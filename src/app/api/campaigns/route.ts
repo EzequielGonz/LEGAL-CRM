@@ -15,6 +15,8 @@ export async function POST(request: Request) {
     contact_ids,
     send_delay_seconds,
     daily_send_limit,
+    batch_size,
+    batch_pause_seconds,
   } = await request.json();
 
   if (!name || !channel_id || !message_template_name) {
@@ -31,10 +33,19 @@ export async function POST(request: Request) {
       channel_id,
       message_template_name,
       status: "borrador",
+      // Ritmo "seguro" para no generar bloqueos de WhatsApp: por defecto 1
+      // mensaje nuevo cada 90s (1.5min), en lotes de 10, con 5min de pausa
+      // entre lote y lote. Configurable, pero estos son los valores que
+      // pidió el estudio.
       send_delay_seconds:
-        typeof send_delay_seconds === "number" && send_delay_seconds > 0 ? send_delay_seconds : 2,
+        typeof send_delay_seconds === "number" && send_delay_seconds > 0 ? send_delay_seconds : 90,
       daily_send_limit:
         typeof daily_send_limit === "number" && daily_send_limit > 0 ? daily_send_limit : null,
+      batch_size: typeof batch_size === "number" && batch_size > 0 ? batch_size : 10,
+      batch_pause_seconds:
+        typeof batch_pause_seconds === "number" && batch_pause_seconds > 0
+          ? batch_pause_seconds
+          : 300,
     })
     .select()
     .single();
