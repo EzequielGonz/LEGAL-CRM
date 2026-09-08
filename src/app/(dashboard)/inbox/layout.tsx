@@ -3,10 +3,15 @@ import { ConversationList, type ConversationListItem } from "@/components/inbox/
 
 export const dynamic = "force-dynamic";
 
-async function getConversations(searchParams: { area?: string; canal?: string }) {
+// Nota: los layouts de Next.js (a diferencia de los page.tsx) NO reciben
+// `searchParams` como prop — por eso el filtro por área/canal se aplica del
+// lado del cliente, dentro de <ConversationList> (que ya es "use client" y
+// ya lee los searchParams con el hook useSearchParams para los <select> de
+// filtro). Acá simplemente traemos todas las conversaciones recientes.
+async function getConversations() {
   const supabase = createClient();
 
-  let query = supabase
+  const { data } = await supabase
     .from("conversations")
     .select(
       "id, area, status, last_message_at, ai_enabled, contacts(full_name), channels(type)"
@@ -14,11 +19,7 @@ async function getConversations(searchParams: { area?: string; canal?: string })
     .order("last_message_at", { ascending: false, nullsFirst: false })
     .limit(100);
 
-  if (searchParams.area) query = query.eq("area", searchParams.area);
-
-  const { data } = await query;
-
-  let items: ConversationListItem[] = (data ?? []).map((c: any) => ({
+  const items: ConversationListItem[] = (data ?? []).map((c: any) => ({
     id: c.id,
     area: c.area,
     status: c.status,
@@ -29,21 +30,11 @@ async function getConversations(searchParams: { area?: string; canal?: string })
     last_message_preview: null,
   }));
 
-  if (searchParams.canal) {
-    items = items.filter((i) => i.channel_type === searchParams.canal);
-  }
-
   return items;
 }
 
-export default async function InboxLayout({
-  children,
-  searchParams,
-}: {
-  children: React.ReactNode;
-  searchParams: { area?: string; canal?: string };
-}) {
-  const items = await getConversations(searchParams);
+export default async function InboxLayout({ children }: { children: React.ReactNode }) {
+  const items = await getConversations();
 
   return (
     <div className="flex h-[calc(100vh-4rem)] -m-8">
