@@ -20,6 +20,17 @@ export function ConversationList({ items }: { items: ConversationListItem[] }) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  // El layout (server component) no puede leer searchParams, así que el
+  // filtro por área/canal se aplica acá, del lado del cliente, sobre la
+  // lista completa que ya llegó por props.
+  const areaFilter = searchParams.get("area");
+  const canalFilter = searchParams.get("canal");
+  const filteredItems = items.filter((item) => {
+    if (areaFilter && item.area !== areaFilter) return false;
+    if (canalFilter && item.channel_type !== canalFilter) return false;
+    return true;
+  });
+
   function setFilter(key: string, value: string) {
     const sp = new URLSearchParams(searchParams.toString());
     if (value) sp.set(key, value);
@@ -53,7 +64,7 @@ export function ConversationList({ items }: { items: ConversationListItem[] }) {
       </div>
 
       <div className="flex-1 overflow-y-auto">
-        {items.map((item) => (
+        {filteredItems.map((item) => (
           <Link
             key={item.id}
             href={`/inbox/${item.id}`}
@@ -80,7 +91,7 @@ export function ConversationList({ items }: { items: ConversationListItem[] }) {
             </div>
           </Link>
         ))}
-        {items.length === 0 && (
+        {filteredItems.length === 0 && (
           <p className="p-4 text-sm text-slate-400">No hay conversaciones con estos filtros.</p>
         )}
       </div>
