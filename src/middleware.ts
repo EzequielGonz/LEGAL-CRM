@@ -2,8 +2,10 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 // Rutas públicas: login y todo lo que reciba tráfico externo (webhooks,
-// formulario de la landing, la landing en sí).
-const PUBLIC_PATHS = ["/login", "/landing", "/api/webhooks", "/api/landing"];
+// formulario de la landing, la landing en sí, y el "latido" de campañas que
+// llama un cron externo sin sesión de Supabase — se protege con su propio
+// CRON_SECRET adentro de la ruta, no con el login del panel).
+const PUBLIC_PATHS = ["/login", "/landing", "/api/webhooks", "/api/landing", "/api/campaigns/tick"];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
