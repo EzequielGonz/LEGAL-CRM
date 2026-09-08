@@ -188,6 +188,11 @@ export interface Campaign {
   status: CampaignStatus;
   send_delay_seconds: number;
   daily_send_limit: number | null;
+  batch_size: number;
+  batch_pause_seconds: number;
+  last_sent_at: string | null;
+  sent_in_batch: number;
+  batch_paused_until: string | null;
   scheduled_at: string | null;
   created_at: string;
   started_at: string | null;
