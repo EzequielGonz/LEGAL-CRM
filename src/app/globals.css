@@ -1,0 +1,123 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #f6f8fc;
+  --foreground: #0f1c34;
+}
+
+* {
+  scrollbar-color: #aabcda #eaeff8;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+}
+
+/* Scrollbar dorado sutil (webkit) */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #eaeff8;
+}
+::-webkit-scrollbar-thumb {
+  background: #aabcda;
+  border-radius: 9999px;
+  border: 2px solid #eaeff8;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #d4af37;
+}
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  }
+
+  a,
+  button {
+    transition: color 0.18s ease, background-color 0.18s ease,
+      border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease,
+      opacity 0.18s ease;
+  }
+
+  input,
+  select,
+  textarea {
+    transition: border-color 0.18s ease, box-shadow 0.18s ease,
+      background-color 0.18s ease;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: none;
+  }
+}
+
+@layer components {
+  /* Botón principal dorado: reemplaza el bg-slate-900 plano por un
+     degradé navy->navy con acento dorado en el borde y hover con leve
+     elevación, más consistente con la identidad navy + dorado. */
+  .btn-gold {
+    @apply relative inline-flex items-center justify-center gap-2 rounded-lg
+      bg-gradient-to-br from-slate-800 to-slate-900 px-4 py-2 text-sm
+      font-medium text-gold-200 shadow-navy ring-1 ring-inset ring-gold-500/30
+      transition-all duration-200 ease-out
+      hover:-translate-y-0.5 hover:from-slate-900 hover:to-slate-950
+      hover:text-gold-100 hover:shadow-gold hover:ring-gold-400/60
+      active:translate-y-0 active:shadow-none
+      disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0
+      disabled:hover:shadow-navy;
+  }
+
+  .btn-gold-sm {
+    @apply relative inline-flex items-center justify-center gap-1.5 rounded-md
+      bg-gradient-to-br from-slate-800 to-slate-900 px-3 py-1.5 text-xs
+      font-medium text-gold-200 shadow-navy ring-1 ring-inset ring-gold-500/30
+      transition-all duration-200 ease-out
+      hover:-translate-y-0.5 hover:from-slate-900 hover:to-slate-950
+      hover:text-gold-100 hover:shadow-gold hover:ring-gold-400/60
+      active:translate-y-0 active:shadow-none
+      disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0
+      disabled:hover:shadow-navy;
+  }
+
+  /* Tarjeta base con hover-lift sutil, usada en stat-card y similares */
+  .card-lift {
+    @apply transition-all duration-200 ease-out hover:-translate-y-0.5 hover:shadow-navy;
+  }
+
+  /* Anillo de foco dorado para inputs/selects, en reemplazo del azul genérico */
+  .focus-gold:focus {
+    @apply border-gold-500 ring-2 ring-gold-500/20;
+  }
+}
+
+@layer utilities {
+  .animate-in {
+    animation-fill-mode: both;
+  }
+
+  .skeleton-shimmer {
+    background: linear-gradient(
+      90deg,
+      #eaeff8 25%,
+      #f6f8fc 37%,
+      #eaeff8 63%
+    );
+    background-size: 400% 100%;
+    animation: shimmer 2.5s ease-in-out infinite;
+  }
+}
