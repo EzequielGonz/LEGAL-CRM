@@ -47,7 +47,13 @@ export function normalizePhoneAR(raw: string | null | undefined): PhoneNormaliza
     return { phone: `549${digits}`, confidence: "alta", original };
   }
 
-  if (digits.length >= 8) {
+  // Menos de 9 dígitos nunca puede ser un teléfono argentino completo (ni
+  // con el código de área más corto se llega a 10) — típicamente es un DNI
+  // (7-8 dígitos) metido por error en la columna de teléfono. Mejor
+  // rechazarlo como inválido que inventar un número que WhatsApp va a
+  // rechazar de todos modos, silenciosamente creando un contacto con datos
+  // basura.
+  if (digits.length >= 9) {
     return { phone: `549${digits}`, confidence: "revisar", original };
   }
 
