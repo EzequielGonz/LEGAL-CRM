@@ -22,6 +22,15 @@ import { findOrCreateConversation } from "@/lib/contacts";
  * milisegundos, sin importar cuántas horas tarde la campaña completa.
  */
 
+// Variables 2 y 3 de la plantilla de WhatsApp aprobada ("Soy Leonardo, del
+// equipo de Estudio Jurídico Vita"): son fijas para todas las campañas,
+// Vita las confirmó así. La variable 1 (nombre del contacto) sigue siendo
+// dinámica, por contacto. Si en el futuro necesitan variar por campaña o
+// por área (Civil/Penal), conviene moverlas a columnas de la tabla
+// `campaigns` y exponerlas en el formulario de "Nueva campaña".
+const TEMPLATE_SENDER_NAME = "Leonardo";
+const TEMPLATE_TEAM_NAME = "Estudio Jurídico Vita";
+
 export interface TickResult {
   campaignId: string;
   action:
@@ -152,6 +161,8 @@ export async function tickCampaign(campaignId: string): Promise<TickResult> {
   try {
     await sendWhatsAppTemplate(campaign.area, phone, campaign.message_template_name, "es_AR", [
       name,
+      TEMPLATE_SENDER_NAME,
+      TEMPLATE_TEAM_NAME,
     ]);
     await supabase
       .from("campaign_contacts")
