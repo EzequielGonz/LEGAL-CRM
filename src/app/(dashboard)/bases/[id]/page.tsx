@@ -77,7 +77,7 @@ export default async function BaseDetailPage({ params }: { params: { id: string 
           </p>
         </div>
         <div className="flex items-center gap-3">
-          {downloadUrl && (
+                  {          {downloadUrl && (
             
               href={downloadUrl}
               className="text-sm text-gold-700 hover:underline"
