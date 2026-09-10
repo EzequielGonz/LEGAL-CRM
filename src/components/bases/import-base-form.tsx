@@ -4,6 +4,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { parseSpreadsheetFile } from "@/lib/bases/parse-file";
 import type { ImportBaseSummary } from "@/lib/bases/import";
+import { SpreadsheetPreview } from "./spreadsheet-preview";
+
+const PREVIEW_ROW_LIMIT = 100;
 
 export function ImportBaseForm() {
   const router = useRouter();
@@ -12,9 +15,34 @@ export function ImportBaseForm() {
   const [name, setName] = useState("");
   const [sourceLabel, setSourceLabel] = useState("");
   const [file, setFile] = useState<File | null>(null);
+  const [previewRows, setPreviewRows] = useState<Record<string, unknown>[] | null>(null);
+  const [previewTotal, setPreviewTotal] = useState(0);
+  const [previewLoading, setPreviewLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [summary, setSummary] = useState<ImportBaseSummary | null>(null);
+
+  async function handleFileChange(f: File | null) {
+    setFile(f);
+    setError(null);
+    setPreviewRows(null);
+    if (!f) return;
+
+    // Apenas se elige el archivo lo parseamos y lo mostramos en pantalla tal
+    // como va a quedar — así se puede revisar que sea el correcto sin tener
+    // que abrirlo en Excel. Esto no importa nada todavía: es solo vista
+    // previa, en memoria del browser.
+    setPreviewLoading(true);
+    try {
+      const rows = await parseSpreadsheetFile(f);
+      setPreviewTotal(rows.length);
+      setPreviewRows(rows.slice(0, PREVIEW_ROW_LIMIT));
+    } catch (err: any) {
+      setError(`No se pudo leer el archivo: ${String(err.message ?? err)}`);
+    } finally {
+      setPreviewLoading(false);
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -30,17 +58,15 @@ export function ImportBaseForm() {
         return;
       }
 
-      const res = await fetch("/api/bases", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          area,
-          name,
-          source_label: sourceLabel,
-          file_name: file.name,
-          rows,
-        }),
-      });
+      const form = new FormData();
+      form.append("area", area);
+      form.append("name", name);
+      form.append("source_label", sourceLabel);
+      form.append("file_name", file.name);
+      form.append("rows", JSON.stringify(rows));
+      form.append("file", file);
+
+      const res = await fetch("/api/bases", { method: "POST", body: form });
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Error desconocido al importar");
@@ -127,7 +153,7 @@ export function ImportBaseForm() {
           required
           type="file"
           accept=".csv,.xlsx,.xls"
-          onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+          onChange={(e) => handleFileChange(e.target.files?.[0] ?? null)}
           className="text-xs"
         />
         <p className="mt-1 text-xs text-slate-400">
@@ -136,6 +162,22 @@ export function ImportBaseForm() {
           modificar.
         </p>
       </div>
+
+      {previewLoading && <p className="text-xs text-slate-400">Leyendo el archivo…</p>}
+
+      {previewRows && previewRows.length > 0 && (
+        <div>
+          <p className="mb-2 text-xs font-medium text-slate-600">
+            Vista previa — {previewTotal} fila{previewTotal === 1 ? "" : "s"} encontrada
+            {previewTotal === 1 ? "" : "s"}
+            {previewTotal > PREVIEW_ROW_LIMIT
+              ? ` (mostrando las primeras ${PREVIEW_ROW_LIMIT}; se procesan todas al importar)`
+              : ""}
+            . Revisá que sea el archivo correcto antes de importar.
+          </p>
+          <SpreadsheetPreview rows={previewRows} />
+        </div>
+      )}
 
       {error && <p className="text-sm text-red-600">{error}</p>}
 
