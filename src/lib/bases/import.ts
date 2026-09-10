@@ -11,6 +11,9 @@ export interface ImportBaseInput {
   fileName?: string | null;
   rows: Record<string, unknown>[];
   importedBy?: string | null;
+  /** Bytes del archivo original (Excel/CSV) tal como lo subió el usuario, para guardarlo íntegro en Storage. Opcional: si no viene, la base queda igual pero sin archivo descargable. */
+  fileBuffer?: ArrayBuffer | null;
+  fileMimeType?: string | null;
 }
 
 export interface ImportBaseSummary {
@@ -48,6 +51,30 @@ export async function importBase(input: ImportBaseInput): Promise<ImportBaseSumm
 
   if (baseError || !base) {
     throw new Error(`No se pudo registrar la base: ${baseError?.message}`);
+  }
+
+  // Guardamos el archivo original tal cual lo subió el usuario en un bucket
+  // privado, para que quede como respaldo descargable sin tener que
+  // reconstruirlo a partir de las filas procesadas. Si esto falla (bucket
+  // caído, archivo raro, etc.) no queremos que se pierda la importación
+  // entera por eso: seguimos igual, la base queda sin archivo descargable.
+  if (input.fileBuffer) {
+    try {
+      const safeName = (input.fileName ?? "archivo").replace(/[^a-zA-Z0-9._-]/g, "_");
+      const path = `${input.area}/${base.id}/${safeName}`;
+      const { error: uploadError } = await supabase.storage
+        .from("bases-originales")
+        .upload(path, input.fileBuffer, {
+          contentType: input.fileMimeType ?? "application/octet-stream",
+          upsert: false,
+        });
+      if (!uploadError) {
+        await supabase.from("imported_bases").update({ storage_path: path }).eq("id", base.id);
+      }
+    } catch {
+      // Best-effort: el archivo original es un respaldo, no el dato crítico
+      // (eso son las filas en imported_base_rows, que ya se guardan sí o sí).
+    }
   }
 
   let creados = 0;
