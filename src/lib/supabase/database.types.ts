@@ -132,6 +132,8 @@ export interface Conversation {
   area: Area;
   status: ConversationStatus;
   ai_enabled: boolean;
+  /** Paso actual del cuestionario fijo de la plantilla de campaña (null = no arrancó / no aplica). */
+  intake_step: string | null;
   last_message_at: string | null;
   created_at: string;
 }
