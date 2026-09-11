@@ -42,7 +42,19 @@ export async function POST(request: Request) {
         if (!area) continue; // evento de un número que no es Civil ni Penal
 
         for (const message of value.messages ?? []) {
-          if (message.type !== "text") continue; // MVP: solo texto por ahora
+          // "text": mensaje de texto normal. "button": el prospecto tocó un
+          // botón de respuesta rápida de una plantilla de campaña (ej. "Mi
+          // caso esta pendiente" / "Mi caso ya esta resuelto") — Meta lo
+          // manda con este tipo, no como "text", así que hay que leerlo de
+          // message.button.text para que el flujo de preguntas lo detecte.
+          let body: string | null = null;
+          if (message.type === "text") {
+            body = message.text?.body ?? "";
+          } else if (message.type === "button") {
+            body = message.button?.text ?? message.button?.payload ?? "";
+          } else {
+            continue; // MVP: solo texto y botones de plantilla por ahora
+          }
 
           const contactProfile = (value.contacts ?? []).find(
             (c: any) => c.wa_id === message.from
@@ -54,7 +66,7 @@ export async function POST(request: Request) {
             externalUserId: message.from,
             phone: message.from,
             fullName: contactProfile?.profile?.name ?? null,
-            body: message.text?.body ?? "",
+            body,
             externalMessageId: message.id,
           });
         }
