@@ -47,7 +47,7 @@ export async function POST(request: Request) {
           // caso esta pendiente" / "Mi caso ya esta resuelto") — Meta lo
           // manda con este tipo, no como "text", así que hay que leerlo de
           // message.button.text para que el flujo de preguntas lo detecte.
-          let body: string | null = null;
+          let body: string;
           if (message.type === "text") {
             body = message.text?.body ?? "";
           } else if (message.type === "button") {
