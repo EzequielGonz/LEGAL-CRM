@@ -1,5 +1,6 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendWhatsAppText } from "@/lib/whatsapp/client";
+import { normalizePhoneAR } from "@/lib/phone";
 import type { Area } from "@/lib/supabase/database.types";
 
 const SOURCE_LABEL: Record<string, string> = {
@@ -81,27 +82,53 @@ export async function notifyAdminOfClosedAppointment(appointmentId: string) {
     .select()
     .single();
 
-  const adminPhone = process.env.ADMIN_WHATSAPP_PHONE;
-  if (!adminPhone) {
-    console.warn("ADMIN_WHATSAPP_PHONE no está configurado: no se pudo notificar al admin.");
+  // Lista de teléfonos de administradores que reciben la notificación,
+  // separados por coma (ej: "5491139435473,5492235223906"). Se acepta
+  // ADMIN_WHATSAPP_PHONE (singular) como alias por compatibilidad con
+  // configuraciones anteriores que solo tenían un teléfono.
+  const rawPhones = process.env.ADMIN_WHATSAPP_PHONES ?? process.env.ADMIN_WHATSAPP_PHONE ?? "";
+  const adminPhones = rawPhones
+    .split(",")
+    .map((p) => normalizePhoneAR(p.trim()).phone)
+    .filter((p): p is string => Boolean(p));
+
+  if (adminPhones.length === 0) {
+    console.warn(
+      "ADMIN_WHATSAPP_PHONES no está configurado (o no tiene teléfonos válidos): no se pudo notificar a ningún administrador."
+    );
     return;
   }
 
-  try {
-    await sendWhatsAppText(area, adminPhone, messageBody);
-    await supabase
-      .from("admin_notifications")
-      .update({ sent: true })
-      .eq("id", notification!.id);
+  // Mandamos a todos los administradores configurados. Si alguno falla (por
+  // ejemplo, un número mal cargado) no queremos que eso le impida al resto
+  // enterarse: intentamos con cada uno por separado y juntamos los errores.
+  const sendErrors: string[] = [];
+  let anySent = false;
+  for (const phone of adminPhones) {
+    try {
+      await sendWhatsAppText(area, phone, messageBody);
+      anySent = true;
+    } catch (err: any) {
+      sendErrors.push(`${phone}: ${String(err.message ?? err)}`);
+    }
+  }
+
+  await supabase
+    .from("admin_notifications")
+    .update({
+      sent: anySent,
+      error: sendErrors.length > 0 ? sendErrors.join(" | ") : null,
+    })
+    .eq("id", notification!.id);
+
+  if (anySent) {
     await supabase
       .from("appointments")
       .update({ admin_notified_at: new Date().toISOString() })
       .eq("id", appointment.id);
-  } catch (err: any) {
-    await supabase
-      .from("admin_notifications")
-      .update({ error: String(err.message ?? err) })
-      .eq("id", notification!.id);
-    throw err;
+  }
+
+  if (sendErrors.length > 0 && !anySent) {
+    throw new Error(sendErrors.join(" | "));
   }
 }
