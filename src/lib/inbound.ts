@@ -1,6 +1,7 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { findOrCreateContact, findOrCreateConversation } from "@/lib/contacts";
 import { runAgentTurn } from "@/lib/ai-agent/agent";
+import { handleIntakeFlow } from "@/lib/ai-agent/intake-flow";
 import type { Area, ChannelType, SourceType } from "@/lib/supabase/database.types";
 
 /**
@@ -94,7 +95,19 @@ export async function handleInboundMessage({
     .eq("contact_id", contact.id)
     .in("status", ["enviado", "entregado", "leido"]);
 
-  if (conversation.ai_enabled) {
+  // Si el mensaje corresponde al cuestionario fijo de la plantilla de campaña
+  // (botón "Mi caso esta pendiente" / "Mi caso ya esta resuelto", o una
+  // respuesta a una de sus preguntas), ese flujo determinístico ya contesta
+  // por su cuenta y no debe pasar además por el agente IA.
+  const handledByIntakeFlow = await handleIntakeFlow({
+    conversationId: conversation.id,
+    contactId: contact.id,
+    fullName: contact.full_name,
+    intakeStep: (conversation as any).intake_step ?? null,
+    body,
+  });
+
+  if (!handledByIntakeFlow && conversation.ai_enabled) {
     await runAgentTurn(conversation.id);
   }
 }
