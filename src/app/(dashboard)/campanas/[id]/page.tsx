@@ -81,7 +81,11 @@ export default async function CampaignDetailPage({ params }: { params: { id: str
             {campaign.daily_send_limit ? ` · máx. ${campaign.daily_send_limit}/día` : ""}
           </p>
         </div>
-        <CampaignControls campaignId={campaign.id} status={campaign.status} />
+        <CampaignControls
+          campaignId={campaign.id}
+          campaignName={campaign.name}
+          status={campaign.status}
+        />
       </div>
 
       <div className="mb-6 grid grid-cols-3 gap-3 md:grid-cols-7">
