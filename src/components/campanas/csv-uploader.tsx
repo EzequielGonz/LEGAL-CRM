@@ -20,16 +20,28 @@ export function CsvUploader({ campaignId }: { campaignId: string }) {
       // Mismo parser que usa la sección de Bases: soporta tanto CSV como
       // Excel (.xlsx/.xls), así no hace falta convertir nada a mano antes de subirlo.
       const parsed = await parseSpreadsheetFile(file);
-      const rows = parsed.map((r: any) => ({
-        full_name: r.nombre ?? r.full_name ?? r.name ?? "",
-        phone: r.telefono ?? r.phone ?? r.celular ?? "",
-      }));
+      // En Excel, si la columna de teléfono no está formateada como texto,
+      // la celda llega como número de JS (no string) — de ahí que haya que
+      // convertir todo con String(...) antes de mandarlo, para no romper
+      // más adelante cuando se le hace .trim().
+      const rows = parsed.map((r: any) => {
+        const rawName = r.nombre ?? r.full_name ?? r.name ?? "";
+        const rawPhone = r.telefono ?? r.phone ?? r.celular ?? "";
+        return {
+          full_name: rawName === "" || rawName == null ? "" : String(rawName).trim(),
+          phone: rawPhone === "" || rawPhone == null ? "" : String(rawPhone).trim(),
+        };
+      });
 
       const res = await fetch("/api/campaigns/import", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ campaign_id: campaignId, contacts: rows }),
       });
+      if (!res.ok) {
+        setError(`El servidor devolvió un error (${res.status}) al importar el archivo.`);
+        return;
+      }
       const data = await res.json();
       setResult(data);
       router.refresh();
