@@ -19,10 +19,21 @@ export function NewCampaignForm({
   const [batchPauseSeconds, setBatchPauseSeconds] = useState(300);
   const [dailyLimit, setDailyLimit] = useState<number | "">("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
+    setError(null);
+
+    if (!channelId) {
+      setLoading(false);
+      setError(
+        "No hay ningún canal de WhatsApp disponible para elegir. Recargá la página e intentá de nuevo."
+      );
+      return;
+    }
+
     const res = await fetch("/api/campaigns", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -36,10 +47,20 @@ export function NewCampaignForm({
         daily_send_limit: dailyLimit === "" ? null : dailyLimit,
       }),
     });
-    const { campaign } = await res.json();
+    const data = await res.json();
     setLoading(false);
+
+    // Antes, si esto fallaba (por ejemplo la sesión vencida o algún error del
+    // servidor), el formulario se cerraba solo y no avisaba nada — parecía
+    // que "no se podían crear más campañas" cuando en realidad no hay ningún
+    // límite, solo faltaba mostrar el error.
+    if (!res.ok || data.error || !data.campaign) {
+      setError(data.error ?? "No se pudo crear la campaña. Probá de nuevo.");
+      return;
+    }
+
     setOpen(false);
-    router.push(`/campanas/${campaign.id}`);
+    router.push(`/campanas/${data.campaign.id}`);
   }
 
   if (!open) {
@@ -108,6 +129,10 @@ export function NewCampaignForm({
         dailyLimit={dailyLimit}
         onDailyLimitChange={setDailyLimit}
       />
+
+      {error && (
+        <p className="rounded-lg bg-red-50 px-3 py-2 text-xs text-red-600">{error}</p>
+      )}
 
       <div className="flex gap-2">
         <button
