@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { CampaignLiveModal } from "./campaign-live-modal";
 
 const ACTION_MESSAGE: Record<string, string> = {
   sent: "Primer mensaje enviado. El resto de los envíos van a seguir en segundo plano, solos, respetando el ritmo configurado — no hace falta dejar esta pantalla abierta.",
@@ -16,14 +17,17 @@ const ACTION_MESSAGE: Record<string, string> = {
 
 export function CampaignControls({
   campaignId,
+  campaignName,
   status,
 }: {
   campaignId: string;
+  campaignName: string;
   status: string;
 }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [showLive, setShowLive] = useState(false);
 
   async function launch() {
     setLoading(true);
@@ -36,6 +40,9 @@ export function CampaignControls({
       setMessage(`Error: ${data.error}`);
     } else {
       setMessage(ACTION_MESSAGE[data.action] ?? "Campaña lanzada.");
+      // Al lanzar, abrimos directo el panel de seguimiento en vivo para que
+      // se vea el progreso sin tener que buscarlo aparte.
+      setShowLive(true);
     }
     router.refresh();
   }
@@ -68,6 +75,14 @@ export function CampaignControls({
             {loading ? "Lanzando..." : status === "pausada" ? "Reanudar" : "Lanzar campaña"}
           </button>
         )}
+        {(status === "en_curso" || status === "pausada" || status === "finalizada") && (
+          <button
+            onClick={() => setShowLive(true)}
+            className="rounded-lg border border-slate-300 px-4 py-2 text-sm text-slate-600 hover:border-gold-300"
+          >
+            Ver seguimiento en vivo
+          </button>
+        )}
       </div>
       {message && <p className="mt-2 max-w-md text-xs text-slate-500">{message}</p>}
       {status === "en_curso" && !message && (
@@ -76,6 +91,13 @@ export function CampaignControls({
           ritmo configurado. Se actualiza acá a medida que van saliendo.
         </p>
       )}
+
+      <CampaignLiveModal
+        campaignId={campaignId}
+        campaignName={campaignName}
+        open={showLive}
+        onClose={() => setShowLive(false)}
+      />
     </div>
   );
 }
