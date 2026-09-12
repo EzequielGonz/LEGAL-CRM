@@ -159,14 +159,32 @@ export async function tickCampaign(campaignId: string): Promise<TickResult> {
   };
 
   try {
-    await sendWhatsAppTemplate(campaign.area, phone, campaign.message_template_name, "es_AR", [
-      name,
-      TEMPLATE_SENDER_NAME,
-      TEMPLATE_TEAM_NAME,
-    ]);
+    const sendResult = await sendWhatsAppTemplate(
+      campaign.area,
+      phone,
+      campaign.message_template_name,
+      "es_AR",
+      [name, TEMPLATE_SENDER_NAME, TEMPLATE_TEAM_NAME]
+    );
+
+    // Log completo de la respuesta de Meta: antes esto se descartaba, así que
+    // si un mensaje quedaba marcado "enviado" en el panel pero nunca llegaba
+    // al celular, no había forma de ver qué había contestado realmente la
+    // API (por ejemplo, un id de mensaje válido no garantiza entrega — eso
+    // depende de cosas fuera de nuestro control, como si el número de
+    // Meta todavía está en modo prueba/desarrollo con destinatarios
+    // restringidos). Con este log, la próxima vez se puede revisar en los
+    // logs de Vercel.
+    console.log(
+      `[campaigns] Respuesta de Meta al enviar a ${phone} (campaña ${campaign.id}):`,
+      JSON.stringify(sendResult)
+    );
+
+    const messageId = sendResult?.messages?.[0]?.id ?? null;
+
     await supabase
       .from("campaign_contacts")
-      .update({ status: "enviado", sent_at: now.toISOString() })
+      .update({ status: "enviado", sent_at: now.toISOString(), message_id: messageId })
       .eq("id", nextRow.id);
 
     // Dejamos registro de la conversación y del mensaje saliente: si no,
