@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { NewCampaignForm } from "@/components/campanas/new-campaign-form";
+import { DeleteCampaignButton } from "@/components/campanas/delete-campaign-button";
 
 export const dynamic = "force-dynamic";
 
@@ -48,22 +49,24 @@ export default async function CampanasPage() {
           ).length;
 
           return (
-            <Link
+            <div
               key={c.id}
-              href={`/campanas/${c.id}`}
-              className="block card-lift rounded-xl border border-slate-200 bg-white p-5 hover:border-gold-300"
+              className="card-lift flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white p-5 hover:border-gold-300"
             >
-              <div className="mb-1 flex items-center justify-between">
-                <h3 className="font-medium text-slate-900">{c.name}</h3>
-                <span className="text-xs font-medium text-slate-500">
-                  {STATUS_LABEL[c.status]}
-                </span>
-              </div>
-              <p className="text-xs text-slate-400">
-                {enviados}/{total} enviados · {respondieron} respondieron · {agendados} agendados ·
-                plantilla {c.message_template_name}
-              </p>
-            </Link>
+              <Link href={`/campanas/${c.id}`} className="block min-w-0 flex-1">
+                <div className="mb-1 flex items-center justify-between">
+                  <h3 className="font-medium text-slate-900">{c.name}</h3>
+                  <span className="text-xs font-medium text-slate-500">
+                    {STATUS_LABEL[c.status]}
+                  </span>
+                </div>
+                <p className="text-xs text-slate-400">
+                  {enviados}/{total} enviados · {respondieron} respondieron · {agendados} agendados ·
+                  plantilla {c.message_template_name}
+                </p>
+              </Link>
+              <DeleteCampaignButton campaignId={c.id} campaignName={c.name} />
+            </div>
           );
         })}
         {(campaigns ?? []).length === 0 && (
