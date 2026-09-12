@@ -3,8 +3,11 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { findOrCreateContact } from "@/lib/contacts";
 
 interface ImportRow {
-  full_name?: string;
-  phone: string;
+  // Puede llegar string o number (Excel manda números "crudos" cuando la
+  // columna no está formateada como texto), por eso el tipo amplio acá y la
+  // conversión explícita con String(...) más abajo antes de usarlos.
+  full_name?: string | number | null;
+  phone: string | number | null;
 }
 
 /**
@@ -37,18 +40,23 @@ export async function POST(request: Request) {
   let skipped = 0;
 
   for (const row of contacts) {
-    const phone = row.phone?.trim();
+    // Puede llegar un número de JS en vez de string (ej: Excel con la
+    // columna de teléfono sin formato de texto), así que convertimos con
+    // String(...) antes de cualquier .trim() para no romper con eso.
+    const phone = row.phone != null ? String(row.phone).trim() : "";
     if (!phone) {
       skipped++;
       continue;
     }
+
+    const fullNameRaw = row.full_name != null ? String(row.full_name).trim() : "";
 
     const { contact } = await findOrCreateContact({
       area: campaign.area,
       channelType: "whatsapp",
       externalUserId: phone,
       phone,
-      fullName: row.full_name?.trim() || null,
+      fullName: fullNameRaw || null,
       source: "base_de_datos",
       channelId: campaign.channel_id,
       campaignId: campaign.id,
