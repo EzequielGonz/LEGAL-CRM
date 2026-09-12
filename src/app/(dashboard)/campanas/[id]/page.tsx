@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { CsvUploader } from "@/components/campanas/csv-uploader";
 import { CampaignControls } from "@/components/campanas/campaign-controls";
+import { DeleteCampaignButton } from "@/components/campanas/delete-campaign-button";
 
 export const dynamic = "force-dynamic";
 
@@ -81,11 +82,18 @@ export default async function CampaignDetailPage({ params }: { params: { id: str
             {campaign.daily_send_limit ? ` · máx. ${campaign.daily_send_limit}/día` : ""}
           </p>
         </div>
-        <CampaignControls
-          campaignId={campaign.id}
-          campaignName={campaign.name}
-          status={campaign.status}
-        />
+        <div className="flex items-start gap-2">
+          <CampaignControls
+            campaignId={campaign.id}
+            campaignName={campaign.name}
+            status={campaign.status}
+          />
+          <DeleteCampaignButton
+            campaignId={campaign.id}
+            campaignName={campaign.name}
+            redirectTo="/campanas"
+          />
+        </div>
       </div>
 
       <div className="mb-6 grid grid-cols-3 gap-3 md:grid-cols-7">
