@@ -1,7 +1,7 @@
 function normalizeHeader(h: string): string {
   return h
     .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "") // saca acentos
+    .replace(/[\u0300-\u036f]/g, "") // saca acentos (rango unicode de tildes)
     .toLowerCase()
     .replace(/[^a-z0-9]/g, ""); // saca espacios, guiones, slashes, etc.
 }
@@ -15,6 +15,7 @@ const ALIASES: Record<string, string[]> = {
     "name",
     "apellidoynombre",
     "nombreyapellido",
+    "apelidoynombre", // typo común: "apellido" con una sola "l" (así vino una planilla real)
   ],
   phone: [
     "telefono",
@@ -52,6 +53,15 @@ const ALIASES: Record<string, string[]> = {
 // headers más largos como "Teléfono de contacto" o "Número de Whatsapp"
 // que no son un alias exacto pero sí contienen la palabra clave.
 const PHONE_CONTAINS_TOKENS = ["telefono", "whatsapp", "celular", "movil"];
+
+// Mismo respaldo que el teléfono, pero para el nombre: si ninguno de los
+// alias exactos matchea (por ejemplo, un typo distinto al que ya se
+// contempló arriba), se acepta cualquier columna que CONTENGA "nombre".
+// Es un poco menos preciso que el de teléfono (podría matchear una columna
+// rara tipo "Nombre del estudio"), pero en la práctica una planilla de
+// contactos casi siempre tiene como mucho una columna con "nombre" en el
+// header, así que vale la pena como último recurso antes de dejarlo vacío.
+const FULL_NAME_CONTAINS_TOKENS = ["nombre"];
 
 export interface ExtractedRowFields {
   full_name: string | null;
@@ -99,8 +109,17 @@ export function extractRowFields(rawRow: Record<string, unknown>): ExtractedRowF
     return cellValue(match);
   }
 
+  function findFullNameField(): string | null {
+    const exact = findField("full_name");
+    if (exact !== null) return exact;
+    const match = normalizedEntries.find(([key]) =>
+      FULL_NAME_CONTAINS_TOKENS.some((token) => key.includes(token))
+    );
+    return cellValue(match);
+  }
+
   return {
-    full_name: findField("full_name"),
+    full_name: findFullNameField(),
     phone_raw: findPhoneField(),
     email: findField("email"),
     dni_cuil: findField("dni_cuil"),
