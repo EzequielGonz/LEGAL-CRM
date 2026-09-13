@@ -188,7 +188,9 @@ export interface Campaign {
   channel_id: string;
   message_template_name: string;
   status: CampaignStatus;
-  send_delay_seconds: number;
+  min_send_delay_seconds: number;
+  max_send_delay_seconds: number;
+  next_delay_seconds: number | null;
   daily_send_limit: number | null;
   batch_size: number;
   batch_pause_seconds: number;
