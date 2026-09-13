@@ -110,26 +110,46 @@ export async function handleIntakeFlow({
   fullName,
   intakeStep,
   body,
+  isButtonClick,
 }: {
   conversationId: string;
   contactId: string;
   fullName: string | null;
   intakeStep: string | null;
   body: string;
+  /** true si el mensaje entrante es un click real a un botón de plantilla
+   * (message.type === "button" en el webhook), no texto libre. */
+  isButtonClick: boolean;
 }): Promise<boolean> {
   const supabase = createAdminClient();
   const normalized = normalize(body);
 
-  // Arranque del flujo: el prospecto tocó "Mi caso esta pendiente".
-  if (!intakeStep && esBotonPendiente(normalized)) {
+  // Los botones de la plantilla de campaña (RE)ARRANCAN el cuestionario
+  // siempre que se toquen, sin importar en qué paso haya quedado
+  // `intake_step` de una vuelta anterior. Esto es necesario porque el mismo
+  // contacto/número puede recibir más de una campaña con el tiempo (o
+  // usarse para reprobar), y siempre reutiliza la MISMA conversación — antes
+  // este chequeo pedía además `!intakeStep`, así que si una vez ya se había
+  // completado el cuestionario (o marcado "resuelto"), tocar el botón de
+  // nuevo en una campaña posterior no hacía absolutamente nada: no
+  // matcheaba ninguna rama de acá (porque intakeStep ya no era null) y
+  // tampoco pasaba al agente IA (porque `ai_enabled` había quedado en
+  // false). Por eso se chequea `isButtonClick` en vez de `!intakeStep`, y
+  // solo con mensajes de tipo "button" real — así un texto libre que
+  // casualmente contenga las mismas palabras no dispara el cuestionario por
+  // error.
+  if (isButtonClick && esBotonPendiente(normalized)) {
     await send(conversationId, MSG_INTRO);
     await send(conversationId, MSG_PREGUNTA_1);
-    await supabase.from("conversations").update({ intake_step: "pregunta_1" }).eq("id", conversationId);
+    await supabase
+      .from("conversations")
+      .update({ intake_step: "pregunta_1", status: "en_conversacion", ai_enabled: true })
+      .eq("id", conversationId);
     return true;
   }
 
   // Rama "ya está resuelto": se agradece y se cierra, sin arrancar el cuestionario.
-  if (!intakeStep && esBotonResuelto(normalized)) {
+  if (isButtonClick && esBotonResuelto(normalized)) {
     await send(conversationId, MSG_RESUELTO);
     await supabase
       .from("conversations")
