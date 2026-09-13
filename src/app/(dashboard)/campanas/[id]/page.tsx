@@ -77,8 +77,9 @@ export default async function CampaignDetailPage({ params }: { params: { id: str
           <h1 className="text-2xl font-semibold text-slate-900">{campaign.name}</h1>
           <p className="text-sm text-slate-500">
             {(campaign as any).channels?.label} · plantilla {campaign.message_template_name} ·{" "}
-            {campaign.send_delay_seconds}s entre mensajes · lotes de {campaign.batch_size} · pausa
-            de {Math.round(campaign.batch_pause_seconds / 60)}min entre lotes
+            {campaign.min_send_delay_seconds}-{campaign.max_send_delay_seconds}s entre mensajes
+            (variable) · lotes de {campaign.batch_size} · pausa de{" "}
+            {Math.round(campaign.batch_pause_seconds / 60)}min entre lotes
             {campaign.daily_send_limit ? ` · máx. ${campaign.daily_send_limit}/día` : ""}
           </p>
         </div>
