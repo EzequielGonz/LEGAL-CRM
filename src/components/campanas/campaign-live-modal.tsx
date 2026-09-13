@@ -7,7 +7,9 @@ interface StatusSnapshot {
     id: string;
     name: string;
     status: string;
-    send_delay_seconds: number;
+    min_send_delay_seconds: number;
+    max_send_delay_seconds: number;
+    next_delay_seconds: number | null;
     batch_size: number;
     batch_pause_seconds: number;
     daily_send_limit: number | null;
@@ -217,7 +219,10 @@ export function CampaignLiveModal({
                 ["Respondieron", s.counts.respondio],
                 ["Fallidos", s.counts.fallo],
                 ["Lote actual", `${s.campaign.sent_in_batch}/${s.campaign.batch_size}`],
-                ["Ritmo", `1 cada ${s.campaign.send_delay_seconds}s`],
+                [
+                  "Ritmo",
+                  `${s.campaign.min_send_delay_seconds}-${s.campaign.max_send_delay_seconds}s (variable)`,
+                ],
               ].map(([label, value]) => (
                 <div key={label as string} className="rounded-lg bg-slate-50 p-2">
                   <p className="text-[10px] uppercase text-slate-400">{label}</p>
