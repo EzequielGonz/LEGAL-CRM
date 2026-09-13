@@ -2,17 +2,20 @@ import { createClient } from "@/lib/supabase/server";
 import { AreaBadge } from "@/components/ui/badge";
 import { StudioForm } from "@/components/configuracion/studio-form";
 import { AdminPhoneForm } from "@/components/configuracion/admin-phone-form";
+import { NotificationPhonesForm } from "@/components/configuracion/notification-phones-form";
 
 export const dynamic = "force-dynamic";
 
 export default async function ConfiguracionPage() {
   const supabase = createClient();
 
-  const [{ data: channels }, { data: studios }, { data: userResp }] = await Promise.all([
-    supabase.from("channels").select("*").order("area").order("type"),
-    supabase.from("studios").select("*").order("area"),
-    supabase.auth.getUser(),
-  ]);
+  const [{ data: channels }, { data: studios }, { data: userResp }, { data: notificationPhones }] =
+    await Promise.all([
+      supabase.from("channels").select("*").order("area").order("type"),
+      supabase.from("studios").select("*").order("area"),
+      supabase.auth.getUser(),
+      supabase.from("notification_phones").select("*").order("created_at", { ascending: true }),
+    ]);
 
   let adminPhone: string | null = null;
   if (userResp.user) {
@@ -31,6 +34,18 @@ export default async function ConfiguracionPage() {
       <div className="rounded-xl border border-slate-200 bg-white p-5">
         <h2 className="mb-3 text-sm font-semibold text-slate-700">Notificaciones</h2>
         <AdminPhoneForm initialPhone={adminPhone} />
+      </div>
+
+      <div className="rounded-xl border border-slate-200 bg-white p-5">
+        <h2 className="mb-3 text-sm font-semibold text-slate-700">
+          Números adicionales de notificación
+        </h2>
+        <p className="mb-3 text-xs text-slate-400">
+          Además del teléfono de arriba (uno por usuario logueado), acá podés agregar los números
+          que quieras — no necesitan cuenta en el panel — para que también reciban el aviso de
+          &quot;caso calificado&quot; y &quot;nuevo cliente agendado&quot; por WhatsApp.
+        </p>
+        <NotificationPhonesForm phones={notificationPhones ?? []} />
       </div>
 
       <div className="rounded-xl border border-slate-200 bg-white p-5">
