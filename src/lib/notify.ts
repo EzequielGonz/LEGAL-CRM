@@ -20,13 +20,17 @@ function formatQualificationData(data: Record<string, unknown>): string {
 }
 
 /**
- * Junta los teléfonos de administrador que reciben notificaciones de
- * WhatsApp: los cargados como variable de entorno (ADMIN_WHATSAPP_PHONES,
- * uno o varios separados por coma) MÁS los que cada usuario haya guardado
- * desde Configuración → Notificaciones (tabla `admin_profiles`). Antes esta
- * función solo miraba la variable de entorno, así que el teléfono que se
- * carga desde esa pantalla de Configuración quedaba guardado en la base
- * pero nunca se usaba realmente para mandar nada.
+ * Junta los teléfonos que reciben notificaciones de WhatsApp, de tres
+ * fuentes posibles:
+ * 1) Variable de entorno ADMIN_WHATSAPP_PHONES (uno o varios separados por coma).
+ * 2) El teléfono que cada usuario logueado haya guardado en Configuración →
+ *    Notificaciones (tabla `admin_profiles`, uno por cuenta).
+ * 3) La tabla `notification_phones`: números adicionales que NO necesitan
+ *    una cuenta de login en el panel — se cargan directamente (por ahora a
+ *    mano, en el futuro desde una pantalla de Configuración).
+ * Antes esta función solo miraba la variable de entorno, así que el
+ * teléfono cargado desde Configuración quedaba guardado en la base pero
+ * nunca se usaba realmente para mandar nada.
  */
 async function getAdminPhones(): Promise<string[]> {
   const supabase = createAdminClient();
@@ -37,12 +41,20 @@ async function getAdminPhones(): Promise<string[]> {
     .map((p) => normalizePhoneAR(p.trim()).phone)
     .filter((p): p is string => Boolean(p));
 
-  const { data: profiles } = await supabase.from("admin_profiles").select("phone");
+  const [{ data: profiles }, { data: extraPhones }] = await Promise.all([
+    supabase.from("admin_profiles").select("phone"),
+    supabase.from("notification_phones").select("phone"),
+  ]);
+
   const profilePhones = (profiles ?? [])
     .map((p) => (p.phone ? normalizePhoneAR(p.phone).phone : null))
     .filter((p): p is string => Boolean(p));
 
-  return Array.from(new Set([...envPhones, ...profilePhones]));
+  const extraPhonesNormalized = (extraPhones ?? [])
+    .map((p) => (p.phone ? normalizePhoneAR(p.phone).phone : null))
+    .filter((p): p is string => Boolean(p));
+
+  return Array.from(new Set([...envPhones, ...profilePhones, ...extraPhonesNormalized]));
 }
 
 /**
