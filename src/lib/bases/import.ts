@@ -4,6 +4,20 @@ import { normalizePhoneAR } from "@/lib/phone";
 import { extractRowFields } from "./mapping";
 import type { Area } from "@/lib/supabase/database.types";
 
+/**
+ * Muchas planillas de bases vienen con el nombre en MAYÚSCULA SOSTENIDA
+ * (ej. "RODRIGUEZ AQUINO ANGEL"), que se ve mal en el panel y en los
+ * mensajes de WhatsApp (que usan el primer nombre). Lo pasamos a
+ * Formato Título antes de guardarlo.
+ */
+function toTitleCase(name: string): string {
+  return name
+    .toLowerCase()
+    .split(" ")
+    .map((word) => (word ? word[0].toUpperCase() + word.slice(1) : word))
+    .join(" ");
+}
+
 export interface ImportBaseInput {
   area: Area;
   name: string;
@@ -123,7 +137,7 @@ export async function importBase(input: ImportBaseInput): Promise<ImportBaseSumm
       channelType: "whatsapp",
       externalUserId: phone,
       phone,
-      fullName: fields.full_name,
+      fullName: fields.full_name ? toTitleCase(fields.full_name) : fields.full_name,
       email: fields.email,
       source: "base_de_datos",
       campaignId: null,
