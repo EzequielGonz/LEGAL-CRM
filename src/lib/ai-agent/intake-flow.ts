@@ -1,5 +1,6 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendOutboundMessage } from "@/lib/messaging";
+import { notifyAdminOfQualifiedIntake } from "@/lib/notify";
 
 /**
  * Cuestionario fijo que se dispara cuando un prospecto responde al botón
@@ -10,7 +11,7 @@ import { sendOutboundMessage } from "@/lib/messaging";
  * `conversations.intake_step`.
  *
  * Devuelve `true` si el mensaje entrante fue consumido por este flujo (el
- * llamador no debe pasárselo además al agente IA), `false` si no aplica y
+ * llamador no debe pasárselo también al agente IA), `false` si no aplica y
  * el mensaje debe seguir su curso normal.
  */
 
@@ -183,6 +184,17 @@ export async function handleIntakeFlow({
       .update({ intake_step: "completado", status: "requiere_atencion_humana", ai_enabled: false })
       .eq("id", conversationId);
     await supabase.from("contacts").update({ status: "calificado" }).eq("id", contactId);
+
+    // Avisarle al estudio que hay un caso nuevo, calificado y con toda la
+    // info del cuestionario, listo para que un profesional se contacte.
+    // Antes esto no se hacía: el cuestionario se completaba pero nunca
+    // salía ningún aviso.
+    try {
+      await notifyAdminOfQualifiedIntake(contactId);
+    } catch (err) {
+      console.error("No se pudo notificar al administrador del caso calificado:", err);
+    }
+
     return true;
   }
 
