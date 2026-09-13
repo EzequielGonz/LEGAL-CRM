@@ -28,7 +28,8 @@ export function BaseRowsTable({
   const [campaignName, setCampaignName] = useState("");
   const [channelId, setChannelId] = useState(channels[0]?.id ?? "");
   const [template, setTemplate] = useState("");
-  const [delaySeconds, setDelaySeconds] = useState(90);
+  const [minDelaySeconds, setMinDelaySeconds] = useState(50);
+  const [maxDelaySeconds, setMaxDelaySeconds] = useState(200);
   const [batchSize, setBatchSize] = useState(10);
   const [batchPauseSeconds, setBatchPauseSeconds] = useState(300);
   const [dailyLimit, setDailyLimit] = useState<number | "">("");
@@ -63,7 +64,8 @@ export function BaseRowsTable({
         name: campaignName,
         channel_id: channelId,
         message_template_name: template,
-        send_delay_seconds: delaySeconds,
+        min_send_delay_seconds: minDelaySeconds,
+        max_send_delay_seconds: maxDelaySeconds,
         batch_size: batchSize,
         batch_pause_seconds: batchPauseSeconds,
         daily_send_limit: dailyLimit === "" ? null : dailyLimit,
@@ -149,8 +151,10 @@ export function BaseRowsTable({
           </div>
 
           <SendLimitsFields
-            delaySeconds={delaySeconds}
-            onDelayChange={setDelaySeconds}
+            minDelaySeconds={minDelaySeconds}
+            onMinDelayChange={setMinDelaySeconds}
+            maxDelaySeconds={maxDelaySeconds}
+            onMaxDelayChange={setMaxDelaySeconds}
             batchSize={batchSize}
             onBatchSizeChange={setBatchSize}
             batchPauseSeconds={batchPauseSeconds}
