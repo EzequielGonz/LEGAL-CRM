@@ -16,6 +16,7 @@ export async function handleInboundMessage({
   phone,
   fullName,
   body,
+  isButtonClick,
   externalMessageId,
 }: {
   area: Area;
@@ -24,6 +25,8 @@ export async function handleInboundMessage({
   phone?: string | null;
   fullName?: string | null;
   body: string;
+  /** true si vino de un botón de respuesta rápida de plantilla (no de texto libre). */
+  isButtonClick?: boolean;
   externalMessageId?: string;
 }) {
   const supabase = createAdminClient();
@@ -105,6 +108,7 @@ export async function handleInboundMessage({
     fullName: contact.full_name,
     intakeStep: (conversation as any).intake_step ?? null,
     body,
+    isButtonClick: isButtonClick ?? false,
   });
 
   if (!handledByIntakeFlow && conversation.ai_enabled) {
