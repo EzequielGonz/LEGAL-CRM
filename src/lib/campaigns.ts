@@ -8,10 +8,13 @@ import { findOrCreateConversation } from "@/lib/contacts";
  * Por qué no es un loop síncrono: las funciones serverless de Vercel tienen
  * un tiempo máximo de ejecución (10-60s en plan Hobby, hasta 300s en Pro).
  * El ritmo que necesitamos para no generar bloqueos de WhatsApp — 1 mensaje
- * nuevo cada 1.5 minutos, en lotes de 10, con una pausa de 5 minutos entre
- * lote y lote — implica que una campaña real puede tardar horas en
- * terminar. Ninguna función serverless puede quedarse "despierta" tanto
- * tiempo dentro de una sola request.
+ * nuevo cada tanto (un número al azar entre `min_send_delay_seconds` y
+ * `max_send_delay_seconds`, para que no sea siempre el mismo intervalo
+ * exacto y así se parezca más a una persona mandando mensajes a mano), en
+ * lotes de 10, con una pausa de 5 minutos entre lote y lote — implica que
+ * una campaña real puede tardar horas en terminar. Ninguna función
+ * serverless puede quedarse "despierta" tanto tiempo dentro de una sola
+ * request.
  *
  * En cambio: cada invocación de `tickCampaign` manda COMO MÁXIMO un mensaje
  * (o ninguno, si todavía no le toca por el ritmo configurado) y guarda en la
@@ -30,6 +33,19 @@ import { findOrCreateConversation } from "@/lib/contacts";
 // `campaigns` y exponerlas en el formulario de "Nueva campaña".
 const TEMPLATE_SENDER_NAME = "Leonardo";
 const TEMPLATE_TEAM_NAME = "Estudio Jurídico Vita";
+
+/**
+ * Devuelve un entero al azar entre min y max (ambos inclusive). Se usa para
+ * que el tiempo entre mensajes no sea siempre el mismo número exacto — así
+ * el envío se parece más al ritmo irregular de una persona mandando
+ * mensajes a mano, en vez de un número fijo repetido cientos de veces
+ * seguidas (un patrón fácil de detectar).
+ */
+export function randomInt(min: number, max: number): number {
+  const lo = Math.min(min, max);
+  const hi = Math.max(min, max);
+  return Math.floor(Math.random() * (hi - lo + 1)) + lo;
+}
 
 export interface TickResult {
   campaignId: string;
@@ -105,10 +121,13 @@ export async function tickCampaign(campaignId: string): Promise<TickResult> {
     }
   }
 
-  // 3) ¿Ya pasó el intervalo mínimo desde el último mensaje?
+  // 3) ¿Ya pasó el intervalo (al azar, entre min y max) desde el último
+  // mensaje? `next_delay_seconds` es el número que se sorteó la vez pasada
+  // específicamente para esta espera; si todavía no hay ninguno sorteado
+  // (primer mensaje de la campaña) usamos el mínimo configurado.
   if (campaign.last_sent_at) {
     const elapsedMs = now.getTime() - new Date(campaign.last_sent_at).getTime();
-    const neededMs = campaign.send_delay_seconds * 1000;
+    const neededMs = (campaign.next_delay_seconds ?? campaign.min_send_delay_seconds) * 1000;
     if (elapsedMs < neededMs) {
       return {
         campaignId,
@@ -156,6 +175,10 @@ export async function tickCampaign(campaignId: string): Promise<TickResult> {
     batch_paused_until: batchDone
       ? new Date(now.getTime() + campaign.batch_pause_seconds * 1000).toISOString()
       : null,
+    // Sorteamos ACÁ el tiempo de espera hasta el próximo mensaje (no un
+    // número fijo): así cada intervalo entre mensajes es distinto, dentro
+    // del rango configurado, simulando el ritmo irregular de una persona.
+    next_delay_seconds: randomInt(campaign.min_send_delay_seconds, campaign.max_send_delay_seconds),
   };
 
   try {
@@ -280,7 +303,9 @@ export interface CampaignStatusSnapshot {
     id: string;
     name: string;
     status: string;
-    send_delay_seconds: number;
+    min_send_delay_seconds: number;
+    max_send_delay_seconds: number;
+    next_delay_seconds: number | null;
     batch_size: number;
     batch_pause_seconds: number;
     daily_send_limit: number | null;
@@ -408,7 +433,7 @@ export async function getCampaignStatus(campaignId: string): Promise<CampaignSta
       waitReason = "finalizada";
     } else if (campaign.last_sent_at) {
       const elapsedMs = now.getTime() - new Date(campaign.last_sent_at).getTime();
-      const neededMs = campaign.send_delay_seconds * 1000;
+      const neededMs = (campaign.next_delay_seconds ?? campaign.min_send_delay_seconds) * 1000;
       if (elapsedMs < neededMs) {
         waitReason = "esperando_intervalo";
         waitSeconds = Math.ceil((neededMs - elapsedMs) / 1000);
@@ -421,7 +446,9 @@ export async function getCampaignStatus(campaignId: string): Promise<CampaignSta
       id: campaign.id,
       name: campaign.name,
       status: campaign.status,
-      send_delay_seconds: campaign.send_delay_seconds,
+      min_send_delay_seconds: campaign.min_send_delay_seconds,
+      max_send_delay_seconds: campaign.max_send_delay_seconds,
+      next_delay_seconds: campaign.next_delay_seconds,
       batch_size: campaign.batch_size,
       batch_pause_seconds: campaign.batch_pause_seconds,
       daily_send_limit: campaign.daily_send_limit,
