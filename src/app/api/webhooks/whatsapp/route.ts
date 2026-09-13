@@ -48,9 +48,10 @@ export async function POST(request: Request) {
           // manda con este tipo, no como "text", así que hay que leerlo de
           // message.button.text para que el flujo de preguntas lo detecte.
           let body: string;
+          const isButtonClick = message.type === "button";
           if (message.type === "text") {
             body = message.text?.body ?? "";
-          } else if (message.type === "button") {
+          } else if (isButtonClick) {
             body = message.button?.text ?? message.button?.payload ?? "";
           } else {
             continue; // MVP: solo texto y botones de plantilla por ahora
@@ -67,6 +68,7 @@ export async function POST(request: Request) {
             phone: message.from,
             fullName: contactProfile?.profile?.name ?? null,
             body,
+            isButtonClick,
             externalMessageId: message.id,
           });
         }
