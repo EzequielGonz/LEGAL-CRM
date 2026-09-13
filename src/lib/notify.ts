@@ -20,6 +20,32 @@ function formatQualificationData(data: Record<string, unknown>): string {
 }
 
 /**
+ * Junta los teléfonos de administrador que reciben notificaciones de
+ * WhatsApp: los cargados como variable de entorno (ADMIN_WHATSAPP_PHONES,
+ * uno o varios separados por coma) MÁS los que cada usuario haya guardado
+ * desde Configuración → Notificaciones (tabla `admin_profiles`). Antes esta
+ * función solo miraba la variable de entorno, así que el teléfono que se
+ * carga desde esa pantalla de Configuración quedaba guardado en la base
+ * pero nunca se usaba realmente para mandar nada.
+ */
+async function getAdminPhones(): Promise<string[]> {
+  const supabase = createAdminClient();
+
+  const rawEnvPhones = process.env.ADMIN_WHATSAPP_PHONES ?? process.env.ADMIN_WHATSAPP_PHONE ?? "";
+  const envPhones = rawEnvPhones
+    .split(",")
+    .map((p) => normalizePhoneAR(p.trim()).phone)
+    .filter((p): p is string => Boolean(p));
+
+  const { data: profiles } = await supabase.from("admin_profiles").select("phone");
+  const profilePhones = (profiles ?? [])
+    .map((p) => (p.phone ? normalizePhoneAR(p.phone).phone : null))
+    .filter((p): p is string => Boolean(p));
+
+  return Array.from(new Set([...envPhones, ...profilePhones]));
+}
+
+/**
  * Arma el mensaje de "nuevo cliente agendado" con el formato pedido y lo
  * envía por WhatsApp al teléfono del administrador, usando la línea de
  * WhatsApp del área correspondiente. Queda registrado en admin_notifications
@@ -82,15 +108,7 @@ export async function notifyAdminOfClosedAppointment(appointmentId: string) {
     .select()
     .single();
 
-  // Lista de teléfonos de administradores que reciben la notificación,
-  // separados por coma (ej: "5491139435473,5492235223906"). Se acepta
-  // ADMIN_WHATSAPP_PHONE (singular) como alias por compatibilidad con
-  // configuraciones anteriores que solo tenían un teléfono.
-  const rawPhones = process.env.ADMIN_WHATSAPP_PHONES ?? process.env.ADMIN_WHATSAPP_PHONE ?? "";
-  const adminPhones = rawPhones
-    .split(",")
-    .map((p) => normalizePhoneAR(p.trim()).phone)
-    .filter((p): p is string => Boolean(p));
+  const adminPhones = await getAdminPhones();
 
   if (adminPhones.length === 0) {
     console.warn(
@@ -127,6 +145,92 @@ export async function notifyAdminOfClosedAppointment(appointmentId: string) {
       .update({ admin_notified_at: new Date().toISOString() })
       .eq("id", appointment.id);
   }
+
+  if (sendErrors.length > 0 && !anySent) {
+    throw new Error(sendErrors.join(" | "));
+  }
+}
+
+/**
+ * Igual que `notifyAdminOfClosedAppointment`, pero para cuando se completa
+ * el cuestionario fijo de la campaña (intake-flow.ts) — ese caso no tiene
+ * una cita agendada con fecha/hora todavía (la "Pregunta 4" es una
+ * disponibilidad en texto libre, no un turno confirmado), así que se manda
+ * un aviso de "caso calificado" con toda la info recopilada, para que el
+ * estudio se ponga en contacto.
+ */
+export async function notifyAdminOfQualifiedIntake(contactId: string) {
+  const supabase = createAdminClient();
+
+  const { data: contact } = await supabase
+    .from("contacts")
+    .select("*")
+    .eq("id", contactId)
+    .single();
+
+  if (!contact) throw new Error(`Contacto ${contactId} no encontrado`);
+
+  const area: Area = contact.area;
+
+  const messageBody = [
+    "✅ CASO CALIFICADO (cuestionario completado)",
+    "",
+    `Área: ${area.toUpperCase()}`,
+    "",
+    "Nombre:",
+    contact.full_name ?? "(no informado)",
+    "",
+    "Teléfono:",
+    contact.phone ?? "(no informado)",
+    "",
+    "Email:",
+    contact.email ?? "(no informado)",
+    "",
+    "Origen:",
+    SOURCE_LABEL[contact.source] ?? contact.source,
+    "",
+    "Información recopilada:",
+    formatQualificationData(contact.qualification_data ?? {}),
+  ].join("\n");
+
+  const { data: notification } = await supabase
+    .from("admin_notifications")
+    .insert({
+      contact_id: contact.id,
+      area,
+      message_body: messageBody,
+      sent: false,
+    })
+    .select()
+    .single();
+
+  const adminPhones = await getAdminPhones();
+
+  if (adminPhones.length === 0) {
+    console.warn(
+      "No hay teléfonos de administrador configurados (ni por variable de entorno ni en Configuración): no se pudo notificar del caso calificado."
+    );
+    return;
+  }
+
+  const sendErrors: string[] = [];
+  let anySent = false;
+  for (const phone of adminPhones) {
+    try {
+      await sendWhatsAppText(area, phone, messageBody);
+      anySent = true;
+    } catch (err: any) {
+      sendErrors.push(`${phone}: ${String(err.message ?? err)}`);
+    }
+  }
+
+  await supabase
+    .from("admin_notifications")
+    .update({
+      sent: anySent,
+      error: sendErrors.length > 0 ? sendErrors.join(" | ") : null,
+    })
+    .eq("id", notification!.id);
 
   if (sendErrors.length > 0 && !anySent) {
     throw new Error(sendErrors.join(" | "));
