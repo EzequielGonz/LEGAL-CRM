@@ -6,6 +6,7 @@ import { AreaBadge } from "@/components/ui/badge";
 import { BaseRowsTable, type BaseRowItem } from "@/components/bases/base-rows-table";
 import { BaseRawGrid, type BaseRawRow } from "@/components/bases/base-raw-grid";
 import { BaseViewTabs } from "@/components/bases/base-view-tabs";
+import { DeleteBaseButton } from "@/components/bases/delete-base-button";
 
 export const dynamic = "force-dynamic";
 
@@ -86,6 +87,7 @@ export default async function BaseDetailPage({ params }: { params: { id: string 
             </Link>
           )}
           <AreaBadge area={base.area} />
+          <DeleteBaseButton baseId={base.id} baseName={base.name} redirectTo="/bases" />
         </div>
       </div>
 
