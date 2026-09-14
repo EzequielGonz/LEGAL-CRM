@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { AreaBadge } from "@/components/ui/badge";
 import { ImportBaseForm } from "@/components/bases/import-base-form";
+import { DeleteBaseButton } from "@/components/bases/delete-base-button";
 
 export const dynamic = "force-dynamic";
 
@@ -35,7 +36,10 @@ export default async function BasesPage() {
           >
             <div className="mb-1 flex items-center justify-between">
               <h3 className="font-medium text-slate-900">{b.name}</h3>
-              <AreaBadge area={b.area} />
+              <div className="flex items-center gap-2">
+                <AreaBadge area={b.area} />
+                <DeleteBaseButton baseId={b.id} baseName={b.name} />
+              </div>
             </div>
             <p className="text-xs text-slate-400">
               {b.source_label} · {b.total_rows} filas · {b.created_rows} nuevos ·{" "}
