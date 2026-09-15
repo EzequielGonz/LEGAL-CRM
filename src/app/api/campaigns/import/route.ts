@@ -40,6 +40,12 @@ interface ParsedRow {
  * y procesa todo en lotes en vez de fila por fila por el mismo motivo que
  * se corrigió ahí: con archivos de miles de filas, ir de a una agotaba el
  * tiempo máximo de la función en Vercel.
+ *
+ * También excluye automáticamente de la cola a cualquier contacto que ya
+ * haya recibido un mensaje de campaña en el pasado (de esta campaña o de
+ * cualquier otra, aunque ya esté borrada) — así, subir el mismo archivo a
+ * una campaña nueva no le vuelve a mandar el "primer contacto" a alguien
+ * que ya lo recibió.
  */
 export async function POST(request: Request) {
   const body = await request.json().catch(() => null);
@@ -212,8 +218,59 @@ export async function POST(request: Request) {
     }
   }
 
-  // --- Paso 5: agregar a todos como destinatarios pendientes de la campaña.
-  for (const phones of chunkArray(uniquePhones, CHUNK_SIZE)) {
+  // --- Paso 4.5: no volver a agregar a la cola a quien YA recibió alguna
+  // vez un mensaje de campaña (de esta campaña o de cualquier otra
+  // anterior, aunque esa campaña ya se haya borrado). Sin este paso,
+  // reimportar el mismo archivo en una campaña nueva le manda un "primer
+  // contacto" de nuevo a gente que ya lo recibió — pedido explícito para
+  // no volver a molestar a los ~100 que ya se contactaron en la tanda
+  // anterior. La fuente de verdad es el registro de mensajes salientes
+  // (`messages`, filtrado por `metadata.campaign_id`), no el estado del
+  // contacto ni de `campaign_contacts` — esas filas se borran junto con la
+  // campaña, pero el mensaje ya se mandó igual y eso no se puede deshacer.
+  const allContactIds = [...new Set(contactIdByPhone.values())];
+  const alreadyContactedIds = new Set<string>();
+
+  for (const ids of chunkArray(allContactIds, CHUNK_SIZE)) {
+    const { data: convRows } = await supabase
+      .from("conversations")
+      .select("id, contact_id")
+      .in("contact_id", ids);
+    if (!convRows || convRows.length === 0) continue;
+
+    const convIdToContactId = new Map(convRows.map((c) => [c.id, c.contact_id]));
+    const conversationIds = convRows.map((c) => c.id);
+
+    for (const convIdsChunk of chunkArray(conversationIds, CHUNK_SIZE)) {
+      const { data: msgRows } = await supabase
+        .from("messages")
+        .select("conversation_id, metadata")
+        .in("conversation_id", convIdsChunk)
+        .eq("direction", "saliente");
+      for (const m of msgRows ?? []) {
+        const metadata = m.metadata as any;
+        if (metadata && metadata.campaign_id) {
+          const cId = convIdToContactId.get(m.conversation_id);
+          if (cId) alreadyContactedIds.add(cId);
+        }
+      }
+    }
+  }
+
+  let yaContactados = 0;
+  const phonesToQueue: string[] = [];
+  for (const phone of uniquePhones) {
+    const contactId = contactIdByPhone.get(phone)!;
+    if (alreadyContactedIds.has(contactId)) {
+      yaContactados++;
+    } else {
+      phonesToQueue.push(phone);
+    }
+  }
+
+  // --- Paso 5: agregar como destinatarios pendientes de la campaña a
+  // todos menos a los que ya se contactaron antes (paso 4.5).
+  for (const phones of chunkArray(phonesToQueue, CHUNK_SIZE)) {
     const campaignContactRows = phones.map((phone) => ({
       campaign_id: campaign.id,
       contact_id: contactIdByPhone.get(phone)!,
@@ -233,5 +290,10 @@ export async function POST(request: Request) {
     }
   }
 
-  return NextResponse.json({ imported: parsedRows.length, skipped });
+  return NextResponse.json({
+    imported: parsedRows.length,
+    skipped,
+    agregados: phonesToQueue.length,
+    yaContactados,
+  });
 }
