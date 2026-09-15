@@ -8,24 +8,34 @@ import type { Area } from "@/lib/supabase/database.types";
  * cliente la convierte a un array de objetos con los headers originales
  * como claves) y la procesa fila por fila.
  *
- * Viene como multipart/form-data (no JSON) porque además de las filas ya
- * parseadas mandamos el archivo original tal cual, para guardarlo íntegro
- * como respaldo descargable (ver `importBase`).
+ * Viene como JSON (ya no como multipart/form-data): el archivo original
+ * pesado se sube DIRECTO a Storage desde el navegador antes de llamar acá
+ * (ver /api/bases/upload-url), así que esta request solo lleva datos
+ * livianos — nombre, filas ya interpretadas, y la ruta donde quedó el
+ * archivo. Esto evita el límite de ~4.5MB por request que tienen las
+ * funciones serverless de Vercel (antes el archivo viajaba en el mismo
+ * POST, y un archivo grande hacía que Vercel rechazara la request con un
+ * error que no era JSON — "Unexpected token 'R'..." en el panel).
  *
- * Campos del form-data:
+ * Body JSON:
  *   area, name, source_label, file_name: strings
- *   rows: string (JSON.stringify de Record<string, unknown>[])
- *   file: el archivo original (opcional, pero se manda siempre desde el form)
+ *   rows: Record<string, unknown>[]
+ *   storage_path: string | null (ruta en el bucket "bases-originales", si se subió archivo)
  */
 export async function POST(request: Request) {
-  const form = await request.formData();
+  const body = await request.json().catch(() => null);
+  if (!body) {
+    return NextResponse.json({ error: "Body inválido" }, { status: 400 });
+  }
 
-  const area = form.get("area") as Area;
-  const name = form.get("name") as string;
-  const source_label = form.get("source_label") as string;
-  const file_name = (form.get("file_name") as string) || undefined;
-  const rowsRaw = form.get("rows") as string | null;
-  const file = form.get("file") as File | null;
+  const { area, name, source_label, file_name, rows, storage_path } = body as {
+    area: Area;
+    name: string;
+    source_label: string;
+    file_name?: string | null;
+    rows?: unknown;
+    storage_path?: string | null;
+  };
 
   if (area !== "civil" && area !== "penal") {
     return NextResponse.json({ error: "Área inválida" }, { status: 400 });
@@ -33,17 +43,6 @@ export async function POST(request: Request) {
   if (!name || !source_label) {
     return NextResponse.json({ error: "Faltan nombre o fuente de la base" }, { status: 400 });
   }
-  if (!rowsRaw) {
-    return NextResponse.json({ error: "Faltan las filas a importar" }, { status: 400 });
-  }
-
-  let rows: Record<string, unknown>[];
-  try {
-    rows = JSON.parse(rowsRaw);
-  } catch {
-    return NextResponse.json({ error: "Las filas no vinieron en un formato válido" }, { status: 400 });
-  }
-
   if (!Array.isArray(rows) || rows.length === 0) {
     return NextResponse.json({ error: "El archivo no tiene filas para importar" }, { status: 400 });
   }
@@ -60,17 +59,14 @@ export async function POST(request: Request) {
   } = await supabase.auth.getUser();
 
   try {
-    const fileBuffer = file ? await file.arrayBuffer() : null;
-
     const summary = await importBase({
       area,
       name,
       sourceLabel: source_label,
-      fileName: file_name ?? file?.name ?? null,
-      rows,
+      fileName: file_name ?? null,
+      rows: rows as Record<string, unknown>[],
       importedBy: user?.id ?? null,
-      fileBuffer,
-      fileMimeType: file?.type ?? null,
+      storagePath: storage_path ?? null,
     });
     return NextResponse.json(summary);
   } catch (err: any) {
