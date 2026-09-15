@@ -43,7 +43,12 @@ interface StatusSnapshot {
 }
 
 const WAIT_LABEL: Record<StatusSnapshot["waitReason"], string> = {
-  listo: "Preparando el próximo envío...",
+  // Esto NO es un error ni la campaña trabada: ya se cumplió el tiempo de
+  // espera entre mensajes, pero el envío real lo hace el cron que revisa
+  // cada campaña una vez por minuto (ver docs/SETUP.md §6.1) — así que puede
+  // tardar hasta 60 segundos en pasar de acá a "Próximo mensaje en...". Es
+  // normal verlo así un ratito en cada mensaje.
+  listo: "Preparando el próximo envío (puede tardar hasta 1 minuto)...",
   esperando_intervalo: "Próximo mensaje en:",
   pausa_entre_lotes: "En pausa entre lotes. Se reanuda en:",
   limite_diario: "Límite diario de envíos alcanzado por hoy.",
@@ -78,8 +83,11 @@ export function CampaignLiveModal({
   const [snapshot, setSnapshot] = useState<StatusSnapshot | null>(null);
   const [countdown, setCountdown] = useState(0);
   const [errored, setErrored] = useState(false);
+  const [lastUpdatedAt, setLastUpdatedAt] = useState<Date | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const tickRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const fetchSnapshotRef = useRef<() => void>(() => {});
 
   useEffect(() => {
     if (!open) return;
@@ -95,19 +103,53 @@ export function CampaignLiveModal({
         setSnapshot(data);
         setCountdown(data.waitSeconds);
         setErrored(false);
+        setLastUpdatedAt(new Date());
       } catch {
         if (!cancelled) setErrored(true);
       }
     }
+    fetchSnapshotRef.current = fetchSnapshot;
+
+    function startPolling() {
+      if (pollRef.current) clearInterval(pollRef.current);
+      pollRef.current = setInterval(fetchSnapshot, POLL_MS);
+    }
+
+    // Bug reportado: el panel se quedaba mostrando "69 enviados" aunque el
+    // servidor ya hubiera llegado a 100. La causa es que este setInterval
+    // corre en el navegador (o en la app del celular) y, cuando la pantalla
+    // se bloquea o la pestaña pasa a segundo plano, el sistema operativo lo
+    // pausa para ahorrar batería — durante ese tiempo el panel deja de
+    // pedirle la novedad al servidor y se queda "congelado" en el último
+    // dato que llegó a tener, aunque los envíos hayan seguido su curso
+    // normalmente en el fondo. Al volver a primer plano refrescamos al
+    // toque (en vez de esperar hasta 4 segundos, o los minutos que haya
+    // estado en pausa) y reiniciamos el intervalo.
+    function handleWake() {
+      if (document.visibilityState === "visible") {
+        fetchSnapshot();
+        startPolling();
+      }
+    }
 
     fetchSnapshot();
-    pollRef.current = setInterval(fetchSnapshot, POLL_MS);
+    startPolling();
+    document.addEventListener("visibilitychange", handleWake);
+    window.addEventListener("focus", handleWake);
 
     return () => {
       cancelled = true;
       if (pollRef.current) clearInterval(pollRef.current);
+      document.removeEventListener("visibilitychange", handleWake);
+      window.removeEventListener("focus", handleWake);
     };
   }, [open, campaignId]);
+
+  async function handleManualRefresh() {
+    setRefreshing(true);
+    await fetchSnapshotRef.current();
+    setRefreshing(false);
+  }
 
   // Cuenta regresiva local, segundo a segundo, entre cada refresco del
   // servidor (que es el que manda la posta cada POLL_MS).
@@ -134,14 +176,34 @@ export function CampaignLiveModal({
             <p className="text-xs uppercase tracking-wide text-slate-400">Seguimiento en vivo</p>
             <h2 className="text-lg font-semibold text-slate-900">{campaignName}</h2>
           </div>
-          <button
-            onClick={onClose}
-            className="rounded-full px-2 py-1 text-sm text-slate-400 hover:bg-slate-100 hover:text-slate-600"
-            aria-label="Cerrar"
-          >
-            ✕
-          </button>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={handleManualRefresh}
+              disabled={refreshing}
+              className="rounded-full px-2 py-1 text-sm text-slate-400 hover:bg-slate-100 hover:text-slate-600 disabled:opacity-50"
+              aria-label="Actualizar ahora"
+              title="Actualizar ahora"
+            >
+              {refreshing ? "..." : "↻"}
+            </button>
+            <button
+              onClick={onClose}
+              className="rounded-full px-2 py-1 text-sm text-slate-400 hover:bg-slate-100 hover:text-slate-600"
+              aria-label="Cerrar"
+            >
+              ✕
+            </button>
+          </div>
         </div>
+
+        {lastUpdatedAt && (
+          <p className="-mt-2 mb-3 text-[11px] text-slate-400">
+            Actualizado {lastUpdatedAt.toLocaleTimeString("es-AR")}
+            {" · "}
+            si dejás esta ventana abierta y bloqueás la pantalla o cambiás de app, tocá ↻ al
+            volver para traer el último estado.
+          </p>
+        )}
 
         {!s && !errored && <p className="py-8 text-center text-sm text-slate-400">Cargando...</p>}
         {errored && !s && (
