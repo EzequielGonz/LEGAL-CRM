@@ -1,8 +1,15 @@
 import { createAdminClient } from "@/lib/supabase/admin";
-import { findOrCreateContact } from "@/lib/contacts";
 import { normalizePhoneAR } from "@/lib/phone";
 import { extractRowFields } from "./mapping";
 import type { Area } from "@/lib/supabase/database.types";
+
+const UNIQUE_VIOLATION = "23505";
+
+// Cuántas filas se procesan por consulta a la base en cada lote. No es un
+// límite de cuántas filas soporta el importador (eso lo controla
+// `rows.length > 5000` en la API) — es solo el tamaño de cada "paquete" de
+// inserts/selects para no mandar una sola consulta gigante.
+const CHUNK_SIZE = 500;
 
 /**
  * Muchas planillas de bases vienen con el nombre en MAYÚSCULA SOSTENIDA
@@ -16,6 +23,12 @@ function toTitleCase(name: string): string {
     .split(" ")
     .map((word) => (word ? word[0].toUpperCase() + word.slice(1) : word))
     .join(" ");
+}
+
+function chunkArray<T>(items: T[], size: number): T[][] {
+  const out: T[][] = [];
+  for (let i = 0; i < items.length; i += size) out.push(items.slice(i, i + size));
+  return out;
 }
 
 export interface ImportBaseInput {
@@ -47,6 +60,20 @@ export interface ImportBaseSummary {
   filas_a_revisar: number; // duplicado o creado pero con teléfono de confianza "revisar"
 }
 
+interface ParsedRow {
+  rowNumber: number;
+  rawRow: Record<string, unknown>;
+  phone: string;
+  confidence: string;
+  fullName: string | null;
+  email: string | null;
+  dniCuil: string | null;
+  tipoDeConsulta: string | null;
+  fechaDeConsulta: string | null;
+  observaciones: string | null;
+  isFirstForPhone: boolean;
+}
+
 /**
  * Procesa una base recién subida: por cada fila cruda, valida y normaliza el
  * teléfono, deduplica (contra contactos ya existentes Y contra otras filas
@@ -54,6 +81,13 @@ export interface ImportBaseSummary {
  * original (`raw_data`) se guarda intacta en `imported_base_rows` para
  * quedar como registro auditable — nunca se modifica ni se borra desde acá
  * en adelante.
+ *
+ * Todo esto se hace en lotes (`CHUNK_SIZE` filas por consulta) en vez de
+ * fila por fila: antes cada fila hacía 3-4 viajes a la base uno por uno, lo
+ * que con archivos de miles de filas tardaba varios minutos y Vercel
+ * cortaba la función por tiempo ("Task timed out after 300 seconds" — el
+ * error "An error o..." al importar un archivo grande). En lotes, un
+ * archivo de miles de filas se procesa en segundos.
  */
 export async function importBase(input: ImportBaseInput): Promise<ImportBaseSummary> {
   const supabase = createAdminClient();
@@ -78,25 +112,25 @@ export async function importBase(input: ImportBaseInput): Promise<ImportBaseSumm
     throw new Error(`No se pudo registrar la base: ${baseError?.message}`);
   }
 
-  let creados = 0;
-  let duplicados = 0;
+  // --- Paso 1: parsear y normalizar todas las filas en memoria (sin
+  // pegarle todavía a la base de datos).
+  const parsedRows: ParsedRow[] = [];
+  const invalidRowInserts: Record<string, unknown>[] = [];
+  const firstIndexByPhone = new Map<string, number>();
   let invalidos = 0;
   let filasARevisar = 0;
 
-  // Dedup dentro del propio archivo: mismo teléfono normalizado repetido dos
-  // veces en la misma base no debe crear dos contactos.
-  const seenInFile = new Map<string, string>(); // phone -> contact_id
-
   for (let i = 0; i < input.rows.length; i++) {
     const rawRow = input.rows[i];
+    const rowNumber = i + 1;
     const fields = extractRowFields(rawRow);
     const { phone, confidence } = normalizePhoneAR(fields.phone_raw);
 
     if (!phone) {
       invalidos++;
-      await supabase.from("imported_base_rows").insert({
+      invalidRowInserts.push({
         base_id: base.id,
-        row_number: i + 1,
+        row_number: rowNumber,
         raw_data: rawRow,
         status: "invalido",
         error: "Sin teléfono o formato irreconocible",
@@ -106,62 +140,156 @@ export async function importBase(input: ImportBaseInput): Promise<ImportBaseSumm
 
     if (confidence === "revisar") filasARevisar++;
 
-    if (seenInFile.has(phone)) {
-      duplicados++;
-      await supabase.from("imported_base_rows").insert({
-        base_id: base.id,
-        row_number: i + 1,
-        raw_data: rawRow,
-        status: "duplicado",
-        error: "Teléfono repetido dentro de la misma base",
-        contact_id: seenInFile.get(phone),
-      });
-      continue;
-    }
+    const isFirstForPhone = !firstIndexByPhone.has(phone);
+    if (isFirstForPhone) firstIndexByPhone.set(phone, parsedRows.length);
 
-    const { contact, created } = await findOrCreateContact({
-      area: input.area,
-      channelType: "whatsapp",
-      externalUserId: phone,
+    parsedRows.push({
+      rowNumber,
+      rawRow,
       phone,
-      fullName: fields.full_name ? toTitleCase(fields.full_name) : fields.full_name,
-      email: fields.email,
-      source: "base_de_datos",
-      campaignId: null,
+      confidence,
+      fullName: fields.full_name ? toTitleCase(fields.full_name) : fields.full_name ?? null,
+      email: fields.email ?? null,
+      dniCuil: fields.dni_cuil ?? null,
+      tipoDeConsulta: fields.tipo_de_consulta ?? null,
+      fechaDeConsulta: fields.fecha_de_consulta ?? null,
+      observaciones: fields.observaciones ?? null,
+      isFirstForPhone,
+    });
+  }
+
+  const uniquePhones = [...firstIndexByPhone.keys()];
+
+  // --- Paso 2: buscar en lote cuáles de esos teléfonos ya son contactos
+  // existentes (por identidad de WhatsApp, o por teléfono dentro de la
+  // misma área).
+  const contactIdByPhone = new Map<string, string>();
+
+  for (const phones of chunkArray(uniquePhones, CHUNK_SIZE)) {
+    const { data: identities } = await supabase
+      .from("contact_identities")
+      .select("contact_id, external_user_id")
+      .eq("area", input.area)
+      .eq("channel_type", "whatsapp")
+      .in("external_user_id", phones);
+    for (const row of identities ?? []) {
+      contactIdByPhone.set(row.external_user_id, row.contact_id);
+    }
+  }
+
+  const phonesWithoutIdentity = uniquePhones.filter((p) => !contactIdByPhone.has(p));
+  for (const phones of chunkArray(phonesWithoutIdentity, CHUNK_SIZE)) {
+    const { data: contactsByPhone } = await supabase
+      .from("contacts")
+      .select("id, phone")
+      .eq("area", input.area)
+      .in("phone", phones);
+    for (const c of contactsByPhone ?? []) {
+      if (c.phone) contactIdByPhone.set(c.phone, c.id);
+    }
+  }
+
+  // --- Paso 3: crear en lote los contactos que todavía no existían.
+  const newPhones = uniquePhones.filter((p) => !contactIdByPhone.has(p));
+  const newPhoneSet = new Set(newPhones);
+
+  for (const phones of chunkArray(newPhones, CHUNK_SIZE)) {
+    const rowsToInsert = phones.map((phone) => {
+      const row = parsedRows[firstIndexByPhone.get(phone)!];
+      const qualification_data: Record<string, unknown> = {};
+      if (row.tipoDeConsulta) qualification_data.tipo_de_consulta = row.tipoDeConsulta;
+      if (row.fechaDeConsulta) qualification_data.fecha_de_consulta_base = row.fechaDeConsulta;
+      if (row.observaciones) qualification_data.observaciones_base = row.observaciones;
+      return {
+        area: input.area,
+        full_name: row.fullName,
+        phone,
+        email: row.email,
+        source: "base_de_datos" as const,
+        dni_cuil: row.dniCuil,
+        imported_base_id: base.id,
+        qualification_data,
+      };
     });
 
-    seenInFile.set(phone, contact.id);
+    let { data: inserted, error: insertError } = await supabase
+      .from("contacts")
+      .insert(rowsToInsert)
+      .select("id, phone");
 
-    if (created) {
-      creados++;
-      // Solo completamos estos campos al crear el contacto: si ya existía
-      // (por ejemplo, llegó antes por Instagram) no pisamos su historial.
-      const mergedQualification = {
-        ...(contact.qualification_data ?? {}),
-        ...(fields.tipo_de_consulta ? { tipo_de_consulta: fields.tipo_de_consulta } : {}),
-        ...(fields.fecha_de_consulta ? { fecha_de_consulta_base: fields.fecha_de_consulta } : {}),
-        ...(fields.observaciones ? { observaciones_base: fields.observaciones } : {}),
-      };
-      await supabase
+    if (insertError) {
+      // Carrera rara: alguien escribió por WhatsApp con ese mismo teléfono
+      // justo mientras se importaba la base. Buscamos quién ganó la carrera
+      // e insertamos solo los que de verdad siguen faltando.
+      if (insertError.code !== UNIQUE_VIOLATION) {
+        throw new Error(`No se pudieron crear los contactos: ${insertError.message}`);
+      }
+      const { data: nowExisting } = await supabase
         .from("contacts")
-        .update({
-          dni_cuil: fields.dni_cuil,
-          imported_base_id: base.id,
-          qualification_data: mergedQualification,
-        })
-        .eq("id", contact.id);
-    } else {
-      duplicados++;
+        .select("id, phone")
+        .eq("area", input.area)
+        .in("phone", phones);
+      const wonRace = new Set((nowExisting ?? []).map((c) => c.phone));
+      const stillMissing = rowsToInsert.filter((r) => !wonRace.has(r.phone));
+
+      inserted = [...(nowExisting ?? [])];
+      if (stillMissing.length > 0) {
+        const { data: retryInserted, error: retryError } = await supabase
+          .from("contacts")
+          .insert(stillMissing)
+          .select("id, phone");
+        if (retryError) {
+          throw new Error(`No se pudieron crear los contactos: ${retryError.message}`);
+        }
+        inserted = [...inserted, ...(retryInserted ?? [])];
+      }
     }
 
-    await supabase.from("imported_base_rows").insert({
-      base_id: base.id,
-      row_number: i + 1,
-      raw_data: rawRow,
-      status: created ? "creado" : "duplicado",
-      error: confidence === "revisar" ? "Teléfono normalizado con baja confianza: revisar" : null,
-      contact_id: contact.id,
-    });
+    for (const c of inserted ?? []) {
+      if (c.phone) contactIdByPhone.set(c.phone, c.id);
+    }
+  }
+
+  const creados = newPhones.length;
+  const duplicados = parsedRows.length - creados;
+
+  // --- Paso 4: asociar la identidad de WhatsApp a todos los contactos
+  // (nuevos y existentes). Si ya existía esa identidad, el `upsert` con
+  // `ignoreDuplicates` simplemente no hace nada.
+  for (const phones of chunkArray(uniquePhones, CHUNK_SIZE)) {
+    const identityRows = phones.map((phone) => ({
+      contact_id: contactIdByPhone.get(phone)!,
+      area: input.area,
+      channel_type: "whatsapp" as const,
+      external_user_id: phone,
+    }));
+    const { error } = await supabase
+      .from("contact_identities")
+      .upsert(identityRows, {
+        onConflict: "area,channel_type,external_user_id",
+        ignoreDuplicates: true,
+      });
+    if (error) {
+      throw new Error(`No se pudieron asociar las identidades: ${error.message}`);
+    }
+  }
+
+  // --- Paso 5: guardar el registro auditable de cada fila
+  // (`imported_base_rows`), en lote.
+  const validRowInserts = parsedRows.map((row) => ({
+    base_id: base.id,
+    row_number: row.rowNumber,
+    raw_data: row.rawRow,
+    status: row.isFirstForPhone && newPhoneSet.has(row.phone) ? "creado" : "duplicado",
+    error: row.confidence === "revisar" ? "Teléfono normalizado con baja confianza: revisar" : null,
+    contact_id: contactIdByPhone.get(row.phone) ?? null,
+  }));
+
+  for (const rows of chunkArray([...invalidRowInserts, ...validRowInserts], CHUNK_SIZE)) {
+    const { error } = await supabase.from("imported_base_rows").insert(rows);
+    if (error) {
+      throw new Error(`No se pudo guardar el detalle de la importación: ${error.message}`);
+    }
   }
 
   await supabase
