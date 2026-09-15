@@ -8,7 +8,12 @@ export function CsvUploader({ campaignId }: { campaignId: string }) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<{ imported: number; skipped: number } | null>(null);
+  const [result, setResult] = useState<{
+    imported: number;
+    skipped: number;
+    agregados?: number;
+    yaContactados?: number;
+  } | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   async function handleFile(file: File) {
@@ -71,7 +76,12 @@ export function CsvUploader({ campaignId }: { campaignId: string }) {
       {error && <p className="mt-2 text-xs text-red-600">{error}</p>}
       {result && (
         <p className="mt-2 text-xs text-green-600">
-          {result.imported} contactos importados · {result.skipped} filas sin teléfono omitidas.
+          {result.agregados ?? result.imported} agregados a la cola de la campaña
+          {typeof result.yaContactados === "number" && result.yaContactados > 0 && (
+            <> · {result.yaContactados} ya habían recibido un mensaje de campaña antes (no se les vuelve a mandar)</>
+          )}
+          {" · "}
+          {result.skipped} filas sin teléfono omitidas.
         </p>
       )}
     </div>
