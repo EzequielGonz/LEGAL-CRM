@@ -41,6 +41,9 @@ const ALIASES: Record<string, string[]> = {
   tipo_de_consulta: ["tipodeconsulta", "tipoconsulta", "consulta", "motivo", "motivodeconsulta"],
   fecha_de_consulta: ["fechadeconsulta", "fechaconsulta", "fecha"],
   observaciones: ["observaciones", "notas", "comentarios", "observacion"],
+  // El barrio/zona del prospecto — en las planillas reales viene bajo la
+  // columna "Localidad".
+  localidad: ["localidad", "barrio", "zona", "localidadbarrio", "ciudad"],
 };
 
 // Para el teléfono en particular (el dato que más importa reconocer bien:
@@ -71,6 +74,7 @@ export interface ExtractedRowFields {
   tipo_de_consulta: string | null;
   fecha_de_consulta: string | null;
   observaciones: string | null;
+  localidad: string | null;
 }
 
 /**
@@ -126,5 +130,6 @@ export function extractRowFields(rawRow: Record<string, unknown>): ExtractedRowF
     tipo_de_consulta: findField("tipo_de_consulta"),
     fecha_de_consulta: findField("fecha_de_consulta"),
     observaciones: findField("observaciones"),
+    localidad: findField("localidad"),
   };
 }
