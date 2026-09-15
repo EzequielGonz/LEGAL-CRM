@@ -170,7 +170,7 @@ export async function runAgentTurn(conversationId: string) {
 
   for (let i = 0; i < MAX_TOOL_ITERATIONS; i++) {
     const response = await gemini().models.generateContent({
-      model: process.env.GEMINI_MODEL ?? "gemini-2.5-flash",
+            model: process.env.GEMINI_MODEL ?? "gemini-3.6-flash",
       contents: messages,
       config: {
         systemInstruction: system,
