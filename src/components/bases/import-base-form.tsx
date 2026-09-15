@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { parseSpreadsheetFile } from "@/lib/bases/parse-file";
 import type { ImportBaseSummary } from "@/lib/bases/import";
+import { createClient } from "@/lib/supabase/client";
 import { SpreadsheetPreview } from "./spreadsheet-preview";
 
 const PREVIEW_ROW_LIMIT = 100;
@@ -58,15 +59,49 @@ export function ImportBaseForm() {
         return;
       }
 
-      const form = new FormData();
-      form.append("area", area);
-      form.append("name", name);
-      form.append("source_label", sourceLabel);
-      form.append("file_name", file.name);
-      form.append("rows", JSON.stringify(rows));
-      form.append("file", file);
+      // El archivo original se sube DIRECTO a Storage (con una URL firmada
+      // de un solo uso) en vez de mandarlo dentro del POST a /api/bases.
+      // Las funciones de Vercel rechazan requests de más de ~4.5MB antes de
+      // que nuestro código llegue a correr — con archivos grandes eso daba
+      // el error "Unexpected token 'R'..." (Vercel devuelve texto plano,
+      // "Request Entity Too Large", no JSON). Subiendo aparte, el archivo
+      // nunca pasa por esa función, así que no hay límite de tamaño real.
+      let storagePath: string | null = null;
+      try {
+        const urlRes = await fetch("/api/bases/upload-url", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ area, fileName: file.name }),
+        });
+        const urlData = await urlRes.json();
+        if (!urlRes.ok) throw new Error(urlData.error ?? "No se pudo preparar la subida del archivo");
 
-      const res = await fetch("/api/bases", { method: "POST", body: form });
+        const supabase = createClient();
+        const { error: uploadError } = await supabase.storage
+          .from("bases-originales")
+          .uploadToSignedUrl(urlData.path, urlData.token, file);
+        if (uploadError) throw uploadError;
+
+        storagePath = urlData.path;
+      } catch (uploadErr: any) {
+        // El archivo original es un respaldo descargable, no el dato
+        // crítico (eso son las filas, que van aparte) — si esto falla no
+        // bloqueamos la importación, solo queda sin archivo para descargar.
+        console.warn("No se pudo subir el archivo original a Storage:", uploadErr);
+      }
+
+      const res = await fetch("/api/bases", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          area,
+          name,
+          source_label: sourceLabel,
+          file_name: file.name,
+          rows,
+          storage_path: storagePath,
+        }),
+      });
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Error desconocido al importar");
