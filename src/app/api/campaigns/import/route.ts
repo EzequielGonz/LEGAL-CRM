@@ -1,29 +1,59 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { findOrCreateContact } from "@/lib/contacts";
+import { extractRowFields } from "@/lib/bases/mapping";
+import { normalizePhoneAR } from "@/lib/phone";
 
-interface ImportRow {
-  // Puede llegar string o number (Excel manda números "crudos" cuando la
-  // columna no está formateada como texto), por eso el tipo amplio acá y la
-  // conversión explícita con String(...) más abajo antes de usarlos.
-  full_name?: string | number | null;
-  phone: string | number | null;
+const UNIQUE_VIOLATION = "23505";
+
+// Mismo motivo que en /api/bases: procesar en lotes en vez de fila por fila,
+// para no agotar el tiempo máximo de la función con archivos grandes.
+const CHUNK_SIZE = 500;
+export const maxDuration = 60;
+
+function chunkArray<T>(items: T[], size: number): T[][] {
+  const out: T[][] = [];
+  for (let i = 0; i < items.length; i += size) out.push(items.slice(i, i + size));
+  return out;
+}
+
+interface ParsedRow {
+  phone: string;
+  fullName: string | null;
+  tipoDeConsulta: string | null;
+  fechaDeConsulta: string | null;
+  observaciones: string | null;
+  localidad: string | null;
 }
 
 /**
- * Recibe la base ya parseada en el cliente (papaparse) como JSON:
- * { campaign_id, contacts: [{ full_name, phone }, ...] }
- * Crea (o reutiliza) cada contacto con source='base_de_datos' y lo agrega
- * a la campaña como destinatario pendiente.
+ * Recibe filas CRUDAS (tal como las devuelve parseSpreadsheetFile, con los
+ * headers originales del CSV/Excel como claves — no ya mapeadas a
+ * full_name/phone) y las agrega como destinatarios de una campaña ya
+ * creada.
+ *
+ * Antes esta ruta esperaba que el cliente ya hubiera adivinado las columnas
+ * buscando literalmente las claves "nombre"/"telefono", y guardaba el
+ * teléfono tal cual venía en la planilla (sin normalizar al formato
+ * 549+área+número que espera WhatsApp). Ahora usa exactamente el mismo
+ * reconocimiento de columnas por alias (`extractRowFields`) y la misma
+ * normalización de teléfono (`normalizePhoneAR`) que la sección de Bases,
+ * y procesa todo en lotes en vez de fila por fila por el mismo motivo que
+ * se corrigió ahí: con archivos de miles de filas, ir de a una agotaba el
+ * tiempo máximo de la función en Vercel.
  */
 export async function POST(request: Request) {
-  const { campaign_id, contacts } = (await request.json()) as {
-    campaign_id: string;
-    contacts: ImportRow[];
+  const body = await request.json().catch(() => null);
+  if (!body) {
+    return NextResponse.json({ error: "Body inválido" }, { status: 400 });
+  }
+
+  const { campaign_id, rows } = body as {
+    campaign_id?: string;
+    rows?: unknown;
   };
 
-  if (!campaign_id || !Array.isArray(contacts) || contacts.length === 0) {
-    return NextResponse.json({ error: "Faltan campaign_id o contactos" }, { status: 400 });
+  if (!campaign_id || !Array.isArray(rows) || rows.length === 0) {
+    return NextResponse.json({ error: "Faltan campaign_id o filas para importar" }, { status: 400 });
   }
 
   const supabase = createAdminClient();
@@ -36,41 +66,172 @@ export async function POST(request: Request) {
 
   if (!campaign) return NextResponse.json({ error: "Campaña no encontrada" }, { status: 404 });
 
-  let imported = 0;
+  // --- Paso 1: interpretar y normalizar todas las filas en memoria.
+  const parsedRows: ParsedRow[] = [];
   let skipped = 0;
+  const firstIndexByPhone = new Map<string, number>();
 
-  for (const row of contacts) {
-    // Puede llegar un número de JS en vez de string (ej: Excel con la
-    // columna de teléfono sin formato de texto), así que convertimos con
-    // String(...) antes de cualquier .trim() para no romper con eso.
-    const phone = row.phone != null ? String(row.phone).trim() : "";
+  for (const rawRow of rows as Record<string, unknown>[]) {
+    const fields = extractRowFields(rawRow);
+    const { phone } = normalizePhoneAR(fields.phone_raw);
+
     if (!phone) {
       skipped++;
       continue;
     }
 
-    const fullNameRaw = row.full_name != null ? String(row.full_name).trim() : "";
+    if (!firstIndexByPhone.has(phone)) firstIndexByPhone.set(phone, parsedRows.length);
 
-    const { contact } = await findOrCreateContact({
-      area: campaign.area,
-      channelType: "whatsapp",
-      externalUserId: phone,
+    parsedRows.push({
       phone,
-      fullName: fullNameRaw || null,
-      source: "base_de_datos",
-      channelId: campaign.channel_id,
-      campaignId: campaign.id,
+      fullName: fields.full_name ?? null,
+      tipoDeConsulta: fields.tipo_de_consulta ?? null,
+      fechaDeConsulta: fields.fecha_de_consulta ?? null,
+      observaciones: fields.observaciones ?? null,
+      localidad: fields.localidad ?? null,
     });
-
-    await supabase
-      .from("campaign_contacts")
-      .upsert(
-        { campaign_id: campaign.id, contact_id: contact.id, status: "pendiente" },
-        { onConflict: "campaign_id,contact_id", ignoreDuplicates: true }
-      );
-
-    imported++;
   }
 
-  return NextResponse.json({ imported, skipped });
+  const uniquePhones = [...firstIndexByPhone.keys()];
+
+  // --- Paso 2: buscar en lote cuáles de esos teléfonos ya son contactos
+  // existentes (por identidad de WhatsApp, o por teléfono en la misma área).
+  const contactIdByPhone = new Map<string, string>();
+
+  for (const phones of chunkArray(uniquePhones, CHUNK_SIZE)) {
+    const { data: identities } = await supabase
+      .from("contact_identities")
+      .select("contact_id, external_user_id")
+      .eq("area", campaign.area)
+      .eq("channel_type", "whatsapp")
+      .in("external_user_id", phones);
+    for (const row of identities ?? []) {
+      contactIdByPhone.set(row.external_user_id, row.contact_id);
+    }
+  }
+
+  const phonesWithoutIdentity = uniquePhones.filter((p) => !contactIdByPhone.has(p));
+  for (const phones of chunkArray(phonesWithoutIdentity, CHUNK_SIZE)) {
+    const { data: contactsByPhone } = await supabase
+      .from("contacts")
+      .select("id, phone")
+      .eq("area", campaign.area)
+      .in("phone", phones);
+    for (const c of contactsByPhone ?? []) {
+      if (c.phone) contactIdByPhone.set(c.phone, c.id);
+    }
+  }
+
+  // --- Paso 3: crear en lote los contactos que todavía no existían.
+  const newPhones = uniquePhones.filter((p) => !contactIdByPhone.has(p));
+
+  for (const phones of chunkArray(newPhones, CHUNK_SIZE)) {
+    const rowsToInsert = phones.map((phone) => {
+      const row = parsedRows[firstIndexByPhone.get(phone)!];
+      const qualification_data: Record<string, unknown> = {};
+      if (row.tipoDeConsulta) qualification_data.tipo_de_consulta = row.tipoDeConsulta;
+      if (row.fechaDeConsulta) qualification_data.fecha_de_consulta_base = row.fechaDeConsulta;
+      if (row.observaciones) qualification_data.observaciones_base = row.observaciones;
+      if (row.localidad) qualification_data.localidad = row.localidad;
+      return {
+        area: campaign.area,
+        full_name: row.fullName,
+        phone,
+        source: "base_de_datos" as const,
+        first_channel_id: campaign.channel_id ?? null,
+        campaign_id: campaign.id,
+        qualification_data,
+      };
+    });
+
+    let { data: inserted, error: insertError } = await supabase
+      .from("contacts")
+      .insert(rowsToInsert)
+      .select("id, phone");
+
+    if (insertError) {
+      // Carrera rara: alguien escribió por WhatsApp con ese mismo teléfono
+      // justo mientras se importaba. Buscamos quién ganó la carrera e
+      // insertamos solo los que de verdad siguen faltando.
+      if (insertError.code !== UNIQUE_VIOLATION) {
+        return NextResponse.json(
+          { error: `No se pudieron crear los contactos: ${insertError.message}` },
+          { status: 500 }
+        );
+      }
+      const { data: nowExisting } = await supabase
+        .from("contacts")
+        .select("id, phone")
+        .eq("area", campaign.area)
+        .in("phone", phones);
+      const wonRace = new Set((nowExisting ?? []).map((c) => c.phone));
+      const stillMissing = rowsToInsert.filter((r) => !wonRace.has(r.phone));
+
+      inserted = [...(nowExisting ?? [])];
+      if (stillMissing.length > 0) {
+        const { data: retryInserted, error: retryError } = await supabase
+          .from("contacts")
+          .insert(stillMissing)
+          .select("id, phone");
+        if (retryError) {
+          return NextResponse.json(
+            { error: `No se pudieron crear los contactos: ${retryError.message}` },
+            { status: 500 }
+          );
+        }
+        inserted = [...inserted, ...(retryInserted ?? [])];
+      }
+    }
+
+    for (const c of inserted ?? []) {
+      if (c.phone) contactIdByPhone.set(c.phone, c.id);
+    }
+  }
+
+  // --- Paso 4: asociar la identidad de WhatsApp a todos los contactos
+  // (nuevos y existentes). Si ya existía, el `upsert` con `ignoreDuplicates`
+  // no hace nada.
+  for (const phones of chunkArray(uniquePhones, CHUNK_SIZE)) {
+    const identityRows = phones.map((phone) => ({
+      contact_id: contactIdByPhone.get(phone)!,
+      area: campaign.area,
+      channel_type: "whatsapp" as const,
+      external_user_id: phone,
+    }));
+    const { error } = await supabase
+      .from("contact_identities")
+      .upsert(identityRows, {
+        onConflict: "area,channel_type,external_user_id",
+        ignoreDuplicates: true,
+      });
+    if (error) {
+      return NextResponse.json(
+        { error: `No se pudieron asociar las identidades: ${error.message}` },
+        { status: 500 }
+      );
+    }
+  }
+
+  // --- Paso 5: agregar a todos como destinatarios pendientes de la campaña.
+  for (const phones of chunkArray(uniquePhones, CHUNK_SIZE)) {
+    const campaignContactRows = phones.map((phone) => ({
+      campaign_id: campaign.id,
+      contact_id: contactIdByPhone.get(phone)!,
+      status: "pendiente",
+    }));
+    const { error } = await supabase
+      .from("campaign_contacts")
+      .upsert(campaignContactRows, {
+        onConflict: "campaign_id,contact_id",
+        ignoreDuplicates: true,
+      });
+    if (error) {
+      return NextResponse.json(
+        { error: `No se pudieron agregar los destinatarios a la campaña: ${error.message}` },
+        { status: 500 }
+      );
+    }
+  }
+
+  return NextResponse.json({ imported: parsedRows.length, skipped });
 }
