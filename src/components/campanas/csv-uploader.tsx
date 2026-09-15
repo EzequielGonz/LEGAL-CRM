@@ -56,8 +56,9 @@ export function CsvUploader({ campaignId }: { campaignId: string }) {
       <p className="mb-2 font-medium text-slate-700">Cargar base (CSV o Excel)</p>
       <p className="mb-3 text-xs text-slate-400">
         Reconoce columnas de nombre y teléfono con cualquier variante de nombre habitual (ej:
-        "Teléfono", "Celular", "WhatsApp") — no hace falta que se llamen exactamente así. El
-        teléfono se normaliza automáticamente al formato que necesita WhatsApp.
+        &ldquo;Teléfono&rdquo;, &ldquo;Celular&rdquo;, &ldquo;WhatsApp&rdquo;) — no hace falta que
+        se llamen exactamente así. El teléfono se normaliza automáticamente al formato que
+        necesita WhatsApp.
       </p>
       <input
         ref={inputRef}
