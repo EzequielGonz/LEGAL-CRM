@@ -3,6 +3,11 @@ import { importBase } from "@/lib/bases/import";
 import { createClient } from "@/lib/supabase/server";
 import type { Area } from "@/lib/supabase/database.types";
 
+// Margen de seguridad: con el importador en lotes (ver src/lib/bases/import.ts)
+// esto no debería hacer falta ni de cerca, pero por las dudas le damos más
+// tiempo del default a esta función en particular.
+export const maxDuration = 60;
+
 /**
  * Recibe una base ya parseada en el cliente (CSV o Excel, da igual: el
  * cliente la convierte a un array de objetos con los headers originales
