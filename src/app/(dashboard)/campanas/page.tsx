@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { NewCampaignForm } from "@/components/campanas/new-campaign-form";
 import { DeleteCampaignButton } from "@/components/campanas/delete-campaign-button";
+import { getCampaignFunnelCounts } from "@/lib/campaigns";
 
 export const dynamic = "force-dynamic";
 
@@ -16,12 +17,25 @@ export default async function CampanasPage() {
   const supabase = createClient();
 
   const [{ data: campaigns }, { data: channels }] = await Promise.all([
-    supabase
-      .from("campaigns")
-      .select("*, campaign_contacts(status, contacts(status))")
-      .order("created_at", { ascending: false }),
+    // Antes acá se traía "*, campaign_contacts(status, contacts(status))"
+    // embebido para contar a mano — pero el límite de "Max Rows" del
+    // proyecto de Supabase (1000 por defecto) recorta esas filas
+    // embebidas igual que cualquier otra consulta, así que con una
+    // campaña de más de 1000 destinatarios la tarjeta mostraba "99/1000
+    // enviados" en vez del total y el conteo real. Ahora se cuenta aparte
+    // con `getCampaignFunnelCounts` (consultas de solo conteo, sin ese
+    // límite).
+    supabase.from("campaigns").select("*").order("created_at", { ascending: false }),
     supabase.from("channels").select("id, label").eq("area", "civil").eq("type", "whatsapp"),
   ]);
+
+  const funnelsByCampaignId = new Map(
+    await Promise.all(
+      (campaigns ?? []).map(
+        async (c) => [c.id, await getCampaignFunnelCounts(supabase, c.id)] as const
+      )
+    )
+  );
 
   return (
     <div>
@@ -37,16 +51,11 @@ export default async function CampanasPage() {
 
       <div className="space-y-3">
         {(campaigns ?? []).map((c: any) => {
-          const total = c.campaign_contacts?.length ?? 0;
-          const enviados = (c.campaign_contacts ?? []).filter((cc: any) =>
-            ["enviado", "entregado", "leido", "respondio"].includes(cc.status)
-          ).length;
-          const respondieron = (c.campaign_contacts ?? []).filter(
-            (cc: any) => cc.status === "respondio"
-          ).length;
-          const agendados = (c.campaign_contacts ?? []).filter((cc: any) =>
-            ["agendado", "cerrado_ganado"].includes(cc.contacts?.status)
-          ).length;
+          const funnel = funnelsByCampaignId.get(c.id);
+          const total = funnel?.total ?? 0;
+          const enviados = funnel?.enviados ?? 0;
+          const respondieron = funnel?.respondieron ?? 0;
+          const agendados = funnel?.agendados ?? 0;
 
           return (
             <div
