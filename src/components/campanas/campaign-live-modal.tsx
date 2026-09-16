@@ -18,6 +18,8 @@ interface StatusSnapshot {
     batch_paused_until: string | null;
     started_at: string | null;
     finished_at: string | null;
+    send_window_start_hour: number;
+    send_window_end_hour: number;
   };
   counts: {
     total: number;
@@ -38,8 +40,10 @@ interface StatusSnapshot {
     | "esperando_intervalo"
     | "pausa_entre_lotes"
     | "limite_diario"
+    | "fuera_de_horario"
     | "detenida"
     | "finalizada";
+  resumesAt: string | null;
 }
 
 const WAIT_LABEL: Record<StatusSnapshot["waitReason"], string> = {
@@ -52,6 +56,9 @@ const WAIT_LABEL: Record<StatusSnapshot["waitReason"], string> = {
   esperando_intervalo: "Próximo mensaje en:",
   pausa_entre_lotes: "En pausa entre lotes. Se reanuda en:",
   limite_diario: "Límite diario de envíos alcanzado por hoy.",
+  // Antes esto no existía: sin horario configurado, la campaña mandaba
+  // mensajes a cualquier hora, incluida la madrugada.
+  fuera_de_horario: "Fuera del horario de envío permitido. Se reanuda:",
   detenida: "La campaña no está en curso.",
   finalizada: "Campaña finalizada: no quedan destinatarios pendientes.",
 };
@@ -65,6 +72,20 @@ function formatCountdown(totalSeconds: number): string {
 
 function formatPhone(phone: string | null): string {
   return phone ?? "—";
+}
+
+// Se usa cuando la campaña está fuera del horario permitido de envío: en
+// vez de una cuenta regresiva en mm:ss (que puede ser de varias horas y
+// quedaría fea, ej. "540:00"), mostramos directamente el día y la hora en
+// que se reanuda, siempre en hora Argentina sin importar la zona horaria
+// del dispositivo que esté mirando la pantalla.
+function formatResumeTime(iso: string): string {
+  return new Date(iso).toLocaleString("es-AR", {
+    timeZone: "America/Argentina/Buenos_Aires",
+    weekday: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 }
 
 const POLL_MS = 4000;
@@ -279,6 +300,17 @@ export function CampaignLiveModal({
                   <p className="mt-1 text-2xl font-semibold tabular-nums text-slate-900 sm:text-3xl">
                     {formatCountdown(countdown)}
                   </p>
+                )}
+                {s.waitReason === "fuera_de_horario" && (
+                  <>
+                    <p className="mt-1 text-xl font-semibold text-slate-900 sm:text-2xl">
+                      {s.resumesAt ? formatResumeTime(s.resumesAt) : "—"}
+                    </p>
+                    <p className="mt-0.5 text-[11px] text-slate-400">
+                      Envía de {s.campaign.send_window_start_hour} a {s.campaign.send_window_end_hour}hs
+                      (Argentina) — fuera de ese rango no manda nada, para no molestar de madrugada.
+                    </p>
+                  </>
                 )}
               </div>
 
