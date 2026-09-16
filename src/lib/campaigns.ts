@@ -47,6 +47,54 @@ export function randomInt(min: number, max: number): number {
   return Math.floor(Math.random() * (hi - lo + 1)) + lo;
 }
 
+// Argentina está en UTC-3 todo el año (no tiene horario de verano desde
+// 2009), así que alcanza con un offset fijo — no hace falta lidiar con
+// cambios de hora.
+const ARGENTINA_UTC_OFFSET_MS = 3 * 60 * 60 * 1000;
+
+/**
+ * Determina si `now` cae dentro del horario permitido de envío de la
+ * campaña (en hora Argentina) y, si no, calcula cuándo vuelve a abrir.
+ *
+ * Antes esto no existía: el cron mandaba mensajes a cualquier hora,
+ * incluida la madrugada (3-4am), porque nada se lo impedía — el límite
+ * diario de envíos (`daily_send_limit`) solo limita CUÁNTOS mensajes manda
+ * por día, no A QUÉ HORA los manda.
+ *
+ * No depende de la zona horaria del servidor (Vercel corre en UTC): se
+ * calcula todo a mano con el offset fijo de Argentina.
+ */
+export function getSendWindow(
+  campaign: { send_window_start_hour: number; send_window_end_hour: number },
+  now: Date
+): { withinWindow: boolean; opensAt: Date } {
+  // Truco: restamos el offset y leemos con los getters "UTC" — así, sin
+  // importar en qué zona horaria corra el proceso, esos getters devuelven
+  // la hora de pared de Argentina.
+  const artNow = new Date(now.getTime() - ARGENTINA_UTC_OFFSET_MS);
+  const currentHour = artNow.getUTCHours();
+  const { send_window_start_hour: start, send_window_end_hour: end } = campaign;
+
+  if (currentHour >= start && currentHour < end) {
+    return { withinWindow: true, opensAt: now };
+  }
+
+  // Instante UTC real que corresponde a la medianoche de Argentina del día
+  // de `artNow`, más las horas de `start` — así calculamos el próximo
+  // horario de apertura sin depender de la zona horaria del servidor.
+  const argentinaMidnightUtcMs =
+    Date.UTC(artNow.getUTCFullYear(), artNow.getUTCMonth(), artNow.getUTCDate()) +
+    ARGENTINA_UTC_OFFSET_MS;
+  const todayOpensAt = new Date(argentinaMidnightUtcMs + start * 60 * 60 * 1000);
+  // Si ya pasó el horario de cierre de hoy, abre mañana; si todavía no
+  // llegó el horario de apertura de hoy (por ejemplo, son las 4am), abre
+  // más tarde hoy mismo.
+  const opensAt =
+    currentHour >= end ? new Date(todayOpensAt.getTime() + 24 * 60 * 60 * 1000) : todayOpensAt;
+
+  return { withinWindow: false, opensAt };
+}
+
 export interface TickResult {
   campaignId: string;
   action:
@@ -55,6 +103,7 @@ export interface TickResult {
     | "waiting_interval"
     | "batch_pause"
     | "daily_limit_reached"
+    | "outside_send_window"
     | "finished"
     | "not_running";
   detail?: string;
@@ -83,6 +132,22 @@ export async function tickCampaign(campaignId: string): Promise<TickResult> {
   }
 
   const now = new Date();
+
+  // 0) ¿Estamos dentro del horario permitido de envío? No tocamos el
+  // ritmo/pacing acá: apenas vuelva a estar en horario, la campaña sigue
+  // exactamente donde había quedado (no hace falta "Reanudar" a mano cada
+  // mañana, se despierta sola).
+  const sendWindow = getSendWindow(campaign, now);
+  if (!sendWindow.withinWindow) {
+    return {
+      campaignId,
+      action: "outside_send_window",
+      detail: `Fuera del horario permitido (${campaign.send_window_start_hour}-${campaign.send_window_end_hour}hs, Argentina). Reanuda a las ${sendWindow.opensAt.toLocaleString(
+        "es-AR",
+        { timeZone: "America/Argentina/Buenos_Aires", hour: "2-digit", minute: "2-digit" }
+      )}.`,
+    };
+  }
 
   // 1) ¿Está en la pausa larga entre lotes?
   if (campaign.batch_paused_until) {
@@ -314,6 +379,8 @@ export interface CampaignStatusSnapshot {
     batch_paused_until: string | null;
     started_at: string | null;
     finished_at: string | null;
+    send_window_start_hour: number;
+    send_window_end_hour: number;
   };
   counts: {
     total: number;
@@ -334,8 +401,12 @@ export interface CampaignStatusSnapshot {
     | "esperando_intervalo"
     | "pausa_entre_lotes"
     | "limite_diario"
+    | "fuera_de_horario" // ej. de madrugada: espera a que abra el horario permitido
     | "detenida" // pausada o en borrador
     | "finalizada";
+  // Solo tiene valor cuando waitReason === "fuera_de_horario": a qué hora
+  // (ISO) vuelve a abrir el horario de envío permitido.
+  resumesAt: string | null;
 }
 
 /**
@@ -356,14 +427,44 @@ export async function getCampaignStatus(campaignId: string): Promise<CampaignSta
 
   if (campaignError || !campaign) throw new Error("Campaña no encontrada");
 
-  const { data: statusRows } = await supabase
-    .from("campaign_contacts")
-    .select("status")
-    .eq("campaign_id", campaignId)
-    .limit(20000);
+  // Contamos con consultas de SOLO CONTEO (`count: "exact", head: true`) en
+  // vez de traer todas las filas de `campaign_contacts` y contarlas acá.
+  //
+  // Por qué: el proyecto de Supabase tiene un límite de filas por respuesta
+  // ("Max Rows" en Settings → API, 1000 por defecto) que recorta CUALQUIER
+  // consulta que devuelva filas, sin importar qué `.limit()` se pida desde
+  // el código — antes esto pedía hasta 20000 filas con `.select("status")`,
+  // pero en una campaña de más de 1000 destinatarios (pasó con una de
+  // 1389) Supabase igual devolvía como mucho 1000, así que el panel de
+  // seguimiento en vivo mostraba "/1000" en vez del total real, y contaba
+  // enviados/respondieron solo sobre esa porción recortada — de ahí los
+  // números que no coincidían con la realidad (ni con la tarjeta de la
+  // lista de campañas, que tenía el mismo problema por otro lado, ver
+  // `getCampaignFunnelCounts`). Las consultas `head: true` no devuelven
+  // filas, solo un número en un header, así que no las afecta ese límite.
+  const STATUS_KEYS = [
+    "pendiente",
+    "enviado",
+    "entregado",
+    "leido",
+    "respondio",
+    "fallo",
+    "opt_out",
+  ] as const;
+
+  const [{ count: total }, ...perStatusCounts] = await Promise.all([
+    supabase.from("campaign_contacts").select("*", { count: "exact", head: true }).eq("campaign_id", campaignId),
+    ...STATUS_KEYS.map((status) =>
+      supabase
+        .from("campaign_contacts")
+        .select("*", { count: "exact", head: true })
+        .eq("campaign_id", campaignId)
+        .eq("status", status)
+    ),
+  ]);
 
   const counts = {
-    total: statusRows?.length ?? 0,
+    total: total ?? 0,
     pendiente: 0,
     enviado: 0,
     entregado: 0,
@@ -372,10 +473,9 @@ export async function getCampaignStatus(campaignId: string): Promise<CampaignSta
     fallo: 0,
     opt_out: 0,
   };
-  for (const row of statusRows ?? []) {
-    const key = row.status as keyof typeof counts;
-    if (key in counts) (counts[key] as number)++;
-  }
+  STATUS_KEYS.forEach((status, i) => {
+    counts[status] = perStatusCounts[i].count ?? 0;
+  });
   const enviados_total = counts.enviado + counts.entregado + counts.leido + counts.respondio;
 
   const [{ data: lastSentRow }, { data: nextRow }] = await Promise.all([
@@ -402,11 +502,18 @@ export async function getCampaignStatus(campaignId: string): Promise<CampaignSta
   const now = new Date();
   let waitSeconds = 0;
   let waitReason: CampaignStatusSnapshot["waitReason"] = "listo";
+  let resumesAt: string | null = null;
+
+  const sendWindow = getSendWindow(campaign, now);
 
   if (campaign.status === "finalizada") {
     waitReason = "finalizada";
   } else if (campaign.status !== "en_curso") {
     waitReason = "detenida";
+  } else if (!sendWindow.withinWindow) {
+    waitReason = "fuera_de_horario";
+    waitSeconds = Math.ceil((sendWindow.opensAt.getTime() - now.getTime()) / 1000);
+    resumesAt = sendWindow.opensAt.toISOString();
   } else if (campaign.batch_paused_until && now < new Date(campaign.batch_paused_until)) {
     waitReason = "pausa_entre_lotes";
     waitSeconds = Math.ceil(
@@ -457,6 +564,8 @@ export async function getCampaignStatus(campaignId: string): Promise<CampaignSta
       batch_paused_until: campaign.batch_paused_until,
       started_at: campaign.started_at,
       finished_at: campaign.finished_at,
+      send_window_start_hour: campaign.send_window_start_hour,
+      send_window_end_hour: campaign.send_window_end_hour,
     },
     counts: { ...counts, enviados_total },
     lastSent: lastSentRow
@@ -474,5 +583,99 @@ export async function getCampaignStatus(campaignId: string): Promise<CampaignSta
       : null,
     waitSeconds,
     waitReason,
+    resumesAt,
   };
+}
+
+export interface CampaignFunnelCounts {
+  total: number;
+  enviados: number;
+  entregados: number;
+  leidos: number;
+  respondieron: number;
+  fallidos: number;
+  calificados: number;
+  agendados: number;
+  noCalifica: number;
+}
+
+/**
+ * Cuenta el embudo de una campaña (total, enviados, respondieron,
+ * calificados, etc.) para las tarjetas de la lista de campañas y de la
+ * ficha de una campaña. Usa solo consultas de CONTEO (`count: "exact",
+ * head: true`) en vez de traer todas las filas de `campaign_contacts` con
+ * un `select("*, campaign_contacts(status, contacts(status))")` embebido.
+ *
+ * Por qué: ese embed devolvía filas reales, y el límite de "Max Rows" del
+ * proyecto de Supabase (1000 por defecto, Settings → API) recorta
+ * cualquier consulta que devuelva filas — sin importar el `.limit()` que
+ * se pida, e incluso en relaciones embebidas. Con una campaña de más de
+ * 1000 destinatarios (pasó con una de 1389), esto hacía que la tarjeta
+ * mostrara "99/1000 enviados" en vez del total y el conteo real: el 1000
+ * no era "cuántos contactos tiene la campaña", era el límite de filas que
+ * Supabase devolvía, y el 99 salía de contar enviados solo dentro de esa
+ * porción recortada — por eso no coincidía ni con la campaña real ni con
+ * lo que mostraba el panel de seguimiento en vivo (que tenía el mismo
+ * problema, arreglado en `getCampaignStatus`, arriba). Las consultas
+ * `head: true` no devuelven filas, solo un número en un header, así que no
+ * las afecta ese límite sin importar cuántos miles de destinatarios tenga
+ * la campaña.
+ *
+ * Recibe el cliente de Supabase como parámetro (en vez de crear uno con
+ * `createAdminClient`) para poder usarse tanto desde páginas con sesión de
+ * usuario (`createClient` de `@/lib/supabase/server`) como desde contextos
+ * sin sesión.
+ */
+export async function getCampaignFunnelCounts(
+  // Tipado como `any` a propósito: esta función la llaman tanto páginas con
+  // sesión de usuario (`createClient` de `@/lib/supabase/server`) como
+  // código sin sesión (`createAdminClient`) — son dos clientes de Supabase
+  // con tipos ligeramente distintos, y a los dos les sirve igual acá porque
+  // solo se usan los métodos genéricos `.from().select()`.
+  supabase: any,
+  campaignId: string
+): Promise<CampaignFunnelCounts> {
+  const byStatus = async (statuses: string[]) => {
+    const { count } = await supabase
+      .from("campaign_contacts")
+      .select("*", { count: "exact", head: true })
+      .eq("campaign_id", campaignId)
+      .in("status", statuses);
+    return count ?? 0;
+  };
+
+  // Filtra por el status del CONTACTO (no del campaign_contacts), usando un
+  // inner join embebido — `head: true` sigue devolviendo solo el conteo,
+  // no las filas, así que tampoco lo afecta el límite de Max Rows.
+  const byContactStatus = async (statuses: string[]) => {
+    const { count } = await supabase
+      .from("campaign_contacts")
+      .select("id, contacts!inner(status)", { count: "exact", head: true })
+      .eq("campaign_id", campaignId)
+      .in("contacts.status", statuses);
+    return count ?? 0;
+  };
+
+  const totalQuery = async () => {
+    const { count } = await supabase
+      .from("campaign_contacts")
+      .select("*", { count: "exact", head: true })
+      .eq("campaign_id", campaignId);
+    return count ?? 0;
+  };
+
+  const [total, enviados, entregados, leidos, respondieron, fallidos, calificados, agendados, noCalifica] =
+    await Promise.all([
+      totalQuery(),
+      byStatus(["enviado", "entregado", "leido", "respondio"]),
+      byStatus(["entregado", "leido", "respondio"]),
+      byStatus(["leido", "respondio"]),
+      byStatus(["respondio"]),
+      byStatus(["fallo"]),
+      byContactStatus(["calificado", "agendado", "cerrado_ganado"]),
+      byContactStatus(["agendado", "cerrado_ganado"]),
+      byContactStatus(["no_califica", "cerrado_perdido"]),
+    ]);
+
+  return { total, enviados, entregados, leidos, respondieron, fallidos, calificados, agendados, noCalifica };
 }
