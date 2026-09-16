@@ -427,14 +427,44 @@ export async function getCampaignStatus(campaignId: string): Promise<CampaignSta
 
   if (campaignError || !campaign) throw new Error("Campaña no encontrada");
 
-  const { data: statusRows } = await supabase
-    .from("campaign_contacts")
-    .select("status")
-    .eq("campaign_id", campaignId)
-    .limit(20000);
+  // Contamos con consultas de SOLO CONTEO (`count: "exact", head: true`) en
+  // vez de traer todas las filas de `campaign_contacts` y contarlas acá.
+  //
+  // Por qué: el proyecto de Supabase tiene un límite de filas por respuesta
+  // ("Max Rows" en Settings → API, 1000 por defecto) que recorta CUALQUIER
+  // consulta que devuelva filas, sin importar qué `.limit()` se pida desde
+  // el código — antes esto pedía hasta 20000 filas con `.select("status")`,
+  // pero en una campaña de más de 1000 destinatarios (pasó con una de
+  // 1389) Supabase igual devolvía como mucho 1000, así que el panel de
+  // seguimiento en vivo mostraba "/1000" en vez del total real, y contaba
+  // enviados/respondieron solo sobre esa porción recortada — de ahí los
+  // números que no coincidían con la realidad (ni con la tarjeta de la
+  // lista de campañas, que tenía el mismo problema por otro lado, ver
+  // `getCampaignFunnelCounts`). Las consultas `head: true` no devuelven
+  // filas, solo un número en un header, así que no las afecta ese límite.
+  const STATUS_KEYS = [
+    "pendiente",
+    "enviado",
+    "entregado",
+    "leido",
+    "respondio",
+    "fallo",
+    "opt_out",
+  ] as const;
+
+  const [{ count: total }, ...perStatusCounts] = await Promise.all([
+    supabase.from("campaign_contacts").select("*", { count: "exact", head: true }).eq("campaign_id", campaignId),
+    ...STATUS_KEYS.map((status) =>
+      supabase
+        .from("campaign_contacts")
+        .select("*", { count: "exact", head: true })
+        .eq("campaign_id", campaignId)
+        .eq("status", status)
+    ),
+  ]);
 
   const counts = {
-    total: statusRows?.length ?? 0,
+    total: total ?? 0,
     pendiente: 0,
     enviado: 0,
     entregado: 0,
@@ -443,10 +473,9 @@ export async function getCampaignStatus(campaignId: string): Promise<CampaignSta
     fallo: 0,
     opt_out: 0,
   };
-  for (const row of statusRows ?? []) {
-    const key = row.status as keyof typeof counts;
-    if (key in counts) (counts[key] as number)++;
-  }
+  STATUS_KEYS.forEach((status, i) => {
+    counts[status] = perStatusCounts[i].count ?? 0;
+  });
   const enviados_total = counts.enviado + counts.entregado + counts.leido + counts.respondio;
 
   const [{ data: lastSentRow }, { data: nextRow }] = await Promise.all([
@@ -556,4 +585,97 @@ export async function getCampaignStatus(campaignId: string): Promise<CampaignSta
     waitReason,
     resumesAt,
   };
+}
+
+export interface CampaignFunnelCounts {
+  total: number;
+  enviados: number;
+  entregados: number;
+  leidos: number;
+  respondieron: number;
+  fallidos: number;
+  calificados: number;
+  agendados: number;
+  noCalifica: number;
+}
+
+/**
+ * Cuenta el embudo de una campaña (total, enviados, respondieron,
+ * calificados, etc.) para las tarjetas de la lista de campañas y de la
+ * ficha de una campaña. Usa solo consultas de CONTEO (`count: "exact",
+ * head: true`) en vez de traer todas las filas de `campaign_contacts` con
+ * un `select("*, campaign_contacts(status, contacts(status))")` embebido.
+ *
+ * Por qué: ese embed devolvía filas reales, y el límite de "Max Rows" del
+ * proyecto de Supabase (1000 por defecto, Settings → API) recorta
+ * cualquier consulta que devuelva filas — sin importar el `.limit()` que
+ * se pida, e incluso en relaciones embebidas. Con una campaña de más de
+ * 1000 destinatarios (pasó con una de 1389), esto hacía que la tarjeta
+ * mostrara "99/1000 enviados" en vez del total y el conteo real: el 1000
+ * no era "cuántos contactos tiene la campaña", era el límite de filas que
+ * Supabase devolvía, y el 99 salía de contar enviados solo dentro de esa
+ * porción recortada — por eso no coincidía ni con la campaña real ni con
+ * lo que mostraba el panel de seguimiento en vivo (que tenía el mismo
+ * problema, arreglado en `getCampaignStatus`, arriba). Las consultas
+ * `head: true` no devuelven filas, solo un número en un header, así que no
+ * las afecta ese límite sin importar cuántos miles de destinatarios tenga
+ * la campaña.
+ *
+ * Recibe el cliente de Supabase como parámetro (en vez de crear uno con
+ * `createAdminClient`) para poder usarse tanto desde páginas con sesión de
+ * usuario (`createClient` de `@/lib/supabase/server`) como desde contextos
+ * sin sesión.
+ */
+export async function getCampaignFunnelCounts(
+  // Tipado como `any` a propósito: esta función la llaman tanto páginas con
+  // sesión de usuario (`createClient` de `@/lib/supabase/server`) como
+  // código sin sesión (`createAdminClient`) — son dos clientes de Supabase
+  // con tipos ligeramente distintos, y a los dos les sirve igual acá porque
+  // solo se usan los métodos genéricos `.from().select()`.
+  supabase: any,
+  campaignId: string
+): Promise<CampaignFunnelCounts> {
+  const byStatus = async (statuses: string[]) => {
+    const { count } = await supabase
+      .from("campaign_contacts")
+      .select("*", { count: "exact", head: true })
+      .eq("campaign_id", campaignId)
+      .in("status", statuses);
+    return count ?? 0;
+  };
+
+  // Filtra por el status del CONTACTO (no del campaign_contacts), usando un
+  // inner join embebido — `head: true` sigue devolviendo solo el conteo,
+  // no las filas, así que tampoco lo afecta el límite de Max Rows.
+  const byContactStatus = async (statuses: string[]) => {
+    const { count } = await supabase
+      .from("campaign_contacts")
+      .select("id, contacts!inner(status)", { count: "exact", head: true })
+      .eq("campaign_id", campaignId)
+      .in("contacts.status", statuses);
+    return count ?? 0;
+  };
+
+  const totalQuery = async () => {
+    const { count } = await supabase
+      .from("campaign_contacts")
+      .select("*", { count: "exact", head: true })
+      .eq("campaign_id", campaignId);
+    return count ?? 0;
+  };
+
+  const [total, enviados, entregados, leidos, respondieron, fallidos, calificados, agendados, noCalifica] =
+    await Promise.all([
+      totalQuery(),
+      byStatus(["enviado", "entregado", "leido", "respondio"]),
+      byStatus(["entregado", "leido", "respondio"]),
+      byStatus(["leido", "respondio"]),
+      byStatus(["respondio"]),
+      byStatus(["fallo"]),
+      byContactStatus(["calificado", "agendado", "cerrado_ganado"]),
+      byContactStatus(["agendado", "cerrado_ganado"]),
+      byContactStatus(["no_califica", "cerrado_perdido"]),
+    ]);
+
+  return { total, enviados, entregados, leidos, respondieron, fallidos, calificados, agendados, noCalifica };
 }
