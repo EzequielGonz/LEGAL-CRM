@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { CsvUploader } from "@/components/campanas/csv-uploader";
 import { CampaignControls } from "@/components/campanas/campaign-controls";
 import { DeleteCampaignButton } from "@/components/campanas/delete-campaign-button";
+import { getCampaignFunnelCounts } from "@/lib/campaigns";
 
 export const dynamic = "force-dynamic";
 
@@ -17,28 +18,6 @@ const STATUS_LABEL: Record<string, string> = {
   opt_out: "Opt-out",
 };
 
-function buildFunnel(rows: { status: string; contacts: { status: string } | null }[]) {
-  const total = rows.length;
-  const enviados = rows.filter((r) =>
-    ["enviado", "entregado", "leido", "respondio"].includes(r.status)
-  ).length;
-  const entregados = rows.filter((r) => ["entregado", "leido", "respondio"].includes(r.status)).length;
-  const leidos = rows.filter((r) => ["leido", "respondio"].includes(r.status)).length;
-  const respondieron = rows.filter((r) => r.status === "respondio").length;
-  const fallidos = rows.filter((r) => r.status === "fallo").length;
-
-  const contactStatuses = rows.map((r) => r.contacts?.status).filter(Boolean) as string[];
-  const calificados = contactStatuses.filter((s) =>
-    ["calificado", "agendado", "cerrado_ganado"].includes(s)
-  ).length;
-  const agendados = contactStatuses.filter((s) => ["agendado", "cerrado_ganado"].includes(s)).length;
-  const noCalifica = contactStatuses.filter((s) =>
-    ["no_califica", "cerrado_perdido"].includes(s)
-  ).length;
-
-  return { total, enviados, entregados, leidos, respondieron, fallidos, calificados, agendados, noCalifica };
-}
-
 export default async function CampaignDetailPage({ params }: { params: { id: string } }) {
   const supabase = createClient();
 
@@ -50,21 +29,25 @@ export default async function CampaignDetailPage({ params }: { params: { id: str
 
   if (!campaign) notFound();
 
-  const [{ data: recipients }, { data: allForFunnel }] = await Promise.all([
+  // Antes el embudo (Enviados/Entregados/Leídos/Respondieron/Calificados/
+  // Agendados) se calculaba trayendo TODAS las filas de campaign_contacts
+  // con ".select(\"status, contacts(status)\").limit(20000)" y contando a
+  // mano — pero el límite de "Max Rows" del proyecto de Supabase (1000 por
+  // defecto, Settings → API) recorta cualquier consulta que devuelva
+  // filas, sin importar el `.limit()` pedido. Con esta campaña (1389
+  // destinatarios) esas tarjetas mostraban números truncados, distintos
+  // de la realidad y del panel de seguimiento en vivo. Ahora se usa
+  // `getCampaignFunnelCounts`, que cuenta con consultas de solo conteo
+  // (sin ese límite).
+  const [{ data: recipients }, funnel] = await Promise.all([
     supabase
       .from("campaign_contacts")
       .select("*, contacts(full_name, phone)")
       .eq("campaign_id", params.id)
       .order("sent_at", { ascending: false, nullsFirst: true })
       .limit(200),
-    supabase
-      .from("campaign_contacts")
-      .select("status, contacts(status)")
-      .eq("campaign_id", params.id)
-      .limit(20000),
+    getCampaignFunnelCounts(supabase, params.id),
   ]);
-
-  const funnel = buildFunnel((allForFunnel ?? []) as any);
 
   return (
     <div>
@@ -81,6 +64,8 @@ export default async function CampaignDetailPage({ params }: { params: { id: str
             (variable) · lotes de {campaign.batch_size} · pausa de{" "}
             {Math.round(campaign.batch_pause_seconds / 60)}min entre lotes
             {campaign.daily_send_limit ? ` · máx. ${campaign.daily_send_limit}/día` : ""}
+            {" · "}envía de {campaign.send_window_start_hour} a {campaign.send_window_end_hour}hs
+            (Arg.)
           </p>
         </div>
         <div className="flex items-start gap-2">
