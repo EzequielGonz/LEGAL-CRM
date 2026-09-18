@@ -9,13 +9,15 @@ const NAV = [
   { href: "/", label: "Estadísticas" },
   { href: "/inbox", label: "Inbox" },
   { href: "/prospectos", label: "Prospectos" },
-  { href: "/casos-cerrados", label: "Casos cerrados" },
+  { href: "/casos-cerrados", label: "Casos" },
   { href: "/bases", label: "Bases" },
   { href: "/agenda", label: "Agenda" },
   { href: "/campanas", label: "Campañas" },
   { href: "/agentes", label: "Agentes IA" },
   { href: "/configuracion", label: "Configuración" },
 ];
+
+export function Sidebar() {
 
 export function Sidebar() {
   const pathname = usePathname();
