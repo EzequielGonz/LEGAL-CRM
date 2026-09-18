@@ -21,7 +21,9 @@ export default async function CasosCerradosPage({
 
   let query = supabase
     .from("contacts")
-    .select("id, full_name, phone, area, source, status, assigned_studio_id, studios(name), updated_at")
+    .select(
+      "id, full_name, phone, area, source, status, assigned_studio_id, studios(name), updated_at, qualification_data"
+    )
     .in("status", ["cerrado_ganado", "cerrado_perdido"])
     .order("updated_at", { ascending: false })
     .limit(200);
@@ -40,9 +42,10 @@ export default async function CasosCerradosPage({
     <div>
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-900">Casos cerrados</h1>
+          <h1 className="text-2xl font-semibold text-slate-900">Casos</h1>
           <p className="text-sm text-slate-500">
-            Prospectos marcados como cerrados (ganados o perdidos) desde su ficha.
+            Prospectos marcados como cerrados (ganados o perdidos) desde su ficha, con toda la
+            información que fue enviando la persona.
           </p>
         </div>
       </div>
@@ -107,36 +110,60 @@ export default async function CasosCerradosPage({
               <th className="px-4 py-3">Origen</th>
               <th className="px-4 py-3">Resultado</th>
               <th className="px-4 py-3">Estudio derivado</th>
+              <th className="px-4 py-3">Información del caso</th>
               <th className="px-4 py-3">Última actualización</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
-            {(casos ?? []).map((c: any) => (
-              <tr key={c.id} className="hover:bg-slate-50">
-                <td className="px-4 py-3">
-                  <Link href={`/prospectos/${c.id}`} className="font-medium text-slate-900 hover:underline">
-                    {c.full_name ?? "Sin nombre"}
-                  </Link>
-                </td>
-                <td className="px-4 py-3 text-slate-600">{c.phone ?? "—"}</td>
-                <td className="px-4 py-3">
-                  <AreaBadge area={c.area} />
-                </td>
-                <td className="px-4 py-3">
-                  <SourceBadge source={c.source} />
-                </td>
-                <td className="px-4 py-3">
-                  <StatusBadge status={c.status} />
-                </td>
-                <td className="px-4 py-3 text-slate-600">{c.studios?.name ?? "—"}</td>
-                <td className="px-4 py-3 text-slate-400">
-                  {new Date(c.updated_at).toLocaleDateString("es-AR")}
-                </td>
-              </tr>
-            ))}
+            {(casos ?? []).map((c: any) => {
+              // Todo lo que la IA (o quien cargó la base) fue guardando sobre
+              // este caso a medida que la persona respondía — antes esta
+              // información solo se veía entrando a la ficha del prospecto;
+              // ahora queda visible acá mismo, en la tabla de Casos.
+              const datos = Object.entries(c.qualification_data ?? {}) as [string, unknown][];
+              return (
+                <tr key={c.id} className="hover:bg-slate-50">
+                  <td className="px-4 py-3 align-top">
+                    <Link href={`/prospectos/${c.id}`} className="font-medium text-slate-900 hover:underline">
+                      {c.full_name ?? "Sin nombre"}
+                    </Link>
+                  </td>
+                  <td className="px-4 py-3 align-top text-slate-600">{c.phone ?? "—"}</td>
+                  <td className="px-4 py-3 align-top">
+                    <AreaBadge area={c.area} />
+                  </td>
+                  <td className="px-4 py-3 align-top">
+                    <SourceBadge source={c.source} />
+                  </td>
+                  <td className="px-4 py-3 align-top">
+                    <StatusBadge status={c.status} />
+                  </td>
+                  <td className="px-4 py-3 align-top text-slate-600">{c.studios?.name ?? "—"}</td>
+                  <td className="px-4 py-3 align-top">
+                    {datos.length === 0 ? (
+                      <span className="text-slate-400">Sin datos recopilados.</span>
+                    ) : (
+                      <dl className="max-w-xs space-y-0.5">
+                        {datos.map(([key, value]) => (
+                          <div key={key} className="text-xs">
+                            <dt className="inline font-medium capitalize text-slate-500">
+                              {key.replaceAll("_", " ")}:
+                            </dt>{" "}
+                            <dd className="inline text-slate-700">{String(value)}</dd>
+                          </div>
+                        ))}
+                      </dl>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 align-top text-slate-400">
+                    {new Date(c.updated_at).toLocaleDateString("es-AR")}
+                  </td>
+                </tr>
+              );
+            })}
             {(casos ?? []).length === 0 && (
               <tr>
-                <td colSpan={7} className="px-4 py-8 text-center text-slate-400">
+                <td colSpan={8} className="px-4 py-8 text-center text-slate-400">
                   {hasFilters
                     ? "No hay casos cerrados que coincidan con estos filtros."
                     : "Todavía no hay ningún caso cerrado."}
