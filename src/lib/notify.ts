@@ -188,7 +188,7 @@ export async function notifyAdminOfQualifiedIntake(contactId: string) {
   const area: Area = contact.area;
 
   const messageBody = [
-    "✅ CASO CALIFICADO (cuestionario completado)",
+    "✅ CASO CERRADO (cuestionario completado)",
     "",
     `Área: ${area.toUpperCase()}`,
     "",
