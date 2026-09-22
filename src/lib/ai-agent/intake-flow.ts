@@ -203,9 +203,17 @@ export async function handleIntakeFlow({
       .from("conversations")
       .update({ intake_step: "completado", status: "requiere_atencion_humana", ai_enabled: false })
       .eq("id", conversationId);
-    await supabase.from("contacts").update({ status: "calificado" }).eq("id", contactId);
+    // Antes esto dejaba al contacto en "calificado" y alguien del estudio
+    // tenía que entrar a la ficha y cambiar el Estado a mano a "Cerrado
+    // (ganado)" para que el caso apareciera en la sección Casos — pedido
+    // explícito: que apenas se completa el cuestionario (con toda la info
+    // ya cargada en qualification_data) el caso quede marcado como cerrado
+    // directamente, sin ese paso manual. Si algún caso particular después
+    // no prospera, se puede corregir a mano a "Cerrado (perdido)" desde la
+    // ficha del prospecto.
+    await supabase.from("contacts").update({ status: "cerrado_ganado" }).eq("id", contactId);
 
-    // Avisarle al estudio que hay un caso nuevo, calificado y con toda la
+    // Avisarle al estudio que hay un caso nuevo, cerrado y con toda la
     // info del cuestionario, listo para que un profesional se contacte.
     // Antes esto no se hacía: el cuestionario se completaba pero nunca
     // salía ningún aviso.
