@@ -18,8 +18,6 @@ const NAV = [
 ];
 
 export function Sidebar() {
-
-export function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const supabase = createClient();
