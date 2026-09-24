@@ -65,25 +65,48 @@ function buildWaText(contact: any, messages: any[]): string {
  * intake_step = "completado". No cualquier caso cerrado a mano desde otro
  * lado entra acá — esto es puntualmente la cola de casos que salieron del
  * cuestionario automático y todavía hay que derivar a un profesional.
+ *
+ * Arriba de la lista se muestra un resumen de estadísticas de los 4
+ * rubros (casos agendados / clientes cerrados), como pidió Vita — así
+ * desde el celular se puede ver de un vistazo cómo viene cada rubro, no
+ * solo Jurídico (que es, por ahora, el único con datos reales).
  */
 export default async function DerivarPage() {
   const supabase = createClient();
 
-  const { data: contacts } = await supabase
-    .from("contacts")
-    .select(
-      "id, full_name, phone, area, email, qualification_data, derived_at, updated_at, conversations!inner(id, intake_step, messages(id, sender_type, body, created_at))"
-    )
-    .eq("status", "cerrado_ganado")
-    .eq("conversations.intake_step", "completado")
-    .order("updated_at", { ascending: false });
+  const [{ data: contacts }, { data: rubros }, { data: statRows }] = await Promise.all([
+    supabase
+      .from("contacts")
+      .select(
+        "id, full_name, phone, area, email, qualification_data, derived_at, updated_at, rubros(name, emoji), conversations!inner(id, intake_step, messages(id, sender_type, body, created_at))"
+      )
+      .eq("status", "cerrado_ganado")
+      .eq("conversations.intake_step", "completado")
+      .order("updated_at", { ascending: false }),
+    supabase
+      .from("rubros")
+      .select("id, name, emoji")
+      .eq("active", true)
+      .order("sort_order", { ascending: true }),
+    supabase.from("contacts").select("rubro_id, status").in("status", ["agendado", "cerrado_ganado"]),
+  ]);
 
   const casos = (contacts ?? []).map((c: any) => {
     const conv = Array.isArray(c.conversations) ? c.conversations[0] : c.conversations;
     const messages = ((conv?.messages ?? []) as any[])
       .slice()
       .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
-    return { ...c, messages };
+    const rubro = Array.isArray(c.rubros) ? c.rubros[0] : c.rubros;
+    return { ...c, messages, rubro };
+  });
+
+  const resumenRubros = (rubros ?? []).map((r: any) => {
+    const rows = (statRows ?? []).filter((c: any) => c.rubro_id === r.id);
+    return {
+      ...r,
+      agendados: rows.filter((c: any) => c.status === "agendado").length,
+      cerrados: rows.filter((c: any) => c.status === "cerrado_ganado").length,
+    };
   });
 
   return (
@@ -98,6 +121,28 @@ export default async function DerivarPage() {
         </p>
       </header>
 
+      <div className="flex gap-3 overflow-x-auto px-4 pb-1 pt-4">
+        {resumenRubros.map((r: any) => (
+          <div
+            key={r.id}
+            className="min-w-[140px] shrink-0 rounded-xl border border-slate-200 bg-white p-3 shadow-sm"
+          >
+            <p className="text-lg leading-none">{r.emoji}</p>
+            <p className="mt-1 truncate text-xs font-medium text-slate-500">{r.name}</p>
+            <div className="mt-1.5 flex items-center gap-3">
+              <span>
+                <span className="text-sm font-semibold text-slate-900">{r.agendados}</span>{" "}
+                <span className="text-[10px] text-slate-400">agend.</span>
+              </span>
+              <span>
+                <span className="text-sm font-semibold text-slate-900">{r.cerrados}</span>{" "}
+                <span className="text-[10px] text-slate-400">cerr.</span>
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+
       <div className="space-y-3 px-4 py-5">
         {casos.map((c: any) => (
           <CasoCard
@@ -106,6 +151,8 @@ export default async function DerivarPage() {
             fullName={c.full_name ?? "Sin nombre"}
             phone={c.phone ?? "—"}
             area={c.area}
+            rubroName={c.rubro?.name}
+            rubroEmoji={c.rubro?.emoji}
             waText={buildWaText(c, c.messages)}
             initiallyDerived={Boolean(c.derived_at)}
           />
