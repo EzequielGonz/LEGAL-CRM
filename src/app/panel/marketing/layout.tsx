@@ -11,7 +11,12 @@ export default function PanelMarketingLayout({
 }) {
   return (
     <div className="flex">
-      <SidebarRubro basePath="/panel/marketing" emoji="📈" name="Agencia Marketing" />
+      <SidebarRubro
+        basePath="/panel/marketing"
+        emoji="📈"
+        name="Agencia Marketing"
+        extraNavItems={[{ path: "captacion", label: "Captación" }]}
+      />
       <main className="h-screen flex-1 overflow-y-auto bg-slate-50 p-8">{children}</main>
     </div>
   );
