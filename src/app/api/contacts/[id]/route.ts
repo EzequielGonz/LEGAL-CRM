@@ -9,6 +9,10 @@ const EDITABLE_FIELDS = [
   "notes",
   "status",
   "assigned_studio_id",
+  // Se marca desde la pantalla de Teléfono ("Casos para derivar") al tocar
+  // "Enviar a WhatsApp" — es solo un tilde visual de "ya lo mandé", no una
+  // confirmación real de entrega.
+  "derived_at",
 ] as const;
 
 /**
