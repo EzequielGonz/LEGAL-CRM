@@ -1,12 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import clsx from "clsx";
-import { createClient } from "@/lib/supabase/client";
 
 const NAV = [
-  { href: "/", label: "Estadísticas" },
+  { href: "/estadisticas", label: "Estadísticas" },
   { href: "/inbox", label: "Inbox" },
   { href: "/prospectos", label: "Prospectos" },
   { href: "/casos-cerrados", label: "Casos" },
@@ -17,16 +16,12 @@ const NAV = [
   { href: "/configuracion", label: "Configuración" },
 ];
 
+// El panel ya no requiere sesión iniciada, así que este sidebar ya no tiene
+// botón de "Cerrar sesión" (no hay sesión que cerrar). "Estadísticas" ahora
+// vive en /estadisticas — "/" quedó libre para que siempre redirija primero
+// a /inicio (elegir Teléfono o Computadora).
 export function Sidebar() {
   const pathname = usePathname();
-  const router = useRouter();
-  const supabase = createClient();
-
-  async function handleLogout() {
-    await supabase.auth.signOut();
-    router.push("/login");
-    router.refresh();
-  }
 
   return (
     <aside className="flex h-screen w-60 flex-col bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 shadow-navy">
@@ -46,8 +41,7 @@ export function Sidebar() {
 
       <nav className="flex-1 space-y-1 px-3 py-5">
         {NAV.map((item, i) => {
-          const active =
-            item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+          const active = pathname.startsWith(item.href);
           return (
             <Link
               key={item.href}
@@ -71,15 +65,6 @@ export function Sidebar() {
           );
         })}
       </nav>
-
-      <div className="border-t border-white/10 p-3">
-        <button
-          onClick={handleLogout}
-          className="w-full rounded-lg px-3 py-2 text-left text-sm text-slate-400 transition-colors duration-200 hover:bg-white/5 hover:text-gold-200"
-        >
-          Cerrar sesión
-        </button>
-      </div>
     </aside>
   );
 }
