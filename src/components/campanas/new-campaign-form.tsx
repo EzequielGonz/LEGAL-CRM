@@ -6,8 +6,13 @@ import { SendLimitsFields } from "./send-limits-fields";
 
 export function NewCampaignForm({
   channels,
+  redirectBase = "/campanas",
 }: {
   channels: { id: string; label: string }[];
+  /** Base de la URL a la que navegar después de crear la campaña, seguida
+   * de "/<id>". Por defecto "/campanas" (panel de Jurídico); los paneles
+   * de otros rubros pasan la suya, por ejemplo "/panel/agencia_0km/campanas". */
+  redirectBase?: string;
 }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -62,7 +67,7 @@ export function NewCampaignForm({
     }
 
     setOpen(false);
-    router.push(`/campanas/${data.campaign.id}`);
+    router.push(`${redirectBase}/${data.campaign.id}`);
   }
 
   if (!open) {
