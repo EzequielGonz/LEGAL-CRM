@@ -2,7 +2,18 @@
 // Cuando el proyecto esté conectado a Supabase, se pueden regenerar con:
 //   npx supabase gen types typescript --project-id <id> > src/lib/supabase/database.types.ts
 
-export type Area = "civil" | "penal";
+// "civil"/"penal" son las dos sub-áreas de Jurídico (rubro_id las agrupa a
+// las dos bajo el mismo rubro en `contacts`). Los 3 valores nuevos son,
+// cada uno, 1:1 con su propio rubro (Agencia 0KM, Coberturas Médicas,
+// Marketing) — así toda la infraestructura ya armada alrededor de "area"
+// (canales, agenda, agentes de IA, campañas) sirve para los rubros nuevos
+// sin tener que duplicar esas tablas.
+export type Area =
+  | "civil"
+  | "penal"
+  | "agencia_0km"
+  | "coberturas_medicas"
+  | "marketing";
 
 export type ChannelType =
   | "whatsapp"
