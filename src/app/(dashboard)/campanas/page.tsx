@@ -17,15 +17,15 @@ export default async function CampanasPage() {
   const supabase = createClient();
 
   const [{ data: campaigns }, { data: channels }] = await Promise.all([
-    // Antes acá se traía "*, campaign_contacts(status, contacts(status))"
-    // embebido para contar a mano — pero el límite de "Max Rows" del
-    // proyecto de Supabase (1000 por defecto) recorta esas filas
-    // embebidas igual que cualquier otra consulta, así que con una
-    // campaña de más de 1000 destinatarios la tarjeta mostraba "99/1000
-    // enviados" en vez del total y el conteo real. Ahora se cuenta aparte
-    // con `getCampaignFunnelCounts` (consultas de solo conteo, sin ese
-    // límite).
-    supabase.from("campaigns").select("*").order("created_at", { ascending: false }),
+    // Filtrado a civil/penal: sin esto, las campañas de los rubros nuevos
+    // (Agencia 0KM, etc.) aparecían mezcladas acá — cada rubro ahora tiene
+    // su propia página de Campañas en su panel dedicado
+    // (/panel/<rubro>/campanas).
+    supabase
+      .from("campaigns")
+      .select("*")
+      .in("area", ["civil", "penal"])
+      .order("created_at", { ascending: false }),
     supabase.from("channels").select("id, label").eq("area", "civil").eq("type", "whatsapp"),
   ]);
 
