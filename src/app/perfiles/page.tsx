@@ -1,16 +1,21 @@
 import { createClient } from "@/lib/supabase/server";
 import { PerfilSelector } from "@/components/perfiles/perfil-selector";
+import { buildPerfiles, RELEVANT_STATUSES } from "@/lib/perfiles-stats";
 
 export const dynamic = "force-dynamic";
 
 /**
  * Pantalla de Computadora (estilo Netflix): a la izquierda los 4 perfiles
- * (rubros), a la derecha una vista previa de estadísticas del rubro
- * seleccionado (casos agendados / clientes cerrados) antes de entrar de
- * lleno al panel de ese rubro. "Ingresar" lleva a /panel/[slug] — para
- * Jurídico eso redirige al panel completo de siempre; los otros rubros
- * todavía no tienen su motor de leads conectado (Fases 2/3 en curso), así
- * que por ahora muestran un aviso en vez del panel completo.
+ * (rubros), a la derecha una vista previa en vivo de ese rubro — casos
+ * agendados, clientes cerrados, y el nombre + teléfono de los últimos
+ * casos cerrados (mismo criterio que /casos-cerrados). "Ingresar al
+ * panel →" lleva a /panel/[slug] — para Jurídico eso manda directo a
+ * /casos-cerrados; los otros rubros todavía no tienen su motor de leads
+ * conectado (Fases 2/3 en curso), así que por ahora muestran un aviso.
+ *
+ * Esta primera carga trae los datos por el server (rápido, sin parpadeo);
+ * después el PerfilSelector se subscribe a Supabase Realtime para que la
+ * vista se actualice sola apenas cambia algo en Casos, sin recargar.
  *
  * A propósito NO usa el layout de (dashboard) (no tiene Sidebar ni nada
  * alrededor) — es una pantalla completa, standalone, igual que /inicio.
@@ -18,7 +23,7 @@ export const dynamic = "force-dynamic";
 export default async function PerfilesPage() {
   const supabase = createClient();
 
-  const [{ data: rubros }, { data: statRows }] = await Promise.all([
+  const [{ data: rubros }, { data: rows }] = await Promise.all([
     supabase
       .from("rubros")
       .select("id, slug, name, emoji, description")
@@ -26,18 +31,13 @@ export default async function PerfilesPage() {
       .order("sort_order", { ascending: true }),
     supabase
       .from("contacts")
-      .select("rubro_id, status")
-      .in("status", ["agendado", "cerrado_ganado"]),
+      .select("id, full_name, phone, rubro_id, status, updated_at")
+      .in("status", RELEVANT_STATUSES)
+      .order("updated_at", { ascending: false })
+      .limit(1000),
   ]);
 
-  const perfiles = (rubros ?? []).map((r: any) => {
-    const rows = (statRows ?? []).filter((c: any) => c.rubro_id === r.id);
-    return {
-      ...r,
-      agendados: rows.filter((c: any) => c.status === "agendado").length,
-      cerrados: rows.filter((c: any) => c.status === "cerrado_ganado").length,
-    };
-  });
+  const perfiles = buildPerfiles((rubros ?? []) as any, (rows ?? []) as any);
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 px-4 py-12">
