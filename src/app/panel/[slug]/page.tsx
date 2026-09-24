@@ -4,16 +4,18 @@ import { createClient } from "@/lib/supabase/server";
 export const dynamic = "force-dynamic";
 
 /**
- * Punto de entrada al panel completo de un rubro, desde "Ingresar" en
- * /perfiles. Jurídico ya tiene su panel completo armado en /estadisticas,
- * así que ese slug redirige para allá. Los demás rubros (Agencia 0KM,
- * Coberturas Médicas, Marketing) todavía no tienen su motor de leads ni
- * su bot conectados (eso es el resto de la Fase 2 en adelante) — por eso
- * por ahora muestran un aviso en vez de un panel vacío o roto.
+ * Punto de entrada al panel completo de un rubro, desde "Ingresar al
+ * panel →" en /perfiles. Jurídico ya tiene su sección de Casos armada en
+ * /casos-cerrados, así que ese slug manda directo ahí (es lo que pidió
+ * Vita: entrar desde la vista previa tiene que llevar a la sección de
+ * casos/clientes, no al dashboard general). Los demás rubros (Agencia
+ * 0KM, Coberturas Médicas, Marketing) todavía no tienen su motor de leads
+ * ni su bot conectados (eso es el resto de la Fase 2 en adelante) — por
+ * eso por ahora muestran un aviso en vez de un panel vacío o roto.
  */
 export default async function PanelRubroPage({ params }: { params: { slug: string } }) {
   if (params.slug === "juridico") {
-    redirect("/estadisticas");
+    redirect("/casos-cerrados");
   }
 
   const supabase = createClient();
