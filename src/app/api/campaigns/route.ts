@@ -26,11 +26,27 @@ export async function POST(request: Request) {
 
   const supabase = createAdminClient();
 
+  // El área de la campaña tiene que ser la del canal que se eligió, no un
+  // valor fijo. Antes acá se guardaba siempre "civil" sin importar qué
+  // canal se hubiera seleccionado en el formulario — así que cualquier
+  // campaña creada desde el panel de otro rubro (por ejemplo Agencia 0KM)
+  // quedaba mal etiquetada como Jurídico/Civil y terminaba mezclada en las
+  // estadísticas, el envío y el filtrado por área de esa otra línea.
+  const { data: channel, error: channelError } = await supabase
+    .from("channels")
+    .select("area")
+    .eq("id", channel_id)
+    .single();
+
+  if (channelError || !channel) {
+    return NextResponse.json({ error: "El canal seleccionado no existe." }, { status: 400 });
+  }
+
   const { data: campaign, error } = await supabase
     .from("campaigns")
     .insert({
       name,
-      area: "civil",
+      area: channel.area,
       channel_id,
       message_template_name,
       status: "borrador",
