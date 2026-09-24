@@ -1,7 +1,12 @@
 import type { Area } from "@/lib/supabase/database.types";
+import { envPrefixForArea } from "@/lib/rubros";
 
 const GRAPH_VERSION = "v21.0";
 
+// Jurídico (civil/penal) sigue usando sus variables de siempre. Los rubros
+// nuevos arman el nombre de la variable a partir del area (ver
+// envPrefixForArea) — agregar un rubro más no requiere tocar esta función,
+// solo cargar sus variables en Vercel con el nombre que corresponde.
 function credsFor(area: Area) {
   if (area === "civil") {
     return {
@@ -9,10 +14,24 @@ function credsFor(area: Area) {
       accessToken: process.env.WHATSAPP_CIVIL_ACCESS_TOKEN!,
     };
   }
-  return {
-    phoneNumberId: process.env.WHATSAPP_PENAL_PHONE_NUMBER_ID!,
-    accessToken: process.env.WHATSAPP_PENAL_ACCESS_TOKEN!,
-  };
+  if (area === "penal") {
+    return {
+      phoneNumberId: process.env.WHATSAPP_PENAL_PHONE_NUMBER_ID!,
+      accessToken: process.env.WHATSAPP_PENAL_ACCESS_TOKEN!,
+    };
+  }
+
+  const prefix = envPrefixForArea(area);
+  const phoneNumberId = process.env[`${prefix}_PHONE_NUMBER_ID`];
+  const accessToken = process.env[`${prefix}_ACCESS_TOKEN`];
+
+  if (!phoneNumberId || !accessToken) {
+    throw new Error(
+      `Faltan las variables de entorno ${prefix}_PHONE_NUMBER_ID / ${prefix}_ACCESS_TOKEN en Vercel para el área "${area}".`
+    );
+  }
+
+  return { phoneNumberId, accessToken };
 }
 
 /** Envía un mensaje de texto libre (solo válido dentro de la ventana de 24hs). */
