@@ -23,12 +23,18 @@ export function SidebarRubro({
   basePath,
   emoji,
   name,
+  extraNavItems = [],
 }: {
   basePath: string;
   emoji: string;
   name: string;
+  /** Items de navegación propios de este rubro, además de los 4 comunes a
+   * todos (Clientes cerrados, Campañas, Agentes IA, Configuración) — por
+   * ejemplo "Captación" en Marketing. */
+  extraNavItems?: { path: string; label: string }[];
 }) {
   const pathname = usePathname();
+  const items = [...NAV_ITEMS, ...extraNavItems];
 
   return (
     <aside className="flex h-screen w-60 flex-col bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 shadow-navy">
@@ -43,7 +49,7 @@ export function SidebarRubro({
       </div>
 
       <nav className="flex-1 space-y-1 px-3 py-5">
-        {NAV_ITEMS.map((item, i) => {
+        {items.map((item, i) => {
           const href = `${basePath}/${item.path}`;
           const active = pathname.startsWith(href);
           return (
