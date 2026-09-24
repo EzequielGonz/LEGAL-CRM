@@ -1,5 +1,6 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import type { Area, ChannelType, SourceType } from "@/lib/supabase/database.types";
+import { AREA_TO_RUBRO_ID, RUBRO_IDS } from "@/lib/rubros";
 
 const UNIQUE_VIOLATION = "23505";
 
@@ -82,10 +83,14 @@ export async function findOrCreateContact({
   }
 
   // 3) Contacto nuevo.
+  //    rubro_id se pone explícito acá (en vez de confiar en el default de la
+  //    columna, que apunta a Jurídico) para que un contacto que llega por el
+  //    área de otro rubro quede bien clasificado desde el primer momento.
   const { data: created, error } = await supabase
     .from("contacts")
     .insert({
       area,
+      rubro_id: AREA_TO_RUBRO_ID[area] ?? RUBRO_IDS.juridico,
       full_name: fullName ?? null,
       phone: phone ?? null,
       email: email ?? null,
