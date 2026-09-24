@@ -53,14 +53,14 @@ export default async function CaptacionDetailPage({ params }: { params: { id: st
         href="/panel/marketing/captacion"
         className="mb-4 inline-block text-sm text-slate-500 hover:underline"
       >
-        ← Volver a captación
+        Volver a captacion
       </Link>
 
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold text-slate-900">{base.name}</h1>
           <p className="text-sm text-slate-500">
-            {base.source_label} · {new Date(base.created_at).toLocaleString("es-AR")}
+            {base.source_label} - {new Date(base.created_at).toLocaleString("es-AR")}
           </p>
         </div>
         <div className="flex items-center gap-3">
