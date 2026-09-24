@@ -82,6 +82,7 @@ const SOURCE_LABEL: Record<string, string> = {
   anuncio_facebook: "Anuncio Facebook",
   landing: "Landing",
   base_de_datos: "Base de datos",
+  google_maps: "Google Maps",
 };
 
 export function SourceBadge({ source }: { source: string }) {
