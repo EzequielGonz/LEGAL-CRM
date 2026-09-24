@@ -3,17 +3,21 @@ import Link from "next/link";
 export const dynamic = "force-dynamic";
 
 /**
- * Pantalla de entrada al sistema (Fase 5 — accesos separados): apenas se
- * loguea, en vez de caer directo al panel de escritorio, se muestra esta
- * pantalla intermedia para elegir cómo se va a usar el sistema en este
+ * Pantalla de entrada al sistema (Fase 5 — accesos separados): al entrar al
+ * panel se muestra esta pantalla para elegir cómo se va a usar en este
  * dispositivo:
  * - "Teléfono" → /derivar, la vista angosta de "Casos listos para
  *   derivar" (sin menú, sin poder navegar a ningún otro lado).
- * - "Computadora" → / (el panel completo de siempre, sin cambios).
+ * - "Computadora" → /estadisticas (el panel completo de siempre, sin
+ *   cambios).
+ *
+ * El panel ya no pide iniciar sesión, y "/" siempre redirige acá primero
+ * — así esta pantalla vuelve a aparecer cada vez que se entra "por el
+ * link", sin importar qué se haya elegido antes.
  *
  * A propósito NO usa el layout de (dashboard) (no tiene Sidebar ni nada
  * alrededor) — es una pantalla completa, standalone, con el mismo estilo
- * navy + dorado que la pantalla de login.
+ * navy + dorado de siempre.
  */
 export default function InicioPage() {
   return (
@@ -49,7 +53,7 @@ export default function InicioPage() {
           </Link>
 
           <Link
-            href="/"
+            href="/estadisticas"
             className="group animate-scale-in rounded-2xl border border-white/10 bg-white/5 p-8 text-left backdrop-blur transition-all duration-200 hover:-translate-y-1 hover:border-gold-400/50 hover:bg-white/10 active:scale-[0.98]"
             style={{ animationDelay: "80ms" }}
           >
