@@ -29,7 +29,8 @@ export type SourceType =
   | "anuncio_instagram"
   | "anuncio_facebook"
   | "landing"
-  | "base_de_datos";
+  | "base_de_datos"
+  | "google_maps";
 
 export type ConversationStatus =
   | "nuevo"
