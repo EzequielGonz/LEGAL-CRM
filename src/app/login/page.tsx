@@ -25,7 +25,11 @@ export default function LoginPage() {
       return;
     }
 
-    router.push("/");
+    // Antes esto llevaba directo al panel de escritorio (/). Ahora primero
+    // pasa por /inicio, la pantalla donde se elige si este acceso es desde
+    // el teléfono (solo "Casos para derivar") o desde la computadora (el
+    // panel completo de siempre).
+    router.push("/inicio");
     router.refresh();
   }
 
