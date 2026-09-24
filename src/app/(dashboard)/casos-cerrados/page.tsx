@@ -24,6 +24,11 @@ export default async function CasosCerradosPage({
     .select(
       "id, full_name, phone, area, source, status, assigned_studio_id, studios(name), updated_at, qualification_data"
     )
+    // Filtrado a civil/penal: sin esto, los clientes cerrados de los
+    // rubros nuevos (Agencia 0KM, etc.) aparecían mezclados acá — cada
+    // rubro ahora tiene su propia página de "Clientes cerrados" en su
+    // panel dedicado (/panel/<rubro>/casos-cerrados).
+    .in("area", ["civil", "penal"])
     .in("status", ["cerrado_ganado", "cerrado_perdido"])
     .order("updated_at", { ascending: false })
     .limit(200);
