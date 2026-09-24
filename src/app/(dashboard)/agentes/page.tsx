@@ -5,7 +5,14 @@ export const dynamic = "force-dynamic";
 
 export default async function AgentesPage() {
   const supabase = createClient();
-  const { data: agents } = await supabase.from("ai_agents").select("*").order("area");
+  // Filtrado a civil/penal: sin esto, los agentes de los rubros nuevos
+  // (Agencia 0KM, etc.) aparecían mezclados acá — cada rubro ahora tiene su
+  // propia página de Agentes en su panel dedicado (/panel/<rubro>/agentes).
+  const { data: agents } = await supabase
+    .from("ai_agents")
+    .select("*")
+    .in("area", ["civil", "penal"])
+    .order("area");
 
   return (
     <div>
