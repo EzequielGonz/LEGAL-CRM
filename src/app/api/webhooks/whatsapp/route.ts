@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { handleInboundMessage } from "@/lib/inbound";
 import type { Area } from "@/lib/supabase/database.types";
+import { NUEVAS_AREAS_WHATSAPP, envPrefixForArea } from "@/lib/rubros";
 
 // ---------------------------------------------------------------------
 // Verificación del webhook (paso único al configurarlo en Meta Developer:
@@ -20,8 +21,21 @@ export async function GET(request: Request) {
 }
 
 function areaForPhoneNumberId(phoneNumberId: string): Area | null {
+  // Jurídico (civil/penal): sin cambios, las mismas variables de siempre.
   if (phoneNumberId === process.env.WHATSAPP_CIVIL_PHONE_NUMBER_ID) return "civil";
   if (phoneNumberId === process.env.WHATSAPP_PENAL_PHONE_NUMBER_ID) return "penal";
+
+  // Rubros nuevos: se arma el nombre de la variable a partir del nombre del
+  // area (ej. "agencia_0km" -> WHATSAPP_AGENCIA_0KM_PHONE_NUMBER_ID), así
+  // que agregar un rubro más a NUEVAS_AREAS_WHATSAPP alcanza, sin tener que
+  // tocar esta función de nuevo. Mientras Vita no cargue esa variable en
+  // Vercel para una línea, los mensajes de ese número simplemente no
+  // matchean nada acá y se ignoran (no rompe nada).
+  for (const area of NUEVAS_AREAS_WHATSAPP) {
+    const envVar = `${envPrefixForArea(area)}_PHONE_NUMBER_ID`;
+    if (phoneNumberId === process.env[envVar]) return area;
+  }
+
   return null;
 }
 
