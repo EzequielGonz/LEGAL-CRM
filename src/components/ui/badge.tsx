@@ -1,15 +1,36 @@
 import clsx from "clsx";
 import type { Area, ConversationStatus } from "@/lib/supabase/database.types";
 
+// "area" ahora tiene 5 valores posibles (civil/penal de Jurídico, más un
+// valor 1:1 por cada rubro nuevo) — antes este badge asumía que solo
+// existían esas dos, así que cualquier otro valor caía mal etiquetado como
+// "Penal". Se arma un mapa con las 5 opciones para que cada una se vea
+// bien, tanto acá como en cualquier otro lugar que use AreaBadge.
+const AREA_LABEL: Record<Area, string> = {
+  civil: "Civil",
+  penal: "Penal",
+  agencia_0km: "Agencia 0KM",
+  coberturas_medicas: "Coberturas Médicas",
+  marketing: "Marketing",
+};
+
+const AREA_COLOR: Record<Area, string> = {
+  civil: "bg-civil-light text-civil",
+  penal: "bg-penal-light text-penal",
+  agencia_0km: "bg-blue-100 text-blue-700",
+  coberturas_medicas: "bg-teal-100 text-teal-700",
+  marketing: "bg-purple-100 text-purple-700",
+};
+
 export function AreaBadge({ area }: { area: Area }) {
   return (
     <span
       className={clsx(
         "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
-        area === "civil" ? "bg-civil-light text-civil" : "bg-penal-light text-penal"
+        AREA_COLOR[area] ?? "bg-slate-100 text-slate-600"
       )}
     >
-      {area === "civil" ? "Civil" : "Penal"}
+      {AREA_LABEL[area] ?? area}
     </span>
   );
 }
