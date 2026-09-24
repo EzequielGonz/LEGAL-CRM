@@ -17,9 +17,14 @@ export interface BaseRowItem {
 export function BaseRowsTable({
   rows,
   channels,
+  redirectBase = "/campanas",
 }: {
   rows: BaseRowItem[];
   channels: { id: string; label: string }[];
+  /** Base de la URL a la que navegar después de crear la campaña, seguida
+   * de "/<id>". Por defecto "/campanas" (panel de Jurídico); los paneles
+   * de otros rubros pasan la suya, por ejemplo "/panel/marketing/campanas". */
+  redirectBase?: string;
 }) {
   const router = useRouter();
   const selectable = useMemo(() => rows.filter((r) => r.contact_id), [rows]);
@@ -74,7 +79,7 @@ export function BaseRowsTable({
     });
     const data = await res.json();
     setCreating(false);
-    if (data.campaign) router.push(`/campanas/${data.campaign.id}`);
+    if (data.campaign) router.push(`${redirectBase}/${data.campaign.id}`);
   }
 
   const statusLabel: Record<string, string> = {
