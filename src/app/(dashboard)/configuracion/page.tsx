@@ -9,10 +9,16 @@ export const dynamic = "force-dynamic";
 export default async function ConfiguracionPage() {
   const supabase = createClient();
 
+  // Filtrado a civil/penal en canales y estudios: sin esto, el canal de
+  // WhatsApp de los rubros nuevos (Agencia 0KM, etc.) aparecía mezclado
+  // acá — cada rubro ahora tiene su propia Configuración en su panel
+  // dedicado (/panel/<rubro>/configuracion). Notificaciones y números
+  // adicionales siguen siendo globales (no tienen columna de área), así
+  // que se quedan acá sin cambios.
   const [{ data: channels }, { data: studios }, { data: userResp }, { data: notificationPhones }] =
     await Promise.all([
-      supabase.from("channels").select("*").order("area").order("type"),
-      supabase.from("studios").select("*").order("area"),
+      supabase.from("channels").select("*").in("area", ["civil", "penal"]).order("area").order("type"),
+      supabase.from("studios").select("*").in("area", ["civil", "penal"]).order("area"),
       supabase.auth.getUser(),
       supabase.from("notification_phones").select("*").order("created_at", { ascending: true }),
     ]);
