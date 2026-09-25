@@ -55,7 +55,7 @@ export async function GET(_request: Request, { params }: { params: { id: string 
 
   const safeName = base.name.replace(/[^a-zA-Z0-9 _-]/g, "").trim() || "captacion";
 
-  return new NextResponse(buffer, {
+  return new NextResponse(new Uint8Array(buffer), {
     headers: {
       "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       "Content-Disposition": `attachment; filename="${safeName}.xlsx"`,
