@@ -64,12 +64,12 @@ export default async function CaptacionDetailPage({ params }: { params: { id: st
           </p>
         </div>
         <div className="flex items-center gap-3">
-          
+          <Link
             href={`/api/marketing/scraping/${base.id}/export`}
             className="text-sm text-gold-700 hover:underline"
           >
             Descargar Excel
-          </a>
+          </Link>
           <DeleteBaseButton
             baseId={base.id}
             baseName={base.name}
