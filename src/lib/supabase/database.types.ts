@@ -223,6 +223,9 @@ export interface CampaignContact {
   sent_at: string | null;
   responded_at: string | null;
   error: string | null;
+  /** Menor número = se manda primero. 0 = lesión prioritaria (fractura/muerte/amputación), 1 = normal. */
+  priority: number;
+  queued_at: string;
 }
 
 export interface AiAgent {
