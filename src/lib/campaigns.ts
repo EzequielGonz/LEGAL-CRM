@@ -202,12 +202,17 @@ export async function tickCampaign(campaignId: string): Promise<TickResult> {
     }
   }
 
-  // 4) Buscar el próximo pendiente.
+  // 4) Buscar el próximo pendiente — primero los de prioridad alta
+  // (fractura/muerte/amputación, priority=0), y dentro de cada nivel de
+  // prioridad, en el orden en que se agregaron a la campaña
+  // (`queued_at`). Ver computeCampaignPriority en @/lib/bases/priority.
   const { data: nextRow } = await supabase
     .from("campaign_contacts")
     .select("id, contact_id, contacts(full_name, phone)")
     .eq("campaign_id", campaignId)
     .eq("status", "pendiente")
+    .order("priority", { ascending: true })
+    .order("queued_at", { ascending: true })
     .limit(1)
     .maybeSingle();
 
@@ -487,14 +492,16 @@ export async function getCampaignStatus(campaignId: string): Promise<CampaignSta
       .order("sent_at", { ascending: false })
       .limit(1)
       .maybeSingle(),
-    // Misma consulta (sin ORDER BY) que usa tickCampaign para elegir a quién
-    // le toca el próximo envío — así lo que se muestra acá coincide siempre
-    // con a quién realmente le va a llegar el próximo mensaje.
+    // Misma consulta (mismo ORDER BY) que usa tickCampaign para elegir a
+    // quién le toca el próximo envío — así lo que se muestra acá coincide
+    // siempre con a quién realmente le va a llegar el próximo mensaje.
     supabase
       .from("campaign_contacts")
       .select("contacts(full_name, phone)")
       .eq("campaign_id", campaignId)
       .eq("status", "pendiente")
+      .order("priority", { ascending: true })
+      .order("queued_at", { ascending: true })
       .limit(1)
       .maybeSingle(),
   ]);
