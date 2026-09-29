@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { computeCampaignPriority } from "@/lib/bases/priority";
 
 /**
  * Crea una campaña. Si viene `contact_ids`, además los agrega de una como
@@ -77,11 +78,30 @@ export async function POST(request: Request) {
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
   if (Array.isArray(contact_ids) && contact_ids.length > 0) {
+    // Prioridad de envío según la lesión que haya quedado guardada en el
+    // contacto (campo "diagnostico"/"tipo_de_consulta" de qualification_data,
+    // cargado al importar la base): fractura, muerte o amputación van
+    // primero — ver computeCampaignPriority.
+    const { data: contactsData } = await supabase
+      .from("contacts")
+      .select("id, qualification_data")
+      .in("id", contact_ids);
+    const priorityByContactId = new Map<string, number>(
+      (contactsData ?? []).map((c: any) => [
+        c.id,
+        computeCampaignPriority(
+          c.qualification_data?.diagnostico,
+          c.qualification_data?.tipo_de_consulta
+        ),
+      ])
+    );
+
     const { error: attachError } = await supabase.from("campaign_contacts").insert(
       contact_ids.map((contact_id: string) => ({
         campaign_id: campaign.id,
         contact_id,
         status: "pendiente",
+        priority: priorityByContactId.get(contact_id) ?? 1,
       }))
     );
     if (attachError) {
