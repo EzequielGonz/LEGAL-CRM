@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { extractRowFields } from "@/lib/bases/mapping";
 import { normalizePhoneAR } from "@/lib/phone";
+import { computeCampaignPriority } from "@/lib/bases/priority";
 
 const UNIQUE_VIOLATION = "23505";
 
@@ -23,6 +24,7 @@ interface ParsedRow {
   fechaDeConsulta: string | null;
   observaciones: string | null;
   localidad: string | null;
+  diagnostico: string | null;
 }
 
 /**
@@ -95,6 +97,7 @@ export async function POST(request: Request) {
       fechaDeConsulta: fields.fecha_de_consulta ?? null,
       observaciones: fields.observaciones ?? null,
       localidad: fields.localidad ?? null,
+      diagnostico: fields.diagnostico ?? null,
     });
   }
 
@@ -139,6 +142,7 @@ export async function POST(request: Request) {
       if (row.fechaDeConsulta) qualification_data.fecha_de_consulta_base = row.fechaDeConsulta;
       if (row.observaciones) qualification_data.observaciones_base = row.observaciones;
       if (row.localidad) qualification_data.localidad = row.localidad;
+      if (row.diagnostico) qualification_data.diagnostico = row.diagnostico;
       return {
         area: campaign.area,
         full_name: row.fullName,
@@ -238,8 +242,10 @@ export async function POST(request: Request) {
       .in("contact_id", ids);
     if (!convRows || convRows.length === 0) continue;
 
-    const convIdToContactId = new Map(convRows.map((c) => [c.id, c.contact_id]));
-    const conversationIds = convRows.map((c) => c.id);
+    const convIdToContactId = new Map<string, string>(
+      convRows.map((c: any) => [c.id as string, c.contact_id as string])
+    );
+    const conversationIds = convRows.map((c: any) => c.id as string);
 
     for (const convIdsChunk of chunkArray(conversationIds, CHUNK_SIZE)) {
       const { data: msgRows } = await supabase
@@ -271,11 +277,19 @@ export async function POST(request: Request) {
   // --- Paso 5: agregar como destinatarios pendientes de la campaña a
   // todos menos a los que ya se contactaron antes (paso 4.5).
   for (const phones of chunkArray(phonesToQueue, CHUNK_SIZE)) {
-    const campaignContactRows = phones.map((phone) => ({
-      campaign_id: campaign.id,
-      contact_id: contactIdByPhone.get(phone)!,
-      status: "pendiente",
-    }));
+    const campaignContactRows = phones.map((phone) => {
+      // Prioridad de envío según la lesión de ESTA lista (no la de un
+      // contacto ya existente de una lista anterior): fractura, muerte o
+      // amputación detectada en "Diagnóstico" (o, si no hay, en "Tipo de
+      // consulta") van primero — ver computeCampaignPriority.
+      const row = parsedRows[firstIndexByPhone.get(phone)!];
+      return {
+        campaign_id: campaign.id,
+        contact_id: contactIdByPhone.get(phone)!,
+        status: "pendiente",
+        priority: computeCampaignPriority(row.diagnostico, row.tipoDeConsulta),
+      };
+    });
     const { error } = await supabase
       .from("campaign_contacts")
       .upsert(campaignContactRows, {
