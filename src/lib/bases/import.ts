@@ -72,6 +72,7 @@ interface ParsedRow {
   fechaDeConsulta: string | null;
   observaciones: string | null;
   localidad: string | null;
+  diagnostico: string | null;
   isFirstForPhone: boolean;
 }
 
@@ -156,6 +157,7 @@ export async function importBase(input: ImportBaseInput): Promise<ImportBaseSumm
       fechaDeConsulta: fields.fecha_de_consulta ?? null,
       observaciones: fields.observaciones ?? null,
       localidad: fields.localidad ?? null,
+      diagnostico: fields.diagnostico ?? null,
       isFirstForPhone,
     });
   }
@@ -203,6 +205,7 @@ export async function importBase(input: ImportBaseInput): Promise<ImportBaseSumm
       if (row.fechaDeConsulta) qualification_data.fecha_de_consulta_base = row.fechaDeConsulta;
       if (row.observaciones) qualification_data.observaciones_base = row.observaciones;
       if (row.localidad) qualification_data.localidad = row.localidad;
+      if (row.diagnostico) qualification_data.diagnostico = row.diagnostico;
       return {
         area: input.area,
         full_name: row.fullName,
