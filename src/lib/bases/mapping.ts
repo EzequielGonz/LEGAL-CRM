@@ -44,6 +44,11 @@ const ALIASES: Record<string, string[]> = {
   // El barrio/zona del prospecto — en las planillas reales viene bajo la
   // columna "Localidad".
   localidad: ["localidad", "barrio", "zona", "localidadbarrio", "ciudad"],
+  // El tipo de lesión (para priorizar el envío de campañas, ver
+  // computeCampaignPriority en ./priority.ts). En las planillas reales de
+  // ART/aseguradoras viene bajo la columna "DIAGNOSTICO" — pero se suman
+  // alias por si en otra planilla viene bajo un nombre distinto.
+  diagnostico: ["diagnostico", "diagnosticomedico", "lesion", "tipodelesion", "lesiones"],
 };
 
 // Para el teléfono en particular (el dato que más importa reconocer bien:
@@ -75,6 +80,7 @@ export interface ExtractedRowFields {
   fecha_de_consulta: string | null;
   observaciones: string | null;
   localidad: string | null;
+  diagnostico: string | null;
 }
 
 /**
@@ -131,5 +137,6 @@ export function extractRowFields(rawRow: Record<string, unknown>): ExtractedRowF
     fecha_de_consulta: findField("fecha_de_consulta"),
     observaciones: findField("observaciones"),
     localidad: findField("localidad"),
+    diagnostico: findField("diagnostico"),
   };
 }
