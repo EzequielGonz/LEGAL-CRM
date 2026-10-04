@@ -73,6 +73,7 @@ interface ParsedRow {
   observaciones: string | null;
   localidad: string | null;
   diagnostico: string | null;
+  obraSocialActual: string | null;
   isFirstForPhone: boolean;
 }
 
@@ -158,6 +159,7 @@ export async function importBase(input: ImportBaseInput): Promise<ImportBaseSumm
       observaciones: fields.observaciones ?? null,
       localidad: fields.localidad ?? null,
       diagnostico: fields.diagnostico ?? null,
+      obraSocialActual: fields.obra_social_actual ?? null,
       isFirstForPhone,
     });
   }
@@ -206,6 +208,7 @@ export async function importBase(input: ImportBaseInput): Promise<ImportBaseSumm
       if (row.observaciones) qualification_data.observaciones_base = row.observaciones;
       if (row.localidad) qualification_data.localidad = row.localidad;
       if (row.diagnostico) qualification_data.diagnostico = row.diagnostico;
+      if (row.obraSocialActual) qualification_data.obra_social_actual = row.obraSocialActual;
       return {
         area: input.area,
         full_name: row.fullName,
