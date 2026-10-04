@@ -49,6 +49,18 @@ const ALIASES: Record<string, string[]> = {
   // ART/aseguradoras viene bajo la columna "DIAGNOSTICO" — pero se suman
   // alias por si en otra planilla viene bajo un nombre distinto.
   diagnostico: ["diagnostico", "diagnosticomedico", "lesion", "tipodelesion", "lesiones"],
+  // Para Coberturas Médicas: de qué obra social/prepaga viene el contacto
+  // ANTES de la propuesta de cambio (no la que se le recomienda, esa la
+  // define el agente de IA). Útil tanto para que el bot no se la vuelva a
+  // preguntar si ya vino en la planilla, como para filtrar/analizar la base.
+  obra_social_actual: [
+    "obrasocial",
+    "obrasocialactual",
+    "prepaga",
+    "coberturamedica",
+    "coberturaactual",
+    "obrasocialoprepaga",
+  ],
 };
 
 // Para el teléfono en particular (el dato que más importa reconocer bien:
@@ -81,6 +93,7 @@ export interface ExtractedRowFields {
   observaciones: string | null;
   localidad: string | null;
   diagnostico: string | null;
+  obra_social_actual: string | null;
 }
 
 /**
@@ -138,5 +151,6 @@ export function extractRowFields(rawRow: Record<string, unknown>): ExtractedRowF
     observaciones: findField("observaciones"),
     localidad: findField("localidad"),
     diagnostico: findField("diagnostico"),
+    obra_social_actual: findField("obra_social_actual"),
   };
 }
