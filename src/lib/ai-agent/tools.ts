@@ -74,4 +74,28 @@ export const AGENT_TOOLS: FunctionDeclaration[] = [
       required: ["motivo"],
     },
   },
+  {
+    name: "finalizar_consulta",
+    description:
+      "Cierra la conversación de una consulta de accidente laboral (solo área Civil). Usala UNA sola vez, al final. " +
+      "resultado='completado': ya tenés los datos del caso y la persona te dijo cuándo le queda cómodo que la contacten de nuevo; el caso pasa al equipo del estudio. " +
+      "resultado='caso_resuelto': la persona ya resolvió su situación. " +
+      "resultado='no_interesado': pidió que no la contactemos más o no quiere seguir. " +
+      "Apaga tus respuestas automáticas en esta conversación, así que después solo despedite con un mensaje corto y cálido.",
+    parametersJsonSchema: {
+      type: "object",
+      properties: {
+        resultado: {
+          type: "string",
+          enum: ["completado", "caso_resuelto", "no_interesado"],
+        },
+        disponibilidad_para_reunion: {
+          type: "string",
+          description:
+            "Día y/o horario que la persona dijo que le queda cómodo para volver a contactarla, tal cual lo dijo. Obligatorio si resultado='completado'.",
+        },
+      },
+      required: ["resultado"],
+    },
+  },
 ];
