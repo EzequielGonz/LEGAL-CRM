@@ -2,7 +2,7 @@ import { GoogleGenAI, type Content, type Part } from "@google/genai";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendOutboundMessage } from "@/lib/messaging";
 import { getAvailableSlots, createAppointment } from "@/lib/agenda";
-import { notifyAdminOfClosedAppointment } from "@/lib/notify";
+import { notifyAdminOfClosedAppointment, notifyAdminOfQualifiedIntake } from "@/lib/notify";
 import { AGENT_TOOLS } from "./tools";
 import type { Area } from "@/lib/supabase/database.types";
 
@@ -25,6 +25,7 @@ function buildSystemPrompt(
     required_fields: string[];
   },
   contactContext: {
+    area: Area;
     fullName: string | null;
     dniCuil: string | null;
     qualificationData: Record<string, unknown>;
@@ -59,7 +60,13 @@ function buildSystemPrompt(
       : "Todavía no hay datos previos cargados de este prospecto.",
     "",
     contactContext.isFirstReplyToCampaign
-      ? "Este prospecto viene de una campaña (le escribiste vos primero con un mensaje inicial y ahora te está respondiendo por primera vez). Antes de seguir calificando, arrancá preguntando si su situación sigue vigente o si ya la resolvió — si ya la resolvió, agradecé y cerrá la conversación amablemente sin insistir."
+      ? contactContext.area === "civil"
+        ? // Civil (campaña de accidentes laborales): el guión de apertura y de
+          // preguntas vive completo en el prompt del agente (panel Agentes IA).
+          // Acá NO se fuerza la vieja pregunta de "¿sigue vigente o ya lo
+          // resolviste?", porque ahora la charla es más natural y no hay botones.
+          "Este prospecto viene de una campaña: el mensaje inicial ya se lo mandamos nosotros en tu nombre y ahora te está respondiendo por primera vez. Seguí desde ahí, de forma natural, según el guión de tu rol."
+        : "Este prospecto viene de una campaña (le escribiste vos primero con un mensaje inicial y ahora te está respondiendo por primera vez). Antes de seguir calificando, arrancá preguntando si su situación sigue vigente o si ya la resolvió — si ya la resolvió, agradecé y cerrá la conversación amablemente sin insistir."
       : "",
     "Reglas estrictas:",
     "- NUNCA inventes información, plazos, montos ni asesoramiento legal específico.",
@@ -159,6 +166,7 @@ export async function runAgentTurn(conversationId: string) {
   }
 
   const system = buildSystemPrompt(agentConfig as any, {
+    area,
     fullName: contact.full_name,
     dniCuil: contact.dni_cuil,
     qualificationData: contact.qualification_data ?? {},
@@ -304,6 +312,62 @@ async function executeTool(
         })
         .eq("id", ctx.contact.id);
       return { output: { ok: true }, escalated: true };
+    }
+
+    case "finalizar_consulta": {
+      // Solo para la campaña de accidentes laborales (área Civil). Reproduce
+      // los mismos estados finales que tenía el cuestionario fijo anterior
+      // (intake-flow.ts), para que /derivar, Casos cerrados y los avisos al
+      // administrador sigan funcionando igual.
+      if (ctx.area !== "civil") {
+        return { output: { error: "Esta herramienta solo está disponible en el área Civil." } };
+      }
+
+      const resultado = String(input.resultado ?? "");
+
+      if (resultado === "completado") {
+        const disponibilidad = String(input.disponibilidad_para_reunion ?? "").trim();
+        if (!disponibilidad) {
+          return {
+            output: {
+              error:
+                "Falta disponibilidad_para_reunion: preguntale cuándo le queda cómodo que la contacten y volvé a llamar esta herramienta.",
+            },
+          };
+        }
+
+        const merged = {
+          ...(ctx.contact.qualification_data ?? {}),
+          disponibilidad_para_reunion: disponibilidad,
+        };
+        await supabase.from("contacts").update({ qualification_data: merged }).eq("id", ctx.contact.id);
+        ctx.contact.qualification_data = merged;
+
+        await supabase
+          .from("conversations")
+          .update({ intake_step: "completado", status: "requiere_atencion_humana", ai_enabled: false })
+          .eq("id", ctx.conversationId);
+        await supabase.from("contacts").update({ status: "cerrado_ganado" }).eq("id", ctx.contact.id);
+
+        try {
+          await notifyAdminOfQualifiedIntake(ctx.contact.id);
+        } catch (err) {
+          console.error("No se pudo notificar al administrador del caso calificado:", err);
+        }
+
+        return { output: { ok: true }, escalated: true };
+      }
+
+      if (resultado === "caso_resuelto" || resultado === "no_interesado") {
+        await supabase
+          .from("conversations")
+          .update({ intake_step: "resuelto", status: "cerrado_perdido", ai_enabled: false })
+          .eq("id", ctx.conversationId);
+        await supabase.from("contacts").update({ status: "no_califica" }).eq("id", ctx.contact.id);
+        return { output: { ok: true }, escalated: true };
+      }
+
+      return { output: { error: `resultado inválido: ${resultado}` } };
     }
 
     default:
