@@ -1,4 +1,5 @@
 import type { FunctionDeclaration } from "@google/genai";
+import type { Area } from "@/lib/supabase/database.types";
 
 /**
  * Herramientas que el agente IA puede invocar durante la conversación.
@@ -99,3 +100,56 @@ export const AGENT_TOOLS: FunctionDeclaration[] = [
     },
   },
 ];
+
+/**
+ * Herramientas EXCLUSIVAS del agente de Kocos Marketing. No existen para
+ * ningún otro rubro.
+ */
+export const MARKETING_TOOLS: FunctionDeclaration[] = [
+  {
+    name: "registrar_resultado_marketing",
+    description:
+      "Registra cómo quedó la conversación con el prospecto. Es obligatorio llamarla cuando se define: " +
+      "resultado='aprobado': aceptó la propuesta y quiere avanzar (el sistema avisa al equipo técnico y cierra el caso: después avisale al prospecto que lo derivás al equipo técnico para empezar el proyecto). " +
+      "resultado='en_duda': duda, quiere pensarlo o dice que en otro momento (el sistema le hace seguimiento por WhatsApp). " +
+      "resultado='no_interesado': dijo claramente que no o pidió que no lo contactemos más. " +
+      "Apaga tus respuestas automáticas salvo en 'en_duda'.",
+    parametersJsonSchema: {
+      type: "object",
+      properties: {
+        resultado: { type: "string", enum: ["aprobado", "en_duda", "no_interesado"] },
+        motivo: {
+          type: "string",
+          description:
+            "Una frase con lo que dijo el prospecto y/o lo que se aprobó (servicios y presupuesto acordado, si aplica).",
+        },
+      },
+      required: ["resultado", "motivo"],
+    },
+  },
+  {
+    name: "analizar_negocio",
+    description:
+      "Analiza en el momento el negocio de un prospecto que nos escribió por su cuenta (consulta directa): revisa su sitio web y/o su ficha de Google Maps y devuelve los hallazgos concretos. " +
+      "Usala cuando no tengas análisis y el prospecto te pase su sitio web o el nombre y la zona de su negocio.",
+    parametersJsonSchema: {
+      type: "object",
+      properties: {
+        sitio_web: { type: "string", description: "URL del sitio web del negocio, si la tiene." },
+        nombre_y_zona: {
+          type: "string",
+          description: "Nombre del negocio y su zona/ciudad, para buscar su ficha en Google Maps. Ej: 'Panadería Don Pepe, Rosario'.",
+        },
+      },
+    },
+  },
+];
+
+/** Herramientas disponibles según el área del agente. */
+export function toolsForArea(area: Area): FunctionDeclaration[] {
+  if (area === "marketing") {
+    // Marketing no usa finalizar_consulta (es del cuestionario de Civil).
+    return [...AGENT_TOOLS.filter((t) => t.name !== "finalizar_consulta"), ...MARKETING_TOOLS];
+  }
+  return AGENT_TOOLS;
+}

@@ -15,7 +15,13 @@ export default function PanelMarketingLayout({
         basePath="/panel/marketing"
         emoji="📈"
         name="Agencia Marketing"
-        extraNavItems={[{ path: "captacion", label: "Captación" }]}
+        extraNavItems={[
+          { path: "captacion", label: "Captación" },
+          { path: "prospectos", label: "Prospectos prioritarios" },
+          { path: "seguimiento", label: "Seguimiento o repesca" },
+          { path: "consultas-directas", label: "Consultas directas" },
+          { path: "estadisticas", label: "Estadísticas" },
+        ]}
       />
       <main className="h-screen flex-1 overflow-y-auto bg-slate-50 p-8">{children}</main>
     </div>

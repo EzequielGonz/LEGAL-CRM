@@ -1,6 +1,7 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { findOrCreateContact, findOrCreateConversation } from "@/lib/contacts";
 import { runAgentTurn } from "@/lib/ai-agent/agent";
+import { onMarketingInbound } from "@/lib/marketing/leads";
 import type { Area, ChannelType, SourceType } from "@/lib/supabase/database.types";
 
 /**
@@ -96,6 +97,18 @@ export async function handleInboundMessage({
     .update({ status: "respondio", responded_at: new Date().toISOString() })
     .eq("contact_id", contact.id)
     .in("status", ["enviado", "entregado", "leido"]);
+
+  // Marketing: registra la respuesta en el pipeline de prospección. Si el
+  // contacto no tenía lead es una consulta DIRECTA y se crea uno (con su
+  // fuente); si estaba contactado o en seguimiento pasa a "respondió" y se
+  // cancelan los recordatorios pendientes. Nunca debe frenar la respuesta.
+  if (area === "marketing") {
+    try {
+      await onMarketingInbound({ id: contact.id, source: contact.source });
+    } catch (err) {
+      console.error("[marketing] No se pudo registrar el mensaje entrante en el pipeline:", err);
+    }
+  }
 
   // Antes, acá se corría un cuestionario fijo (botones "Mi caso esta
   // pendiente" / "Mi caso ya esta resuelto" + preguntas numeradas, ver

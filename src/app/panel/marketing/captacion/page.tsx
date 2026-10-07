@@ -2,16 +2,17 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { DeleteBaseButton } from "@/components/bases/delete-base-button";
 import { ScrapingForm } from "@/components/marketing/scraping-form";
+import { ScrapeQueueForm } from "@/components/marketing/scrape-queue-form";
 
 export const dynamic = "force-dynamic";
 
 export default async function CaptacionMarketingPage() {
   const supabase = createClient();
-  const { data: bases } = await supabase
-    .from("imported_bases")
-    .select("*")
-    .eq("area", "marketing")
-    .order("created_at", { ascending: false });
+  const [{ data: bases }, { data: jobs }] = await Promise.all([
+    supabase.from("imported_bases").select("*").eq("area", "marketing").order("created_at", { ascending: false }),
+    supabase.from("marketing_scrape_jobs").select("*").order("created_at", { ascending: false }).limit(60),
+  ]);
+  const jobCount = (status: string) => (jobs ?? []).filter((j: any) => j.status === status).length;
 
   return (
     <div>
@@ -27,6 +28,34 @@ export default async function CaptacionMarketingPage() {
       </div>
 
       <ScrapingForm />
+
+      <ScrapeQueueForm />
+
+      {(jobs ?? []).length > 0 && (
+        <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4">
+          <h2 className="mb-1 text-sm font-semibold text-slate-800">Cola de búsquedas</h2>
+          <p className="mb-3 text-xs text-slate-500">
+            {jobCount("pendiente")} pendientes · {jobCount("ejecutando")} corriendo · {jobCount("listo")} listas ·{" "}
+            {jobCount("error")} con error
+          </p>
+          <ul className="max-h-56 space-y-1 overflow-y-auto text-xs text-slate-600">
+            {(jobs ?? []).map((j: any) => (
+              <li key={j.id} className="flex justify-between gap-3">
+                <span>
+                  {j.rubro} en {j.zona}
+                </span>
+                <span className="text-slate-400">
+                  {j.status === "listo"
+                    ? `${j.result?.creados ?? 0} nuevos de ${j.result?.total ?? 0}`
+                    : j.status === "error"
+                      ? `error: ${j.error ?? ""}`.slice(0, 80)
+                      : j.status}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <div className="space-y-3">
         {(bases ?? []).map((b) => (

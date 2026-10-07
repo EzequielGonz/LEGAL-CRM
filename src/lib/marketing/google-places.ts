@@ -30,6 +30,30 @@ export interface ScrapedPlace {
   rating: number | null;
   ratingCount: number | null;
   types: string[];
+  /** Datos extra de Google Maps que usa el análisis del negocio. */
+  extra: PlaceExtra;
+}
+
+export interface PlaceExtra {
+  photosCount: number | null;
+  verified: boolean | null;
+  businessStatus: string | null;
+  /** null = Google/Outscraper no informó el dato (no se asume que falte). */
+  hasHours: boolean | null;
+  description: string | null;
+  facebook: string | null;
+  instagram: string | null;
+  email: string | null;
+  reviewsPerScore: Record<string, number> | null;
+  mapsUrl: string | null;
+}
+
+function textOrNull(v: unknown): string | null {
+  return typeof v === "string" && v.trim() ? v.trim() : null;
+}
+
+function numberOrNull(v: unknown): number | null {
+  return typeof v === "number" && Number.isFinite(v) ? v : null;
 }
 
 function sleep(ms: number) {
@@ -54,6 +78,27 @@ function toScrapedPlace(raw: any): ScrapedPlace | null {
           ? raw.reviews_count
           : null,
     types: raw.category ? [String(raw.category)] : Array.isArray(raw.type) ? raw.type : [],
+    extra: {
+      photosCount: numberOrNull(raw.photos_count),
+      verified: typeof raw.verified === "boolean" ? raw.verified : null,
+      businessStatus: textOrNull(raw.business_status),
+      hasHours:
+        raw.working_hours === undefined && raw.working_hours_old_format === undefined && raw.hours === undefined
+          ? null
+          : Boolean(
+              raw.working_hours &&
+                (typeof raw.working_hours !== "object" || Object.keys(raw.working_hours).length > 0)
+            ),
+      description: textOrNull(raw.description),
+      facebook: textOrNull(raw.facebook),
+      instagram: textOrNull(raw.instagram),
+      email: textOrNull(raw.email_1 ?? raw.email),
+      reviewsPerScore:
+        raw.reviews_per_score && typeof raw.reviews_per_score === "object"
+          ? (raw.reviews_per_score as Record<string, number>)
+          : null,
+      mapsUrl: textOrNull(raw.location_link ?? raw.maps_url),
+    },
   };
 }
 

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import type { Message } from "@/lib/supabase/database.types";
+import type { Area, Message } from "@/lib/supabase/database.types";
 import { AreaBadge, SourceBadge, StatusBadge } from "@/components/ui/badge";
 
 export interface ThreadContact {
@@ -10,7 +10,7 @@ export interface ThreadContact {
   full_name: string | null;
   phone: string | null;
   email: string | null;
-  area: "civil" | "penal";
+  area: Area;
   status: string;
   source: string;
   qualification_data: Record<string, unknown>;

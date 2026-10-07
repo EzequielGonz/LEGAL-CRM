@@ -43,7 +43,11 @@ function formatQualificationData(data: Record<string, unknown>): string {
   return entries.map(([key, value]) => `- ${key.replaceAll("_", " ")}: ${value}`).join("\n");
 }
 
-export async function notifyMarketingHandoff(contactId: string, motivo: string) {
+export async function notifyMarketingHandoff(
+  contactId: string,
+  motivo: string,
+  tipo: "atender" | "cierre" = "atender"
+) {
   const supabase = createAdminClient();
 
   const { data: contact } = await supabase
@@ -57,8 +61,19 @@ export async function notifyMarketingHandoff(contactId: string, motivo: string) 
   const data = (contact.qualification_data ?? {}) as Record<string, unknown>;
   const score = data.sales_intent_score;
 
+  const { data: lead } = await supabase
+    .from("marketing_leads")
+    .select("source_kind, source_detail, lead_score, priority, summary, website, analysis")
+    .eq("contact_id", contact.id)
+    .maybeSingle();
+  const servicios: string[] = Array.isArray((lead as any)?.analysis?.servicios_sugeridos)
+    ? (lead as any).analysis.servicios_sugeridos
+    : [];
+
   const messageBody = [
-    "🔥 LEAD PARA ATENDER (KOCOS MARKETING)",
+    tipo === "cierre"
+      ? "✅ PROYECTO APROBADO — DERIVAR AL EQUIPO TÉCNICO (KOCOS MARKETING)"
+      : "🔥 LEAD PARA ATENDER (KOCOS MARKETING)",
     "",
     "Nombre:",
     contact.full_name ?? "(no informado)",
@@ -66,11 +81,19 @@ export async function notifyMarketingHandoff(contactId: string, motivo: string) 
     "Teléfono:",
     contact.phone ?? "(no informado)",
     "",
-    "Motivo del aviso:",
+    "Origen:",
+    lead
+      ? `${lead.source_kind === "directa" ? "Consulta directa" : "Dato frío de Google Maps"} — ${lead.source_detail ?? ""}`
+      : "(sin dato)",
+    "",
+    tipo === "cierre" ? "Resultado:" : "Motivo del aviso:",
     motivo || "(sin detalle)",
     "",
     "Puntaje de intención de compra:",
     score !== undefined && score !== null ? String(score) : "(sin calcular)",
+    ...(lead?.lead_score != null ? ["", "Puntaje de oportunidad del análisis:", `${lead.lead_score}/100 (${lead.priority})`] : []),
+    ...(servicios.length > 0 ? ["", "Servicios sugeridos por el análisis:", servicios.join(", ")] : []),
+    ...(lead?.website ? ["", "Sitio web:", lead.website] : []),
     "",
     "Información recopilada:",
     formatQualificationData(data),

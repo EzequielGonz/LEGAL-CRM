@@ -4,7 +4,17 @@ import { sendOutboundMessage } from "@/lib/messaging";
 import { getAvailableSlots, createAppointment } from "@/lib/agenda";
 import { notifyAdminOfClosedAppointment, notifyAdminOfQualifiedIntake } from "@/lib/notify";
 import { notifyMarketingHandoff } from "@/lib/notify-marketing";
-import { AGENT_TOOLS } from "./tools";
+import { toolsForArea } from "./tools";
+import {
+  buildMarketingBrief,
+  ensureLead,
+  getLeadByContact,
+  logMarketingEvent,
+  setMarketingOutcome,
+  sourceDetailFor,
+  type MarketingOutcome,
+} from "@/lib/marketing/leads";
+import { analyzeLead } from "@/lib/marketing/analysis";
 import type { Area } from "@/lib/supabase/database.types";
 
 const MAX_TOOL_ITERATIONS = 6;
@@ -174,6 +184,10 @@ export async function runAgentTurn(conversationId: string) {
     campaignName,
     isFirstReplyToCampaign,
   });
+  // Marketing: se suma lo que el sistema sabe del negocio (análisis) y cómo registrar el resultado.
+  const marketingBrief = area === "marketing" ? await buildMarketingBrief(contact.id) : "";
+  const systemWithBrief = marketingBrief ? `${system}\n\n${marketingBrief}` : system;
+  const tools = toolsForArea(area);
   let escalated = false;
   let finalText = "";
 
@@ -182,8 +196,8 @@ export async function runAgentTurn(conversationId: string) {
             model: process.env.GEMINI_MODEL ?? "gemini-3.6-flash",
       contents: messages,
       config: {
-        systemInstruction: system,
-        tools: [{ functionDeclarations: AGENT_TOOLS }],
+        systemInstruction: systemWithBrief,
+        tools: [{ functionDeclarations: tools }],
       },
     });
 
@@ -320,6 +334,13 @@ async function executeTool(
         } catch (err) {
           console.error("No se pudo avisar al equipo del lead de Marketing:", err);
         }
+        const lead = await getLeadByContact(ctx.contact.id);
+        await logMarketingEvent({
+          leadId: lead?.id ?? null,
+          contactId: ctx.contact.id,
+          type: "escalado_a_humano",
+          detail: { motivo: String(input.motivo ?? "") },
+        });
       }
 
       return { output: { ok: true }, escalated: true };
@@ -379,6 +400,100 @@ async function executeTool(
       }
 
       return { output: { error: `resultado inválido: ${resultado}` } };
+    }
+
+    case "registrar_resultado_marketing": {
+      if (ctx.area !== "marketing") {
+        return { output: { error: "Esta herramienta solo está disponible en Marketing." } };
+      }
+      const resultado = String(input.resultado ?? "") as MarketingOutcome;
+      if (!["aprobado", "en_duda", "no_interesado"].includes(resultado)) {
+        return { output: { error: `resultado inválido: ${resultado}` } };
+      }
+      const motivo = String(input.motivo ?? "").trim() || "(sin detalle)";
+
+      await setMarketingOutcome({
+        contactId: ctx.contact.id,
+        conversationId: ctx.conversationId,
+        resultado,
+        motivo,
+      });
+
+      if (resultado === "aprobado") {
+        try {
+          await notifyMarketingHandoff(ctx.contact.id, motivo, "cierre");
+        } catch (err) {
+          console.error("No se pudo avisar al equipo del cierre de Marketing:", err);
+        }
+        return {
+          output: {
+            ok: true,
+            instruccion:
+              "Avisale al prospecto, con calidez, que queda aprobado y que lo derivás al equipo técnico para empezar a trabajar en el proyecto. Despedite breve.",
+          },
+          escalated: true,
+        };
+      }
+      if (resultado === "no_interesado") {
+        return {
+          output: { ok: true, instruccion: "Agradecé y despedite con respeto, sin insistir." },
+          escalated: true,
+        };
+      }
+      return {
+        output: {
+          ok: true,
+          instruccion:
+            "Decile con naturalidad que quedás atento y que le escribimos en unos días para retomar. No presiones.",
+        },
+      };
+    }
+
+    case "analizar_negocio": {
+      if (ctx.area !== "marketing") {
+        return { output: { error: "Esta herramienta solo está disponible en Marketing." } };
+      }
+      const sitioWeb = typeof input.sitio_web === "string" ? input.sitio_web.trim() : "";
+      const nombreYZona = typeof input.nombre_y_zona === "string" ? input.nombre_y_zona.trim() : "";
+      if (!sitioWeb && !nombreYZona) {
+        return { output: { error: "Necesito el sitio web o el nombre y la zona del negocio." } };
+      }
+
+      const { lead } = await ensureLead({
+        contactId: ctx.contact.id,
+        sourceKind: "directa",
+        sourceDetail: sourceDetailFor(ctx.contact.source),
+      });
+
+      const analyzed: any = await analyzeLead(lead.id, {
+        force: true,
+        websiteOverride: sitioWeb || null,
+        mapsQuery: nombreYZona || null,
+      });
+      if (!analyzed || analyzed.analysis_status === "omitido") {
+        return {
+          output: {
+            error:
+              "No pude obtener datos de ese negocio. Pedile al prospecto su sitio web o el nombre exacto y la zona, o seguí la charla con lo que él te cuente.",
+          },
+        };
+      }
+
+      const a = analyzed.analysis ?? {};
+      return {
+        output: {
+          puntaje_oportunidad: analyzed.lead_score,
+          prioridad: analyzed.priority,
+          resumen: analyzed.summary,
+          hallazgos: (a.hallazgos ?? []).slice(0, 8).map((h: any) => ({
+            problema: h.problema,
+            impacto: h.impacto,
+            mejora: h.mejora,
+          })),
+          servicios_sugeridos: a.servicios_sugeridos ?? [],
+          nota: "Presentá solo estos hallazgos, con transparencia sobre de dónde salen. No inventes otros.",
+        },
+      };
     }
 
     default:

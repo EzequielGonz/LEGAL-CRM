@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server";
 import { tickAllActiveCampaigns } from "@/lib/campaigns";
+import { runMarketingTick } from "@/lib/marketing/followups";
+import { enqueueQualifiedLeads } from "@/lib/marketing/outreach";
+
+// El análisis de negocios (descargar la web + IA) necesita más de los 10s por defecto.
+export const maxDuration = 60;
 
 /**
  * Endpoint "latido": le da un paso a todas las campañas en curso (manda como
@@ -33,8 +38,21 @@ export async function POST(request: Request) {
   }
 
   try {
+    // 1) Primero lo que manda mensajes (campañas), que es lo sensible al ritmo.
     const results = await tickAllActiveCampaigns();
-    return NextResponse.json({ ok: true, results });
+
+    // 2) Pipeline de Marketing: analiza negocios nuevos, suma los mejor
+    //    calificados a la prospección automática y gestiona los seguimientos.
+    //    Aislado: si falla, no afecta a las campañas de los otros rubros.
+    let marketing: Record<string, unknown> = {};
+    try {
+      marketing = await runMarketingTick();
+      marketing.sumados_a_prospeccion = await enqueueQualifiedLeads();
+    } catch (err: any) {
+      marketing = { error: String(err?.message ?? err) };
+    }
+
+    return NextResponse.json({ ok: true, results, marketing });
   } catch (err: any) {
     return NextResponse.json({ error: String(err.message ?? err) }, { status: 500 });
   }

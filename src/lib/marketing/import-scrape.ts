@@ -2,6 +2,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { normalizePhoneAR } from "@/lib/phone";
 import { findOrCreateContact } from "@/lib/contacts";
 import type { ScrapedPlace } from "./google-places";
+import { ensureLead } from "./leads";
 
 export interface ImportScrapeSummary {
   base_id: string;
@@ -152,6 +153,38 @@ export async function importScrapedPlaces({
         .eq("id", contact.id);
     } else {
       duplicados++;
+    }
+
+    // Lead de Marketing: queda "pendiente de análisis" y el cron lo analiza solo.
+    if (created) {
+      try {
+        await ensureLead({
+          contactId: contact.id,
+          sourceKind: "scraper",
+          sourceDetail: `Google Maps · ${rubroBuscado} en ${zona}`,
+          placeId: place.placeId,
+          website: place.website,
+          mapsData: {
+            rating: place.rating,
+            ratingCount: place.ratingCount,
+            photosCount: place.extra.photosCount,
+            verified: place.extra.verified,
+            hasHours: place.extra.hasHours,
+            businessStatus: place.extra.businessStatus,
+            categories: place.types,
+            address: place.address,
+            description: place.extra.description,
+            facebook: place.extra.facebook,
+            instagram: place.extra.instagram,
+            email: place.extra.email,
+            mapsUrl: place.extra.mapsUrl,
+            rubro_buscado: rubroBuscado,
+            zona_buscada: zona,
+          },
+        });
+      } catch (err) {
+        console.error("[marketing] No se pudo crear el lead del negocio:", err);
+      }
     }
 
     rowInserts.push({

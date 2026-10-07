@@ -1,6 +1,8 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendWhatsAppTemplate } from "@/lib/whatsapp/client";
 import { findOrCreateConversation } from "@/lib/contacts";
+import { AUTO_CAMPAIGN_NAME, pickNextMarketingContact } from "@/lib/marketing/outreach";
+import { markLeadContacted } from "@/lib/marketing/leads";
 
 /**
  * Motor de envío de campañas — modelo "a pasos" (tick-based).
@@ -206,17 +208,43 @@ export async function tickCampaign(campaignId: string): Promise<TickResult> {
   // (fractura/muerte/amputación, priority=0), y dentro de cada nivel de
   // prioridad, en el orden en que se agregaron a la campaña
   // (`queued_at`). Ver computeCampaignPriority en @/lib/bases/priority.
-  const { data: nextRow } = await supabase
-    .from("campaign_contacts")
-    .select("id, contact_id, contacts(full_name, phone)")
-    .eq("campaign_id", campaignId)
-    .eq("status", "pendiente")
-    .order("priority", { ascending: true })
-    .order("queued_at", { ascending: true })
-    .limit(1)
-    .maybeSingle();
+  let nextRow: any = null;
+  let marketingHook: string | null = null;
+
+  if (campaign.area === "marketing") {
+    // Marketing: no se va en orden de carga. Se elige al lead más calificado ya
+    // analizado y el mensaje lleva el "gancho" del análisis (ver marketing/outreach.ts).
+    const pick = await pickNextMarketingContact(campaignId);
+    if (pick.kind === "waiting") {
+      return { campaignId, action: "waiting_interval", detail: pick.detail };
+    }
+    if (pick.kind === "ready") {
+      nextRow = {
+        id: pick.campaignContactId,
+        contact_id: pick.contactId,
+        contacts: { full_name: pick.name, phone: pick.phone },
+      };
+      marketingHook = pick.hook;
+    }
+  } else {
+    const { data } = await supabase
+      .from("campaign_contacts")
+      .select("id, contact_id, contacts(full_name, phone)")
+      .eq("campaign_id", campaignId)
+      .eq("status", "pendiente")
+      .order("priority", { ascending: true })
+      .order("queued_at", { ascending: true })
+      .limit(1)
+      .maybeSingle();
+    nextRow = data;
+  }
 
   if (!nextRow) {
+    // La campaña de prospección automática nunca se da por terminada: se
+    // queda esperando leads nuevos que vayan saliendo del análisis.
+    if (campaign.area === "marketing" && campaign.name === AUTO_CAMPAIGN_NAME) {
+      return { campaignId, action: "waiting_interval", detail: "Sin leads calificados por contactar por ahora" };
+    }
     await supabase
       .from("campaigns")
       .update({ status: "finalizada", finished_at: now.toISOString() })
@@ -257,7 +285,10 @@ export async function tickCampaign(campaignId: string): Promise<TickResult> {
       phone,
       campaign.message_template_name,
       "es_AR",
-      [name, TEMPLATE_SENDER_NAME, TEMPLATE_TEAM_NAME]
+      // Marketing: {{1}} = nombre del negocio, {{2}} = gancho del análisis.
+      campaign.area === "marketing" && marketingHook
+        ? [name, marketingHook]
+        : [name, TEMPLATE_SENDER_NAME, TEMPLATE_TEAM_NAME]
     );
 
     // Log completo de la respuesta de Meta: antes esto se descartaba, así que
@@ -292,9 +323,15 @@ export async function tickCampaign(campaignId: string): Promise<TickResult> {
       conversation_id: conversation.id,
       sender_type: "agente_ia",
       direction: "saliente",
-      body: `[Plantilla de campaña "${campaign.name}": ${campaign.message_template_name}] Primer contacto automático a ${name || "el prospecto"}.`,
+      body:
+        campaign.area === "marketing" && marketingHook
+          ? `[Mensaje inicial de Kocos Marketing — plantilla ${campaign.message_template_name}] Estuvimos viendo ${name} en Google y notamos que ${marketingHook}. Armamos una propuesta concreta para mejorarlo. ¿Querés que te la mostremos?`
+          : `[Plantilla de campaña "${campaign.name}": ${campaign.message_template_name}] Primer contacto automático a ${name || "el prospecto"}.`,
       metadata: { campaign_id: campaign.id, template: campaign.message_template_name },
     });
+    if (campaign.area === "marketing") {
+      await markLeadContacted(nextRow.contact_id, marketingHook);
+    }
     await supabase
       .from("conversations")
       .update({ status: "esperando_respuesta_prospecto", last_message_at: now.toISOString() })
