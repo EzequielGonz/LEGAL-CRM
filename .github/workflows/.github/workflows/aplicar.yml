@@ -1,0 +1,26 @@
+name: Aplicar pipeline Kocos
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'kocos-pipeline*.zip'
+permissions:
+  contents: write
+jobs:
+  aplicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Aplicar
+        run: |
+          set -e
+          ZIP=$(ls kocos-pipeline*.zip | head -n 1)
+          unzip -o "$ZIP"
+          rm -f kocos-pipeline*.zip
+          for f in agent.ts tools.ts campaigns.ts inbound.ts notify-marketing.ts analysis.ts followups.ts google-places.ts import-scrape.ts leads.ts outreach.ts scrape-jobs.ts web-analysis.ts route.ts page.tsx layout.tsx conversation-thread.tsx auto-outreach-control.tsx lead-badges.tsx lead-list.tsx scrape-queue-form.tsx 0005_marketing_pipeline.sql; do rm -f "./$f"; done
+          find . -maxdepth 1 -type f -name '* ([0-9]*).*' -delete
+          git config user.name "kocos-bot"
+          git config user.email "kocos-bot@users.noreply.github.com"
+          git add -A
+          git commit -m "Aplicar pipeline de Marketing" || echo "sin cambios"
+          git push
