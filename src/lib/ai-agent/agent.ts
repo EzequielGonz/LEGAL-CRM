@@ -3,6 +3,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { sendOutboundMessage } from "@/lib/messaging";
 import { getAvailableSlots, createAppointment } from "@/lib/agenda";
 import { notifyAdminOfClosedAppointment, notifyAdminOfQualifiedIntake } from "@/lib/notify";
+import { notifyMarketingHandoff } from "@/lib/notify-marketing";
 import { AGENT_TOOLS } from "./tools";
 import type { Area } from "@/lib/supabase/database.types";
 
@@ -60,8 +61,8 @@ function buildSystemPrompt(
       : "Todavía no hay datos previos cargados de este prospecto.",
     "",
     contactContext.isFirstReplyToCampaign
-      ? contactContext.area === "civil"
-        ? // Civil (campaña de accidentes laborales): el guión de apertura y de
+      ? contactContext.area === "civil" || contactContext.area === "marketing"
+        ? // Civil (accidentes laborales) y Marketing (venta consultiva): el guión de apertura y de
           // preguntas vive completo en el prompt del agente (panel Agentes IA).
           // Acá NO se fuerza la vieja pregunta de "¿sigue vigente o ya lo
           // resolviste?", porque ahora la charla es más natural y no hay botones.
@@ -311,6 +312,16 @@ async function executeTool(
             : `[Escalado] ${input.motivo}`,
         })
         .eq("id", ctx.contact.id);
+
+      // Solo Marketing: aviso inmediato por WhatsApp al equipo humano.
+      if (ctx.area === "marketing") {
+        try {
+          await notifyMarketingHandoff(ctx.contact.id, String(input.motivo ?? ""));
+        } catch (err) {
+          console.error("No se pudo avisar al equipo del lead de Marketing:", err);
+        }
+      }
+
       return { output: { ok: true }, escalated: true };
     }
 
