@@ -290,7 +290,7 @@ export async function buildMarketingBrief(contactId: string): Promise<string> {
 
     if (lead.hook && lead.source_kind === "scraper") {
       lines.push(
-        `El mensaje inicial que ya recibió decía, en resumen: "Estuvimos viendo tu negocio en Google y notamos que ${lead.hook}. Armamos una propuesta concreta, ¿querés que te la mostremos?". Seguí desde ahí, sin repetirlo.`
+        `El mensaje inicial que ya recibió fue genérico: "Hola, ¿cómo estás? Mi nombre es Ezequiel de Kocos Marketing. Analizamos tu negocio en Google y tenemos una propuesta para ofrecerte." (sin botones: el prospecto puede contestar lo que quiera). Todavía NO le dijimos qué detectamos. Primero respondé con naturalidad a lo que escribió (saludo, una pregunta, "¿qué propuesta?", "¿quiénes son?", una duda o un rechazo) y, cuando corresponda, presentale lo que vimos de su negocio (la idea de fondo: ${lead.hook}) y llevá la charla hacia la propuesta y el cierre. Si dice claramente que no le interesa, respetalo y no insistas.`
       );
     }
 

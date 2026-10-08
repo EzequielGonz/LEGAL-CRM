@@ -327,7 +327,7 @@ export async function tickCampaign(campaignId: string): Promise<TickResult> {
       direction: "saliente",
       body:
         campaign.area === "marketing" && marketingHook
-          ? `[Mensaje inicial de Kocos Marketing — plantilla ${campaign.message_template_name}] Hola, ¿cómo estás? Mi nombre es Ezequiel de Kocos Marketing. Analizamos tu negocio en Google y tenemos una propuesta para ofrecerte. [Botones: Quiero ver la propuesta / No me interesa]`
+          ? `[Mensaje inicial de Kocos Marketing — plantilla ${campaign.message_template_name}] Hola, ¿cómo estás? Mi nombre es Ezequiel de Kocos Marketing. Analizamos tu negocio en Google y tenemos una propuesta para ofrecerte.`
           : `[Plantilla de campaña "${campaign.name}": ${campaign.message_template_name}] Primer contacto automático a ${name || "el prospecto"}.`,
       metadata: { campaign_id: campaign.id, template: campaign.message_template_name },
     });
