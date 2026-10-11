@@ -1,7 +1,11 @@
-// Cálculo de las estadísticas por rubro que se usan en la vista previa de
-// /perfiles. Vive en un archivo aparte (sin "use client") para que lo
-// pueda usar tanto el server component (primera carga) como el client
-// component (refrescos en vivo) sin duplicar la lógica.
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getProfileMetrics } from "@/lib/metrics";
+
+/**
+ * Vista previa de cada perfil (pantalla de Computadora y teléfono). Usa el
+ * cálculo único de cifras (bloque 1.5): lo que se ve acá coincide con
+ * Estadísticas y con Casos.
+ */
 export type RubroRow = {
   id: string;
   slug: string;
@@ -10,45 +14,46 @@ export type RubroRow = {
   description: string | null;
 };
 
-export type ContactStatRow = {
-  id: string;
-  full_name: string | null;
-  phone: string | null;
-  rubro_id: string;
-  status: string;
-  updated_at: string;
-};
-
 export type PerfilStats = RubroRow & {
+  /** captados (unidad: oportunidad) */
   agendados: number;
+  /** captados sin derivar */
   cerrados: number;
   casos: { id: string; full_name: string | null; phone: string | null }[];
 };
 
-// Mismo criterio de "cerrado" que usa la pantalla de Casos
-// (/casos-cerrados): ganados + perdidos. Así el número que se ve acá
-// siempre coincide con el total de esa pantalla.
-const ESTADOS_CERRADO = ["cerrado_ganado", "cerrado_perdido"];
 const CASOS_PREVIEW_LIMIT = 8;
 
-export function buildPerfiles(rubros: RubroRow[], rows: ContactStatRow[]): PerfilStats[] {
-  return rubros.map((r) => {
-    const deRubro = rows.filter((c) => c.rubro_id === r.id);
-    const cerradosRows = deRubro.filter((c) => ESTADOS_CERRADO.includes(c.status));
+export async function loadPerfiles(): Promise<PerfilStats[]> {
+  const supabase = createAdminClient();
+  const { data: rubros } = await supabase
+    .from("rubros")
+    .select("id, slug, name, emoji, description")
+    .eq("active", true)
+    .order("sort_order", { ascending: true });
 
-    return {
-      ...r,
-      agendados: deRubro.filter((c) => c.status === "agendado").length,
-      cerrados: cerradosRows.length,
-      casos: cerradosRows.slice(0, CASOS_PREVIEW_LIMIT).map((c) => ({
-        id: c.id,
-        full_name: c.full_name,
-        phone: c.phone,
-      })),
-    };
-  });
+  return Promise.all(
+    ((rubros ?? []) as RubroRow[]).map(async (r) => {
+      const [metrics, { data: ultimos }] = await Promise.all([
+        getProfileMetrics(r.id),
+        supabase
+          .from("opportunities")
+          .select("contact_id, contacts(full_name, phone)")
+          .eq("rubro_id", r.id)
+          .eq("capture_state", "captado")
+          .order("captured_at", { ascending: false, nullsFirst: false })
+          .limit(CASOS_PREVIEW_LIMIT),
+      ]);
+      return {
+        ...r,
+        agendados: metrics?.captacion.captado ?? 0,
+        cerrados: metrics?.derivacion.no_derivado ?? 0,
+        casos: ((ultimos ?? []) as any[]).map((o) => ({
+          id: o.contact_id,
+          full_name: o.contacts?.full_name ?? null,
+          phone: o.contacts?.phone ?? null,
+        })),
+      };
+    })
+  );
 }
-
-// Estados que trae la query base (agendado + los dos de cerrado): si se
-// agrega algún estado nuevo a futuro, se actualiza acá nomás.
-export const RELEVANT_STATUSES = ["agendado", ...ESTADOS_CERRADO];

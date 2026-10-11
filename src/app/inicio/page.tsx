@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { LogoutButton } from "@/components/acceso/logout-button";
 
 export const dynamic = "force-dynamic";
 
@@ -7,8 +8,8 @@ export const dynamic = "force-dynamic";
  * loguea, en vez de caer directo al panel de escritorio, se muestra esta
  * pantalla intermedia para elegir cómo se va a usar el sistema en este
  * dispositivo:
- * - "Teléfono" → /derivar, estadísticas de todos los rubros + "Casos
- *   listos para derivar" abajo (sin menú, sin poder navegar a otro lado).
+ * - "Teléfono" → /telefono: los perfiles con tres accesos (Iniciar
+ *   campaña, Clientes cerrados y Estadísticas), vista reducida e instalable.
  * - "Computadora" → /perfiles, el selector de perfiles estilo Netflix
  *   (uno por rubro) con vista previa de estadísticas antes de entrar al
  *   panel completo de cada uno.
@@ -38,11 +39,14 @@ export default function InicioPage() {
         <h1 className="mb-2 font-serif text-2xl font-semibold text-white sm:text-3xl">
           ¿Cómo querés utilizar el panel?
         </h1>
-        <p className="mb-10 text-sm text-slate-400">Estudio Jurídico Vita — Panel central</p>
+        <p className="mb-10 text-sm text-slate-400">Panel central</p>
+        <div className="mb-6 text-center">
+          <LogoutButton className="text-xs" />
+        </div>
 
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
           <Link
-            href="/derivar"
+            href="/telefono"
             className="group animate-scale-in rounded-2xl border border-white/10 bg-white/5 p-8 text-left backdrop-blur transition-all duration-200 hover:-translate-y-1 hover:border-gold-400/50 hover:bg-white/10 active:scale-[0.98]"
           >
             <span className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-gold-300 via-gold-500 to-gold-700 text-2xl shadow-gold">
@@ -50,7 +54,7 @@ export default function InicioPage() {
             </span>
             <h2 className="mb-1 font-serif text-lg font-semibold text-gold-100">Teléfono</h2>
             <p className="text-sm leading-relaxed text-slate-300">
-              Acceso rápido a clientes listos para derivar.
+              Iniciar campañas, clientes cerrados y estadísticas de cada perfil.
             </p>
           </Link>
 

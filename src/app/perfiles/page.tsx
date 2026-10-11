@@ -1,6 +1,6 @@
-import { createClient } from "@/lib/supabase/server";
+import { LogoutButton } from "@/components/acceso/logout-button";
 import { PerfilSelector } from "@/components/perfiles/perfil-selector";
-import { buildPerfiles, RELEVANT_STATUSES } from "@/lib/perfiles-stats";
+import { loadPerfiles } from "@/lib/perfiles-stats";
 
 export const dynamic = "force-dynamic";
 
@@ -21,23 +21,7 @@ export const dynamic = "force-dynamic";
  * alrededor) — es una pantalla completa, standalone, igual que /inicio.
  */
 export default async function PerfilesPage() {
-  const supabase = createClient();
-
-  const [{ data: rubros }, { data: rows }] = await Promise.all([
-    supabase
-      .from("rubros")
-      .select("id, slug, name, emoji, description")
-      .eq("active", true)
-      .order("sort_order", { ascending: true }),
-    supabase
-      .from("contacts")
-      .select("id, full_name, phone, rubro_id, status, updated_at")
-      .in("status", RELEVANT_STATUSES)
-      .order("updated_at", { ascending: false })
-      .limit(1000),
-  ]);
-
-  const perfiles = buildPerfiles((rubros ?? []) as any, (rows ?? []) as any);
+  const perfiles = await loadPerfiles();
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 px-4 py-12">
@@ -55,7 +39,10 @@ export default async function PerfilesPage() {
           <h1 className="font-serif text-xl font-semibold text-white sm:text-2xl">
             Elegí un perfil
           </h1>
-          <p className="mt-1 text-sm text-slate-400">Estudio Vita — Panel central</p>
+          <p className="mt-1 text-sm text-slate-400">Panel central</p>
+          <div className="mt-2">
+            <LogoutButton className="text-xs" />
+          </div>
         </div>
 
         <PerfilSelector perfiles={perfiles} />

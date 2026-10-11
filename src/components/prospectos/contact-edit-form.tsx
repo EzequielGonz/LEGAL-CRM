@@ -25,9 +25,12 @@ export interface EditableContact {
 export function ContactEditForm({
   contact,
   studios,
+  hideStatus = false,
 }: {
   contact: EditableContact;
   studios: { id: string; name: string }[];
+  /** Etapa 1: el estado vive en la oportunidad (ficha); el estado anterior queda como histórico. */
+  hideStatus?: boolean;
 }) {
   const router = useRouter();
   const [fullName, setFullName] = useState(contact.full_name ?? "");
@@ -52,7 +55,7 @@ export function ContactEditForm({
         email,
         dni_cuil: dniCuil,
         notes,
-        status,
+        ...(hideStatus ? {} : { status }),
         assigned_studio_id: studioId,
       }),
     });
@@ -96,6 +99,7 @@ export function ContactEditForm({
             className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
           />
         </div>
+        {!hideStatus && (
         <div>
           <label className="mb-1 block text-xs font-medium text-slate-600">Estado</label>
           <select
@@ -110,6 +114,7 @@ export function ContactEditForm({
             ))}
           </select>
         </div>
+        )}
         <div>
           <label className="mb-1 block text-xs font-medium text-slate-600">
             Derivar a estudio jurídico

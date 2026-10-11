@@ -1,0 +1,24 @@
+import type { Metadata, Viewport } from "next";
+import { PwaRegister } from "@/components/telefono/pwa-register";
+
+export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "CRM · Teléfono",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#0b1220",
+};
+
+/** Modo teléfono (bloque 1.9): vista reducida, una columna. */
+export default function TelefonoLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="min-h-screen bg-slate-50 pb-12">
+      <PwaRegister />
+      {children}
+    </div>
+  );
+}

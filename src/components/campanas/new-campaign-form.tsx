@@ -3,12 +3,16 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { SendLimitsFields } from "./send-limits-fields";
+import { TemplatePicker } from "@/components/plantillas/template-picker";
 
 export function NewCampaignForm({
   channels,
+  lines = [],
   redirectBase = "/campanas",
 }: {
   channels: { id: string; label: string }[];
+  /** Líneas del perfil habilitadas para campañas (bloque 1.4). Se puede asignar después. */
+  lines?: { id: string; label: string }[];
   /** Base de la URL a la que navegar después de crear la campaña, seguida
    * de "/<id>". Por defecto "/campanas" (panel de Jurídico); los paneles
    * de otros rubros pasan la suya, por ejemplo "/panel/agencia_0km/campanas". */
@@ -19,6 +23,7 @@ export function NewCampaignForm({
   const [name, setName] = useState("");
   const [channelId, setChannelId] = useState(channels[0]?.id ?? "");
   const [template, setTemplate] = useState("");
+  const [lineId, setLineId] = useState(lines.length === 1 ? lines[0].id : "");
   const [minDelaySeconds, setMinDelaySeconds] = useState(50);
   const [maxDelaySeconds, setMaxDelaySeconds] = useState(200);
   const [batchSize, setBatchSize] = useState(10);
@@ -46,12 +51,13 @@ export function NewCampaignForm({
       body: JSON.stringify({
         name,
         channel_id: channelId,
-        message_template_name: template,
+        template_id: template || null,
         min_send_delay_seconds: minDelaySeconds,
         max_send_delay_seconds: maxDelaySeconds,
         batch_size: batchSize,
         batch_pause_seconds: batchPauseSeconds,
         daily_send_limit: dailyLimit === "" ? null : dailyLimit,
+        line_id: lineId || null,
       }),
     });
     const data = await res.json();
@@ -111,18 +117,31 @@ export function NewCampaignForm({
         </select>
       </div>
       <div>
-        <label className="mb-1 block text-xs font-medium text-slate-600">
-          Nombre de la plantilla aprobada en WhatsApp
-        </label>
-        <input
-          required
-          value={template}
-          onChange={(e) => setTemplate(e.target.value)}
+        <label className="mb-1 block text-xs font-medium text-slate-600">Línea que envía</label>
+        <select
+          value={lineId}
+          onChange={(e) => {
+            setLineId(e.target.value);
+            setTemplate("");
+          }}
           className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
-          placeholder="ej: primer_contacto_civil"
-        />
+        >
+          <option value="">Asignar después</option>
+          {lines.map((l) => (
+            <option key={l.id} value={l.id}>
+              {l.label}
+            </option>
+          ))}
+        </select>
         <p className="mt-1 text-xs text-slate-400">
-          Debe existir y estar aprobada en Meta Business Manager antes de usarla acá.
+          Sin línea asignada la campaña queda en borrador y no se puede lanzar. Las líneas se cargan en Configuración.
+        </p>
+      </div>
+      <div>
+        <label className="mb-1 block text-xs font-medium text-slate-600">Plantilla (catálogo de la línea)</label>
+        <TemplatePicker lineId={lineId || null} value={template} onChange={setTemplate} />
+        <p className="mt-1 text-xs text-slate-400">
+          Solo plantillas aprobadas según Meta y asignadas a la línea para campañas. Se puede elegir después.
         </p>
       </div>
 

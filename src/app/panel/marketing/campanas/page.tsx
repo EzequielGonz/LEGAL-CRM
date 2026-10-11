@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { NewCampaignForm } from "@/components/campanas/new-campaign-form";
 import { DeleteCampaignButton } from "@/components/campanas/delete-campaign-button";
+import { ArchivedToggle } from "@/components/ui/archived-toggle";
 import { getCampaignFunnelCounts } from "@/lib/campaigns";
 
 export const dynamic = "force-dynamic";
@@ -15,13 +16,19 @@ const STATUS_LABEL: Record<string, string> = {
 
 const AREA = "marketing" as const;
 
-export default async function CampanasMarketingPage() {
+export default async function CampanasMarketingPage({
+  searchParams,
+}: {
+  searchParams: { archivadas?: string };
+}) {
+  const verArchivadas = searchParams?.archivadas === "1";
   const supabase = createClient();
 
   const [{ data: campaigns }, { data: channels }] = await Promise.all([
     supabase
       .from("campaigns")
       .select("*")
+      .filter("archived_at", verArchivadas ? "not.is" : "is", null)
       .eq("area", AREA)
       .order("created_at", { ascending: false }),
     supabase.from("channels").select("id, label").eq("area", AREA).eq("type", "whatsapp"),
@@ -35,16 +42,25 @@ export default async function CampanasMarketingPage() {
     )
   );
 
+  const { data: campaignLines } = await supabase
+    .from("profile_lines")
+    .select("id, label")
+    .eq("rubro_id", "44444444-4444-4444-4444-444444444444")
+    .eq("active", true)
+    .eq("use_for_campaigns", true)
+    .order("created_at");
+
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold text-slate-900">Campañas</h1>
+        <ArchivedToggle basePath="/panel/marketing/campanas" showing={verArchivadas} />
           <p className="text-sm text-slate-500">
             Inicio de conversaciones con bases cargadas — Marketing.
           </p>
         </div>
-        <NewCampaignForm channels={channels ?? []} redirectBase="/panel/marketing/campanas" />
+        <NewCampaignForm channels={channels ?? []} lines={campaignLines ?? []} redirectBase="/panel/marketing/campanas" />
       </div>
 
       <div className="space-y-3">
@@ -69,10 +85,11 @@ export default async function CampanasMarketingPage() {
                 </div>
                 <p className="text-xs text-slate-400">
                   {enviados}/{total} enviados · {respondieron} respondieron · {agendados} agendados
-                  · plantilla {c.message_template_name}
+                  · plantilla {c.message_template_name ?? "sin elegir"}
+                  {c.message_template_name && !c.template_id ? " (sin confirmar en el catálogo)" : ""}
                 </p>
               </Link>
-              <DeleteCampaignButton campaignId={c.id} campaignName={c.name} />
+              <DeleteCampaignButton campaignId={c.id} campaignName={c.name} archived={!!c.archived_at} />
             </div>
           );
         })}

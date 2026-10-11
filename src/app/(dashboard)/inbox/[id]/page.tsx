@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { ConversationThread } from "@/components/inbox/conversation-thread";
+import { FichaSection } from "@/components/ficha/ficha-section";
 
 export const dynamic = "force-dynamic";
 
@@ -38,6 +39,7 @@ export default async function ConversationPage({ params }: { params: { id: strin
         qualification_data: contact.qualification_data ?? {},
       }}
       initialMessages={messages ?? []}
+      ficha={<FichaSection contactId={contact.id} compact />}
     />
   );
 }

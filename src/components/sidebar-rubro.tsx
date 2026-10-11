@@ -3,9 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
+import { LogoutButton } from "@/components/acceso/logout-button";
 
 const NAV_ITEMS = [
   { path: "casos-cerrados", label: "Clientes cerrados" },
+  { path: "bases", label: "Bases" },
+  { path: "agenda", label: "Agenda" },
   { path: "campanas", label: "Campañas" },
   { path: "agentes", label: "Agentes IA" },
   { path: "configuracion", label: "Configuración" },
@@ -83,6 +86,7 @@ export function SidebarRubro({
         >
           ← Elegir otro perfil
         </Link>
+        <LogoutButton className="mt-1 block w-full rounded-lg px-3 py-2 text-left text-xs hover:bg-white/5" />
       </div>
     </aside>
   );

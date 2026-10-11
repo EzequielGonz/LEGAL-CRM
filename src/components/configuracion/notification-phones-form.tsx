@@ -76,7 +76,7 @@ export function NotificationPhonesForm({ phones }: { phones: NotificationPhone[]
             className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
           />
           <input
-            placeholder="Etiqueta (opcional, ej: Leonardo)"
+            placeholder="Etiqueta (opcional, ej: Responsable)"
             value={label}
             onChange={(e) => setLabel(e.target.value)}
             className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"

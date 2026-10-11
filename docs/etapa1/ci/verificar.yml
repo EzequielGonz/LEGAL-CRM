@@ -1,0 +1,58 @@
+# Verificación con las dependencias reales: build de Next.js, tipos de la
+# aplicación y de las pruebas, lint, pruebas unitarias y de integración.
+#
+# Para activarla, crear en GitHub (con el editor web) el archivo
+# .github/workflows/verificar.yml con este mismo contenido. No viaja dentro
+# del zip porque el flujo "Aplicar pipeline Kocos" no puede crear archivos de
+# flujos de trabajo (GitHub no se lo permite a su token).
+#
+# Se ejecuta a mano (Actions → "Verificar Etapa 1" → Run workflow, eligiendo
+# la rama) o al abrir un pull request. No usa ningún secreto, no publica nada
+# y no se conecta a Supabase, Meta ni Vercel: la base de las pruebas se crea
+# vacía dentro del propio trabajo, con datos inventados.
+name: Verificar Etapa 1
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Dependencias (exactas, de package-lock.json)
+        run: npm ci
+
+      - name: Build de Next.js (incluye su propia revisión de tipos y lint)
+        run: npm run build
+        env:
+          # Valores de relleno: el build no se conecta a nada.
+          NEXT_PUBLIC_SUPABASE_URL: http://localhost:54321
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: relleno-solo-para-build
+          SUPABASE_SERVICE_ROLE_KEY: relleno-solo-para-build
+
+      - name: Tipos de la aplicación
+        run: npm run typecheck
+
+      - name: Tipos de las pruebas
+        run: npx tsc -p tests/tsconfig.json --noEmit
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Pruebas unitarias
+        run: npx --yes tsx@4.23.12 --tsconfig tests/tsconfig.json --test tests/unitarias/*.test.ts
+
+      - name: Pruebas de integración (PostgreSQL + PostgREST con Docker, Meta simulado)
+        run: bash tests/integracion/correr.sh

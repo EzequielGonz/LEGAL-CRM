@@ -1,3 +1,5 @@
+import { ProfileSettingsSection } from "@/components/perfiles/profile-settings-section";
+import { TemplatesSection } from "@/components/plantillas/templates-section";
 import { createClient } from "@/lib/supabase/server";
 import { AreaBadge } from "@/components/ui/badge";
 
@@ -13,7 +15,17 @@ export default async function Configuracion0kmPage() {
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
-      <h1 className="text-2xl font-semibold text-slate-900">Configuración — Agencia 0KM</h1>
+      <h1 className="text-2xl font-semibold text-slate-900">Configuración</h1>
+
+      <div className="rounded-xl border border-slate-200 bg-white p-5">
+        <h2 className="mb-3 text-sm font-semibold text-slate-700">Perfil, nombres y líneas</h2>
+        <ProfileSettingsSection slug="agencia_0km" />
+      </div>
+
+      <div className="rounded-xl border border-slate-200 bg-white p-5">
+        <h2 className="mb-3 text-sm font-semibold text-slate-700">Plantillas de WhatsApp</h2>
+        <TemplatesSection slug="agencia_0km" />
+      </div>
 
       <div className="rounded-xl border border-slate-200 bg-white p-5">
         <h2 className="mb-3 text-sm font-semibold text-slate-700">Canales</h2>

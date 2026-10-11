@@ -160,7 +160,7 @@ export function ScrapingForm() {
         <div className="space-y-3 rounded-lg border border-slate-200 bg-slate-50 p-4">
           <div>
             <label className="mb-1 block text-xs font-medium text-slate-600">
-              Nombre de la plantilla aprobada en WhatsApp
+              Nombre de referencia de la plantilla (para enviar se elige del catálogo en la campaña)
             </label>
             <input
               required={autoSend}

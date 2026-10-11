@@ -24,6 +24,8 @@ interface StatusSnapshot {
   counts: {
     total: number;
     pendiente: number;
+    enviando?: number;
+    revisar?: number;
     enviado: number;
     entregado: number;
     leido: number;
@@ -307,8 +309,8 @@ export function CampaignLiveModal({
                       {s.resumesAt ? formatResumeTime(s.resumesAt) : "—"}
                     </p>
                     <p className="mt-0.5 text-[11px] text-slate-400">
-                      Envía de {s.campaign.send_window_start_hour} a {s.campaign.send_window_end_hour}hs
-                      (Argentina) — fuera de ese rango no manda nada, para no molestar de madrugada.
+                      Envía de lunes a sábado, de {s.campaign.send_window_start_hour} a {s.campaign.send_window_end_hour}hs
+                      (Argentina) — fuera de ese horario y los domingos no manda nada.
                     </p>
                   </>
                 )}
@@ -358,6 +360,8 @@ export function CampaignLiveModal({
                   ],
                   ["Respondieron", s.counts.respondio, "text-indigo-600"],
                   ["Fallidos", s.counts.fallo, "text-red-600"],
+                  ["A revisar", s.counts.revisar ?? 0, "text-amber-700"],
+                  ["En envío", s.counts.enviando ?? 0, "text-slate-700"],
                   ["Lote actual", `${s.campaign.sent_in_batch}/${s.campaign.batch_size}`, "text-slate-700"],
                   [
                     "Ritmo",

@@ -1,0 +1,14 @@
+// SOLO para entornos sin npm: reemplaza @supabase/supabase-js y next/server por
+// imitaciones mínimas. La verificación oficial usa tests/tsconfig.json con las dependencias reales.
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "../..",
+    "paths": {
+      "@/*": ["src/*"],
+      "@supabase/supabase-js": ["tests/sin-npm/supabase-js.ts"],
+      "next/server": ["tests/sin-npm/next-server.ts"],
+      "@google/genai": ["tests/sin-npm/google-genai.ts"]
+    }
+  }
+}

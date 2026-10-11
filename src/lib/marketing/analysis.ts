@@ -1,4 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
+import { getProfile } from "@/lib/profiles";
+import { RUBRO_IDS } from "@/lib/rubros";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { analyzeWebsite, normalizeWebsiteUrl, type WebSignals } from "./web-analysis";
 import { searchGooglePlaces } from "./google-places";
@@ -422,8 +424,9 @@ async function synthesizeWithAi(input: {
     })),
   };
 
+  const marca = (await getProfile(RUBRO_IDS.marketing))?.brand_name?.trim();
   const prompt = [
-    "Sos analista comercial de Kocos Marketing, una agencia de marketing digital argentina.",
+    `Sos analista comercial${marca ? ` de ${marca}` : ""}, una agencia de marketing digital argentina.`,
     "Te paso el análisis técnico de un negocio. Devolvé SOLO un JSON con estas claves:",
     '- "gancho": una frase corta en minúscula (máx. 90 caracteres, sin punto final, sin emojis, sin precios, sin nombre del negocio) que complete "notamos que ...". Debe nombrar el problema más importante y concreto, en voseo o impersonal, ej: "no tienen página web propia".',
     '- "resumen": 3 a 5 oraciones para el equipo interno: qué le pasa al negocio, qué oportunidad hay y por dónde empezar.',

@@ -3,10 +3,10 @@
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
-import { createClient } from "@/lib/supabase/client";
-import { buildPerfiles, RELEVANT_STATUSES, type PerfilStats } from "@/lib/perfiles-stats";
+import type { PerfilStats } from "@/lib/perfiles-stats";
 
-const FALLBACK_POLL_MS = 60000;
+/** La vista previa se vuelve a pedir al servidor cada 30 s (pestaña visible). */
+const POLL_MS = 30000;
 
 /**
  * Selector de perfiles estilo Netflix para la pantalla de Computadora: a
@@ -25,44 +25,32 @@ const FALLBACK_POLL_MS = 60000;
  */
 export function PerfilSelector({ perfiles: initial }: { perfiles: PerfilStats[] }) {
   const router = useRouter();
-  const supabase = createClient();
   const [perfiles, setPerfiles] = useState(initial);
   const [selectedId, setSelectedId] = useState<string | null>(initial[0]?.id ?? null);
 
+  // Lectura del lado del servidor (la clave pública ya no lee tablas).
   const refrescar = useCallback(async () => {
-    const [{ data: rubros }, { data: rows }] = await Promise.all([
-      supabase
-        .from("rubros")
-        .select("id, slug, name, emoji, description")
-        .eq("active", true)
-        .order("sort_order", { ascending: true }),
-      supabase
-        .from("contacts")
-        .select("id, full_name, phone, rubro_id, status, updated_at")
-        .in("status", RELEVANT_STATUSES)
-        .order("updated_at", { ascending: false })
-        .limit(1000),
-    ]);
-
-    if (!rubros) return;
-    setPerfiles(buildPerfiles(rubros as any, (rows ?? []) as any));
-  }, [supabase]);
+    try {
+      const res = await fetch("/api/perfiles/estado", { cache: "no-store" });
+      if (!res.ok) return;
+      const data = (await res.json()) as { perfiles: PerfilStats[] };
+      if (Array.isArray(data.perfiles)) setPerfiles(data.perfiles);
+    } catch {
+      // sin conexión: se reintenta en el próximo ciclo
+    }
+  }, []);
 
   useEffect(() => {
-    const channel = supabase
-      .channel("perfiles-contacts")
-      .on("postgres_changes", { event: "*", schema: "public", table: "contacts" }, () => {
-        refrescar();
-      })
-      .subscribe();
-
-    const interval = setInterval(refrescar, FALLBACK_POLL_MS);
-
-    return () => {
-      supabase.removeChannel(channel);
-      clearInterval(interval);
+    const tick = () => {
+      if (document.visibilityState === "visible") refrescar();
     };
-  }, [supabase, refrescar]);
+    const interval = setInterval(tick, POLL_MS);
+    document.addEventListener("visibilitychange", tick);
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener("visibilitychange", tick);
+    };
+  }, [refrescar]);
 
   const activo = perfiles.find((p) => p.id === selectedId) ?? perfiles[0] ?? null;
 
@@ -100,19 +88,19 @@ export function PerfilSelector({ perfiles: initial }: { perfiles: PerfilStats[] 
 
           <div className="mb-6 grid grid-cols-2 gap-4">
             <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-              <p className="text-xs text-slate-400">Casos agendados</p>
+              <p className="text-xs text-slate-400">Captados</p>
               <p className="text-3xl font-semibold text-gold-200">{activo.agendados}</p>
             </div>
             <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-              <p className="text-xs text-slate-400">Clientes cerrados</p>
+              <p className="text-xs text-slate-400">Sin derivar</p>
               <p className="text-3xl font-semibold text-gold-200">{activo.cerrados}</p>
             </div>
           </div>
 
-          <p className="mb-2 text-xs uppercase tracking-wider text-slate-500">Últimos casos</p>
+          <p className="mb-2 text-xs uppercase tracking-wider text-slate-500">Últimos captados</p>
           <div className="mb-6 max-h-64 space-y-2 overflow-y-auto pr-1">
             {activo.casos.length === 0 && (
-              <p className="text-sm text-slate-400">Todavía no hay casos cerrados en este rubro.</p>
+              <p className="text-sm text-slate-400">Todavía no hay captados en este perfil.</p>
             )}
             {activo.casos.map((c) => (
               <div
@@ -125,9 +113,9 @@ export function PerfilSelector({ perfiles: initial }: { perfiles: PerfilStats[] 
                 <span className="shrink-0 text-xs text-slate-400">{c.phone ?? "—"}</span>
               </div>
             ))}
-            {activo.cerrados > activo.casos.length && (
+            {activo.agendados > activo.casos.length && (
               <p className="pt-1 text-center text-xs text-slate-500">
-                +{activo.cerrados - activo.casos.length} más — entrá al panel para verlos todos
+                +{activo.agendados - activo.casos.length} más — entrá al panel para verlos todos
               </p>
             )}
           </div>

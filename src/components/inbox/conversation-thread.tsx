@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { createClient } from "@/lib/supabase/client";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { Area, Message } from "@/lib/supabase/database.types";
 import { AreaBadge, SourceBadge, StatusBadge } from "@/components/ui/badge";
+import { mergePoll, type DeliveryUpdate } from "@/lib/inbox/estados";
 
 export interface ThreadContact {
   id: string;
@@ -16,64 +16,125 @@ export interface ThreadContact {
   qualification_data: Record<string, unknown>;
 }
 
+type ThreadMessage = Message & {
+  message_type?: string | null;
+  duplicate_of?: string | null;
+  delivery_status?: string | null;
+  delivery_status_at?: string | null;
+};
+
+/**
+ * Tipos de mensaje con un archivo original: se guarda en el almacenamiento
+ * privado y se abre desde acá (con sesión, por un enlace que vence a los
+ * pocos minutos). "file" es el documento de Instagram/Facebook.
+ */
+const MEDIA_TYPES = new Set(["audio", "image", "video", "document", "sticker", "file"]);
+const MEDIA_ACTION: Record<string, string> = {
+  audio: "Escuchar audio",
+  image: "Ver foto",
+  video: "Ver video",
+  document: "Abrir documento",
+  file: "Abrir documento",
+  sticker: "Ver sticker",
+};
+
+/** Cuántos archivos trae el mensaje (Instagram/Facebook pueden traer varios). */
+function attachmentCount(m: ThreadMessage): number {
+  const list = (m.metadata as any)?.attachments;
+  return Array.isArray(list) && list.length > 1 ? Math.min(list.length, 10) : 1;
+}
+
+/** Cada cuánto se consultan mensajes nuevos mientras la pestaña está visible. */
+const POLL_MS = 5000;
+
+const DELIVERY_LABEL: Record<string, string> = {
+  enviado: "Enviado",
+  entregado: "Entregado",
+  leido: "Leído",
+  fallido: "No entregado",
+};
+
 export function ConversationThread({
   conversationId,
   aiEnabled,
   contact,
   initialMessages,
+  ficha,
 }: {
   conversationId: string;
   aiEnabled: boolean;
   contact: ThreadContact;
   initialMessages: Message[];
+  /** Ficha compartida (la misma que en Prospectos), renderizada en el servidor. */
+  ficha?: React.ReactNode;
 }) {
-  const supabase = createClient();
-  const [messages, setMessages] = useState<Message[]>(initialMessages);
+  const [messages, setMessages] = useState<ThreadMessage[]>(initialMessages as ThreadMessage[]);
   const [aiOn, setAiOn] = useState(aiEnabled);
   const [draft, setDraft] = useState("");
   const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const lastAtRef = useRef<string | null>(
+    initialMessages.length ? initialMessages[initialMessages.length - 1].created_at : null
+  );
+
+  // Lecturas del lado del servidor (la clave pública ya no lee tablas):
+  // se piden los mensajes posteriores al último que se ve en pantalla y el
+  // estado de entrega actual de los salientes (Enviado → Entregado → Leído).
+  const traerNuevos = useCallback(async () => {
+    const qs = lastAtRef.current ? `?after=${encodeURIComponent(lastAtRef.current)}` : "";
+    try {
+      const res = await fetch(`/api/conversations/${conversationId}/messages${qs}`, { cache: "no-store" });
+      if (!res.ok) return;
+      const data = (await res.json()) as { messages?: ThreadMessage[]; estados?: DeliveryUpdate[] };
+      const recibidos = data.messages ?? [];
+      setMessages((prev) => mergePoll(prev, recibidos, data.estados ?? []));
+      if (recibidos.length) lastAtRef.current = recibidos[recibidos.length - 1].created_at;
+    } catch {
+      // sin conexión: se reintenta en el próximo ciclo
+    }
+  }, [conversationId]);
 
   useEffect(() => {
-    const channel = supabase
-      .channel(`messages-${conversationId}`)
-      .on(
-        "postgres_changes",
-        {
-          event: "INSERT",
-          schema: "public",
-          table: "messages",
-          filter: `conversation_id=eq.${conversationId}`,
-        },
-        (payload) => {
-          setMessages((prev) => [...prev, payload.new as Message]);
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
+    const tick = () => {
+      if (document.visibilityState === "visible") traerNuevos();
     };
-  }, [conversationId, supabase]);
+    const interval = setInterval(tick, POLL_MS);
+    document.addEventListener("visibilitychange", tick);
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener("visibilitychange", tick);
+    };
+  }, [traerNuevos]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages.length]);
 
   async function handleSend() {
-    if (!draft.trim()) return;
+    if (!draft.trim() || sending) return;
     setSending(true);
-    await fetch(`/api/conversations/${conversationId}/messages`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ body: draft }),
-    });
-    setDraft("");
-    setSending(false);
-    // El endpoint siempre apaga el agente IA al mandar un mensaje manual: si
-    // no reflejamos esto acá, el checkbox se queda marcado como "activo"
-    // hasta que se recargue la página, aunque el backend ya lo desactivó.
-    setAiOn(false);
+    setSendError(null);
+    try {
+      const res = await fetch(`/api/conversations/${conversationId}/messages`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ body: draft }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setSendError(data.error ?? "No se pudo enviar el mensaje.");
+        // El chat se toma antes de enviar: aunque el envío falle, la IA ya quedó apagada.
+        if (res.status === 502 && !String(data.error ?? "").startsWith("No se pudo pausar")) setAiOn(false);
+        return;
+      }
+      setDraft("");
+      // El chat pasa a atención humana antes de enviar el mensaje manual.
+      setAiOn(false);
+      await traerNuevos();
+    } finally {
+      setSending(false);
+    }
   }
 
   async function toggleAi() {
@@ -85,6 +146,8 @@ export function ConversationThread({
       body: JSON.stringify({ ai_enabled: next }),
     });
   }
+
+  const visibles = messages.filter((m) => !m.duplicate_of);
 
   return (
     <div className="flex h-full">
@@ -104,7 +167,7 @@ export function ConversationThread({
         </div>
 
         <div className="flex-1 space-y-3 overflow-y-auto bg-slate-50 p-5">
-          {messages.map((m) => (
+          {visibles.map((m) => (
             <div
               key={m.id}
               className={`flex ${m.direction === "saliente" ? "justify-end" : "justify-start"}`}
@@ -118,7 +181,32 @@ export function ConversationThread({
                     : "bg-white text-slate-800 shadow-sm"
                 }`}
               >
-                <p>{m.body}</p>
+                {m.message_type && m.message_type !== "text" && m.message_type !== "button" && (
+                  <p className="mb-0.5 text-[10px] font-semibold uppercase tracking-wide opacity-70">
+                    {m.message_type}
+                  </p>
+                )}
+                <p className="whitespace-pre-wrap">{m.body}</p>
+                {m.direction === "entrante" && m.message_type && MEDIA_TYPES.has(m.message_type) && (
+                  <div className="mt-1.5 space-y-1">
+                    {m.message_type === "audio" && (
+                      <audio controls preload="none" className="max-w-full" src={`/api/adjuntos/mensaje/${m.id}`} />
+                    )}
+                    {Array.from({ length: attachmentCount(m) }, (_, n) => (
+                      <a
+                        key={n}
+                        href={`/api/adjuntos/mensaje/${m.id}${n ? `?n=${n}` : ""}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mr-3 inline-block text-xs font-medium underline"
+                      >
+                        {MEDIA_ACTION[m.message_type!] ?? "Abrir archivo"}
+                        {attachmentCount(m) > 1 ? ` ${n + 1}` : ""}
+                      </a>
+                    ))}
+                    <p className="text-[10px] opacity-60">Original en almacenamiento privado (solo con sesión).</p>
+                  </div>
+                )}
                 <p
                   className={`mt-1 text-[10px] ${
                     m.direction === "saliente" ? "text-white/60" : "text-slate-400"
@@ -126,6 +214,9 @@ export function ConversationThread({
                 >
                   {m.sender_type === "agente_ia" ? "Agente IA · " : m.sender_type === "admin" ? "Admin · " : ""}
                   {new Date(m.created_at).toLocaleString("es-AR")}
+                  {m.direction === "saliente" && m.delivery_status
+                    ? ` · ${DELIVERY_LABEL[m.delivery_status] ?? m.delivery_status}`
+                    : ""}
                 </p>
               </div>
             </div>
@@ -140,6 +231,7 @@ export function ConversationThread({
               Agente IA activo en esta conversación
             </label>
           </div>
+          {sendError && <p className="mb-2 text-xs text-red-600">{sendError}</p>}
           <div className="flex gap-2">
             <input
               value={draft}
@@ -152,18 +244,15 @@ export function ConversationThread({
               }
               className="flex-1 rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
             />
-            <button
-              onClick={handleSend}
-              disabled={sending}
-              className="btn-gold"
-            >
-              Enviar
+            <button onClick={handleSend} disabled={sending} className="btn-gold">
+              {sending ? "Enviando..." : "Enviar"}
             </button>
           </div>
         </div>
       </div>
 
-      <div className="w-72 border-l border-slate-200 bg-white p-4">
+      <div className="w-80 overflow-y-auto border-l border-slate-200 bg-white p-4">
+        {ficha && <div className="mb-5">{ficha}</div>}
         <h3 className="mb-3 text-sm font-semibold text-slate-700">Datos recopilados por la IA</h3>
         {Object.keys(contact.qualification_data ?? {}).length === 0 ? (
           <p className="text-xs text-slate-400">Todavía no hay datos recopilados.</p>

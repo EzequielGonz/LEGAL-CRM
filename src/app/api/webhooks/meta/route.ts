@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
-import { handleInboundMessage } from "@/lib/inbound";
-import type { Area } from "@/lib/supabase/database.types";
+import { quarantineWebhook, readRawJson, verifyMetaSignature } from "@/lib/webhooks/security";
+import { processMetaPayload } from "@/lib/webhooks/process";
+
+export const dynamic = "force-dynamic";
 
 // ---------------------------------------------------------------------
 // Verificación del webhook (Meta Developer -> tu app -> Webhooks ->
-// Instagram / Messenger -> Verify and save). Se puede usar el mismo
-// endpoint para Instagram y Facebook: ambos comparten el formato Graph API.
+// Instagram / Messenger -> Verify and save).
 // ---------------------------------------------------------------------
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -13,54 +14,38 @@ export async function GET(request: Request) {
   const token = searchParams.get("hub.verify_token");
   const challenge = searchParams.get("hub.challenge");
 
-  if (mode === "subscribe" && token === process.env.META_VERIFY_TOKEN) {
+  if (mode === "subscribe" && token && token === process.env.META_VERIFY_TOKEN) {
     return new NextResponse(challenge ?? "", { status: 200 });
   }
 
   return new NextResponse("Forbidden", { status: 403 });
 }
 
-function resolveAreaAndPlatform(
-  pageOrIgId: string
-): { area: Area; platform: "instagram" | "facebook" } | null {
-  if (pageOrIgId === process.env.FACEBOOK_CIVIL_PAGE_ID) return { area: "civil", platform: "facebook" };
-  if (pageOrIgId === process.env.FACEBOOK_PENAL_PAGE_ID) return { area: "penal", platform: "facebook" };
-  if (pageOrIgId === process.env.INSTAGRAM_CIVIL_BUSINESS_ID)
-    return { area: "civil", platform: "instagram" };
-  if (pageOrIgId === process.env.INSTAGRAM_PENAL_BUSINESS_ID)
-    return { area: "penal", platform: "instagram" };
-  return null;
-}
-
 // ---------------------------------------------------------------------
-// Mensajes entrantes de Instagram/Messenger. Referencia:
-// https://developers.facebook.com/docs/messenger-platform/instagram
-// https://developers.facebook.com/docs/messenger-platform/webhooks
+// Mensajes entrantes de Instagram/Messenger (misma verificación de firma).
 // ---------------------------------------------------------------------
 export async function POST(request: Request) {
-  const payload = await request.json();
+  const { raw, json: payload } = await readRawJson(request);
+  const signature = verifyMetaSignature(raw, request.headers.get("x-hub-signature-256"));
+
+  if (signature !== "ok") {
+    await quarantineWebhook({
+      source: "meta",
+      reason: signature === "ausente" ? "firma_ausente" : "firma_invalida",
+      accountId: payload?.entry?.[0]?.id ?? null,
+      payload: payload ?? { raw: raw.toString("utf8").slice(0, 100000) },
+      detail:
+        signature === "sin_secreto"
+          ? "No hay secreto de la app configurado (META_APP_SECRET)."
+          : "La firma X-Hub-Signature-256 no coincide con ningún secreto configurado.",
+    });
+    return NextResponse.json({ ok: true });
+  }
 
   try {
-    for (const entry of payload.entry ?? []) {
-      const resolved = resolveAreaAndPlatform(entry.id);
-      if (!resolved) continue; // evento de una página/cuenta que no es nuestra
-
-      for (const event of entry.messaging ?? []) {
-        if (!event.message?.text) continue; // MVP: solo texto por ahora
-        if (event.message.is_echo) continue; // ignorar eco de nuestros propios envíos
-
-        await handleInboundMessage({
-          area: resolved.area,
-          channelType: resolved.platform,
-          externalUserId: event.sender.id,
-          body: event.message.text,
-          externalMessageId: event.message.mid,
-        });
-      }
-    }
+    await processMetaPayload(payload);
   } catch (err) {
     console.error("Error procesando webhook de Meta:", err);
   }
-
   return NextResponse.json({ ok: true });
 }

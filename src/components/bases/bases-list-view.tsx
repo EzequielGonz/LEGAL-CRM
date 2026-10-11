@@ -1,0 +1,100 @@
+import Link from "next/link";
+import { createClient } from "@/lib/supabase/server";
+import { AreaBadge } from "@/components/ui/badge";
+import { ImportBaseForm } from "@/components/bases/import-base-form";
+import { DeleteBaseButton } from "@/components/bases/delete-base-button";
+import { ArchivedToggle } from "@/components/ui/archived-toggle";
+import { getBaseQuality, pctText } from "@/lib/bases/quality";
+import type { AreaOption } from "@/components/bases/import-flow";
+
+/**
+ * Listado de bases de un perfil (bloque 1.6), con su resumen de carga y su
+ * calidad con denominador. El mismo componente sirve para todos los
+ * perfiles; cada panel pasa sus áreas.
+ */
+export async function BasesListView({
+  areas,
+  importAreas,
+  basesPath,
+  searchParams,
+}: {
+  areas: string[];
+  importAreas: AreaOption[];
+  basesPath: string;
+  searchParams: { archivadas?: string };
+}) {
+  const verArchivadas = searchParams?.archivadas === "1";
+  const supabase = createClient();
+  const { data: bases } = await supabase
+    .from("imported_bases")
+    .select("*")
+    .in("area", areas)
+    .filter("archived_at", verArchivadas ? "not.is" : "is", null)
+    .order("created_at", { ascending: false });
+
+  const qualities = new Map(
+    await Promise.all((bases ?? []).map(async (b: any) => [b.id, await getBaseQuality(b.id)] as const))
+  );
+
+  return (
+    <div>
+      <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-semibold text-slate-900">Bases</h1>
+          <p className="text-sm text-slate-500">
+            Historial de bases importadas con su calidad. El archivo original de cada una queda guardado sin modificar. Cargar
+            una base nunca envía mensajes.
+          </p>
+        </div>
+        <ArchivedToggle basePath={basesPath} showing={verArchivadas} />
+      </div>
+
+      {!verArchivadas && (
+        <div className="mb-6">
+          <ImportBaseForm areas={importAreas} basesPath={basesPath} />
+        </div>
+      )}
+
+      <div className="space-y-3">
+        {(bases ?? []).map((b: any) => {
+          const q = qualities.get(b.id);
+          const s = b.import_summary as any;
+          return (
+            <Link
+              key={b.id}
+              href={`${basesPath}/${b.id}`}
+              className="block card-lift rounded-xl border border-slate-200 bg-white p-5 hover:border-gold-300"
+            >
+              <div className="mb-1 flex items-center justify-between gap-2">
+                <h3 className="font-medium text-slate-900">{b.name}</h3>
+                <div className="flex items-center gap-2">
+                  <AreaBadge area={b.area} />
+                  <DeleteBaseButton baseId={b.id} baseName={b.name} archived={!!b.archived_at} />
+                </div>
+              </div>
+              <p className="text-xs text-slate-400">
+                {b.source_label} · {b.total_rows} filas · {b.created_rows} nuevos · {b.duplicate_rows} duplicados ·{" "}
+                {b.invalid_rows} inválidos · {new Date(b.created_at).toLocaleDateString("es-AR")}
+                {s?.contactados_anteriormente ? ` · ${s.contactados_anteriormente} contactados antes de la carga` : ""}
+                {s?.conflictos ? ` · ${s.conflictos} conflictos` : ""}
+              </p>
+              {q && (
+                <p className="mt-1 text-xs text-slate-500">
+                  Calidad: {q.respondieron} respondieron de {q.contactados} contactados · números equivocados{" "}
+                  {pctText(q.numeros_equivocados, q.respondieron)} · consultas negadas {pctText(q.consultas_negadas, q.respondieron)} ·
+                  contestadores {pctText(q.contestadores_automaticos, q.respondieron)} · desconocido{" "}
+                  {pctText(q.sin_clasificar, q.respondieron)} · {q.detenidos} detenidos
+                </p>
+              )}
+            </Link>
+          );
+        })}
+        {(bases ?? []).length === 0 && (
+          <p className="rounded-xl border border-dashed border-slate-300 p-8 text-center text-sm text-slate-400">
+            {verArchivadas ? "No hay bases archivadas." : "Todavía no importaste ninguna base."}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
