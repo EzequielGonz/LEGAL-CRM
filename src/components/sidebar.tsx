@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
+import { LogoutButton } from "@/components/acceso/logout-button";
 
 const NAV = [
   { href: "/estadisticas", label: "Estadísticas" },
@@ -13,14 +14,14 @@ const NAV = [
   { href: "/agenda", label: "Agenda" },
   { href: "/campanas", label: "Campañas" },
   { href: "/agentes", label: "Agentes IA" },
+  { href: "/revision", label: "Revisión" },
   { href: "/configuracion", label: "Configuración" },
 ];
 
-// El panel ya no requiere sesión iniciada, así que este sidebar ya no tiene
-// botón de "Cerrar sesión" (no hay sesión que cerrar). "Estadísticas" ahora
-// vive en /estadisticas — "/" quedó libre para que siempre redirija primero
-// a /inicio (elegir Teléfono o Computadora).
-export function Sidebar() {
+// Acceso con PIN general (Etapa 1): la sesión no vence sola y se cierra a
+// mano con "Cerrar sesión". "Estadísticas" vive en /estadisticas — "/"
+// siempre redirige primero a /inicio (elegir Teléfono o Computadora).
+export function Sidebar({ title }: { title: string }) {
   const pathname = usePathname();
 
   return (
@@ -30,9 +31,7 @@ export function Sidebar() {
           E
         </span>
         <div>
-          <p className="font-serif text-sm font-semibold tracking-wide text-gold-100">
-            Estudio Vita
-          </p>
+          <p className="font-serif text-sm font-semibold tracking-wide text-gold-100">{title}</p>
           <p className="text-[11px] uppercase tracking-wider text-slate-400">
             Panel central
           </p>
@@ -65,6 +64,16 @@ export function Sidebar() {
           );
         })}
       </nav>
+
+      <div className="space-y-1 border-t border-white/10 px-3 py-4">
+        <Link
+          href="/inicio"
+          className="block rounded-lg px-3 py-2 text-xs font-medium text-slate-400 transition-colors hover:bg-white/5 hover:text-gold-100"
+        >
+          ← Teléfono o computadora
+        </Link>
+        <LogoutButton className="block w-full rounded-lg px-3 py-2 text-left text-xs hover:bg-white/5" />
+      </div>
     </aside>
   );
 }

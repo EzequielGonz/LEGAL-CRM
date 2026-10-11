@@ -5,6 +5,7 @@ import { AreaBadge, SourceBadge, StatusBadge } from "@/components/ui/badge";
 import { ContactEditForm } from "@/components/prospectos/contact-edit-form";
 import { ScheduleAppointmentForm } from "@/components/prospectos/schedule-appointment-form";
 import { CancelAppointmentButton } from "@/components/prospectos/cancel-appointment-button";
+import { FichaSection } from "@/components/ficha/ficha-section";
 
 export const dynamic = "force-dynamic";
 
@@ -33,7 +34,7 @@ export default async function ProspectoDetailPage({ params }: { params: { id: st
 
   return (
     <div className="mx-auto max-w-3xl">
-      <Link href="/prospectos" className="mb-4 inline-block text-sm text-slate-500 hover:underline">
+      <Link href="/prospectos" className="mb-4 inline-block text-sm text-slate-500 hover:underline" scroll={false}>
         ← Volver a prospectos
       </Link>
 
@@ -55,14 +56,22 @@ export default async function ProspectoDetailPage({ params }: { params: { id: st
         </div>
         <div className="flex gap-2">
           <AreaBadge area={contact.area} />
-          <StatusBadge status={contact.status} />
           <SourceBadge source={contact.source} />
         </div>
       </div>
 
       <div className="mb-6 rounded-xl border border-slate-200 bg-white p-6">
-        <h2 className="mb-3 text-sm font-semibold text-slate-700">Gestionar prospecto</h2>
+        <h2 className="mb-3 text-sm font-semibold text-slate-700">Ficha</h2>
+        <FichaSection contactId={contact.id} />
+        <p className="mt-3 text-[11px] text-slate-400">
+          Estado anterior a la Etapa 1 (histórico): <StatusBadge status={contact.status} />
+        </p>
+      </div>
+
+      <div className="mb-6 rounded-xl border border-slate-200 bg-white p-6">
+        <h2 className="mb-3 text-sm font-semibold text-slate-700">Datos del contacto</h2>
         <ContactEditForm
+          hideStatus
           contact={{
             id: contact.id,
             full_name: contact.full_name,

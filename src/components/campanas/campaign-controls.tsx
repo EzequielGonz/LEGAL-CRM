@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CampaignLiveModal } from "./campaign-live-modal";
 
@@ -28,6 +28,22 @@ export function CampaignControls({
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [showLive, setShowLive] = useState(false);
+  const [prep, setPrep] = useState<{ ready: boolean; missing: string[]; pausa_general: boolean; pause_reason: string | null } | null>(null);
+  const [pauseReason, setPauseReason] = useState("");
+  const [askingPause, setAskingPause] = useState(false);
+
+  // Qué falta para lanzar (configuración del perfil, línea, plantilla, pausa general).
+  const loadPrep = useCallback(async () => {
+    try {
+      const res = await fetch(`/api/campaigns/${campaignId}/preparacion`, { cache: "no-store" });
+      if (res.ok) setPrep(await res.json());
+    } catch {
+      // sin datos: el servidor igual rechaza el lanzamiento si falta algo
+    }
+  }, [campaignId]);
+  useEffect(() => {
+    loadPrep();
+  }, [loadPrep, status]);
 
   async function launch() {
     setLoading(true);
@@ -49,27 +65,54 @@ export function CampaignControls({
 
   async function pause() {
     setLoading(true);
-    await fetch(`/api/campaigns/${campaignId}/pause`, { method: "POST" });
+    await fetch(`/api/campaigns/${campaignId}/pause`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ motivo: pauseReason.trim() || undefined }),
+    });
     setLoading(false);
+    setAskingPause(false);
+    setPauseReason("");
     setMessage("Campaña pausada: no se va a enviar nada más hasta que la reactives.");
     router.refresh();
   }
+
+  const blocked = prep ? !prep.ready : false;
 
   return (
     <div>
       <div className="flex gap-2">
         {status === "en_curso" ? (
-          <button
-            onClick={pause}
-            disabled={loading}
-            className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-2 text-sm font-medium text-amber-700"
-          >
-            Pausar campaña
-          </button>
+          askingPause ? (
+            <span className="flex flex-wrap items-center gap-2">
+              <input
+                value={pauseReason}
+                onChange={(e) => setPauseReason(e.target.value)}
+                placeholder="Motivo de la pausa (opcional)"
+                className="w-56 rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
+              />
+              <button
+                onClick={pause}
+                disabled={loading}
+                className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-2 text-sm font-medium text-amber-700"
+              >
+                Confirmar pausa
+              </button>
+            </span>
+          ) : (
+            <button
+              onClick={() => setAskingPause(true)}
+              disabled={loading}
+              className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-2 text-sm font-medium text-amber-700"
+            >
+              Pausar campaña
+            </button>
+          )
         ) : (
           <button
             onClick={launch}
-            disabled={loading || status === "finalizada"}
+            disabled={loading || status === "finalizada" || blocked}
+            title={blocked ? "Falta configurar algo antes de lanzar" : undefined}
             className="btn-gold"
           >
             {loading ? "Lanzando..." : status === "pausada" ? "Reanudar" : "Lanzar campaña"}
@@ -84,6 +127,24 @@ export function CampaignControls({
           </button>
         )}
       </div>
+      {prep?.pause_reason && status === "pausada" && (
+        <p className="mt-2 max-w-md text-xs text-slate-500">Motivo de la pausa: {prep.pause_reason}</p>
+      )}
+      {blocked && status !== "en_curso" && status !== "finalizada" && (
+        <div className="mt-2 max-w-md rounded-lg border border-amber-200 bg-amber-50 p-2 text-xs text-amber-900">
+          {prep?.pausa_general && <p>Pausa general de envíos activa (Configuración → Pausa general).</p>}
+          {prep && prep.missing.length > 0 && (
+            <>
+              <p className="font-semibold">Falta antes de lanzar:</p>
+              <ul className="list-disc pl-4">
+                {prep.missing.map((m) => (
+                  <li key={m}>{m}</li>
+                ))}
+              </ul>
+            </>
+          )}
+        </div>
+      )}
       {message && <p className="mt-2 max-w-md text-xs text-slate-500">{message}</p>}
       {status === "en_curso" && !message && (
         <p className="mt-2 max-w-md text-xs text-slate-400">

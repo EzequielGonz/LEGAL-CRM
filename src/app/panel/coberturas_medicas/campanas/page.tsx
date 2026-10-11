@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { NewCampaignForm } from "@/components/campanas/new-campaign-form";
 import { DeleteCampaignButton } from "@/components/campanas/delete-campaign-button";
+import { ArchivedToggle } from "@/components/ui/archived-toggle";
 import { getCampaignFunnelCounts } from "@/lib/campaigns";
 
 export const dynamic = "force-dynamic";
@@ -15,13 +16,19 @@ const STATUS_LABEL: Record<string, string> = {
 
 const AREA = "coberturas_medicas" as const;
 
-export default async function CampanasCoberturasMedicasPage() {
+export default async function CampanasCoberturasMedicasPage({
+  searchParams,
+}: {
+  searchParams: { archivadas?: string };
+}) {
+  const verArchivadas = searchParams?.archivadas === "1";
   const supabase = createClient();
 
   const [{ data: campaigns }, { data: channels }] = await Promise.all([
     supabase
       .from("campaigns")
       .select("*")
+      .filter("archived_at", verArchivadas ? "not.is" : "is", null)
       .eq("area", AREA)
       .order("created_at", { ascending: false }),
     supabase.from("channels").select("id, label").eq("area", AREA).eq("type", "whatsapp"),
@@ -35,17 +42,26 @@ export default async function CampanasCoberturasMedicasPage() {
     )
   );
 
+  const { data: campaignLines } = await supabase
+    .from("profile_lines")
+    .select("id, label")
+    .eq("rubro_id", "33333333-3333-3333-3333-333333333333")
+    .eq("active", true)
+    .eq("use_for_campaigns", true)
+    .order("created_at");
+
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold text-slate-900">Campañas</h1>
+        <ArchivedToggle basePath="/panel/coberturas_medicas/campanas" showing={verArchivadas} />
           <p className="text-sm text-slate-500">
             Inicio de conversaciones con bases cargadas — Coberturas Médicas.
           </p>
         </div>
         <NewCampaignForm
-          channels={channels ?? []}
+          channels={channels ?? []} lines={campaignLines ?? []}
           redirectBase="/panel/coberturas_medicas/campanas"
         />
       </div>
@@ -75,10 +91,11 @@ export default async function CampanasCoberturasMedicasPage() {
                 </div>
                 <p className="text-xs text-slate-400">
                   {enviados}/{total} enviados · {respondieron} respondieron · {agendados} agendados
-                  · plantilla {c.message_template_name}
+                  · plantilla {c.message_template_name ?? "sin elegir"}
+                  {c.message_template_name && !c.template_id ? " (sin confirmar en el catálogo)" : ""}
                 </p>
               </Link>
-              <DeleteCampaignButton campaignId={c.id} campaignName={c.name} />
+              <DeleteCampaignButton campaignId={c.id} campaignName={c.name} archived={!!c.archived_at} />
             </div>
           );
         })}

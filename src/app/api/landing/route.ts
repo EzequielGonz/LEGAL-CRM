@@ -2,11 +2,20 @@ import { NextResponse } from "next/server";
 import { findOrCreateContact, findOrCreateConversation } from "@/lib/contacts";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendWhatsAppTemplate } from "@/lib/whatsapp/client";
+import { isApprovedInCatalog } from "@/lib/plantillas";
+import { getAutomationPause } from "@/lib/automation-pause";
+import { originHash } from "@/lib/acceso/pin";
+import { contactBlockReason } from "@/lib/detention";
 import type { Area } from "@/lib/supabase/database.types";
 
+export const dynamic = "force-dynamic";
+
+/** Formulario público: como máximo 5 envíos por origen por hora. */
+const MAX_PER_HOUR = 5;
+
 export async function POST(request: Request) {
-  const body = await request.json();
-  const { full_name, phone, email, area, consulta } = body as {
+  const body = await request.json().catch(() => null);
+  const { full_name, phone, email, area, consulta } = (body ?? {}) as {
     full_name: string;
     phone: string;
     email?: string;
@@ -20,8 +29,26 @@ export async function POST(request: Request) {
   if (area !== "civil" && area !== "penal") {
     return NextResponse.json({ error: "Área inválida" }, { status: 400 });
   }
+  if (String(full_name).length > 200 || String(phone).length > 40 || String(consulta).length > 5000) {
+    return NextResponse.json({ error: "Datos demasiado largos" }, { status: 400 });
+  }
 
   const supabase = createAdminClient();
+
+  const origin = await originHash(request);
+  const since = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+  const { count } = await supabase
+    .from("landing_submissions")
+    .select("id", { count: "exact", head: true })
+    .eq("origin_hash", origin)
+    .gte("at", since);
+  if ((count ?? 0) >= MAX_PER_HOUR) {
+    return NextResponse.json(
+      { error: "Recibimos varias consultas desde esta conexión. Probá de nuevo más tarde." },
+      { status: 429 }
+    );
+  }
+  await supabase.from("landing_submissions").insert({ origin_hash: origin, area });
 
   const { data: channel } = await supabase
     .from("channels")
@@ -68,15 +95,19 @@ export async function POST(request: Request) {
       .eq("id", conversation.id);
   }
 
-  // Best-effort: si hay una plantilla configurada para continuar por
-  // WhatsApp, la disparamos para que el agente IA pueda seguir la
-  // conversación ahí (la landing en sí no tiene canal de mensajería).
-  // No bloquea la respuesta al formulario si falla o no está configurada.
+  // Best-effort: plantilla de continuidad por WhatsApp. No sale con la pausa
+  // general activa ni a un contacto detenido; nunca bloquea la respuesta.
   if (process.env.LANDING_WHATSAPP_TEMPLATE) {
     try {
-      await sendWhatsAppTemplate(area, phone, process.env.LANDING_WHATSAPP_TEMPLATE, "es_AR", [
-        full_name,
-      ]);
+      const pause = await getAutomationPause();
+      const blocked = await contactBlockReason(contact.id);
+      // Pregunta 22: solo si la plantilla figura aprobada en el catálogo leído de Meta.
+      const approved = !pause.outboundPaused && !blocked && (await isApprovedInCatalog(process.env.LANDING_WHATSAPP_TEMPLATE, "es_AR"));
+      if (approved) {
+        await sendWhatsAppTemplate(area, phone, process.env.LANDING_WHATSAPP_TEMPLATE, "es_AR", [full_name]);
+      } else if (!pause.outboundPaused && !blocked) {
+        console.warn("Plantilla de la landing no confirmada como aprobada en el catálogo: no se envió.");
+      }
     } catch (err) {
       console.error("No se pudo enviar la plantilla de continuidad de la landing:", err);
     }

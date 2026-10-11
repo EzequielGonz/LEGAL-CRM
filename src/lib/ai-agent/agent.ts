@@ -1,6 +1,6 @@
 import { GoogleGenAI, type Content, type Part } from "@google/genai";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { sendOutboundMessage } from "@/lib/messaging";
+import { AutomaticSendBlockedError, sendOutboundMessage } from "@/lib/messaging";
 import { getAvailableSlots, createAppointment } from "@/lib/agenda";
 import { notifyAdminOfClosedAppointment, notifyAdminOfQualifiedIntake } from "@/lib/notify";
 import { notifyMarketingHandoff } from "@/lib/notify-marketing";
@@ -15,6 +15,8 @@ import {
   type MarketingOutcome,
 } from "@/lib/marketing/leads";
 import { analyzeLead } from "@/lib/marketing/analysis";
+import { getAutomationPause } from "@/lib/automation-pause";
+import { agentReadiness, getProfile, profileIdForArea } from "@/lib/profiles";
 import type { Area } from "@/lib/supabase/database.types";
 
 const MAX_TOOL_ITERATIONS = 6;
@@ -42,7 +44,8 @@ function buildSystemPrompt(
     qualificationData: Record<string, unknown>;
     campaignName: string | null;
     isFirstReplyToCampaign: boolean;
-  }
+  },
+  identity: { presentationName: string; brandName: string }
 ) {
   const knownFacts: string[] = [];
   if (contactContext.fullName) knownFacts.push(`- Nombre: ${contactContext.fullName}`);
@@ -55,6 +58,9 @@ function buildSystemPrompt(
   }
 
   return [
+    // Identidad cargada a mano en el perfil (bloque 1.4): no sale del código.
+    `Te presentás como ${identity.presentationName}, de ${identity.brandName}. No uses otro nombre ni otra marca, no inventes una persona real, matrícula ni disponibilidad humana, y si te preguntan si sos una automatización respondé con la verdad.`,
+    "",
     agent.system_prompt,
     "",
     "Criterios de calificación comercial (evaluá contra esto con la herramienta evaluar_calificacion):",
@@ -119,6 +125,10 @@ function buildHistory(rows: { direction: string; body: string | null }[]): Conte
  * prospecto por el canal correspondiente.
  */
 export async function runAgentTurn(conversationId: string) {
+  // Pausa general de respuestas de la IA (Configuración → Pausa general).
+  // Mientras está activa, los mensajes quedan para atención manual.
+  if ((await getAutomationPause()).aiRepliesPaused) return;
+
   const supabase = createAdminClient();
 
   const { data: conversation } = await supabase
@@ -139,6 +149,18 @@ export async function runAgentTurn(conversationId: string) {
     .single();
 
   if (!agentConfig || !agentConfig.active) return;
+
+  // Sin nombre de presentación o marca cargados en el perfil, el agente no responde.
+  const readiness = await agentReadiness(area);
+  if (!readiness.ready) {
+    console.warn(`[agente] No responde en ${area}: falta configurar ${readiness.missing.join(", ")}`);
+    return;
+  }
+  const profile = await getProfile(profileIdForArea(area)!);
+  const identity = {
+    presentationName: profile?.agent_presentation_name?.trim() ?? "",
+    brandName: profile?.brand_name?.trim() ?? "",
+  };
 
   const { data: messageRows } = await supabase
     .from("messages")
@@ -183,13 +205,16 @@ export async function runAgentTurn(conversationId: string) {
     qualificationData: contact.qualification_data ?? {},
     campaignName,
     isFirstReplyToCampaign,
-  });
+  }, identity);
   // Marketing: se suma lo que el sistema sabe del negocio (análisis) y cómo registrar el resultado.
   const marketingBrief = area === "marketing" ? await buildMarketingBrief(contact.id) : "";
   const systemWithBrief = marketingBrief ? `${system}\n\n${marketingBrief}` : system;
   const tools = toolsForArea(area);
   let escalated = false;
   let finalText = "";
+  // Contexto de las herramientas. Si la IA deriva a una persona, la
+  // herramienta deja acá el permiso de un solo uso para el acuse final.
+  const toolCtx: ToolContext = { area, contact, conversationId, finalAckToken: null };
 
   for (let i = 0; i < MAX_TOOL_ITERATIONS; i++) {
     const response = await gemini().models.generateContent({
@@ -215,11 +240,7 @@ export async function runAgentTurn(conversationId: string) {
     const responseParts: Part[] = [];
     for (const part of functionCallParts) {
       const call = part.functionCall!;
-      const result = await executeTool(call.name ?? "", call.args ?? {}, {
-        area,
-        contact,
-        conversationId,
-      });
+      const result = await executeTool(call.name ?? "", call.args ?? {}, toolCtx);
       responseParts.push({
         functionResponse: {
           name: call.name,
@@ -240,14 +261,64 @@ export async function runAgentTurn(conversationId: string) {
   }
 
   if (finalText) {
-    await sendOutboundMessage({ conversationId, senderType: "agente_ia", body: finalText });
+    try {
+      await sendOutboundMessage({
+        conversationId,
+        senderType: "agente_ia",
+        body: finalText,
+        // Solo el acuse que sigue a una derivación de esta misma respuesta.
+        finalAckToken: escalated ? toolCtx.finalAckToken : null,
+      });
+    } catch (err) {
+      if (err instanceof AutomaticSendBlockedError) {
+        // Al revalidar antes de enviar ya no correspondía (pausa general o
+        // chat tomado por una persona): la respuesta no sale.
+        console.warn(`[agente] Respuesta no enviada en ${conversationId}: ${err.message}`);
+        return;
+      }
+      throw err;
+    }
   }
+}
+
+interface ToolContext {
+  area: Area;
+  contact: any;
+  conversationId: string;
+  /** permiso de un solo uso para el acuse final tras derivar a una persona */
+  finalAckToken: string | null;
+}
+
+/** Pausa la IA en la conversación y otorga el permiso para el acuse final de esta respuesta. */
+async function pauseWithFinalAck(
+  ctx: ToolContext,
+  status: "requiere_atencion_humana" | "cerrado_perdido",
+  intakeStep: string | null = null
+) {
+  const supabase = createAdminClient();
+  const { data, error } = await supabase.rpc("grant_ai_final_ack", {
+    p_conversation: ctx.conversationId,
+    p_status: status,
+    p_intake_step: intakeStep,
+    p_minutes: 5,
+  });
+  if (error) {
+    // Sin permiso el acuse no sale, pero la conversación igual queda pausada.
+    console.error("[agente] No se pudo otorgar el permiso del acuse final:", error.message);
+    await supabase
+      .from("conversations")
+      .update({ ai_enabled: false, status, ...(intakeStep ? { intake_step: intakeStep } : {}) })
+      .eq("id", ctx.conversationId);
+    ctx.finalAckToken = null;
+    return;
+  }
+  ctx.finalAckToken = typeof data === "string" ? data : null;
 }
 
 async function executeTool(
   name: string,
   input: Record<string, any>,
-  ctx: { area: Area; contact: any; conversationId: string }
+  ctx: ToolContext
 ): Promise<{ output: unknown; escalated?: boolean }> {
   const supabase = createAdminClient();
 
@@ -314,10 +385,7 @@ async function executeTool(
     }
 
     case "escalar_a_humano": {
-      await supabase
-        .from("conversations")
-        .update({ ai_enabled: false, status: "requiere_atencion_humana" })
-        .eq("id", ctx.conversationId);
+      await pauseWithFinalAck(ctx, "requiere_atencion_humana");
       await supabase
         .from("contacts")
         .update({
@@ -375,10 +443,7 @@ async function executeTool(
         await supabase.from("contacts").update({ qualification_data: merged }).eq("id", ctx.contact.id);
         ctx.contact.qualification_data = merged;
 
-        await supabase
-          .from("conversations")
-          .update({ intake_step: "completado", status: "requiere_atencion_humana", ai_enabled: false })
-          .eq("id", ctx.conversationId);
+        await pauseWithFinalAck(ctx, "requiere_atencion_humana", "completado");
         await supabase.from("contacts").update({ status: "cerrado_ganado" }).eq("id", ctx.contact.id);
 
         try {
@@ -391,10 +456,7 @@ async function executeTool(
       }
 
       if (resultado === "caso_resuelto" || resultado === "no_interesado") {
-        await supabase
-          .from("conversations")
-          .update({ intake_step: "resuelto", status: "cerrado_perdido", ai_enabled: false })
-          .eq("id", ctx.conversationId);
+        await pauseWithFinalAck(ctx, "cerrado_perdido", "resuelto");
         await supabase.from("contacts").update({ status: "no_califica" }).eq("id", ctx.contact.id);
         return { output: { ok: true }, escalated: true };
       }

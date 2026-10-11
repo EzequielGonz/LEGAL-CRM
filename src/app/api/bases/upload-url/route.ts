@@ -17,10 +17,12 @@ import type { Area } from "@/lib/supabase/database.types";
  * nunca pasa por esta función: solo pasan los datos livianos (nombre, filas
  * ya interpretadas) por /api/bases.
  */
-export async function POST(request: Request) {
-  const { area, fileName } = await request.json();
+const AREAS: Area[] = ["civil", "penal", "agencia_0km", "coberturas_medicas", "marketing"];
 
-  if (area !== "civil" && area !== "penal") {
+export async function POST(request: Request) {
+  const { area, fileName } = await request.json().catch(() => ({}) as any);
+
+  if (!AREAS.includes(area)) {
     return NextResponse.json({ error: "Área inválida" }, { status: 400 });
   }
   if (!fileName || typeof fileName !== "string") {

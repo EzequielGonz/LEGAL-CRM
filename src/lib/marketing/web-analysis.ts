@@ -193,7 +193,7 @@ async function fetchPageSafely(startUrl: string): Promise<FetchedPage> {
         redirect: "manual",
         signal: controller.signal,
         headers: {
-          "User-Agent": "Mozilla/5.0 (compatible; KocosMarketingBot/1.0; +analisis-comercial)",
+          "User-Agent": "Mozilla/5.0 (compatible; AnalisisComercialBot/1.0; +analisis-comercial)",
           Accept: "text/html,application/xhtml+xml",
           "Accept-Language": "es-AR,es;q=0.9",
         },

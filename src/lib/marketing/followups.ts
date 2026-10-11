@@ -1,6 +1,12 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendWhatsAppTemplate } from "@/lib/whatsapp/client";
+import { isApprovedInCatalog } from "@/lib/plantillas";
+import { classifySendFailure } from "@/lib/envios/errores";
 import { getSendWindow } from "@/lib/campaigns";
+import { getAutomationPause } from "@/lib/automation-pause";
+import { contactBlockReason } from "@/lib/detention";
+import { getProfile } from "@/lib/profiles";
+import { RUBRO_IDS } from "@/lib/rubros";
 import { analyzePendingLeads } from "./analysis";
 import { hasRunnableScrapeJob, runNextScrapeJob } from "./scrape-jobs";
 import { FOLLOWUP_INTERVAL_HOURS, MAX_FOLLOWUPS, logMarketingEvent } from "./leads";
@@ -31,11 +37,16 @@ const TEMPLATE_REPESCA_2 = process.env.MARKETING_TEMPLATE_REPESCA_2 ?? "kocos_re
  * Meta. Se usa solo para dejar registrado en el historial del panel qué se
  * le mandó al prospecto (el que realmente llega es el de Meta).
  */
-export function renderRepescaText(step: 1 | 2, negocio: string, tema: string): string {
+/**
+ * Texto que se registra en la conversación para cada seguimiento (refleja la
+ * plantilla aprobada en Meta). La marca sale del perfil, cargada a mano.
+ */
+export function renderRepescaText(step: 1 | 2, negocio: string, tema: string, marca: string): string {
+  const desde = marca ? ` de ${marca}` : "";
   if (step === 1) {
-    return `Hola, ¿cómo estás? Te escribimos de Kocos Marketing por lo que charlamos para ${negocio} sobre ${tema}. ¿Pudiste pensarlo? Si te quedó alguna duda, escribinos por acá y te la resolvemos.`;
+    return `Hola, ¿cómo estás? Te escribimos${desde} por lo que charlamos para ${negocio} sobre ${tema}. ¿Pudiste pensarlo? Si te quedó alguna duda, escribinos por acá y te la resolvemos.`;
   }
-  return `Hola, te escribimos por última vez desde Kocos Marketing para saber si seguís interesado en mejorar ${negocio} con ${tema}. Si preferís dejarlo para más adelante no hay problema, quedamos a disposición por acá cuando quieras retomarlo.`;
+  return `Hola, te escribimos por última vez${desde ? desde.replace(" de ", " desde ") : ""} para saber si seguís interesado en mejorar ${negocio} con ${tema}. Si preferís dejarlo para más adelante no hay problema, quedamos a disposición por acá cuando quieras retomarlo.`;
 }
 
 function oneLine(text: string, max: number): string {
@@ -96,10 +107,13 @@ async function moveSilentLeadsToRepesca(): Promise<number> {
   return moved;
 }
 
-/** Manda (como máximo) UN seguimiento vencido, o da de baja al que ya agotó los suyos. */
-async function processOneDueFollowup(): Promise<string> {
+/**
+ * Manda (como máximo) UN seguimiento vencido, o da de baja al que ya agotó los suyos.
+ * `now`: hora de referencia para el horario (solo pruebas; por defecto, la actual).
+ */
+export async function processOneDueFollowup(opts: { now?: Date } = {}): Promise<string> {
   const supabase = createAdminClient();
-  const now = new Date();
+  const now = opts.now ?? new Date();
 
   const { data: due } = await supabase
     .from("marketing_leads")
@@ -134,19 +148,74 @@ async function processOneDueFollowup(): Promise<string> {
     return "sin teléfono";
   }
 
+  // Detención persistente: nunca un seguimiento a un contacto detenido.
+  const block = await contactBlockReason(contact.id);
+  if (block) {
+    await supabase
+      .from("marketing_leads")
+      .update({ next_followup_at: null, closed_reason: `Contacto detenido: ${block.label}`, updated_at: now.toISOString() })
+      .eq("id", lead.id);
+    return `detenido: ${contact.full_name ?? contact.id}`;
+  }
+
   const step: 1 | 2 = lead.followup_count === 0 ? 1 : 2;
   const negocio = oneLine(contact.full_name ?? "tu negocio", 60);
   const tema = topicFor(contact);
 
+  // Pregunta 22: la plantilla tiene que figurar aprobada en el catálogo leído
+  // de Meta. Si no, el seguimiento no sale y queda pendiente (no cuenta como fallo).
+  if (!(await isApprovedInCatalog(step === 1 ? TEMPLATE_REPESCA_1 : TEMPLATE_REPESCA_2, "es_AR"))) {
+    return "plantilla no confirmada en el catálogo: seguimiento pendiente";
+  }
+
+  // Revalidación inmediatamente antes de enviar: pausa general de envíos
+  // automáticos (con la misma regla que la base: solo un false explícito la
+  // levanta) y conversación tomada por una persona.
+  const [{ data: pausedNow }, { data: convNow }] = await Promise.all([
+    supabase.rpc("automation_pause_active", { p_field: "outbound_automations_paused" }),
+    supabase
+      .from("conversations")
+      .select("id, ai_enabled")
+      .eq("contact_id", contact.id)
+      .order("last_message_at", { ascending: false, nullsFirst: false })
+      .limit(1)
+      .maybeSingle(),
+  ]);
+  if (pausedNow !== false) return "pausa general activa: el seguimiento queda pendiente";
+  if (convNow && (convNow as any).ai_enabled === false) {
+    await supabase
+      .from("marketing_leads")
+      .update({ next_followup_at: null, closed_reason: "Una persona tomó la conversación: sin seguimiento automático", updated_at: now.toISOString() })
+      .eq("id", lead.id);
+    return "conversación tomada por una persona: seguimiento cerrado";
+  }
+
+  let wamid: string | null = null;
   try {
-    await sendWhatsAppTemplate(
+    const sent = await sendWhatsAppTemplate(
       "marketing",
       contact.phone,
       step === 1 ? TEMPLATE_REPESCA_1 : TEMPLATE_REPESCA_2,
       "es_AR",
       [negocio, tema]
     );
+    wamid = sent?.messages?.[0]?.id ?? null;
   } catch (err: any) {
+    const failure = classifySendFailure(err);
+    if (!failure.certainNotSent) {
+      // No se sabe si Meta lo aceptó: no se reintenta solo (podría llegar dos veces).
+      await supabase.from("marketing_events").insert({
+        lead_id: lead.id,
+        contact_id: contact.id,
+        event_type: "repesca_incierta",
+        detail: { paso: step, error: failure.detail.slice(0, 300) },
+      });
+      await supabase
+        .from("marketing_leads")
+        .update({ next_followup_at: null, closed_reason: "No se pudo confirmar el envío del seguimiento: revisar antes de reintentar", updated_at: now.toISOString() })
+        .eq("id", lead.id);
+      return `seguimiento incierto: ${failure.detail}`;
+    }
     const { count: failures } = await supabase
       .from("marketing_events")
       .select("*", { count: "exact", head: true })
@@ -162,7 +231,8 @@ async function processOneDueFollowup(): Promise<string> {
     return `error al enviar seguimiento: ${detail.error}`;
   }
 
-  const text = renderRepescaText(step, negocio, tema);
+  const marketingProfile = await getProfile(RUBRO_IDS.marketing);
+  const text = renderRepescaText(step, negocio, tema, marketingProfile?.brand_name?.trim() ?? "");
   const { data: conversation } = await supabase
     .from("conversations")
     .select("id")
@@ -176,6 +246,10 @@ async function processOneDueFollowup(): Promise<string> {
       sender_type: "agente_ia",
       direction: "saliente",
       body: text,
+      // Identificador de Meta y estado inicial: así se registran entrega y lectura.
+      external_message_id: wamid,
+      delivery_status: wamid ? "enviado" : null,
+      delivery_status_at: wamid ? now.toISOString() : null,
       metadata: { marketing_followup: step },
     });
     await supabase.from("conversations").update({ last_message_at: now.toISOString() }).eq("id", conversation.id);
@@ -203,6 +277,12 @@ async function processOneDueFollowup(): Promise<string> {
  */
 export async function runMarketingTick() {
   const result: Record<string, unknown> = {};
+
+  // Pausa general: sin búsquedas, análisis con IA ni seguimientos automáticos.
+  if ((await getAutomationPause()).outboundPaused) {
+    result.pausa_general = true;
+    return result;
+  }
 
   // Una búsqueda de Google Maps (hasta ~45 s) y el análisis (descarga de sitios + IA) no
   // entran juntos en una misma ejecución: si hay una búsqueda por correr y la cola de

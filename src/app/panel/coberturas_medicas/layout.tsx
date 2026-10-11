@@ -1,4 +1,6 @@
-import { SidebarRubro } from "@/components/sidebar-rubro";
+import { ProfileSidebar } from "@/components/perfiles/profile-sidebar";
+
+export const dynamic = "force-dynamic";
 
 // Panel completo y exclusivo de Coberturas Médicas: mismo patrón que el de
 // Agencia 0KM y Marketing — su propio sidebar, acotado solo a lo de este
@@ -11,7 +13,7 @@ export default function PanelCoberturasMedicasLayout({
 }) {
   return (
     <div className="flex">
-      <SidebarRubro basePath="/panel/coberturas_medicas" emoji="🏥" name="Coberturas Médicas" />
+      <ProfileSidebar slug="coberturas_medicas" />
       <main className="h-screen flex-1 overflow-y-auto bg-slate-50 p-8">{children}</main>
     </div>
   );

@@ -48,11 +48,12 @@ export function AutoOutreachControl({
       <p className="mb-3 text-xs text-slate-500">
         Cuando está activado, cada negocio que sale del análisis con prioridad alta o media recibe solo el mensaje inicial
         (con el dato detectado), de a uno, con el ritmo y el límite diario de abajo, de 9 a 20 hs. Nunca se le escribe dos
-        veces a un mismo negocio.
+        veces a un mismo negocio. Para enviar, la campaña tiene que tener elegida una plantilla del catálogo, aprobada
+        según Meta y asignada a su línea: el nombre escrito acá no alcanza.
       </p>
       <div className="flex flex-wrap items-end gap-3">
         <div>
-          <label className="mb-1 block text-xs font-medium text-slate-500">Plantilla aprobada (nombre exacto)</label>
+          <label className="mb-1 block text-xs font-medium text-slate-500">Nombre de referencia de la plantilla</label>
           <input
             value={template}
             onChange={(e) => setTemplate(e.target.value)}

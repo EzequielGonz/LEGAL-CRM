@@ -1,15 +1,21 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { DeleteBaseButton } from "@/components/bases/delete-base-button";
+import { ArchivedToggle } from "@/components/ui/archived-toggle";
 import { ScrapingForm } from "@/components/marketing/scraping-form";
 import { ScrapeQueueForm } from "@/components/marketing/scrape-queue-form";
 
 export const dynamic = "force-dynamic";
 
-export default async function CaptacionMarketingPage() {
+export default async function CaptacionMarketingPage({
+  searchParams,
+}: {
+  searchParams: { archivadas?: string };
+}) {
+  const verArchivadas = searchParams?.archivadas === "1";
   const supabase = createClient();
   const [{ data: bases }, { data: jobs }] = await Promise.all([
-    supabase.from("imported_bases").select("*").eq("area", "marketing").order("created_at", { ascending: false }),
+    supabase.from("imported_bases").select("*").eq("area", "marketing").filter("archived_at", verArchivadas ? "not.is" : "is", null).order("created_at", { ascending: false }),
     supabase.from("marketing_scrape_jobs").select("*").order("created_at", { ascending: false }).limit(60),
   ]);
   const jobCount = (status: string) => (jobs ?? []).filter((j: any) => j.status === status).length;
@@ -19,6 +25,7 @@ export default async function CaptacionMarketingPage() {
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold text-slate-900">Captación — Google Maps</h1>
+        <ArchivedToggle basePath="/panel/marketing/captacion" showing={verArchivadas} />
           <p className="text-sm text-slate-500">
             Busca negocios por rubro y zona a través de la API oficial de Google Maps y los carga
             como leads nuevos. Un negocio que ya apareció en una búsqueda anterior nunca se vuelve
@@ -66,7 +73,7 @@ export default async function CaptacionMarketingPage() {
           >
             <div className="mb-1 flex items-center justify-between">
               <h3 className="font-medium text-slate-900">{b.name}</h3>
-              <DeleteBaseButton baseId={b.id} baseName={b.name} />
+              <DeleteBaseButton baseId={b.id} baseName={b.name} archived={!!b.archived_at} />
             </div>
             <p className="text-xs text-slate-400">
               {b.source_label} · {b.total_rows} negocios · {b.created_rows} nuevos ·{" "}

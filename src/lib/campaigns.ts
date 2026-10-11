@@ -3,6 +3,18 @@ import { sendWhatsAppTemplate } from "@/lib/whatsapp/client";
 import { findOrCreateConversation } from "@/lib/contacts";
 import { AUTO_CAMPAIGN_NAME, pickNextMarketingContact } from "@/lib/marketing/outreach";
 import { markLeadContacted } from "@/lib/marketing/leads";
+import { assertOutboundAllowed, getAutomationPause } from "@/lib/automation-pause";
+import { contactBlockReason } from "@/lib/detention";
+import { campaignReadiness, getProfile } from "@/lib/profiles";
+import { buildBodyParameters } from "@/lib/plantillas/catalogo";
+import { confirmTemplateLive, recordTemplateSendError } from "@/lib/plantillas";
+import { classifySendFailure, failureNote, MAX_TRANSIENT_ATTEMPTS } from "@/lib/envios/errores";
+import { randomUUID } from "node:crypto";
+import { effectiveSendHours, getSendWindow, startOfArgentinaDay } from "@/lib/horario";
+
+// El horario vive en src/lib/horario.ts (sin dependencias, se prueba solo); se
+// sigue exportando desde acá para quien ya lo importaba de este archivo.
+export { effectiveSendHours, getSendWindow, startOfArgentinaDay };
 
 /**
  * Motor de envío de campañas — modelo "a pasos" (tick-based).
@@ -27,14 +39,11 @@ import { markLeadContacted } from "@/lib/marketing/leads";
  * milisegundos, sin importar cuántas horas tarde la campaña completa.
  */
 
-// Variables 2 y 3 de la plantilla de WhatsApp aprobada ("Soy Leonardo, del
-// equipo de Estudio Jurídico Vita"): son fijas para todas las campañas,
-// Vita las confirmó así. La variable 1 (nombre del contacto) sigue siendo
-// dinámica, por contacto. Si en el futuro necesitan variar por campaña o
-// por área (Civil/Penal), conviene moverlas a columnas de la tabla
-// `campaigns` y exponerlas en el formulario de "Nueva campaña".
-const TEMPLATE_SENDER_NAME = "Leonardo";
-const TEMPLATE_TEAM_NAME = "Estudio Jurídico Vita";
+// La plantilla sale del catálogo (pregunta 22): nombre, idioma y variables
+// tal como los informa Meta. Cada variable se completa con la fuente que se
+// eligió al asignarla a la línea (nombre del contacto, nombre de
+// presentación o nombre del perfil o marca, cargados a mano en el perfil).
+// Si falta un dato, ese envío no sale: nunca se manda una variable vacía.
 
 /**
  * Devuelve un entero al azar entre min y max (ambos inclusive). Se usa para
@@ -49,52 +58,13 @@ export function randomInt(min: number, max: number): number {
   return Math.floor(Math.random() * (hi - lo + 1)) + lo;
 }
 
-// Argentina está en UTC-3 todo el año (no tiene horario de verano desde
-// 2009), así que alcanza con un offset fijo — no hace falta lidiar con
-// cambios de hora.
-const ARGENTINA_UTC_OFFSET_MS = 3 * 60 * 60 * 1000;
-
-/**
- * Determina si `now` cae dentro del horario permitido de envío de la
- * campaña (en hora Argentina) y, si no, calcula cuándo vuelve a abrir.
- *
- * Antes esto no existía: el cron mandaba mensajes a cualquier hora,
- * incluida la madrugada (3-4am), porque nada se lo impedía — el límite
- * diario de envíos (`daily_send_limit`) solo limita CUÁNTOS mensajes manda
- * por día, no A QUÉ HORA los manda.
- *
- * No depende de la zona horaria del servidor (Vercel corre en UTC): se
- * calcula todo a mano con el offset fijo de Argentina.
- */
-export function getSendWindow(
-  campaign: { send_window_start_hour: number; send_window_end_hour: number },
-  now: Date
-): { withinWindow: boolean; opensAt: Date } {
-  // Truco: restamos el offset y leemos con los getters "UTC" — así, sin
-  // importar en qué zona horaria corra el proceso, esos getters devuelven
-  // la hora de pared de Argentina.
-  const artNow = new Date(now.getTime() - ARGENTINA_UTC_OFFSET_MS);
-  const currentHour = artNow.getUTCHours();
-  const { send_window_start_hour: start, send_window_end_hour: end } = campaign;
-
-  if (currentHour >= start && currentHour < end) {
-    return { withinWindow: true, opensAt: now };
+export class CampaignNotReadyError extends Error {
+  missing: string[];
+  constructor(missing: string[]) {
+    super(`Falta configurar antes de lanzar: ${missing.join("; ")}.`);
+    this.name = "CampaignNotReadyError";
+    this.missing = missing;
   }
-
-  // Instante UTC real que corresponde a la medianoche de Argentina del día
-  // de `artNow`, más las horas de `start` — así calculamos el próximo
-  // horario de apertura sin depender de la zona horaria del servidor.
-  const argentinaMidnightUtcMs =
-    Date.UTC(artNow.getUTCFullYear(), artNow.getUTCMonth(), artNow.getUTCDate()) +
-    ARGENTINA_UTC_OFFSET_MS;
-  const todayOpensAt = new Date(argentinaMidnightUtcMs + start * 60 * 60 * 1000);
-  // Si ya pasó el horario de cierre de hoy, abre mañana; si todavía no
-  // llegó el horario de apertura de hoy (por ejemplo, son las 4am), abre
-  // más tarde hoy mismo.
-  const opensAt =
-    currentHour >= end ? new Date(todayOpensAt.getTime() + 24 * 60 * 60 * 1000) : todayOpensAt;
-
-  return { withinWindow: false, opensAt };
 }
 
 export interface TickResult {
@@ -107,18 +77,100 @@ export interface TickResult {
     | "daily_limit_reached"
     | "outside_send_window"
     | "finished"
-    | "not_running";
+    | "not_running"
+    /** otra ejecución está procesando esta campaña (no se hizo nada) */
+    | "busy";
   detail?: string;
+}
+
+/** Vigencia del bloqueo por campaña (segundos): vence solo si la ejecución se corta. */
+export const TICK_LOCK_SECONDS = 120;
+/** Una reserva más vieja que esto se considera cortada (segundos). */
+export const CLAIM_LEASE_SECONDS = 600;
+
+interface ClaimedRecipient {
+  id: string;
+  contact_id: string;
+  full_name: string | null;
+  phone: string | null;
+  attempts: number;
+}
+
+type FinishStatus = "enviado" | "fallo" | "opt_out" | "pendiente" | "revisar";
+
+/**
+ * Cierra la reserva de un destinatario con su resultado. Solo quien tiene
+ * la reserva (token) puede cerrarla. Reintenta ante fallas al guardar; si
+ * igual no se puede, la fila queda reservada y la recuperación la pasa a
+ * revisión (si ya se había llamado a Meta) o de vuelta a la cola (si no).
+ */
+export async function finishClaim(
+  supabase: ReturnType<typeof createAdminClient>,
+  claimId: string,
+  token: string,
+  status: FinishStatus,
+  opts: { messageId?: string | null; error?: string | null; uncertain?: boolean } = {},
+  retries = 3
+): Promise<boolean> {
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    const { data, error } = await supabase.rpc("campaign_finish_send", {
+      p_campaign_contact: claimId,
+      p_token: token,
+      p_status: status,
+      p_message_id: opts.messageId ?? null,
+      p_error: opts.error ?? null,
+      p_uncertain: opts.uncertain ?? false,
+    });
+    if (!error) return data === true;
+    console.error(`[campaigns] No se pudo guardar el resultado (${status}) del destinatario ${claimId}, intento ${attempt}:`, error.message);
+    if (attempt < retries) await new Promise((r) => setTimeout(r, 200 * attempt * attempt));
+  }
+  return false;
 }
 
 /**
  * Intenta avanzar UNA campaña un paso: manda un mensaje si ya le toca según
  * el ritmo configurado, o no hace nada y explica por qué en `detail`.
  * Nunca bloquea esperando — siempre vuelve casi al instante.
+ *
+ * Concurrencia: una sola ejecución por campaña (bloqueo con vencimiento) y
+ * una sola por destinatario (reserva atómica en la base). Dos ticks
+ * simultáneos nunca le envían dos veces a la misma persona.
  */
-export async function tickCampaign(campaignId: string): Promise<TickResult> {
+export async function tickCampaign(
+  campaignId: string,
+  /** `now`: hora de referencia para horario, días y ritmo (solo pruebas; por defecto, la actual). */
+  opts: { now?: Date } = {}
+): Promise<TickResult> {
   const supabase = createAdminClient();
+  const token = randomUUID();
+  const { data: locked, error: lockError } = await supabase.rpc("campaign_tick_lock", {
+    p_campaign: campaignId,
+    p_token: token,
+    p_seconds: TICK_LOCK_SECONDS,
+  });
+  if (lockError) {
+    return { campaignId, action: "not_running", detail: `No se pudo tomar el bloqueo de la campaña: ${lockError.message}` };
+  }
+  if (locked !== true) {
+    return { campaignId, action: "busy", detail: "Otra ejecución está procesando esta campaña." };
+  }
+  try {
+    // Reservas que quedaron de una ejecución cortada: sin marca de inicio
+    // vuelven a la cola; con marca, a revisión (no se reenvían solas).
+    await supabase.rpc("campaign_recover_stale", { p_campaign: campaignId, p_lease_seconds: CLAIM_LEASE_SECONDS });
+    return await tickLocked(supabase, campaignId, token, opts.now ?? new Date());
+  } finally {
+    await supabase.rpc("campaign_tick_unlock", { p_campaign: campaignId, p_token: token });
+  }
+}
 
+async function tickLocked(
+  supabase: ReturnType<typeof createAdminClient>,
+  campaignId: string,
+  token: string,
+  now: Date
+): Promise<TickResult> {
   const { data: campaign, error: campaignError } = await supabase
     .from("campaigns")
     .select("*")
@@ -133,7 +185,48 @@ export async function tickCampaign(campaignId: string): Promise<TickResult> {
     return { campaignId, action: "not_running", detail: `Estado actual: ${campaign.status}` };
   }
 
-  const now = new Date();
+  // Pausa general (Configuración → Pausa general): no sale ningún envío
+  // automático. La campaña conserva su cola, su ritmo y sus contadores.
+  const pause = await getAutomationPause();
+  if (pause.outboundPaused) {
+    return { campaignId, action: "not_running", detail: "Pausa general de envíos automáticos activa" };
+  }
+  if (campaign.archived_at) {
+    return { campaignId, action: "not_running", detail: "Campaña archivada" };
+  }
+  // Días de ejecución (1 = lunes … 6 = sábado, hora Argentina; los domingos no se envía).
+  if (Array.isArray(campaign.run_days) && campaign.run_days.length > 0) {
+    const artDay = new Date(now.getTime() - 3 * 60 * 60 * 1000).getUTCDay(); // 0 = domingo
+    const isoDay = artDay === 0 ? 7 : artDay;
+    if (!campaign.run_days.includes(isoDay)) {
+      return { campaignId, action: "outside_send_window", detail: "Hoy no es un día de ejecución de esta campaña." };
+    }
+  }
+  // Configuración del perfil, línea asignada (bloque 1.4) y plantilla del
+  // catálogo (pregunta 22): si falta algo, no envía y el envío queda pendiente.
+  const readiness = await campaignReadiness(campaign);
+  if (!readiness.ready || !readiness.line || !readiness.template) {
+    return { campaignId, action: "not_running", detail: `Falta configurar: ${readiness.missing.join("; ")}` };
+  }
+  const line = readiness.line;
+  const resolved = readiness.template;
+  const template = resolved.template;
+  // Límite diario de la línea (sumando todas las campañas que la usan).
+  if (line.daily_limit) {
+    const { data: lineCampaigns } = await supabase.from("campaigns").select("id").eq("line_id", line.id);
+    const { count: sentByLine } = await supabase
+      .from("campaign_contacts")
+      .select("id", { count: "exact", head: true })
+      .in("campaign_id", (lineCampaigns ?? []).map((c: any) => c.id))
+      .in("status", ["enviado", "entregado", "leido", "respondio"])
+      .gte("sent_at", startOfArgentinaDay(now).toISOString());
+    if ((sentByLine ?? 0) >= line.daily_limit) {
+      return { campaignId, action: "daily_limit_reached", detail: `La línea «${line.label}» llegó a su límite de ${line.daily_limit} envíos por hoy.` };
+    }
+  }
+  const profile = await getProfile(line.rubro_id);
+  const senderName = profile?.agent_presentation_name?.trim() ?? "";
+  const brandName = profile?.brand_name?.trim() ?? "";
 
   // 0) ¿Estamos dentro del horario permitido de envío? No tocamos el
   // ritmo/pacing acá: apenas vuelva a estar en horario, la campaña sigue
@@ -141,12 +234,13 @@ export async function tickCampaign(campaignId: string): Promise<TickResult> {
   // mañana, se despierta sola).
   const sendWindow = getSendWindow(campaign, now);
   if (!sendWindow.withinWindow) {
+    const hours = effectiveSendHours(campaign);
     return {
       campaignId,
       action: "outside_send_window",
-      detail: `Fuera del horario permitido (${campaign.send_window_start_hour}-${campaign.send_window_end_hour}hs, Argentina). Reanuda a las ${sendWindow.opensAt.toLocaleString(
+      detail: `Fuera del horario permitido (lunes a sábado, ${hours.start}-${hours.end}hs, Argentina). Reanuda el ${sendWindow.opensAt.toLocaleString(
         "es-AR",
-        { timeZone: "America/Argentina/Buenos_Aires", hour: "2-digit", minute: "2-digit" }
+        { timeZone: "America/Argentina/Buenos_Aires", weekday: "long", hour: "2-digit", minute: "2-digit" }
       )}.`,
     };
   }
@@ -172,8 +266,7 @@ export async function tickCampaign(campaignId: string): Promise<TickResult> {
 
   // 2) ¿Llegó al límite diario?
   if (campaign.daily_send_limit) {
-    const startOfToday = new Date();
-    startOfToday.setHours(0, 0, 0, 0);
+    const startOfToday = startOfArgentinaDay(now);
 
     const { count: sentToday } = await supabase
       .from("campaign_contacts")
@@ -183,7 +276,10 @@ export async function tickCampaign(campaignId: string): Promise<TickResult> {
       .gte("sent_at", startOfToday.toISOString());
 
     if ((sentToday ?? 0) >= campaign.daily_send_limit) {
-      await supabase.from("campaigns").update({ status: "pausada" }).eq("id", campaignId);
+      await supabase
+        .from("campaigns")
+        .update({ status: "pausada", pause_reason: "Límite diario alcanzado", paused_at: new Date().toISOString() })
+        .eq("id", campaignId);
       return { campaignId, action: "daily_limit_reached" };
     }
   }
@@ -204,11 +300,11 @@ export async function tickCampaign(campaignId: string): Promise<TickResult> {
     }
   }
 
-  // 4) Buscar el próximo pendiente — primero los de prioridad alta
-  // (fractura/muerte/amputación, priority=0), y dentro de cada nivel de
-  // prioridad, en el orden en que se agregaron a la campaña
-  // (`queued_at`). Ver computeCampaignPriority en @/lib/bases/priority.
-  let nextRow: any = null;
+  // 4) Reserva atómica del próximo destinatario. Primero los de prioridad
+  // alta (fractura/muerte/amputación, priority=0) y dentro de cada nivel en
+  // el orden en que se agregaron (`queued_at`). Ver computeCampaignPriority.
+  // Marketing elige al lead más calificado y reserva ese destinatario.
+  let claimed: ClaimedRecipient | null = null;
   let marketingHook: string | null = null;
 
   if (campaign.area === "marketing") {
@@ -219,31 +315,36 @@ export async function tickCampaign(campaignId: string): Promise<TickResult> {
       return { campaignId, action: "waiting_interval", detail: pick.detail };
     }
     if (pick.kind === "ready") {
-      nextRow = {
-        id: pick.campaignContactId,
-        contact_id: pick.contactId,
-        contacts: { full_name: pick.name, phone: pick.phone },
-      };
+      const { data } = await supabase.rpc("campaign_claim_recipient", {
+        p_campaign_contact: pick.campaignContactId,
+        p_token: token,
+      });
+      const row = Array.isArray(data) ? data[0] : null;
+      if (!row) return { campaignId, action: "busy", detail: "Ese destinatario ya lo tomó otra ejecución." };
+      claimed = { ...row, full_name: pick.name };
       marketingHook = pick.hook;
     }
   } else {
-    const { data } = await supabase
-      .from("campaign_contacts")
-      .select("id, contact_id, contacts(full_name, phone)")
-      .eq("campaign_id", campaignId)
-      .eq("status", "pendiente")
-      .order("priority", { ascending: true })
-      .order("queued_at", { ascending: true })
-      .limit(1)
-      .maybeSingle();
-    nextRow = data;
+    const { data, error } = await supabase.rpc("campaign_claim_next", { p_campaign: campaignId, p_token: token });
+    if (error) return { campaignId, action: "not_running", detail: `No se pudo reservar el próximo destinatario: ${error.message}` };
+    claimed = (Array.isArray(data) ? data[0] : null) ?? null;
   }
 
-  if (!nextRow) {
+  if (!claimed) {
     // La campaña de prospección automática nunca se da por terminada: se
     // queda esperando leads nuevos que vayan saliendo del análisis.
     if (campaign.area === "marketing" && campaign.name === AUTO_CAMPAIGN_NAME) {
       return { campaignId, action: "waiting_interval", detail: "Sin leads calificados por contactar por ahora" };
+    }
+    // Termina solo cuando no queda nada pendiente ni en envío (lo que está a
+    // revisar lo decide una persona).
+    const { count: open } = await supabase
+      .from("campaign_contacts")
+      .select("id", { count: "exact", head: true })
+      .eq("campaign_id", campaignId)
+      .in("status", ["pendiente", "enviando"]);
+    if ((open ?? 0) > 0) {
+      return { campaignId, action: "waiting_interval", detail: "Hay destinatarios en envío por otra ejecución" };
     }
     await supabase
       .from("campaigns")
@@ -252,17 +353,65 @@ export async function tickCampaign(campaignId: string): Promise<TickResult> {
     return { campaignId, action: "finished" };
   }
 
-  const phone = (nextRow as any).contacts?.phone;
-  const name = (nextRow as any).contacts?.full_name ?? "";
+  const claim = claimed;
+  const phone = claim.phone;
+  const name = claim.full_name ?? "";
+
+  // Detención persistente: un contacto detenido nunca recibe el envío,
+  // aunque esté en la cola. Queda registrado y no cuenta para el ritmo.
+  const block = await contactBlockReason(claim.contact_id);
+  if (block) {
+    await finishClaim(supabase, claim.id, token, "opt_out", { error: `Detenido: ${block.label}` });
+    return { campaignId, action: "failed_send", detail: `Contacto detenido (${block.label}), no se envió` };
+  }
 
   if (!phone) {
-    await supabase
-      .from("campaign_contacts")
-      .update({ status: "fallo", error: "Sin teléfono" })
-      .eq("id", nextRow.id);
     // No cuenta como intento de envío real: no tocamos el ritmo, así el
     // próximo tick prueba con el siguiente contacto sin esperar de más.
+    await finishClaim(supabase, claim.id, token, "fallo", { error: "Sin teléfono" });
     return { campaignId, action: "failed_send", detail: "Contacto sin teléfono" };
+  }
+
+  // Variables de la plantilla con las fuentes elegidas. Si falta un dato de
+  // este contacto, su envío no sale (nunca con una variable vacía).
+  const built = buildBodyParameters(resolved.analysis, resolved.sources, {
+    "contacto.nombre": name,
+    "perfil.presentacion": senderName,
+    "perfil.marca": brandName,
+  });
+  if (!built.ok) {
+    const what = built.missing.map((m) => `${m.label} para ${m.variable}`).join(", ");
+    // Igual que "Sin teléfono": no hubo intento contra la API, no cuenta para el ritmo.
+    await finishClaim(supabase, claim.id, token, "fallo", { error: `No se envió: falta ${what}` });
+    return { campaignId, action: "failed_send", detail: `Falta ${what}` };
+  }
+
+  // Revalidación inmediatamente antes de llamar a Meta: pausa general,
+  // estado de la campaña y detención, leídos de nuevo.
+  const [pauseNow, { data: fresh }, blockNow] = await Promise.all([
+    getAutomationPause(),
+    supabase.from("campaigns").select("status, archived_at").eq("id", campaignId).maybeSingle(),
+    contactBlockReason(claim.contact_id),
+  ]);
+  const stopReason = pauseNow.outboundPaused
+    ? "Pausa general de envíos automáticos activa"
+    : !fresh || fresh.status !== "en_curso" || fresh.archived_at
+    ? `La campaña cambió de estado (${fresh?.archived_at ? "archivada" : fresh?.status ?? "sin datos"})`
+    : blockNow
+    ? `Contacto detenido (${blockNow.label})`
+    : null;
+  if (stopReason) {
+    await finishClaim(supabase, claim.id, token, blockNow ? "opt_out" : "pendiente", {
+      error: blockNow ? `Detenido: ${blockNow.label}` : null,
+    });
+    return { campaignId, action: "not_running", detail: `${stopReason}: no se envió` };
+  }
+
+  // Marca de inicio: a partir de acá, si la ejecución se corta, el caso va a
+  // revisión y nunca se reenvía solo.
+  const { data: marked } = await supabase.rpc("campaign_mark_sending", { p_campaign_contact: claim.id, p_token: token });
+  if (marked !== true) {
+    return { campaignId, action: "busy", detail: "La reserva de este destinatario ya no está vigente: no se envió" };
   }
 
   const sentInBatchAfter = campaign.sent_in_batch + 1;
@@ -279,87 +428,131 @@ export async function tickCampaign(campaignId: string): Promise<TickResult> {
     next_delay_seconds: randomInt(campaign.min_send_delay_seconds, campaign.max_send_delay_seconds),
   };
 
+  let sendResult: any;
   try {
-    const sendResult = await sendWhatsAppTemplate(
+    sendResult = await sendWhatsAppTemplate(
       campaign.area,
       phone,
-      campaign.message_template_name,
-      "es_AR",
-      // Marketing: la plantilla del primer mensaje NO lleva variables (el análisis del
-      // negocio se presenta recién cuando el prospecto responde). Las demás áreas
-      // siguen usando [nombre, remitente, equipo].
-      campaign.area === "marketing"
-        ? []
-        : [name, TEMPLATE_SENDER_NAME, TEMPLATE_TEAM_NAME]
+      template.name,
+      template.language,
+      built.parameters,
+      { credentialKey: line.credential_key }
     );
+  } catch (err) {
+    const failure = classifySendFailure(err);
+    const note = failureNote(failure);
+    // Se hizo un intento real contra la API: cuenta para el ritmo.
+    await supabase.from("campaigns").update(pacingUpdate).eq("id", campaignId);
 
-    // Log completo de la respuesta de Meta: antes esto se descartaba, así que
-    // si un mensaje quedaba marcado "enviado" en el panel pero nunca llegaba
-    // al celular, no había forma de ver qué había contestado realmente la
-    // API (por ejemplo, un id de mensaje válido no garantiza entrega — eso
-    // depende de cosas fuera de nuestro control, como si el número de
-    // Meta todavía está en modo prueba/desarrollo con destinatarios
-    // restringidos). Con este log, la próxima vez se puede revisar en los
-    // logs de Vercel.
-    console.log(
-      `[campaigns] Respuesta de Meta al enviar a ${phone} (campaña ${campaign.id}):`,
-      JSON.stringify(sendResult)
-    );
+    if (failure.kind === "plantilla" || failure.kind === "cuenta") {
+      // El problema no es de este contacto: su envío queda pendiente y la
+      // campaña se pausa con el motivo, conservando cola y contadores.
+      await finishClaim(supabase, claim.id, token, "pendiente", { error: `Pendiente: ${note}` });
+      if (failure.kind === "plantilla") await recordTemplateSendError(template.id, failure.detail);
+      await supabase
+        .from("campaigns")
+        .update({ status: "pausada", pause_reason: note, paused_at: new Date().toISOString() })
+        .eq("id", campaignId);
+      return { campaignId, action: "failed_send", detail: note };
+    }
+    if (failure.kind === "transitorio") {
+      // Meta no aceptó el mensaje por una falla temporal: vuelve a la cola,
+      // con un límite de intentos.
+      if (claim.attempts >= MAX_TRANSIENT_ATTEMPTS) {
+        await finishClaim(supabase, claim.id, token, "revisar", {
+          error: `${note} Ya se intentó ${claim.attempts} veces: queda para revisión.`,
+          uncertain: false,
+        });
+      } else {
+        await finishClaim(supabase, claim.id, token, "pendiente", { error: `Pendiente: ${note}` });
+      }
+      return { campaignId, action: "failed_send", detail: note };
+    }
+    if (failure.kind === "contacto") {
+      // Meta confirmó un problema de este destinatario.
+      await finishClaim(supabase, claim.id, token, "fallo", { error: note });
+      return { campaignId, action: "failed_send", detail: note };
+    }
+    // Incierto o no clasificado: a revisión, sin reenvío automático.
+    await finishClaim(supabase, claim.id, token, "revisar", { error: note, uncertain: !failure.certainNotSent });
+    return { campaignId, action: "failed_send", detail: note };
+  }
 
-    const messageId = sendResult?.messages?.[0]?.id ?? null;
+  // Log completo de la respuesta de Meta: antes esto se descartaba, así que
+  // si un mensaje quedaba marcado "enviado" en el panel pero nunca llegaba
+  // al celular, no había forma de ver qué había contestado realmente la
+  // API. Con este log, la próxima vez se puede revisar en los logs de Vercel.
+  console.log(
+    `[campaigns] Respuesta de Meta al enviar a ${phone} (campaña ${campaign.id}):`,
+    JSON.stringify(sendResult)
+  );
 
-    await supabase
-      .from("campaign_contacts")
-      .update({ status: "enviado", sent_at: now.toISOString(), message_id: messageId })
-      .eq("id", nextRow.id);
+  const messageId: string = sendResult.messages[0].id;
+  const finished = await finishClaim(supabase, claim.id, token, "enviado", { messageId });
+  if (!finished) {
+    // Meta lo aceptó pero no se pudo guardar el resultado: la fila queda
+    // reservada con marca de inicio y la recuperación la pasa a revisión.
+    // Nunca se reenvía sola.
+    console.error(`[campaigns] Meta aceptó el envío ${messageId} pero no se pudo guardar el resultado del destinatario ${claim.id}.`);
+  }
 
-    // Dejamos registro de la conversación y del mensaje saliente: si no,
-    // cuando la persona responda por WhatsApp, el agente IA arranca sin
-    // saber qué se le mandó ni de qué campaña vino.
+  // Dejamos registro de la conversación y del mensaje saliente: si no,
+  // cuando la persona responda por WhatsApp, el agente IA arranca sin
+  // saber qué se le mandó ni de qué campaña vino. El identificador de Meta
+  // y el estado inicial quedan en el mensaje para registrar entrega y lectura.
+  try {
     const conversation = await findOrCreateConversation({
-      contactId: nextRow.contact_id,
+      contactId: claim.contact_id,
       channelId: campaign.channel_id,
       area: campaign.area,
     });
-    await supabase.from("messages").insert({
+    // La conversación queda asociada a la línea por la que salió el envío,
+    // así las respuestas manuales salen por la misma línea.
+    await supabase.from("conversations").update({ line_id: line.id }).eq("id", conversation.id).is("line_id", null);
+    const sentAt = new Date().toISOString();
+    const messageRow = {
       conversation_id: conversation.id,
       sender_type: "agente_ia",
       direction: "saliente",
       body:
         campaign.area === "marketing" && marketingHook
-          ? `[Mensaje inicial de Kocos Marketing — plantilla ${campaign.message_template_name}] Hola, ¿cómo estás? Mi nombre es Ezequiel de Kocos Marketing. Analizamos tu negocio en Google y tenemos una propuesta para ofrecerte.`
-          : `[Plantilla de campaña "${campaign.name}": ${campaign.message_template_name}] Primer contacto automático a ${name || "el prospecto"}.`,
-      metadata: { campaign_id: campaign.id, template: campaign.message_template_name },
-    });
+          ? `[Mensaje inicial — plantilla ${template.name}${brandName ? ` · ${brandName}` : ""}] Primer contacto automático con el gancho del análisis.`
+          : `[Plantilla de campaña "${campaign.name}": ${template.name}] Primer contacto automático a ${name || "el prospecto"}.`,
+      external_message_id: messageId,
+      delivery_status: "enviado",
+      delivery_status_at: sentAt,
+      metadata: { campaign_id: campaign.id, template: template.name, template_id: template.id, template_language: template.language },
+    };
+    let { error: msgError } = await supabase.from("messages").insert(messageRow);
+    if (msgError && (msgError as any).code !== "23505") {
+      ({ error: msgError } = await supabase.from("messages").insert(messageRow));
+    }
+    if (msgError && (msgError as any).code !== "23505") {
+      console.error(`[campaigns] No se pudo registrar el mensaje ${messageId} en la conversación:`, msgError.message);
+    }
     if (campaign.area === "marketing") {
-      await markLeadContacted(nextRow.contact_id, marketingHook);
+      await markLeadContacted(claim.contact_id, marketingHook);
     }
     await supabase
       .from("conversations")
-      .update({ status: "esperando_respuesta_prospecto", last_message_at: now.toISOString() })
+      .update({ status: "esperando_respuesta_prospecto", last_message_at: sentAt })
       .eq("id", conversation.id);
     await supabase
       .from("contacts")
       .update({ status: "esperando_respuesta_prospecto" })
-      .eq("id", nextRow.contact_id);
-
-    await supabase.from("campaigns").update(pacingUpdate).eq("id", campaignId);
-
-    return { campaignId, action: "sent", detail: phone };
-  } catch (err: any) {
-    await supabase
-      .from("campaign_contacts")
-      .update({ status: "fallo", error: String(err.message ?? err) })
-      .eq("id", nextRow.id);
-    // Igual actualizamos el ritmo: se hizo un intento real contra la API de
-    // WhatsApp, así que cuenta para el cupo de "no generar bloqueos".
-    await supabase.from("campaigns").update(pacingUpdate).eq("id", campaignId);
-    return { campaignId, action: "failed_send", detail: String(err.message ?? err) };
+      .eq("id", claim.contact_id);
+  } catch (err) {
+    console.error(`[campaigns] El envío ${messageId} salió pero falló el registro posterior:`, err);
   }
+
+  await supabase.from("campaigns").update(pacingUpdate).eq("id", campaignId);
+
+  return { campaignId, action: "sent", detail: phone };
 }
 
 /** Le da un paso a todas las campañas activas. Esto es lo que llama el endpoint de cron. */
 export async function tickAllActiveCampaigns(): Promise<TickResult[]> {
+  if ((await getAutomationPause()).outboundPaused) return [];
   const supabase = createAdminClient();
   const { data: activeCampaigns } = await supabase
     .from("campaigns")
@@ -380,15 +573,29 @@ export async function tickAllActiveCampaigns(): Promise<TickResult[]> {
  * envíos los va haciendo el cron externo llamando a `/api/campaigns/tick`.
  */
 export async function launchCampaign(campaignId: string): Promise<TickResult> {
+  // Con la pausa general activa no se lanza ni se reanuda nada: se levanta
+  // primero la pausa, por decisión expresa, desde Configuración.
+  await assertOutboundAllowed();
   const supabase = createAdminClient();
 
   const { data: campaign, error: campaignError } = await supabase
     .from("campaigns")
-    .select("started_at")
+    .select("started_at, archived_at")
     .eq("id", campaignId)
     .single();
 
   if (campaignError || !campaign) throw new Error("Campaña no encontrada");
+  if (campaign.archived_at) throw new Error("La campaña está archivada: recuperala antes de lanzarla.");
+  const { data: full } = await supabase
+    .from("campaigns")
+    .select("area, line_id, message_template_name, template_id")
+    .eq("id", campaignId)
+    .single();
+  const readiness = await campaignReadiness(full as any);
+  if (!readiness.ready || !readiness.line || !readiness.template) throw new CampaignNotReadyError(readiness.missing);
+  // Estado real de la plantilla en Meta en el momento de lanzar (pregunta 22).
+  const live = await confirmTemplateLive(readiness.template.template.id, readiness.line);
+  if (!live.ok) throw new CampaignNotReadyError([live.message ?? "No se pudo confirmar la plantilla en Meta"]);
 
   await supabase
     .from("campaigns")
@@ -396,15 +603,20 @@ export async function launchCampaign(campaignId: string): Promise<TickResult> {
       status: "en_curso",
       started_at: campaign.started_at ?? new Date().toISOString(),
       batch_paused_until: null,
+      pause_reason: null,
+      paused_at: null,
     })
     .eq("id", campaignId);
 
   return tickCampaign(campaignId);
 }
 
-export async function pauseCampaign(campaignId: string) {
+export async function pauseCampaign(campaignId: string, reason = "Pausada desde el panel") {
   const supabase = createAdminClient();
-  await supabase.from("campaigns").update({ status: "pausada" }).eq("id", campaignId);
+  await supabase
+    .from("campaigns")
+    .update({ status: "pausada", pause_reason: reason, paused_at: new Date().toISOString() })
+    .eq("id", campaignId);
 }
 
 export interface CampaignStatusSnapshot {
@@ -429,6 +641,10 @@ export interface CampaignStatusSnapshot {
   counts: {
     total: number;
     pendiente: number;
+    /** reservados por una ejecución en curso */
+    enviando: number;
+    /** no se sabe si Meta los aceptó, o Meta los rechazó por un motivo no clasificado */
+    revisar: number;
     enviado: number;
     entregado: number;
     leido: number;
@@ -488,6 +704,8 @@ export async function getCampaignStatus(campaignId: string): Promise<CampaignSta
   // filas, solo un número en un header, así que no las afecta ese límite.
   const STATUS_KEYS = [
     "pendiente",
+    "enviando",
+    "revisar",
     "enviado",
     "entregado",
     "leido",
@@ -510,6 +728,8 @@ export async function getCampaignStatus(campaignId: string): Promise<CampaignSta
   const counts = {
     total: total ?? 0,
     pendiente: 0,
+    enviando: 0,
+    revisar: 0,
     enviado: 0,
     entregado: 0,
     leido: 0,
@@ -568,8 +788,7 @@ export async function getCampaignStatus(campaignId: string): Promise<CampaignSta
   } else {
     let dailyLimitReached = false;
     if (campaign.daily_send_limit) {
-      const startOfToday = new Date();
-      startOfToday.setHours(0, 0, 0, 0);
+      const startOfToday = startOfArgentinaDay(now);
       const { count: sentToday } = await supabase
         .from("campaign_contacts")
         .select("*", { count: "exact", head: true })
@@ -610,8 +829,9 @@ export async function getCampaignStatus(campaignId: string): Promise<CampaignSta
       batch_paused_until: campaign.batch_paused_until,
       started_at: campaign.started_at,
       finished_at: campaign.finished_at,
-      send_window_start_hour: campaign.send_window_start_hour,
-      send_window_end_hour: campaign.send_window_end_hour,
+      // Horario efectivo: el de la campaña dentro del horario general (pregunta 39).
+      send_window_start_hour: effectiveSendHours(campaign).start,
+      send_window_end_hour: effectiveSendHours(campaign).end,
     },
     counts: { ...counts, enviados_total },
     lastSent: lastSentRow

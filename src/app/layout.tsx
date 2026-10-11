@@ -9,6 +9,10 @@ export const metadata: Metadata = {
   // de protección de acceso, solo evita que aparezca en resultados de
   // búsqueda de Google y similares).
   robots: { index: false, follow: false },
+  // App instalable (bloque 1.9): manifiesto, íconos y modo pantalla completa en iPhone.
+  manifest: "/manifest.webmanifest",
+  icons: { icon: "/iconos/icono-192.png", apple: "/iconos/apple-touch-icon.png" },
+  appleWebApp: { capable: true, title: "Panel CRM", statusBarStyle: "black-translucent" },
 };
 
 export default function RootLayout({

@@ -1,0 +1,12 @@
+// Pruebas: misma configuración que la aplicación, más las carpetas de pruebas.
+// La aplicación (tsconfig.json de la raíz) no incluye tests/: el build de Next.js no las revisa.
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "..",
+    "paths": { "@/*": ["src/*"] },
+    "noEmit": true,
+    "incremental": false
+  },
+  "include": ["../next-env.d.ts", "../src/**/*.ts", "../src/**/*.tsx", "./unitarias/**/*.ts", "./integracion/**/*.ts"]
+}

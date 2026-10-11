@@ -1,4 +1,5 @@
 import { createAdminClient } from "@/lib/supabase/admin";
+import { getAutomationPause } from "@/lib/automation-pause";
 import { ensureLead } from "./leads";
 
 /**
@@ -136,6 +137,7 @@ export async function pickNextMarketingContact(campaignId: string): Promise<Mark
  * analizados con prioridad alta o media que todavía no fueron contactados.
  */
 export async function enqueueQualifiedLeads(): Promise<number> {
+  if ((await getAutomationPause()).outboundPaused) return 0;
   const supabase = createAdminClient();
 
   const { data: campaign } = await supabase

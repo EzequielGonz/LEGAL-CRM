@@ -83,6 +83,50 @@ const PHONE_CONTAINS_TOKENS = ["telefono", "whatsapp", "celular", "movil"];
 // header, así que vale la pena como último recurso antes de dejarlo vacío.
 const FULL_NAME_CONTAINS_TOKENS = ["nombre"];
 
+/** Columnas elegidas a mano en la importación (null = detección automática). */
+export interface ColumnMapping {
+  phone?: string | null;
+  name?: string | null;
+  dni?: string | null;
+}
+
+/**
+ * Propone qué columna del archivo corresponde a teléfono, nombre y DNI, con
+ * el mismo criterio que usa la lectura fila por fila (alias exactos y, para
+ * teléfono y nombre, columnas que contienen la palabra clave). Se muestra
+ * como propuesta: la persona puede corregirla antes de guardar.
+ */
+export function detectColumns(headers: string[]): { phone: string | null; name: string | null; dni: string | null } {
+  const norm = headers.map((h) => [h, normalizeHeader(h)] as const);
+  const byAlias = (field: keyof typeof ALIASES) => {
+    for (const alias of ALIASES[field]) {
+      const hit = norm.find(([, n]) => n === alias);
+      if (hit) return hit[0];
+    }
+    return null;
+  };
+  const byToken = (tokens: string[]) => norm.find(([, n]) => tokens.some((t) => n.includes(t)))?.[0] ?? null;
+  return {
+    phone: byAlias("phone") ?? byToken(PHONE_CONTAINS_TOKENS),
+    name: byAlias("full_name") ?? byToken(FULL_NAME_CONTAINS_TOKENS),
+    dni: byAlias("dni_cuil"),
+  };
+}
+
+/** Lectura de una fila con las columnas elegidas a mano por encima de la detección. */
+export function resolveRowFields(rawRow: Record<string, unknown>, mapping?: ColumnMapping | null): ExtractedRowFields {
+  const fields = extractRowFields(rawRow);
+  const pick = (col?: string | null) => {
+    if (!col) return undefined;
+    const v = rawRow[col];
+    return v === undefined || v === null || String(v).trim() === "" ? null : String(v).trim();
+  };
+  if (mapping?.phone) fields.phone_raw = pick(mapping.phone) ?? null;
+  if (mapping?.name) fields.full_name = pick(mapping.name) ?? null;
+  if (mapping?.dni) fields.dni_cuil = pick(mapping.dni) ?? null;
+  return fields;
+}
+
 export interface ExtractedRowFields {
   full_name: string | null;
   phone_raw: string | null;

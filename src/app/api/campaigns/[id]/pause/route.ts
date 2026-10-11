@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server";
 import { pauseCampaign } from "@/lib/campaigns";
 
-export async function POST(_request: Request, { params }: { params: { id: string } }) {
-  await pauseCampaign(params.id);
+/** Pausa con motivo (bloque 1.8). body opcional: { motivo } */
+export async function POST(request: Request, { params }: { params: { id: string } }) {
+  const body = await request.json().catch(() => ({}));
+  const motivo = typeof body?.motivo === "string" && body.motivo.trim() ? body.motivo.trim().slice(0, 300) : undefined;
+  await pauseCampaign(params.id, motivo);
   return NextResponse.json({ ok: true });
 }

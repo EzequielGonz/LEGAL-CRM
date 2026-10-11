@@ -1,4 +1,6 @@
-import { SidebarRubro } from "@/components/sidebar-rubro";
+import { ProfileSidebar } from "@/components/perfiles/profile-sidebar";
+
+export const dynamic = "force-dynamic";
 
 // Panel completo y exclusivo de Agencia 0KM: mismo diseño que el panel de
 // Jurídico ((dashboard)/layout.tsx) pero con su propio sidebar, acotado
@@ -12,7 +14,7 @@ export default function PanelAgencia0kmLayout({
 }) {
   return (
     <div className="flex">
-      <SidebarRubro basePath="/panel/agencia_0km" emoji="🚗" name="Agencia 0KM" />
+      <ProfileSidebar slug="agencia_0km" />
       <main className="h-screen flex-1 overflow-y-auto bg-slate-50 p-8">{children}</main>
     </div>
   );

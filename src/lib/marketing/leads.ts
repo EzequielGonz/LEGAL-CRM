@@ -1,4 +1,6 @@
 import { createAdminClient } from "@/lib/supabase/admin";
+import { RUBRO_IDS } from "@/lib/rubros";
+import { getProfile } from "@/lib/profiles";
 import type { SourceType } from "@/lib/supabase/database.types";
 
 /**
@@ -276,9 +278,12 @@ export async function setMarketingOutcome({
  */
 export async function buildMarketingBrief(contactId: string): Promise<string> {
   const lead = await getLeadByContact(contactId);
+  const profile = await getProfile(RUBRO_IDS.marketing);
+  const marca = profile?.brand_name?.trim() ?? "";
+  const presentacion = profile?.agent_presentation_name?.trim() ?? "";
 
   const lines: string[] = [
-    "=== DATOS DEL SISTEMA SOBRE ESTE PROSPECTO (Kocos Marketing) ===",
+    `=== DATOS DEL SISTEMA SOBRE ESTE PROSPECTO${marca ? ` (${marca})` : ""} ===`,
   ];
 
   if (!lead) {
@@ -290,7 +295,7 @@ export async function buildMarketingBrief(contactId: string): Promise<string> {
 
     if (lead.hook && lead.source_kind === "scraper") {
       lines.push(
-        `El mensaje inicial que ya recibió fue genérico: "Hola, ¿cómo estás? Mi nombre es Ezequiel de Kocos Marketing. Analizamos tu negocio en Google y tenemos una propuesta para ofrecerte." (sin botones: el prospecto puede contestar lo que quiera). Todavía NO le dijimos qué detectamos. Primero respondé con naturalidad a lo que escribió (saludo, una pregunta, "¿qué propuesta?", "¿quiénes son?", una duda o un rechazo) y, cuando corresponda, presentale lo que vimos de su negocio (la idea de fondo: ${lead.hook}) y llevá la charla hacia la propuesta y el cierre. Si dice claramente que no le interesa, respetalo y no insistas.`
+        `El mensaje inicial que ya recibió fue genérico: "Hola, ¿cómo estás? Mi nombre es ${presentacion} de ${marca}. Analizamos tu negocio en Google y tenemos una propuesta para ofrecerte." (sin botones: el prospecto puede contestar lo que quiera). Todavía NO le dijimos qué detectamos. Primero respondé con naturalidad a lo que escribió (saludo, una pregunta, "¿qué propuesta?", "¿quiénes son?", una duda o un rechazo) y, cuando corresponda, presentale lo que vimos de su negocio (la idea de fondo: ${lead.hook}) y llevá la charla hacia la propuesta y el cierre. Si dice claramente que no le interesa, respetalo y no insistas.`
       );
     }
 
