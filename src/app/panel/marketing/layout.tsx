@@ -1,4 +1,5 @@
 import { ProfileSidebar } from "@/components/perfiles/profile-sidebar";
+import { requirePageSession } from "@/lib/acceso/pagina";
 
 export const dynamic = "force-dynamic";
 
@@ -6,17 +7,19 @@ export const dynamic = "force-dynamic";
 // Jurídico y el de Agencia 0KM, pero con su propio sidebar acotado solo a
 // lo de este rubro. Nunca comparte el layout de (dashboard) ni el de
 // agencia_0km.
-export default function PanelMarketingLayout({
+export default async function PanelMarketingLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const sesion = await requirePageSession();
+  if (!sesion.ok) return sesion.fallback;
   return (
     <div className="flex">
       <ProfileSidebar slug="marketing" extraNavItems={[
           { path: "captacion", label: "Captación" },
           { path: "prospectos", label: "Prospectos prioritarios" },
-          { path: "seguimiento", label: "Seguimiento o repesca" },
+          { path: "seguimiento", label: "Seguimiento" },
           { path: "consultas-directas", label: "Consultas directas" },
           { path: "estadisticas", label: "Estadísticas" },
         ]} />

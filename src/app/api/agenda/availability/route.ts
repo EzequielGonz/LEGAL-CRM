@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 /** Reemplaza las reglas de disponibilidad de un área (días/horarios/duración). */
 export async function POST(request: Request) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const { area, rules } = await request.json();
 
   if (area !== "civil" && area !== "penal") {

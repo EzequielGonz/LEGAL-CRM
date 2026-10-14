@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { detainedContactIds } from "@/lib/detention";
+import { requireSession } from "@/lib/acceso/autorizacion";
+import { textoBusquedaSeguro } from "@/lib/busqueda";
 
 export const dynamic = "force-dynamic";
 
@@ -11,12 +13,14 @@ const PAGE_SIZE = 40;
  * en el servidor, con el último mensaje y la atención de cada conversación.
  */
 export async function GET(request: Request) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const sp = new URL(request.url).searchParams;
   const page = Math.max(1, Number(sp.get("pagina")) || 1);
   const area = sp.get("area");
   const canal = sp.get("canal");
   const atencion = sp.get("atencion");
-  const q = (sp.get("q") ?? "").replace(/[,()]/g, "").trim();
+  const q = textoBusquedaSeguro(sp.get("q"));
 
   const supabase = createAdminClient();
   const contactsSel = q ? "contacts!inner(full_name, phone)" : "contacts(full_name, phone)";

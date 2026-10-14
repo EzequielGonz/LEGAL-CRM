@@ -3,7 +3,7 @@
 import test, { after, before } from "node:test";
 import assert from "node:assert/strict";
 
-import { RedSimulada, SIN_PAUSA, crearContacto, crearConversacion, db, esperarApi, fijarPausa } from "./soporte/entorno";
+import { RedSimulada, SIN_PAUSA, crearContacto, crearConversacion, db, esperarApi, fijarPausa, pedido, prepararSesionDePrueba } from "./soporte/entorno";
 import { EN_HORARIO, crearCampana } from "./soporte/campanas";
 import { tickCampaign } from "@/lib/campaigns";
 import { applyDeliveryStatus } from "@/lib/delivery-status";
@@ -11,10 +11,12 @@ import { sendOutboundMessage } from "@/lib/messaging";
 import { mergePoll } from "@/lib/inbox/estados";
 import { GET as leerMensajes } from "@/app/api/conversations/[id]/messages/route";
 
+
 let red: RedSimulada;
 before(async () => {
   red = new RedSimulada();
   await esperarApi();
+  await prepararSesionDePrueba();
   await fijarPausa(SIN_PAUSA);
 });
 after(() => red.restaurar());
@@ -54,7 +56,7 @@ test("4: el mensaje de campaña guarda el identificador de Meta y su estado inic
 
   // Polling del Inbox: no hay mensajes nuevos, pero sí el estado actualizado del que ya se ve.
   const url = `http://local/api/conversations/${msg!.conversation_id}/messages?after=${encodeURIComponent(msg!.created_at)}`;
-  const res = await leerMensajes(new Request(url), { params: { id: msg!.conversation_id } });
+  const res = await leerMensajes(pedido(url), { params: { id: msg!.conversation_id } });
   const body = await res.json();
   assert.equal(res.status, 200);
   assert.deepEqual(body.messages, []);

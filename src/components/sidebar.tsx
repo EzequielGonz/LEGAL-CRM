@@ -12,6 +12,7 @@ const NAV = [
   { href: "/casos-cerrados", label: "Casos" },
   { href: "/bases", label: "Bases" },
   { href: "/agenda", label: "Agenda" },
+  { href: "/seguimiento", label: "Seguimiento" },
   { href: "/campanas", label: "Campañas" },
   { href: "/agentes", label: "Agentes IA" },
   { href: "/revision", label: "Revisión" },

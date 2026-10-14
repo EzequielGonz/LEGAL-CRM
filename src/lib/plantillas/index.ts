@@ -553,6 +553,56 @@ export async function campaignTemplateCheck(
 }
 
 /**
+ * Plantilla de una línea para un propósito que no es campaña (seguimiento,
+ * reagendamiento, aviso interno…): una asignación activa, aprobada según
+ * Meta, de la cuenta de la línea y con cada variable resuelta. Si hay varias,
+ * vale la más reciente que cumpla. Si no hay ninguna válida, ese envío queda
+ * pendiente con lo que falta.
+ */
+export async function purposeTemplateCheck(
+  line: { id: string; label: string; credential_key: string },
+  purposes: TemplatePurpose[]
+): Promise<{ missing: string[]; resolved: (ResolvedCampaignTemplate & { purpose: TemplatePurpose }) | null }> {
+  const supabase = createAdminClient();
+  const waba = lineWabaId(line.credential_key);
+  const missing: string[] = [];
+  for (const purpose of purposes) {
+    const { data: assignments } = await supabase
+      .from("template_assignments")
+      .select("id, template_id, variable_sources, created_at")
+      .eq("line_id", line.id)
+      .eq("purpose", purpose)
+      .eq("active", true)
+      .order("created_at", { ascending: false });
+    for (const a of assignments ?? []) {
+      const { data: tpl } = await supabase.from("whatsapp_templates").select("*").eq("id", a.template_id).maybeSingle();
+      if (!tpl) {
+        missing.push("La plantilla asignada ya no está en el catálogo");
+        continue;
+      }
+      const template = tpl as CatalogTemplateRow;
+      const problems = [...templateProblems(template, waba), ...sourcesProblems(template.variables, a.variable_sources)];
+      if (!problems.length) {
+        const sync = await latestSync(line.id);
+        if (sync?.line_verified === false) {
+          return { missing: [`La línea «${line.label}» no figura en la cuenta de WhatsApp Business configurada`], resolved: null };
+        }
+        return {
+          missing: [],
+          resolved: { template, analysis: template.variables, assignmentId: a.id, sources: a.variable_sources as string[], purpose },
+        };
+      }
+      for (const p of problems) missing.push(`Plantilla «${template.name}» (${template.language}): ${p}`);
+    }
+  }
+  if (!missing.length) {
+    const label = purposeInfo(purposes[0])?.label ?? purposes[0];
+    missing.push(`Una plantilla aprobada asignada a la línea «${line.label}» para «${label}»`);
+  }
+  return { missing, resolved: null };
+}
+
+/**
  * Confirma en Meta, en el momento, el estado de la plantilla (antes de
  * lanzar). Actualiza el catálogo con lo que responde.
  */

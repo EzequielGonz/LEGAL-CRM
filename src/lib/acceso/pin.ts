@@ -134,7 +134,8 @@ export type AccessEventKind =
   | "recuperacion_pin"
   | "pin_inicial"
   | "cierre_todas_sesiones"
-  | "pausa_general";
+  | "pausa_general"
+  | "seguimiento_automatico";
 
 export async function logAccessEvent(
   kind: AccessEventKind,

@@ -1,5 +1,6 @@
 import { redirect, notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { requirePageSession } from "@/lib/acceso/pagina";
 
 export const dynamic = "force-dynamic";
 
@@ -14,6 +15,8 @@ export const dynamic = "force-dynamic";
  * eso por ahora muestran un aviso en vez de un panel vacío o roto.
  */
 export default async function PanelRubroPage({ params }: { params: { slug: string } }) {
+  const sesion = await requirePageSession();
+  if (!sesion.ok) return sesion.fallback;
   if (params.slug === "juridico") {
     redirect("/casos-cerrados");
   }

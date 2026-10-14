@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { AssignmentError, createAssignment } from "@/lib/plantillas";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 export const dynamic = "force-dynamic";
 
@@ -9,6 +10,8 @@ export const dynamic = "force-dynamic";
  * cuenta de esa línea y compatibles con el envío.
  */
 export async function POST(request: Request) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => ({}));
   try {
     const result = await createAssignment({

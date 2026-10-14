@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import * as XLSX from "xlsx";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 const STATUS_LABEL: Record<string, string> = {
   creado: "Nuevo contacto",
@@ -15,7 +16,9 @@ const STATUS_LABEL: Record<string, string> = {
  * del sistema. Usa la misma librería (`xlsx` / SheetJS) que ya usa el
  * importador de bases para leer Excel, solo que acá se usa para escribir.
  */
-export async function GET(_request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, { params }: { params: { id: string } }) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const supabase = createAdminClient();
 
   const { data: base } = await supabase

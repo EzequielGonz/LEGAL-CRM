@@ -5,15 +5,17 @@
 import test, { after, before } from "node:test";
 import assert from "node:assert/strict";
 
-import { CON_PAUSA, RedSimulada, SIN_PAUSA, crearContacto, crearConversacion, db, esperarApi, fijarPausa, sql } from "./soporte/entorno";
+import { CON_PAUSA, RedSimulada, SIN_PAUSA, crearContacto, crearConversacion, db, esperarApi, fijarPausa, sql, pedido, prepararSesionDePrueba } from "./soporte/entorno";
 import { AutomaticSendBlockedError, sendOutboundMessage } from "@/lib/messaging";
 import { POST as responderManual } from "@/app/api/conversations/[id]/messages/route";
 import { POST as cambiarIa } from "@/app/api/conversations/[id]/toggle-ai/route";
+
 
 let red: RedSimulada;
 before(async () => {
   red = new RedSimulada();
   await esperarApi();
+  await prepararSesionDePrueba();
 });
 after(() => red.restaurar());
 
@@ -30,7 +32,7 @@ async function mensajes(id: string) {
   const { data } = await db().from("messages").select("sender_type, body").eq("conversation_id", id);
   return data ?? [];
 }
-const json = (body: unknown) => new Request("http://local/api", { method: "POST", body: JSON.stringify(body) });
+const json = (body: unknown) => pedido("http://local/api", { method: "POST", body: JSON.stringify(body) });
 
 test("3: la respuesta manual pausa el chat ANTES de llamar a Meta", async () => {
   await fijarPausa(SIN_PAUSA);

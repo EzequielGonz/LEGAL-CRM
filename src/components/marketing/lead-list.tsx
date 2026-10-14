@@ -77,14 +77,11 @@ export function LeadList({
               </td>
               {mode === "seguimiento" && (
                 <td className="px-4 py-3 align-top text-xs text-slate-600">
+                  {/* Sistema anterior (antes de la Etapa 2): solo historial, ya no envía. */}
                   {l.outreach_status === "repesca" ? (
-                    <>
-                      Mensaje {l.followup_count} de 2 enviado
-                      <br />
-                      Próximo: {fmt(l.next_followup_at)}
-                    </>
+                    <>Sistema anterior: {l.followup_count} de 2 enviados. Ya no envía: sigue el circuito general.</>
                   ) : (
-                    "Cerrado el seguimiento"
+                    "Cerrado por el sistema anterior"
                   )}
                 </td>
               )}

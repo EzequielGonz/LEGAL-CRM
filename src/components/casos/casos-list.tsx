@@ -3,6 +3,7 @@ import clsx from "clsx";
 import { createClient } from "@/lib/supabase/server";
 import { Pager, pageFromParam } from "@/components/ui/pager";
 import { CAPTURE_STATE_LABEL, DERIVATION_STATE_LABEL, FOLLOWUP_STATE_LABEL } from "@/lib/opportunities";
+import { textoBusquedaSeguro } from "@/lib/busqueda";
 
 const PAGE_SIZE = 50;
 
@@ -55,7 +56,8 @@ export async function CasosList({
   if (vista === "perdidos") query = query.eq("capture_state", "perdido");
 
   const q = searchParams.q?.replace(/[,()]/g, "").trim();
-  if (q) query = query.or(`full_name.ilike.%${q}%,phone.ilike.%${q}%`, { referencedTable: "contacts" });
+  const qSeguro = textoBusquedaSeguro(q);
+  if (qSeguro) query = query.or(`full_name.ilike.%${qSeguro}%,phone.ilike.%${qSeguro}%`, { referencedTable: "contacts" });
 
   const { data: rows, count } = await query;
 

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { setOpportunityState } from "@/lib/opportunities";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +21,8 @@ export const dynamic = "force-dynamic";
  *  - "revisado": { nota } → quita la marca de revisión pendiente
  */
 export async function POST(request: Request, { params }: { params: { id: string } }) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => ({}));
   const accion = body?.accion as string;
   const nota = typeof body?.nota === "string" ? body.nota.trim().slice(0, 1000) : "";

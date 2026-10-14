@@ -9,6 +9,8 @@ import { AccessSettings } from "@/components/configuracion/access-settings";
 import { PauseControl } from "@/components/configuracion/pause-control";
 import { PushSettingsSection } from "@/components/configuracion/push-settings-section";
 import { getAutomationPause } from "@/lib/automation-pause";
+import { CalendarSettings } from "@/components/configuracion/calendar-settings";
+import { listCalendarExceptions } from "@/lib/contacto/calendario";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
@@ -43,6 +45,7 @@ export default async function ConfiguracionPage() {
     supabase.from("webhook_quarantine").select("id", { count: "exact", head: true }).is("reviewed_at", null),
     getAutomationPause(),
   ]);
+  const calendar = await listCalendarExceptions();
 
   const adminPhone: string | null = adminProfile?.phone ?? null;
 
@@ -69,6 +72,11 @@ export default async function ConfiguracionPage() {
           reason={pause.reason}
           configProblem={pause.configProblem ?? (pause.readError ? `No se pudo leer la pausa general (${pause.readError}): se asume todo en pausa.` : null)}
         />
+      </div>
+
+      <div className="rounded-xl border border-slate-200 bg-white p-5">
+        <h2 className="mb-3 text-sm font-semibold text-slate-700">Horario de contacto y calendario (todos los perfiles)</h2>
+        <CalendarSettings upcoming={calendar.upcoming} archived={calendar.archived} loadError={calendar.error} />
       </div>
 
       <div className="rounded-xl border border-slate-200 bg-white p-5">

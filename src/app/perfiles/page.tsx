@@ -1,6 +1,7 @@
 import { LogoutButton } from "@/components/acceso/logout-button";
 import { PerfilSelector } from "@/components/perfiles/perfil-selector";
 import { loadPerfiles } from "@/lib/perfiles-stats";
+import { requirePageSession } from "@/lib/acceso/pagina";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +22,8 @@ export const dynamic = "force-dynamic";
  * alrededor) — es una pantalla completa, standalone, igual que /inicio.
  */
 export default async function PerfilesPage() {
+  const sesion = await requirePageSession();
+  if (!sesion.ok) return sesion.fallback;
   const perfiles = await loadPerfiles();
 
   return (

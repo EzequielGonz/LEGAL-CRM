@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { MissingAccessError, syncLineTemplates } from "@/lib/plantillas";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 export const dynamic = "force-dynamic";
 
@@ -9,6 +10,8 @@ export const dynamic = "force-dynamic";
  * envía nada. Si falta el acceso privado, informa qué falta.
  */
 export async function POST(request: Request) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => ({}));
   const lineId = typeof body?.line_id === "string" ? body.line_id : "";
   if (!lineId) return NextResponse.json({ error: "Falta la línea" }, { status: 400 });

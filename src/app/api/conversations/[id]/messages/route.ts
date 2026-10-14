@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { sendOutboundMessage } from "@/lib/messaging";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 export const dynamic = "force-dynamic";
 
@@ -12,6 +13,8 @@ export const dynamic = "force-dynamic";
  * el Inbox actualice "Enviado → Entregado → Leído" en los que ya muestra.
  */
 export async function GET(request: Request, { params }: { params: { id: string } }) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const { searchParams } = new URL(request.url);
   const after = searchParams.get("after");
   const supabase = createAdminClient();
@@ -45,6 +48,8 @@ export async function GET(request: Request, { params }: { params: { id: string }
  * respuesta de la IA que se estuviera generando ya no puede salir encima.
  */
 export async function POST(request: Request, { params }: { params: { id: string } }) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const { body } = await request.json().catch(() => ({ body: null }));
 
   if (!body || typeof body !== "string") {

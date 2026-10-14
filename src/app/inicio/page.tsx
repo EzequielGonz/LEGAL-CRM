@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { LogoutButton } from "@/components/acceso/logout-button";
+import { requirePageSession } from "@/lib/acceso/pagina";
 
 export const dynamic = "force-dynamic";
 
@@ -22,7 +23,9 @@ export const dynamic = "force-dynamic";
  * alrededor) — es una pantalla completa, standalone, con el mismo estilo
  * navy + dorado de siempre.
  */
-export default function InicioPage() {
+export default async function InicioPage() {
+  const sesion = await requirePageSession();
+  if (!sesion.ok) return sesion.fallback;
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 px-4 py-12">
       {/* Glow decorativo dorado, igual que en login — puramente ambiental */}

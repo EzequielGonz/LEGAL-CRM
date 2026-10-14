@@ -1,6 +1,7 @@
 import { attachmentIdForMessage, openAttachment } from "@/lib/adjuntos/guardar";
 import { NextResponse } from "next/server";
 import { isUuid, notSavedResponse } from "@/lib/adjuntos/respuesta";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -11,6 +12,8 @@ export const maxDuration = 60;
  * este guardado, lo registra en el momento.
  */
 export async function GET(request: Request, { params }: { params: { messageId: string } }) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   if (!isUuid(params.messageId)) return notSavedResponse(400, "Identificador inválido.");
   const n = Number(new URL(request.url).searchParams.get("n") ?? "0");
   const position = Number.isInteger(n) && n >= 0 && n < 20 ? n : 0;

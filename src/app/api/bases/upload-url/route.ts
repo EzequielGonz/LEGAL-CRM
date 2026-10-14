@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import type { Area } from "@/lib/supabase/database.types";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 /**
  * Genera una URL firmada para que el navegador suba el archivo original
@@ -20,6 +21,8 @@ import type { Area } from "@/lib/supabase/database.types";
 const AREAS: Area[] = ["civil", "penal", "agencia_0km", "coberturas_medicas", "marketing"];
 
 export async function POST(request: Request) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const { area, fileName } = await request.json().catch(() => ({}) as any);
 
   if (!AREAS.includes(area)) {

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { importBase, RepeatedImportError } from "@/lib/bases/import";
 import type { Area } from "@/lib/supabase/database.types";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 // Margen de seguridad: con el importador en lotes (ver src/lib/bases/import.ts)
 // esto no debería hacer falta ni de cerca, pero por las dudas le damos más
@@ -35,6 +36,8 @@ const AREAS: Area[] = ["civil", "penal", "agencia_0km", "coberturas_medicas", "m
  * 409 con la base anterior, para que se pueda revisar antes de repetir.
  */
 export async function POST(request: Request) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => null);
   if (!body) {
     return NextResponse.json({ error: "Body inválido" }, { status: 400 });

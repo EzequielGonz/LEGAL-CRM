@@ -1,10 +1,13 @@
 import { NextResponse } from "next/server";
 import { setCampaignArchived } from "@/lib/archive";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 export const dynamic = "force-dynamic";
 
 /** body: { accion: "archivar" | "recuperar", nota? }. Archivar pausa; recuperar no reanuda. */
 export async function POST(request: Request, { params }: { params: { id: string } }) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => ({}));
   if (body?.accion !== "archivar" && body?.accion !== "recuperar") {
     return NextResponse.json({ error: "Acción inválida" }, { status: 400 });

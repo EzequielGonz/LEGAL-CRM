@@ -2,11 +2,14 @@ import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { campaignReadiness } from "@/lib/profiles";
 import { getAutomationPause } from "@/lib/automation-pause";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 export const dynamic = "force-dynamic";
 
 /** Qué falta para poder lanzar la campaña (se muestra junto al botón). */
-export async function GET(_request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, { params }: { params: { id: string } }) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const supabase = createAdminClient();
   const { data: campaign } = await supabase
     .from("campaigns")

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 export const dynamic = "force-dynamic";
 
@@ -11,6 +12,8 @@ const MAX_ZONES = 300;
  * GET lista las últimas. DELETE saca de la cola las que todavía no corrieron.
  */
 export async function POST(request: Request) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => null);
   if (!body) return NextResponse.json({ error: "Body inválido" }, { status: 400 });
 
@@ -40,7 +43,9 @@ export async function POST(request: Request) {
   return NextResponse.json({ ok: true, encoladas: zonasClean.length });
 }
 
-export async function GET() {
+export async function GET(request: Request) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const supabase = createAdminClient();
   const { data } = await supabase
     .from("marketing_scrape_jobs")
@@ -50,7 +55,9 @@ export async function GET() {
   return NextResponse.json({ jobs: data ?? [] });
 }
 
-export async function DELETE() {
+export async function DELETE(request: Request) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const supabase = createAdminClient();
   const { error } = await supabase.from("marketing_scrape_jobs").delete().eq("status", "pendiente");
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });

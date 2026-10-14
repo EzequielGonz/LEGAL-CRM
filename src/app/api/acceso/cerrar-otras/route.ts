@@ -11,6 +11,7 @@ import {
   verifyPin,
 } from "@/lib/acceso/pin";
 import { SESSION_COOKIE, randomId, sessionCookieOptions, signSession } from "@/lib/acceso/session";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +21,8 @@ export const dynamic = "force-dynamic";
  * aplicarse en los otros.
  */
 export async function POST(request: Request) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => ({}));
   const pin = typeof body?.pin === "string" ? body.pin.trim() : "";
   const origin = await originHash(request);

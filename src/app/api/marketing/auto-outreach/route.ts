@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { AUTO_CAMPAIGN_NAME } from "@/lib/marketing/outreach";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 /**
  * Prende / apaga la prospección automática de Marketing: una campaña
@@ -10,6 +11,8 @@ import { AUTO_CAMPAIGN_NAME } from "@/lib/marketing/outreach";
  * respetando el ritmo, el horario y el límite diario de la campaña.
  */
 export async function POST(request: Request) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => null);
   if (!body) return NextResponse.json({ error: "Body inválido" }, { status: 400 });
 
