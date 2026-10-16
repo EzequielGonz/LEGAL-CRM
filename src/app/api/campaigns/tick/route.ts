@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { timingSafeEqual } from "node:crypto";
 import { tickAllActiveCampaigns } from "@/lib/campaigns";
 import { runMarketingTick } from "@/lib/marketing/followups";
 import { enqueueQualifiedLeads } from "@/lib/marketing/outreach";
@@ -9,6 +10,7 @@ import { getTareasServidor } from "@/lib/tareas-servidor";
 import { generarInformesVencidos } from "@/lib/experimento/servicio";
 import { evaluarPlantillasPendientes, revisarAjusteC } from "@/lib/experimento/acciones";
 import { avanzarExtraccion } from "@/lib/marketing/extraer";
+import { registrarLatido } from "@/lib/salud";
 
 // El análisis de negocios (descargar la web + IA) necesita más de los 10s por defecto.
 export const maxDuration = 60;
@@ -21,22 +23,17 @@ export const maxDuration = 60;
  * nuevo cada 1.5 minutos, en lotes de 10, con 5 minutos de pausa entre
  * lotes" sin necesitar que ninguna función quede corriendo horas.
  *
- * Protegido con CRON_SECRET para que no cualquiera pueda gatillar envíos:
- * aceptamos el secreto como header `Authorization: Bearer <secreto>` (lo
- * usan la mayoría de los servicios de cron que soportan headers custom) o
- * como query param `?secret=<secreto>` (para los que no).
+ * Protegido con CRON_SECRET, solo por encabezado `Authorization: Bearer
+ * <secreto>` (desde el 16/10 ya no se acepta en la dirección: las URL quedan
+ * en los registros). La tarea de Supabase ya lo manda por encabezado.
  */
 function isAuthorized(request: Request): boolean {
   const expected = process.env.CRON_SECRET;
   if (!expected) return false; // sin secreto configurado, no se puede usar
-
-  const authHeader = request.headers.get("authorization");
-  if (authHeader === `Bearer ${expected}`) return true;
-
-  const { searchParams } = new URL(request.url);
-  if (searchParams.get("secret") === expected) return true;
-
-  return false;
+  const recibido = request.headers.get("authorization") ?? "";
+  const esperado = `Bearer ${expected}`;
+  if (recibido.length !== esperado.length) return false;
+  return timingSafeEqual(Buffer.from(recibido), Buffer.from(esperado));
 }
 
 export async function POST(request: Request) {
@@ -118,8 +115,11 @@ export async function POST(request: Request) {
       }
     }
 
+    // Tablero de salud: deja la hora del último latido.
+    await registrarLatido(true, { ms: Date.now() - inicio });
     return NextResponse.json({ ok: true, results, seguimiento, marketing, servidor, extraccion, experimento });
   } catch (err: any) {
+    await registrarLatido(false, { error: String(err?.message ?? err).slice(0, 200) });
     return NextResponse.json({ error: String(err.message ?? err) }, { status: 500 });
   }
 }
