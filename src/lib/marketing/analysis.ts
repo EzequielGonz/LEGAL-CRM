@@ -60,6 +60,11 @@ export interface LeadAnalysis {
   puntos_clave: string[];
   servicios_sugeridos: string[];
   generado_con_ia: boolean;
+  /** Investigación con búsqueda en la web (16/10): resumen y fuentes reales consultadas. */
+  investigacion?: string | null;
+  fuentes?: { titulo: string; url: string }[];
+  /** Modelo que redactó la síntesis (comparación de agentes). */
+  modelo_sintesis?: string | null;
 }
 
 export const PRIORITY_HIGH_MIN = 60;
@@ -388,14 +393,50 @@ interface AiSynthesis {
   puntos_clave?: string[];
 }
 
+/**
+ * Investigación con fuentes reales (16/10): Gemini 3.8 con búsqueda de
+ * Google. Devuelve un resumen y las fuentes consultadas (título y enlace).
+ * Si falla, el análisis sigue con la web y la ficha de Maps.
+ */
+export async function investigarNegocio(input: { nombre: string; zona?: string | null; rubro?: string | null; web?: string | null }): Promise<{ texto: string; fuentes: { titulo: string; url: string }[] } | null> {
+  if (!process.env.GEMINI_API_KEY) return null;
+  const prompt = [
+    `Investigá en la web el negocio «${input.nombre}»${input.rubro ? ` (${input.rubro})` : ""}${input.zona ? ` de ${input.zona}, Argentina` : ", Argentina"}${input.web ? `, sitio: ${input.web}` : ""}.`,
+    "Buscá: presencia en Google y redes sociales (actividad reciente), reseñas y lo que dicen los clientes, competidores cercanos y cómo se comunican, y oportunidades concretas de marketing digital.",
+    "Respondé en español rioplatense, 5 a 8 viñetas cortas, solo con lo que encuentres en las fuentes. Si no hay información, decilo.",
+  ].join("\n");
+  try {
+    const r: any = await gemini().models.generateContent({
+      model: "gemini-3.8-flash",
+      contents: [{ role: "user", parts: [{ text: prompt }] }],
+      config: { tools: [{ googleSearch: {} }] } as any,
+    });
+    const texto = String(r.text ?? (r.candidates?.[0]?.content?.parts ?? []).map((p: any) => p.text ?? "").join("")).trim();
+    const chunks: any[] = r.candidates?.[0]?.groundingMetadata?.groundingChunks ?? [];
+    const fuentes = chunks
+      .map((c) => ({ titulo: String(c.web?.title ?? c.web?.domain ?? "fuente"), url: String(c.web?.uri ?? "") }))
+      .filter((f) => /^https?:\/\//.test(f.url))
+      .slice(0, 10);
+    return texto ? { texto: texto.slice(0, 4000), fuentes } : null;
+  } catch (err) {
+    console.error("[marketing] Falló la investigación con búsqueda:", err);
+    return null;
+  }
+}
+
+/** Generador de texto alternativo para la síntesis (modelo del candidato en la comparación). */
+export type GeneradorTexto = (prompt: string) => Promise<string>;
+
 async function synthesizeWithAi(input: {
   name: string;
   maps: Partial<MapsData>;
   hasWebsite: boolean;
   web: WebSignals | null;
   findings: Finding[];
+  investigacion?: string | null;
+  generar?: GeneradorTexto | null;
 }): Promise<AiSynthesis | null> {
-  if (!process.env.GEMINI_API_KEY) return null;
+  if (!process.env.GEMINI_API_KEY && !input.generar) return null;
 
   const payload = {
     negocio: input.name,
@@ -437,17 +478,25 @@ async function synthesizeWithAi(input: {
     "",
     "ANÁLISIS:",
     JSON.stringify(payload),
+    ...(input.investigacion ? ["", "INVESTIGACIÓN EN LA WEB (con fuentes reales):", input.investigacion] : []),
   ].join("\n");
 
   try {
-    const response = await gemini().models.generateContent({
-      model: identificadorModelo(),
-      contents: [{ role: "user", parts: [{ text: prompt }] }],
-      config: { responseMimeType: "application/json" },
-    });
-    const raw = (response.text ?? "").trim();
+    let raw: string;
+    if (input.generar) {
+      raw = (await input.generar(prompt)).trim();
+    } else {
+      const response = await gemini().models.generateContent({
+        model: identificadorModelo(),
+        contents: [{ role: "user", parts: [{ text: prompt }] }],
+        config: { responseMimeType: "application/json" },
+      });
+      raw = (response.text ?? "").trim();
+    }
     if (!raw) return null;
-    const parsed = JSON.parse(raw.replace(/^```json\s*|```$/g, "")) as AiSynthesis;
+    const m = raw.replace(/^```json\s*|```$/g, "").match(/\{[\s\S]*\}/);
+    if (!m) return null;
+    const parsed = JSON.parse(m[0]) as AiSynthesis;
     return parsed;
   } catch (err) {
     console.error("[marketing] Falló la síntesis con IA, se usa el texto por reglas:", err);
@@ -474,6 +523,11 @@ export interface AnalyzeOptions {
   websiteOverride?: string | null;
   /** Busca la ficha en Google Maps con este texto (ej.: "Nombre del negocio, zona"). */
   mapsQuery?: string | null;
+  /** Investigación con búsqueda en la web (análisis profundo al aceptar). */
+  investigar?: boolean;
+  /** Modelo del candidato para la síntesis (comparación de agentes). */
+  generar?: GeneradorTexto | null;
+  modeloSintesis?: string | null;
 }
 
 /** Analiza un lead y guarda el resultado. Devuelve el lead actualizado o null si no se pudo reclamar. */
@@ -481,7 +535,7 @@ export async function analyzeLead(leadId: string, options: AnalyzeOptions = {}) 
   const supabase = createAdminClient();
 
   // "Reclamar" el lead para que dos ticks seguidos no lo analicen a la vez.
-  const claimFrom = options.force ? ["pendiente", "listo", "error", "omitido"] : ["pendiente"];
+  const claimFrom = options.force ? ["pendiente", "listo", "error", "omitido", "no_iniciado"] : ["pendiente"];
   const { data: claimed } = await supabase
     .from("marketing_leads")
     .update({ analysis_status: "analizando", updated_at: new Date().toISOString() })
@@ -549,7 +603,10 @@ export async function analyzeLead(leadId: string, options: AnalyzeOptions = {}) 
     const score = computeScore(findings, mapsData);
     const priority = priorityForScore(score);
 
-    const ai = await synthesizeWithAi({ name, maps: mapsData, hasWebsite, web, findings });
+    const investigacion = options.investigar
+      ? await investigarNegocio({ nombre: name, zona: (mapsData as any).zona_buscada ?? mapsData.address ?? null, rubro: (mapsData as any).rubro_buscado ?? mapsData.categories?.[0] ?? null, web: websiteUrl })
+      : null;
+    const ai = await synthesizeWithAi({ name, maps: mapsData, hasWebsite, web, findings, investigacion: investigacion?.texto ?? null, generar: options.generar ?? null });
 
     const topFinding = findings[0];
     const aiHook = ai?.gancho ? sanitizeTemplateVar(ai.gancho) : null;
@@ -573,6 +630,9 @@ export async function analyzeLead(leadId: string, options: AnalyzeOptions = {}) 
           ? ai!.servicios_sugeridos!.slice(0, 6).map(String)
           : Array.from(new Set(findings.slice(0, 4).map((f) => f.mejora))),
       generado_con_ia: Boolean(ai),
+      investigacion: investigacion?.texto ?? null,
+      fuentes: investigacion?.fuentes ?? [],
+      modelo_sintesis: ai ? options.modeloSintesis ?? identificadorModelo() : null,
     };
 
     const summary =
