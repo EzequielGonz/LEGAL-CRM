@@ -15,7 +15,7 @@ import { GoogleGenAI } from "@google/genai";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { RUBRO_IDS, type RubroSlug } from "@/lib/rubros";
 import { configuracionVertex, generadorVertex } from "@/lib/agentes/modelo";
-import { exportarCorpus, sembrarCorpus } from "@/lib/agentes/servicio";
+import { exportarCorpus } from "@/lib/agentes/servicio";
 import { crearTrabajoAjuste, estimarCostoAjuste, leerTrabajoAjuste, subirCorpus } from "@/lib/agentes/vertex";
 import { PLANTILLAS_PROPUESTAS } from "@/lib/plantillas/propuestas";
 import { casosDesdeConversacion, EJEMPLOS_RECOMENDADOS } from "./corpus-real";
@@ -154,10 +154,14 @@ const EPOCAS = 3;
 /** Importa las conversaciones reales autorizadas al corpus del ajuste (idempotente). */
 export async function importarConversacionesReales(): Promise<{ setId: string; conversaciones: number; ejemplos: number }> {
   const s = createAdminClient();
-  await sembrarCorpus(SET_AJUSTE);
-  const { data: set } = await s.from("training_sets").select("id").eq("nombre", SET_AJUSTE).single();
+  // Decisión del 16/10: el corpus de C sale SOLO de las conversaciones nuevas
+  // (desde system_settings.corpus_desde), sin casos semilla ni el historial anterior.
+  let { data: set } = await s.from("training_sets").select("id").eq("nombre", SET_AJUSTE).maybeSingle();
+  if (!set) ({ data: set } = await s.from("training_sets").insert({ nombre: SET_AJUSTE, objetivo: "Ajuste de C con conversaciones nuevas", alcance: "piloto" }).select("id").single());
   const setId = (set as any).id as string;
-  const { data: convs } = await s.from("conversations").select("id, area, contacts(rubro_id)").limit(5000);
+  const { data: desdeCfg } = await s.from("system_settings").select("value").eq("key", "corpus_desde").maybeSingle();
+  const desde = typeof (desdeCfg as any)?.value === "string" ? (desdeCfg as any).value : new Date().toISOString();
+  const { data: convs } = await s.from("conversations").select("id, area, contacts(rubro_id)").gte("created_at", desde).limit(5000);
   let conversaciones = 0;
   let ejemplos = 0;
   for (const c of (convs ?? []) as any[]) {
