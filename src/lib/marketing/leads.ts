@@ -42,7 +42,8 @@ export type MarketingEventType =
   | "no_interesado"
   | "baja"
   | "derivado_a_equipo"
-  | "escalado_a_humano";
+  | "escalado_a_humano"
+  | `etapa_${string}`;
 
 export async function logMarketingEvent({
   leadId,
@@ -80,6 +81,7 @@ export async function ensureLead({
   placeId = null,
   website = null,
   mapsData = {},
+  extra = {},
 }: {
   contactId: string;
   sourceKind: "scraper" | "directa";
@@ -87,6 +89,8 @@ export async function ensureLead({
   placeId?: string | null;
   website?: string | null;
   mapsData?: Record<string, unknown>;
+  /** Columnas nuevas (16/10): analysis_status 'no_iniciado', extraction_id. */
+  extra?: Record<string, unknown>;
 }): Promise<{ lead: any; created: boolean }> {
   const supabase = createAdminClient();
 
@@ -102,6 +106,7 @@ export async function ensureLead({
       place_id: placeId,
       website,
       maps_data: mapsData,
+      ...extra,
     })
     .select()
     .single();
@@ -293,7 +298,10 @@ export async function buildMarketingBrief(contactId: string): Promise<string> {
       `Origen: ${lead.source_kind === "directa" ? "CONSULTA DIRECTA (nos escribió él)" : "Dato frío de Google Maps (le escribimos nosotros primero)"} — ${lead.source_detail ?? "sin detalle"}.`
     );
 
-    if (lead.hook && lead.source_kind === "scraper") {
+    // Bases de «Extraer negocios» (16/10): la apertura es genérica y la guía
+    // de venta sale de briefVenta (presupuestos.ts). Esto queda para los
+    // contactados con la apertura vieja.
+    if (lead.hook && lead.source_kind === "scraper" && !lead.extraction_id) {
       lines.push(
         `El mensaje inicial que ya recibió fue genérico: "Hola, ¿cómo estás? Mi nombre es ${presentacion} de ${marca}. Analizamos tu negocio en Google y tenemos una propuesta para ofrecerte." (sin botones: el prospecto puede contestar lo que quiera). Todavía NO le dijimos qué detectamos. Primero respondé con naturalidad a lo que escribió (saludo, una pregunta, "¿qué propuesta?", "¿quiénes son?", una duda o un rechazo) y, cuando corresponda, presentale lo que vimos de su negocio (la idea de fondo: ${lead.hook}) y llevá la charla hacia la propuesta y el cierre. Si dice claramente que no le interesa, respetalo y no insistas.`
       );
@@ -322,6 +330,11 @@ export async function buildMarketingBrief(contactId: string): Promise<string> {
       if (Array.isArray(a.servicios_sugeridos) && a.servicios_sugeridos.length > 0) {
         lines.push(`Servicios sugeridos por el análisis: ${a.servicios_sugeridos.join(", ")}.`);
       }
+      if (a.investigacion) {
+        lines.push("INVESTIGACIÓN EN LA WEB (fuentes reales):", String(a.investigacion));
+        const fuentes: any[] = Array.isArray(a.fuentes) ? a.fuentes : [];
+        if (fuentes.length) lines.push(`Fuentes: ${fuentes.slice(0, 6).map((f) => f.titulo).join("; ")}. Si te pregunta de dónde sale, nombrá la fuente.`);
+      }
 
       const m = lead.maps_data ?? {};
       const mapsBits = [
@@ -346,7 +359,10 @@ export async function buildMarketingBrief(contactId: string): Promise<string> {
   lines.push(
     "",
     "HERRAMIENTAS DE REGISTRO (obligatorias, el sistema las usa para estadísticas y seguimiento):",
-    "- registrar_resultado_marketing con resultado='aprobado': cuando el prospecto ACEPTA la propuesta y quiere avanzar. Después de llamarla, avisale que lo derivás al equipo técnico para empezar a trabajar en el proyecto aprobado y despedite.",
+    "- pedir_presupuesto: cuando quiere que le preparemos un presupuesto (preguntalo SIEMPRE al cerrar). Decile que va a estar listo en menos de 24 horas.",
+    "- presupuesto_aprobado: cuando aprueba el presupuesto que ya recibió.",
+    "- registrar_venta: para guardar necesidad, servicios conversados, precios mencionados, objeciones, plazo deseado y la etapa (por ejemplo 'propuesta' cuando se la presentaste).",
+    "- registrar_resultado_marketing con resultado='aprobado': solo si acepta avanzar SIN presupuesto (por ejemplo, ya conoce los precios). Después avisale que lo derivás al equipo técnico.",
     "- registrar_resultado_marketing con resultado='en_duda': cuando duda, pide pensarlo, o dice que en otro momento. El sistema le hará seguimiento por WhatsApp (un recordatorio a los ~3 días y otro a los ~6). Decile con naturalidad que quedás atento.",
     "- registrar_resultado_marketing con resultado='no_interesado': cuando dice claramente que no quiere o pide que no lo contactemos más. No insistas.",
     "- analizar_negocio: solo para consultas directas, cuando no hay análisis y el prospecto te dio su web o el nombre y la zona de su negocio.",
