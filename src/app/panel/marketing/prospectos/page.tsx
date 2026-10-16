@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { LEAD_COLUMNS, LeadList, type LeadRow } from "@/components/marketing/lead-list";
 import { AutoOutreachControl } from "@/components/marketing/auto-outreach-control";
 import { AUTO_CAMPAIGN_NAME } from "@/lib/marketing/outreach";
+import { ETAPA_LABEL } from "@/lib/marketing/venta";
 
 export const dynamic = "force-dynamic";
 
@@ -14,7 +15,7 @@ export const dynamic = "force-dynamic";
 export default async function ProspectosPage({
   searchParams,
 }: {
-  searchParams: { prioridad?: string; estado?: string };
+  searchParams: { prioridad?: string; estado?: string; etapa?: string };
 }) {
   const supabase = createClient();
 
@@ -27,6 +28,8 @@ export default async function ProspectosPage({
 
   if (searchParams.prioridad) query = query.eq("priority", searchParams.prioridad);
   if (searchParams.estado) query = query.eq("outreach_status", searchParams.estado);
+  // Venta consultiva (16/10): etapa de cada negocio de las bases extraídas.
+  if (searchParams.etapa && searchParams.etapa in ETAPA_LABEL) query = query.eq("sale_stage", searchParams.etapa);
 
   const [{ data: leads }, { data: autoCampaign }, { count: pendientes }] = await Promise.all([
     query,
@@ -43,7 +46,7 @@ export default async function ProspectosPage({
       .in("analysis_status", ["pendiente", "analizando"]),
   ]);
 
-  const hasFilters = Boolean(searchParams.prioridad || searchParams.estado);
+  const hasFilters = Boolean(searchParams.prioridad || searchParams.estado || searchParams.etapa);
 
   return (
     <div>
@@ -54,6 +57,15 @@ export default async function ProspectosPage({
           y media reciben el primer mensaje; los de prioridad baja no se contactan.
           {pendientes ? ` Hay ${pendientes} negocio(s) en cola de análisis.` : ""}
         </p>
+        <p className="mt-1 text-sm text-slate-600">
+          Las bases de «Extraer negocios» reciben la apertura genérica y se analizan recién cuando aceptan escuchar la propuesta.
+        </p>
+        <nav aria-label="Etapa de venta" className="mt-2 flex flex-wrap gap-1 text-xs">
+          <Link href="/panel/marketing/prospectos" className={`rounded px-2 py-1 ${!searchParams.etapa ? "bg-slate-900 text-gold-100" : "border border-slate-300"}`}>Todas las etapas</Link>
+          {Object.entries(ETAPA_LABEL).map(([k, v]) => (
+            <Link key={k} href={`/panel/marketing/prospectos?etapa=${k}`} className={`rounded px-2 py-1 ${searchParams.etapa === k ? "bg-slate-900 text-gold-100" : "border border-slate-300"}`}>{v}</Link>
+          ))}
+        </nav>
       </div>
 
       <AutoOutreachControl

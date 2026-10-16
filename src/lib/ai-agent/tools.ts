@@ -170,6 +170,47 @@ export const MARKETING_TOOLS: FunctionDeclaration[] = [
     },
   },
   {
+    name: "pedir_presupuesto",
+    description:
+      "Registra que el prospecto QUIERE que le preparemos un presupuesto (preguntáselo siempre al cerrar). Cuenta como captado y avisa al equipo. " +
+      "Después decile que el presupuesto va a estar listo en menos de 24 horas. Nunca armes ni estimes el presupuesto vos.",
+    parametersJsonSchema: {
+      type: "object",
+      properties: {
+        detalle: { type: "string", description: "Qué necesita, con sus palabras (objetivo, alcance, lo que pidió)." },
+        servicios: { type: "array", items: { type: "string" }, description: "Servicios conversados (ej.: Sitio web, Google Maps, Redes)." },
+        presupuesto_mencionado: { type: "string", description: "Si mencionó cuánto quiere o puede invertir." },
+        urgencia: { type: "string", description: "Para cuándo lo necesita, si lo dijo." },
+      },
+      required: ["detalle"],
+    },
+  },
+  {
+    name: "presupuesto_aprobado",
+    description: "Registra que el prospecto APROBÓ el presupuesto que ya recibió (cierre). Después agradecé y contale que el equipo lo contacta para arrancar.",
+    parametersJsonSchema: {
+      type: "object",
+      properties: { evidencia: { type: "string", description: "Lo que dijo al aprobar." } },
+      required: ["evidencia"],
+    },
+  },
+  {
+    name: "registrar_venta",
+    description:
+      "Guarda lo que vas sabiendo de la venta para el equipo (no se le dice al prospecto): etapa y datos. Usala cuando presentes la propuesta, cuando aparezcan precios, objeciones o plazos.",
+    parametersJsonSchema: {
+      type: "object",
+      properties: {
+        etapa: { type: "string", enum: ["propuesta"], description: "'propuesta' cuando ya le presentaste la propuesta." },
+        necesidad: { type: "string" },
+        servicios_conversados: { type: "array", items: { type: "string" } },
+        precios_mencionados: { type: "array", items: { type: "string" } },
+        objeciones: { type: "array", items: { type: "string" } },
+        plazo_deseado: { type: "string" },
+      },
+    },
+  },
+  {
     name: "analizar_negocio",
     description:
       "Analiza en el momento el negocio de un prospecto que nos escribió por su cuenta (consulta directa): revisa su sitio web y/o su ficha de Google Maps y devuelve los hallazgos concretos. " +
