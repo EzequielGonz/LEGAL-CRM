@@ -14,7 +14,9 @@ import {
   sourceDetailFor,
   type MarketingOutcome,
 } from "@/lib/marketing/leads";
-import { analyzeLead } from "@/lib/marketing/analysis";
+import { analyzeLead, type GeneradorTexto } from "@/lib/marketing/analysis";
+import { aprobarPresupuesto, briefVenta, marcarAceptacion, pedirPresupuesto, registrarVenta } from "@/lib/marketing/presupuestos";
+import { esAceptacion } from "@/lib/marketing/venta";
 import { getAutomationPause } from "@/lib/automation-pause";
 import { agentReadiness, getProfile, profileIdForArea } from "@/lib/profiles";
 import type { Area } from "@/lib/supabase/database.types";
@@ -33,7 +35,8 @@ import type { DetentionMotive } from "@/lib/detention";
 import { instruccionReparacion, validarTextoSalida } from "@/lib/agentes/contrato";
 import { armarContexto, armarResumen } from "@/lib/agentes/contexto";
 import { asignacionActiva } from "@/lib/agentes/servicio";
-import { identificadorModelo } from "@/lib/agentes/modelo";
+import { generadorVertex, identificadorModelo } from "@/lib/agentes/modelo";
+import { candidatoParaOportunidad, configuracionGanadora, experimentoEnCurso, registrarIncidente, registrarTurno, type CandidatoTurno } from "@/lib/experimento/servicio";
 
 const MAX_TOOL_ITERATIONS = 6;
 const HISTORY_LIMIT = 30;
@@ -55,16 +58,51 @@ export type ModeloAgente = (req: {
   contents: Content[];
   systemInstruction: string;
   tools: unknown[];
-}) => Promise<{ parts: Part[] }>;
+  /** Modelo pedido para este turno (comparación de agentes); sin dato, el vigente. */
+  modelo?: string;
+}) => Promise<{ parts: Part[]; tokensEntrada?: number; tokensSalida?: number; tokensRazonamiento?: number; modeloRespuesta?: string | null }>;
 
-const modeloGemini: ModeloAgente = async ({ contents, systemInstruction, tools }) => {
+const modeloGemini: ModeloAgente = async ({ contents, systemInstruction, tools, modelo }) => {
   const response = await gemini().models.generateContent({
-    model: identificadorModelo(),
+    model: modelo || identificadorModelo(),
     contents,
     config: { systemInstruction, tools: [{ functionDeclarations: tools as any }] },
   });
-  return { parts: response.candidates?.[0]?.content?.parts ?? [] };
+  const u: any = (response as any).usageMetadata ?? {};
+  return {
+    parts: response.candidates?.[0]?.content?.parts ?? [],
+    tokensEntrada: u.promptTokenCount ?? 0,
+    tokensSalida: u.candidatesTokenCount ?? 0,
+    tokensRazonamiento: u.thoughtsTokenCount ?? 0,
+    modeloRespuesta: (response as any).modelVersion ?? null,
+  };
 };
+
+/** Modelo del candidato de la comparación (Gemini con otro identificador o Vertex). */
+function modeloDeCandidato(c: CandidatoTurno["candidato"]): ModeloAgente {
+  if (c.proveedor === "vertex") {
+    const gen = generadorVertex(c.modelo ?? "");
+    return async (req) => {
+      const r = await gen({ contents: req.contents, systemInstruction: req.systemInstruction, tools: req.tools });
+      return { parts: r.parts as Part[], tokensEntrada: r.tokensEntrada, tokensSalida: r.tokensSalida, modeloRespuesta: c.modelo };
+    };
+  }
+  return (req) => modeloGemini({ ...req, modelo: c.modelo ?? undefined });
+}
+
+/** Texto simple con el modelo del candidato (síntesis del análisis de Marketing). */
+function generadorTextoDe(c: CandidatoTurno["candidato"], acum?: { entrada: number; salida: number; modelo: string | null }): GeneradorTexto {
+  const m = modeloDeCandidato(c);
+  return async (prompt) => {
+    const r = await m({ contents: [{ role: "user", parts: [{ text: prompt }] }], systemInstruction: "Respondé solo el JSON pedido.", tools: [] });
+    if (acum) {
+      acum.entrada += r.tokensEntrada ?? 0;
+      acum.salida += (r.tokensSalida ?? 0) + (r.tokensRazonamiento ?? 0);
+      acum.modelo = r.modeloRespuesta ?? acum.modelo;
+    }
+    return (r.parts ?? []).map((p) => p.text ?? "").join("");
+  };
+}
 
 let _modelo: ModeloAgente = modeloGemini;
 /** Solo pruebas: reemplaza el modelo (null vuelve a Gemini). */
@@ -192,7 +230,7 @@ export async function runAgentTurn(conversationId: string) {
   return runAgentTurnCon(conversationId, _modelo);
 }
 
-async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente) {
+async function runAgentTurnCon(conversationId: string, modeloBase: ModeloAgente, forzarActual = false): Promise<void> {
   // Pausa general de respuestas de la IA (Configuración → Pausa general).
   // Mientras está activa, los mensajes quedan para atención manual.
   if ((await getAutomationPause()).aiRepliesPaused) return;
@@ -234,10 +272,13 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente) {
     .from("messages")
     .select("direction, body")
     .eq("conversation_id", conversationId)
-    .order("created_at", { ascending: true })
+    .order("created_at", { ascending: false })
     .limit(HISTORY_LIMIT);
+  // Se piden los ÚLTIMOS mensajes (antes se tomaban los primeros 30 y en
+  // charlas largas el agente no veía lo más reciente) y se ordenan.
+  const ordenados = [...(messageRows ?? [])].reverse();
 
-  const messages = buildHistory(messageRows ?? []);
+  const messages = buildHistory(ordenados);
   if (messages.length === 0 || messages[messages.length - 1].role !== "user") {
     // No hay nada nuevo del prospecto para responder.
     return;
@@ -266,6 +307,43 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente) {
     await supabase.from("contacts").update({ status: "en_conversacion" }).eq("id", contact.id);
   }
 
+  // Oportunidad (antes de armar el contexto: decide el candidato de la comparación).
+  let opportunityId: string | null = null;
+  try {
+    opportunityId = (await ensureOpportunity({ contactId: contact.id, conversationId })).id;
+  } catch (err) {
+    console.error("[agente] No se pudo leer la oportunidad:", err);
+  }
+  // Comparación de agentes: candidato fijo de esta oportunidad. Sin
+  // experimento en curso responde exactamente como hoy.
+  let cand: CandidatoTurno | null = null;
+  if (opportunityId) {
+    try {
+      cand = await candidatoParaOportunidad(opportunityId);
+      if (cand && forzarActual && cand.letra !== "A") {
+        // Reemplazo por falla del candidato: responde A (bot actual) en este turno.
+        const enCurso = await experimentoEnCurso();
+        const a = enCurso?.candidatos.find((c) => c.letra === "A" && c.estado === "listo");
+        cand = a ? { ...cand, letra: "A", reemplazo: true, candidato: a } : null;
+      }
+    } catch (err) {
+      console.error("[agente] No se pudo resolver el candidato de la comparación:", err);
+    }
+  }
+  // Sin experimento: si ya se aplicó un ganador, responde con su configuración.
+  let config: CandidatoTurno["candidato"] | null = cand?.candidato ?? null;
+  if (!cand) {
+    try {
+      const g = await configuracionGanadora();
+      if (g) config = { ...g, estado: "listo" } as unknown as CandidatoTurno["candidato"];
+    } catch {
+      config = null;
+    }
+  }
+  // En pruebas (modelo inyectado) se respeta el modelo inyectado.
+  const modelo: ModeloAgente = config && modeloBase === modeloGemini ? modeloDeCandidato(config) : modeloBase;
+  const modeloPedido = config?.modelo ?? identificadorModelo();
+
   const system = buildSystemPrompt(agentConfig as any, {
     area,
     fullName: contact.full_name,
@@ -274,8 +352,40 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente) {
     campaignName,
     isFirstReplyToCampaign,
   }, identity);
-  // Marketing: se suma lo que el sistema sabe del negocio (análisis) y cómo registrar el resultado.
-  const marketingBrief = area === "marketing" ? await buildMarketingBrief(contact.id) : "";
+  // Marketing (16/10): si la persona acepta escuchar la propuesta, recién ahí
+  // se hace el análisis profundo con fuentes reales (con el modelo del
+  // candidato durante la comparación). Se espera hasta ~20 s; si tarda más,
+  // sigue desde el latido y el agente pregunta mientras tanto.
+  if (area === "marketing") {
+    try {
+      const ultimoTexto = ordenados.filter((m: any) => m.direction === "entrante").slice(-1)[0]?.body ?? "";
+      if (esAceptacion(ultimoTexto) && (await marcarAceptacion(contact.id))) {
+        const lead = await getLeadByContact(contact.id);
+        if (lead) {
+          const acum = { entrada: 0, salida: 0, modelo: null as string | null };
+          const generar: GeneradorTexto | null = config ? generadorTextoDe(config, acum) : null;
+          const t0a = Date.now();
+          await Promise.race([
+            analyzeLead(lead.id, { investigar: true, generar, modeloSintesis: config?.modelo ?? null }),
+            new Promise((r) => setTimeout(r, 20_000)),
+          ]);
+          if (cand && acum.entrada + acum.salida > 0) {
+            await registrarTurno({
+              experimentId: cand.experimentId, candidato: cand.letra, precio: config, opportunityId, conversationId, rubroId: contact.rubro_id ?? null,
+              proveedor: config?.proveedor ?? "gemini_api", modeloPedido: config?.modelo ?? identificadorModelo(), modeloRespuesta: acum.modelo,
+              llamadas: 1, tokensEntrada: acum.entrada, tokensSalida: acum.salida, tokensRazonamiento: 0, latenciaMs: Date.now() - t0a,
+              herramientas: [], resultado: "enviado", uso: "analisis",
+            });
+          }
+        }
+      }
+    } catch (err) {
+      console.error("[agente] No se pudo iniciar el análisis al aceptar:", err);
+    }
+  }
+  // Marketing: se suma lo que el sistema sabe del negocio (análisis), la guía de venta y cómo registrar el resultado.
+  const marketingBrief =
+    area === "marketing" ? [await buildMarketingBrief(contact.id), await briefVenta(contact.id).catch(() => "")].filter(Boolean).join("\n\n") : "";
   const criterio = criterioDelRubro(area, contact.rubro_id ?? null);
   const withCriterio = criterio ? `${system}\n\n${criterio}` : system;
   let systemWithBrief = marketingBrief ? `${withCriterio}\n\n${marketingBrief}` : withCriterio;
@@ -283,11 +393,15 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente) {
   // contexto sale de los módulos versionados (principal + derivado). Sin
   // asignación activa, responde exactamente como hoy.
   try {
-    const asignacion = await asignacionActiva(area);
+    // Candidato «actual» (A): el prompt de hoy aunque haya asignación de biblioteca.
+    // Candidato «biblioteca» (B y C): manual + módulos aunque no haya asignación activa.
+    const asignacionLeida = config?.contexto === "actual" ? null : await asignacionActiva(area);
+    const claveBiblioteca = asignacionLeida?.agente_clave ?? (config?.contexto === "biblioteca" ? rubroSlugDe({ rubro_id: contact.rubro_id ?? null, area }) : null);
+    const asignacion = claveBiblioteca ? { agente_clave: claveBiblioteca } : null;
     if (asignacion) {
       const { data: ag } = await supabase.from("agent_library").select("instrucciones, limites").eq("clave", asignacion.agente_clave).maybeSingle();
       const { data: principal } = await supabase.from("agent_library").select("instrucciones").eq("clave", "principal").maybeSingle();
-      const ultimo = (messageRows ?? []).filter((m: any) => m.direction === "entrante").slice(-1)[0]?.body ?? "";
+      const ultimo = ordenados.filter((m: any) => m.direction === "entrante").slice(-1)[0]?.body ?? "";
       const slug = rubroSlugDe({ rubro_id: contact.rubro_id ?? null, area });
       const ctx = armarContexto({
         rubro: slug,
@@ -307,18 +421,46 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente) {
   const tools = toolsForArea(area);
   let escalated = false;
   let finalText = "";
+  // Registro del turno (costo, demora, modelo informado y resultado).
+  const t0 = Date.now();
+  const uso = { llamadas: 0, entrada: 0, salida: 0, razonamiento: 0, modeloRespuesta: null as string | null, herramientas: [] as string[] };
+  const llamarModelo: ModeloAgente = async (req) => {
+    const r = await modelo(req);
+    uso.llamadas++;
+    uso.entrada += r.tokensEntrada ?? 0;
+    uso.salida += r.tokensSalida ?? 0;
+    uso.razonamiento += r.tokensRazonamiento ?? 0;
+    uso.modeloRespuesta = r.modeloRespuesta ?? uso.modeloRespuesta;
+    return r;
+  };
+  const registrar = (resultado: "enviado" | "retenido" | "sin_texto" | "bloqueado" | "error", extra: { motivos?: string[]; error?: string } = {}) =>
+    registrarTurno({
+      experimentId: cand?.experimentId ?? null,
+      candidato: cand?.letra ?? null,
+      precio: config,
+      opportunityId,
+      conversationId,
+      rubroId: contact.rubro_id ?? null,
+      proveedor: config?.proveedor ?? "gemini_api",
+      modeloPedido,
+      modeloRespuesta: uso.modeloRespuesta,
+      llamadas: uso.llamadas,
+      tokensEntrada: uso.entrada,
+      tokensSalida: uso.salida,
+      tokensRazonamiento: uso.razonamiento,
+      latenciaMs: Date.now() - t0,
+      herramientas: uso.herramientas,
+      resultado,
+      ...extra,
+    });
   // Contexto de las herramientas. Si la IA deriva a una persona, la
   // herramienta deja acá el permiso de un solo uso para el acuse final.
-  let opportunityId: string | null = null;
-  try {
-    opportunityId = (await ensureOpportunity({ contactId: contact.id, conversationId })).id;
-  } catch (err) {
-    console.error("[agente] No se pudo leer la oportunidad:", err);
-  }
   const toolCtx: ToolContext = { area, contact, conversationId, finalAckToken: null, opportunityId, pendingDetention: null };
 
+  let retenido: string[] | null = null;
+  try {
   for (let i = 0; i < MAX_TOOL_ITERATIONS; i++) {
-    const response = await modelo({ contents: messages, systemInstruction: systemWithBrief, tools });
+    const response = await llamarModelo({ contents: messages, systemInstruction: systemWithBrief, tools });
 
     const candidateParts: Part[] = response.parts ?? [];
     const textParts = candidateParts.filter((p) => typeof p.text === "string");
@@ -334,6 +476,7 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente) {
     const responseParts: Part[] = [];
     for (const part of functionCallParts) {
       const call = part.functionCall!;
+      uso.herramientas.push(call.name ?? "");
       const result = await executeTool(call.name ?? "", call.args ?? {}, toolCtx);
       responseParts.push({
         functionResponse: {
@@ -363,7 +506,7 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente) {
     if (!v.ok) {
       try {
         messages.push({ role: "user", parts: [{ text: instruccionReparacion(v) }] });
-        const r2 = await modelo({ contents: messages, systemInstruction: systemWithBrief, tools });
+        const r2 = await llamarModelo({ contents: messages, systemInstruction: systemWithBrief, tools });
         const t2 = (r2.parts ?? []).filter((p) => typeof p.text === "string").map((p) => p.text).join("\n").trim();
         const v2 = validarTextoSalida(t2);
         if (v2.ok && t2) finalText = t2;
@@ -375,8 +518,32 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente) {
         console.warn(`[agente] Respuesta retenida en ${conversationId}: ${v.motivos.join(", ")}`);
         await atencionDelAgente(toolCtx, "consulta_fuera_alcance", `Respuesta retenida por el validador: ${v.motivos.join(", ")}`);
         finalText = "";
+        retenido = v.motivos;
       }
     }
+  }
+  } catch (err: any) {
+    // Falla del modelo: se registra; si es un candidato de la comparación
+    // distinto de A, se anota el incidente (fatal si el modelo no está
+    // disponible, lo que lo detiene) y el turno se responde con el bot actual.
+    const detalle = String(err?.message ?? err).slice(0, 400);
+    await registrar("error", { error: detalle });
+    if (cand) {
+      const fatal = err?.name === "ModeloNoDisponibleError" || /404|not found|permission|403/i.test(detalle);
+      await registrarIncidente({
+        experimentId: cand.experimentId,
+        candidato: cand.letra,
+        gravedad: fatal ? "fatal" : "grave",
+        tipo: "error_modelo",
+        detalle,
+        opportunityId,
+        conversationId,
+      }).catch((e) => console.error("[agente] No se pudo registrar el incidente:", e));
+      if (cand.letra !== "A" && !forzarActual && uso.herramientas.length === 0) {
+        return runAgentTurnCon(conversationId, modeloBase, true);
+      }
+    }
+    throw err;
   }
 
   try {
@@ -395,10 +562,15 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente) {
           // Al revalidar antes de enviar ya no correspondía (pausa general o
           // chat tomado por una persona): la respuesta no sale.
           console.warn(`[agente] Respuesta no enviada en ${conversationId}: ${err.message}`);
+          await registrar("bloqueado", { error: err.message });
           return;
         }
+        await registrar("error", { error: String((err as any)?.message ?? err) });
         throw err;
       }
+      await registrar("enviado");
+    } else {
+      await registrar(retenido ? "retenido" : "sin_texto", { motivos: retenido ?? [] });
     }
   } finally {
     // La detención se registra DESPUÉS de la disculpa (si no, la disculpa no
@@ -735,6 +907,73 @@ async function executeTool(
             "Decile con naturalidad que quedás atento y que le escribimos en unos días para retomar. No presiones.",
         },
       };
+    }
+
+    case "pedir_presupuesto": {
+      if (ctx.area !== "marketing") return { output: { error: "Esta herramienta solo está disponible en Marketing." } };
+      const detalle = String(input.detalle ?? "").trim();
+      if (!detalle) return { output: { error: "Contame qué necesita la persona (detalle)." } };
+      const r = await pedirPresupuesto({
+        contactId: ctx.contact.id,
+        opportunityId: ctx.opportunityId,
+        conversationId: ctx.conversationId,
+        detalle,
+        servicios: Array.isArray(input.servicios) ? input.servicios.map(String) : [],
+        presupuestoMencionado: typeof input.presupuesto_mencionado === "string" ? input.presupuesto_mencionado : null,
+        urgencia: typeof input.urgencia === "string" ? input.urgencia : null,
+      });
+      if (r.nuevo) {
+        // «Pide presupuesto» cuenta como captado (decisión del 16/10).
+        if (ctx.opportunityId) {
+          try {
+            await registrarCaptacion({ opportunityId: ctx.opportunityId, actor: "ia", aceptacion: true, evidencia: `Pidió presupuesto: ${detalle}`.slice(0, 500) });
+          } catch (err) {
+            console.error("[agente] No se pudo registrar la captación por presupuesto:", err);
+          }
+        }
+        try {
+          await notifyMarketingHandoff(ctx.contact.id, `🧾 PIDIÓ PRESUPUESTO — prepararlo y cargarlo en «Pide presupuesto» en menos de 24 h. Lo que pidió: ${detalle}`, "atender");
+        } catch (err) {
+          console.error("[agente] No se pudo avisar el pedido de presupuesto:", err);
+        }
+      }
+      return {
+        output: {
+          ok: true,
+          instruccion: "Confirmale con calidez que el presupuesto va a estar listo en menos de 24 horas y que se lo mandás por acá. No des montos ni condiciones.",
+        },
+      };
+    }
+
+    case "presupuesto_aprobado": {
+      if (ctx.area !== "marketing") return { output: { error: "Esta herramienta solo está disponible en Marketing." } };
+      const evidencia = String(input.evidencia ?? "").trim() || "(sin detalle)";
+      await aprobarPresupuesto({ contactId: ctx.contact.id, evidencia });
+      try {
+        await notifyMarketingHandoff(ctx.contact.id, `Presupuesto aprobado: ${evidencia}`, "cierre");
+      } catch (err) {
+        console.error("[agente] No se pudo avisar el cierre:", err);
+      }
+      return {
+        output: { ok: true, instruccion: "Agradecé, confirmale que queda aprobado y que el equipo lo contacta para arrancar. Despedite breve." },
+        escalated: true,
+      };
+    }
+
+    case "registrar_venta": {
+      if (ctx.area !== "marketing") return { output: { error: "Esta herramienta solo está disponible en Marketing." } };
+      const lista = (v: unknown) => (Array.isArray(v) ? v.map(String).filter(Boolean).slice(0, 10) : undefined);
+      await registrarVenta(ctx.contact.id, {
+        etapa: input.etapa === "propuesta" ? "propuesta" : undefined,
+        datos: {
+          necesidad: typeof input.necesidad === "string" ? input.necesidad.slice(0, 500) : undefined,
+          servicios_conversados: lista(input.servicios_conversados),
+          precios_mencionados: lista(input.precios_mencionados),
+          objeciones: lista(input.objeciones),
+          plazo_deseado: typeof input.plazo_deseado === "string" ? input.plazo_deseado.slice(0, 200) : undefined,
+        },
+      });
+      return { output: { ok: true } };
     }
 
     case "analizar_negocio": {

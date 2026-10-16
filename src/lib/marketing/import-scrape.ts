@@ -36,28 +36,43 @@ export async function importScrapedPlaces({
   rubroBuscado,
   zona,
   places,
+  baseId = null,
+  extraccionId = null,
 }: {
   rubroBuscado: string;
   zona: string;
   places: ScrapedPlace[];
+  /** «Extraer negocios» (16/10): todas las zonas van a la misma base. */
+  baseId?: string | null;
+  extraccionId?: string | null;
 }): Promise<ImportScrapeSummary> {
   const supabase = createAdminClient();
 
-  const { data: base, error: baseError } = await supabase
-    .from("imported_bases")
-    .insert({
-      area: "marketing",
-      name: `${rubroBuscado} en ${zona}`,
-      source_label: "Google Maps",
-      file_name: null,
-      total_rows: places.length,
-    })
-    .select()
-    .single();
-
-  if (baseError || !base) {
-    throw new Error(`No se pudo registrar la corrida de captación: ${baseError?.message}`);
+  let base: any = null;
+  let filaInicial = 0;
+  if (baseId) {
+    const { data } = await supabase.from("imported_bases").select("*").eq("id", baseId).single();
+    base = data;
+    const { count } = await supabase.from("imported_base_rows").select("id", { count: "exact", head: true }).eq("base_id", baseId);
+    filaInicial = count ?? 0;
+  } else {
+    const { data, error: baseError } = await supabase
+      .from("imported_bases")
+      .insert({
+        area: "marketing",
+        name: `${rubroBuscado} en ${zona}`,
+        source_label: "Google Maps",
+        file_name: null,
+        total_rows: places.length,
+      })
+      .select()
+      .single();
+    if (baseError || !data) {
+      throw new Error(`No se pudo registrar la corrida de captación: ${baseError?.message}`);
+    }
+    base = data;
   }
+  if (!base) throw new Error("No se encontró la base de la extracción.");
 
   let creados = 0;
   let duplicados = 0;
@@ -67,7 +82,7 @@ export async function importScrapedPlaces({
 
   for (let i = 0; i < places.length; i++) {
     const place = places[i];
-    const rowNumber = i + 1;
+    const rowNumber = filaInicial + i + 1;
     const rawData = {
       nombre: place.name,
       telefono: place.phone,
@@ -181,6 +196,8 @@ export async function importScrapedPlaces({
             rubro_buscado: rubroBuscado,
             zona_buscada: zona,
           },
+          // Extraer negocios: sin análisis previo al contacto (se hace al aceptar).
+          extra: extraccionId ? { analysis_status: "no_iniciado", extraction_id: extraccionId } : {},
         });
       } catch (err) {
         console.error("[marketing] No se pudo crear el lead del negocio:", err);
@@ -213,7 +230,16 @@ export async function importScrapedPlaces({
 
   await supabase
     .from("imported_bases")
-    .update({ created_rows: creados, duplicate_rows: duplicados, invalid_rows: invalidos })
+    .update(
+      baseId
+        ? {
+            total_rows: (base.total_rows ?? 0) + places.length,
+            created_rows: (base.created_rows ?? 0) + creados,
+            duplicate_rows: (base.duplicate_rows ?? 0) + duplicados,
+            invalid_rows: (base.invalid_rows ?? 0) + invalidos,
+          }
+        : { created_rows: creados, duplicate_rows: duplicados, invalid_rows: invalidos }
+    )
     .eq("id", base.id);
 
   return {

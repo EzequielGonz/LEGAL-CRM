@@ -2,6 +2,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { findOrCreateContact, findOrCreateConversation } from "@/lib/contacts";
 import { runAgentTurn } from "@/lib/ai-agent/agent";
 import { onMarketingInbound } from "@/lib/marketing/leads";
+import { entregarPresupuestoPendiente } from "@/lib/marketing/presupuestos";
 import { getAutomationPause } from "@/lib/automation-pause";
 import { contactBlockReason } from "@/lib/detention";
 import { ensureOpportunity, setOpportunityState } from "@/lib/opportunities";
@@ -298,6 +299,21 @@ async function afterInboundSaved({
       }
     }
     return result;
+  }
+
+  // Marketing (16/10): «Pide presupuesto» capta, pero la venta sigue con la IA
+  // hasta el cierre. Si hay un presupuesto listo esperando (se avisó con la
+  // plantilla), se envía ahora que la ventana está abierta.
+  if (area === "marketing") {
+    try {
+      await entregarPresupuestoPendiente(conversation.id);
+    } catch (err) {
+      console.error("[presupuesto] No se pudo enviar el presupuesto pendiente:", err);
+    }
+    if (captado) {
+      const { data: ml } = await supabase.from("marketing_leads").select("sale_stage").eq("contact_id", contact.id).maybeSingle();
+      if (["presupuesto_pedido", "presupuesto_enviado"].includes((ml as any)?.sale_stage)) captado = false;
+    }
   }
 
   // 3) Un captado que vuelve a escribir: su mensaje queda guardado y pasa a

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ANALYSIS_LABEL, OutreachBadge, PriorityBadge } from "./lead-badges";
+import { ETAPA_LABEL, type EtapaVenta } from "@/lib/marketing/venta";
 
 export interface LeadRow {
   id: string;
@@ -16,6 +17,9 @@ export interface LeadRow {
   last_inbound_at: string | null;
   created_at: string;
   contacts: { full_name: string | null; phone: string | null } | null;
+  /** Desde la migración 0311 (venta consultiva). */
+  sale_stage?: string | null;
+  contact_id?: string;
 }
 
 function fmt(date: string | null) {
@@ -74,6 +78,14 @@ export function LeadList({
               </td>
               <td className="px-4 py-3 align-top">
                 <OutreachBadge status={l.outreach_status} />
+                {l.sale_stage && l.sale_stage !== "apertura" && (
+                  <span className="mt-1 block text-xs font-medium text-slate-700">{ETAPA_LABEL[l.sale_stage as EtapaVenta] ?? l.sale_stage}</span>
+                )}
+                {l.contact_id && (
+                  <Link href={`/ficha/${l.contact_id}`} className="mt-1 block text-xs text-slate-600 underline">
+                    Ficha y conversación
+                  </Link>
+                )}
               </td>
               {mode === "seguimiento" && (
                 <td className="px-4 py-3 align-top text-xs text-slate-600">
@@ -101,5 +113,6 @@ export function LeadList({
   );
 }
 
-export const LEAD_COLUMNS =
-  "id, source_kind, source_detail, analysis_status, lead_score, priority, hook, summary, outreach_status, followup_count, next_followup_at, last_inbound_at, created_at, contacts(full_name, phone)";
+// «*» y no una lista fija: así la pantalla funciona antes y después de la
+// migración 0311 (etapa de venta).
+export const LEAD_COLUMNS = "*, contacts(full_name, phone)";
