@@ -6,11 +6,18 @@ export function PinLoginForm({ configured, next }: { configured: boolean; next: 
   const [pin, setPin] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [sacudir, setSacudir] = useState(false);
+
+  function avisarError(msg: string) {
+    setError(msg);
+    setSacudir(true);
+    window.setTimeout(() => setSacudir(false), 450);
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!/^\d{6}$/.test(pin)) {
-      setError("El PIN tiene 6 números.");
+      avisarError("El PIN tiene 6 números.");
       return;
     }
     setLoading(true);
@@ -23,7 +30,7 @@ export function PinLoginForm({ configured, next }: { configured: boolean; next: 
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setError(data.error ?? "No se pudo ingresar.");
+        avisarError(data.error ?? "No se pudo ingresar.");
         setPin("");
         setLoading(false);
         return;
@@ -31,7 +38,7 @@ export function PinLoginForm({ configured, next }: { configured: boolean; next: 
       // Navegación completa: así el servidor ya ve la cookie nueva.
       window.location.assign(data.next ?? "/inicio");
     } catch {
-      setError("No hay conexión con el servidor. Probá de nuevo.");
+      avisarError("No hay conexión con el servidor. Probá de nuevo.");
       setLoading(false);
     }
   }
@@ -39,14 +46,15 @@ export function PinLoginForm({ configured, next }: { configured: boolean; next: 
   return (
     <form
       onSubmit={handleSubmit}
-      className="relative w-full max-w-sm animate-scale-in rounded-2xl border border-white/10 bg-white/95 p-8 shadow-navy backdrop-blur"
+      className={`pin-tarjeta${sacudir ? " pin-sacudida" : ""}`}
+      aria-busy={loading}
     >
       <div className="mb-6 flex flex-col items-center text-center">
-        <span className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-gold-300 via-gold-500 to-gold-700 font-serif text-lg font-bold text-slate-950 shadow-gold">
+        <span className="icono-dorado mb-4 !h-12 !w-12 !rounded-full font-serif text-lg font-bold">
           E
         </span>
-        <h1 className="font-serif text-xl font-semibold text-slate-900">Panel de Captación</h1>
-        <p className="mt-1 text-sm text-slate-500">Ingresá el PIN del panel.</p>
+        <h1 className="font-serif text-2xl font-semibold text-slate-900">Panel de Captación</h1>
+        <p className="mt-1.5 text-sm text-slate-500">Ingresá el PIN del panel para entrar.</p>
       </div>
 
       {!configured ? (
@@ -70,13 +78,32 @@ export function PinLoginForm({ configured, next }: { configured: boolean; next: 
             autoFocus
             value={pin}
             onChange={(e) => setPin(e.target.value.replace(/\D/g, "").slice(0, 6))}
-            className="mb-4 w-full rounded-lg border border-slate-300 px-3 py-2 text-center font-mono text-2xl tracking-[0.5em] outline-none focus-gold"
+            aria-invalid={error ? true : undefined}
+            aria-describedby={error ? "pin-error" : undefined}
+            className="mb-3 w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-center font-mono text-2xl tracking-[0.5em] shadow-inner outline-none focus-gold"
           />
+          <div className="pin-progreso" aria-hidden="true">
+            {Array.from({ length: 6 }, (_, i) => (
+              <span key={i} className={i < pin.length ? "lleno" : ""} />
+            ))}
+          </div>
 
-          {error && <p className="mb-4 animate-fade-in text-sm text-red-600">{error}</p>}
+          {error && (
+            <p id="pin-error" role="alert" className="mb-4 animate-fade-in text-sm font-medium text-red-700">
+              {error}
+            </p>
+          )}
 
-          <button type="submit" disabled={loading || pin.length !== 6} className="btn-gold w-full py-2.5">
-            {loading ? "Ingresando..." : "Ingresar"}
+          <button type="submit" disabled={loading || pin.length !== 6} className="btn-gold w-full py-3">
+            {loading ? (
+              <>
+                <span className="pin-spinner" aria-hidden="true" /> Ingresando...
+              </>
+            ) : (
+              <>
+                Ingresar <span className="flecha-desliza" aria-hidden="true">→</span>
+              </>
+            )}
           </button>
         </>
       )}

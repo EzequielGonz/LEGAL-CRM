@@ -23,8 +23,8 @@ export async function BarraSalud({ slug }: { slug: string }) {
   const verTodo = `/salud?perfil=${encodeURIComponent(slug)}`;
   if (r.rojo === 0 && r.amarillo === 0) {
     return (
-      <Link href={verTodo} className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-300 bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-900">
-        <span aria-hidden="true" className="h-2 w-2 rounded-full bg-emerald-500" /> Sistema en orden
+      <Link href={verTodo} className="mb-4 inline-flex items-center gap-2.5 rounded-full border border-emerald-300 bg-emerald-50 px-3.5 py-1.5 text-xs font-medium text-emerald-900 transition-shadow hover:shadow-md">
+        <span aria-hidden="true" className="punto-vivo text-emerald-500" /> Sistema en orden
       </Link>
     );
   }

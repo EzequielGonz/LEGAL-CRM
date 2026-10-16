@@ -56,12 +56,15 @@ export function MenuPerfil({ slug, nombre, logo }: { slug: SlugPerfil; nombre?: 
         </button>
       </div>
 
+      {abierto && <div className="menu-velo lg:hidden" aria-hidden="true" onClick={() => setAbierto(false)} />}
+
       <aside
         id="menu-perfil"
         className={clsx(
-          "z-20 h-screen w-64 shrink-0 flex-col bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 shadow-navy",
-          "fixed inset-y-0 left-0 lg:sticky lg:top-0 lg:flex",
-          abierto ? "flex" : "hidden"
+          "z-20 flex h-screen w-64 shrink-0 flex-col bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 shadow-navy",
+          "fixed inset-y-0 left-0 lg:sticky lg:top-0 lg:visible lg:translate-x-0",
+          "transition-[transform,visibility] duration-300 ease-out",
+          abierto ? "visible translate-x-0" : "invisible -translate-x-full"
         )}
       >
         <a href="#contenido" className="skip-link">
@@ -78,7 +81,10 @@ export function MenuPerfil({ slug, nombre, logo }: { slug: SlugPerfil; nombre?: 
         <nav aria-label="Secciones del perfil" className="flex-1 overflow-y-auto px-3 py-4">
           {grupos.map((g) => (
             <div key={g.titulo} className="mb-4">
-              <p className="px-3 pb-1 text-[11px] font-semibold uppercase tracking-wider text-slate-400">{g.titulo}</p>
+              <p className="flex items-center gap-2 px-3 pb-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-400">
+                <span>{g.titulo}</span>
+                <span aria-hidden="true" className="h-px flex-1 bg-gradient-to-r from-white/15 to-transparent" />
+              </p>
               <ul className="space-y-0.5">
                 {g.items.map((item) => {
                   const esActivo = item.href === activo;
@@ -90,7 +96,7 @@ export function MenuPerfil({ slug, nombre, logo }: { slug: SlugPerfil; nombre?: 
                         className={clsx(
                           "group relative block rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200",
                           esActivo
-                            ? "bg-gold-500/15 text-gold-100"
+                            ? "menu-activo text-gold-100"
                             : "text-slate-300 hover:translate-x-0.5 hover:bg-white/5 hover:text-gold-100"
                         )}
                       >

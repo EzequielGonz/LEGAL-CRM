@@ -26,7 +26,7 @@ export function AreaBadge({ area }: { area: Area }) {
   return (
     <span
       className={clsx(
-        "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
+        "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset ring-black/5",
         AREA_COLOR[area] ?? "bg-slate-100 text-slate-600"
       )}
     >
@@ -65,10 +65,11 @@ export function StatusBadge({ status }: { status: ConversationStatus }) {
   return (
     <span
       className={clsx(
-        "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
+        "inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset ring-black/5",
         STATUS_COLOR[status]
       )}
     >
+      <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-current opacity-70" />
       {STATUS_LABEL[status]}
     </span>
   );

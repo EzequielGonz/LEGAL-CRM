@@ -27,7 +27,7 @@ export default async function PerfilesPage() {
   const perfiles = await loadPerfiles();
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 px-4 py-12">
+    <div className="escena-oscura flex items-center justify-center px-4 py-12">
       <div className="pointer-events-none absolute -left-24 -top-24 h-96 w-96 animate-float rounded-full bg-gold-500/10 blur-3xl" />
       <div
         className="pointer-events-none absolute -bottom-24 -right-24 h-96 w-96 animate-float rounded-full bg-gold-500/10 blur-3xl"
@@ -36,7 +36,7 @@ export default async function PerfilesPage() {
 
       <div className="relative w-full max-w-4xl">
         <div className="mb-8 text-center">
-          <span className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-gold-300 via-gold-500 to-gold-700 font-serif text-lg font-bold text-slate-950 shadow-gold">
+          <span className="icono-dorado mx-auto mb-4 !h-12 !w-12 !rounded-full animate-scale-in font-serif text-lg font-bold">
             E
           </span>
           <h1 className="font-serif text-xl font-semibold text-white sm:text-2xl">
