@@ -6,32 +6,41 @@ import { isApprovedInCatalog } from "@/lib/plantillas";
 import { getAutomationPause } from "@/lib/automation-pause";
 import { originHash } from "@/lib/acceso/pin";
 import { contactBlockReason } from "@/lib/detention";
-import type { Area } from "@/lib/supabase/database.types";
+import { normalizarLead, origenPermitido } from "@/lib/landing-lead";
+import { ensureOpportunity } from "@/lib/opportunities";
 
 export const dynamic = "force-dynamic";
+
+/** CORS: solo los dominios propios de las landings (más LANDING_ORIGINS, separados por coma). */
+function corsHeaders(request: Request): Record<string, string> {
+  const origin = request.headers.get("origin");
+  const extra = (process.env.LANDING_ORIGINS ?? "").split(",");
+  if (!origenPermitido(origin, extra)) return {};
+  return {
+    "Access-Control-Allow-Origin": origin as string,
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Max-Age": "86400",
+    Vary: "Origin",
+  };
+}
+
+export async function OPTIONS(request: Request) {
+  return new NextResponse(null, { status: 204, headers: corsHeaders(request) });
+}
 
 /** Formulario público: como máximo 5 envíos por origen por hora. */
 const MAX_PER_HOUR = 5;
 
 export async function POST(request: Request) {
+  const cors = corsHeaders(request);
+  const json = (data: unknown, status = 200) => NextResponse.json(data, { status, headers: cors });
   const body = await request.json().catch(() => null);
-  const { full_name, phone, email, area, consulta } = (body ?? {}) as {
-    full_name: string;
-    phone: string;
-    email?: string;
-    area: Area;
-    consulta: string;
-  };
-
-  if (!full_name || !phone || !area || !consulta) {
-    return NextResponse.json({ error: "Faltan campos requeridos" }, { status: 400 });
-  }
-  if (area !== "civil" && area !== "penal") {
-    return NextResponse.json({ error: "Área inválida" }, { status: 400 });
-  }
-  if (String(full_name).length > 200 || String(phone).length > 40 || String(consulta).length > 5000) {
-    return NextResponse.json({ error: "Datos demasiado largos" }, { status: 400 });
-  }
+  const perfilParam = new URL(request.url).searchParams.get("perfil");
+  const lead = normalizarLead(body as Record<string, unknown> | null, perfilParam);
+  if ("error" in lead) return json({ error: lead.error }, 400);
+  const { area, nombre: full_name, telefono: phone, email, pagina } = lead;
+  const consulta = pagina ? `Consulta desde la web (${pagina}):\n${lead.consulta}` : lead.consulta;
 
   const supabase = createAdminClient();
 
@@ -43,10 +52,7 @@ export async function POST(request: Request) {
     .eq("origin_hash", origin)
     .gte("at", since);
   if ((count ?? 0) >= MAX_PER_HOUR) {
-    return NextResponse.json(
-      { error: "Recibimos varias consultas desde esta conexión. Probá de nuevo más tarde." },
-      { status: 429 }
-    );
+    return json({ error: "Recibimos varias consultas desde esta conexión. Probá de nuevo más tarde." }, 429);
   }
   await supabase.from("landing_submissions").insert({ origin_hash: origin, area });
 
@@ -93,6 +99,18 @@ export async function POST(request: Request) {
       .from("conversations")
       .update({ last_message_at: new Date().toISOString() })
       .eq("id", conversation.id);
+
+    // Fuente acreditada: el formulario del sitio (nunca pisa una fuente anterior).
+    try {
+      const opp = await ensureOpportunity({ contactId: contact.id, conversationId: conversation.id });
+      await supabase
+        .from("opportunities")
+        .update({ first_source: "landing", first_source_detail: pagina ? `formulario ${pagina}` : "formulario", first_source_at: new Date().toISOString() })
+        .eq("id", opp.id)
+        .is("first_source", null);
+    } catch (err) {
+      console.error("[landing] No se pudo registrar la fuente:", err);
+    }
   }
 
   // Best-effort: plantilla de continuidad por WhatsApp. No sale con la pausa
@@ -113,5 +131,5 @@ export async function POST(request: Request) {
     }
   }
 
-  return NextResponse.json({ ok: true });
+  return json({ ok: true });
 }
