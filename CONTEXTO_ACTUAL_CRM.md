@@ -1,6 +1,10 @@
 # CONTEXTO ACTUAL · CRM multirubro
 
-Actualizado: 15/10/2026. Sin secretos ni datos de prospectos.
+Actualizado: 16/10/2026. Sin secretos ni datos de prospectos.
+
+## Publicado 16/10
+- PR #2 `etapa3` → `main` (merge `0a4fd30`), deploy de producción READY, sin errores de ejecución. SQL 0199–0300 aplicado por la responsable; verificación de seguridad: 14 controles en 0. Pausas, agentes, seguimiento, publicación y ejecutor siguen apagados.
+- Siguiente bloque: candidatos A/B/C y experimento, Marketing «Extraer negocios» y «Pide presupuesto», landings, reporte de plantillas (preguntas enviadas el 16/10).
 
 ## Estado al 15/10 (bloque: integración Etapa 3 + Gemini 3.8 + plantillas + redes)
 - Autorización 15/10: la responsable pidió implementar directamente (código, base, configuración y despliegue) conservando las pausas. Restricción: autorización antes de cualquier pago.
