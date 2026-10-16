@@ -4,13 +4,122 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ---------------------------------------------------------------------
+   Sistema visual por perfil (16/10). Las clases slate-* y gold-* de todo el
+   panel toman estos canales RGB: cada perfil se pinta con su paleta de marca
+   poniendo data-tema="<slug>" en el contenedor. Sin atributo = Jurídico VITA.
+   Los tonos se ajustaron para contraste AA (texto 500 sobre 50, 400 sobre 900).
+   Archivo fuente: generado con docs/estetica/gen_tema.py.
+   --------------------------------------------------------------------- */
+:root, [data-tema="juridico"] {
+  --c-slate-50: 245 244 240;
+  --c-slate-100: 231 226 206;
+  --c-slate-200: 211 214 224;
+  --c-slate-300: 169 179 201;
+  --c-slate-400: 128 144 176;
+  --c-slate-500: 79 97 137;
+  --c-slate-600: 59 80 125;
+  --c-slate-700: 42 61 102;
+  --c-slate-800: 26 43 87;
+  --c-slate-900: 17 34 80;
+  --c-slate-950: 10 20 51;
+  --c-gold-50: 251 248 240;
+  --c-gold-100: 243 237 219;
+  --c-gold-200: 231 220 184;
+  --c-gold-300: 220 200 142;
+  --c-gold-400: 208 181 110;
+  --c-gold-500: 201 168 90;
+  --c-gold-600: 173 140 66;
+  --c-gold-700: 122 96 41;
+  --c-gold-800: 107 85 40;
+  --c-gold-900: 79 63 30;
+  --c-gold-950: 46 37 17;
+}
+[data-tema="coberturas_medicas"] {
+  --c-slate-50: 242 249 244;
+  --c-slate-100: 218 241 222;
+  --c-slate-200: 193 226 201;
+  --c-slate-300: 166 205 176;
+  --c-slate-400: 142 182 155;
+  --c-slate-500: 67 111 88;
+  --c-slate-600: 62 107 87;
+  --c-slate-700: 35 83 71;
+  --c-slate-800: 22 56 50;
+  --c-slate-900: 11 43 38;
+  --c-slate-950: 5 31 32;
+  --c-gold-50: 245 252 235;
+  --c-gold-100: 231 248 207;
+  --c-gold-200: 208 240 159;
+  --c-gold-300: 182 230 110;
+  --c-gold-400: 160 218 85;
+  --c-gold-500: 127 200 67;
+  --c-gold-600: 47 154 107;
+  --c-gold-700: 19 117 102;
+  --c-gold-800: 13 99 94;
+  --c-gold-900: 10 95 90;
+  --c-gold-950: 5 64 61;
+}
+[data-tema="agencia_0km"] {
+  --c-slate-50: 243 247 253;
+  --c-slate-100: 227 236 250;
+  --c-slate-200: 199 215 242;
+  --c-slate-300: 156 182 227;
+  --c-slate-400: 107 142 207;
+  --c-slate-500: 64 105 184;
+  --c-slate-600: 37 80 160;
+  --c-slate-700: 14 60 138;
+  --c-slate-800: 1 31 101;
+  --c-slate-900: 2 12 71;
+  --c-slate-950: 0 5 33;
+  --c-gold-50: 238 248 254;
+  --c-gold-100: 216 239 252;
+  --c-gold-200: 179 225 249;
+  --c-gold-300: 125 205 244;
+  --c-gold-400: 63 180 236;
+  --c-gold-500: 33 150 224;
+  --c-gold-600: 32 120 207;
+  --c-gold-700: 14 78 178;
+  --c-gold-800: 11 63 145;
+  --c-gold-900: 10 50 116;
+  --c-gold-950: 7 31 74;
+}
+[data-tema="marketing"] {
+  --c-slate-50: 250 248 246;
+  --c-slate-100: 241 238 235;
+  --c-slate-200: 226 222 218;
+  --c-slate-300: 200 195 190;
+  --c-slate-400: 159 153 147;
+  --c-slate-500: 110 104 99;
+  --c-slate-600: 87 82 78;
+  --c-slate-700: 63 59 56;
+  --c-slate-800: 50 50 50;
+  --c-slate-900: 27 27 27;
+  --c-slate-950: 14 14 14;
+  --c-gold-50: 255 246 238;
+  --c-gold-100: 255 231 208;
+  --c-gold-200: 255 205 163;
+  --c-gold-300: 254 174 110;
+  --c-gold-400: 253 140 63;
+  --c-gold-500: 252 110 32;
+  --c-gold-600: 226 86 15;
+  --c-gold-700: 185 66 12;
+  --c-gold-800: 147 54 16;
+  --c-gold-900: 119 47 17;
+  --c-gold-950: 64 21 6;
+}
+
 :root {
-  --background: #f6f8fc;
-  --foreground: #0f1c34;
+  --background: rgb(var(--c-slate-50));
+  --foreground: rgb(var(--c-slate-900));
+}
+
+[data-tema] {
+  background: rgb(var(--c-slate-50));
+  color: rgb(var(--c-slate-900));
 }
 
 * {
-  scrollbar-color: #aabcda #eaeff8;
+  scrollbar-color: rgb(var(--c-slate-300)) rgb(var(--c-slate-100));
 }
 
 body {
@@ -26,15 +135,15 @@ body {
   height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #eaeff8;
+  background: rgb(var(--c-slate-100));
 }
 ::-webkit-scrollbar-thumb {
-  background: #aabcda;
+  background: rgb(var(--c-slate-300));
   border-radius: 9999px;
-  border: 2px solid #eaeff8;
+  border: 2px solid rgb(var(--c-slate-100));
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #d4af37;
+  background: rgb(var(--c-gold-500));
 }
 
 @layer base {
@@ -113,9 +222,9 @@ body {
   .skeleton-shimmer {
     background: linear-gradient(
       90deg,
-      #eaeff8 25%,
-      #f6f8fc 37%,
-      #eaeff8 63%
+      rgb(var(--c-slate-100)) 25%,
+      rgb(var(--c-slate-50)) 37%,
+      rgb(var(--c-slate-100)) 63%
     );
     background-size: 400% 100%;
     animation: shimmer 2.5s ease-in-out infinite;
@@ -138,7 +247,7 @@ body {
   select:focus-visible,
   textarea:focus-visible,
   [tabindex]:not([tabindex="-1"]):focus-visible {
-    outline: 3px solid #1d4ed8;
+    outline: 3px solid rgb(var(--c-slate-700));
     outline-offset: 2px;
     box-shadow: 0 0 0 5px #ffffff;
     border-radius: 6px;
@@ -166,7 +275,7 @@ body {
   top: -4rem;
   z-index: 100;
   border-radius: 0.5rem;
-  background: #0f1c34;
+  background: rgb(var(--c-slate-900));
   color: #ffffff;
   padding: 0.6rem 1rem;
   font-size: 0.875rem;
