@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { AgentEditor } from "@/components/agentes/agent-editor";
+import { AgentesEtapa3 } from "@/components/agentes/agentes-etapa3";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +23,11 @@ export default async function AgentesPage() {
         abogados.
       </p>
 
+      <div className="mb-6">
+        <AgentesEtapa3 perfil="juridico" rubroId="11111111-1111-1111-1111-111111111111" areas={["civil", "penal"]} volver="/agentes" />
+      </div>
+
+      <h2 className="mb-2 text-base font-semibold text-slate-800">Configuración que responde hoy</h2>
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {(agents ?? []).map((agent) => (
           <AgentEditor key={agent.id} agent={agent as any} />

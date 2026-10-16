@@ -19,6 +19,8 @@ export type PerfilStats = RubroRow & {
   agendados: number;
   /** captados sin derivar */
   cerrados: number;
+  /** Etapa 3: qué requiere acción de una persona (atención humana, captados sin derivar, revisión). */
+  accion: { humano: number; sin_derivar: number; revision: number };
   casos: { id: string; full_name: string | null; phone: string | null }[];
 };
 
@@ -48,6 +50,7 @@ export async function loadPerfiles(): Promise<PerfilStats[]> {
         ...r,
         agendados: metrics?.captacion.captado ?? 0,
         cerrados: metrics?.derivacion.no_derivado ?? 0,
+        accion: { humano: metrics?.atencion.requiere_humano ?? 0, sin_derivar: metrics?.derivacion.no_derivado ?? 0, revision: metrics?.revision_pendiente ?? 0 },
         casos: ((ultimos ?? []) as any[]).map((o) => ({
           id: o.contact_id,
           full_name: o.contacts?.full_name ?? null,

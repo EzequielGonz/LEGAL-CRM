@@ -3,6 +3,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { searchGooglePlaces } from "@/lib/marketing/google-places";
 import { importScrapedPlaces } from "@/lib/marketing/import-scrape";
 import { launchCampaign } from "@/lib/campaigns";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 // Una búsqueda de hasta 60 negocios + hasta 2 pausas de 2s entre páginas de
 // Google puede llevar unos segundos — le damos margen extra a la función.
@@ -15,6 +16,8 @@ export const maxDuration = 60;
  * WhatsApp con el primer mensaje a los leads nuevos.
  */
 export async function POST(request: Request) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => null);
   if (!body) return NextResponse.json({ error: "Body inválido" }, { status: 400 });
 

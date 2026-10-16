@@ -1,10 +1,13 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 export const dynamic = "force-dynamic";
 
 /** Editar o desactivar una línea (no se eliminan). */
 export async function PATCH(request: Request, { params }: { params: { id: string; lineId: string } }) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => ({}));
   const update: Record<string, unknown> = {};
   if (typeof body?.label === "string") {

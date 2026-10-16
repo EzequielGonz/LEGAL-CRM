@@ -216,14 +216,14 @@ export async function setMarketingOutcome({
   const nowIso = now.toISOString();
 
   if (resultado === "en_duda") {
-    // Solo los datos fríos entran en seguimiento semanal automático; una consulta directa
-    // también: si dudó, se le hace seguimiento igual (con las mismas reglas).
+    // Etapa 2 (bloque 2.3): el seguimiento lo maneja el circuito general de los
+    // cuatro perfiles (si la conversación se interrumpe, contacto 2 a las 48–72 h).
+    // Acá solo queda registrado que dudó; el sistema anterior ya no programa envíos.
     await supabase
       .from("marketing_leads")
       .update({
         outreach_status: "repesca",
-        followup_count: 0,
-        next_followup_at: new Date(now.getTime() + FOLLOWUP_INTERVAL_HOURS * 3600 * 1000).toISOString(),
+        next_followup_at: null,
         updated_at: nowIso,
       })
       .eq("id", lead.id);

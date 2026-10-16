@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
 import { CampaignNotReadyError, launchCampaign } from "@/lib/campaigns";
 import { AutomationPausedError } from "@/lib/automation-pause";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
-export async function POST(_request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request, { params }: { params: { id: string } }) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   try {
     const result = await launchCampaign(params.id);
     return NextResponse.json({ ok: true, ...result });

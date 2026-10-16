@@ -5,13 +5,14 @@ import test, { after, before } from "node:test";
 import assert from "node:assert/strict";
 import { createHash, randomBytes, randomUUID } from "node:crypto";
 
-import { RedSimulada, SIN_PAUSA, crearContacto, db, esperarApi, fijarPausa, sql, telefonoFicticio } from "./soporte/entorno";
+import { RedSimulada, SIN_PAUSA, crearContacto, db, esperarApi, fijarPausa, sql, telefonoFicticio, pedido, prepararSesionDePrueba } from "./soporte/entorno";
 import { processWhatsAppPayload } from "@/lib/webhooks/process";
 import { handleInboundMessage } from "@/lib/inbound";
 import { openAttachment, saveAttachment } from "@/lib/adjuntos/guardar";
 import { GET as abrirDeMensaje } from "@/app/api/adjuntos/mensaje/[messageId]/route";
 import { GET as abrirAdjunto } from "@/app/api/adjuntos/[id]/route";
 import { POST as guardarAhora } from "@/app/api/adjuntos/[id]/guardar/route";
+
 
 const JURIDICO = "11111111-1111-1111-1111-111111111111";
 const LINEA_CIVIL = process.env.WHATSAPP_CIVIL_PHONE_NUMBER_ID!;
@@ -20,6 +21,7 @@ let red: RedSimulada;
 before(async () => {
   red = new RedSimulada();
   await esperarApi();
+  await prepararSesionDePrueba();
   // Sin pausa (solo en la base de pruebas): así se comprueba que un audio
   // tampoco dispara respuestas ni envíos cuando todo está habilitado.
   await fijarPausa(SIN_PAUSA);
@@ -100,7 +102,7 @@ test("adjuntos: un audio de WhatsApp se guarda en privado, sin datos personales 
   assert.deepEqual(salientes, []);
 
   // Acceso desde la conversación: enlace firmado de corta duración, se abre en el navegador.
-  const res = await abrirDeMensaje(new Request(`http://local/api/adjuntos/mensaje/${messageId}`), { params: { messageId } });
+  const res = await abrirDeMensaje(pedido(`http://local/api/adjuntos/mensaje/${messageId}`), { params: { messageId } });
   assert.equal(res.status, 302);
   const location = res.headers.get("location")!;
   assert.match(location, /\/storage\/v1\/object\/sign\/adjuntos-originales\/civil\//);
@@ -128,7 +130,8 @@ test("adjuntos: un documento se descarga con su nombre original y nunca se abre 
   assert.match(rows[0].storage_path, /\.docx$/);
   const open = await openAttachment(rows[0].id);
   assert.equal(open.ok, true);
-  assert.match((open as any).url, /download=Constancia%20de%20prueba\.docx/);
+  // Se compara el nombre ya decodificado: la biblioteca de Supabase escribe los espacios como "+" y la imitación sin npm, como "%20".
+  assert.equal(new URL((open as any).url).searchParams.get("download"), "Constancia de prueba.docx");
 
   // Un documento HTML se guarda como binario y solo se descarga (nunca se abre como página).
   const h = medio("text/html", 100);
@@ -165,7 +168,7 @@ test("adjuntos: si Meta falla, el mensaje igual queda guardado y el original se 
 
   // Meta se recupera: "Guardar ahora" desde la ficha o Revisión.
   red.medios.set(img.mediaId, { bytes: img.bytes, mime: img.mime });
-  const res = await guardarAhora(new Request("http://local", { method: "POST" }), { params: { id: rows[0].id } });
+  const res = await guardarAhora(pedido("http://local", { method: "POST" }), { params: { id: rows[0].id } });
   const body = await res.json();
   assert.equal(res.status, 200, JSON.stringify(body));
   assert.equal(body.estado, "guardado");
@@ -182,7 +185,7 @@ test("adjuntos: lo pesado se guarda a pedido; lo que supera el tope queda regist
   const r = (await adjuntosDe((p.entry[0].changes[0].value.messages[0] as any).id)).rows[0];
   assert.equal(r.status, "pendiente", "no es un error: se guarda al abrirlo");
   assert.match(r.last_error, /17,0 MB/);
-  const res = await abrirAdjunto(new Request(`http://local/api/adjuntos/${r.id}`), { params: { id: r.id } });
+  const res = await abrirAdjunto(pedido(`http://local/api/adjuntos/${r.id}`), { params: { id: r.id } });
   assert.equal(res.status, 302, await res.clone().text());
   assert.equal((await db().from("message_attachments").select("status").eq("id", r.id).single()).data!.status, "guardado");
 
@@ -192,7 +195,7 @@ test("adjuntos: lo pesado se guarda a pedido; lo que supera el tope queda regist
   await processWhatsAppPayload(p2);
   const r2 = (await adjuntosDe((p2.entry[0].changes[0].value.messages[0] as any).id)).rows[0];
   assert.equal(r2.status, "demasiado_grande");
-  const res2 = await abrirAdjunto(new Request(`http://local/api/adjuntos/${r2.id}`), { params: { id: r2.id } });
+  const res2 = await abrirAdjunto(pedido(`http://local/api/adjuntos/${r2.id}`), { params: { id: r2.id } });
   assert.equal(res2.status, 413);
   assert.match(await res2.text(), /50 MB/);
 });
@@ -208,7 +211,7 @@ test("adjuntos: pasados los 7 días de Meta queda 'vencido' (se conserva el regi
   sql(`update message_attachments set received_at = now() - interval '8 days', expires_at = now() - interval '1 day' where id = '${r.id}'`);
   const out = await saveAttachment(r.id);
   assert.equal(out.status, "vencido");
-  const res = await abrirAdjunto(new Request(`http://local/api/adjuntos/${r.id}`), { params: { id: r.id } });
+  const res = await abrirAdjunto(pedido(`http://local/api/adjuntos/${r.id}`), { params: { id: r.id } });
   assert.equal(res.status, 410);
   assert.match(await res.text(), /7 días/);
   const { count } = await db().from("message_attachments").select("id", { count: "exact", head: true }).eq("id", r.id);
@@ -250,7 +253,7 @@ test("adjuntos: Instagram con dos fotos: dos originales, sin mandar el token de 
     [0, "imagen", "guardado", "instagram"],
     [1, "imagen", "guardado", "instagram"],
   ]);
-  const res = await abrirDeMensaje(new Request(`http://local/api/adjuntos/mensaje/${messageId}?n=1`), { params: { messageId } });
+  const res = await abrirDeMensaje(pedido(`http://local/api/adjuntos/mensaje/${messageId}?n=1`), { params: { messageId } });
   assert.equal(res.status, 302);
   assert.ok(res.headers.get("location")!.includes(rows[1].storage_path));
 });
@@ -276,7 +279,7 @@ test("adjuntos: un mensaje anterior a este guardado se registra y se guarda al a
     })
     .select("id")
     .single();
-  const res = await abrirDeMensaje(new Request(`http://local/api/adjuntos/mensaje/${msg!.id}`), { params: { messageId: msg!.id } });
+  const res = await abrirDeMensaje(pedido(`http://local/api/adjuntos/mensaje/${msg!.id}`), { params: { messageId: msg!.id } });
   assert.equal(res.status, 302, await res.clone().text());
   const { data: rows } = await s.from("message_attachments").select("status, kind").eq("message_id", msg!.id);
   assert.deepEqual(rows, [{ status: "guardado", kind: "imagen" }]);
@@ -287,7 +290,7 @@ test("adjuntos: un mensaje anterior a este guardado se registra y se guarda al a
     .insert({ conversation_id: conv!.id, sender_type: "prospecto", direction: "entrante", body: "hola", message_type: "text" })
     .select("id")
     .single();
-  const res2 = await abrirDeMensaje(new Request(`http://local/api/adjuntos/mensaje/${texto!.id}`), { params: { messageId: texto!.id } });
+  const res2 = await abrirDeMensaje(pedido(`http://local/api/adjuntos/mensaje/${texto!.id}`), { params: { messageId: texto!.id } });
   assert.equal(res2.status, 404);
 });
 

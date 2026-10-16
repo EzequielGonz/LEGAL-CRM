@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 export const dynamic = "force-dynamic";
 
@@ -17,6 +18,8 @@ function clean(v: unknown, max = 120): string | null | undefined {
  * se eliminan.
  */
 export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => ({}));
   const update: Record<string, unknown> = {};
   const name = clean(body?.name, 80);

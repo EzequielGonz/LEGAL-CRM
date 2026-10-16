@@ -12,6 +12,18 @@ import { findBarrio, optionalShareFields } from "@/lib/ficha";
 import { FichaActions } from "@/components/ficha/ficha-actions";
 import { ReviewAction } from "@/components/revision/review-action";
 import { AdjuntosLista } from "@/components/adjuntos/adjuntos-lista";
+import { ResultadoPosteriorForm } from "@/components/ficha/resultado-posterior-form";
+import { FUENTE_LABEL, esFuente } from "@/lib/fuente";
+import {
+  CATEGORIA_ATENCION_LABEL,
+  MOTIVO_NO_AVANCE_LABEL,
+  RESULTADO_POSTERIOR_LABEL,
+  ZONA_LABEL,
+  clasificarAtencion,
+  esMotivoNoAvance,
+  esResultadoPosterior,
+  normalizarZona,
+} from "@/lib/captacion/reglas";
 
 const ACTOR_LABEL: Record<string, string> = { ia: "IA", operador: "Operador", sistema: "Sistema", migracion: "Migración" };
 const AREA_LABEL: Record<string, string> = { civil: "Civil", penal: "Penal", agencia_0km: "Agencia 0KM", coberturas_medicas: "Coberturas médicas", marketing: "Marketing" };
@@ -55,6 +67,12 @@ export async function FichaSection({
         .order("at", { ascending: false })
         .limit(compact ? 8 : 30)
     : { data: [] as any[] };
+
+  const postState: unknown = (opp as any)?.post_derivation_state;
+  const postReason: unknown = (opp as any)?.post_derivation_reason;
+  const resultadoPost = esResultadoPosterior(postState) ? postState : null;
+  const fuente: unknown = (opp as any)?.first_source;
+  const motivoPost = esMotivoNoAvance(postReason) ? postReason : null;
 
   const baseData = (baseRow?.raw_data as Record<string, unknown> | null | undefined) ?? null;
   // El barrio sale del campo "barrio" (o localidad, partido...); el domicilio
@@ -111,6 +129,44 @@ export async function FichaSection({
         </div>
       ) : (
         <p className="text-sm text-slate-400">Este contacto todavía no tiene oportunidad registrada.</p>
+      )}
+
+      {opp && (opp.capture_state === "captado" || opp.attention_category) && (
+        <div className="space-y-1 rounded-lg bg-slate-50 p-3 text-sm text-slate-700">
+          {opp.capture_state === "captado" && (
+            <p>
+              <span className="font-medium">Ubicación:</span> {ZONA_LABEL[normalizarZona(opp.location_zone)]}
+              {Array.isArray(opp.capture_warnings) && opp.capture_warnings.length > 0 && (
+                <span className="text-amber-800"> · Falta: {(opp.capture_warnings as string[]).map((w) => w.replaceAll("_", " ")).join(", ")}</span>
+              )}
+            </p>
+          )}
+          {opp.attention_category && (
+            <p>
+              <span className="font-medium">Atención:</span> {CATEGORIA_ATENCION_LABEL[opp.attention_category as keyof typeof CATEGORIA_ATENCION_LABEL] ?? opp.attention_category}
+              {opp.attention_reason ? ` · ${clasificarAtencion(opp.attention_reason).label}` : ""}
+            </p>
+          )}
+          {opp.derivation_state === "derivado" && (
+            <p>
+              <span className="font-medium">Después de derivar:</span>{" "}
+              {resultadoPost ? RESULTADO_POSTERIOR_LABEL[resultadoPost] : "Sin resultado registrado"}
+              {motivoPost ? ` · ${MOTIVO_NO_AVANCE_LABEL[motivoPost]}` : ""}
+              {opp.post_derivation_at ? ` · ${new Date(opp.post_derivation_at).toLocaleString("es-AR")}` : ""}
+              {opp.post_derivation_note ? ` · ${opp.post_derivation_note}` : ""}
+            </p>
+          )}
+        </div>
+      )}
+      {opp && opp.derivation_state === "derivado" && !compact && (
+        <ResultadoPosteriorForm opportunityId={opp.id} actual={resultadoPost} />
+      )}
+
+      {opp && esFuente(fuente) && (
+        <p className="text-xs text-slate-600">
+          Fuente: {FUENTE_LABEL[fuente]}
+          {(opp as any).first_source_detail ? ` · ${(opp as any).first_source_detail}` : ""}
+        </p>
       )}
 
       {opp?.historical_result && (

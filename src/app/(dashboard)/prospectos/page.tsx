@@ -11,6 +11,7 @@ import {
 } from "@/lib/opportunities";
 import { DETENTION_LABEL, detainedContactIds, type DetentionMotive } from "@/lib/detention";
 import { RUBRO_IDS } from "@/lib/rubros";
+import { textoBusquedaSeguro } from "@/lib/busqueda";
 
 export const dynamic = "force-dynamic";
 
@@ -57,9 +58,10 @@ export default async function ProspectosPage({ searchParams }: { searchParams: P
   const q = searchParams.q?.trim();
   if (q) {
     // Los separadores de filtros de PostgREST ("," y "()") se quitan del término.
-    const safeQ = q.replace(/[,()]/g, "");
+    const safeQ = textoBusquedaSeguro(q);
     if (safeQ) {
-      query = query.or(`full_name.ilike.%${safeQ}%,phone.ilike.%${safeQ}%,dni_cuil.ilike.%${safeQ}%`, {
+      // También busca en los valores de las columnas importadas de sus bases (0204).
+      query = query.or(`full_name.ilike.%${safeQ}%,phone.ilike.%${safeQ}%,dni_cuil.ilike.%${safeQ}%,base_text.ilike.%${safeQ}%`, {
         referencedTable: "contacts",
       });
     }

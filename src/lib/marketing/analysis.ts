@@ -5,6 +5,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { analyzeWebsite, normalizeWebsiteUrl, type WebSignals } from "./web-analysis";
 import { searchGooglePlaces } from "./google-places";
 import { logMarketingEvent } from "./leads";
+import { identificadorModelo } from "@/lib/agentes/modelo";
 
 /**
  * Análisis comercial de un negocio (sitio web + ficha de Google Maps).
@@ -440,7 +441,7 @@ async function synthesizeWithAi(input: {
 
   try {
     const response = await gemini().models.generateContent({
-      model: process.env.GEMINI_MODEL ?? "gemini-3.6-flash",
+      model: identificadorModelo(),
       contents: [{ role: "user", parts: [{ text: prompt }] }],
       config: { responseMimeType: "application/json" },
     });

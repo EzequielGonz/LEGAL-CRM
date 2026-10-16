@@ -96,7 +96,8 @@ export async function AgendaSupervision({
   if (tab === "citas") {
     const { data, count } = await supabase
       .from("appointments")
-      .select("id, starts_at, status, contact_id, contacts(full_name, phone)", { count: "exact" })
+      // «*»: incluye el tipo de cita (0203) sin fallar si todavía no existe.
+      .select("*, contacts(full_name, phone)", { count: "exact" })
       .in("area", areas)
       .gte("starts_at", desdeCitas)
       .in("status", ["pendiente", "confirmada"])
@@ -109,9 +110,10 @@ export async function AgendaSupervision({
       name: a.contacts?.full_name ?? null,
       phone: a.contacts?.phone ?? null,
       detail:
-        new Date(a.starts_at) < new Date() && ["pendiente", "confirmada"].includes(a.status)
+        (a.kind === "ia" ? "Revisión con la IA (no usa turnos del equipo) · " : "") +
+        (new Date(a.starts_at) < new Date() && ["pendiente", "confirmada"].includes(a.status)
           ? `${CITA_LABEL[a.status]} · ya pasó: cargar el resultado`
-          : CITA_LABEL[a.status] ?? a.status,
+          : CITA_LABEL[a.status] ?? a.status),
       when: a.starts_at,
       appointment: { id: a.id, status: a.status },
     }));

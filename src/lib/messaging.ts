@@ -3,6 +3,10 @@ import { sendWhatsAppText } from "@/lib/whatsapp/client";
 import { sendMetaMessage } from "@/lib/meta/client";
 import { assertAutomaticContactAllowed, manualContactCheck } from "@/lib/detention";
 import type { Area, ChannelType, MessageSenderType } from "@/lib/supabase/database.types";
+import { getAutomationPause } from "@/lib/automation-pause";
+import { loadContactCalendar } from "@/lib/contacto/calendario";
+import { isContactAllowed } from "@/lib/contacto/reglas";
+import { politicaPorOrigen, type OrigenTarea } from "@/lib/contacto/origen";
 
 /**
  * Una salida automática no se hizo porque, al revalidar inmediatamente antes
@@ -15,6 +19,10 @@ export class AutomaticSendBlockedError extends Error {
     super(
       reason === "pausa_general"
         ? "Pausa general de respuestas de la IA activa: no se envió."
+        : reason === "pausa_envios"
+        ? "Pausa general de envíos automáticos activa: no se envió."
+        : reason === "fuera_de_horario"
+        ? "Fuera de la franja de lunes a sábado de 8 a 21: no se envió."
         : reason === "chat_pausado"
         ? "El chat está tomado por una persona: la respuesta de la IA no se envió."
         : reason === "acuse_no_autorizado"
@@ -24,6 +32,34 @@ export class AutomaticSendBlockedError extends Error {
     this.name = "AutomaticSendBlockedError";
     this.reason = reason;
   }
+}
+
+/**
+ * Guarda un mensaje con su origen. Si la base todavía no tiene la columna
+ * `origin` (migración 0203 sin aplicar), lo guarda igual sin ella: el
+ * historial nunca se pierde por el orden de publicación.
+ */
+export async function insertMessageRow(
+  supabase: ReturnType<typeof createAdminClient>,
+  row: Record<string, unknown>,
+  opts: { select?: string } = {}
+): Promise<{ data: any; error: any }> {
+  const run = (r: Record<string, unknown>) => {
+    const q: any = supabase.from("messages").insert(r);
+    return opts.select ? q.select(opts.select).maybeSingle() : q;
+  };
+  let res = await run(row);
+  if (res.error && "origin" in row && isMissingColumn(res.error, "origin")) {
+    const { origin: _omit, ...rest } = row;
+    res = await run(rest);
+  }
+  return res;
+}
+
+export function isMissingColumn(error: { code?: string; message?: string } | null | undefined, column: string): boolean {
+  if (!error) return false;
+  const msg = String(error.message ?? "");
+  return (error.code === "PGRST204" || error.code === "42703") && msg.includes(column);
 }
 
 /**
@@ -45,14 +81,37 @@ export async function sendOutboundMessage({
   senderType,
   body,
   finalAckToken = null,
+  origin,
+  clock = () => new Date(),
 }: {
   conversationId: string;
   senderType: MessageSenderType;
   body: string;
   /** permiso de un solo uso para el acuse final de la IA tras derivar a una persona */
   finalAckToken?: string | null;
+  /**
+   * Origen de la salida (parche 2.0, 6.3). Por defecto: atención humana si
+   * escribe una persona y respuesta a un entrante si escribe la IA. Las
+   * salidas iniciadas por la empresa (inicio de cita, reagendamiento…)
+   * revalidan acá la pausa de envíos y la franja lunes a sábado 8–21.
+   */
+  origin?: OrigenTarea;
+  clock?: () => Date;
 }) {
   const supabase = createAdminClient();
+  const origen: OrigenTarea = origin ?? (senderType === "admin" ? "atencion_humana" : "respuesta_entrante");
+  if (senderType === "admin" && origen !== "atencion_humana") {
+    throw new Error("Un envío manual siempre tiene origen «atención humana».");
+  }
+  if (senderType !== "admin" && origen === "atencion_humana") {
+    throw new AutomaticSendBlockedError("origen_no_automatico");
+  }
+  if (politicaPorOrigen(origen) === "salida_empresa") {
+    const pause = await getAutomationPause();
+    if (pause.outboundPaused) throw new AutomaticSendBlockedError("pausa_envios");
+    const { calendar } = await loadContactCalendar(clock());
+    if (!isContactAllowed(clock(), calendar)) throw new AutomaticSendBlockedError("fuera_de_horario");
+  }
 
   const { data: conversation, error } = await supabase
     .from("conversations")
@@ -114,19 +173,22 @@ export async function sendOutboundMessage({
     // Se deja registrado igual para que quede en el historial.
   }
 
-  await supabase.from("messages").insert({
+  const sentAt = new Date().toISOString();
+  const { data: saved } = await insertMessageRow(supabase, {
     conversation_id: conversationId,
     sender_type: senderType,
     direction: "saliente",
     body,
     external_message_id: externalId,
     delivery_status: externalId ? "enviado" : null,
-    delivery_status_at: externalId ? new Date().toISOString() : null,
-  });
+    delivery_status_at: externalId ? sentAt : null,
+    origin: origen,
+  }, { select: "id, created_at" });
 
   await supabase
     .from("conversations")
     .update({ last_message_at: new Date().toISOString() })
     .eq("id", conversationId);
   // La oportunidad pasa a "Contactado" desde la base (disparador de mensajes).
+  return { messageId: (saved?.id as string | undefined) ?? null, externalId, sentAt };
 }

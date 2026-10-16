@@ -18,6 +18,22 @@ import { analyzeLead } from "@/lib/marketing/analysis";
 import { getAutomationPause } from "@/lib/automation-pause";
 import { agentReadiness, getProfile, profileIdForArea } from "@/lib/profiles";
 import type { Area } from "@/lib/supabase/database.types";
+import { ensureOpportunity } from "@/lib/opportunities";
+import {
+  elegirRutaJuridica,
+  registrarCaptacion,
+  registrarDetencion,
+  registrarZona,
+  rubroSlugDe,
+  solicitarAtencion,
+} from "@/lib/captacion";
+import { clasificarAtencion, CRITERIO_POR_RUBRO, type MotivoAtencion } from "@/lib/captacion/reglas";
+import { crearCitaIa } from "@/lib/citas";
+import type { DetentionMotive } from "@/lib/detention";
+import { instruccionReparacion, validarTextoSalida } from "@/lib/agentes/contrato";
+import { armarContexto, armarResumen } from "@/lib/agentes/contexto";
+import { asignacionActiva } from "@/lib/agentes/servicio";
+import { identificadorModelo } from "@/lib/agentes/modelo";
 
 const MAX_TOOL_ITERATIONS = 6;
 const HISTORY_LIMIT = 30;
@@ -29,6 +45,54 @@ let _client: GoogleGenAI | null = null;
 function gemini() {
   if (!_client) _client = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
   return _client;
+}
+
+/**
+ * Modelo del agente, separado de las decisiones para poder probar el flujo
+ * completo sin llamar a la IA real. Por defecto, Gemini.
+ */
+export type ModeloAgente = (req: {
+  contents: Content[];
+  systemInstruction: string;
+  tools: unknown[];
+}) => Promise<{ parts: Part[] }>;
+
+const modeloGemini: ModeloAgente = async ({ contents, systemInstruction, tools }) => {
+  const response = await gemini().models.generateContent({
+    model: identificadorModelo(),
+    contents,
+    config: { systemInstruction, tools: [{ functionDeclarations: tools as any }] },
+  });
+  return { parts: response.candidates?.[0]?.content?.parts ?? [] };
+};
+
+let _modelo: ModeloAgente = modeloGemini;
+/** Solo pruebas: reemplaza el modelo (null vuelve a Gemini). */
+export function usarModeloAgente(modelo: ModeloAgente | null) {
+  _modelo = modelo ?? modeloGemini;
+}
+
+/** Criterio de captación y límites del rubro, desde la configuración (no del prompt editable). */
+function criterioDelRubro(area: Area, rubroId: string | null): string {
+  let slug;
+  try {
+    slug = rubroSlugDe({ rubro_id: rubroId, area });
+  } catch {
+    return "";
+  }
+  const c = CRITERIO_POR_RUBRO[slug];
+  return [
+    "Captación (regla del sistema):",
+    `- Hay captación solo con: ${c.aceptacion}. Cuando la persona lo acepte, usá la herramienta captar con la evidencia (lo que dijo).`,
+    "- Agendar no es captar. Compartir datos no es derivar. Derivar lo hace una persona.",
+    `- Datos deseables (si faltan no impiden captar): ${c.deseables.join(", ")}.`,
+    c.zonaAplica ? "- La ubicación se registra con registrar_ubicacion (AMBA, fuera de AMBA o sin confirmar). Nunca supongas AMBA." : "",
+    `- Nunca prometas ni informes: ${c.limites.join(", ")}.`,
+    "- Si la persona rechaza el contacto, se enoja, es un número equivocado, ya resolvió su caso o ya tiene abogado: usá detener_contacto y respondé solo una disculpa breve.",
+    "- Si pide una persona, pregunta algo fuera de tu alcance o comparte datos sensibles: usá escalar_a_humano con la categoría que corresponda.",
+  ]
+    .filter(Boolean)
+    .join("\n");
 }
 
 function buildSystemPrompt(
@@ -125,6 +189,10 @@ function buildHistory(rows: { direction: string; body: string | null }[]): Conte
  * prospecto por el canal correspondiente.
  */
 export async function runAgentTurn(conversationId: string) {
+  return runAgentTurnCon(conversationId, _modelo);
+}
+
+async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente) {
   // Pausa general de respuestas de la IA (Configuración → Pausa general).
   // Mientras está activa, los mensajes quedan para atención manual.
   if ((await getAutomationPause()).aiRepliesPaused) return;
@@ -208,25 +276,51 @@ export async function runAgentTurn(conversationId: string) {
   }, identity);
   // Marketing: se suma lo que el sistema sabe del negocio (análisis) y cómo registrar el resultado.
   const marketingBrief = area === "marketing" ? await buildMarketingBrief(contact.id) : "";
-  const systemWithBrief = marketingBrief ? `${system}\n\n${marketingBrief}` : system;
+  const criterio = criterioDelRubro(area, contact.rubro_id ?? null);
+  const withCriterio = criterio ? `${system}\n\n${criterio}` : system;
+  let systemWithBrief = marketingBrief ? `${withCriterio}\n\n${marketingBrief}` : withCriterio;
+  // Etapa 3: si hay una asignación ACTIVA de la biblioteca para esta área, el
+  // contexto sale de los módulos versionados (principal + derivado). Sin
+  // asignación activa, responde exactamente como hoy.
+  try {
+    const asignacion = await asignacionActiva(area);
+    if (asignacion) {
+      const { data: ag } = await supabase.from("agent_library").select("instrucciones, limites").eq("clave", asignacion.agente_clave).maybeSingle();
+      const { data: principal } = await supabase.from("agent_library").select("instrucciones").eq("clave", "principal").maybeSingle();
+      const ultimo = (messageRows ?? []).filter((m: any) => m.direction === "entrante").slice(-1)[0]?.body ?? "";
+      const slug = rubroSlugDe({ rubro_id: contact.rubro_id ?? null, area });
+      const ctx = armarContexto({
+        rubro: slug,
+        modo: isFirstReplyToCampaign ? "frio" : "consulta_actual",
+        identidad: identity,
+        instruccionesAgente: [principal?.instrucciones ?? "", ag?.instrucciones ?? ""].filter(Boolean).join("\n\n"),
+        limites: (ag?.limites as string[]) ?? [],
+        resumen: armarResumen({ rubro: slug, qualificationData: contact.qualification_data ?? {} }),
+        ultimoMensaje: ultimo,
+        primerTurno: isFirstReplyToCampaign,
+      });
+      systemWithBrief = marketingBrief ? `${ctx.systemInstruction}\n\n${marketingBrief}` : ctx.systemInstruction;
+    }
+  } catch (err) {
+    console.error("[agente] No se pudo leer la asignación de la biblioteca; se usa la configuración actual:", err);
+  }
   const tools = toolsForArea(area);
   let escalated = false;
   let finalText = "";
   // Contexto de las herramientas. Si la IA deriva a una persona, la
   // herramienta deja acá el permiso de un solo uso para el acuse final.
-  const toolCtx: ToolContext = { area, contact, conversationId, finalAckToken: null };
+  let opportunityId: string | null = null;
+  try {
+    opportunityId = (await ensureOpportunity({ contactId: contact.id, conversationId })).id;
+  } catch (err) {
+    console.error("[agente] No se pudo leer la oportunidad:", err);
+  }
+  const toolCtx: ToolContext = { area, contact, conversationId, finalAckToken: null, opportunityId, pendingDetention: null };
 
   for (let i = 0; i < MAX_TOOL_ITERATIONS; i++) {
-    const response = await gemini().models.generateContent({
-            model: process.env.GEMINI_MODEL ?? "gemini-3.6-flash",
-      contents: messages,
-      config: {
-        systemInstruction: systemWithBrief,
-        tools: [{ functionDeclarations: tools }],
-      },
-    });
+    const response = await modelo({ contents: messages, systemInstruction: systemWithBrief, tools });
 
-    const candidateParts: Part[] = response.candidates?.[0]?.content?.parts ?? [];
+    const candidateParts: Part[] = response.parts ?? [];
     const textParts = candidateParts.filter((p) => typeof p.text === "string");
     finalText = textParts.map((p) => p.text).join("\n").trim();
 
@@ -243,6 +337,8 @@ export async function runAgentTurn(conversationId: string) {
       const result = await executeTool(call.name ?? "", call.args ?? {}, toolCtx);
       responseParts.push({
         functionResponse: {
+          // Gemini 3.x: la respuesta referencia la llamada por id y nombre.
+          ...(call.id ? { id: call.id } : {}),
           name: call.name,
           response: result.output as Record<string, unknown>,
         },
@@ -260,23 +356,66 @@ export async function runAgentTurn(conversationId: string) {
     if (escalated && i === MAX_TOOL_ITERATIONS - 1) break;
   }
 
+  // Etapa 3 (R07): validación determinista del texto antes de enviar. Si no
+  // pasa, se pide UNA reparación; si vuelve a fallar, se retiene y va a una persona.
   if (finalText) {
-    try {
-      await sendOutboundMessage({
-        conversationId,
-        senderType: "agente_ia",
-        body: finalText,
-        // Solo el acuse que sigue a una derivación de esta misma respuesta.
-        finalAckToken: escalated ? toolCtx.finalAckToken : null,
-      });
-    } catch (err) {
-      if (err instanceof AutomaticSendBlockedError) {
-        // Al revalidar antes de enviar ya no correspondía (pausa general o
-        // chat tomado por una persona): la respuesta no sale.
-        console.warn(`[agente] Respuesta no enviada en ${conversationId}: ${err.message}`);
-        return;
+    let v = validarTextoSalida(finalText);
+    if (!v.ok) {
+      try {
+        messages.push({ role: "user", parts: [{ text: instruccionReparacion(v) }] });
+        const r2 = await modelo({ contents: messages, systemInstruction: systemWithBrief, tools });
+        const t2 = (r2.parts ?? []).filter((p) => typeof p.text === "string").map((p) => p.text).join("\n").trim();
+        const v2 = validarTextoSalida(t2);
+        if (v2.ok && t2) finalText = t2;
+        else v = v2;
+      } catch (err) {
+        console.error("[agente] No se pudo reparar la respuesta:", err);
       }
-      throw err;
+      if (!validarTextoSalida(finalText).ok) {
+        console.warn(`[agente] Respuesta retenida en ${conversationId}: ${v.motivos.join(", ")}`);
+        await atencionDelAgente(toolCtx, "consulta_fuera_alcance", `Respuesta retenida por el validador: ${v.motivos.join(", ")}`);
+        finalText = "";
+      }
+    }
+  }
+
+  try {
+    if (finalText) {
+      try {
+        await sendOutboundMessage({
+          conversationId,
+          senderType: "agente_ia",
+          body: finalText,
+          origin: "respuesta_entrante",
+          // Solo el acuse que sigue a una derivación de esta misma respuesta.
+          finalAckToken: escalated ? toolCtx.finalAckToken : null,
+        });
+      } catch (err) {
+        if (err instanceof AutomaticSendBlockedError) {
+          // Al revalidar antes de enviar ya no correspondía (pausa general o
+          // chat tomado por una persona): la respuesta no sale.
+          console.warn(`[agente] Respuesta no enviada en ${conversationId}: ${err.message}`);
+          return;
+        }
+        throw err;
+      }
+    }
+  } finally {
+    // La detención se registra DESPUÉS de la disculpa (si no, la disculpa no
+    // podría salir). Se registra igual aunque la disculpa no haya salido.
+    if (toolCtx.pendingDetention) {
+      try {
+        await registrarDetencion({
+          contactId: contact.id,
+          motivo: toolCtx.pendingDetention.motivo,
+          menor: toolCtx.pendingDetention.menor,
+          actor: "ia",
+          nota: toolCtx.pendingDetention.nota,
+          motivoAtencion: toolCtx.pendingDetention.motivoAtencion,
+        });
+      } catch (err) {
+        console.error("[agente] No se pudo registrar la detención:", err);
+      }
     }
   }
 }
@@ -287,7 +426,40 @@ interface ToolContext {
   conversationId: string;
   /** permiso de un solo uso para el acuse final tras derivar a una persona */
   finalAckToken: string | null;
+  opportunityId: string | null;
+  /** detención a registrar después de la disculpa */
+  pendingDetention: { motivo: DetentionMotive; menor: boolean; nota: string; motivoAtencion: string } | null;
 }
+
+/** Atención humana o detención pedida por el agente (clasificación 12.2). */
+async function atencionDelAgente(ctx: ToolContext, motivoAtencion: MotivoAtencion, detalle: string) {
+  const t = clasificarAtencion(motivoAtencion);
+  if (t.pausarChat) {
+    await pauseWithFinalAck(ctx, t.principal ? "requiere_atencion_humana" : "cerrado_perdido");
+  }
+  const r = await solicitarAtencion({
+    opportunityId: ctx.opportunityId,
+    contactId: ctx.contact.id,
+    conversationId: ctx.conversationId,
+    motivo: t.motivo,
+    actor: "ia",
+    nota: detalle || null,
+    chatYaPausado: true,
+    diferirDetencion: true,
+  });
+  if (r.detencionPendiente) {
+    ctx.pendingDetention = { motivo: r.detencionPendiente, menor: r.menor, nota: detalle || r.label, motivoAtencion: r.motivo };
+  }
+  return r;
+}
+
+const INSTRUCCION_RESPUESTA: Record<string, string> = {
+  disculpa_breve: "Respondé solo una disculpa breve y cordial, sin insistir ni ofrecer nada más.",
+  aviso_de_persona: "Avisale con calidez que una persona del equipo va a seguir la conversación. No prometas plazos.",
+  explicar_procedencia: "Explicá con la verdad de dónde proviene el contacto, sin inventar datos.",
+  reconocer_sin_inventar: "Reconocé su pedido, decile que una persona lo va a revisar y no inventes de dónde salió su contacto.",
+  ninguna: "No respondas nada más.",
+};
 
 /** Pausa la IA en la conversación y otorga el permiso para el acuse final de esta respuesta. */
 async function pauseWithFinalAck(
@@ -385,7 +557,13 @@ async function executeTool(
     }
 
     case "escalar_a_humano": {
-      await pauseWithFinalAck(ctx, "requiere_atencion_humana");
+      const categoria = clasificarAtencion(input.categoria ?? "pide_persona");
+      if (categoria.detener || !categoria.pausarChat) {
+        // Detenciones y consultas de procedencia tienen su propio tratamiento.
+        const r = await atencionDelAgente(ctx, categoria.motivo, String(input.motivo ?? ""));
+        return { output: { ok: true, instruccion: INSTRUCCION_RESPUESTA[r.respuesta] }, escalated: r.pausarChat };
+      }
+      await atencionDelAgente(ctx, categoria.motivo, String(input.motivo ?? ""));
       await supabase
         .from("contacts")
         .update({
@@ -445,6 +623,19 @@ async function executeTool(
 
         await pauseWithFinalAck(ctx, "requiere_atencion_humana", "completado");
         await supabase.from("contacts").update({ status: "cerrado_ganado" }).eq("id", ctx.contact.id);
+        if (ctx.opportunityId) {
+          try {
+            await registrarCaptacion({
+              opportunityId: ctx.opportunityId,
+              actor: "ia",
+              aceptacion: true,
+              evidencia: `Aceptó el contacto del profesional. Disponibilidad: ${disponibilidad}`,
+              datos: merged,
+            });
+          } catch (err) {
+            console.error("[agente] No se pudo registrar la captación:", err);
+          }
+        }
 
         try {
           await notifyAdminOfQualifiedIntake(ctx.contact.id);
@@ -458,7 +649,20 @@ async function executeTool(
       if (resultado === "caso_resuelto" || resultado === "no_interesado") {
         await pauseWithFinalAck(ctx, "cerrado_perdido", "resuelto");
         await supabase.from("contacts").update({ status: "no_califica" }).eq("id", ctx.contact.id);
-        return { output: { ok: true }, escalated: true };
+        // Disculpa breve y detención con motivo (archivo secundario).
+        const r = await solicitarAtencion({
+          opportunityId: ctx.opportunityId,
+          contactId: ctx.contact.id,
+          conversationId: ctx.conversationId,
+          motivo: resultado === "caso_resuelto" ? "caso_resuelto" : "desinteres",
+          actor: "ia",
+          chatYaPausado: true,
+          diferirDetencion: true,
+        });
+        if (r.detencionPendiente) {
+          ctx.pendingDetention = { motivo: r.detencionPendiente, menor: false, nota: r.label, motivoAtencion: r.motivo };
+        }
+        return { output: { ok: true, instruccion: INSTRUCCION_RESPUESTA.disculpa_breve }, escalated: true };
       }
 
       return { output: { error: `resultado inválido: ${resultado}` } };
@@ -481,6 +685,13 @@ async function executeTool(
         motivo,
       });
 
+      if (resultado === "aprobado" && ctx.opportunityId) {
+        try {
+          await registrarCaptacion({ opportunityId: ctx.opportunityId, actor: "ia", aceptacion: true, evidencia: motivo });
+        } catch (err) {
+          console.error("[agente] No se pudo registrar la captación de Marketing:", err);
+        }
+      }
       if (resultado === "aprobado") {
         try {
           await notifyMarketingHandoff(ctx.contact.id, motivo, "cierre");
@@ -497,6 +708,21 @@ async function executeTool(
         };
       }
       if (resultado === "no_interesado") {
+        if (ctx.opportunityId) {
+          const r = await solicitarAtencion({
+            opportunityId: ctx.opportunityId,
+            contactId: ctx.contact.id,
+            conversationId: ctx.conversationId,
+            motivo: "desinteres",
+            actor: "ia",
+            nota: motivo,
+            chatYaPausado: true,
+            diferirDetencion: true,
+          });
+          if (r.detencionPendiente) {
+            ctx.pendingDetention = { motivo: r.detencionPendiente, menor: false, nota: motivo, motivoAtencion: r.motivo };
+          }
+        }
         return {
           output: { ok: true, instruccion: "Agradecé y despedite con respeto, sin insistir." },
           escalated: true,
@@ -556,6 +782,70 @@ async function executeTool(
           nota: "Presentá solo estos hallazgos, con transparencia sobre de dónde salen. No inventes otros.",
         },
       };
+    }
+
+    case "captar": {
+      if (!ctx.opportunityId) return { output: { error: "No hay oportunidad para registrar." } };
+      if (input.solo_precio === true) {
+        // Solo preguntó el precio: va a una persona y no capta. El chat se
+        // pausa con el permiso del acuse antes de clasificar.
+        await atencionDelAgente(ctx, "precio_fuera_alcance", String(input.evidencia ?? "Consultó solo el precio"));
+        return { output: { ok: true, captado: false, instruccion: INSTRUCCION_RESPUESTA.aviso_de_persona }, escalated: true };
+      }
+      const r = await registrarCaptacion({
+        opportunityId: ctx.opportunityId,
+        actor: "ia",
+        aceptacion: input.aceptacion === true,
+        evidencia: String(input.evidencia ?? ""),
+      });
+      if (!r.captado) {
+        return { output: { ok: false, captado: false, motivo: r.evaluacion.motivo, nota: "Sin aceptación con evidencia no hay captación. Seguí la conversación." } };
+      }
+      // Después de captar se detiene la gestión comercial: lo que siga lo atiende una persona.
+      await pauseWithFinalAck(ctx, "requiere_atencion_humana");
+      return {
+        output: {
+          ok: true,
+          captado: true,
+          advertencias: r.evaluacion.advertencias,
+          instruccion: "Confirmale con calidez que una persona del equipo lo va a contactar. No prometas resultados, plazos ni precios.",
+        },
+        escalated: true,
+      };
+    }
+
+    case "detener_contacto": {
+      const motivoAtencion = String(input.motivo ?? "");
+      const t = clasificarAtencion(motivoAtencion);
+      if (!t.detener) return { output: { error: "Motivo de detención no válido." } };
+      const r = await atencionDelAgente(ctx, t.motivo, String(input.detalle ?? ""));
+      return { output: { ok: true, instruccion: INSTRUCCION_RESPUESTA[r.respuesta] }, escalated: true };
+    }
+
+    case "registrar_ubicacion": {
+      if (!ctx.opportunityId) return { output: { error: "No hay oportunidad para registrar." } };
+      const zona = await registrarZona({ opportunityId: ctx.opportunityId, zona: input.zona, actor: "ia" });
+      return { output: { ok: true, zona } };
+    }
+
+    case "elegir_ruta_juridica": {
+      if (ctx.area !== "civil" && ctx.area !== "penal") return { output: { error: "Solo para Jurídico." } };
+      if (!ctx.opportunityId) return { output: { error: "No hay oportunidad para registrar." } };
+      const ruta = input.ruta === "directa" ? "directa" : "fases";
+      await elegirRutaJuridica({ opportunityId: ctx.opportunityId, ruta, actor: "ia" });
+      return { output: { ok: true, ruta } };
+    }
+
+    case "programar_fase2": {
+      if (ctx.area !== "civil" && ctx.area !== "penal") return { output: { error: "Solo para Jurídico." } };
+      const cita = await crearCitaIa({
+        contactId: ctx.contact.id,
+        conversationId: ctx.conversationId,
+        area: ctx.area,
+        opportunityId: ctx.opportunityId,
+        elegido: typeof input.horario === "string" ? input.horario : null,
+      });
+      return { output: { ok: true, cita_id: cita.id, inicio: cita.starts_at, nota: "Agendar no capta: la captación llega cuando acepte el análisis y el contacto del profesional." } };
     }
 
     default:

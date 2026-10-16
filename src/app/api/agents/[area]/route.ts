@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 export async function POST(request: Request, { params }: { params: { area: string } }) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   if (params.area !== "civil" && params.area !== "penal") {
     return NextResponse.json({ error: "Área inválida" }, { status: 400 });
   }

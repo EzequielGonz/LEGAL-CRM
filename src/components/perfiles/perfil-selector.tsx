@@ -97,6 +97,21 @@ export function PerfilSelector({ perfiles: initial }: { perfiles: PerfilStats[] 
             </div>
           </div>
 
+          {activo.accion && (
+            <div className="mb-6 rounded-xl border border-gold-500/30 bg-gold-500/10 p-4">
+              <p className="mb-1 text-xs uppercase tracking-wider text-gold-300">Requiere acción</p>
+              {activo.accion.humano + activo.accion.sin_derivar + activo.accion.revision === 0 ? (
+                <p className="text-sm text-slate-300">Nada pendiente de una persona en este perfil.</p>
+              ) : (
+                <ul className="space-y-1 text-sm text-white">
+                  {activo.accion.humano > 0 && <li>{activo.accion.humano} piden atención humana (Inbox).</li>}
+                  {activo.accion.sin_derivar > 0 && <li>{activo.accion.sin_derivar} captados sin derivar (Agenda).</li>}
+                  {activo.accion.revision > 0 && <li>{activo.accion.revision} en revisión pendiente.</li>}
+                </ul>
+              )}
+            </div>
+          )}
+
           <p className="mb-2 text-xs uppercase tracking-wider text-slate-500">Últimos captados</p>
           <div className="mb-6 max-h-64 space-y-2 overflow-y-auto pr-1">
             {activo.casos.length === 0 && (

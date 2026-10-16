@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 /**
  * Prende o apaga la IA en una conversación. Apagarla es tomar el chat: se
  * anula cualquier acuse final pendiente de la IA.
  */
 export async function POST(request: Request, { params }: { params: { id: string } }) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const { ai_enabled } = await request.json();
   const supabase = createAdminClient();
   const enabled = Boolean(ai_enabled);

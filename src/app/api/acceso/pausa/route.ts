@@ -11,6 +11,7 @@ import {
   verifyPin,
 } from "@/lib/acceso/pin";
 import { getAutomationPause } from "@/lib/automation-pause";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +23,8 @@ export const dynamic = "force-dynamic";
  * body: { pin, ai_replies_paused?: boolean, outbound_automations_paused?: boolean }
  */
 export async function POST(request: Request) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => ({}));
   const pin = typeof body?.pin === "string" ? body.pin.trim() : "";
   const origin = await originHash(request);

@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { setOpportunityState } from "@/lib/opportunities";
+import { requireSession } from "@/lib/acceso/autorizacion";
+import { CaptacionError, registrarCaptacion, registrarResultadoPosterior, registrarZona, solicitarAtencion } from "@/lib/captacion";
 
 export const dynamic = "force-dynamic";
 
@@ -18,8 +20,15 @@ export const dynamic = "force-dynamic";
  *  - "atencion": { estado: "ia" | "requiere_humano" | "humano_en_curso" }
  *  - "seguimiento": { estado: "completado" | "caido", nota }
  *  - "revisado": { nota } → quita la marca de revisión pendiente
+ *  - "resultado_posterior": { resultado, fuente, motivo?, nota?, contacto_previsto? }
+ *     (solo derivadas; otra dimensión: no toca captación ni derivación)
+ *  - "atencion_motivo": { motivo, nota? } → clasificación 12.2 (pausa el chat
+ *     y detiene cuando corresponde)
+ *  - "zona": { zona: "amba" | "fuera" | "sin_confirmar" }
  */
 export async function POST(request: Request, { params }: { params: { id: string } }) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => ({}));
   const accion = body?.accion as string;
   const nota = typeof body?.nota === "string" ? body.nota.trim().slice(0, 1000) : "";
@@ -66,15 +75,8 @@ export async function POST(request: Request, { params }: { params: { id: string 
         if (!nota) {
           return NextResponse.json({ error: "Anotá qué aceptó la persona (la evidencia de la captación)." }, { status: 400 });
         }
-        await setOpportunityState({
-          opportunityId: opp.id,
-          dimension: "captacion",
-          field: "capture_state",
-          value: "captado",
-          actor: "operador",
-          reason: nota,
-          extra: { captured_at: now, capture_reason: null },
-        });
+        // Evento único con evidencia, advertencias y avisos internos pendientes.
+        await registrarCaptacion({ opportunityId: opp.id, actor: "operador", aceptacion: true, evidencia: nota, zona: body?.zona });
         break;
       }
       case "perder": {
@@ -151,10 +153,31 @@ export async function POST(request: Request, { params }: { params: { id: string 
         });
         break;
       }
+      case "resultado_posterior": {
+        await registrarResultadoPosterior({
+          opportunityId: opp.id,
+          resultado: body?.resultado,
+          fuente: body?.fuente,
+          motivo: body?.motivo,
+          nota: body?.nota,
+          contactoPrevistoAt: body?.contacto_previsto,
+          actor: "operador",
+        });
+        break;
+      }
+      case "atencion_motivo": {
+        const r = await solicitarAtencion({ opportunityId: opp.id, motivo: body?.motivo, actor: "operador", nota: nota || null });
+        return NextResponse.json({ ok: true, categoria: r.categoria, principal: r.principal, detenido: !!r.detener });
+      }
+      case "zona": {
+        const zona = await registrarZona({ opportunityId: opp.id, zona: body?.zona, actor: "operador" });
+        return NextResponse.json({ ok: true, zona });
+      }
       default:
         return NextResponse.json({ error: "Acción inválida" }, { status: 400 });
     }
   } catch (err: any) {
+    if (err instanceof CaptacionError) return NextResponse.json({ error: err.message }, { status: err.status });
     return NextResponse.json({ error: String(err?.message ?? err) }, { status: 500 });
   }
   return NextResponse.json({ ok: true });

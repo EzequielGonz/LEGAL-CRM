@@ -2,12 +2,15 @@ import { NextResponse } from "next/server";
 import { saveAttachment } from "@/lib/adjuntos/guardar";
 import { STATUS_LABEL } from "@/lib/adjuntos/modelo";
 import { isUuid } from "@/lib/adjuntos/respuesta";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
 /** "Guardar ahora": descarga el original de Meta y lo guarda en el almacenamiento privado. */
-export async function POST(_request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request, { params }: { params: { id: string } }) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   if (!isUuid(params.id)) return NextResponse.json({ error: "Identificador inválido." }, { status: 400 });
   try {
     const outcome = await saveAttachment(params.id);

@@ -7,6 +7,7 @@ import {
   CAMPAIGN_STATES_ACCEPTING_RECIPIENTS,
   planRecipients,
 } from "@/lib/campaign-recipients";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 export const maxDuration = 60;
 
@@ -25,6 +26,8 @@ export const maxDuration = 60;
  * por separado, para que agregar destinatarios sea una confirmación aparte.
  */
 export async function POST(request: Request) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => null);
   if (!body) {
     return NextResponse.json({ error: "Body inválido" }, { status: 400 });

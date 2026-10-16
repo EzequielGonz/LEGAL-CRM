@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { registerDevice } from "@/lib/push";
 import { vapidConfig } from "@/lib/webpush";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 export const dynamic = "force-dynamic";
 
@@ -9,6 +10,8 @@ export const dynamic = "force-dynamic";
  * aceptó el permiso en el navegador). Body: { subscription, label }.
  */
 export async function POST(request: Request) {
+  const sesion = await requireSession(request);
+  if (!sesion.ok) return sesion.response;
   if (!vapidConfig().config) {
     return NextResponse.json({ error: "Los avisos web todavía no están configurados en el servidor." }, { status: 409 });
   }

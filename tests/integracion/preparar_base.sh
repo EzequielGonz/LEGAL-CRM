@@ -3,7 +3,8 @@
 #   1) lo mínimo de Supabase (roles, auth, permisos por defecto);
 #   2) la estructura de producción previa a la Etapa 1, sin datos;
 #   3) perfiles y canales de prueba;
-#   4) TODAS las migraciones del repositorio, en orden (0100 … 0117 y 0199);
+#   4) TODAS las migraciones del repositorio, en orden (Etapa 1: 0100 … 0117 y 0199;
+#      Etapa 2: 0200 en adelante);
 #   5) aviso a la API para que relea la estructura.
 # Uso: PSQL="<comando psql>" tests/integracion/preparar_base.sh
 #   Con Docker (por defecto):  docker compose -f tests/integracion/docker-compose.yml exec -T db psql -U postgres
@@ -24,7 +25,7 @@ for f in tests/integracion/sql/00_supabase_minimo.sql \
   echo "  $f"
   run "$DB" < "$f"
 done
-for f in supabase/migrations/01*.sql; do
+for f in supabase/migrations/0[1-9][0-9][0-9]_*.sql; do
   echo "  $f"
   run "$DB" < "$f"
 done

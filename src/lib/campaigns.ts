@@ -1,3 +1,4 @@
+import { insertMessageRow } from "@/lib/messaging";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendWhatsAppTemplate } from "@/lib/whatsapp/client";
 import { findOrCreateConversation } from "@/lib/contacts";
@@ -11,6 +12,7 @@ import { confirmTemplateLive, recordTemplateSendError } from "@/lib/plantillas";
 import { classifySendFailure, failureNote, MAX_TRANSIENT_ATTEMPTS } from "@/lib/envios/errores";
 import { randomUUID } from "node:crypto";
 import { effectiveSendHours, getSendWindow, startOfArgentinaDay } from "@/lib/horario";
+import { loadContactCalendar } from "@/lib/contacto/calendario";
 
 // El horario vive en src/lib/horario.ts (sin dependencias, se prueba solo); se
 // sigue exportando desde acá para quien ya lo importaba de este archivo.
@@ -232,13 +234,18 @@ async function tickLocked(
   // ritmo/pacing acá: apenas vuelva a estar en horario, la campaña sigue
   // exactamente donde había quedado (no hace falta "Reanudar" a mano cada
   // mañana, se despierta sola).
-  const sendWindow = getSendWindow(campaign, now);
+  // Calendario de contacto (bloque 2.0): si no se puede leer, no se envía.
+  const contactCalendar = await loadContactCalendar(now);
+  if (contactCalendar.error) {
+    return { campaignId, action: "not_running", detail: contactCalendar.error };
+  }
+  const sendWindow = getSendWindow(campaign, now, contactCalendar.calendar.exceptions);
   if (!sendWindow.withinWindow) {
     const hours = effectiveSendHours(campaign);
     return {
       campaignId,
       action: "outside_send_window",
-      detail: `Fuera del horario permitido (lunes a sábado, ${hours.start}-${hours.end}hs, Argentina). Reanuda el ${sendWindow.opensAt.toLocaleString(
+      detail: `Fuera del horario permitido (lunes a sábado, ${hours.start}-${hours.end}hs, Argentina, con las excepciones del calendario). Reanuda el ${sendWindow.opensAt.toLocaleString(
         "es-AR",
         { timeZone: "America/Argentina/Buenos_Aires", weekday: "long", hour: "2-digit", minute: "2-digit" }
       )}.`,
@@ -522,10 +529,11 @@ async function tickLocked(
       delivery_status: "enviado",
       delivery_status_at: sentAt,
       metadata: { campaign_id: campaign.id, template: template.name, template_id: template.id, template_language: template.language },
+      origin: "inicio_campana",
     };
-    let { error: msgError } = await supabase.from("messages").insert(messageRow);
+    let { error: msgError } = await insertMessageRow(supabase, messageRow);
     if (msgError && (msgError as any).code !== "23505") {
-      ({ error: msgError } = await supabase.from("messages").insert(messageRow));
+      ({ error: msgError } = await insertMessageRow(supabase, messageRow));
     }
     if (msgError && (msgError as any).code !== "23505") {
       console.error(`[campaigns] No se pudo registrar el mensaje ${messageId} en la conversación:`, msgError.message);
@@ -770,7 +778,8 @@ export async function getCampaignStatus(campaignId: string): Promise<CampaignSta
   let waitReason: CampaignStatusSnapshot["waitReason"] = "listo";
   let resumesAt: string | null = null;
 
-  const sendWindow = getSendWindow(campaign, now);
+  const contactCalendar = await loadContactCalendar(now);
+  const sendWindow = getSendWindow(campaign, now, contactCalendar.calendar.exceptions);
 
   if (campaign.status === "finalizada") {
     waitReason = "finalizada";

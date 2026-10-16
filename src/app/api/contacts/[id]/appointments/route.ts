@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createAppointment } from "@/lib/agenda";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 /**
  * Agenda manual: el administrador agenda una cita directamente desde la
@@ -11,6 +12,8 @@ import { createAppointment } from "@/lib/agenda";
  * estuviera en la conversación — acá ya la está cargando él mismo.
  */
 export async function POST(request: Request, { params }: { params: { id: string } }) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const { starts_at, duration_minutes, consultation_type } = await request.json();
 
   if (!starts_at) {

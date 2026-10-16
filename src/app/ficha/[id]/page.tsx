@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { FichaSection } from "@/components/ficha/ficha-section";
+import { requirePageSession } from "@/lib/acceso/pagina";
 
 export const dynamic = "force-dynamic";
 
@@ -10,6 +11,8 @@ export const dynamic = "force-dynamic";
  * cada perfil (bloque 1.7). Las acciones son las mismas que en Prospectos.
  */
 export default async function FichaPage({ params, searchParams }: { params: { id: string }; searchParams: { volver?: string } }) {
+  const sesion = await requirePageSession();
+  if (!sesion.ok) return sesion.fallback;
   const supabase = createClient();
   const { data: contact } = await supabase
     .from("contacts")

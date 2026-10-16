@@ -1,0 +1,9 @@
+# Etapa 2 · Entrega única (13/10/2026) — guía en 5 pasos
+
+Base: `main` en `fb5cdc3`. Reemplaza a todas las entregas anteriores sin publicar (ver `INFORME.md`). Nada se activa: siguen la pausa general, los agentes apagados, la tarea de campañas inactiva, las campañas pausadas, el seguimiento apagado, la atención 24 h apagada y la publicación de contenido apagada.
+
+1. **Subí el código a una rama.** En GitHub (`EzequielGonz/LEGAL-CRM`) creá la rama `etapa2` desde `main` (si no existe) y subí `kocos-pipeline-etapa2-cierre-1310.zip` con «Add file → Upload files». El flujo «Aplicar pipeline Kocos» lo descomprime. Alternativa: `git apply etapa2-cierre-1310-sobre-fb5cdc3.patch` sobre `fb5cdc3`. Comprobá antes las huellas con `SHA256SUMS.txt`.
+2. **Esperá la Preview de Vercel y confirmá que compila.** Es la primera verificación con las dependencias reales (tipos, lint y compilación). Si falla, no sigas: mandame el error. La Preview usa la base y las líneas de producción: **solo se mira**.
+3. **En Supabase (SQL Editor), aplicá la carpeta `sql/` en orden**, un archivo por vez y completo, del `01` al `10`. Antes, fijate qué ya existe (al 13/10, ninguno aplicado). Al final corré `11_verificar_seguridad.sql`: **todas las cifras deben dar 0**. Cómo revertir: `sql/revertir/LEEME.md`.
+4. **Revisá la Preview solo mirando:** ingresás con el PIN; Estadísticas → cada cifra abre su lista y vuelve con los filtros; una ficha muestra ubicación, atención y resultado posterior; «Oportunidades», «Contenido automático» (apagado, en pausa, sin piezas) y «Biblioteca de agentes» (5 apagados); Seguimiento apagado; campañas pausadas. No actives nada.
+5. **Publicá en producción y comprobá:** pull request de `etapa2` a `main` y merge. En `legal-crm-nine.vercel.app` repetí el paso 4 y volvé a correr `11_verificar_seguridad.sql`. Sugerencia: cambiá el PIN después de publicar. Reversión del código: «Instant Rollback» en Vercel.

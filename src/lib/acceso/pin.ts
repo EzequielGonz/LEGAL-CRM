@@ -134,7 +134,14 @@ export type AccessEventKind =
   | "recuperacion_pin"
   | "pin_inicial"
   | "cierre_todas_sesiones"
-  | "pausa_general";
+  | "pausa_general"
+  | "seguimiento_automatico"
+  | "atencion_entrante_24h"
+  | "biblioteca_agentes"
+  | "politica_publicacion"
+  | "asignacion_agente"
+  | "ajuste_autorizado"
+  | "ejecutor_tareas";
 
 export async function logAccessEvent(
   kind: AccessEventKind,

@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
+import { TRATAMIENTO_ATENCION } from "@/lib/captacion/reglas";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { detainedContactIds } from "@/lib/detention";
+import { requireSession } from "@/lib/acceso/autorizacion";
+import { textoBusquedaSeguro } from "@/lib/busqueda";
 
 export const dynamic = "force-dynamic";
 
@@ -11,17 +14,19 @@ const PAGE_SIZE = 40;
  * en el servidor, con el último mensaje y la atención de cada conversación.
  */
 export async function GET(request: Request) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const sp = new URL(request.url).searchParams;
   const page = Math.max(1, Number(sp.get("pagina")) || 1);
   const area = sp.get("area");
   const canal = sp.get("canal");
   const atencion = sp.get("atencion");
-  const q = (sp.get("q") ?? "").replace(/[,()]/g, "").trim();
+  const q = textoBusquedaSeguro(sp.get("q"));
 
   const supabase = createAdminClient();
   const contactsSel = q ? "contacts!inner(full_name, phone)" : "contacts(full_name, phone)";
   const channelsSel = canal ? "channels!inner(type)" : "channels(type)";
-  const oppSel = atencion ? "opportunities!inner(attention_state, capture_state)" : "opportunities(attention_state, capture_state)";
+  const oppSel = atencion && atencion !== "detenidos" ? "opportunities!inner(attention_state, capture_state, attention_reason, attention_category)" : "opportunities(attention_state, capture_state, attention_reason, attention_category)";
 
   let query = supabase
     .from("conversations")
@@ -30,8 +35,14 @@ export async function GET(request: Request) {
     .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
   if (area) query = query.eq("area", area);
   if (canal) query = query.eq("channels.type", canal);
-  if (atencion) query = query.eq("opportunities.attention_state", atencion);
-  if (q) query = query.or(`full_name.ilike.%${q}%,phone.ilike.%${q}%`, { referencedTable: "contacts" });
+  if (atencion === "detenidos") {
+    // Vista secundaria (Etapa 3): conversaciones de contactos con detención vigente.
+    const { data: det } = await supabase.from("contact_detentions").select("contact_id").eq("status", "vigente").not("contact_id", "is", null).limit(2000);
+    const ids = Array.from(new Set((det ?? []).map((d: any) => d.contact_id as string)));
+    query = ids.length ? query.in("contact_id", ids) : query.eq("id", "00000000-0000-0000-0000-000000000000");
+  } else if (atencion) query = query.eq("opportunities.attention_state", atencion);
+  // Nombre, teléfono y valores de las columnas importadas de sus bases (0204).
+  if (q) query = query.or(`full_name.ilike.%${q}%,phone.ilike.%${q}%,base_text.ilike.%${q}%`, { referencedTable: "contacts" });
 
   const { data, count, error } = await query;
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
@@ -64,6 +75,8 @@ export async function GET(request: Request) {
         last_message_preview: lm ? `${lm.direction === "saliente" ? "Vos: " : ""}${(lm.body ?? "").slice(0, 90)}` : null,
         last_from_contact: lm ? lm.direction === "entrante" : false,
         attention_state: opp?.attention_state ?? null,
+        // Etapa 3: la cola humana muestra el motivo en palabras (12.2).
+        attention_reason: opp?.attention_reason ? (TRATAMIENTO_ATENCION as any)[opp.attention_reason]?.label ?? opp.attention_reason : null,
         detained: det ? (det.motive === "motivo_no_confirmado" ? "retenido" : "detenido") : null,
       };
     }),

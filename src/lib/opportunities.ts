@@ -36,7 +36,17 @@ export const DERIVATION_STATE_LABEL: Record<string, string> = {
   derivado: "Derivado",
 };
 
-type Dimension = "contacto" | "captacion" | "seguimiento" | "atencion" | "derivacion" | "ficha" | "detencion" | "revision";
+export type Dimension =
+  | "contacto"
+  | "captacion"
+  | "seguimiento"
+  | "atencion"
+  | "derivacion"
+  | "ficha"
+  | "detencion"
+  | "revision"
+  | "resultado_posterior"
+  | "cita";
 
 export async function logOpportunityEvent(input: {
   opportunityId: string;

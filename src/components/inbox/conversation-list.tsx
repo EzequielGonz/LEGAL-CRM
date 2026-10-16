@@ -17,6 +17,7 @@ export interface ConversationListItem {
   last_message_preview: string | null;
   last_from_contact: boolean;
   attention_state: string | null;
+  attention_reason: string | null;
   detained: "detenido" | "retenido" | null;
 }
 
@@ -133,6 +134,7 @@ export function ConversationList() {
           <option value="requiere_humano">Requiere atención humana</option>
           <option value="humano_en_curso">Atención humana en curso</option>
           <option value="ia">Gestionado por IA</option>
+          <option value="detenidos">Detenidos (vista secundaria)</option>
         </select>
       </div>
 
@@ -153,7 +155,10 @@ export function ConversationList() {
             <div className="flex flex-wrap items-center gap-2 text-[10px] font-medium uppercase">
               {item.last_message_at && <span className="normal-case text-slate-400">{new Date(item.last_message_at).toLocaleString("es-AR")}</span>}
               {item.attention_state && ATTENTION_LABEL[item.attention_state] && (
-                <span className="text-orange-600">{ATTENTION_LABEL[item.attention_state]}</span>
+                <span className="text-orange-600">
+                  {ATTENTION_LABEL[item.attention_state]}
+                  {item.attention_reason ? <span className="normal-case"> · {item.attention_reason}</span> : null}
+                </span>
               )}
               {!item.ai_enabled && !item.attention_state && <span className="text-orange-600">Tomada por humano</span>}
               {item.detained && <span className="text-red-600">{item.detained}</span>}

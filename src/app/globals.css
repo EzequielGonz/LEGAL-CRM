@@ -121,3 +121,63 @@ body {
     animation: shimmer 2.5s ease-in-out infinite;
   }
 }
+
+/* ---------------------------------------------------------------------
+   Etapa 2 · Bloque 2 — Accesibilidad común (WCAG 2.2 AA como objetivo)
+   - Foco visible en todo control operable con teclado (contraste ≥ 3:1
+     sobre fondo claro y oscuro: anillo azul marino con borde claro).
+   - Movimiento reducido: sin animaciones ni desplazamientos decorativos.
+   - Salto al contenido principal.
+   --------------------------------------------------------------------- */
+@layer base {
+  a:focus-visible,
+  button:focus-visible,
+  [role="button"]:focus-visible,
+  summary:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  [tabindex]:not([tabindex="-1"]):focus-visible {
+    outline: 3px solid #1d4ed8;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 5px #ffffff;
+    border-radius: 6px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .card-lift:hover,
+  .hover\:translate-x-0\.5:hover {
+    transform: none !important;
+  }
+}
+
+.skip-link {
+  position: absolute;
+  left: 0.75rem;
+  top: -4rem;
+  z-index: 100;
+  border-radius: 0.5rem;
+  background: #0f1c34;
+  color: #ffffff;
+  padding: 0.6rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.skip-link:focus {
+  top: 0.75rem;
+}
+
+/* Objetivo táctil de 44 × 44 px para las acciones del panel nuevo. */
+.tactil {
+  min-height: 44px;
+  min-width: 44px;
+}

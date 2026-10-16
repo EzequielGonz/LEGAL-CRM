@@ -7,9 +7,18 @@ import { contactBlockReason } from "@/lib/detention";
 import { ensureOpportunity, setOpportunityState } from "@/lib/opportunities";
 import { registerMessageAttachments, saveInboundAttachments } from "@/lib/adjuntos/guardar";
 import type { Area, ChannelType, SourceType } from "@/lib/supabase/database.types";
+import { decidirRespuestaEntrante, type DecisionEntrante } from "@/lib/contacto/origen";
+import { loadContactCalendar } from "@/lib/contacto/calendario";
+import { solicitarAtencion } from "@/lib/captacion";
+import { agentReadiness } from "@/lib/profiles";
+import { AREA_TO_RUBRO_ID } from "@/lib/rubros";
+import { TEXTO_PEDIDO_TEXTO, correspondePedidoTexto, detectarFuente, identificadoresValidos } from "@/lib/fuente";
+import { AutomaticSendBlockedError, sendOutboundMessage } from "@/lib/messaging";
 
 export interface InboundResult {
   status: "guardado" | "duplicado";
+  /** Qué decidió la compuerta de respuesta entrante (solo si se guardó). */
+  respuesta?: DecisionEntrante;
   messageId?: string;
   conversationId?: string;
   contactId?: string;
@@ -37,6 +46,7 @@ export async function handleInboundMessage({
   metadata = {},
   aiReadable = true,
   lineId = null,
+  now,
 }: {
   area: Area;
   channelType: ChannelType;
@@ -54,6 +64,8 @@ export async function handleInboundMessage({
   aiReadable?: boolean;
   /** Línea registrada por la que llegó (para responder por la misma). */
   lineId?: string | null;
+  /** Solo pruebas: hora con la que se decide la política de respuesta. */
+  now?: Date;
 }): Promise<InboundResult> {
   const supabase = createAdminClient();
 
@@ -159,6 +171,10 @@ export async function handleInboundMessage({
       insertedId: inserted?.id,
       lineId,
       aiReadable,
+      now,
+      channelType,
+      metadata,
+      body,
     });
   } finally {
     if (attachmentIds.length) await saveInboundAttachments(attachmentIds);
@@ -174,7 +190,15 @@ async function afterInboundSaved({
   insertedId,
   lineId,
   aiReadable,
+  now: nowParam,
+  channelType,
+  metadata,
+  body,
 }: {
+  now?: Date;
+  channelType?: ChannelType;
+  metadata?: Record<string, unknown>;
+  body?: string;
   supabase: ReturnType<typeof createAdminClient>;
   area: Area;
   contact: any;
@@ -227,8 +251,30 @@ async function afterInboundSaved({
   // La oportunidad ya quedó en "Respondió" desde la base (disparador de
   // mensajes); acá solo se busca para marcar atención humana si hace falta.
   let opportunityId: string | null = null;
+  let captado = false;
   try {
-    opportunityId = (await ensureOpportunity({ contactId: contact.id, conversationId: conversation.id })).id;
+    const opp = await ensureOpportunity({ contactId: contact.id, conversationId: conversation.id });
+    opportunityId = opp.id;
+    captado = opp.row?.capture_state === "captado";
+    // Fuente acreditada (2.8): la primera comprobable; nunca se pisa.
+    if (opp.row && opp.row.first_source == null && "first_source" in opp.row) {
+      const rubroFuente = (contact as any).rubro_id ?? AREA_TO_RUBRO_ID[area] ?? null;
+      const { data: rubroCfg } = rubroFuente
+        ? await supabase.from("rubros").select("*").eq("id", rubroFuente).maybeSingle()
+        : { data: null as any };
+      const f = detectarFuente({
+        channelType: channelType ?? "whatsapp",
+        metadata,
+        body,
+        identificadores: identificadoresValidos((rubroCfg as any)?.source_identifiers),
+        contactSource: (contact as any).source ?? null,
+      });
+      await supabase
+        .from("opportunities")
+        .update({ first_source: f.fuente, first_source_detail: f.detalle, first_source_at: new Date().toISOString() })
+        .eq("id", opp.id)
+        .is("first_source", null);
+    }
   } catch (err) {
     console.error("[oportunidad] No se pudo leer la oportunidad:", err);
   }
@@ -254,12 +300,91 @@ async function afterInboundSaved({
     return result;
   }
 
-  // 3) Respuesta automática: solo si la conversación la tiene habilitada, el
-  //    mensaje es legible para el agente y la pausa general no está activa.
-  if (!conversation.ai_enabled || !aiReadable) return result;
+  // 3) Un captado que vuelve a escribir: su mensaje queda guardado y pasa a
+  //    atención humana prioritaria, sin respuesta comercial automática (C12).
+  if (captado && opportunityId) {
+    try {
+      await solicitarAtencion({
+        opportunityId,
+        conversationId: conversation.id,
+        motivo: "mensaje_posterior_captado",
+        actor: "sistema",
+      });
+    } catch (err) {
+      console.error("[oportunidad] No se pudo pedir atención humana para el captado:", err);
+    }
+    result.respuesta = { responder: false, motivo: "captado_mensaje_posterior" };
+    return result;
+  }
+
+  // 4) Respuesta automática según el origen «respuesta a un entrante»: 24 h
+  //    si el perfil la habilitó, el agente está activo, no hay pausa y el
+  //    chat no está tomado; si no, el horario general (parche 2.0, 6.3).
+  const now = nowParam ?? new Date();
   const pause = await getAutomationPause();
-  if (pause.aiRepliesPaused) return result;
+  const rubroId = (contact as any).rubro_id ?? AREA_TO_RUBRO_ID[area] ?? null;
+  let entrante24h = false;
+  if (rubroId) {
+    // select("*"): funciona aunque la migración 0203 todavía no esté aplicada (queda apagado).
+    const { data: rubro } = await supabase.from("rubros").select("*").eq("id", rubroId).maybeSingle();
+    entrante24h = (rubro as any)?.inbound_24h_enabled === true;
+  }
+  let agenteActivo = false;
+  if (conversation.ai_enabled && !pause.aiRepliesPaused) {
+    const { data: agentConfig } = await supabase.from("ai_agents").select("active").eq("area", area).maybeSingle();
+    agenteActivo = !!agentConfig?.active && (await agentReadiness(area)).ready;
+  }
+  const { calendar } = await loadContactCalendar(now);
+  const decision = decidirRespuestaEntrante(
+    {
+      entrante24hHabilitado: entrante24h,
+      agenteActivo,
+      pausaIa: pause.aiRepliesPaused,
+      chatTomado: !conversation.ai_enabled,
+      legible: aiReadable,
+      detenido: false,
+      captado: false,
+      // Acaba de llegar un mensaje de la persona: la ventana del canal está abierta.
+      ventanaAbierta: true,
+    },
+    now,
+    calendar
+  );
+  result.respuesta = decision;
+  if (!decision.responder) {
+    // Adjunto que el agente no puede leer (2.6): si la IA podría responder
+    // (misma compuerta, como si fuera texto), se pide que lo escriba. Como
+    // mucho una vez cada 12 horas por conversación. Sin transcripción.
+    if (decision.motivo === "no_legible") {
+      const comoTexto = decidirRespuestaEntrante(
+        { entrante24hHabilitado: entrante24h, agenteActivo, pausaIa: pause.aiRepliesPaused, chatTomado: !conversation.ai_enabled, legible: true, detenido: false, captado: false, ventanaAbierta: true },
+        now,
+        calendar
+      );
+      if (comoTexto.responder) await pedirTexto(supabase, conversation.id, now);
+    }
+    return result;
+  }
 
   await runAgentTurn(conversation.id);
   return result;
+}
+
+/**
+ * Reserva del pedido de texto (una vez cada 12 h) con comparación y
+ * reemplazo: si dos audios llegan juntos, solo uno cambia la marca y envía.
+ */
+async function pedirTexto(supabase: ReturnType<typeof createAdminClient>, conversationId: string, now: Date) {
+  const { data: actual } = await supabase.from("conversations").select("text_request_at").eq("id", conversationId).maybeSingle();
+  const previo: string | null = (actual as any)?.text_request_at ?? null;
+  if (!correspondePedidoTexto(previo ? new Date(previo) : null, now)) return;
+  let q: any = supabase.from("conversations").update({ text_request_at: now.toISOString() }).eq("id", conversationId);
+  q = previo ? q.eq("text_request_at", previo) : q.is("text_request_at", null);
+  const { data: reservada } = await q.select("id").maybeSingle();
+  if (!reservada) return;
+  try {
+    await sendOutboundMessage({ conversationId, senderType: "agente_ia", body: TEXTO_PEDIDO_TEXTO, origin: "respuesta_entrante" });
+  } catch (err) {
+    if (!(err instanceof AutomaticSendBlockedError)) console.error("[adjuntos] No se pudo pedir el texto:", err);
+  }
 }

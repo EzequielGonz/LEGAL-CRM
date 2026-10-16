@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 /**
  * Teléfono principal de avisos. Con el acceso por PIN general ya no hay
@@ -7,6 +8,8 @@ import { createAdminClient } from "@/lib/supabase/admin";
  * ya existía (se conserva su registro, no se crean cuentas nuevas).
  */
 export async function POST(request: Request) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const { phone } = await request.json().catch(() => ({ phone: null }));
   if (phone !== null && typeof phone !== "string") {
     return NextResponse.json({ error: "Teléfono inválido" }, { status: 400 });
