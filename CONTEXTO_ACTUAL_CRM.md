@@ -1,6 +1,12 @@
 # CONTEXTO ACTUAL · CRM multirubro
 
-Actualizado: 16/10/2026 (noche). Sin secretos ni datos de prospectos.
+Actualizado: 16/10/2026 (noche, diseño premium en revisión). Sin secretos ni datos de prospectos.
+
+## Bloque 16/10 (cierre): diseño premium del panel — EN REVISIÓN
+- **Pedido**: subir un nivel el diseño desde el ingreso hasta el CRM completo (detalles, animaciones suaves, lámpara de inicio trabajada). Solo presentación; landings, Meta y Fase 3 siguen en espera.
+- **Hecho**: lámpara interactiva (cordón con resorte, cono de luz, polvo, teclado), tarjeta del PIN, Inicio, Perfiles, menú, tarjetas, insignias y capa global en `src/app/premium.css`. Detalle en `docs/estetica/DISENO_PREMIUM_1610.md`.
+- **Probado**: la escena del ingreso en un navegador real con datos sintéticos (clic, arrastre largo y corto, teclado, PC y teléfono) y el panel en los 4 perfiles con CSS compilado. **No probado**: chequeo de tipos, lint y build de Next (no se pudo instalar dependencias en esa sesión) → lo comprueba la Preview de la rama `diseno-premium-1610`.
+- **No publicado ni habilitado**: rama y PR para revisión; nada se fusionó a `main`. No cambia datos, envíos ni pausas.
 
 ## Bloque 16/10 (noche): comparación de agentes, Marketing, estética y auditoría — CERRADO
 - **Publicado**:
