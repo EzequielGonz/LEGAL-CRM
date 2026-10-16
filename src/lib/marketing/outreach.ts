@@ -37,6 +37,34 @@ export function templateVar(text: string, maxLen: number): string {
 export async function pickNextMarketingContact(campaignId: string): Promise<MarketingPick> {
   const supabase = createAdminClient();
 
+  // Desde el 16/10, las campañas de Marketing que no son la prospección
+  // automática histórica (por ejemplo «Ejecutar base») van en orden de carga
+  // con la apertura genérica: el análisis se hace recién cuando el negocio
+  // acepta escuchar la propuesta. Sin gancho.
+  const { data: camp } = await supabase.from("campaigns").select("name").eq("id", campaignId).maybeSingle();
+  if ((camp as any)?.name !== AUTO_CAMPAIGN_NAME) {
+    const { data: next } = await supabase
+      .from("campaign_contacts")
+      .select("id, contact_id, contacts(full_name, phone)")
+      .eq("campaign_id", campaignId)
+      .eq("status", "pendiente")
+      .order("priority", { ascending: true })
+      .order("queued_at", { ascending: true })
+      .limit(1)
+      .maybeSingle();
+    if (!next) return { kind: "empty" };
+    const { data: lead } = await supabase.from("marketing_leads").select("id").eq("contact_id", (next as any).contact_id).maybeSingle();
+    return {
+      kind: "ready",
+      campaignContactId: (next as any).id,
+      contactId: (next as any).contact_id,
+      leadId: (lead as any)?.id ?? "",
+      phone: (next as any).contacts?.phone ?? null,
+      name: templateVar((next as any).contacts?.full_name ?? "tu negocio", 60),
+      hook: "",
+    };
+  }
+
   const { data: pending } = await supabase
     .from("campaign_contacts")
     .select("id, contact_id, contacts(full_name, phone, source, qualification_data)")
