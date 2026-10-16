@@ -1,0 +1,131 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import clsx from "clsx";
+import { LogoutButton } from "@/components/acceso/logout-button";
+import { marcaDe, type SlugPerfil } from "@/lib/marca";
+import { itemActivo, menuDePerfil } from "@/lib/menu";
+
+/**
+ * Menú unificado de los cuatro perfiles (16/10). Misma estructura y
+ * comportamiento en todos; cambia la marca (logo, nombre) y la paleta, que
+ * llega por `data-tema` del contenedor. En pantallas chicas se pliega en una
+ * barra superior con botón «Menú».
+ */
+export function MenuPerfil({ slug, nombre, logo }: { slug: SlugPerfil; nombre?: string | null; logo?: string | null }) {
+  const pathname = usePathname() ?? "/";
+  const marca = marcaDe(slug);
+  const grupos = menuDePerfil(slug);
+  const activo = itemActivo(grupos, pathname);
+  const [abierto, setAbierto] = useState(false);
+  const [logoFallo, setLogoFallo] = useState(false);
+  const titulo = nombre?.trim() || marca.nombre;
+  const logoUrl = logo?.trim() || marca.logo;
+
+  useEffect(() => setAbierto(false), [pathname]);
+
+  const Logo = (
+    <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white/95 shadow-gold ring-1 ring-gold-400/40">
+      {logoFallo ? (
+        <span className="font-serif text-lg font-bold text-slate-900">{titulo.charAt(0)}</span>
+      ) : (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={logoUrl} alt="" className="h-full w-full object-contain p-1" onError={() => setLogoFallo(true)} />
+      )}
+    </span>
+  );
+
+  return (
+    <>
+      {/* Barra superior en teléfono y tablet */}
+      <div className="sticky top-0 z-30 flex items-center justify-between gap-3 bg-slate-950 px-4 py-3 shadow-navy lg:hidden">
+        <div className="flex min-w-0 items-center gap-3">
+          {Logo}
+          <p className="truncate font-serif text-sm font-semibold text-gold-100">{titulo}</p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setAbierto((v) => !v)}
+          aria-expanded={abierto}
+          aria-controls="menu-perfil"
+          className="tactil rounded-lg border border-white/15 px-3 text-sm font-medium text-gold-100"
+        >
+          {abierto ? "Cerrar" : "Menú"}
+        </button>
+      </div>
+
+      <aside
+        id="menu-perfil"
+        className={clsx(
+          "z-20 h-screen w-64 shrink-0 flex-col bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 shadow-navy",
+          "fixed inset-y-0 left-0 lg:sticky lg:top-0 lg:flex",
+          abierto ? "flex" : "hidden"
+        )}
+      >
+        <a href="#contenido" className="skip-link">
+          Saltar al contenido
+        </a>
+        <div className="flex items-center gap-3 border-b border-white/10 px-5 py-5">
+          {Logo}
+          <div className="min-w-0">
+            <p className="truncate font-serif text-sm font-semibold tracking-wide text-gold-100">{titulo}</p>
+            <p className="text-[11px] uppercase tracking-wider text-slate-400">{marca.bajada}</p>
+          </div>
+        </div>
+
+        <nav aria-label="Secciones del perfil" className="flex-1 overflow-y-auto px-3 py-4">
+          {grupos.map((g) => (
+            <div key={g.titulo} className="mb-4">
+              <p className="px-3 pb-1 text-[11px] font-semibold uppercase tracking-wider text-slate-400">{g.titulo}</p>
+              <ul className="space-y-0.5">
+                {g.items.map((item) => {
+                  const esActivo = item.href === activo;
+                  return (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        aria-current={esActivo ? "page" : undefined}
+                        className={clsx(
+                          "group relative block rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200",
+                          esActivo
+                            ? "bg-gold-500/15 text-gold-100"
+                            : "text-slate-300 hover:translate-x-0.5 hover:bg-white/5 hover:text-gold-100"
+                        )}
+                      >
+                        <span
+                          className={clsx(
+                            "absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-gold-400 transition-opacity duration-200",
+                            esActivo ? "opacity-100" : "opacity-0 group-hover:opacity-60"
+                          )}
+                        />
+                        <span className="pl-2">{item.label}</span>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ))}
+        </nav>
+
+        <div className="space-y-1 border-t border-white/10 px-3 py-4">
+          <Link
+            href="/perfiles"
+            className="block rounded-lg px-3 py-2 text-xs font-medium text-slate-300 transition-colors hover:bg-white/5 hover:text-gold-100"
+          >
+            ← Elegir otro perfil
+          </Link>
+          <Link
+            href="/inicio"
+            className="block rounded-lg px-3 py-2 text-xs font-medium text-slate-300 transition-colors hover:bg-white/5 hover:text-gold-100"
+          >
+            ← Teléfono o computadora
+          </Link>
+          <LogoutButton className="block w-full rounded-lg px-3 py-2 text-left text-xs hover:bg-white/5" />
+        </div>
+      </aside>
+    </>
+  );
+}

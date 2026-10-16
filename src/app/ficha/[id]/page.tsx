@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { temaDe } from "@/lib/marca";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { FichaSection } from "@/components/ficha/ficha-section";
@@ -16,7 +17,7 @@ export default async function FichaPage({ params, searchParams }: { params: { id
   const supabase = createClient();
   const { data: contact } = await supabase
     .from("contacts")
-    .select("id, full_name, phone, email, dni_cuil, source, rubros(name, emoji), conversations(id)")
+    .select("id, full_name, phone, email, dni_cuil, source, rubros(name, emoji, slug), conversations(id)")
     .eq("id", params.id)
     .maybeSingle();
   if (!contact) notFound();
@@ -25,7 +26,7 @@ export default async function FichaPage({ params, searchParams }: { params: { id
   const rubro = (contact as any).rubros;
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-10">
+    <div data-tema={temaDe(rubro?.slug)} className="min-h-screen bg-slate-50 pb-10">
       <header className="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 px-5 py-5 shadow-navy">
         <div className="mx-auto flex max-w-3xl items-center justify-between">
           <div>

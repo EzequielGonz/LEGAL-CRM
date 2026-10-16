@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
 import type { PerfilStats } from "@/lib/perfiles-stats";
+import { marcaDe, temaDe } from "@/lib/marca";
 
 /** La vista previa se vuelve a pedir al servidor cada 30 s (pestaña visible). */
 const POLL_MS = 30000;
@@ -54,6 +55,15 @@ export function PerfilSelector({ perfiles: initial }: { perfiles: PerfilStats[] 
 
   const activo = perfiles.find((p) => p.id === selectedId) ?? perfiles[0] ?? null;
 
+  // La pantalla toma la paleta del perfil elegido (16/10).
+  useEffect(() => {
+    const tema = temaDe(activo?.slug);
+    document.body.dataset.tema = tema;
+    return () => {
+      delete document.body.dataset.tema;
+    };
+  }, [activo?.slug]);
+
   return (
     <div className="flex flex-col gap-6 sm:flex-row">
       <div className="flex flex-row gap-4 sm:flex-col">
@@ -65,14 +75,15 @@ export function PerfilSelector({ perfiles: initial }: { perfiles: PerfilStats[] 
               onClick={() => setSelectedId(p.id)}
               style={{ animationDelay: `${i * 60}ms` }}
               className={clsx(
-                "flex h-16 w-16 shrink-0 animate-scale-in items-center justify-center rounded-2xl border text-2xl transition-all duration-200 sm:h-20 sm:w-20",
+                "flex h-16 w-16 shrink-0 animate-scale-in items-center justify-center overflow-hidden rounded-2xl border text-2xl transition-all duration-200 sm:h-20 sm:w-20",
                 isActive
                   ? "scale-105 border-gold-400/70 bg-white/10 shadow-gold"
                   : "border-white/10 bg-white/5 hover:-translate-y-0.5 hover:bg-white/10"
               )}
               title={p.name}
             >
-              {p.emoji ?? "•"}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={marcaDe(p.slug).logo} alt={p.name} className="h-full w-full rounded-2xl bg-white/95 object-contain p-2" />
             </button>
           );
         })}

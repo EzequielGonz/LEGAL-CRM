@@ -1,5 +1,14 @@
 import type { Config } from "tailwindcss";
 
+// Sistema visual por perfil (16/10): slate (base) y gold (acento) leen
+// variables CSS definidas en globals.css. Cada perfil cambia su paleta con
+// data-tema="<slug>"; las clases existentes (bg-slate-900, text-gold-200,
+// bg-gold-500/20…) siguen funcionando, opacidad incluida.
+const PASOS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950] as const;
+function escala(nombre: "slate" | "gold") {
+  return Object.fromEntries(PASOS.map((p) => [p, `rgb(var(--c-${nombre}-${p}) / <alpha-value>)`]));
+}
+
 const config: Config = {
   content: [
     "./src/app/**/*.{ts,tsx}",
@@ -16,36 +25,9 @@ const config: Config = {
           DEFAULT: "#7c2d12",
           light: "#fee2e2",
         },
-        // Paleta "navy" que reemplaza el slate por defecto de Tailwind: al
-        // redefinir estos mismos tonos, cualquier clase existente en el
-        // proyecto (bg-slate-900, text-slate-600, border-slate-200, etc.)
-        // hereda automáticamente el look azul oscuro sin tocar cada archivo.
-        slate: {
-          50: "#f6f8fc",
-          100: "#eaeff8",
-          200: "#d3ddee",
-          300: "#aabcda",
-          400: "#7c93bd",
-          500: "#57709e",
-          600: "#3f577f",
-          700: "#2f4266",
-          800: "#1d2c4a",
-          900: "#0f1c34",
-          950: "#080f20",
-        },
-        gold: {
-          50: "#fdfbf3",
-          100: "#faf3d9",
-          200: "#f3e4ab",
-          300: "#ebd274",
-          400: "#e0ba42",
-          500: "#d4af37",
-          600: "#b3901f",
-          700: "#8f7119",
-          800: "#74591a",
-          900: "#5f491b",
-          950: "#35270d",
-        },
+        // slate = base del perfil, gold = acento del perfil (ver globals.css).
+        slate: escala("slate"),
+        gold: escala("gold"),
       },
       fontFamily: {
         serif: [
@@ -85,8 +67,8 @@ const config: Config = {
           "50%": { transform: "translateY(-4px)" },
         },
         glow: {
-          "0%, 100%": { boxShadow: "0 0 0 0 rgba(212, 175, 55, 0.35)" },
-          "50%": { boxShadow: "0 0 0 6px rgba(212, 175, 55, 0)" },
+          "0%, 100%": { boxShadow: "0 0 0 0 rgb(var(--c-gold-500) / 0.35)" },
+          "50%": { boxShadow: "0 0 0 6px rgb(var(--c-gold-500) / 0)" },
         },
       },
       animation: {
@@ -98,8 +80,8 @@ const config: Config = {
         glow: "glow 2.4s ease-in-out infinite",
       },
       boxShadow: {
-        gold: "0 4px 14px 0 rgba(212, 175, 55, 0.25)",
-        navy: "0 10px 30px -10px rgba(8, 15, 32, 0.35)",
+        gold: "0 4px 14px 0 rgb(var(--c-gold-500) / 0.25)",
+        navy: "0 10px 30px -10px rgb(var(--c-slate-950) / 0.35)",
       },
     },
   },
