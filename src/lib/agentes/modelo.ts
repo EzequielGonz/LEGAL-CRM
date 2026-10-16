@@ -68,15 +68,15 @@ export class ModeloNoDisponibleError extends Error {
   }
 }
 
-/** Generador para Vertex: preparado, se activa solo con las variables y el endpoint reales. */
+/** Generador para Vertex: llama al endpoint del modelo ajustado (identificador = endpoint). */
 export function generadorVertex(identificador: string, env: Record<string, string | undefined> = process.env): Generador {
-  return async () => {
+  return async (req) => {
     const cfg = configuracionVertex(env);
     if (!cfg.configurado) throw new ModeloNoDisponibleError("vertex", cfg.faltan);
-    // La llamada real (token OAuth de la cuenta de servicio + endpoint de
-    // predicción del modelo ajustado) se habilita en 3C con el contrato
-    // comprobado en la cuenta; hasta entonces no se hace ninguna petición.
-    throw new ModeloNoDisponibleError("vertex", [`endpoint de ${identificador} no habilitado (incremento 3C)`]);
+    if (!identificador.trim()) throw new ModeloNoDisponibleError("vertex", ["endpoint del modelo ajustado"]);
+    const { generarVertex } = await import("@/lib/agentes/vertex");
+    const r = await generarVertex({ endpoint: identificador, contents: req.contents, systemInstruction: req.systemInstruction, tools: req.tools }, env);
+    return { parts: r.parts, tokensEntrada: r.tokensEntrada, tokensSalida: r.tokensSalida };
   };
 }
 
