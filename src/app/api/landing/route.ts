@@ -105,7 +105,7 @@ export async function POST(request: Request) {
       const opp = await ensureOpportunity({ contactId: contact.id, conversationId: conversation.id });
       await supabase
         .from("opportunities")
-        .update({ first_source: "landing", first_source_detail: pagina ? `formulario ${pagina}` : "formulario", first_source_at: new Date().toISOString() })
+        .update({ first_source: "landing", first_source_detail: [pagina ? `formulario ${pagina}` : "formulario", lead.llegada ? `llegó desde ${lead.llegada}` : null].filter(Boolean).join(" · "), first_source_at: new Date().toISOString() })
         .eq("id", opp.id)
         .is("first_source", null);
     } catch (err) {

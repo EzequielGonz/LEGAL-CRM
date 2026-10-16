@@ -31,6 +31,7 @@ export function menuDePerfil(slug: SlugPerfil): GrupoMenu[] {
       {
         titulo: "Trabajo diario",
         items: [
+          { href: comun(slug, "salud"), label: "Salud del sistema", match: "/salud" },
           { href: "/estadisticas", label: "Estadísticas" },
           { href: comun(slug, "oportunidades"), label: "Oportunidades", match: "/oportunidades" },
           { href: "/inbox", label: "Inbox" },
@@ -62,6 +63,7 @@ export function menuDePerfil(slug: SlugPerfil): GrupoMenu[] {
 
   const base = `/panel/${slug}`;
   const diario: ItemMenu[] = [
+    { href: comun(slug, "salud"), label: "Salud del sistema", match: "/salud" },
     { href: comun(slug, "oportunidades"), label: "Oportunidades", match: "/oportunidades" },
     { href: `${base}/seguimiento`, label: "Seguimiento" },
     { href: `${base}/agenda`, label: "Agenda" },

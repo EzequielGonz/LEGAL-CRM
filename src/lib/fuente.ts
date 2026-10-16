@@ -25,6 +25,15 @@ export const FUENTE_LABEL: Record<Fuente, string> = {
   no_informada: "No informada",
 };
 
+/** Redes desde las que puede llegar una visita a la landing. */
+export const NOMBRE_RED: Record<string, string> = { instagram: "Instagram", facebook: "Facebook", google: "Google", tiktok: "TikTok" };
+
+/** Red de llegada informada por el formulario de la landing (lo demás se ignora). */
+export function redDeLlegada(v: unknown): string | null {
+  const k = typeof v === "string" ? v.trim().toLowerCase() : "";
+  return NOMBRE_RED[k] ?? null;
+}
+
 export interface IdentificadorFuente {
   texto: string;
   fuente: Fuente;
@@ -86,7 +95,11 @@ export function detectarFuente(input: {
   const body = input.body ? normalizarTexto(input.body) : "";
   if (body) {
     for (const id of input.identificadores ?? []) {
-      if (body.includes(normalizarTexto(id.texto))) return { fuente: id.fuente, detalle: "mensaje prearmado" };
+      if (body.includes(normalizarTexto(id.texto))) {
+        // Landings (16/10): «(llegué desde Instagram)» si la visita vino de una red.
+        const red = /llegue desde (instagram|facebook|google|tiktok)/.exec(body)?.[1];
+        return { fuente: id.fuente, detalle: red ? `mensaje prearmado · llegó desde ${NOMBRE_RED[red]}` : "mensaje prearmado" };
+      }
     }
   }
   if (input.contactSource === "base_de_datos") return { fuente: "base_importada", detalle: null };

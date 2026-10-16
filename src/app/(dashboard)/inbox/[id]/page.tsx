@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { ConversationThread } from "@/components/inbox/conversation-thread";
 import { FichaSection } from "@/components/ficha/ficha-section";
@@ -19,6 +19,12 @@ export default async function ConversationPage({ params, searchParams }: { param
     .single();
 
   if (!conversation) notFound();
+  // Conversaciones de Coberturas, Autos 0 km y Marketing: se abren con el
+  // marco (menú y colores) de su propio perfil.
+  const areaConv = (conversation.contacts as any)?.area as string | undefined;
+  if (areaConv && areaConv !== "civil" && areaConv !== "penal") {
+    redirect(`/conversacion/${conversation.id}${volver ? `?volver=${encodeURIComponent(volver)}` : ""}`);
+  }
 
   const { data: messages } = await supabase
     .from("messages")

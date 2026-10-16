@@ -1,5 +1,6 @@
 import { ensurePinState } from "@/lib/acceso/pin";
 import { PinLoginForm } from "@/components/acceso/pin-login-form";
+import { LamparaIngreso } from "@/components/acceso/lampara-ingreso";
 
 export const dynamic = "force-dynamic";
 
@@ -21,15 +22,10 @@ export default async function LoginPage({
     console.error("[login] No se pudo leer el estado del PIN:", err);
   }
 
+  // Escena «lámpara» (16/10): solo visual; el ingreso sigue siendo con el PIN.
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 px-4">
-      {/* Glow decorativo dorado, puramente ambiental */}
-      <div className="pointer-events-none absolute -left-24 -top-24 h-96 w-96 animate-float rounded-full bg-gold-500/10 blur-3xl" />
-      <div
-        className="pointer-events-none absolute -bottom-24 -right-24 h-96 w-96 animate-float rounded-full bg-gold-500/10 blur-3xl"
-        style={{ animationDelay: "1.2s" }}
-      />
+    <LamparaIngreso>
       <PinLoginForm configured={configured} next={searchParams?.next ?? null} />
-    </div>
+    </LamparaIngreso>
   );
 }
