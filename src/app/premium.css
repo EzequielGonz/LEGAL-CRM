@@ -1,0 +1,442 @@
+/* =====================================================================
+   Capa premium (16/10 noche) — detalles, no rediseño.
+   CSS plano a propósito: no depende de utilidades de Tailwind. Para
+   revertir todo el diseño premium basta con quitar el import de este
+   archivo en src/app/layout.tsx.
+   Todo movimiento queda anulado por «reducir movimiento» (ver arriba).
+   ===================================================================== */
+
+html {
+  scroll-behavior: smooth;
+  text-rendering: optimizeLegibility;
+}
+::selection {
+  background: rgb(var(--c-gold-300) / 0.55);
+  color: rgb(var(--c-slate-950));
+}
+h1, h2, h3 {
+  text-wrap: balance;
+  letter-spacing: -0.01em;
+}
+.tabular-nums, .cifra {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Ingreso: escena de la lámpara ---------- */
+.lampara-escena {
+  position: relative;
+  display: flex;
+  min-height: 100vh;
+  min-height: 100dvh;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 2rem 1rem;
+  background:
+    radial-gradient(120% 90% at 50% 110%, #1b120c 0%, #0d0806 55%, #070403 100%);
+  color: #f6e7cc;
+}
+.lampara-ambiente {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.06;
+  transition: opacity 0.9s ease;
+  background:
+    radial-gradient(52% 60% at 26% 40%, rgba(255, 184, 100, 0.34), transparent 72%),
+    radial-gradient(46% 46% at 70% 52%, rgba(255, 170, 90, 0.16), transparent 72%);
+}
+.esta-prendida .lampara-ambiente {
+  opacity: 1;
+}
+.lampara-vineta {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(90% 80% at 50% 45%, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
+}
+.lampara-grano {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+.lampara-contenido {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 100%;
+  max-width: 62rem;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+.lampara-columna {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.lampara-marco {
+  position: relative;
+  width: clamp(120px, 34vw, 210px);
+  aspect-ratio: 220 / 440;
+}
+.lampara-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.lampara-luz,
+.lampara-foco-on,
+.lampara-pantalla-on,
+.lampara-borde-on {
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+.esta-prendida .lampara-luz,
+.esta-prendida .lampara-foco-on,
+.esta-prendida .lampara-pantalla-on,
+.esta-prendida .lampara-borde-on {
+  opacity: 1;
+}
+.lampara-luz {
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+.encendiendo .lampara-luz,
+.encendiendo .lampara-foco-on {
+  animation: lampara-parpadeo 0.9s ease-out both;
+}
+.lampara-cordon {
+  transform-box: view-box;
+  transform-origin: 160px 124px;
+  animation: lampara-balanceo 6s ease-in-out infinite;
+}
+.lampara-tirador {
+  cursor: grab;
+  touch-action: none;
+  outline: none;
+}
+.lampara-tirador:active {
+  cursor: grabbing;
+}
+.lampara-tirador:focus-visible circle:first-of-type,
+.lampara-tirador:focus-visible rect {
+  stroke: #fff2cf;
+  stroke-width: 2;
+}
+.lampara-tirador:focus-visible {
+  filter: drop-shadow(0 0 6px rgba(255, 226, 160, 0.95));
+}
+.lampara-polvo {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+.esta-prendida .lampara-polvo {
+  opacity: 1;
+}
+.lampara-polvo span {
+  position: absolute;
+  border-radius: 9999px;
+  background: rgba(255, 228, 175, 0.85);
+  box-shadow: 0 0 6px 1px rgba(255, 214, 140, 0.5);
+  opacity: 0;
+  animation: lampara-mota linear infinite;
+}
+.lampara-pista {
+  margin-top: 0.25rem;
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(214, 178, 112, 0.85);
+}
+.lampara-tarjeta {
+  width: 100%;
+  max-width: 26rem;
+  padding: 1px;
+  border-radius: 1.4rem;
+  background: linear-gradient(150deg, rgba(255, 214, 150, 0.5), rgba(255, 255, 255, 0.08) 42%, rgba(255, 214, 150, 0.18));
+  box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.85), 0 0 0 rgba(255, 190, 110, 0);
+  filter: brightness(0.86) saturate(0.9);
+  transition: box-shadow 0.9s ease, filter 0.9s ease;
+  animation: lampara-tarjeta-entra 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+}
+.esta-prendida .lampara-tarjeta {
+  filter: none;
+  box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.85), 0 0 90px rgba(255, 190, 110, 0.22);
+}
+@media (min-width: 900px) {
+  .lampara-contenido {
+    flex-direction: row;
+    justify-content: center;
+    gap: clamp(3rem, 9vw, 8rem);
+  }
+  .lampara-marco {
+    width: clamp(210px, 19vw, 270px);
+  }
+}
+
+/* ---------- Ingreso: tarjeta del PIN ---------- */
+.pin-tarjeta {
+  position: relative;
+  width: 100%;
+  border-radius: calc(1.4rem - 1px);
+  padding: 2rem 1.75rem 1.75rem;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(250, 245, 235, 0.95));
+  color: rgb(var(--c-slate-900));
+}
+.pin-sacudida {
+  animation: pin-sacudida 0.42s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+.pin-progreso {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.375rem;
+  margin: -0.5rem 0 1.25rem;
+}
+.pin-progreso span {
+  height: 3px;
+  border-radius: 9999px;
+  background: rgb(var(--c-slate-200));
+  transition: background-color 0.25s ease, transform 0.25s ease;
+}
+.pin-progreso span.lleno {
+  background: linear-gradient(90deg, rgb(var(--c-gold-500)), rgb(var(--c-gold-400)));
+  transform: scaleY(1.7);
+}
+.pin-spinner {
+  display: inline-block;
+  height: 0.9rem;
+  width: 0.9rem;
+  border-radius: 9999px;
+  border: 2px solid rgb(var(--c-gold-200) / 0.35);
+  border-top-color: rgb(var(--c-gold-200));
+  animation: pin-giro 0.7s linear infinite;
+}
+
+/* ---------- Pantallas de entrada (Inicio y Perfiles) ---------- */
+.escena-oscura {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden;
+  background:
+    radial-gradient(90% 70% at 15% 0%, rgb(var(--c-gold-500) / 0.1), transparent 60%),
+    radial-gradient(80% 70% at 100% 100%, rgb(var(--c-gold-500) / 0.08), transparent 60%),
+    linear-gradient(135deg, rgb(var(--c-slate-950)), rgb(var(--c-slate-900)) 55%, rgb(var(--c-slate-950)));
+}
+.escena-oscura::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.06;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+.tarjeta-luz {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 0.1);
+  background: linear-gradient(160deg, rgb(255 255 255 / 0.07), rgb(255 255 255 / 0.025));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.35s ease;
+}
+.tarjeta-luz::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  background: radial-gradient(380px circle at var(--mx, 50%) var(--my, 0%), rgb(var(--c-gold-400) / 0.22), transparent 65%);
+}
+.tarjeta-luz:hover,
+.tarjeta-luz:focus-visible {
+  transform: translateY(-4px);
+  border-color: rgb(var(--c-gold-400) / 0.5);
+  box-shadow: 0 24px 50px -24px rgb(0 0 0 / 0.7), 0 0 40px -10px rgb(var(--c-gold-500) / 0.35);
+}
+.tarjeta-luz:hover::before,
+.tarjeta-luz:focus-visible::before {
+  opacity: 1;
+}
+.tarjeta-luz:active {
+  transform: translateY(-1px) scale(0.99);
+}
+.icono-dorado {
+  display: flex;
+  height: 3.5rem;
+  width: 3.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+  background: linear-gradient(145deg, rgb(var(--c-gold-300)), rgb(var(--c-gold-500)) 55%, rgb(var(--c-gold-700)));
+  color: rgb(var(--c-slate-950));
+  box-shadow: 0 10px 24px -8px rgb(var(--c-gold-500) / 0.6), inset 0 1px 0 rgb(255 255 255 / 0.4);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.tarjeta-luz:hover .icono-dorado {
+  transform: scale(1.06) rotate(-3deg);
+}
+.flecha-desliza {
+  display: inline-block;
+  transition: transform 0.25s ease;
+}
+a:hover > .flecha-desliza,
+button:hover > .flecha-desliza,
+.tarjeta-luz:hover .flecha-desliza,
+.card-lift:hover .flecha-desliza {
+  transform: translateX(4px);
+}
+.punto-vivo {
+  position: relative;
+  display: inline-block;
+  height: 0.5rem;
+  width: 0.5rem;
+  border-radius: 9999px;
+  background: currentColor;
+}
+.punto-vivo::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  border: 1px solid currentColor;
+  opacity: 0;
+  animation: punto-pulso 2.4s ease-out infinite;
+}
+
+/* ---------- Panel: lienzo, entrada de páginas y superficies ---------- */
+main#contenido {
+  background:
+    radial-gradient(900px 320px at 85% -80px, rgb(var(--c-gold-300) / 0.16), transparent 70%),
+    rgb(var(--c-slate-50));
+}
+main#contenido > * {
+  animation: pagina-entra 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+main#contenido > *:nth-child(2) { animation-delay: 0.04s; }
+main#contenido > *:nth-child(3) { animation-delay: 0.08s; }
+main#contenido > *:nth-child(4) { animation-delay: 0.12s; }
+main#contenido > *:nth-child(n + 5) { animation-delay: 0.16s; }
+
+main#contenido :is([class~="rounded-xl"], [class~="rounded-2xl"])[class~="bg-white"][class~="border"] {
+  box-shadow: 0 1px 2px rgb(var(--c-slate-900) / 0.04), 0 8px 24px -16px rgb(var(--c-slate-900) / 0.18);
+  transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+main#contenido a:is([class~="rounded-xl"], [class~="rounded-2xl"])[class~="bg-white"][class~="border"]:hover {
+  border-color: rgb(var(--c-gold-400) / 0.7);
+  box-shadow: 0 2px 4px rgb(var(--c-slate-900) / 0.05), 0 18px 36px -18px rgb(var(--c-slate-900) / 0.3);
+}
+
+/* Tablas: filas con respuesta al pasar y encabezado más tranquilo */
+main#contenido table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+main#contenido tbody tr > td {
+  transition: background-color 0.18s ease;
+}
+main#contenido tbody tr:hover > td {
+  background-color: rgb(var(--c-gold-50) / 0.75);
+}
+main#contenido thead th {
+  letter-spacing: 0.04em;
+}
+
+/* Botón principal: brillo que cruza al pasar */
+.btn-gold, .btn-gold-sm {
+  overflow: hidden;
+}
+.btn-gold::after, .btn-gold-sm::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transform: translateX(-120%);
+  background: linear-gradient(105deg, transparent 35%, rgb(255 255 255 / 0.22) 50%, transparent 65%);
+}
+.btn-gold:hover:not(:disabled)::after,
+.btn-gold-sm:hover:not(:disabled)::after {
+  transform: translateX(120%);
+  transition: transform 0.75s ease;
+}
+
+/* Menú lateral */
+.menu-activo {
+  background: linear-gradient(90deg, rgb(var(--c-gold-500) / 0.22), rgb(var(--c-gold-500) / 0.04));
+  box-shadow: inset 0 0 0 1px rgb(var(--c-gold-400) / 0.2);
+}
+.menu-velo {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  background: rgb(0 0 0 / 0.55);
+  backdrop-filter: blur(2px);
+  animation: velo-entra 0.25s ease-out both;
+}
+
+/* ---------- Animaciones de la capa premium ---------- */
+@keyframes lampara-balanceo {
+  0%, 100% { transform: rotate(-1.4deg); }
+  50% { transform: rotate(1.4deg); }
+}
+@keyframes lampara-parpadeo {
+  0% { opacity: 0; }
+  8% { opacity: 0.95; }
+  14% { opacity: 0.2; }
+  22% { opacity: 1; }
+  30% { opacity: 0.55; }
+  100% { opacity: 1; }
+}
+@keyframes lampara-mota {
+  0% { opacity: 0; transform: translate(0, 0); }
+  20% { opacity: 0.9; }
+  50% { transform: translate(var(--dx, 8px), -26px); }
+  80% { opacity: 0.7; }
+  100% { opacity: 0; transform: translate(calc(var(--dx, 8px) * -0.6), -56px); }
+}
+@keyframes lampara-tarjeta-entra {
+  from { opacity: 0; transform: translateY(20px) scale(0.98); }
+}
+@keyframes pin-sacudida {
+  10%, 90% { transform: translateX(-2px); }
+  20%, 80% { transform: translateX(4px); }
+  30%, 50%, 70% { transform: translateX(-7px); }
+  40%, 60% { transform: translateX(7px); }
+}
+@keyframes pin-giro {
+  to { transform: rotate(360deg); }
+}
+@keyframes punto-pulso {
+  0% { opacity: 0.55; transform: scale(0.6); }
+  100% { opacity: 0; transform: scale(2.4); }
+}
+@keyframes velo-entra {
+  from { opacity: 0; }
+}
+@keyframes pagina-entra {
+  from { opacity: 0; transform: translateY(8px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lampara-cordon,
+  .lampara-polvo span,
+  .punto-vivo::after {
+    animation: none !important;
+  }
+  .lampara-polvo span { display: none; }
+  .tarjeta-luz:hover,
+  .tarjeta-luz:active { transform: none; }
+}
