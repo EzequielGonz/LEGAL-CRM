@@ -1,3 +1,4 @@
+import { redDeLlegada } from "@/lib/fuente";
 /**
  * Formularios de las cuatro landings → CRM (16/10).
  *
@@ -40,6 +41,8 @@ export interface LeadNormalizado {
   email: string | null;
   consulta: string;
   pagina: string | null;
+  /** Red desde la que llegó la visita (Instagram, Facebook, Google, TikTok). */
+  llegada?: string | null;
 }
 
 function txt(v: unknown, max: number): string {
@@ -87,5 +90,5 @@ export function normalizarLead(body: Record<string, unknown> | null, perfilParam
   const area: Area =
     perfil === "juridico" ? (/penal/i.test(`${tipo} ${descripcion}`) ? "penal" : "civil") : (perfil as Area);
   const consulta = [tipo ? `Tipo: ${tipo}` : null, descripcion || null].filter(Boolean).join("\n");
-  return { area, nombre, telefono, email: txt(body.email, 200) || null, consulta, pagina };
+  return { area, nombre, telefono, email: txt(body.email, 200) || null, consulta, pagina, llegada: redDeLlegada(body.llegada) };
 }
