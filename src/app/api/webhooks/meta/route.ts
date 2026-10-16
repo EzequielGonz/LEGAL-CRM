@@ -3,6 +3,8 @@ import { quarantineWebhook, readRawJson, verifyMetaSignature } from "@/lib/webho
 import { processMetaPayload } from "@/lib/webhooks/process";
 
 export const dynamic = "force-dynamic";
+// El turno del agente (herramientas + IA, y en Marketing el análisis al aceptar) puede pasar los 10 s.
+export const maxDuration = 60;
 
 // ---------------------------------------------------------------------
 // Verificación del webhook (Meta Developer -> tu app -> Webhooks ->

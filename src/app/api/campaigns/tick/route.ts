@@ -6,6 +6,9 @@ import { runFollowupTick } from "@/lib/seguimiento/motor";
 import { ejecutarCitaTareasVencidas } from "@/lib/citas";
 import { publicarVencidas } from "@/lib/contenido/cola";
 import { getTareasServidor } from "@/lib/tareas-servidor";
+import { generarInformesVencidos } from "@/lib/experimento/servicio";
+import { evaluarPlantillasPendientes, revisarAjusteC } from "@/lib/experimento/acciones";
+import { avanzarExtraccion } from "@/lib/marketing/extraer";
 
 // El análisis de negocios (descargar la web + IA) necesita más de los 10s por defecto.
 export const maxDuration = 60;
@@ -41,6 +44,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "No autorizado" }, { status: 401 });
   }
 
+  const inicio = Date.now();
   try {
     // 1) Primero lo que manda mensajes (campañas), que es lo sensible al ritmo.
     const results = await tickAllActiveCampaigns();
@@ -85,7 +89,36 @@ export async function POST(request: Request) {
       }
     }
 
-    return NextResponse.json({ ok: true, results, seguimiento, marketing, servidor });
+    // 5) Extraer negocios (Marketing): una zona por latido. No contacta a
+    //    nadie, así que corre aunque la pausa general esté puesta. Si este
+    //    latido ya usó mucho tiempo, queda para el próximo (la búsqueda puede
+    //    tardar hasta ~45 s y la función tiene 60 s).
+    let extraccion: unknown = "sin tiempo en este latido";
+    if (Date.now() - inicio < 12_000) {
+      try {
+        extraccion = await avanzarExtraccion();
+      } catch (err: any) {
+        extraccion = { error: String(err?.message ?? err) };
+      }
+    }
+
+    // 6) Comparación de agentes: informes de los días 7/14/21/28, estado del
+    //    ajuste de C y evaluación de plantillas en cola. No envía mensajes;
+    //    corre aunque nadie tenga el panel abierto.
+    const experimento: Record<string, unknown> = {};
+    for (const [clave, tarea] of [
+      ["informes", () => generarInformesVencidos()],
+      ["ajuste_c", () => revisarAjusteC()],
+      ["plantillas", () => (Date.now() - inicio < 40_000 ? evaluarPlantillasPendientes(2) : Promise.resolve("sin tiempo en este latido"))],
+    ] as const) {
+      try {
+        experimento[clave] = await tarea();
+      } catch (err: any) {
+        experimento[clave] = { error: String(err?.message ?? err) };
+      }
+    }
+
+    return NextResponse.json({ ok: true, results, seguimiento, marketing, servidor, extraccion, experimento });
   } catch (err: any) {
     return NextResponse.json({ error: String(err.message ?? err) }, { status: 500 });
   }
