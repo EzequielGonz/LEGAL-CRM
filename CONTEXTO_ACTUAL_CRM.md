@@ -1,12 +1,13 @@
 # CONTEXTO ACTUAL · CRM multirubro
 
-Actualizado: 16/10/2026 (noche, diseño premium en revisión). Sin secretos ni datos de prospectos.
+Actualizado: 16/10/2026 (noche, diseño premium publicado). Sin secretos ni datos de prospectos.
 
-## Bloque 16/10 (cierre): diseño premium del panel — EN REVISIÓN
-- **Pedido**: subir un nivel el diseño desde el ingreso hasta el CRM completo (detalles, animaciones suaves, lámpara de inicio trabajada). Solo presentación; landings, Meta y Fase 3 siguen en espera.
-- **Hecho**: lámpara interactiva (cordón con resorte, cono de luz, polvo, teclado), tarjeta del PIN, Inicio, Perfiles, menú, tarjetas, insignias y capa global en `src/app/premium.css`. Detalle en `docs/estetica/DISENO_PREMIUM_1610.md`.
-- **Probado**: la escena del ingreso en un navegador real con datos sintéticos (clic, arrastre largo y corto, teclado, PC y teléfono) y el panel en los 4 perfiles con CSS compilado. **No probado**: chequeo de tipos, lint y build de Next (no se pudo instalar dependencias en esa sesión) → lo comprueba la Preview de la rama `diseno-premium-1610`.
-- **No publicado ni habilitado**: rama y PR para revisión; nada se fusionó a `main`. No cambia datos, envíos ni pausas.
+## Bloque 16/10 (cierre): diseño premium del panel — PUBLICADO (PR #8)
+- **Pedido**: subir un nivel el diseño desde el ingreso hasta el CRM completo (detalles, animaciones suaves, lámpara de inicio trabajada) y verlo directo en el panel. Solo presentación; landings, Meta y Fase 3 siguen en espera.
+- **Hecho**: lámpara interactiva (cordón con resorte, cono de luz, polvo, teclado), tarjeta del PIN, Inicio, Perfiles, menú, tarjetas, insignias y capa global en `src/app/premium.css` (importada en `layout.tsx`; se revierte quitando ese import). Detalle en `docs/estetica/DISENO_PREMIUM_1610.md`.
+- **Probado**: la escena del ingreso en un navegador real con datos sintéticos (clic, arrastre largo y corto, teclado, PC y teléfono); el panel en los 4 perfiles con CSS compilado; Preview de la rama READY con el build de Next. **No probado**: `lint` y `typecheck` por separado, «reducir movimiento» en un navegador, navegación con sesión real y dispositivos reales.
+- **Publicado**: fusionado a `main` con el PR #8 por pedido expreso de la responsable (16/10). Es solo visual: no cambia datos, envíos, pausas ni migraciones.
+- **Siguiente paso**: que la responsable lo mire en el panel y pida ajustes finos.
 
 ## Bloque 16/10 (noche): comparación de agentes, Marketing, estética y auditoría — CERRADO
 - **Publicado**:
