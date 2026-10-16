@@ -12,6 +12,8 @@
 import { execFileSync } from "node:child_process";
 import { createHash, createHmac, randomUUID } from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
+import { hashPin } from "@/lib/acceso/pin";
+import { SESSION_COOKIE, invalidateSessionVersionCache, signSession } from "@/lib/acceso/session";
 
 export const REST_URL = (process.env.PRUEBAS_REST_URL ?? "http://127.0.0.1:54331").replace(/\/$/, "");
 const JWT_SECRET = process.env.PRUEBAS_JWT_SECRET ?? "secreto-de-pruebas-locales-con-al-menos-32-caracteres";
@@ -110,6 +112,8 @@ export class RedSimulada {
   storage = new Map<string, ObjetoGuardado>();
   /** cantidad de fallas a simular por función de la base (rpc) */
   fallasRpc = new Map<string, number>();
+  /** cantidad de veces que la lectura de la versión de sesión (access_pin) va a fallar como si la base no respondiera */
+  fallasSesion = 0;
   /** demora de Meta para responder cada envío (para provocar ejecuciones simultáneas) */
   demoraEnvioMs = 0;
   /** se llama cuando Meta recibe un envío, antes de responder (para revisar la base en ese instante) */
@@ -153,6 +157,10 @@ export class RedSimulada {
   }
 
   private async rest(url: URL, method: string, headers: Headers, init: any): Promise<Response> {
+    if (url.pathname === "/rest/v1/access_pin" && this.fallasSesion > 0) {
+      this.fallasSesion--;
+      throw new TypeError("fetch failed");
+    }
     const rpc = url.pathname.match(/^\/rest\/v1\/rpc\/([a-z0-9_]+)$/)?.[1];
     if (rpc && (this.fallasRpc.get(rpc) ?? 0) > 0) {
       this.fallasRpc.set(rpc, this.fallasRpc.get(rpc)! - 1);
@@ -343,4 +351,41 @@ export async function esperarApi(): Promise<void> {
     await new Promise((ok) => setTimeout(ok, 1000));
   }
   throw new Error(`La API de pruebas no responde en ${REST_URL}`);
+}
+
+// ---------------------------------------------------------------------------
+// Sesión del panel para llamar a las rutas privadas (bloque 1.12)
+// ---------------------------------------------------------------------------
+
+/** Cookie de sesión firmada con la versión vigente de la base de pruebas. */
+export let COOKIE_SESION = "";
+
+/** Deja un PIN de prueba guardado (si no hay) y firma una cookie con la versión vigente. */
+export async function prepararSesionDePrueba(): Promise<string> {
+  const s = db();
+  const { data: row } = await s.from("access_pin").select("session_version").eq("id", true).maybeSingle();
+  // El PIN de prueba es el que cada archivo deja en ACCESS_PIN (o uno fijo): la fila se crea o se actualiza
+  // con ese valor, así las rutas que piden el PIN lo reconocen aunque otro archivo haya corrido antes.
+  const pin = process.env.ACCESS_PIN && /^[0-9]{6}$/.test(process.env.ACCESS_PIN) ? process.env.ACCESS_PIN : "482915";
+  const pin_hash = await hashPin(pin);
+  let version = row?.session_version as number | undefined;
+  if (version === undefined) {
+    const { error } = await s.from("access_pin").insert({ id: true, pin_hash, source: "inicial", session_version: 1 });
+    if (error && (error as any).code !== "23505") throw new Error(`No se pudo guardar el PIN de prueba: ${error.message}`);
+    version = 1;
+  } else {
+    const { error } = await s.from("access_pin").update({ pin_hash, source: "inicial" }).eq("id", true);
+    if (error) throw new Error(`No se pudo actualizar el PIN de prueba: ${error.message}`);
+  }
+  invalidateSessionVersionCache();
+  const token = await signSession({ v: version, iat: Math.floor(Date.now() / 1000), sid: `prueba-${process.pid}` });
+  COOKIE_SESION = `${SESSION_COOKIE}=${token}`;
+  return token;
+}
+
+/** Request con la cookie de sesión de prueba (y lo que se pida en init). */
+export function pedido(url: string, init: RequestInit = {}): Request {
+  const headers = new Headers(init.headers);
+  if (COOKIE_SESION && !headers.has("cookie")) headers.set("cookie", COOKIE_SESION);
+  return new Request(url, { ...init, headers });
 }

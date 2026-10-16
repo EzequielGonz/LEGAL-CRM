@@ -2,13 +2,16 @@ import { NextResponse } from "next/server";
 import { setCampaignArchived } from "@/lib/archive";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { AREA_TO_RUBRO_ID } from "@/lib/rubros";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 /**
  * Las campañas ya no se eliminan (pregunta 20): un DELETE la archiva (y la
  * pausa si estaba en curso). Destinatarios, resultados y conversaciones
  * quedan intactos; recuperarla no reanuda envíos.
  */
-export async function DELETE(_request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   try {
     await setCampaignArchived(params.id, true, "Archivada desde el panel");
     return NextResponse.json({ ok: true, archivada: true });
@@ -23,6 +26,8 @@ export async function DELETE(_request: Request, { params }: { params: { id: stri
  * domingos no se envía, pregunta 39) y plantilla del catálogo (pregunta 22).
  */
 export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => ({}));
   const supabase = createAdminClient();
   const { data: campaign } = await supabase

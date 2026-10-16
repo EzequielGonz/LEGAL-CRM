@@ -1,0 +1,760 @@
+[
+ {
+  "rubro": "juridico",
+  "proposito": "campana",
+  "nombre": "jur_recupero_laboral_a",
+  "idioma": "es_AR",
+  "categoria": "MARKETING",
+  "cuerpo": "Hola {{1}}, te escribe {{2}} de {{3}}. Hace un tiempo nos dejaste una consulta por un accidente o problema laboral. ¿Sigue pendiente o ya lo pudiste resolver?",
+  "ejemplos": [
+   "Laura",
+   "Martín",
+   "Estudio Ejemplo"
+  ],
+  "botones": [
+   {
+    "type": "QUICK_REPLY",
+    "text": "Sigue pendiente"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "Ya lo resolví"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "No me escriban más"
+   }
+  ],
+  "nota": "Opción A (recomendada): pregunta fácil con botones; 'Ya lo resolví' y la baja se detienen con motivo."
+ },
+ {
+  "rubro": "juridico",
+  "proposito": "campana",
+  "nombre": "jur_recupero_laboral_b",
+  "idioma": "es_AR",
+  "categoria": "MARKETING",
+  "cuerpo": "Hola {{1}}, soy {{2}} de {{3}}. Te contacto por la consulta laboral que habías registrado con nosotros. ¿Todavía necesitás ayuda con ese tema?",
+  "ejemplos": [
+   "Laura",
+   "Martín",
+   "Estudio Ejemplo"
+  ],
+  "botones": [
+   {
+    "type": "QUICK_REPLY",
+    "text": "Sí, todavía"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "Ya no"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "No me escriban más"
+   }
+  ],
+  "nota": "Opción B: más directa."
+ },
+ {
+  "rubro": "juridico",
+  "proposito": "campana",
+  "nombre": "jur_recupero_laboral_c",
+  "idioma": "es_AR",
+  "categoria": "MARKETING",
+  "cuerpo": "Hola {{1}}, ¿cómo estás? Te escribimos de {{2}} por la consulta que nos hiciste sobre un tema laboral. Queríamos saber si seguís con ese tema o si ya quedó resuelto.",
+  "ejemplos": [
+   "Laura",
+   "Estudio Ejemplo"
+  ],
+  "botones": [
+   {
+    "type": "QUICK_REPLY",
+    "text": "Sigo con el tema"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "Ya quedó resuelto"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "No me escriban más"
+   }
+  ],
+  "nota": "Opción C: sin nombre del asesor (si el perfil no lo tiene cargado)."
+ },
+ {
+  "rubro": "juridico",
+  "proposito": "inicio_cita",
+  "nombre": "jur_inicio_fase2",
+  "idioma": "es_AR",
+  "categoria": "UTILITY",
+  "cuerpo": "Hola {{1}}, como quedamos, seguimos ahora con tu consulta para que el estudio pueda revisarla. ¿Te queda cómodo empezar?",
+  "ejemplos": [
+   "Laura"
+  ],
+  "botones": [
+   {
+    "type": "QUICK_REPLY",
+    "text": "Sí, empecemos"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "Prefiero otro horario"
+   }
+  ],
+  "nota": "Inicio de Fase 2 en la fecha y hora coordinadas. Agendar e iniciar no captan."
+ },
+ {
+  "rubro": "juridico",
+  "proposito": "seguimiento",
+  "nombre": "jur_seguimiento_2",
+  "idioma": "es_AR",
+  "categoria": "MARKETING",
+  "cuerpo": "Hola {{1}}, retomo lo que veníamos hablando sobre tu consulta. Si querés, seguimos desde donde quedamos para que el estudio pueda revisarla. ¿Te parece?",
+  "ejemplos": [
+   "Laura"
+  ],
+  "botones": [
+   {
+    "type": "QUICK_REPLY",
+    "text": "Sí, sigamos"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "Ahora no"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "No me escriban más"
+   }
+  ],
+  "nota": "Contacto 2: solo si respondió y se estancó; 48–72 h (60 por defecto)."
+ },
+ {
+  "rubro": "juridico",
+  "proposito": "seguimiento_3",
+  "nombre": "jur_seguimiento_3",
+  "idioma": "es_AR",
+  "categoria": "MARKETING",
+  "cuerpo": "Hola {{1}}, te escribo por última vez sobre tu consulta. Si todavía te interesa que el estudio la revise, respondé este mensaje y lo coordinamos.",
+  "ejemplos": [
+   "Laura"
+  ],
+  "botones": [
+   {
+    "type": "QUICK_REPLY",
+    "text": "Me interesa"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "No me escriban más"
+   }
+  ],
+  "nota": "Contacto 3: solo si respondió al 2 y volvió a estancarse. Último ciclo."
+ },
+ {
+  "rubro": "juridico",
+  "proposito": "reagendamiento",
+  "nombre": "jur_reagendar",
+  "idioma": "es_AR",
+  "categoria": "UTILITY",
+  "cuerpo": "Hola {{1}}, habíamos quedado en conversar hoy a las {{2}} sobre tu consulta y no pudimos coincidir. ¿Querés que lo pasemos a otro horario?",
+  "ejemplos": [
+   "Laura",
+   "18:00"
+  ],
+  "botones": [
+   {
+    "type": "QUICK_REPLY",
+    "text": "Sí, otro horario"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "No, gracias"
+   }
+  ],
+  "nota": "Un solo intento, una hora después del inicio enviado."
+ },
+ {
+  "rubro": "coberturas_medicas",
+  "proposito": "campana",
+  "nombre": "cob_recupero_a",
+  "idioma": "es_AR",
+  "categoria": "MARKETING",
+  "cuerpo": "Hola {{1}}, te escribe {{2}} de {{3}}. Hace un tiempo consultaste por tu cobertura médica. ¿Te interesa que revisemos alternativas para vos o tu familia?",
+  "ejemplos": [
+   "Laura",
+   "Martín",
+   "Asesoría Ejemplo"
+  ],
+  "botones": [
+   {
+    "type": "QUICK_REPLY",
+    "text": "Sí, me interesa"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "Ahora no"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "No me escriban más"
+   }
+  ],
+  "nota": "Opción A (recomendada)."
+ },
+ {
+  "rubro": "coberturas_medicas",
+  "proposito": "campana",
+  "nombre": "cob_recupero_b",
+  "idioma": "es_AR",
+  "categoria": "MARKETING",
+  "cuerpo": "Hola {{1}}, soy {{2}} de {{3}}. ¿Seguís con ganas de comparar tu cobertura de salud por costo o prestaciones? Si querés, lo vemos juntos sin compromiso.",
+  "ejemplos": [
+   "Laura",
+   "Martín",
+   "Asesoría Ejemplo"
+  ],
+  "botones": [
+   {
+    "type": "QUICK_REPLY",
+    "text": "Quiero comparar"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "No por ahora"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "No me escriban más"
+   }
+  ],
+  "nota": "Opción B: menciona costo y prestaciones sin prometer ahorro."
+ },
+ {
+  "rubro": "coberturas_medicas",
+  "proposito": "campana",
+  "nombre": "cob_recupero_c",
+  "idioma": "es_AR",
+  "categoria": "MARKETING",
+  "cuerpo": "Hola {{1}}, te escribimos de {{2}} por la consulta que habías hecho sobre coberturas médicas. ¿Querés que un asesor revise tu caso y te cuente qué opciones hay?",
+  "ejemplos": [
+   "Laura",
+   "Asesoría Ejemplo"
+  ],
+  "botones": [
+   {
+    "type": "QUICK_REPLY",
+    "text": "Sí, que me escriban"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "No, gracias"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "No me escriban más"
+   }
+  ],
+  "nota": "Opción C: sin nombre del asesor."
+ },
+ {
+  "rubro": "coberturas_medicas",
+  "proposito": "seguimiento",
+  "nombre": "cob_seguimiento_2",
+  "idioma": "es_AR",
+  "categoria": "MARKETING",
+  "cuerpo": "Hola {{1}}, retomo lo de tu cobertura. Si querés, dejamos tu consulta lista para que un asesor revise alternativas aunque falten algunos datos. ¿Te parece?",
+  "ejemplos": [
+   "Laura"
+  ],
+  "botones": [
+   {
+    "type": "QUICK_REPLY",
+    "text": "Dale"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "Ahora no"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "No me escriban más"
+   }
+  ],
+  "nota": "Contacto 2."
+ },
+ {
+  "rubro": "coberturas_medicas",
+  "proposito": "seguimiento_3",
+  "nombre": "cob_seguimiento_3",
+  "idioma": "es_AR",
+  "categoria": "MARKETING",
+  "cuerpo": "Hola {{1}}, te escribo por última vez sobre la revisión de tu cobertura. Si te sigue interesando, respondé este mensaje y un asesor se comunica con vos.",
+  "ejemplos": [
+   "Laura"
+  ],
+  "botones": [
+   {
+    "type": "QUICK_REPLY",
+    "text": "Me interesa"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "No me escriban más"
+   }
+  ],
+  "nota": "Contacto 3."
+ },
+ {
+  "rubro": "coberturas_medicas",
+  "proposito": "reagendamiento",
+  "nombre": "cob_reagendar",
+  "idioma": "es_AR",
+  "categoria": "UTILITY",
+  "cuerpo": "Hola {{1}}, habíamos quedado en hablar hoy a las {{2}} sobre tu cobertura y no pudimos coincidir. ¿Querés que lo pasemos a otro horario?",
+  "ejemplos": [
+   "Laura",
+   "18:00"
+  ],
+  "botones": [
+   {
+    "type": "QUICK_REPLY",
+    "text": "Sí, otro horario"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "No, gracias"
+   }
+  ],
+  "nota": "Un solo intento."
+ },
+ {
+  "rubro": "agencia_0km",
+  "proposito": "campana",
+  "nombre": "autos_recupero_a",
+  "idioma": "es_AR",
+  "categoria": "MARKETING",
+  "cuerpo": "Hola {{1}}, te escribe {{2}} de {{3}}. Hace un tiempo consultaste por un 0 km. ¿Seguís buscando auto?",
+  "ejemplos": [
+   "Laura",
+   "Martín",
+   "Concesionaria Ejemplo"
+  ],
+  "botones": [
+   {
+    "type": "QUICK_REPLY",
+    "text": "Sí, sigo buscando"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "Ya compré"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "No me escriban más"
+   }
+  ],
+  "nota": "Opción A (recomendada). 'Ya compré' se registra como necesidad resuelta y se detiene."
+ },
+ {
+  "rubro": "agencia_0km",
+  "proposito": "campana",
+  "nombre": "autos_recupero_b",
+  "idioma": "es_AR",
+  "categoria": "MARKETING",
+  "cuerpo": "Hola {{1}}, soy {{2}} de {{3}}. ¿Todavía estás pensando en un 0 km? Si querés, te ayudamos a ver qué modelo se ajusta a lo que necesitás.",
+  "ejemplos": [
+   "Laura",
+   "Martín",
+   "Concesionaria Ejemplo"
+  ],
+  "botones": [
+   {
+    "type": "QUICK_REPLY",
+    "text": "Sí, quiero ver"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "Ahora no"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "No me escriban más"
+   }
+  ],
+  "nota": "Opción B."
+ },
+ {
+  "rubro": "agencia_0km",
+  "proposito": "campana",
+  "nombre": "autos_recupero_c",
+  "idioma": "es_AR",
+  "categoria": "MARKETING",
+  "cuerpo": "Hola {{1}}, te escribimos de {{2}} por la consulta que hiciste sobre autos 0 km. ¿Querés que un vendedor te contacte para ver opciones?",
+  "ejemplos": [
+   "Laura",
+   "Concesionaria Ejemplo"
+  ],
+  "botones": [
+   {
+    "type": "QUICK_REPLY",
+    "text": "Sí, que me contacten"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "No, gracias"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "No me escriban más"
+   }
+  ],
+  "nota": "Opción C: sin nombre del asesor."
+ },
+ {
+  "rubro": "agencia_0km",
+  "proposito": "seguimiento",
+  "nombre": "autos_seguimiento_2",
+  "idioma": "es_AR",
+  "categoria": "MARKETING",
+  "cuerpo": "Hola {{1}}, retomo lo del 0 km. Si querés, dejamos tu consulta lista para que un vendedor te cuente opciones según lo que buscás. ¿Te parece?",
+  "ejemplos": [
+   "Laura"
+  ],
+  "botones": [
+   {
+    "type": "QUICK_REPLY",
+    "text": "Dale"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "Ahora no"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "No me escriban más"
+   }
+  ],
+  "nota": "Contacto 2."
+ },
+ {
+  "rubro": "agencia_0km",
+  "proposito": "seguimiento_3",
+  "nombre": "autos_seguimiento_3",
+  "idioma": "es_AR",
+  "categoria": "MARKETING",
+  "cuerpo": "Hola {{1}}, te escribo por última vez por tu consulta del 0 km. Si te sigue interesando, respondé este mensaje y un vendedor se comunica con vos.",
+  "ejemplos": [
+   "Laura"
+  ],
+  "botones": [
+   {
+    "type": "QUICK_REPLY",
+    "text": "Me interesa"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "No me escriban más"
+   }
+  ],
+  "nota": "Contacto 3."
+ },
+ {
+  "rubro": "agencia_0km",
+  "proposito": "reagendamiento",
+  "nombre": "autos_reagendar",
+  "idioma": "es_AR",
+  "categoria": "UTILITY",
+  "cuerpo": "Hola {{1}}, habíamos quedado en hablar hoy a las {{2}} sobre el 0 km y no pudimos coincidir. ¿Querés que lo pasemos a otro horario?",
+  "ejemplos": [
+   "Laura",
+   "18:00"
+  ],
+  "botones": [
+   {
+    "type": "QUICK_REPLY",
+    "text": "Sí, otro horario"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "No, gracias"
+   }
+  ],
+  "nota": "Un solo intento."
+ },
+ {
+  "rubro": "marketing",
+  "proposito": "campana",
+  "nombre": "mkt_prospeccion_a",
+  "idioma": "es_AR",
+  "categoria": "MARKETING",
+  "cuerpo": "Hola, ¿cómo están? Soy {{1}} de {{2}}. Estuvimos mirando {{3}} y notamos {{4}}. ¿Les interesaría que les contemos una idea concreta para mejorarlo?",
+  "ejemplos": [
+   "Martín",
+   "Agencia Ejemplo",
+   "la web de Panadería Ejemplo",
+   "que el botón de pedidos no se ve en el celular"
+  ],
+  "botones": [
+   {
+    "type": "QUICK_REPLY",
+    "text": "Sí, cuéntenme"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "No, gracias"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "No me escriban más"
+   }
+  ],
+  "nota": "Opción A (recomendada). {{4}} SOLO con un hallazgo guardado en el análisis; sin análisis no se envía."
+ },
+ {
+  "rubro": "marketing",
+  "proposito": "campana",
+  "nombre": "mkt_prospeccion_b",
+  "idioma": "es_AR",
+  "categoria": "MARKETING",
+  "cuerpo": "Hola, soy {{1}} de {{2}}. Revisamos {{3}} y vimos una oportunidad: {{4}}. Si les sirve, les preparamos una propuesta a medida. ¿Les interesa?",
+  "ejemplos": [
+   "Martín",
+   "Agencia Ejemplo",
+   "el Instagram de Panadería Ejemplo",
+   "no hay forma directa de pedir por WhatsApp"
+  ],
+  "botones": [
+   {
+    "type": "QUICK_REPLY",
+    "text": "Me interesa"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "Ahora no"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "No me escriban más"
+   }
+  ],
+  "nota": "Opción B."
+ },
+ {
+  "rubro": "marketing",
+  "proposito": "campana",
+  "nombre": "mkt_prospeccion_c",
+  "idioma": "es_AR",
+  "categoria": "MARKETING",
+  "cuerpo": "Hola, ¿qué tal? Les escribe {{1}} de {{2}}. Analizamos {{3}} y encontramos algo que se puede mejorar: {{4}}. ¿Quieren que les mostremos cómo?",
+  "ejemplos": [
+   "Martín",
+   "Agencia Ejemplo",
+   "la web de Panadería Ejemplo",
+   "la página tarda en cargar en el celular"
+  ],
+  "botones": [
+   {
+    "type": "QUICK_REPLY",
+    "text": "Sí, muéstrenme"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "No, gracias"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "No me escriban más"
+   }
+  ],
+  "nota": "Opción C."
+ },
+ {
+  "rubro": "marketing",
+  "proposito": "seguimiento",
+  "nombre": "mkt_seguimiento_2",
+  "idioma": "es_AR",
+  "categoria": "MARKETING",
+  "cuerpo": "Hola, retomo lo que conversamos sobre {{1}}. Si les sirve, el equipo puede analizar el proyecto y prepararles una propuesta. ¿Les parece?",
+  "ejemplos": [
+   "la web de Panadería Ejemplo"
+  ],
+  "botones": [
+   {
+    "type": "QUICK_REPLY",
+    "text": "Dale"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "Ahora no"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "No me escriban más"
+   }
+  ],
+  "nota": "Contacto 2."
+ },
+ {
+  "rubro": "marketing",
+  "proposito": "seguimiento_3",
+  "nombre": "mkt_seguimiento_3",
+  "idioma": "es_AR",
+  "categoria": "MARKETING",
+  "cuerpo": "Hola, les escribo por última vez sobre la propuesta para {{1}}. Si les sigue interesando, respondan este mensaje y lo coordinamos.",
+  "ejemplos": [
+   "la web de Panadería Ejemplo"
+  ],
+  "botones": [
+   {
+    "type": "QUICK_REPLY",
+    "text": "Nos interesa"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "No me escriban más"
+   }
+  ],
+  "nota": "Contacto 3."
+ },
+ {
+  "rubro": "marketing",
+  "proposito": "reagendamiento",
+  "nombre": "mkt_reagendar",
+  "idioma": "es_AR",
+  "categoria": "UTILITY",
+  "cuerpo": "Hola {{1}}, habíamos quedado en hablar hoy a las {{2}} sobre su proyecto y no pudimos coincidir. ¿Quieren que lo pasemos a otro horario?",
+  "ejemplos": [
+   "Laura",
+   "18:00"
+  ],
+  "botones": [
+   {
+    "type": "QUICK_REPLY",
+    "text": "Sí, otro horario"
+   },
+   {
+    "type": "QUICK_REPLY",
+    "text": "No, gracias"
+   }
+  ],
+  "nota": "Un solo intento."
+ },
+ {
+  "rubro": "juridico",
+  "proposito": "aviso_interno",
+  "nombre": "aviso_captacion_jur",
+  "idioma": "es_AR",
+  "categoria": "UTILITY",
+  "cuerpo": "Nueva oportunidad captada en {{1}}: {{2}}. Estado: {{3}}. Advertencias: {{4}}. Revisala en el panel del CRM.",
+  "ejemplos": [
+   "Jurídico",
+   "Laura P. · San Martín",
+   "Captado, no derivado",
+   "falta fecha del accidente"
+  ],
+  "botones": [],
+  "nota": "Aviso al número interno del perfil; un envío por evento y destino. Sin datos sensibles ni conversación."
+ },
+ {
+  "rubro": "juridico",
+  "proposito": "formulario",
+  "nombre": "form_recibido_jur",
+  "idioma": "es_AR",
+  "categoria": "UTILITY",
+  "cuerpo": "Hola {{1}}, recibimos la consulta que dejaste en nuestra web. Te escribimos por acá para seguir. ¿Me contás un poco más de lo que necesitás?",
+  "ejemplos": [
+   "Laura"
+  ],
+  "botones": [],
+  "nota": "Excepción de formularios verificados: preparada y DESACTIVADA en el CRM."
+ },
+ {
+  "rubro": "coberturas_medicas",
+  "proposito": "aviso_interno",
+  "nombre": "aviso_captacion_cob",
+  "idioma": "es_AR",
+  "categoria": "UTILITY",
+  "cuerpo": "Nueva oportunidad captada en {{1}}: {{2}}. Estado: {{3}}. Advertencias: {{4}}. Revisala en el panel del CRM.",
+  "ejemplos": [
+   "Jurídico",
+   "Laura P. · San Martín",
+   "Captado, no derivado",
+   "falta fecha del accidente"
+  ],
+  "botones": [],
+  "nota": "Aviso al número interno del perfil; un envío por evento y destino. Sin datos sensibles ni conversación."
+ },
+ {
+  "rubro": "coberturas_medicas",
+  "proposito": "formulario",
+  "nombre": "form_recibido_cob",
+  "idioma": "es_AR",
+  "categoria": "UTILITY",
+  "cuerpo": "Hola {{1}}, recibimos la consulta que dejaste en nuestra web. Te escribimos por acá para seguir. ¿Me contás un poco más de lo que necesitás?",
+  "ejemplos": [
+   "Laura"
+  ],
+  "botones": [],
+  "nota": "Excepción de formularios verificados: preparada y DESACTIVADA en el CRM."
+ },
+ {
+  "rubro": "agencia_0km",
+  "proposito": "aviso_interno",
+  "nombre": "aviso_captacion_autos",
+  "idioma": "es_AR",
+  "categoria": "UTILITY",
+  "cuerpo": "Nueva oportunidad captada en {{1}}: {{2}}. Estado: {{3}}. Advertencias: {{4}}. Revisala en el panel del CRM.",
+  "ejemplos": [
+   "Jurídico",
+   "Laura P. · San Martín",
+   "Captado, no derivado",
+   "falta fecha del accidente"
+  ],
+  "botones": [],
+  "nota": "Aviso al número interno del perfil; un envío por evento y destino. Sin datos sensibles ni conversación."
+ },
+ {
+  "rubro": "agencia_0km",
+  "proposito": "formulario",
+  "nombre": "form_recibido_autos",
+  "idioma": "es_AR",
+  "categoria": "UTILITY",
+  "cuerpo": "Hola {{1}}, recibimos la consulta que dejaste en nuestra web. Te escribimos por acá para seguir. ¿Me contás un poco más de lo que necesitás?",
+  "ejemplos": [
+   "Laura"
+  ],
+  "botones": [],
+  "nota": "Excepción de formularios verificados: preparada y DESACTIVADA en el CRM."
+ },
+ {
+  "rubro": "marketing",
+  "proposito": "aviso_interno",
+  "nombre": "aviso_captacion_mkt",
+  "idioma": "es_AR",
+  "categoria": "UTILITY",
+  "cuerpo": "Nueva oportunidad captada en {{1}}: {{2}}. Estado: {{3}}. Advertencias: {{4}}. Revisala en el panel del CRM.",
+  "ejemplos": [
+   "Jurídico",
+   "Laura P. · San Martín",
+   "Captado, no derivado",
+   "falta fecha del accidente"
+  ],
+  "botones": [],
+  "nota": "Aviso al número interno del perfil; un envío por evento y destino. Sin datos sensibles ni conversación."
+ },
+ {
+  "rubro": "marketing",
+  "proposito": "formulario",
+  "nombre": "form_recibido_mkt",
+  "idioma": "es_AR",
+  "categoria": "UTILITY",
+  "cuerpo": "Hola {{1}}, recibimos la consulta que dejaste en nuestra web. Te escribimos por acá para seguir. ¿Me contás un poco más de lo que necesitás?",
+  "ejemplos": [
+   "Laura"
+  ],
+  "botones": [],
+  "nota": "Excepción de formularios verificados: preparada y DESACTIVADA en el CRM."
+ }
+]

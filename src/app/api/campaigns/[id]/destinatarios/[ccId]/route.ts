@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 export const dynamic = "force-dynamic";
 
@@ -11,6 +12,8 @@ export const dynamic = "force-dynamic";
  * Nada se envía desde acá.
  */
 export async function POST(request: Request, { params }: { params: { id: string; ccId: string } }) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => ({}));
   const accion = body?.accion === "reintentar" || body?.accion === "descartar" ? body.accion : null;
   if (!accion) return NextResponse.json({ error: "Acción desconocida" }, { status: 400 });

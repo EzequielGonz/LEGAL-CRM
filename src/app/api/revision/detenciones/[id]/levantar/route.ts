@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { liftDetention } from "@/lib/detention";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 export const dynamic = "force-dynamic";
 
@@ -10,6 +11,8 @@ export const dynamic = "force-dynamic";
  * explícita (confirmacion: "LEVANTAR").
  */
 export async function POST(request: Request, { params }: { params: { id: string } }) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => ({}));
   const motivo = typeof body?.motivo === "string" ? body.motivo.trim() : "";
   if (!motivo) return NextResponse.json({ error: "Escribí el motivo." }, { status: 400 });

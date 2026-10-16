@@ -134,8 +134,10 @@ export async function readSignedSession(cookieValue: string | undefined | null):
 // ---------------------------------------------------------------------
 // Versión vigente de sesiones (para "cerrar en todos los dispositivos").
 // Se lee de la base con la clave de servicio y se guarda 30 s en memoria.
-// Si la base no responde, se acepta la cookie firmada (el panel igual no
-// funcionaría sin base): nunca se deja afuera a alguien por una falla ajena.
+// Bloque 1.12: si la base no responde y la copia en memoria ya venció, la
+// sesión NO se acepta por las dudas. Se devuelve "no_comprobable", que el
+// middleware y las rutas traducen en un error recuperable (503) sin borrar
+// la cookie: cuando la base vuelve, la misma sesión sigue valiendo.
 // ---------------------------------------------------------------------
 let versionCache: { value: number | null; at: number } | null = null;
 const VERSION_TTL_MS = 30_000;
@@ -144,34 +146,56 @@ export function invalidateSessionVersionCache() {
   versionCache = null;
 }
 
-export async function currentSessionVersion(): Promise<number | null> {
+export type SessionVersionResult = { ok: true; value: number | null } | { ok: false; reason: string };
+
+/**
+ * Versión de sesiones vigente. `value` nulo = no hay PIN configurado (no
+ * existe la fila), así que ninguna cookie vale. `ok: false` = no se pudo
+ * comprobar (base sin responder, sin configuración o respuesta inválida).
+ */
+export async function currentSessionVersion(): Promise<SessionVersionResult> {
   const now = Date.now();
-  if (versionCache && now - versionCache.at < VERSION_TTL_MS) return versionCache.value;
+  if (versionCache && now - versionCache.at < VERSION_TTL_MS) return { ok: true, value: versionCache.value };
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !key) return null;
+  if (!url || !key) return { ok: false, reason: "sin_configuracion" };
   try {
     const res = await fetch(`${url}/rest/v1/access_pin?select=session_version&id=eq.true`, {
       headers: { apikey: key, Authorization: `Bearer ${key}` },
       cache: "no-store",
     });
-    if (!res.ok) return versionCache?.value ?? null;
+    if (!res.ok) return { ok: false, reason: `respuesta_${res.status}` };
     const rows = (await res.json()) as { session_version: number }[];
-    const value = rows[0]?.session_version ?? null;
+    if (!Array.isArray(rows)) return { ok: false, reason: "respuesta_invalida" };
+    const raw = rows[0]?.session_version;
+    const value = typeof raw === "number" ? raw : null;
     versionCache = { value, at: now };
-    return value;
+    return { ok: true, value };
   } catch {
-    return versionCache?.value ?? null;
+    return { ok: false, reason: "sin_respuesta" };
   }
 }
 
-/** Sesión válida = firma correcta + versión vigente (o base sin responder). */
-export async function validateSession(cookieValue: string | undefined | null): Promise<SessionPayload | null> {
+export type SessionCheck =
+  | { status: "valida"; session: SessionPayload }
+  /** no hay cookie */
+  | { status: "ausente" }
+  /** cookie mal formada, alterada o firmada con otra clave */
+  | { status: "invalida" }
+  /** firma correcta pero las sesiones se cerraron en todos los dispositivos (o no hay PIN) */
+  | { status: "revocada" }
+  /** firma correcta pero la vigencia no se pudo comprobar: error recuperable, la cookie se conserva */
+  | { status: "no_comprobable"; reason: string; session: SessionPayload };
+
+/** Sesión válida = firma correcta + versión vigente comprobada. */
+export async function validateSession(cookieValue: string | undefined | null): Promise<SessionCheck> {
+  if (!cookieValue) return { status: "ausente" };
   const payload = await readSignedSession(cookieValue);
-  if (!payload) return null;
+  if (!payload) return { status: "invalida" };
   const version = await currentSessionVersion();
-  if (version !== null && payload.v !== version) return null;
-  return payload;
+  if (!version.ok) return { status: "no_comprobable", reason: version.reason, session: payload };
+  if (version.value === null || payload.v !== version.value) return { status: "revocada" };
+  return { status: "valida", session: payload };
 }
 
 export function sessionCookieOptions() {

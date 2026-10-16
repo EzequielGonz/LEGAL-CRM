@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 const EDITABLE_FIELDS = [
   "full_name",
@@ -22,6 +23,8 @@ const EDITABLE_FIELDS = [
  * que vengan en el body — no pisa el resto del registro.
  */
 export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const body = await request.json();
 
   const patch: Record<string, unknown> = {};

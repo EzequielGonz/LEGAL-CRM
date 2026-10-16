@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { PhoneHeader } from "@/components/telefono/phone-header";
 import { Pager, pageFromParam } from "@/components/ui/pager";
 import { phoneProfile } from "@/lib/telefono";
+import { soloDigitos, textoBusquedaSeguro } from "@/lib/busqueda";
 
 export const dynamic = "force-dynamic";
 
@@ -46,7 +47,8 @@ export default async function TelefonoClientesPage({
     .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
   if (estado !== "todos") query = query.eq("derivation_state", estado);
   const q = searchParams.q?.replace(/[,()]/g, "").trim();
-  if (q) query = query.or(`full_name.ilike.%${q}%,phone.ilike.%${q.replace(/\D/g, "") || q}%`, { referencedTable: "contacts" });
+  const qSeguro = textoBusquedaSeguro(q);
+  if (qSeguro) query = query.or(`full_name.ilike.%${qSeguro}%,phone.ilike.%${soloDigitos(qSeguro) || qSeguro}%`, { referencedTable: "contacts" });
 
   const [{ data: rows, count }, { data: rubro }] = await Promise.all([
     query,

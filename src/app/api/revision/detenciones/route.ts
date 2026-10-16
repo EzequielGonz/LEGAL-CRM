@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { DETENTION_MOTIVES, createDetention, type DetentionMotive } from "@/lib/detention";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 export const dynamic = "force-dynamic";
 
 /** Registrar una detención a mano (desde la ficha). */
 export async function POST(request: Request) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => ({}));
   const contactId = typeof body?.contact_id === "string" ? body.contact_id : "";
   const motive = body?.motive as DetentionMotive;

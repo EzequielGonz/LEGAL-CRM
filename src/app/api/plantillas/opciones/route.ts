@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server";
 import { templateOptions } from "@/lib/plantillas";
 import { purposeInfo, type TemplatePurpose } from "@/lib/plantillas/catalogo";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 export const dynamic = "force-dynamic";
 
 /** Plantillas asignadas a una línea para un propósito, con lo que impide usar cada una. */
 export async function GET(request: Request) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const url = new URL(request.url);
   const lineId = url.searchParams.get("line_id") ?? "";
   const purpose = url.searchParams.get("purpose") ?? "campana";

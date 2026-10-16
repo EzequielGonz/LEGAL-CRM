@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { PwaRegister } from "@/components/telefono/pwa-register";
+import { requirePageSession } from "@/lib/acceso/pagina";
 
 export const dynamic = "force-dynamic";
 
@@ -14,7 +15,9 @@ export const viewport: Viewport = {
 };
 
 /** Modo teléfono (bloque 1.9): vista reducida, una columna. */
-export default function TelefonoLayout({ children }: { children: React.ReactNode }) {
+export default async function TelefonoLayout({ children }: { children: React.ReactNode }) {
+  const sesion = await requirePageSession();
+  if (!sesion.ok) return sesion.fallback;
   return (
     <div className="min-h-screen bg-slate-50 pb-12">
       <PwaRegister />

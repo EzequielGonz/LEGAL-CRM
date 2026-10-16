@@ -191,11 +191,24 @@ export function qualityText(q: MetaTemplate["quality_score"]): string | null {
 // ---------------------------------------------------------------------
 // Propósitos y fuentes de las variables
 
-export type TemplatePurpose = "campana" | "seguimiento" | "reagendamiento" | "inicio_cita" | "aviso_interno" | "formulario";
+export type TemplatePurpose =
+  | "campana"
+  | "seguimiento"
+  | "seguimiento_3"
+  | "reagendamiento"
+  | "inicio_cita"
+  | "aviso_interno"
+  | "formulario";
 
 export const TEMPLATE_PURPOSES: { key: TemplatePurpose; label: string; enabled: boolean; when: string }[] = [
   { key: "campana", label: "Primer contacto de campaña", enabled: true, when: "Etapa 1 (bloque 1.8)" },
-  { key: "seguimiento", label: "Seguimiento (contactos 2 y 3)", enabled: false, when: "Se habilita en la Etapa 2 (bloque 2.3)" },
+  { key: "seguimiento", label: "Seguimiento: contacto 2", enabled: true, when: "Etapa 2 (bloque 2.3)" },
+  {
+    key: "seguimiento_3",
+    label: "Seguimiento: contacto 3 (si no hay, se usa la del contacto 2)",
+    enabled: true,
+    when: "Etapa 2 (bloque 2.3)",
+  },
   { key: "reagendamiento", label: "Reagendamiento de la cita", enabled: false, when: "Se habilita en la Etapa 2 (bloque 2.2)" },
   { key: "inicio_cita", label: "Inicio de la cita (Fase 2)", enabled: false, when: "Se habilita en la Etapa 2 (bloque 2.2)" },
   { key: "aviso_interno", label: "Aviso interno de cierre", enabled: false, when: "Se habilita en la Etapa 2 (bloque 2.9)" },

@@ -7,14 +7,17 @@ import { LogoutButton } from "@/components/acceso/logout-button";
 
 const NAV = [
   { href: "/estadisticas", label: "Estadísticas" },
+  { href: "/oportunidades?perfil=juridico", label: "Oportunidades", match: "/oportunidades" },
   { href: "/inbox", label: "Inbox" },
   { href: "/prospectos", label: "Prospectos" },
   { href: "/casos-cerrados", label: "Casos" },
   { href: "/bases", label: "Bases" },
   { href: "/agenda", label: "Agenda" },
+  { href: "/seguimiento", label: "Seguimiento" },
   { href: "/campanas", label: "Campañas" },
   { href: "/agentes", label: "Agentes IA" },
   { href: "/revision", label: "Revisión" },
+  { href: "/contenido?perfil=juridico", label: "Contenido automático", match: "/contenido" },
   { href: "/configuracion", label: "Configuración" },
 ];
 
@@ -26,6 +29,9 @@ export function Sidebar({ title }: { title: string }) {
 
   return (
     <aside className="flex h-screen w-60 flex-col bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 shadow-navy">
+      <a href="#contenido" className="skip-link">
+        Saltar al contenido
+      </a>
       <div className="flex items-center gap-3 border-b border-white/10 px-5 py-5">
         <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-gold-300 via-gold-500 to-gold-700 text-sm font-serif font-bold text-slate-950 shadow-gold">
           E
@@ -38,13 +44,14 @@ export function Sidebar({ title }: { title: string }) {
         </div>
       </div>
 
-      <nav className="flex-1 space-y-1 px-3 py-5">
+      <nav aria-label="Secciones del panel" className="flex-1 space-y-1 px-3 py-5">
         {NAV.map((item, i) => {
-          const active = pathname.startsWith(item.href);
+          const active = pathname.startsWith((item as { match?: string }).match ?? item.href);
           return (
             <Link
               key={item.href}
               href={item.href}
+              aria-current={active ? "page" : undefined}
               style={{ animationDelay: `${i * 40}ms` }}
               className={clsx(
                 "group relative block animate-fade-in-up rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200",

@@ -1,10 +1,13 @@
 import { NextResponse } from "next/server";
 import { setDeviceStatus } from "@/lib/push";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 export const dynamic = "force-dynamic";
 
 /** Desactivar, reactivar o retirar un dispositivo desde el panel (nada se borra). */
 export async function POST(request: Request, { params }: { params: { id: string } }) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => ({}));
   const accion = body?.accion;
   const status = accion === "desactivar" ? "desactivado" : accion === "retirar" ? "retirado" : accion === "activar" ? "activo" : null;

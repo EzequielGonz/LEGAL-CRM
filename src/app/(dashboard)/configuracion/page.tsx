@@ -9,6 +9,12 @@ import { AccessSettings } from "@/components/configuracion/access-settings";
 import { PauseControl } from "@/components/configuracion/pause-control";
 import { PushSettingsSection } from "@/components/configuracion/push-settings-section";
 import { getAutomationPause } from "@/lib/automation-pause";
+import { CalendarSettings } from "@/components/configuracion/calendar-settings";
+import { TareasServidorControl } from "@/components/configuracion/tareas-servidor-control";
+import { Conexiones } from "@/components/configuracion/conexiones";
+import { AvailabilityEditor } from "@/components/agenda/availability-editor";
+import { getTareasServidor } from "@/lib/tareas-servidor";
+import { listCalendarExceptions } from "@/lib/contacto/calendario";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
@@ -43,6 +49,12 @@ export default async function ConfiguracionPage() {
     supabase.from("webhook_quarantine").select("id", { count: "exact", head: true }).is("reviewed_at", null),
     getAutomationPause(),
   ]);
+  const calendar = await listCalendarExceptions();
+  const tareas = await getTareasServidor();
+  const [{ data: civilRules }, { data: penalRules }] = await Promise.all([
+    supabase.from("availability_rules").select("*").eq("area", "civil").order("weekday"),
+    supabase.from("availability_rules").select("*").eq("area", "penal").order("weekday"),
+  ]);
 
   const adminPhone: string | null = adminProfile?.phone ?? null;
 
@@ -69,6 +81,29 @@ export default async function ConfiguracionPage() {
           reason={pause.reason}
           configProblem={pause.configProblem ?? (pause.readError ? `No se pudo leer la pausa general (${pause.readError}): se asume todo en pausa.` : null)}
         />
+      </div>
+
+      <div id="disponibilidad" className="rounded-xl border border-slate-200 bg-white p-5">
+        <h2 className="mb-3 text-sm font-semibold text-slate-700">Disponibilidad para citas</h2>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <AvailabilityEditor area="civil" initialRules={civilRules ?? []} />
+          <AvailabilityEditor area="penal" initialRules={penalRules ?? []} />
+        </div>
+      </div>
+
+      <div className="rounded-xl border border-slate-200 bg-white p-5">
+        <h2 className="mb-3 text-sm font-semibold text-slate-700">Tareas del servidor (citas y contenido)</h2>
+        <TareasServidorControl citas={tareas.citas} contenido={tareas.contenido} configProblem={tareas.configProblem ?? null} />
+      </div>
+
+      <div className="rounded-xl border border-slate-200 bg-white p-5">
+        <h2 className="mb-3 text-sm font-semibold text-slate-700">Conexiones</h2>
+        <Conexiones />
+      </div>
+
+      <div className="rounded-xl border border-slate-200 bg-white p-5">
+        <h2 className="mb-3 text-sm font-semibold text-slate-700">Horario de contacto y calendario (todos los perfiles)</h2>
+        <CalendarSettings upcoming={calendar.upcoming} archived={calendar.archived} loadError={calendar.error} />
       </div>
 
       <div className="rounded-xl border border-slate-200 bg-white p-5">

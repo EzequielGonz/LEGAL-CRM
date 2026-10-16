@@ -13,7 +13,10 @@ import { parseWhatsAppMessage, mapDeliveryStatus } from "@/lib/webhooks/whatsapp
 test("sesión: firma y lectura", async () => {
   const token = await signSession({ v: 1, iat: 1700000000, sid: "abc" });
   assert.deepEqual(await readSignedSession(token), { v: 1, iat: 1700000000, sid: "abc" });
-  assert.ok(await validateSession(token), "sin base disponible acepta la firma válida");
+  const check = await validateSession(token);
+  assert.equal(check.status, "no_comprobable", "sin base configurada, la vigencia no se puede comprobar y no se acepta por las dudas (bloque 1.12)");
+  assert.equal((await validateSession(undefined)).status, "ausente");
+  assert.equal((await validateSession("basura")).status, "invalida");
 });
 
 test("sesión: cookie alterada o con otra clave no vale", async () => {

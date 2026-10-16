@@ -2,6 +2,10 @@ import { NextResponse } from "next/server";
 import { tickAllActiveCampaigns } from "@/lib/campaigns";
 import { runMarketingTick } from "@/lib/marketing/followups";
 import { enqueueQualifiedLeads } from "@/lib/marketing/outreach";
+import { runFollowupTick } from "@/lib/seguimiento/motor";
+import { ejecutarCitaTareasVencidas } from "@/lib/citas";
+import { publicarVencidas } from "@/lib/contenido/cola";
+import { getTareasServidor } from "@/lib/tareas-servidor";
 
 // El análisis de negocios (descargar la web + IA) necesita más de los 10s por defecto.
 export const maxDuration = 60;
@@ -41,8 +45,17 @@ export async function POST(request: Request) {
     // 1) Primero lo que manda mensajes (campañas), que es lo sensible al ritmo.
     const results = await tickAllActiveCampaigns();
 
-    // 2) Pipeline de Marketing: analiza negocios nuevos, suma los mejor
-    //    calificados a la prospección automática y gestiona los seguimientos.
+    // 2) Seguimiento general de los cuatro perfiles (bloque 2.3): programa los
+    //    contactos 2 y 3 y manda los vencidos. Aislado: si falla, no afecta al resto.
+    let seguimiento: Record<string, unknown> = {};
+    try {
+      seguimiento = await runFollowupTick();
+    } catch (err: any) {
+      seguimiento = { error: String(err?.message ?? err) };
+    }
+
+    // 3) Pipeline de Marketing: analiza negocios nuevos, suma los mejor
+    //    calificados a la prospección automática (sus seguimientos ya van por el punto 2).
     //    Aislado: si falla, no afecta a las campañas de los otros rubros.
     let marketing: Record<string, unknown> = {};
     try {
@@ -52,7 +65,27 @@ export async function POST(request: Request) {
       marketing = { error: String(err?.message ?? err) };
     }
 
-    return NextResponse.json({ ok: true, results, marketing });
+    // 4) Etapa 3: tareas del servidor (citas de Fase 2 y publicación de
+    //    contenido), solo si el ejecutor está encendido desde Configuración.
+    //    Cada una además respeta la pausa general y su política propia.
+    const tareas = await getTareasServidor();
+    const servidor: Record<string, unknown> = { citas: "apagado", contenido: "apagado" };
+    if (tareas.citas) {
+      try {
+        servidor.citas = await ejecutarCitaTareasVencidas({ limit: 5 });
+      } catch (err: any) {
+        servidor.citas = { error: String(err?.message ?? err) };
+      }
+    }
+    if (tareas.contenido) {
+      try {
+        servidor.contenido = await publicarVencidas({ limit: 3 });
+      } catch (err: any) {
+        servidor.contenido = { error: String(err?.message ?? err) };
+      }
+    }
+
+    return NextResponse.json({ ok: true, results, seguimiento, marketing, servidor });
   } catch (err: any) {
     return NextResponse.json({ error: String(err.message ?? err) }, { status: 500 });
   }

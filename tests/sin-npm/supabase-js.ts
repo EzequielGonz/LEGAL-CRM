@@ -96,8 +96,9 @@ class Query implements PromiseLike<Result> {
     this.filters.push([c, `like.${pattern}`]);
     return this;
   }
-  or(expr: string) {
-    this.filters.push(["or", `(${expr})`]);
+  or(expr: string, opts?: { referencedTable?: string; foreignTable?: string }) {
+    const tabla = opts?.referencedTable ?? opts?.foreignTable;
+    this.filters.push([tabla ? `${tabla}.or` : "or", `(${expr})`]);
     return this;
   }
   contains(c: string, v: unknown) {

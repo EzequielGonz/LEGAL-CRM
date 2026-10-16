@@ -12,6 +12,7 @@ import {
   updatePin,
   verifyPin,
 } from "@/lib/acceso/pin";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +21,8 @@ export const dynamic = "force-dynamic";
  * siguen abiertas (para cerrarlas está "Cerrar sesión en los demás dispositivos").
  */
 export async function POST(request: Request) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => ({}));
   const actual = typeof body?.actual === "string" ? body.actual.trim() : "";
   const nuevo = typeof body?.nuevo === "string" ? body.nuevo.trim() : "";

@@ -35,7 +35,7 @@ export default async function EstadisticasPage() {
         </p>
       </div>
 
-      <MetricsPanel metrics={metrics} />
+      <MetricsPanel metrics={metrics} perfil="juridico" volver="/estadisticas" />
 
       <div className="rounded-xl border border-slate-200 bg-white p-5">
         <h2 className="mb-3 text-sm font-semibold text-slate-700">Próximas citas</h2>

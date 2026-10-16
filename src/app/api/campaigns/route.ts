@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { attachRecipients, baseContacts, contactPriorities, planRecipients, planSummary } from "@/lib/campaign-recipients";
 import { AREA_TO_RUBRO_ID } from "@/lib/rubros";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 /**
  * Crea una campaña (siempre en borrador). Si viene `base_id` (toda una
@@ -10,6 +11,8 @@ import { AREA_TO_RUBRO_ID } from "@/lib/rubros";
  * src/lib/campaign-recipients.ts. Nada se envía hasta lanzarla a mano.
  */
 export async function POST(request: Request) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const body = await request.json();
   const contact_ids: string[] | undefined = body?.contact_ids;
   const base_id: string | undefined = typeof body?.base_id === "string" ? body.base_id : undefined;

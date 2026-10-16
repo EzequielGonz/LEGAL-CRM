@@ -37,10 +37,21 @@ export function SidebarRubro({
   extraNavItems?: { path: string; label: string }[];
 }) {
   const pathname = usePathname();
-  const items = [...NAV_ITEMS, ...extraNavItems];
+  const slug = basePath.split("/").filter(Boolean).pop() ?? "";
+  // «Oportunidades» es común a todos los perfiles: abre la lista con los
+  // indicadores clickeables (misma consulta que cada cifra).
+  const items: { path: string; label: string; href?: string; match?: string }[] = [
+    { path: "oportunidades", label: "Oportunidades", href: `/oportunidades?perfil=${encodeURIComponent(slug)}`, match: "/oportunidades" },
+    ...NAV_ITEMS,
+    { path: "contenido", label: "Contenido automático", href: `/contenido?perfil=${encodeURIComponent(slug)}`, match: "/contenido" },
+    ...extraNavItems,
+  ];
 
   return (
     <aside className="flex h-screen w-60 flex-col bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 shadow-navy">
+      <a href="#contenido" className="skip-link">
+        Saltar al contenido
+      </a>
       <div className="flex items-center gap-3 border-b border-white/10 px-5 py-5">
         <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-gold-300 via-gold-500 to-gold-700 text-lg shadow-gold">
           {emoji}
@@ -51,14 +62,15 @@ export function SidebarRubro({
         </div>
       </div>
 
-      <nav className="flex-1 space-y-1 px-3 py-5">
+      <nav aria-label="Secciones del perfil" className="flex-1 space-y-1 px-3 py-5">
         {items.map((item, i) => {
-          const href = `${basePath}/${item.path}`;
-          const active = pathname.startsWith(href);
+          const href = item.href ?? `${basePath}/${item.path}`;
+          const active = pathname.startsWith(item.match ?? href);
           return (
             <Link
               key={item.path}
               href={href}
+              aria-current={active ? "page" : undefined}
               style={{ animationDelay: `${i * 40}ms` }}
               className={clsx(
                 "group relative block animate-fade-in-up rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200",

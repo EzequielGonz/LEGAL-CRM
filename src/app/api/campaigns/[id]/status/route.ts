@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getCampaignStatus } from "@/lib/campaigns";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 /**
  * Foto de solo lectura del estado actual de una campaña, para el panel de
@@ -7,7 +8,9 @@ import { getCampaignStatus } from "@/lib/campaigns";
  * ese panel está abierto). Nunca dispara envíos: eso lo sigue haciendo
  * únicamente el cron que pega a /api/campaigns/tick.
  */
-export async function GET(_request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, { params }: { params: { id: string } }) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   try {
     const snapshot = await getCampaignStatus(params.id);
     return NextResponse.json(snapshot);

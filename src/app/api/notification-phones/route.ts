@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 /**
  * Teléfonos adicionales que reciben notificaciones de WhatsApp (caso
@@ -7,7 +8,9 @@ import { createAdminClient } from "@/lib/supabase/admin";
  * panel — a diferencia del teléfono de "Configuración → Notificaciones"
  * (uno por usuario logueado), acá se pueden cargar tantos como haga falta.
  */
-export async function GET() {
+export async function GET(request: Request) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const supabase = createAdminClient();
   const { data, error } = await supabase
     .from("notification_phones")
@@ -19,6 +22,8 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const { phone, label } = await request.json();
 
   if (!phone || typeof phone !== "string" || !phone.trim()) {

@@ -1,5 +1,9 @@
 import type { FunctionDeclaration } from "@google/genai";
 import type { Area } from "@/lib/supabase/database.types";
+import { MOTIVOS_AGENTE, TRATAMIENTO_ATENCION } from "@/lib/captacion/reglas";
+
+const MOTIVOS_DETENER = MOTIVOS_AGENTE.filter((m) => TRATAMIENTO_ATENCION[m].detener && !TRATAMIENTO_ATENCION[m].principal);
+const MOTIVOS_ESCALAR = MOTIVOS_AGENTE.filter((m) => !MOTIVOS_DETENER.includes(m));
 
 /**
  * Herramientas que el agente IA puede invocar durante la conversación.
@@ -66,13 +70,51 @@ export const AGENT_TOOLS: FunctionDeclaration[] = [
   {
     name: "escalar_a_humano",
     description:
-      "Deriva la conversación a un humano cuando el prospecto pide hablar con una persona, hay una situación sensible/urgente, o vos no podés resolver algo. Apaga tus respuestas automáticas en esta conversación.",
+      "Pasa la conversación a una persona del equipo cuando la persona pide hablar con alguien, consulta algo fuera de tu alcance (precios, decisiones del profesional), comparte datos sensibles o pregunta de dónde sacamos su contacto. Elegí la categoría. Salvo la consulta de procedencia, apaga tus respuestas automáticas en esta conversación.",
     parametersJsonSchema: {
       type: "object",
       properties: {
-        motivo: { type: "string" },
+        categoria: { type: "string", enum: MOTIVOS_ESCALAR },
+        motivo: { type: "string", description: "Qué dijo o pidió la persona, en una frase." },
       },
       required: ["motivo"],
+    },
+  },
+  {
+    name: "detener_contacto",
+    description:
+      "Detiene el contacto cuando la persona no quiere más mensajes, se enoja por el contacto, es un número equivocado, ya resolvió su necesidad, ya tiene abogado, ya contrató por otro canal o no le interesa. Después respondé SOLO una disculpa breve. Apaga tus respuestas automáticas.",
+    parametersJsonSchema: {
+      type: "object",
+      properties: {
+        motivo: { type: "string", enum: MOTIVOS_DETENER },
+        detalle: { type: "string", description: "Lo que dijo la persona, en una frase." },
+      },
+      required: ["motivo"],
+    },
+  },
+  {
+    name: "captar",
+    description:
+      "Registra la captación SOLO cuando la persona aceptó el siguiente paso que corresponde al rubro (ver las reglas de captación). Agendar no es captar. Si la persona solo preguntó el precio, usá solo_precio=true: no capta y pasa a una persona.",
+    parametersJsonSchema: {
+      type: "object",
+      properties: {
+        aceptacion: { type: "boolean", description: "true si aceptó el siguiente paso." },
+        evidencia: { type: "string", description: "Qué aceptó, con sus palabras." },
+        solo_precio: { type: "boolean" },
+      },
+      required: ["aceptacion", "evidencia"],
+    },
+  },
+  {
+    name: "registrar_ubicacion",
+    description:
+      "Registra la ubicación de la persona en tres valores: amba, fuera (fuera de AMBA) o sin_confirmar. Nunca supongas AMBA: si no lo dijo, es sin_confirmar.",
+    parametersJsonSchema: {
+      type: "object",
+      properties: { zona: { type: "string", enum: ["amba", "fuera", "sin_confirmar"] } },
+      required: ["zona"],
     },
   },
   {
@@ -145,11 +187,36 @@ export const MARKETING_TOOLS: FunctionDeclaration[] = [
   },
 ];
 
+/** Herramientas EXCLUSIVAS de Jurídico (Civil y Penal): ruta y Fase 2. */
+export const JURIDICO_TOOLS: FunctionDeclaration[] = [
+  {
+    name: "elegir_ruta_juridica",
+    description:
+      "Registra la ruta del caso: 'fases' para un caso frío (Fase 1 agenda la revisión, Fase 2 obtiene el relato) o 'directa' para una consulta actual (ruta rápida).",
+    parametersJsonSchema: {
+      type: "object",
+      properties: { ruta: { type: "string", enum: ["fases", "directa"] } },
+      required: ["ruta"],
+    },
+  },
+  {
+    name: "programar_fase2",
+    description:
+      "Agenda la Fase 2 (revisión del caso con vos, sin usar turnos del equipo). Empieza unos 2 minutos después si la persona puede ahora, o en el horario que eligió (ISO 8601). Agendar NO capta.",
+    parametersJsonSchema: {
+      type: "object",
+      properties: { horario: { type: "string", description: "Inicio elegido, ISO 8601. Vacío = en unos minutos." } },
+    },
+  },
+];
+
 /** Herramientas disponibles según el área del agente. */
 export function toolsForArea(area: Area): FunctionDeclaration[] {
   if (area === "marketing") {
     // Marketing no usa finalizar_consulta (es del cuestionario de Civil).
     return [...AGENT_TOOLS.filter((t) => t.name !== "finalizar_consulta"), ...MARKETING_TOOLS];
   }
-  return AGENT_TOOLS;
+  if (area === "civil" || area === "penal") return [...AGENT_TOOLS, ...JURIDICO_TOOLS];
+  // Coberturas y Autos: sin el cierre propio de Civil.
+  return AGENT_TOOLS.filter((t) => t.name !== "finalizar_consulta");
 }

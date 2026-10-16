@@ -1,10 +1,13 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 export const dynamic = "force-dynamic";
 
 /** Resolver o descartar una incidencia (queda la nota y el momento; nunca se borra). */
 export async function POST(request: Request, { params }: { params: { id: string } }) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => ({}));
   const accion = body?.accion;
   const nota = typeof body?.nota === "string" ? body.nota.trim() : "";

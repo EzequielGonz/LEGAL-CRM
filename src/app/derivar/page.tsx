@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { requirePageSession } from "@/lib/acceso/pagina";
 
 export const dynamic = "force-dynamic";
 
@@ -10,6 +11,8 @@ export const dynamic = "force-dynamic";
  * a mano. Esta dirección queda como acceso directo para no romper enlaces
  * guardados.
  */
-export default function DerivarPage() {
+export default async function DerivarPage() {
+  const sesion = await requirePageSession();
+  if (!sesion.ok) return sesion.fallback;
   redirect("/telefono");
 }

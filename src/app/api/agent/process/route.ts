@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { runAgentTurn } from "@/lib/ai-agent/agent";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 /**
  * Dispara manualmente un turno del agente IA para una conversación.
@@ -8,6 +9,8 @@ import { runAgentTurn } from "@/lib/ai-agent/agent";
  * desde el panel.
  */
 export async function POST(request: Request) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const { conversation_id } = await request.json();
 
   if (!conversation_id) {

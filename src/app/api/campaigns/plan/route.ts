@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { baseContacts, contactPriorities, planRecipients, planSummary } from "@/lib/campaign-recipients";
 import { getCampaignInfo } from "@/lib/campaign-metrics";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -15,6 +16,8 @@ export const maxDuration = 60;
  * Body: { base_id? | contact_ids?, campaign_id?, include_previously_contacted? }
  */
 export async function POST(request: Request) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => null);
   if (!body) return NextResponse.json({ error: "Body inválido" }, { status: 400 });
   const { base_id, contact_ids, campaign_id, include_previously_contacted } = body as {

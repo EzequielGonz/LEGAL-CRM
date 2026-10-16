@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { ensureOpportunity, logOpportunityEvent } from "@/lib/opportunities";
+import { requireSession } from "@/lib/acceso/autorizacion";
 
 export const dynamic = "force-dynamic";
 
@@ -15,6 +16,8 @@ const ESTADOS = ["pendiente", "confirmada", "realizada", "ausente", "cancelada"]
  * body: { estado, nota? }
  */
 export async function POST(request: Request, { params }: { params: { id: string } }) {
+  const auth = await requireSession(request);
+  if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => ({}));
   const estado = body?.estado as (typeof ESTADOS)[number];
   if (!ESTADOS.includes(estado)) return NextResponse.json({ error: "Estado de cita inválido." }, { status: 400 });

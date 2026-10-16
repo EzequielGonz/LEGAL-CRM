@@ -30,7 +30,8 @@ export async function getAvailableSlots(
       .gte("ends_at", now.toISOString()),
     supabase
       .from("appointments")
-      .select("starts_at, ends_at")
+      // Se lee todo y se filtra acá: así funciona antes y después de la migración 0203.
+      .select("*")
       .eq("area", area)
       .neq("status", "cancelada")
       .gte("starts_at", now.toISOString()),
@@ -68,8 +69,9 @@ export async function getAvailableSlots(
         if (slotStart < now) continue;
         const slotEnd = new Date(slotStart.getTime() + rule.slot_duration_minutes * 60000);
 
-        const overlapsAppointment = (appointments ?? []).some(
-          (a) => new Date(a.starts_at) < slotEnd && new Date(a.ends_at) > slotStart
+        // Las citas de IA (Fase 2) no consumen turnos humanos.
+        const overlapsAppointment = (appointments ?? []).filter((a: any) => a.kind !== "ia").some(
+          (a: any) => new Date(a.starts_at) < slotEnd && new Date(a.ends_at) > slotStart
         );
         const overlapsBlock = (blocks ?? []).some(
           (b) => new Date(b.starts_at) < slotEnd && new Date(b.ends_at) > slotStart
