@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { LogoutButton } from "@/components/acceso/logout-button";
+import { TarjetaLuz } from "@/components/ui/tarjeta-luz";
 import { requirePageSession } from "@/lib/acceso/pagina";
 
 export const dynamic = "force-dynamic";
@@ -27,8 +27,8 @@ export default async function InicioPage() {
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 px-4 py-12">
-      {/* Glow decorativo dorado, igual que en login — puramente ambiental */}
+    <div className="escena-oscura flex items-center justify-center px-4 py-12">
+      {/* Resplandores ambientales (decorativos) */}
       <div className="pointer-events-none absolute -left-24 -top-24 h-96 w-96 animate-float rounded-full bg-gold-500/10 blur-3xl" />
       <div
         className="pointer-events-none absolute -bottom-24 -right-24 h-96 w-96 animate-float rounded-full bg-gold-500/10 blur-3xl"
@@ -36,44 +36,52 @@ export default async function InicioPage() {
       />
 
       <div className="relative w-full max-w-3xl text-center">
-        <span className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-gold-300 via-gold-500 to-gold-700 font-serif text-xl font-bold text-slate-950 shadow-gold">
+        <span className="icono-dorado mx-auto mb-5 !h-14 !w-14 !rounded-full animate-scale-in font-serif text-xl font-bold">
           E
         </span>
-        <h1 className="mb-2 font-serif text-2xl font-semibold text-white sm:text-3xl">
+        <h1 className="animate-fade-in-up mb-2 font-serif text-2xl font-semibold text-white sm:text-3xl">
           ¿Cómo querés utilizar el panel?
         </h1>
-        <p className="mb-10 text-sm text-slate-400">Panel central</p>
-        <div className="mb-6 text-center">
-          <LogoutButton className="text-xs" />
-        </div>
+        <p className="animate-fade-in-up mb-8 text-sm text-slate-400" style={{ animationDelay: "60ms" }}>
+          Panel central
+        </p>
 
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-          <Link
-            href="/telefono"
-            className="group animate-scale-in rounded-2xl border border-white/10 bg-white/5 p-8 text-left backdrop-blur transition-all duration-200 hover:-translate-y-1 hover:border-gold-400/50 hover:bg-white/10 active:scale-[0.98]"
-          >
-            <span className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-gold-300 via-gold-500 to-gold-700 text-2xl shadow-gold">
-              📱
+          <TarjetaLuz href="/telefono" className="animate-scale-in rounded-3xl p-8 text-left" style={{ animationDelay: "120ms" }}>
+            <span className="icono-dorado mb-5">
+              <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <rect x="7" y="2.5" width="10" height="19" rx="2.5" />
+                <path d="M11 18.5h2" />
+              </svg>
             </span>
-            <h2 className="mb-1 font-serif text-lg font-semibold text-gold-100">Teléfono</h2>
+            <h2 className="mb-1 font-serif text-xl font-semibold text-gold-100">Teléfono</h2>
             <p className="text-sm leading-relaxed text-slate-300">
               Iniciar campañas, clientes cerrados y estadísticas de cada perfil.
             </p>
-          </Link>
+            <p className="mt-5 text-xs font-semibold uppercase tracking-wider text-gold-300">
+              Entrar <span className="flecha-desliza" aria-hidden="true">→</span>
+            </p>
+          </TarjetaLuz>
 
-          <Link
-            href="/perfiles"
-            className="group animate-scale-in rounded-2xl border border-white/10 bg-white/5 p-8 text-left backdrop-blur transition-all duration-200 hover:-translate-y-1 hover:border-gold-400/50 hover:bg-white/10 active:scale-[0.98]"
-            style={{ animationDelay: "80ms" }}
-          >
-            <span className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-gold-300 via-gold-500 to-gold-700 text-2xl shadow-gold">
-              💻
+          <TarjetaLuz href="/perfiles" className="animate-scale-in rounded-3xl p-8 text-left" style={{ animationDelay: "200ms" }}>
+            <span className="icono-dorado mb-5">
+              <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <rect x="3" y="4.5" width="18" height="12" rx="2" />
+                <path d="M8 20h8M12 16.5V20" />
+              </svg>
             </span>
-            <h2 className="mb-1 font-serif text-lg font-semibold text-gold-100">Computadora</h2>
+            <h2 className="mb-1 font-serif text-xl font-semibold text-gold-100">Computadora</h2>
             <p className="text-sm leading-relaxed text-slate-300">
               Acceso al sistema de gestión y automatizaciones.
             </p>
-          </Link>
+            <p className="mt-5 text-xs font-semibold uppercase tracking-wider text-gold-300">
+              Entrar <span className="flecha-desliza" aria-hidden="true">→</span>
+            </p>
+          </TarjetaLuz>
+        </div>
+
+        <div className="mt-8 text-center">
+          <LogoutButton className="text-xs" />
         </div>
       </div>
     </div>
