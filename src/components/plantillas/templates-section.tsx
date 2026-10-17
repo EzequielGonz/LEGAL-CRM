@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { profileCatalog } from "@/lib/plantillas";
 import { TemplatesManager } from "@/components/plantillas/templates-manager";
+import { EnviarPropuestas } from "@/components/plantillas/enviar-propuestas";
 
 /**
  * Sección "Plantillas de WhatsApp" de la Configuración de cada perfil
@@ -25,15 +26,18 @@ export async function TemplatesSection({ slug }: { slug: string }) {
     return view;
   });
   return (
-    <TemplatesManager
-      profile={{
-        id: profile.id,
-        name: profile.name,
-        hasBrand: !!profile.brand_name?.trim(),
-        hasPresentation: !!profile.agent_presentation_name?.trim(),
-      }}
-      lines={catalog.lines as any}
-      templates={templates as any}
-    />
+    <div className="space-y-4">
+      <EnviarPropuestas lines={catalog.lines as any} />
+      <TemplatesManager
+        profile={{
+          id: profile.id,
+          name: profile.name,
+          hasBrand: !!profile.brand_name?.trim(),
+          hasPresentation: !!profile.agent_presentation_name?.trim(),
+        }}
+        lines={catalog.lines as any}
+        templates={templates as any}
+      />
+    </div>
   );
 }
