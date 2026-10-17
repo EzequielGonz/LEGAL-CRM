@@ -118,20 +118,20 @@ export function MenuPerfil({ slug, nombre, logo }: { slug: SlugPerfil; nombre?: 
           ))}
         </nav>
 
-        <div className="menu-pie space-y-0.5 border-t border-white/[0.07] px-3 py-3">
+        <div className="menu-pie border-t border-white/[0.07] px-3 py-2">
           <Link
             href="/perfiles"
-            className="block rounded-lg px-3 py-2 text-xs font-medium text-slate-300 transition-colors hover:bg-white/5 hover:text-gold-100"
+            className="block rounded-lg px-3 py-1.5 text-xs font-medium text-slate-300 transition-colors hover:bg-white/5 hover:text-gold-100"
           >
             ← Elegir otro perfil
           </Link>
           <Link
             href="/inicio"
-            className="block rounded-lg px-3 py-2 text-xs font-medium text-slate-300 transition-colors hover:bg-white/5 hover:text-gold-100"
+            className="block rounded-lg px-3 py-1.5 text-xs font-medium text-slate-300 transition-colors hover:bg-white/5 hover:text-gold-100"
           >
             ← Teléfono o computadora
           </Link>
-          <LogoutButton className="block w-full rounded-lg px-3 py-2 text-left text-xs hover:bg-white/5" />
+          <LogoutButton className="block w-full rounded-lg px-3 py-1.5 text-left text-xs hover:bg-white/5" />
         </div>
       </aside>
     </>
