@@ -1,0 +1,393 @@
+/* =====================================================================
+   Dirección visual «Estudio» (16/10, rediseño integral).
+   Idea: el escritorio de un despacho de primer nivel. Papel cálido con
+   trama fina, carpetas con relieve apenas perceptible, una regla de
+   acento (la «regla de libro mayor») que marca cada cifra y cada sección,
+   y la tinta del perfil para todo lo que es estructura. Un solo sistema
+   para los cuatro perfiles: cambia la paleta (data-tema), no el diseño.
+   Solo presentación: no cambia textos, datos, campos ni acciones.
+   ===================================================================== */
+
+:root {
+  --e-radio-tarjeta: 14px;
+  --e-radio-control: 10px;
+  --e-borde: rgb(var(--c-slate-900) / 0.08);
+  --e-borde-fuerte: rgb(var(--c-slate-900) / 0.14);
+  --e-sombra-1: 0 1px 0 rgb(255 255 255 / 0.9) inset, 0 1px 2px rgb(var(--c-slate-900) / 0.045), 0 6px 18px -12px rgb(var(--c-slate-900) / 0.16);
+  --e-sombra-2: 0 1px 0 rgb(255 255 255 / 0.9) inset, 0 2px 4px rgb(var(--c-slate-900) / 0.05), 0 18px 36px -18px rgb(var(--c-slate-900) / 0.28);
+  --e-curva: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* ---------- Lienzo: papel con trama ---------- */
+main#contenido,
+.modo-telefono,
+.modo-telefono [data-tema] {
+  background-color: rgb(var(--c-slate-50));
+  background-image:
+    radial-gradient(1100px 420px at 100% -140px, rgb(var(--c-gold-300) / 0.2), transparent 70%),
+    radial-gradient(800px 360px at -10% 110%, rgb(var(--c-slate-300) / 0.18), transparent 70%),
+    radial-gradient(rgb(var(--c-slate-900) / 0.04) 1px, transparent 1.3px);
+  background-size: auto, auto, 22px 22px;
+  background-attachment: local;
+}
+.lienzo-contenido {
+  width: 100%;
+  max-width: 92rem;
+  margin: 0 auto;
+  padding: 1.25rem 1rem 3rem;
+}
+@media (min-width: 640px) {
+  .lienzo-contenido { padding: 1.5rem 1.5rem 3rem; }
+}
+@media (min-width: 1024px) {
+  .lienzo-contenido { padding: 1.75rem 2.25rem 3.5rem; }
+}
+/* La entrada suave pasa del main a cada bloque de la página */
+main#contenido > * {
+  animation: none;
+}
+.lienzo-contenido > * {
+  animation: pagina-entra 0.36s var(--e-curva) backwards;
+}
+.lienzo-contenido > *:nth-child(2) { animation-delay: 0.035s; }
+.lienzo-contenido > *:nth-child(3) { animation-delay: 0.07s; }
+.lienzo-contenido > *:nth-child(n + 4) { animation-delay: 0.1s; }
+
+/* Contenido que quedaba angosto en el centro: más ancho, mejor repartido */
+.lienzo-contenido :is([class~="max-w-3xl"], [class~="max-w-4xl"])[class~="mx-auto"] {
+  max-width: 68rem;
+}
+.lienzo-contenido [class~="max-w-5xl"][class~="mx-auto"] {
+  max-width: 80rem;
+}
+
+/* ---------- Franja superior (ubicación + fecha) ---------- */
+.encabezado-panel {
+  display: none;
+}
+@media (min-width: 1024px) {
+  .encabezado-panel {
+    position: sticky;
+    top: 0;
+    z-index: 15;
+    display: flex;
+    height: 3.25rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0 2.25rem;
+    background: rgb(var(--c-slate-50) / 0.78);
+    -webkit-backdrop-filter: saturate(1.5) blur(14px);
+    backdrop-filter: saturate(1.5) blur(14px);
+    border-bottom: 1px solid var(--e-borde);
+    font-size: 0.8125rem;
+  }
+}
+.encabezado-ruta {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.55rem;
+  white-space: nowrap;
+}
+.encabezado-icono {
+  display: grid;
+  height: 1.75rem;
+  width: 1.75rem;
+  place-items: center;
+  border-radius: 8px;
+  background: rgb(var(--c-gold-100));
+  color: rgb(var(--c-gold-800));
+  box-shadow: inset 0 0 0 1px rgb(var(--c-gold-500) / 0.25);
+}
+.encabezado-perfil { font-weight: 600; color: rgb(var(--c-slate-700)); }
+.encabezado-grupo { color: rgb(var(--c-slate-500)); }
+.encabezado-seccion { font-weight: 600; color: rgb(var(--c-slate-950)); overflow: hidden; text-overflow: ellipsis; }
+.encabezado-sep { color: rgb(var(--c-slate-300)); }
+.encabezado-fecha {
+  display: inline-block;
+  color: rgb(var(--c-slate-500));
+  font-variant-numeric: tabular-nums;
+}
+.encabezado-fecha::first-letter { text-transform: uppercase; }
+
+/* ---------- Tipografía ---------- */
+:is(main#contenido, .modo-telefono) h1:not([class*="text-white"]) {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: clamp(1.6rem, 1.15rem + 1.05vw, 2.125rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.022em;
+  color: rgb(var(--c-slate-950));
+}
+main#contenido h1 + p {
+  margin-top: 0.4rem;
+  max-width: 72ch;
+  color: rgb(var(--c-slate-500));
+}
+/* Títulos de sección: versalitas con la regla del libro mayor */
+:is(main#contenido, .modo-telefono) h2:is([class~="text-sm"], [class~="text-xs"]) {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgb(var(--c-slate-500));
+}
+:is(main#contenido, .modo-telefono) h2:is([class~="text-sm"], [class~="text-xs"])::before {
+  content: "";
+  flex: none;
+  width: 1.1rem;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, rgb(var(--c-gold-500)), rgb(var(--c-gold-300)));
+}
+:is(main#contenido, .modo-telefono) h2:is([class~="text-base"], [class~="text-lg"], [class~="text-xl"]) {
+  letter-spacing: -0.012em;
+  color: rgb(var(--c-slate-950));
+}
+:is(main#contenido, .modo-telefono) h3 {
+  letter-spacing: -0.01em;
+}
+
+/* ---------- Superficies: carpetas con relieve sutil ---------- */
+:is(main#contenido, .modo-telefono) :is([class~="rounded-xl"], [class~="rounded-2xl"])[class~="border"][class~="bg-white"]:not(input):not(select):not(textarea):not(button) {
+  border-color: var(--e-borde);
+  border-radius: var(--e-radio-tarjeta);
+  box-shadow: var(--e-sombra-1);
+}
+/* Una carpeta dentro de otra no repite la sombra: se hunde apenas */
+:is(main#contenido, .modo-telefono) :is([class~="rounded-xl"], [class~="rounded-2xl"])[class~="border"][class~="bg-white"] :is([class~="rounded-xl"], [class~="rounded-lg"])[class~="border"][class~="bg-white"]:not(input):not(select):not(textarea):not(button) {
+  box-shadow: none;
+  background-color: rgb(var(--c-slate-50) / 0.55);
+  border-color: rgb(var(--c-slate-900) / 0.07);
+}
+:is(main#contenido, .modo-telefono) a:is([class~="rounded-xl"], [class~="rounded-2xl"])[class~="border"][class~="bg-white"] {
+  transition: transform 0.22s var(--e-curva), box-shadow 0.22s var(--e-curva), border-color 0.22s ease;
+}
+:is(main#contenido, .modo-telefono) a:is([class~="rounded-xl"], [class~="rounded-2xl"])[class~="border"][class~="bg-white"]:hover {
+  transform: translateY(-2px);
+  border-color: rgb(var(--c-gold-500) / 0.45);
+  box-shadow: var(--e-sombra-2);
+}
+/* Superficies de apoyo (bg-slate-50) dentro del panel */
+:is(main#contenido, .modo-telefono) [class~="rounded-xl"][class~="border"][class~="bg-slate-50"] {
+  border-color: var(--e-borde);
+  border-radius: var(--e-radio-tarjeta);
+}
+
+/* ---------- Tarjetas de cifras ---------- */
+.tarjeta-cifra {
+  min-height: 8.75rem;
+  padding: 1.15rem 1.25rem 1.05rem;
+  isolation: isolate;
+}
+.tarjeta-cifra::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  right: -3rem;
+  top: -3rem;
+  width: 9rem;
+  height: 9rem;
+  border-radius: 9999px;
+  background: radial-gradient(closest-side, rgb(var(--c-gold-200) / 0.45), transparent);
+  opacity: 0.55;
+  transition: opacity 0.3s ease, transform 0.4s var(--e-curva);
+}
+a.tarjeta-cifra:hover::after {
+  opacity: 1;
+  transform: scale(1.12);
+}
+.tarjeta-cifra-regla {
+  display: block;
+  width: 1.4rem;
+  height: 2px;
+  margin-bottom: 0.8rem;
+  border-radius: 2px;
+  background: linear-gradient(90deg, rgb(var(--c-gold-500)), rgb(var(--c-gold-300)));
+  transition: width 0.3s var(--e-curva);
+}
+a.tarjeta-cifra:hover .tarjeta-cifra-regla {
+  width: 2.4rem;
+}
+.tarjeta-cifra-etiqueta {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(var(--c-slate-500));
+}
+.tarjeta-cifra-valor {
+  margin-top: 0.35rem;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: clamp(1.85rem, 1.45rem + 1vw, 2.45rem);
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  color: rgb(var(--c-slate-950));
+}
+.tarjeta-cifra-ir {
+  flex: none;
+  font-size: 0.72rem;
+  font-weight: 650;
+  color: rgb(var(--c-gold-800));
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+a.tarjeta-cifra:hover .tarjeta-cifra-ir {
+  color: rgb(var(--c-slate-950));
+}
+/* Otras cifras grandes del panel: misma voz tipográfica */
+:is(main#contenido, .modo-telefono) p[class~="font-serif"]:is([class~="text-2xl"], [class~="text-3xl"]) {
+  letter-spacing: -0.022em;
+  font-variant-numeric: tabular-nums;
+  color: rgb(var(--c-slate-950));
+}
+
+/* ---------- Tablas ---------- */
+:is(main#contenido, .modo-telefono) thead {
+  background: linear-gradient(180deg, rgb(var(--c-slate-50)), rgb(var(--c-slate-50) / 0.6));
+}
+:is(main#contenido, .modo-telefono) thead th {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--e-borde);
+}
+:is(main#contenido, .modo-telefono) tbody td {
+  color: rgb(var(--c-slate-700));
+}
+:is(main#contenido, .modo-telefono) tbody td:first-child {
+  color: rgb(var(--c-slate-950));
+  font-weight: 500;
+}
+:is(main#contenido, .modo-telefono) tbody tr {
+  transition: background-color 0.16s ease;
+}
+:is(main#contenido, .modo-telefono) tbody tr:hover > td {
+  background-color: rgb(var(--c-gold-50) / 0.8);
+}
+
+/* ---------- Insignias ---------- */
+:is(main#contenido, .modo-telefono) span[class~="rounded-full"][class~="text-xs"][class~="font-medium"] {
+  letter-spacing: 0.005em;
+}
+
+/* ---------- Botones ---------- */
+.btn-gold,
+[data-tema] button[class~="bg-slate-900"] {
+  border-radius: var(--e-radio-control);
+}
+.btn-gold {
+  min-height: 2.5rem;
+  box-shadow: 0 1px 0 rgb(255 255 255 / 0.1) inset, 0 1px 2px rgb(var(--c-slate-950) / 0.3), 0 8px 18px -10px rgb(var(--c-slate-950) / 0.55);
+}
+[data-tema] :is(button, a)[class~="border-slate-300"]:not(:disabled) {
+  background-color: #fff;
+  border-color: var(--e-borde-fuerte);
+  box-shadow: 0 1px 2px rgb(var(--c-slate-900) / 0.05);
+}
+[data-tema] :is(button, a)[class~="border-slate-300"]:not(:disabled):hover {
+  background-color: rgb(var(--c-gold-50));
+}
+
+/* ---------- Campos ---------- */
+[data-tema] :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]), select, textarea) {
+  border-radius: var(--e-radio-control);
+  background-color: rgb(255 255 255);
+  box-shadow: inset 0 1px 2px rgb(var(--c-slate-900) / 0.04);
+}
+[data-tema] :is(input, select, textarea):focus {
+  box-shadow: 0 0 0 3px rgb(var(--c-gold-500) / 0.2), inset 0 1px 2px rgb(var(--c-slate-900) / 0.04);
+}
+[data-tema] label {
+  color: rgb(var(--c-slate-700));
+}
+
+/* ---------- Menú lateral ---------- */
+.menu-estudio {
+  background:
+    radial-gradient(140% 55% at 0% 0%, rgb(var(--c-gold-500) / 0.13), transparent 60%),
+    radial-gradient(120% 50% at 100% 100%, rgb(var(--c-slate-700) / 0.35), transparent 60%),
+    linear-gradient(180deg, rgb(var(--c-slate-900)), rgb(var(--c-slate-950)) 55%);
+  box-shadow: inset -1px 0 0 rgb(255 255 255 / 0.06), 12px 0 32px -24px rgb(0 0 0 / 0.6);
+}
+.menu-marca {
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.07), rgb(255 255 255 / 0.025));
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08), 0 12px 28px -18px rgb(0 0 0 / 0.7);
+}
+.menu-estudio nav {
+  padding-top: 1.1rem;
+}
+.menu-item {
+  color: rgb(var(--c-slate-300));
+}
+.menu-item:hover {
+  background: rgb(255 255 255 / 0.055);
+}
+.menu-item[aria-current="page"] {
+  background: linear-gradient(90deg, rgb(var(--c-gold-500) / 0.24), rgb(var(--c-gold-500) / 0.05) 85%);
+  box-shadow: inset 0 0 0 1px rgb(var(--c-gold-400) / 0.22), 0 8px 18px -12px rgb(0 0 0 / 0.6);
+  color: rgb(var(--c-gold-100));
+}
+.menu-pie a,
+.menu-pie button {
+  color: rgb(var(--c-slate-400));
+}
+
+/* ---------- Modo teléfono ---------- */
+.cabecera-telefono {
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgb(var(--c-gold-500) / 0.22), transparent 55%),
+    linear-gradient(160deg, rgb(var(--c-slate-900)), rgb(var(--c-slate-950)));
+  box-shadow: 0 18px 40px -24px rgb(var(--c-slate-950) / 0.8);
+  padding-top: max(1.5rem, env(safe-area-inset-top));
+}
+.cabecera-telefono::after {
+  content: "";
+  position: absolute;
+  left: 1.25rem;
+  bottom: 0.9rem;
+  width: 1.6rem;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, rgb(var(--c-gold-400)), rgb(var(--c-gold-200)));
+}
+
+/* ---------- Esqueleto y foco ---------- */
+.skeleton-shimmer {
+  background-image: linear-gradient(90deg, rgb(var(--c-slate-100)) 25%, rgb(255 255 255 / 0.9) 37%, rgb(var(--c-slate-100)) 63%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lienzo-contenido > *,
+  a.tarjeta-cifra:hover::after,
+  :is(main#contenido, .modo-telefono) a[class~="rounded-xl"]:hover {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+/* ---------- Teléfono: cifras de a dos, más compactas ---------- */
+@media (max-width: 639px) {
+  .lienzo-contenido div[class~="grid"]:has(> .tarjeta-cifra) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+  .tarjeta-cifra {
+    min-height: 0;
+    padding: 0.9rem 0.95rem 0.85rem;
+  }
+  .tarjeta-cifra-regla { margin-bottom: 0.55rem; }
+  .tarjeta-cifra-etiqueta { font-size: 0.64rem; letter-spacing: 0.1em; }
+  .tarjeta-cifra > div:last-child { flex-wrap: wrap; row-gap: 0.25rem; }
+}
+
+.barra-movil {
+  background: radial-gradient(120% 140% at 100% 0%, rgb(var(--c-gold-500) / 0.18), transparent 55%), linear-gradient(180deg, rgb(var(--c-slate-900)), rgb(var(--c-slate-950)));
+  box-shadow: 0 1px 0 rgb(255 255 255 / 0.06) inset, 0 10px 24px -16px rgb(0 0 0 / 0.7);
+  padding-top: max(0.75rem, env(safe-area-inset-top));
+}
