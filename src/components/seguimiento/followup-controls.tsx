@@ -90,6 +90,8 @@ export function FollowupConfigControl({
               inputMode="numeric"
               maxLength={6}
               placeholder="PIN"
+              aria-label="PIN de confirmación"
+              autoComplete="off"
               value={pin}
               onChange={(e) => setPin(e.target.value.replace(/\D/g, ""))}
               className="w-28 rounded border border-slate-300 bg-white px-2 py-1 font-mono text-sm"
@@ -109,27 +111,29 @@ export function FollowupConfigControl({
         </div>
       )}
 
-      <div className="flex flex-wrap items-center gap-2 text-xs text-slate-700">
-        Valor objetivo entre contactos:
+      <div className="flex flex-wrap items-center gap-2 text-sm text-slate-700">
+        <label htmlFor={`seguimiento-horas-${rubroId}`}>Valor objetivo entre contactos:</label>
         <input
+          id={`seguimiento-horas-${rubroId}`}
           type="number"
           min={48}
           max={72}
           value={hours}
           onChange={(e) => setHours(e.target.value)}
-          className="w-20 rounded border border-slate-300 px-2 py-1"
+          aria-describedby={`seguimiento-horas-ayuda-${rubroId}`}
+          className="tactil w-24 rounded-lg border border-slate-300 px-2 py-1"
         />
-        horas (de 48 a 72)
+        <span id={`seguimiento-horas-ayuda-${rubroId}`}>horas (de 48 a 72)</span>
         <button
           type="button"
           disabled={busy || hours === String(targetHours)}
           onClick={() => send({ target_hours: Number(hours) }, "Valor objetivo guardado.")}
-          className="rounded border border-slate-300 px-2 py-1 font-medium hover:bg-slate-50 disabled:opacity-50"
+          className="tactil rounded-lg border border-slate-300 px-3 font-medium hover:bg-slate-50 disabled:opacity-50"
         >
           Guardar
         </button>
       </div>
-      {msg && <p className={`text-xs ${msg.ok ? "text-green-700" : "text-red-600"}`}>{msg.text}</p>}
+      {msg && <p role="status" className={`text-sm ${msg.ok ? "text-green-700" : "font-medium text-red-700"}`}>{msg.text}</p>}
     </div>
   );
 }

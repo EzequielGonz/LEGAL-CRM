@@ -25,6 +25,27 @@ const BORDE: Record<TonoResumen, string> = {
   info: "border-l-slate-400",
 };
 
+/**
+ * Enlace del resumen. Un destino dentro de la misma página (#ancla) va con
+ * un <a> común: así el navegador desplaza, actualiza la dirección y avisa el
+ * cambio de ancla (lo usan, por ejemplo, «Probar una conversación» o las
+ * listas de Seguimiento). El resto, con la navegación de Next.
+ */
+function Enlace({ href, className, children }: { href: string; className: string; children: React.ReactNode }) {
+  if (href.startsWith("#")) {
+    return (
+      <a href={href} className={className}>
+        {children}
+      </a>
+    );
+  }
+  return (
+    <Link href={href} className={className}>
+      {children}
+    </Link>
+  );
+}
+
 const ETIQUETA_TONO: Record<TonoResumen, string> = {
   bloqueo: "Frena el trabajo",
   atencion: "Requiere atención",
@@ -96,9 +117,9 @@ export function ResumenSeccion({
             return (
               <li key={p.texto}>
                 {p.href ? (
-                  <Link href={p.href} className={`${clase} hover:border-slate-400 hover:bg-slate-50`}>
+                  <Enlace href={p.href} className={`${clase} hover:border-slate-400 hover:bg-slate-50`}>
                     {cuerpo}
-                  </Link>
+                  </Enlace>
                 ) : (
                   <div className={clase}>{cuerpo}</div>
                 )}
@@ -113,14 +134,14 @@ export function ResumenSeccion({
       {principal || secundarias.length || personalizar ? (
         <div className="mt-4 flex flex-wrap items-center gap-2">
           {principal ? (
-            <Link href={principal.href} className="tactil inline-flex items-center rounded-lg bg-slate-900 px-5 text-sm font-semibold text-white hover:bg-slate-800">
+            <Enlace href={principal.href} className="tactil inline-flex items-center rounded-lg bg-slate-900 px-5 text-sm font-semibold text-white hover:bg-slate-800">
               {principal.texto}
-            </Link>
+            </Enlace>
           ) : null}
           {secundarias.map((a) => (
-            <Link key={a.texto} href={a.href} className="tactil inline-flex items-center rounded-lg border border-slate-300 bg-white px-4 text-sm font-medium text-slate-900 hover:bg-slate-50">
+            <Enlace key={a.texto} href={a.href} className="tactil inline-flex items-center rounded-lg border border-slate-300 bg-white px-4 text-sm font-medium text-slate-900 hover:bg-slate-50">
               {a.texto}
-            </Link>
+            </Enlace>
           ))}
           {personalizar ? (
             <EnlaceAvanzado href={personalizar.href} className="tactil ml-auto inline-flex items-center gap-1.5 px-2 text-sm font-medium text-slate-700 underline underline-offset-2 hover:text-slate-950">
