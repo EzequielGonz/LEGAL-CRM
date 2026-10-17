@@ -5,6 +5,7 @@ import { MenuPerfil } from "@/components/menu-perfil";
 import { BarraSalud } from "@/components/salud/barra-salud";
 import { EncabezadoPanel } from "@/components/perfiles/encabezado-panel";
 import type { SlugPerfil } from "@/lib/marca";
+import { EnfocarAncla } from "@/components/ui/enfocar-ancla";
 
 /**
  * Nombre y logo del perfil. Cambian muy de vez en cuando, así que se guardan
@@ -59,6 +60,7 @@ export async function MarcoPerfil({ slug, children, sinSalud = false }: { slug: 
           {children}
         </div>
       </main>
+      <EnfocarAncla />
     </div>
   );
 }

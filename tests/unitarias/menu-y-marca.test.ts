@@ -6,7 +6,7 @@ import { itemActivo, menuDePerfil } from "@/lib/menu";
 test("cada perfil tiene marca, logo https y tema propio; lo desconocido cae en Jurídico", () => {
   for (const s of SLUGS_PERFIL) {
     assert.equal(MARCAS[s].slug, s);
-    assert.match(MARCAS[s].logo, /^https:\/\//);
+    assert.match(MARCAS[s].logo, /^\/logos\/[a-z0-9_]+\.svg$/);
     assert.equal(temaDe(s), s);
   }
   assert.equal(temaDe("otro"), "juridico");
