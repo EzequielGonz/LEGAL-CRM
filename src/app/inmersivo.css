@@ -68,85 +68,11 @@ a.tarjeta-cifra.en-3d,
     calc(var(--ry) * -1.6) calc(var(--rx) * 1.6 + 22px) 44px -22px rgb(var(--c-slate-950) / 0.38);
 }
 
-/* ---------- Fondo con volumen (Inicio, Perfiles) ---------- */
-.fondo-volumen {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-.aurora {
-  position: absolute;
-  width: 62vmax;
-  height: 62vmax;
-  border-radius: 9999px;
-  opacity: 0.55;
-  will-change: transform;
-}
-.aurora-1 {
-  left: -18vmax;
-  top: -22vmax;
-  background: radial-gradient(closest-side, rgb(var(--c-gold-500) / 0.42), transparent 70%);
-  animation: aurora-a 22s ease-in-out infinite alternate;
-}
-.aurora-2 {
-  right: -20vmax;
-  top: 8vmax;
-  background: radial-gradient(closest-side, rgb(var(--c-slate-500) / 0.55), transparent 70%);
-  animation: aurora-b 28s ease-in-out infinite alternate;
-}
-.aurora-3 {
-  left: 20vmax;
-  bottom: -30vmax;
-  background: radial-gradient(closest-side, rgb(var(--c-gold-300) / 0.28), transparent 70%);
-  animation: aurora-c 34s ease-in-out infinite alternate;
-}
-.horizonte {
-  position: absolute;
-  left: -25%;
-  right: -25%;
-  bottom: 0;
-  height: 46%;
-  perspective: 420px;
-  perspective-origin: 50% 0%;
-  -webkit-mask-image: linear-gradient(to top, #000 0%, rgb(0 0 0 / 0.55) 45%, transparent 100%);
-  mask-image: linear-gradient(to top, #000 0%, rgb(0 0 0 / 0.55) 45%, transparent 100%);
-}
-.suelo-3d {
-  position: absolute;
-  inset: -100% 0 0 0;
-  transform: rotateX(68deg);
-  transform-origin: 50% 100%;
-  background-image:
-    linear-gradient(rgb(var(--c-gold-400) / 0.22) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(var(--c-gold-400) / 0.16) 1px, transparent 1px);
-  background-size: 64px 64px;
-  animation: suelo-avanza 6s linear infinite;
-}
-.estrellas {
-  position: absolute;
-  inset: 0;
-  opacity: 0.5;
-  background-image:
-    radial-gradient(1px 1px at 12% 18%, rgb(255 255 255 / 0.8), transparent),
-    radial-gradient(1px 1px at 72% 12%, rgb(255 255 255 / 0.6), transparent),
-    radial-gradient(1.5px 1.5px at 38% 34%, rgb(var(--c-gold-200) / 0.8), transparent),
-    radial-gradient(1px 1px at 86% 42%, rgb(255 255 255 / 0.5), transparent),
-    radial-gradient(1px 1px at 22% 58%, rgb(255 255 255 / 0.45), transparent),
-    radial-gradient(1.5px 1.5px at 58% 22%, rgb(255 255 255 / 0.7), transparent),
-    radial-gradient(1px 1px at 92% 70%, rgb(var(--c-gold-200) / 0.6), transparent);
-  animation: titila 7s ease-in-out infinite alternate;
-}
 /* La capa de contenido flota sobre el fondo con paralaje */
 .escena-capa {
   z-index: 1;
   transform: translate3d(calc(var(--px, 0) * -10px), calc(var(--py, 0) * -8px), 0);
   transition: transform 0.6s var(--i-curva);
-}
-.escena-3d .fondo-volumen {
-  transform: translate3d(calc(var(--px, 0) * 14px), calc(var(--py, 0) * 10px), 0) scale(1.04);
-  transition: transform 0.9s var(--i-curva);
 }
 
 /* ---------- Ingreso: más protagonismo y paralaje ---------- */
@@ -208,39 +134,9 @@ a.tarjeta-cifra.en-3d,
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.12), 0 30px 60px -36px rgb(0 0 0 / 0.85);
 }
 
-/* ---------- Panel: luz ambiental viva detrás del papel ---------- */
-.aurora-panel {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-.aurora-panel::before,
-.aurora-panel::after {
-  content: "";
-  position: absolute;
-  width: 70vmax;
-  height: 70vmax;
-  border-radius: 9999px;
-  will-change: transform;
-}
-.aurora-panel::before {
-  right: -28vmax;
-  top: -34vmax;
-  background: radial-gradient(closest-side, rgb(var(--c-gold-300) / 0.32), transparent 70%);
-  animation: aurora-b 30s ease-in-out infinite alternate;
-}
-.aurora-panel::after {
-  left: -24vmax;
-  bottom: -40vmax;
-  background: radial-gradient(closest-side, rgb(var(--c-slate-300) / 0.3), transparent 70%);
-  animation: aurora-a 36s ease-in-out infinite alternate;
-}
 [data-tema] > main#contenido {
   position: relative;
   z-index: 1;
-  background-color: rgb(var(--c-slate-50) / 0.72);
 }
 /* Menú lateral translúcido con relieve */
 @media (min-width: 1024px) {
@@ -301,25 +197,6 @@ a.tarjeta-cifra.en-3d,
     scale: 0.96;
   }
 }
-@keyframes aurora-a {
-  from { transform: translate3d(0, 0, 0) scale(1); }
-  to { transform: translate3d(8vmax, 6vmax, 0) scale(1.15); }
-}
-@keyframes aurora-b {
-  from { transform: translate3d(0, 0, 0) scale(1.1); }
-  to { transform: translate3d(-10vmax, 5vmax, 0) scale(0.95); }
-}
-@keyframes aurora-c {
-  from { transform: translate3d(0, 0, 0) scale(1); }
-  to { transform: translate3d(-6vmax, -8vmax, 0) scale(1.2); }
-}
-@keyframes suelo-avanza {
-  to { background-position: 0 64px, 0 0; }
-}
-@keyframes titila {
-  from { opacity: 0.25; }
-  to { opacity: 0.6; }
-}
 @keyframes borde-gira {
   to { --giro: 360deg; }
 }
@@ -339,13 +216,7 @@ a.tarjeta-cifra.en-3d,
   .menu-item[aria-current="page"]::after {
     display: none;
   }
-  .aurora,
-  .aurora-panel::before,
-  .aurora-panel::after,
-  .suelo-3d,
-  .estrellas,
   .escena-capa,
-  .escena-3d .fondo-volumen,
   .lampara-columna,
   .lampara-ambiente {
     animation: none !important;
@@ -355,8 +226,5 @@ a.tarjeta-cifra.en-3d,
 @media (pointer: coarse) {
   [data-3d] {
     will-change: auto;
-  }
-  .suelo-3d {
-    animation-duration: 10s;
   }
 }
