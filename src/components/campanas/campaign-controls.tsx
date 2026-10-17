@@ -31,6 +31,8 @@ export function CampaignControls({
   const [prep, setPrep] = useState<{ ready: boolean; missing: string[]; pausa_general: boolean; pause_reason: string | null } | null>(null);
   const [pauseReason, setPauseReason] = useState("");
   const [askingPause, setAskingPause] = useState(false);
+  // Lanzar o reanudar envía mensajes reales: siempre se confirma aparte (rediseño 17/10).
+  const [confirmando, setConfirmando] = useState(false);
 
   // Qué falta para lanzar (configuración del perfil, línea, plantilla, pausa general).
   const loadPrep = useCallback(async () => {
@@ -46,6 +48,7 @@ export function CampaignControls({
   }, [loadPrep, status]);
 
   async function launch() {
+    setConfirmando(false);
     setLoading(true);
     setMessage(null);
     const res = await fetch(`/api/campaigns/${campaignId}/launch`, { method: "POST" });
@@ -77,7 +80,8 @@ export function CampaignControls({
     router.refresh();
   }
 
-  const blocked = prep ? !prep.ready : false;
+  // Mientras no se sabe si está lista, no se ofrece lanzar (el servidor igual lo rechazaría).
+  const blocked = prep ? !prep.ready : true;
 
   return (
     <div>
@@ -86,6 +90,7 @@ export function CampaignControls({
           askingPause ? (
             <span className="flex flex-wrap items-center gap-2">
               <input
+                aria-label="Motivo de la pausa (opcional)"
                 value={pauseReason}
                 onChange={(e) => setPauseReason(e.target.value)}
                 placeholder="Motivo de la pausa (opcional)"
@@ -110,12 +115,12 @@ export function CampaignControls({
           )
         ) : (
           <button
-            onClick={launch}
-            disabled={loading || status === "finalizada" || blocked}
-            title={blocked ? "Falta configurar algo antes de lanzar" : undefined}
+            onClick={() => setConfirmando(true)}
+            disabled={loading || status === "finalizada" || blocked || confirmando}
+            aria-describedby={blocked ? `campana-falta-${campaignId}` : undefined}
             className="btn-gold"
           >
-            {loading ? "Lanzando..." : status === "pausada" ? "Reanudar" : "Lanzar campaña"}
+            {loading ? "Lanzando..." : status === "pausada" ? "Reanudar envíos…" : "Lanzar campaña…"}
           </button>
         )}
         {(status === "en_curso" || status === "pausada" || status === "finalizada") && (
@@ -127,11 +132,30 @@ export function CampaignControls({
           </button>
         )}
       </div>
-      {prep?.pause_reason && status === "pausada" && (
-        <p className="mt-2 max-w-md text-xs text-slate-500">Motivo de la pausa: {prep.pause_reason}</p>
+      {confirmando && (
+        <div role="alertdialog" aria-labelledby={`confirmar-${campaignId}`} className="mt-2 max-w-md rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm text-amber-950">
+          <p id={`confirmar-${campaignId}`} className="font-semibold">
+            {status === "pausada" ? "¿Reanudar los envíos?" : "¿Lanzar la campaña?"}
+          </p>
+          <p className="mt-1">
+            Empieza a enviar mensajes reales por WhatsApp a las personas de esta campaña, con el ritmo configurado. Lo que se
+            envía no se puede deshacer; podés pausarla en cualquier momento.
+          </p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            <button onClick={launch} disabled={loading} className="btn-gold">
+              Sí, {status === "pausada" ? "reanudar" : "lanzar"} y enviar
+            </button>
+            <button onClick={() => setConfirmando(false)} className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm text-slate-800">
+              Cancelar
+            </button>
+          </div>
+        </div>
       )}
-      {blocked && status !== "en_curso" && status !== "finalizada" && (
-        <div className="mt-2 max-w-md rounded-lg border border-amber-200 bg-amber-50 p-2 text-xs text-amber-900">
+      {prep?.pause_reason && status === "pausada" && (
+        <p className="mt-2 max-w-md text-sm text-slate-700">Motivo de la pausa: {prep.pause_reason}</p>
+      )}
+      {prep && blocked && status !== "en_curso" && status !== "finalizada" && (
+        <div id={`campana-falta-${campaignId}`} className="mt-2 max-w-md rounded-lg border border-amber-200 bg-amber-50 p-2 text-sm text-amber-950">
           {prep?.pausa_general && <p>Pausa general de envíos activa (Configuración → Pausa general).</p>}
           {prep && prep.missing.length > 0 && (
             <>
@@ -145,9 +169,9 @@ export function CampaignControls({
           )}
         </div>
       )}
-      {message && <p className="mt-2 max-w-md text-xs text-slate-500">{message}</p>}
+      {message && <p role="status" className="mt-2 max-w-md text-sm text-slate-700">{message}</p>}
       {status === "en_curso" && !message && (
-        <p className="mt-2 max-w-md text-xs text-slate-400">
+        <p className="mt-2 max-w-md text-sm text-slate-700">
           En curso: el sistema va enviando los mensajes solo, en segundo plano, respetando el
           ritmo configurado. Se actualiza acá a medida que van saliendo.
         </p>

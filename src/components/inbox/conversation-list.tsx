@@ -106,7 +106,28 @@ export function ConversationList() {
             className="w-full rounded-lg border border-slate-300 px-2 py-1.5 text-sm outline-none focus-gold"
           />
         </form>
-        <div className="grid grid-cols-2 gap-2">
+        {/* Simple: los tres conjuntos de todos los días. Los filtros detallados, en Avanzado (se siguen aplicando). */}
+        <div role="group" aria-label="Vistas rápidas" className="solo-simple flex flex-wrap gap-1.5">
+          {[
+            { v: "", t: "Todas" },
+            { v: "requiere_humano", t: "Esperan a una persona" },
+            { v: "humano_en_curso", t: "Atiende una persona" },
+          ].map((o) => {
+            const activa = (searchParams.get("atencion") ?? "") === o.v;
+            return (
+              <button
+                key={o.t}
+                type="button"
+                aria-pressed={activa}
+                onClick={() => setFilter("atencion", o.v)}
+                className={`tactil inline-flex items-center rounded-full border px-3 text-sm font-medium ${activa ? "border-slate-900 bg-slate-900 text-white" : "border-slate-300 bg-white text-slate-900 hover:bg-slate-50"}`}
+              >
+                {o.t}
+              </button>
+            );
+          })}
+        </div>
+        <div className="solo-avanzado grid grid-cols-2 gap-2">
           <select
             className="w-full rounded-lg border border-slate-300 px-2 py-1.5 text-sm outline-none focus-gold"
             aria-label="Área"
@@ -131,7 +152,7 @@ export function ConversationList() {
           </select>
         </div>
         <select
-          className="w-full rounded-lg border border-slate-300 px-2 py-1.5 text-sm outline-none focus-gold"
+          className="solo-avanzado w-full rounded-lg border border-slate-300 px-2 py-1.5 text-sm outline-none focus-gold"
           aria-label="Atención"
           defaultValue={searchParams.get("atencion") ?? ""}
           onChange={(e) => setFilter("atencion", e.target.value)}
@@ -155,34 +176,34 @@ export function ConversationList() {
               <span className="min-w-0 truncate text-sm font-medium text-slate-900">{item.contact_name ?? item.phone ?? "Sin nombre"}</span>
               <AreaBadge area={item.area as any} />
             </div>
-            <p className={`mb-1 truncate text-xs ${item.last_from_contact ? "font-medium text-slate-700" : "text-slate-500"}`}>
+            <p className={`mb-1 truncate text-sm ${item.last_from_contact ? "font-medium text-slate-800" : "text-slate-600"}`}>
               {item.last_message_preview ?? "Sin mensajes todavía"}
             </p>
-            <div className="flex min-w-0 flex-wrap items-center gap-2 text-[10px] font-medium uppercase [overflow-wrap:anywhere]">
-              {item.last_message_at && <span className="normal-case text-slate-400">{new Date(item.last_message_at).toLocaleString("es-AR")}</span>}
+            <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-0.5 text-xs [overflow-wrap:anywhere]">
+              {item.last_message_at && <span className="tabular-nums text-slate-600">{new Date(item.last_message_at).toLocaleString("es-AR", { dateStyle: "short", timeStyle: "short" })}</span>}
               {item.attention_state && ATTENTION_LABEL[item.attention_state] && (
-                <span className="text-orange-600">
+                <span className="font-medium text-amber-800">
                   {ATTENTION_LABEL[item.attention_state]}
-                  {item.attention_reason ? <span className="normal-case"> · {item.attention_reason}</span> : null}
+                  {item.attention_reason ? <span className="solo-avanzado font-normal"> · {item.attention_reason}</span> : null}
                 </span>
               )}
-              {!item.ai_enabled && !item.attention_state && <span className="text-orange-600">Tomada por humano</span>}
-              {item.detained && <span className="text-red-600">{item.detained}</span>}
+              {!item.ai_enabled && !item.attention_state && <span className="font-medium text-amber-800">Tomada por una persona</span>}
+              {item.detained && <span className="font-medium text-red-700">{item.detained === "detenido" ? "Detenido" : "Retenido"}</span>}
             </div>
           </Link>
         ))}
-        {!loading && items.length === 0 && <p className="p-4 text-sm text-slate-400">No hay conversaciones con estos filtros.</p>}
-        {loading && <p className="p-4 text-sm text-slate-400">Cargando…</p>}
+        {!loading && items.length === 0 && <p className="p-4 text-sm text-slate-700">No hay conversaciones con estos filtros.</p>}
+        {loading && <p role="status" className="p-4 text-sm text-slate-700">Cargando…</p>}
       </div>
 
-      <div className="flex items-center justify-between border-t border-slate-200 px-3 py-2 text-[11px] text-slate-500">
-        <span>{total.toLocaleString("es-AR")} conversaciones</span>
+      <div className="flex items-center justify-between border-t border-slate-200 px-3 py-2 text-xs text-slate-700">
+        <span className="tabular-nums">{total.toLocaleString("es-AR")} conversaciones</span>
         <span className="flex items-center gap-2">
-          <button type="button" aria-label="Página anterior" disabled={page <= 1} onClick={() => goPage(page - 1)} className="tactil px-2 disabled:text-slate-300">
+          <button type="button" aria-label="Página anterior" disabled={page <= 1} onClick={() => goPage(page - 1)} className="tactil px-2 disabled:text-slate-400">
             ←
           </button>
           {page}/{pages}
-          <button type="button" aria-label="Página siguiente" disabled={page >= pages} onClick={() => goPage(page + 1)} className="tactil px-2 disabled:text-slate-300">
+          <button type="button" aria-label="Página siguiente" disabled={page >= pages} onClick={() => goPage(page + 1)} className="tactil px-2 disabled:text-slate-400">
             →
           </button>
         </span>
