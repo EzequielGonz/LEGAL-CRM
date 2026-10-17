@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { useDialogo } from "@/components/ui/use-dialogo";
 
 interface StatusSnapshot {
   campaign: {
@@ -111,6 +113,7 @@ export function CampaignLiveModal({
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const tickRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const fetchSnapshotRef = useRef<() => void>(() => {});
+  const dialogoRef = useDialogo<HTMLDivElement>(open, onClose);
 
   useEffect(() => {
     if (!open) return;
@@ -200,24 +203,31 @@ export function CampaignLiveModal({
     };
   }, [open]);
 
-  if (!open) return null;
+  if (!open || typeof document === "undefined") return null;
 
   const s = snapshot;
   const progressPct = s && s.counts.total > 0 ? Math.round((s.counts.enviados_total / s.counts.total) * 100) : 0;
   const isWaitingCountdown = s?.waitReason === "esperando_intervalo" || s?.waitReason === "pausa_entre_lotes";
 
-  return (
+  // El diálogo se monta en <body> (fuera del panel): conserva la paleta del perfil.
+  const tema = document.querySelector("[data-tema]")?.getAttribute("data-tema") ?? undefined;
+
+  return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-3 backdrop-blur-[2px] sm:p-4"
+      data-portal-dialogo=""
+      data-tema={tema}
+      className="dialogo-velo fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-3 sm:p-4"
       style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}
       onClick={onClose}
     >
       <div
+        ref={dialogoRef}
         role="dialog"
         aria-modal="true"
-        aria-label={`Seguimiento en vivo — ${campaignName}`}
+        aria-labelledby="dialogo-vivo-tipo dialogo-vivo-titulo"
+        tabIndex={-1}
         onClick={(e) => e.stopPropagation()}
-        className="flex max-h-[92dvh] w-full max-w-md flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl"
+        className="dialogo-caja flex max-h-[92dvh] w-full max-w-md flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl outline-none"
       >
         {/* Header fijo: siempre visible arriba, aunque el contenido de abajo
             haga scroll en pantallas chicas — así los botones nunca quedan
@@ -225,29 +235,31 @@ export function CampaignLiveModal({
         <div className="shrink-0 border-b border-slate-100 bg-white/95 px-4 py-3 backdrop-blur sm:px-6 sm:py-4">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
-              <p className="text-[11px] font-medium uppercase tracking-wide text-slate-400">
+              <p id="dialogo-vivo-tipo" className="text-xs font-medium uppercase tracking-wide text-slate-600">
                 Seguimiento en vivo
               </p>
-              <h2 className="truncate text-base font-semibold text-slate-900 sm:text-lg">
+              <h2 id="dialogo-vivo-titulo" className="truncate text-base font-semibold text-slate-900 sm:text-lg">
                 {campaignName}
               </h2>
             </div>
             <div className="flex shrink-0 items-center gap-1">
               <button
+                type="button"
                 onClick={handleManualRefresh}
                 disabled={refreshing}
-                className="flex h-10 w-10 items-center justify-center rounded-full text-base text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 active:bg-slate-200 disabled:opacity-50"
+                className="flex h-11 w-11 items-center justify-center rounded-full text-base text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-600 active:bg-slate-200 disabled:opacity-50"
                 aria-label="Actualizar ahora"
                 title="Actualizar ahora"
               >
-                <span className={refreshing ? "animate-spin" : ""}>↻</span>
+                <span aria-hidden="true" className={refreshing ? "animate-spin" : ""}>↻</span>
               </button>
               <button
+                type="button"
                 onClick={onClose}
-                className="flex h-10 w-10 items-center justify-center rounded-full text-base text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 active:bg-slate-200"
-                aria-label="Cerrar"
+                className="flex h-11 w-11 items-center justify-center rounded-full text-base text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-600 active:bg-slate-200"
+                aria-label="Cerrar el seguimiento en vivo"
               >
-                ✕
+                <span aria-hidden="true">✕</span>
               </button>
             </div>
           </div>
@@ -386,6 +398,7 @@ export function CampaignLiveModal({
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
