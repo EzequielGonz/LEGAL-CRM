@@ -48,6 +48,7 @@ export async function MarcoPerfil({ slug, children, sinSalud = false }: { slug: 
   return (
     <div data-tema={slug} className="min-h-screen lg:flex">
       <MenuPerfil slug={slug} nombre={marca.nombre} logo={marca.logo} />
+      <span className="aurora-panel" aria-hidden="true" />
       <main id="contenido" tabIndex={-1} className="min-w-0 flex-1 bg-slate-50 lg:h-screen lg:overflow-y-auto">
         <EncabezadoPanel slug={slug} nombre={marca.nombre} />
         <div className="lienzo-contenido">

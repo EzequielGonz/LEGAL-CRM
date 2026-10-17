@@ -1,5 +1,6 @@
 import { LogoutButton } from "@/components/acceso/logout-button";
 import { PerfilSelector } from "@/components/perfiles/perfil-selector";
+import { FondoVolumen } from "@/components/ui/fondo-volumen";
 import { loadPerfiles } from "@/lib/perfiles-stats";
 import { requirePageSession } from "@/lib/acceso/pagina";
 
@@ -27,14 +28,15 @@ export default async function PerfilesPage() {
   const perfiles = await loadPerfiles();
 
   return (
-    <div className="escena-oscura flex items-center justify-center px-4 py-12">
+    <div className="escena-oscura escena-3d flex items-center justify-center px-4 py-12">
+      <FondoVolumen />
       <div className="pointer-events-none absolute -left-24 -top-24 h-96 w-96 animate-float rounded-full bg-gold-500/10 blur-3xl" />
       <div
         className="pointer-events-none absolute -bottom-24 -right-24 h-96 w-96 animate-float rounded-full bg-gold-500/10 blur-3xl"
         style={{ animationDelay: "1.2s" }}
       />
 
-      <div className="relative w-full max-w-4xl">
+      <div className="escena-capa relative w-full max-w-4xl">
         <div className="mb-8 text-center">
           <span className="icono-dorado mx-auto mb-4 !h-12 !w-12 !rounded-full animate-scale-in font-serif text-lg font-bold">
             E

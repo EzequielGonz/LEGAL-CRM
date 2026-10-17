@@ -1,11 +1,9 @@
-"use client";
-
 import Link from "next/link";
 
 /**
- * Tarjeta de entrada con foco de luz que sigue al puntero (solo decorativo:
- * el enlace funciona igual con teclado y sin movimiento). Los estilos viven
- * en premium.css (`.tarjeta-luz`).
+ * Tarjeta de entrada con perspectiva y luz que sigue al puntero (la mueve
+ * efectos-3d.tsx por `data-3d`; solo decorativo: el enlace funciona igual
+ * con teclado y sin movimiento).
  */
 export function TarjetaLuz({
   href,
@@ -22,12 +20,8 @@ export function TarjetaLuz({
     <Link
       href={href}
       style={style}
+      data-3d="fuerte"
       className={`tarjeta-luz ${className}`}
-      onPointerMove={(e) => {
-        const r = e.currentTarget.getBoundingClientRect();
-        e.currentTarget.style.setProperty("--mx", `${e.clientX - r.left}px`);
-        e.currentTarget.style.setProperty("--my", `${e.clientY - r.top}px`);
-      }}
     >
       {children}
     </Link>

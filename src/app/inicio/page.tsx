@@ -1,5 +1,6 @@
 import { LogoutButton } from "@/components/acceso/logout-button";
 import { TarjetaLuz } from "@/components/ui/tarjeta-luz";
+import { FondoVolumen } from "@/components/ui/fondo-volumen";
 import { requirePageSession } from "@/lib/acceso/pagina";
 
 export const dynamic = "force-dynamic";
@@ -27,7 +28,8 @@ export default async function InicioPage() {
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
   return (
-    <div className="escena-oscura flex items-center justify-center px-4 py-12">
+    <div className="escena-oscura escena-3d flex items-center justify-center px-4 py-12">
+      <FondoVolumen />
       {/* Resplandores ambientales (decorativos) */}
       <div className="pointer-events-none absolute -left-24 -top-24 h-96 w-96 animate-float rounded-full bg-gold-500/10 blur-3xl" />
       <div
@@ -35,7 +37,7 @@ export default async function InicioPage() {
         style={{ animationDelay: "1.2s" }}
       />
 
-      <div className="relative w-full max-w-3xl text-center">
+      <div className="escena-capa relative w-full max-w-3xl text-center">
         <span className="icono-dorado mx-auto mb-5 !h-14 !w-14 !rounded-full animate-scale-in font-serif text-xl font-bold">
           E
         </span>
