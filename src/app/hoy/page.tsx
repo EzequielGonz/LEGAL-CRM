@@ -6,6 +6,7 @@ import { contarIndicador, enlaceIndicador, indicadorPorClave, rubroIdDe } from "
 import { esSlugPerfil, type SlugPerfil } from "@/lib/marca";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { prioridadesDeInicio, type Pendiente } from "@/lib/inicio";
+import { CircuitosMarketing } from "@/components/marketing/circuitos-marketing";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Inicio" };
@@ -82,6 +83,8 @@ export default async function InicioPerfilPage({ searchParams }: { searchParams:
             </div>
           )}
         </section>
+
+        {slug === "marketing" ? <CircuitosMarketing /> : null}
 
         <section aria-labelledby="hoy-atencion">
           <h2 id="hoy-atencion" className="mb-2 text-base font-semibold text-slate-900">Necesita tu atención</h2>
