@@ -131,3 +131,53 @@ export function resumenSalud(items: ItemSalud[]): { rojo: number; amarillo: numb
     verde: items.filter((i) => i.estado === "verde").length,
   };
 }
+
+/* ───────────── Lectura para el nivel Simple ───────────── */
+
+export interface LecturaSimple {
+  /** Qué pasa y qué consecuencia tiene, sin nombres de variables ni tareas internas. */
+  que: string;
+  /** Quién lo resuelve: desde el panel o quien administra el sistema. */
+  quien: "panel" | "tecnico";
+  /** Acción en palabras simples (null si no hay nada que hacer desde el panel). */
+  accion: string | null;
+  href: string | null;
+}
+
+/** Nombre del perfil al principio del título («Marketing: …»). */
+function perfilDe(titulo: string): string {
+  return titulo.split(":")[0];
+}
+
+/**
+ * La misma información del tablero contada para el día a día (rediseño
+ * 17/10, bloque 3): qué pasa, qué consecuencia tiene y quién lo resuelve.
+ * El detalle técnico (variables, tareas del servidor) queda en Avanzado.
+ */
+export function lecturaSimple(i: ItemSalud): LecturaSimple {
+  const base = i.clave.split("_")[0];
+  if (i.clave === "latido") {
+    return i.estado === "verde"
+      ? { que: "Las tareas automáticas del servidor están corriendo.", quien: "panel", accion: null, href: null }
+      : { que: "Las tareas automáticas del servidor no están corriendo: mientras tanto no salen informes, seguimientos, extracciones ni campañas.", quien: "tecnico", accion: null, href: null };
+  }
+  if (i.clave === "secreto_meta") {
+    return { que: "Los mensajes que entran por WhatsApp quedan retenidos por seguridad y nadie los responde.", quien: "tecnico", accion: null, href: null };
+  }
+  if (i.clave === "cuarentena" && i.estado !== "verde") {
+    return { que: `${i.titulo.split(" ")[0]} mensaje(s) que entraron quedaron retenidos por seguridad y no se respondieron.`, quien: "panel", accion: "Revisarlos", href: i.href ?? null };
+  }
+  if (base === "whatsapp") {
+    return { que: `${perfilDe(i.titulo)} no tiene una línea de WhatsApp conectada: no puede responder ni enviar por ese canal.`, quien: "tecnico", accion: null, href: null };
+  }
+  if (base === "agente" && i.estado === "rojo") {
+    return { que: `El agente de ${perfilDe(i.titulo)} no puede responder porque faltan datos del perfil (${i.detalle.replace(/^Falta: /, "").replace(/\.$/, "")}).`, quien: "panel", accion: "Completar los datos", href: i.href ?? null };
+  }
+  if (i.clave === "errores_ia") {
+    return { que: `La IA tuvo ${i.titulo.split(" ")[0]} error(es) al responder en las últimas 24 h.`, quien: "panel", accion: "Ver qué pasó", href: i.href ?? null };
+  }
+  if (i.clave === "vertex") {
+    return { que: "La tercera opción de la comparación de agentes no está configurada: por ahora se comparan dos.", quien: "tecnico", accion: null, href: null };
+  }
+  return { que: `${i.titulo}. ${i.detalle}`, quien: "panel", accion: i.accion ?? null, href: i.href ?? null };
+}
