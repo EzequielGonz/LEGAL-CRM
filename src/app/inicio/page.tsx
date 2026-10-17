@@ -1,6 +1,7 @@
 import { LogoutButton } from "@/components/acceso/logout-button";
 import { TarjetaLuz } from "@/components/ui/tarjeta-luz";
-import { LamparaDecorativa, SalaLampara, SelloLampara } from "@/components/ui/lampara-dibujo";
+import { SalaLampara } from "@/components/ui/lampara-dibujo";
+import { MarcaPanel } from "@/components/ui/marca-panel";
 import { IlusComputadora, IlusTelefono } from "@/components/ui/ilustraciones";
 import { requirePageSession } from "@/lib/acceso/pagina";
 
@@ -31,10 +32,9 @@ export default async function InicioPage() {
   return (
     <div data-tema="neutro" className="escena-oscura escena-3d flex items-center justify-center px-4 py-12">
       <SalaLampara />
-      <LamparaDecorativa className="sala-lampara-lateral" />
 
       <div className="escena-capa relative w-full max-w-3xl text-center">
-        <SelloLampara className="sello-grande mx-auto mb-5 animate-scale-in" />
+        <MarcaPanel className="sello-grande mx-auto mb-5 animate-scale-in" />
         <h1 className="animate-fade-in-up mb-2 font-serif text-2xl font-semibold text-white sm:text-3xl">
           ¿Cómo querés utilizar el panel?
         </h1>

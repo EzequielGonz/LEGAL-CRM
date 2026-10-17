@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { SelloLampara } from "@/components/ui/lampara-dibujo";
+import { MarcaPanel } from "@/components/ui/marca-panel";
 
 export function PinLoginForm({ configured, next }: { configured: boolean; next: string | null }) {
   const [pin, setPin] = useState("");
@@ -51,7 +51,7 @@ export function PinLoginForm({ configured, next }: { configured: boolean; next: 
       aria-busy={loading}
     >
       <div className="mb-6 flex flex-col items-center text-center">
-        <SelloLampara className="mb-4" />
+        <MarcaPanel className="mb-4" />
         <h1 className="pin-titulo font-serif text-2xl font-semibold">Panel de Captación</h1>
         <p className="pin-bajada mt-1.5 text-sm">Ingresá el PIN del panel para entrar.</p>
       </div>
