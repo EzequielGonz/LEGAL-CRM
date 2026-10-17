@@ -1,11 +1,11 @@
-import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { ConversationThread } from "@/components/inbox/conversation-thread";
 import { FichaSection } from "@/components/ficha/ficha-section";
 import { MarcoPerfil } from "@/components/perfiles/marco-perfil";
 import { requirePageSession } from "@/lib/acceso/pagina";
-import { volverSeguro } from "@/lib/indicadores";
+import { volverSeguro } from "@/lib/navegacion";
+import { EnlaceVolver } from "@/components/ui/enlaces-navegacion";
 import { esSlugPerfil } from "@/lib/marca";
 
 export const dynamic = "force-dynamic";
@@ -33,9 +33,12 @@ export default async function ConversacionPerfilPage({ params, searchParams }: {
 
   return (
     <MarcoPerfil slug={slug}>
-      <Link href={volver ?? `/ficha/${contact.id}`} className="tactil mb-2 inline-flex items-center text-sm text-slate-700 hover:underline">
-        ← {volver ? "Volver a la lista" : "Ver la ficha"}
-      </Link>
+      <EnlaceVolver
+        volver={volver}
+        respaldo={`/ficha/${contact.id}`}
+        textoRespaldo="Ver la ficha"
+        className="tactil mb-2 inline-flex items-center gap-1.5 text-sm font-medium text-slate-700 hover:underline"
+      />
       <div className="h-[calc(100vh-9rem)] overflow-hidden rounded-xl border border-slate-200 bg-white">
         <ConversationThread
           conversationId={conversation.id}
@@ -51,7 +54,7 @@ export default async function ConversacionPerfilPage({ params, searchParams }: {
             qualification_data: contact.qualification_data ?? {},
           }}
           initialMessages={messages ?? []}
-          ficha={<FichaSection contactId={contact.id} compact />}
+          ficha={<FichaSection contactId={contact.id} compact fullHref={`/ficha/${contact.id}`} />}
         />
       </div>
     </MarcoPerfil>

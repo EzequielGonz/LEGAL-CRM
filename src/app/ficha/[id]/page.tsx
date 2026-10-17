@@ -1,9 +1,10 @@
-import Link from "next/link";
 import { temaDe } from "@/lib/marca";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { FichaSection } from "@/components/ficha/ficha-section";
 import { requirePageSession } from "@/lib/acceso/pagina";
+import { EnlaceDetalle, EnlaceVolver } from "@/components/ui/enlaces-navegacion";
+import { inicioDePerfil, volverSeguro } from "@/lib/navegacion";
 
 export const dynamic = "force-dynamic";
 
@@ -21,7 +22,7 @@ export default async function FichaPage({ params, searchParams }: { params: { id
     .eq("id", params.id)
     .maybeSingle();
   if (!contact) notFound();
-  const volver = searchParams.volver && searchParams.volver.startsWith("/") && !searchParams.volver.startsWith("//") ? searchParams.volver : null;
+  const volver = volverSeguro(searchParams.volver);
   const conversations = ((contact as any).conversations ?? []) as { id: string }[];
   const rubro = (contact as any).rubros;
 
@@ -39,9 +40,11 @@ export default async function FichaPage({ params, searchParams }: { params: { id
               {contact.dni_cuil ? ` · DNI ${contact.dni_cuil}` : ""}
             </p>
           </div>
-          <Link href={volver ?? "/inicio"} className="text-xs text-slate-400 hover:text-gold-200">
-            ← Volver
-          </Link>
+          <EnlaceVolver
+            volver={volver}
+            respaldo={inicioDePerfil(temaDe(rubro?.slug))}
+            className="tactil inline-flex items-center gap-1.5 text-sm font-medium text-slate-200 hover:text-white hover:underline"
+          />
         </div>
       </header>
       <main className="mx-auto max-w-3xl space-y-4 px-4 py-5">
@@ -51,9 +54,9 @@ export default async function FichaPage({ params, searchParams }: { params: { id
         {conversations.length > 0 && (
           <div className="rounded-xl border border-slate-200 bg-white p-4 text-sm">
             {conversations.map((c) => (
-              <Link key={c.id} href={`/inbox/${c.id}`} className="block text-slate-700 hover:underline">
+              <EnlaceDetalle key={c.id} href={`/inbox/${c.id}`} className="tactil inline-flex items-center text-slate-800 hover:underline">
                 Ver conversación →
-              </Link>
+              </EnlaceDetalle>
             ))}
           </div>
         )}

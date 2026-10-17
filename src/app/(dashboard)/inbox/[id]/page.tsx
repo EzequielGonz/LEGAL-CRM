@@ -2,8 +2,8 @@ import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { ConversationThread } from "@/components/inbox/conversation-thread";
 import { FichaSection } from "@/components/ficha/ficha-section";
-import Link from "next/link";
-import { volverSeguro } from "@/lib/indicadores";
+import { volverSeguro, fichaDe } from "@/lib/navegacion";
+import { EnlaceVolver } from "@/components/ui/enlaces-navegacion";
 
 export const dynamic = "force-dynamic";
 
@@ -36,11 +36,7 @@ export default async function ConversationPage({ params, searchParams }: { param
 
   return (
     <>
-      {volver && (
-        <Link href={volver} className="tactil mb-2 inline-flex items-center text-sm text-slate-700 hover:underline">
-          ← Volver a la lista
-        </Link>
-      )}
+      {volver && <EnlaceVolver volver={volver} respaldo="/inbox" className="tactil mb-2 inline-flex items-center gap-1.5 text-sm font-medium text-slate-700 hover:underline" />}
     <ConversationThread
       conversationId={conversation.id}
       aiEnabled={conversation.ai_enabled}
@@ -55,7 +51,7 @@ export default async function ConversationPage({ params, searchParams }: { param
         qualification_data: contact.qualification_data ?? {},
       }}
       initialMessages={messages ?? []}
-      ficha={<FichaSection contactId={contact.id} compact />}
+      ficha={<FichaSection contactId={contact.id} compact fullHref={fichaDe(contact.id, contact.area)} />}
     />
     </>
   );

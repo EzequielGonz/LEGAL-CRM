@@ -2,6 +2,7 @@ import { ProfileSettingsSection } from "@/components/perfiles/profile-settings-s
 import { TemplatesSection } from "@/components/plantillas/templates-section";
 import { createClient } from "@/lib/supabase/server";
 import { AreaBadge } from "@/components/ui/badge";
+import { SeccionAjustes } from "@/components/configuracion/seccion-ajustes";
 
 export const dynamic = "force-dynamic";
 
@@ -17,19 +18,16 @@ export default async function ConfiguracionMarketingPage() {
     <div className="mx-auto max-w-3xl space-y-6">
       <h1 className="text-2xl font-semibold text-slate-900">Configuración</h1>
 
-      <div className="rounded-xl border border-slate-200 bg-white p-5">
-        <h2 className="mb-3 text-sm font-semibold text-slate-700">Perfil, nombres y líneas</h2>
+      <SeccionAjustes id="perfil" titulo="Perfil, nombres y líneas" alcance="perfil">
         <ProfileSettingsSection slug="marketing" />
-      </div>
+      </SeccionAjustes>
 
-      <div className="rounded-xl border border-slate-200 bg-white p-5">
-        <h2 className="mb-3 text-sm font-semibold text-slate-700">Plantillas de WhatsApp</h2>
+      <SeccionAjustes id="plantillas" titulo="Plantillas de WhatsApp" alcance="perfil">
         <TemplatesSection slug="marketing" />
-      </div>
+      </SeccionAjustes>
 
-      <div className="rounded-xl border border-slate-200 bg-white p-5">
-        <h2 className="mb-3 text-sm font-semibold text-slate-700">Canales</h2>
-        <p className="mb-3 text-xs text-slate-400">
+      <SeccionAjustes id="canales" titulo="Canales" alcance="perfil">
+        <p className="mb-3 text-sm text-slate-600">
           El estado de conexión se actualiza automáticamente al configurar las credenciales en
           las variables de entorno del servidor en Vercel (WHATSAPP_MARKETING_PHONE_NUMBER_ID /
           WHATSAPP_MARKETING_ACCESS_TOKEN).
@@ -41,7 +39,7 @@ export default async function ConfiguracionMarketingPage() {
                 <AreaBadge area={c.area} />
                 <span className="text-slate-700">{c.label}</span>
                 {c.phone_number && (
-                  <span className="text-xs text-slate-400">({c.phone_number})</span>
+                  <span className="text-sm text-slate-600">({c.phone_number})</span>
                 )}
               </div>
               <span
@@ -57,7 +55,7 @@ export default async function ConfiguracionMarketingPage() {
             <li className="py-2 text-sm text-slate-400">Sin canales cargados.</li>
           )}
         </ul>
-      </div>
+      </SeccionAjustes>
     </div>
   );
 }
