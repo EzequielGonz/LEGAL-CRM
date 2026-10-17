@@ -61,3 +61,13 @@ test("ficha: siguiente paso según el estado, con la intervención humana primer
   assert.match(siguientePasoFicha({ detenido: true, attention_state: "requiere_humano" }).texto, /detenido/);
   assert.match(siguientePasoFicha(null).texto, /no hay nada pendiente/);
 });
+
+test("estado corto: prioridad igual que el siguiente paso", async () => {
+  const { estadoCorto } = await import("@/lib/inicio");
+  assert.equal(estadoCorto({ detenido: true, attention_state: "requiere_humano" }).texto, "Detenido");
+  assert.equal(estadoCorto({ attention_state: "requiere_humano", capture_state: "captado" }).texto, "Espera a una persona");
+  assert.equal(estadoCorto({ capture_state: "captado", derivation_state: "no_derivado" }).tono, "atencion");
+  assert.equal(estadoCorto({ capture_state: "captado", derivation_state: "derivado" }).texto, "Derivado");
+  assert.equal(estadoCorto({ contact_state: "sin_contactar", capture_state: "nuevo" }).texto, "Sin contactar");
+  assert.equal(estadoCorto({}).texto, "Sin contactar");
+});

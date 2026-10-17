@@ -57,3 +57,27 @@ export function siguientePasoFicha(o: {
   if (o.followup_state === "activo") return { texto: "En seguimiento automático: no hace falta hacer nada por ahora.", urgente: false };
   return { texto: "La conversación está en curso con el agente: no hace falta hacer nada por ahora.", urgente: false };
 }
+
+/**
+ * Estado de una oportunidad en pocas palabras, para la columna «Qué pasa»
+ * del nivel Simple. Mismo orden de prioridad que `siguientePasoFicha`. Pura.
+ */
+export function estadoCorto(o: {
+  contact_state?: string | null;
+  capture_state?: string | null;
+  attention_state?: string | null;
+  derivation_state?: string | null;
+  review_required?: boolean | null;
+  detenido?: boolean;
+}): { texto: string; tono: "bloqueo" | "atencion" | "ok" | "info" } {
+  if (o.detenido) return { texto: "Detenido", tono: "bloqueo" };
+  if (o.attention_state === "requiere_humano") return { texto: "Espera a una persona", tono: "atencion" };
+  if (o.attention_state === "humano_en_curso") return { texto: "Lo atiende una persona", tono: "info" };
+  if (o.capture_state === "captado") return o.derivation_state === "derivado" ? { texto: "Derivado", tono: "ok" } : { texto: "Captado: falta derivar", tono: "atencion" };
+  if (o.review_required) return { texto: "Para revisar", tono: "atencion" };
+  if (o.capture_state === "perdido") return { texto: "Perdido", tono: "info" };
+  if (o.contact_state === "error_contacto") return { texto: "No se pudo contactar", tono: "atencion" };
+  if (o.contact_state === "respondio") return { texto: o.capture_state === "en_seguimiento" ? "En seguimiento" : "Respondió", tono: "info" };
+  if (o.contact_state === "contactado_sin_respuesta") return { texto: "Sin respuesta", tono: "info" };
+  return { texto: "Sin contactar", tono: "info" };
+}

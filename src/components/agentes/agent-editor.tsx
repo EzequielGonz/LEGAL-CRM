@@ -10,10 +10,13 @@ export function AgentEditor({ agent }: { agent: AiAgent }) {
   const [active, setActive] = useState(agent.active);
   const [saving, setSaving] = useState(false);
   const [savedAt, setSavedAt] = useState<number | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const id = (s: string) => `agente-${agent.area}-${s}`;
 
   async function save() {
     setSaving(true);
-    await fetch(`/api/agents/${agent.area}`, {
+    setError(null);
+    const res = await fetch(`/api/agents/${agent.area}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -24,43 +27,51 @@ export function AgentEditor({ agent }: { agent: AiAgent }) {
       }),
     });
     setSaving(false);
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      setError(data.error ?? "No se pudo guardar. No se cambió nada.");
+      return;
+    }
     setSavedAt(Date.now());
   }
 
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-5">
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-slate-700">{agent.display_name}</h2>
-        <label className="flex items-center gap-1.5 text-xs text-slate-500">
-          <input type="checkbox" checked={active} onChange={(e) => setActive(e.target.checked)} />
-          Activo
+        <h3 className="text-base font-semibold text-slate-900">{agent.display_name}</h3>
+        <label className="tactil flex items-center gap-2 text-sm text-slate-800">
+          <input type="checkbox" checked={active} onChange={(e) => setActive(e.target.checked)} className="h-4 w-4" />
+          Activo (se aplica al guardar)
         </label>
       </div>
 
-      <label className="mb-1 block text-xs font-medium text-slate-600">
-        Prompt del sistema (personalidad e instrucciones)
+      <label htmlFor={id("prompt")} className="mb-1 block text-sm font-medium text-slate-700">
+        Instrucciones del agente (personalidad y forma de responder)
       </label>
       <textarea
+        id={id("prompt")}
         value={systemPrompt}
         onChange={(e) => setSystemPrompt(e.target.value)}
         rows={5}
         className="mb-4 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
       />
 
-      <label className="mb-1 block text-xs font-medium text-slate-600">
+      <label htmlFor={id("criterios")} className="mb-1 block text-sm font-medium text-slate-700">
         Criterios de calificación comercial (uno por línea)
       </label>
       <textarea
+        id={id("criterios")}
         value={criteria}
         onChange={(e) => setCriteria(e.target.value)}
         rows={4}
         className="mb-4 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
       />
 
-      <label className="mb-1 block text-xs font-medium text-slate-600">
+      <label htmlFor={id("datos")} className="mb-1 block text-sm font-medium text-slate-700">
         Datos que debe recolectar (separados por coma)
       </label>
       <input
+        id={id("datos")}
         value={fields}
         onChange={(e) => setFields(e.target.value)}
         className="mb-4 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
@@ -73,7 +84,9 @@ export function AgentEditor({ agent }: { agent: AiAgent }) {
       >
         {saving ? "Guardando..." : "Guardar cambios"}
       </button>
-      {savedAt && <span className="ml-3 text-xs text-green-600">Guardado ✓</span>}
+      <span role="status" className="ml-3 text-sm">
+        {error ? <span className="font-medium text-red-700">{error}</span> : savedAt ? <span className="text-emerald-700">Guardado</span> : null}
+      </span>
     </div>
   );
 }

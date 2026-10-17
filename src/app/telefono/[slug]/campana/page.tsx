@@ -39,7 +39,7 @@ export default async function TelefonoCampanaPage({ params }: { params: { slug: 
 
   return (
     <div>
-      <PhoneHeader eyebrow={rubro?.name ?? params.slug} title="Iniciar campaña" backHref="/telefono" />
+      <PhoneHeader eyebrow={rubro?.name ?? params.slug} title="Cargar base y preparar campaña" subtitle="Cargar no envía nada. Solo el último paso, que se confirma aparte, empieza los envíos." backHref="/telefono" />
       <main className="mx-auto max-w-md px-4 py-5">
         <PhoneCampaignFlow
           areas={profile.areas}

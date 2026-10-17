@@ -66,6 +66,8 @@ export function menuDePerfil(slug: SlugPerfil): GrupoMenu[] {
   const diario: ItemMenu[] = [
     { href: comun(slug, "hoy"), label: "Inicio", match: "/hoy" },
     { href: comun(slug, "salud"), label: "Salud del sistema", match: "/salud" },
+    // Estadísticas en los cuatro perfiles, con la misma estructura (bloque 3).
+    { href: `${base}/estadisticas`, label: "Estadísticas" },
     { href: comun(slug, "oportunidades"), label: "Oportunidades", match: "/oportunidades" },
     { href: `${base}/seguimiento`, label: "Seguimiento" },
     { href: `${base}/agenda`, label: "Agenda" },
@@ -77,8 +79,7 @@ export function menuDePerfil(slug: SlugPerfil): GrupoMenu[] {
     { href: comun(slug, "contenido"), label: "Contenido", match: "/contenido" },
   ];
   if (slug === "marketing") {
-    diario.splice(1, 0, { href: `${base}/estadisticas`, label: "Estadísticas" });
-    diario.splice(3, 0,
+    diario.splice(4, 0,
       { href: `${base}/prospectos`, label: "Prospectos prioritarios" },
       { href: `${base}/presupuestos`, label: "Pide presupuesto" },
       { href: `${base}/consultas-directas`, label: "Consultas directas" },
