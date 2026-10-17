@@ -21,6 +21,7 @@ import { MarcoPerfil } from "@/components/perfiles/marco-perfil";
 import { EnlaceVolver } from "@/components/ui/enlaces-navegacion";
 import { esSlugPerfil, type SlugPerfil } from "@/lib/marca";
 import { conVolver, inicioDePerfil } from "@/lib/navegacion";
+import { estadoCorto } from "@/lib/inicio";
 
 export const dynamic = "force-dynamic";
 
@@ -192,7 +193,10 @@ export default async function OportunidadesPage({
                   <li key={o.id} className="flex flex-col gap-2 p-4 sm:flex-row sm:items-center sm:justify-between">
                     <div className="min-w-0">
                       <p className="truncate font-medium text-slate-900">{o.contacts?.full_name ?? "Sin nombre"}</p>
-                      <p className="text-xs text-slate-600">
+                      <p className="solo-simple text-sm text-slate-700">
+                        <span className="tabular-nums">{o.contacts?.phone ?? "Sin teléfono"}</span> · {estadoCorto(o).texto}
+                      </p>
+                      <p className="solo-avanzado text-xs text-slate-600">
                         {o.contacts?.phone ?? "Sin teléfono"} · {CONTACT_STATE_LABEL[o.contact_state] ?? o.contact_state} ·{" "}
                         {CAPTURE_STATE_LABEL[o.capture_state] ?? o.capture_state}
                         {o.capture_state === "captado" ? ` · ${ZONA_LABEL[normalizarZona(o.location_zone)]}` : ""}

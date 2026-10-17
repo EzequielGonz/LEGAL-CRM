@@ -13,8 +13,26 @@ import { DETENTION_LABEL, detainedContactIds, type DetentionMotive } from "@/lib
 import { RUBRO_IDS } from "@/lib/rubros";
 import { textoBusquedaSeguro } from "@/lib/busqueda";
 import { EnlaceDetalle } from "@/components/ui/enlaces-navegacion";
+import { estadoCorto } from "@/lib/inicio";
 
 export const dynamic = "force-dynamic";
+export const metadata = { title: "Prospectos" };
+
+const TONO_TEXTO: Record<string, string> = {
+  bloqueo: "bg-red-50 text-red-800 ring-red-200",
+  atencion: "bg-amber-50 text-amber-900 ring-amber-200",
+  ok: "bg-emerald-50 text-emerald-900 ring-emerald-200",
+  info: "bg-slate-50 text-slate-800 ring-slate-200",
+};
+
+/** Vistas rápidas (Simple y Avanzado): los conjuntos que más se usan, en un clic. */
+const VISTAS: { texto: string; params: Record<string, string> }[] = [
+  { texto: "Todos", params: {} },
+  { texto: "Esperan a una persona", params: { atencion: "requiere_humano" } },
+  { texto: "Captados sin derivar", params: { captacion: "captado", derivacion: "no_derivado" } },
+  { texto: "Sin contactar", params: { contacto: "sin_contactar" } },
+  { texto: "Para revisar", params: { revision: "1" } },
+];
 
 const PAGE_SIZE = 50;
 
@@ -116,13 +134,41 @@ export default async function ProspectosPage({ searchParams }: { searchParams: P
 
   return (
     <div>
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-4">
         <h1 className="text-2xl font-semibold text-slate-900">Prospectos</h1>
+        <p className="mt-1 text-sm text-slate-600">
+          <span className="tabular-nums">{(count ?? 0).toLocaleString("es-AR")}</span> {hasFilters ? "coinciden con lo elegido" : "oportunidades en total"}. Abrí uno para ver su ficha y su conversación.
+        </p>
       </div>
 
+      <nav aria-label="Vistas rápidas" className="mb-3 flex flex-wrap gap-2">
+        {VISTAS.map((v) => {
+          const qs = new URLSearchParams(v.params).toString();
+          const activa =
+            Object.keys(v.params).length === 0
+              ? !hasFilters
+              : Object.entries(v.params).every(([k, val]) => searchParams[k as keyof Params] === val) &&
+                Object.entries(searchParams).filter(([k, val]) => val && k !== "pagina").length === Object.keys(v.params).length;
+          return (
+            <Link
+              key={v.texto}
+              href={qs ? `/prospectos?${qs}` : "/prospectos"}
+              aria-current={activa ? "page" : undefined}
+              className={clsx(
+                "tactil inline-flex items-center rounded-full border px-4 text-sm font-medium",
+                activa ? "border-slate-900 bg-slate-900 text-white" : "border-slate-300 bg-white text-slate-900 hover:bg-slate-50"
+              )}
+            >
+              {v.texto}
+            </Link>
+          );
+        })}
+      </nav>
+
       <form action="/prospectos" method="GET" className="mb-4 flex flex-wrap items-end gap-2 rounded-xl border border-slate-200 bg-white p-4">
+        {/* Los filtros detallados se ven en Avanzado; en Simple siguen aplicándose (no se pierden al cambiar de nivel). */}
         {FILTROS.map((f) => (
-          <span key={f.name}>{select(f.name, f.label, f.options)}</span>
+          <span key={f.name} className="solo-avanzado">{select(f.name, f.label, f.options)}</span>
         ))}
         <div>
           <label htmlFor="filtro-q" className="mb-1 block text-sm font-medium text-slate-700">Buscar (nombre, teléfono o DNI)</label>
@@ -135,12 +181,14 @@ export default async function ProspectosPage({ searchParams }: { searchParams: P
             className="rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
           />
         </div>
-        <label className="tactil flex items-center gap-2 text-sm text-slate-700">
+        <label className="solo-avanzado tactil flex items-center gap-2 text-sm text-slate-700">
           <input type="checkbox" name="revision" value="1" defaultChecked={searchParams.revision === "1"} className="h-4 w-4" />
           Para revisar
         </label>
+        {/* En Simple, «Para revisar» se elige con las vistas rápidas; la casilla oculta igual se envía, así no se pierde. */}
         <button type="submit" className="btn-gold">
-          Filtrar
+          <span className="solo-simple">Buscar</span>
+          <span className="solo-avanzado">Filtrar</span>
         </button>
       </form>
 
@@ -167,20 +215,22 @@ export default async function ProspectosPage({ searchParams }: { searchParams: P
 
       <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
         <table className="w-full text-sm">
-          <thead className="border-b border-slate-200 bg-slate-50 text-left text-xs uppercase text-slate-500">
+          <thead className="border-b border-slate-200 bg-slate-50 text-left text-xs font-semibold text-slate-700">
             <tr>
               <th className="px-4 py-3">Nombre</th>
               <th className="px-4 py-3">Teléfono</th>
               <th className="px-4 py-3">Área</th>
-              <th className="px-4 py-3">Contacto</th>
-              <th className="px-4 py-3">Captación</th>
-              <th className="px-4 py-3">Atención</th>
+              <th className="solo-simple px-4 py-3">Qué pasa</th>
+              <th className="solo-avanzado px-4 py-3">Contacto</th>
+              <th className="solo-avanzado px-4 py-3">Captación</th>
+              <th className="solo-avanzado px-4 py-3">Atención</th>
               <th className="px-4 py-3">Fecha</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
             {(rows ?? []).map((r: any) => {
               const det = detained.get(r.contact_id);
+              const corto = estadoCorto({ ...r, detenido: !!det });
               return (
                 <tr key={r.id} className="hover:bg-slate-50">
                   <td className="px-4 py-3">
@@ -200,25 +250,28 @@ export default async function ProspectosPage({ searchParams }: { searchParams: P
                     )}
                     {r.review_required && <span className="ml-1 text-[10px] font-semibold text-slate-500">· revisar</span>}
                   </td>
-                  <td className="px-4 py-3 text-slate-600">{r.contacts?.phone ?? "—"}</td>
+                  <td className="px-4 py-3 tabular-nums text-slate-700">{r.contacts?.phone ?? "—"}</td>
                   <td className="px-4 py-3">
                     <AreaBadge area={r.area} />
                   </td>
-                  <td className="px-4 py-3 text-xs text-slate-600">{CONTACT_STATE_LABEL[r.contact_state] ?? r.contact_state}</td>
-                  <td className="px-4 py-3 text-xs text-slate-600">
+                  <td className="solo-simple px-4 py-3">
+                    <span className={clsx("inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset", TONO_TEXTO[corto.tono])}>{corto.texto}</span>
+                  </td>
+                  <td className="solo-avanzado px-4 py-3 text-xs text-slate-700">{CONTACT_STATE_LABEL[r.contact_state] ?? r.contact_state}</td>
+                  <td className="solo-avanzado px-4 py-3 text-xs text-slate-700">
                     {CAPTURE_STATE_LABEL[r.capture_state] ?? r.capture_state}
                     {r.capture_state === "captado" && (
-                      <span className="block text-[10px] text-slate-400">{DERIVATION_STATE_LABEL[r.derivation_state]}</span>
+                      <span className="block text-xs text-slate-600">{DERIVATION_STATE_LABEL[r.derivation_state]}</span>
                     )}
                   </td>
-                  <td className="px-4 py-3 text-xs text-slate-600">{ATTENTION_STATE_LABEL[r.attention_state] ?? r.attention_state}</td>
-                  <td className="px-4 py-3 text-slate-400">{new Date(r.created_at).toLocaleDateString("es-AR")}</td>
+                  <td className="solo-avanzado px-4 py-3 text-xs text-slate-700">{ATTENTION_STATE_LABEL[r.attention_state] ?? r.attention_state}</td>
+                  <td className="px-4 py-3 tabular-nums text-slate-600">{new Date(r.created_at).toLocaleDateString("es-AR")}</td>
                 </tr>
               );
             })}
             {(rows ?? []).length === 0 && (
               <tr>
-                <td colSpan={7} className="px-4 py-8 text-center text-slate-400">
+                <td colSpan={8} className="px-4 py-8 text-center text-slate-600">
                   {hasFilters ? "No hay prospectos que coincidan con estos filtros." : "No hay prospectos todavía."}
                 </td>
               </tr>
