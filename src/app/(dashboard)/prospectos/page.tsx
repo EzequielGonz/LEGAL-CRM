@@ -12,6 +12,7 @@ import {
 import { DETENTION_LABEL, detainedContactIds, type DetentionMotive } from "@/lib/detention";
 import { RUBRO_IDS } from "@/lib/rubros";
 import { textoBusquedaSeguro } from "@/lib/busqueda";
+import { EnlaceDetalle } from "@/components/ui/enlaces-navegacion";
 
 export const dynamic = "force-dynamic";
 
@@ -71,10 +72,34 @@ export default async function ProspectosPage({ searchParams }: { searchParams: P
   const detained = await detainedContactIds((rows ?? []).map((r: any) => r.contact_id));
   const hasFilters = Object.entries(searchParams).some(([k, v]) => k !== "pagina" && !!v);
 
+  const FILTROS: { name: keyof Params; label: string; options: Record<string, string> }[] = [
+    { name: "area", label: "Área", options: { civil: "Civil", penal: "Penal" } },
+    { name: "contacto", label: "Contacto", options: CONTACT_STATE_LABEL },
+    { name: "captacion", label: "Captación", options: CAPTURE_STATE_LABEL },
+    { name: "atencion", label: "Atención", options: ATTENTION_STATE_LABEL },
+    { name: "derivacion", label: "Derivación (captados)", options: DERIVATION_STATE_LABEL },
+  ];
+  // Filtros activos, cada uno con su enlace para quitarlo (se conservan los demás).
+  const sinFiltro = (clave: keyof Params) => {
+    const p = new URLSearchParams();
+    for (const [k, v] of Object.entries(searchParams)) if (v && k !== clave && k !== "pagina") p.set(k, String(v));
+    const qs = p.toString();
+    return qs ? `/prospectos?${qs}` : "/prospectos";
+  };
+  const activos: { clave: keyof Params; texto: string }[] = [
+    ...FILTROS.filter((f) => searchParams[f.name] && f.options[searchParams[f.name] as string]).map((f) => ({
+      clave: f.name,
+      texto: `${f.label}: ${f.options[searchParams[f.name] as string]}`,
+    })),
+    ...(searchParams.q?.trim() ? [{ clave: "q" as const, texto: `Búsqueda: «${searchParams.q.trim()}»` }] : []),
+    ...(searchParams.revision === "1" ? [{ clave: "revision" as const, texto: "Para revisar" }] : []),
+  ];
+
   const select = (name: keyof Params, label: string, options: Record<string, string>) => (
     <div>
-      <label className="mb-1 block text-xs font-medium text-slate-500">{label}</label>
+      <label htmlFor={`filtro-${name}`} className="mb-1 block text-sm font-medium text-slate-700">{label}</label>
       <select
+        id={`filtro-${name}`}
         name={name}
         defaultValue={searchParams[name] ?? ""}
         className="rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
@@ -96,33 +121,47 @@ export default async function ProspectosPage({ searchParams }: { searchParams: P
       </div>
 
       <form action="/prospectos" method="GET" className="mb-4 flex flex-wrap items-end gap-2 rounded-xl border border-slate-200 bg-white p-4">
-        {select("area", "Área", { civil: "Civil", penal: "Penal" })}
-        {select("contacto", "Contacto", CONTACT_STATE_LABEL)}
-        {select("captacion", "Captación", CAPTURE_STATE_LABEL)}
-        {select("atencion", "Atención", ATTENTION_STATE_LABEL)}
-        {select("derivacion", "Derivación (captados)", DERIVATION_STATE_LABEL)}
+        {FILTROS.map((f) => (
+          <span key={f.name}>{select(f.name, f.label, f.options)}</span>
+        ))}
         <div>
-          <label className="mb-1 block text-xs font-medium text-slate-500">Buscar (nombre, teléfono o DNI)</label>
+          <label htmlFor="filtro-q" className="mb-1 block text-sm font-medium text-slate-700">Buscar (nombre, teléfono o DNI)</label>
           <input
+            id="filtro-q"
+            type="search"
             name="q"
             defaultValue={searchParams.q ?? ""}
             placeholder="Ej: Pérez o 1122223333"
             className="rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
           />
         </div>
-        <label className="flex items-center gap-1 pb-2 text-xs text-slate-600">
-          <input type="checkbox" name="revision" value="1" defaultChecked={searchParams.revision === "1"} />
+        <label className="tactil flex items-center gap-2 text-sm text-slate-700">
+          <input type="checkbox" name="revision" value="1" defaultChecked={searchParams.revision === "1"} className="h-4 w-4" />
           Para revisar
         </label>
         <button type="submit" className="btn-gold">
           Filtrar
         </button>
-        {hasFilters && (
-          <Link href="/prospectos" className="pb-2 text-sm text-slate-500 hover:underline">
+      </form>
+
+      {activos.length > 0 && (
+        <div role="group" aria-label="Filtros activos" className="mb-4 flex flex-wrap items-center gap-2 text-sm">
+          <span className="text-slate-700">Filtros activos:</span>
+          {activos.map((a) => (
+            <Link
+              key={a.clave}
+              href={sinFiltro(a.clave)}
+              className="tactil inline-flex items-center gap-1.5 rounded-full border border-slate-300 bg-white px-3 text-slate-800 hover:bg-slate-50"
+              aria-label={`Quitar filtro ${a.texto}`}
+            >
+              {a.texto} <span aria-hidden="true">×</span>
+            </Link>
+          ))}
+          <Link href="/prospectos" className="tactil inline-flex items-center px-2 font-medium text-slate-800 underline">
             Limpiar filtros
           </Link>
-        )}
-      </form>
+        </div>
+      )}
 
       {error && <p className="mb-3 text-sm text-red-600">No se pudo cargar la lista: {error.message}</p>}
 
@@ -145,9 +184,9 @@ export default async function ProspectosPage({ searchParams }: { searchParams: P
               return (
                 <tr key={r.id} className="hover:bg-slate-50">
                   <td className="px-4 py-3">
-                    <Link href={`/prospectos/${r.contact_id}`} className="font-medium text-slate-900 hover:underline">
+                    <EnlaceDetalle href={`/prospectos/${r.contact_id}`} className="font-medium text-slate-900 hover:underline">
                       {r.contacts?.full_name ?? "Sin nombre"}
-                    </Link>
+                    </EnlaceDetalle>
                     {det && (
                       <span
                         className={clsx(

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { AreaBadge, SourceBadge, StatusBadge } from "@/components/ui/badge";
@@ -6,10 +5,13 @@ import { ContactEditForm } from "@/components/prospectos/contact-edit-form";
 import { ScheduleAppointmentForm } from "@/components/prospectos/schedule-appointment-form";
 import { CancelAppointmentButton } from "@/components/prospectos/cancel-appointment-button";
 import { FichaSection } from "@/components/ficha/ficha-section";
+import { EnlaceDetalle, EnlaceVolver } from "@/components/ui/enlaces-navegacion";
+import { volverSeguro } from "@/lib/navegacion";
 
 export const dynamic = "force-dynamic";
 
-export default async function ProspectoDetailPage({ params }: { params: { id: string } }) {
+export default async function ProspectoDetailPage({ params, searchParams }: { params: { id: string }; searchParams?: { volver?: string } }) {
+  const volver = volverSeguro(searchParams?.volver);
   const supabase = createClient();
 
   const { data: contact } = await supabase
@@ -34,9 +36,9 @@ export default async function ProspectoDetailPage({ params }: { params: { id: st
 
   return (
     <div className="mx-auto max-w-3xl">
-      <Link href="/prospectos" className="mb-4 inline-block text-sm text-slate-500 hover:underline" scroll={false}>
-        ← Volver a prospectos
-      </Link>
+      <div className="mb-4">
+        <EnlaceVolver volver={volver} respaldo="/prospectos" textoRespaldo="Volver a prospectos" />
+      </div>
 
       <div className="mb-6 flex items-start justify-between rounded-xl border border-slate-200 bg-white p-6">
         <div>
@@ -145,9 +147,9 @@ export default async function ProspectoDetailPage({ params }: { params: { id: st
           <ul className="space-y-2">
             {conversations.map((c) => (
               <li key={c.id}>
-                <Link href={`/inbox/${c.id}`} className="text-sm text-blue-600 hover:underline">
+                <EnlaceDetalle href={`/inbox/${c.id}`} className="tactil inline-flex items-center text-sm text-slate-800 underline">
                   Ver conversación · {c.channels?.label ?? "Canal"}
-                </Link>
+                </EnlaceDetalle>
               </li>
             ))}
           </ul>
