@@ -5,6 +5,7 @@ import "./premium.css";
 import "./controles.css";
 import "./estudio.css";
 import "./inmersivo.css";
+import "./escena.css";
 import { Efectos3D } from "@/components/ui/efectos-3d";
 
 // Fuentes autoalojadas por Next (16/10): antes se pedían con un @import a

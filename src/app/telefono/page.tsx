@@ -4,6 +4,9 @@ import { PhoneHeader } from "@/components/telefono/phone-header";
 import { PushControls } from "@/components/telefono/push-controls";
 import { InstallHint } from "@/components/telefono/install-hint";
 import { phoneProfile } from "@/lib/telefono";
+import { marcaDe } from "@/lib/marca";
+import { Medallon } from "@/components/ui/ilustraciones";
+import { Icono } from "@/components/ui/icono-seccion";
 
 export const dynamic = "force-dynamic";
 
@@ -34,27 +37,33 @@ export default async function TelefonoPage() {
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={r.photo_url} alt="" className="h-12 w-12 rounded-full object-cover" />
               ) : (
-                <span className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-2xl">{r.emoji ?? "•"}</span>
+                <Medallon className="h-12 w-12">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={marcaDe(r.slug).logo} alt="" className="h-full w-full object-contain p-1" />
+                </Medallon>
               )}
               <p className="font-serif text-lg font-semibold text-slate-900">{r.name}</p>
             </div>
             <div className="grid grid-cols-3 gap-2">
               <Link
                 href={`/telefono/${r.slug}/campana`}
-                className="rounded-xl bg-slate-900 px-2 py-3 text-center text-xs font-semibold text-gold-100 active:scale-[0.98]"
+                className="flex flex-col items-center gap-1.5 rounded-xl bg-slate-900 px-2 py-3 text-center text-xs font-semibold text-gold-100 active:scale-[0.98]"
               >
+                <Icono nombre="campanas" className="h-5 w-5" />
                 Iniciar campaña
               </Link>
               <Link
                 href={`/telefono/${r.slug}/clientes`}
-                className="rounded-xl border border-slate-300 px-2 py-3 text-center text-xs font-semibold text-slate-700 active:scale-[0.98]"
+                className="flex flex-col items-center gap-1.5 rounded-xl border border-slate-300 px-2 py-3 text-center text-xs font-semibold text-slate-700 active:scale-[0.98]"
               >
+                <Icono nombre="cerrados" className="h-5 w-5" />
                 Clientes cerrados
               </Link>
               <Link
                 href={`/telefono/${r.slug}/estadisticas`}
-                className="rounded-xl border border-slate-300 px-2 py-3 text-center text-xs font-semibold text-slate-700 active:scale-[0.98]"
+                className="flex flex-col items-center gap-1.5 rounded-xl border border-slate-300 px-2 py-3 text-center text-xs font-semibold text-slate-700 active:scale-[0.98]"
               >
+                <Icono nombre="estadisticas" className="h-5 w-5" />
                 Estadísticas
               </Link>
             </div>

@@ -1,6 +1,7 @@
 import { LogoutButton } from "@/components/acceso/logout-button";
 import { TarjetaLuz } from "@/components/ui/tarjeta-luz";
-import { FondoVolumen } from "@/components/ui/fondo-volumen";
+import { EscenaGeometrica } from "@/components/ui/escena-geometrica";
+import { IlusComputadora, IlusTelefono } from "@/components/ui/ilustraciones";
 import { requirePageSession } from "@/lib/acceso/pagina";
 
 export const dynamic = "force-dynamic";
@@ -29,13 +30,7 @@ export default async function InicioPage() {
   if (!sesion.ok) return sesion.fallback;
   return (
     <div className="escena-oscura escena-3d flex items-center justify-center px-4 py-12">
-      <FondoVolumen />
-      {/* Resplandores ambientales (decorativos) */}
-      <div className="pointer-events-none absolute -left-24 -top-24 h-96 w-96 animate-float rounded-full bg-gold-500/10 blur-3xl" />
-      <div
-        className="pointer-events-none absolute -bottom-24 -right-24 h-96 w-96 animate-float rounded-full bg-gold-500/10 blur-3xl"
-        style={{ animationDelay: "1.2s" }}
-      />
+      <EscenaGeometrica />
 
       <div className="escena-capa relative w-full max-w-3xl text-center">
         <span className="icono-dorado mx-auto mb-5 !h-14 !w-14 !rounded-full animate-scale-in font-serif text-xl font-bold">
@@ -50,11 +45,8 @@ export default async function InicioPage() {
 
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
           <TarjetaLuz href="/telefono" className="animate-scale-in rounded-3xl p-8 text-left" style={{ animationDelay: "120ms" }}>
-            <span className="icono-dorado mb-5">
-              <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <rect x="7" y="2.5" width="10" height="19" rx="2.5" />
-                <path d="M11 18.5h2" />
-              </svg>
+            <span className="ilus-acceso mb-4">
+              <IlusTelefono className="h-24 w-24" id="il-acceso-tel" />
             </span>
             <h2 className="mb-1 font-serif text-xl font-semibold text-gold-100">Teléfono</h2>
             <p className="text-sm leading-relaxed text-slate-300">
@@ -66,11 +58,8 @@ export default async function InicioPage() {
           </TarjetaLuz>
 
           <TarjetaLuz href="/perfiles" className="animate-scale-in rounded-3xl p-8 text-left" style={{ animationDelay: "200ms" }}>
-            <span className="icono-dorado mb-5">
-              <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <rect x="3" y="4.5" width="18" height="12" rx="2" />
-                <path d="M8 20h8M12 16.5V20" />
-              </svg>
+            <span className="ilus-acceso mb-4">
+              <IlusComputadora className="h-24 w-24" id="il-acceso-pc" />
             </span>
             <h2 className="mb-1 font-serif text-xl font-semibold text-gold-100">Computadora</h2>
             <p className="text-sm leading-relaxed text-slate-300">
