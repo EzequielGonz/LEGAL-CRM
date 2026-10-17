@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { SelloLampara } from "@/components/ui/lampara-dibujo";
 
 export function PinLoginForm({ configured, next }: { configured: boolean; next: string | null }) {
   const [pin, setPin] = useState("");
@@ -50,9 +51,7 @@ export function PinLoginForm({ configured, next }: { configured: boolean; next: 
       aria-busy={loading}
     >
       <div className="mb-6 flex flex-col items-center text-center">
-        <span className="icono-dorado mb-4 !h-12 !w-12 !rounded-full font-serif text-lg font-bold">
-          E
-        </span>
+        <SelloLampara className="mb-4" />
         <h1 className="font-serif text-2xl font-semibold text-slate-900">Panel de Captación</h1>
         <p className="mt-1.5 text-sm text-slate-500">Ingresá el PIN del panel para entrar.</p>
       </div>
@@ -64,7 +63,7 @@ export function PinLoginForm({ configured, next }: { configured: boolean; next: 
         </p>
       ) : (
         <>
-          <label htmlFor="pin" className="mb-1 block text-sm font-medium text-slate-700">
+          <label htmlFor="pin" className="pin-etiqueta">
             PIN
           </label>
           <input
@@ -80,7 +79,7 @@ export function PinLoginForm({ configured, next }: { configured: boolean; next: 
             onChange={(e) => setPin(e.target.value.replace(/\D/g, "").slice(0, 6))}
             aria-invalid={error ? true : undefined}
             aria-describedby={error ? "pin-error" : undefined}
-            className="mb-3 w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-center font-mono text-2xl tracking-[0.5em] shadow-inner outline-none focus-gold"
+            className="pin-campo"
           />
           <div className="pin-progreso" aria-hidden="true">
             {Array.from({ length: 6 }, (_, i) => (
@@ -89,12 +88,12 @@ export function PinLoginForm({ configured, next }: { configured: boolean; next: 
           </div>
 
           {error && (
-            <p id="pin-error" role="alert" className="mb-4 animate-fade-in text-sm font-medium text-red-700">
+            <p id="pin-error" role="alert" className="pin-error animate-fade-in">
               {error}
             </p>
           )}
 
-          <button type="submit" disabled={loading || pin.length !== 6} className="btn-gold w-full py-3">
+          <button type="submit" disabled={loading || pin.length !== 6} className="btn-gold pin-boton w-full">
             {loading ? (
               <>
                 <span className="pin-spinner" aria-hidden="true" /> Ingresando...
