@@ -4,8 +4,7 @@ import { PhoneHeader } from "@/components/telefono/phone-header";
 import { PushControls } from "@/components/telefono/push-controls";
 import { InstallHint } from "@/components/telefono/install-hint";
 import { phoneProfile } from "@/lib/telefono";
-import { marcaDe } from "@/lib/marca";
-import { Medallon } from "@/components/ui/ilustraciones";
+import { marcaDe, temaDe } from "@/lib/marca";
 import { Icono } from "@/components/ui/icono-seccion";
 
 export const dynamic = "force-dynamic";
@@ -27,20 +26,20 @@ export default async function TelefonoPage() {
   const perfiles = (rubros ?? []).filter((r: any) => phoneProfile(r.slug));
 
   return (
-    <div>
+    <div data-tema="neutro" className="min-h-screen">
       <PhoneHeader eyebrow="Teléfono" title="Perfiles" subtitle="Elegí qué querés hacer en cada perfil." />
       <main className="mx-auto max-w-md space-y-4 px-4 py-5">
         {perfiles.map((r: any) => (
-          <section key={r.id} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+          <section key={r.id} data-tema={temaDe(r.slug)} className="tarjeta-perfil-tel rounded-2xl border border-slate-200 p-4 shadow-sm">
             <div className="mb-3 flex items-center gap-3">
               {r.photo_url ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={r.photo_url} alt="" className="h-12 w-12 rounded-full object-cover" />
               ) : (
-                <Medallon className="h-12 w-12">
+                <span className="logo-perfil h-12 w-12">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={marcaDe(r.slug).logo} alt="" className="h-full w-full object-contain p-1" />
-                </Medallon>
+                  <img src={marcaDe(r.slug).logo} alt="" className="h-full w-full object-contain" />
+                </span>
               )}
               <p className="font-serif text-lg font-semibold text-slate-900">{r.name}</p>
             </div>
