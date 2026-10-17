@@ -87,6 +87,12 @@ export function PerfilSelector({ perfiles: initial }: { perfiles: PerfilStats[] 
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={marcaDe(p.slug).logo} alt={p.name} className="h-full w-full rounded-2xl bg-white/95 object-contain p-2" />
+              {/* Paleta del perfil al pie de su logo */}
+              <span className="paleta-tira" aria-hidden="true">
+                {marcaDe(p.slug).paleta.map((c) => (
+                  <span key={c} style={{ backgroundColor: c }} />
+                ))}
+              </span>
             </button>
           );
         })}
