@@ -111,8 +111,10 @@ export function PauseControl({
 
       {target && (
         <div className="flex flex-wrap items-center gap-2 rounded-lg bg-slate-50 p-3">
-          <span className="text-xs text-slate-600">Confirmá con el PIN:</span>
+          <label htmlFor="pin-pausa" className="text-sm text-slate-700">Confirmá con el PIN:</label>
           <input
+            id="pin-pausa"
+            autoComplete="off"
             type="password"
             inputMode="numeric"
             maxLength={6}
@@ -128,7 +130,7 @@ export function PauseControl({
           </button>
         </div>
       )}
-      {msg && <p className={`text-xs ${msg.ok ? "text-green-600" : "text-red-600"}`}>{msg.text}</p>}
+      <p role="status" className={`text-sm ${msg?.ok ? "text-green-700" : "font-medium text-red-700"}`}>{msg?.text ?? ""}</p>
     </div>
   );
 }
