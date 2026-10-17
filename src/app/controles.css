@@ -29,6 +29,17 @@
   color: rgb(var(--c-slate-500));
   opacity: 1;
 }
+/* Sin desborde horizontal (rediseño 17/10, bloque 1): un select con opciones
+   largas o un texto sin espacios (claves, enlaces) no ensancha la pantalla. */
+[data-tema] select {
+  max-width: 100%;
+}
+[data-tema] .flex-wrap > * {
+  max-width: 100%;
+}
+main#contenido {
+  overflow-wrap: break-word;
+}
 [data-tema] :is(input, select, textarea):disabled {
   background-color: rgb(var(--c-slate-50));
   color: rgb(var(--c-slate-500));
@@ -157,8 +168,8 @@ main#contenido .overflow-x-auto {
 }
 
 /* Diálogos y avisos: entran suave, sin saltos */
-[data-tema] [role="dialog"],
-[data-tema] [aria-modal="true"] {
+[data-tema] [role="dialog"]:not(.dialogo-caja),
+[data-tema] [aria-modal="true"]:not(.dialogo-caja) {
   animation: dialogo-entra 0.22s cubic-bezier(0.23, 1, 0.32, 1) backwards;
 }
 [data-tema] [role="alert"] {
@@ -189,7 +200,14 @@ main#contenido p {
 
 @media (prefers-reduced-motion: reduce) {
   [data-tema] :is(button, [role="button"], a):active { transform: none !important; }
+  [data-tema] :is([role="dialog"], [aria-modal="true"], [role="alert"]),
+  [data-tema] details[open] > :not(summary) { animation: none !important; }
 }
+
+/* Inbox a lo ancho del área de trabajo: compensa el margen del lienzo en cada ancho. */
+.marco-inbox { margin: -1.25rem -1rem 0; }
+@media (min-width: 640px) { .marco-inbox { margin: -1.5rem -1.5rem 0; } }
+@media (min-width: 1024px) { .marco-inbox { margin: -1.75rem -2.25rem 0; } }
 
 /* Fuentes de next/font (layout.tsx) para las utilidades font-sans y font-serif */
 .font-sans { font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }

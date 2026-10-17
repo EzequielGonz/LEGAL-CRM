@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 // búsqueda y páginas; así se mantiene al día sin recargar la página.
 export default function InboxLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex h-[calc(100vh-4rem)] -m-8">
+    <div className="marco-inbox flex h-[calc(100vh-4rem)]">
       <ConversationList />
       <div className="flex-1">{children}</div>
     </div>
