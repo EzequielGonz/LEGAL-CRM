@@ -1,4 +1,5 @@
-import { EnlaceDetalle } from "@/components/ui/enlaces-navegacion";
+import { EnlaceDetalle, EnlaceVolver } from "@/components/ui/enlaces-navegacion";
+import { conVolver, volverSeguro } from "@/lib/navegacion";
 import Link from "next/link";
 import { requirePageSession } from "@/lib/acceso/pagina";
 import { MarcoPerfil } from "@/components/perfiles/marco-perfil";
@@ -15,7 +16,7 @@ const POR_PAGINA = 50;
 export default async function ListaIndicadorPage({
   searchParams,
 }: {
-  searchParams: { perfil?: string; cand?: string; metrica?: string; rubro?: string; desde?: string; hasta?: string; pagina?: string };
+  searchParams: { perfil?: string; cand?: string; metrica?: string; rubro?: string; desde?: string; hasta?: string; pagina?: string; volver?: string };
 }) {
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
@@ -28,7 +29,7 @@ export default async function ListaIndicadorPage({
   const hasta = fecha(searchParams.hasta);
   const rubro = esSlugPerfil(searchParams.rubro) ? searchParams.rubro : null;
   const pagina = Math.max(1, Number(searchParams.pagina) || 1);
-  const volver = `/comparacion-agentes?perfil=${perfil}${rubro ? "&vista=perfil" : ""}`;
+  const volver = volverSeguro(searchParams.volver) ?? `/comparacion-agentes?perfil=${perfil}${rubro ? "&vista=perfil" : ""}`;
 
   if (!actual || !cand || !metrica) {
     return (
@@ -45,7 +46,7 @@ export default async function ListaIndicadorPage({
   return (
     <MarcoPerfil slug={perfil}>
       <div className="mx-auto max-w-4xl">
-        <Link href={volver} className="text-sm text-slate-600 underline">← Volver a la comparación</Link>
+        <EnlaceVolver volver={volver} respaldo={volver} textoRespaldo="Volver a la comparación" />
         <h1 className="mt-2 font-serif text-2xl font-semibold text-slate-900">
           {label} · candidato {cand}
         </h1>
@@ -67,7 +68,7 @@ export default async function ListaIndicadorPage({
                 </div>
                 <div className="flex shrink-0 gap-2 text-sm">
                   {o.contact_id && (
-                    <Link href={`/ficha/${o.contact_id}?volver=${encodeURIComponent(aqui)}`} className="tactil inline-flex items-center rounded-lg border border-slate-300 px-3">Ficha</Link>
+                    <Link href={conVolver(`/ficha/${o.contact_id}`, aqui)} className="tactil inline-flex items-center rounded-lg border border-slate-300 px-3">Ficha</Link>
                   )}
                   {o.conversation_id && (
                     <EnlaceDetalle href={`/inbox/${o.conversation_id}`} className="tactil inline-flex items-center rounded-lg bg-slate-900 px-3 text-gold-100">Conversación</EnlaceDetalle>

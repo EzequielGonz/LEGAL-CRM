@@ -1,3 +1,4 @@
+import { EnlaceDetalle } from "@/components/ui/enlaces-navegacion";
 import Link from "next/link";
 import clsx from "clsx";
 import { createClient } from "@/lib/supabase/server";
@@ -107,16 +108,16 @@ async function Incidencias({
       <form action="/revision" method="GET" className="mb-4 flex flex-wrap items-end gap-2 rounded-xl border border-slate-200 bg-white p-4">
         <input type="hidden" name="vista" value="incidencias" />
         <div>
-          <label className="mb-1 block text-xs font-medium text-slate-500">Estado</label>
-          <select name="estado" defaultValue={searchParams.estado ?? ""} className="rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold">
+          <label htmlFor="revision-estado" className="mb-1 block text-sm font-medium text-slate-700">Estado</label>
+          <select id="revision-estado" name="estado" defaultValue={searchParams.estado ?? ""} className="rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold">
             <option value="">Abiertas</option>
             <option value="cerradas">Resueltas o descartadas</option>
             <option value="todas">Todas</option>
           </select>
         </div>
         <div>
-          <label className="mb-1 block text-xs font-medium text-slate-500">Tipo</label>
-          <select name="tipo" defaultValue={searchParams.tipo ?? ""} className="rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold">
+          <label htmlFor="revision-tipo" className="mb-1 block text-sm font-medium text-slate-700">Tipo</label>
+          <select id="revision-tipo" name="tipo" defaultValue={searchParams.tipo ?? ""} className="rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold">
             <option value="">Todos</option>
             {Object.entries(INCIDENCE_LABEL).map(([value, label]) => (
               <option key={value} value={value}>
@@ -147,17 +148,17 @@ async function Incidencias({
                 {r.contacts && (
                   <p className="mt-1 text-xs text-slate-500">
                     {r.contact_id ? (
-                      <Link href={`/prospectos/${r.contact_id}`} className="font-medium text-slate-700 hover:underline">
+                      <EnlaceDetalle href={`/prospectos/${r.contact_id}`} className="font-medium text-slate-700 hover:underline">
                         {r.contacts.full_name ?? "Sin nombre"}
-                      </Link>
+                      </EnlaceDetalle>
                     ) : null}{" "}
                     · {r.contacts.phone ?? "—"}
                     {r.conversation_id && (
                       <>
                         {" · "}
-                        <Link href={`/inbox/${r.conversation_id}`} className="text-slate-700 hover:underline">
+                        <EnlaceDetalle href={`/inbox/${r.conversation_id}`} className="text-slate-700 hover:underline">
                           Ver conversación
-                        </Link>
+                        </EnlaceDetalle>
                       </>
                     )}
                   </p>
@@ -206,7 +207,7 @@ async function Detenciones({ searchParams, page }: { searchParams: { estado?: st
 
   return (
     <div>
-      <div className="mb-3 flex gap-3 text-sm">
+      <div className="mb-3 flex flex-wrap gap-3 text-sm">
         <Link href="/revision?vista=detenciones" className={clsx(vigentes ? "font-semibold text-slate-900" : "text-slate-500 hover:underline")}>
           Vigentes
         </Link>
@@ -233,9 +234,9 @@ async function Detenciones({ searchParams, page }: { searchParams: { estado?: st
                   )}
                   <p className="mt-1 text-xs text-slate-500">
                     {d.contact_id ? (
-                      <Link href={`/prospectos/${d.contact_id}`} className="font-medium text-slate-700 hover:underline">
+                      <EnlaceDetalle href={`/prospectos/${d.contact_id}`} className="font-medium text-slate-700 hover:underline">
                         {d.contacts?.full_name ?? "Sin nombre"}
-                      </Link>
+                      </EnlaceDetalle>
                     ) : (
                       "Contacto"
                     )}{" "}
@@ -282,7 +283,7 @@ async function Retenidos({ searchParams, page }: { searchParams: { estado?: stri
 
   return (
     <div>
-      <div className="mb-3 flex gap-3 text-sm">
+      <div className="mb-3 flex flex-wrap gap-3 text-sm">
         <Link href="/revision?vista=retenidos" className={clsx(pendientes ? "font-semibold text-slate-900" : "text-slate-500 hover:underline")}>
           Pendientes
         </Link>
@@ -357,7 +358,7 @@ async function Adjuntos({ searchParams, page }: { searchParams: { estado?: strin
 
   return (
     <div>
-      <div className="mb-3 flex gap-3 text-sm">
+      <div className="mb-3 flex flex-wrap gap-3 text-sm">
         {link(null, "Sin guardar", filtro === "sin_guardar")}
         {link("no_guardados", "Vencidos o demasiado pesados", filtro === "no_guardados")}
         {link("todos", "Todos", filtro === "todos")}
