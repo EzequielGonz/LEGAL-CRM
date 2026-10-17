@@ -1,7 +1,7 @@
 /* =====================================================================
    Sala de la lámpara (17/10). Una sola composición para la entrada: la
    lámpara de pie es la protagonista y la sala la acompaña con la misma luz
-   cálida (2700 K), una pared grafito con boiserie, zócalo, piso con
+   cálida (2700 K), una pared grafito despejada, zócalo, piso con
    reflejo y sombras de contacto. Inicio y Perfiles usan la misma sala con
    la lámpara a un costado. Dentro del CRM no hay escena: superficies
    limpias con la identidad (logo y paleta) de cada perfil.
@@ -61,16 +61,8 @@
 }
 .sala-pared {
   background:
-    /* boiserie: paneles anchos con moldura (luz arriba-izquierda, sombra abajo-derecha) */
-    repeating-linear-gradient(90deg,
-      transparent 0 calc(var(--panel, 236px) - 3px),
-      rgb(0 0 0 / 0.38) calc(var(--panel, 236px) - 3px) calc(var(--panel, 236px) - 2px),
-      rgb(255 255 255 / 0.028) calc(var(--panel, 236px) - 2px) calc(var(--panel, 236px) - 1px),
-      transparent calc(var(--panel, 236px) - 1px) var(--panel, 236px)),
-    /* reflejo frío y lejano desde la derecha */
-    radial-gradient(55% 60% at 100% 35%, rgb(var(--sala-frio) / 0.045), transparent 70%),
+    radial-gradient(55% 60% at 100% 35%, rgb(var(--sala-frio) / 0.04), transparent 70%),
     linear-gradient(180deg, var(--sala-pared-alta), var(--sala-pared-baja) 78%);
-  background-position: calc(50% + var(--panel-desfase, 0px)) 0, 0 0, 0 0;
 }
 .sala-grano {
   opacity: 0.06;
@@ -140,101 +132,124 @@
 .lampara-contenido {
   z-index: 1;
 }
-/* La tarjeta: un solo borde fino, iluminada desde la lámpara (izquierda) */
+/* La tarjeta: grafito, un solo borde fino y la luz cálida desde la lámpara */
 .lampara-tarjeta {
-  background: linear-gradient(115deg, rgb(255 222 170 / 0.55), rgb(255 255 255 / 0.1) 38%, rgb(255 255 255 / 0.06)) !important;
-  box-shadow:
-    0 2px 4px rgb(0 0 0 / 0.3),
-    0 40px 70px -34px rgb(0 0 0 / 0.95) !important;
-  filter: brightness(0.82) saturate(0.85);
+  padding: 0 !important;
+  border: 1px solid rgb(255 255 255 / 0.1);
+  background: none !important;
+  box-shadow: 0 40px 70px -34px rgb(0 0 0 / 0.95) !important;
+  filter: brightness(0.85);
 }
 .esta-prendida .lampara-tarjeta {
   filter: none;
+  border-color: rgb(var(--sala-luz) / 0.22);
   box-shadow:
-    0 2px 4px rgb(0 0 0 / 0.3),
     0 40px 70px -34px rgb(0 0 0 / 0.95),
-    -40px 0 90px -50px rgb(var(--sala-luz) / 0.45) !important;
+    -40px 0 90px -55px rgb(var(--sala-luz) / 0.5) !important;
 }
+.lampara-tarjeta::before,
 .lampara-tarjeta::after {
   display: none !important;
+}
+/* Sin inclinación ni brillo superpuesto: la tarjeta queda quieta y nítida */
+.lampara-tarjeta[data-3d] {
+  transform: none !important;
+  translate: none !important;
+  will-change: auto;
 }
 @media (min-width: 900px) {
   .lampara-contenido {
     align-items: flex-end;
   }
-  .lampara-columna {
-    padding-bottom: 0;
-  }
-  /* La tarjeta apoya su sombra en la misma línea que la lámpara */
   .lampara-tarjeta {
     margin-bottom: clamp(3rem, 8vh, 5rem);
   }
 }
 
-/* Formulario del PIN */
+/* Formulario del PIN (grafito, texto claro, acentos de latón) */
 .pin-tarjeta {
-  padding: 2.25rem 2rem 2rem;
-  background: linear-gradient(180deg, #fdfcf9, #f5f1e8);
+  border-radius: calc(1.4rem - 1px);
+  padding: 2rem 1.75rem 1.75rem !important;
+  background: linear-gradient(160deg, #222328 0%, #18191c 55%, #141517 100%) !important;
+  color: #ece6da !important;
   text-align: left;
 }
-.pin-etiqueta {
+.pin-titulo {
+  color: #f4eee3;
+}
+.pin-bajada {
+  color: #a9a59d;
+}
+[data-tema] .pin-tarjeta .pin-etiqueta {
   display: block;
-  margin: 0 0 0.5rem;
+  margin: 0 0 8px;
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.16em;
   line-height: 1rem;
   text-transform: uppercase;
-  color: rgb(var(--c-slate-600));
+  color: #b9b2a5;
 }
-.pin-campo {
+[data-tema] .pin-tarjeta input.pin-campo {
   display: block;
+  box-sizing: border-box;
   width: 100%;
-  height: 3.5rem;
-  margin: 0;
+  height: 48px;
+  margin: 0 0 1.25rem;
   padding: 0 0 0 0.5em;
-  border: 1px solid rgb(var(--c-slate-300));
-  border-radius: 0.875rem;
-  background: #fff;
-  color: rgb(var(--c-slate-900));
+  border: 1px solid rgb(255 255 255 / 0.16) !important;
+  border-radius: 0.75rem;
+  background: #0f1012 !important;
+  color: #f4eee3 !important;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 1.5rem;
+  font-size: 1.375rem;
   letter-spacing: 0.5em;
   text-align: center;
-  box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.06);
+  box-shadow: none !important;
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
-.pin-campo:hover {
-  border-color: rgb(var(--c-slate-400));
+[data-tema] .pin-tarjeta input.pin-campo:hover {
+  border-color: rgb(255 255 255 / 0.26) !important;
 }
-.pin-campo:focus,
-.pin-campo:focus-visible {
-  border-color: rgb(var(--c-gold-700));
-  box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.06), 0 0 0 3px rgb(var(--c-gold-400) / 0.55) !important;
+[data-tema] .pin-tarjeta input.pin-campo:focus,
+[data-tema] .pin-tarjeta input.pin-campo:focus-visible {
+  border-color: var(--laton) !important;
+  box-shadow: 0 0 0 3px rgb(201 169 108 / 0.35) !important;
   outline: none !important;
 }
-.pin-campo[aria-invalid="true"] {
-  border-color: rgb(185 28 28);
-}
-.pin-progreso {
-  margin: 0.75rem 0 1.5rem !important;
-  gap: 0.5rem !important;
+[data-tema] .pin-tarjeta input.pin-campo[aria-invalid="true"] {
+  border-color: #f08a7e !important;
 }
 .pin-error {
   margin: -0.5rem 0 1rem;
   font-size: 0.875rem;
   font-weight: 500;
-  color: rgb(185 28 28);
+  color: #f4a397;
 }
 .pin-boton {
-  height: 3rem;
-  border-radius: 0.875rem !important;
+  display: flex !important;
+  height: 48px;
+  border-radius: 0.75rem !important;
   font-size: 0.9375rem !important;
+  background: linear-gradient(180deg, #34352f, #26251f) !important;
+  color: #f1dfb6 !important;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.08), 0 10px 24px -14px rgb(0 0 0 / 0.9) !important;
+  --tw-ring-color: rgb(201 169 108 / 0.45) !important;
+}
+.pin-boton:hover:not(:disabled) {
+  background: linear-gradient(180deg, #3d3d35, #2c2b24) !important;
 }
 .pin-boton:focus-visible {
-  outline: 2px solid rgb(var(--c-gold-600)) !important;
+  outline: 2px solid var(--laton) !important;
   outline-offset: 3px !important;
+}
+.pin-tarjeta .sello-lampara {
+  background: radial-gradient(circle at 35% 28%, #3a3b40, #121315 70%);
+}
+.pin-tarjeta .bg-amber-50 {
+  background: rgb(201 169 108 / 0.12) !important;
+  color: #ecd9b0 !important;
 }
 
 /* Foco de teclado del cordón: un anillo alrededor de la cuenta */
@@ -324,6 +339,25 @@
       radial-gradient(70% 45% at 0% 0%, rgb(var(--sala-luz) / 0.16), rgb(var(--sala-luz) / 0.04) 55%, transparent 75%),
       linear-gradient(180deg, transparent calc(100% - 64px), #0f1012 calc(100% - 64px), #0f1012 calc(100% - 50px), var(--sala-piso) calc(100% - 50px));
   }
+}
+
+/* Perfiles: la sala toma la paleta del perfil elegido (data-tema del body) */
+.escena-oscura.sala-perfil {
+  background: rgb(var(--c-slate-950)) !important;
+  transition: background-color 0.6s ease;
+}
+.sala-perfil .sala-pared {
+  background:
+    radial-gradient(70% 55% at 50% 0%, rgb(var(--c-slate-800) / 0.55), transparent 70%),
+    linear-gradient(180deg, rgb(var(--c-slate-950)), color-mix(in srgb, rgb(var(--c-slate-900)) 70%, #000) 80%);
+}
+.sala-perfil .sala-piso {
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.06), transparent 2px),
+    linear-gradient(180deg, color-mix(in srgb, rgb(var(--c-slate-950)) 80%, #000), #050505 100%);
+}
+.sala-perfil .vidrio-perfil {
+  border-color: rgb(var(--c-gold-400) / 0.18) !important;
 }
 
 /* Accesos de Inicio: vidrio sobre la pared, luz cálida desde la izquierda */
