@@ -28,11 +28,11 @@ Implementado → Desplegado → Comprobado automáticamente → Revisado visualm
 ## Estado por bloque
 | Bloque | Estado | Commit |
 |---|---|---|
-| 1 | Implementado, en Preview y comprobado en el entorno aislado: 47/47 sobre `566ade8`. Revisión visual pendiente | `568edea` |
-| 2 | Implementado: fuente única de marca, `logo_panel` (migración 0400 aplicada), favicon e iconos, manifest, títulos «Pantalla · Marca». Comprobado en el entorno aislado (N6, N7). Revisión visual pendiente | `5531880`…`566ade8` |
-| 3 | En curso: selector, Inicio, Contenido guiado, Configuración en 8 grupos, ficha. Faltan Salud, Estadísticas, Bases, Campañas, Inbox, Seguimiento/Agenda, Agentes, Comparación, Revisión, Teléfono y circuitos de Marketing. Lo hecho: 45/45 en el entorno aislado (N1–N12) | hasta `566ade8` |
-| 4 | Pendiente | — |
-| 5 | Pendiente | — |
+| 1 | Implementado y comprobado en el entorno aislado (B1 48/48). Revisión visual hecha por la responsable (17/10/2026) | `568edea` |
+| 2 | Implementado: fuente única de marca, `logo_panel` (migración 0400 aplicada), favicon e iconos, manifest, títulos «Pantalla · Marca». Comprobado en el entorno aislado (N6, N7). Revisión visual hecha (17/10/2026) | `5531880`…`566ade8` |
+| 3 | Implementado y verificado en el entorno aislado: B2-3 45/45, B3 31/31, marca-agente 11/11 | `23d3ab7` |
+| 4 | Sistema visual y movimiento. Typecheck, lint, unitarias 170/170 y build sin errores de prerender. Preview revisada por la responsable (17/10/2026). Pruebas de navegador pendientes (arnés a reconstruir) | `0fff75c` |
+| 5 | Pendiente: verificación integral (cuatro perfiles, 320–1440 px, zoom, teclado, movimiento reducido) y medición de caché | — |
 
 ## Matriz de hallazgos → bloque
 
