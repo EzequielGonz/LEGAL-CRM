@@ -19,7 +19,7 @@ export default async function TelefonoLayout({ children }: { children: React.Rea
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
   return (
-    <div className="min-h-screen bg-slate-50 pb-12">
+    <div className="modo-telefono min-h-screen bg-slate-50 pb-12">
       <PwaRegister />
       {children}
     </div>

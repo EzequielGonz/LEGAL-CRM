@@ -41,7 +41,7 @@ export function MenuPerfil({ slug, nombre, logo }: { slug: SlugPerfil; nombre?: 
   return (
     <>
       {/* Barra superior en teléfono y tablet */}
-      <div className="sticky top-0 z-30 flex items-center justify-between gap-3 bg-slate-950 px-4 py-3 shadow-navy lg:hidden">
+      <div className="barra-movil sticky top-0 z-30 flex items-center justify-between gap-3 bg-slate-950 px-4 py-3 lg:hidden">
         <div className="flex min-w-0 items-center gap-3">
           {Logo}
           <p className="truncate font-serif text-sm font-semibold text-gold-100">{titulo}</p>
@@ -62,7 +62,7 @@ export function MenuPerfil({ slug, nombre, logo }: { slug: SlugPerfil; nombre?: 
       <aside
         id="menu-perfil"
         className={clsx(
-          "z-20 flex h-screen w-64 shrink-0 flex-col bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 shadow-navy",
+          "menu-estudio z-20 flex h-screen w-[17rem] shrink-0 flex-col bg-slate-950",
           "fixed inset-y-0 left-0 lg:sticky lg:top-0 lg:visible lg:translate-x-0",
           "transition-[transform,visibility] duration-300 ease-out",
           abierto ? "visible translate-x-0" : "invisible -translate-x-full"
@@ -71,11 +71,11 @@ export function MenuPerfil({ slug, nombre, logo }: { slug: SlugPerfil; nombre?: 
         <a href="#contenido" className="skip-link">
           Saltar al contenido
         </a>
-        <div className="flex items-center gap-3 border-b border-white/10 px-5 py-5">
+        <div className="menu-marca mx-3 mt-3 flex items-center gap-3 rounded-2xl px-3 py-3">
           {Logo}
           <div className="min-w-0">
             <p className="truncate font-serif text-sm font-semibold tracking-wide text-gold-100">{titulo}</p>
-            <p className="text-[11px] uppercase tracking-wider text-slate-400">{marca.bajada}</p>
+            <p className="truncate text-[11px] uppercase tracking-[0.14em] text-slate-400">{marca.bajada}</p>
           </div>
         </div>
 
@@ -95,7 +95,7 @@ export function MenuPerfil({ slug, nombre, logo }: { slug: SlugPerfil; nombre?: 
                         href={item.href}
                         aria-current={esActivo ? "page" : undefined}
                         className={clsx(
-                          "group relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-[background-color,color,transform] duration-200",
+                          "menu-item group relative flex items-center gap-3 rounded-[10px] px-3 py-[0.5625rem] text-[13.5px] font-medium transition-[background-color,color,transform] duration-200",
                           esActivo
                             ? "menu-activo text-gold-100"
                             : "text-slate-300 hover:translate-x-0.5 hover:bg-white/5 hover:text-gold-100"
@@ -118,7 +118,7 @@ export function MenuPerfil({ slug, nombre, logo }: { slug: SlugPerfil; nombre?: 
           ))}
         </nav>
 
-        <div className="space-y-1 border-t border-white/10 px-3 py-4">
+        <div className="menu-pie space-y-0.5 border-t border-white/[0.07] px-3 py-3">
           <Link
             href="/perfiles"
             className="block rounded-lg px-3 py-2 text-xs font-medium text-slate-300 transition-colors hover:bg-white/5 hover:text-gold-100"

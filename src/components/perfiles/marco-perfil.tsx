@@ -3,6 +3,7 @@ import { unstable_cache } from "next/cache";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { MenuPerfil } from "@/components/menu-perfil";
 import { BarraSalud } from "@/components/salud/barra-salud";
+import { EncabezadoPanel } from "@/components/perfiles/encabezado-panel";
 import type { SlugPerfil } from "@/lib/marca";
 
 /**
@@ -47,13 +48,16 @@ export async function MarcoPerfil({ slug, children, sinSalud = false }: { slug: 
   return (
     <div data-tema={slug} className="min-h-screen lg:flex">
       <MenuPerfil slug={slug} nombre={marca.nombre} logo={marca.logo} />
-      <main id="contenido" tabIndex={-1} className="min-w-0 flex-1 bg-slate-50 p-4 sm:p-6 lg:h-screen lg:overflow-y-auto lg:p-8">
-        {!sinSalud && (
-          <Suspense fallback={<div className="mb-4 h-7 w-36 rounded-full skeleton-shimmer" aria-hidden="true" />}>
-            <BarraSalud slug={slug} />
-          </Suspense>
-        )}
-        {children}
+      <main id="contenido" tabIndex={-1} className="min-w-0 flex-1 bg-slate-50 lg:h-screen lg:overflow-y-auto">
+        <EncabezadoPanel slug={slug} nombre={marca.nombre} />
+        <div className="lienzo-contenido">
+          {!sinSalud && (
+            <Suspense fallback={<div className="mb-4 h-7 w-36 rounded-full skeleton-shimmer" aria-hidden="true" />}>
+              <BarraSalud slug={slug} />
+            </Suspense>
+          )}
+          {children}
+        </div>
       </main>
     </div>
   );
