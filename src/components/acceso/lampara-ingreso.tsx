@@ -9,12 +9,13 @@ import { AnclaSala, LamparaCuerpo, LamparaDefs, LamparaLuz, SalaLampara } from "
  * Una lámpara de pie con cordón que se puede tirar de verdad: el cordón sigue
  * al puntero (o al dedo), vuelve con un resorte con rebote y, si se tiró lo
  * suficiente, prende o apaga la luz. Con la luz prendida hay un cono de luz
- * volumétrico, polvo flotando en el haz y un resplandor que ilumina la
- * tarjeta del PIN. Con teclado funciona como un interruptor (Enter o Espacio).
+ * y un resplandor suave sobre la tarjeta del PIN, que es lo principal de la
+ * pantalla (bloque 4: lámpara más chica, sin polvo ni balanceo). Con teclado
+ * funciona como un interruptor (Enter o Espacio).
  *
  * Es solo visual: no cambia nada del ingreso con PIN. Con «reducir
- * movimiento» no hay resorte, ni polvo, ni balanceo: el cordón se acciona
- * igual y la luz cambia sin animaciones.
+ * movimiento» no hay resorte: el cordón se acciona igual y la luz cambia sin
+ * animaciones.
  */
 
 const UMBRAL_TIRON = 14; // unidades del dibujo (viewBox) para que cuente como tirón
@@ -22,20 +23,8 @@ const MAX_TIRON = 46;
 const CORDON_Y0 = 124; // donde nace el cordón (borde inferior de la pantalla)
 const CORDON_LARGO = 62;
 
-// Polvo en suspensión: valores fijos (sin azar) para que el servidor y el
-// navegador dibujen lo mismo.
-const MOTAS = Array.from({ length: 18 }, (_, i) => ({
-  left: 24 + ((i * 37) % 52),
-  top: 34 + ((i * 53) % 56),
-  tam: 2 + ((i * 7) % 3),
-  dur: 9 + ((i * 5) % 8),
-  delay: -((i * 3) % 11),
-  dx: ((i * 13) % 30) - 15,
-}));
-
 export function LamparaIngreso({ children }: { children: React.ReactNode }) {
   const [prendida, setPrendida] = useState(true);
-  const [encendiendo, setEncendiendo] = useState(false);
   const [tiron, setTiron] = useState(0);
 
   const svgRef = useRef<SVGSVGElement | null>(null);
@@ -56,10 +45,6 @@ export function LamparaIngreso({ children }: { children: React.ReactNode }) {
   }, []);
 
   const alternar = useCallback(() => {
-    if (!prendida) {
-      setEncendiendo(true);
-      window.setTimeout(() => setEncendiendo(false), 900);
-    }
     setPrendida(!prendida);
   }, [prendida]);
 
@@ -148,7 +133,7 @@ export function LamparaIngreso({ children }: { children: React.ReactNode }) {
   const y2 = CORDON_Y0 + CORDON_LARGO + tiron;
 
   return (
-    <div data-tema="neutro" className={`lampara-escena escena-3d${prendida ? " esta-prendida" : ""}${encendiendo ? " encendiendo" : ""}`}>
+    <div data-tema="neutro" className={`lampara-escena${prendida ? " esta-prendida" : ""}`}>
       {/* Sala: pared con boiserie y grano; el piso y la luz se anclan a la lámpara */}
       <SalaLampara />
 
@@ -192,25 +177,6 @@ export function LamparaIngreso({ children }: { children: React.ReactNode }) {
               </g>
             </svg>
 
-            {/* Polvo flotando dentro del haz */}
-            <div aria-hidden="true" className="lampara-polvo">
-              {MOTAS.map((m, i) => (
-                <span
-                  key={i}
-                  style={
-                    {
-                      left: `${m.left}%`,
-                      top: `${m.top}%`,
-                      width: m.tam,
-                      height: m.tam,
-                      animationDuration: `${m.dur}s`,
-                      animationDelay: `${m.delay}s`,
-                      "--dx": `${m.dx}px`,
-                    } as React.CSSProperties
-                  }
-                />
-              ))}
-            </div>
           </div>
           <p className="lampara-pista" aria-hidden="true">
             {prendida ? "Tirá del cordón para apagar" : "Tirá del cordón para prender"}
@@ -218,7 +184,7 @@ export function LamparaIngreso({ children }: { children: React.ReactNode }) {
         </div>
 
         {/* Tarjeta del ingreso */}
-        <div className="lampara-tarjeta" data-3d="suave">{children}</div>
+        <div className="lampara-tarjeta">{children}</div>
       </div>
     </div>
   );

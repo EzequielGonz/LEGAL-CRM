@@ -141,7 +141,7 @@ export function ProfileSettings({
         {msg && <span className={`text-xs ${msg.ok ? "text-green-600" : "text-red-600"}`}>{msg.text}</span>}
       </div>
       {profile.whatsapp_phone && (
-        <p className="text-[11px] text-slate-400">Teléfono que figuraba antes en este perfil (dato anterior, sin uso automático): {profile.whatsapp_phone}</p>
+        <p className="text-xs text-slate-400">Teléfono que figuraba antes en este perfil (dato anterior, sin uso automático): {profile.whatsapp_phone}</p>
       )}
 
       <div>

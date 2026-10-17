@@ -47,7 +47,7 @@ export default async function ListaIndicadorPage({
     <MarcoPerfil slug={perfil}>
       <div className="mx-auto max-w-4xl">
         <EnlaceVolver volver={volver} respaldo={volver} textoRespaldo="Volver a la comparación" />
-        <h1 className="mt-2 font-serif text-2xl font-semibold text-slate-900">
+        <h1 className="mt-2 text-2xl font-semibold text-slate-900">
           {label} · candidato {cand}
         </h1>
         <p className="text-sm text-slate-600">

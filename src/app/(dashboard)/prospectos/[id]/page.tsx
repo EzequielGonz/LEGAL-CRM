@@ -65,7 +65,7 @@ export default async function ProspectoDetailPage({ params, searchParams }: { pa
       <div className="mb-6 rounded-xl border border-slate-200 bg-white p-6">
         <h2 className="mb-3 text-sm font-semibold text-slate-700">Ficha</h2>
         <FichaSection contactId={contact.id} />
-        <p className="mt-3 text-[11px] text-slate-400">
+        <p className="mt-3 text-xs text-slate-400">
           Estado anterior a la Etapa 1 (histórico): <StatusBadge status={contact.status} />
         </p>
       </div>

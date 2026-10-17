@@ -101,7 +101,7 @@ export default async function TelefonoClientesPage({
               </div>
               <span
                 className={clsx(
-                  "shrink-0 rounded-full px-2.5 py-1 text-[11px] font-medium",
+                  "shrink-0 rounded-full px-2.5 py-1 text-xs font-medium",
                   r.derivation_state === "derivado" ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-800"
                 )}
               >

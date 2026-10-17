@@ -40,7 +40,7 @@ export function RecipientReview({
   }
 
   return (
-    <div className="mt-1 flex flex-wrap items-center gap-2 text-[11px]">
+    <div className="mt-1 flex flex-wrap items-center gap-2 text-xs">
       {uncertain && (
         <label className="flex items-center gap-1 text-amber-800">
           <input type="checkbox" checked={confirm} onChange={(e) => setConfirm(e.target.checked)} />

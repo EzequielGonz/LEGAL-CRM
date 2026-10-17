@@ -240,7 +240,7 @@ export default async function ProspectosPage({ searchParams }: { searchParams: P
                     {det && (
                       <span
                         className={clsx(
-                          "ml-2 rounded-full px-2 py-0.5 text-[10px] font-semibold",
+                          "ml-2 rounded-full px-2 py-0.5 text-xs font-semibold",
                           det.hardBlock ? "bg-red-50 text-red-700" : "bg-amber-50 text-amber-800"
                         )}
                         title={DETENTION_LABEL[det.motive as DetentionMotive]}
@@ -248,7 +248,7 @@ export default async function ProspectosPage({ searchParams }: { searchParams: P
                         {det.motive === "motivo_no_confirmado" ? "Retenido" : "Detenido"}
                       </span>
                     )}
-                    {r.review_required && <span className="ml-1 text-[10px] font-semibold text-slate-500">· revisar</span>}
+                    {r.review_required && <span className="ml-1 text-xs font-semibold text-slate-500">· revisar</span>}
                   </td>
                   <td className="px-4 py-3 tabular-nums text-slate-700">{r.contacts?.phone ?? "—"}</td>
                   <td className="px-4 py-3">

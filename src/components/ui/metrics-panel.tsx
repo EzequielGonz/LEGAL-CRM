@@ -41,7 +41,7 @@ export function MetricsPanel({
         {rates.map((r) => (
           <div key={r.label} className="rounded-xl border border-slate-200 bg-white p-4">
             <p className="text-sm text-slate-500">{r.label}</p>
-            <p className="mt-1 font-serif text-2xl font-semibold text-slate-900">{formatRate(r)}</p>
+            <p className="mt-1 text-2xl font-semibold tabular-nums text-slate-900">{formatRate(r)}</p>
             <p className="mt-1 text-xs text-slate-400">
               {formatCount(r.numerator)} de {formatCount(r.denominator)} · {r.definition}
             </p>
@@ -81,7 +81,7 @@ export function MetricsPanel({
           </div>
         </div>
       )}
-      <p className="text-[11px] text-slate-400">
+      <p className="text-xs text-slate-400">
         Unidad: oportunidad (una por consulta). Actualizado {new Date(m.calculado_en).toLocaleString("es-AR")}.
       </p>
     </div>

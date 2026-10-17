@@ -1,16 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
-import "./premium.css";
+import "./panel.css";
 import "./controles.css";
-import "./estudio.css";
-import "./inmersivo.css";
-import "./escena.css";
 import "./marca.css";
-import { Efectos3D } from "@/components/ui/efectos-3d";
 
-// Fuentes autoalojadas por Next (16/10): antes se pedían con un @import a
-// Google Fonts dentro del CSS, que bloqueaba el primer pintado en cadena.
+// Fuentes autoalojadas por Next (16/10). Inter para toda la operación;
+// Playfair solo para la marca y las pantallas de ingreso (bloque 4).
 const sans = Inter({ subsets: ["latin"], display: "swap", variable: "--font-sans" });
 const serif = Playfair_Display({ subsets: ["latin"], weight: ["600", "700"], display: "swap", variable: "--font-serif" });
 
@@ -53,7 +49,6 @@ export default function RootLayout({
     <html lang="es" className={`${sans.variable} ${serif.variable}`}>
       <body className="antialiased">
         {children}
-        <Efectos3D />
       </body>
     </html>
   );

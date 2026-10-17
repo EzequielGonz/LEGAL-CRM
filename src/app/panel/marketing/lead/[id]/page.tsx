@@ -118,7 +118,7 @@ export default async function LeadPage({ params }: { params: { id: string } }) {
                 {hallazgos.map((h, i) => (
                   <li key={i} className="rounded-lg border border-slate-100 p-3">
                     <div className="mb-1 flex items-center gap-2">
-                      <span className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${SEVERITY_COLOR[h.severidad] ?? SEVERITY_COLOR.baja}`}>
+                      <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${SEVERITY_COLOR[h.severidad] ?? SEVERITY_COLOR.baja}`}>
                         {h.severidad}
                       </span>
                       <span className="text-sm font-medium text-slate-800">{h.problema}</span>

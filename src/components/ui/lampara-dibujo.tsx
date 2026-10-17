@@ -105,7 +105,6 @@ export function SalaLampara() {
   return (
     <div className="sala" aria-hidden="true">
       <span className="sala-pared" />
-      <span className="sala-grano" />
     </div>
   );
 }

@@ -124,7 +124,7 @@ export function AccessSettings({
           </button>
         </div>
         <p role="status" className={`mt-2 text-sm ${msg?.ok ? "text-green-700" : "font-medium text-red-700"}`}>{msg?.text ?? ""}</p>
-        <p className="mt-2 text-[11px] text-slate-400">
+        <p className="mt-2 text-xs text-slate-400">
           Si se olvida el PIN: cargar un valor nuevo en la variable privada ACCESS_PIN_RESET del servidor (se aplica una sola vez).
         </p>
       </div>

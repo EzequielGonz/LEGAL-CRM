@@ -1,6 +1,8 @@
 import { redirect, notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { requirePageSession } from "@/lib/acceso/pagina";
+import { LogoPerfil } from "@/components/ui/logo-perfil";
+import { temaDe } from "@/lib/marca";
 
 export const dynamic = "force-dynamic";
 
@@ -32,8 +34,8 @@ export default async function PanelRubroPage({ params }: { params: { slug: strin
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-slate-50 px-4 text-center">
-      <span className="mb-4 text-5xl">{rubro.emoji}</span>
-      <h1 className="mb-2 font-serif text-2xl font-semibold text-slate-900">{rubro.name}</h1>
+      <LogoPerfil slug={temaDe(params.slug)} tamano="lg" className="mb-4" />
+      <h1 className="mb-2 text-2xl font-semibold text-slate-900">{rubro.name}</h1>
       <p className="max-w-md text-sm text-slate-500">
         Este rubro todavía no tiene su motor de leads y su bot de WhatsApp conectados. Se está
         construyendo — cuando esté listo, acá vas a ver el mismo panel completo que ya tenés

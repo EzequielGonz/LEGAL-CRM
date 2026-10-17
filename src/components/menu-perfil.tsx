@@ -77,14 +77,14 @@ export function MenuPerfil({ slug, nombre, logo }: { slug: SlugPerfil; nombre?: 
           {Logo}
           <div className="min-w-0">
             <p className="truncate font-serif text-sm font-semibold tracking-wide text-gold-100">{titulo}</p>
-            <p className="truncate text-[11px] uppercase tracking-[0.14em] text-slate-400">{marca.bajada}</p>
+            <p className="truncate text-xs uppercase tracking-[0.14em] text-slate-400">{marca.bajada}</p>
           </div>
         </div>
 
         <nav aria-label="Secciones del perfil" className="flex-1 overflow-y-auto px-3 py-4">
           {grupos.map((g) => (
             <div key={g.titulo} className="mb-4">
-              <p className="flex items-center gap-2 px-3 pb-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-400">
+              <p className="flex items-center gap-2 px-3 pb-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">
                 <span>{g.titulo}</span>
                 <span aria-hidden="true" className="h-px flex-1 bg-gradient-to-r from-white/15 to-transparent" />
               </p>

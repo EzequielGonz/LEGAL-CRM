@@ -49,7 +49,7 @@ export default async function ComparacionAgentesPage({ searchParams }: { searchP
   if (!actual) {
     return (
       <MarcoPerfil slug={perfil}>
-        <h1 className="font-serif text-2xl font-semibold text-slate-900">Comparación de agentes</h1>
+        <h1 className="text-2xl font-semibold text-slate-900">Comparación de agentes</h1>
         <p className="mt-2 text-sm text-slate-600">Falta aplicar la migración 0310 (ver la guía del programador). Hasta entonces no hay experimento preparado.</p>
       </MarcoPerfil>
     );
@@ -137,7 +137,7 @@ export default async function ComparacionAgentesPage({ searchParams }: { searchP
         <header className="flex flex-wrap items-end justify-between gap-3">
           <div>
             <p className="text-xs uppercase tracking-wider text-gold-700">Agentes</p>
-            <h1 className="font-serif text-2xl font-semibold text-slate-900">Comparación de agentes</h1>
+            <h1 className="text-2xl font-semibold text-slate-900">Comparación de agentes</h1>
             <p className="text-sm text-slate-600">
               {exp.nombre} · <strong>{ESTADO_EXP[exp.estado] ?? exp.estado}</strong>
               {inicio ? ` · desde ${new Date(inicio).toLocaleDateString("es-AR")} · semana ${semanasTranscurridas} de ${exp.semanas}` : ""}
@@ -174,7 +174,7 @@ export default async function ComparacionAgentesPage({ searchParams }: { searchP
         />
 
         <section aria-labelledby="t-cand" className="solo-avanzado rounded-xl border border-slate-200 bg-white p-4">
-          <h2 id="t-cand" tabIndex={-1} className="mb-3 font-serif text-lg font-semibold text-slate-900">Candidatos</h2>
+          <h2 id="t-cand" tabIndex={-1} className="mb-3 text-lg font-semibold text-slate-900">Candidatos</h2>
           <div className="grid gap-3 md:grid-cols-3">
             {candidatos.map((k) => (
               <div key={k.letra} className="rounded-lg border border-slate-200 p-3 text-sm">
@@ -240,7 +240,7 @@ export default async function ComparacionAgentesPage({ searchParams }: { searchP
 
         <section aria-labelledby="t-ind" className="solo-avanzado rounded-xl border border-slate-200 bg-white p-4">
           <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-            <h2 id="t-ind" className="font-serif text-lg font-semibold text-slate-900">
+            <h2 id="t-ind" className="text-lg font-semibold text-slate-900">
               Indicadores {vista === "perfil" ? `· ${MARCAS[perfil].nombre}` : "· todos los perfiles"} {semana ? `· semana ${semana}` : "· acumulado"}
             </h2>
             <nav aria-label="Período" className="flex flex-wrap gap-1 text-xs">
@@ -346,7 +346,7 @@ export default async function ComparacionAgentesPage({ searchParams }: { searchP
         </section>
 
         <section id="t-inf-sec" aria-labelledby="t-inf" className="rounded-xl border border-slate-200 bg-white p-4">
-          <h2 id="t-inf" tabIndex={-1} className="mb-1 font-serif text-lg font-semibold text-slate-900">Informes y votos</h2>
+          <h2 id="t-inf" tabIndex={-1} className="mb-1 text-lg font-semibold text-slate-900">Informes y votos</h2>
           <p className="mb-3 text-sm text-slate-600">El servidor genera los informes de los días 7, 14, 21 y 28 aunque nadie tenga el panel abierto. Mi recomendación va separada de su voto (uno por informe).</p>
           {((informes ?? []) as any[]).length === 0 && <p className="text-sm text-slate-500">Todavía no hay informes.</p>}
           <ol className="space-y-3">
@@ -407,7 +407,7 @@ export default async function ComparacionAgentesPage({ searchParams }: { searchP
         </section>
 
         <section aria-labelledby="t-c" className="solo-avanzado rounded-xl border border-slate-200 bg-white p-4">
-          <h2 id="t-c" className="mb-1 font-serif text-lg font-semibold text-slate-900">Candidato C · ajuste en Vertex</h2>
+          <h2 id="t-c" className="mb-1 text-lg font-semibold text-slate-900">Candidato C · ajuste en Vertex</h2>
           <p className="text-sm text-slate-700">
             Variables de Vertex: {vertex.configurado ? "cargadas" : `faltan ${vertex.faltan.join(", ")}`}. Bucket del corpus: {process.env.GCP_BUCKET ? "cargado" : "falta GCP_BUCKET"}. Límite autorizado: USD 30.
           </p>
@@ -440,7 +440,7 @@ export default async function ComparacionAgentesPage({ searchParams }: { searchP
         </section>
 
         <section aria-labelledby="t-pl" className="solo-avanzado rounded-xl border border-slate-200 bg-white p-4">
-          <h2 id="t-pl" className="mb-1 font-serif text-lg font-semibold text-slate-900">Plantillas evaluadas por cada modelo</h2>
+          <h2 id="t-pl" className="mb-1 text-lg font-semibold text-slate-900">Plantillas evaluadas por cada modelo</h2>
           <p className="mb-2 text-sm text-slate-600">
             {PLANTILLAS_PROPUESTAS.length} plantillas propuestas (incluye la apertura y el aviso de presupuesto de Marketing). Cada candidato listo las puntúa de 1 a 5 en claridad, cumplimiento, tono y respuesta esperada, y marca el riesgo. Se procesan de a poco desde el servidor.
           </p>
@@ -496,7 +496,7 @@ export default async function ComparacionAgentesPage({ searchParams }: { searchP
         </section>
 
         <section aria-labelledby="t-inc" className="rounded-xl border border-slate-200 bg-white p-4">
-          <h2 id="t-inc" tabIndex={-1} className="mb-2 font-serif text-lg font-semibold text-slate-900">Incidentes</h2>
+          <h2 id="t-inc" tabIndex={-1} className="mb-2 text-lg font-semibold text-slate-900">Incidentes</h2>
           {((incidentes ?? []) as any[]).length === 0 ? (
             <p className="text-sm text-slate-500">Sin incidentes.</p>
           ) : (

@@ -296,7 +296,7 @@ async function Detenciones({ searchParams, page }: { searchParams: { estado?: st
                     )}{" "}
                     · {d.contacts?.phone ?? "—"}
                   </p>
-                  <p className="mt-1 text-[11px] text-slate-400">
+                  <p className="mt-1 text-xs text-slate-400">
                     {new Date(d.created_at).toLocaleString("es-AR")} · origen: {d.source}
                     {d.status === "levantada" && d.lift_reason ? ` · levantada: ${d.lift_reason}` : ""}
                   </p>
@@ -365,7 +365,7 @@ async function Retenidos({ searchParams, page }: { searchParams: { estado?: stri
                     {s.texto ?? "(sin texto)"}
                     {s.cantidad > 1 ? ` (+${s.cantidad - 1})` : ""}
                   </p>
-                  <p className="mt-1 text-[11px] text-slate-400">
+                  <p className="mt-1 text-xs text-slate-400">
                     {new Date(q.received_at).toLocaleString("es-AR")}
                     {q.account_id ? ` · cuenta ${q.account_id}` : ""}
                     {q.detail ? ` · ${q.detail}` : ""}

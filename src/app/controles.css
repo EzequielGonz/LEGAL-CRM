@@ -116,11 +116,11 @@ main#contenido {
 
 /* Tablas: encabezado sobrio, líneas que casi no se ven, números alineados */
 main#contenido :is(thead th, [role="columnheader"]) {
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: rgb(var(--c-slate-500));
+  color: rgb(var(--c-slate-600));
   white-space: nowrap;
 }
 main#contenido :is(tbody tr, thead tr) {

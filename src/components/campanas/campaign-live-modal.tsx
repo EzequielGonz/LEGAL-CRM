@@ -265,7 +265,7 @@ export function CampaignLiveModal({
           </div>
 
           {lastUpdatedAt && (
-            <p className="mt-1.5 text-[11px] leading-snug text-slate-400">
+            <p className="mt-1.5 text-xs leading-snug text-slate-400">
               Actualizado {lastUpdatedAt.toLocaleTimeString("es-AR")}
               {" · "}
               si bloqueás la pantalla o cambiás de app, tocá ↻ al volver.
@@ -320,7 +320,7 @@ export function CampaignLiveModal({
                     <p className="mt-1 text-xl font-semibold text-slate-900 sm:text-2xl">
                       {s.resumesAt ? formatResumeTime(s.resumesAt) : "—"}
                     </p>
-                    <p className="mt-0.5 text-[11px] text-slate-400">
+                    <p className="mt-0.5 text-xs text-slate-400">
                       Envía de lunes a sábado, de {s.campaign.send_window_start_hour} a {s.campaign.send_window_end_hour}hs
                       (Argentina) — fuera de ese horario y los domingos no manda nada.
                     </p>
@@ -331,14 +331,14 @@ export function CampaignLiveModal({
               {/* Último enviado / próximo en la fila */}
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div className="min-w-0 rounded-xl border border-slate-200 p-3">
-                  <p className="mb-1 text-[11px] uppercase text-slate-400">Último enviado</p>
+                  <p className="mb-1 text-xs uppercase text-slate-400">Último enviado</p>
                   {s.lastSent ? (
                     <>
                       <p className="truncate text-sm font-medium text-slate-800">
                         {s.lastSent.full_name || "Sin nombre"}
                       </p>
                       <p className="truncate text-xs text-slate-500">{formatPhone(s.lastSent.phone)}</p>
-                      <p className="mt-1 text-[11px] text-slate-400">
+                      <p className="mt-1 text-xs text-slate-400">
                         {new Date(s.lastSent.sent_at).toLocaleTimeString("es-AR")}
                       </p>
                     </>
@@ -347,7 +347,7 @@ export function CampaignLiveModal({
                   )}
                 </div>
                 <div className="min-w-0 rounded-xl border border-slate-200 p-3">
-                  <p className="mb-1 text-[11px] uppercase text-slate-400">Próximo en la fila</p>
+                  <p className="mb-1 text-xs uppercase text-slate-400">Próximo en la fila</p>
                   {s.nextUp ? (
                     <>
                       <p className="truncate text-sm font-medium text-slate-800">
@@ -385,13 +385,13 @@ export function CampaignLiveModal({
                     key={label as string}
                     className="min-w-0 rounded-lg bg-slate-50 px-2 py-2.5 text-center"
                   >
-                    <p className="truncate text-[10px] uppercase text-slate-400">{label}</p>
+                    <p className="truncate text-xs uppercase text-slate-400">{label}</p>
                     <p className={`truncate text-sm font-semibold ${color}`}>{value}</p>
                   </div>
                 ))}
               </div>
 
-              <p className="text-center text-[11px] leading-snug text-slate-400">
+              <p className="text-center text-xs leading-snug text-slate-400">
                 Los envíos siguen solos en segundo plano aunque cierres esta ventana.
               </p>
             </div>

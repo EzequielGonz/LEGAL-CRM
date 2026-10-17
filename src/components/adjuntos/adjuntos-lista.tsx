@@ -41,11 +41,11 @@ export function AdjuntosLista({ rows, showConversation = false }: { rows: Attach
                 {KIND_LABEL[a.kind as AttachmentKind] ?? a.kind}
                 {a.file_name ? ` · ${a.file_name}` : ""}
                 {a.size_bytes ? ` · ${formatBytes(a.size_bytes)}` : ""}
-                <span className={`ml-2 rounded-full px-2 py-0.5 text-[10px] font-semibold ${STATUS_TONE[a.status] ?? "bg-slate-100"}`}>
+                <span className={`ml-2 rounded-full px-2 py-0.5 text-xs font-semibold ${STATUS_TONE[a.status] ?? "bg-slate-100"}`}>
                   {STATUS_LABEL[a.status as AttachmentStatus] ?? a.status}
                 </span>
               </p>
-              <p className="text-[11px] text-slate-400">
+              <p className="text-xs text-slate-400">
                 Recibido {new Date(a.received_at).toLocaleString("es-AR")}
                 {canSave && a.expires_at ? ` · se puede guardar hasta ${new Date(a.expires_at).toLocaleString("es-AR")}` : ""}
                 {a.status !== "guardado" && a.last_error ? ` · ${a.last_error}` : ""}

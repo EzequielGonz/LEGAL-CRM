@@ -329,7 +329,7 @@ export function BaseRowsTable({
                 <td className={`px-4 py-2 font-medium ${STATUS_COLOR[r.status]}`}>
                   {STATUS_LABEL[r.status]}
                   {r.match_label && r.status !== "invalido" && (
-                    <span className="block text-[11px] font-normal text-slate-400">{r.match_label}</span>
+                    <span className="block text-xs font-normal text-slate-400">{r.match_label}</span>
                   )}
                 </td>
                 <td className="px-4 py-2 text-xs">

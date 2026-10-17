@@ -145,11 +145,13 @@ body {
 }
 
 @layer base {
+  /* Títulos en Inter como el resto de la operación (bloque 4). Playfair se
+     usa solo con la clase font-serif, en la marca y en el ingreso. */
   h1,
   h2,
   h3,
   h4 {
-    font-family: var(--font-serif, "Playfair Display"), Georgia, "Times New Roman", serif;
+    font-family: var(--font-sans, "Inter"), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   }
 
   a,
@@ -174,36 +176,29 @@ body {
 }
 
 @layer components {
-  /* Botón principal dorado: reemplaza el bg-slate-900 plano por un
-     degradé navy->navy con acento dorado en el borde y hover con leve
-     elevación, más consistente con la identidad navy + dorado. */
+  /* Botón principal: fondo de la tinta del perfil con acento en el borde.
+     Al pasar cambia el tono; no se desplaza ni brilla (bloque 4). */
   .btn-gold {
     @apply relative inline-flex items-center justify-center gap-2 rounded-lg
       bg-gradient-to-br from-slate-800 to-slate-900 px-4 py-2 text-sm
-      font-medium text-gold-200 shadow-navy ring-1 ring-inset ring-gold-500/30
-      transition-all duration-200 ease-out
-      hover:-translate-y-0.5 hover:from-slate-900 hover:to-slate-950
-      hover:text-gold-100 hover:shadow-gold hover:ring-gold-400/60
-      active:translate-y-0 active:shadow-none
-      disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0
-      disabled:hover:shadow-navy;
+      font-medium text-gold-200 ring-1 ring-inset ring-gold-500/30
+      transition-colors duration-150 ease-out
+      hover:from-slate-900 hover:to-slate-950 hover:text-gold-100 hover:ring-gold-400/60
+      disabled:cursor-not-allowed disabled:opacity-60;
   }
 
   .btn-gold-sm {
     @apply relative inline-flex items-center justify-center gap-1.5 rounded-md
       bg-gradient-to-br from-slate-800 to-slate-900 px-3 py-1.5 text-xs
-      font-medium text-gold-200 shadow-navy ring-1 ring-inset ring-gold-500/30
-      transition-all duration-200 ease-out
-      hover:-translate-y-0.5 hover:from-slate-900 hover:to-slate-950
-      hover:text-gold-100 hover:shadow-gold hover:ring-gold-400/60
-      active:translate-y-0 active:shadow-none
-      disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0
-      disabled:hover:shadow-navy;
+      font-medium text-gold-200 ring-1 ring-inset ring-gold-500/30
+      transition-colors duration-150 ease-out
+      hover:from-slate-900 hover:to-slate-950 hover:text-gold-100 hover:ring-gold-400/60
+      disabled:cursor-not-allowed disabled:opacity-60;
   }
 
-  /* Tarjeta base con hover-lift sutil, usada en stat-card y similares */
+  /* Tarjeta con respuesta al pasar: solo borde y sombra, sin desplazarse. */
   .card-lift {
-    @apply transition-all duration-200 ease-out hover:-translate-y-0.5 hover:shadow-navy;
+    @apply transition-shadow duration-150 ease-out;
   }
 
   /* Anillo de foco dorado para inputs/selects, en reemplazo del azul genérico */
@@ -261,7 +256,6 @@ body {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  .card-lift:hover,
   .hover\:translate-x-0\.5:hover {
     transform: none !important;
   }

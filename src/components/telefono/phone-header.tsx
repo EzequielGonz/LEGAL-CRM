@@ -29,7 +29,7 @@ export function PhoneHeader({
         <LogoutButton className="text-sm" label="Salir" />
       </div>
       {eyebrow && <p className="mb-1 pr-28 text-xs font-semibold text-gold-200">{eyebrow}</p>}
-      <h1 className="pr-28 font-serif text-[1.45rem] font-semibold leading-tight tracking-[-0.015em] text-white">{title}</h1>
+      <h1 className="pr-28 text-2xl font-semibold leading-tight tracking-[-0.015em] text-white">{title}</h1>
       {subtitle && <p className="mt-1 text-sm text-slate-200">{subtitle}</p>}
       {/* Mismo selector que en la computadora, en el mismo lugar de todas las pantallas del teléfono. */}
       <div className="mt-3 flex justify-end">

@@ -88,7 +88,7 @@ export default async function TelefonoEstadisticasPage({
                   {line ? `${line.label}${line.phone_display ? ` (${line.phone_display})` : ""}` : "sin asignar"}
                 </p>
                 {!list.some((c) => c.status === "en_curso") && (
-                  <p className="text-[11px] text-slate-400">No hay campañas activas: se muestra la última.</p>
+                  <p className="text-xs text-slate-400">No hay campañas activas: se muestra la última.</p>
                 )}
               </div>
               <CampaignMetricsPanel m={cm} compact />
@@ -100,7 +100,7 @@ export default async function TelefonoEstadisticasPage({
           <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Perfil</h2>
           <MetricsPanel metrics={metrics} compact perfil={profile.rubroId} volver={`/telefono/${params.slug}/estadisticas`} />
           {metrics && (
-            <p className="mt-2 text-[11px] text-slate-400">Calculado {new Date(metrics.calculado_en).toLocaleString("es-AR")}. Mismas cifras que en la computadora.</p>
+            <p className="mt-2 text-xs text-slate-400">Calculado {new Date(metrics.calculado_en).toLocaleString("es-AR")}. Mismas cifras que en la computadora.</p>
           )}
         </section>
       </main>

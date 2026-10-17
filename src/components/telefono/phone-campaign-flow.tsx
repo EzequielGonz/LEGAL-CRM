@@ -190,7 +190,7 @@ function CampaignStep({
         <AddBaseToCampaign baseId={baseId} campaignId={choice} onAdded={() => setConfirmedCampaign(choice)} />
       )}
       {error && <p className="text-xs text-red-600">{error}</p>}
-      <p className="text-[11px] text-slate-400">Área: {area}</p>
+      <p className="text-xs text-slate-400">Área: {area}</p>
     </div>
   );
 }

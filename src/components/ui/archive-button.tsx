@@ -58,7 +58,7 @@ export function ArchiveButton({
         <button onClick={run} disabled={busy} className={base} title={`Recuperar ${kind}`}>
           {busy ? "Recuperando..." : "Recuperar"}
         </button>
-        {error && <span className="text-[11px] text-red-600">{error}</span>}
+        {error && <span className="text-xs text-red-600">{error}</span>}
       </span>
     );
   }
@@ -87,7 +87,7 @@ export function ArchiveButton({
         e.stopPropagation();
       }}
     >
-      <span className="text-[11px] leading-snug text-slate-600">
+      <span className="text-xs leading-snug text-slate-600">
         ¿Archivar {kind === "base" ? "la base" : "la campaña"} «{name}»? No se borra nada
         {kind === "campaña" ? "; si está en curso queda pausada y al recuperarla sigue pausada." : "; se puede recuperar cuando quieras."}
       </span>
@@ -106,7 +106,7 @@ export function ArchiveButton({
           Cancelar
         </button>
       </span>
-      {error && <span className="text-[11px] text-red-600">{error}</span>}
+      {error && <span className="text-xs text-red-600">{error}</span>}
     </span>
   );
 }

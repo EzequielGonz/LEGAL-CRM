@@ -45,7 +45,7 @@ export default async function PidePresupuestoPage({ searchParams }: { searchPara
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <p className="text-xs uppercase tracking-wider text-gold-700">Trabajo diario</p>
-          <h1 className="font-serif text-2xl font-semibold text-slate-900">Pide presupuesto</h1>
+          <h1 className="text-2xl font-semibold text-slate-900">Pide presupuesto</h1>
           <p className="text-sm text-slate-600">Prometimos el presupuesto en menos de 24 h. Al cargarlo se envía (o se avisa con la plantilla si la ventana está cerrada) y la IA retoma para cerrar.</p>
         </div>
         <nav className="flex gap-2 text-sm" aria-label="Filtro">

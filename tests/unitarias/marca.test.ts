@@ -66,3 +66,11 @@ test("marca: título de pestaña «Pantalla · Marca»", () => {
   assert.equal(tituloPestana("Inbox", "marketing"), "Inbox · Kocos Marketing");
   assert.equal(tituloPestana("Perfiles"), "Perfiles · Panel central");
 });
+
+test("marca: el nombre del panel sale de brand_briefs, nunca de rubros.brand_name (identidad del agente)", () => {
+  // Una fila con brand_name (como la de rubros) no cambia el nombre visible del panel.
+  const conAgente = resolverMarca("marketing", { brand_name: "Nombre con el que se presenta el agente" } as any);
+  assert.equal(conAgente.nombre, MARCAS.marketing.nombre);
+  const conAmbos = resolverMarca("marketing", { nombre_publico: "Marca del panel", brand_name: "Marca del agente" } as any);
+  assert.equal(conAmbos.nombre, "Marca del panel");
+});

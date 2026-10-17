@@ -27,15 +27,15 @@ export function BaseQualityPanel({ q, compact = false }: { q: BaseQuality | null
       <div className={compact ? "grid grid-cols-2 gap-2" : "grid grid-cols-2 gap-3 md:grid-cols-4"}>
         {items.map((it) => (
           <div key={it.label} className="rounded-lg bg-slate-50 p-3">
-            <p className="text-[11px] uppercase tracking-wide text-slate-400">{it.label}</p>
+            <p className="text-xs uppercase tracking-wide text-slate-400">{it.label}</p>
             <p className={`text-lg font-semibold ${it.tone}`}>{it.n.toLocaleString("es-AR")}</p>
-            <p className="text-[11px] text-slate-400">
+            <p className="text-xs text-slate-400">
               {pctText(it.n, q.respondieron)} de {q.respondieron.toLocaleString("es-AR")} que respondieron
             </p>
           </div>
         ))}
       </div>
-      <p className="mt-2 text-[11px] text-slate-400">
+      <p className="mt-2 text-xs text-slate-400">
         Denominador: contactos de la base que respondieron. Una respuesta puede tener más de una marca; lo no clasificado queda
         como desconocido.
       </p>
