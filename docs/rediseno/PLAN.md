@@ -17,6 +17,23 @@ Implementado → Desplegado → Comprobado automáticamente → Revisado visualm
 | 4 | Sistema visual y movimiento | Inter para la operación y Playfair solo en marca e ingreso; escala 14–16 px, metadatos desde 12 px, títulos 28–32 px; cifras tabulares; cabecera, márgenes y anchos comunes; botones, pestañas y estados completos; iconos sin emojis; colores de marca por función con contraste comprobado; se quitan inclinaciones 3D, luz que sigue al cursor y animaciones ambientales; consolidación de `premium.css`, `estudio.css`, `inmersivo.css` y `escena.css`; `prefers-reduced-motion`. |
 | 5 | Verificación integral | Cuatro perfiles, escritorio y teléfono, desde 320 px, zoom, teclado, movimiento reducido; registro de límites y pendientes. |
 
+## Niveles de detalle: Simple y Avanzado (pedido del 17/10)
+- **Selector global** «Simple / Avanzado» en la cabecera de todas las pantallas del perfil (y en la barra del teléfono), con la misma posición en todos lados. Grupo de opciones con flechas, opción activa marcada con texto y forma, aviso para lector de pantalla y sin animación con movimiento reducido.
+- **Primera entrada en Simple.** La elección se recuerda por navegador (cookie `crm_nivel`, un año) y se conserva entre secciones y perfiles. No es configuración del negocio: no se guarda en la base.
+- **Solo presentación.** Las dos vistas usan los mismos datos, permisos, validaciones y reglas. Cambiar no guarda, no envía, no publica, no activa automatizaciones, no evalúa, no entrena y no genera gastos. Nada se desmonta: se conservan perfil, sección, registro, búsqueda, filtros, página y borradores.
+- **Simple** responde qué pasa, qué requiere atención, qué hacer ahora y cuál es el siguiente paso. **Avanzado** conserva toda la configuración y capacidad.
+- **«Personalizar» / «Ver configuración completa»**: pasan a Avanzado y abren el grupo o campo exacto (abre secciones plegadas y lleva el foco), con regreso. `?nivel=avanzado` en un enlace hace lo mismo.
+- **Contenido primero:** crear contenido con recorrido guiado (qué decir, canal, datos imprescindibles, vista previa, siguiente acción), piezas que requieren atención, borradores, calendario, publicadas y resultados. Si falta un dato imprescindible, «Completar configuración» abre ese campo. «Guardar borrador», «Programar» y «Publicar» se explican con condiciones y consecuencias; publicar sigue sujeto a la política habilitada por la responsable.
+
+## Estado por bloque
+| Bloque | Estado | Commit |
+|---|---|---|
+| 1 | Implementado, en Preview y comprobado en el entorno aislado: 47/47 sobre `566ade8`. Revisión visual pendiente | `568edea` |
+| 2 | Implementado: fuente única de marca, `logo_panel` (migración 0400 aplicada), favicon e iconos, manifest, títulos «Pantalla · Marca». Comprobado en el entorno aislado (N6, N7). Revisión visual pendiente | `5531880`…`566ade8` |
+| 3 | En curso: selector, Inicio, Contenido guiado, Configuración en 8 grupos, ficha. Faltan Salud, Estadísticas, Bases, Campañas, Inbox, Seguimiento/Agenda, Agentes, Comparación, Revisión, Teléfono y circuitos de Marketing. Lo hecho: 45/45 en el entorno aislado (N1–N12) | hasta `566ade8` |
+| 4 | Pendiente | — |
+| 5 | Pendiente | — |
+
 ## Matriz de hallazgos → bloque
 
 | Hallazgo de la auditoría | Bloque |

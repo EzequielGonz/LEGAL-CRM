@@ -1,6 +1,6 @@
 # CONTEXTO ACTUAL · CRM multirubro
 
-Actualizado: 17/10/2026 15:15 UTC (reconciliación con evidencia y arranque del rediseño integral). Sin secretos ni datos de prospectos.
+Actualizado: 17/10/2026 19:10 UTC (rediseño: bloques 1 y 2 cerrados en el entorno aislado, bloque 3 en curso). Sin secretos ni datos de prospectos.
 
 ## Cómo se registra la evidencia (desde el 17/10)
 Cada cambio declara por separado cinco niveles. Un despliegue READY solo acredita el segundo.
@@ -25,8 +25,38 @@ Cada cambio declara por separado cinco niveles. Un despliegue READY solo acredit
 - **PR #16** (`176e067`, logos sobre placa negra): se fusionó 7 segundos después de abrirse. Se implementó y se desplegó (READY). **No hubo revisión visual de la versión publicada ni prueba funcional.** Solo se revisó local con datos de ejemplo. La entrada anterior que decía «verificado en producción en PC y teléfono» era incorrecta: salió de un resumen y no de la evidencia.
 - **PR #13 a #15**: las revisiones en producción con Sandbox y PIN quedaron registradas por la sesión del 17/10, pero no se guardaron capturas. Se consideran «revisado visualmente (sin capturas archivadas)».
 
+## Etapa 3: estado concreto (reemplaza la frase ambigua «Fase 3 pausada»)
+- **Código**: integrado y publicado en producción (PR #2 `0a4fd30`, más Comparación de agentes y circuitos nuevos de Marketing en PR #5 `e0e8c32`).
+- **Configuración**: disponible en el panel (agentes, comparación, contenido, conexiones). Nada nuevo se habilita por estar disponible.
+- **Experimento A/B/C**: preparado (1 registro en estado «preparado»), **no iniciado**. Arrancarlo es decisión de la responsable con PIN.
+- **Corpus y ajuste fino del candidato C**: no iniciados. El tope de USD 30 es una autorización de gasto aparte y no se usó.
+- El rediseño no inicia el experimento, no entrena, no cambia modelos y no activa envíos.
+
 ## Bloque en curso: rediseño integral (pedido del 17/10)
-Plan, matriz de hallazgos y criterios de aceptación en `docs/rediseno/PLAN.md`. Orden: 1) navegación, regreso, diálogo, etiquetas y anclas; 2) marca, títulos, favicon y fuente única de configuración; 3) configuración completa y pantallas habituales simples; 4) tipografía, componentes, composición y movimiento; 5) verificación en los cuatro perfiles, escritorio y teléfono. Se conservan datos, reglas, agentes, estados, archivos originales, integraciones y el estado operativo actual.
+Plan, matriz, criterios y estado por bloque en `docs/rediseno/PLAN.md`. Rama `rediseno-b1-navegacion` (sin fusionar a `main`). Último commit comprobado: **`566ade8`**.
+
+**Niveles de evidencia sobre `566ade8`**
+1. Implementado: en la rama (remoto = local, comprobado con `git fetch` + diff).
+2. Desplegado: Preview `dpl_D4Yw3szy3eq6JEf9bNoC6pEAEGNr` READY (solo acredita el despliegue). **Producción sin cambios.**
+3. Comprobado automáticamente (entorno aislado de Vercel, base local con datos inventados, Meta simulado): typecheck 0, lint 0, unitarias 167/167, build 0, app 200 en `/login`.
+4. Revisado visualmente: **pendiente**. Hay capturas en el entorno aislado (`/tmp/capturas`: Inicio, Contenido y Configuración en Simple y Avanzado, 320/390/1363), pero no se pudieron traer a la sesión; la Preview no se miró con sesión. Lo revisa la responsable o el programador.
+5. Probado funcionalmente (entorno aislado, navegador automatizado): bloque 1, 47/47 (39 originales + K, L, M, M2 y ajustes); bloques 2 y 3, 45/45 (N1–N12).
+
+**Qué cambió en bloques 2 y 3**
+- Marca de fuente única (`src/lib/marca.ts`, `marca-servidor.ts`): claves `principal`/`primario` unificadas (causa de «falta color primario»); logo del panel en columna nueva `logo_panel` (migración `0400_rediseno_logo_panel.sql`, **aplicada en la base de producción**, aditiva, vacía = logo original); `logo_ref` queda para las piezas. Roles de color con contraste comprobado. Favicon 16/32, iconos 96/180/192/512 y maskable, manifest y Apple Touch generados por `/marca/[archivo]`. Títulos «Pantalla · Marca».
+- Selector global Simple/Avanzado (`src/components/nivel/nivel.tsx`, cookie `crm_nivel`, primera entrada en Simple). Inicio por perfil (`/hoy?perfil=`) con siguiente paso; Contenido con recorrido guiado y diferencias entre borrador, programar y publicar; Configuración de Jurídico en 8 grupos con búsqueda y la de los otros tres perfiles unificada; ficha con siguiente paso.
+- Corrección encontrada en las pruebas: el cliente de servicio de Supabase leía datos viejos de la caché de datos de Next (el brief guardado no volvía en la lectura siguiente). Ahora usa `cache: "no-store"`. Afecta a todo el panel: conviene que el programador lo tenga en cuenta al revisar rendimiento.
+- Ancla al llegar a una página: salto inmediato y corrección si cambia el alto de arriba.
+
+**Pendientes del rediseño**
+- Bloque 3: Salud, Estadísticas, Bases/Prospectos, Campañas, Inbox, Seguimiento/Agenda, Agentes, Comparación, Revisión, Teléfono y entrada común a los dos circuitos de Marketing.
+- Bloque 4 (Inter, capas CSS, sin 3D ni luz al cursor, lámpara del ingreso) y bloque 5 (verificación integral).
+- Decisión abierta: `rubros.brand_name` (lo usa el agente) no se unificó con la marca del panel.
+
+**Pendientes separados (no son del rediseño)**
+- Landings: hosting sin confirmar.
+- Meta: `META_APP_SECRET` (2 webhooks en cuarentena), plantillas `mkt_apertura_propuesta` y `mkt_presupuesto_listo`, líneas y asignaciones.
+- Candidato C: variables `GCP_*` y `GCP_BUCKET`; corpus y ajuste no iniciados; tope USD 30.
 
 ## Bloque 17/10 (4): logos sobre placa negra — DESPLEGADO, sin revisión (PR #16, `176e067`)
 - Implementado: los logos (fondo transparente) se muestran sobre negro en el selector, el menú, la barra del teléfono y la vista Teléfono. Solo diseño.
