@@ -88,7 +88,9 @@ export function ConversationList() {
   const keep = qs ? `?${qs}` : "";
 
   return (
-    <div className="flex h-full w-80 flex-col border-r border-slate-200 bg-white">
+    // Teléfono y tablet chica: lista o conversación, una a la vez (la
+    // conversación tiene su «Volver»); desde 768 px, las dos lado a lado.
+    <div className={`${params?.id ? "hidden md:flex" : "flex"} h-full w-full shrink-0 flex-col border-r border-slate-200 bg-white md:w-72 xl:w-80`}>
       <div className="space-y-2 border-b border-slate-200 p-3">
         <form
           onSubmit={(e) => {
@@ -100,12 +102,14 @@ export function ConversationList() {
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Buscar nombre o teléfono"
+            aria-label="Buscar conversaciones por nombre o teléfono"
             className="w-full rounded-lg border border-slate-300 px-2 py-1.5 text-sm outline-none focus-gold"
           />
         </form>
         <div className="grid grid-cols-2 gap-2">
           <select
             className="w-full rounded-lg border border-slate-300 px-2 py-1.5 text-sm outline-none focus-gold"
+            aria-label="Área"
             defaultValue={searchParams.get("area") ?? ""}
             onChange={(e) => setFilter("area", e.target.value)}
           >
@@ -115,6 +119,7 @@ export function ConversationList() {
           </select>
           <select
             className="w-full rounded-lg border border-slate-300 px-2 py-1.5 text-sm outline-none focus-gold"
+            aria-label="Canal"
             defaultValue={searchParams.get("canal") ?? ""}
             onChange={(e) => setFilter("canal", e.target.value)}
           >
@@ -127,6 +132,7 @@ export function ConversationList() {
         </div>
         <select
           className="w-full rounded-lg border border-slate-300 px-2 py-1.5 text-sm outline-none focus-gold"
+          aria-label="Atención"
           defaultValue={searchParams.get("atencion") ?? ""}
           onChange={(e) => setFilter("atencion", e.target.value)}
         >
@@ -146,13 +152,13 @@ export function ConversationList() {
             className={`block border-b border-slate-100 px-4 py-3 hover:bg-slate-50 ${params?.id === item.id ? "bg-slate-100" : ""}`}
           >
             <div className="mb-1 flex items-center justify-between gap-2">
-              <span className="truncate text-sm font-medium text-slate-900">{item.contact_name ?? item.phone ?? "Sin nombre"}</span>
+              <span className="min-w-0 truncate text-sm font-medium text-slate-900">{item.contact_name ?? item.phone ?? "Sin nombre"}</span>
               <AreaBadge area={item.area as any} />
             </div>
             <p className={`mb-1 truncate text-xs ${item.last_from_contact ? "font-medium text-slate-700" : "text-slate-500"}`}>
               {item.last_message_preview ?? "Sin mensajes todavía"}
             </p>
-            <div className="flex flex-wrap items-center gap-2 text-[10px] font-medium uppercase">
+            <div className="flex min-w-0 flex-wrap items-center gap-2 text-[10px] font-medium uppercase [overflow-wrap:anywhere]">
               {item.last_message_at && <span className="normal-case text-slate-400">{new Date(item.last_message_at).toLocaleString("es-AR")}</span>}
               {item.attention_state && ATTENTION_LABEL[item.attention_state] && (
                 <span className="text-orange-600">
@@ -172,11 +178,11 @@ export function ConversationList() {
       <div className="flex items-center justify-between border-t border-slate-200 px-3 py-2 text-[11px] text-slate-500">
         <span>{total.toLocaleString("es-AR")} conversaciones</span>
         <span className="flex items-center gap-2">
-          <button type="button" disabled={page <= 1} onClick={() => goPage(page - 1)} className="disabled:text-slate-300">
+          <button type="button" aria-label="Página anterior" disabled={page <= 1} onClick={() => goPage(page - 1)} className="tactil px-2 disabled:text-slate-300">
             ←
           </button>
           {page}/{pages}
-          <button type="button" disabled={page >= pages} onClick={() => goPage(page + 1)} className="disabled:text-slate-300">
+          <button type="button" aria-label="Página siguiente" disabled={page >= pages} onClick={() => goPage(page + 1)} className="tactil px-2 disabled:text-slate-300">
             →
           </button>
         </span>

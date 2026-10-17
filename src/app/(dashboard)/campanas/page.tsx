@@ -54,7 +54,7 @@ export default async function CampanasPage({
 
   return (
     <div>
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold text-slate-900">Campañas</h1>
         <ArchivedToggle basePath="/campanas" showing={verArchivadas} />
@@ -79,13 +79,13 @@ export default async function CampanasPage({
               className="card-lift flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white p-5 hover:border-gold-300"
             >
               <Link href={`/campanas/${c.id}`} className="block min-w-0 flex-1">
-                <div className="mb-1 flex items-center justify-between">
-                  <h3 className="font-medium text-slate-900">{c.name}</h3>
-                  <span className="text-xs font-medium text-slate-500">
+                <div className="mb-1 flex flex-wrap items-start justify-between gap-x-3 gap-y-1">
+                  <h3 className="min-w-0 break-words font-medium text-slate-900 [overflow-wrap:anywhere]">{c.name}</h3>
+                  <span className="shrink-0 text-xs font-medium text-slate-600">
                     {STATUS_LABEL[c.status]}
                   </span>
                 </div>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-slate-600 [overflow-wrap:anywhere]">
                   {enviados}/{total} enviados · {respondieron} respondieron · {agendados} agendados ·
                   plantilla {c.message_template_name ?? "sin elegir"}
                   {c.message_template_name && !c.template_id ? " (sin confirmar en el catálogo)" : ""}

@@ -8,7 +8,7 @@ export default function InboxLayout({ children }: { children: React.ReactNode })
   return (
     <div className="marco-inbox flex h-[calc(100vh-4rem)]">
       <ConversationList />
-      <div className="flex-1">{children}</div>
+      <div className="min-w-0 flex-1">{children}</div>
     </div>
   );
 }

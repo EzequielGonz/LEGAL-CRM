@@ -150,30 +150,30 @@ export function ConversationThread({
   const visibles = messages.filter((m) => !m.duplicate_of);
 
   return (
-    <div className="flex h-full">
-      <div className="flex flex-1 flex-col">
-        <div className="flex items-center justify-between border-b border-slate-200 bg-white px-5 py-3">
-          <div>
-            <p className="text-sm font-semibold text-slate-900">
+    <div className="flex h-full min-w-0 flex-col overflow-y-auto lg:flex-row lg:overflow-hidden">
+      <div className="flex min-h-[70vh] min-w-0 flex-1 flex-col lg:min-h-0">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 bg-white px-4 py-3 sm:px-5">
+          <div className="min-w-0">
+            <p className="text-sm font-semibold text-slate-900 [overflow-wrap:anywhere]">
               {contact.full_name ?? "Sin nombre"}
             </p>
-            <p className="text-xs text-slate-400">{contact.phone ?? contact.email ?? "—"}</p>
+            <p className="text-xs text-slate-600 [overflow-wrap:anywhere]">{contact.phone ?? contact.email ?? "—"}</p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <AreaBadge area={contact.area} />
             <StatusBadge status={contact.status as any} />
             <SourceBadge source={contact.source} />
           </div>
         </div>
 
-        <div className="flex-1 space-y-3 overflow-y-auto bg-slate-50 p-5">
+        <div className="flex-1 space-y-3 overflow-y-auto bg-slate-50 p-3 sm:p-5">
           {visibles.map((m) => (
             <div
               key={m.id}
               className={`flex ${m.direction === "saliente" ? "justify-end" : "justify-start"}`}
             >
               <div
-                className={`max-w-md animate-fade-in-up rounded-2xl px-4 py-2 text-sm ${
+                className={`min-w-0 max-w-[85%] animate-fade-in-up rounded-2xl px-4 py-2 text-sm [overflow-wrap:anywhere] sm:max-w-md ${
                   m.direction === "saliente"
                     ? m.sender_type === "admin"
                       ? "bg-gradient-to-br from-slate-800 to-slate-900 text-gold-100 shadow-navy ring-1 ring-gold-500/20"
@@ -232,7 +232,7 @@ export function ConversationThread({
             </label>
           </div>
           {sendError && <p className="mb-2 text-xs text-red-600">{sendError}</p>}
-          <div className="flex gap-2">
+          <div className="flex min-w-0 gap-2">
             <input
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
@@ -242,7 +242,8 @@ export function ConversationThread({
                   ? "Escribir desactiva el agente IA para esta conversación..."
                   : "Escribir un mensaje como administrador..."
               }
-              className="flex-1 rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
+              aria-label="Mensaje"
+              className="min-w-0 flex-1 rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
             />
             <button onClick={handleSend} disabled={sending} className="btn-gold">
               {sending ? "Enviando..." : "Enviar"}
@@ -251,7 +252,7 @@ export function ConversationThread({
         </div>
       </div>
 
-      <div className="w-80 overflow-y-auto border-l border-slate-200 bg-white p-4">
+      <div className="w-full shrink-0 border-t border-slate-200 bg-white p-4 lg:w-80 lg:overflow-y-auto lg:border-l lg:border-t-0">
         {ficha && <div className="mb-5">{ficha}</div>}
         <h3 className="mb-3 text-sm font-semibold text-slate-700">Datos recopilados por la IA</h3>
         {Object.keys(contact.qualification_data ?? {}).length === 0 ? (
@@ -263,7 +264,7 @@ export function ConversationThread({
                 <dt className="text-xs font-medium uppercase text-slate-400">
                   {key.replaceAll("_", " ")}
                 </dt>
-                <dd className="text-sm text-slate-800">{String(value)}</dd>
+                <dd className="text-sm text-slate-800 [overflow-wrap:anywhere]">{String(value)}</dd>
               </div>
             ))}
           </dl>

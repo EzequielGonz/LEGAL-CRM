@@ -7,7 +7,7 @@ import { EnlaceVolver } from "@/components/ui/enlaces-navegacion";
 
 export const dynamic = "force-dynamic";
 
-export default async function ConversationPage({ params, searchParams }: { params: { id: string }; searchParams?: { volver?: string } }) {
+export default async function ConversationPage({ params, searchParams }: { params: { id: string }; searchParams?: Record<string, string | undefined> }) {
   // Al llegar desde una lista (indicador, búsqueda), «Volver» conserva filtros, orden y página.
   const volver = volverSeguro(searchParams?.volver);
   const supabase = createClient();
@@ -33,10 +33,19 @@ export default async function ConversationPage({ params, searchParams }: { param
     .order("created_at", { ascending: true });
 
   const contact = conversation.contacts as any;
+  const filtrosLista = new URLSearchParams(
+    Object.entries(searchParams ?? {}).filter(([k, v]) => k !== "volver" && typeof v === "string") as [string, string][]
+  ).toString();
+  const listaInbox = filtrosLista ? `/inbox?${filtrosLista}` : "/inbox";
 
   return (
     <>
-      {volver && <EnlaceVolver volver={volver} respaldo="/inbox" className="tactil mb-2 inline-flex items-center gap-1.5 text-sm font-medium text-slate-700 hover:underline" />}
+      {volver ? (
+        <EnlaceVolver volver={volver} respaldo="/inbox" className="tactil mb-2 inline-flex items-center gap-1.5 text-sm font-medium text-slate-700 hover:underline" />
+      ) : (
+        // En teléfono la lista y la conversación van de a una: regreso a la lista con sus filtros.
+        <EnlaceVolver volver={null} respaldo={listaInbox} textoRespaldo="Volver a la lista" className="tactil mb-2 inline-flex items-center gap-1.5 px-4 text-sm font-medium text-slate-700 hover:underline md:hidden" />
+      )}
     <ConversationThread
       conversationId={conversation.id}
       aiEnabled={conversation.ai_enabled}
