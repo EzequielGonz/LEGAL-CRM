@@ -1,5 +1,6 @@
 "use client";
 
+import { Icono } from "@/components/ui/icono-seccion";
 import { useState } from "react";
 import { AreaBadge } from "@/components/ui/badge";
 import type { Area } from "@/lib/supabase/database.types";
@@ -93,7 +94,7 @@ export function CasoCard({
 
       {derived && (
         <p className="mb-3 inline-flex items-center gap-1 rounded-full bg-green-100 px-2.5 py-1 text-xs font-medium text-green-700">
-          ✓ Enviado
+          <Icono nombre="check" className="h-3.5 w-3.5" /> Enviado
         </p>
       )}
 
@@ -103,13 +104,13 @@ export function CasoCard({
           disabled={sending}
           className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#25D366] px-4 py-3.5 text-sm font-semibold text-white shadow-sm transition-transform active:scale-[0.98] disabled:opacity-60"
         >
-          📲 {derived ? "Reenviar a WhatsApp" : "Enviar a WhatsApp"}
+          <Icono nombre="enviar" className="h-4 w-4" /> {derived ? "Reenviar a WhatsApp" : "Enviar a WhatsApp"}
         </button>
         <button
           onClick={handleCopiar}
           className="flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-3.5 text-sm font-semibold text-slate-700 shadow-sm transition-transform active:scale-[0.98]"
         >
-          {copied ? "✓" : "📋"}
+          {copied ? <Icono nombre="check" className="h-5 w-5" /> : <Icono nombre="copiar" className="h-5 w-5" />}
         </button>
       </div>
     </div>

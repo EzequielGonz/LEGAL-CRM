@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { unstable_cache } from "next/cache";
 import { leerSalud, resumenSalud, type ItemSalud } from "@/lib/salud";
+import { Icono } from "@/components/ui/icono-seccion";
 
 const COLOR: Record<ItemSalud["estado"], string> = {
   rojo: "border-red-300 bg-red-50 text-red-900",
@@ -41,8 +42,9 @@ export async function BarraSalud({ slug }: { slug: string }) {
   return (
     <section aria-label="Salud del sistema" className={`mb-5 rounded-xl border p-3 ${r.rojo ? COLOR.rojo : COLOR.amarillo}`}>
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-sm font-semibold">
-          {r.rojo ? `⚠ ${r.rojo} problema(s) frenan la operación` : `${r.amarillo} punto(s) para revisar`}
+        <p className="flex items-center gap-2 text-sm font-semibold">
+          {r.rojo ? <Icono nombre="alerta" className="h-4 w-4 shrink-0" /> : null}
+          {r.rojo ? `${r.rojo} problema(s) frenan la operación` : `${r.amarillo} punto(s) para revisar`}
           {r.rojo && r.amarillo ? ` · ${r.amarillo} para revisar` : ""}
         </p>
         <Link href={verTodo} className="rounded-lg bg-white/70 px-3 py-1 text-xs font-semibold underline">
