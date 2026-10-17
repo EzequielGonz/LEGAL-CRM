@@ -21,6 +21,7 @@ export function SendLimitsFields({
   onBatchPauseSecondsChange,
   dailyLimit,
   onDailyLimitChange,
+  idPrefix = "envio",
 }: {
   minDelaySeconds: number;
   onMinDelayChange: (v: number) => void;
@@ -32,14 +33,18 @@ export function SendLimitsFields({
   onBatchPauseSecondsChange: (v: number) => void;
   dailyLimit: number | "";
   onDailyLimitChange: (v: number | "") => void;
+  /** Prefijo de los ids (para que no se repitan si hay dos formularios en la misma página). */
+  idPrefix?: string;
 }) {
+  const id = (s: string) => `${idPrefix}-${s}`;
   return (
     <div className="grid grid-cols-2 gap-3">
       <div>
-        <label className="mb-1 block text-xs font-medium text-slate-600">
+        <label htmlFor={id("min")} className="mb-1 block text-xs font-medium text-slate-700">
           Mínimo de segundos entre mensajes
         </label>
         <input
+          id={id("min")}
           type="number"
           min={1}
           value={minDelaySeconds}
@@ -48,10 +53,11 @@ export function SendLimitsFields({
         />
       </div>
       <div>
-        <label className="mb-1 block text-xs font-medium text-slate-600">
+        <label htmlFor={id("max")} className="mb-1 block text-xs font-medium text-slate-700">
           Máximo de segundos entre mensajes
         </label>
         <input
+          id={id("max")}
           type="number"
           min={1}
           value={maxDelaySeconds}
@@ -60,10 +66,11 @@ export function SendLimitsFields({
         />
       </div>
       <div>
-        <label className="mb-1 block text-xs font-medium text-slate-600">
+        <label htmlFor={id("lote")} className="mb-1 block text-xs font-medium text-slate-700">
           Mensajes por lote (antes de la pausa larga)
         </label>
         <input
+          id={id("lote")}
           type="number"
           min={1}
           value={batchSize}
@@ -72,10 +79,11 @@ export function SendLimitsFields({
         />
       </div>
       <div>
-        <label className="mb-1 block text-xs font-medium text-slate-600">
+        <label htmlFor={id("pausa")} className="mb-1 block text-xs font-medium text-slate-700">
           Pausa entre lotes (segundos)
         </label>
         <input
+          id={id("pausa")}
           type="number"
           min={1}
           value={batchPauseSeconds}
@@ -84,10 +92,11 @@ export function SendLimitsFields({
         />
       </div>
       <div>
-        <label className="mb-1 block text-xs font-medium text-slate-600">
+        <label htmlFor={id("dia")} className="mb-1 block text-xs font-medium text-slate-700">
           Límite de envíos por día
         </label>
         <input
+          id={id("dia")}
           type="number"
           min={1}
           placeholder="Sin límite"
@@ -96,7 +105,7 @@ export function SendLimitsFields({
           className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
         />
       </div>
-      <p className="col-span-2 text-xs text-slate-400">
+      <p className="col-span-2 text-xs text-slate-600">
         Con los valores de por defecto: cada mensaje nuevo espera un tiempo al azar entre 50 y 200
         segundos desde el anterior (nunca siempre el mismo número), hasta 10 mensajes, y después una
         pausa de 5 minutos antes de seguir con el próximo lote — así se cuida la calidad del número,

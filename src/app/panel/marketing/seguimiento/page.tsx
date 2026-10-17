@@ -4,6 +4,7 @@ import { FollowupPanel } from "@/components/seguimiento/followup-panel";
 import { RUBRO_IDS } from "@/lib/rubros";
 
 export const dynamic = "force-dynamic";
+export const metadata = { title: "Seguimiento" };
 
 /**
  * Seguimiento de Marketing. Etapa 2 (bloque 2.3): pasó al circuito general

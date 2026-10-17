@@ -1,0 +1,900 @@
+/* =====================================================================
+   Sistema visual del panel (rediseño 17/10, bloque 4). Reemplaza y
+   consolida premium.css, estudio.css, inmersivo.css y escena.css.
+
+   Criterios:
+   - Inter para toda la operación. Playfair queda solo para la marca y las
+     pantallas de ingreso (ingreso, Inicio y Perfiles).
+   - Escala: texto 14–16 px, metadatos desde 12 px, títulos de página
+     28–32 px, cifras tabulares.
+   - Sin inclinaciones 3D, sin luz que sigue al cursor, sin paralaje, sin
+     partículas ni animaciones continuas. Se conservan las transiciones de
+     estado (pasar el puntero, foco, encender la lámpara) y, con «reducir
+     movimiento», globals.css las deja en cero.
+   - Una paleta por perfil (data-tema en globals.css): cambia el color,
+     no el diseño.
+   Solo presentación: no cambia textos, datos, campos ni acciones.
+   ===================================================================== */
+
+:root {
+  --e-radio-tarjeta: 14px;
+  --e-radio-control: 10px;
+  --e-borde: rgb(var(--c-slate-900) / 0.09);
+  --e-borde-fuerte: rgb(var(--c-slate-900) / 0.16);
+  --e-sombra-1: 0 1px 2px rgb(var(--c-slate-900) / 0.05), 0 4px 14px -10px rgb(var(--c-slate-900) / 0.16);
+  --e-sombra-2: 0 2px 4px rgb(var(--c-slate-900) / 0.06), 0 14px 30px -18px rgb(var(--c-slate-900) / 0.26);
+  --e-curva: cubic-bezier(0.23, 1, 0.32, 1);
+  /* Sala del ingreso (luz cálida 2700 K sobre pared grafito) */
+  --sala-pared-alta: #0b0c0e;
+  --sala-pared-baja: #17181b;
+  --sala-piso: #0d0c0b;
+  --sala-luz: 255 196 128;
+  --sala-frio: 185 203 224;
+  --laton: #c9a96c;
+}
+
+/* ---------- Base ---------- */
+html {
+  scroll-behavior: smooth;
+  text-rendering: optimizeLegibility;
+}
+::selection {
+  background: rgb(var(--c-gold-300) / 0.55);
+  color: rgb(var(--c-slate-950));
+}
+h1, h2, h3 {
+  text-wrap: balance;
+  letter-spacing: -0.01em;
+}
+.tabular-nums, .cifra {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Pantallas comunes (ingreso, Inicio, teléfono): grafito y latón, sin la
+   marca de ningún perfil. */
+[data-tema="neutro"] {
+  --c-slate-50: 246 245 243;
+  --c-slate-100: 236 235 232;
+  --c-slate-200: 216 216 214;
+  --c-slate-300: 186 187 190;
+  --c-slate-400: 140 143 150;
+  --c-slate-500: 98 102 110;
+  --c-slate-600: 74 78 86;
+  --c-slate-700: 54 57 64;
+  --c-slate-800: 36 38 44;
+  --c-slate-900: 24 26 30;
+  --c-slate-950: 14 15 18;
+  --c-gold-50: 250 247 240;
+  --c-gold-100: 243 236 220;
+  --c-gold-200: 232 216 182;
+  --c-gold-300: 219 194 141;
+  --c-gold-400: 207 176 112;
+  --c-gold-500: 192 157 92;
+  --c-gold-600: 166 132 72;
+  --c-gold-700: 128 100 54;
+  --c-gold-800: 101 79 44;
+  --c-gold-900: 76 60 34;
+  --c-gold-950: 45 35 20;
+}
+
+/* =====================================================================
+   1. Ingreso: la sala de la lámpara
+   La tarjeta del PIN es lo principal; la lámpara acompaña, más chica, y se
+   prende o apaga solo cuando la persona tira del cordón.
+   ===================================================================== */
+.lampara-escena,
+.escena-oscura {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--sala-pared-alta);
+}
+.lampara-escena {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  color: #f6e7cc;
+}
+.sala {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.sala > span {
+  position: absolute;
+  inset: 0;
+}
+.sala-pared {
+  background:
+    radial-gradient(55% 60% at 100% 35%, rgb(var(--sala-frio) / 0.04), transparent 70%),
+    linear-gradient(180deg, var(--sala-pared-alta), var(--sala-pared-baja) 78%);
+}
+/* Piso y luz anclados a la lámpara */
+.sala-ancla {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.sala-ancla > span {
+  position: absolute;
+  display: block;
+}
+.sala-bano {
+  left: 50%;
+  top: 30%;
+  width: 1200px;
+  height: 920px;
+  translate: -50% -50%;
+  background: radial-gradient(closest-side, rgb(var(--sala-luz) / 0.16), rgb(var(--sala-luz) / 0.06) 45%, rgb(var(--sala-luz) / 0.015) 72%, transparent);
+  opacity: 0.12;
+  transition: opacity 0.6s ease;
+}
+/* El piso arranca en la base de la lámpara (y = 412 de 440) */
+.sala-piso {
+  top: 93.6%;
+  left: -300vw;
+  width: 600vw;
+  height: 100vh;
+  background:
+    linear-gradient(180deg, rgb(255 236 205 / 0.06), transparent 2px),
+    linear-gradient(180deg, #19171a 0, var(--sala-piso) 28%, #070707 100%);
+  box-shadow: 0 -14px 0 0 #0f1012, 0 -15px 0 0 rgb(255 255 255 / 0.035);
+}
+.sala-charco {
+  left: 50%;
+  top: 93.6%;
+  width: 900px;
+  height: 190px;
+  translate: -50% -38%;
+  background: radial-gradient(closest-side, rgb(var(--sala-luz) / 0.24), rgb(var(--sala-luz) / 0.07) 50%, transparent);
+  opacity: 0.08;
+  transition: opacity 0.6s ease;
+}
+.esta-prendida .sala-bano,
+.esta-prendida .sala-charco {
+  opacity: 1;
+}
+
+.lampara-contenido {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 100%;
+  max-width: 56rem;
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: 1.5rem;
+}
+.lampara-columna {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.lampara-marco {
+  position: relative;
+  width: clamp(84px, 24vw, 130px);
+  aspect-ratio: 220 / 440;
+}
+.lampara-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.lampara-luz,
+.lampara-foco-on,
+.lampara-pantalla-on,
+.lampara-borde-on {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.esta-prendida .lampara-luz,
+.esta-prendida .lampara-foco-on,
+.esta-prendida .lampara-pantalla-on,
+.esta-prendida .lampara-borde-on {
+  opacity: 1;
+}
+.lampara-luz {
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+.lampara-tirador {
+  cursor: grab;
+  touch-action: none;
+  outline: none;
+}
+.lampara-tirador:active {
+  cursor: grabbing;
+}
+/* Foco de teclado del cordón: un anillo alrededor de la cuenta */
+.lampara-anillo {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.lampara-tirador:focus-visible .lampara-anillo {
+  opacity: 1;
+  stroke: #fff2cf;
+}
+.lampara-pista {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: rgb(214 178 112 / 0.9);
+}
+.lampara-tarjeta {
+  width: 100%;
+  max-width: 26rem;
+  border: 1px solid rgb(255 255 255 / 0.1);
+  border-radius: 1.4rem;
+  box-shadow: 0 40px 70px -34px rgb(0 0 0 / 0.95);
+  transition: border-color 0.5s ease, box-shadow 0.5s ease;
+}
+.esta-prendida .lampara-tarjeta {
+  border-color: rgb(var(--sala-luz) / 0.2);
+  box-shadow: 0 40px 70px -34px rgb(0 0 0 / 0.95), -40px 0 90px -60px rgb(var(--sala-luz) / 0.45);
+}
+@media (min-width: 900px) {
+  .lampara-contenido {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: center;
+    gap: clamp(2.5rem, 7vw, 6rem);
+  }
+  .lampara-marco {
+    width: clamp(150px, 13vw, 190px);
+  }
+  .lampara-tarjeta {
+    margin-bottom: clamp(3rem, 8vh, 5rem);
+  }
+}
+
+/* Formulario del PIN (grafito, texto claro, acentos de latón) */
+.pin-tarjeta {
+  position: relative;
+  width: 100%;
+  border-radius: calc(1.4rem - 1px);
+  padding: 2rem 1.75rem 1.75rem;
+  background: linear-gradient(160deg, #222328 0%, #18191c 55%, #141517 100%);
+  color: #ece6da;
+  text-align: left;
+}
+.pin-titulo { color: #f4eee3; }
+.pin-bajada { color: #a9a59d; }
+[data-tema] .pin-tarjeta .pin-etiqueta {
+  display: block;
+  margin: 0 0 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  line-height: 1rem;
+  text-transform: uppercase;
+  color: #b9b2a5;
+}
+[data-tema] .pin-tarjeta input.pin-campo {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  height: 48px;
+  margin: 0 0 1.25rem;
+  padding: 0 0 0 0.5em;
+  border: 1px solid rgb(255 255 255 / 0.16);
+  border-radius: 0.75rem;
+  background: #0f1012;
+  color: #f4eee3;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 1.375rem;
+  letter-spacing: 0.5em;
+  text-align: center;
+  box-shadow: none;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+[data-tema] .pin-tarjeta input.pin-campo:hover {
+  border-color: rgb(255 255 255 / 0.26);
+}
+[data-tema] .pin-tarjeta input.pin-campo:focus,
+[data-tema] .pin-tarjeta input.pin-campo:focus-visible {
+  border-color: var(--laton);
+  box-shadow: 0 0 0 3px rgb(201 169 108 / 0.35);
+  outline: none;
+}
+[data-tema] .pin-tarjeta input.pin-campo[aria-invalid="true"] {
+  border-color: #f08a7e;
+}
+.pin-error {
+  margin: -0.5rem 0 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #f4a397;
+}
+.pin-boton {
+  display: flex !important;
+  height: 48px;
+  border-radius: 0.75rem !important;
+  font-size: 0.9375rem !important;
+  background: linear-gradient(180deg, #34352f, #26251f) !important;
+  color: #f1dfb6 !important;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.08), 0 10px 24px -14px rgb(0 0 0 / 0.9) !important;
+  --tw-ring-color: rgb(201 169 108 / 0.45) !important;
+}
+.pin-boton:hover:not(:disabled) {
+  background: linear-gradient(180deg, #3d3d35, #2c2b24) !important;
+}
+.pin-boton:focus-visible {
+  outline: 2px solid var(--laton) !important;
+  outline-offset: 3px !important;
+}
+.pin-tarjeta .bg-amber-50 {
+  background: rgb(201 169 108 / 0.12) !important;
+  color: #ecd9b0 !important;
+}
+.pin-sacudida {
+  animation: pin-sacudida 0.42s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+.pin-progreso {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.375rem;
+  margin: -0.5rem 0 1.25rem;
+}
+.pin-progreso span {
+  height: 3px;
+  border-radius: 9999px;
+  background: rgb(var(--c-slate-700));
+  transition: background-color 0.2s ease;
+}
+.pin-progreso span.lleno {
+  background: var(--laton);
+}
+.pin-spinner {
+  display: inline-block;
+  height: 0.9rem;
+  width: 0.9rem;
+  border-radius: 9999px;
+  border: 2px solid rgb(var(--c-gold-200) / 0.35);
+  border-top-color: rgb(var(--c-gold-200));
+  animation: pin-giro 0.7s linear infinite;
+}
+
+/* =====================================================================
+   2. Inicio y Perfiles (pantallas de entrada)
+   ===================================================================== */
+.escena-oscura::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 45% at 50% 0%, rgb(var(--c-gold-500) / 0.1), transparent 70%),
+    radial-gradient(120% 90% at 50% 40%, transparent 55%, rgb(0 0 0 / 0.45) 100%);
+}
+.escena-capa {
+  position: relative;
+  z-index: 1;
+}
+/* Perfiles: la sala toma la paleta del perfil elegido */
+.escena-oscura.sala-perfil {
+  background: rgb(var(--c-slate-950));
+  transition: background-color 0.4s ease;
+}
+.sala-perfil .sala-pared {
+  background:
+    radial-gradient(70% 55% at 50% 0%, rgb(var(--c-slate-800) / 0.55), transparent 70%),
+    linear-gradient(180deg, rgb(var(--c-slate-950)), color-mix(in srgb, rgb(var(--c-slate-900)) 70%, #000) 80%);
+}
+.sala-perfil .sala-piso {
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.06), transparent 2px),
+    linear-gradient(180deg, color-mix(in srgb, rgb(var(--c-slate-950)) 80%, #000), #050505 100%);
+}
+
+/* Accesos de Inicio: superficie translúcida; al pasar, solo cambia el borde */
+.tarjeta-luz {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 0.1);
+  background: linear-gradient(160deg, rgb(255 255 255 / 0.075), rgb(255 255 255 / 0.025));
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 30px 60px -36px rgb(0 0 0 / 0.9);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+.tarjeta-luz:hover,
+.tarjeta-luz:focus-visible {
+  border-color: rgb(var(--c-gold-400) / 0.55);
+  background: linear-gradient(160deg, rgb(255 255 255 / 0.1), rgb(255 255 255 / 0.04));
+}
+.ilus-acceso {
+  display: block;
+  width: max-content;
+}
+.icono-dorado {
+  display: flex;
+  height: 3.5rem;
+  width: 3.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+  background: linear-gradient(145deg, rgb(var(--c-gold-300)), rgb(var(--c-gold-500)) 55%, rgb(var(--c-gold-700)));
+  color: rgb(var(--c-slate-950));
+}
+
+/* Selector de perfiles: vidrio y logos sobre placa negra */
+.vidrio-perfil {
+  position: relative;
+  background: linear-gradient(150deg, rgb(255 255 255 / 0.1), rgb(255 255 255 / 0.03)) !important;
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.1), 0 40px 80px -40px rgb(0 0 0 / 0.8);
+}
+.sala-perfil .vidrio-perfil {
+  border-color: rgb(var(--c-gold-400) / 0.18) !important;
+}
+.boton-perfil {
+  position: relative;
+  padding: 0;
+  background: rgb(255 255 255 / 0.04) !important;
+  box-shadow: 0 18px 30px -18px rgb(0 0 0 / 0.85);
+  transition: box-shadow 0.2s ease;
+}
+.boton-perfil[aria-pressed="true"] {
+  box-shadow: 0 0 0 2px rgb(var(--c-gold-400)), 0 22px 36px -18px rgb(0 0 0 / 0.95) !important;
+}
+.paleta-tira {
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 2;
+  display: flex;
+  height: 6px;
+}
+.paleta-tira > span {
+  flex: 1;
+}
+
+/* Sellos de marca: panel central (cuatro piezas) y lámpara en latón */
+.marca-panel {
+  display: grid;
+  height: 3rem;
+  width: 3rem;
+  place-items: center;
+  border-radius: 0.9rem;
+  background: linear-gradient(160deg, #26272c, #141518);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.12), 0 0 0 1px rgb(255 255 255 / 0.08), 0 8px 18px -8px rgb(0 0 0 / 0.6);
+}
+.marca-panel svg {
+  height: 62%;
+  width: 62%;
+}
+.sello-lampara {
+  display: grid;
+  height: 3rem;
+  width: 3rem;
+  place-items: center;
+  border-radius: 9999px;
+  color: var(--laton);
+  background: radial-gradient(circle at 35% 28%, #3a3d44, #17181c 70%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.18), inset 0 0 0 1px rgb(201 169 108 / 0.35), 0 8px 18px -8px rgb(0 0 0 / 0.6);
+}
+.sello-lampara svg {
+  height: 58%;
+  width: 58%;
+}
+.pin-tarjeta .sello-lampara {
+  background: radial-gradient(circle at 35% 28%, #3a3b40, #121315 70%);
+}
+.sello-grande,
+.marca-panel.sello-grande {
+  height: 3.5rem;
+  width: 3.5rem;
+}
+
+/* =====================================================================
+   3. Dentro del CRM: lienzo, cabecera, tipografía y superficies
+   ===================================================================== */
+[data-tema] > main#contenido {
+  position: relative;
+  z-index: 1;
+}
+main#contenido,
+.modo-telefono,
+.modo-telefono [data-tema] {
+  background-color: rgb(var(--c-slate-50));
+}
+.lienzo-contenido {
+  width: 100%;
+  max-width: 92rem;
+  margin: 0 auto;
+  padding: 1.25rem 1rem 3rem;
+}
+@media (min-width: 640px) {
+  .lienzo-contenido { padding: 1.5rem 1.5rem 3rem; }
+}
+@media (min-width: 1024px) {
+  .lienzo-contenido { padding: 1.75rem 2.25rem 3.5rem; }
+}
+/* Anchos comunes: lectura (68rem) y tablero (80rem) */
+.lienzo-contenido :is([class~="max-w-3xl"], [class~="max-w-4xl"])[class~="mx-auto"] {
+  max-width: 68rem;
+}
+.lienzo-contenido :is([class~="max-w-5xl"], [class~="max-w-6xl"])[class~="mx-auto"] {
+  max-width: 80rem;
+}
+
+/* Franja superior (ubicación, fecha y nivel) */
+.encabezado-panel {
+  display: none;
+}
+@media (min-width: 1024px) {
+  .encabezado-panel {
+    position: sticky;
+    top: 0;
+    z-index: 15;
+    display: flex;
+    height: 3.25rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0 2.25rem;
+    background: rgb(var(--c-slate-50) / 0.92);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--e-borde);
+    font-size: 0.8125rem;
+  }
+}
+.encabezado-ruta {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.55rem;
+  white-space: nowrap;
+}
+.encabezado-icono {
+  display: grid;
+  height: 1.75rem;
+  width: 1.75rem;
+  place-items: center;
+  border-radius: 8px;
+  background: rgb(var(--c-gold-100));
+  color: rgb(var(--c-gold-800));
+  box-shadow: inset 0 0 0 1px rgb(var(--c-gold-500) / 0.25);
+}
+.encabezado-perfil { font-weight: 600; color: rgb(var(--c-slate-700)); }
+.encabezado-grupo { color: rgb(var(--c-slate-600)); }
+.encabezado-seccion { font-weight: 600; color: rgb(var(--c-slate-950)); overflow: hidden; text-overflow: ellipsis; }
+.encabezado-sep { color: rgb(var(--c-slate-400)); }
+.encabezado-fecha {
+  display: inline-block;
+  color: rgb(var(--c-slate-600));
+  font-variant-numeric: tabular-nums;
+}
+.encabezado-fecha::first-letter { text-transform: uppercase; }
+
+/* Tipografía de la operación: Inter. Título de página 28–32 px. */
+:is(main#contenido, .modo-telefono) h1:not([class*="text-white"]) {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: clamp(1.75rem, 1.5rem + 0.55vw, 2rem);
+  font-weight: 650;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: rgb(var(--c-slate-950));
+}
+main#contenido h1 + p {
+  margin-top: 0.4rem;
+  max-width: 72ch;
+  color: rgb(var(--c-slate-600));
+}
+/* Títulos de sección chicos: versalitas con una regla de acento */
+:is(main#contenido, .modo-telefono) h2:is([class~="text-sm"], [class~="text-xs"]) {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(var(--c-slate-600));
+}
+:is(main#contenido, .modo-telefono) h2:is([class~="text-sm"], [class~="text-xs"])::before {
+  content: "";
+  flex: none;
+  width: 1.1rem;
+  height: 2px;
+  border-radius: 2px;
+  background: rgb(var(--c-gold-500));
+}
+:is(main#contenido, .modo-telefono) h2:is([class~="text-base"], [class~="text-lg"], [class~="text-xl"]) {
+  letter-spacing: -0.012em;
+  color: rgb(var(--c-slate-950));
+}
+
+/* Superficies: tarjetas con borde fino y sombra baja; sin desplazarse */
+:is(main#contenido, .modo-telefono) :is([class~="rounded-xl"], [class~="rounded-2xl"])[class~="border"][class~="bg-white"]:not(input):not(select):not(textarea):not(button) {
+  border-color: var(--e-borde);
+  border-radius: var(--e-radio-tarjeta);
+  box-shadow: var(--e-sombra-1);
+}
+/* Una tarjeta dentro de otra no repite la sombra */
+:is(main#contenido, .modo-telefono) :is([class~="rounded-xl"], [class~="rounded-2xl"])[class~="border"][class~="bg-white"] :is([class~="rounded-xl"], [class~="rounded-lg"])[class~="border"][class~="bg-white"]:not(input):not(select):not(textarea):not(button) {
+  box-shadow: none;
+}
+:is(main#contenido, .modo-telefono) a:is([class~="rounded-xl"], [class~="rounded-2xl"])[class~="border"][class~="bg-white"] {
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+:is(main#contenido, .modo-telefono) a:is([class~="rounded-xl"], [class~="rounded-2xl"])[class~="border"][class~="bg-white"]:hover {
+  border-color: rgb(var(--c-gold-500) / 0.5);
+  box-shadow: var(--e-sombra-2);
+}
+:is(main#contenido, .modo-telefono) [class~="rounded-xl"][class~="border"][class~="bg-slate-50"] {
+  border-color: var(--e-borde);
+  border-radius: var(--e-radio-tarjeta);
+}
+
+/* Tarjetas de cifra */
+.tarjeta-cifra {
+  min-height: 8.25rem;
+  padding: 1.1rem 1.25rem 1rem;
+}
+.tarjeta-cifra-regla {
+  display: block;
+  width: 1.4rem;
+  height: 2px;
+  margin-bottom: 0.75rem;
+  border-radius: 2px;
+  background: rgb(var(--c-gold-500));
+}
+.tarjeta-cifra-etiqueta {
+  font-size: 0.75rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgb(var(--c-slate-600));
+}
+.tarjeta-cifra-valor {
+  margin-top: 0.35rem;
+  font-size: clamp(1.75rem, 1.5rem + 0.7vw, 2.25rem);
+  font-weight: 650;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: rgb(var(--c-slate-950));
+}
+.tarjeta-cifra-ir {
+  flex: none;
+  font-size: 0.75rem;
+  font-weight: 650;
+  color: rgb(var(--c-gold-800));
+  white-space: nowrap;
+}
+a.tarjeta-cifra:hover .tarjeta-cifra-ir {
+  color: rgb(var(--c-slate-950));
+  text-decoration: underline;
+}
+.flecha-desliza {
+  display: inline-block;
+}
+
+/* Tablas */
+main#contenido table,
+.modo-telefono table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+:is(main#contenido, .modo-telefono) thead {
+  background: rgb(var(--c-slate-50));
+}
+:is(main#contenido, .modo-telefono) thead th {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--e-borde);
+  letter-spacing: 0.02em;
+}
+:is(main#contenido, .modo-telefono) tbody td {
+  color: rgb(var(--c-slate-700));
+}
+:is(main#contenido, .modo-telefono) tbody td:first-child {
+  color: rgb(var(--c-slate-950));
+  font-weight: 500;
+}
+:is(main#contenido, .modo-telefono) tbody tr > td {
+  transition: background-color 0.15s ease;
+}
+:is(main#contenido, .modo-telefono) tbody tr:hover > td {
+  background-color: rgb(var(--c-gold-50) / 0.8);
+}
+
+/* Botones */
+.btn-gold,
+[data-tema] button[class~="bg-slate-900"] {
+  border-radius: var(--e-radio-control);
+}
+.btn-gold {
+  min-height: 2.75rem;
+  box-shadow: 0 1px 0 rgb(255 255 255 / 0.1) inset, 0 1px 2px rgb(var(--c-slate-950) / 0.3);
+}
+[data-tema] :is(button, a)[class~="border-slate-300"]:not(:disabled) {
+  background-color: #fff;
+  border-color: var(--e-borde-fuerte);
+}
+[data-tema] :is(button, a)[class~="border-slate-300"]:not(:disabled):hover {
+  background-color: rgb(var(--c-gold-50));
+}
+
+/* Campos */
+[data-tema] :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not(.pin-campo), select, textarea) {
+  border-radius: var(--e-radio-control);
+  background-color: rgb(255 255 255);
+}
+[data-tema] :is(input:not(.pin-campo), select, textarea):focus {
+  box-shadow: 0 0 0 3px rgb(var(--c-gold-500) / 0.22);
+}
+[data-tema] label {
+  color: rgb(var(--c-slate-700));
+}
+
+/* Contraste AA del texto secundario sobre superficies claras: los grises
+   más suaves (300/400) pasan al 500 de cada paleta (≥ 4,5:1 sobre blanco y
+   sobre el fondo del panel en los cuatro perfiles). Sobre superficies
+   oscuras quedan como están. */
+:is(main#contenido, .modo-telefono) :is(.text-slate-300, .text-slate-400):not([class*="bg-slate-8"]):not([class*="bg-slate-9"]):not(:is([class*="bg-slate-7"], [class*="bg-slate-8"], [class*="bg-slate-9"], [class*="bg-gradient"], .menu-estudio, .cabecera-telefono, .btn-gold, .btn-gold-sm) *) {
+  color: rgb(var(--c-slate-500));
+}
+
+/* Punto de estado (sin pulso) */
+.punto-vivo {
+  display: inline-block;
+  height: 0.5rem;
+  width: 0.5rem;
+  border-radius: 9999px;
+  background: currentColor;
+}
+
+/* =====================================================================
+   4. Menú lateral y barras
+   ===================================================================== */
+@media (min-width: 1024px) {
+  .menu-estudio {
+    position: sticky;
+    z-index: 2;
+  }
+}
+.menu-estudio {
+  background: linear-gradient(180deg, rgb(var(--c-slate-900)), rgb(var(--c-slate-950)) 55%);
+  box-shadow: inset -1px 0 0 rgb(255 255 255 / 0.06);
+}
+.menu-marca {
+  background: rgb(255 255 255 / 0.05);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08);
+}
+.menu-estudio nav {
+  padding-top: 1.1rem;
+}
+.menu-item {
+  color: rgb(var(--c-slate-300));
+}
+.menu-item:hover {
+  background: rgb(255 255 255 / 0.06);
+}
+.menu-item[aria-current="page"] {
+  background: rgb(var(--c-gold-500) / 0.18);
+  box-shadow: inset 3px 0 0 rgb(var(--c-gold-400));
+  color: rgb(var(--c-gold-100));
+}
+.menu-item[aria-current="page"] svg {
+  color: rgb(var(--c-gold-300));
+}
+.menu-pie a,
+.menu-pie button {
+  color: rgb(var(--c-slate-400));
+}
+.menu-activo {
+  background: rgb(var(--c-gold-500) / 0.18);
+}
+.menu-velo {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  background: rgb(0 0 0 / 0.55);
+  animation: velo-entra 0.2s ease-out both;
+}
+#menu-perfil nav svg {
+  shape-rendering: geometricPrecision;
+}
+/* Si las secciones no entran en la altura, la lista se desplaza y se
+   desvanece al pie (nunca queda tapada por los accesos). */
+#menu-perfil nav {
+  padding-bottom: 1.75rem;
+  -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 1.75rem), transparent);
+  mask-image: linear-gradient(180deg, #000 calc(100% - 1.75rem), transparent);
+  scrollbar-width: thin;
+  scrollbar-color: rgb(255 255 255 / 0.18) transparent;
+}
+
+/* Teléfono */
+.cabecera-telefono {
+  background: linear-gradient(160deg, rgb(var(--c-slate-900)), rgb(var(--c-slate-950)));
+  box-shadow: 0 18px 40px -24px rgb(var(--c-slate-950) / 0.8);
+  padding-top: max(1.5rem, env(safe-area-inset-top));
+}
+.cabecera-telefono::after {
+  content: "";
+  position: absolute;
+  left: 1.25rem;
+  bottom: 0.9rem;
+  width: 1.6rem;
+  height: 2px;
+  border-radius: 2px;
+  background: rgb(var(--c-gold-400));
+}
+.barra-movil {
+  background: linear-gradient(180deg, rgb(var(--c-slate-900)), rgb(var(--c-slate-950)));
+  box-shadow: 0 1px 0 rgb(255 255 255 / 0.06) inset, 0 10px 24px -16px rgb(0 0 0 / 0.7);
+  padding-top: max(0.75rem, env(safe-area-inset-top));
+}
+.logo-perfil {
+  display: grid;
+  flex: none;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 0.875rem;
+  padding: 0.25rem;
+  box-shadow: 0 0 0 1px rgb(var(--c-slate-200)), 0 4px 10px -6px rgb(0 0 0 / 0.35);
+}
+.tarjeta-perfil-tel {
+  background: #fff !important;
+}
+@media (max-width: 639px) {
+  .lienzo-contenido div[class~="grid"]:has(> .tarjeta-cifra) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+  .tarjeta-cifra {
+    min-height: 0;
+    padding: 0.9rem 0.95rem 0.85rem;
+  }
+  .tarjeta-cifra-regla { margin-bottom: 0.55rem; }
+  .tarjeta-cifra > div:last-child { flex-wrap: wrap; row-gap: 0.25rem; }
+}
+
+/* Logos de perfil sobre placa negra (17/10, pedido de la responsable):
+   las imágenes tienen fondo transparente. */
+.boton-perfil img,
+.logo-perfil,
+.menu-marca > span:first-child,
+.barra-movil > div > span:first-child {
+  background: #000 !important;
+}
+.menu-marca > span:first-child > span,
+.barra-movil > div > span:first-child > span {
+  color: #fff !important;
+}
+
+/* Esqueleto de carga */
+.skeleton-shimmer {
+  background-image: linear-gradient(90deg, rgb(var(--c-slate-100)) 25%, rgb(255 255 255 / 0.9) 37%, rgb(var(--c-slate-100)) 63%);
+}
+
+/* =====================================================================
+   5. Animaciones que quedan (todas responden a una acción)
+   ===================================================================== */
+@keyframes pin-sacudida {
+  10%, 90% { transform: translateX(-2px); }
+  20%, 80% { transform: translateX(4px); }
+  30%, 50%, 70% { transform: translateX(-7px); }
+  40%, 60% { transform: translateX(7px); }
+}
+@keyframes pin-giro {
+  to { transform: rotate(360deg); }
+}
+@keyframes velo-entra {
+  from { opacity: 0; }
+}

@@ -10,6 +10,7 @@ import { headersOf, validateRows } from "@/lib/bases/validate";
 import type { ImportBaseSummary } from "@/lib/bases/import";
 import { createClient } from "@/lib/supabase/client";
 import { SpreadsheetPreview } from "./spreadsheet-preview";
+import { EnlaceAvanzado } from "@/components/nivel/nivel";
 
 const PREVIEW_ROW_LIMIT = 100;
 const MAX_ROWS = 5000;
@@ -39,7 +40,7 @@ export function ImportFlow({
   basesPath,
   startOpen = false,
   compact = false,
-  openLabel = "+ Importar base",
+  openLabel = "Cargar una base",
   after,
   onCancel,
 }: {
@@ -203,8 +204,8 @@ export function ImportFlow({
       <div className={clsx("grid gap-3", compact ? "grid-cols-1" : "sm:grid-cols-2")}>
         {areas.length > 1 && (
           <div>
-            <label className="mb-1 block text-xs font-medium text-slate-600">Área del perfil</label>
-            <select value={area} onChange={(e) => setArea(e.target.value)} className={selectCls}>
+            <label htmlFor="import-area" className="mb-1 block text-sm font-medium text-slate-700">Área del perfil</label>
+            <select id="import-area" value={area} onChange={(e) => setArea(e.target.value)} className={selectCls}>
               {areas.map((a) => (
                 <option key={a.value} value={a.value}>
                   {a.label}
@@ -214,20 +215,21 @@ export function ImportFlow({
           </div>
         )}
         <div>
-          <label className="mb-1 block text-xs font-medium text-slate-600">Archivo (CSV o Excel)</label>
+          <label htmlFor="import-archivo" className="mb-1 block text-sm font-medium text-slate-700">Archivo (CSV o Excel)</label>
           <input
+            id="import-archivo"
             type="file"
             accept=".csv,.xlsx,.xls"
             onChange={(e) => handleFile(e.target.files?.[0] ?? null)}
             className="w-full text-xs"
           />
-          <p className="mt-1 text-xs text-slate-400">
+          <p className="mt-1 text-xs text-slate-600">
             Se guardan todas las columnas del archivo, también las que el CRM no reconoce. Cargar no envía mensajes.
           </p>
         </div>
       </div>
 
-      {reading && <p className="text-xs text-slate-400">Leyendo el archivo…</p>}
+      {reading && <p role="status" className="text-sm text-slate-700">Leyendo el archivo…</p>}
 
       {loaded && (
         <>
@@ -250,8 +252,27 @@ export function ImportFlow({
             </p>
           )}
 
-          <div>
-            <p className="mb-2 text-xs font-medium text-slate-600">Columnas que usa el CRM (propuesta; podés corregirla)</p>
+          {/* Simple: qué entendió el CRM, en una frase. El ajuste fino de columnas y el detalle, en Avanzado. */}
+          <div className="solo-simple rounded-lg border border-slate-200 p-3 text-sm text-slate-800">
+            <p>
+              Columnas detectadas: teléfono = <strong className="font-semibold">{mapping.phone ?? "por el encabezado de cada fila"}</strong>
+              {mapping.name ? <> · nombre = <strong className="font-semibold">{mapping.name}</strong></> : null}
+              {mapping.dni ? <> · DNI = <strong className="font-semibold">{mapping.dni}</strong></> : null}.
+            </p>
+            {validation ? (
+              <p className="mt-1">
+                <span className="tabular-nums font-semibold">{validation.utilizables.toLocaleString("es-AR")}</span> de{" "}
+                <span className="tabular-nums">{validation.total.toLocaleString("es-AR")}</span> filas se pueden usar para contactar
+                {validation.invalidas ? <> · <span className="tabular-nums">{validation.invalidas.toLocaleString("es-AR")}</span> requieren corrección (se guardan igual con su motivo)</> : null}.
+              </p>
+            ) : null}
+            <EnlaceAvanzado href="#import-columnas" className="tactil mt-1 inline-flex items-center text-sm font-medium text-slate-700 underline underline-offset-2">
+              Corregir columnas o ver el detalle
+            </EnlaceAvanzado>
+          </div>
+
+          <div id="import-columnas" tabIndex={-1} className="solo-avanzado">
+            <p className="mb-2 text-sm font-medium text-slate-700">Columnas que usa el CRM (propuesta; podés corregirla)</p>
             <div className={clsx("grid gap-3", compact ? "grid-cols-1" : "sm:grid-cols-3")}>
               {(
                 [
@@ -261,8 +282,9 @@ export function ImportFlow({
                 ] as const
               ).map(([key, label]) => (
                 <div key={key}>
-                  <label className="mb-1 block text-[11px] uppercase tracking-wide text-slate-400">{label}</label>
+                  <label htmlFor={`import-col-${key}`} className="mb-1 block text-xs font-medium text-slate-700">{label}</label>
                   <select
+                    id={`import-col-${key}`}
                     value={mapping[key] ?? ""}
                     onChange={(e) => setMapping((m) => ({ ...m, [key]: e.target.value || null }))}
                     className={selectCls}
@@ -277,13 +299,13 @@ export function ImportFlow({
                 </div>
               ))}
             </div>
-            <p className="mt-1 text-xs text-slate-400">
+            <p className="mt-1 text-xs text-slate-600">
               El resto de las columnas (localidad, diagnóstico, observaciones u otras) se guardan tal cual en cada fila.
             </p>
           </div>
 
           {validation && (
-            <div className="rounded-lg border border-slate-200 p-3">
+            <div className="solo-avanzado rounded-lg border border-slate-200 p-3">
               <p className="mb-2 text-xs font-medium text-slate-600">Validación (la misma que aplica el servidor al guardar)</p>
               <div className={clsx("grid gap-2 text-center", compact ? "grid-cols-2" : "grid-cols-2 sm:grid-cols-5")}>
                 <Stat label="Filas reconocidas" value={validation.total} />
@@ -331,7 +353,7 @@ export function ImportFlow({
           )}
 
           {!compact && loaded.rows.length > 0 && (
-            <div>
+            <div className="solo-avanzado">
               <p className="mb-2 text-xs font-medium text-slate-600">
                 Vista previa{loaded.rows.length > PREVIEW_ROW_LIMIT ? ` (primeras ${PREVIEW_ROW_LIMIT} filas; se procesan todas)` : ""}
               </p>
@@ -341,8 +363,9 @@ export function ImportFlow({
 
           <div className={clsx("grid gap-3", compact ? "grid-cols-1" : "sm:grid-cols-2")}>
             <div>
-              <label className="mb-1 block text-xs font-medium text-slate-600">Nombre de la base</label>
+              <label htmlFor="import-nombre" className="mb-1 block text-sm font-medium text-slate-700">Nombre de la base</label>
               <input
+                id="import-nombre"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Ej: Base accidentes laborales septiembre"
@@ -350,8 +373,9 @@ export function ImportFlow({
               />
             </div>
             <div>
-              <label className="mb-1 block text-xs font-medium text-slate-600">Fuente de la base</label>
+              <label htmlFor="import-fuente" className="mb-1 block text-sm font-medium text-slate-700">Fuente de la base</label>
               <input
+                id="import-fuente"
                 value={sourceLabel}
                 onChange={(e) => setSourceLabel(e.target.value)}
                 placeholder="Ej: Compra base marketing - marzo"
@@ -381,7 +405,7 @@ export function ImportFlow({
         </div>
       )}
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p role="alert" className="text-sm font-medium text-red-700">{error}</p>}
 
       <div className="flex flex-wrap gap-2">
         <button type="button" onClick={() => save(false)} disabled={!canSave} className="btn-gold">
@@ -406,7 +430,7 @@ export function ImportFlow({
 function Stat({ label, value, tone }: { label: string; value: number; tone?: "green" | "red" | "amber" }) {
   return (
     <div className="rounded-lg bg-slate-50 p-2">
-      <p className="text-[10px] uppercase tracking-wide text-slate-400">{label}</p>
+      <p className="text-xs text-slate-600">{label}</p>
       <p
         className={clsx(
           "text-lg font-semibold",

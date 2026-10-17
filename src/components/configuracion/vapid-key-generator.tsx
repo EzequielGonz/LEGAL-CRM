@@ -60,7 +60,7 @@ export function VapidKeyGenerator() {
             <div key={name}>
               <p className="font-semibold text-slate-700">{name}</p>
               <div className="flex items-center gap-2">
-                <code className="block flex-1 break-all rounded border border-slate-200 bg-white px-2 py-1 font-mono text-[11px]">{value}</code>
+                <code className="block flex-1 break-all rounded border border-slate-200 bg-white px-2 py-1 font-mono text-xs">{value}</code>
                 <button type="button" onClick={() => copy(name, value)} className="rounded border border-slate-300 px-2 py-1">
                   {copied === name ? "Copiado ✓" : "Copiar"}
                 </button>

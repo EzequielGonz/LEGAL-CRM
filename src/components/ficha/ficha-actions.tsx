@@ -247,7 +247,7 @@ export function FichaActions({
             Compartir…
           </button>
         </div>
-        <p className="mt-1 text-[11px] text-slate-400">Compartir o copiar no cambia el estado. Después de entregarlo, marcá Derivado.</p>
+        <p className="mt-1 text-xs text-slate-400">Compartir o copiar no cambia el estado. Después de entregarlo, marcá Derivado.</p>
       </div>
     </div>
   );

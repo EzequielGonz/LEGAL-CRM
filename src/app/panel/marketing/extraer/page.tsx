@@ -22,13 +22,13 @@ export default async function ExtraerNegociosPage() {
     <div className="mx-auto max-w-4xl space-y-6">
       <header>
         <p className="text-xs uppercase tracking-wider text-gold-700">Captación</p>
-        <h1 className="font-serif text-2xl font-semibold text-slate-900">Extraer negocios</h1>
+        <h1 className="text-2xl font-semibold text-slate-900">Extraer negocios</h1>
         <p className="text-sm text-slate-600">Busca negocios en Google Maps (Outscraper) y arma una base nueva. El análisis profundo se hace recién cuando el negocio acepta escuchar la propuesta.</p>
       </header>
       <ExtraerNegocios limites={limites} usadosHoy={usados} faltan={req.faltan} avisos={req.avisos} />
       {recientes.length > 0 && (
         <section className="rounded-xl border border-slate-200 bg-white p-4">
-          <h2 className="mb-2 font-serif text-lg font-semibold text-slate-900">Extracciones recientes</h2>
+          <h2 className="mb-2 text-lg font-semibold text-slate-900">Extracciones recientes</h2>
           <ul className="divide-y divide-slate-100 text-sm">
             {recientes.map((e: any) => (
               <li key={e.id} className="flex flex-wrap items-center justify-between gap-2 py-2">

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { EnlaceDetalle } from "@/components/ui/enlaces-navegacion";
 import { createClient } from "@/lib/supabase/server";
 import {
   ATTENTION_STATE_LABEL,
@@ -14,6 +14,7 @@ import { ReviewAction } from "@/components/revision/review-action";
 import { AdjuntosLista } from "@/components/adjuntos/adjuntos-lista";
 import { ResultadoPosteriorForm } from "@/components/ficha/resultado-posterior-form";
 import { FUENTE_LABEL, esFuente } from "@/lib/fuente";
+import { siguientePasoFicha } from "@/lib/inicio";
 import {
   CATEGORIA_ATENCION_LABEL,
   MOTIVO_NO_AVANCE_LABEL,
@@ -87,14 +88,33 @@ export async function FichaSection({
   });
 
   const chip = (label: string, value: string | null | undefined) => (
-    <div className="rounded-lg border border-slate-200 px-3 py-2">
-      <p className="text-[10px] uppercase tracking-wide text-slate-400">{label}</p>
-      <p className="text-sm font-medium text-slate-800">{value ?? "—"}</p>
+    <div className="min-w-0 rounded-lg border border-slate-200 px-3 py-2">
+      <p className="text-xs uppercase tracking-wide text-slate-600">{label}</p>
+      <p className="text-sm font-medium text-slate-800 [overflow-wrap:anywhere]">{value ?? "—"}</p>
     </div>
+  );
+
+  const paso = siguientePasoFicha(
+    opp
+      ? {
+          capture_state: opp.capture_state,
+          attention_state: opp.attention_state,
+          derivation_state: opp.derivation_state,
+          post_derivation_state: (opp as any).post_derivation_state ?? null,
+          followup_state: opp.followup_state,
+          review_required: opp.review_required,
+          detenido: !!(block && block.detentionId),
+        }
+      : null
   );
 
   return (
     <div className="space-y-4">
+      {/* Simple: una frase con el siguiente paso; el detalle completo queda en Avanzado. */}
+      <p className={`solo-simple rounded-lg border p-3 text-sm ${paso.urgente ? "border-amber-400 bg-amber-50 font-medium text-amber-950" : "border-slate-200 bg-white text-slate-800"}`}>
+        <span className="block text-xs font-medium uppercase tracking-wide text-slate-600">Siguiente paso</span>
+        {paso.texto}
+      </p>
       {block && block.detentionId && (
         <div className={`rounded-lg p-3 text-sm ${block.hardBlock ? "bg-red-50 text-red-800" : "bg-amber-50 text-amber-900"}`}>
           <p className="font-semibold">{block.motive === "motivo_no_confirmado" ? "Retenido para revisión" : "Contacto detenido"}: {block.label}</p>
@@ -115,7 +135,7 @@ export async function FichaSection({
       )}
 
       {opp ? (
-        <div className={compact ? "grid grid-cols-2 gap-2" : "grid grid-cols-2 gap-2 md:grid-cols-5"}>
+        <div className={`solo-avanzado ${compact ? "grid grid-cols-2 gap-2" : "grid grid-cols-2 gap-2 md:grid-cols-5"}`}>
           {chip("Contacto", CONTACT_STATE_LABEL[opp.contact_state])}
           {chip("Captación", CAPTURE_STATE_LABEL[opp.capture_state] + (opp.capture_reason ? ` · ${opp.capture_reason}` : ""))}
           {chip("Seguimiento", FOLLOWUP_STATE_LABEL[opp.followup_state])}
@@ -163,21 +183,21 @@ export async function FichaSection({
       )}
 
       {opp && esFuente(fuente) && (
-        <p className="text-xs text-slate-600">
+        <p className="solo-avanzado text-xs text-slate-600">
           Fuente: {FUENTE_LABEL[fuente]}
           {(opp as any).first_source_detail ? ` · ${(opp as any).first_source_detail}` : ""}
         </p>
       )}
 
       {opp?.historical_result && (
-        <p className="text-xs text-slate-500">
+        <p className="solo-avanzado text-xs text-slate-600">
           Resultado histórico: {opp.historical_result.replaceAll("_", " ")}
           {opp.motive_unconfirmed ? " · motivo no confirmado" : ""}
           {opp.migration_group ? ` · grupo ${opp.migration_group}` : ""}
         </p>
       )}
       {opp?.automation_hold && (
-        <p className="text-xs text-slate-500">Conversación histórica: no entra sola al seguimiento automático.</p>
+        <p className="solo-avanzado text-xs text-slate-600">Conversación histórica: no entra sola al seguimiento automático.</p>
       )}
 
       <FichaActions
@@ -207,7 +227,8 @@ export async function FichaSection({
       </div>
 
       <div>
-        <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Historial</h3>
+        <div className="solo-avanzado">
+        <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-600">Historial</h3>
         {(events ?? []).length === 0 ? (
           <p className="text-xs text-slate-400">Sin cambios registrados.</p>
         ) : (
@@ -225,10 +246,11 @@ export async function FichaSection({
             ))}
           </ul>
         )}
+        </div>
         {compact && opp && (
-          <Link href={fullHref ?? `/prospectos/${contactId}`} className="mt-2 inline-block text-xs text-slate-500 hover:underline">
+          <EnlaceDetalle href={fullHref ?? `/prospectos/${contactId}`} className="tactil mt-2 inline-flex items-center text-sm text-slate-700 hover:underline">
             Ver ficha completa →
-          </Link>
+          </EnlaceDetalle>
         )}
       </div>
     </div>

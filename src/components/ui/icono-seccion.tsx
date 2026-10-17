@@ -6,6 +6,7 @@
 type Dibujo = { l: string; r?: string };
 
 const DIBUJOS: Record<string, Dibujo> = {
+  inicio: { l: "M4 11 12 4.5 20 11M6 9.5V19a1.5 1.5 0 0 0 1.5 1.5H10v-5.5h4v5.5h2.5A1.5 1.5 0 0 0 18 19V9.5", r: "M6 9.5 12 4.5 18 9.5V19a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 6 19Z" },
   estadisticas: { l: "M4 20h16M7 16.5V11M12 16.5V6.5M17 16.5v-4", r: "M10.5 6.5h3V17h-3zM5.5 11h3v6h-3zM15.5 12.5h3V17h-3z" },
   salud: { l: "M3.5 12.5h3.2l2-4.5 3.4 9 2.4-6 1.3 1.5h4.7", r: "M12 20.5c-4.8-3-8.5-6.3-8.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 8.5 2.7c0 3.9-3.7 7.2-8.5 10.2Z" },
   inbox: { l: "M4 13.5 6.4 6.2A1.8 1.8 0 0 1 8.1 5h7.8a1.8 1.8 0 0 1 1.7 1.2L20 13.5M4 13.5V18a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 20 18v-4.5M4 13.5h4.5l1 2h5l1-2H20", r: "M4 13.5h4.5l1 2h5l1-2H20V18a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18Z" },
@@ -34,6 +35,7 @@ const DIBUJOS: Record<string, Dibujo> = {
 };
 
 const POR_RUTA: [RegExp, string][] = [
+  [/^hoy$/, "inicio"],
   [/estadisticas/, "estadisticas"],
   [/salud/, "salud"],
   [/inbox/, "inbox"],

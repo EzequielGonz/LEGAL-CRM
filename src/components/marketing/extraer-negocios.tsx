@@ -161,7 +161,7 @@ export function ExtraerNegocios({ limites, usadosHoy, faltan, avisos }: { limite
       {ext && (
         <section aria-live="polite" className="rounded-xl border border-gold-500/40 bg-white p-5 shadow-gold">
           <p className="text-xs uppercase tracking-wider text-gold-700">{ESTADO[ext.estado] ?? ext.estado}</p>
-          <h2 className="font-serif text-xl font-semibold text-slate-900">{ext.nombre_base}</h2>
+          <h2 className="text-xl font-semibold text-slate-900">{ext.nombre_base}</h2>
           <p className="mt-1 text-sm text-slate-700">
             <strong className="text-2xl text-slate-900">{ext.creados}</strong> negocios nuevos · {ext.duplicados} ya estaban · {ext.invalidos} sin teléfono · {ext.encontrados} encontrados de {ext.cantidad_max}
           </p>

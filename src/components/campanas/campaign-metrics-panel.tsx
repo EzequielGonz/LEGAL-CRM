@@ -30,7 +30,7 @@ export function CampaignMetricsPanel({ m, compact = false }: { m: CampaignMetric
       <div className={compact ? "grid grid-cols-3 gap-2" : "grid grid-cols-3 gap-3 md:grid-cols-9"}>
         {tiles.map(([label, value, color]) => (
           <div key={label} className="rounded-xl border border-slate-200 bg-white p-3 text-center">
-            <p className="text-[10px] uppercase leading-tight text-slate-400">{label}</p>
+            <p className="text-xs uppercase leading-tight text-slate-400">{label}</p>
             <p className={`text-lg font-semibold ${color}`}>{value.toLocaleString("es-AR")}</p>
           </div>
         ))}
@@ -43,7 +43,7 @@ export function CampaignMetricsPanel({ m, compact = false }: { m: CampaignMetric
         {(m.en_envio ?? 0) > 0 ? ` · ${m.en_envio} en envío` : ""}
         {m.detenidos > 0 ? ` · ${m.detenidos} destinatarios detenidos (no reciben más envíos)` : ""}
       </p>
-      <p className="text-[11px] text-slate-400">
+      <p className="text-xs text-slate-400">
         Unidad: destinatarios de la campaña (mensajes enviados y respuestas cuentan mensajes).
         {m.actualizado ? ` Última actividad: ${new Date(m.actualizado).toLocaleString("es-AR")}.` : " Todavía sin actividad."}
       </p>

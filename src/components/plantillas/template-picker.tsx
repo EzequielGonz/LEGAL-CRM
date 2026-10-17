@@ -27,11 +27,14 @@ export function TemplatePicker({
   value,
   onChange,
   className,
+  ariaLabel,
 }: {
   lineId: string | null;
   value: string;
   onChange: (templateId: string) => void;
   className?: string;
+  /** Nombre accesible; por defecto coincide con la etiqueta visible de los formularios. */
+  ariaLabel?: string;
 }) {
   const [options, setOptions] = useState<Option[] | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -59,6 +62,7 @@ export function TemplatePicker({
   return (
     <div>
       <select
+        aria-label={ariaLabel ?? "Plantilla (catálogo de la línea)"}
         value={lineId ? value : ""}
         onChange={(e) => onChange(e.target.value)}
         disabled={!lineId || options === null}

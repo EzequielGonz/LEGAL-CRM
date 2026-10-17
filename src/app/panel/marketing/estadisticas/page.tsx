@@ -1,7 +1,9 @@
 import { createClient } from "@/lib/supabase/server";
 import { StatCard } from "@/components/ui/stat-card";
+import { EstadisticasPerfil } from "@/components/estadisticas/estadisticas-perfil";
 
 export const dynamic = "force-dynamic";
+export const metadata = { title: "Estadísticas" };
 
 function pct(part: number, total: number) {
   return total > 0 ? `${Math.round((part / total) * 100)}%` : "—";
@@ -63,17 +65,35 @@ export default async function EstadisticasMarketingPage() {
   const n = (r: { count: number | null }) => r.count ?? 0;
   const sinRespuesta = n(contactados) - n(respondieron);
 
-  return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-semibold text-slate-900">Estadísticas de Marketing</h1>
-        <p className="text-sm text-slate-500">
-          Del negocio encontrado en Google Maps hasta el proyecto aprobado. El detalle de cada prospecto está en su ficha.
-        </p>
+  // Misma estructura que los otros perfiles (bloque 3) y, aparte, los dos
+  // circuitos propios de Marketing: Simple ve el resultado de cada uno;
+  // Avanzado, el embudo completo.
+  const extra = (
+    <section aria-labelledby="mkt-circuitos" className="space-y-4">
+      <h2 id="mkt-circuitos" className="text-base font-semibold text-slate-900">Los dos circuitos de Marketing</h2>
+      <div className="grid gap-3 md:grid-cols-2">
+        <div className="rounded-xl border border-slate-200 bg-white p-4">
+          <p className="text-sm font-medium text-slate-600">Captación saliente (negocios encontrados)</p>
+          <p className="mt-1 text-lg font-semibold text-slate-900">
+            <span className="tabular-nums">{n(respondieron)}</span> respondieron de <span className="tabular-nums">{n(contactados)}</span> contactados
+          </p>
+          <p className="mt-1 text-sm text-slate-700">
+            <span className="tabular-nums">{n(aprobadosFrios)}</span> proyectos aprobados ({pct(n(aprobadosFrios), n(respondieron))} de los que respondieron).
+          </p>
+        </div>
+        <div className="rounded-xl border border-slate-200 bg-white p-4">
+          <p className="text-sm font-medium text-slate-600">Consultas directas (escriben ellos)</p>
+          <p className="mt-1 text-lg font-semibold text-slate-900">
+            <span className="tabular-nums">{n(directasTotal)}</span> consultas recibidas
+          </p>
+          <p className="mt-1 text-sm text-slate-700">
+            <span className="tabular-nums">{n(directasAprobadas)}</span> proyectos aprobados ({pct(n(directasAprobadas), n(directasTotal))} de las consultas).
+          </p>
+        </div>
       </div>
-
+      <div className="solo-avanzado space-y-8">
       <section>
-        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500">Datos fríos (scraper)</h2>
+        <h3 className="mb-3 text-sm font-semibold text-slate-700">Datos fríos (negocios encontrados)</h3>
         <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
           <StatCard label="Negocios cargados" value={n(total)} />
           <StatCard label="Analizados" value={n(analizados)} hint={pct(n(analizados), n(total))} />
@@ -87,7 +107,7 @@ export default async function EstadisticasMarketingPage() {
       </section>
 
       <section>
-        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500">Resultado</h2>
+        <h3 className="mb-3 text-sm font-semibold text-slate-700">Resultado de la captación saliente</h3>
         <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
           <StatCard label="Proyectos aprobados" value={n(aprobadosFrios)} hint={`${pct(n(aprobadosFrios), n(respondieron))} de los que respondieron`} />
           <StatCard label="No interesados" value={n(noInteresadosFrios)} />
@@ -103,13 +123,15 @@ export default async function EstadisticasMarketingPage() {
       </section>
 
       <section>
-        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500">Consultas directas</h2>
+        <h3 className="mb-3 text-sm font-semibold text-slate-700">Consultas directas</h3>
         <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
           <StatCard label="Consultas recibidas" value={n(directasTotal)} />
           <StatCard label="Proyectos aprobados" value={n(directasAprobadas)} hint={`${pct(n(directasAprobadas), n(directasTotal))} de las consultas`} />
           <StatCard label="No interesadas" value={n(directasNoInteresadas)} />
         </div>
       </section>
-    </div>
+      </div>
+    </section>
   );
+  return <EstadisticasPerfil slug="marketing" ruta="/panel/marketing/estadisticas" extra={extra} />;
 }

@@ -1,26 +1,25 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
-import "./premium.css";
+import "./panel.css";
 import "./controles.css";
-import "./estudio.css";
-import "./inmersivo.css";
-import "./escena.css";
-import { Efectos3D } from "@/components/ui/efectos-3d";
+import "./marca.css";
 
-// Fuentes autoalojadas por Next (16/10): antes se pedían con un @import a
-// Google Fonts dentro del CSS, que bloqueaba el primer pintado en cadena.
+// Fuentes autoalojadas por Next (16/10). Inter para toda la operación;
+// Playfair solo para la marca y las pantallas de ingreso (bloque 4).
 const sans = Inter({ subsets: ["latin"], display: "swap", variable: "--font-sans" });
 const serif = Playfair_Display({ subsets: ["latin"], weight: ["600", "700"], display: "swap", variable: "--font-serif" });
 
 export const viewport: Viewport = {
-  themeColor: "#0a1433",
+  themeColor: "#15171C",
   width: "device-width",
   initialScale: 1,
 };
 
 export const metadata: Metadata = {
-  title: "Panel de Captación Legal",
+  // «Pantalla · Marca»: cada pantalla pone su nombre; dentro de un perfil, el
+  // menú lo completa con la marca del perfil (rediseño 17/10, bloque 2).
+  title: { default: "Panel central", template: "%s · Panel central" },
   description: "Panel central: prospectos, conversaciones, agenda y campañas.",
   // El panel ya no pide login, así que como capa extra de resguardo se le
   // pide a los buscadores que no lo indexen (esto no reemplaza ningún tipo
@@ -29,8 +28,16 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
   // App instalable (bloque 1.9): manifiesto, íconos y modo pantalla completa en iPhone.
   manifest: "/manifest.webmanifest",
-  icons: { icon: "/iconos/icono-192.png", apple: "/iconos/apple-touch-icon.png" },
-  appleWebApp: { capable: true, title: "Panel CRM", statusBarStyle: "black-translucent" },
+  // Marca maestra (lámpara): SVG para navegadores actuales, PNG de 16/32 px de respaldo.
+  icons: {
+    icon: [
+      { url: "/iconos/marca.svg", type: "image/svg+xml" },
+      { url: "/marca/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/marca/favicon-16.png", sizes: "16x16", type: "image/png" },
+    ],
+    apple: { url: "/marca/apple-touch-icon.png", sizes: "180x180" },
+  },
+  appleWebApp: { capable: true, title: "Panel central", statusBarStyle: "black-translucent" },
 };
 
 export default function RootLayout({
@@ -42,7 +49,6 @@ export default function RootLayout({
     <html lang="es" className={`${sans.variable} ${serif.variable}`}>
       <body className="antialiased">
         {children}
-        <Efectos3D />
       </body>
     </html>
   );

@@ -4,7 +4,8 @@ import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
 import type { PerfilStats } from "@/lib/perfiles-stats";
-import { marcaDe, temaDe } from "@/lib/marca";
+import { marcaDe, temaDe, type SlugPerfil } from "@/lib/marca";
+import { LogoPerfil } from "@/components/ui/logo-perfil";
 
 /** La vista previa se vuelve a pedir al servidor cada 30 s (pestaña visible). */
 const POLL_MS = 30000;
@@ -24,7 +25,7 @@ const POLL_MS = 30000;
  * red de seguridad por si se corta esa conexión un rato, también se
  * refresca solo cada 60 segundos.
  */
-export function PerfilSelector({ perfiles: initial }: { perfiles: PerfilStats[] }) {
+export function PerfilSelector({ perfiles: initial, logos }: { perfiles: PerfilStats[]; logos?: Partial<Record<SlugPerfil, string>> }) {
   const router = useRouter();
   const [perfiles, setPerfiles] = useState(initial);
   const [selectedId, setSelectedId] = useState<string | null>(initial[0]?.id ?? null);
@@ -75,18 +76,16 @@ export function PerfilSelector({ perfiles: initial }: { perfiles: PerfilStats[] 
               onClick={() => setSelectedId(p.id)}
               style={{ animationDelay: `${i * 60}ms` }}
               className={clsx(
-                "flex h-16 w-16 shrink-0 animate-scale-in items-center justify-center overflow-hidden rounded-2xl border text-2xl transition-all duration-300 sm:h-20 sm:w-20",
+                "boton-perfil flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl border text-2xl transition-colors duration-150 sm:h-20 sm:w-20",
                 isActive
-                  ? "scale-105 border-gold-400/70 bg-white/10 shadow-gold ring-2 ring-gold-400/40 ring-offset-2 ring-offset-slate-950"
-                  : "border-white/10 bg-white/5 opacity-70 hover:-translate-y-0.5 hover:bg-white/10 hover:opacity-100"
+                  ? "border-gold-400/70 bg-white/10 ring-2 ring-gold-400/40 ring-offset-2 ring-offset-slate-950"
+                  : "border-white/10 bg-white/5 opacity-80 hover:bg-white/10 hover:opacity-100"
               )}
               title={p.name}
-              data-3d="fuerte"
               aria-label={`Ver perfil ${p.name}`}
               aria-pressed={isActive}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={marcaDe(p.slug).logo} alt={p.name} className="h-full w-full rounded-2xl bg-white/95 object-contain p-2" />
+              <LogoPerfil slug={temaDe(p.slug)} src={logos?.[temaDe(p.slug)]} alt={p.name} tamano="lg" />
               {/* Paleta del perfil al pie de su logo */}
               <span className="paleta-tira" aria-hidden="true">
                 {marcaDe(p.slug).paleta.map((c) => (
@@ -99,7 +98,7 @@ export function PerfilSelector({ perfiles: initial }: { perfiles: PerfilStats[] 
       </div>
 
       {activo && (
-        <div key={activo.id} data-3d="suave" className="vidrio-perfil flex-1 animate-fade-in-up rounded-[2rem] border border-white/10 bg-gradient-to-br from-white/[0.08] to-white/[0.02] p-6 shadow-navy backdrop-blur sm:p-8">
+        <div key={activo.id} className="vidrio-perfil flex-1 animate-fade-in-up rounded-[2rem] border border-white/10 bg-gradient-to-br from-white/[0.08] to-white/[0.02] p-6 shadow-navy backdrop-blur sm:p-8">
           <p className="text-xs uppercase tracking-wider text-gold-300">{activo.name}</p>
           <h2 className="mb-1 font-serif text-2xl font-semibold text-white">Estadísticas</h2>
           {activo.description && (

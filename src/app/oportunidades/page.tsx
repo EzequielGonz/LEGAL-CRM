@@ -17,6 +17,11 @@ import {
 import { ATTENTION_STATE_LABEL, CAPTURE_STATE_LABEL, CONTACT_STATE_LABEL } from "@/lib/opportunities";
 import { ZONA_LABEL, normalizarZona } from "@/lib/captacion/reglas";
 import { FUENTE_LABEL, esFuente } from "@/lib/fuente";
+import { MarcoPerfil } from "@/components/perfiles/marco-perfil";
+import { EnlaceVolver } from "@/components/ui/enlaces-navegacion";
+import { esSlugPerfil, type SlugPerfil } from "@/lib/marca";
+import { conVolver, inicioDePerfil } from "@/lib/navegacion";
+import { estadoCorto } from "@/lib/inicio";
 
 export const dynamic = "force-dynamic";
 
@@ -40,6 +45,7 @@ export default async function OportunidadesPage({
   if (!rubroIdLeido) notFound();
   const rubroId: string = rubroIdLeido as string;
   const perfil = searchParams.perfil ?? "juridico";
+  const slug: SlugPerfil = esSlugPerfil(perfil) ? perfil : "juridico";
   const ind = indicadorPorClave(searchParams.indicador ?? "oportunidades") ?? indicadorPorClave("oportunidades")!;
   const orden: Orden = (Object.keys(ORDENES) as Orden[]).includes(searchParams.orden as Orden) ? (searchParams.orden as Orden) : "reciente";
   const pagina = Math.max(1, Number.parseInt(searchParams.pagina ?? "1", 10) || 1);
@@ -47,7 +53,7 @@ export default async function OportunidadesPage({
 
   const supabase = createClient();
   const [{ data: rubro }, lista, contador] = await Promise.all([
-    supabase.from("rubros").select("name, emoji").eq("id", rubroId).maybeSingle(),
+    supabase.from("rubros").select("name").eq("id", rubroId).maybeSingle(),
     listarIndicador(rubroId, ind, { pagina, orden }),
     contarIndicador(rubroId, ind),
   ]);
@@ -76,54 +82,71 @@ export default async function OportunidadesPage({
     fuente: "Fuente",
   };
 
+  const delGrupo = INDICADORES.filter((i) => i.grupo === ind.grupo);
+
   return (
-    <div className="min-h-screen bg-slate-50 pb-10">
+    <MarcoPerfil slug={slug}>
       <a href="#lista" className="skip-link">
         Saltar a la lista
       </a>
-      <header className="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 px-5 py-5 shadow-navy">
-        <div className="mx-auto flex max-w-5xl items-start justify-between gap-4">
-          <div>
-            <p className="text-xs uppercase tracking-wider text-gold-300">
-              {rubro?.emoji} {rubro?.name ?? "Perfil"}
+      <div className="space-y-4">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-sm text-slate-600">
+              Oportunidades · {GRUPO_LABEL[ind.grupo] ?? ind.grupo}
+              {rubro?.name ? ` · ${rubro.name}` : ""}
             </p>
-            <h1 className="font-serif text-xl font-semibold text-white">{ind.label}</h1>
-            <p className="text-sm text-slate-300">{ind.definicion}</p>
+            <h1 className="text-2xl font-semibold text-slate-900">{ind.label}</h1>
+            <p className="mt-1 max-w-2xl text-sm text-slate-600">{ind.definicion}</p>
           </div>
-          <Link href={volver ?? "/inicio"} className="tactil inline-flex items-center text-sm text-slate-300 hover:text-gold-200">
-            ← Volver
-          </Link>
+          <EnlaceVolver volver={volver} respaldo={inicioDePerfil(slug)} />
         </div>
-      </header>
 
-      <main className="mx-auto max-w-5xl space-y-4 px-4 py-5">
-        <details className="rounded-xl border border-slate-200 bg-white p-4" open={ind.clave === "oportunidades"}>
-          <summary className="cursor-pointer text-sm font-semibold text-slate-700">Cambiar de lista</summary>
-          <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {grupos.map((g) => (
-              <div key={g}>
-                <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-500">{GRUPO_LABEL[g] ?? g}</p>
-                <ul className="space-y-1">
-                  {INDICADORES.filter((i) => i.grupo === g).map((i) => (
-                    <li key={i.clave}>
-                      <Link
-                        href={enlaceIndicador(perfil, i.clave, volver)}
-                        aria-current={i.clave === ind.clave ? "page" : undefined}
-                        className={
-                          i.clave === ind.clave
-                            ? "block rounded px-2 py-1 text-sm font-semibold text-slate-900 underline"
-                            : "block rounded px-2 py-1 text-sm text-slate-700 hover:bg-slate-50 hover:underline"
-                        }
-                      >
-                        {i.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </details>
+        <nav aria-label={`Listas de ${GRUPO_LABEL[ind.grupo] ?? ind.grupo}`} className="flex flex-wrap items-center gap-2">
+          {delGrupo.map((i) => (
+            <Link
+              key={i.clave}
+              href={enlaceIndicador(perfil, i.clave, volver)}
+              aria-current={i.clave === ind.clave ? "page" : undefined}
+              className={
+                i.clave === ind.clave
+                  ? "tactil inline-flex items-center rounded-lg bg-slate-900 px-3 text-sm font-medium text-white"
+                  : "tactil inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-700 hover:bg-slate-50"
+              }
+            >
+              {i.label}
+            </Link>
+          ))}
+          <details className="relative">
+            <summary className="tactil inline-flex cursor-pointer list-none items-center rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-700 hover:bg-slate-50">
+              Todas las listas <span aria-hidden="true" className="ml-1.5">▾</span>
+            </summary>
+            <div className="absolute left-0 z-20 mt-2 grid w-[min(92vw,44rem)] grid-cols-1 gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-lg sm:grid-cols-2 lg:grid-cols-3">
+              {grupos.map((g) => (
+                <div key={g}>
+                  <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-600">{GRUPO_LABEL[g] ?? g}</p>
+                  <ul className="space-y-0.5">
+                    {INDICADORES.filter((i) => i.grupo === g).map((i) => (
+                      <li key={i.clave}>
+                        <Link
+                          href={enlaceIndicador(perfil, i.clave, volver)}
+                          aria-current={i.clave === ind.clave ? "page" : undefined}
+                          className={
+                            i.clave === ind.clave
+                              ? "block rounded px-2 py-1.5 text-sm font-semibold text-slate-900 underline"
+                              : "block rounded px-2 py-1.5 text-sm text-slate-700 hover:bg-slate-50 hover:underline"
+                          }
+                        >
+                          {i.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </details>
+        </nav>
 
         <div className="flex flex-wrap items-center justify-between gap-3 text-sm">
           <p className="text-slate-700" aria-live="polite">
@@ -170,7 +193,10 @@ export default async function OportunidadesPage({
                   <li key={o.id} className="flex flex-col gap-2 p-4 sm:flex-row sm:items-center sm:justify-between">
                     <div className="min-w-0">
                       <p className="truncate font-medium text-slate-900">{o.contacts?.full_name ?? "Sin nombre"}</p>
-                      <p className="text-xs text-slate-600">
+                      <p className="solo-simple text-sm text-slate-700">
+                        <span className="tabular-nums">{o.contacts?.phone ?? "Sin teléfono"}</span> · {estadoCorto(o).texto}
+                      </p>
+                      <p className="solo-avanzado text-xs text-slate-600">
                         {o.contacts?.phone ?? "Sin teléfono"} · {CONTACT_STATE_LABEL[o.contact_state] ?? o.contact_state} ·{" "}
                         {CAPTURE_STATE_LABEL[o.capture_state] ?? o.capture_state}
                         {o.capture_state === "captado" ? ` · ${ZONA_LABEL[normalizarZona(o.location_zone)]}` : ""}
@@ -183,14 +209,14 @@ export default async function OportunidadesPage({
                     </div>
                     <div className="flex shrink-0 gap-2">
                       <Link
-                        href={`/ficha/${o.contact_id}?volver=${encodeURIComponent(aqui)}`}
+                        href={conVolver(`/ficha/${o.contact_id}`, aqui)}
                         className="tactil inline-flex items-center rounded-lg border border-slate-300 px-3 text-sm text-slate-800 hover:bg-slate-50"
                       >
                         Ficha
                       </Link>
                       {o.conversation_id && (
                         <Link
-                          href={`/inbox/${o.conversation_id}?volver=${encodeURIComponent(aqui)}`}
+                          href={conVolver(`/inbox/${o.conversation_id}`, aqui)}
                           className="tactil inline-flex items-center rounded-lg bg-slate-900 px-3 text-sm text-white hover:bg-slate-800"
                         >
                           Conversación
@@ -222,8 +248,8 @@ export default async function OportunidadesPage({
             )}
           </nav>
         )}
-        <p className="text-xs text-slate-500">Unidad: oportunidad (una por consulta). La cifra y esta lista salen de la misma consulta.</p>
-      </main>
-    </div>
+        <p className="text-xs text-slate-600">Unidad: oportunidad (una por consulta). La cifra y esta lista salen de la misma consulta.</p>
+      </div>
+    </MarcoPerfil>
   );
 }

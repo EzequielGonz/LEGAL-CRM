@@ -4,7 +4,9 @@ import { PhoneHeader } from "@/components/telefono/phone-header";
 import { PushControls } from "@/components/telefono/push-controls";
 import { InstallHint } from "@/components/telefono/install-hint";
 import { phoneProfile } from "@/lib/telefono";
-import { marcaDe, temaDe } from "@/lib/marca";
+import { temaDe } from "@/lib/marca";
+import { marcasResueltas } from "@/lib/marca-servidor";
+import { LogoPerfil } from "@/components/ui/logo-perfil";
 import { Icono } from "@/components/ui/icono-seccion";
 
 export const dynamic = "force-dynamic";
@@ -24,6 +26,7 @@ export default async function TelefonoPage() {
     .order("sort_order", { ascending: true });
 
   const perfiles = (rubros ?? []).filter((r: any) => phoneProfile(r.slug));
+  const marcas = await marcasResueltas().catch(() => null);
 
   return (
     <div data-tema="neutro" className="min-h-screen">
@@ -36,31 +39,28 @@ export default async function TelefonoPage() {
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={r.photo_url} alt="" className="h-12 w-12 rounded-full object-cover" />
               ) : (
-                <span className="logo-perfil h-12 w-12">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={marcaDe(r.slug).logo} alt="" className="h-full w-full object-contain" />
-                </span>
+                <LogoPerfil slug={temaDe(r.slug)} src={marcas?.[temaDe(r.slug)]?.logoPanel} tamano="md" />
               )}
-              <p className="font-serif text-lg font-semibold text-slate-900">{r.name}</p>
+              <h2 className="text-lg font-semibold text-slate-900">{r.name}</h2>
             </div>
             <div className="grid grid-cols-3 gap-2">
               <Link
                 href={`/telefono/${r.slug}/campana`}
-                className="flex flex-col items-center gap-1.5 rounded-xl bg-slate-900 px-2 py-3 text-center text-xs font-semibold text-gold-100 active:scale-[0.98]"
+                className="flex min-h-[44px] flex-col items-center gap-1.5 rounded-xl bg-slate-900 px-2 py-3 text-center text-sm font-semibold text-white"
               >
                 <Icono nombre="campanas" className="h-5 w-5" />
-                Iniciar campaña
+                Cargar base y campaña
               </Link>
               <Link
                 href={`/telefono/${r.slug}/clientes`}
-                className="flex flex-col items-center gap-1.5 rounded-xl border border-slate-300 px-2 py-3 text-center text-xs font-semibold text-slate-700 active:scale-[0.98]"
+                className="flex min-h-[44px] flex-col items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-2 py-3 text-center text-sm font-semibold text-slate-900"
               >
                 <Icono nombre="cerrados" className="h-5 w-5" />
                 Clientes cerrados
               </Link>
               <Link
                 href={`/telefono/${r.slug}/estadisticas`}
-                className="flex flex-col items-center gap-1.5 rounded-xl border border-slate-300 px-2 py-3 text-center text-xs font-semibold text-slate-700 active:scale-[0.98]"
+                className="flex min-h-[44px] flex-col items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-2 py-3 text-center text-sm font-semibold text-slate-900"
               >
                 <Icono nombre="estadisticas" className="h-5 w-5" />
                 Estadísticas
@@ -69,13 +69,13 @@ export default async function TelefonoPage() {
           </section>
         ))}
         {perfiles.length === 0 && (
-          <p className="rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-400">
+          <p className="rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-700">
             No hay perfiles activos.
           </p>
         )}
 
         <section className="rounded-2xl border border-slate-200 bg-white p-4 text-sm">
-          <p className="mb-2 font-semibold text-slate-800">Avisos en este teléfono</p>
+          <h2 className="mb-2 font-semibold text-slate-900">Avisos en este teléfono</h2>
           <PushControls />
         </section>
         <InstallHint />

@@ -28,7 +28,8 @@ export function AvailabilityEditor({
     }))
   );
   const [saving, setSaving] = useState(false);
-  const [savedAt, setSavedAt] = useState<number | null>(null);
+  const nombreArea = area === "civil" ? "Civil" : "Penal";
+  const [resultado, setResultado] = useState<{ ok: boolean; texto: string } | null>(null);
 
   function addRow() {
     setRows((r) => [...r, { weekday: 1, start_time: "09:00", end_time: "18:00", slot_duration_minutes: 30 }]);
@@ -44,30 +45,41 @@ export function AvailabilityEditor({
 
   async function save() {
     setSaving(true);
-    await fetch("/api/agenda/availability", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ area, rules: rows }),
-    });
-    setSaving(false);
-    setSavedAt(Date.now());
+    setResultado(null);
+    try {
+      const res = await fetch("/api/agenda/availability", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ area, rules: rows }),
+      });
+      setResultado(
+        res.ok
+          ? { ok: true, texto: `Disponibilidad de ${nombreArea} guardada.` }
+          : { ok: false, texto: `No se pudo guardar la disponibilidad de ${nombreArea}. Reintentá.` }
+      );
+    } catch {
+      setResultado({ ok: false, texto: `No se pudo guardar la disponibilidad de ${nombreArea} (sin conexión). Reintentá.` });
+    } finally {
+      setSaving(false);
+    }
   }
 
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-5">
       <div className="mb-3 flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-slate-700">
-          Disponibilidad — {area === "civil" ? "Civil" : "Penal"}
-        </h2>
-        <button onClick={addRow} className="text-xs font-medium text-blue-600 hover:underline">
+        <h3 className="text-sm font-semibold text-slate-800">
+          Disponibilidad — {nombreArea}
+        </h3>
+        <button type="button" onClick={addRow} className="tactil inline-flex items-center text-sm font-medium text-slate-800 underline">
           + Agregar bloque
         </button>
       </div>
 
       <div className="space-y-2">
         {rows.map((row, idx) => (
-          <div key={idx} className="flex items-center gap-2 text-sm">
+          <div key={idx} role="group" aria-label={`Bloque ${idx + 1} de ${nombreArea}`} className="flex flex-wrap items-center gap-2 text-sm">
             <select
+              aria-label={`Día del bloque ${idx + 1} (${nombreArea})`}
               value={row.weekday}
               onChange={(e) => updateRow(idx, { weekday: Number(e.target.value) })}
               className="rounded-lg border border-slate-300 px-2 py-1.5 outline-none focus-gold"
@@ -80,42 +92,43 @@ export function AvailabilityEditor({
             </select>
             <input
               type="time"
+              aria-label={`Desde, bloque ${idx + 1} (${nombreArea})`}
               value={row.start_time}
               onChange={(e) => updateRow(idx, { start_time: e.target.value })}
               className="rounded-lg border border-slate-300 px-2 py-1.5 outline-none focus-gold"
             />
-            <span className="text-slate-400">a</span>
+            <span className="text-slate-600" aria-hidden="true">a</span>
             <input
               type="time"
+              aria-label={`Hasta, bloque ${idx + 1} (${nombreArea})`}
               value={row.end_time}
               onChange={(e) => updateRow(idx, { end_time: e.target.value })}
               className="rounded-lg border border-slate-300 px-2 py-1.5 outline-none focus-gold"
             />
             <input
               type="number"
+              aria-label={`Duración de cada turno en minutos, bloque ${idx + 1} (${nombreArea})`}
               value={row.slot_duration_minutes}
               onChange={(e) => updateRow(idx, { slot_duration_minutes: Number(e.target.value) })}
               className="w-20 rounded-lg border border-slate-300 px-2 py-1.5 outline-none focus-gold"
               min={10}
               step={5}
             />
-            <span className="text-xs text-slate-400">min/turno</span>
-            <button onClick={() => removeRow(idx)} className="ml-auto text-xs text-red-500 hover:underline">
+            <span className="text-sm text-slate-600" aria-hidden="true">min/turno</span>
+            <button type="button" onClick={() => removeRow(idx)} aria-label={`Quitar bloque ${idx + 1} (${nombreArea})`} className="tactil ml-auto inline-flex items-center text-sm text-red-700 hover:underline">
               Quitar
             </button>
           </div>
         ))}
-        {rows.length === 0 && <p className="text-xs text-slate-400">Sin bloques configurados.</p>}
+        {rows.length === 0 && <p className="text-sm text-slate-600">Sin bloques configurados.</p>}
       </div>
 
-      <button
-        onClick={save}
-        disabled={saving}
-        className="mt-4 btn-gold"
-      >
+      <button type="button" onClick={save} disabled={saving} className="mt-4 btn-gold">
         {saving ? "Guardando..." : "Guardar disponibilidad"}
       </button>
-      {savedAt && <span className="ml-3 text-xs text-green-600">Guardado ✓</span>}
+      <span role="status" className={`ml-3 text-sm ${resultado?.ok === false ? "font-medium text-red-700" : "text-green-700"}`}>
+        {resultado?.texto ?? ""}
+      </span>
     </div>
   );
 }

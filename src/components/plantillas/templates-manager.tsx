@@ -191,14 +191,14 @@ export function TemplatesManager({
         </ul>
       )}
 
-      {msg && <p className={`text-xs ${msg.ok ? "text-green-700" : "text-red-600"}`}>{msg.text}</p>}
+      <p role="status" className={`text-sm ${msg?.ok ? "text-green-700" : "font-medium text-red-700"}`}>{msg?.text ?? ""}</p>
 
       {templates.length > 0 && (
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <p className="text-xs font-semibold uppercase text-slate-500">Catálogo ({templates.length})</p>
             <label className="flex items-center gap-1 text-xs text-slate-500">
-              <input type="checkbox" checked={onlyApproved} onChange={(e) => setOnlyApproved(e.target.checked)} />
+              <input type="checkbox" className="h-4 w-4" checked={onlyApproved} onChange={(e) => setOnlyApproved(e.target.checked)} />
               Solo aprobadas
             </label>
           </div>
@@ -398,14 +398,14 @@ function TemplateDetail({
           <div className="space-y-2 rounded-lg border border-slate-200 p-2">
             <p className="font-medium text-slate-700">Asignar a una línea y propósito</p>
             <div className="flex flex-wrap gap-2">
-              <select value={lineId} onChange={(e) => setLineId(e.target.value)} className="rounded-lg border border-slate-300 px-2 py-1.5">
+              <select aria-label="Línea para la plantilla" value={lineId} onChange={(e) => setLineId(e.target.value)} className="rounded-lg border border-slate-300 px-2 py-1.5">
                 {lines.map((l) => (
                   <option key={l.id} value={l.id}>
                     {l.label}
                   </option>
                 ))}
               </select>
-              <select value={purpose} onChange={(e) => setPurpose(e.target.value)} className="rounded-lg border border-slate-300 px-2 py-1.5">
+              <select aria-label="Propósito de la plantilla" value={purpose} onChange={(e) => setPurpose(e.target.value)} className="rounded-lg border border-slate-300 px-2 py-1.5">
                 {TEMPLATE_PURPOSES.map((p) => (
                   <option key={p.key} value={p.key} disabled={!p.enabled}>
                     {p.label}
@@ -458,7 +458,7 @@ function TemplateDetail({
           .
         </p>
       )}
-      {msg && <p className={msg.ok ? "text-green-700" : "text-red-600"}>{msg.text}</p>}
+      <p role="status" className={msg?.ok ? "text-green-700" : "font-medium text-red-700"}>{msg?.text ?? ""}</p>
     </div>
   );
 }

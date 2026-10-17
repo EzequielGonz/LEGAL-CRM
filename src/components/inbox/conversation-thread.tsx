@@ -150,30 +150,30 @@ export function ConversationThread({
   const visibles = messages.filter((m) => !m.duplicate_of);
 
   return (
-    <div className="flex h-full">
-      <div className="flex flex-1 flex-col">
-        <div className="flex items-center justify-between border-b border-slate-200 bg-white px-5 py-3">
-          <div>
-            <p className="text-sm font-semibold text-slate-900">
+    <div className="flex h-full min-w-0 flex-col overflow-y-auto lg:flex-row lg:overflow-hidden">
+      <div className="flex min-h-[70vh] min-w-0 flex-1 flex-col lg:min-h-0">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 bg-white px-4 py-3 sm:px-5">
+          <div className="min-w-0">
+            <p className="text-sm font-semibold text-slate-900 [overflow-wrap:anywhere]">
               {contact.full_name ?? "Sin nombre"}
             </p>
-            <p className="text-xs text-slate-400">{contact.phone ?? contact.email ?? "—"}</p>
+            <p className="text-xs text-slate-600 [overflow-wrap:anywhere]">{contact.phone ?? contact.email ?? "—"}</p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <AreaBadge area={contact.area} />
             <StatusBadge status={contact.status as any} />
             <SourceBadge source={contact.source} />
           </div>
         </div>
 
-        <div className="flex-1 space-y-3 overflow-y-auto bg-slate-50 p-5">
+        <div className="flex-1 space-y-3 overflow-y-auto bg-slate-50 p-3 sm:p-5">
           {visibles.map((m) => (
             <div
               key={m.id}
               className={`flex ${m.direction === "saliente" ? "justify-end" : "justify-start"}`}
             >
               <div
-                className={`max-w-md animate-fade-in-up rounded-2xl px-4 py-2 text-sm ${
+                className={`min-w-0 max-w-[85%] animate-fade-in-up rounded-2xl px-4 py-2 text-sm [overflow-wrap:anywhere] sm:max-w-md ${
                   m.direction === "saliente"
                     ? m.sender_type === "admin"
                       ? "bg-gradient-to-br from-slate-800 to-slate-900 text-gold-100 shadow-navy ring-1 ring-gold-500/20"
@@ -182,7 +182,7 @@ export function ConversationThread({
                 }`}
               >
                 {m.message_type && m.message_type !== "text" && m.message_type !== "button" && (
-                  <p className="mb-0.5 text-[10px] font-semibold uppercase tracking-wide opacity-70">
+                  <p className="mb-0.5 text-xs font-semibold opacity-80">
                     {m.message_type}
                   </p>
                 )}
@@ -204,12 +204,12 @@ export function ConversationThread({
                         {attachmentCount(m) > 1 ? ` ${n + 1}` : ""}
                       </a>
                     ))}
-                    <p className="text-[10px] opacity-60">Original en almacenamiento privado (solo con sesión).</p>
+                    <p className="solo-avanzado text-xs opacity-80">Original en almacenamiento privado (solo con sesión).</p>
                   </div>
                 )}
                 <p
-                  className={`mt-1 text-[10px] ${
-                    m.direction === "saliente" ? "text-white/60" : "text-slate-400"
+                  className={`mt-1 text-xs tabular-nums ${
+                    m.direction === "saliente" ? "text-white/80" : "text-slate-600"
                   }`}
                 >
                   {m.sender_type === "agente_ia" ? "Agente IA · " : m.sender_type === "admin" ? "Admin · " : ""}
@@ -225,14 +225,15 @@ export function ConversationThread({
         </div>
 
         <div className="border-t border-slate-200 bg-white p-3">
-          <div className="mb-2 flex items-center gap-2 text-xs text-slate-500">
-            <label className="flex cursor-pointer items-center gap-1.5">
-              <input type="checkbox" checked={aiOn} onChange={toggleAi} />
+          <div className="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-slate-700">
+            <label className="tactil flex cursor-pointer items-center gap-2">
+              <input type="checkbox" checked={aiOn} onChange={toggleAi} className="h-4 w-4" />
               Agente IA activo en esta conversación
             </label>
+            <span className="text-xs text-slate-600">{aiOn ? "Si escribís vos, el agente se apaga en este chat." : "Responde una persona; el agente no escribe."}</span>
           </div>
-          {sendError && <p className="mb-2 text-xs text-red-600">{sendError}</p>}
-          <div className="flex gap-2">
+          {sendError && <p role="alert" className="mb-2 text-sm font-medium text-red-700">{sendError}</p>}
+          <div className="flex min-w-0 gap-2">
             <input
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
@@ -242,7 +243,8 @@ export function ConversationThread({
                   ? "Escribir desactiva el agente IA para esta conversación..."
                   : "Escribir un mensaje como administrador..."
               }
-              className="flex-1 rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
+              aria-label="Mensaje"
+              className="min-w-0 flex-1 rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
             />
             <button onClick={handleSend} disabled={sending} className="btn-gold">
               {sending ? "Enviando..." : "Enviar"}
@@ -251,19 +253,19 @@ export function ConversationThread({
         </div>
       </div>
 
-      <div className="w-80 overflow-y-auto border-l border-slate-200 bg-white p-4">
+      <div className="w-full shrink-0 border-t border-slate-200 bg-white p-4 lg:w-80 lg:overflow-y-auto lg:border-l lg:border-t-0">
         {ficha && <div className="mb-5">{ficha}</div>}
-        <h3 className="mb-3 text-sm font-semibold text-slate-700">Datos recopilados por la IA</h3>
+        <h3 className="mb-3 text-sm font-semibold text-slate-900">Datos recopilados por la IA</h3>
         {Object.keys(contact.qualification_data ?? {}).length === 0 ? (
-          <p className="text-xs text-slate-400">Todavía no hay datos recopilados.</p>
+          <p className="text-sm text-slate-600">Todavía no hay datos recopilados.</p>
         ) : (
           <dl className="space-y-2">
             {Object.entries(contact.qualification_data).map(([key, value]) => (
               <div key={key}>
-                <dt className="text-xs font-medium uppercase text-slate-400">
+                <dt className="text-xs font-medium text-slate-600">
                   {key.replaceAll("_", " ")}
                 </dt>
-                <dd className="text-sm text-slate-800">{String(value)}</dd>
+                <dd className="text-sm text-slate-800 [overflow-wrap:anywhere]">{String(value)}</dd>
               </div>
             ))}
           </dl>

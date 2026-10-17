@@ -37,7 +37,7 @@ export default async function BibliotecaPage({ searchParams }: { searchParams: {
       </div>
       <p className="text-sm text-slate-700">{a.objetivo || "Sin objetivo cargado."}</p>
       <p className="text-xs text-slate-600">
-        {a.rol === "principal" ? "Base común de todos los derivados." : `Se usaría en: ${rubroDe(a.rubro_id)?.emoji ?? ""} ${rubroDe(a.rubro_id)?.name ?? "perfil"} · hereda del principal.`}{" "}
+        {a.rol === "principal" ? "Base común de todos los derivados." : `Se usaría en: ${rubroDe(a.rubro_id)?.name ?? "perfil"} · hereda del principal.`}{" "}
         Modos: {(a.modos ?? []).map((m) => MODO_LABEL[m as Modo] ?? m).join(", ")}.
       </p>
       <details className="text-sm">
@@ -57,7 +57,7 @@ export default async function BibliotecaPage({ searchParams }: { searchParams: {
       <header className="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 px-5 py-5 shadow-navy">
         <div className="mx-auto flex max-w-5xl items-start justify-between gap-4">
           <div>
-            <h1 className="font-serif text-xl font-semibold text-white">Biblioteca de agentes</h1>
+            <h1 className="text-xl font-semibold text-white">Biblioteca de agentes</h1>
             <p className="text-sm text-slate-300">Solo configuración: ninguno responde mensajes. El agente que responde hoy se maneja en «Agentes IA» de cada perfil.</p>
           </div>
           <Link href={volver ?? "/inicio"} className="tactil inline-flex items-center text-sm text-slate-300 hover:text-gold-200">

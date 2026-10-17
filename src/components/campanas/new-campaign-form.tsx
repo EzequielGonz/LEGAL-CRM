@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { EnlaceAvanzado } from "@/components/nivel/nivel";
 import { useRouter } from "next/navigation";
 import { SendLimitsFields } from "./send-limits-fields";
 import { TemplatePicker } from "@/components/plantillas/template-picker";
@@ -82,7 +83,7 @@ export function NewCampaignForm({
         onClick={() => setOpen(true)}
         className="btn-gold"
       >
-        + Nueva campaña
+        Preparar una campaña
       </button>
     );
   }
@@ -92,9 +93,13 @@ export function NewCampaignForm({
       onSubmit={handleSubmit}
       className="mb-6 space-y-3 rounded-xl border border-slate-200 bg-white p-5"
     >
+      <p className="text-sm text-slate-700">
+        Crear una campaña solo la prepara: no envía nada. Los mensajes salen recién cuando la lanzás y lo confirmás.
+      </p>
       <div>
-        <label className="mb-1 block text-xs font-medium text-slate-600">Nombre</label>
+        <label htmlFor="campana-nombre" className="mb-1 block text-sm font-medium text-slate-700">Nombre</label>
         <input
+          id="campana-nombre"
           required
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -102,9 +107,11 @@ export function NewCampaignForm({
           placeholder="Ej: Base clientes 2024 - Accidentes laborales"
         />
       </div>
-      <div>
-        <label className="mb-1 block text-xs font-medium text-slate-600">Canal (WhatsApp)</label>
+      {/* Con un solo canal no hace falta elegir: se ve en Avanzado. */}
+      <div className={channels.length > 1 ? "" : "solo-avanzado"}>
+        <label htmlFor="campana-canal" className="mb-1 block text-sm font-medium text-slate-700">Canal (WhatsApp)</label>
         <select
+          id="campana-canal"
           value={channelId}
           onChange={(e) => setChannelId(e.target.value)}
           className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
@@ -117,8 +124,9 @@ export function NewCampaignForm({
         </select>
       </div>
       <div>
-        <label className="mb-1 block text-xs font-medium text-slate-600">Línea que envía</label>
+        <label htmlFor="campana-linea" className="mb-1 block text-sm font-medium text-slate-700">Línea que envía</label>
         <select
+          id="campana-linea"
           value={lineId}
           onChange={(e) => {
             setLineId(e.target.value);
@@ -133,19 +141,27 @@ export function NewCampaignForm({
             </option>
           ))}
         </select>
-        <p className="mt-1 text-xs text-slate-400">
+        <p className="mt-1 text-xs text-slate-600">
           Sin línea asignada la campaña queda en borrador y no se puede lanzar. Las líneas se cargan en Configuración.
         </p>
       </div>
       <div>
-        <label className="mb-1 block text-xs font-medium text-slate-600">Plantilla (catálogo de la línea)</label>
-        <TemplatePicker lineId={lineId || null} value={template} onChange={setTemplate} />
-        <p className="mt-1 text-xs text-slate-400">
+        <p className="mb-1 block text-sm font-medium text-slate-700">Plantilla (catálogo de la línea)</p>
+        <TemplatePicker lineId={lineId || null} value={template} onChange={setTemplate} ariaLabel="Plantilla (catálogo de la línea)" />
+        <p className="mt-1 text-xs text-slate-600">
           Solo plantillas aprobadas según Meta y asignadas a la línea para campañas. Se puede elegir después.
         </p>
       </div>
 
+      <p className="solo-simple rounded-lg bg-slate-50 px-3 py-2 text-sm text-slate-700">
+        Ritmo de envío: el recomendado (de a 10 mensajes, con esperas variables y pausas, para cuidar el número).{" "}
+        <EnlaceAvanzado href="#campana-ritmo" className="font-medium underline underline-offset-2">
+          Personalizar
+        </EnlaceAvanzado>
+      </p>
+      <div id="campana-ritmo" tabIndex={-1} className="solo-avanzado">
       <SendLimitsFields
+        idPrefix="campana-envio"
         minDelaySeconds={minDelaySeconds}
         onMinDelayChange={setMinDelaySeconds}
         maxDelaySeconds={maxDelaySeconds}
@@ -157,9 +173,10 @@ export function NewCampaignForm({
         dailyLimit={dailyLimit}
         onDailyLimitChange={setDailyLimit}
       />
+      </div>
 
       {error && (
-        <p className="rounded-lg bg-red-50 px-3 py-2 text-xs text-red-600">{error}</p>
+        <p role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-sm font-medium text-red-800">{error}</p>
       )}
 
       <div className="flex gap-2">
@@ -168,7 +185,7 @@ export function NewCampaignForm({
           disabled={loading}
           className="btn-gold"
         >
-          {loading ? "Creando..." : "Crear campaña"}
+          {loading ? "Creando..." : "Crear campaña (no envía nada)"}
         </button>
         <button
           type="button"

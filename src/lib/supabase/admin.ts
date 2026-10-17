@@ -12,6 +12,12 @@ export function createAdminClient() {
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
     {
       auth: { persistSession: false, autoRefreshToken: false },
+      // Siempre datos frescos: sin esto, Next 14 puede guardar en su caché de
+      // datos lecturas de la base (se vio en el entorno aislado: el brief de
+      // marca guardado no volvía en la lectura siguiente). Las cachés
+      // intencionales (marca, barra de salud) usan `unstable_cache` con su
+      // propio vencimiento y etiqueta.
+      global: { fetch: (entrada: RequestInfo | URL, init?: RequestInit) => fetch(entrada, { ...init, cache: "no-store" }) },
     }
   );
 }

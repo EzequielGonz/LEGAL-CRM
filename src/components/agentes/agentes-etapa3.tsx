@@ -50,6 +50,15 @@ export function AgentesEtapa3({ perfil, rubroId, areas, volver }: { perfil: stri
   useEffect(() => {
     void cargar();
   }, [cargar]);
+  // «Probar una conversación» desde el resumen (#agentes-probar) abre el simulador.
+  useEffect(() => {
+    const abrir = () => {
+      if (window.location.hash === "#agentes-probar") setSeccion("probar");
+    };
+    abrir();
+    window.addEventListener("hashchange", abrir);
+    return () => window.removeEventListener("hashchange", abrir);
+  }, []);
 
   const principal = agentes.find((a) => a.rol === "principal") ?? null;
   const derivados = agentes.filter((a) => a.rol === "derivado" && a.rubro_id === rubroId);
@@ -62,20 +71,21 @@ export function AgentesEtapa3({ perfil, rubroId, areas, volver }: { perfil: stri
           <h2 id="etapa3-agentes" className="text-lg font-semibold text-slate-900">
             Agente del perfil
           </h2>
-          <p className="text-sm text-slate-600">
+          <p className="solo-simple text-sm text-slate-700">Probá cómo responde o mirá los resultados de sus evaluaciones.</p>
+          <p className="solo-avanzado text-sm text-slate-700">
             Modelo activo: <strong>{modelo?.identificador ?? "…"}</strong> ({modelo?.proveedor ?? "…"}){modelo && !modelo.claveConfigurada ? " · sin clave configurada: las pruebas usan el generador simulado" : ""}. Las asignaciones de abajo dicen qué versión responde en cada área; sin asignación activa responde la configuración de arriba, como hasta ahora.
           </p>
         </div>
-        <a href={`/biblioteca-agentes?volver=${encodeURIComponent(volver)}`} className="tactil inline-flex items-center rounded-lg border border-slate-300 px-3 text-sm text-slate-800 hover:bg-slate-50">
+        <a href={`/biblioteca-agentes?volver=${encodeURIComponent(volver)}`} className="solo-avanzado tactil inline-flex items-center rounded-lg border border-slate-300 px-3 text-sm text-slate-800 hover:bg-slate-50">
           Configurar
         </a>
       </div>
       {error && <p className="rounded-lg bg-red-50 p-2 text-sm text-red-800">{error}</p>}
 
-      <ul className="grid grid-cols-1 gap-3 md:grid-cols-2">
+      <ul className="solo-avanzado grid grid-cols-1 gap-3 md:grid-cols-2">
         {principal && (
           <li className="rounded-lg border border-slate-200 p-3 text-sm">
-            <p className="font-medium text-slate-900">{principal.nombre} <span className="text-xs font-normal text-slate-500">· base común · v{principal.version}</span></p>
+            <p className="font-medium text-slate-900">{principal.nombre} <span className="text-xs font-normal text-slate-600">· base común · v{principal.version}</span></p>
             <p className="text-slate-600">{principal.objetivo || "Sin objetivo cargado."}</p>
           </li>
         )}
@@ -85,7 +95,7 @@ export function AgentesEtapa3({ perfil, rubroId, areas, volver }: { perfil: stri
           return (
             <li key={a.clave} className="rounded-lg border border-slate-200 p-3 text-sm">
               <p className="font-medium text-slate-900">
-                {a.nombre} <span className="text-xs font-normal text-slate-500">· v{a.version} · {PUBLICACION[a.publicacion] ?? a.publicacion}</span>
+                {a.nombre} <span className="text-xs font-normal text-slate-600">· v{a.version} · {PUBLICACION[a.publicacion] ?? a.publicacion}</span>
               </p>
               <p className="text-slate-600">{a.objetivo || "Sin objetivo cargado."}</p>
               <p className="mt-1 text-xs text-slate-600">
@@ -95,18 +105,18 @@ export function AgentesEtapa3({ perfil, rubroId, areas, volver }: { perfil: stri
             </li>
           );
         })}
-        {derivados.length === 0 && <li className="text-sm text-slate-500">Este perfil todavía no tiene un derivado en la biblioteca. Usá «Crear agente».</li>}
+        {derivados.length === 0 && <li className="text-sm text-slate-700">Este perfil todavía no tiene un derivado en la biblioteca. Usá «Crear agente».</li>}
       </ul>
 
-      <div className="flex flex-wrap gap-2">
+      <div id="agentes-probar" tabIndex={-1} className="flex flex-wrap gap-2">
         {([
-          ["probar", "Probar conversación"],
-          ["pedir", "Pedir mejora"],
-          ["resultados", "Ver resultados"],
-          ["crear", "Crear agente"],
-          ["asignar", "Asignar versión"],
-        ] as const).map(([k, label]) => (
-          <button key={k} type="button" onClick={() => setSeccion(seccion === k ? "ninguna" : k)} aria-expanded={seccion === k} className={`tactil rounded-lg px-3 text-sm font-medium ${seccion === k ? "bg-slate-900 text-white" : "border border-slate-300 text-slate-800 hover:bg-slate-50"}`}>
+          ["probar", "Probar conversación", true],
+          ["resultados", "Ver resultados", true],
+          ["pedir", "Pedir mejora", false],
+          ["crear", "Crear agente", false],
+          ["asignar", "Asignar versión", false],
+        ] as const).map(([k, label, simple]) => (
+          <button key={k} type="button" onClick={() => setSeccion(seccion === k ? "ninguna" : k)} aria-expanded={seccion === k} className={`${simple ? "" : "solo-avanzado "}tactil rounded-lg px-3 text-sm font-medium ${seccion === k ? "bg-slate-900 text-white" : "border border-slate-300 text-slate-800 hover:bg-slate-50"}`}>
             {label}
           </button>
         ))}
@@ -117,7 +127,7 @@ export function AgentesEtapa3({ perfil, rubroId, areas, volver }: { perfil: stri
       {seccion === "resultados" && <Resultados derivados={derivados} alTerminar={cargar} />}
       {seccion === "crear" && <Crear rubroId={rubroId} alTerminar={cargar} />}
       {seccion === "asignar" && <Asignar rubroId={rubroId} derivados={derivados} areas={areas} asignaciones={asignadas} alTerminar={cargar} />}
-      <p className="text-xs text-slate-500">Perfil: {perfil}. Probar y evaluar no escriben mensajes ni citas reales; usan datos ficticios.</p>
+      <p className="text-xs text-slate-600">Perfil: {perfil}. Probar y evaluar no escriben mensajes ni citas reales; usan datos ficticios.</p>
     </section>
   );
 }

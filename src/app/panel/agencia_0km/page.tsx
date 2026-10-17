@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
-// Landing del panel de Agencia 0KM: igual que Jurídico manda directo a su
-// listado de casos cerrados en vez de mostrar un dashboard vacío.
-export default function PanelAgencia0kmIndexPage() {
-  redirect("/panel/agencia_0km/casos-cerrados");
+// Entrada al panel del perfil: el Inicio con prioridades y siguiente paso
+// (rediseño 17/10, bloque 3). Antes llevaba directo a Clientes cerrados.
+export default function PanelInicioPage() {
+  redirect("/hoy?perfil=agencia_0km");
 }

@@ -12,6 +12,8 @@ import { Pager, pageFromParam } from "@/components/ui/pager";
 import { getCampaignMetrics } from "@/lib/campaign-metrics";
 import { effectiveSendHours } from "@/lib/horario";
 import { statusLabel } from "@/lib/plantillas/catalogo";
+import { CAMPAIGN_STATUS_LABEL } from "@/lib/campaign-status";
+import { EnlaceAvanzado } from "@/components/nivel/nivel";
 
 const PAGE_SIZE = 100;
 
@@ -91,14 +93,32 @@ export async function CampaignDetailView({
 
   return (
     <div>
-      <Link href={backHref} className="mb-4 inline-block text-sm text-slate-500 hover:underline">
+      <Link href={backHref} className="tactil mb-2 inline-flex items-center text-sm font-medium text-slate-700 underline-offset-2 hover:underline">
         ← Volver a campañas
       </Link>
 
       <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-semibold text-slate-900">{campaign.name}</h1>
-          <p className="text-sm text-slate-500">
+        <div className="min-w-0">
+          <h1 className="text-2xl font-semibold text-slate-900 [overflow-wrap:anywhere]">{campaign.name}</h1>
+          <p className="mt-1 text-sm text-slate-700">
+            Estado: <strong className="font-semibold">{CAMPAIGN_STATUS_LABEL[campaign.status] ?? campaign.status}</strong>
+            {campaign.status === "borrador" || campaign.status === "pausada" ? " — no envía nada hasta que la lances y lo confirmes." : ""}
+          </p>
+          {/* Simple: lo que hace falta para poder enviar, en una lista corta. */}
+          <ul className="solo-simple mt-2 space-y-1 text-sm text-slate-800" aria-label="Antes de enviar">
+            <li><Marca ok={!!line} /> Línea que envía: {line ? `${line.label}${line.phone_display ? ` (${line.phone_display})` : ""}` : "sin asignar"}</li>
+            <li><Marca ok={!!template} /> Plantilla: {template ? `${template.name} (${statusLabel(template.status)})` : "sin elegir del catálogo"}</li>
+            <li>
+              <Marca ok={!!metrics && metrics.prospectos > 0} /> Destinatarios: <span className="tabular-nums">{metrics?.prospectos ?? 0}</span> ·{" "}
+              envía de lunes a sábado, de {hours.start} a {hours.end} h
+            </li>
+          </ul>
+          <p className="solo-simple mt-1 text-sm">
+            <EnlaceAvanzado href="#campana-config" className="font-medium text-slate-700 underline underline-offset-2">
+              Ver ritmo y configuración completa
+            </EnlaceAvanzado>
+          </p>
+          <p className="solo-avanzado mt-1 text-sm text-slate-600 [overflow-wrap:anywhere]">
             {(campaign as any).channels?.label} · línea {line ? `${line.label}${line.phone_display ? ` (${line.phone_display})` : ""}` : "sin asignar"} ·
             {template
               ? `plantilla ${template.name} (${template.language}, ${statusLabel(template.status)})`
@@ -111,18 +131,20 @@ export async function CampaignDetailView({
             {" · "}envía de lunes a sábado, de {hours.start} a {hours.end}hs (Arg.)
           </p>
         </div>
-        <div className="flex items-start gap-2">
+        <div className="flex flex-wrap items-start gap-2">
           <CampaignControls campaignId={campaign.id} campaignName={campaign.name} status={campaign.status} />
+          <span className="solo-avanzado">
           <DeleteCampaignButton
             campaignId={campaign.id}
             campaignName={campaign.name}
             archived={!!campaign.archived_at}
             redirectTo={backHref}
           />
+          </span>
         </div>
       </div>
 
-      <div className="mb-6">
+      <div id="campana-config" tabIndex={-1} className="mb-6">
         <CampaignSetupSection campaignId={campaign.id} />
       </div>
 
@@ -151,9 +173,9 @@ export async function CampaignDetailView({
         ))}
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+      <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
         <table className="w-full text-sm">
-          <thead className="border-b border-slate-200 bg-slate-50 text-left text-xs uppercase text-slate-500">
+          <thead className="border-b border-slate-200 bg-slate-50 text-left text-xs font-semibold text-slate-700">
             <tr>
               <th className="px-4 py-3">Nombre</th>
               <th className="px-4 py-3">Teléfono</th>
@@ -168,21 +190,21 @@ export async function CampaignDetailView({
                 <td className="px-4 py-3 text-slate-600">{r.contacts?.phone}</td>
                 <td className="px-4 py-3">
                   {STATUS_LABEL[r.status] ?? r.status}
-                  {r.status === "fallo" && r.error ? <span className="block text-[11px] text-red-500">{String(r.error).slice(0, 160)}</span> : null}
-                  {r.status === "pendiente" && r.error ? <span className="block text-[11px] text-slate-500">{String(r.error).slice(0, 160)}</span> : null}
+                  {r.status === "fallo" && r.error ? <span className="block text-xs text-red-700">{String(r.error).slice(0, 160)}</span> : null}
+                  {r.status === "pendiente" && r.error ? <span className="block text-xs text-slate-600">{String(r.error).slice(0, 160)}</span> : null}
                   {r.status === "revisar" ? (
                     <>
-                      <span className="block text-[11px] text-amber-800">{String(r.review_reason ?? r.error ?? "").slice(0, 240)}</span>
+                      <span className="block text-xs text-amber-900">{String(r.review_reason ?? r.error ?? "").slice(0, 240)}</span>
                       {!campaign.archived_at && <RecipientReview campaignId={campaign.id} recipientId={r.id} uncertain={!!r.send_uncertain} />}
                     </>
                   ) : null}
                 </td>
-                <td className="px-4 py-3 text-slate-400">{r.sent_at ? new Date(r.sent_at).toLocaleString("es-AR") : "—"}</td>
+                <td className="px-4 py-3 tabular-nums text-slate-600">{r.sent_at ? new Date(r.sent_at).toLocaleString("es-AR") : "—"}</td>
               </tr>
             ))}
             {(recipients ?? []).length === 0 && (
               <tr>
-                <td colSpan={4} className="px-4 py-8 text-center text-slate-400">
+                <td colSpan={4} className="px-4 py-8 text-center text-slate-600">
                   {filter.key === "todos" ? "Todavía no cargaste destinatarios." : "No hay destinatarios en este estado."}
                 </td>
               </tr>
@@ -199,5 +221,17 @@ export async function CampaignDetailView({
         />
       </div>
     </div>
+  );
+}
+
+/** Marca de lista: visible como ✓/✗ y leída como «Listo» / «Falta». */
+function Marca({ ok }: { ok: boolean }) {
+  return (
+    <>
+      <span aria-hidden="true" className={ok ? "font-semibold text-emerald-700" : "font-semibold text-red-700"}>
+        {ok ? "✓" : "✗"}
+      </span>
+      <span className="sr-only">{ok ? "Listo:" : "Falta:"}</span>
+    </>
   );
 }

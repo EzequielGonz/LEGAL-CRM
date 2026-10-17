@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { evaluarSalud, resumenSalud, type DatosSalud } from "@/lib/salud/reglas";
+import { evaluarSalud, lecturaSimple, resumenSalud, type DatosSalud } from "@/lib/salud/reglas";
 
 const base: DatosSalud = {
   ahora: new Date("2026-10-16T12:00:00Z"),
@@ -33,4 +33,29 @@ test("perfil sin línea y agente apagado: amarillo con acción", () => {
   const items = evaluarSalud({ ...base, perfiles: [{ slug: "agencia_0km", nombre: "Autos", whatsapp: false, agenteActivo: false, agenteListo: true, faltante: [] }] });
   assert.ok(items.some((i) => i.clave === "whatsapp_agencia_0km" && i.estado === "amarillo" && i.href));
   assert.ok(items.some((i) => i.clave === "agente_agencia_0km" && i.estado === "amarillo"));
+});
+
+test("lectura simple: sin nombres de variables ni tareas internas y con responsable", () => {
+  const items = evaluarSalud({
+    ahora: new Date("2026-10-17T12:00:00Z"),
+    ultimoLatido: null,
+    pausa: { ia: true, envios: false },
+    cuarentena24h: { cantidad: 2, motivo: "Firma inválida" },
+    secretoMeta: false,
+    ultimoEntrante: null,
+    perfiles: [{ slug: "marketing", nombre: "Marketing", whatsapp: false, agenteActivo: false, agenteListo: false, faltante: ["nombre"] }],
+    turnos24h: { errores: 3, total: 10 },
+    incidentesFatales: 0,
+    presupuestosAtrasados: 0,
+    vertexConfigurado: false,
+  });
+  for (const i of items) {
+    const l = lecturaSimple(i);
+    assert.doesNotMatch(l.que, /[A-Z]{2,}_[A-Z]/, `variable a la vista en ${i.clave}`);
+    assert.doesNotMatch(l.que, /campaigns-tick|Vercel|Supabase/, `herramienta interna en ${i.clave}`);
+    if (l.quien === "tecnico") assert.equal(l.href, null);
+  }
+  const latido = lecturaSimple(items.find((i) => i.clave === "latido")!);
+  assert.equal(latido.quien, "tecnico");
+  assert.match(lecturaSimple(items.find((i) => i.clave === "cuarentena")!).que, /^2 mensaje/);
 });

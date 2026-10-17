@@ -1,3 +1,4 @@
+import { EnlaceDetalle } from "@/components/ui/enlaces-navegacion";
 import Link from "next/link";
 import clsx from "clsx";
 import { createClient } from "@/lib/supabase/server";
@@ -6,8 +7,10 @@ import { DETENTION_LABEL, type DetentionMotive } from "@/lib/detention";
 import { ReviewAction } from "@/components/revision/review-action";
 import { Pager, pageFromParam } from "@/components/ui/pager";
 import { AdjuntosLista } from "@/components/adjuntos/adjuntos-lista";
+import { ResumenSeccion } from "@/components/nivel/resumen-seccion";
 
 export const dynamic = "force-dynamic";
+export const metadata = { title: "Revisión" };
 
 const PAGE_SIZE = 50;
 
@@ -47,11 +50,23 @@ export default async function RevisionPage({
 
   return (
     <div>
-      <div className="mb-6">
+      <div className="mb-4">
         <h1 className="text-2xl font-semibold text-slate-900">Revisión</h1>
-        <p className="mt-1 text-sm text-slate-500">
-          Lo que necesita la decisión de una persona. Cada acción pide una nota y queda registrada.
+        <p className="mt-1 text-sm text-slate-700">
+          Lo que necesita la decisión de una persona. Cada acción pide una nota y queda registrada; nada se borra.
         </p>
+      </div>
+
+      <div className="mb-4">
+        <ResumenSeccion
+          id="rev"
+          estado={(() => {
+            const total = tabs.reduce((a, t) => a + (t.count ?? 0), 0);
+            return total ? `${total.toLocaleString("es-AR")} cosa(s) esperan una decisión` : "No hay nada esperando una decisión";
+          })()}
+          tono={tabs.some((t) => t.count) ? "atencion" : "ok"}
+          puntos={tabs.map((t) => ({ texto: t.label, cantidad: t.count, href: `/revision?vista=${t.key}`, tono: t.count ? ("atencion" as const) : ("ok" as const) }))}
+        />
       </div>
 
       <div className="mb-4 flex flex-wrap gap-2">
@@ -59,14 +74,13 @@ export default async function RevisionPage({
           <Link
             key={t.key}
             href={`/revision?vista=${t.key}`}
+            aria-current={tab === t.key ? "page" : undefined}
             className={clsx(
-              "rounded-full border px-4 py-1.5 text-sm font-medium transition-colors",
-              tab === t.key
-                ? "border-gold-400 bg-slate-900 text-gold-100"
-                : "border-slate-200 bg-white text-slate-600 hover:border-gold-300"
+              "tactil inline-flex items-center rounded-full border px-4 text-sm font-medium",
+              tab === t.key ? "border-slate-900 bg-slate-900 text-white" : "border-slate-300 bg-white text-slate-900 hover:bg-slate-50"
             )}
           >
-            {t.label} <span className="ml-1 opacity-70">{(t.count ?? 0).toLocaleString("es-AR")}</span>
+            {t.label} <span className="ml-1.5 tabular-nums">{t.count === null ? "Sin datos" : t.count.toLocaleString("es-AR")}</span>
           </Link>
         ))}
       </div>
@@ -101,22 +115,33 @@ async function Incidencias({
   if (searchParams.tipo && INCIDENCE_LABEL[searchParams.tipo]) query = query.eq("kind", searchParams.tipo);
 
   const { data: rows, count } = await query;
+  const porClave = new Map<string, { clave: string; titulo: string; telefono: string | null; contactId: string | null; conversationId: string | null; filas: any[] }>();
+  for (const r of (rows ?? []) as any[]) {
+    const clave = r.contact_id ?? "general";
+    const g =
+      porClave.get(clave) ??
+      { clave, titulo: r.contact_id ? r.contacts?.full_name ?? "Sin nombre" : "Generales (sin persona)", telefono: r.contacts?.phone ?? null, contactId: r.contact_id ?? null, conversationId: null as string | null, filas: [] as any[] };
+    g.conversationId ??= r.conversation_id ?? null;
+    g.filas.push(r);
+    porClave.set(clave, g);
+  }
+  const grupos = Array.from(porClave.values()).sort((a, b) => b.filas.length - a.filas.length);
 
   return (
     <div>
-      <form action="/revision" method="GET" className="mb-4 flex flex-wrap items-end gap-2 rounded-xl border border-slate-200 bg-white p-4">
+      <form action="/revision" method="GET" className="solo-avanzado mb-4 flex flex-wrap items-end gap-2 rounded-xl border border-slate-200 bg-white p-4">
         <input type="hidden" name="vista" value="incidencias" />
         <div>
-          <label className="mb-1 block text-xs font-medium text-slate-500">Estado</label>
-          <select name="estado" defaultValue={searchParams.estado ?? ""} className="rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold">
+          <label htmlFor="revision-estado" className="mb-1 block text-sm font-medium text-slate-700">Estado</label>
+          <select id="revision-estado" name="estado" defaultValue={searchParams.estado ?? ""} className="rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold">
             <option value="">Abiertas</option>
             <option value="cerradas">Resueltas o descartadas</option>
             <option value="todas">Todas</option>
           </select>
         </div>
         <div>
-          <label className="mb-1 block text-xs font-medium text-slate-500">Tipo</label>
-          <select name="tipo" defaultValue={searchParams.tipo ?? ""} className="rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold">
+          <label htmlFor="revision-tipo" className="mb-1 block text-sm font-medium text-slate-700">Tipo</label>
+          <select id="revision-tipo" name="tipo" defaultValue={searchParams.tipo ?? ""} className="rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold">
             <option value="">Todos</option>
             {Object.entries(INCIDENCE_LABEL).map(([value, label]) => (
               <option key={value} value={value}>
@@ -130,9 +155,35 @@ async function Incidencias({
         </button>
       </form>
 
-      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+      {/* Agrupadas por persona: varias incidencias de la misma persona se ven y se resuelven juntas. */}
+      <div className="space-y-4">
+        {grupos.map((g) => (
+          <section key={g.clave} aria-label={g.titulo} className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+            <header className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 bg-slate-50 px-4 py-2">
+              <h2 className="min-w-0 text-sm font-semibold text-slate-900 [overflow-wrap:anywhere]">
+                {g.contactId ? (
+                  <EnlaceDetalle href={`/prospectos/${g.contactId}`} className="underline-offset-2 hover:underline">
+                    {g.titulo}
+                  </EnlaceDetalle>
+                ) : (
+                  g.titulo
+                )}
+                {g.telefono ? <span className="ml-2 font-normal tabular-nums text-slate-700">{g.telefono}</span> : null}
+              </h2>
+              <span className="text-sm text-slate-700">
+                <span className="tabular-nums">{g.filas.length}</span> incidencia(s)
+                {g.conversationId ? (
+                  <>
+                    {" · "}
+                    <EnlaceDetalle href={`/inbox/${g.conversationId}`} className="font-medium text-slate-900 underline underline-offset-2">
+                      Ver conversación
+                    </EnlaceDetalle>
+                  </>
+                ) : null}
+              </span>
+            </header>
         <ul className="divide-y divide-slate-100">
-          {(rows ?? []).map((r: any) => (
+          {g.filas.map((r: any) => (
             <li key={r.id} className="flex flex-col gap-2 px-4 py-3 sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0">
                 <p className="text-sm font-semibold text-slate-900">
@@ -143,27 +194,27 @@ async function Incidencias({
                     </span>
                   )}
                 </p>
-                <p className="mt-0.5 text-sm text-slate-600">{r.detail?.texto ?? ""}</p>
+                <p className="mt-0.5 text-sm text-slate-700 [overflow-wrap:anywhere]">{r.detail?.texto ?? ""}</p>
                 {r.contacts && (
-                  <p className="mt-1 text-xs text-slate-500">
+                  <p className="solo-avanzado mt-1 text-xs text-slate-600">
                     {r.contact_id ? (
-                      <Link href={`/prospectos/${r.contact_id}`} className="font-medium text-slate-700 hover:underline">
+                      <EnlaceDetalle href={`/prospectos/${r.contact_id}`} className="font-medium text-slate-700 hover:underline">
                         {r.contacts.full_name ?? "Sin nombre"}
-                      </Link>
+                      </EnlaceDetalle>
                     ) : null}{" "}
                     · {r.contacts.phone ?? "—"}
                     {r.conversation_id && (
                       <>
                         {" · "}
-                        <Link href={`/inbox/${r.conversation_id}`} className="text-slate-700 hover:underline">
+                        <EnlaceDetalle href={`/inbox/${r.conversation_id}`} className="text-slate-700 hover:underline">
                           Ver conversación
-                        </Link>
+                        </EnlaceDetalle>
                       </>
                     )}
                   </p>
                 )}
-                <p className="mt-1 text-[11px] text-slate-400">
-                  {new Date(r.created_at).toLocaleString("es-AR")} · origen: {r.created_by}
+                <p className="mt-1 text-xs text-slate-600">
+                  {new Date(r.created_at).toLocaleString("es-AR")}<span className="solo-avanzado"> · origen: {r.created_by}</span>
                   {r.status !== "abierta" && r.resolution_note ? ` · ${r.status}: ${r.resolution_note}` : ""}
                 </p>
               </div>
@@ -186,9 +237,13 @@ async function Incidencias({
               </div>
             </li>
           ))}
-          {(rows ?? []).length === 0 && <li className="px-4 py-8 text-center text-sm text-slate-400">No hay incidencias con estos filtros.</li>}
         </ul>
-        <Pager basePath="/revision" params={{ vista: "incidencias", estado: searchParams.estado, tipo: searchParams.tipo }} page={page} pageSize={PAGE_SIZE} total={count ?? 0} unit="incidencias" />
+          </section>
+        ))}
+        {(rows ?? []).length === 0 && <p className="rounded-xl border border-dashed border-slate-300 bg-white px-4 py-8 text-center text-sm text-slate-700">No hay incidencias con estos filtros.</p>}
+        <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+          <Pager basePath="/revision" params={{ vista: "incidencias", estado: searchParams.estado, tipo: searchParams.tipo }} page={page} pageSize={PAGE_SIZE} total={count ?? 0} unit="incidencias" />
+        </div>
       </div>
     </div>
   );
@@ -206,7 +261,7 @@ async function Detenciones({ searchParams, page }: { searchParams: { estado?: st
 
   return (
     <div>
-      <div className="mb-3 flex gap-3 text-sm">
+      <div className="mb-3 flex flex-wrap gap-3 text-sm">
         <Link href="/revision?vista=detenciones" className={clsx(vigentes ? "font-semibold text-slate-900" : "text-slate-500 hover:underline")}>
           Vigentes
         </Link>
@@ -233,15 +288,15 @@ async function Detenciones({ searchParams, page }: { searchParams: { estado?: st
                   )}
                   <p className="mt-1 text-xs text-slate-500">
                     {d.contact_id ? (
-                      <Link href={`/prospectos/${d.contact_id}`} className="font-medium text-slate-700 hover:underline">
+                      <EnlaceDetalle href={`/prospectos/${d.contact_id}`} className="font-medium text-slate-700 hover:underline">
                         {d.contacts?.full_name ?? "Sin nombre"}
-                      </Link>
+                      </EnlaceDetalle>
                     ) : (
                       "Contacto"
                     )}{" "}
                     · {d.contacts?.phone ?? "—"}
                   </p>
-                  <p className="mt-1 text-[11px] text-slate-400">
+                  <p className="mt-1 text-xs text-slate-400">
                     {new Date(d.created_at).toLocaleString("es-AR")} · origen: {d.source}
                     {d.status === "levantada" && d.lift_reason ? ` · levantada: ${d.lift_reason}` : ""}
                   </p>
@@ -282,7 +337,7 @@ async function Retenidos({ searchParams, page }: { searchParams: { estado?: stri
 
   return (
     <div>
-      <div className="mb-3 flex gap-3 text-sm">
+      <div className="mb-3 flex flex-wrap gap-3 text-sm">
         <Link href="/revision?vista=retenidos" className={clsx(pendientes ? "font-semibold text-slate-900" : "text-slate-500 hover:underline")}>
           Pendientes
         </Link>
@@ -310,7 +365,7 @@ async function Retenidos({ searchParams, page }: { searchParams: { estado?: stri
                     {s.texto ?? "(sin texto)"}
                     {s.cantidad > 1 ? ` (+${s.cantidad - 1})` : ""}
                   </p>
-                  <p className="mt-1 text-[11px] text-slate-400">
+                  <p className="mt-1 text-xs text-slate-400">
                     {new Date(q.received_at).toLocaleString("es-AR")}
                     {q.account_id ? ` · cuenta ${q.account_id}` : ""}
                     {q.detail ? ` · ${q.detail}` : ""}
@@ -357,7 +412,7 @@ async function Adjuntos({ searchParams, page }: { searchParams: { estado?: strin
 
   return (
     <div>
-      <div className="mb-3 flex gap-3 text-sm">
+      <div className="mb-3 flex flex-wrap gap-3 text-sm">
         {link(null, "Sin guardar", filtro === "sin_guardar")}
         {link("no_guardados", "Vencidos o demasiado pesados", filtro === "no_guardados")}
         {link("todos", "Todos", filtro === "todos")}

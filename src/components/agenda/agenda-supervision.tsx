@@ -171,20 +171,21 @@ export async function AgendaSupervision({
           <Link
             key={t.key}
             href={href({ tab: t.key === "citas" ? undefined : t.key })}
+            aria-current={tab === t.key ? "page" : undefined}
             className={clsx(
-              "rounded-full border px-3 py-1 text-xs font-medium",
-              tab === t.key ? "border-gold-400 bg-slate-900 text-gold-100" : "border-slate-200 bg-white text-slate-600 hover:border-gold-300"
+              "tactil inline-flex items-center gap-1.5 rounded-full border px-4 text-sm font-medium",
+              tab === t.key ? "border-slate-900 bg-slate-900 text-white" : "border-slate-300 bg-white text-slate-900 hover:bg-slate-50"
             )}
           >
-            {t.label} ({countByTab[t.key].toLocaleString("es-AR")})
+            {t.label} <span className="tabular-nums">({countByTab[t.key].toLocaleString("es-AR")})</span>
           </Link>
         ))}
       </div>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
-        <div className={clsx("overflow-hidden rounded-xl border border-slate-200 bg-white", selectedContact ? "lg:col-span-3" : "lg:col-span-5")}>
+        <div className={clsx("min-w-0 overflow-x-auto rounded-xl border border-slate-200 bg-white", selectedContact ? "lg:col-span-3" : "lg:col-span-5")}>
           <table className="w-full text-sm">
-            <thead className="border-b border-slate-200 bg-slate-50 text-left text-xs uppercase text-slate-500">
+            <thead className="border-b border-slate-200 bg-slate-50 text-left text-xs font-semibold text-slate-700">
               <tr>
                 <th className="px-4 py-3">Nombre</th>
                 <th className="px-4 py-3">Teléfono</th>
@@ -204,8 +205,8 @@ export async function AgendaSupervision({
                       {r.name ?? "Sin nombre"}
                     </Link>
                   </td>
-                  <td className="px-4 py-2 text-slate-600">{r.phone ?? "—"}</td>
-                  <td className="px-4 py-2 text-xs text-slate-600">
+                  <td className="px-4 py-2 tabular-nums text-slate-700">{r.phone ?? "—"}</td>
+                  <td className="px-4 py-2 text-sm text-slate-800">
                     {r.detail}
                     {r.appointment && (
                       <div className="mt-1">
@@ -213,12 +214,12 @@ export async function AgendaSupervision({
                       </div>
                     )}
                   </td>
-                  <td className="px-4 py-2 text-xs text-slate-400">{r.when ? new Date(r.when).toLocaleString("es-AR") : "—"}</td>
+                  <td className="px-4 py-2 text-sm tabular-nums text-slate-700">{r.when ? new Date(r.when).toLocaleString("es-AR", { dateStyle: "short", timeStyle: "short" }) : "—"}</td>
                 </tr>
               ))}
               {rows.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="px-4 py-8 text-center text-slate-400">
+                  <td colSpan={4} className="px-4 py-8 text-center text-slate-600">
                     No hay pendientes en esta sección.
                   </td>
                 </tr>
@@ -240,14 +241,14 @@ export async function AgendaSupervision({
             <div className="mb-3 flex items-start justify-between gap-2">
               <div>
                 <p className="font-semibold text-slate-900">{selectedContact.full_name ?? "Sin nombre"}</p>
-                <p className="text-xs text-slate-500">{selectedContact.phone ?? "—"}</p>
+                <p className="text-sm tabular-nums text-slate-700">{selectedContact.phone ?? "—"}</p>
               </div>
-              <Link href={href({ tab: tab === "citas" ? undefined : tab, pagina: page > 1 ? String(page) : undefined })} scroll={false} className="text-xs text-slate-400 hover:underline">
+              <Link href={href({ tab: tab === "citas" ? undefined : tab, pagina: page > 1 ? String(page) : undefined })} scroll={false} className="tactil inline-flex items-center px-2 text-sm font-medium text-slate-700 underline-offset-2 hover:underline">
                 Cerrar
               </Link>
             </div>
             {conversationHref && (selectedContact.conversations ?? []).length > 0 && (
-              <Link href={`${conversationHref}/${selectedContact.conversations[0].id}`} className="mb-3 inline-block text-xs text-gold-700 hover:underline">
+              <Link href={`${conversationHref}/${selectedContact.conversations[0].id}`} className="tactil mb-3 inline-flex items-center text-sm font-medium text-slate-900 underline underline-offset-2">
                 Ver conversación →
               </Link>
             )}

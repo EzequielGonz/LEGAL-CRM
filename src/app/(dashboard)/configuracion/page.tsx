@@ -16,6 +16,10 @@ import { AvailabilityEditor } from "@/components/agenda/availability-editor";
 import { getTareasServidor } from "@/lib/tareas-servidor";
 import { listCalendarExceptions } from "@/lib/contacto/calendario";
 import Link from "next/link";
+import { SeccionAjustes } from "@/components/configuracion/seccion-ajustes";
+import { GrupoAjustes } from "@/components/configuracion/grupo-ajustes";
+import { NavegacionAjustes, type GrupoNav } from "@/components/configuracion/navegacion-ajustes";
+import { BriefMarca } from "@/components/contenido/contenido-etapa3";
 
 export const dynamic = "force-dynamic";
 
@@ -58,137 +62,176 @@ export default async function ConfiguracionPage() {
 
   const adminPhone: string | null = adminProfile?.phone ?? null;
 
+  const conectados = (channels ?? []).filter((c) => c.is_connected).length;
+  const pausaActiva = pause.aiRepliesPaused || pause.outboundPaused;
+  const grupos: GrupoNav[] = [
+    { id: "marca", titulo: "Perfil y marca", resumen: "Nombre, logo, colores, líneas y estudios" },
+    { id: "canales", titulo: "Canales, líneas y plantillas", resumen: `${conectados} de ${(channels ?? []).length} canales conectados` },
+    { id: "agenda", titulo: "Agenda, disponibilidad, horarios y excepciones", resumen: `${calendar.upcoming?.length ?? 0} excepciones próximas` },
+    { id: "automatizaciones", titulo: "Automatizaciones y pausas", resumen: pausaActiva ? "Pausa general activa" : "Pausa general levantada" },
+    { id: "agentes", titulo: "Agentes, versiones, modelos y evaluaciones", resumen: "En Agentes IA y Comparación de agentes" },
+    { id: "notificaciones", titulo: "Notificaciones y dispositivos", resumen: `${(notificationPhones ?? []).length + (adminPhone ? 1 : 0)} números de aviso` },
+    { id: "acceso", titulo: "Acceso, PIN y sesiones", resumen: pinRow?.source ? "PIN configurado" : "PIN sin configurar" },
+    { id: "sistema", titulo: "Sistema, tareas e integraciones", resumen: (retenidos ?? 0) > 0 ? `${retenidos} eventos retenidos sin revisar` : "Sin eventos retenidos" },
+  ];
+  const resumenDe = (id: string) => grupos.find((g) => g.id === id)?.resumen;
+
   return (
-    <div className="mx-auto max-w-3xl space-y-6">
-      <h1 className="text-2xl font-semibold text-slate-900">Configuración</h1>
-
-      <div className="rounded-xl border border-slate-200 bg-white p-5">
-        <h2 className="mb-3 text-sm font-semibold text-slate-700">Perfil, nombres y líneas</h2>
-        <ProfileSettingsSection slug="juridico" />
-      </div>
-
-      <div className="rounded-xl border border-slate-200 bg-white p-5">
-        <h2 className="mb-3 text-sm font-semibold text-slate-700">Plantillas de WhatsApp</h2>
-        <TemplatesSection slug="juridico" />
-      </div>
-
-      <div className="rounded-xl border border-slate-200 bg-white p-5">
-        <h2 className="mb-3 text-sm font-semibold text-slate-700">Pausa general</h2>
-        <PauseControl
-          aiPaused={pause.aiRepliesPaused}
-          outboundPaused={pause.outboundPaused}
-          since={pause.since}
-          reason={pause.reason}
-          configProblem={pause.configProblem ?? (pause.readError ? `No se pudo leer la pausa general (${pause.readError}): se asume todo en pausa.` : null)}
-        />
-      </div>
-
-      <div id="disponibilidad" className="rounded-xl border border-slate-200 bg-white p-5">
-        <h2 className="mb-3 text-sm font-semibold text-slate-700">Disponibilidad para citas</h2>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <AvailabilityEditor area="civil" initialRules={civilRules ?? []} />
-          <AvailabilityEditor area="penal" initialRules={penalRules ?? []} />
-        </div>
-      </div>
-
-      <div className="rounded-xl border border-slate-200 bg-white p-5">
-        <h2 className="mb-3 text-sm font-semibold text-slate-700">Tareas del servidor (citas y contenido)</h2>
-        <TareasServidorControl citas={tareas.citas} contenido={tareas.contenido} configProblem={tareas.configProblem ?? null} />
-      </div>
-
-      <div className="rounded-xl border border-slate-200 bg-white p-5">
-        <h2 className="mb-3 text-sm font-semibold text-slate-700">Conexiones</h2>
-        <Conexiones />
-      </div>
-
-      <div className="rounded-xl border border-slate-200 bg-white p-5">
-        <h2 className="mb-3 text-sm font-semibold text-slate-700">Horario de contacto y calendario (todos los perfiles)</h2>
-        <CalendarSettings upcoming={calendar.upcoming} archived={calendar.archived} loadError={calendar.error} />
-      </div>
-
-      <div className="rounded-xl border border-slate-200 bg-white p-5">
-        <h2 className="mb-3 text-sm font-semibold text-slate-700">Acceso</h2>
-        <AccessSettings
-          pinSource={pinRow?.source ?? null}
-          pinUpdatedAt={pinRow?.updated_at ?? null}
-          events={(accessEvents ?? []) as any}
-        />
-      </div>
-
-      {(retenidos ?? 0) > 0 && (
-        <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
-          Hay {retenidos} evento(s) de Meta retenidos por seguridad.{" "}
-          <Link href="/revision?vista=retenidos" className="font-semibold underline">
-            Revisarlos
-          </Link>
-        </div>
-      )}
-
-      <div className="rounded-xl border border-slate-200 bg-white p-5">
-        <h2 className="mb-3 text-sm font-semibold text-slate-700">Avisos web</h2>
-        <PushSettingsSection />
-      </div>
-
-      <div className="rounded-xl border border-slate-200 bg-white p-5">
-        <h2 className="mb-3 text-sm font-semibold text-slate-700">Notificaciones</h2>
-        <AdminPhoneForm initialPhone={adminPhone} />
-      </div>
-
-      <div className="rounded-xl border border-slate-200 bg-white p-5">
-        <h2 className="mb-3 text-sm font-semibold text-slate-700">
-          Números adicionales de notificación
-        </h2>
-        <p className="mb-3 text-xs text-slate-400">
-          Además del teléfono principal de arriba, acá podés agregar los números
-          que quieras — no necesitan cuenta en el panel — para que también reciban el aviso de
-          &quot;caso calificado&quot; y &quot;nuevo cliente agendado&quot; por WhatsApp.
+    <div className="mx-auto max-w-3xl space-y-8">
+      <div>
+        <h1 className="text-2xl font-semibold text-slate-900">Configuración</h1>
+        <p className="mt-1 text-sm text-slate-700">
+          <span className="solo-simple">Los ajustes de todos los días. El resto está en la configuración completa.</span>
+          <span className="solo-avanzado">Todos los ajustes, en ocho grupos. Cada sección se guarda por separado y dice si vale para este perfil o para todos.</span>
         </p>
-        <NotificationPhonesForm phones={notificationPhones ?? []} />
       </div>
 
-      <div className="rounded-xl border border-slate-200 bg-white p-5">
-        <h2 className="mb-3 text-sm font-semibold text-slate-700">Canales</h2>
-        <p className="mb-3 text-xs text-slate-400">
-          El estado de conexión se actualiza automáticamente al configurar las credenciales en
-          las variables de entorno del servidor (ver Configuración → guía de Meta API).
-        </p>
-        <ul className="divide-y divide-slate-100">
-          {(channels ?? []).map((c) => (
-            <li key={c.id} className="flex items-center justify-between py-2 text-sm">
-              <div className="flex items-center gap-2">
-                <AreaBadge area={c.area} />
-                <span className="text-slate-700">{c.label}</span>
-              </div>
-              <span
-                className={`text-xs font-medium ${
-                  c.is_connected ? "text-green-600" : "text-slate-400"
-                }`}
-              >
-                {c.is_connected ? "Conectado" : "Sin conectar"}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <NavegacionAjustes grupos={grupos} />
 
-      <div className="rounded-xl border border-slate-200 bg-white p-5">
-        <h2 className="mb-3 text-sm font-semibold text-slate-700">Estudios jurídicos</h2>
-        <ul className="divide-y divide-slate-100">
-          {(studios ?? []).map((s) => (
-            <li key={s.id} className="flex items-center justify-between py-2 text-sm">
-              <div className="flex items-center gap-2">
-                <AreaBadge area={s.area} />
-                <span className="text-slate-700">{s.name}</span>
-              </div>
-              <span className="text-xs text-slate-400">{s.contact_phone}</span>
-            </li>
-          ))}
-          {(studios ?? []).length === 0 && (
-            <li className="py-2 text-sm text-slate-400">Sin estudios cargados.</li>
+      <GrupoAjustes id="marca" titulo="Perfil y marca" resumen={resumenDe("marca")}>
+        <SeccionAjustes id="marca-perfil" titulo="Marca del perfil" alcance="perfil" nivel="simple" palabras="logo colores nombre identidad">
+          <BriefMarca perfil="juridico" soloMarca />
+        </SeccionAjustes>
+        <SeccionAjustes id="perfil" titulo="Perfil, nombres y líneas" alcance="perfil" palabras="nombre foto líneas whatsapp">
+          <ProfileSettingsSection slug="juridico" />
+        </SeccionAjustes>
+        <SeccionAjustes id="estudios" titulo="Estudios jurídicos" alcance="perfil" palabras="derivación estudio abogado">
+          <ul className="divide-y divide-slate-100">
+            {(studios ?? []).map((s) => (
+              <li key={s.id} className="flex flex-wrap items-center justify-between gap-2 py-2 text-sm">
+                <div className="flex min-w-0 items-center gap-2">
+                  <AreaBadge area={s.area} />
+                  <span className="text-slate-800 [overflow-wrap:anywhere]">{s.name}</span>
+                </div>
+                <span className="text-sm text-slate-600">{s.contact_phone}</span>
+              </li>
+            ))}
+            {(studios ?? []).length === 0 && <li className="py-2 text-sm text-slate-600">Sin estudios cargados.</li>}
+          </ul>
+          <StudioForm />
+        </SeccionAjustes>
+      </GrupoAjustes>
+
+      <GrupoAjustes id="canales" titulo="Canales, líneas y plantillas" resumen={resumenDe("canales")} soloAvanzado>
+        <SeccionAjustes
+          id="canales"
+          titulo="Canales"
+          alcance="perfil"
+          palabras="whatsapp instagram facebook conexión"
+          descripcion="El estado de conexión se actualiza solo al configurar las credenciales en las variables privadas del servidor."
+        >
+          <ul className="divide-y divide-slate-100">
+            {(channels ?? []).map((c) => (
+              <li key={c.id} className="flex flex-wrap items-center justify-between gap-2 py-2 text-sm">
+                <div className="flex min-w-0 items-center gap-2">
+                  <AreaBadge area={c.area} />
+                  <span className="text-slate-800 [overflow-wrap:anywhere]">{c.label}</span>
+                </div>
+                <span className={`text-sm font-medium ${c.is_connected ? "text-green-700" : "text-slate-600"}`}>
+                  {c.is_connected ? "Conectado" : "Sin conectar"}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </SeccionAjustes>
+        <SeccionAjustes id="plantillas" titulo="Plantillas de WhatsApp" alcance="perfil" palabras="meta mensajes aprobadas">
+          <TemplatesSection slug="juridico" />
+        </SeccionAjustes>
+      </GrupoAjustes>
+
+      <GrupoAjustes id="agenda" titulo="Agenda, disponibilidad, horarios y excepciones" resumen={resumenDe("agenda")}>
+        <SeccionAjustes id="disponibilidad" titulo="Disponibilidad para citas" alcance="perfil" nivel="simple" palabras="horarios turnos días">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <AvailabilityEditor area="civil" initialRules={civilRules ?? []} />
+            <AvailabilityEditor area="penal" initialRules={penalRules ?? []} />
+          </div>
+        </SeccionAjustes>
+        <SeccionAjustes id="calendario" titulo="Horario de contacto y calendario" alcance="general" palabras="feriados excepciones horario 8 21">
+          <CalendarSettings upcoming={calendar.upcoming} archived={calendar.archived} loadError={calendar.error} />
+        </SeccionAjustes>
+      </GrupoAjustes>
+
+      <GrupoAjustes id="automatizaciones" titulo="Automatizaciones y pausas" resumen={resumenDe("automatizaciones")}>
+        <SeccionAjustes id="pausa" titulo="Pausa general" alcance="general" nivel="simple" palabras="detener agentes envíos">
+          <PauseControl
+            aiPaused={pause.aiRepliesPaused}
+            outboundPaused={pause.outboundPaused}
+            since={pause.since}
+            reason={pause.reason}
+            configProblem={pause.configProblem ?? (pause.readError ? `No se pudo leer la pausa general (${pause.readError}): se asume todo en pausa.` : null)}
+          />
+        </SeccionAjustes>
+      </GrupoAjustes>
+
+      <GrupoAjustes id="agentes" titulo="Agentes, versiones, modelos y evaluaciones" resumen={resumenDe("agentes")} soloAvanzado>
+        <SeccionAjustes id="agentes-config" titulo="Dónde se configuran los agentes" alcance="perfil" palabras="modelo versión prompt evaluación entrenamiento">
+          <p className="text-sm text-slate-700">
+            La configuración de cada agente (versión, modelo, parámetros y biblioteca) está en{" "}
+            <Link href="/agentes" className="font-medium underline">Agentes IA</Link>; las evaluaciones y el experimento, en{" "}
+            <Link href="/comparacion-agentes?perfil=juridico" className="font-medium underline">Comparación de agentes</Link>. Cambiarlos no se hace desde acá.
+          </p>
+        </SeccionAjustes>
+      </GrupoAjustes>
+
+      <GrupoAjustes id="notificaciones" titulo="Notificaciones y dispositivos" resumen={resumenDe("notificaciones")}>
+        <SeccionAjustes id="notificaciones" titulo="Teléfono principal de avisos" alcance="general" nivel="simple" palabras="whatsapp aviso administrador">
+          <AdminPhoneForm initialPhone={adminPhone} />
+        </SeccionAjustes>
+        <SeccionAjustes
+          id="numeros-adicionales"
+          titulo="Números adicionales de notificación"
+          alcance="general"
+          palabras="avisos whatsapp"
+          descripcion={
+            <>
+              Además del teléfono principal, estos números (no necesitan cuenta en el panel) reciben por WhatsApp el aviso de
+              &quot;caso calificado&quot; y &quot;nuevo cliente agendado&quot;.
+            </>
+          }
+        >
+          <NotificationPhonesForm phones={notificationPhones ?? []} />
+        </SeccionAjustes>
+        <SeccionAjustes id="avisos" titulo="Avisos web en este dispositivo" alcance="general" palabras="push notificaciones navegador teléfono">
+          <PushSettingsSection />
+        </SeccionAjustes>
+      </GrupoAjustes>
+
+      <GrupoAjustes id="acceso" titulo="Acceso, PIN y sesiones" resumen={resumenDe("acceso")} soloAvanzado>
+        <SeccionAjustes id="acceso" titulo="Acceso" alcance="general" palabras="pin sesiones ingresos">
+          <AccessSettings
+            pinSource={pinRow?.source ?? null}
+            pinUpdatedAt={pinRow?.updated_at ?? null}
+            events={(accessEvents ?? []) as any}
+          />
+        </SeccionAjustes>
+      </GrupoAjustes>
+
+      <GrupoAjustes id="sistema" titulo="Sistema, tareas e integraciones" resumen={resumenDe("sistema")} soloAvanzado>
+        <SeccionAjustes
+          id="tareas"
+          titulo="Tareas del servidor"
+          alcance="general"
+          palabras="latido cron citas contenido"
+          descripcion="El latido «campaigns-tick» corre cada minuto en Supabase; su estado se ve en Salud del sistema. Acá se encienden las tareas de citas y de contenido."
+        >
+          <TareasServidorControl citas={tareas.citas} contenido={tareas.contenido} configProblem={tareas.configProblem ?? null} />
+        </SeccionAjustes>
+        <SeccionAjustes id="conexiones" titulo="Conexiones" alcance="general" palabras="integraciones google calendar metricool search console">
+          <Conexiones />
+        </SeccionAjustes>
+        <SeccionAjustes id="cuarentena" titulo="Mensajes retenidos por seguridad" alcance="general" palabras="meta webhooks firma cuarentena">
+          {(retenidos ?? 0) > 0 ? (
+            <p className="text-sm text-amber-900">
+              Hay {retenidos} evento(s) de Meta retenidos sin revisar.{" "}
+              <Link href="/revision?vista=retenidos" className="font-semibold underline">
+                Revisarlos
+              </Link>
+            </p>
+          ) : (
+            <p className="text-sm text-slate-700">No hay eventos de Meta retenidos sin revisar.</p>
           )}
-        </ul>
-        <StudioForm />
-      </div>
+        </SeccionAjustes>
+      </GrupoAjustes>
     </div>
   );
 }

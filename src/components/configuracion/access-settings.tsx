@@ -26,6 +26,8 @@ export interface AccessEventRow {
 function PinInput(props: { value: string; onChange: (v: string) => void; placeholder: string }) {
   return (
     <input
+      aria-label={props.placeholder}
+      autoComplete="off"
       type="password"
       inputMode="numeric"
       maxLength={6}
@@ -121,8 +123,8 @@ export function AccessSettings({
             {busy ? "Guardando..." : "Cambiar PIN"}
           </button>
         </div>
-        {msg && <p className={`mt-2 text-xs ${msg.ok ? "text-green-600" : "text-red-600"}`}>{msg.text}</p>}
-        <p className="mt-2 text-[11px] text-slate-400">
+        <p role="status" className={`mt-2 text-sm ${msg?.ok ? "text-green-700" : "font-medium text-red-700"}`}>{msg?.text ?? ""}</p>
+        <p className="mt-2 text-xs text-slate-400">
           Si se olvida el PIN: cargar un valor nuevo en la variable privada ACCESS_PIN_RESET del servidor (se aplica una sola vez).
         </p>
       </div>
@@ -140,7 +142,7 @@ export function AccessSettings({
             Cerrar en los demás
           </button>
         </div>
-        {msgOtras && <p className={`mt-2 text-xs ${msgOtras.ok ? "text-green-600" : "text-red-600"}`}>{msgOtras.text}</p>}
+        <p role="status" className={`mt-2 text-sm ${msgOtras?.ok ? "text-green-700" : "font-medium text-red-700"}`}>{msgOtras?.text ?? ""}</p>
       </div>
 
       <div>

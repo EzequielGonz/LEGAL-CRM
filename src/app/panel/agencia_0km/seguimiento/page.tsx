@@ -2,6 +2,7 @@ import { FollowupPanel } from "@/components/seguimiento/followup-panel";
 import { RUBRO_IDS } from "@/lib/rubros";
 
 export const dynamic = "force-dynamic";
+export const metadata = { title: "Seguimiento" };
 
 /** Etapa 2 · Bloque 2.3 — Seguimiento general del perfil. */
 export default function SeguimientoPage() {

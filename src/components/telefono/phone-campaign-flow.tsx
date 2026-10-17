@@ -190,7 +190,7 @@ function CampaignStep({
         <AddBaseToCampaign baseId={baseId} campaignId={choice} onAdded={() => setConfirmedCampaign(choice)} />
       )}
       {error && <p className="text-xs text-red-600">{error}</p>}
-      <p className="text-[11px] text-slate-400">Área: {area}</p>
+      <p className="text-xs text-slate-400">Área: {area}</p>
     </div>
   );
 }
@@ -225,8 +225,9 @@ function LaunchStep({ campaignId }: { campaignId: string }) {
 
   return (
     <div className="space-y-3 rounded-xl border border-slate-200 bg-white p-4 text-sm">
-      <p className="font-medium text-slate-800">Iniciar la campaña</p>
-      {!prep && <p className="text-xs text-slate-400">Revisando…</p>}
+      <p className="font-medium text-slate-900">Iniciar la campaña</p>
+      <p className="text-sm text-slate-700">Al confirmar empiezan a salir mensajes reales por WhatsApp. Lo enviado no se puede deshacer; se puede pausar desde la computadora.</p>
+      {!prep && <p role="status" className="text-sm text-slate-700">Revisando…</p>}
       {prep && prep.pausa_general && (
         <p className="rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800">
           La pausa general está activa: no se inicia ninguna campaña hasta levantarla desde Configuración.
@@ -245,7 +246,7 @@ function LaunchStep({ campaignId }: { campaignId: string }) {
       <button type="button" onClick={iniciar} disabled={busy || !prep?.ready} className="btn-gold w-full">
         {busy ? "Iniciando…" : "Confirmar e iniciar campaña"}
       </button>
-      {msg && <p className={`text-xs ${msg.ok ? "text-green-600" : "text-red-600"}`}>{msg.text}</p>}
+      {msg && <p role="status" className={`text-sm ${msg.ok ? "text-emerald-700" : "font-medium text-red-700"}`}>{msg.text}</p>}
     </div>
   );
 }

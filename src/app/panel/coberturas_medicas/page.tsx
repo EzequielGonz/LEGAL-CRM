@@ -1,8 +1,7 @@
 import { redirect } from "next/navigation";
 
-// Landing del panel de Coberturas Médicas: igual que los demás rubros,
-// manda directo al listado de casos cerrados en vez de mostrar un
-// dashboard vacío.
-export default function PanelCoberturasMedicasIndexPage() {
-  redirect("/panel/coberturas_medicas/casos-cerrados");
+// Entrada al panel del perfil: el Inicio con prioridades y siguiente paso
+// (rediseño 17/10, bloque 3). Antes llevaba directo a Clientes cerrados.
+export default function PanelInicioPage() {
+  redirect("/hoy?perfil=coberturas_medicas");
 }

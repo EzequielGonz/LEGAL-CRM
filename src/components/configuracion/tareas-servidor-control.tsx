@@ -44,10 +44,10 @@ export function TareasServidorControl({ citas, contenido, configProblem = null }
         {configProblem ? ` ${configProblem}` : ""}
       </p>
       <label className="flex items-center gap-2">
-        <input type="checkbox" checked={c} onChange={(e) => setC(e.target.checked)} /> Ejecutar las tareas de cita (mensaje de inicio de Fase 2 a la hora acordada)
+        <input type="checkbox" className="h-4 w-4 shrink-0" checked={c} onChange={(e) => setC(e.target.checked)} /> Ejecutar las tareas de cita (mensaje de inicio de Fase 2 a la hora acordada)
       </label>
       <label className="flex items-center gap-2">
-        <input type="checkbox" checked={k} onChange={(e) => setK(e.target.checked)} /> Publicar las piezas de contenido programadas (solo con política habilitada y cuenta conectada)
+        <input type="checkbox" className="h-4 w-4 shrink-0" checked={k} onChange={(e) => setK(e.target.checked)} /> Publicar las piezas de contenido programadas (solo con política habilitada y cuenta conectada)
       </label>
       <div className="flex flex-wrap items-center gap-3">
         <input value={pin} onChange={(e) => setPin(e.target.value)} type="password" inputMode="numeric" autoComplete="off" placeholder="PIN" required aria-label="PIN" className="tactil w-32 rounded-lg border border-slate-300 px-2" />

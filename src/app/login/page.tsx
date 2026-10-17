@@ -2,6 +2,8 @@ import { ensurePinState } from "@/lib/acceso/pin";
 import { PinLoginForm } from "@/components/acceso/pin-login-form";
 import { LamparaIngreso } from "@/components/acceso/lampara-ingreso";
 
+export const metadata = { title: "Ingreso" };
+
 export const dynamic = "force-dynamic";
 
 /**

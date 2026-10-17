@@ -31,6 +31,7 @@ export function menuDePerfil(slug: SlugPerfil): GrupoMenu[] {
       {
         titulo: "Trabajo diario",
         items: [
+          { href: comun(slug, "hoy"), label: "Inicio", match: "/hoy" },
           { href: comun(slug, "salud"), label: "Salud del sistema", match: "/salud" },
           { href: "/estadisticas", label: "Estadísticas" },
           { href: comun(slug, "oportunidades"), label: "Oportunidades", match: "/oportunidades" },
@@ -46,7 +47,7 @@ export function menuDePerfil(slug: SlugPerfil): GrupoMenu[] {
         items: [
           { href: "/bases", label: "Bases" },
           { href: "/campanas", label: "Campañas" },
-          { href: comun(slug, "contenido"), label: "Contenido automático", match: "/contenido" },
+          { href: comun(slug, "contenido"), label: "Contenido", match: "/contenido" },
         ],
       },
       {
@@ -63,7 +64,10 @@ export function menuDePerfil(slug: SlugPerfil): GrupoMenu[] {
 
   const base = `/panel/${slug}`;
   const diario: ItemMenu[] = [
+    { href: comun(slug, "hoy"), label: "Inicio", match: "/hoy" },
     { href: comun(slug, "salud"), label: "Salud del sistema", match: "/salud" },
+    // Estadísticas en los cuatro perfiles, con la misma estructura (bloque 3).
+    { href: `${base}/estadisticas`, label: "Estadísticas" },
     { href: comun(slug, "oportunidades"), label: "Oportunidades", match: "/oportunidades" },
     { href: `${base}/seguimiento`, label: "Seguimiento" },
     { href: `${base}/agenda`, label: "Agenda" },
@@ -72,11 +76,10 @@ export function menuDePerfil(slug: SlugPerfil): GrupoMenu[] {
   const captacion: ItemMenu[] = [
     { href: `${base}/bases`, label: "Bases" },
     { href: `${base}/campanas`, label: "Campañas" },
-    { href: comun(slug, "contenido"), label: "Contenido automático", match: "/contenido" },
+    { href: comun(slug, "contenido"), label: "Contenido", match: "/contenido" },
   ];
   if (slug === "marketing") {
-    diario.unshift({ href: `${base}/estadisticas`, label: "Estadísticas" });
-    diario.splice(2, 0,
+    diario.splice(4, 0,
       { href: `${base}/prospectos`, label: "Prospectos prioritarios" },
       { href: `${base}/presupuestos`, label: "Pide presupuesto" },
       { href: `${base}/consultas-directas`, label: "Consultas directas" },

@@ -4,6 +4,10 @@ import { SalaLampara } from "@/components/ui/lampara-dibujo";
 import { MarcaPanel } from "@/components/ui/marca-panel";
 import { loadPerfiles } from "@/lib/perfiles-stats";
 import { requirePageSession } from "@/lib/acceso/pagina";
+import { marcasResueltas } from "@/lib/marca-servidor";
+import { SLUGS_PERFIL } from "@/lib/marca";
+
+export const metadata = { title: "Perfiles" };
 
 export const dynamic = "force-dynamic";
 
@@ -26,25 +30,26 @@ export const dynamic = "force-dynamic";
 export default async function PerfilesPage() {
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
-  const perfiles = await loadPerfiles();
+  const [perfiles, marcas] = await Promise.all([loadPerfiles(), marcasResueltas().catch(() => null)]);
+  const logos = marcas ? Object.fromEntries(SLUGS_PERFIL.map((s) => [s, marcas[s].logoPanel])) : undefined;
 
   return (
-    <div className="escena-oscura sala-perfil escena-3d flex items-center justify-center px-4 py-12">
+    <div className="escena-oscura sala-perfil flex items-center justify-center px-4 py-12">
       <SalaLampara />
 
       <div className="escena-capa relative w-full max-w-4xl">
         <div className="mb-8 text-center">
-          <MarcaPanel className="sello-grande mx-auto mb-5 animate-scale-in" />
+          <MarcaPanel className="sello-grande mx-auto mb-5" />
           <h1 className="font-serif text-xl font-semibold text-white sm:text-2xl">
             Elegí un perfil
           </h1>
-          <p className="mt-1 text-sm text-slate-400">Panel central</p>
+          <p className="mt-1 text-sm text-slate-300">Panel central</p>
           <div className="mt-2">
             <LogoutButton className="text-xs" />
           </div>
         </div>
 
-        <PerfilSelector perfiles={perfiles} />
+        <PerfilSelector perfiles={perfiles} logos={logos} />
       </div>
     </div>
   );

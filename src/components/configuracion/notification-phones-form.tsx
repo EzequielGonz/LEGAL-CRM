@@ -68,19 +68,26 @@ export function NotificationPhonesForm({ phones }: { phones: NotificationPhone[]
         </button>
       ) : (
         <form onSubmit={handleAdd} className="mt-2 space-y-2 rounded-lg border border-slate-200 p-3">
-          <input
-            required
-            placeholder="Teléfono (ej: 5491139435473)"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
-          />
-          <input
-            placeholder="Etiqueta (opcional, ej: Responsable)"
-            value={label}
-            onChange={(e) => setLabel(e.target.value)}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
-          />
+          <label className="block text-sm font-medium text-slate-700">
+            Teléfono, con código de país
+            <input
+              required
+              inputMode="tel"
+              placeholder="5491139435473"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
+            />
+          </label>
+          <label className="block text-sm font-medium text-slate-700">
+            Etiqueta (opcional)
+            <input
+              placeholder="Ej.: Responsable"
+              value={label}
+              onChange={(e) => setLabel(e.target.value)}
+              className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
+            />
+          </label>
           <div className="flex gap-2">
             <button type="submit" disabled={saving} className="btn-gold-sm">
               Guardar

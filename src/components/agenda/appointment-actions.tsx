@@ -66,7 +66,7 @@ export function AppointmentActions({ appointmentId, status }: { appointmentId: s
           </button>
         </>
       )}
-      {msg && <span className="text-[11px] text-slate-400">{msg}</span>}
+      {msg && <span className="text-xs text-slate-400">{msg}</span>}
     </div>
   );
 }

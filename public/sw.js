@@ -44,8 +44,8 @@ self.addEventListener("push", (event) => {
     self.registration.showNotification(title, {
       body: data.body || "",
       tag: data.tag || undefined,
-      icon: "/iconos/icono-192.png",
-      badge: "/iconos/insignia-96.png",
+      icon: "/marca/icono-192.png",
+      badge: "/marca/insignia-96.png",
       data: { url: typeof data.url === "string" && data.url.startsWith("/") ? data.url : "/telefono" },
     })
   );

@@ -5,6 +5,8 @@ import { MarcaPanel } from "@/components/ui/marca-panel";
 import { IlusComputadora, IlusTelefono } from "@/components/ui/ilustraciones";
 import { requirePageSession } from "@/lib/acceso/pagina";
 
+export const metadata = { title: "Inicio" };
+
 export const dynamic = "force-dynamic";
 
 /**
@@ -30,20 +32,20 @@ export default async function InicioPage() {
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
   return (
-    <div data-tema="neutro" className="escena-oscura escena-3d flex items-center justify-center px-4 py-12">
+    <div data-tema="neutro" className="escena-oscura flex items-center justify-center px-4 py-12">
       <SalaLampara />
 
       <div className="escena-capa relative w-full max-w-3xl text-center">
-        <MarcaPanel className="sello-grande mx-auto mb-5 animate-scale-in" />
-        <h1 className="animate-fade-in-up mb-2 font-serif text-2xl font-semibold text-white sm:text-3xl">
+        <MarcaPanel className="sello-grande mx-auto mb-5" />
+        <h1 className="mb-2 font-serif text-2xl font-semibold text-white sm:text-3xl">
           ¿Cómo querés utilizar el panel?
         </h1>
-        <p className="animate-fade-in-up mb-8 text-sm text-slate-400" style={{ animationDelay: "60ms" }}>
+        <p className="mb-8 text-sm text-slate-300">
           Panel central
         </p>
 
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-          <TarjetaLuz href="/telefono" className="animate-scale-in rounded-3xl p-8 text-left" style={{ animationDelay: "120ms" }}>
+          <TarjetaLuz href="/telefono" className="rounded-3xl p-8 text-left">
             <span className="ilus-acceso mb-4">
               <IlusTelefono className="h-24 w-24" id="il-acceso-tel" />
             </span>
@@ -56,7 +58,7 @@ export default async function InicioPage() {
             </p>
           </TarjetaLuz>
 
-          <TarjetaLuz href="/perfiles" className="animate-scale-in rounded-3xl p-8 text-left" style={{ animationDelay: "200ms" }}>
+          <TarjetaLuz href="/perfiles" className="rounded-3xl p-8 text-left">
             <span className="ilus-acceso mb-4">
               <IlusComputadora className="h-24 w-24" id="il-acceso-pc" />
             </span>

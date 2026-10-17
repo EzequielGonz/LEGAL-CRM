@@ -115,9 +115,11 @@ export function CalendarSettings({
                 </p>
               </div>
               <button
+                type="button"
                 onClick={() => archive(e.id)}
                 disabled={archivingId === e.id}
-                className="shrink-0 text-xs text-slate-500 hover:underline disabled:opacity-50"
+                aria-label={`Archivar la excepción del ${dayLabel(e.day)}`}
+                className="tactil inline-flex shrink-0 items-center text-sm text-slate-700 hover:underline disabled:opacity-50"
               >
                 {archivingId === e.id ? "Archivando…" : "Archivar"}
               </button>
@@ -127,7 +129,7 @@ export function CalendarSettings({
         </ul>
       </div>
 
-      {error && <p className="text-xs text-red-600">{error}</p>}
+      <p role="alert" className={error ? "text-sm font-medium text-red-700" : "sr-only"}>{error ?? ""}</p>
 
       {!open ? (
         <button onClick={() => setOpen(true)} className="text-xs font-medium text-blue-600 hover:underline">
@@ -135,7 +137,7 @@ export function CalendarSettings({
         </button>
       ) : (
         <form onSubmit={add} className="space-y-2 rounded-lg border border-slate-200 p-3">
-          <label className="block text-xs text-slate-600">
+          <label className="block text-sm font-medium text-slate-700">
             Día
             <input
               type="date"
@@ -145,26 +147,27 @@ export function CalendarSettings({
               className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
             />
           </label>
-          <div className="flex flex-wrap gap-4 text-xs text-slate-700">
-            <label className="flex items-center gap-1">
-              <input type="radio" checked={closed} onChange={() => setClosed(true)} /> Cerrado todo el día
+          <fieldset className="flex flex-wrap gap-4 text-sm text-slate-700">
+            <legend className="sr-only">Tipo de excepción</legend>
+            <label className="tactil flex items-center gap-2">
+              <input type="radio" name="tipo-excepcion" className="h-4 w-4" checked={closed} onChange={() => setClosed(true)} /> Cerrado todo el día
             </label>
-            <label className="flex items-center gap-1">
-              <input type="radio" checked={!closed} onChange={() => setClosed(false)} /> Horario más corto
+            <label className="tactil flex items-center gap-2">
+              <input type="radio" name="tipo-excepcion" className="h-4 w-4" checked={!closed} onChange={() => setClosed(false)} /> Horario más corto
             </label>
-          </div>
+          </fieldset>
           {!closed && (
-            <div className="flex items-center gap-2 text-xs text-slate-700">
-              De
-              <select value={startHour} onChange={(e) => setStartHour(e.target.value)} className="rounded border border-slate-300 px-2 py-1">
+            <div className="flex items-center gap-2 text-sm text-slate-700">
+              <span aria-hidden="true">De</span>
+              <select aria-label="Desde la hora" value={startHour} onChange={(e) => setStartHour(e.target.value)} className="rounded border border-slate-300 px-2 py-1">
                 {hours.slice(0, -1).map((h) => (
                   <option key={h} value={h}>
                     {h}
                   </option>
                 ))}
               </select>
-              a
-              <select value={endHour} onChange={(e) => setEndHour(e.target.value)} className="rounded border border-slate-300 px-2 py-1">
+              <span aria-hidden="true">a</span>
+              <select aria-label="Hasta la hora" value={endHour} onChange={(e) => setEndHour(e.target.value)} className="rounded border border-slate-300 px-2 py-1">
                 {hours.slice(1).map((h) => (
                   <option key={h} value={h}>
                     {h}
@@ -174,12 +177,15 @@ export function CalendarSettings({
               hs
             </div>
           )}
-          <input
-            placeholder="Motivo (opcional, ej: cierre del estudio)"
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
-          />
+          <label className="block text-sm font-medium text-slate-700">
+            Motivo (opcional)
+            <input
+              placeholder="Ej.: cierre del estudio"
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
+            />
+          </label>
           <div className="flex gap-2">
             <button type="submit" disabled={saving} className="btn-gold text-xs disabled:opacity-50">
               {saving ? "Guardando…" : "Guardar excepción"}

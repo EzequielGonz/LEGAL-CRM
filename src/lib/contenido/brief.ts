@@ -12,12 +12,14 @@
  */
 
 import type { Canal, Formato, PiezaContenido } from "@/lib/contenido/politica";
+import { colorPrincipal, normalizarColores } from "@/lib/marca";
 
 export interface BriefMarca {
   rubro: "juridico" | "coberturas_medicas" | "agencia_0km" | "marketing";
   nombre_publico: string | null;
   logo_ref: string | null;
-  colores: { primario?: string; secundario?: string; texto?: string };
+  /** Clave canónica `principal`; `primario` se lee como alias (ver `normalizarColores`). */
+  colores: { principal?: string; primario?: string; secundario?: string; texto?: string; [clave: string]: string | undefined };
   servicios: string[];
   publico: string | null;
   zonas: string | null;
@@ -37,7 +39,7 @@ export function faltantesDelBrief(b: Partial<BriefMarca>): string[] {
   if (!b.publico?.trim()) f.push("público al que se habla");
   if (!b.tono?.trim()) f.push("tono");
   if (!b.logo_ref) f.push("logo (se usa un marcador neutro hasta recibirlo)");
-  if (!b.colores?.primario) f.push("color primario");
+  if (!colorPrincipal(b.colores)) f.push("color principal");
   return f;
 }
 
@@ -106,8 +108,9 @@ function partirLineas(texto: string, max = 28): string[] {
 
 /** Imagen cuadrada (1080×1080) con el titular, el nombre público y el logo o un marcador neutro. */
 export function disenoSvg(input: { titular: string; marca: string; colores: BriefMarca["colores"]; logoRef: string | null; pie?: string }): string {
-  const primario = /^#[0-9a-f]{6}$/i.test(input.colores.primario ?? "") ? input.colores.primario! : "#1f2937";
-  const textoColor = /^#[0-9a-f]{6}$/i.test(input.colores.texto ?? "") ? input.colores.texto! : "#ffffff";
+  const c = normalizarColores(input.colores);
+  const primario = c.principal ?? "#1f2937";
+  const textoColor = c.texto ?? c.claro ?? "#ffffff";
   const lineas = partirLineas(input.titular);
   const logo = input.logoRef && /^https?:\/\//.test(input.logoRef)
     ? `<image href="${escapar(input.logoRef)}" x="80" y="80" width="160" height="160" preserveAspectRatio="xMidYMid meet"/>`
@@ -121,7 +124,18 @@ export function disenoSvg(input: { titular: string; marca: string; colores: Brie
  * misma salida. Usa solo afirmaciones autorizadas del brief; el resto del
  * texto es orientación general sin cifras ni promesas.
  */
-export function generarPieza(input: { brief: BriefMarca; canal: Canal; formato?: Formato; indicePilar: number; cta?: { tipo: string; url: string } | null; fecha?: string }): PiezaGenerada {
+export function generarPieza(input: {
+  brief: BriefMarca;
+  canal: Canal;
+  formato?: Formato;
+  indicePilar: number;
+  cta?: { tipo: string; url: string } | null;
+  fecha?: string;
+  /** «Qué querés comunicar» del recorrido guiado: reemplaza el titular del pilar. */
+  tema?: string | null;
+  /** Texto escrito o corregido a mano (Avanzado): reemplaza el cuerpo generado. */
+  textoPropio?: string | null;
+}): PiezaGenerada {
   const { brief, canal } = input;
   const pilares = PILARES[brief.rubro];
   const p = pilares[((input.indicePilar % pilares.length) + pilares.length) % pilares.length];
@@ -130,15 +144,17 @@ export function generarPieza(input: { brief: BriefMarca; canal: Canal; formato?:
   const faltan = faltantesDelBrief(brief);
   if (!briefCompleto(brief)) motivos.push(`brief incompleto: ${faltan.join(", ")}`);
   const afirmacion = brief.afirmaciones_autorizadas[input.indicePilar % Math.max(1, brief.afirmaciones_autorizadas.length)] ?? null;
-  const titular = p.ejemplo.replace(/\.$/, "");
+  const tema = (input.tema ?? "").replace(/\s+/g, " ").trim().slice(0, 120);
+  const titular = (tema || p.ejemplo).replace(/\.$/, "");
   const cuerpo = [
     titular + ".",
     afirmacion ? afirmacion.replace(/\.$/, "") + "." : `En ${marca} ${brief.servicios[0] ? `trabajamos con ${brief.servicios[0].toLowerCase()}` : "te orientamos"}${brief.zonas ? ` en ${brief.zonas}` : ""}.`,
     input.cta ? `${ctaTexto(input.cta.tipo)}` : "Consultá sin compromiso: una persona te responde.",
   ].join("\n\n");
   const hashtags = canal === "instagram" ? `\n\n#${brief.rubro.replace(/_/g, "")} #${marca.replace(/[^a-záéíóúñ0-9]/gi, "").toLowerCase() || "marca"}` : "";
-  const texto = cuerpo + hashtags;
-  const prohibidas = textoProhibido(texto, brief.prohibido);
+  const propio = (input.textoPropio ?? "").trim().slice(0, 2200);
+  const texto = propio || cuerpo + hashtags;
+  const prohibidas = textoProhibido(`${titular}\n${texto}`, brief.prohibido);
   if (prohibidas.length) motivos.push(`texto con frases no autorizadas: ${prohibidas.join(", ")}`);
   const svg = disenoSvg({ titular, marca, colores: brief.colores, logoRef: brief.logo_ref, pie: brief.contacto?.web ?? undefined });
   return {
