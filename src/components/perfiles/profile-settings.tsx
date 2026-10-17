@@ -102,6 +102,7 @@ export function ProfileSettings({
   }
 
   const input = "rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold";
+  const etiqueta = "text-sm font-medium text-slate-700";
 
   return (
     <div className="space-y-6">
@@ -120,17 +121,17 @@ export function ProfileSettings({
       )}
 
       <div className="grid gap-3 sm:grid-cols-3">
-        <label className="text-xs font-medium text-slate-600">
+        <label className={etiqueta}>
           Nombre del perfil (uso interno)
           <input value={name} onChange={(e) => setName(e.target.value)} className={`${input} mt-1 w-full`} />
         </label>
-        <label className="text-xs font-medium text-slate-600">
+        <label className={etiqueta}>
           Nombre del perfil o marca (lo ve el contacto)
-          <input value={brand} onChange={(e) => setBrand(e.target.value)} placeholder="Sin cargar" className={`${input} mt-1 w-full`} />
+          <input value={brand} onChange={(e) => setBrand(e.target.value)} className={`${input} mt-1 w-full`} />
         </label>
-        <label className="text-xs font-medium text-slate-600">
+        <label className={etiqueta}>
           Nombre con el que se presenta el agente
-          <input value={presentation} onChange={(e) => setPresentation(e.target.value)} placeholder="Sin cargar" className={`${input} mt-1 w-full`} />
+          <input value={presentation} onChange={(e) => setPresentation(e.target.value)} className={`${input} mt-1 w-full`} />
         </label>
       </div>
       <div className="flex items-center gap-3">
@@ -152,7 +153,7 @@ export function ProfileSettings({
                 <p className="font-medium text-slate-800">
                   {l.label} <span className="text-xs font-normal text-slate-500">· {AREA_LABEL[l.area] ?? l.area}{l.phone_display ? ` · ${l.phone_display}` : ""}</span>
                 </p>
-                <p className="text-[11px] text-slate-500">
+                <p className="text-xs text-slate-600">
                   Variables {l.credential_key}_* ·{" "}
                   {l.credentials.ok ? (
                     <span className="text-green-700">credenciales cargadas</span>
@@ -162,16 +163,16 @@ export function ProfileSettings({
                   {l.daily_limit ? ` · límite ${l.daily_limit}/día` : ""}
                 </p>
               </div>
-              <div className="flex flex-wrap items-center gap-3 text-xs text-slate-600">
-                <label className="flex items-center gap-1">
-                  <input type="checkbox" checked={l.answers_with_agent} onChange={(e) => patchLine(l.id, { answers_with_agent: e.target.checked })} />
+              <div className="flex flex-wrap items-center gap-3 text-sm text-slate-700">
+                <label className="tactil flex items-center gap-2">
+                  <input type="checkbox" aria-label={`Responde con agente: ${l.label}`} className="h-4 w-4" checked={l.answers_with_agent} onChange={(e) => patchLine(l.id, { answers_with_agent: e.target.checked })} />
                   Agente
                 </label>
-                <label className="flex items-center gap-1">
-                  <input type="checkbox" checked={l.use_for_campaigns} onChange={(e) => patchLine(l.id, { use_for_campaigns: e.target.checked })} />
+                <label className="tactil flex items-center gap-2">
+                  <input type="checkbox" aria-label={`Se usa para campañas: ${l.label}`} className="h-4 w-4" checked={l.use_for_campaigns} onChange={(e) => patchLine(l.id, { use_for_campaigns: e.target.checked })} />
                   Campañas
                 </label>
-                <button type="button" onClick={() => patchLine(l.id, { active: !l.active })} className="rounded border border-slate-300 px-2 py-1 hover:bg-slate-50">
+                <button type="button" onClick={() => patchLine(l.id, { active: !l.active })} aria-label={`${l.active ? "Desactivar" : "Activar"} la línea ${l.label}`} className="tactil rounded border border-slate-300 px-3 hover:bg-slate-50">
                   {l.active ? "Desactivar" : "Activar"}
                 </button>
               </div>
@@ -202,28 +203,43 @@ export function ProfileSettings({
           </div>
         )}
 
-        <div className="mt-3 grid gap-2 sm:grid-cols-5">
+        <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
           {areas.length > 1 && (
-            <select value={newLine.area} onChange={(e) => setNewLine({ ...newLine, area: e.target.value })} className={input}>
-              {areas.map((a) => (
-                <option key={a} value={a}>
-                  {AREA_LABEL[a] ?? a}
-                </option>
-              ))}
-            </select>
+            <label className={etiqueta}>
+              Área de la línea
+              <select value={newLine.area} onChange={(e) => setNewLine({ ...newLine, area: e.target.value })} className={`${input} mt-1 w-full`}>
+                {areas.map((a) => (
+                  <option key={a} value={a}>
+                    {AREA_LABEL[a] ?? a}
+                  </option>
+                ))}
+              </select>
+            </label>
           )}
-          <input value={newLine.label} onChange={(e) => setNewLine({ ...newLine, label: e.target.value })} placeholder="Nombre de la línea" className={input} />
-          <input value={newLine.phone_display} onChange={(e) => setNewLine({ ...newLine, phone_display: e.target.value })} placeholder="Número (para mostrar)" className={input} />
-          <input value={newLine.credential_key} onChange={(e) => setNewLine({ ...newLine, credential_key: e.target.value.toUpperCase() })} placeholder="Prefijo, ej. WHATSAPP_CIVIL" className={`${input} font-mono`} />
-          <input value={newLine.daily_limit} onChange={(e) => setNewLine({ ...newLine, daily_limit: e.target.value.replace(/\D/g, "") })} placeholder="Límite diario (opcional)" className={input} />
+          <label className={etiqueta}>
+            Nombre de la línea
+            <input value={newLine.label} onChange={(e) => setNewLine({ ...newLine, label: e.target.value })} className={`${input} mt-1 w-full`} />
+          </label>
+          <label className={etiqueta}>
+            Número para mostrar
+            <input value={newLine.phone_display} onChange={(e) => setNewLine({ ...newLine, phone_display: e.target.value })} inputMode="tel" className={`${input} mt-1 w-full`} />
+          </label>
+          <label className={etiqueta}>
+            Prefijo de credenciales
+            <input value={newLine.credential_key} onChange={(e) => setNewLine({ ...newLine, credential_key: e.target.value.toUpperCase() })} placeholder="WHATSAPP_CIVIL" aria-describedby="ayuda-prefijo" className={`${input} mt-1 w-full font-mono`} />
+          </label>
+          <label className={etiqueta}>
+            Límite diario (opcional)
+            <input value={newLine.daily_limit} onChange={(e) => setNewLine({ ...newLine, daily_limit: e.target.value.replace(/\D/g, "") })} inputMode="numeric" className={`${input} mt-1 w-full`} />
+          </label>
         </div>
         <div className="mt-2 flex items-center gap-3">
           <button type="button" onClick={() => addLine()} className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">
             Registrar línea
           </button>
-          {lineMsg && <span className={`text-xs ${lineMsg.ok ? "text-green-600" : "text-red-600"}`}>{lineMsg.text}</span>}
+          <span role="status" className={`text-sm ${lineMsg?.ok ? "text-green-700" : "text-red-700"}`}>{lineMsg?.text ?? ""}</span>
         </div>
-        <p className="mt-2 text-[11px] text-slate-400">
+        <p id="ayuda-prefijo" className="mt-2 text-xs text-slate-600">
           Las claves de cada línea se cargan en la configuración privada del servidor como PREFIJO_PHONE_NUMBER_ID y PREFIJO_ACCESS_TOKEN. Acá nunca se muestran.
         </p>
       </div>

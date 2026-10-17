@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { EnlaceDetalle } from "@/components/ui/enlaces-navegacion";
 import { followupOverview, type FollowupTaskRow } from "@/lib/seguimiento/panel";
 import { FOLLOWUP_TASK_STATUS_LABEL } from "@/lib/seguimiento/circuito";
 import { getAutomationPause } from "@/lib/automation-pause";
@@ -19,14 +19,14 @@ function fmt(iso: string | null | undefined): string {
 function Who({ name, phone, contactId, conversationId }: { name?: string | null; phone?: string | null; contactId: string; conversationId?: string | null }) {
   return (
     <span>
-      <Link href={`/ficha/${contactId}`} className="font-medium text-slate-800 hover:underline">
+      <EnlaceDetalle href={`/ficha/${contactId}`} className="font-medium text-slate-800 hover:underline">
         {name || phone || "Sin nombre"}
-      </Link>
+      </EnlaceDetalle>
       {phone && name ? <span className="ml-1 text-xs text-slate-400">{phone}</span> : null}
       {conversationId && (
-        <Link href={`/inbox/${conversationId}`} className="ml-2 text-xs text-slate-500 hover:underline">
+        <EnlaceDetalle href={`/inbox/${conversationId}`} className="ml-2 text-xs text-slate-500 hover:underline">
           conversación
-        </Link>
+        </EnlaceDetalle>
       )}
     </span>
   );

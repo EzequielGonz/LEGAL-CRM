@@ -1,3 +1,4 @@
+import { EnlaceDetalle } from "@/components/ui/enlaces-navegacion";
 import Link from "next/link";
 import { ANALYSIS_LABEL, OutreachBadge, PriorityBadge } from "./lead-badges";
 import { ETAPA_LABEL, type EtapaVenta } from "@/lib/marketing/venta";
@@ -82,9 +83,9 @@ export function LeadList({
                   <span className="mt-1 block text-xs font-medium text-slate-700">{ETAPA_LABEL[l.sale_stage as EtapaVenta] ?? l.sale_stage}</span>
                 )}
                 {l.contact_id && (
-                  <Link href={`/ficha/${l.contact_id}`} className="mt-1 block text-xs text-slate-600 underline">
+                  <EnlaceDetalle href={`/ficha/${l.contact_id}`} className="mt-1 block text-xs text-slate-600 underline">
                     Ficha y conversación
-                  </Link>
+                  </EnlaceDetalle>
                 )}
               </td>
               {mode === "seguimiento" && (

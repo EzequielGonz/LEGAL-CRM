@@ -1,3 +1,4 @@
+import { EnlaceDetalle } from "@/components/ui/enlaces-navegacion";
 import { GuardarAhora } from "@/components/adjuntos/guardar-ahora";
 import { KIND_LABEL, STATUS_LABEL, formatBytes, type AttachmentKind, type AttachmentStatus } from "@/lib/adjuntos/modelo";
 
@@ -57,9 +58,9 @@ export function AdjuntosLista({ rows, showConversation = false }: { rows: Attach
                 </a>
               )}
               {showConversation && a.conversation_id && (
-                <a href={`/inbox/${a.conversation_id}`} className="text-slate-500 hover:underline">
+                <EnlaceDetalle href={`/inbox/${a.conversation_id}`} className="text-slate-500 hover:underline">
                   Conversación
-                </a>
+                </EnlaceDetalle>
               )}
               {canSave && <GuardarAhora attachmentId={a.id} />}
             </div>

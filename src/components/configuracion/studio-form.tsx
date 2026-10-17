@@ -38,33 +38,44 @@ export function StudioForm() {
 
   return (
     <form onSubmit={handleSubmit} className="mt-3 space-y-2 rounded-lg border border-slate-200 p-3">
-      <input
-        required
-        placeholder="Nombre del estudio"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
-      />
-      <select
-        value={area}
-        onChange={(e) => setArea(e.target.value as "civil" | "penal")}
-        className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
-      >
-        <option value="civil">Civil</option>
-        <option value="penal">Penal</option>
-      </select>
-      <input
-        placeholder="Teléfono de contacto"
-        value={phone}
-        onChange={(e) => setPhone(e.target.value)}
-        className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
-      />
-      <input
-        placeholder="Email de contacto"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
-      />
+      <label className="block text-sm font-medium text-slate-700">
+        Nombre del estudio
+        <input
+          required
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
+        />
+      </label>
+      <label className="block text-sm font-medium text-slate-700">
+        Área
+        <select
+          value={area}
+          onChange={(e) => setArea(e.target.value as "civil" | "penal")}
+          className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
+        >
+          <option value="civil">Civil</option>
+          <option value="penal">Penal</option>
+        </select>
+      </label>
+      <label className="block text-sm font-medium text-slate-700">
+        Teléfono de contacto
+        <input
+          inputMode="tel"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
+        />
+      </label>
+      <label className="block text-sm font-medium text-slate-700">
+        Email de contacto
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
+        />
+      </label>
       <div className="flex gap-2">
         <button
           type="submit"
