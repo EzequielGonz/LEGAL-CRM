@@ -52,8 +52,8 @@ export function PinLoginForm({ configured, next }: { configured: boolean; next: 
     >
       <div className="mb-6 flex flex-col items-center text-center">
         <SelloLampara className="mb-4" />
-        <h1 className="font-serif text-2xl font-semibold text-slate-900">Panel de Captación</h1>
-        <p className="mt-1.5 text-sm text-slate-500">Ingresá el PIN del panel para entrar.</p>
+        <h1 className="pin-titulo font-serif text-2xl font-semibold">Panel de Captación</h1>
+        <p className="pin-bajada mt-1.5 text-sm">Ingresá el PIN del panel para entrar.</p>
       </div>
 
       {!configured ? (
@@ -81,12 +81,6 @@ export function PinLoginForm({ configured, next }: { configured: boolean; next: 
             aria-describedby={error ? "pin-error" : undefined}
             className="pin-campo"
           />
-          <div className="pin-progreso" aria-hidden="true">
-            {Array.from({ length: 6 }, (_, i) => (
-              <span key={i} className={i < pin.length ? "lleno" : ""} />
-            ))}
-          </div>
-
           {error && (
             <p id="pin-error" role="alert" className="pin-error animate-fade-in">
               {error}

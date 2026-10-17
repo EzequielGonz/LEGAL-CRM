@@ -28,7 +28,7 @@ export default async function PerfilesPage() {
   const perfiles = await loadPerfiles();
 
   return (
-    <div className="escena-oscura escena-3d flex items-center justify-center px-4 py-12">
+    <div className="escena-oscura sala-perfil escena-3d flex items-center justify-center px-4 py-12">
       <SalaLampara />
       <LamparaDecorativa className="sala-lampara-lateral sala-lampara-ancha" />
 
