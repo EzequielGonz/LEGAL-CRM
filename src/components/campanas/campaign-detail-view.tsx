@@ -111,7 +111,7 @@ export async function CampaignDetailView({
             {" · "}envía de lunes a sábado, de {hours.start} a {hours.end}hs (Arg.)
           </p>
         </div>
-        <div className="flex items-start gap-2">
+        <div className="flex flex-wrap items-start gap-2">
           <CampaignControls campaignId={campaign.id} campaignName={campaign.name} status={campaign.status} />
           <DeleteCampaignButton
             campaignId={campaign.id}
@@ -151,7 +151,7 @@ export async function CampaignDetailView({
         ))}
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+      <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
         <table className="w-full text-sm">
           <thead className="border-b border-slate-200 bg-slate-50 text-left text-xs uppercase text-slate-500">
             <tr>
