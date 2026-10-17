@@ -3,6 +3,7 @@ import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import "./premium.css";
 import "./controles.css";
+import "./estudio.css";
 
 // Fuentes autoalojadas por Next (16/10): antes se pedían con un @import a
 // Google Fonts dentro del CSS, que bloqueaba el primer pintado en cadena.
