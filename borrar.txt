@@ -1,5 +1,0 @@
-src/app/escena.css
-src/app/estudio.css
-src/app/inmersivo.css
-src/app/premium.css
-src/components/ui/efectos-3d.tsx
