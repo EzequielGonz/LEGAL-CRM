@@ -147,7 +147,7 @@ export function LamparaIngreso({ children }: { children: React.ReactNode }) {
   const y2 = CORDON_Y0 + CORDON_LARGO + tiron;
 
   return (
-    <div className={`lampara-escena${prendida ? " esta-prendida" : ""}${encendiendo ? " encendiendo" : ""}`}>
+    <div className={`lampara-escena escena-3d${prendida ? " esta-prendida" : ""}${encendiendo ? " encendiendo" : ""}`}>
       {/* Fondo: luz ambiente, viñeta y grano fino */}
       <div aria-hidden="true" className="lampara-ambiente" />
       <div aria-hidden="true" className="lampara-vineta" />
@@ -298,7 +298,7 @@ export function LamparaIngreso({ children }: { children: React.ReactNode }) {
         </div>
 
         {/* Tarjeta del ingreso */}
-        <div className="lampara-tarjeta">{children}</div>
+        <div className="lampara-tarjeta" data-3d="suave">{children}</div>
       </div>
     </div>
   );
