@@ -462,3 +462,16 @@
   scrollbar-width: thin;
   scrollbar-color: rgb(255 255 255 / 0.18) transparent;
 }
+
+/* Logos de perfil sobre placa negra (17/10, pedido de la responsable):
+   las imágenes tienen fondo transparente. */
+.escena-oscura button[data-3d] img,
+.logo-perfil,
+.menu-marca > span:first-child,
+.barra-movil > div > span:first-child {
+  background: #000 !important;
+}
+.menu-marca > span:first-child > span,
+.barra-movil > div > span:first-child > span {
+  color: #fff !important;
+}
