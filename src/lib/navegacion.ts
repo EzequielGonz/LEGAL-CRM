@@ -30,7 +30,7 @@ export function etiquetaVolver(volver: string | null | undefined): string {
   const camino = v.split("?")[0];
   if (camino.startsWith("/ficha/") || /^\/prospectos\/[^/]+$/.test(camino) || /^\/panel\/marketing\/lead\//.test(camino)) return "Volver a la ficha";
   if (camino.startsWith("/inbox/") || camino.startsWith("/conversacion/")) return "Volver a la conversación";
-  if (camino === "/inicio" || camino === "/perfiles") return "Volver al inicio";
+  if (camino === "/inicio" || camino === "/perfiles" || camino === "/hoy") return "Volver al inicio";
   if (camino === "/comparacion-agentes") return "Volver a la comparación";
   if (camino === "/revision") return "Volver a Revisión";
   if (camino === "/telefono" || /^\/telefono\/[^/]+$/.test(camino)) return "Volver al teléfono";
@@ -38,9 +38,9 @@ export function etiquetaVolver(volver: string | null | undefined): string {
   return "Volver a la lista";
 }
 
-/** Pantalla principal de cada perfil (Jurídico conserva sus rutas sin prefijo). */
+/** Inicio de cada perfil: prioridades y siguiente acción (rediseño 17/10, bloque 3). */
 export function inicioDePerfil(slug: SlugPerfil): string {
-  return slug === "juridico" ? "/" : `/panel/${slug}`;
+  return `/hoy?perfil=${slug}`;
 }
 
 /** Perfil al que pertenece un área de contacto (civil y penal son Jurídico). */

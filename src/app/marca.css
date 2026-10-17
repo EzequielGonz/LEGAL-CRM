@@ -1,0 +1,149 @@
+/* Rediseño 17/10 · bloque 2: marca y roles de color.
+   Nivel semántico de los tokens: cada perfil asigna una función a los
+   colores de su paleta aprobada (ver ROLES en src/lib/marca.ts, contrastes
+   comprobados en tests/unitarias/marca.test.ts). */
+:root, [data-tema="juridico"] {
+  --rol-superficie: #F5F4F0; --rol-texto: #112250; --rol-texto-suave: #3B507D;
+  --rol-borde-control: #3B507D; --rol-divisor: #BEB7A7;
+  --rol-seleccion: #E7E2CE; --rol-texto-seleccion: #112250;
+  --rol-accion: #112250; --rol-texto-accion: #F5F4F0;
+  --rol-menu: #112250; --rol-texto-menu: #F5F4F0;
+}
+[data-tema="coberturas_medicas"] {
+  --rol-superficie: #FFFFFF; --rol-texto: #051F20; --rol-texto-suave: #235347;
+  --rol-borde-control: #235347; --rol-divisor: #8EB69B;
+  --rol-seleccion: #DAF1DE; --rol-texto-seleccion: #0B2B26;
+  --rol-accion: #163832; --rol-texto-accion: #DAF1DE;
+  --rol-menu: #051F20; --rol-texto-menu: #DAF1DE;
+}
+[data-tema="agencia_0km"] {
+  --rol-superficie: #FFFFFF; --rol-texto: #000521; --rol-texto-suave: #011F65;
+  --rol-borde-control: #0E4EB2; --rol-divisor: #2078CF;
+  --rol-seleccion: #020C47; --rol-texto-seleccion: #FFFFFF;
+  --rol-accion: #0E4EB2; --rol-texto-accion: #FFFFFF;
+  --rol-menu: #000521; --rol-texto-menu: #FFFFFF;
+}
+[data-tema="marketing"] {
+  --rol-superficie: #FFFFFF; --rol-texto: #1B1B1B; --rol-texto-suave: #323232;
+  --rol-borde-control: #323232; --rol-divisor: #FFE7D0;
+  --rol-seleccion: #FFE7D0; --rol-texto-seleccion: #1B1B1B;
+  --rol-accion: #FC6E20; --rol-texto-accion: #1B1B1B;
+  --rol-menu: #1B1B1B; --rol-texto-menu: #FFE7D0;
+}
+
+/* Selección de texto con el color de selección del perfil. */
+[data-tema] ::selection {
+  background: var(--rol-seleccion);
+  color: var(--rol-texto-seleccion);
+}
+
+/* ---------- Placa del logo de perfil ---------- */
+.placa-logo {
+  position: relative;
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  overflow: hidden;
+  aspect-ratio: 1;
+  border-radius: 22%;
+  background: #000;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08), 0 6px 14px -10px rgb(0 0 0 / 0.6);
+}
+.placa-logo img {
+  display: block;
+  width: 84%;
+  height: 84%;
+  object-fit: contain;
+  /* sin filtros: la imagen se ve tal cual la entregó la marca */
+  filter: none;
+}
+.placa-logo-sm { width: 2.75rem; }
+.placa-logo-md { width: 3rem; }
+.placa-logo-lg { width: 100%; height: 100%; }
+.placa-logo-inicial {
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: #fff;
+}
+
+/* ---------- Marca maestra del panel ---------- */
+.marca-maestra {
+  display: inline-block;
+  flex: none;
+  width: 2.25rem;
+  height: 2.25rem;
+}
+.marca-maestra.sello-grande {
+  width: 4rem;
+  height: 4rem;
+}
+
+/* ---------- Simple / Avanzado (bloque 3) ---------- */
+[data-nivel="simple"] .solo-avanzado,
+[data-nivel="avanzado"] .solo-simple {
+  display: none !important;
+}
+.selector-nivel { display: inline-flex; align-items: center; }
+.selector-nivel-grupo {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 999px;
+  background: rgb(var(--c-slate-100));
+  box-shadow: inset 0 0 0 1px rgb(var(--c-slate-300));
+}
+.selector-nivel-opcion {
+  min-height: 2.25rem;
+  min-width: 5.5rem;
+  padding: 0 0.9rem;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgb(var(--c-slate-700));
+  transition: background-color 140ms ease, color 140ms ease, box-shadow 140ms ease;
+}
+.selector-nivel-opcion:hover { color: rgb(var(--c-slate-900)); }
+.selector-nivel-opcion[aria-checked="true"] {
+  background: #fff;
+  color: rgb(var(--c-slate-950));
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.12), inset 0 0 0 1.5px rgb(var(--c-slate-700));
+}
+.selector-nivel-opcion:focus-visible {
+  outline: 2px solid rgb(var(--c-slate-900));
+  outline-offset: 2px;
+}
+.selector-nivel-oscuro .selector-nivel-grupo {
+  background: rgb(255 255 255 / 0.08);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.18);
+}
+.selector-nivel-oscuro .selector-nivel-opcion { color: rgb(255 255 255 / 0.82); min-width: 4.75rem; padding: 0 0.7rem; }
+.selector-nivel-oscuro .selector-nivel-opcion[aria-checked="true"] { background: #fff; color: #111; }
+.selector-nivel-oscuro .selector-nivel-opcion:focus-visible { outline-color: #fff; }
+@media (prefers-reduced-motion: reduce) {
+  .selector-nivel-opcion { transition: none; }
+}
+
+/* Opciones en forma de chip (temas sugeridos, canal) */
+.chip-opcion {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 0.9rem;
+  border-radius: 999px;
+  border: 1px solid rgb(var(--c-slate-300));
+  background: #fff;
+  font-size: 0.875rem;
+  color: rgb(var(--c-slate-800));
+  transition: background-color 140ms ease, border-color 140ms ease;
+}
+.chip-opcion:hover { border-color: rgb(var(--c-slate-500)); }
+.chip-opcion[aria-pressed="true"],
+.chip-opcion:has(input:checked) {
+  border-color: rgb(var(--c-slate-900));
+  background: rgb(var(--c-slate-900));
+  color: #fff;
+  font-weight: 500;
+}
+.chip-opcion:has(input:focus-visible) { outline: 2px solid rgb(var(--c-slate-900)); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .chip-opcion { transition: none; } }
