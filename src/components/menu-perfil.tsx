@@ -23,7 +23,7 @@ export function MenuPerfil({ slug, nombre, logo }: { slug: SlugPerfil; nombre?: 
   const [abierto, setAbierto] = useState(false);
   const [logoFallo, setLogoFallo] = useState(false);
   const titulo = nombre?.trim() || marca.nombre;
-  const logoUrl = logo?.trim() || marca.logo;
+  const logoUrl = marca.logo || logo?.trim() || "";
 
   useEffect(() => setAbierto(false), [pathname]);
 
