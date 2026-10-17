@@ -81,6 +81,7 @@ export function PerfilSelector({ perfiles: initial }: { perfiles: PerfilStats[] 
                   : "border-white/10 bg-white/5 opacity-70 hover:-translate-y-0.5 hover:bg-white/10 hover:opacity-100"
               )}
               title={p.name}
+              data-3d="fuerte"
               aria-label={`Ver perfil ${p.name}`}
               aria-pressed={isActive}
             >
@@ -92,7 +93,7 @@ export function PerfilSelector({ perfiles: initial }: { perfiles: PerfilStats[] 
       </div>
 
       {activo && (
-        <div key={activo.id} className="flex-1 animate-fade-in-up rounded-[2rem] border border-white/10 bg-gradient-to-br from-white/[0.08] to-white/[0.02] p-6 shadow-navy backdrop-blur sm:p-8">
+        <div key={activo.id} data-3d="suave" className="vidrio-perfil flex-1 animate-fade-in-up rounded-[2rem] border border-white/10 bg-gradient-to-br from-white/[0.08] to-white/[0.02] p-6 shadow-navy backdrop-blur sm:p-8">
           <p className="text-xs uppercase tracking-wider text-gold-300">{activo.name}</p>
           <h2 className="mb-1 font-serif text-2xl font-semibold text-white">Estadísticas</h2>
           {activo.description && (
