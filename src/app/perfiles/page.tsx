@@ -1,6 +1,7 @@
 import { LogoutButton } from "@/components/acceso/logout-button";
 import { PerfilSelector } from "@/components/perfiles/perfil-selector";
-import { LamparaDecorativa, SalaLampara, SelloLampara } from "@/components/ui/lampara-dibujo";
+import { SalaLampara } from "@/components/ui/lampara-dibujo";
+import { MarcaPanel } from "@/components/ui/marca-panel";
 import { loadPerfiles } from "@/lib/perfiles-stats";
 import { requirePageSession } from "@/lib/acceso/pagina";
 
@@ -30,11 +31,10 @@ export default async function PerfilesPage() {
   return (
     <div className="escena-oscura sala-perfil escena-3d flex items-center justify-center px-4 py-12">
       <SalaLampara />
-      <LamparaDecorativa className="sala-lampara-lateral sala-lampara-ancha" />
 
       <div className="escena-capa relative w-full max-w-4xl">
         <div className="mb-8 text-center">
-          <SelloLampara className="sello-grande mx-auto mb-5 animate-scale-in" />
+          <MarcaPanel className="sello-grande mx-auto mb-5 animate-scale-in" />
           <h1 className="font-serif text-xl font-semibold text-white sm:text-2xl">
             Elegí un perfil
           </h1>
