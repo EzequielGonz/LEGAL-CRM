@@ -1,5 +1,13 @@
-import Papa from "papaparse";
-import * as XLSX from "xlsx";
+// Rendimiento (16/10): xlsx y papaparse pesan ~190 kB y solo hacen falta al
+// elegir un archivo; se cargan en ese momento en vez de con la página.
+const cargarXlsx = async (): Promise<typeof import("xlsx")> => {
+  const m: any = await import("xlsx");
+  return m.read ? m : m.default;
+};
+const cargarPapa = async () => {
+  const m: any = await import("papaparse");
+  return (m.parse ? m : m.default) as typeof import("papaparse");
+};
 
 /**
  * Convierte un CSV o Excel (.xlsx/.xls) subido por el usuario en un array de
@@ -25,7 +33,7 @@ export async function parseSpreadsheetFileDetailed(file: File): Promise<ParsedSp
   if (isCsv) {
     return { rows: await parseSpreadsheetFile(file), sheetName: null, sheetNames: [] };
   }
-  const buffer = await file.arrayBuffer();
+  const [buffer, XLSX] = await Promise.all([file.arrayBuffer(), cargarXlsx()]);
   const workbook = XLSX.read(buffer, { type: "array" });
   const firstSheetName = workbook.SheetNames[0];
   const sheet = workbook.Sheets[firstSheetName];
@@ -40,6 +48,7 @@ export async function parseSpreadsheetFile(file: File): Promise<Record<string, u
   const isCsv = file.name.toLowerCase().endsWith(".csv");
 
   if (isCsv) {
+    const Papa = await cargarPapa();
     return new Promise((resolve, reject) => {
       Papa.parse(file, {
         header: true,
@@ -51,7 +60,7 @@ export async function parseSpreadsheetFile(file: File): Promise<Record<string, u
   }
 
   // Excel (.xlsx / .xls)
-  const buffer = await file.arrayBuffer();
+  const [buffer, XLSX] = await Promise.all([file.arrayBuffer(), cargarXlsx()]);
   const workbook = XLSX.read(buffer, { type: "array" });
   const firstSheetName = workbook.SheetNames[0];
   const sheet = workbook.Sheets[firstSheetName];

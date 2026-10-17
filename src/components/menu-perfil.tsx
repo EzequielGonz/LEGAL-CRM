@@ -7,6 +7,7 @@ import clsx from "clsx";
 import { LogoutButton } from "@/components/acceso/logout-button";
 import { marcaDe, type SlugPerfil } from "@/lib/marca";
 import { itemActivo, menuDePerfil } from "@/lib/menu";
+import { IconoSeccion } from "@/components/ui/icono-seccion";
 
 /**
  * Menú unificado de los cuatro perfiles (16/10). Misma estructura y
@@ -94,7 +95,7 @@ export function MenuPerfil({ slug, nombre, logo }: { slug: SlugPerfil; nombre?: 
                         href={item.href}
                         aria-current={esActivo ? "page" : undefined}
                         className={clsx(
-                          "group relative block rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200",
+                          "group relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-[background-color,color,transform] duration-200",
                           esActivo
                             ? "menu-activo text-gold-100"
                             : "text-slate-300 hover:translate-x-0.5 hover:bg-white/5 hover:text-gold-100"
@@ -106,7 +107,8 @@ export function MenuPerfil({ slug, nombre, logo }: { slug: SlugPerfil; nombre?: 
                             esActivo ? "opacity-100" : "opacity-0 group-hover:opacity-60"
                           )}
                         />
-                        <span className="pl-2">{item.label}</span>
+                        <IconoSeccion href={item.href} className={clsx("ml-1 h-[18px] w-[18px] shrink-0 transition-opacity", esActivo ? "opacity-100 text-gold-300" : "opacity-60 group-hover:opacity-100")} />
+                        <span>{item.label}</span>
                       </Link>
                     </li>
                   );

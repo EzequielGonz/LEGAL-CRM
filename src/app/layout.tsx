@@ -1,6 +1,19 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import "./premium.css";
+import "./controles.css";
+
+// Fuentes autoalojadas por Next (16/10): antes se pedían con un @import a
+// Google Fonts dentro del CSS, que bloqueaba el primer pintado en cadena.
+const sans = Inter({ subsets: ["latin"], display: "swap", variable: "--font-sans" });
+const serif = Playfair_Display({ subsets: ["latin"], weight: ["600", "700"], display: "swap", variable: "--font-serif" });
+
+export const viewport: Viewport = {
+  themeColor: "#0a1433",
+  width: "device-width",
+  initialScale: 1,
+};
 
 export const metadata: Metadata = {
   title: "Panel de Captación Legal",
@@ -22,7 +35,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es">
+    <html lang="es" className={`${sans.variable} ${serif.variable}`}>
       <body className="antialiased">{children}</body>
     </html>
   );

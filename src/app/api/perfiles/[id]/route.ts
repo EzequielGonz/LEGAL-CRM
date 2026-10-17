@@ -1,3 +1,4 @@
+import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireSession } from "@/lib/acceso/autorizacion";
@@ -51,5 +52,6 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     before,
     after: update,
   });
+  revalidateTag("marca-perfil");
   return NextResponse.json({ ok: true });
 }

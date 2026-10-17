@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { unstable_cache } from "next/cache";
 import { leerSalud, resumenSalud, type ItemSalud } from "@/lib/salud";
 
 const COLOR: Record<ItemSalud["estado"], string> = {
@@ -8,6 +9,13 @@ const COLOR: Record<ItemSalud["estado"], string> = {
 };
 
 /**
+ * La barra es un resumen: se recalcula como mucho una vez por minuto en vez
+ * de en cada navegación (son ~14 consultas). El tablero /salud sigue leyendo
+ * en vivo.
+ */
+const saludResumida = unstable_cache(() => leerSalud(), ["barra-salud"], { revalidate: 60 });
+
+/**
  * Barra de salud arriba de cada panel (16/10): lo que frena la operación se
  * ve apenas se entra, con el botón para resolverlo. Si está todo bien, un
  * aviso mínimo.
@@ -15,7 +23,7 @@ const COLOR: Record<ItemSalud["estado"], string> = {
 export async function BarraSalud({ slug }: { slug: string }) {
   let items: ItemSalud[] = [];
   try {
-    items = await leerSalud();
+    items = await saludResumida();
   } catch {
     return null;
   }
