@@ -45,7 +45,7 @@ export default async function FichaPage({ params, searchParams }: { params: { id
           <div className="flex flex-wrap gap-2">
             {conversations.map((c) => (
               <EnlaceDetalle key={c.id} href={`/inbox/${c.id}`} className="tactil inline-flex items-center rounded-lg bg-slate-900 px-4 text-sm font-medium text-white hover:bg-slate-800">
-                Abrir conversación
+                Ver conversación
               </EnlaceDetalle>
             ))}
           </div>
