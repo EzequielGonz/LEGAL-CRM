@@ -12,15 +12,16 @@ export class ContenidoError extends Error {
 
 export async function panoramaContenido(rubroId: string) {
   const s = createAdminClient();
-  const [pol, proximas, publicadas, atencion, pedidos, gsc] = await Promise.all([
+  const [pol, proximas, publicadas, atencion, pedidos, gsc, borradores] = await Promise.all([
     s.from("content_policies").select("canal, habilitada, calendario_pausado, objetivos, temas, frecuencia_semanal, destino_ref, proveedor, zona_horaria, version, updated_at").eq("rubro_id", rubroId),
     s.from("content_pieces").select("id, canal, formato, titulo, texto, estado, programada_para, zona_horaria").eq("rubro_id", rubroId).in("estado", ["programada", "lista", "publicando"]).order("programada_para", { ascending: true, nullsFirst: false }).limit(50),
     s.from("content_pieces").select("id, canal, formato, titulo, texto, publicada_at, url_publicada, proveedor_id, content_results(medido_at, alcance, interacciones, clics, consultas)").eq("rubro_id", rubroId).eq("estado", "publicada").order("publicada_at", { ascending: false }).limit(50),
     s.from("content_pieces").select("id, canal, formato, titulo, texto, estado, motivo, updated_at").eq("rubro_id", rubroId).in("estado", ["retenida", "error", "incierta"]).order("updated_at", { ascending: false }).limit(50),
     s.from("content_requests").select("id, tipo, pedido, estado, resolucion, created_at").eq("rubro_id", rubroId).order("created_at", { ascending: false }).limit(20),
     s.from("search_console_connections").select("estado, propiedad, conectado_at, ultimo_error").eq("rubro_id", rubroId).maybeSingle(),
+    s.from("content_pieces").select("id, canal, formato, titulo, texto, updated_at").eq("rubro_id", rubroId).eq("estado", "borrador").order("updated_at", { ascending: false }).limit(30),
   ]);
-  const error = [pol, proximas, publicadas, atencion, pedidos].find((r) => r.error)?.error ?? null;
+  const error = [pol, proximas, publicadas, atencion, pedidos, borradores].find((r) => r.error)?.error ?? null;
   return {
     error: error ? String(error.message ?? error) : null,
     politicas: pol.data ?? [],
@@ -28,6 +29,7 @@ export async function panoramaContenido(rubroId: string) {
     publicadas: publicadas.data ?? [],
     atencion: atencion.data ?? [],
     pedidos: pedidos.data ?? [],
+    borradores: borradores.data ?? [],
     searchConsole: gsc.data ?? { estado: "sin_conectar" },
   };
 }
