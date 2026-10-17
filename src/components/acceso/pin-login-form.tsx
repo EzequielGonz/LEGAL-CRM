@@ -52,7 +52,7 @@ export function PinLoginForm({ configured, next }: { configured: boolean; next: 
     >
       <div className="mb-6 flex flex-col items-center text-center">
         <MarcaPanel className="mb-4" />
-        <h1 className="pin-titulo font-serif text-2xl font-semibold">Panel de Captación</h1>
+        <h1 className="pin-titulo font-serif text-2xl font-semibold">Panel central</h1>
         <p className="pin-bajada mt-1.5 text-sm">Ingresá el PIN del panel para entrar.</p>
       </div>
 

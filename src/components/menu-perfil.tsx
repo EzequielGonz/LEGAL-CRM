@@ -8,6 +8,8 @@ import { LogoutButton } from "@/components/acceso/logout-button";
 import { marcaDe, type SlugPerfil } from "@/lib/marca";
 import { itemActivo, menuDePerfil } from "@/lib/menu";
 import { IconoSeccion } from "@/components/ui/icono-seccion";
+import { LogoPerfil } from "@/components/ui/logo-perfil";
+import { SelectorNivel } from "@/components/nivel/nivel";
 
 /**
  * Menú unificado de los cuatro perfiles (16/10). Misma estructura y
@@ -21,31 +23,30 @@ export function MenuPerfil({ slug, nombre, logo }: { slug: SlugPerfil; nombre?: 
   const grupos = menuDePerfil(slug);
   const activo = itemActivo(grupos, pathname);
   const [abierto, setAbierto] = useState(false);
-  const [logoFallo, setLogoFallo] = useState(false);
   const titulo = nombre?.trim() || marca.nombre;
-  const logoUrl = marca.logo || logo?.trim() || "";
+  // Fuente única: lo que resolvió el servidor (Configuración → original).
+  const logoUrl = logo?.trim() || marca.logo;
 
   useEffect(() => setAbierto(false), [pathname]);
 
-  const Logo = (
-    <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white/95 shadow-gold ring-1 ring-gold-400/40">
-      {logoFallo ? (
-        <span className="font-serif text-lg font-bold text-slate-900">{titulo.charAt(0)}</span>
-      ) : (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={logoUrl} alt="" className="h-full w-full object-contain p-1" onError={() => setLogoFallo(true)} />
-      )}
-    </span>
-  );
+  // Título de la pestaña «Pantalla · Marca» (rediseño 17/10, bloque 2).
+  const pantalla = grupos.flatMap((g) => g.items).find((it) => it.href === activo)?.label ?? "Panel";
+  useEffect(() => {
+    document.title = `${pantalla} · ${titulo}`;
+  }, [pantalla, titulo]);
+
+  const Logo = <LogoPerfil slug={slug} src={logoUrl} tamano="sm" />;
 
   return (
     <>
       {/* Barra superior en teléfono y tablet */}
-      <div className="barra-movil sticky top-0 z-30 flex items-center justify-between gap-3 bg-slate-950 px-4 py-3 lg:hidden">
+      <div className="barra-movil sticky top-0 z-30 flex items-center justify-between gap-2 bg-slate-950 px-3 py-3 sm:px-4 lg:hidden">
         <div className="flex min-w-0 items-center gap-3">
           {Logo}
-          <p className="truncate font-serif text-sm font-semibold text-gold-100">{titulo}</p>
+          <p className="hidden truncate font-serif text-sm font-semibold text-gold-100 min-[420px]:block">{titulo}</p>
         </div>
+        <div className="flex shrink-0 items-center gap-2">
+        <SelectorNivel oscuro />
         <button
           type="button"
           onClick={() => setAbierto((v) => !v)}
@@ -55,6 +56,7 @@ export function MenuPerfil({ slug, nombre, logo }: { slug: SlugPerfil; nombre?: 
         >
           {abierto ? "Cerrar" : "Menú"}
         </button>
+        </div>
       </div>
 
       {abierto && <div className="menu-velo lg:hidden" aria-hidden="true" onClick={() => setAbierto(false)} />}

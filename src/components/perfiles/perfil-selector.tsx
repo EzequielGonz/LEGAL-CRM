@@ -4,7 +4,8 @@ import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
 import type { PerfilStats } from "@/lib/perfiles-stats";
-import { marcaDe, temaDe } from "@/lib/marca";
+import { marcaDe, temaDe, type SlugPerfil } from "@/lib/marca";
+import { LogoPerfil } from "@/components/ui/logo-perfil";
 
 /** La vista previa se vuelve a pedir al servidor cada 30 s (pestaña visible). */
 const POLL_MS = 30000;
@@ -24,7 +25,7 @@ const POLL_MS = 30000;
  * red de seguridad por si se corta esa conexión un rato, también se
  * refresca solo cada 60 segundos.
  */
-export function PerfilSelector({ perfiles: initial }: { perfiles: PerfilStats[] }) {
+export function PerfilSelector({ perfiles: initial, logos }: { perfiles: PerfilStats[]; logos?: Partial<Record<SlugPerfil, string>> }) {
   const router = useRouter();
   const [perfiles, setPerfiles] = useState(initial);
   const [selectedId, setSelectedId] = useState<string | null>(initial[0]?.id ?? null);
@@ -85,8 +86,7 @@ export function PerfilSelector({ perfiles: initial }: { perfiles: PerfilStats[] 
               aria-label={`Ver perfil ${p.name}`}
               aria-pressed={isActive}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={marcaDe(p.slug).logo} alt={p.name} className="h-full w-full rounded-2xl bg-white/95 object-contain p-2" />
+              <LogoPerfil slug={temaDe(p.slug)} src={logos?.[temaDe(p.slug)]} alt={p.name} tamano="lg" />
               {/* Paleta del perfil al pie de su logo */}
               <span className="paleta-tira" aria-hidden="true">
                 {marcaDe(p.slug).paleta.map((c) => (

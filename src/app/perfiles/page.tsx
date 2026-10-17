@@ -4,6 +4,10 @@ import { SalaLampara } from "@/components/ui/lampara-dibujo";
 import { MarcaPanel } from "@/components/ui/marca-panel";
 import { loadPerfiles } from "@/lib/perfiles-stats";
 import { requirePageSession } from "@/lib/acceso/pagina";
+import { marcasResueltas } from "@/lib/marca-servidor";
+import { SLUGS_PERFIL } from "@/lib/marca";
+
+export const metadata = { title: "Perfiles" };
 
 export const dynamic = "force-dynamic";
 
@@ -26,7 +30,8 @@ export const dynamic = "force-dynamic";
 export default async function PerfilesPage() {
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
-  const perfiles = await loadPerfiles();
+  const [perfiles, marcas] = await Promise.all([loadPerfiles(), marcasResueltas().catch(() => null)]);
+  const logos = marcas ? Object.fromEntries(SLUGS_PERFIL.map((s) => [s, marcas[s].logoPanel])) : undefined;
 
   return (
     <div className="escena-oscura sala-perfil escena-3d flex items-center justify-center px-4 py-12">
@@ -44,7 +49,7 @@ export default async function PerfilesPage() {
           </div>
         </div>
 
-        <PerfilSelector perfiles={perfiles} />
+        <PerfilSelector perfiles={perfiles} logos={logos} />
       </div>
     </div>
   );

@@ -1,5 +1,7 @@
 /**
- * Sección de Configuración con ancla estable (rediseño 17/10, bloque 1).
+ * Sección de Configuración con ancla estable (rediseño 17/10, bloques 1 y 3).
+ * Cada sección guarda por su cuenta (su botón dice qué guarda y su
+ * confirmación se anuncia); el distintivo indica el alcance.
  * Los enlaces de Salud y de otras pantallas apuntan a `#<id>`; la sección
  * es enfocable para que el lector de pantalla y el teclado lleguen ahí.
  */
@@ -8,6 +10,8 @@ export function SeccionAjustes({
   titulo,
   descripcion,
   alcance,
+  nivel = "avanzado",
+  palabras = "",
   children,
 }: {
   id: string;
@@ -15,10 +19,20 @@ export function SeccionAjustes({
   descripcion?: React.ReactNode;
   /** «Este perfil» o «Todos los perfiles». */
   alcance?: "perfil" | "general";
+  /** «simple»: ajuste frecuente, visible en los dos niveles. «avanzado»: solo en Avanzado. */
+  nivel?: "simple" | "avanzado";
+  /** Palabras extra para el buscador de Configuración. */
+  palabras?: string;
   children: React.ReactNode;
 }) {
   return (
-    <section id={id} aria-labelledby={`${id}-titulo`} tabIndex={-1} className="seccion-ajustes scroll-mt-24 rounded-xl border border-slate-200 bg-white p-5 outline-none">
+    <section
+      id={id}
+      aria-labelledby={`${id}-titulo`}
+      tabIndex={-1}
+      data-buscar={`${titulo} ${palabras}`.toLowerCase()}
+      className={`seccion-ajustes scroll-mt-24 rounded-xl border border-slate-200 bg-white p-5 outline-none ${nivel === "avanzado" ? "solo-avanzado" : ""}`}
+    >
       <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
         <h2 id={`${id}-titulo`} className="text-base font-semibold text-slate-900">
           {titulo}

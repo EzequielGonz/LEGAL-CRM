@@ -18,7 +18,7 @@ export default async function PanelRubroPage({ params }: { params: { slug: strin
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
   if (params.slug === "juridico") {
-    redirect("/casos-cerrados");
+    redirect("/hoy?perfil=juridico");
   }
 
   const supabase = createClient();

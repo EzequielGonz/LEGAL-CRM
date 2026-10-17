@@ -38,8 +38,9 @@ test("el texto de «Volver» dice adónde lleva", () => {
 });
 
 test("inicio y ficha según el perfil", () => {
-  assert.equal(inicioDePerfil("juridico"), "/");
-  assert.equal(inicioDePerfil("marketing"), "/panel/marketing");
+  assert.equal(inicioDePerfil("juridico"), "/hoy?perfil=juridico");
+  assert.equal(inicioDePerfil("marketing"), "/hoy?perfil=marketing");
+  assert.equal(etiquetaVolver("/hoy?perfil=marketing"), "Volver al inicio");
   assert.equal(perfilDeArea("civil"), "juridico");
   assert.equal(perfilDeArea("penal"), "juridico");
   assert.equal(perfilDeArea("agencia_0km"), "agencia_0km");

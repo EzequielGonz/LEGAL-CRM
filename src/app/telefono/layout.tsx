@@ -5,13 +5,13 @@ import { requirePageSession } from "@/lib/acceso/pagina";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "CRM · Teléfono",
+  title: "Teléfono",
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#0b1220",
+  themeColor: "#15171C",
 };
 
 /** Modo teléfono (bloque 1.9): vista reducida, una columna. */

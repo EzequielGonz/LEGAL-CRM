@@ -5,6 +5,8 @@ import { MarcaPanel } from "@/components/ui/marca-panel";
 import { IlusComputadora, IlusTelefono } from "@/components/ui/ilustraciones";
 import { requirePageSession } from "@/lib/acceso/pagina";
 
+export const metadata = { title: "Inicio" };
+
 export const dynamic = "force-dynamic";
 
 /**
