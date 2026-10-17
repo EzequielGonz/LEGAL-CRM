@@ -1,3 +1,4 @@
+import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 import { requireSession } from "@/lib/acceso/autorizacion";
 import { rubroIdDe } from "@/lib/indicadores";
@@ -65,5 +66,6 @@ export async function PUT(request: Request) {
   const completo = briefCompleto(fila as any);
   const { error } = await createAdminClient().from("brand_briefs").upsert({ ...fila, completo }, { onConflict: "rubro_id" });
   if (error) return NextResponse.json({ error: "No se pudo guardar el brief." }, { status: 500 });
+  revalidateTag("marca-perfil");
   return NextResponse.json({ ok: true, completo, faltantes: faltantesDelBrief(fila as any) });
 }
