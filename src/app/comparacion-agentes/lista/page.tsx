@@ -1,3 +1,4 @@
+import { EnlaceDetalle } from "@/components/ui/enlaces-navegacion";
 import Link from "next/link";
 import { requirePageSession } from "@/lib/acceso/pagina";
 import { MarcoPerfil } from "@/components/perfiles/marco-perfil";
@@ -69,7 +70,7 @@ export default async function ListaIndicadorPage({
                     <Link href={`/ficha/${o.contact_id}?volver=${encodeURIComponent(aqui)}`} className="tactil inline-flex items-center rounded-lg border border-slate-300 px-3">Ficha</Link>
                   )}
                   {o.conversation_id && (
-                    <Link href={`/inbox/${o.conversation_id}`} className="tactil inline-flex items-center rounded-lg bg-slate-900 px-3 text-gold-100">Conversación</Link>
+                    <EnlaceDetalle href={`/inbox/${o.conversation_id}`} className="tactil inline-flex items-center rounded-lg bg-slate-900 px-3 text-gold-100">Conversación</EnlaceDetalle>
                   )}
                 </div>
               </li>

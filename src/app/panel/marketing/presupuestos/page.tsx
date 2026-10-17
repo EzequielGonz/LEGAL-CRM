@@ -1,3 +1,4 @@
+import { EnlaceDetalle } from "@/components/ui/enlaces-navegacion";
 import Link from "next/link";
 import { requirePageSession } from "@/lib/acceso/pagina";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -90,8 +91,8 @@ export default async function PidePresupuestoPage({ searchParams }: { searchPara
                 </p>
               )}
               <div className="mt-2 flex flex-wrap gap-2 text-sm">
-                {c.id && <Link href={`/ficha/${c.id}?volver=${encodeURIComponent("/panel/marketing/presupuestos")}`} className="tactil inline-flex items-center rounded-lg border border-slate-300 px-3">Ficha</Link>}
-                {b.conversation_id && <Link href={`/inbox/${b.conversation_id}`} className="tactil inline-flex items-center rounded-lg border border-slate-300 px-3">Conversación</Link>}
+                {c.id && <EnlaceDetalle href={`/ficha/${c.id}`} className="tactil inline-flex items-center rounded-lg border border-slate-300 px-3">Ficha</EnlaceDetalle>}
+                {b.conversation_id && <EnlaceDetalle href={`/inbox/${b.conversation_id}`} className="tactil inline-flex items-center rounded-lg border border-slate-300 px-3">Conversación</EnlaceDetalle>}
               </div>
               {["pedido", "listo"].includes(b.estado) && <CargarPresupuesto budgetId={b.id} />}
               {["enviado", "listo"].includes(b.estado) && (

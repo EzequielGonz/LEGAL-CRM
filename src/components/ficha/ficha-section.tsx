@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { EnlaceDetalle } from "@/components/ui/enlaces-navegacion";
 import { createClient } from "@/lib/supabase/server";
 import {
   ATTENTION_STATE_LABEL,
@@ -226,9 +226,9 @@ export async function FichaSection({
           </ul>
         )}
         {compact && opp && (
-          <Link href={fullHref ?? `/prospectos/${contactId}`} className="mt-2 inline-block text-xs text-slate-500 hover:underline">
+          <EnlaceDetalle href={fullHref ?? `/prospectos/${contactId}`} className="tactil mt-2 inline-flex items-center text-sm text-slate-700 hover:underline">
             Ver ficha completa →
-          </Link>
+          </EnlaceDetalle>
         )}
       </div>
     </div>
