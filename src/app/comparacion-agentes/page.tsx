@@ -1,3 +1,4 @@
+import { EnlaceDetalle } from "@/components/ui/enlaces-navegacion";
 import Link from "next/link";
 import { requirePageSession } from "@/lib/acceso/pagina";
 import { MarcoPerfil } from "@/components/perfiles/marco-perfil";
@@ -91,6 +92,8 @@ export default async function ComparacionAgentesPage({ searchParams }: { searchP
   };
   const lista = (l: Letra, metrica: string) => {
     const p = new URLSearchParams({ perfil, cand: l, metrica, ...(vista === "perfil" ? { rubro: perfil } : {}), ...(desde && hasta ? { desde, hasta } : {}) });
+    // La lista vuelve exactamente a esta vista (perfil, vista y semana).
+    p.set("volver", enlace({}));
     return `/comparacion-agentes/lista?${p.toString()}`;
   };
 
@@ -472,7 +475,7 @@ export default async function ComparacionAgentesPage({ searchParams }: { searchP
                   {i.conversation_id ? (
                     <>
                       {" · "}
-                      <Link href={`/inbox/${i.conversation_id}`} className="underline">ver conversación</Link>
+                      <EnlaceDetalle href={`/inbox/${i.conversation_id}`} className="underline">ver conversación</EnlaceDetalle>
                     </>
                   ) : null}
                 </li>
