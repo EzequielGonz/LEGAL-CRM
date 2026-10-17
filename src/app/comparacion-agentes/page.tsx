@@ -19,8 +19,10 @@ import {
 } from "@/lib/experimento/reglas";
 import { configuracionVertex } from "@/lib/agentes/modelo";
 import { PLANTILLAS_PROPUESTAS } from "@/lib/plantillas/propuestas";
+import { ResumenSeccion, type PuntoResumen } from "@/components/nivel/resumen-seccion";
 
 export const dynamic = "force-dynamic";
+export const metadata = { title: "Comparación de agentes" };
 
 const ESTADO_EXP: Record<string, string> = { preparado: "Preparado (no corre)", en_curso: "En curso", finalizado: "Finalizado", cancelado: "Detenido" };
 const ESTADO_CAND: Record<string, string> = { listo: "Listo", pendiente: "Pendiente", detenido: "Detenido" };
@@ -122,6 +124,13 @@ export default async function ComparacionAgentesPage({ searchParams }: { searchP
     porPlantilla[e.plantilla][e.candidato] = { prom, riesgo: p.riesgo, comentario: e.comentario, sugerencia: e.sugerencia };
   }
 
+  // Lo que pide una decisión, para el resumen del nivel Simple.
+  const pendientesVoto = ((informes ?? []) as any[]).filter((r) => !votoDe[r.id]);
+  const puntosComp: PuntoResumen[] = [
+    { texto: "Informes sin tu voto", cantidad: pendientesVoto.length, href: "#t-inf", tono: pendientesVoto.length ? "atencion" : "ok" },
+    { texto: "Incidentes registrados", cantidad: (incidentes ?? []).length, href: "#t-inc", tono: (incidentes ?? []).length ? "atencion" : "ok" },
+  ];
+
   return (
     <MarcoPerfil slug={perfil}>
       <div className="mx-auto max-w-6xl space-y-6">
@@ -140,8 +149,32 @@ export default async function ComparacionAgentesPage({ searchParams }: { searchP
           </div>
         </header>
 
-        <section aria-labelledby="t-cand" className="rounded-xl border border-slate-200 bg-white p-4">
-          <h2 id="t-cand" className="mb-3 font-serif text-lg font-semibold text-slate-900">Candidatos</h2>
+        <ResumenSeccion
+          id="comp"
+          estado={
+            exp.estado === "preparado"
+              ? "La comparación está preparada y todavía no empezó"
+              : exp.estado === "en_curso"
+              ? `Comparando: semana ${semanasTranscurridas} de ${exp.semanas}`
+              : exp.estado === "finalizado"
+              ? "La comparación terminó"
+              : "La comparación está detenida"
+          }
+          detalle={
+            <p>
+              Se comparan {letras.join(", ")} respondiendo consultas reales repartidas en partes iguales.
+              {exp.estado === "preparado" ? " Mientras no empiece, responde el agente de siempre; empezar es una decisión aparte y pide el PIN." : ""}
+              {!vertex.configurado ? " El candidato C no está configurado: por ahora se comparan dos." : ""}
+            </p>
+          }
+          tono={(incidentes ?? []).some((i: any) => i.candidato_detenido) ? "bloqueo" : pendientesVoto.length ? "atencion" : "info"}
+          puntos={puntosComp}
+          principal={pendientesVoto.length ? { texto: "Votar el último informe", href: "#t-inf" } : null}
+          personalizar={{ href: "#t-cand", texto: "Ver candidatos e indicadores" }}
+        />
+
+        <section aria-labelledby="t-cand" className="solo-avanzado rounded-xl border border-slate-200 bg-white p-4">
+          <h2 id="t-cand" tabIndex={-1} className="mb-3 font-serif text-lg font-semibold text-slate-900">Candidatos</h2>
           <div className="grid gap-3 md:grid-cols-3">
             {candidatos.map((k) => (
               <div key={k.letra} className="rounded-lg border border-slate-200 p-3 text-sm">
@@ -205,7 +238,7 @@ export default async function ComparacionAgentesPage({ searchParams }: { searchP
           </div>
         </section>
 
-        <section aria-labelledby="t-ind" className="rounded-xl border border-slate-200 bg-white p-4">
+        <section aria-labelledby="t-ind" className="solo-avanzado rounded-xl border border-slate-200 bg-white p-4">
           <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
             <h2 id="t-ind" className="font-serif text-lg font-semibold text-slate-900">
               Indicadores {vista === "perfil" ? `· ${MARCAS[perfil].nombre}` : "· todos los perfiles"} {semana ? `· semana ${semana}` : "· acumulado"}
@@ -312,8 +345,8 @@ export default async function ComparacionAgentesPage({ searchParams }: { searchP
           </p>
         </section>
 
-        <section aria-labelledby="t-inf" className="rounded-xl border border-slate-200 bg-white p-4">
-          <h2 id="t-inf" className="mb-1 font-serif text-lg font-semibold text-slate-900">Informes y votos</h2>
+        <section id="t-inf-sec" aria-labelledby="t-inf" className="rounded-xl border border-slate-200 bg-white p-4">
+          <h2 id="t-inf" tabIndex={-1} className="mb-1 font-serif text-lg font-semibold text-slate-900">Informes y votos</h2>
           <p className="mb-3 text-sm text-slate-600">El servidor genera los informes de los días 7, 14, 21 y 28 aunque nadie tenga el panel abierto. Mi recomendación va separada de su voto (uno por informe).</p>
           {((informes ?? []) as any[]).length === 0 && <p className="text-sm text-slate-500">Todavía no hay informes.</p>}
           <ol className="space-y-3">
@@ -373,7 +406,7 @@ export default async function ComparacionAgentesPage({ searchParams }: { searchP
           </div>
         </section>
 
-        <section aria-labelledby="t-c" className="rounded-xl border border-slate-200 bg-white p-4">
+        <section aria-labelledby="t-c" className="solo-avanzado rounded-xl border border-slate-200 bg-white p-4">
           <h2 id="t-c" className="mb-1 font-serif text-lg font-semibold text-slate-900">Candidato C · ajuste en Vertex</h2>
           <p className="text-sm text-slate-700">
             Variables de Vertex: {vertex.configurado ? "cargadas" : `faltan ${vertex.faltan.join(", ")}`}. Bucket del corpus: {process.env.GCP_BUCKET ? "cargado" : "falta GCP_BUCKET"}. Límite autorizado: USD 30.
@@ -406,7 +439,7 @@ export default async function ComparacionAgentesPage({ searchParams }: { searchP
           </p>
         </section>
 
-        <section aria-labelledby="t-pl" className="rounded-xl border border-slate-200 bg-white p-4">
+        <section aria-labelledby="t-pl" className="solo-avanzado rounded-xl border border-slate-200 bg-white p-4">
           <h2 id="t-pl" className="mb-1 font-serif text-lg font-semibold text-slate-900">Plantillas evaluadas por cada modelo</h2>
           <p className="mb-2 text-sm text-slate-600">
             {PLANTILLAS_PROPUESTAS.length} plantillas propuestas (incluye la apertura y el aviso de presupuesto de Marketing). Cada candidato listo las puntúa de 1 a 5 en claridad, cumplimiento, tono y respuesta esperada, y marca el riesgo. Se procesan de a poco desde el servidor.
@@ -463,7 +496,7 @@ export default async function ComparacionAgentesPage({ searchParams }: { searchP
         </section>
 
         <section aria-labelledby="t-inc" className="rounded-xl border border-slate-200 bg-white p-4">
-          <h2 id="t-inc" className="mb-2 font-serif text-lg font-semibold text-slate-900">Incidentes</h2>
+          <h2 id="t-inc" tabIndex={-1} className="mb-2 font-serif text-lg font-semibold text-slate-900">Incidentes</h2>
           {((incidentes ?? []) as any[]).length === 0 ? (
             <p className="text-sm text-slate-500">Sin incidentes.</p>
           ) : (
