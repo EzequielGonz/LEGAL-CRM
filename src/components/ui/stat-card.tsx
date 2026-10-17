@@ -34,10 +34,10 @@ export function StatCard({
   const cls = "tarjeta-cifra group relative flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white";
   if (href) {
     return (
-      <Link href={href} className={cls} aria-label={`${label}: ${value}. Ver la lista`}>
+      <Link href={href} className={cls} data-3d="" aria-label={`${label}: ${value}. Ver la lista`}>
         {body}
       </Link>
     );
   }
-  return <div className={cls}>{body}</div>;
+  return <div className={cls} data-3d="suave">{body}</div>;
 }

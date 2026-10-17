@@ -4,6 +4,8 @@ import "./globals.css";
 import "./premium.css";
 import "./controles.css";
 import "./estudio.css";
+import "./inmersivo.css";
+import { Efectos3D } from "@/components/ui/efectos-3d";
 
 // Fuentes autoalojadas por Next (16/10): antes se pedían con un @import a
 // Google Fonts dentro del CSS, que bloqueaba el primer pintado en cadena.
@@ -37,7 +39,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" className={`${sans.variable} ${serif.variable}`}>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        {children}
+        <Efectos3D />
+      </body>
     </html>
   );
 }
