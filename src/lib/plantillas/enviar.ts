@@ -52,7 +52,7 @@ async function crearEnMeta(wabaId: string, token: string, payload: unknown): Pro
   throw new MetaApiError(err?.error_user_msg || err?.message || `HTTP ${res.status}`, res.status, err?.code ?? null, err?.error_subcode ?? null);
 }
 
-export async function enviarPropuestasALinea(lineId: string, confirmar: boolean): Promise<{ rubro: string; confirmar: boolean; resultados: ResultadoEnvio[] }> {
+export async function enviarPropuestasALinea(lineId: string, confirmar: boolean, lista?: PlantillaPropuesta[]): Promise<{ rubro: string; confirmar: boolean; resultados: ResultadoEnvio[] }> {
   const supabase = createAdminClient();
   const { data: line } = await supabase
     .from("profile_lines")
@@ -70,7 +70,7 @@ export async function enviarPropuestasALinea(lineId: string, confirmar: boolean)
   if (!token) missing.push(`${line.credential_key}_ACCESS_TOKEN`);
   if (missing.length || !waba || !token) throw new MissingAccessError(missing);
 
-  const propuestas = PLANTILLAS_PROPUESTAS.filter((p) => p.rubro === rubro);
+  const propuestas = (lista ?? PLANTILLAS_PROPUESTAS).filter((p) => p.rubro === rubro);
   const resultados: ResultadoEnvio[] = [];
   for (const p of propuestas) {
     const base = { nombre: p.nombre, categoria: p.categoria };
@@ -92,4 +92,33 @@ export async function enviarPropuestasALinea(lineId: string, confirmar: boolean)
     }
   }
   return { rubro, confirmar, resultados };
+}
+
+/** Línea principal de cada rubro para registrar plantillas (Jurídico: la de Civil). */
+export async function lineaPrincipal(rubroId: string): Promise<string | null> {
+  const { data } = await createAdminClient().from("profile_lines").select("id, area").eq("rubro_id", rubroId).eq("active", true).order("created_at");
+  const filas = (data ?? []) as { id: string; area: string }[];
+  return (filas.find((f) => f.area === "civil") ?? filas[0])?.id ?? null;
+}
+
+/** Envía a revisión de Meta las plantillas de un archivo, cada una a la línea de su rubro. */
+export async function enviarPlantillasDeArchivo(lista: PlantillaPropuesta[], confirmar: boolean) {
+  const porRubro = new Map<string, PlantillaPropuesta[]>();
+  for (const p of lista) porRubro.set(p.rubro, [...(porRubro.get(p.rubro) ?? []), p]);
+  const salida: { rubro: string; linea: string | null; resultados: ResultadoEnvio[]; error?: string }[] = [];
+  for (const [rubro, propuestas] of Array.from(porRubro.entries())) {
+    const rubroId = (RUBRO_IDS as Record<string, string>)[rubro];
+    const linea = rubroId ? await lineaPrincipal(rubroId) : null;
+    if (!linea) {
+      salida.push({ rubro, linea: null, resultados: [], error: "Este perfil no tiene una línea de WhatsApp activa." });
+      continue;
+    }
+    try {
+      const r = await enviarPropuestasALinea(linea, confirmar, propuestas);
+      salida.push({ rubro, linea, resultados: r.resultados });
+    } catch (err) {
+      salida.push({ rubro, linea, resultados: [], error: err instanceof MissingAccessError ? err.message : String((err as Error)?.message ?? err) });
+    }
+  }
+  return salida;
 }
