@@ -1,6 +1,6 @@
 # CONTEXTO ACTUAL · CRM multirubro
 
-Actualizado: 18/10/2026 (reorganización 2, PR #20). Sin secretos ni datos de prospectos.
+Actualizado: 18/10/2026 (reorganización 2 publicada en producción, PR #20). Sin secretos ni datos de prospectos.
 
 ## Bloque actual: reorganización 2 (18/10, pedido de la responsable)
 Detalle en `docs/reorganizacion-2/ENTREGA.md`. Rama `reorganizacion-2`, PR #20 → `main`. Sin migraciones.
@@ -18,7 +18,7 @@ Detalle en `docs/reorganizacion-2/ENTREGA.md`. Rama `reorganizacion-2`, PR #20 �
 
 **Evidencia**
 1. Implementado: rama `reorganizacion-2`, remoto = local (comparación archivo por archivo).
-2. Desplegado: ver PR #20 y el registro de producción en `claude/CONTEXTO_ACTUAL_CRM.md` del proyecto.
+2. Desplegado: Preview `dpl_H7SWxALcp7Q8yC2VkdWXyzBdKLfj` READY (`65f28f3`, todo el código). Producción: `dpl_2gmTG1tVVHUPJdY9F1M4ez7sunUL` READY = `main` `d6ae224` (PR #20 fusionado 18/10). Sin errores de ejecución nuevos al publicar. Rollback: promover `dpl_EDpu2BTUTKMKpXjF6XHBiiNiNBGC` (`b74c1dc`).
 3. Comprobado automáticamente: unitarias 190/190; build de Vercel.
 4. Revisado visualmente: **pendiente** (la sesión no puede abrir el panel con ingreso).
 5. Probado funcionalmente: **no** (sin páginas de Facebook vinculadas; sin contacto real).
