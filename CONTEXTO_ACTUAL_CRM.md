@@ -1,6 +1,6 @@
 # CONTEXTO ACTUAL · CRM multirubro
 
-Actualizado: 18/10/2026 (reorganización 18/10 integrada en el PR #19). Sin secretos ni datos de prospectos.
+Actualizado: 18/10/2026 (reorganización 18/10 publicada en producción, PR #19). Sin secretos ni datos de prospectos.
 
 ## Bloque actual: reorganización 18/10 (pedido de la responsable)
 Detalle en `docs/reorganizacion-1810/ENTREGA.md`. Rama `reorganizacion-1810`, PR #19 → `main`.
@@ -18,7 +18,7 @@ Detalle en `docs/reorganizacion-1810/ENTREGA.md`. Rama `reorganizacion-1810`, PR
 
 **Evidencia**
 1. Implementado: rama `reorganizacion-1810`, remoto = local (comparación archivo por archivo con `git fetch` + diff).
-2. Desplegado: Preview `dpl_132XR4NMHoqCG62J9G5z8t3CE6QY` READY (`ea31b39`, todo el código). Producción: ver sección siguiente.
+2. Desplegado: Preview `dpl_132XR4NMHoqCG62J9G5z8t3CE6QY` READY (`ea31b39`, todo el código). Producción: `dpl_2k6M9Be5LH8vaDzQrSfrx7uNhif5` READY = `main` `b505fe1` (PR #19 fusionado 18/10). Sin errores de ejecución en los primeros 15 min. Rollback: promover `dpl_4QRbiJ4ejjsdgm1hJ2PHmYd4pbAC` (`fb6688f`).
 3. Comprobado automáticamente: unitarias 183/183 (tsx); build de Vercel sin errores (incluye typecheck y lint de Next).
 4. Revisado visualmente: **pendiente**. La sesión no puede abrir la Preview con sesión del panel (pide ingreso) y el navegador local no llega a vercel.app. Lo revisa la responsable.
 5. Probado funcionalmente: **no**. Asistente, Metricool y perfil de WhatsApp no se ejecutaron contra servicios reales.
