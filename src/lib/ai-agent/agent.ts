@@ -1,3 +1,4 @@
+import { bloqueHorarioAtencion } from "@/lib/horario-atencion";
 import { GoogleGenAI, type Content, type Part } from "@google/genai";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { AutomaticSendBlockedError, sendOutboundMessage } from "@/lib/messaging";
@@ -456,6 +457,8 @@ async function runAgentTurnCon(conversationId: string, modeloBase: ModeloAgente,
   // Contexto de las herramientas. Si la IA deriva a una persona, la
   // herramienta deja acá el permiso de un solo uso para el acuse final.
   const toolCtx: ToolContext = { area, contact, conversationId, finalAckToken: null, opportunityId, pendingDetention: null };
+  // Horario de atención (18/10, todos los perfiles): fuera de la franja de asesores igual se capta.
+  systemWithBrief = `${systemWithBrief}\n\n${bloqueHorarioAtencion(new Date())}`;
 
   let retenido: string[] | null = null;
   try {
