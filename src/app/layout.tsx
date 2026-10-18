@@ -4,6 +4,7 @@ import "./globals.css";
 import "./panel.css";
 import "./controles.css";
 import "./marca.css";
+import "./renovacion.css";
 
 // Fuentes autoalojadas por Next (16/10). Inter para toda la operación;
 // Playfair solo para la marca y las pantallas de ingreso (bloque 4).

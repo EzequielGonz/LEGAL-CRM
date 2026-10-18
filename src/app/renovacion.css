@@ -1,0 +1,383 @@
+/* =====================================================================
+   Renovación visual (18/10). Se carga después del resto de los estilos y
+   reemplaza lo que se veía viejo: paletas con superficies neutras, botones
+   sólidos, títulos en minúscula, tarjetas más limpias, menú claro con
+   pestañas por sección y «Más opciones» para lo avanzado.
+   Solo presentación: no cambia textos, datos ni acciones.
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   Sistema visual por perfil (renovado 18/10). Superficies y textos
+   secundarios en grises neutros iguales para los cuatro perfiles (50–700);
+   los tonos profundos de cada marca quedan en 800–950 (botones principales,
+   texto fuerte) y el acento de la marca en la escala `gold`. Así cambia el
+   color de la marca, nunca el diseño. Sin atributo = Jurídico VITA.
+   --------------------------------------------------------------------- */
+:root, [data-tema="juridico"] {
+  --c-slate-50: 248 249 251;
+  --c-slate-100: 241 243 246;
+  --c-slate-200: 228 231 236;
+  --c-slate-300: 208 213 221;
+  --c-slate-400: 152 161 175;
+  --c-slate-500: 100 110 126;
+  --c-slate-600: 75 85 99;
+  --c-slate-700: 55 65 81;
+  --c-slate-800: 30 47 96;
+  --c-slate-900: 17 34 80;
+  --c-slate-950: 10 20 51;
+  --c-gold-50: 251 248 240;
+  --c-gold-100: 244 238 220;
+  --c-gold-200: 232 220 184;
+  --c-gold-300: 219 199 140;
+  --c-gold-400: 207 180 108;
+  --c-gold-500: 196 162 84;
+  --c-gold-600: 168 134 60;
+  --c-gold-700: 128 101 44;
+  --c-gold-800: 104 82 38;
+  --c-gold-900: 79 63 30;
+  --c-gold-950: 46 37 17;
+}
+[data-tema="coberturas_medicas"] {
+  --c-slate-50: 248 249 251;
+  --c-slate-100: 241 243 246;
+  --c-slate-200: 228 231 236;
+  --c-slate-300: 208 213 221;
+  --c-slate-400: 152 161 175;
+  --c-slate-500: 100 110 126;
+  --c-slate-600: 75 85 99;
+  --c-slate-700: 55 65 81;
+  --c-slate-800: 24 66 58;
+  --c-slate-900: 16 48 42;
+  --c-slate-950: 6 31 30;
+  --c-gold-50: 240 248 243;
+  --c-gold-100: 220 240 226;
+  --c-gold-200: 190 224 202;
+  --c-gold-300: 152 201 170;
+  --c-gold-400: 115 175 138;
+  --c-gold-500: 79 148 108;
+  --c-gold-600: 55 122 88;
+  --c-gold-700: 41 99 72;
+  --c-gold-800: 33 79 60;
+  --c-gold-900: 27 62 49;
+  --c-gold-950: 13 36 29;
+}
+[data-tema="agencia_0km"] {
+  --c-slate-50: 248 249 251;
+  --c-slate-100: 241 243 246;
+  --c-slate-200: 228 231 236;
+  --c-slate-300: 208 213 221;
+  --c-slate-400: 152 161 175;
+  --c-slate-500: 100 110 126;
+  --c-slate-600: 75 85 99;
+  --c-slate-700: 55 65 81;
+  --c-slate-800: 12 46 118;
+  --c-slate-900: 6 27 84;
+  --c-slate-950: 1 10 42;
+  --c-gold-50: 238 246 254;
+  --c-gold-100: 217 236 252;
+  --c-gold-200: 182 218 249;
+  --c-gold-300: 130 192 243;
+  --c-gold-400: 74 160 232;
+  --c-gold-500: 37 128 216;
+  --c-gold-600: 28 102 190;
+  --c-gold-700: 20 80 160;
+  --c-gold-800: 17 65 130;
+  --c-gold-900: 14 52 104;
+  --c-gold-950: 8 32 66;
+}
+[data-tema="marketing"] {
+  --c-slate-50: 248 249 251;
+  --c-slate-100: 241 243 246;
+  --c-slate-200: 228 231 236;
+  --c-slate-300: 208 213 221;
+  --c-slate-400: 152 161 175;
+  --c-slate-500: 100 110 126;
+  --c-slate-600: 75 85 99;
+  --c-slate-700: 55 65 81;
+  --c-slate-800: 44 44 47;
+  --c-slate-900: 27 27 29;
+  --c-slate-950: 15 15 16;
+  --c-gold-50: 255 246 238;
+  --c-gold-100: 255 231 208;
+  --c-gold-200: 255 205 163;
+  --c-gold-300: 254 174 110;
+  --c-gold-400: 253 140 63;
+  --c-gold-500: 252 110 32;
+  --c-gold-600: 226 86 15;
+  --c-gold-700: 185 66 12;
+  --c-gold-800: 147 54 16;
+  --c-gold-900: 119 47 17;
+  --c-gold-950: 64 21 6;
+}
+
+
+[data-tema="neutro"] {
+  --c-slate-50: 248 249 251;
+  --c-slate-100: 241 243 246;
+  --c-slate-200: 228 231 236;
+  --c-slate-300: 208 213 221;
+  --c-slate-400: 152 161 175;
+  --c-slate-500: 100 110 126;
+  --c-slate-600: 75 85 99;
+  --c-slate-700: 55 65 81;
+  --c-slate-800: 36 38 44;
+  --c-slate-900: 24 26 30;
+  --c-slate-950: 14 15 18;
+  --c-gold-50: 250 247 240;
+  --c-gold-100: 243 236 220;
+  --c-gold-200: 232 216 182;
+  --c-gold-300: 219 194 141;
+  --c-gold-400: 207 176 112;
+  --c-gold-500: 192 157 92;
+  --c-gold-600: 166 132 72;
+  --c-gold-700: 128 100 54;
+  --c-gold-800: 101 79 44;
+  --c-gold-900: 76 60 34;
+  --c-gold-950: 45 35 20;
+}
+
+:root {
+  --e-borde: rgb(15 23 42 / 0.08);
+  --e-borde-fuerte: rgb(15 23 42 / 0.14);
+  --e-sombra-1: 0 1px 2px rgb(15 23 42 / 0.04), 0 1px 3px rgb(15 23 42 / 0.03);
+  --e-sombra-2: 0 2px 6px rgb(15 23 42 / 0.05), 0 12px 28px -12px rgb(15 23 42 / 0.14);
+}
+
+body {
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Foco visible en el color de la marca (contraste ≥ 3:1). */
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible,
+summary:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:not([tabindex="-1"]):focus-visible {
+  outline: 2px solid rgb(var(--c-gold-600));
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--c-slate-400));
+}
+
+/* ---------- Botones ---------- */
+.btn-gold,
+.btn-gold-sm {
+  background-image: none;
+  background-color: rgb(var(--c-slate-900));
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgb(15 23 42 / 0.12);
+}
+.btn-gold:hover:not(:disabled),
+.btn-gold-sm:hover:not(:disabled) {
+  background-image: none;
+  background-color: rgb(var(--c-slate-800));
+  color: #fff;
+}
+.btn-gold {
+  min-height: 2.5rem;
+}
+.btn-suave {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200
+    bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm
+    transition-colors duration-150 hover:bg-slate-50 hover:text-slate-900
+    disabled:cursor-not-allowed disabled:opacity-60;
+}
+
+/* ---------- Títulos ---------- */
+:is(main#contenido, .modo-telefono) h2:is([class~="text-sm"], [class~="text-xs"]) {
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+:is(main#contenido, .modo-telefono) h2:is([class~="text-sm"], [class~="text-xs"])::before {
+  content: none;
+  display: none;
+}
+
+/* ---------- Tarjetas y cifras ---------- */
+:is(main#contenido, .modo-telefono) a:is([class~="rounded-xl"], [class~="rounded-2xl"])[class~="border"][class~="bg-white"]:hover {
+  border-color: rgb(15 23 42 / 0.16);
+}
+.tarjeta-cifra-regla {
+  display: none;
+}
+.tarjeta-cifra-etiqueta {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+}
+:is(main#contenido, .modo-telefono) tbody tr:hover > td {
+  background-color: rgb(var(--c-slate-50));
+}
+[data-tema] :is(button, a)[class~="border-slate-300"]:not(:disabled):hover {
+  background-color: rgb(var(--c-slate-50));
+}
+[data-tema] :is(input:not(.pin-campo), select, textarea):focus {
+  border-color: rgb(var(--c-gold-500));
+  box-shadow: 0 0 0 3px rgb(var(--c-gold-500) / 0.18);
+}
+
+/* ---------- Encabezado ---------- */
+.encabezado-icono {
+  background: rgb(var(--c-slate-100));
+  color: rgb(var(--c-gold-700));
+  box-shadow: none;
+}
+
+/* Las tarjetas de perfil no toman el fondo del tema. */
+li.tarjeta-perfil[data-tema] {
+  background: #fff;
+}
+.tarjeta-perfil .placa-logo {
+  background: #000 !important;
+}
+
+/* =====================================================================
+   4. Menú lateral y barras (renovado 18/10): barra clara, ítems con
+   pastilla suave, ícono en el color de la marca.
+   ===================================================================== */
+.menu-estudio {
+  background: #fff;
+  background-image: none;
+  box-shadow: inset -1px 0 0 var(--e-borde);
+}
+@media (min-width: 1024px) {
+  .menu-estudio {
+    position: sticky;
+    z-index: 2;
+  }
+}
+.menu-marca {
+  background: transparent;
+  box-shadow: none;
+}
+.menu-estudio nav {
+  padding-top: 0.5rem;
+}
+.menu-item {
+  color: rgb(var(--c-slate-600));
+}
+.menu-item:hover {
+  background: rgb(var(--c-slate-100));
+  color: rgb(var(--c-slate-950));
+}
+.menu-item[aria-current="page"] {
+  background: rgb(var(--c-gold-500) / 0.12);
+  box-shadow: none;
+  color: rgb(var(--c-slate-950));
+  font-weight: 600;
+}
+.menu-item svg {
+  color: rgb(var(--c-slate-400));
+}
+.menu-item[aria-current="page"] svg {
+  color: rgb(var(--c-gold-700));
+}
+.menu-pie a,
+.menu-pie button {
+  color: rgb(var(--c-slate-600));
+}
+.menu-pie a:hover,
+.menu-pie button:hover {
+  color: rgb(var(--c-slate-950));
+  background: rgb(var(--c-slate-100));
+}
+.menu-velo {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  background: rgb(15 23 42 / 0.35);
+  animation: velo-entra 0.2s ease-out both;
+}
+#menu-perfil nav svg {
+  shape-rendering: geometricPrecision;
+}
+#menu-perfil nav {
+  padding-bottom: 1rem;
+  -webkit-mask-image: none;
+  mask-image: none;
+  scrollbar-width: thin;
+}
+
+/* Pestañas de la sección (18/10): las vistas de una misma sección. */
+.pestanas-seccion {
+  display: flex;
+  gap: 0.25rem;
+  overflow-x: auto;
+  margin: 0 0 1.25rem;
+  padding: 0.25rem;
+  border-radius: 12px;
+  background: rgb(var(--c-slate-100));
+  width: max-content;
+  max-width: 100%;
+  scrollbar-width: none;
+}
+.pestanas-seccion::-webkit-scrollbar { display: none; }
+.pestana {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  min-height: 2.25rem;
+  padding: 0 0.875rem;
+  border-radius: 9px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgb(var(--c-slate-600));
+}
+.pestana:hover { color: rgb(var(--c-slate-950)); }
+.pestana[aria-current="page"] {
+  background: #fff;
+  color: rgb(var(--c-slate-950));
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgb(15 23 42 / 0.08), 0 0 0 1px rgb(15 23 42 / 0.04);
+}
+
+/* «Más opciones» (18/10): las opciones avanzadas se despliegan a pedido. */
+.mas-opciones {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+.mas-opciones button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.5rem;
+  padding: 0 1rem;
+  border-radius: 999px;
+  border: 1px dashed rgb(var(--c-slate-300));
+  background: #fff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgb(var(--c-slate-700));
+}
+.mas-opciones button:hover {
+  border-style: solid;
+  color: rgb(var(--c-slate-950));
+}
+
+.barra-movil {
+  background: rgb(255 255 255 / 0.94);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: inset 0 -1px 0 var(--e-borde);
+}
+
+/* Campo del asistente: el borde lo pone el contenedor. */
+[data-tema] textarea.sin-anillo,
+[data-tema] textarea.sin-anillo:focus {
+  border-color: transparent;
+  box-shadow: none;
+  background: transparent;
+}
