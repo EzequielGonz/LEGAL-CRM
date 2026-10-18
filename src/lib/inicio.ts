@@ -14,8 +14,8 @@ export interface Pendiente {
 }
 
 const ORDEN: Omit<Pendiente, "cantidad" | "href">[] = [
-  { clave: "requiere_humano", titulo: "Conversaciones que piden una persona", accion: "Responder", porQue: "Pidieron hablar con alguien: la IA no responde en esos chats hasta que una persona los atienda.", urgente: true },
   { clave: "captado_sin_derivar", titulo: "Captados para derivar", accion: "Derivar", porQue: "Aceptaron el siguiente paso y todavía no se pasaron al profesional.", urgente: true },
+  { clave: "requiere_humano", titulo: "Conversaciones que piden una persona", accion: "Responder", porQue: "Pidieron hablar con alguien: la IA no responde en esos chats hasta que una persona los atienda.", urgente: true },
   { clave: "revision_pendiente", titulo: "Conversaciones para revisar", accion: "Revisar", porQue: "Quedaron marcadas para que una persona las mire.", urgente: false },
   { clave: "contenido_retenido", titulo: "Piezas de contenido retenidas", accion: "Ver motivos", porQue: "No se publican hasta resolver el motivo indicado en cada una.", urgente: false },
   { clave: "seguimiento_caido", titulo: "Seguimientos caídos", accion: "Ver seguimientos", porQue: "El seguimiento no avanzó y conviene decidir qué hacer.", urgente: false },
