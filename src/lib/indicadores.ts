@@ -20,7 +20,11 @@ export type Condicion =
   | { col: string; op: "neq"; value: string }
   | { col: string; op: "in"; value: string[] }
   | { col: string; op: "is_null" }
-  | { col: string; op: "not_null" };
+  | { col: string; op: "not_null" }
+  /** Anterior a «ahora menos N horas» (se resuelve al consultar). */
+  | { col: string; op: "antes_de_horas"; value: number }
+  /** Filtro «o» de PostgREST, ya armado (por ejemplo: «a.is.null,a.neq.x»). Uno solo por indicador. */
+  | { col: "_or"; op: "or"; value: string };
 
 export interface Indicador {
   clave: string;
@@ -34,6 +38,8 @@ export interface Indicador {
 }
 
 const eq = (col: string, value: string | boolean): Condicion => ({ col, op: "eq", value });
+/** Excluye las detenciones (quejas, pedidos de no contacto): no son oportunidades. */
+const sinDetencion: Condicion = { col: "_or", op: "or", value: "attention_category.is.null,attention_category.neq.detencion" };
 
 export const INDICADORES: Indicador[] = [
   { clave: "oportunidades", label: "Oportunidades", grupo: "captacion", definicion: "Todas las oportunidades del perfil", conds: [], metrica: (m) => m.oportunidades },
@@ -56,6 +62,12 @@ export const INDICADORES: Indicador[] = [
   { clave: "detencion_reciente", label: "Detenidos por la conversación", grupo: "atencion", definicion: "Rechazo, enojo, número equivocado o necesidad resuelta: archivo secundario, no es trabajo pendiente", conds: [eq("attention_category", "detencion")] },
   { clave: "seguimiento_activo", label: "Seguimiento activo", grupo: "seguimiento", definicion: "Con seguimiento automático en curso", conds: [eq("followup_state", "activo")], metrica: (m) => m.seguimiento.activo },
   { clave: "seguimiento_caido", label: "Seguimientos caídos", grupo: "seguimiento", definicion: "Seguimiento que no avanzó", conds: [eq("followup_state", "caido")], metrica: (m) => m.seguimiento.caido },
+  // Reorganización 2 (18/10): las listas que valen la pena (oportunidades reales).
+  { clave: "piden_persona", label: "Quieren hablar con alguien", grupo: "atencion", definicion: "Pidieron una persona y siguen interesados (sin quejas ni pedidos de no contacto)", conds: [{ col: "attention_state", op: "in", value: ["requiere_humano", "humano_en_curso"] }, { col: "capture_state", op: "neq", value: "perdido" }, sinDetencion] },
+  { clave: "venta", label: "Ventas concretadas", grupo: "derivacion", definicion: "Derivados con el resultado «Operación concretada»", conds: [eq("derivation_state", "derivado"), eq("post_derivation_state", "operacion_concretada")] },
+  { clave: "repesca", label: "En repesca", grupo: "seguimiento", definicion: "Terminaron el seguimiento sin avanzar: para volver a intentar a mano", conds: [{ col: "capture_state", op: "neq", value: "captado" }, { col: "_or", op: "or", value: "followup_exhausted_at.not.is.null,repesca_base_id.not.is.null" }] },
+  { clave: "perdido_comercial", label: "Perdidos", grupo: "captacion", definicion: "Perdidos por motivo comercial (sin contar quejas ni pedidos de no contacto)", conds: [eq("capture_state", "perdido"), sinDetencion] },
+  { clave: "dejaron_de_responder", label: "Dejaron de responder", grupo: "seguimiento", definicion: "Respondieron, la charla quedó a medias y no escriben hace más de 3 días", conds: [eq("contact_state", "respondio"), { col: "capture_state", op: "in", value: ["en_conversacion", "en_seguimiento"] }, { col: "updated_at", op: "antes_de_horas", value: 72 }, sinDetencion] },
   { clave: "revision_pendiente", label: "Revisión pendiente", grupo: "revision", definicion: "Marcadas para revisar por una persona", conds: [eq("review_required", true)], metrica: (m) => m.revision_pendiente },
   // Fuente acreditada (2.8): la primera comprobable; «no informada» si no hubo referencia.
   ...FUENTES.map(
@@ -83,7 +95,7 @@ export function rubroIdDe(perfil: unknown): string | null {
 }
 
 /** Aplica las condiciones a una consulta de PostgREST (contador y lista usan esto mismo). */
-export function aplicarCondiciones<Q extends { eq: Function; neq: Function; in: Function; is: Function; not: Function }>(q: Q, conds: Condicion[]): Q {
+export function aplicarCondiciones<Q extends { eq: Function; neq: Function; in: Function; is: Function; not: Function; lt: Function; or: Function }>(q: Q, conds: Condicion[]): Q {
   let out: any = q;
   for (const c of conds) {
     if (c.op === "eq") out = out.eq(c.col, c.value);
@@ -91,6 +103,8 @@ export function aplicarCondiciones<Q extends { eq: Function; neq: Function; in: 
     else if (c.op === "in") out = out.in(c.col, c.value);
     else if (c.op === "is_null") out = out.is(c.col, null);
     else if (c.op === "not_null") out = out.not(c.col, "is", null);
+    else if (c.op === "antes_de_horas") out = out.lt(c.col, new Date(Date.now() - c.value * 3600 * 1000).toISOString());
+    else if (c.op === "or") out = out.or(c.value);
   }
   return out as Q;
 }

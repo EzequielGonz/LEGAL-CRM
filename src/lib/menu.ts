@@ -25,6 +25,8 @@ export interface ItemMenu {
   exacto?: boolean;
   /** Además de la ruta, uno de estos valores de ?indicador= (vistas filtradas). */
   indicadores?: string[];
+  /** Marca la sección como activa pero no se muestra como pestaña (listas completas, vistas viejas). */
+  oculto?: boolean;
 }
 
 export type ClaveSeccion = "inicio" | "conversaciones" | "contactos" | "captacion" | "redes" | "configuracion";
@@ -45,7 +47,7 @@ export interface GrupoMenu {
   items: ItemMenu[];
 }
 
-const INDICADORES_CONVERSACION = ["en_conversacion", "requiere_humano", "humano_en_curso"];
+const INDICADORES_CONVERSACION = ["en_conversacion", "requiere_humano", "humano_en_curso", "piden_persona", "captado_sin_derivar", "seguimiento_caido", "dejaron_de_responder", "perdido_comercial", "detencion_reciente"];
 
 function comun(slug: SlugPerfil, ruta: string, extra?: Record<string, string>): string {
   const p = new URLSearchParams({ perfil: slug, ...(extra ?? {}) });
@@ -63,33 +65,35 @@ export function seccionesDePerfil(slug: SlugPerfil): SeccionMenu[] {
 
   const inicio: ItemMenu[] = [
     { href: comun(slug, "hoy"), label: "Resumen", match: "/hoy" },
-    { href: `${base}/estadisticas`, label: "Estadísticas" },
+    { href: `${base}/estadisticas`, label: "Historial" },
     { href: comun(slug, "salud"), label: "Salud del sistema", match: "/salud" },
   ];
 
-  const conversaciones: ItemMenu[] = j
-    ? [
-        { href: "/inbox", label: "Bandeja" },
-        { href: "/revision", label: "Revisión" },
-      ]
-    : [
-        { href: comun(slug, "oportunidades", { indicador: "en_conversacion" }), label: "En conversación", match: "/oportunidades", indicadores: ["en_conversacion"] },
-        { href: comun(slug, "oportunidades", { indicador: "requiere_humano" }), label: "Piden una persona", match: "/oportunidades", indicadores: ["requiere_humano", "humano_en_curso"] },
-        ...(mk ? [{ href: `${base}/consultas-directas`, label: "Consultas directas" }] : []),
-      ];
+  // Reorganización 2 (18/10): Conversaciones y Contactos muestran solo lo que
+  // vale la pena, agrupado; la base fría vive en Prospectos, por base.
+  const conversaciones: ItemMenu[] = [
+    { href: comun(slug, "conversaciones"), label: "Oportunidades", match: "/conversaciones" },
+    ...(j ? [{ href: "/inbox", label: "Todos los chats" }] : []),
+    ...(mk ? [{ href: `${base}/consultas-directas`, label: "Consultas directas" }] : []),
+    { href: comun(slug, "recuperar"), label: "Revisión", match: "/recuperar" },
+    ...(j ? [{ href: "/revision", label: "Incidencias" }] : []),
+    { href: comun(slug, "oportunidades", { indicador: "en_conversacion" }), label: "Lista", match: "/oportunidades", indicadores: INDICADORES_CONVERSACION, oculto: true },
+  ];
 
   const contactos: ItemMenu[] = [
-    { href: comun(slug, "oportunidades"), label: "Todos", match: "/oportunidades" },
-    ...(j ? [{ href: "/prospectos", label: "Prospectos" }] : []),
+    { href: comun(slug, "contactos"), label: "Cartera", match: "/contactos" },
+    { href: `${base}/agenda`, label: "Citas" },
+    { href: `${base}/seguimiento`, label: "Seguimiento" },
+    { href: `${base}/casos-cerrados`, label: j ? "Casos" : "Clientes cerrados" },
     ...(mk
       ? [
           { href: `${base}/prospectos`, label: "Prioritarios" },
           { href: `${base}/presupuestos`, label: "Piden presupuesto" },
         ]
       : []),
-    { href: `${base}/agenda`, label: "Citas" },
-    { href: `${base}/seguimiento`, label: "Seguimiento" },
-    { href: `${base}/casos-cerrados`, label: j ? "Casos" : "Clientes cerrados" },
+    { href: comun(slug, "prospectos-por-base"), label: "Prospectos", match: "/prospectos-por-base" },
+    ...(j ? [{ href: "/prospectos", label: "Buscar en la base", oculto: true }] : []),
+    { href: comun(slug, "oportunidades"), label: "Lista", match: "/oportunidades", oculto: true },
   ];
 
   const captacion: ItemMenu[] = [
@@ -106,7 +110,8 @@ export function seccionesDePerfil(slug: SlugPerfil): SeccionMenu[] {
   const redes: ItemMenu[] = [
     { href: comun(slug, "redes"), label: "Publicaciones", match: "/redes", exacto: true },
     { href: comun(slug, "contenido"), label: "Contenido", match: "/contenido" },
-    { href: comun(slug, "redes/whatsapp"), label: "Perfil de WhatsApp", match: "/redes/whatsapp" },
+    { href: comun(slug, "redes/perfiles"), label: "Perfiles", match: "/redes/perfiles" },
+    { href: comun(slug, "redes/whatsapp"), label: "Perfil de WhatsApp", match: "/redes/whatsapp", oculto: true },
     { href: comun(slug, "redes/plantillas"), label: "Plantillas", match: "/redes/plantillas" },
     { href: comun(slug, "redes/publicidad"), label: "Publicidad", match: "/redes/publicidad" },
   ];

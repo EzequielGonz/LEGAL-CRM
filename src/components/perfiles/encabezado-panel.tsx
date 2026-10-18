@@ -49,10 +49,11 @@ export function PestanasSeccion({ slug }: { slug: SlugPerfil }) {
   const pathname = usePathname() ?? "/";
   const search = useSearchParams();
   const activa = seccionActiva(seccionesDePerfil(slug), pathname, search?.toString() ?? null);
-  if (!activa || activa.seccion.tabs.length < 2) return null;
+  const visibles = activa ? activa.seccion.tabs.filter((t) => !t.oculto) : [];
+  if (!activa || visibles.length < 2) return null;
   return (
     <nav aria-label={`Vistas de ${activa.seccion.label}`} className="pestanas-seccion">
-      {activa.seccion.tabs.map((t) => (
+      {visibles.map((t) => (
         <Link key={t.href} href={t.href} aria-current={t.href === activa.tab.href ? "page" : undefined} className="pestana">
           {t.label}
         </Link>

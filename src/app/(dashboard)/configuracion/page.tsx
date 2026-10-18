@@ -20,6 +20,7 @@ import { SeccionAjustes } from "@/components/configuracion/seccion-ajustes";
 import { GrupoAjustes } from "@/components/configuracion/grupo-ajustes";
 import { NavegacionAjustes, type GrupoNav } from "@/components/configuracion/navegacion-ajustes";
 import { BriefMarca } from "@/components/contenido/contenido-etapa3";
+import { HorarioAtencion } from "@/components/configuracion/horario-atencion";
 
 export const dynamic = "force-dynamic";
 
@@ -77,16 +78,15 @@ export default async function ConfiguracionPage() {
   const resumenDe = (id: string) => grupos.find((g) => g.id === id)?.resumen;
 
   return (
-    <div className="mx-auto max-w-3xl space-y-8">
+    <div className="mx-auto max-w-4xl space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold text-slate-900">Configuración</h1>
-        <p className="mt-1 text-sm text-slate-700">
-          <span className="solo-simple">Los ajustes de todos los días. El resto está en la configuración completa.</span>
-          <span className="solo-avanzado">Todos los ajustes, en ocho grupos. Cada sección se guarda por separado y dice si vale para este perfil o para todos.</span>
-        </p>
+        <h1 className="text-2xl font-semibold text-slate-950">Configuración</h1>
+        <p className="mt-1 text-sm text-slate-600">Tocá un grupo para abrirlo. Cada sección se guarda por separado y dice si vale para este perfil o para todos.</p>
       </div>
 
       <NavegacionAjustes grupos={grupos} />
+
+      <div className="grupos-ajustes">
 
       <GrupoAjustes id="marca" titulo="Perfil y marca" resumen={resumenDe("marca")}>
         <SeccionAjustes id="marca-perfil" titulo="Marca del perfil" alcance="perfil" nivel="simple" palabras="logo colores nombre identidad">
@@ -140,6 +140,9 @@ export default async function ConfiguracionPage() {
       </GrupoAjustes>
 
       <GrupoAjustes id="agenda" titulo="Agenda, disponibilidad, horarios y excepciones" resumen={resumenDe("agenda")}>
+        <SeccionAjustes id="horario-atencion" titulo="Horario de atención" alcance="general" palabras="24 horas fuera de horario asesor 8 21 noche domingo">
+          <HorarioAtencion />
+        </SeccionAjustes>
         <SeccionAjustes id="disponibilidad" titulo="Disponibilidad para citas" alcance="perfil" nivel="simple" palabras="horarios turnos días">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <AvailabilityEditor area="civil" initialRules={civilRules ?? []} />
@@ -232,6 +235,7 @@ export default async function ConfiguracionPage() {
           )}
         </SeccionAjustes>
       </GrupoAjustes>
+      </div>
     </div>
   );
 }

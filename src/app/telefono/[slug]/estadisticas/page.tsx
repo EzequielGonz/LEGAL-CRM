@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import clsx from "clsx";
 import { createClient } from "@/lib/supabase/server";
 import { PhoneHeader } from "@/components/telefono/phone-header";
 import { MetricsPanel } from "@/components/ui/metrics-panel";
@@ -71,10 +70,8 @@ export default async function TelefonoEstadisticasPage({
                     <Link
                       key={c.id}
                       href={`${basePath}?campana=${c.id}`}
-                      className={clsx(
-                        "shrink-0 rounded-full border px-3 py-1 text-xs font-medium",
-                        c.id === selected.id ? "border-gold-400 bg-slate-900 text-gold-100" : "border-slate-200 bg-white text-slate-600"
-                      )}
+                      aria-current={c.id === selected.id ? "page" : undefined}
+                      className="chip-filtro chip-filtro-chico shrink-0"
                     >
                       {c.name}
                     </Link>

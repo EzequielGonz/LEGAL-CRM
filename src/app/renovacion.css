@@ -381,3 +381,202 @@ li.tarjeta-perfil[data-tema] {
   box-shadow: none;
   background: transparent;
 }
+
+/* =====================================================================
+   Reorganización 2 (18/10): cartera compacta, configuración en tarjetas,
+   perfiles como antes en la computadora y modo teléfono renovado.
+   ===================================================================== */
+
+/* ---------- Botones chicos ---------- */
+.btn-gold-sm {
+  border-radius: 0.5rem;
+  min-height: 2rem;
+  padding: 0.375rem 0.75rem;
+}
+.btn-suave-sm {
+  @apply inline-flex min-h-[2rem] items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5
+    text-xs font-medium text-slate-700 shadow-sm transition-colors duration-150 hover:bg-slate-50 hover:text-slate-950;
+}
+
+/* ---------- Avatar de ficha ---------- */
+.avatar-ficha {
+  background: rgb(var(--c-gold-500) / 0.14);
+  color: rgb(var(--c-gold-800));
+  box-shadow: inset 0 0 0 1px rgb(var(--c-gold-500) / 0.22);
+  letter-spacing: 0.02em;
+}
+
+/* ---------- Filtros en píldora ---------- */
+.chip-filtro {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-height: 2.25rem;
+  padding: 0 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--e-borde-fuerte);
+  background: #fff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgb(var(--c-slate-700));
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+.chip-filtro:hover {
+  border-color: rgb(var(--c-slate-300));
+  color: rgb(var(--c-slate-950));
+}
+.chip-filtro[aria-current] {
+  background: rgb(var(--c-slate-900));
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 1px 2px rgb(15 23 42 / 0.16);
+}
+.chip-filtro-chico {
+  min-height: 2rem;
+  padding: 0 0.75rem;
+  font-size: 0.75rem;
+}
+summary.chip-filtro::-webkit-details-marker,
+.grupo-ajustes > summary::-webkit-details-marker,
+.grupo-base > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* ---------- Tarjetas de grupo (cartera e Inicio) ---------- */
+.tarjeta-grupo {
+  min-height: 6.5rem;
+}
+.tarjeta-grupo[aria-current="page"] {
+  box-shadow: 0 0 0 2px rgb(var(--c-gold-500)), 0 12px 28px -16px rgb(var(--c-gold-700) / 0.45) !important;
+}
+.ficha-cartera {
+  min-height: 11rem;
+}
+
+/* ---------- Configuración: grupos como tarjetas ---------- */
+.grupos-ajustes {
+  display: grid;
+  gap: 0.75rem;
+}
+@media (min-width: 640px) {
+  .grupos-ajustes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+  .grupos-ajustes > details[open] {
+    grid-column: 1 / -1;
+  }
+}
+.grupo-ajustes[open] > summary {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.grupo-ajustes > div {
+  animation: abre-suave 0.22s ease-out both;
+}
+.grupo-base[open] {
+  box-shadow: var(--e-sombra-2);
+}
+@keyframes abre-suave {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ---------- Perfiles en la computadora (como antes) ---------- */
+.perfil-pc {
+  animation: entra-perfil 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.perfil-pc-tarjeta {
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.07), 0 24px 44px -26px rgb(0 0 0 / 0.85);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+}
+.perfil-pc-tarjeta:hover,
+.perfil-pc-tarjeta:focus-visible {
+  transform: translateY(-4px) scale(1.025);
+  box-shadow: 0 0 0 3px rgb(var(--c-gold-400)), 0 30px 54px -26px rgb(0 0 0 / 0.95);
+  outline: none;
+}
+.perfil-pc-placa {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: inherit !important;
+}
+.perfil-pc-placa img {
+  width: 70%;
+  height: 70%;
+}
+.perfil-pc-brillo {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(155deg, rgb(255 255 255 / 0.12), transparent 42%);
+}
+.perfil-pc-lapiz {
+  opacity: 0;
+  transform: scale(0.9);
+}
+.perfil-pc:hover .perfil-pc-lapiz,
+.perfil-pc:focus-within .perfil-pc-lapiz {
+  opacity: 1;
+  transform: none;
+}
+@media (hover: none) {
+  .perfil-pc-lapiz {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes entra-perfil {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .perfil-pc,
+  .grupo-ajustes > div {
+    animation: none;
+  }
+  .perfil-pc-tarjeta {
+    transition: none;
+  }
+}
+
+/* ---------- Modo teléfono ---------- */
+.modo-telefono {
+  background: rgb(var(--c-slate-50));
+}
+.barra-telefono {
+  background: rgb(255 255 255 / 0.92);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: inset 0 -1px 0 var(--e-borde);
+  padding-top: max(0.625rem, env(safe-area-inset-top));
+}
+.cabecera-telefono {
+  position: static !important;
+  background: none !important;
+  box-shadow: none !important;
+  padding-top: 1.25rem !important;
+}
+.cabecera-telefono::after {
+  content: none !important;
+  display: none !important;
+}
+.modo-telefono :is(a, button)[class~="bg-slate-900"] {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ---------- Controles y superficies en todo el panel ---------- */
+:is(main#contenido, .modo-telefono) :is(a, button)[class~="border-slate-300"][class~="bg-white"] {
+  border-color: var(--e-borde-fuerte);
+  box-shadow: 0 1px 2px rgb(15 23 42 / 0.04);
+}
+[data-tema] :is(input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="file"]):not(.pin-campo), select, textarea)[class~="border-slate-300"] {
+  border-color: var(--e-borde-fuerte);
+  border-radius: 0.625rem;
+}
+:is(main#contenido, .modo-telefono) h2[class~="text-lg"] {
+  font-weight: 600;
+}
+:is(main#contenido, .modo-telefono) .divide-y > li {
+  transition: background-color 0.15s ease;
+}
