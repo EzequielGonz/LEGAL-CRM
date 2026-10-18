@@ -1,19 +1,17 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
-import { COOKIE_NIVEL, DURACION_NIVEL_S, NIVEL_AYUDA, NIVEL_LABEL, nivelDe, type Nivel } from "@/lib/nivel";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { nivelDe, type Nivel } from "@/lib/nivel";
 import { conVolver } from "@/lib/navegacion";
 
 /**
- * Simple / Avanzado (rediseño 17/10, bloque 3).
- *
- * Cómo funciona: el marco del panel lleva `data-nivel` y el contenido de
- * cada nivel se marca con las clases `solo-simple` / `solo-avanzado`
- * (marca.css las oculta). Al alternar solo cambia ese atributo: nada se
- * desmonta, así se conservan borradores, archivos elegidos, búsqueda,
- * filtros, página y registro abierto. No se guarda nada en la base, no se
- * envía nada y no se navega.
+ * Opciones avanzadas a pedido (18/10; reemplaza el selector Simple /
+ * Avanzado). Cada pantalla abre con lo esencial; lo marcado como
+ * `solo-avanzado` se despliega con «Más opciones» al pie de la página y se
+ * vuelve a plegar al cambiar de pantalla. Nada se desmonta: se conservan
+ * borradores, archivos elegidos, filtros y registro abierto. No se guarda
+ * nada en la base, no se envía nada y no se navega.
  */
 const NivelContexto = createContext<{ nivel: Nivel; cambiar: (n: Nivel) => void }>({ nivel: "simple", cambiar: () => {} });
 
@@ -21,25 +19,17 @@ export function useNivel() {
   return useContext(NivelContexto);
 }
 
-function guardarCookie(n: Nivel) {
-  document.cookie = `${COOKIE_NIVEL}=${n}; path=/; max-age=${DURACION_NIVEL_S}; samesite=lax`;
-}
-
-export function NivelProvider({ inicial, children, className = "" }: { inicial: Nivel; children: React.ReactNode; className?: string }) {
+export function NivelProvider({ inicial = "simple", children, className = "" }: { inicial?: Nivel; children: React.ReactNode; className?: string }) {
   const [nivel, setNivel] = useState<Nivel>(inicial);
-  const cambiar = useCallback((n: Nivel) => {
-    setNivel(n);
-    guardarCookie(n);
-  }, []);
-  // `?nivel=avanzado` (accesos «Personalizar» / «Ver configuración completa»).
-  // Si la página llegó de la caché del navegador con otro nivel, manda la cookie.
+  const cambiar = useCallback((n: Nivel) => setNivel(n), []);
+  const pathname = usePathname();
+  // Cada pantalla abre plegada; `?nivel=avanzado` (accesos «Personalizar»)
+  // la abre desplegada.
   useEffect(() => {
     const pedido = new URLSearchParams(window.location.search).get("nivel");
-    if (pedido === "simple" || pedido === "avanzado") return cambiar(pedido);
-    const guardado = document.cookie.split("; ").find((c) => c.startsWith(`${COOKIE_NIVEL}=`))?.split("=")[1];
-    if (guardado) setNivel(nivelDe(guardado));
-  }, [cambiar]);
-  // Un pedido de foco (error de validación en un campo oculto o plegado).
+    setNivel(pedido === "avanzado" ? "avanzado" : "simple");
+  }, [pathname]);
+  // Un pedido de foco (error de validación en un campo plegado).
   useEffect(() => {
     const alPedir = (e: Event) => {
       const id = (e as CustomEvent<string>).detail;
@@ -70,64 +60,47 @@ export function NivelProvider({ inicial, children, className = "" }: { inicial: 
   );
 }
 
+/**
+ * «Más opciones» al pie de cada pantalla: aparece solo si la pantalla tiene
+ * opciones plegadas y las despliega (o las vuelve a plegar).
+ */
+export function MasOpciones() {
+  const { nivel, cambiar } = useNivel();
+  const pathname = usePathname();
+  const [hay, setHay] = useState(false);
+  useEffect(() => {
+    const revisar = () => setHay(!!document.querySelector("#contenido .solo-avanzado"));
+    revisar();
+    const t = window.setTimeout(revisar, 800);
+    return () => window.clearTimeout(t);
+  }, [pathname]);
+  if (!hay) return null;
+  const abierto = nivel === "avanzado";
+  return (
+    <div className="mas-opciones">
+      <button
+        type="button"
+        aria-expanded={abierto}
+        onClick={() => {
+          cambiar(abierto ? "simple" : "avanzado");
+          if (!abierto) window.setTimeout(() => document.querySelector("#contenido .solo-avanzado")?.scrollIntoView({ block: "start", behavior: "smooth" }), 60);
+        }}
+      >
+        {abierto ? "Ocultar opciones avanzadas" : "Más opciones"}
+        <span aria-hidden="true">{abierto ? "▴" : "▾"}</span>
+      </button>
+    </div>
+  );
+}
+
 /** Lleva el foco a un campo aunque esté en Avanzado o dentro de una sección plegada. */
 export function enfocarCampo(id: string) {
   window.dispatchEvent(new CustomEvent("crm:enfocar", { detail: id }));
 }
 
-/**
- * Selector «Simple / Avanzado»: dos opciones con semántica de radio,
- * flechas para cambiar, opción activa marcada con texto y forma (no solo
- * color) y un aviso para el lector de pantalla.
- */
-export function SelectorNivel({ className = "", oscuro = false }: { className?: string; oscuro?: boolean }) {
-  const { nivel, cambiar } = useNivel();
-  const [aviso, setAviso] = useState("");
-  const refs = useRef<Record<Nivel, HTMLButtonElement | null>>({ simple: null, avanzado: null });
-  const elegir = (n: Nivel, foco = false) => {
-    if (n !== nivel) {
-      cambiar(n);
-      setAviso(NIVEL_AYUDA[n]);
-    }
-    if (foco) refs.current[n]?.focus();
-  };
-  const opciones: Nivel[] = ["simple", "avanzado"];
-  return (
-    <div className={`selector-nivel ${oscuro ? "selector-nivel-oscuro" : ""} ${className}`}>
-      <div
-        role="radiogroup"
-        aria-label="Nivel de detalle"
-        className="selector-nivel-grupo"
-        onKeyDown={(e) => {
-          if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key)) {
-            e.preventDefault();
-            elegir(nivel === "simple" ? "avanzado" : "simple", true);
-          }
-        }}
-      >
-        {opciones.map((n) => (
-          <button
-            key={n}
-            ref={(el) => {
-              refs.current[n] = el;
-            }}
-            type="button"
-            role="radio"
-            aria-checked={nivel === n}
-            tabIndex={nivel === n ? 0 : -1}
-            title={NIVEL_AYUDA[n]}
-            onClick={() => elegir(n)}
-            className="selector-nivel-opcion"
-          >
-            {NIVEL_LABEL[n]}
-          </button>
-        ))}
-      </div>
-      <span role="status" aria-live="polite" className="sr-only">
-        {aviso}
-      </span>
-    </div>
-  );
+/** Ya no hay selector global (18/10): se conserva el nombre por compatibilidad. */
+export function SelectorNivel(_props: { className?: string; oscuro?: boolean }) {
+  return null;
 }
 
 /** Contenido solo para un nivel. Se oculta con CSS (no se desmonta: conserva lo escrito). */
@@ -153,8 +126,9 @@ export function EnlaceAvanzado({ href, children, className = "" }: { href: strin
         cambiar("avanzado");
         const aqui = window.location.pathname + window.location.search;
         const [ruta, ancla] = href.split("#");
-        const destino = conVolver(ruta, aqui) + (ancla ? `#${ancla}` : "");
-        if (ruta === window.location.pathname || ruta === "") {
+        const conNivel = ruta ? `${ruta}${ruta.includes("?") ? "&" : "?"}nivel=avanzado` : ruta;
+        const destino = conVolver(conNivel, aqui) + (ancla ? `#${ancla}` : "");
+        if (ruta.split("?")[0] === window.location.pathname || ruta === "") {
           // Mismo lugar: solo se abre el apartado.
           if (ancla) enfocarCampo(ancla);
           return;

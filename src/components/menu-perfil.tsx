@@ -2,60 +2,61 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import clsx from "clsx";
 import { LogoutButton } from "@/components/acceso/logout-button";
 import { marcaDe, type SlugPerfil } from "@/lib/marca";
-import { itemActivo, menuDePerfil } from "@/lib/menu";
-import { IconoSeccion } from "@/components/ui/icono-seccion";
+import { seccionActiva, seccionesDePerfil } from "@/lib/menu";
+import { Icono } from "@/components/ui/icono-seccion";
 import { LogoPerfil } from "@/components/ui/logo-perfil";
-import { SelectorNivel } from "@/components/nivel/nivel";
+import { abrirAsistente } from "@/components/asistente/asistente-panel";
 
 /**
- * Menú unificado de los cuatro perfiles (16/10). Misma estructura y
- * comportamiento en todos; cambia la marca (logo, nombre) y la paleta, que
- * llega por `data-tema` del contenedor. En pantallas chicas se pliega en una
- * barra superior con botón «Menú».
+ * Menú de los cuatro perfiles (renovado 18/10): barra clara con seis
+ * secciones, iguales en todos los perfiles. Cambia la marca (logo, nombre y
+ * color del acento). Las vistas de cada sección se eligen con las pestañas
+ * de arriba del contenido. En pantallas chicas se pliega en una barra con
+ * botón «Menú». Abajo del todo, el asistente IA.
  */
 export function MenuPerfil({ slug, nombre, logo }: { slug: SlugPerfil; nombre?: string | null; logo?: string | null }) {
   const pathname = usePathname() ?? "/";
+  const search = useSearchParams();
   const marca = marcaDe(slug);
-  const grupos = menuDePerfil(slug);
-  const activo = itemActivo(grupos, pathname);
+  const secciones = seccionesDePerfil(slug);
+  const activa = seccionActiva(secciones, pathname, search?.toString() ?? null);
   const [abierto, setAbierto] = useState(false);
   const titulo = nombre?.trim() || marca.nombre;
-  // Fuente única: lo que resolvió el servidor (Configuración → original).
   const logoUrl = logo?.trim() || marca.logo;
 
   useEffect(() => setAbierto(false), [pathname]);
 
-  // Título de la pestaña «Pantalla · Marca» (rediseño 17/10, bloque 2).
-  const pantalla = grupos.flatMap((g) => g.items).find((it) => it.href === activo)?.label ?? "Panel";
+  // Título de la pestaña del navegador: «Vista · Marca».
+  const pantalla = activa ? (activa.seccion.tabs.length > 1 ? activa.tab.label : activa.seccion.label) : "Panel";
   useEffect(() => {
     document.title = `${pantalla} · ${titulo}`;
   }, [pantalla, titulo]);
 
-  const Logo = <LogoPerfil slug={slug} src={logoUrl} tamano="sm" />;
-
   return (
     <>
       {/* Barra superior en teléfono y tablet */}
-      <div className="barra-movil sticky top-0 z-30 flex items-center justify-between gap-2 bg-slate-950 px-3 py-3 sm:px-4 lg:hidden">
-        <div className="flex min-w-0 items-center gap-3">
-          {Logo}
-          <p className="hidden truncate font-serif text-sm font-semibold text-gold-100 min-[420px]:block">{titulo}</p>
+      <div className="barra-movil sticky top-0 z-30 flex items-center justify-between gap-2 px-3 py-2.5 sm:px-4 lg:hidden">
+        <div className="flex min-w-0 items-center gap-2.5">
+          <LogoPerfil slug={slug} src={logoUrl} tamano="sm" />
+          <p className="truncate text-sm font-semibold text-slate-950">{titulo}</p>
         </div>
         <div className="flex shrink-0 items-center gap-2">
-        <SelectorNivel oscuro />
-        <button
-          type="button"
-          onClick={() => setAbierto((v) => !v)}
-          aria-expanded={abierto}
-          aria-controls="menu-perfil"
-          className="tactil rounded-lg border border-white/15 px-3 text-sm font-medium text-gold-100"
-        >
-          {abierto ? "Cerrar" : "Menú"}
-        </button>
+          <button type="button" onClick={() => abrirAsistente()} className="tactil inline-flex items-center justify-center rounded-lg text-slate-700 hover:bg-slate-100" aria-label="Abrir el asistente">
+            <Icono nombre="asistente" className="h-5 w-5 text-gold-600" />
+          </button>
+          <button
+            type="button"
+            onClick={() => setAbierto((v) => !v)}
+            aria-expanded={abierto}
+            aria-controls="menu-perfil"
+            className="tactil rounded-lg border border-slate-200 bg-white px-3 text-sm font-medium text-slate-800"
+          >
+            {abierto ? "Cerrar" : "Menú"}
+          </button>
         </div>
       </div>
 
@@ -64,7 +65,7 @@ export function MenuPerfil({ slug, nombre, logo }: { slug: SlugPerfil; nombre?: 
       <aside
         id="menu-perfil"
         className={clsx(
-          "menu-estudio z-20 flex h-screen w-[17rem] shrink-0 flex-col bg-slate-950",
+          "menu-estudio z-20 flex h-screen w-[16rem] shrink-0 flex-col",
           "fixed inset-y-0 left-0 lg:sticky lg:top-0 lg:visible lg:translate-x-0",
           "transition-[transform,visibility] duration-300 ease-out",
           abierto ? "visible translate-x-0" : "invisible -translate-x-full"
@@ -73,67 +74,58 @@ export function MenuPerfil({ slug, nombre, logo }: { slug: SlugPerfil; nombre?: 
         <a href="#contenido" className="skip-link">
           Saltar al contenido
         </a>
-        <div className="menu-marca mx-3 mt-3 flex items-center gap-3 rounded-2xl px-3 py-3">
-          {Logo}
-          <div className="min-w-0">
-            <p className="truncate font-serif text-sm font-semibold tracking-wide text-gold-100">{titulo}</p>
-            <p className="truncate text-xs uppercase tracking-[0.14em] text-slate-400">{marca.bajada}</p>
-          </div>
-        </div>
+        <Link href="/perfiles" className="menu-marca mx-3 mt-4 flex items-center gap-3 rounded-xl px-2 py-2 hover:bg-slate-50" title="Cambiar de perfil">
+          <LogoPerfil slug={slug} src={logoUrl} tamano="sm" />
+          <span className="min-w-0">
+            <span className="block truncate text-sm font-semibold text-slate-950">{titulo}</span>
+            <span className="block truncate text-xs text-slate-500">{marca.bajada}</span>
+          </span>
+        </Link>
 
         <nav aria-label="Secciones del perfil" className="flex-1 overflow-y-auto px-3 py-4">
-          {grupos.map((g) => (
-            <div key={g.titulo} className="mb-4">
-              <p className="flex items-center gap-2 px-3 pb-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">
-                <span>{g.titulo}</span>
-                <span aria-hidden="true" className="h-px flex-1 bg-gradient-to-r from-white/15 to-transparent" />
-              </p>
-              <ul className="space-y-0.5">
-                {g.items.map((item) => {
-                  const esActivo = item.href === activo;
-                  return (
-                    <li key={item.href}>
-                      <Link
-                        href={item.href}
-                        aria-current={esActivo ? "page" : undefined}
-                        className={clsx(
-                          "menu-item group relative flex items-center gap-3 rounded-[10px] px-3 py-[0.5625rem] text-[13.5px] font-medium transition-[background-color,color,transform] duration-200",
-                          esActivo
-                            ? "menu-activo text-gold-100"
-                            : "text-slate-300 hover:translate-x-0.5 hover:bg-white/5 hover:text-gold-100"
-                        )}
-                      >
-                        <span
-                          className={clsx(
-                            "absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-gold-400 transition-opacity duration-200",
-                            esActivo ? "opacity-100" : "opacity-0 group-hover:opacity-60"
-                          )}
-                        />
-                        <IconoSeccion href={item.href} className={clsx("ml-1 h-[18px] w-[18px] shrink-0 transition-opacity", esActivo ? "opacity-100 text-gold-300" : "opacity-60 group-hover:opacity-100")} />
-                        <span>{item.label}</span>
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          ))}
+          <ul className="space-y-0.5">
+            {secciones.map((s) => {
+              const esActiva = activa?.seccion.clave === s.clave;
+              return (
+                <li key={s.clave}>
+                  <Link
+                    href={s.href}
+                    aria-current={esActiva ? "page" : undefined}
+                    className="menu-item flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium"
+                  >
+                    <Icono nombre={s.icono} className="h-[18px] w-[18px] shrink-0" />
+                    <span>{s.label}</span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
         </nav>
 
-        <div className="menu-pie border-t border-white/[0.07] px-3 py-2">
-          <Link
-            href="/perfiles"
-            className="block rounded-lg px-3 py-1.5 text-xs font-medium text-slate-300 transition-colors hover:bg-white/5 hover:text-gold-100"
+        <div className="px-3 pb-2">
+          <button
+            type="button"
+            onClick={() => abrirAsistente()}
+            className="flex w-full items-center gap-3 rounded-xl border border-slate-200 bg-gradient-to-br from-white to-slate-50 px-3 py-2.5 text-left text-sm font-medium text-slate-800 shadow-sm hover:border-slate-300"
           >
-            ← Elegir otro perfil
+            <span className="grid h-8 w-8 place-items-center rounded-lg bg-gold-500/15 text-gold-700">
+              <Icono nombre="asistente" className="h-[18px] w-[18px]" />
+            </span>
+            <span className="min-w-0">
+              <span className="block">Pedile algo</span>
+              <span className="block truncate text-xs font-normal text-slate-500">Asistente del panel</span>
+            </span>
+          </button>
+        </div>
+
+        <div className="menu-pie border-t border-slate-100 px-3 py-2">
+          <Link href="/perfiles" className="block rounded-lg px-3 py-1.5 text-xs font-medium">
+            Cambiar de perfil
           </Link>
-          <Link
-            href="/inicio"
-            className="block rounded-lg px-3 py-1.5 text-xs font-medium text-slate-300 transition-colors hover:bg-white/5 hover:text-gold-100"
-          >
-            ← Teléfono o computadora
+          <Link href="/inicio" className="block rounded-lg px-3 py-1.5 text-xs font-medium">
+            Teléfono o computadora
           </Link>
-          <LogoutButton className="block w-full rounded-lg px-3 py-1.5 text-left text-xs hover:bg-white/5" />
+          <LogoutButton className="block w-full rounded-lg px-3 py-1.5 text-left text-xs font-medium" />
         </div>
       </aside>
     </>
