@@ -26,7 +26,15 @@ const DIBUJOS: Record<string, Dibujo> = {
   agentes: { l: "M7.5 8h9A2.5 2.5 0 0 1 19 10.5v6a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 5 16.5v-6A2.5 2.5 0 0 1 7.5 8ZM12 4v4M9.5 13h.01M14.5 13h.01M10 16h4M3 12v3M21 12v3", r: "M7.5 8h9A2.5 2.5 0 0 1 19 10.5v6a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 5 16.5v-6A2.5 2.5 0 0 1 7.5 8Z" },
   revision: { l: "M12 3.5 19 6v5.5c0 4.3-3 7.6-7 9-4-1.4-7-4.7-7-9V6ZM9 12l2 2 4-4.5", r: "M12 3.5 19 6v5.5c0 4.3-3 7.6-7 9-4-1.4-7-4.7-7-9V6Z" },
   configuracion: { l: "M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM19.4 13.5l1.6 1-2 3.4-1.8-.6a7.5 7.5 0 0 1-2.2 1.3L14.6 20.5h-4l-.4-1.9A7.5 7.5 0 0 1 8 17.3l-1.8.6-2-3.4 1.6-1a7.6 7.6 0 0 1 0-2.6l-1.6-1 2-3.4 1.8.6A7.5 7.5 0 0 1 10.2 5.8l.4-2.3h4l.4 2.3a7.5 7.5 0 0 1 2.2 1.3l1.8-.6 2 3.4-1.6 1a7.6 7.6 0 0 1 0 2.6Z", r: "M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" },
+  redes: { l: "M7 9.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM17 7a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM17 22a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM9.2 8.3l5.6 4.4M9.2 6.2l5.6-.9M7 9.5v6l7.8 3", r: "M7 9.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" },
+  publicidad: { l: "M4 19.5h16M6.5 16V9.5M11 16V5.5M15.5 16v-4M19 8l-3-3-3 3", r: "M9.5 5.5h3V16h-3z" },
+  asistente: { l: "M12 3.5l1.7 4.6 4.8 1.4-4.8 1.6L12 15.5l-1.7-4.4-4.8-1.6 4.8-1.4ZM18.5 14.5l.8 2.1 2.2.7-2.2.8-.8 2.1-.8-2.1-2.2-.8 2.2-.7ZM5.5 15.5l.6 1.4 1.4.5-1.4.5-.6 1.6-.6-1.6-1.4-.5 1.4-.5Z", r: "M12 3.5l1.7 4.6 4.8 1.4-4.8 1.6L12 15.5l-1.7-4.4-4.8-1.6 4.8-1.4Z" },
   // acciones
+  lapiz: { l: "M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16ZM13.5 6.5l4 4", r: "M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16Z" },
+  puntos: { l: "M12 6.5h.01M12 12h.01M12 17.5h.01" },
+  flecha: { l: "M5 12h14M13 6l6 6-6 6" },
+  mas: { l: "M12 5v14M5 12h14" },
+  borrar: { l: "M5 7h14M10 7V5h4v2M7 7l1 12.5a1.5 1.5 0 0 0 1.5 1.5h5a1.5 1.5 0 0 0 1.5-1.5L17 7M10.5 11v6M13.5 11v6" },
   check: { l: "M5 12.5l4.5 4.5L19 7" },
   copiar: { l: "M9 9h9.5A1.5 1.5 0 0 1 20 10.5V19a1.5 1.5 0 0 1-1.5 1.5H10A1.5 1.5 0 0 1 8.5 19v-8.5A1.5 1.5 0 0 1 9 9ZM15.5 9V5.5A1.5 1.5 0 0 0 14 4H5.5A1.5 1.5 0 0 0 4 5.5V14a1.5 1.5 0 0 0 1.5 1.5H8.5", r: "M9 9h9.5A1.5 1.5 0 0 1 20 10.5V19a1.5 1.5 0 0 1-1.5 1.5H10A1.5 1.5 0 0 1 8.5 19v-8.5A1.5 1.5 0 0 1 9 9Z" },
   enviar: { l: "M20.5 3.5 10 14M20.5 3.5 14 20.5l-4-6.5-6.5-4Z", r: "M20.5 3.5 14 20.5l-4-6.5-6.5-4Z" },
@@ -51,18 +59,20 @@ const POR_RUTA: [RegExp, string][] = [
   [/campanas|campana/, "campanas"],
   [/captacion/, "captacion"],
   [/contenido/, "contenido"],
+  [/^redes$/, "redes"],
+  [/publicidad/, "publicidad"],
   [/comparacion/, "comparacion"],
   [/agentes|biblioteca/, "agentes"],
   [/revision/, "revision"],
   [/configuracion/, "configuracion"],
 ];
 
-export function Icono({ nombre, className = "h-[18px] w-[18px]" }: { nombre: string; className?: string }) {
+export function Icono({ nombre, className = "h-[18px] w-[18px]", grosor }: { nombre: string; className?: string; grosor?: number }) {
   const d = DIBUJOS[nombre] ?? { l: "M5 12h14M12 5v14" };
   return (
     <svg viewBox="0 0 24 24" className={className} fill="none" aria-hidden="true" focusable="false">
       {d.r && <path d={d.r} fill="currentColor" fillOpacity=".14" />}
-      <path d={d.l} stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+      <path d={d.l} stroke="currentColor" strokeWidth={grosor ?? (nombre === "puntos" ? 2.6 : 1.6)} strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
