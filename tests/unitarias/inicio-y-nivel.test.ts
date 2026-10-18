@@ -11,15 +11,16 @@ test("nivel: la primera entrada y cualquier valor desconocido abren en Simple", 
   assert.equal(nivelDe("avanzado"), "avanzado");
 });
 
-test("inicio: orden por urgencia, enlaces a la lista exacta y «Sin datos» ≠ 0", () => {
+test("inicio: los captados primero, enlaces a la lista exacta y «Sin datos» ≠ 0", () => {
   const p = prioridadesDeInicio({
     conteos: { requiere_humano: 2, captado_sin_derivar: null, revision_pendiente: 0 },
     contenidoRetenido: 3,
     enlace: (c) => `/oportunidades?indicador=${c}`,
     enlaceContenido: "/contenido#c-acc",
   });
-  assert.equal(p[0].clave, "requiere_humano");
-  assert.equal(p[0].href, "/oportunidades?indicador=requiere_humano");
+  assert.equal(p[0].clave, "captado_sin_derivar");
+  assert.equal(p[1].clave, "requiere_humano");
+  assert.equal(p[1].href, "/oportunidades?indicador=requiere_humano");
   assert.equal(p.find((x) => x.clave === "captado_sin_derivar")!.cantidad, null);
   assert.equal(p.find((x) => x.clave === "contenido_retenido")!.href, "/contenido#c-acc");
   assert.equal(p.find((x) => x.clave === "seguimiento_caido")!.cantidad, null);
