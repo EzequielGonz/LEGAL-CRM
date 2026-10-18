@@ -67,7 +67,7 @@ export default async function TelefonoClientesPage({
             name="q"
             defaultValue={searchParams.q ?? ""}
             placeholder="Nombre o teléfono"
-            className="min-w-0 flex-1 rounded-xl border border-slate-300 px-3 py-2.5 text-sm outline-none focus-gold"
+            className="min-w-0 flex-1 rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm shadow-sm outline-none focus-gold"
           />
           <button type="submit" className="btn-gold">
             Buscar
@@ -78,10 +78,8 @@ export default async function TelefonoClientesPage({
             <Link
               key={e.key}
               href={`${basePath}?estado=${e.key}${q ? `&q=${encodeURIComponent(q)}` : ""}`}
-              className={clsx(
-                "rounded-full border px-3 py-1 text-xs font-medium",
-                estado === e.key ? "border-gold-400 bg-slate-900 text-gold-100" : "border-slate-200 bg-white text-slate-600"
-              )}
+              aria-current={estado === e.key ? "page" : undefined}
+              className="chip-filtro chip-filtro-chico"
             >
               {e.label}
             </Link>
@@ -92,7 +90,7 @@ export default async function TelefonoClientesPage({
           <Link
             key={r.id}
             href={`/ficha/${r.contact_id}?volver=${volver}`}
-            className="block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm active:scale-[0.99]"
+            className="block rounded-3xl border border-slate-200 bg-white p-4 shadow-sm transition active:scale-[0.99]"
           >
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">

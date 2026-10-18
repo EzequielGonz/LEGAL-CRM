@@ -54,13 +54,13 @@ export default async function BibliotecaPage({ searchParams }: { searchParams: {
 
   return (
     <div className="min-h-screen bg-slate-50 pb-10">
-      <header className="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 px-5 py-5 shadow-navy">
+      <header className="border-b border-slate-200 bg-white px-5 py-5">
         <div className="mx-auto flex max-w-5xl items-start justify-between gap-4">
           <div>
-            <h1 className="text-xl font-semibold text-white">Biblioteca de agentes</h1>
-            <p className="text-sm text-slate-300">Solo configuración: ninguno responde mensajes. El agente que responde hoy se maneja en «Agentes IA» de cada perfil.</p>
+            <h1 className="text-xl font-semibold text-slate-950">Biblioteca de agentes</h1>
+            <p className="text-sm text-slate-600">Solo configuración: ninguno responde mensajes. El agente que responde hoy se maneja en «Agentes IA» de cada perfil.</p>
           </div>
-          <Link href={volver ?? "/inicio"} className="tactil inline-flex items-center text-sm text-slate-300 hover:text-gold-200">
+          <Link href={volver ?? "/inicio"} className="tactil inline-flex items-center text-sm font-medium text-slate-600 hover:text-slate-950">
             ← Volver
           </Link>
         </div>
