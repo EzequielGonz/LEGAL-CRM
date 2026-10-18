@@ -1,6 +1,6 @@
 # CONTEXTO ACTUAL · CRM multirubro
 
-Actualizado: 18/10/2026 (reorganización 2 publicada en producción, PR #20). Sin secretos ni datos de prospectos.
+Actualizado: 18/10/2026 (reorganización 2 y ajuste de perfiles en PC publicados, PR #20 y #21). Sin secretos ni datos de prospectos.
 
 ## Bloque actual: reorganización 2 (18/10, pedido de la responsable)
 Detalle en `docs/reorganizacion-2/ENTREGA.md`. Rama `reorganizacion-2`, PR #20 → `main`. Sin migraciones.
@@ -22,6 +22,8 @@ Detalle en `docs/reorganizacion-2/ENTREGA.md`. Rama `reorganizacion-2`, PR #20 �
 3. Comprobado automáticamente: unitarias 190/190; build de Vercel.
 4. Revisado visualmente: **pendiente** (la sesión no puede abrir el panel con ingreso).
 5. Probado funcionalmente: **no** (sin páginas de Facebook vinculadas; sin contacto real).
+
+**Ajuste posterior (PR #21, pedido de la responsable):** la pantalla de perfiles en PC quedaba con recuadros blancos y nombres invisibles (cada perfil tomaba el fondo claro del tema). Ahora muestra una tarjeta completa por marca, más que la del teléfono: pendientes, semana (mensajes, captados, citas, derivados), última base con embudo, últimos captados y accesos, con lápiz y tres puntos. Preview `dpl_A9sEqNCWddQf1ZndRyavxdSJxUSW` READY (`113b78e`). Producción `dpl_EFD1DzdwnFVRbWyYx5P3truzxGdt` READY = `main` `eb9b8a9`, sin errores nuevos. Revisión visual: pendiente (la hace la responsable).
 
 **Habilitado**: nada nuevo se activa solo. La regla de horario rige en las respuestas de los agentes activos. Facebook requiere las variables por perfil en Vercel.
 
@@ -56,7 +58,7 @@ Implementado → Desplegado (READY) → Comprobado automáticamente → Revisado
 - Conversaciones y Contactos muestran solo oportunidades reales; la base fría vive en Prospectos, agrupada por base (18/10).
 
 ## Siguiente paso
-Revisión visual de la responsable y vinculación de redes, landings y Google Cloud. Después: contenido de 1 mes por rubro y landings.
+En pausa hasta que la responsable vincule redes, landings y Google Cloud. Revisión visual de la responsable y vinculación de redes, landings y Google Cloud. Después: contenido de 1 mes por rubro y landings.
 
 ## Dónde leer
 `CLAUDE.md` → `.claude/referencias/reglas-comunes.md` → `docs/reorganizacion-2/ENTREGA.md` → `claude/PUNTO_DE_CONTROL.md`.
