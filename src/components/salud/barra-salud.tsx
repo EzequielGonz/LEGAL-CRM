@@ -31,13 +31,8 @@ export async function BarraSalud({ slug }: { slug: string }) {
   }
   const r = resumenSalud(items);
   const verTodo = `/salud?perfil=${encodeURIComponent(slug)}`;
-  if (r.rojo === 0 && r.amarillo === 0) {
-    return (
-      <Link href={verTodo} className="mb-4 inline-flex items-center gap-2.5 rounded-full border border-emerald-300 bg-emerald-50 px-3.5 py-1.5 text-xs font-medium text-emerald-900 transition-shadow hover:shadow-md">
-        <span aria-hidden="true" className="punto-vivo text-emerald-500" /> Sistema en orden
-      </Link>
-    );
-  }
+  // Todo en orden: no se muestra nada (menos ruido). El detalle sigue en Inicio › Salud.
+  if (r.rojo === 0 && r.amarillo === 0) return null;
   const urgentes = items.filter((i) => i.estado === "rojo").slice(0, 3);
   const mostrar = urgentes.length ? urgentes : items.filter((i) => i.estado === "amarillo").slice(0, 2);
   const titulo = r.rojo ? `${r.rojo} problema(s) frenan la operación` : `${r.amarillo} punto(s) para revisar`;

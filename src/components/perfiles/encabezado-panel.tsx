@@ -1,55 +1,62 @@
 "use client";
 
-import { usePathname } from "next/navigation";
-import { itemActivo, menuDePerfil } from "@/lib/menu";
+import Link from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
+import { seccionActiva, seccionesDePerfil } from "@/lib/menu";
 import { marcaDe, type SlugPerfil } from "@/lib/marca";
-import { IconoSeccion } from "@/components/ui/icono-seccion";
-import { SelectorNivel } from "@/components/nivel/nivel";
+import { Icono } from "@/components/ui/icono-seccion";
+import { abrirAsistente } from "@/components/asistente/asistente-panel";
 
 /**
- * Franja superior del panel (diseño «estudio», 16/10): ubica dónde se está
- * (grupo › sección del mismo menú), el perfil y la fecha. La ruta es solo
- * orientación visual (oculta al lector: el menú ya marca la página actual).
- * A la derecha, siempre en el mismo lugar, el selector Simple / Avanzado.
+ * Franja superior del panel (renovada 18/10): dónde se está (perfil ›
+ * sección), la fecha y el acceso al asistente. La ruta es solo orientación
+ * visual: el menú ya marca la página actual para el lector de pantalla.
  */
 export function EncabezadoPanel({ slug, nombre }: { slug: SlugPerfil; nombre?: string | null }) {
   const pathname = usePathname() ?? "/";
-  const grupos = menuDePerfil(slug);
-  const activo = itemActivo(grupos, pathname);
-  let grupo: string | null = null;
-  let seccion: string | null = null;
-  for (const g of grupos) {
-    const it = g.items.find((i) => i.href === activo);
-    if (it) {
-      grupo = g.titulo;
-      seccion = it.label;
-      break;
-    }
-  }
+  const search = useSearchParams();
+  const activa = seccionActiva(seccionesDePerfil(slug), pathname, search?.toString() ?? null);
   const marca = marcaDe(slug);
   const titulo = nombre?.trim() || marca.nombre;
-  const hoy = new Intl.DateTimeFormat("es-AR", { weekday: "long", day: "numeric", month: "long" }).format(new Date());
+  const hoy = new Intl.DateTimeFormat("es-AR", { weekday: "long", day: "numeric", month: "long", timeZone: "America/Argentina/Buenos_Aires" }).format(new Date());
 
   return (
     <div className="encabezado-panel">
       <div className="encabezado-ruta" aria-hidden="true">
-        {activo && (
-          <span className="encabezado-icono">
-            <IconoSeccion href={activo} className="h-4 w-4" />
-          </span>
-        )}
         <span className="encabezado-perfil">{titulo}</span>
-        {grupo && <span className="encabezado-sep">/</span>}
-        {grupo && <span className="encabezado-grupo">{grupo}</span>}
-        {seccion && <span className="encabezado-sep">/</span>}
-        {seccion && <span className="encabezado-seccion">{seccion}</span>}
+        {activa && <span className="encabezado-sep">/</span>}
+        {activa && <span className="encabezado-seccion">{activa.seccion.label}</span>}
       </div>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
         <span className="encabezado-fecha" aria-hidden="true" suppressHydrationWarning>
           {hoy}
         </span>
-        <SelectorNivel />
+        <button
+          type="button"
+          onClick={() => abrirAsistente()}
+          className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 text-xs font-medium text-slate-700 shadow-sm hover:border-slate-300 hover:text-slate-950"
+        >
+          <Icono nombre="asistente" className="h-4 w-4 text-gold-600" />
+          Pedile algo
+        </button>
       </div>
     </div>
+  );
+}
+
+/** Pestañas de la sección actual: las vistas que agrupa (18/10). */
+export function PestanasSeccion({ slug }: { slug: SlugPerfil }) {
+  const pathname = usePathname() ?? "/";
+  const search = useSearchParams();
+  const activa = seccionActiva(seccionesDePerfil(slug), pathname, search?.toString() ?? null);
+  if (!activa || activa.seccion.tabs.length < 2) return null;
+  return (
+    <nav aria-label={`Vistas de ${activa.seccion.label}`} className="pestanas-seccion">
+      {activa.seccion.tabs.map((t) => (
+        <Link key={t.href} href={t.href} aria-current={t.href === activa.tab.href ? "page" : undefined} className="pestana">
+          {t.label}
+        </Link>
+      ))}
+    </nav>
   );
 }

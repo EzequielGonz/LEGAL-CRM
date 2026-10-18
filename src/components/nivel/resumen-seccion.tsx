@@ -18,6 +18,13 @@ export interface AccionResumen {
   href: string;
 }
 
+const PUNTO: Record<TonoResumen, string> = {
+  bloqueo: "bg-red-500",
+  atencion: "bg-amber-500",
+  ok: "bg-emerald-500",
+  info: "bg-slate-400",
+};
+
 const BORDE: Record<TonoResumen, string> = {
   bloqueo: "border-l-red-600",
   atencion: "border-l-amber-500",
@@ -88,8 +95,9 @@ export function ResumenSeccion({
 }) {
   const titulo = id ? `${id}-titulo` : undefined;
   return (
-    <section aria-labelledby={titulo} className={`resumen-seccion solo-simple rounded-2xl border border-slate-300 border-l-4 bg-white p-5 sm:p-6 ${BORDE[tono]}`}>
-      <p className="text-sm font-medium text-slate-600">
+    <section aria-labelledby={titulo} className="resumen-seccion solo-simple rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+      <p className="flex items-center gap-2 text-sm font-medium text-slate-600">
+        <span aria-hidden="true" className={`h-2 w-2 rounded-full ${PUNTO[tono]}`} />
         {etiqueta} <span className="sr-only">· {ETIQUETA_TONO[tono]}</span>
       </p>
       <h2 id={titulo} className="mt-1 text-xl font-semibold text-slate-900 [overflow-wrap:anywhere]">
@@ -113,7 +121,7 @@ export function ResumenSeccion({
                 ) : null}
               </>
             );
-            const clase = `flex min-h-[44px] items-center justify-between gap-3 rounded-xl border border-slate-200 border-l-4 bg-white px-3 py-2 ${BORDE[p.tono ?? "info"]}`;
+            const clase = `flex min-h-[44px] items-center justify-between gap-3 rounded-xl border border-slate-200 border-l-[3px] bg-slate-50/60 px-3 py-2 ${BORDE[p.tono ?? "info"]}`;
             return (
               <li key={p.texto}>
                 {p.href ? (
@@ -134,12 +142,12 @@ export function ResumenSeccion({
       {principal || secundarias.length || personalizar ? (
         <div className="mt-4 flex flex-wrap items-center gap-2">
           {principal ? (
-            <Enlace href={principal.href} className="tactil inline-flex items-center rounded-lg bg-slate-900 px-5 text-sm font-semibold text-white hover:bg-slate-800">
+            <Enlace href={principal.href} className="btn-gold">
               {principal.texto}
             </Enlace>
           ) : null}
           {secundarias.map((a) => (
-            <Enlace key={a.texto} href={a.href} className="tactil inline-flex items-center rounded-lg border border-slate-300 bg-white px-4 text-sm font-medium text-slate-900 hover:bg-slate-50">
+            <Enlace key={a.texto} href={a.href} className="btn-suave">
               {a.texto}
             </Enlace>
           ))}

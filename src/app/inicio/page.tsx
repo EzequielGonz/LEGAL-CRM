@@ -1,6 +1,5 @@
 import { LogoutButton } from "@/components/acceso/logout-button";
-import { TarjetaLuz } from "@/components/ui/tarjeta-luz";
-import { SalaLampara } from "@/components/ui/lampara-dibujo";
+import Link from "next/link";
 import { MarcaPanel } from "@/components/ui/marca-panel";
 import { IlusComputadora, IlusTelefono } from "@/components/ui/ilustraciones";
 import { requirePageSession } from "@/lib/acceso/pagina";
@@ -32,48 +31,34 @@ export default async function InicioPage() {
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
   return (
-    <div data-tema="neutro" className="escena-oscura flex items-center justify-center px-4 py-12">
-      <SalaLampara />
+    <div data-tema="neutro" className="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-12">
+      <div className="w-full max-w-3xl">
+        <div className="mb-8 text-center">
+          <MarcaPanel className="sello-grande mx-auto mb-5" />
+          <h1 className="text-3xl font-semibold tracking-tight text-slate-950">¿Cómo querés usar el panel?</h1>
+          <p className="mt-2 text-sm text-slate-600">Podés cambiarlo cuando quieras.</p>
+        </div>
 
-      <div className="escena-capa relative w-full max-w-3xl text-center">
-        <MarcaPanel className="sello-grande mx-auto mb-5" />
-        <h1 className="mb-2 font-serif text-2xl font-semibold text-white sm:text-3xl">
-          ¿Cómo querés utilizar el panel?
-        </h1>
-        <p className="mb-8 text-sm text-slate-300">
-          Panel central
-        </p>
-
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-          <TarjetaLuz href="/telefono" className="rounded-3xl p-8 text-left">
-            <span className="ilus-acceso mb-4">
-              <IlusTelefono className="h-24 w-24" id="il-acceso-tel" />
-            </span>
-            <h2 className="mb-1 font-serif text-xl font-semibold text-gold-100">Teléfono</h2>
-            <p className="text-sm leading-relaxed text-slate-300">
-              Iniciar campañas, clientes cerrados y estadísticas de cada perfil.
-            </p>
-            <p className="mt-5 text-xs font-semibold uppercase tracking-wider text-gold-300">
-              Entrar <span className="flecha-desliza" aria-hidden="true">→</span>
-            </p>
-          </TarjetaLuz>
-
-          <TarjetaLuz href="/perfiles" className="rounded-3xl p-8 text-left">
-            <span className="ilus-acceso mb-4">
-              <IlusComputadora className="h-24 w-24" id="il-acceso-pc" />
-            </span>
-            <h2 className="mb-1 font-serif text-xl font-semibold text-gold-100">Computadora</h2>
-            <p className="text-sm leading-relaxed text-slate-300">
-              Acceso al sistema de gestión y automatizaciones.
-            </p>
-            <p className="mt-5 text-xs font-semibold uppercase tracking-wider text-gold-300">
-              Entrar <span className="flecha-desliza" aria-hidden="true">→</span>
-            </p>
-          </TarjetaLuz>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {[
+            { href: "/telefono", titulo: "Teléfono", texto: "Campañas, clientes cerrados y estadísticas de cada perfil, en una vista simple.", Ilus: IlusTelefono, id: "il-acceso-tel" },
+            { href: "/perfiles", titulo: "Computadora", texto: "El panel completo: conversaciones, contactos, redes y configuración.", Ilus: IlusComputadora, id: "il-acceso-pc" },
+          ].map(({ href, titulo, texto, Ilus, id }) => (
+            <Link key={href} href={href} className="group rounded-2xl border border-slate-200 bg-white p-7 text-left shadow-sm transition-shadow hover:shadow-md">
+              <span className="mb-4 block w-max rounded-2xl bg-slate-100 p-3">
+                <Ilus className="h-16 w-16" id={id} />
+              </span>
+              <h2 className="text-lg font-semibold text-slate-950">{titulo}</h2>
+              <p className="mt-1 text-sm leading-relaxed text-slate-600">{texto}</p>
+              <p className="mt-5 text-sm font-semibold text-slate-900">
+                Entrar <span aria-hidden="true">→</span>
+              </p>
+            </Link>
+          ))}
         </div>
 
         <div className="mt-8 text-center">
-          <LogoutButton className="text-xs" />
+          <LogoutButton className="!text-slate-600 hover:!text-slate-950" />
         </div>
       </div>
     </div>

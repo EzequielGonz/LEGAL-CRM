@@ -57,7 +57,7 @@ export const PUBLICADOR_NO_CONECTADO: Publicador = {
 export function claveDeduplicacion(input: { rubroId: string; canal: string; texto: string; destino?: string | null; programadaPara?: string | null }): string {
   const norm = input.texto.replace(/\s+/g, " ").trim().toLowerCase();
   return createHash("sha256")
-    .update([input.rubroId, input.canal, input.destino ?? "", input.programadaPara ?? "", norm].join("\u0000"))
+    .update([input.rubroId, input.canal, input.destino ?? "", input.programadaPara ?? "", norm].join(String.fromCharCode(0)))
     .digest("hex");
 }
 
@@ -74,7 +74,7 @@ export async function politica(rubroId: string, canal: Canal): Promise<PoliticaC
   };
 }
 
-export async function crearPieza(input: PiezaContenido & { rubroId: string; programadaPara?: string | null; createdBy?: string }) {
+export async function crearPieza(input: PiezaContenido & { rubroId: string; programadaPara?: string | null; createdBy?: string; id?: string }) {
   const supabase = createAdminClient();
   const pol = await politica(input.rubroId, input.canal);
   const ev = evaluarPieza(input, pol);
@@ -83,6 +83,7 @@ export async function crearPieza(input: PiezaContenido & { rubroId: string; prog
   const { data, error } = await supabase
     .from("content_pieces")
     .insert({
+      ...(input.id ? { id: input.id } : {}),
       rubro_id: input.rubroId,
       canal: input.canal,
       formato: input.formato,
@@ -129,6 +130,8 @@ export async function publicarVencidas(opts: { publicador?: Publicador; now?: Da
     .from("content_pieces")
     .select("*")
     .eq("estado", "programada")
+    // Las que ya se programaron en Metricool las publica Metricool en su fecha.
+    .is("proveedor_id", null)
     .lte("programada_para", now.toISOString())
     .order("programada_para", { ascending: true })
     .limit(opts.limit ?? 20);
