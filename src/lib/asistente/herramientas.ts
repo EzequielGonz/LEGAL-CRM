@@ -74,7 +74,7 @@ export const DECLARACIONES = [
   {
     name: "ir_a_pantalla",
     description:
-      "Devuelve un botón para abrir una pantalla del panel. Destinos: campanas (cargar o revisar campañas), bases (cargar una base), contactos, citas, conversaciones, publicaciones, contenido, plantillas, perfil_whatsapp, publicidad, agentes, configuracion, estadisticas.",
+      "Devuelve un botón para abrir una pantalla del panel. Destinos: campanas (cargar o revisar campañas), bases (cargar una base), contactos (clientes, citas y seguimiento), prospectos (base fría por base), revision (seguimientos caídos y perdidos), citas, conversaciones (oportunidades activas), publicaciones, contenido, plantillas, perfil_whatsapp, publicidad, agentes, configuracion, estadisticas.",
     parametersJsonSchema: {
       type: "object",
       properties: { destino: { type: "string" } },
@@ -90,13 +90,16 @@ export function rutaDestino(slug: SlugPerfil, destino: string): { href: string; 
   const mapa: Record<string, { href: string; texto: string }> = {
     campanas: { href: `${base}/campanas`, texto: "Abrir Campañas" },
     bases: { href: `${base}/bases`, texto: "Cargar una base" },
-    contactos: { href: `/oportunidades?${p}`, texto: "Ver contactos" },
+    contactos: { href: `/contactos?${p}`, texto: "Ver contactos" },
+    prospectos: { href: `/prospectos-por-base?${p}`, texto: "Ver prospectos por base" },
+    revision: { href: `/recuperar?${p}`, texto: "Ver qué se cayó" },
     citas: { href: `${base}/agenda`, texto: "Ver citas" },
-    conversaciones: { href: slug === "juridico" ? "/inbox" : `/oportunidades?${p}&indicador=en_conversacion`, texto: "Ver conversaciones" },
+    conversaciones: { href: `/conversaciones?${p}`, texto: "Ver conversaciones" },
     publicaciones: { href: `/redes?${p}`, texto: "Ver publicaciones" },
     contenido: { href: `/contenido?${p}`, texto: "Abrir Contenido" },
     plantillas: { href: `/redes/plantillas?${p}`, texto: "Abrir Plantillas" },
-    perfil_whatsapp: { href: `/redes/whatsapp?${p}`, texto: "Editar perfil de WhatsApp" },
+    perfil_whatsapp: { href: `/redes/perfiles?${p}`, texto: "Editar perfiles de redes" },
+    perfiles_redes: { href: `/redes/perfiles?${p}`, texto: "Editar perfiles de Facebook, Instagram y WhatsApp" },
     publicidad: { href: `/redes/publicidad?${p}`, texto: "Abrir Publicidad" },
     agentes: { href: `${base}/agentes`, texto: "Ver agentes IA" },
     configuracion: { href: `${base}/configuracion`, texto: "Abrir Configuración" },
