@@ -30,7 +30,7 @@ function Chip({ tono, children }: { tono: "urgente" | "info" | "ok"; children: R
 }
 
 /** Menú de tres puntos: campañas, publicaciones y entrar. */
-function MenuAcciones({ p, onPausar }: { p: PerfilStats; onPausar: () => void }) {
+export function MenuAcciones({ p, onPausar, modo = "pc" }: { p: PerfilStats; onPausar: () => void; modo?: "pc" | "telefono" }) {
   const [abierto, setAbierto] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const slug = temaDe(p.slug);
@@ -55,11 +55,11 @@ function MenuAcciones({ p, onPausar }: { p: PerfilStats; onPausar: () => void })
       </button>
       {abierto && (
         <div role="menu" className="absolute right-0 top-full z-30 mt-1 w-60 rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl animate-scale-in">
-          <Link role="menuitem" href={`${base(slug)}/campanas`} className={item}>
+          <Link role="menuitem" href={modo === "telefono" ? `/telefono/${slug}/campana` : `${base(slug)}/campanas`} className={item}>
             <Icono nombre="campanas" className="h-4 w-4" /> Cargar campaña
           </Link>
           {p.campana && (
-            <Link role="menuitem" href={`${base(slug)}/campanas/${p.campana.id}`} className={item}>
+            <Link role="menuitem" href={modo === "telefono" ? `/telefono/${slug}/estadisticas?campana=${p.campana.id}` : `${base(slug)}/campanas/${p.campana.id}`} className={item}>
               <Icono nombre="estadisticas" className="h-4 w-4" /> Revisar campaña
             </Link>
           )}
@@ -86,7 +86,7 @@ function MenuAcciones({ p, onPausar }: { p: PerfilStats; onPausar: () => void })
           </Link>
           <div className="my-1 h-px bg-slate-100" />
           <Link role="menuitem" href={`/panel/${slug}`} className={item}>
-            <Icono nombre="flecha" className="h-4 w-4" /> Entrar al panel
+            <Icono nombre="flecha" className="h-4 w-4" /> {modo === "telefono" ? "Abrir el panel completo" : "Entrar al panel"}
           </Link>
         </div>
       )}
@@ -95,7 +95,7 @@ function MenuAcciones({ p, onPausar }: { p: PerfilStats; onPausar: () => void })
 }
 
 /** Lápiz: nombre, nombre interno, logo y color de acento. */
-function EditarPerfil({ p, marca, onCerrar, onGuardado }: { p: PerfilStats; marca: MarcaTarjeta; onCerrar: () => void; onGuardado: (m: MarcaTarjeta, interno: string) => void }) {
+export function EditarPerfil({ p, marca, onCerrar, onGuardado }: { p: PerfilStats; marca: MarcaTarjeta; onCerrar: () => void; onGuardado: (m: MarcaTarjeta, interno: string) => void }) {
   const slug = temaDe(p.slug);
   const original = marcaDe(slug);
   const [nombre, setNombre] = useState(marca.nombre);
@@ -209,12 +209,13 @@ function EditarPerfil({ p, marca, onCerrar, onGuardado }: { p: PerfilStats; marc
 }
 
 /**
- * Pantalla de perfiles (renovada 18/10): una tarjeta alargada por perfil con
- * lo que está pendiente (captados sin derivar, chats que piden una persona,
- * mensajes del día, campaña y publicaciones). Lápiz para nombre, logo y
- * color; tres puntos para campañas y publicaciones. Se actualiza sola.
+ * Tarjetas de perfiles del modo teléfono (reorganización 2, 18/10): una
+ * tarjeta por perfil con lo que está pendiente (captados sin derivar, chats
+ * que piden una persona, mensajes del día, campaña y publicaciones), los tres
+ * accesos del teléfono, el lápiz (nombre, logo y color) y los tres puntos
+ * (campañas y publicaciones). Se actualiza sola.
  */
-export function PerfilSelector({ perfiles: initial, marcas: marcasIniciales }: { perfiles: PerfilStats[]; marcas: Partial<Record<SlugPerfil, MarcaTarjeta>> }) {
+export function PerfilSelector({ perfiles: initial, marcas: marcasIniciales, modo = "telefono" }: { perfiles: PerfilStats[]; marcas: Partial<Record<SlugPerfil, MarcaTarjeta>>; modo?: "pc" | "telefono" }) {
   const router = useRouter();
   const [perfiles, setPerfiles] = useState(initial);
   const [marcas, setMarcas] = useState(marcasIniciales);
@@ -267,35 +268,56 @@ export function PerfilSelector({ perfiles: initial, marcas: marcasIniciales }: {
           const estilo = (variablesAcento(m.acento) ?? undefined) as React.CSSProperties | undefined;
           const pendientes = p.accion.sin_derivar + p.accion.humano;
           return (
-            <li key={p.id} data-tema={slug} style={estilo} className="tarjeta-perfil group relative overflow-hidden rounded-2xl border border-slate-200 !bg-white shadow-sm transition-shadow hover:shadow-md">
-              <span className="absolute inset-y-0 left-0 w-1.5 bg-gold-500" aria-hidden="true" />
-              <div className="flex flex-col gap-4 p-4 pl-6 sm:flex-row sm:items-center sm:p-5 sm:pl-7">
-                <Link href={`/panel/${slug}`} className="flex min-w-0 flex-1 items-center gap-4">
-                  <span className="block h-14 w-14 shrink-0 sm:h-16 sm:w-16">
-                    <LogoPerfil slug={slug} src={m.logo} alt="" tamano="lg" />
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block truncate text-lg font-semibold text-slate-950">{m.nombre}</span>
-                    <span className="block truncate text-sm text-slate-500">{p.name}</span>
-                    <span className="mt-2 flex flex-wrap gap-1.5">
-                      {p.accion.sin_derivar > 0 && <Chip tono="urgente">{p.accion.sin_derivar === 1 ? "1 captado sin derivar" : `${p.accion.sin_derivar} captados sin derivar`}</Chip>}
-                      {p.accion.humano > 0 && <Chip tono="urgente">{p.accion.humano === 1 ? "1 pide una persona" : `${p.accion.humano} piden una persona`}</Chip>}
-                      {(p.recibidos24h ?? 0) > 0 && <Chip tono="info">{p.recibidos24h} mensaje(s) hoy</Chip>}
-                      {p.campana && <Chip tono={p.campana.estado === "en_curso" ? "ok" : "info"}>Campaña {ESTADO_CAMPANA[p.campana.estado] ?? p.campana.estado}</Chip>}
-                      {(p.programadas ?? 0) > 0 && <Chip tono="info">{p.programadas} publicaciones programadas</Chip>}
-                      {pendientes === 0 && !(p.recibidos24h ?? 0) && <Chip tono="ok">Todo al día</Chip>}
+            <li key={p.id} data-tema={slug} style={estilo} className="tarjeta-perfil group relative overflow-hidden rounded-3xl border border-slate-200 !bg-white shadow-sm transition-shadow hover:shadow-md">
+              <span className="absolute inset-x-0 top-0 h-1 bg-gold-500" aria-hidden="true" />
+              <div className="p-4 pt-5">
+                <div className="flex items-start gap-3">
+                  <Link href={modo === "telefono" ? `/telefono/${slug}/clientes` : `/panel/${slug}`} className="flex min-w-0 flex-1 items-center gap-3">
+                    <span className="block h-14 w-14 shrink-0">
+                      <LogoPerfil slug={slug} src={m.logo} alt="" tamano="lg" />
                     </span>
-                  </span>
-                </Link>
-                <div className="flex shrink-0 items-center gap-1 self-end sm:self-auto">
-                  <button type="button" onClick={() => setEditando(p.id)} aria-label={`Editar ${m.nombre}`} className="tactil grid place-items-center rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-900">
-                    <Icono nombre="lapiz" className="h-[18px] w-[18px]" />
-                  </button>
-                  <MenuAcciones p={p} onPausar={() => pausar(p)} />
-                  <button type="button" onClick={() => router.push(`/panel/${slug}`)} className="btn-gold ml-1">
+                    <span className="min-w-0">
+                      <span className="block truncate text-base font-semibold text-slate-950">{m.nombre}</span>
+                      <span className="block truncate text-xs text-slate-500">{p.name}</span>
+                    </span>
+                  </Link>
+                  <div className="flex shrink-0 items-center">
+                    <button type="button" onClick={() => setEditando(p.id)} aria-label={`Editar ${m.nombre}`} className="tactil grid place-items-center rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-900">
+                      <Icono nombre="lapiz" className="h-[18px] w-[18px]" />
+                    </button>
+                    <MenuAcciones p={p} onPausar={() => pausar(p)} modo={modo} />
+                  </div>
+                </div>
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  {p.accion.sin_derivar > 0 && <Chip tono="urgente">{p.accion.sin_derivar === 1 ? "1 captado sin derivar" : `${p.accion.sin_derivar} captados sin derivar`}</Chip>}
+                  {p.accion.humano > 0 && <Chip tono="urgente">{p.accion.humano === 1 ? "1 pide una persona" : `${p.accion.humano} piden una persona`}</Chip>}
+                  {(p.recibidos24h ?? 0) > 0 && <Chip tono="info">{p.recibidos24h} mensaje(s) hoy</Chip>}
+                  {p.campana && <Chip tono={p.campana.estado === "en_curso" ? "ok" : "info"}>Campaña {ESTADO_CAMPANA[p.campana.estado] ?? p.campana.estado}</Chip>}
+                  {(p.programadas ?? 0) > 0 && <Chip tono="info">{p.programadas} publicaciones programadas</Chip>}
+                  {pendientes === 0 && !(p.recibidos24h ?? 0) && <Chip tono="ok">Todo al día</Chip>}
+                </div>
+                {modo === "telefono" ? (
+                  <div className="mt-4 grid grid-cols-3 gap-2">
+                    {[
+                      { href: `/telefono/${slug}/campana`, texto: "Campaña", icono: "campanas", principal: true },
+                      { href: `/telefono/${slug}/clientes`, texto: "Cerrados", icono: "cerrados", principal: false },
+                      { href: `/telefono/${slug}/estadisticas`, texto: "Cifras", icono: "estadisticas", principal: false },
+                    ].map((a) => (
+                      <Link
+                        key={a.href}
+                        href={a.href}
+                        className={`flex min-h-[3.25rem] flex-col items-center justify-center gap-1 rounded-2xl px-2 py-2 text-center text-xs font-semibold ${a.principal ? "bg-slate-900 text-white shadow-sm" : "bg-slate-100 text-slate-800"}`}
+                      >
+                        <Icono nombre={a.icono} className="h-[18px] w-[18px]" />
+                        {a.texto}
+                      </Link>
+                    ))}
+                  </div>
+                ) : (
+                  <button type="button" onClick={() => router.push(`/panel/${slug}`)} className="btn-gold mt-4 w-full">
                     Entrar <Icono nombre="flecha" className="h-4 w-4" />
                   </button>
-                </div>
+                )}
               </div>
               {editando === p.id && (
                 <EditarPerfil
