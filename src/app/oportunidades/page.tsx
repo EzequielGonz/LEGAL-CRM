@@ -22,6 +22,7 @@ import { EnlaceVolver } from "@/components/ui/enlaces-navegacion";
 import { esSlugPerfil, type SlugPerfil } from "@/lib/marca";
 import { conVolver, inicioDePerfil } from "@/lib/navegacion";
 import { estadoCorto } from "@/lib/inicio";
+import { enlaceConversacion, iniciales } from "@/lib/cartera";
 
 export const dynamic = "force-dynamic";
 
@@ -108,17 +109,13 @@ export default async function OportunidadesPage({
               key={i.clave}
               href={enlaceIndicador(perfil, i.clave, volver)}
               aria-current={i.clave === ind.clave ? "page" : undefined}
-              className={
-                i.clave === ind.clave
-                  ? "tactil inline-flex items-center rounded-lg bg-slate-900 px-3 text-sm font-medium text-white"
-                  : "tactil inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-700 hover:bg-slate-50"
-              }
+              className="chip-filtro"
             >
               {i.label}
             </Link>
           ))}
           <details className="relative">
-            <summary className="tactil inline-flex cursor-pointer list-none items-center rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-700 hover:bg-slate-50">
+            <summary className="chip-filtro cursor-pointer list-none">
               Todas las listas <span aria-hidden="true" className="ml-1.5">▾</span>
             </summary>
             <div className="absolute left-0 z-20 mt-2 grid w-[min(92vw,44rem)] grid-cols-1 gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-lg sm:grid-cols-2 lg:grid-cols-3">
@@ -168,11 +165,7 @@ export default async function OportunidadesPage({
                 key={o}
                 href={con({ orden: o, pagina: "1" })}
                 aria-current={o === orden ? "true" : undefined}
-                className={
-                  o === orden
-                    ? "tactil inline-flex items-center rounded-lg bg-slate-900 px-3 text-xs font-medium text-white"
-                    : "tactil inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 text-xs text-slate-700 hover:bg-slate-50"
-                }
+                className="chip-filtro chip-filtro-chico"
               >
                 {ORDENES[o].label}
               </Link>
@@ -180,7 +173,7 @@ export default async function OportunidadesPage({
           </nav>
         </div>
 
-        <section id="lista" aria-label={`Lista: ${ind.label}`} className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+        <section id="lista" aria-label={`Lista: ${ind.label}`} className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
           {!lista.error && lista.filas.length === 0 ? (
             <p className="p-6 text-sm text-slate-600">
               No hay oportunidades en esta lista{pagina > 1 ? " en esta página" : ""}.
@@ -190,9 +183,13 @@ export default async function OportunidadesPage({
               {lista.filas.map((o: any) => {
                 const advertencias = Array.isArray(o.capture_warnings) ? (o.capture_warnings as string[]) : [];
                 return (
-                  <li key={o.id} className="flex flex-col gap-2 p-4 sm:flex-row sm:items-center sm:justify-between">
+                  <li key={o.id} className="flex flex-col gap-2 px-4 py-3.5 transition-colors hover:bg-slate-50/70 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex min-w-0 items-center gap-3">
+                    <span aria-hidden="true" className="avatar-ficha grid h-9 w-9 shrink-0 place-items-center rounded-full text-xs font-semibold">
+                      {iniciales(o.contacts?.full_name)}
+                    </span>
                     <div className="min-w-0">
-                      <p className="truncate font-medium text-slate-900">{o.contacts?.full_name ?? "Sin nombre"}</p>
+                      <p className="truncate text-sm font-semibold text-slate-950">{o.contacts?.full_name ?? "Sin nombre"}</p>
                       <p className="solo-simple text-sm text-slate-700">
                         <span className="tabular-nums">{o.contacts?.phone ?? "Sin teléfono"}</span> · {estadoCorto(o).texto}
                       </p>
@@ -207,17 +204,18 @@ export default async function OportunidadesPage({
                         <p className="text-xs text-amber-800">Falta: {advertencias.map((a) => a.replaceAll("_", " ")).join(", ")}</p>
                       )}
                     </div>
+                    </div>
                     <div className="flex shrink-0 gap-2">
                       <Link
                         href={conVolver(`/ficha/${o.contact_id}`, aqui)}
-                        className="tactil inline-flex items-center rounded-lg border border-slate-300 px-3 text-sm text-slate-800 hover:bg-slate-50"
+                        className="btn-suave-sm"
                       >
                         Ficha
                       </Link>
                       {o.conversation_id && (
                         <Link
-                          href={conVolver(`/inbox/${o.conversation_id}`, aqui)}
-                          className="tactil inline-flex items-center rounded-lg bg-slate-900 px-3 text-sm text-white hover:bg-slate-800"
+                          href={conVolver(enlaceConversacion(slug, o.conversation_id), aqui)}
+                          className="btn-gold-sm"
                         >
                           Conversación
                         </Link>
@@ -233,14 +231,14 @@ export default async function OportunidadesPage({
         {paginas > 1 && (
           <nav aria-label="Páginas" className="flex items-center justify-between text-sm">
             {pagina > 1 ? (
-              <Link href={con({ pagina: String(pagina - 1) })} className="tactil inline-flex items-center rounded-lg border border-slate-300 bg-white px-3">
+              <Link href={con({ pagina: String(pagina - 1) })} className="btn-suave">
                 ← Anterior
               </Link>
             ) : (
               <span />
             )}
             {pagina < paginas ? (
-              <Link href={con({ pagina: String(pagina + 1) })} className="tactil inline-flex items-center rounded-lg border border-slate-300 bg-white px-3">
+              <Link href={con({ pagina: String(pagina + 1) })} className="btn-suave">
                 Siguiente →
               </Link>
             ) : (
