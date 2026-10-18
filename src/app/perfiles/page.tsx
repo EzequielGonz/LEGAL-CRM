@@ -1,56 +1,59 @@
 import { LogoutButton } from "@/components/acceso/logout-button";
-import { PerfilSelector } from "@/components/perfiles/perfil-selector";
-import { SalaLampara } from "@/components/ui/lampara-dibujo";
+import { PerfilSelector, type MarcaTarjeta } from "@/components/perfiles/perfil-selector";
 import { MarcaPanel } from "@/components/ui/marca-panel";
 import { loadPerfiles } from "@/lib/perfiles-stats";
 import { requirePageSession } from "@/lib/acceso/pagina";
 import { marcasResueltas } from "@/lib/marca-servidor";
-import { SLUGS_PERFIL } from "@/lib/marca";
+import { SLUGS_PERFIL, type SlugPerfil } from "@/lib/marca";
+import Link from "next/link";
 
 export const metadata = { title: "Perfiles" };
 
 export const dynamic = "force-dynamic";
 
 /**
- * Pantalla de Computadora (estilo Netflix): a la izquierda los 4 perfiles
- * (rubros), a la derecha una vista previa en vivo de ese rubro — casos
- * agendados, clientes cerrados, y el nombre + teléfono de los últimos
- * casos cerrados (mismo criterio que /casos-cerrados). "Ingresar al
- * panel →" lleva a /panel/[slug] — para Jurídico eso manda directo a
- * /casos-cerrados; los otros rubros todavía no tienen su motor de leads
- * conectado (Fases 2/3 en curso), así que por ahora muestran un aviso.
- *
- * Esta primera carga trae los datos por el server (rápido, sin parpadeo);
- * después el PerfilSelector se subscribe a Supabase Realtime para que la
- * vista se actualice sola apenas cambia algo en Casos, sin recargar.
- *
- * A propósito NO usa el layout de (dashboard) (no tiene Sidebar ni nada
- * alrededor) — es una pantalla completa, standalone, igual que /inicio.
+ * Pantalla de perfiles (renovada 18/10): una tarjeta por perfil con lo que
+ * está pendiente, el lápiz para editar nombre, logo y color, y el menú de
+ * tres puntos para campañas y publicaciones. Pantalla completa, sin el menú
+ * del panel.
  */
 export default async function PerfilesPage() {
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
   const [perfiles, marcas] = await Promise.all([loadPerfiles(), marcasResueltas().catch(() => null)]);
-  const logos = marcas ? Object.fromEntries(SLUGS_PERFIL.map((s) => [s, marcas[s].logoPanel])) : undefined;
+  const tarjetas: Partial<Record<SlugPerfil, MarcaTarjeta>> = marcas
+    ? Object.fromEntries(
+        SLUGS_PERFIL.map((s) => [s, { nombre: marcas[s].nombre, logo: marcas[s].origenLogo === "configuracion" ? marcas[s].logoPanel : null, acento: marcas[s].colores?.panel ?? null }])
+      )
+    : {};
+  const hoy = new Intl.DateTimeFormat("es-AR", { weekday: "long", day: "numeric", month: "long", timeZone: "America/Argentina/Buenos_Aires" }).format(new Date());
 
   return (
-    <div className="escena-oscura sala-perfil flex items-center justify-center px-4 py-12">
-      <SalaLampara />
-
-      <div className="escena-capa relative w-full max-w-4xl">
-        <div className="mb-8 text-center">
-          <MarcaPanel className="sello-grande mx-auto mb-5" />
-          <h1 className="font-serif text-xl font-semibold text-white sm:text-2xl">
-            Elegí un perfil
-          </h1>
-          <p className="mt-1 text-sm text-slate-300">Panel central</p>
-          <div className="mt-2">
-            <LogoutButton className="text-xs" />
+    <div data-tema="neutro" className="min-h-screen bg-slate-50">
+      <header className="border-b border-slate-200 bg-white/80 backdrop-blur">
+        <div className="mx-auto flex max-w-4xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+          <div className="flex items-center gap-3">
+            <MarcaPanel className="h-9 w-9" />
+            <span className="text-sm font-semibold text-slate-950">Panel central</span>
+          </div>
+          <div className="flex items-center gap-4 text-sm">
+            <Link href="/inicio" className="font-medium text-slate-600 hover:text-slate-950">
+              Teléfono o computadora
+            </Link>
+            <LogoutButton className="!text-slate-600 hover:!text-slate-950" />
           </div>
         </div>
-
-        <PerfilSelector perfiles={perfiles} logos={logos} />
-      </div>
+      </header>
+      <main id="contenido" className="mx-auto max-w-4xl px-4 py-10 sm:px-6">
+        <p className="text-sm font-medium capitalize text-slate-500" suppressHydrationWarning>
+          {hoy}
+        </p>
+        <h1 className="mt-1 text-3xl font-semibold tracking-tight text-slate-950">¿Con qué perfil trabajás?</h1>
+        <p className="mt-2 text-sm text-slate-600">Lo que necesita tu atención aparece en cada tarjeta. Tocá una para entrar.</p>
+        <div className="mt-8">
+          <PerfilSelector perfiles={perfiles} marcas={tarjetas} />
+        </div>
+      </main>
     </div>
   );
 }
