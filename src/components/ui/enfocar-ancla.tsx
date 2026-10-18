@@ -22,6 +22,7 @@ export function EnfocarAncla() {
       if (!destino) return;
       const oculto = !!destino.closest(".solo-avanzado") && !!destino.closest('[data-nivel="simple"]');
       if (oculto) cambiar("avanzado");
+      if (destino instanceof HTMLDetailsElement) destino.open = true;
       for (let p = destino.parentElement; p; p = p.parentElement) if (p instanceof HTMLDetailsElement) p.open = true;
       if (!destino.hasAttribute("tabindex") && !/^(A|BUTTON|INPUT|SELECT|TEXTAREA)$/.test(destino.tagName)) {
         destino.setAttribute("tabindex", "-1");

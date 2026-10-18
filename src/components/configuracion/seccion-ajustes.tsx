@@ -19,7 +19,7 @@ export function SeccionAjustes({
   descripcion?: React.ReactNode;
   /** «Este perfil» o «Todos los perfiles». */
   alcance?: "perfil" | "general";
-  /** «simple»: ajuste frecuente, visible en los dos niveles. «avanzado»: solo en Avanzado. */
+  /** Compatibilidad: todas las secciones se ven al abrir su grupo (18/10). */
   nivel?: "simple" | "avanzado";
   /** Palabras extra para el buscador de Configuración. */
   palabras?: string;
@@ -31,7 +31,8 @@ export function SeccionAjustes({
       aria-labelledby={`${id}-titulo`}
       tabIndex={-1}
       data-buscar={`${titulo} ${palabras}`.toLowerCase()}
-      className={`seccion-ajustes scroll-mt-24 rounded-xl border border-slate-200 bg-white p-5 outline-none ${nivel === "avanzado" ? "solo-avanzado" : ""}`}
+      data-nivel-ajuste={nivel}
+      className="seccion-ajustes scroll-mt-24 rounded-xl border border-slate-100 bg-slate-50/50 p-4 outline-none sm:p-5"
     >
       <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
         <h2 id={`${id}-titulo`} className="text-base font-semibold text-slate-900">

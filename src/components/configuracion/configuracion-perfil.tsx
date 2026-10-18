@@ -8,6 +8,7 @@ import { GrupoAjustes } from "@/components/configuracion/grupo-ajustes";
 import { NavegacionAjustes, type GrupoNav } from "@/components/configuracion/navegacion-ajustes";
 import { BriefMarca } from "@/components/contenido/contenido-etapa3";
 import type { SlugPerfil } from "@/lib/marca";
+import { HorarioAtencion } from "@/components/configuracion/horario-atencion";
 
 /**
  * Configuración de Coberturas médicas, Autos 0 km y Marketing (rediseño
@@ -23,6 +24,7 @@ export async function ConfiguracionPerfil({ slug }: { slug: Exclude<SlugPerfil, 
   const grupos: GrupoNav[] = [
     { id: "marca", titulo: "Perfil y marca", resumen: "Nombre, logo, colores y líneas" },
     { id: "canales", titulo: "Canales, líneas y plantillas", resumen: `${conectados} de ${(channels ?? []).length} canales conectados` },
+    { id: "agenda", titulo: "Agenda y horario de atención", resumen: "Respuesta 24 h · asesores de lunes a sábado de 8 a 21" },
     { id: "generales", titulo: "Ajustes generales (todos los perfiles)", resumen: "Agenda, automatizaciones, avisos, acceso y sistema" },
   ];
   const general = (ancla: string, texto: string) => (
@@ -31,16 +33,15 @@ export async function ConfiguracionPerfil({ slug }: { slug: Exclude<SlugPerfil, 
     </Link>
   );
   return (
-    <div className="mx-auto max-w-3xl space-y-8">
+    <div className="mx-auto max-w-4xl space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold text-slate-900">Configuración</h1>
-        <p className="mt-1 text-sm text-slate-700">
-          <span className="solo-simple">Los ajustes de todos los días. El resto está en la configuración completa.</span>
-          <span className="solo-avanzado">Ajustes de este perfil y acceso a los generales. Cada sección se guarda por separado.</span>
-        </p>
+        <h1 className="text-2xl font-semibold text-slate-950">Configuración</h1>
+        <p className="mt-1 text-sm text-slate-600">Tocá un grupo para abrirlo. Los ajustes que comparten los cuatro perfiles se editan en un solo lugar, enlazado abajo.</p>
       </div>
 
       <NavegacionAjustes grupos={grupos} />
+
+      <div className="grupos-ajustes">
 
       <GrupoAjustes id="marca" titulo="Perfil y marca" resumen={grupos[0].resumen}>
         <SeccionAjustes id="marca-perfil" titulo="Marca del perfil" alcance="perfil" nivel="simple" palabras="logo colores nombre identidad">
@@ -78,7 +79,18 @@ export async function ConfiguracionPerfil({ slug }: { slug: Exclude<SlugPerfil, 
         </SeccionAjustes>
       </GrupoAjustes>
 
-      <GrupoAjustes id="generales" titulo="Ajustes generales (todos los perfiles)" resumen={grupos[2].resumen}>
+      <GrupoAjustes id="agenda" titulo="Agenda y horario de atención" resumen={grupos[2].resumen}>
+        <SeccionAjustes id="horario-atencion" titulo="Horario de atención" alcance="general" palabras="24 horas fuera de horario asesor 8 21 noche domingo">
+          <HorarioAtencion />
+        </SeccionAjustes>
+        <SeccionAjustes id="agenda-enlaces" titulo="Citas y disponibilidad" alcance="perfil" palabras="citas turnos horarios feriados excepciones">
+          <p className="text-sm text-slate-700">
+            Las citas de este perfil están en <Link href={`/panel/${slug}/agenda`} className="font-medium underline">Contactos › Citas</Link>. Los feriados y excepciones del horario se cargan en {general("calendario", "el calendario general")}.
+          </p>
+        </SeccionAjustes>
+      </GrupoAjustes>
+
+      <GrupoAjustes id="generales" titulo="Ajustes generales (todos los perfiles)" resumen={grupos[3].resumen}>
         <SeccionAjustes id="generales-enlaces" titulo="Dónde están los ajustes que comparten los cuatro perfiles" alcance="general" nivel="simple" palabras="pausa horario avisos pin acceso tareas conexiones agentes">
           <ul className="list-disc space-y-1 pl-5 text-sm text-slate-700">
             <li>{general("pausa", "Pausa general")} y {general("tareas", "tareas del servidor")}</li>
@@ -94,6 +106,7 @@ export async function ConfiguracionPerfil({ slug }: { slug: Exclude<SlugPerfil, 
           </ul>
         </SeccionAjustes>
       </GrupoAjustes>
+      </div>
     </div>
   );
 }
