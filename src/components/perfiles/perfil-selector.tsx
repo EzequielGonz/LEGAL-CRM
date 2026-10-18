@@ -22,9 +22,9 @@ function base(slug: SlugPerfil) {
   return slug === "juridico" ? "" : `/panel/${slug}`;
 }
 
-const ESTADO_CAMPANA: Record<string, string> = { borrador: "en borrador", en_curso: "enviando", pausada: "pausada", finalizada: "finalizada" };
+export const ESTADO_CAMPANA: Record<string, string> = { borrador: "en borrador", en_curso: "enviando", pausada: "pausada", finalizada: "finalizada" };
 
-function Chip({ tono, children }: { tono: "urgente" | "info" | "ok"; children: React.ReactNode }) {
+export function Chip({ tono, children }: { tono: "urgente" | "info" | "ok"; children: React.ReactNode }) {
   const clase = tono === "urgente" ? "bg-amber-50 text-amber-900 ring-amber-200" : tono === "ok" ? "bg-emerald-50 text-emerald-800 ring-emerald-200" : "bg-slate-50 text-slate-700 ring-slate-200";
   return <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ring-1 ring-inset ${clase}`}>{children}</span>;
 }
@@ -209,17 +209,11 @@ export function EditarPerfil({ p, marca, onCerrar, onGuardado }: { p: PerfilStat
 }
 
 /**
- * Tarjetas de perfiles del modo teléfono (reorganización 2, 18/10): una
- * tarjeta por perfil con lo que está pendiente (captados sin derivar, chats
- * que piden una persona, mensajes del día, campaña y publicaciones), los tres
- * accesos del teléfono, el lápiz (nombre, logo y color) y los tres puntos
- * (campañas y publicaciones). Se actualiza sola.
+ * Vista previa en vivo de los perfiles (teléfono y computadora): se vuelve a
+ * pedir cada 30 s con la pestaña visible, y permite pausar la campaña en curso.
  */
-export function PerfilSelector({ perfiles: initial, marcas: marcasIniciales, modo = "telefono" }: { perfiles: PerfilStats[]; marcas: Partial<Record<SlugPerfil, MarcaTarjeta>>; modo?: "pc" | "telefono" }) {
-  const router = useRouter();
+export function usePerfilesEnVivo(initial: PerfilStats[]) {
   const [perfiles, setPerfiles] = useState(initial);
-  const [marcas, setMarcas] = useState(marcasIniciales);
-  const [editando, setEditando] = useState<string | null>(null);
   const [aviso, setAviso] = useState<string | null>(null);
 
   const refrescar = useCallback(async () => {
@@ -252,6 +246,22 @@ export function PerfilSelector({ perfiles: initial, marcas: marcasIniciales, mod
     setAviso(res.ok ? `Campaña «${p.campana.nombre}» pausada.` : "No se pudo pausar la campaña.");
     refrescar();
   }
+
+  return { perfiles, setPerfiles, aviso, pausar };
+}
+
+/**
+ * Tarjetas de perfiles del modo teléfono (reorganización 2, 18/10): una
+ * tarjeta por perfil con lo que está pendiente (captados sin derivar, chats
+ * que piden una persona, mensajes del día, campaña y publicaciones), los tres
+ * accesos del teléfono, el lápiz (nombre, logo y color) y los tres puntos
+ * (campañas y publicaciones). Se actualiza sola.
+ */
+export function PerfilSelector({ perfiles: initial, marcas: marcasIniciales, modo = "telefono" }: { perfiles: PerfilStats[]; marcas: Partial<Record<SlugPerfil, MarcaTarjeta>>; modo?: "pc" | "telefono" }) {
+  const router = useRouter();
+  const { perfiles, setPerfiles, aviso, pausar } = usePerfilesEnVivo(initial);
+  const [marcas, setMarcas] = useState(marcasIniciales);
+  const [editando, setEditando] = useState<string | null>(null);
 
   return (
     <div>
