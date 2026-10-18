@@ -1,4 +1,0 @@
-uno:A
-dos:\\u0041
-tres:\n
-cuatro:\\n
