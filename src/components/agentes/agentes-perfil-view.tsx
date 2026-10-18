@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { AgentEditor } from "@/components/agentes/agent-editor";
 import { AgentesEtapa3 } from "@/components/agentes/agentes-etapa3";
 import { ResumenSeccion } from "@/components/nivel/resumen-seccion";
+import { PuntajeBots } from "@/components/agentes/puntaje-bots";
 
 const NOMBRE_AREA: Record<string, string> = {
   civil: "Civil",
@@ -48,6 +49,8 @@ export async function AgentesPerfilView({
         </p>
       ) : null}
 
+      <PuntajeBots rubroId={rubroId} />
+
       <ResumenSeccion
         id="agentes"
         etiqueta="Quién responde hoy"
@@ -70,7 +73,9 @@ export async function AgentesPerfilView({
         personalizar={{ href: "#agentes-config", texto: "Personalizar instrucciones" }}
       />
 
-      <AgentesEtapa3 perfil={perfil} rubroId={rubroId} areas={areas} volver={volver} />
+      <div className="solo-avanzado">
+        <AgentesEtapa3 perfil={perfil} rubroId={rubroId} areas={areas} volver={volver} />
+      </div>
 
       <section id="agentes-config" tabIndex={-1} aria-labelledby="agentes-config-titulo" className="solo-avanzado">
         <h2 id="agentes-config-titulo" className="mb-2 text-base font-semibold text-slate-900">
