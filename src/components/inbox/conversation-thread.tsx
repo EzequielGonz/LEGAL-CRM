@@ -176,9 +176,9 @@ export function ConversationThread({
                 className={`min-w-0 max-w-[85%] animate-fade-in-up rounded-2xl px-4 py-2 text-sm [overflow-wrap:anywhere] sm:max-w-md ${
                   m.direction === "saliente"
                     ? m.sender_type === "admin"
-                      ? "bg-gradient-to-br from-slate-800 to-slate-900 text-gold-100 shadow-navy ring-1 ring-gold-500/20"
-                      : "bg-blue-600 text-white"
-                    : "bg-white text-slate-800 shadow-sm"
+                      ? "rounded-br-md bg-gold-100 text-slate-900 shadow-sm ring-1 ring-gold-300/60"
+                      : "rounded-br-md bg-slate-900 text-white shadow-sm"
+                    : "rounded-bl-md bg-white text-slate-800 shadow-sm ring-1 ring-slate-200/70"
                 }`}
               >
                 {m.message_type && m.message_type !== "text" && m.message_type !== "button" && (
@@ -209,7 +209,7 @@ export function ConversationThread({
                 )}
                 <p
                   className={`mt-1 text-xs tabular-nums ${
-                    m.direction === "saliente" ? "text-white/80" : "text-slate-600"
+                    m.direction === "saliente" ? (m.sender_type === "admin" ? "text-slate-600" : "text-white/75") : "text-slate-500"
                   }`}
                 >
                   {m.sender_type === "agente_ia" ? "Agente IA · " : m.sender_type === "admin" ? "Admin · " : ""}
