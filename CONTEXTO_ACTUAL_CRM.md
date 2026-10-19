@@ -1,6 +1,6 @@
 # CONTEXTO ACTUAL · CRM multirubro
 
-Actualizado: 18/10/2026 (reorganización 2 y ajuste de perfiles en PC publicados, PR #20 y #21). Sin secretos ni datos de prospectos.
+Actualizado: 19/10/2026 (reorganización 2, ajuste de perfiles en PC y estado real de las líneas publicados, PR #20, #21 y #22). Sin secretos ni datos de prospectos.
 
 ## Bloque actual: reorganización 2 (18/10, pedido de la responsable)
 Detalle en `docs/reorganizacion-2/ENTREGA.md`. Rama `reorganizacion-2`, PR #20 → `main`. Sin migraciones.
@@ -25,6 +25,8 @@ Detalle en `docs/reorganizacion-2/ENTREGA.md`. Rama `reorganizacion-2`, PR #20 �
 
 **Ajuste posterior (PR #21, pedido de la responsable):** la pantalla de perfiles en PC quedaba con recuadros blancos y nombres invisibles (cada perfil tomaba el fondo claro del tema). Ahora muestra una tarjeta completa por marca, más que la del teléfono: pendientes, semana (mensajes, captados, citas, derivados), última base con embudo, últimos captados y accesos, con lápiz y tres puntos. Preview `dpl_A9sEqNCWddQf1ZndRyavxdSJxUSW` READY (`113b78e`). Producción `dpl_EFD1DzdwnFVRbWyYx5P3truzxGdt` READY = `main` `eb9b8a9`, sin errores nuevos. Revisión visual: pendiente (la hace la responsable).
 
+**Estado real de las líneas de WhatsApp (PR #22, pedido de la responsable):** el panel decía «credenciales cargadas» y todo correcto solo porque existían las variables, aunque en Meta el número de Agencia Kocos figuraba «Pendiente». Ahora `src/lib/whatsapp/estado-linea.ts` le pregunta a Meta (solo lectura, sin enviar ni modificar nada) y el panel muestra por línea «Meta: Conectada / Pendiente / Con problema / Token inválido o vencido / Sin acceso / No se pudo comprobar», con botón «Volver a comprobar con Meta». Solo «Conectada» cuenta como lista: «qué falta para contactar», el selector de línea de las campañas y el lanzamiento (`campaignReadiness`, memoria de 2 min) lo exigen. Conexiones aclara que mira solo las variables del webhook. Un fallo de red al consultar no bloquea. Implementado y publicado: sí (Preview `dpl_48no88zqtYicyfTACi8EeocW1oBq` READY en `1629862`; producción `dpl_3o2HQezCSUJNnHxak6V8msaiwnde` READY = `main` `5a27718`, sin errores de ejecución). Probado: unitarias 198/198 con Meta simulado; **sin llamada real a Meta ni revisión visual**. Habilitado: nada. El estado «Pendiente» del número se resuelve en el Administrador de WhatsApp (verificar y registrar el número, y que el token tenga acceso): lo hace la responsable.
+
 **Habilitado**: nada nuevo se activa solo. La regla de horario rige en las respuestas de los agentes activos. Facebook requiere las variables por perfil en Vercel.
 
 ## Bloques anteriores (cerrados)
@@ -42,6 +44,7 @@ Implementado → Desplegado (READY) → Comprobado automáticamente → Revisado
 ## Pendientes
 - Responsable: vincular Facebook e Instagram por perfil en Vercel (`FACEBOOK_<CLAVE>_PAGE_ID`, `FACEBOOK_<CLAVE>_PAGE_ACCESS_TOKEN`, `INSTAGRAM_<CLAVE>_BUSINESS_ID`), landings y Google Cloud. Después: 1 post diario + historias destacadas con calendario de 1 mes por rubro, y CTA/redes/marca en landings (VITA en Jurídico, CTA de WhatsApp visible en Coberturas).
 - Responsable: cargar `METRICOOL_USER_TOKEN` y `METRICOOL_USER_ID` en Vercel; crear y conectar en Metricool las marcas de Coberturas, 0 km y Jurídico (y el Instagram de Kocos); cargar cada blogId en Redes › Publicaciones; pegar el enlace con origen en la biografía de Instagram.
+- Responsable: completar en el Administrador de WhatsApp la verificación/registro del número de Agencia Kocos (hoy «Pendiente» en Meta) y confirmar que su token tenga acceso; después usar «Volver a comprobar con Meta».
 - Revisión visual de la Preview/producción.
 - Penal dentro de la línea de Civil con roles separados (decidido, no implementado).
 - Landings (Hostinger Horizons, dominio en DonWeb) y sus CTA con origen. Localidades AMBA. Search Console. Variables/corpus (candidato C).
