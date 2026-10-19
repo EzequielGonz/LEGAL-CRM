@@ -24,6 +24,7 @@ export function CampaignSetup({
   templateId,
   legacyTemplateName,
   running,
+  dailyLimit = null,
 }: {
   campaignId: string;
   lines: { id: string; label: string; ok: boolean; motivo?: string | null; daily_limit: number | null }[];
@@ -35,11 +36,14 @@ export function CampaignSetup({
   legacyTemplateName: string | null;
   /** en curso: la plantilla no se cambia hasta pausarla */
   running: boolean;
+  /** 20/10: límite diario de envíos de la campaña (editable también en curso). */
+  dailyLimit?: number | null;
 }) {
   const router = useRouter();
   const [line, setLine] = useState(lineId ?? "");
   const [days, setDays] = useState<number[]>((runDays ?? []).filter((d) => d >= 1 && d <= 6));
   const [tpl, setTpl] = useState(templateId ?? "");
+  const [limite, setLimite] = useState(dailyLimit ? String(dailyLimit) : "");
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -47,7 +51,7 @@ export function CampaignSetup({
     setBusy(true);
     setMsg(null);
     try {
-      const payload: Record<string, unknown> = { line_id: line || null, run_days: days };
+      const payload: Record<string, unknown> = { line_id: line || null, run_days: days, daily_send_limit: limite.trim() === "" ? null : Number(limite) };
       if (!running && (tpl || null) !== (templateId ?? null)) payload.template_id = tpl || null;
       const res = await fetch(`/api/campaigns/${campaignId}`, {
         method: "PATCH",
@@ -126,6 +130,20 @@ export function CampaignSetup({
             </p>
           )}
         </div>
+        <label className="text-xs font-medium text-slate-600">
+          Máximo de mensajes por día
+          <input
+            type="number"
+            min={1}
+            max={1000}
+            inputMode="numeric"
+            value={limite}
+            onChange={(e) => setLimite(e.target.value.replace(/[^0-9]/g, ""))}
+            placeholder="Sin límite propio"
+            className="mt-1 block w-40 rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
+          />
+          <span className="mt-1 block font-normal text-slate-400">Se puede cambiar aunque esté en curso.</span>
+        </label>
         <button type="button" onClick={save} disabled={busy} className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">
           {busy ? "Guardando..." : "Guardar"}
         </button>

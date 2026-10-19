@@ -25,7 +25,7 @@ test("asistente: activar un agente pide PIN; apagarlo o pausarlo, no", () => {
 });
 
 test("asistente: crear una campaña, cambiar la línea o publicar no pueden enviar y no piden más que Confirmar", () => {
-  for (const t of ["crear_campana", "asignar_linea_campana", "publicaciones", "cambio_agente", "pausar_campana"]) {
+  for (const t of ["crear_campana", "asignar_linea_campana", "limite_campana", "publicaciones", "cambio_agente", "pausar_campana"]) {
     assert.equal(nivelDeAccion(t), "cambio", t);
     assert.equal(faltaParaConfirmar("cambio", {}), null);
   }
@@ -34,7 +34,7 @@ test("asistente: crear una campaña, cambiar la línea o publicar no pueden envi
 });
 
 test("asistente: cada tipo permitido en la base tiene su nivel y el asistente no tiene herramientas de pago", () => {
-  assert.equal(TIPOS_ACCION.length, 7);
+  assert.equal(TIPOS_ACCION.length, 8);
   const nombres = DECLARACIONES.map((d) => d.name);
   for (const n of NOMBRES_OPERACIONES) assert.ok(nombres.includes(n), `falta declarar ${n}`);
   assert.ok(!nombres.some((n) => /pago|pagar|gasto|presupuesto|publicidad/.test(n)));

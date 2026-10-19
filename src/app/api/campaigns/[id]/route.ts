@@ -32,7 +32,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
   const supabase = createAdminClient();
   const { data: campaign } = await supabase
     .from("campaigns")
-    .select("id, area, status, line_id, run_days, template_id, message_template_name")
+    .select("id, area, status, line_id, run_days, template_id, message_template_name, daily_send_limit")
     .eq("id", params.id)
     .maybeSingle();
   if (!campaign) return NextResponse.json({ error: "Campaña no encontrada" }, { status: 404 });
@@ -76,6 +76,16 @@ export async function PATCH(request: Request, { params }: { params: { id: string
       update.message_template_name = tpl.name;
     }
   }
+  // 20/10: el límite diario se puede cambiar en cualquier estado, también en curso
+  // (rige desde el próximo envío). Vacío = sin límite propio de la campaña (sigue el de la línea).
+  if (body?.daily_send_limit !== undefined) {
+    if (body.daily_send_limit === null || body.daily_send_limit === "") update.daily_send_limit = null;
+    else {
+      const n = Number(body.daily_send_limit);
+      if (!Number.isInteger(n) || n < 1 || n > 1000) return NextResponse.json({ error: "El límite diario tiene que ser un número entero entre 1 y 1000." }, { status: 400 });
+      update.daily_send_limit = n;
+    }
+  }
   if (Object.keys(update).length === 0) return NextResponse.json({ error: "Nada para guardar" }, { status: 400 });
 
   const { error } = await supabase.from("campaigns").update(update).eq("id", params.id);
@@ -89,6 +99,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
       run_days: campaign.run_days,
       template_id: campaign.template_id,
       message_template_name: campaign.message_template_name,
+      daily_send_limit: (campaign as any).daily_send_limit,
     },
     after: update,
   });

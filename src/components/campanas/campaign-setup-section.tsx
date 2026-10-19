@@ -9,7 +9,7 @@ export async function CampaignSetupSection({ campaignId }: { campaignId: string 
   const supabase = createClient();
   const { data: campaign } = await supabase
     .from("campaigns")
-    .select("id, area, status, line_id, run_days, archived_at, template_id, message_template_name")
+    .select("id, area, status, line_id, run_days, archived_at, template_id, message_template_name, daily_send_limit")
     .eq("id", campaignId)
     .maybeSingle();
   if (!campaign) return null;
@@ -31,6 +31,7 @@ export async function CampaignSetupSection({ campaignId }: { campaignId: string 
       templateId={campaign.template_id ?? null}
       legacyTemplateName={campaign.template_id ? null : campaign.message_template_name ?? null}
       running={campaign.status === "en_curso"}
+      dailyLimit={(campaign as any).daily_send_limit ?? null}
       lines={(lines ?? []).map((l: any) => ({
         id: l.id,
         label: l.label,
