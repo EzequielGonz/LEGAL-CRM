@@ -12,6 +12,7 @@ import { BotonAsistente } from "@/components/asistente/boton-asistente";
 import { Icono } from "@/components/ui/icono-seccion";
 import { VISTAS_CARTERA, cuandoCorto, enlaceConversacion, iniciales } from "@/lib/cartera";
 import { AREAS_DE_PERFIL, contarGrupo, resumenCifras } from "@/lib/cartera-servidor";
+import { getCampaignFunnelCounts } from "@/lib/campaigns";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Inicio" };
@@ -56,6 +57,16 @@ export default async function InicioPerfilPage({ searchParams }: { searchParams:
     contarGrupo(rubroId, areas, grupo("hablando")).catch(() => null),
     resumenCifras(rubroId, areas).catch(() => null),
   ]);
+  // Campañas activas (19/10): las que están enviando ahora, con su avance. Solo lectura.
+  const { data: activas } = await s
+    .from("campaigns")
+    .select("id, name, status")
+    .in("area", areas)
+    .is("archived_at", null)
+    .eq("status", "en_curso")
+    .order("created_at", { ascending: false });
+  const embudos = await Promise.all(((activas ?? []) as any[]).map((c) => getCampaignFunnelCounts(s, c.id).catch(() => null)));
+  const baseCampanas = slug === "juridico" ? "/campanas" : `/panel/${slug}/campanas`;
   const cuenta = Object.fromEntries(conteos.map(([c, r]) => [c, r])) as Record<(typeof claves)[number], { count: number | null; error: string | null }>;
   const errores = conteos.filter(([, r]) => r.error).length + (retenidas.error ? 1 : 0);
 
@@ -185,6 +196,40 @@ export default async function InicioPerfilPage({ searchParams }: { searchParams:
               </li>
             ))}
           </ul>
+        </section>
+
+        <section aria-labelledby="hoy-campanas" className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <h2 id="hoy-campanas" className="text-base font-semibold text-slate-950">
+                Campañas activas
+                <span className="ml-2 rounded-full bg-gold-500/15 px-2 py-0.5 align-middle text-xs font-semibold text-gold-800 tabular-nums">{(activas ?? []).length}</span>
+              </h2>
+              <p className="text-sm text-slate-600">Las que están enviando ahora.</p>
+            </div>
+            <Link href={baseCampanas} className="shrink-0 text-xs font-medium text-slate-700 underline underline-offset-2">
+              Ver campañas
+            </Link>
+          </div>
+          {(activas ?? []).length === 0 ? (
+            <p className="mt-4 text-sm text-slate-600">Ninguna campaña está enviando ahora.</p>
+          ) : (
+            <ul className="mt-4 divide-y divide-slate-100">
+              {((activas ?? []) as any[]).map((c, i) => {
+                const f = embudos[i];
+                return (
+                  <li key={c.id}>
+                    <Link href={`${baseCampanas}/${c.id}`} className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 py-3 hover:bg-slate-50">
+                      <span className="min-w-0 truncate text-sm font-semibold text-slate-950">{c.name}</span>
+                      <span className="text-xs text-slate-600">
+                        <span className="tabular-nums">{f?.enviados ?? 0}</span> de <span className="tabular-nums">{f?.total ?? 0}</span> enviados · <span className="tabular-nums">{f?.respondieron ?? 0}</span> respondieron · <span className="tabular-nums">{f?.agendados ?? 0}</span> agendados
+                      </span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
         </section>
 
         {slug === "marketing" ? <CircuitosMarketing /> : null}
