@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import type { InformeLinea } from "@/lib/whatsapp/estado-linea";
 
 interface LineView {
   id: string;
@@ -14,6 +15,8 @@ interface LineView {
   daily_limit: number | null;
   active: boolean;
   credentials: { phoneNumberId: boolean; accessToken: boolean; ok: boolean };
+  /** Estado real que informa Meta (solo líneas activas). */
+  estado: InformeLinea | null;
 }
 
 const AREA_LABEL: Record<string, string> = {
@@ -145,7 +148,12 @@ export function ProfileSettings({
       )}
 
       <div>
-        <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Líneas de WhatsApp</h3>
+        <div className="mb-2 flex items-center justify-between gap-3">
+          <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-500">Líneas de WhatsApp</h3>
+          <button type="button" onClick={() => router.refresh()} className="btn-suave-sm">
+            Volver a comprobar con Meta
+          </button>
+        </div>
         <ul className="divide-y divide-slate-100 rounded-lg border border-slate-200">
           {lines.map((l) => (
             <li key={l.id} className={`flex flex-col gap-2 p-3 text-sm sm:flex-row sm:items-center sm:justify-between ${l.active ? "" : "opacity-60"}`}>
@@ -155,13 +163,20 @@ export function ProfileSettings({
                 </p>
                 <p className="text-xs text-slate-600">
                   Variables {l.credential_key}_* ·{" "}
-                  {l.credentials.ok ? (
-                    <span className="text-green-700">credenciales cargadas</span>
-                  ) : (
-                    <span className="text-red-700">faltan credenciales en la configuración privada</span>
-                  )}
+                  {l.credentials.ok ? <span className="text-slate-600">variables cargadas</span> : <span className="text-red-700">faltan variables en la configuración privada</span>}
                   {l.daily_limit ? ` · límite ${l.daily_limit}/día` : ""}
                 </p>
+                {l.active && l.credentials.ok && l.estado && (
+                  <p className="mt-1 text-xs">
+                    <span
+                      className={`inline-flex items-center rounded-full px-2 py-0.5 font-semibold ring-1 ring-inset ${l.estado.ok ? "bg-emerald-50 text-emerald-800 ring-emerald-200" : l.estado.estado === "no_comprobado" ? "bg-slate-50 text-slate-700 ring-slate-200" : "bg-amber-50 text-amber-900 ring-amber-200"}`}
+                    >
+                      Meta: {l.estado.etiqueta}
+                    </span>
+                    {l.estado.ok && l.estado.calidad ? <span className="ml-2 text-slate-600">calidad {l.estado.calidad}</span> : null}
+                    {!l.estado.ok ? <span className="mt-1 block text-slate-600">{l.estado.detalle}</span> : null}
+                  </p>
+                )}
               </div>
               <div className="flex flex-wrap items-center gap-3 text-sm text-slate-700">
                 <label className="tactil flex items-center gap-2">

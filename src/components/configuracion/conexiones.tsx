@@ -12,7 +12,7 @@ function Fila({ nombre, ok, detalle }: { nombre: string; ok: boolean; detalle: s
       <span aria-hidden="true" className={`mt-1 inline-block h-2.5 w-2.5 rounded-full ${ok ? "bg-emerald-500" : "bg-slate-300"}`} />
       <div>
         <p className="font-medium text-slate-800">
-          {nombre} <span className="text-xs font-normal text-slate-500">· {ok ? "configurado" : "sin configurar"}</span>
+          {nombre} <span className="text-xs font-normal text-slate-500">· {ok ? "variables presentes" : "sin configurar"}</span>
         </p>
         <p className="text-xs text-slate-600">{detalle}</p>
       </div>
@@ -31,7 +31,7 @@ export function Conexiones() {
   const cron = !!env.CRON_SECRET;
   return (
     <ul className="divide-y divide-slate-100 text-sm">
-      <Fila nombre="WhatsApp (Meta)" ok={meta} detalle={meta ? "Webhook y firma configurados. Los tokens por línea se guardan en cada canal." : "Faltan la clave de la aplicación o el token de verificación."} />
+      <Fila nombre="WhatsApp (Meta): webhook y firma" ok={meta} detalle={meta ? "Variables del webhook presentes. Esto no dice si cada número está conectado en Meta: el estado real de cada línea se ve en Perfil y marca › Líneas de WhatsApp." : "Faltan la clave de la aplicación o el token de verificación."} />
       <Fila nombre={`Modelo de los agentes (${modelo.proveedor})`} ok={modelo.claveConfigurada} detalle={`Identificador: ${modelo.identificador} (${modelo.origen === "variable" ? "variable de entorno" : "valor por defecto del código"}). ${modelo.claveConfigurada ? "Clave presente." : "Sin clave: el simulador usa el generador simulado."}`} />
       <Fila nombre="Vertex AI (ajuste y modelo ajustado)" ok={vertex.configurado} detalle={vertex.configurado ? "Proyecto, región y cuenta de servicio presentes. Ningún trabajo se envía sin autorización con PIN y límite de gasto." : `Faltan: ${vertex.faltan.join(", ")}. Hasta entonces no hay ajuste real.`} />
       <Fila nombre="Instagram y Facebook (Metricool)" ok={metricool} detalle={metricool ? "Token presente. Publicar además exige la política del canal habilitada y el ejecutor encendido." : "Sin token: las piezas quedan «listas» y no se publican."} />

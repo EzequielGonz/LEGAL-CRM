@@ -7,6 +7,7 @@ import {
   type ProfileLine,
 } from "@/lib/profiles";
 import { ProfileSettings } from "@/components/perfiles/profile-settings";
+import { consultarEstadosLineas } from "@/lib/whatsapp/estado-linea";
 import { profileHasCampaignTemplate } from "@/lib/plantillas";
 import type { Area } from "@/lib/supabase/database.types";
 
@@ -29,7 +30,8 @@ export async function ProfileSettingsSection({ slug }: { slug: string }) {
     .select("*")
     .eq("rubro_id", profile.id)
     .order("created_at");
-  const lines = ((linesData ?? []) as ProfileLine[]).map((l) => ({ ...l, credentials: credentialStatus(l.credential_key) }));
+  const estados = await consultarEstadosLineas(((linesData ?? []) as ProfileLine[]).filter((l) => l.active).map((l) => l.credential_key));
+  const lines = ((linesData ?? []) as ProfileLine[]).map((l) => ({ ...l, credentials: credentialStatus(l.credential_key), estado: estados[l.credential_key] ?? null }));
 
   const areas = areasForProfile(profile.id);
   const registered = new Set(lines.filter((l) => l.active).map((l) => l.credential_key));
@@ -40,8 +42,11 @@ export async function ProfileSettingsSection({ slug }: { slug: string }) {
   // Qué falta para contactar desde este perfil.
   const agent = await agentReadiness(areas[0] as Area);
   const missing = [...agent.missing];
-  const usable = lines.filter((l) => l.active && l.use_for_campaigns && l.credentials.ok);
-  if (usable.length === 0) missing.push("Al menos una línea activa, habilitada para campañas y con credenciales cargadas");
+  const usable = lines.filter((l) => l.active && l.use_for_campaigns && l.credentials.ok && l.estado?.ok);
+  if (usable.length === 0) missing.push("Al menos una línea activa, habilitada para campañas y conectada en Meta (estado «Conectada»)");
+  for (const l of lines) {
+    if (l.active && l.use_for_campaigns && l.credentials.ok && l.estado && !l.estado.ok) missing.push(`Línea «${l.label}»: ${l.estado.etiqueta}`);
+  }
   if (!(await profileHasCampaignTemplate(profile.id))) {
     missing.push("Al menos una plantilla aprobada según Meta, asignada a una línea para campañas (Plantillas de WhatsApp)");
   }

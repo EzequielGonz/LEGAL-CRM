@@ -1,6 +1,7 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { AREA_TO_RUBRO_ID } from "@/lib/rubros";
 import type { Area } from "@/lib/supabase/database.types";
+import { consultarEstadoLinea } from "@/lib/whatsapp/estado-linea";
 import { campaignTemplateCheck, type ResolvedCampaignTemplate } from "@/lib/plantillas";
 
 /**
@@ -135,7 +136,7 @@ export async function campaignReadiness(campaign: {
   line_id: string | null;
   message_template_name: string | null;
   template_id?: string | null;
-}): Promise<Readiness & { line: ProfileLine | null; template: ResolvedCampaignTemplate | null }> {
+}, opciones: { comprobarMeta?: boolean } = {}): Promise<Readiness & { line: ProfileLine | null; template: ResolvedCampaignTemplate | null }> {
   const missing: string[] = [];
   const rubroId = profileIdForArea(campaign.area);
   const profile = rubroId ? await getProfile(rubroId) : null;
@@ -157,6 +158,13 @@ export async function campaignReadiness(campaign: {
       if (rubroId && line.rubro_id !== rubroId) missing.push(`La línea «${line.label}» es de otro perfil`);
       const cred = credentialStatus(line.credential_key);
       if (!cred.ok) missing.push(`Credenciales de la línea «${line.label}» (${line.credential_key}_*) en la configuración privada`);
+      // Estado real en Meta (18/10): variables cargadas no alcanzan si el número está «Pendiente» o el token no sirve.
+      // Un fallo de red al consultar (no_comprobado) no bloquea: solo los estados que Meta confirma como no aptos.
+      // Se reutiliza 2 minutos para no consultar a Meta en cada vuelta del envío automático.
+      else if (opciones.comprobarMeta !== false) {
+        const real = await consultarEstadoLinea(line.credential_key, { memoria: true });
+        if (!real.ok && real.estado !== "no_comprobado") missing.push(`La línea «${line.label}» no está lista en Meta: ${real.etiqueta}. ${real.detalle}`);
+      }
     }
   }
   const tpl = await campaignTemplateCheck(campaign, line);
