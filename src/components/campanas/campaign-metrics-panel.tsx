@@ -5,46 +5,70 @@ function pct(n: number, d: number): string {
   return `${((n / d) * 100).toLocaleString("es-AR", { maximumFractionDigits: 1 })} %`;
 }
 
+/** Tono de la cifra: neutro; solo avisan con color los caídos y los cierres. */
+type Tono = "fuerte" | "suave" | "atencion" | "logro";
+const TONO: Record<Tono, string> = {
+  fuerte: "text-slate-950",
+  suave: "text-slate-600",
+  atencion: "text-amber-700",
+  logro: "text-emerald-700",
+};
+
 /**
  * Cifras de una campaña (doc. 1, 3.3), iguales en PC y teléfono porque
  * salen del mismo cálculo (`campaign_metrics`). Cada tasa muestra su
- * numerador y su denominador.
+ * numerador y su denominador. Afinado 19/10: paleta de la marca (el color
+ * queda solo para lo que avisa algo) y etiquetas cortas en una línea; el
+ * nombre completo de cada cifra queda en el título de la tarjeta.
  */
 export function CampaignMetricsPanel({ m, compact = false }: { m: CampaignMetrics | null; compact?: boolean }) {
   if (!m) {
-    return <p className="rounded-xl border border-dashed border-slate-300 p-4 text-sm text-slate-400">No se pudieron calcular las cifras de la campaña.</p>;
+    return <p className="rounded-xl border border-dashed border-slate-300 p-4 text-sm text-slate-600">No se pudieron calcular las cifras de la campaña.</p>;
   }
-  const tiles: [string, number, string][] = [
-    ["Prospectos", m.prospectos, "text-slate-900"],
-    ["Pendientes", m.pendientes, "text-slate-500"],
-    ["Mensajes enviados", m.mensajes_enviados, "text-blue-600"],
-    ["Respuestas", m.respuestas, "text-indigo-600"],
-    ["Personas que responden", m.personas_responden, "text-indigo-600"],
-    ["Sin respuesta", m.sin_respuesta, "text-slate-600"],
-    ["En seguimiento", m.en_seguimiento, "text-teal-600"],
-    ["Caídos", m.caidos, "text-amber-600"],
-    ["Cierres", m.cierres, "text-green-600"],
+  const tiles: { corto: string; largo: string; valor: number; tono: Tono }[] = [
+    { corto: "Prospectos", largo: "Prospectos", valor: m.prospectos, tono: "fuerte" },
+    { corto: "Pendientes", largo: "Pendientes", valor: m.pendientes, tono: "suave" },
+    { corto: "Enviados", largo: "Mensajes enviados", valor: m.mensajes_enviados, tono: "fuerte" },
+    { corto: "Respuestas", largo: "Respuestas (mensajes)", valor: m.respuestas, tono: "fuerte" },
+    { corto: "Responden", largo: "Personas que responden", valor: m.personas_responden, tono: "fuerte" },
+    { corto: "Sin respuesta", largo: "Sin respuesta", valor: m.sin_respuesta, tono: "suave" },
+    { corto: "Seguimiento", largo: "En seguimiento", valor: m.en_seguimiento, tono: "fuerte" },
+    { corto: "Caídos", largo: "Caídos", valor: m.caidos, tono: m.caidos > 0 ? "atencion" : "fuerte" },
+    { corto: "Cierres", largo: "Cierres", valor: m.cierres, tono: m.cierres > 0 ? "logro" : "fuerte" },
   ];
+  const extras = [
+    m.fallidos > 0 ? `${m.fallidos} envíos fallidos` : null,
+    (m.a_revisar ?? 0) > 0 ? `${m.a_revisar} a revisar (no se reenvían solos)` : null,
+    (m.en_envio ?? 0) > 0 ? `${m.en_envio} en envío` : null,
+    m.detenidos > 0 ? `${m.detenidos} destinatarios detenidos (no reciben más envíos)` : null,
+  ].filter(Boolean);
   return (
     <div>
       <div className={compact ? "grid grid-cols-3 gap-2" : "grid grid-cols-3 gap-3 md:grid-cols-9"}>
-        {tiles.map(([label, value, color]) => (
-          <div key={label} className="rounded-xl border border-slate-200 bg-white p-3 text-center">
-            <p className="text-xs uppercase leading-tight text-slate-400">{label}</p>
-            <p className={`text-lg font-semibold ${color}`}>{value.toLocaleString("es-AR")}</p>
+        {tiles.map((t) => (
+          <div key={t.largo} title={t.largo} className="rounded-xl border border-slate-200 bg-white px-2 py-3 text-center">
+            <p className="truncate text-xs font-medium text-slate-600">{t.corto}</p>
+            <p className={`mt-0.5 text-xl font-semibold tabular-nums ${t.valor === 0 ? "text-slate-400" : TONO[t.tono]}`}>{t.valor.toLocaleString("es-AR")}</p>
           </div>
         ))}
       </div>
+      <dl className="mt-3 space-y-1 text-sm">
+        <div className="flex flex-wrap items-baseline justify-between gap-x-3">
+          <dt className="text-slate-600">Tasa de respuesta</dt>
+          <dd className="font-semibold tabular-nums text-slate-950">
+            {pct(m.personas_responden, m.enviados)} <span className="font-normal text-slate-600">· {m.personas_responden} de {m.enviados} con envío</span>
+          </dd>
+        </div>
+        <div className="flex flex-wrap items-baseline justify-between gap-x-3">
+          <dt className="text-slate-600">Cierres sobre respuestas</dt>
+          <dd className="font-semibold tabular-nums text-slate-950">
+            {pct(m.cierres, m.personas_responden)} <span className="font-normal text-slate-600">· {m.cierres} de {m.personas_responden}</span>
+          </dd>
+        </div>
+      </dl>
+      {extras.length > 0 && <p className="mt-2 text-xs text-slate-600">{extras.join(" · ")}</p>}
       <p className="mt-2 text-xs text-slate-500">
-        Tasa de respuesta: {pct(m.personas_responden, m.enviados)} ({m.personas_responden} de {m.enviados} destinatarios con envío) ·
-        Cierres sobre respuestas: {pct(m.cierres, m.personas_responden)} ({m.cierres} de {m.personas_responden})
-        {m.fallidos > 0 ? ` · ${m.fallidos} envíos fallidos` : ""}
-        {(m.a_revisar ?? 0) > 0 ? ` · ${m.a_revisar} a revisar (no se reenvían solos)` : ""}
-        {(m.en_envio ?? 0) > 0 ? ` · ${m.en_envio} en envío` : ""}
-        {m.detenidos > 0 ? ` · ${m.detenidos} destinatarios detenidos (no reciben más envíos)` : ""}
-      </p>
-      <p className="text-xs text-slate-400">
-        Unidad: destinatarios de la campaña (mensajes enviados y respuestas cuentan mensajes).
+        Cuenta destinatarios; enviados y respuestas cuentan mensajes.
         {m.actualizado ? ` Última actividad: ${new Date(m.actualizado).toLocaleString("es-AR")}.` : " Todavía sin actividad."}
       </p>
     </div>
