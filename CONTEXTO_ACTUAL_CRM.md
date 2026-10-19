@@ -1,6 +1,6 @@
 # CONTEXTO ACTUAL · CRM multirubro
 
-Actualizado: 19/10/2026 (reorganización 2, perfiles en PC, estado real de las líneas y asistente ampliado publicados, PR #20, #21, #22 y #24). Sin secretos ni datos de prospectos.
+Actualizado: 19/10/2026 (reorganización 2, perfiles en PC, estado real de las líneas, asistente ampliado, chat de campañas y afinado de diseño publicados: PR #20, #21, #22, #24, #26 y #27). Sin secretos ni datos de prospectos.
 
 ## Bloque actual: reorganización 2 (18/10, pedido de la responsable)
 Detalle en `docs/reorganizacion-2/ENTREGA.md`. Rama `reorganizacion-2`, PR #20 → `main`. Sin migraciones.
@@ -29,6 +29,10 @@ Detalle en `docs/reorganizacion-2/ENTREGA.md`. Rama `reorganizacion-2`, PR #20 �
 
 **Asistente ampliado (PR #24, pedido de la responsable):** el asistente del panel ahora puede operar campañas, líneas y agentes, **siempre como propuesta que se confirma**. Consulta (`opciones_campana`, `listar_campanas`, `listar_agentes`) y propone (`proponer_campana` en borrador sobre una base, `proponer_asignar_linea`, `proponer_lanzamiento`, `proponer_asignar_agente`, además de publicaciones, cambio de bot y pausa). Niveles en `src/lib/asistente/permisos.ts`, derivados de la propuesta guardada y nunca del pedido: **cambio** = Confirmar; **contacto** (lanzar o reanudar) = casilla de confirmación reforzada + `campaignReadiness` (incluye Meta) + plantilla viva + pausa general; **PIN** (activar un agente) = `confirmPin`. No existe ninguna herramienta de pago ni de gasto (`TIPOS_QUE_GASTAN` vacío; si se agrega una, va con PIN). Es una IA de uso general (sin límite de temas) y mira hasta 3 imágenes adjuntas (se reducen en el navegador); **no edita ni genera imágenes** (si se quiere, es una decisión aparte por posible costo). Campañas › «Preparar con IA» abre el asistente para armar la campaña por prompt y conversando. Migración `0501_asistente_acciones_ampliadas` (amplía los tipos permitidos de `asistente_acciones`; aplicada y verificada en la base real). Implementado y publicado: sí (Preview `dpl_3kDFYiVoLVbNszQ4B9fC7Ng2Uruo` READY en `e35ff2b`; producción `dpl_44qSoySWbfG6wmZW3PMUDDygpDf6` READY = `main` `e78d478`, sin errores de ejecución). Probado: unitarias 204/204; **sin llamada real a Gemini ni a Meta, sin revisión visual y sin lanzar ninguna campaña**. Habilitado: nada; las campañas siguen pausadas y el asistente no envía por sí solo.
 
+**Chat «Preparar con IA» en Campañas (PR #26, pedido de la responsable):** en vez de abrir el asistente lateral, Campañas despliega un chat en la misma pantalla (`src/components/campanas/chat-campana.tsx`) que acepta hasta 3 adjuntos (imágenes, PDF de hasta 2,5 MB y CSV/TXT/MD) y recomienda una plantilla según el tipo de base con la herramienta `analizar_base` (`src/lib/asistente/base-resumen.ts`, que resume columnas y categorías **sin datos personales**). Deja la campaña como propuesta en borrador y nunca lanza. Implementado y publicado: sí (Preview `dpl_GqNyuPFEWojzrY2SyDjeoeMzVYWi` READY en `6bf654a`; producción `dpl_C8yiUN8s6S69KJ3tFERsrJnZsL8Q` READY = `main` `6459464`, sin errores). Probado: unitarias 206/206; **sin llamada real a Gemini ni a Meta**. Habilitado: nada.
+
+**Afinado de diseño (PR #27, pedido de la responsable):** solo presentación. Nueva capa `src/app/afinado.css` (se carga última): aviso de salud y pestañas alineados a la columna de cada pantalla (antes corridos ~60 px), aviso más fino, menú con íconos más legibles y marca dorada en la página actual, botones con profundidad sutil, mejor contraste en textos chicos. Además: formulario de Metricool que se acomoda al ancho (antes la etiqueta se partía palabra por palabra), «Pedile algo» como único nombre del asistente y contador de captados en la paleta de la marca. Implementado y publicado: sí (Preview `dpl_5B7vNwFTib9HQUKpATqUXF8AKio5` READY en `5eec5b2`; producción `dpl_8m5JfBE978SVtHvyU24YRAriiuai` READY = `main` `8ea0c22`, sin errores de ejecución). Probado: unitarias 206/206. **Revisado visualmente en producción** desde el navegador de la responsable (Opera, solo mirando): Inicio, Redes y Configuración. Rollback: quitar el import de `afinado.css` o promover `dpl_C8yiUN8s6S69KJ3tFERsrJnZsL8Q`.
+
 **Habilitado**: nada nuevo se activa solo. La regla de horario rige en las respuestas de los agentes activos. Facebook requiere las variables por perfil en Vercel.
 
 ## Bloques anteriores (cerrados)
@@ -47,11 +51,12 @@ Implementado → Desplegado (READY) → Comprobado automáticamente → Revisado
 - Responsable: vincular Facebook e Instagram por perfil en Vercel (`FACEBOOK_<CLAVE>_PAGE_ID`, `FACEBOOK_<CLAVE>_PAGE_ACCESS_TOKEN`, `INSTAGRAM_<CLAVE>_BUSINESS_ID`), landings y Google Cloud. Después: 1 post diario + historias destacadas con calendario de 1 mes por rubro, y CTA/redes/marca en landings (VITA en Jurídico, CTA de WhatsApp visible en Coberturas).
 - Responsable: cargar `METRICOOL_USER_TOKEN` y `METRICOOL_USER_ID` en Vercel; crear y conectar en Metricool las marcas de Coberturas, 0 km y Jurídico (y el Instagram de Kocos); cargar cada blogId en Redes › Publicaciones; pegar el enlace con origen en la biografía de Instagram.
 - Responsable: completar en el Administrador de WhatsApp la verificación/registro del número de Agencia Kocos (hoy «Pendiente» en Meta) y confirmar que su token tenga acceso; después usar «Volver a comprobar con Meta».
-- Revisión visual de la Preview/producción, incluido el asistente (adjuntar imagen, tarjeta con casilla/PIN, «Preparar con IA»).
+- Revisión visual: el recorrido en PC ya se hizo (19/10). Falta mirar el modo teléfono y probar el asistente (adjuntos, tarjeta con casilla/PIN, chat de Campañas).
+- Diseño, siguiente tanda posible: Configuración muestra dos flechas por grupo (› a la izquierda y ▾ a la derecha); se puede dejar una sola.
 - Penal dentro de la línea de Civil con roles separados (decidido, no implementado).
 - Landings (Hostinger Horizons, dominio en DonWeb) y sus CTA con origen. Localidades AMBA. Search Console. Variables/corpus (candidato C).
 - Meta: estados de las plantillas enviadas; `mkt_apertura_propuesta` y `mkt_presupuesto_listo`.
-- Rotar tokens/secretos pegados en el chat.
+- Rotar tokens/secretos pegados en el chat (incluido el PIN de ingreso, 19/10).
 
 ## Decisiones vigentes
 - Nunca iniciar campañas ni contactar sin autorización expresa. Ningún pago sin autorización. Claves solo en Vercel.
@@ -64,7 +69,7 @@ Implementado → Desplegado (READY) → Comprobado automáticamente → Revisado
 - Conversaciones y Contactos muestran solo oportunidades reales; la base fría vive en Prospectos, agrupada por base (18/10).
 
 ## Siguiente paso
-En pausa hasta que la responsable vincule redes, landings y Google Cloud. Revisión visual de la responsable y vinculación de redes, landings y Google Cloud. Después: contenido de 1 mes por rubro y landings.
+Bandeja para Claude (en un chat nuevo del proyecto, ver `claude/PROXIMO_BANDEJA_CLAUDE.md`). Redes, landings y Google Cloud siguen en pausa hasta que la responsable los vincule; después, contenido de 1 mes por rubro y landings.
 
 ## Dónde leer
 `CLAUDE.md` → `.claude/referencias/reglas-comunes.md` → `docs/reorganizacion-2/ENTREGA.md` → `claude/PUNTO_DE_CONTROL.md`.
