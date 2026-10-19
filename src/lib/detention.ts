@@ -1,5 +1,6 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { normalizePhoneAR } from "@/lib/phone";
+import { setOpportunityState } from "@/lib/opportunities";
 
 /**
  * Detención persistente (bloque 1.2). Se guarda por perfil y por teléfono
@@ -152,7 +153,34 @@ export async function createDetention(input: {
     .select("id")
     .single();
   if (insErr) throw new Error(`No se pudo registrar la detención: ${insErr.message}`);
+  await marcarPerdidoPorDetencion(contact.id, input.motive, input.source === "agente" ? "ia" : "operador");
   return data.id as string;
+}
+
+/**
+ * 20/10 (pedido de la responsable): un contacto detenido (no le interesa,
+ * enojo, número equivocado, ya resuelto…) pasa a Perdido con el motivo y sale
+ * de la revisión manual. Captados y derivados no se tocan. Si falla, la
+ * detención igual queda registrada.
+ */
+export async function marcarPerdidoPorDetencion(contactId: string, motive: DetentionMotive, actor: "ia" | "operador" = "operador"): Promise<void> {
+  try {
+    const supabase = createAdminClient();
+    const { data: opps } = await supabase
+      .from("opportunities")
+      .select("id, capture_state, attention_state")
+      .eq("contact_id", contactId)
+      .not("capture_state", "in", "(captado,derivado,perdido)");
+    const motivo = `Detenido: ${DETENTION_LABEL[motive] ?? motive}`;
+    for (const o of (opps ?? []) as any[]) {
+      await setOpportunityState({ opportunityId: o.id, dimension: "captacion", field: "capture_state", value: "perdido", actor, reason: motivo, extra: { capture_reason: motivo } });
+      if (o.attention_state === "requiere_humano") {
+        await setOpportunityState({ opportunityId: o.id, dimension: "atencion", field: "attention_state", value: "ia", actor, reason: motivo });
+      }
+    }
+  } catch (err) {
+    console.error("[detencion] No se pudo pasar a Perdido:", err);
+  }
 }
 
 export async function liftDetention(detentionId: string, reason: string, by = "operador"): Promise<void> {

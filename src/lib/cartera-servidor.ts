@@ -138,7 +138,8 @@ export async function resumenCifras(rubroId: string, areas: string[], ahora = ne
     return error ? null : count ?? 0;
   };
   const [{ data: base }, respuestas, captados, citas, derivados] = await Promise.all([
-    s.from("imported_bases").select("id, name, file_name, created_at, created_rows, total_rows").in("area", areas).is("archived_at", null).order("created_at", { ascending: false }).limit(1).maybeSingle(),
+    // 20/10: la última base con contactos nuevos (un archivo repetido queda con 0 y no cuenta).
+    s.from("imported_bases").select("id, name, file_name, created_at, created_rows, total_rows").in("area", areas).is("archived_at", null).gt("created_rows", 0).order("created_at", { ascending: false }).limit(1).maybeSingle(),
     cuenta(s.from("messages").select("id, conversations!inner(area)", { count: "exact", head: true }).eq("direction", "entrante").gte("created_at", desde).in("conversations.area", areas)),
     cuenta(s.from("opportunities").select("id", { count: "exact", head: true }).eq("rubro_id", rubroId).eq("capture_state", "captado").gte("captured_at", desde)),
     cuenta(s.from("appointments").select("id", { count: "exact", head: true }).in("area", areas).gte("created_at", desde).neq("status", "cancelada")),

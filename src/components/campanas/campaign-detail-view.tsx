@@ -90,6 +90,21 @@ export async function CampaignDetailView({
   ]);
   const hours = effectiveSendHours(campaign);
   const detailPath = `${backHref}/${campaignId}`;
+  // 20/10: desde cada destinatario se entra a su ficha y a su chat.
+  const idsContacto = ((recipients ?? []) as any[]).map((r) => r.contact_id).filter(Boolean);
+  const { data: convs } = idsContacto.length
+    ? await supabase.from("conversations").select("id, contact_id, updated_at").in("contact_id", idsContacto).order("updated_at", { ascending: false })
+    : { data: [] as any[] };
+  const chatDe = new Map<string, string>();
+  for (const c of (convs ?? []) as any[]) if (!chatDe.has(c.contact_id)) chatDe.set(c.contact_id, c.id);
+  const { data: basesCargadas } = await supabase
+    .from("imported_bases")
+    .select("id, name, file_name, created_rows, total_rows, created_at")
+    .eq("area", campaign.area)
+    .is("archived_at", null)
+    .order("created_at", { ascending: false })
+    .limit(50);
+  const enlaceChat = (convId: string) => (backHref === "/campanas" ? `/inbox/${convId}` : `/conversacion/${convId}`);
 
   return (
     <div>
@@ -149,16 +164,21 @@ export async function CampaignDetailView({
       </div>
 
       <div className="mb-6">
-        <CampaignMetricsPanel m={metrics} />
+        <CampaignMetricsPanel m={metrics} enlaceRespondieron={`${detailPath}?estado=respondieron#destinatarios`} />
       </div>
 
       {!campaign.archived_at && (
         <div className="mb-6">
-          <CsvUploader campaignId={campaign.id} area={campaign.area} basesPath={basesPath} />
+          <CsvUploader
+            campaignId={campaign.id}
+            area={campaign.area}
+            basesPath={basesPath}
+            basesCargadas={((basesCargadas ?? []) as any[]).map((b) => ({ id: b.id, nombre: b.name || b.file_name || "Base sin nombre", filas: b.total_rows ?? b.created_rows ?? null, fecha: b.created_at }))}
+          />
         </div>
       )}
 
-      <div className="mb-3 flex flex-wrap gap-2">
+      <div id="destinatarios" className="mb-3 flex scroll-mt-24 flex-wrap gap-2">
         {FILTERS.map((f) => (
           <Link
             key={f.key}
@@ -181,6 +201,7 @@ export async function CampaignDetailView({
               <th className="px-4 py-3">Teléfono</th>
               <th className="px-4 py-3">Estado</th>
               <th className="px-4 py-3">Enviado</th>
+              <th className="px-4 py-3">Abrir</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
@@ -200,11 +221,25 @@ export async function CampaignDetailView({
                   ) : null}
                 </td>
                 <td className="px-4 py-3 tabular-nums text-slate-600">{r.sent_at ? new Date(r.sent_at).toLocaleString("es-AR") : "—"}</td>
+                <td className="px-4 py-3">
+                  <span className="flex flex-wrap gap-2">
+                    {r.contact_id && (
+                      <Link href={`/ficha/${r.contact_id}?volver=${encodeURIComponent(detailPath)}`} className="rounded-md border border-slate-200 bg-white px-2 py-1 text-xs font-medium text-slate-700 hover:border-slate-300">
+                        Ficha
+                      </Link>
+                    )}
+                    {r.contact_id && chatDe.get(r.contact_id) && (
+                      <Link href={enlaceChat(chatDe.get(r.contact_id)!)} className="rounded-md bg-slate-900 px-2 py-1 text-xs font-medium text-white">
+                        Chat
+                      </Link>
+                    )}
+                  </span>
+                </td>
               </tr>
             ))}
             {(recipients ?? []).length === 0 && (
               <tr>
-                <td colSpan={4} className="px-4 py-8 text-center text-slate-600">
+                <td colSpan={5} className="px-4 py-8 text-center text-slate-600">
                   {filter.key === "todos" ? "Todavía no cargaste destinatarios." : "No hay destinatarios en este estado."}
                 </td>
               </tr>
