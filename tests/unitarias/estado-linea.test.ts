@@ -20,12 +20,18 @@ test("línea: un número «Pendiente» en Meta no se muestra como correcto", () 
   assert.match(r.etiqueta, /Pendiente/);
 });
 
-test("línea: conectada y verificada es la única que queda correcta", () => {
+test("línea: conectada en Meta queda correcta aunque el código de verificación esté vencido", () => {
   assert.equal(interpretarNumero({ status: "CONNECTED", code_verification_status: "VERIFIED", quality_rating: "GREEN" }).ok, true);
   assert.equal(interpretarNumero({ status: "CONNECTED", quality_rating: "GREEN" }).calidad, "alta");
-  const sinVerificar = interpretarNumero({ status: "CONNECTED", code_verification_status: "NOT_VERIFIED" });
-  assert.equal(sinVerificar.ok, false);
-  assert.equal(sinVerificar.estado, "pendiente");
+  for (const codigo of ["NOT_VERIFIED", "EXPIRED"]) {
+    const r = interpretarNumero({ status: "CONNECTED", code_verification_status: codigo });
+    assert.equal(r.ok, true, codigo);
+    assert.equal(r.estado, "conectada", codigo);
+    assert.match(r.detalle, /no impide enviar/);
+  }
+  // El estado del número sigue mandando: pendiente o con problema no pasan aunque el código esté verificado.
+  assert.equal(interpretarNumero({ status: "PENDING", code_verification_status: "VERIFIED" }).ok, false);
+  assert.equal(interpretarNumero({ status: "RESTRICTED", code_verification_status: "VERIFIED" }).ok, false);
 });
 
 test("línea: bloqueada, desconectada o restringida no es apta", () => {
