@@ -18,7 +18,7 @@ export function abrirAsistente(texto?: string) {
   window.dispatchEvent(new CustomEvent(EVENTO, { detail: texto ?? null }));
 }
 
-interface Propuesta {
+export interface Propuesta {
   id: string;
   tipo: string;
   titulo: string;
@@ -92,7 +92,7 @@ function textoResultado(p: Propuesta): string | null {
   return "Listo.";
 }
 
-function TarjetaPropuesta({ p, alCambiar }: { p: Propuesta; alCambiar: (p: Propuesta) => void }) {
+export function TarjetaPropuesta({ p, alCambiar }: { p: Propuesta; alCambiar: (p: Propuesta) => void }) {
   const [ocupado, setOcupado] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const nivel = nivelDeAccion(p.tipo, (p.detalle ?? {}) as Record<string, unknown>);
