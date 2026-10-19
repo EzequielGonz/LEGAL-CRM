@@ -1,0 +1,166 @@
+/*
+ * Afinado de detalle (19/10): solo presentación, sin tocar funciones.
+ * Se carga al final de todo. Corrige lo que se vio recorriendo el panel en
+ * PC (márgenes desparejos, formulario de Metricool apretado, contrastes
+ * bajos) y suma terminaciones de producto premium sin cambiar la
+ * disposición de ninguna pantalla.
+ */
+
+/* ---------- 1. Una sola columna: aviso, pestañas y contenido alineados ----------
+   El aviso de salud y las pestañas ocupaban todo el lienzo (92rem) y cada
+   pantalla centra su contenido en 80rem o 68rem: quedaban 60 px corridos.
+   Ahora toman el mismo ancho que la pantalla que acompañan. */
+.lienzo-contenido {
+  --columna: 100%;
+}
+.lienzo-contenido:has(> [class~="mx-auto"]:is([class~="max-w-5xl"], [class~="max-w-6xl"], [class~="max-w-7xl"])) {
+  --columna: 80rem;
+}
+.lienzo-contenido:has(> [class~="mx-auto"]:is([class~="max-w-3xl"], [class~="max-w-4xl"])) {
+  --columna: 68rem;
+}
+.lienzo-contenido:has(> [class~="mx-auto"][class~="max-w-2xl"]) {
+  --columna: 42rem;
+}
+.lienzo-contenido > .barra-salud {
+  max-width: var(--columna);
+  margin-left: auto;
+  margin-right: auto;
+}
+.lienzo-contenido > .pestanas-seccion {
+  margin-left: max(0px, calc((100% - var(--columna)) / 2));
+}
+
+/* ---------- 2. Aviso de salud: más fino, sin perder el color de alerta ---------- */
+.barra-salud {
+  border-radius: var(--e-radio-tarjeta, 14px);
+  padding: 0.7rem 0.85rem 0.7rem 1rem;
+  box-shadow: var(--e-sombra-1);
+}
+.barra-salud[class~="border-amber-300"] {
+  border-color: rgb(245 158 11 / 0.35);
+  background: linear-gradient(90deg, rgb(255 251 235), rgb(255 251 235 / 0.6));
+}
+.barra-salud[class~="border-red-300"] {
+  border-color: rgb(239 68 68 / 0.35);
+}
+.barra-salud a[class~="rounded-lg"] {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgb(15 23 42 / 0.06);
+}
+
+/* ---------- 3. Menú lateral: íconos legibles y marca de página actual ---------- */
+.menu-item {
+  position: relative;
+  transition: background-color 0.16s ease, color 0.16s ease;
+}
+.menu-item svg {
+  color: rgb(var(--c-slate-500));
+  transition: color 0.16s ease;
+}
+.menu-item:hover svg {
+  color: rgb(var(--c-slate-700));
+}
+.menu-item[aria-current="page"]::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 22%;
+  bottom: 22%;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: rgb(var(--c-gold-500));
+}
+
+/* ---------- 4. Pestañas de sección: riel más liviano ---------- */
+.pestanas-seccion {
+  background: rgb(var(--c-slate-900) / 0.045);
+  box-shadow: inset 0 0 0 1px rgb(var(--c-slate-900) / 0.04);
+}
+.pestana {
+  transition: color 0.16s ease, background-color 0.16s ease, box-shadow 0.16s ease;
+}
+
+/* ---------- 5. Botones principales: profundidad sutil ---------- */
+:is(main#contenido, .modo-telefono, [data-tema]) :is(.btn-gold, .btn-gold-sm),
+:is(main#contenido, .modo-telefono) :is(a, button)[class~="bg-slate-900"] {
+  background-image: linear-gradient(180deg, rgb(255 255 255 / 0.07), rgb(255 255 255 / 0));
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.1), 0 1px 2px rgb(15 23 42 / 0.16), 0 4px 10px -4px rgb(15 23 42 / 0.25);
+  transition: background-color 0.16s ease, box-shadow 0.16s ease, transform 0.12s ease;
+}
+:is(main#contenido, .modo-telefono, [data-tema]) :is(.btn-gold, .btn-gold-sm):hover:not(:disabled),
+:is(main#contenido, .modo-telefono) :is(a, button)[class~="bg-slate-900"]:hover:not(:disabled) {
+  background-image: linear-gradient(180deg, rgb(255 255 255 / 0.1), rgb(255 255 255 / 0));
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.12), 0 2px 4px rgb(15 23 42 / 0.18), 0 8px 18px -6px rgb(15 23 42 / 0.3);
+}
+:is(main#contenido, .modo-telefono, [data-tema]) :is(.btn-gold, .btn-gold-sm):active:not(:disabled),
+:is(main#contenido, .modo-telefono) :is(a, button)[class~="bg-slate-900"]:active:not(:disabled) {
+  transform: translateY(0.5px);
+}
+/* Botones blancos con borde: mismo trato que las tarjetas */
+:is(main#contenido, .modo-telefono) :is(a, button):is([class~="border-slate-200"], [class~="border-slate-300"])[class~="bg-white"] {
+  transition: border-color 0.16s ease, box-shadow 0.16s ease, color 0.16s ease;
+}
+:is(main#contenido, .modo-telefono) :is(a, button):is([class~="border-slate-200"], [class~="border-slate-300"])[class~="bg-white"]:hover:not(:disabled) {
+  border-color: rgb(var(--c-slate-400) / 0.7);
+  box-shadow: 0 1px 2px rgb(15 23 42 / 0.06), 0 4px 10px -6px rgb(15 23 42 / 0.18);
+}
+
+/* ---------- 6. Cifras grandes: más firmes ---------- */
+:is(main#contenido, .modo-telefono) :is([class~="text-2xl"], [class~="text-3xl"], [class~="text-4xl"]):not(h1) {
+  letter-spacing: -0.022em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 7. Textos chicos: contraste suficiente ---------- */
+:is(main#contenido, .modo-telefono) [class~="text-xs"][class~="text-slate-500"] {
+  color: rgb(var(--c-slate-600));
+}
+
+/* ---------- 8. Lectura y cortes de línea ---------- */
+:is(main#contenido, .modo-telefono) :is(h3, h4, legend) {
+  text-wrap: balance;
+}
+:is(main#contenido, .modo-telefono) :is(li, dd, figcaption) {
+  text-wrap: pretty;
+}
+:is(main#contenido, .modo-telefono) :is(p, li, td, dd, h1, h2, h3) {
+  overflow-wrap: break-word;
+}
+:is(main#contenido, .modo-telefono) :is(time, th, td, output) {
+  font-variant-numeric: tabular-nums;
+}
+:is(main#contenido, .modo-telefono) a[class*="underline"] {
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+:is(main#contenido, .modo-telefono) :is(code, kbd, samp) {
+  font-size: 0.92em;
+}
+:is(main#contenido, .modo-telefono) :is(img, video):not([width]) {
+  max-width: 100%;
+  height: auto;
+}
+:is(main#contenido, .modo-telefono) hr {
+  border: 0;
+  border-top: 1px solid var(--e-borde, rgb(15 23 42 / 0.08));
+}
+:is(main#contenido, .modo-telefono) :is(button, input, select, textarea):disabled {
+  cursor: not-allowed;
+}
+:is(button, [role="button"], summary) {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-item,
+  .menu-item svg,
+  .pestana,
+  :is(main#contenido, .modo-telefono, [data-tema]) :is(.btn-gold, .btn-gold-sm),
+  :is(main#contenido, .modo-telefono) :is(a, button) {
+    transition: none;
+  }
+}

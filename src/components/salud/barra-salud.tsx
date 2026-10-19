@@ -38,7 +38,7 @@ export async function BarraSalud({ slug }: { slug: string }) {
   const titulo = r.rojo ? `${r.rojo} problema(s) frenan la operación` : `${r.amarillo} punto(s) para revisar`;
   const primero = lecturaSimple(mostrar[0]);
   return (
-    <section aria-label="Salud del sistema" className={`mb-5 rounded-xl border p-3 ${r.rojo ? COLOR.rojo : COLOR.amarillo}`}>
+    <section aria-label="Salud del sistema" className={`barra-salud mb-5 rounded-xl border p-3 ${r.rojo ? COLOR.rojo : COLOR.amarillo}`}>
       {/* Simple: una línea con lo más importante. Los problemas se ven igual en los dos niveles. */}
       <div className="solo-simple flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
         <p className="flex min-w-0 items-start gap-2 text-sm">

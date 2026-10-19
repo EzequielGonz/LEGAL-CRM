@@ -67,8 +67,8 @@ export function ConexionRedes({ perfil, inicial }: { perfil: string; inicial: Es
         </p>
       )}
 
-      <div className="mt-4 grid gap-4 sm:grid-cols-[1fr_auto] sm:items-end">
-        <label className="block text-sm">
+      <div className="mt-4 flex flex-wrap items-end gap-x-5 gap-y-3">
+        <label className="block min-w-[13rem] flex-1 text-sm">
           <span className="font-medium text-slate-800">Número de la marca en Metricool</span>
           <input
             inputMode="numeric"
@@ -79,7 +79,7 @@ export function ConexionRedes({ perfil, inicial }: { perfil: string; inicial: Es
           />
           <span className="mt-1 block text-xs text-slate-500">Está en la dirección de Metricool cuando elegís la marca (blogId).</span>
         </label>
-        <label className="flex items-center gap-2 text-sm font-medium text-slate-800">
+        <label className="flex items-center gap-2 pb-2.5 text-sm font-medium text-slate-800">
           <input type="checkbox" checked={publicarSolo} onChange={(e) => setPublicarSolo(e.target.checked)} className="h-4 w-4" />
           Publicar solo lo que confirme
         </label>
