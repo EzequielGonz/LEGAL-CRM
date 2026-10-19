@@ -3,7 +3,8 @@ import assert from "node:assert/strict";
 import { faltaParaConfirmar, nivelDeAccion, TIPOS_ACCION } from "@/lib/asistente/permisos";
 import { diasDeEjecucion } from "@/lib/asistente/campanas";
 import { elegirPorNombre } from "@/lib/asistente/operaciones";
-import { validarImagenes, MAX_IMAGENES } from "@/lib/asistente/motor";
+import { validarImagenes, validarTextos, MAX_IMAGENES } from "@/lib/asistente/motor";
+import { resumirColumnas } from "@/lib/asistente/base-resumen";
 import { NOMBRES_OPERACIONES } from "@/lib/asistente/operaciones";
 import { DECLARACIONES } from "@/lib/asistente/herramientas";
 
@@ -60,4 +61,27 @@ test("asistente: imágenes adjuntas se validan por formato y tamaño", () => {
   assert.equal(validarImagenes([{ mime: "image/png", datos: "no es base64!" }]).length, 0);
   assert.equal(validarImagenes([{ mime: "image/png", datos: "A".repeat(6_000_000) }]).length, 0);
   assert.equal(validarImagenes("x").length, 0);
+});
+
+test("asistente: el PDF se acepta y los archivos de texto se limitan", () => {
+  assert.equal(validarImagenes([{ mime: "application/pdf", datos: "QUJD" }]).length, 1);
+  const t = validarTextos([{ nombre: "a.csv", contenido: "x".repeat(50000) }, { nombre: "b.txt", contenido: "y".repeat(50000) }, { nombre: "vacio", contenido: "  " }, 5]);
+  assert.equal(t.length, 2);
+  assert.equal(t.reduce((a, x) => a + x.contenido.length, 0), 60000);
+  assert.deepEqual(validarTextos("no"), []);
+});
+
+test("asistente: el resumen de una base muestra categorías y nunca datos personales", () => {
+  const filas = [
+    { Nombre: "Ana Pérez", Teléfono: "1155550000", Email: "ana@x.com", "Tipo de consulta": "Accidente de tránsito", Observaciones: "llamar tarde" },
+    { Nombre: "Luis Gómez", Teléfono: "1155551111", Email: "luis@x.com", "Tipo de consulta": "Accidente de tránsito", Observaciones: "" },
+    { Nombre: "Eva Díaz", Teléfono: "1155552222", Email: "eva@x.com", "Tipo de consulta": "Accidente laboral", Observaciones: "" },
+  ];
+  const r = resumirColumnas(filas);
+  assert.equal(r.filas, 3);
+  const tipo = r.columnas.find((c) => c.columna === "Tipo de consulta");
+  assert.deepEqual(tipo?.valores, [{ valor: "Accidente de tránsito", cantidad: 2 }, { valor: "Accidente laboral", cantidad: 1 }]);
+  const texto = JSON.stringify(r);
+  for (const dato of ["Ana", "Luis", "1155550000", "ana@x.com", "llamar tarde"]) assert.ok(!texto.includes(dato), dato);
+  assert.ok(r.columnas.filter((c) => c.valores).length === 1);
 });

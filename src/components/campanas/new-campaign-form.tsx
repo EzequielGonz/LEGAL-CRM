@@ -5,12 +5,14 @@ import { EnlaceAvanzado } from "@/components/nivel/nivel";
 import { useRouter } from "next/navigation";
 import { SendLimitsFields } from "./send-limits-fields";
 import { TemplatePicker } from "@/components/plantillas/template-picker";
-import { abrirAsistente } from "@/components/asistente/asistente-panel";
+import { ChatCampana } from "@/components/campanas/chat-campana";
+import type { SlugPerfil } from "@/lib/marca";
 
 export function NewCampaignForm({
   channels,
   lines = [],
   redirectBase = "/campanas",
+  perfil,
 }: {
   channels: { id: string; label: string }[];
   /** Líneas del perfil habilitadas para campañas (bloque 1.4). Se puede asignar después. */
@@ -19,9 +21,12 @@ export function NewCampaignForm({
    * de "/<id>". Por defecto "/campanas" (panel de Jurídico); los paneles
    * de otros rubros pasan la suya, por ejemplo "/panel/agencia_0km/campanas". */
   redirectBase?: string;
+  /** Perfil de la pantalla: habilita «Preparar con IA» dentro de Campañas. */
+  perfil?: SlugPerfil;
 }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [iaAbierta, setIaAbierta] = useState(false);
   const [name, setName] = useState("");
   const [channelId, setChannelId] = useState(channels[0]?.id ?? "");
   const [template, setTemplate] = useState("");
@@ -80,20 +85,29 @@ export function NewCampaignForm({
 
   if (!open) {
     return (
-      <div className="flex flex-wrap items-center gap-3">
-        <button
-          onClick={() => setOpen(true)}
-          className="btn-gold"
-        >
-          Preparar una campaña
-        </button>
-        <button
-          type="button"
-          onClick={() => abrirAsistente("Quiero armar una campaña con tu ayuda. Mostrame qué bases, líneas y plantillas tengo y recomendame cómo conviene hacerla.")}
-          className="rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 hover:border-slate-400"
-        >
-          Preparar con IA
-        </button>
+      <div>
+        <div className="flex flex-wrap items-center gap-3">
+          <button
+            onClick={() => setOpen(true)}
+            className="btn-gold"
+          >
+            Preparar una campaña
+          </button>
+          {perfil && !iaAbierta && (
+            <button
+              type="button"
+              onClick={() => setIaAbierta(true)}
+              className="rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 hover:border-slate-400"
+            >
+              Preparar con IA
+            </button>
+          )}
+        </div>
+        {perfil && iaAbierta && (
+          <div className="mt-4">
+            <ChatCampana slug={perfil} onCerrar={() => setIaAbierta(false)} />
+          </div>
+        )}
       </div>
     );
   }
