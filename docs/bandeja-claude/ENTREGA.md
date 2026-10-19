@@ -4,7 +4,7 @@ Pedido de la responsable (19/10). Rama `bandeja-claude`. Migración `0502_bandej
 
 ## Qué incluye
 
-- **Menú (todos los perfiles):** arriba de todo de la barra izquierda, sobre las secciones y por encima de «Pedile algo», la entrada «Bandeja para Claude». Muestra cuántas tareas hay abiertas y, si alguna quedó en espera, un punto ámbar y «N en espera».
+- **Menú (todos los perfiles):** abajo de la barra izquierda, justo arriba de «Pedile algo», la tarjeta negra «Bandeja para Claude». Muestra cuántas tareas hay abiertas y, si alguna quedó en espera, un punto ámbar y «N en espera».
 - **Pantalla `/bandeja?perfil=<slug>`:** formulario (perfil, pedido de hasta 4000 caracteres, hasta 5 enlaces de referencia) y lista con estados: en espera (arriba, con aviso y motivo), en curso, pendientes; listas y descartadas plegadas. Se puede descartar con motivo lo pendiente o en espera. Nada se borra.
 - **Sin datos personales de prospectos:** el pedido, los enlaces y el motivo rechazan correos, teléfonos y documentos (fechas, rangos de años y precios pasan). Enlaces solo `https://`, sin enlaces de WhatsApp a personas ni credenciales.
 - **«En espera» aunque Claude no llegue a escribir:** una tarea «en curso» sin avance por más de 6 h se muestra «en espera» (por ejemplo, si se agotó el uso del plan).

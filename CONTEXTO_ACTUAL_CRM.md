@@ -3,10 +3,10 @@
 Actualizado: 19/10/2026 (Bandeja para Claude en PR #29, Preview lista y migración 0502 aplicada; antes: reorganización 2, perfiles en PC, estado real de las líneas, asistente ampliado, chat de campañas y afinado de diseño publicados: PR #20, #21, #22, #24, #26 y #27). Sin secretos ni datos de prospectos.
 
 ## Bloque actual: Bandeja para Claude (19/10, pedido de la responsable)
-Detalle en `docs/bandeja-claude/ENTREGA.md`. Rama `bandeja-claude`, PR #29 → `main`. Procedimiento de Claude al recibir «ok»: `.claude/referencias/bandeja-claude.md`.
+Detalle en `docs/bandeja-claude/ENTREGA.md`. Rama `bandeja-claude`, PR #29 fusionado a `main` (`4f74085`, 19/10). Ajuste posterior: tarjeta negra y movida arriba de «Pedile algo» (rama `bandeja-posicion`, PR #32). Procedimiento de Claude al recibir «ok»: `.claude/referencias/bandeja-claude.md`.
 
 **Qué cambió**
-- Menú (todos los perfiles): «Bandeja para Claude» arriba de todo en la barra izquierda, sobre las secciones y por encima de «Pedile algo»; muestra cuántas hay abiertas y avisa en ámbar si alguna está en espera.
+- Menú (todos los perfiles): tarjeta negra «Bandeja para Claude» abajo en la barra izquierda, justo arriba de «Pedile algo»; muestra cuántas hay abiertas y avisa en ámbar si alguna está en espera.
 - Pantalla `/bandeja?perfil=<slug>`: dejar una tarea (perfil, pedido, hasta 5 enlaces), ver estados (pendiente, en curso, en espera, lista, descartada) con resultado y enlaces, y descartar con motivo. Rechaza correos, teléfonos y documentos.
 - «En curso» sin avance por más de 6 h se muestra «en espera» (por ejemplo, si se agotó el uso del plan).
 - Claude no corre dentro del panel y no hay tarea programada: la responsable abre un chat nuevo de Cowork en el proyecto y dice «ok». El asistente del panel sigue en Gemini.
@@ -14,7 +14,7 @@ Detalle en `docs/bandeja-claude/ENTREGA.md`. Rama `bandeja-claude`, PR #29 → `
 
 **Evidencia**
 1. Implementado: rama `bandeja-claude`, remoto = local (comparación con `git diff`, sin diferencias).
-2. Desplegado: Preview `dpl_F9FcwemZjueYihJ3vU6vcinpdbme` READY (`acc91f6`, todo el código; build con typecheck y lint de Next.js sin errores). Producción: **no** (PR #29 abierto). Una Preview intermedia (`57ab297`) falló porque ese commit todavía no tenía el componente de la pantalla; se resolvió con el commit siguiente.
+2. Desplegado: Preview `dpl_F9FcwemZjueYihJ3vU6vcinpdbme` READY (`acc91f6`, todo el código; build con typecheck y lint de Next.js sin errores). Producción: PR #29 fusionado a `main` (`4f74085`), **despliegue en producción sin verificar** (la sesión no pudo consultarlo). Una Preview intermedia (`57ab297`) falló porque ese commit todavía no tenía el componente de la pantalla; se resolvió con el commit siguiente.
 3. Comprobado automáticamente: unitarias de la bandeja 8/8; base: disparadores y restricción probados en una transacción revertida, 0 filas; asesor de seguridad sin avisos nuevos. La suite completa no se pudo correr en la sesión (npm bloqueado; 8 archivos de pruebas necesitan `@supabase/supabase-js`).
 4. Revisado visualmente: **pendiente**.
 5. Probado funcionalmente: **no** (crear y descartar una tarea lo puede probar la responsable en la Preview o en producción; una tarea de prueba queda guardada y se descarta con motivo).
@@ -69,7 +69,7 @@ Implementado → Desplegado (READY) → Comprobado automáticamente → Revisado
 - Migraciones: hasta `0502_bandeja_claude` (19/10).
 
 ## Pendientes
-- Bandeja para Claude: decidir si se fusiona el PR #29 a producción (o lo integra el programador) y revisar la pantalla y el menú.
+- Bandeja para Claude: verificar que producción desplegó `4f74085` (rollback: `dpl_FeydAszMcUu5MJbRJtRKwgPAvyxk` = `d7a0a0c`), decidir el PR #32 de la tarjeta negra y revisar la pantalla y el menú.
 - Responsable: vincular Facebook e Instagram por perfil en Vercel (`FACEBOOK_<CLAVE>_PAGE_ID`, `FACEBOOK_<CLAVE>_PAGE_ACCESS_TOKEN`, `INSTAGRAM_<CLAVE>_BUSINESS_ID`), landings y Google Cloud. Después: 1 post diario + historias destacadas con calendario de 1 mes por rubro, y CTA/redes/marca en landings (VITA en Jurídico, CTA de WhatsApp visible en Coberturas).
 - Responsable: cargar `METRICOOL_USER_TOKEN` y `METRICOOL_USER_ID` en Vercel; crear y conectar en Metricool las marcas de Coberturas, 0 km y Jurídico (y el Instagram de Kocos); cargar cada blogId en Redes › Publicaciones; pegar el enlace con origen en la biografía de Instagram.
 - Responsable: completar en el Administrador de WhatsApp la verificación/registro del número de Agencia Kocos (hoy «Pendiente» en Meta) y confirmar que su token tenga acceso; después usar «Volver a comprobar con Meta».
@@ -91,7 +91,7 @@ Implementado → Desplegado (READY) → Comprobado automáticamente → Revisado
 - Bandeja para Claude: Claude trabaja con el plan desde Cowork, sin clave de API ni tarea programada; toma lo pendiente cuando la responsable dice «ok» y todo lo que cambie el panel o el código vuelve como PR o propuesta (19/10).
 
 ## Siguiente paso
-Fusionar el PR #29 (o dejarlo al programador) y revisar la Bandeja. Para usarla: dejar tareas en el panel y decir «ok» en un chat nuevo del proyecto. Redes, landings y Google Cloud siguen en pausa hasta que la responsable los vincule; después, contenido de 1 mes por rubro y landings.
+Verificar el despliegue de `4f74085`, decidir el PR #32 de la tarjeta y revisar la Bandeja. Para usarla: dejar tareas en el panel y decir «ok» en un chat nuevo del proyecto. Redes, landings y Google Cloud siguen en pausa hasta que la responsable los vincule; después, contenido de 1 mes por rubro y landings.
 
 ## Dónde leer
 `CLAUDE.md` → `.claude/referencias/reglas-comunes.md` → `.claude/referencias/bandeja-claude.md` → `docs/bandeja-claude/ENTREGA.md` → `claude/PUNTO_DE_CONTROL.md`.

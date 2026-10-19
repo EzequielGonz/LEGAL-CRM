@@ -4,7 +4,7 @@ Versión 1.0 · 19/10/2026. Complementa `reglas-comunes.md`; no cambia ninguna r
 
 ## Qué es
 
-La responsable deja tareas complejas en el panel (barra izquierda, arriba de todo: «Bandeja para Claude»). Claude **no corre dentro del panel** y no hay tarea programada: las toma cuando la responsable abre un chat nuevo de Cowork en el proyecto «crm» y dice **«ok»** (también desde la app del celular). El asistente del panel («Pedile algo») sigue en Gemini.
+La responsable deja tareas complejas en el panel (barra izquierda, abajo, arriba de «Pedile algo»: «Bandeja para Claude»). Claude **no corre dentro del panel** y no hay tarea programada: las toma cuando la responsable abre un chat nuevo de Cowork en el proyecto «crm» y dice **«ok»** (también desde la app del celular). El asistente del panel («Pedile algo») sigue en Gemini.
 
 ## Al recibir «ok»
 
