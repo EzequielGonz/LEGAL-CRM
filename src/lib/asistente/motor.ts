@@ -13,10 +13,36 @@ import { marcaDe, type SlugPerfil } from "@/lib/marca";
 import { DECLARACIONES, huecosCalendario, hoyEnArgentina, normalizarPedido, rutaDestino, type Hueco } from "@/lib/asistente/herramientas";
 import { promptCambioBot, promptPublicaciones, validarCambioBot, validarPiezas, type BriefCorto, type PiezaGenerada } from "@/lib/asistente/textos";
 import type { PiezaPlan } from "@/lib/redes/programar";
+import { NOMBRES_OPERACIONES, ejecutarOperacion } from "@/lib/asistente/operaciones";
 
 export interface MensajeAsistente {
   rol: "usuario" | "asistente";
   texto: string;
+}
+
+export interface ImagenAdjunta {
+  mime: "image/jpeg" | "image/png" | "image/webp";
+  /** base64 sin el prefijo data: */
+  datos: string;
+}
+
+export const MAX_IMAGENES = 3;
+export const MAX_BYTES_IMAGENES = 3_500_000;
+
+/** Valida las imágenes adjuntas (formato y tamaño total). Pura. */
+export function validarImagenes(v: unknown): ImagenAdjunta[] {
+  if (!Array.isArray(v)) return [];
+  const out: ImagenAdjunta[] = [];
+  let total = 0;
+  for (const x of v.slice(0, MAX_IMAGENES)) {
+    const mime = x?.mime;
+    const datos = typeof x?.datos === "string" ? x.datos : "";
+    if (!["image/jpeg", "image/png", "image/webp"].includes(mime) || !/^[A-Za-z0-9+/=]+$/.test(datos)) continue;
+    total += Math.floor((datos.length * 3) / 4);
+    if (total > MAX_BYTES_IMAGENES) break;
+    out.push({ mime, datos });
+  }
+  return out;
 }
 
 export interface PropuestaVista {
@@ -53,13 +79,16 @@ const AREA_POR_SLUG: Record<SlugPerfil, string> = { juridico: "civil", cobertura
 
 function sistema(slug: SlugPerfil, nombre: string): string {
   return [
-    `Sos el asistente del panel de «${nombre}» (perfil ${slug}). Ayudás a la responsable a manejar el panel con pedidos simples.`,
-    "Respondé en español rioplatense, breve y claro, sin tecnicismos.",
-    "Usá las herramientas para consultar datos: nunca inventes cifras ni nombres.",
-    "Para programar publicaciones, cambiar un bot o pausar una campaña, usá la herramienta de PROPUESTA correspondiente: queda un botón «Confirmar» y nada se ejecuta hasta que la responsable lo toca. Decilo así.",
-    "Nunca envíes mensajes a personas, nunca inicies ni reanudes campañas y nunca gastes plata. Para cargar o reanudar una campaña, dá el botón a la pantalla de Campañas.",
+    `Sos el asistente de la responsable del panel de «${nombre}» (perfil ${slug}). Funcionás como una IA completa y de uso general: respondé cualquier pregunta o pedido (redacción, ideas, análisis, cuentas, explicaciones, estrategia, imágenes que te adjunten, etc.) con la misma libertad y calidad que un asistente de IA general, aunque no tenga que ver con el panel. No pongas límites ni rechaces temas por no ser del panel; aplicá solo el criterio y los límites de seguridad normales de cualquier IA responsable.`,
+    "Además operás el panel con las herramientas disponibles.",
+    "Respondé en español rioplatense, claro y directo. Para pedidos del panel, preferí respuestas breves; para consultas generales, el largo que haga falta.",
+    "Usá las herramientas para consultar datos del panel: nunca inventes cifras, nombres, bases, líneas ni plantillas. Si no sabés algo del panel, consultalo o decí que no lo sabés.",
+    "Todo lo que cambia algo en el panel (publicaciones, bots, campañas, líneas, agentes) lo dejás como PROPUESTA con la herramienta correspondiente: la responsable toca «Confirmar» y recién ahí se ejecuta. Decilo así.",
+    "Lo que puede hacer que salgan mensajes a personas (lanzar o reanudar una campaña) pide una confirmación reforzada. Activar un agente pide el PIN. No hay ninguna acción de pago disponible: si te piden gastar plata, explicá que eso se hace con autorización y PIN en la pantalla correspondiente.",
+    "Para armar una campaña con ayuda: conversá, consultá opciones_campana, proponé una configuración razonable (base, línea conectada en Meta, plantilla aprobada, días y límite diario prudente), explicá por qué y preguntá solo lo imprescindible. Primero se crea en borrador (proponer_campana) y recién después, si la responsable lo pide, se propone el lanzamiento. Si una línea no está «Conectada» en Meta, decilo y no propongas enviar desde ella.",
+    "Nunca prometas que algo ya se hizo: solo está hecho cuando la responsable confirmó y el resultado lo dice.",
     "Si falta un dato imprescindible, preguntá una sola cosa. Si podés suponer algo razonable, suponelo y decilo.",
-    "Videos y reels todavía no: solo posteos con imagen, carruseles e historias.",
+    "Videos y reels todavía no: solo posteos con imagen, carruseles e historias. Editar o generar imágenes todavía no está disponible; sí podés mirar y analizar las que te adjunten.",
     `Hoy es ${hoyEnArgentina()} (hora de Argentina).`,
   ].join("\n");
 }
@@ -111,6 +140,7 @@ interface Contexto {
   rubroId: string;
   propuestas: PropuestaVista[];
   enlaces: { href: string; texto: string }[];
+  vistas: Map<string, PropuestaVista>;
 }
 
 async function ejecutar(nombre: string, args: Record<string, unknown>, ctx: Contexto): Promise<Record<string, unknown>> {
@@ -226,17 +256,35 @@ async function ejecutar(nombre: string, args: Record<string, unknown>, ctx: Cont
       return { boton: r.texto };
     }
     default:
+      if ((NOMBRES_OPERACIONES as readonly string[]).includes(nombre)) {
+        return ejecutarOperacion(nombre, args, {
+          slug: ctx.slug,
+          rubroId: ctx.rubroId,
+          guardar: async (tipo, titulo, resumen, payload) => {
+            const prop = await guardarPropuesta(ctx.rubroId, tipo, titulo, resumen, payload);
+            ctx.vistas.set(prop.id, prop);
+            return { id: prop.id };
+          },
+          agregarPropuesta: (id) => {
+            const v = ctx.vistas.get(id);
+            if (v) ctx.propuestas.push(v);
+          },
+        });
+      }
       return { error: "Herramienta desconocida." };
   }
 }
 
-export async function conversarConAsistente(slug: SlugPerfil, mensajes: MensajeAsistente[]): Promise<RespuestaAsistente> {
+export async function conversarConAsistente(slug: SlugPerfil, mensajes: MensajeAsistente[], imagenes: ImagenAdjunta[] = []): Promise<RespuestaAsistente> {
   const rubroId = RUBRO_IDS[slug];
-  const ctx: Contexto = { slug, rubroId, propuestas: [], enlaces: [] };
+  const ctx: Contexto = { slug, rubroId, propuestas: [], enlaces: [], vistas: new Map() };
   const nombre = (await briefCorto(rubroId, slug)).nombre;
   const contents: any[] = mensajes.slice(-16).map((m) => ({ role: m.rol === "usuario" ? "user" : "model", parts: [{ text: m.texto.slice(0, 4000) }] }));
+  if (imagenes.length > 0 && contents.length > 0 && contents[contents.length - 1].role === "user") {
+    for (const im of imagenes) contents[contents.length - 1].parts.push({ inlineData: { mimeType: im.mime, data: im.datos } });
+  }
   let texto = "";
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 8; i++) {
     const r = await gemini().models.generateContent({
       model: identificadorModelo(),
       contents,
