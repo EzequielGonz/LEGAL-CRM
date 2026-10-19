@@ -9,6 +9,7 @@ import { AREA_TO_RUBRO_ID } from "@/lib/rubros";
 import { AREAS_DE_PERFIL } from "@/lib/cartera-servidor";
 import { campaignReadiness } from "@/lib/profiles";
 import { consultarEstadosLineas } from "@/lib/whatsapp/estado-linea";
+import { resumirColumnas } from "@/lib/asistente/base-resumen";
 import { diasDeEjecucion, validarPedidoCampana, type PedidoCampana } from "@/lib/asistente/campanas";
 import type { Area } from "@/lib/supabase/database.types";
 
@@ -21,6 +22,7 @@ export interface ContextoOperacion {
 
 export const NOMBRES_OPERACIONES = [
   "opciones_campana",
+  "analizar_base",
   "listar_campanas",
   "proponer_campana",
   "proponer_lanzamiento",
@@ -117,6 +119,14 @@ export async function ejecutarOperacion(nombre: string, args: Record<string, unk
         lineas: conPlantillas,
         nota: "Una línea solo envía si está «Conectada» en Meta y la plantilla está aprobada y asignada a esa línea para campañas.",
       };
+    }
+    case "analizar_base": {
+      const bases = await basesDelPerfil(ctx.slug);
+      const b = elegirPorNombre(bases, args.base, (x) => x.name);
+      if (!b.uno) return { error: b.varios ? "Hay varias bases que coinciden." : "No encontré esa base.", opciones: (b.varios ?? bases).map((x) => x.name).slice(0, 10) };
+      const { data: filas } = await s.from("imported_base_rows").select("raw_data").eq("base_id", b.uno.id).order("row_number", { ascending: true }).limit(2000);
+      const r = resumirColumnas(((filas ?? []) as any[]).map((f) => (f.raw_data ?? {}) as Record<string, unknown>));
+      return { base: b.uno.name, contactos: b.uno.created_rows ?? b.uno.total_rows, cargada: b.uno.created_at, filas_analizadas: r.filas, columnas: r.columnas, nota: "Solo se muestran categorías; los datos personales no se leen ni se muestran." };
     }
     case "listar_campanas": {
       const camps = await campanasDelPerfil(ctx.slug);
