@@ -58,9 +58,9 @@ function Circuito({ id, titulo, descripcion, pasos }: { id: string; titulo: stri
 export async function CircuitosMarketing() {
   const s = createAdminClient();
   const leads = () => s.from("marketing_leads").select("id", { count: "exact", head: true });
-  const [porAnalizar, altaSinContactar, directas, pedidos, atrasados, aprobados, auto] = await Promise.all([
-    leads().eq("source_kind", "scraper").in("analysis_status", ["pendiente", "analizando"]),
-    leads().eq("source_kind", "scraper").eq("priority", "alta").eq("outreach_status", "sin_contactar"),
+  const [sinContactar, aceptaron, directas, pedidos, atrasados, aprobados, auto] = await Promise.all([
+    leads().eq("source_kind", "scraper").eq("outreach_status", "sin_contactar"),
+    leads().eq("source_kind", "scraper").not("sale_stage", "in", "(apertura)").not("sale_stage", "is", null),
     leads().eq("source_kind", "directa").not("outreach_status", "in", "(cerrado,no_interesado,baja)"),
     s.from("marketing_budgets").select("id", { count: "exact", head: true }).eq("estado", "pedido"),
     s.from("marketing_budgets").select("id", { count: "exact", head: true }).eq("estado", "pedido").lt("pedido_at", new Date(Date.now() - 20 * 3_600_000).toISOString()),
@@ -80,15 +80,20 @@ export async function CircuitosMarketing() {
         <Circuito
           id="mkt-saliente"
           titulo="Captación saliente"
-          descripcion="Negocios que buscamos nosotros: se extraen, se analizan y se contacta a los mejores."
+          descripcion="Negocios que buscamos nosotros. Se extrae la base, se carga y se les pregunta si quieren escuchar una propuesta. Solo a los que dicen que sí se les hace el análisis con IA, automático, y la venta consultiva sigue en el mismo chat hasta el presupuesto. No se analiza a nadie que no respondió."
           pasos={[
-            { titulo: "Extraer negocios", href: "/panel/marketing/extraer", efecto: "prepara", estado: "Busca negocios y arma una base." },
-            { titulo: "Captación y análisis", href: "/panel/marketing/captacion", efecto: "guarda", estado: `${cifra(n(porAnalizar), "por analizar")} · enviar el primer mensaje es una opción aparte` },
+            { titulo: "1. Extraer la base", href: "/panel/marketing/extraer", efecto: "prepara", estado: `Busca negocios y arma la base · ${cifra(n(sinContactar), "sin contactar")}` },
             {
-              titulo: "Prospectos prioritarios",
-              href: "/panel/marketing/prospectos",
+              titulo: "2. Cargarla y lanzar la apertura",
+              href: "/panel/marketing/extraer",
               efecto: "envia",
-              estado: `${cifra(n(altaSinContactar), "de prioridad alta sin contactar")} · envío automático: ${estadoAuto.toLowerCase()}`,
+              estado: `«Ejecutar base»: pregunta si quieren escuchar una propuesta (con PIN) · envío automático: ${estadoAuto.toLowerCase()}`,
+            },
+            {
+              titulo: "3. Dicen que sí: análisis IA y venta en el chat",
+              href: "/conversaciones?perfil=marketing",
+              efecto: "guarda",
+              estado: `${cifra(n(aceptaron), "aceptaron escuchar")} · el agente analiza el negocio solo y presenta la propuesta`,
             },
           ]}
         />

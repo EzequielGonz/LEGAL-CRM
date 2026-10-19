@@ -87,6 +87,7 @@ function textoResultado(p: Propuesta): string | null {
   if (p.tipo === "pausar_campana") return "Campaña pausada.";
   if (p.tipo === "crear_campana") return `Campaña creada en borrador con ${r.destinatarios_agregados ?? 0} destinatarios pendientes. No se envió nada: para lanzarla pedímelo o hacelo desde Campañas.`;
   if (p.tipo === "asignar_linea_campana") return "Línea de la campaña actualizada.";
+  if (p.tipo === "limite_campana") return r.limite_diario ? `Listo: la campaña envía como máximo ${r.limite_diario} mensajes por día.` : "Listo: la campaña quedó sin límite diario propio.";
   if (p.tipo === "lanzar_campana") return "Campaña lanzada: los envíos siguen el ritmo y el horario configurados. Podés pausarla cuando quieras.";
   if (p.tipo === "asignar_agente") return `Agente ${r.estado === "activa" ? "activado" : r.estado === "pausada" ? "pausado" : "apagado"}.`;
   return "Listo.";

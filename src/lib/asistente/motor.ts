@@ -4,6 +4,7 @@
  * confirman. Usa el mismo Gemini que los bots (GEMINI_API_KEY / GEMINI_MODEL).
  */
 import { GoogleGenAI } from "@google/genai";
+import { contextoCrm } from "@/lib/asistente/contexto-crm";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getProfileMetrics } from "@/lib/metrics";
 import { identificadorModelo } from "@/lib/agentes/modelo";
@@ -122,6 +123,7 @@ function sistema(slug: SlugPerfil, nombre: string, modo: ModoAsistente = "genera
           "No propongas lanzar salvo que la responsable lo pida expresamente. Si adjuntan ideas, textos o capturas, usalas como insumo.",
         ]
       : []),
+    contextoCrm(slug),
     `Hoy es ${hoyEnArgentina()} (hora de Argentina).`,
   ].join("\n");
 }
