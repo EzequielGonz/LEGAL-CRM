@@ -41,7 +41,7 @@ export const VISTAS_CARTERA: Record<VistaCartera, { titulo: string; bajada: stri
     grupos: [
       { clave: "captados", titulo: "Captados para derivar", detalle: "Aceptaron el siguiente paso: pasalos al profesional.", tono: "caliente", accion: "derivar", fuente: op("captado_sin_derivar") },
       { clave: "agendaron", titulo: "Agendaron", detalle: "Tienen una cita próxima y todavía no se derivaron.", tono: "caliente", accion: "ficha", fuente: citas("proximas_sin_derivar") },
-      { clave: "hablando", titulo: "Hablando ahora", detalle: "La charla está en curso con el agente.", tono: "info", accion: "chat", fuente: op("en_conversacion") },
+      { clave: "hablando", titulo: "Hablando ahora", detalle: "La charla está en curso con el agente.", tono: "info", accion: "chat", fuente: op("hablando_ahora") },
       { clave: "piden", titulo: "Quieren hablar con alguien", detalle: "Interesados que pidieron una persona: respondé desde el chat.", tono: "alerta", accion: "chat", fuente: op("piden_persona") },
     ],
   },

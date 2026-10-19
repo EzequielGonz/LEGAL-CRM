@@ -48,11 +48,14 @@ export async function loadPerfiles(): Promise<PerfilStats[]> {
     .eq("active", true)
     .order("sort_order", { ascending: true });
   const desde = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
+  // 20/10: «piden una persona» cuenta solo pedidos de la última semana, sin
+  // perdidos ni detenidos: si pasó una semana sin responder, ya no es pendiente.
+  const semana = new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString();
 
   return Promise.all(
     ((rubros ?? []) as RubroRow[]).map(async (r) => {
       const areas = AREAS[r.slug] ?? [r.slug];
-      const [metrics, { data: ultimos }, recibidos, { data: camp }, programadas] = await Promise.all([
+      const [metrics, { data: ultimos }, recibidos, { data: camp }, programadas, piden] = await Promise.all([
         getProfileMetrics(r.id),
         supabase
           .from("opportunities")
@@ -69,13 +72,21 @@ export async function loadPerfiles(): Promise<PerfilStats[]> {
           .in("conversations.area", areas),
         supabase.from("campaigns").select("id, name, status").in("area", areas).is("archived_at", null).order("created_at", { ascending: false }).limit(1),
         supabase.from("content_pieces").select("id", { count: "exact", head: true }).eq("rubro_id", r.id).eq("estado", "programada"),
+        supabase
+          .from("opportunities")
+          .select("id", { count: "exact", head: true })
+          .eq("rubro_id", r.id)
+          .eq("attention_state", "requiere_humano")
+          .neq("capture_state", "perdido")
+          .or("attention_category.is.null,attention_category.neq.detencion")
+          .gte("updated_at", semana),
       ]);
       const c: any = (camp ?? [])[0];
       return {
         ...r,
         agendados: metrics?.captacion.captado ?? 0,
         cerrados: metrics?.derivacion.no_derivado ?? 0,
-        accion: { humano: metrics?.atencion.requiere_humano ?? 0, sin_derivar: metrics?.derivacion.no_derivado ?? 0, revision: metrics?.revision_pendiente ?? 0 },
+        accion: { humano: piden.error ? metrics?.atencion.requiere_humano ?? 0 : piden.count ?? 0, sin_derivar: metrics?.derivacion.no_derivado ?? 0, revision: metrics?.revision_pendiente ?? 0 },
         casos: ((ultimos ?? []) as any[]).map((o) => ({
           id: o.contact_id,
           full_name: o.contacts?.full_name ?? null,
