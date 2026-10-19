@@ -985,20 +985,25 @@ async function executeTool(
       }
       const sitioWeb = typeof input.sitio_web === "string" ? input.sitio_web.trim() : "";
       const nombreYZona = typeof input.nombre_y_zona === "string" ? input.nombre_y_zona.trim() : "";
-      if (!sitioWeb && !nombreYZona) {
+      // 20/10: también sirve para los negocios de una base extraída que dijeron que sí:
+      // ya tenemos su ficha (web o Google Maps), así que no hace falta pedir nada.
+      const existente: any = await getLeadByContact(ctx.contact.id);
+      const tieneDatos = !!existente && (!!existente.website || !!existente.place_id || (existente.maps_data && Object.keys(existente.maps_data).length > 0));
+      if (!sitioWeb && !nombreYZona && !tieneDatos) {
         return { output: { error: "Necesito el sitio web o el nombre y la zona del negocio." } };
       }
 
-      const { lead } = await ensureLead({
+      const lead = existente ?? (await ensureLead({
         contactId: ctx.contact.id,
         sourceKind: "directa",
         sourceDetail: sourceDetailFor(ctx.contact.source),
-      });
+      })).lead;
 
       const analyzed: any = await analyzeLead(lead.id, {
         force: true,
         websiteOverride: sitioWeb || null,
         mapsQuery: nombreYZona || null,
+        investigar: true,
       });
       if (!analyzed || analyzed.analysis_status === "omitido") {
         return {

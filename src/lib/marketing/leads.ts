@@ -351,7 +351,9 @@ export async function buildMarketingBrief(contactId: string): Promise<string> {
       lines.push("El análisis de este negocio todavía se está procesando.");
     } else {
       lines.push(
-        "No hay análisis automático de este negocio. Si el prospecto te pasa su sitio web, o el nombre y la zona de su negocio, usá la herramienta analizar_negocio para analizarlo en el momento."
+        lead.source_kind === "scraper"
+          ? "Todavía no hay análisis de este negocio (se hace solo cuando acepta escuchar la propuesta). Si ya aceptó o pregunta qué propuesta es, usá analizar_negocio sin parámetros y con eso armá la propuesta."
+          : "No hay análisis automático de este negocio. Si el prospecto te pasa su sitio web, o el nombre y la zona de su negocio, usá la herramienta analizar_negocio para analizarlo en el momento."
       );
     }
   }
@@ -365,7 +367,7 @@ export async function buildMarketingBrief(contactId: string): Promise<string> {
     "- registrar_resultado_marketing con resultado='aprobado': solo si acepta avanzar SIN presupuesto (por ejemplo, ya conoce los precios). Después avisale que lo derivás al equipo técnico.",
     "- registrar_resultado_marketing con resultado='en_duda': cuando duda, pide pensarlo, o dice que en otro momento. El sistema le hará seguimiento por WhatsApp (un recordatorio a los ~3 días y otro a los ~6). Decile con naturalidad que quedás atento.",
     "- registrar_resultado_marketing con resultado='no_interesado': cuando dice claramente que no quiere o pide que no lo contactemos más. No insistas.",
-    "- analizar_negocio: solo para consultas directas, cuando no hay análisis y el prospecto te dio su web o el nombre y la zona de su negocio.",
+    "- analizar_negocio: cuando aceptó escuchar la propuesta (o pidió saber más) y todavía no tenés el análisis. Si es de una base extraída, llamala sin parámetros; si nos escribió él, pasá su web o el nombre y la zona. Con el resultado hacé la venta consultiva en este mismo chat: qué viste, por qué le afecta, qué proponemos, y ofrecé el presupuesto.",
     "Nunca digas que 'registraste' algo ni menciones herramientas, puntajes internos ni 'el sistema' al prospecto."
   );
 
