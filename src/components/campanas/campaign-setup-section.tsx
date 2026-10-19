@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { credentialStatus } from "@/lib/profiles";
 import { AREA_TO_RUBRO_ID } from "@/lib/rubros";
 import { CampaignSetup } from "@/components/campanas/campaign-setup";
+import { consultarEstadosLineas } from "@/lib/whatsapp/estado-linea";
 
 /** Carga la línea y los días de la campaña y las líneas disponibles del perfil. */
 export async function CampaignSetupSection({ campaignId }: { campaignId: string }) {
@@ -20,6 +21,7 @@ export async function CampaignSetupSection({ campaignId }: { campaignId: string 
     .eq("active", true)
     .eq("use_for_campaigns", true)
     .order("created_at");
+  const estados = await consultarEstadosLineas((lines ?? []).map((l: any) => l.credential_key));
   return (
     <CampaignSetup
       campaignId={campaign.id}
@@ -33,7 +35,8 @@ export async function CampaignSetupSection({ campaignId }: { campaignId: string 
         id: l.id,
         label: l.label,
         daily_limit: l.daily_limit,
-        ok: credentialStatus(l.credential_key).ok,
+        ok: credentialStatus(l.credential_key).ok && !!estados[l.credential_key]?.ok,
+        motivo: !credentialStatus(l.credential_key).ok ? "faltan credenciales" : estados[l.credential_key]?.ok ? null : (estados[l.credential_key]?.etiqueta ?? "sin comprobar").toLowerCase(),
       }))}
     />
   );

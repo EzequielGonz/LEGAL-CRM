@@ -26,7 +26,7 @@ export function CampaignSetup({
   running,
 }: {
   campaignId: string;
-  lines: { id: string; label: string; ok: boolean; daily_limit: number | null }[];
+  lines: { id: string; label: string; ok: boolean; motivo?: string | null; daily_limit: number | null }[];
   lineId: string | null;
   runDays: number[] | null;
   archivedAt: string | null;
@@ -84,7 +84,7 @@ export function CampaignSetup({
             {lines.map((l) => (
               <option key={l.id} value={l.id}>
                 {l.label}
-                {l.ok ? "" : " (faltan credenciales)"}
+                {l.ok ? "" : ` (${l.motivo ?? "faltan credenciales"})`}
                 {l.daily_limit ? ` · ${l.daily_limit}/día` : ""}
               </option>
             ))}
