@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { InformeLinea } from "@/lib/whatsapp/estado-linea";
+import { VerificarNumero } from "@/components/perfiles/verificar-numero";
 
 interface LineView {
   id: string;
@@ -177,6 +178,7 @@ export function ProfileSettings({
                     {!l.estado.ok ? <span className="mt-1 block text-slate-600">{l.estado.detalle}</span> : null}
                   </p>
                 )}
+                {l.active && l.credentials.ok && l.estado && !l.estado.ok && l.estado.estado !== "token_invalido" && <VerificarNumero lineId={l.id} onCambio={() => router.refresh()} />}
               </div>
               <div className="flex flex-wrap items-center gap-3 text-sm text-slate-700">
                 <label className="tactil flex items-center gap-2">
