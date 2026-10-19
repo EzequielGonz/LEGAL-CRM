@@ -7,7 +7,8 @@ import { rubroIdDe, enlaceIndicador } from "@/lib/indicadores";
 import { esSlugPerfil, type SlugPerfil } from "@/lib/marca";
 import { conVolver } from "@/lib/navegacion";
 import { VISTAS_CARTERA, cuandoCorto, enlaceConversacion, grupoElegido, iniciales, type Tono, type VistaCartera } from "@/lib/cartera";
-import { AREAS_DE_PERFIL, contarDetenidos, contarVista, listarGrupo, type FichaCartera } from "@/lib/cartera-servidor";
+import { AREAS_DE_PERFIL, contarDetenidos, contarVista, listarGrupo, resumenCifras, type FichaCartera } from "@/lib/cartera-servidor";
+import { getProfileMetrics } from "@/lib/metrics";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 const PUNTO: Record<Tono, string> = {
@@ -79,14 +80,18 @@ export async function PaginaCartera({ vista, searchParams }: { vista: VistaCarte
   const conteos = await contarVista(rubroId, areas, vista);
   const g = grupoElegido(vista, searchParams.grupo, conteos);
   const aqui = `${ruta}?perfil=${slug}&grupo=${g.clave}`;
-  const [{ fichas, error }, detenidos, incidencias] = await Promise.all([
+  const [{ fichas, error }, detenidos, incidencias, semana, historico] = await Promise.all([
     listarGrupo(rubroId, areas, g),
     vista === "recuperar" ? contarDetenidos(rubroId) : Promise.resolve(null),
     vista === "recuperar" && slug === "juridico"
       ? createAdminClient().from("incidences").select("id", { count: "exact", head: true }).eq("status", "abierta").then((r: any) => (r.error ? null : r.count ?? 0))
       : Promise.resolve(null),
+    // 20/10: en Conversaciones, la semana más reciente y el historial completo.
+    vista === "conversaciones" ? resumenCifras(rubroId, areas).catch(() => null) : Promise.resolve(null),
+    vista === "conversaciones" ? getProfileMetrics(rubroId).catch(() => null) : Promise.resolve(null),
   ]);
   const total = conteos[g.clave];
+  const cifra = (n: number | null | undefined) => (n === null || n === undefined ? "—" : n.toLocaleString("es-AR"));
   const completa = g.fuente.tipo === "oportunidades" ? enlaceIndicador(slug, g.fuente.indicador, aqui) : `${slug === "juridico" ? "" : `/panel/${slug}`}/agenda`;
 
   return (
@@ -96,6 +101,48 @@ export async function PaginaCartera({ vista, searchParams }: { vista: VistaCarte
           <h1 className="text-2xl font-semibold text-slate-950">{def.titulo}</h1>
           <p className="mt-1 text-sm text-slate-600">{def.bajada}</p>
         </div>
+
+        {vista === "conversaciones" ? (
+          <section aria-labelledby="conv-semana" className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <h2 id="conv-semana" className="text-base font-semibold text-slate-950">Esta semana</h2>
+            <p className="text-xs text-slate-500">Desde el lunes</p>
+            <dl className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {[
+                ["Mensajes recibidos", semana?.semana.respuestas],
+                ["Captados", semana?.semana.captados],
+                ["Citas", semana?.semana.citas],
+                ["Derivados", semana?.semana.derivados],
+              ].map(([l, n]) => (
+                <div key={String(l)}>
+                  <dt className="text-xs text-slate-600">{l as string}</dt>
+                  <dd className="text-2xl font-semibold tabular-nums text-slate-950">{cifra(n as number | null | undefined)}</dd>
+                </div>
+              ))}
+            </dl>
+            <details className="mt-4 rounded-xl bg-slate-50 p-3 text-sm">
+              <summary className="font-medium text-slate-800">Historial completo</summary>
+              <dl className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                {[
+                  ["Oportunidades", historico?.oportunidades],
+                  ["Contactados sin respuesta", historico?.contacto.contactado_sin_respuesta],
+                  ["Respondieron", historico?.contacto.respondio],
+                  ["En conversación", historico?.captacion.en_conversacion],
+                  ["Captados", historico?.captacion.captado],
+                  ["Derivados", historico?.derivacion.derivado],
+                  ["Perdidos", historico?.captacion.perdido],
+                  ["Detenidos", historico?.detenidos],
+                  ["Mensajes enviados", historico?.mensajes.enviados],
+                  ["Mensajes recibidos", historico?.mensajes.recibidos],
+                ].map(([l, n]) => (
+                  <div key={String(l)}>
+                    <dt className="text-xs text-slate-600">{l as string}</dt>
+                    <dd className="text-lg font-semibold tabular-nums text-slate-950">{cifra(n as number | null | undefined)}</dd>
+                  </div>
+                ))}
+              </dl>
+            </details>
+          </section>
+        ) : null}
 
         <nav aria-label={`Grupos de ${def.titulo}`}>
           <ul className={`grid grid-cols-2 gap-3 ${def.grupos.length > 4 ? "lg:grid-cols-4 xl:grid-cols-7" : "lg:grid-cols-4"}`}>
