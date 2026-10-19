@@ -5,7 +5,9 @@
  */
 import { createHash } from "node:crypto";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { pauseCampaign } from "@/lib/campaigns";
+import { pauseCampaign, launchCampaign, CampaignNotReadyError } from "@/lib/campaigns";
+import { crearCampanaBorrador, type PedidoCampana } from "@/lib/asistente/campanas";
+import { asignarAgente } from "@/lib/agentes/servicio";
 import { programarPiezas, type PiezaPlan } from "@/lib/redes/programar";
 import { ctasDelPerfil } from "@/lib/redes/conexion";
 
@@ -88,6 +90,40 @@ export async function confirmarAccion(id: string): Promise<{ estado: string; res
     } else if (a.tipo === "pausar_campana") {
       await pauseCampaign(a.payload?.campana_id, a.payload?.motivo ?? "Pausada desde el asistente");
       resultado = { pausada: true };
+    } else if (a.tipo === "crear_campana") {
+      resultado = await crearCampanaBorrador(a.payload?.pedido as PedidoCampana);
+    } else if (a.tipo === "asignar_linea_campana") {
+      const { campana_id, line_id, template_id } = a.payload ?? {};
+      const { data: camp } = await s.from("campaigns").select("id, area, status, archived_at").eq("id", campana_id).maybeSingle();
+      if (!camp || (camp as any).archived_at) throw new Error("La campaña no existe o está archivada.");
+      if ((camp as any).status === "en_curso") throw new Error("La campaña está en curso: pausala antes de cambiar la línea.");
+      const { data: linea } = await s.from("profile_lines").select("id, rubro_id, active, use_for_campaigns").eq("id", line_id).maybeSingle();
+      if (!linea || (linea as any).rubro_id !== a.rubro_id || !(linea as any).active || !(linea as any).use_for_campaigns) throw new Error("La línea no es de este perfil o no está habilitada para campañas.");
+      const cambios: Record<string, unknown> = { line_id };
+      if (template_id) {
+        const { data: asig } = await s.from("template_assignments").select("template:whatsapp_templates(id, name)").eq("line_id", line_id).eq("purpose", "campana").eq("template_id", template_id).eq("active", true).maybeSingle();
+        const tpl = (asig as any)?.template;
+        if (!tpl) throw new Error("Esa plantilla no está asignada a la línea para campañas.");
+        cambios.template_id = tpl.id;
+        cambios.message_template_name = tpl.name;
+      } else {
+        cambios.template_id = null;
+      }
+      const { error } = await s.from("campaigns").update(cambios).eq("id", campana_id);
+      if (error) throw new Error(error.message);
+      resultado = { asignada: true, con_plantilla: !!template_id };
+    } else if (a.tipo === "lanzar_campana") {
+      try {
+        const r = await launchCampaign(String(a.payload?.campana_id ?? ""));
+        resultado = { lanzada: true, detalle: r };
+      } catch (err) {
+        if (err instanceof CampaignNotReadyError) throw new Error(`No está lista para enviar: ${err.missing.join("; ")}`.slice(0, 280));
+        throw err;
+      }
+    } else if (a.tipo === "asignar_agente") {
+      const { clave, version, estado, area, motivo } = a.payload ?? {};
+      const asignacion = await asignarAgente({ rubroId: a.rubro_id, area, clave, version: Number(version), estado, motivo: String(motivo ?? "Desde el asistente").slice(0, 300), actor: "asistente" });
+      resultado = { estado: (asignacion as any)?.estado ?? estado };
     } else {
       throw new Error("Tipo de propuesta desconocido.");
     }
