@@ -213,8 +213,8 @@ export const MARKETING_TOOLS: FunctionDeclaration[] = [
   {
     name: "analizar_negocio",
     description:
-      "Analiza en el momento el negocio de un prospecto que nos escribió por su cuenta (consulta directa): revisa su sitio web y/o su ficha de Google Maps y devuelve los hallazgos concretos. " +
-      "Usala cuando no tengas análisis y el prospecto te pase su sitio web o el nombre y la zona de su negocio.",
+      "Analiza en el momento el negocio del prospecto con IA (sitio web, ficha de Google Maps y búsqueda en la web) y devuelve los hallazgos concretos para armar la propuesta. " +
+      "Usala cuando el prospecto aceptó escuchar la propuesta o pidió saber más y todavía no tenés el análisis. Si es un negocio de una base extraída, llamala sin parámetros (ya tenemos su ficha). Si nos escribió por su cuenta, pasá su sitio web o el nombre y la zona.",
     parametersJsonSchema: {
       type: "object",
       properties: {
