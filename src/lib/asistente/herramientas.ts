@@ -5,8 +5,8 @@
  *  - Consulta: leen y responden en el momento (cifras, captados, bots).
  *  - Propuesta: preparan una acción y la dejan en `asistente_acciones` como
  *    «propuesta». Nada se ejecuta hasta que la responsable confirma en el
- *    panel (botón «Confirmar»). Nunca envían mensajes a personas ni inician
- *    campañas.
+ *    panel (botón «Confirmar»). Ninguna envía mensajes ni inicia nada por sí sola;
+ *    las que pueden contactar personas piden confirmación reforzada.
  */
 import type { SlugPerfil } from "@/lib/marca";
 
@@ -69,6 +69,74 @@ export const DECLARACIONES = [
     parametersJsonSchema: {
       type: "object",
       properties: { motivo: { type: "string" } },
+    },
+  },
+  {
+    name: "opciones_campana",
+    description: "Lista lo que hay para armar una campaña en este perfil: bases cargadas, líneas de WhatsApp habilitadas (con su estado real en Meta) y las plantillas aprobadas de cada línea. Usala antes de proponer una campaña.",
+    parametersJsonSchema: { type: "object", properties: {} },
+  },
+  {
+    name: "listar_campanas",
+    description: "Campañas del perfil con su estado y cuántos destinatarios hay en cada estado.",
+    parametersJsonSchema: { type: "object", properties: {} },
+  },
+  {
+    name: "proponer_campana",
+    description:
+      "Deja como PROPUESTA crear una campaña en BORRADOR sobre una base (no envía nada). Necesita nombre, base, línea y plantilla; si falta algo, consultá opciones_campana y preguntale a la responsable. Los detenidos y los ya contactados quedan afuera automáticamente.",
+    parametersJsonSchema: {
+      type: "object",
+      properties: {
+        nombre: { type: "string", description: "Nombre de la campaña" },
+        base: { type: "string", description: "Nombre de la base" },
+        linea: { type: "string", description: "Nombre de la línea de WhatsApp" },
+        plantilla: { type: "string", description: "Nombre de la plantilla aprobada de esa línea" },
+        dias: { type: "array", items: { type: "integer" }, description: "Días de envío, 1=lunes a 6=sábado (vacío = lunes a sábado)" },
+        limite_diario: { type: "integer", description: "Máximo de mensajes por día (opcional)" },
+      },
+      required: ["nombre", "base", "linea", "plantilla"],
+    },
+  },
+  {
+    name: "proponer_lanzamiento",
+    description:
+      "Deja como PROPUESTA lanzar o reanudar una campaña en borrador o pausada. Es la acción que puede enviar mensajes a personas: la responsable debe marcar la confirmación reforzada. Si la campaña no está lista (línea no conectada en Meta, plantilla, pausa general) devuelve qué falta y NO propone.",
+    parametersJsonSchema: {
+      type: "object",
+      properties: { campana: { type: "string", description: "Nombre de la campaña" } },
+      required: ["campana"],
+    },
+  },
+  {
+    name: "proponer_asignar_linea",
+    description: "Deja como PROPUESTA cambiar la línea (y opcionalmente la plantilla) de una campaña en borrador o pausada. No envía nada.",
+    parametersJsonSchema: {
+      type: "object",
+      properties: {
+        campana: { type: "string" },
+        linea: { type: "string" },
+        plantilla: { type: "string", description: "Opcional: plantilla aprobada de esa línea" },
+      },
+      required: ["campana", "linea"],
+    },
+  },
+  {
+    name: "listar_agentes",
+    description: "Agentes IA del perfil (derivados), su versión, si está publicada, y qué agente responde hoy en cada área.",
+    parametersJsonSchema: { type: "object", properties: {} },
+  },
+  {
+    name: "proponer_asignar_agente",
+    description: "Deja como PROPUESTA activar, pausar o apagar un agente en un área del perfil. Activar pide además el PIN.",
+    parametersJsonSchema: {
+      type: "object",
+      properties: {
+        agente: { type: "string", description: "Nombre o clave del agente" },
+        estado: { type: "string", enum: ["activa", "pausada", "apagada"] },
+        area: { type: "string", description: "Área del perfil (en Jurídico: civil o penal)" },
+      },
+      required: ["agente", "estado"],
     },
   },
   {

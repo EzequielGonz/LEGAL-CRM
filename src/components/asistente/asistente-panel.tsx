@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import type { SlugPerfil } from "@/lib/marca";
 import { Icono } from "@/components/ui/icono-seccion";
+import { nivelDeAccion } from "@/lib/asistente/permisos";
 
 /**
  * Asistente del panel (18/10): un panel lateral donde se pide algo con
@@ -66,6 +67,7 @@ const SUGERENCIAS = [
   "¿Cómo viene el bot de este perfil?",
   "Mostrame los captados que falta derivar",
   "Resumen de hoy",
+  "Ayudame a armar una campaña con una de las bases cargadas",
 ];
 
 function textoResultado(p: Propuesta): string | null {
@@ -83,12 +85,20 @@ function textoResultado(p: Propuesta): string | null {
   }
   if (p.tipo === "cambio_agente") return r.deshecho ? "Cambio deshecho: el bot volvió a sus instrucciones anteriores." : "Listo: el bot ya responde con las instrucciones nuevas.";
   if (p.tipo === "pausar_campana") return "Campaña pausada.";
+  if (p.tipo === "crear_campana") return `Campaña creada en borrador con ${r.destinatarios_agregados ?? 0} destinatarios pendientes. No se envió nada: para lanzarla pedímelo o hacelo desde Campañas.`;
+  if (p.tipo === "asignar_linea_campana") return "Línea de la campaña actualizada.";
+  if (p.tipo === "lanzar_campana") return "Campaña lanzada: los envíos siguen el ritmo y el horario configurados. Podés pausarla cuando quieras.";
+  if (p.tipo === "asignar_agente") return `Agente ${r.estado === "activa" ? "activado" : r.estado === "pausada" ? "pausado" : "apagado"}.`;
   return "Listo.";
 }
 
 function TarjetaPropuesta({ p, alCambiar }: { p: Propuesta; alCambiar: (p: Propuesta) => void }) {
   const [ocupado, setOcupado] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const nivel = nivelDeAccion(p.tipo, (p.detalle ?? {}) as Record<string, unknown>);
+  const [entendido, setEntendido] = useState(false);
+  const [pin, setPin] = useState("");
+  const faltaConfirmacion = (nivel === "contacto" && !entendido) || (nivel === "pin" && pin.trim().length < 4);
 
   async function confirmar() {
     setOcupado(true);
@@ -96,7 +106,11 @@ function TarjetaPropuesta({ p, alCambiar }: { p: Propuesta; alCambiar: (p: Propu
     try {
       // Las publicaciones se programan por tandas: se repite hasta terminar.
       for (let vuelta = 0; vuelta < 40; vuelta++) {
-        const res = await fetch(`/api/asistente/acciones/${p.id}`, { method: "POST" });
+        const res = await fetch(`/api/asistente/acciones/${p.id}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ confirmar_envio: nivel === "contacto" ? entendido : undefined, pin: nivel === "pin" ? pin : undefined }),
+        });
         const data = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(data?.error ?? "No se pudo confirmar.");
         const r = data.resultado ?? {};
@@ -136,9 +150,21 @@ function TarjetaPropuesta({ p, alCambiar }: { p: Propuesta; alCambiar: (p: Propu
           <div className="h-full rounded-full bg-gold-500 transition-all" style={{ width: `${Math.round((p.avance.hechas / Math.max(1, p.avance.total)) * 100)}%` }} />
         </div>
       )}
+      {p.estado === "propuesta" && nivel === "contacto" && (
+        <label className="mt-3 flex items-start gap-2 rounded-lg border border-amber-300 bg-amber-50 p-2 text-xs text-amber-900">
+          <input type="checkbox" className="mt-0.5 h-4 w-4" checked={entendido} onChange={(e) => setEntendido(e.target.checked)} />
+          <span>Revisé a quién, cuántas personas y desde qué línea: entiendo que al confirmar pueden empezar a salir mensajes reales.</span>
+        </label>
+      )}
+      {p.estado === "propuesta" && nivel === "pin" && (
+        <label className="mt-3 block text-xs font-medium text-slate-700">
+          PIN para confirmar
+          <input type="password" inputMode="numeric" autoComplete="off" value={pin} onChange={(e) => setPin(e.target.value.replace(/\D/g, "").slice(0, 8))} className="mt-1 block w-32 rounded-lg border border-slate-300 px-3 py-2 text-sm" />
+        </label>
+      )}
       {p.estado === "propuesta" && (
         <div className="mt-3 flex gap-2">
-          <button type="button" disabled={ocupado} onClick={confirmar} className="btn-gold-sm">
+          <button type="button" disabled={ocupado || faltaConfirmacion} onClick={confirmar} className="btn-gold-sm">
             {ocupado ? "Haciendo…" : "Confirmar"}
           </button>
           <button type="button" disabled={ocupado} onClick={descartar} className="rounded-md px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-100">
@@ -169,6 +195,8 @@ export function AsistentePanel({ slug }: { slug: SlugPerfil }) {
   const [mensajes, setMensajes] = useState<Mensaje[]>([]);
   const [texto, setTexto] = useState("");
   const [pensando, setPensando] = useState(false);
+  const [imagenes, setImagenes] = useState<{ mime: string; datos: string; vista: string }[]>([]);
+  const archivo = useRef<HTMLInputElement>(null);
   const lista = useRef<HTMLDivElement>(null);
   const entrada = useRef<HTMLTextAreaElement>(null);
 
@@ -194,11 +222,35 @@ export function AsistentePanel({ slug }: { slug: SlugPerfil }) {
     lista.current?.scrollTo({ top: lista.current.scrollHeight, behavior: "smooth" });
   }, [mensajes, pensando]);
 
+  async function adjuntar(files: FileList | null) {
+    if (!files) return;
+    const nuevas: { mime: string; datos: string; vista: string }[] = [];
+    for (const f of Array.from(files).slice(0, 3 - imagenes.length)) {
+      if (!f.type.startsWith("image/")) continue;
+      try {
+        const bmp = await createImageBitmap(f);
+        const escala = Math.min(1, 1280 / Math.max(bmp.width, bmp.height));
+        const c = document.createElement("canvas");
+        c.width = Math.round(bmp.width * escala);
+        c.height = Math.round(bmp.height * escala);
+        c.getContext("2d")!.drawImage(bmp, 0, 0, c.width, c.height);
+        const url = c.toDataURL("image/jpeg", 0.8);
+        nuevas.push({ mime: "image/jpeg", datos: url.split(",")[1], vista: url });
+      } catch {
+        /* imagen ilegible: se ignora */
+      }
+    }
+    setImagenes((x) => [...x, ...nuevas].slice(0, 3));
+    if (archivo.current) archivo.current.value = "";
+  }
+
   const enviar = useCallback(
     async (contenido: string) => {
       const limpio = contenido.trim();
-      if (!limpio || pensando) return;
-      const historial: Mensaje[] = [...mensajes, { rol: "usuario", texto: limpio }];
+      if ((!limpio && imagenes.length === 0) || pensando) return;
+      const adjuntas = imagenes;
+      const historial: Mensaje[] = [...mensajes, { rol: "usuario", texto: limpio || "Mirá esta imagen." }];
+      setImagenes([]);
       setMensajes(historial);
       setTexto("");
       setPensando(true);
@@ -206,7 +258,7 @@ export function AsistentePanel({ slug }: { slug: SlugPerfil }) {
         const res = await fetch("/api/asistente", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ perfil: slug, mensajes: historial.filter((m) => !m.error).map((m) => ({ rol: m.rol, texto: m.texto })) }),
+          body: JSON.stringify({ perfil: slug, mensajes: historial.filter((m) => !m.error).map((m) => ({ rol: m.rol, texto: m.texto })), imagenes: adjuntas.map((i) => ({ mime: i.mime, datos: i.datos })) }),
         });
         const data = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(data?.error ?? "No pude responder.");
@@ -217,7 +269,7 @@ export function AsistentePanel({ slug }: { slug: SlugPerfil }) {
         setPensando(false);
       }
     },
-    [mensajes, pensando, slug]
+    [mensajes, pensando, slug, imagenes]
   );
 
   const actualizarPropuesta = (i: number, p: Propuesta) =>
@@ -239,7 +291,7 @@ export function AsistentePanel({ slug }: { slug: SlugPerfil }) {
             </span>
             <div>
               <p className="text-sm font-semibold text-slate-950">Asistente</p>
-              <p className="text-xs text-slate-500">Pedile algo con tus palabras</p>
+              <p className="text-xs text-slate-500">Preguntale o pedile algo con tus palabras</p>
             </div>
           </div>
           <div className="flex items-center gap-1">
@@ -257,7 +309,7 @@ export function AsistentePanel({ slug }: { slug: SlugPerfil }) {
         <div ref={lista} className="flex-1 space-y-4 overflow-y-auto bg-slate-50 px-4 py-4">
           {mensajes.length === 0 && (
             <div>
-              <p className="text-sm text-slate-700">Puedo programar publicaciones, contarte cómo viene cada bot, ajustarlos, buscar captados o llevarte a la pantalla que necesites. Antes de cambiar algo, siempre te pido que confirmes.</p>
+              <p className="text-sm text-slate-700">Preguntame lo que quieras, como a cualquier IA, y también puedo operar el panel: armar campañas con bases, líneas y plantillas, programar publicaciones, ajustar bots y agentes, buscar captados o mirar una imagen que me adjuntes. Antes de cambiar algo, siempre te pido que confirmes; lo que puede enviar mensajes pide una confirmación reforzada.</p>
               <div className="mt-4 flex flex-col gap-2">
                 {SUGERENCIAS.map((s) => (
                   <button key={s} type="button" onClick={() => enviar(s)} className="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-left text-sm text-slate-800 shadow-sm hover:border-slate-300">
@@ -296,7 +348,24 @@ export function AsistentePanel({ slug }: { slug: SlugPerfil }) {
             enviar(texto);
           }}
         >
+          {imagenes.length > 0 && (
+            <div className="mb-2 flex gap-2">
+              {imagenes.map((im, k) => (
+                <div key={k} className="relative">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={im.vista} alt="Imagen adjunta" className="h-14 w-14 rounded-lg object-cover" />
+                  <button type="button" onClick={() => setImagenes((x) => x.filter((_, j) => j !== k))} className="absolute -right-1.5 -top-1.5 grid h-5 w-5 place-items-center rounded-full bg-slate-900 text-[11px] text-white" aria-label="Quitar imagen">
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
           <div className="flex items-end gap-2 rounded-xl border border-slate-200 bg-white p-2 focus-within:border-gold-500">
+            <input ref={archivo} type="file" accept="image/*" multiple className="hidden" onChange={(e) => adjuntar(e.target.files)} />
+            <button type="button" onClick={() => archivo.current?.click()} disabled={imagenes.length >= 3} className="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-slate-600 hover:bg-slate-100 disabled:opacity-40" aria-label="Adjuntar una imagen" title="Adjuntar una imagen">
+              <span aria-hidden="true" className="text-lg leading-none">+</span>
+            </button>
             <label htmlFor="asistente-texto" className="sr-only">
               Pedido para el asistente
             </label>
@@ -315,7 +384,7 @@ export function AsistentePanel({ slug }: { slug: SlugPerfil }) {
               placeholder="Ej.: programá 7 historias para esta semana"
               className="sin-anillo max-h-40 min-h-[2.5rem] flex-1 resize-none border-0 bg-transparent p-1 text-sm text-slate-900 shadow-none focus:ring-0"
             />
-            <button type="submit" disabled={pensando || !texto.trim()} className="btn-gold-sm h-9" aria-label="Enviar">
+            <button type="submit" disabled={pensando || (!texto.trim() && imagenes.length === 0)} className="btn-gold-sm h-9" aria-label="Enviar">
               <Icono nombre="enviar" className="h-4 w-4" />
             </button>
           </div>
