@@ -91,7 +91,7 @@ export default async function InicioPerfilPage({ searchParams }: { searchParams:
             <p className="mt-1 text-sm text-slate-600">Lo que podés cerrar hoy, empezando por los captados.</p>
           </div>
           <BotonAsistente variante="suave" texto="Resumen de hoy">
-            Preguntale al asistente
+            Pedile algo
           </BotonAsistente>
         </div>
 
@@ -110,7 +110,7 @@ export default async function InicioPerfilPage({ searchParams }: { searchParams:
               <div>
                 <h2 id="hoy-captados" className="text-base font-semibold text-slate-950">
                   Captados para derivar
-                  {totalCaptados !== null && <span className="ml-2 rounded-full bg-slate-900 px-2 py-0.5 align-middle text-xs font-semibold text-white tabular-nums">{totalCaptados}</span>}
+                  {totalCaptados !== null && <span className="ml-2 rounded-full bg-gold-500/15 px-2 py-0.5 align-middle text-xs font-semibold text-gold-800 tabular-nums">{totalCaptados}</span>}
                 </h2>
                 <p className="text-sm text-slate-600">Aceptaron el siguiente paso y falta pasarlos al profesional.</p>
               </div>
