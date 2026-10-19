@@ -27,6 +27,7 @@ export const NOMBRES_OPERACIONES = [
   "proponer_campana",
   "proponer_lanzamiento",
   "proponer_asignar_linea",
+  "proponer_limite_diario",
   "listar_agentes",
   "proponer_asignar_agente",
 ] as const;
@@ -188,6 +189,19 @@ export async function ejecutarOperacion(nombre: string, args: Record<string, unk
       const prop = await ctx.guardar("lanzar_campana", `${accion} «${c.uno.name}»`, resumen, { campana_id: c.uno.id, pendientes, linea: r.line.label });
       ctx.agregarPropuesta(prop.id);
       return { propuesta: prop.id, resumen, aviso: "Quedó como propuesta. Para enviarla hay que marcar la confirmación reforzada y tocar Confirmar." };
+    }
+    case "proponer_limite_diario": {
+      const camps = await campanasDelPerfil(ctx.slug, ["borrador", "pausada", "en_curso"]);
+      const c = elegirPorNombre(camps, args.campana, (x) => x.name);
+      if (!c.uno) return { error: c.varios ? "Hay varias campañas que coinciden." : "No encontré esa campaña.", opciones: (c.varios ?? camps).map((x) => `${x.name} (${x.status})`) };
+      const limite = args.limite === null || args.limite === undefined || args.limite === "" ? null : Number(args.limite);
+      if (limite !== null && (!Number.isInteger(limite) || limite < 1 || limite > 1000)) return { error: "El límite tiene que ser un número entero entre 1 y 1000 (o vacío para sacarlo)." };
+      const resumen = limite === null
+        ? `La campaña «${c.uno.name}» queda sin límite diario propio (sigue el límite de la línea). No envía nada por sí solo.`
+        : `La campaña «${c.uno.name}» pasa a enviar como máximo ${limite} mensajes por día${c.uno.status === "en_curso" ? " (rige desde el próximo envío)" : ""}. No lanza ni reanuda la campaña.`;
+      const prop = await ctx.guardar("limite_campana", `Límite diario de «${c.uno.name}»`, resumen, { campana_id: c.uno.id, limite });
+      ctx.agregarPropuesta(prop.id);
+      return { propuesta: prop.id, resumen };
     }
     case "proponer_asignar_linea": {
       const camps = await campanasDelPerfil(ctx.slug, ["borrador", "pausada"]);
