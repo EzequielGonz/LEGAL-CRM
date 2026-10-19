@@ -77,6 +77,11 @@ export const DECLARACIONES = [
     parametersJsonSchema: { type: "object", properties: {} },
   },
   {
+    name: "analizar_base",
+    description: "Resume una base cargada: columnas y distribución de categorías (por ejemplo tipo de consulta o diagnóstico), sin datos personales. Usala para recomendar la plantilla y el enfoque de la campaña según el tipo de base.",
+    parametersJsonSchema: { type: "object", properties: { base: { type: "string", description: "Nombre de la base" } }, required: ["base"] },
+  },
+  {
     name: "listar_campanas",
     description: "Campañas del perfil con su estado y cuántos destinatarios hay en cada estado.",
     parametersJsonSchema: { type: "object", properties: {} },

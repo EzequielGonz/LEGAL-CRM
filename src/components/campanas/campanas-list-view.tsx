@@ -6,6 +6,14 @@ import { ArchivedToggle } from "@/components/ui/archived-toggle";
 import { ResumenSeccion } from "@/components/nivel/resumen-seccion";
 import { getCampaignFunnelCounts } from "@/lib/campaigns";
 import { CAMPAIGN_STATUS_LABEL } from "@/lib/campaign-status";
+import { esSlugPerfil, type SlugPerfil } from "@/lib/marca";
+
+/** Perfil según la ruta: «/campanas» es Jurídico; «/panel/<perfil>/campanas» el resto. */
+function perfilDe(basePath: string): SlugPerfil | undefined {
+  if (basePath === "/campanas") return "juridico";
+  const m = /^\/panel\/([a-z0-9_]+)\/campanas/.exec(basePath);
+  return m && esSlugPerfil(m[1]) ? m[1] : undefined;
+}
 
 /** Qué significa cada estado, en palabras simples. */
 const QUE_HACE: Record<string, string> = {
@@ -101,7 +109,7 @@ export async function CampanasListView({
 
       {!verArchivadas ? (
         <div>
-          <NewCampaignForm channels={channels ?? []} lines={campaignLines ?? []} redirectBase={basePath} />
+          <NewCampaignForm channels={channels ?? []} lines={campaignLines ?? []} redirectBase={basePath} perfil={perfilDe(basePath)} />
         </div>
       ) : null}
 
