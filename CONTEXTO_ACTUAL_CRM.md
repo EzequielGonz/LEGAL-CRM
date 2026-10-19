@@ -1,8 +1,27 @@
 # CONTEXTO ACTUAL · CRM multirubro
 
-Actualizado: 19/10/2026 (reorganización 2, perfiles en PC, estado real de las líneas, asistente ampliado, chat de campañas y afinado de diseño publicados: PR #20, #21, #22, #24, #26 y #27). Sin secretos ni datos de prospectos.
+Actualizado: 19/10/2026 (Bandeja para Claude en PR #29, Preview lista y migración 0502 aplicada; antes: reorganización 2, perfiles en PC, estado real de las líneas, asistente ampliado, chat de campañas y afinado de diseño publicados: PR #20, #21, #22, #24, #26 y #27). Sin secretos ni datos de prospectos.
 
-## Bloque actual: reorganización 2 (18/10, pedido de la responsable)
+## Bloque actual: Bandeja para Claude (19/10, pedido de la responsable)
+Detalle en `docs/bandeja-claude/ENTREGA.md`. Rama `bandeja-claude`, PR #29 → `main`. Procedimiento de Claude al recibir «ok»: `.claude/referencias/bandeja-claude.md`.
+
+**Qué cambió**
+- Menú (todos los perfiles): «Bandeja para Claude» arriba de todo en la barra izquierda, sobre las secciones y por encima de «Pedile algo»; muestra cuántas hay abiertas y avisa en ámbar si alguna está en espera.
+- Pantalla `/bandeja?perfil=<slug>`: dejar una tarea (perfil, pedido, hasta 5 enlaces), ver estados (pendiente, en curso, en espera, lista, descartada) con resultado y enlaces, y descartar con motivo. Rechaza correos, teléfonos y documentos.
+- «En curso» sin avance por más de 6 h se muestra «en espera» (por ejemplo, si se agotó el uso del plan).
+- Claude no corre dentro del panel y no hay tarea programada: la responsable abre un chat nuevo de Cowork en el proyecto y dice «ok». El asistente del panel sigue en Gemini.
+- Migración `0502_bandeja_claude` (tabla nueva con RLS, sin permisos públicos, sin borrados): **aplicada y verificada** en la base real (en el historial figura en tres entradas, ver `docs/bandeja-claude/MIGRACIONES.md`).
+
+**Evidencia**
+1. Implementado: rama `bandeja-claude`, remoto = local (comparación con `git diff`, sin diferencias).
+2. Desplegado: Preview `dpl_F9FcwemZjueYihJ3vU6vcinpdbme` READY (`acc91f6`, todo el código; build con typecheck y lint de Next.js sin errores). Producción: **no** (PR #29 abierto). Una Preview intermedia (`57ab297`) falló porque ese commit todavía no tenía el componente de la pantalla; se resolvió con el commit siguiente.
+3. Comprobado automáticamente: unitarias de la bandeja 8/8; base: disparadores y restricción probados en una transacción revertida, 0 filas; asesor de seguridad sin avisos nuevos. La suite completa no se pudo correr en la sesión (npm bloqueado; 8 archivos de pruebas necesitan `@supabase/supabase-js`).
+4. Revisado visualmente: **pendiente**.
+5. Probado funcionalmente: **no** (crear y descartar una tarea lo puede probar la responsable en la Preview o en producción; una tarea de prueba queda guardada y se descarta con motivo).
+
+**Habilitado**: nada se ejecuta solo; guardar una tarea solo la deja pendiente.
+
+## Bloque anterior: reorganización 2 (18/10, pedido de la responsable)
 Detalle en `docs/reorganizacion-2/ENTREGA.md`. Rama `reorganizacion-2`, PR #20 → `main`. Sin migraciones.
 
 **Qué cambió**
@@ -45,9 +64,10 @@ Implementado → Desplegado (READY) → Comprobado automáticamente → Revisado
 ## Estado operativo (sin cambios por esta entrega)
 - Pausa general levantada el 16/10; atención entrante 24 h; 5 agentes activos; latido `campaigns-tick` activo.
 - Campañas: 1, pausada, sin iniciar. Seguimiento sin activar. Experimento A/B/C preparado, no corre.
-- Migraciones: hasta `0501_asistente_acciones_ampliadas`.
+- Migraciones: hasta `0502_bandeja_claude` (19/10).
 
 ## Pendientes
+- Bandeja para Claude: decidir si se fusiona el PR #29 a producción (o lo integra el programador) y revisar la pantalla y el menú.
 - Responsable: vincular Facebook e Instagram por perfil en Vercel (`FACEBOOK_<CLAVE>_PAGE_ID`, `FACEBOOK_<CLAVE>_PAGE_ACCESS_TOKEN`, `INSTAGRAM_<CLAVE>_BUSINESS_ID`), landings y Google Cloud. Después: 1 post diario + historias destacadas con calendario de 1 mes por rubro, y CTA/redes/marca en landings (VITA en Jurídico, CTA de WhatsApp visible en Coberturas).
 - Responsable: cargar `METRICOOL_USER_TOKEN` y `METRICOOL_USER_ID` en Vercel; crear y conectar en Metricool las marcas de Coberturas, 0 km y Jurídico (y el Instagram de Kocos); cargar cada blogId en Redes › Publicaciones; pegar el enlace con origen en la biografía de Instagram.
 - Responsable: completar en el Administrador de WhatsApp la verificación/registro del número de Agencia Kocos (hoy «Pendiente» en Meta) y confirmar que su token tenga acceso; después usar «Volver a comprobar con Meta».
@@ -67,9 +87,10 @@ Implementado → Desplegado (READY) → Comprobado automáticamente → Revisado
 - Atención 24 h en todos los rubros: asesores lun a sáb 8 a 21 h; fuera de esa franja la IA atiende, intenta captar y agenda la llamada con un asesor (18/10).
 - El asistente opera todo menos pagos, siempre proponiendo: lanzar campañas pide confirmación reforzada y activar agentes pide PIN; cualquier acción que gaste plata pediría autorización y PIN (19/10).
 - Conversaciones y Contactos muestran solo oportunidades reales; la base fría vive en Prospectos, agrupada por base (18/10).
+- Bandeja para Claude: Claude trabaja con el plan desde Cowork, sin clave de API ni tarea programada; toma lo pendiente cuando la responsable dice «ok» y todo lo que cambie el panel o el código vuelve como PR o propuesta (19/10).
 
 ## Siguiente paso
-Bandeja para Claude (en un chat nuevo del proyecto, ver `claude/PROXIMO_BANDEJA_CLAUDE.md`). Redes, landings y Google Cloud siguen en pausa hasta que la responsable los vincule; después, contenido de 1 mes por rubro y landings.
+Fusionar el PR #29 (o dejarlo al programador) y revisar la Bandeja. Para usarla: dejar tareas en el panel y decir «ok» en un chat nuevo del proyecto. Redes, landings y Google Cloud siguen en pausa hasta que la responsable los vincule; después, contenido de 1 mes por rubro y landings.
 
 ## Dónde leer
-`CLAUDE.md` → `.claude/referencias/reglas-comunes.md` → `docs/reorganizacion-2/ENTREGA.md` → `claude/PUNTO_DE_CONTROL.md`.
+`CLAUDE.md` → `.claude/referencias/reglas-comunes.md` → `.claude/referencias/bandeja-claude.md` → `docs/bandeja-claude/ENTREGA.md` → `claude/PUNTO_DE_CONTROL.md`.
