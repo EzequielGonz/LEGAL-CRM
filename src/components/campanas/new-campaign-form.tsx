@@ -5,6 +5,7 @@ import { EnlaceAvanzado } from "@/components/nivel/nivel";
 import { useRouter } from "next/navigation";
 import { SendLimitsFields } from "./send-limits-fields";
 import { TemplatePicker } from "@/components/plantillas/template-picker";
+import { abrirAsistente } from "@/components/asistente/asistente-panel";
 
 export function NewCampaignForm({
   channels,
@@ -79,12 +80,21 @@ export function NewCampaignForm({
 
   if (!open) {
     return (
-      <button
-        onClick={() => setOpen(true)}
-        className="btn-gold"
-      >
-        Preparar una campaña
-      </button>
+      <div className="flex flex-wrap items-center gap-3">
+        <button
+          onClick={() => setOpen(true)}
+          className="btn-gold"
+        >
+          Preparar una campaña
+        </button>
+        <button
+          type="button"
+          onClick={() => abrirAsistente("Quiero armar una campaña con tu ayuda. Mostrame qué bases, líneas y plantillas tengo y recomendame cómo conviene hacerla.")}
+          className="rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 hover:border-slate-400"
+        >
+          Preparar con IA
+        </button>
+      </div>
     );
   }
 
