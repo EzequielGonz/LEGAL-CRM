@@ -16,8 +16,8 @@ import { abrirAsistente } from "@/components/asistente/asistente-panel";
  * secciones, iguales en todos los perfiles. Cambia la marca (logo, nombre y
  * color del acento). Las vistas de cada sección se eligen con las pestañas
  * de arriba del contenido. En pantallas chicas se pliega en una barra con
- * botón «Menú». Arriba de todo, la Bandeja para Claude (19/10); abajo del
- * todo, el asistente IA («Pedile algo», Gemini).
+ * botón «Menú». Abajo, la Bandeja para Claude (tarjeta negra, 19/10) justo
+ * arriba del asistente IA («Pedile algo», Gemini).
  */
 export function MenuPerfil({ slug, nombre, logo }: { slug: SlugPerfil; nombre?: string | null; logo?: string | null }) {
   const pathname = usePathname() ?? "/";
@@ -83,8 +83,6 @@ export function MenuPerfil({ slug, nombre, logo }: { slug: SlugPerfil; nombre?: 
           </span>
         </Link>
 
-        <EntradaBandeja slug={slug} activa={pathname === "/bandeja"} />
-
         <nav aria-label="Secciones del perfil" className="flex-1 overflow-y-auto px-3 py-4">
           <ul className="space-y-0.5">
             {secciones.map((s) => {
@@ -104,6 +102,8 @@ export function MenuPerfil({ slug, nombre, logo }: { slug: SlugPerfil; nombre?: 
             })}
           </ul>
         </nav>
+
+        <EntradaBandeja slug={slug} activa={pathname === "/bandeja"} />
 
         <div className="px-3 pb-2">
           <button
@@ -136,9 +136,10 @@ export function MenuPerfil({ slug, nombre, logo }: { slug: SlugPerfil; nombre?: 
 }
 
 /**
- * Bandeja para Claude, arriba de todo en el menú (19/10). Lleva a la pantalla
- * donde se dejan tareas complejas para Claude. Si alguna quedó «en espera»,
- * lo avisa con un punto y el número; también muestra cuántas hay pendientes.
+ * Bandeja para Claude, tarjeta negra arriba de «Pedile algo» (19/10). Lleva a
+ * la pantalla donde se dejan tareas complejas para Claude. Si alguna quedó
+ * «en espera», lo avisa con un punto y el número; también muestra cuántas
+ * hay pendientes.
  */
 function EntradaBandeja({ slug, activa }: { slug: SlugPerfil; activa: boolean }) {
   const [resumen, setResumen] = useState<{ pendiente: number; en_curso: number; en_espera: number } | null>(null);
@@ -156,25 +157,25 @@ function EntradaBandeja({ slug, activa }: { slug: SlugPerfil; activa: boolean })
   const abiertas = (resumen?.pendiente ?? 0) + (resumen?.en_curso ?? 0);
   const detalle = espera ? `${espera} en espera` : abiertas ? `${abiertas} abierta${abiertas === 1 ? "" : "s"}` : "Tareas para Claude";
   return (
-    <div className="px-3 pt-3">
+    <div className="px-3 pb-2">
       <Link
         href={`/bandeja?perfil=${slug}`}
         aria-current={activa ? "page" : undefined}
         className={clsx(
           "flex w-full items-center gap-3 rounded-xl border px-3 py-2.5 text-left text-sm font-medium shadow-sm",
-          activa ? "border-slate-400 bg-slate-50 text-slate-950" : "border-slate-200 bg-white text-slate-800 hover:border-slate-300"
+          activa ? "border-slate-500 bg-slate-950 text-white ring-2 ring-slate-400/60" : "border-slate-900 bg-slate-950 text-white hover:bg-slate-800"
         )}
       >
-        <span className="relative grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-slate-900/[0.06] text-slate-800">
+        <span className="relative grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-white/10 text-white">
           <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" fill="none" aria-hidden="true" focusable="false">
             <path d="M4 13.5h4.5l1 2h5l1-2H20V18a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18Z" fill="currentColor" fillOpacity=".14" />
             <path d="M4 13.5h4.5l1 2h5l1-2H20M4 13.5V18a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 20 18v-4.5M4 13.5 6 8.5M20 13.5l-2-5M12 3.5v8M9 8.5l3 3 3-3" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-          {espera > 0 && <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full bg-amber-500 ring-2 ring-white" aria-hidden="true" />}
+          {espera > 0 && <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full bg-amber-400 ring-2 ring-slate-950" aria-hidden="true" />}
         </span>
         <span className="min-w-0 flex-1">
           <span className="block">Bandeja para Claude</span>
-          <span className={clsx("block truncate text-xs font-normal", espera ? "font-medium text-amber-700" : "text-slate-500")}>{detalle}</span>
+          <span className={clsx("block truncate text-xs font-normal", espera ? "font-medium text-amber-300" : "text-slate-300")}>{detalle}</span>
         </span>
       </Link>
     </div>
