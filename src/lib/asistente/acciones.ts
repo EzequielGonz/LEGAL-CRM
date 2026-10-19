@@ -112,6 +112,16 @@ export async function confirmarAccion(id: string): Promise<{ estado: string; res
       const { error } = await s.from("campaigns").update(cambios).eq("id", campana_id);
       if (error) throw new Error(error.message);
       resultado = { asignada: true, con_plantilla: !!template_id };
+    } else if (a.tipo === "limite_campana") {
+      const { campana_id, limite } = a.payload ?? {};
+      const { data: camp } = await s.from("campaigns").select("id, area, archived_at, daily_send_limit").eq("id", campana_id).maybeSingle();
+      if (!camp || (camp as any).archived_at) throw new Error("La campaña no existe o está archivada.");
+      const n = limite === null ? null : Number(limite);
+      if (n !== null && (!Number.isInteger(n) || n < 1 || n > 1000)) throw new Error("El límite diario tiene que ser un número entre 1 y 1000.");
+      const { error } = await s.from("campaigns").update({ daily_send_limit: n }).eq("id", campana_id);
+      if (error) throw new Error(error.message);
+      await s.from("ops_change_log").insert({ actor: "asistente", action: "configurar_campana", target: `campaigns:${campana_id}`, before: { daily_send_limit: (camp as any).daily_send_limit }, after: { daily_send_limit: n } });
+      resultado = { limite_diario: n };
     } else if (a.tipo === "lanzar_campana") {
       try {
         const r = await launchCampaign(String(a.payload?.campana_id ?? ""));

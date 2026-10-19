@@ -127,6 +127,18 @@ export const DECLARACIONES = [
     },
   },
   {
+    name: "proponer_limite_diario",
+    description: "Deja como PROPUESTA cambiar el máximo de mensajes por día de una campaña, en cualquier estado (también en curso). Vacío o null = sin límite propio. No lanza ni reanuda nada.",
+    parametersJsonSchema: {
+      type: "object",
+      properties: {
+        campana: { type: "string" },
+        limite: { type: "integer", description: "Mensajes por día, entre 1 y 1000. Omitir para sacar el límite." },
+      },
+      required: ["campana"],
+    },
+  },
+  {
     name: "listar_agentes",
     description: "Agentes IA del perfil (derivados), su versión, si está publicada, y qué agente responde hoy en cada área.",
     parametersJsonSchema: { type: "object", properties: {} },
