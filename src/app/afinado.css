@@ -164,3 +164,11 @@
     transition: none;
   }
 }
+
+/* ---------- 9. Configuración: una sola flecha por grupo ----------
+   Los grupos ya muestran ▾ a la derecha (gira al abrir); la flecha común
+   de los desplegables a la izquierda sobraba. */
+[data-tema] details.grupo-ajustes > summary::before {
+  content: none;
+  display: none;
+}
