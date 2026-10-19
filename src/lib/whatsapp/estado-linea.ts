@@ -64,10 +64,11 @@ export function interpretarNumero(j: Record<string, unknown>): InformeLinea {
     );
   }
   if (status === "CONNECTED") {
-    if (verificacion && verificacion !== "VERIFIED") {
-      return informe("pendiente", "Pendiente de verificación", "El número figura conectado pero su código de verificación no está confirmado en Meta.", extra);
-    }
-    return informe("conectada", "Conectada", "Meta informa el número conectado.", extra);
+    // 19/10: el código de verificación (el SMS o la llamada con que se dio de
+    // alta el número) suele figurar EXPIRED o NOT_VERIFIED en números que
+    // funcionan: no frena el envío. Manda el estado del número.
+    const nota = verificacion && verificacion !== "VERIFIED" ? " El código de verificación figura vencido o sin confirmar en Meta; no impide enviar." : "";
+    return informe("conectada", "Conectada", `Meta informa el número conectado.${nota}`, extra);
   }
   return informe("no_comprobado", "Estado desconocido", status ? `Meta devolvió un estado que el panel no reconoce (${status.toLowerCase()}). Revisalo en el Administrador de WhatsApp.` : "Meta no informó el estado del número. Revisalo en el Administrador de WhatsApp.", extra);
 }
