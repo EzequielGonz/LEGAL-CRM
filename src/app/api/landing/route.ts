@@ -7,6 +7,7 @@ import { getAutomationPause } from "@/lib/automation-pause";
 import { originHash } from "@/lib/acceso/pin";
 import { contactBlockReason } from "@/lib/detention";
 import { normalizarLead, origenPermitido } from "@/lib/landing-lead";
+import { armarCorreoLanding, enviarCorreoLanding } from "@/lib/landing-email";
 import { ensureOpportunity } from "@/lib/opportunities";
 
 export const dynamic = "force-dynamic";
@@ -111,6 +112,30 @@ export async function POST(request: Request) {
     } catch (err) {
       console.error("[landing] No se pudo registrar la fuente:", err);
     }
+  }
+
+  // Aviso por correo a la casilla del rubro (20/10). Es solo un aviso: la consulta
+  // ya quedó guardada. Sin RESEND_API_KEY o LANDING_EMAIL_FROM no se envía; un fallo
+  // nunca bloquea la respuesta ni registra datos del contacto.
+  try {
+    const correo = armarCorreoLanding({
+      area,
+      nombre: full_name,
+      telefono: phone,
+      email,
+      consulta: lead.consulta,
+      pagina,
+      llegada: lead.llegada ?? null,
+    });
+    if (correo) {
+      const r = await enviarCorreoLanding(correo, {
+        apiKey: process.env.RESEND_API_KEY,
+        from: process.env.LANDING_EMAIL_FROM,
+      });
+      if (!r.enviado) console.warn(`[landing] Aviso por correo no enviado (${area}): ${r.motivo}`);
+    }
+  } catch (err) {
+    console.error("[landing] Falló el aviso por correo:", err instanceof Error ? err.name : "error");
   }
 
   // Best-effort: plantilla de continuidad por WhatsApp. No sale con la pausa
