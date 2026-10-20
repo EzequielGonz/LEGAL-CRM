@@ -131,7 +131,7 @@ export function PlantillasArchivo({ perfil }: { perfil: string }) {
                       <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${r.estado === "error" ? "bg-red-50 text-red-800" : r.estado === "ya_existe" ? "bg-slate-100 text-slate-700" : "bg-emerald-50 text-emerald-800"}`}>
                         {ESTADO[r.estado] ?? r.estado}
                       </span>
-                      {r.detalle && <span className="w-full text-xs text-red-700">{r.detalle}</span>}
+                      {r.detalle && <span className={`w-full text-xs ${r.estado === "error" ? "text-red-700" : "text-slate-600"}`}>{r.detalle}</span>}
                     </li>
                   ))}
                 </ul>
