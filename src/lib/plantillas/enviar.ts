@@ -75,8 +75,11 @@ export async function enviarPropuestasALinea(lineId: string, confirmar: boolean,
   for (const p of propuestas) {
     const base = { nombre: p.nombre, categoria: p.categoria };
     try {
-      if (await findWabaTemplate(waba, token, p.nombre, LANGUAGE)) {
-        resultados.push({ ...base, estado: "ya_existe" });
+      const existente = await findWabaTemplate(waba, token, p.nombre, LANGUAGE);
+      if (existente) {
+        // Solo los últimos dígitos de la cuenta: sirve para compararla con la que se mira en Meta.
+        const estadoMeta = String((existente as { status?: unknown }).status ?? "desconocido");
+        resultados.push({ ...base, estado: "ya_existe", detalle: `Figura en Meta con estado ${estadoMeta} (cuenta terminada en ${waba.slice(-4)}, línea ${line.credential_key}).` });
         continue;
       }
       if (!confirmar) {
