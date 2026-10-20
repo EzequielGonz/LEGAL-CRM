@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { parseSpreadsheetFile } from "@/lib/bases/parse-file";
 
 interface Envio {
@@ -22,6 +23,22 @@ async function leerArchivo(f: File): Promise<unknown[]> {
   return parseSpreadsheetFile(f);
 }
 
+/** Cuenta lo que Meta respondió de verdad (una línea sin acceso cuenta como error). */
+function resumir(envios: Envio[]) {
+  let enviadas = 0;
+  let yaEstaban = 0;
+  let errores = 0;
+  for (const e of envios) {
+    if (e.error) errores += 1;
+    for (const r of e.resultados) {
+      if (r.estado === "enviada_a_revision") enviadas += 1;
+      else if (r.estado === "ya_existe") yaEstaban += 1;
+      else if (r.estado === "error") errores += 1;
+    }
+  }
+  return { enviadas, yaEstaban, errores };
+}
+
 /**
  * Plantillas desde un archivo (18/10): subís un CSV, Excel o JSON, el panel
  * reconoce el perfil de cada plantilla y las manda a revisión de Meta en la
@@ -29,6 +46,7 @@ async function leerArchivo(f: File): Promise<unknown[]> {
  * tocar «Enviar a Meta». No manda mensajes a nadie.
  */
 export function PlantillasArchivo({ perfil }: { perfil: string }) {
+  const router = useRouter();
   const [filas, setFilas] = useState<unknown[] | null>(null);
   const [archivo, setArchivo] = useState<string | null>(null);
   const [vista, setVista] = useState<{ envios: Envio[]; errores: { fila: number; nombre: string | null; motivo: string }[]; confirmar: boolean } | null>(null);
@@ -46,12 +64,15 @@ export function PlantillasArchivo({ perfil }: { perfil: string }) {
         throw new Error(data?.error ?? "No se pudo revisar el archivo.");
       }
       setVista({ envios: data.envios ?? [], errores: data.errores ?? [], confirmar });
+      if (confirmar) router.refresh();
     } catch (e) {
       setError((e as Error).message);
     } finally {
       setOcupado(false);
     }
   }
+
+  const resumen = vista?.confirmar ? resumir(vista.envios) : null;
 
   return (
     <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
@@ -110,7 +131,7 @@ export function PlantillasArchivo({ perfil }: { perfil: string }) {
                       <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${r.estado === "error" ? "bg-red-50 text-red-800" : r.estado === "ya_existe" ? "bg-slate-100 text-slate-700" : "bg-emerald-50 text-emerald-800"}`}>
                         {ESTADO[r.estado] ?? r.estado}
                       </span>
-                      {r.detalle && <span className="w-full text-xs text-red-700">{r.detalle}</span>}
+                      {r.detalle && <span className={`w-full text-xs ${r.estado === "error" ? "text-red-700" : "text-slate-600"}`}>{r.detalle}</span>}
                     </li>
                   ))}
                 </ul>
@@ -135,7 +156,24 @@ export function PlantillasArchivo({ perfil }: { perfil: string }) {
               {ocupado ? "Enviando…" : "Enviar a Meta para revisión"}
             </button>
           )}
-          {vista.confirmar && <p className="text-sm text-emerald-700">Listo. Meta revisa cada plantilla (de minutos a 24 h); el estado se ve abajo.</p>}
+          {!vista.confirmar && filas && vista.envios.length > 0 && !vista.envios.some((e) => e.resultados.some((r) => r.estado === "se_enviaría")) && (
+            <p className="text-sm font-medium text-slate-700">No hay nada para enviar: las plantillas válidas ya estaban en Meta o tienen error (ver arriba).</p>
+          )}
+          {resumen && resumen.enviadas > 0 && resumen.errores === 0 && (
+            <p className="text-sm text-emerald-700">
+              Se enviaron {resumen.enviadas} plantilla(s) a Meta para revisión{resumen.yaEstaban ? ` (${resumen.yaEstaban} ya estaban)` : ""}. Meta las revisa (de minutos a 24 h). Para ver el estado, tocá «Leer plantillas de Meta» en la línea, abajo.
+            </p>
+          )}
+          {resumen && resumen.enviadas > 0 && resumen.errores > 0 && (
+            <p className="text-sm font-medium text-red-700">
+              Se enviaron {resumen.enviadas} plantilla(s), pero {resumen.errores} tuvieron error (ver arriba). Para ver el estado, tocá «Leer plantillas de Meta» en la línea, abajo.
+            </p>
+          )}
+          {resumen && resumen.enviadas === 0 && (
+            <p className={`text-sm font-medium ${resumen.errores > 0 ? "text-red-700" : "text-slate-700"}`}>
+              No se envió nada a Meta: {resumen.errores > 0 ? `${resumen.errores} con error (ver arriba).` : "todas las plantillas ya estaban en la cuenta."}
+            </p>
+          )}
         </div>
       )}
     </section>
