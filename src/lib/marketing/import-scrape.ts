@@ -166,6 +166,9 @@ export async function importScrapedPlaces({
           },
         })
         .eq("id", contact.id);
+      // 21/10: la oportunidad se crea antes de conocer la base; se la asocia acá
+      // para que la tarjeta del perfil y Prospectos cuenten la base extraída.
+      await supabase.from("opportunities").update({ imported_base_id: base.id }).eq("contact_id", contact.id).is("imported_base_id", null);
     } else {
       duplicados++;
     }

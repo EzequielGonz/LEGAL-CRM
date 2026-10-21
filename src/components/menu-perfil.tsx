@@ -125,9 +125,6 @@ export function MenuPerfil({ slug, nombre, logo }: { slug: SlugPerfil; nombre?: 
           <Link href="/perfiles" className="block rounded-lg px-3 py-1.5 text-xs font-medium">
             Cambiar de perfil
           </Link>
-          <Link href="/inicio" className="block rounded-lg px-3 py-1.5 text-xs font-medium">
-            Teléfono o computadora
-          </Link>
           <LogoutButton className="block w-full rounded-lg px-3 py-1.5 text-left text-xs font-medium" />
         </div>
       </aside>
