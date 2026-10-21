@@ -48,7 +48,7 @@ update public.agent_experiments
 -- 5) Canales de Instagram y Facebook para los perfiles que no los tenían:
 --    los mensajes directos de redes también los responde el agente.
 insert into public.channels (area, type, label)
-select a.area, t.type, initcap(replace(a.area, '_', ' ')) || ' · ' || initcap(t.type)
+select a.area::public.area_type, t.type::public.channel_type, initcap(replace(a.area, '_', ' ')) || ' · ' || initcap(t.type)
   from (values ('agencia_0km'), ('coberturas_medicas'), ('marketing')) as a(area)
  cross join (values ('instagram'), ('facebook')) as t(type)
- where not exists (select 1 from public.channels c where c.area = a.area and c.type = t.type);
+ where not exists (select 1 from public.channels c where c.area::text = a.area and c.type::text = t.type);
