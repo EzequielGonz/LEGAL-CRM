@@ -43,7 +43,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
       dimension: "ficha",
       from: `cita ${cita.status}`,
       to: `cita ${estado}`,
-      reason: nota || `Cita del ${new Date(cita.starts_at).toLocaleString("es-AR")}`,
+      reason: nota || `Cita del ${new Date(cita.starts_at).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires" })}`,
       detail: { cita_id: cita.id },
     });
   } catch (err) {

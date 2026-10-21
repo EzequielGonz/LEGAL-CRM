@@ -105,10 +105,10 @@ export async function notifyAdminOfClosedAppointment(appointmentId: string) {
     formatQualificationData(contact.qualification_data ?? {}),
     "",
     "Fecha de consulta:",
-    startsAt.toLocaleDateString("es-AR"),
+    startsAt.toLocaleDateString("es-AR", { timeZone: "America/Argentina/Buenos_Aires" }),
     "",
     "Hora:",
-    startsAt.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" }),
+    startsAt.toLocaleTimeString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", hour: "2-digit", minute: "2-digit" }),
   ].join("\n");
 
   const { data: notification } = await supabase
