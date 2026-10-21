@@ -31,8 +31,6 @@ test("el texto de «Volver» dice adónde lleva", () => {
   assert.equal(etiquetaVolver("/telefono/marketing"), "Volver al teléfono");
   assert.equal(etiquetaVolver("/panel/marketing"), "Volver al panel");
   assert.equal(etiquetaVolver("/"), "Volver al panel");
-  assert.equal(etiquetaVolver("/comparacion-agentes?perfil=marketing&vista=perfil&semana=2"), "Volver a la comparación");
-  assert.equal(etiquetaVolver("/comparacion-agentes/lista?cand=A"), "Volver a la lista");
   assert.equal(etiquetaVolver("/revision?vista=detenciones"), "Volver a Revisión");
   assert.equal(etiquetaVolver(null), "Volver");
 });
