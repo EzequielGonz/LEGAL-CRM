@@ -12,6 +12,7 @@ import { consultarEstadosLineas } from "@/lib/whatsapp/estado-linea";
 import { resumirColumnas } from "@/lib/asistente/base-resumen";
 import { diasDeEjecucion, validarPedidoCampana, type PedidoCampana } from "@/lib/asistente/campanas";
 import type { Area } from "@/lib/supabase/database.types";
+import { listarRoles, validarRol } from "@/lib/agentes/roles";
 
 export interface ContextoOperacion {
   slug: string;
@@ -30,6 +31,9 @@ export const NOMBRES_OPERACIONES = [
   "proponer_limite_diario",
   "listar_agentes",
   "proponer_asignar_agente",
+  "listar_roles",
+  "proponer_rol",
+  "proponer_rol_base",
 ] as const;
 
 const norm = (t: unknown) =>
@@ -243,6 +247,49 @@ export async function ejecutarOperacion(nombre: string, args: Record<string, unk
       if (!areas.includes(area)) return { error: `El área tiene que ser una de: ${areas.join(", ")}.` };
       const resumen = `${estado === "activa" ? "Activar" : estado === "pausada" ? "Pausar" : "Apagar"} el agente «${a.uno.nombre}» (versión ${a.uno.version}) en el área ${area}.${estado === "activa" ? " Activar pide el PIN." : ""}`;
       const prop = await ctx.guardar("asignar_agente", `Agente «${a.uno.nombre}»: ${estado}`, resumen, { clave: a.uno.clave, version: a.uno.version, area, estado, motivo: "Desde el asistente" });
+      ctx.agregarPropuesta(prop.id);
+      return { propuesta: prop.id, resumen };
+    }
+    case "listar_roles": {
+      const [roles, bases] = await Promise.all([listarRoles(ctx.rubroId), basesDelPerfil(ctx.slug)]);
+      const { data: conRol } = await s.from("imported_bases" as any).select("id, name, agent_role_id").in("id", bases.map((b) => b.id)).not("agent_role_id", "is", null);
+      return {
+        roles: roles.map((r) => ({ id: r.id, nombre: r.nombre, objetivo: r.objetivo, tono: r.tono, instrucciones: r.instrucciones.slice(0, 600) })),
+        bases_con_rol: ((conRol ?? []) as any[]).map((b) => ({ base: b.name, rol: roles.find((r) => r.id === b.agent_role_id)?.nombre ?? "?" })),
+      };
+    }
+    case "proponer_rol": {
+      const v = validarRol({ nombre: args.nombre, objetivo: args.objetivo, tono: args.tono, instrucciones: args.instrucciones });
+      if (!v.ok) return { error: v.error };
+      let id: string | null = null;
+      if (String(args.rol ?? "").trim()) {
+        const roles = await listarRoles(ctx.rubroId);
+        const r = elegirPorNombre(roles, args.rol, (x) => x.nombre);
+        if (!r.uno) return { error: r.varios ? "Hay varios roles que coinciden." : "No encontré ese rol.", opciones: (r.varios ?? roles).map((x) => x.nombre) };
+        id = r.uno.id;
+      }
+      const resumen = `${id ? "Editar" : "Crear"} el rol «${v.rol.nombre}»${v.rol.objetivo ? ` (objetivo: ${v.rol.objetivo})` : ""}. Queda guardado para usarlo en cualquier base del perfil. No envía nada.`;
+      const prop = await ctx.guardar("guardar_rol", `Rol «${v.rol.nombre}»`, resumen, { id, area: areasDe(ctx.slug)[0], ...v.rol });
+      ctx.agregarPropuesta(prop.id);
+      return { propuesta: prop.id, resumen };
+    }
+    case "proponer_rol_base": {
+      const bases = await basesDelPerfil(ctx.slug);
+      const b = elegirPorNombre(bases, args.base, (x) => x.name);
+      if (!b.uno) return { error: b.varios ? "Hay varias bases que coinciden." : "No encontré esa base.", opciones: (b.varios ?? bases).map((x) => x.name) };
+      let rolId: string | null = null;
+      let rolNombre = "";
+      if (String(args.rol ?? "").trim()) {
+        const roles = await listarRoles(ctx.rubroId);
+        const r = elegirPorNombre(roles, args.rol, (x) => x.nombre);
+        if (!r.uno) return { error: r.varios ? "Hay varios roles que coinciden." : "No encontré ese rol: primero creálo con proponer_rol.", opciones: (r.varios ?? roles).map((x) => x.nombre) };
+        rolId = r.uno.id;
+        rolNombre = r.uno.nombre;
+      }
+      const resumen = rolId
+        ? `La base «${b.uno.name}» pasa a usar el rol «${rolNombre}»: el agente aborda a esos contactos con ese comportamiento. No envía nada.`
+        : `La base «${b.uno.name}» vuelve al agente general del perfil. No envía nada.`;
+      const prop = await ctx.guardar("asignar_rol_base", `Rol de la base «${b.uno.name}»`, resumen, { base_id: b.uno.id, rol_id: rolId });
       ctx.agregarPropuesta(prop.id);
       return { propuesta: prop.id, resumen };
     }
