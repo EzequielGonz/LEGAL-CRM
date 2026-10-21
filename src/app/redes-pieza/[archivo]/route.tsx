@@ -310,5 +310,12 @@ export async function GET(_req: Request, { params }: { params: { archivo: string
     lora && { name: "Lora", data: lora, weight: 700 as const, style: "normal" as const },
   ].filter(Boolean) as any[];
 
-  return new ImageResponse(nodo, { width: 1080, height: alto, fonts, headers: { "Cache-Control": "public, max-age=31536000, immutable" } });
+  // Se dibuja completo antes de responder: si algo falla, se ve el motivo en vez de un 500 mudo.
+  try {
+    const img = new ImageResponse(nodo, { width: 1080, height: alto, fonts });
+    const buf = await img.arrayBuffer();
+    return new Response(buf, { headers: { "Content-Type": "image/png", "Cache-Control": "public, max-age=31536000, immutable" } });
+  } catch (err: any) {
+    return new Response(`No se pudo dibujar: ${String(err?.message ?? err).slice(0, 400)} (fuentes: ${fonts.length})`, { status: 500 });
+  }
 }
