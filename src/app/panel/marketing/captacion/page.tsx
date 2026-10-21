@@ -78,7 +78,7 @@ export default async function CaptacionMarketingPage({
             <p className="text-xs text-slate-400">
               {b.source_label} · {b.total_rows} negocios · {b.created_rows} nuevos ·{" "}
               {b.duplicate_rows} ya existían · {b.invalid_rows} sin teléfono ·{" "}
-              {new Date(b.created_at).toLocaleDateString("es-AR")}
+              {new Date(b.created_at).toLocaleDateString("es-AR", { timeZone: "America/Argentina/Buenos_Aires" })}
             </p>
           </Link>
         ))}

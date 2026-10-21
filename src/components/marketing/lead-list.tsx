@@ -25,7 +25,7 @@ export interface LeadRow {
 
 function fmt(date: string | null) {
   return date
-    ? new Date(date).toLocaleString("es-AR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })
+    ? new Date(date).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })
     : "—";
 }
 
