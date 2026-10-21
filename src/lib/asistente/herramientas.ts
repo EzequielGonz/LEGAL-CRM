@@ -157,6 +157,39 @@ export const DECLARACIONES = [
     },
   },
   {
+    name: "listar_roles",
+    description: "Roles o comportamientos guardados del agente en este perfil (nombre, objetivo, tono, instrucciones) y en qué bases están cargados.",
+    parametersJsonSchema: { type: "object", properties: {} },
+  },
+  {
+    name: "proponer_rol",
+    description:
+      "Deja como PROPUESTA crear o editar un rol del agente para abordar un tipo de cliente (por ejemplo «Inmobiliarias: cierre rápido con reunión»). Para editar, pasá el nombre o id del rol existente en «rol». Queda guardado para reutilizarlo en otras bases.",
+    parametersJsonSchema: {
+      type: "object",
+      properties: {
+        rol: { type: "string", description: "Opcional: nombre o id del rol a editar. Vacío = rol nuevo." },
+        nombre: { type: "string" },
+        objetivo: { type: "string", description: "Qué tiene que lograr con esta base (captar, agendar llamada, vender…)." },
+        tono: { type: "string" },
+        instrucciones: { type: "string", description: "Cómo abordar a este cliente: apertura, argumentos, objeciones y cierre. Sin datos personales." },
+      },
+      required: ["nombre", "instrucciones"],
+    },
+  },
+  {
+    name: "proponer_rol_base",
+    description: "Deja como PROPUESTA cargar un rol guardado a una base del perfil (o sacarlo con rol vacío). Desde ahí el agente aborda a los contactos de esa base con ese rol.",
+    parametersJsonSchema: {
+      type: "object",
+      properties: {
+        base: { type: "string", description: "Nombre o id de la base" },
+        rol: { type: "string", description: "Nombre o id del rol; vacío = volver al agente del perfil" },
+      },
+      required: ["base"],
+    },
+  },
+  {
     name: "ir_a_pantalla",
     description:
       "Devuelve un botón para abrir una pantalla del panel. Destinos: campanas (cargar o revisar campañas), bases (cargar una base), contactos (clientes, citas y seguimiento), prospectos (base fría por base), revision (seguimientos caídos y perdidos), citas, conversaciones (oportunidades activas), publicaciones, contenido, plantillas, perfil_whatsapp, publicidad, agentes, configuracion, estadisticas.",
