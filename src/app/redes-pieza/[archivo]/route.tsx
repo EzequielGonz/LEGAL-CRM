@@ -122,7 +122,7 @@ function Etiqueta({ texto, m }: { texto: string; m: Marca }) {
 
 function Boton({ texto, m, grande }: { texto: string; m: Marca; grande?: boolean }) {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 16, fontSize: grande ? 36 : 30, fontWeight: 800, background: m.acc, color: m.accInk, padding: grande ? "26px 42px" : "18px 30px", borderRadius: m.radio, boxShadow: m.radio === 0 && m.oscuro ? `12px 12px 0 ${m.ink}` : "none" }}>
+    <div style={{ display: "flex", alignItems: "center", gap: 16, fontSize: grande ? 36 : 30, fontWeight: 800, background: m.acc, color: m.accInk, padding: grande ? "26px 42px" : "18px 30px", borderRadius: m.radio, ...(m.radio === 0 && m.oscuro ? { boxShadow: `12px 12px 0 ${m.ink}` } : {}) }}>
       {texto}
     </div>
   );
@@ -165,7 +165,7 @@ function Decoracion({ cod, m, alto }: { cod: string; m: Marca; alto: number }) {
 
 function Lienzo({ cod, m, alto, pad, children }: { cod: string; m: Marca; alto: number; pad: string; children: ReactNode }) {
   return (
-    <div style={{ width: 1080, height: alto, display: "flex", position: "relative", backgroundImage: FONDOS[cod].includes("gradient") ? FONDOS[cod] : undefined, backgroundColor: FONDOS[cod].includes("gradient") ? undefined : FONDOS[cod], color: m.ink, fontFamily: "Inter" }}>
+    <div style={{ width: 1080, height: alto, display: "flex", position: "relative", ...(FONDOS[cod].includes("gradient") ? { backgroundImage: FONDOS[cod] } : { backgroundColor: FONDOS[cod] }), color: m.ink, fontFamily: "Inter" }}>
       <Decoracion cod={cod} m={m} alto={alto} />
       <div style={{ position: "absolute", left: 0, top: 0, width: 1080, height: alto, padding: pad, display: "flex", flexDirection: "column" }}>{children}</div>
     </div>
