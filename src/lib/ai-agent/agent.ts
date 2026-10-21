@@ -15,7 +15,7 @@ import {
   sourceDetailFor,
   type MarketingOutcome,
 } from "@/lib/marketing/leads";
-import { analyzeLead, type GeneradorTexto } from "@/lib/marketing/analysis";
+import { analyzeLead } from "@/lib/marketing/analysis";
 import { aprobarPresupuesto, briefVenta, marcarAceptacion, pedirPresupuesto, registrarVenta } from "@/lib/marketing/presupuestos";
 import { esAceptacion } from "@/lib/marketing/venta";
 import { getAutomationPause } from "@/lib/automation-pause";
@@ -36,10 +36,24 @@ import type { DetentionMotive } from "@/lib/detention";
 import { instruccionReparacion, validarTextoSalida } from "@/lib/agentes/contrato";
 import { armarContexto, armarResumen } from "@/lib/agentes/contexto";
 import { asignacionActiva } from "@/lib/agentes/servicio";
-import { generadorVertex, identificadorModelo } from "@/lib/agentes/modelo";
-import { candidatoParaOportunidad, configuracionGanadora, experimentoEnCurso, registrarIncidente, registrarTurno, type CandidatoTurno } from "@/lib/experimento/servicio";
+import { identificadorModelo } from "@/lib/agentes/modelo";
+import { registrarTurno } from "@/lib/experimento/servicio";
+import { instruccionesDeRol } from "@/lib/agentes/roles";
 
 const MAX_TOOL_ITERATIONS = 6;
+
+/**
+ * 21/10: todo mensaje se responde, venga de donde venga. Se suma al final
+ * del prompt de cada perfil (no reemplaza el guion del rubro).
+ */
+export const BLOQUE_RESPONDER_SIEMPRE = [
+  "Siempre respondés (regla del sistema):",
+  "- Todo mensaje recibe respuesta, aunque sea solo un saludo, un emoji, un audio que no podés escuchar o algo que no entendés. Nunca dejes a la persona sin respuesta.",
+  "- Si escribe sin contexto («hola», «info», «precio»), presentate en una línea, decí qué hacés por ella y hacé UNA pregunta concreta para avanzar.",
+  "- Si pregunta algo de otro tema, respondé breve y con buena onda y volvé a lo tuyo con una pregunta.",
+  "- Tu objetivo es avanzar hacia el cierre del rubro (captar, agendar o derivar con un asesor). Cada respuesta termina con una pregunta o una propuesta concreta de siguiente paso.",
+  "- Si dice que no le interesa, que ya lo resolvió o que es un número equivocado, respetalo: disculpate breve y no insistas.",
+].join("\n");
 const HISTORY_LIMIT = 30;
 
 // Agente IA basado en Google Gemini (antes usaba la API de Anthropic/Claude;
@@ -59,7 +73,7 @@ export type ModeloAgente = (req: {
   contents: Content[];
   systemInstruction: string;
   tools: unknown[];
-  /** Modelo pedido para este turno (comparación de agentes); sin dato, el vigente. */
+  /** Modelo pedido; sin dato, el vigente (Gemini 3.8 Flash o GEMINI_MODEL). */
   modelo?: string;
 }) => Promise<{ parts: Part[]; tokensEntrada?: number; tokensSalida?: number; tokensRazonamiento?: number; modeloRespuesta?: string | null }>;
 
@@ -78,32 +92,6 @@ const modeloGemini: ModeloAgente = async ({ contents, systemInstruction, tools, 
     modeloRespuesta: (response as any).modelVersion ?? null,
   };
 };
-
-/** Modelo del candidato de la comparación (Gemini con otro identificador o Vertex). */
-function modeloDeCandidato(c: CandidatoTurno["candidato"]): ModeloAgente {
-  if (c.proveedor === "vertex") {
-    const gen = generadorVertex(c.modelo ?? "");
-    return async (req) => {
-      const r = await gen({ contents: req.contents, systemInstruction: req.systemInstruction, tools: req.tools });
-      return { parts: r.parts as Part[], tokensEntrada: r.tokensEntrada, tokensSalida: r.tokensSalida, modeloRespuesta: c.modelo };
-    };
-  }
-  return (req) => modeloGemini({ ...req, modelo: c.modelo ?? undefined });
-}
-
-/** Texto simple con el modelo del candidato (síntesis del análisis de Marketing). */
-function generadorTextoDe(c: CandidatoTurno["candidato"], acum?: { entrada: number; salida: number; modelo: string | null }): GeneradorTexto {
-  const m = modeloDeCandidato(c);
-  return async (prompt) => {
-    const r = await m({ contents: [{ role: "user", parts: [{ text: prompt }] }], systemInstruction: "Respondé solo el JSON pedido.", tools: [] });
-    if (acum) {
-      acum.entrada += r.tokensEntrada ?? 0;
-      acum.salida += (r.tokensSalida ?? 0) + (r.tokensRazonamiento ?? 0);
-      acum.modelo = r.modeloRespuesta ?? acum.modelo;
-    }
-    return (r.parts ?? []).map((p) => p.text ?? "").join("");
-  };
-}
 
 let _modelo: ModeloAgente = modeloGemini;
 /** Solo pruebas: reemplaza el modelo (null vuelve a Gemini). */
@@ -231,7 +219,7 @@ export async function runAgentTurn(conversationId: string) {
   return runAgentTurnCon(conversationId, _modelo);
 }
 
-async function runAgentTurnCon(conversationId: string, modeloBase: ModeloAgente, forzarActual = false): Promise<void> {
+async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Promise<void> {
   // Pausa general de respuestas de la IA (Configuración → Pausa general).
   // Mientras está activa, los mensajes quedan para atención manual.
   if ((await getAutomationPause()).aiRepliesPaused) return;
@@ -308,42 +296,14 @@ async function runAgentTurnCon(conversationId: string, modeloBase: ModeloAgente,
     await supabase.from("contacts").update({ status: "en_conversacion" }).eq("id", contact.id);
   }
 
-  // Oportunidad (antes de armar el contexto: decide el candidato de la comparación).
+  // Oportunidad (21/10: ya no hay comparación de agentes; responde siempre el modelo vigente).
   let opportunityId: string | null = null;
   try {
     opportunityId = (await ensureOpportunity({ contactId: contact.id, conversationId })).id;
   } catch (err) {
     console.error("[agente] No se pudo leer la oportunidad:", err);
   }
-  // Comparación de agentes: candidato fijo de esta oportunidad. Sin
-  // experimento en curso responde exactamente como hoy.
-  let cand: CandidatoTurno | null = null;
-  if (opportunityId) {
-    try {
-      cand = await candidatoParaOportunidad(opportunityId);
-      if (cand && forzarActual && cand.letra !== "A") {
-        // Reemplazo por falla del candidato: responde A (bot actual) en este turno.
-        const enCurso = await experimentoEnCurso();
-        const a = enCurso?.candidatos.find((c) => c.letra === "A" && c.estado === "listo");
-        cand = a ? { ...cand, letra: "A", reemplazo: true, candidato: a } : null;
-      }
-    } catch (err) {
-      console.error("[agente] No se pudo resolver el candidato de la comparación:", err);
-    }
-  }
-  // Sin experimento: si ya se aplicó un ganador, responde con su configuración.
-  let config: CandidatoTurno["candidato"] | null = cand?.candidato ?? null;
-  if (!cand) {
-    try {
-      const g = await configuracionGanadora();
-      if (g) config = { ...g, estado: "listo" } as unknown as CandidatoTurno["candidato"];
-    } catch {
-      config = null;
-    }
-  }
-  // En pruebas (modelo inyectado) se respeta el modelo inyectado.
-  const modelo: ModeloAgente = config && modeloBase === modeloGemini ? modeloDeCandidato(config) : modeloBase;
-  const modeloPedido = config?.modelo ?? identificadorModelo();
+  const modeloPedido = identificadorModelo();
 
   const system = buildSystemPrompt(agentConfig as any, {
     area,
@@ -363,21 +323,7 @@ async function runAgentTurnCon(conversationId: string, modeloBase: ModeloAgente,
       if (esAceptacion(ultimoTexto) && (await marcarAceptacion(contact.id))) {
         const lead = await getLeadByContact(contact.id);
         if (lead) {
-          const acum = { entrada: 0, salida: 0, modelo: null as string | null };
-          const generar: GeneradorTexto | null = config ? generadorTextoDe(config, acum) : null;
-          const t0a = Date.now();
-          await Promise.race([
-            analyzeLead(lead.id, { investigar: true, generar, modeloSintesis: config?.modelo ?? null }),
-            new Promise((r) => setTimeout(r, 20_000)),
-          ]);
-          if (cand && acum.entrada + acum.salida > 0) {
-            await registrarTurno({
-              experimentId: cand.experimentId, candidato: cand.letra, precio: config, opportunityId, conversationId, rubroId: contact.rubro_id ?? null,
-              proveedor: config?.proveedor ?? "gemini_api", modeloPedido: config?.modelo ?? identificadorModelo(), modeloRespuesta: acum.modelo,
-              llamadas: 1, tokensEntrada: acum.entrada, tokensSalida: acum.salida, tokensRazonamiento: 0, latenciaMs: Date.now() - t0a,
-              herramientas: [], resultado: "enviado", uso: "analisis",
-            });
-          }
+          await Promise.race([analyzeLead(lead.id, { investigar: true }), new Promise((r) => setTimeout(r, 20_000))]);
         }
       }
     } catch (err) {
@@ -394,11 +340,7 @@ async function runAgentTurnCon(conversationId: string, modeloBase: ModeloAgente,
   // contexto sale de los módulos versionados (principal + derivado). Sin
   // asignación activa, responde exactamente como hoy.
   try {
-    // Candidato «actual» (A): el prompt de hoy aunque haya asignación de biblioteca.
-    // Candidato «biblioteca» (B y C): manual + módulos aunque no haya asignación activa.
-    const asignacionLeida = config?.contexto === "actual" ? null : await asignacionActiva(area);
-    const claveBiblioteca = asignacionLeida?.agente_clave ?? (config?.contexto === "biblioteca" ? rubroSlugDe({ rubro_id: contact.rubro_id ?? null, area }) : null);
-    const asignacion = claveBiblioteca ? { agente_clave: claveBiblioteca } : null;
+    const asignacion = await asignacionActiva(area);
     if (asignacion) {
       const { data: ag } = await supabase.from("agent_library").select("instrucciones, limites").eq("clave", asignacion.agente_clave).maybeSingle();
       const { data: principal } = await supabase.from("agent_library").select("instrucciones").eq("clave", "principal").maybeSingle();
@@ -419,6 +361,11 @@ async function runAgentTurnCon(conversationId: string, modeloBase: ModeloAgente,
   } catch (err) {
     console.error("[agente] No se pudo leer la asignación de la biblioteca; se usa la configuración actual:", err);
   }
+  // Rol de la base (21/10): si la base del contacto tiene un rol cargado, se suma.
+  const rol = await instruccionesDeRol(contact);
+  if (rol) systemWithBrief = `${systemWithBrief}\n\n${rol}`;
+  // Responder siempre (21/10): llegue por campaña, landing, redes o un «hola» suelto.
+  systemWithBrief = `${systemWithBrief}\n\n${BLOQUE_RESPONDER_SIEMPRE}`;
   const tools = toolsForArea(area);
   let escalated = false;
   let finalText = "";
@@ -436,13 +383,13 @@ async function runAgentTurnCon(conversationId: string, modeloBase: ModeloAgente,
   };
   const registrar = (resultado: "enviado" | "retenido" | "sin_texto" | "bloqueado" | "error", extra: { motivos?: string[]; error?: string } = {}) =>
     registrarTurno({
-      experimentId: cand?.experimentId ?? null,
-      candidato: cand?.letra ?? null,
-      precio: config,
+      experimentId: null,
+      candidato: null,
+      precio: null,
       opportunityId,
       conversationId,
       rubroId: contact.rubro_id ?? null,
-      proveedor: config?.proveedor ?? "gemini_api",
+      proveedor: "gemini_api",
       modeloPedido,
       modeloRespuesta: uso.modeloRespuesta,
       llamadas: uso.llamadas,
@@ -526,26 +473,9 @@ async function runAgentTurnCon(conversationId: string, modeloBase: ModeloAgente,
     }
   }
   } catch (err: any) {
-    // Falla del modelo: se registra; si es un candidato de la comparación
-    // distinto de A, se anota el incidente (fatal si el modelo no está
-    // disponible, lo que lo detiene) y el turno se responde con el bot actual.
+    // Falla del modelo: se registra y se deja para atención humana.
     const detalle = String(err?.message ?? err).slice(0, 400);
     await registrar("error", { error: detalle });
-    if (cand) {
-      const fatal = err?.name === "ModeloNoDisponibleError" || /404|not found|permission|403/i.test(detalle);
-      await registrarIncidente({
-        experimentId: cand.experimentId,
-        candidato: cand.letra,
-        gravedad: fatal ? "fatal" : "grave",
-        tipo: "error_modelo",
-        detalle,
-        opportunityId,
-        conversationId,
-      }).catch((e) => console.error("[agente] No se pudo registrar el incidente:", e));
-      if (cand.letra !== "A" && !forzarActual && uso.herramientas.length === 0) {
-        return runAgentTurnCon(conversationId, modeloBase, true);
-      }
-    }
     throw err;
   }
 
