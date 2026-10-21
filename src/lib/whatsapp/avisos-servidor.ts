@@ -1,5 +1,5 @@
 import { createAdminClient } from "@/lib/supabase/admin";
-import { lineaSinAvisos, suscribirAvisos, type ActividadLinea } from "./avisos-meta";
+import { appsSuscriptas, lineaSinAvisos, suscribirAvisos, type ActividadLinea } from "./avisos-meta";
 
 /**
  * Lado servidor de los avisos de Meta (21/10). Lo llama el latido: mira las
@@ -16,6 +16,8 @@ export interface EstadoAvisosLinea {
   ultimoIntento?: string | null;
   resultado?: string | null;
   ok?: boolean | null;
+  /** Diagnóstico de solo lectura: qué apps están suscriptas a la cuenta según Meta. */
+  apps?: string | null;
 }
 
 async function actividad(area: string, ahora: Date): Promise<ActividadLinea> {
@@ -62,6 +64,10 @@ export async function asegurarAvisosDeLineas(ahora = new Date()): Promise<Record
       e.resultado = r.mensaje;
       e.ok = r.ok;
       console.log(`[avisos-meta] ${clave}: ${r.ok ? "suscripta" : "no se pudo"} (${r.http ?? "-"})`);
+    }
+    if (sin) {
+      const d = await appsSuscriptas(clave);
+      e.apps = d.ok ? (d.apps ?? []).join(", ") || "ninguna" : d.mensaje;
     }
     estado[clave] = e;
   }
