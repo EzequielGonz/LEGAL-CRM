@@ -11,9 +11,7 @@ const base: DatosSalud = {
   ultimoEntrante: "2026-10-16T10:00:00Z",
   perfiles: [{ slug: "marketing", nombre: "Marketing", whatsapp: true, agenteActivo: true, agenteListo: true, faltante: [] }],
   turnos24h: { errores: 0, total: 10 },
-  incidentesFatales: 0,
   presupuestosAtrasados: 0,
-  vertexConfigurado: true,
 };
 
 test("todo en orden: solo verdes", () => {
@@ -45,9 +43,8 @@ test("lectura simple: sin nombres de variables ni tareas internas y con responsa
     ultimoEntrante: null,
     perfiles: [{ slug: "marketing", nombre: "Marketing", whatsapp: false, agenteActivo: false, agenteListo: false, faltante: ["nombre"] }],
     turnos24h: { errores: 3, total: 10 },
-    incidentesFatales: 0,
     presupuestosAtrasados: 0,
-    vertexConfigurado: false,
+    avisosMeta: [{ nombre: "Coberturas", sinAvisos: true, resultado: null }],
   });
   for (const i of items) {
     const l = lecturaSimple(i);
@@ -58,4 +55,12 @@ test("lectura simple: sin nombres de variables ni tareas internas y con responsa
   const latido = lecturaSimple(items.find((i) => i.clave === "latido")!);
   assert.equal(latido.quien, "tecnico");
   assert.match(lecturaSimple(items.find((i) => i.clave === "cuarentena")!).que, /^2 mensaje/);
+});
+
+test("línea sin avisos de Meta: rojo y explicado sin nombres técnicos", () => {
+  const items = evaluarSalud({ ...base, avisosMeta: [{ nombre: "Coberturas", sinAvisos: true, resultado: "Cuenta suscripta" }, { nombre: "Marketing", sinAvisos: false, resultado: null }] });
+  const a = items.filter((i) => i.clave.startsWith("avisos_"));
+  assert.equal(a.length, 1);
+  assert.equal(a[0].estado, "rojo");
+  assert.match(lecturaSimple(a[0]).que, /^Coberturas: /);
 });
