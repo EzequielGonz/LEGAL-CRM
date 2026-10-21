@@ -39,21 +39,12 @@ import { asignacionActiva } from "@/lib/agentes/servicio";
 import { identificadorModelo } from "@/lib/agentes/modelo";
 import { registrarTurno } from "@/lib/experimento/servicio";
 import { instruccionesDeRol } from "@/lib/agentes/roles";
+import { GUIA_CAPTACION_Y_CIERRE } from "@/lib/agentes/guia-cierre";
 
 const MAX_TOOL_ITERATIONS = 6;
 
-/**
- * 21/10: todo mensaje se responde, venga de donde venga. Se suma al final
- * del prompt de cada perfil (no reemplaza el guion del rubro).
- */
-export const BLOQUE_RESPONDER_SIEMPRE = [
-  "Siempre respondés (regla del sistema):",
-  "- Todo mensaje recibe respuesta, aunque sea solo un saludo, un emoji, un audio que no podés escuchar o algo que no entendés. Nunca dejes a la persona sin respuesta.",
-  "- Si escribe sin contexto («hola», «info», «precio»), presentate en una línea, decí qué hacés por ella y hacé UNA pregunta concreta para avanzar.",
-  "- Si pregunta algo de otro tema, respondé breve y con buena onda y volvé a lo tuyo con una pregunta.",
-  "- Tu objetivo es avanzar hacia el cierre del rubro (captar, agendar o derivar con un asesor). Cada respuesta termina con una pregunta o una propuesta concreta de siguiente paso.",
-  "- Si dice que no le interesa, que ya lo resolvió o que es un número equivocado, respetalo: disculpate breve y no insistas.",
-].join("\n");
+/** 21/10: guía común de captación y cierre (todo mensaje se responde, venga de donde venga). */
+export const BLOQUE_RESPONDER_SIEMPRE = GUIA_CAPTACION_Y_CIERRE;
 const HISTORY_LIMIT = 30;
 
 // Agente IA basado en Google Gemini (antes usaba la API de Anthropic/Claude;
@@ -168,7 +159,7 @@ function buildSystemPrompt(
       : "Todavía no hay datos previos cargados de este prospecto.",
     "",
     contactContext.isFirstReplyToCampaign
-      ? contactContext.area === "civil" || contactContext.area === "marketing"
+      ? contactContext.area !== "penal"
         ? // Civil (accidentes laborales) y Marketing (venta consultiva): el guión de apertura y de
           // preguntas vive completo en el prompt del agente (panel Agentes IA).
           // Acá NO se fuerza la vieja pregunta de "¿sigue vigente o ya lo
