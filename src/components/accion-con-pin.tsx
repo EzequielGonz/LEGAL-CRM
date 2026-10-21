@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 export interface CampoAccion {
   nombre: string;
   etiqueta: string;
-  tipo?: "text" | "number" | "select" | "textarea";
+  tipo?: "text" | "number" | "select" | "textarea" | "datetime-local";
+  min?: string;
   opciones?: { valor: string; etiqueta: string }[];
   requerido?: boolean;
   valorInicial?: string;
@@ -71,7 +72,7 @@ export function AccionConPin({
           const data = await res.json().catch(() => ({}));
           if (!res.ok) setMsg({ ok: false, text: data.error ?? "No se pudo completar." });
           else {
-            setMsg({ ok: true, text: exito ?? "Listo." });
+            setMsg({ ok: true, text: exito ?? data.detalle ?? "Listo." });
             router.refresh();
           }
         } catch {
@@ -111,6 +112,8 @@ export function AccionConPin({
             <input
               value={valores[c.nombre]}
               required={c.requerido}
+              type={c.tipo === "datetime-local" ? "datetime-local" : undefined}
+              min={c.min}
               inputMode={c.tipo === "number" ? "decimal" : undefined}
               onChange={(e) => setValores({ ...valores, [c.nombre]: e.target.value })}
               className="tactil w-full rounded-lg border border-slate-300 px-2"

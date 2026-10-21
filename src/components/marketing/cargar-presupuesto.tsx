@@ -9,8 +9,9 @@ import { createClient } from "@/lib/supabase/client";
  * privado (enlace firmado de un solo uso) y, con el PIN, lo envía: con la
  * ventana de 24 h abierta sale en el momento; si no, sale la plantilla de
  * aviso y el archivo se manda apenas la persona responda.
+ * Desde el 21/10 se puede programar día y hora (Buenos Aires) para que salga solo.
  */
-export function CargarPresupuesto({ budgetId }: { budgetId: string }) {
+export function CargarPresupuesto({ budgetId, minimo, sugerido }: { budgetId: string; minimo: string; sugerido: string }) {
   const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [monto, setMonto] = useState("");
@@ -19,6 +20,8 @@ export function CargarPresupuesto({ budgetId }: { budgetId: string }) {
   const [plazo, setPlazo] = useState("");
   const [notas, setNotas] = useState("");
   const [pin, setPin] = useState("");
+  const [modo, setModo] = useState<"ahora" | "programar">("ahora");
+  const [cuando, setCuando] = useState(sugerido);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
 
@@ -54,6 +57,7 @@ export function CargarPresupuesto({ budgetId }: { budgetId: string }) {
               alcance,
               plazo,
               notas,
+              programadoPara: modo === "programar" ? cuando : undefined,
               pin,
             }),
           });
@@ -98,10 +102,30 @@ export function CargarPresupuesto({ budgetId }: { budgetId: string }) {
         <span className="mb-1 block text-xs text-slate-700">Notas internas (no se envían)</span>
         <textarea value={notas} onChange={(e) => setNotas(e.target.value)} rows={1} className="w-full rounded-lg border border-slate-300 px-2 py-1" />
       </label>
+      <fieldset className="rounded-lg border border-slate-200 bg-white p-2">
+        <legend className="px-1 text-xs font-medium text-slate-700">¿Cuándo se lo mandamos?</legend>
+        <div className="flex flex-wrap gap-4">
+          <label className="inline-flex items-center gap-2">
+            <input type="radio" name={`modo-${budgetId}`} checked={modo === "ahora"} onChange={() => setModo("ahora")} />
+            Ahora
+          </label>
+          <label className="inline-flex items-center gap-2">
+            <input type="radio" name={`modo-${budgetId}`} checked={modo === "programar"} onChange={() => setModo("programar")} />
+            Programar día y hora
+          </label>
+        </div>
+        {modo === "programar" && (
+          <label className="mt-2 block">
+            <span className="mb-1 block text-xs text-slate-700">Día y hora (hora de Buenos Aires)</span>
+            <input type="datetime-local" required value={cuando} min={minimo} onChange={(e) => setCuando(e.target.value)} className="tactil rounded-lg border border-slate-300 px-2" />
+            <span className="mt-0.5 block text-xs text-slate-500">Se admite de lunes a sábado de 8 a 21. Si la ventana de 24 h está cerrada, a esa hora sale la plantilla de aviso.</span>
+          </label>
+        )}
+      </fieldset>
       <div className="flex flex-wrap items-center gap-2">
         <input value={pin} onChange={(e) => setPin(e.target.value)} type="password" inputMode="numeric" autoComplete="off" placeholder="PIN" required aria-label="PIN" className="tactil w-28 rounded-lg border border-slate-300 px-2" />
         <button type="submit" disabled={busy || !file} className="tactil rounded-lg bg-slate-900 px-4 text-sm font-semibold text-gold-100 disabled:opacity-60">
-          {busy ? "Enviando…" : "Cargar y enviar"}
+          {busy ? "Guardando…" : modo === "programar" ? "Cargar y programar" : "Cargar y enviar"}
         </button>
       </div>
       <p role="status" aria-live="polite" className={msg ? (msg.ok ? "text-emerald-700" : "font-medium text-red-700") : "sr-only"}>

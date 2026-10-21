@@ -4,12 +4,15 @@ import { requirePageSession } from "@/lib/acceso/pagina";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { CargarPresupuesto } from "@/components/marketing/cargar-presupuesto";
 import { AccionConPin } from "@/components/accion-con-pin";
+import { describirProgramacion, instanteAHoraArgentina } from "@/lib/marketing/programacion";
+import { nextAllowedInstant } from "@/lib/contacto/reglas";
 
 export const dynamic = "force-dynamic";
 
 const ESTADO: Record<string, string> = {
   pedido: "Pedido (a preparar)",
   listo: "Listo (espera que la persona escriba)",
+  programado: "Programado",
   enviado: "Enviado (la IA retoma para cerrar)",
   aprobado: "Aprobado · cerrado",
   rechazado: "Rechazado",
@@ -39,6 +42,19 @@ export default async function PidePresupuestoPage({ searchParams }: { searchPara
   if (ver === "abiertos") q = q.in("estado", ["pedido", "listo", "enviado"]);
   const { data, error } = await q;
   const filas = (data ?? []) as any[];
+  // Para programar: mínimo dentro de 2 min; sugerido, la próxima media hora hábil.
+  const ahora = new Date();
+  const minimo = instanteAHoraArgentina(new Date(ahora.getTime() + 2 * 60_000));
+  const media = 30 * 60_000;
+  const proxima = new Date(Math.ceil((ahora.getTime() + 15 * 60_000) / media) * media);
+  const sugerido = instanteAHoraArgentina(nextAllowedInstant(proxima) ?? proxima);
+  const { data: convs } = await s
+    .from("conversations")
+    .select("id, contacts(full_name, phone)")
+    .eq("area", "marketing")
+    .order("last_message_at", { ascending: false, nullsFirst: false })
+    .limit(150);
+  const opcionesConv = ((convs ?? []) as any[]).map((c) => ({ valor: c.id as string, etiqueta: `${c.contacts?.full_name ?? "Sin nombre"} · ${c.contacts?.phone ?? "sin teléfono"}` }));
 
   return (
     <div className="mx-auto max-w-4xl space-y-4">
@@ -46,13 +62,29 @@ export default async function PidePresupuestoPage({ searchParams }: { searchPara
         <div>
           <p className="text-xs uppercase tracking-wider text-gold-700">Trabajo diario</p>
           <h1 className="text-2xl font-semibold text-slate-900">Pide presupuesto</h1>
-          <p className="text-sm text-slate-600">Prometimos el presupuesto en menos de 24 h. Al cargarlo se envía (o se avisa con la plantilla si la ventana está cerrada) y la IA retoma para cerrar.</p>
+          <p className="text-sm text-slate-600">Prometimos el presupuesto en menos de 24 h. Al cargarlo se envía en el momento o el día y la hora que elijas (hora de Buenos Aires); si la ventana está cerrada se avisa con la plantilla, y la IA retoma para cerrar.</p>
         </div>
         <nav className="flex gap-2 text-sm" aria-label="Filtro">
           <Link href="/panel/marketing/presupuestos" aria-current={ver === "abiertos" ? "page" : undefined} className={`tactil inline-flex items-center rounded-lg px-3 ${ver === "abiertos" ? "bg-slate-900 text-gold-100" : "border border-slate-300 bg-white"}`}>Abiertos</Link>
           <Link href="/panel/marketing/presupuestos?ver=todos" aria-current={ver === "todos" ? "page" : undefined} className={`tactil inline-flex items-center rounded-lg px-3 ${ver === "todos" ? "bg-slate-900 text-gold-100" : "border border-slate-300 bg-white"}`}>Todos</Link>
         </nav>
       </header>
+
+      <details className="rounded-xl border border-slate-200 bg-white p-4">
+        <summary className="cursor-pointer text-sm font-semibold text-slate-900">Cargar un presupuesto nuevo</summary>
+        <p className="mt-1 text-xs text-slate-600">Para un cliente de Kocos Marketing que no lo pidió por el agente. Después cargás el archivo y elegís si sale ahora o a un día y hora.</p>
+        <div className="mt-2 max-w-md">
+          <AccionConPin
+            endpoint="/api/marketing/presupuestos"
+            cuerpo={{ accion: "nuevo" }}
+            etiqueta="Crear presupuesto"
+            campos={[
+              { nombre: "conversationId", etiqueta: "Cliente (conversación de WhatsApp de Marketing)", tipo: "select", requerido: true, opciones: opcionesConv },
+              { nombre: "detalle", etiqueta: "Qué se presupuesta", tipo: "textarea", requerido: true },
+            ]}
+          />
+        </div>
+      </details>
 
       {error && <p className="text-sm text-red-700">No se pudo leer la lista ({error.message}). ¿Falta aplicar la migración 0311?</p>}
       {!error && filas.length === 0 && <p className="rounded-xl border border-slate-200 bg-white p-4 text-sm text-slate-600">No hay pedidos de presupuesto {ver === "abiertos" ? "abiertos" : "todavía"}.</p>}
@@ -72,7 +104,7 @@ export default async function PidePresupuestoPage({ searchParams }: { searchPara
                   </p>
                 </div>
                 <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${vencido ? "bg-red-100 text-red-800" : "bg-slate-100 text-slate-800"}`}>
-                  {vencido ? "Vencido (+24 h)" : ESTADO[b.estado] ?? b.estado}
+                  {vencido ? "Vencido (+24 h)" : b.estado === "listo" && b.envio_programado_at && !b.programado_procesado_at ? ESTADO.programado : ESTADO[b.estado] ?? b.estado}
                 </span>
               </div>
               <p className="mt-2 text-sm text-slate-800">
@@ -87,14 +119,52 @@ export default async function PidePresupuestoPage({ searchParams }: { searchPara
                 <p className="mt-1 text-xs text-slate-700">
                   Presupuesto: {b.moneda} {Number(b.monto).toLocaleString("es-AR")}
                   {b.plazo_entrega ? ` · entrega ${b.plazo_entrega}` : ""}
-                  {b.enviado_at ? ` · enviado ${new Date(b.enviado_at).toLocaleString("es-AR")}${b.enviado_via === "plantilla" ? " (tras la plantilla)" : ""}` : ""}
+                  {b.enviado_at ? ` · enviado ${new Date(b.enviado_at).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires" })}${b.enviado_via === "plantilla" ? " (tras la plantilla)" : ""}` : ""}
                 </p>
               )}
               <div className="mt-2 flex flex-wrap gap-2 text-sm">
                 {c.id && <EnlaceDetalle href={`/ficha/${c.id}`} className="tactil inline-flex items-center rounded-lg border border-slate-300 px-3">Ficha</EnlaceDetalle>}
                 {b.conversation_id && <EnlaceDetalle href={`/inbox/${b.conversation_id}`} className="tactil inline-flex items-center rounded-lg border border-slate-300 px-3">Conversación</EnlaceDetalle>}
               </div>
-              {["pedido", "listo"].includes(b.estado) && <CargarPresupuesto budgetId={b.id} />}
+              {b.estado === "listo" && b.envio_programado_at && !b.programado_procesado_at && (
+                <div className="mt-3 rounded-lg border border-sky-200 bg-sky-50 p-3 text-sm">
+                  <p className="font-medium text-sky-900">Programado: sale el {describirProgramacion(new Date(b.envio_programado_at))} (hora de Buenos Aires).</p>
+                  <details className="mt-2">
+                    <summary className="cursor-pointer text-xs font-medium text-sky-900">Cambiar la hora o mandarlo ya</summary>
+                    <div className="mt-2 grid gap-3 sm:grid-cols-2">
+                      <AccionConPin
+                        endpoint="/api/marketing/presupuestos"
+                        cuerpo={{ accion: "programacion", budgetId: b.id }}
+                        etiqueta="Reprogramar"
+                        pidePin
+                        campos={[{ nombre: "cuando", etiqueta: "Nuevo día y hora (Buenos Aires)", tipo: "datetime-local", requerido: true, min: minimo, valorInicial: instanteAHoraArgentina(new Date(b.envio_programado_at)) }]}
+                      />
+                      <AccionConPin
+                        endpoint="/api/marketing/presupuestos"
+                        cuerpo={{ accion: "programacion", budgetId: b.id, cuando: "ahora" }}
+                        etiqueta="Enviar ahora"
+                        variante="secundaria"
+                        pidePin
+                        confirmacion="¿Mandar el presupuesto ahora?"
+                      />
+                    </div>
+                  </details>
+                </div>
+              )}
+              {b.programado_error && <p className="mt-2 text-sm font-medium text-red-700">El envío programado falló: {b.programado_error}. Revisalo y reprogramalo o mandalo a mano.</p>}
+              {b.estado === "pedido" && <CargarPresupuesto budgetId={b.id} minimo={minimo} sugerido={sugerido} />}
+              {b.estado === "listo" && !b.envio_programado_at && <CargarPresupuesto budgetId={b.id} minimo={minimo} sugerido={sugerido} />}
+              {b.estado === "listo" && b.programado_error && (
+                <div className="mt-2 max-w-sm">
+                  <AccionConPin
+                    endpoint="/api/marketing/presupuestos"
+                    cuerpo={{ accion: "programacion", budgetId: b.id }}
+                    etiqueta="Reprogramar"
+                    pidePin
+                    campos={[{ nombre: "cuando", etiqueta: "Nuevo día y hora (Buenos Aires)", tipo: "datetime-local", requerido: true, min: minimo, valorInicial: sugerido }]}
+                  />
+                </div>
+              )}
               {["enviado", "listo"].includes(b.estado) && (
                 <details className="mt-2">
                   <summary className="cursor-pointer text-xs font-medium text-slate-700">Registrar resultado a mano</summary>
