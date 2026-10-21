@@ -39,3 +39,8 @@ export const NUEVAS_AREAS_WHATSAPP = [
 export function envPrefixForArea(area: string): string {
   return `WHATSAPP_${area.toUpperCase()}`;
 }
+
+/** Slug del perfil a partir del id de rubro (Jurídico si no se reconoce). */
+export function slugDeRubro(rubroId: string): RubroSlug {
+  return ((Object.entries(RUBRO_IDS) as [RubroSlug, string][]).find(([, id]) => id === rubroId)?.[0] ?? "juridico") as RubroSlug;
+}
