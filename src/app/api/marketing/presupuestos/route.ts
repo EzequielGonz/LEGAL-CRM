@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { requireSession } from "@/lib/acceso/autorizacion";
 import { confirmPin } from "@/lib/acceso/confirmar-pin";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { aprobarPresupuesto, cargarYEnviarPresupuesto, PresupuestoError, urlSubidaPresupuesto } from "@/lib/marketing/presupuestos";
+import { aprobarPresupuesto, cargarYEnviarPresupuesto, crearPresupuestoManual, PresupuestoError, reprogramarPresupuesto, urlSubidaPresupuesto } from "@/lib/marketing/presupuestos";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -13,11 +13,24 @@ export const maxDuration = 60;
  * POST { accion: "enviar", budgetId, path, nombre, mime, monto?, moneda?, alcance?, plazo?, notas?, pin }
  *   → guarda y envía (ventana abierta) o avisa con la plantilla. Con PIN: sale un mensaje.
  * POST { accion: "resultado", budgetId, estado: aprobado|rechazado|sin_respuesta|anulado, detalle? } → registro manual.
+ * POST { accion: "nuevo", conversationId, detalle } → presupuesto cargado por el equipo (sin pedido del agente).
+ * POST { accion: "programacion", budgetId, cuando: "AAAA-MM-DDTHH:mm" | "ahora", pin } → reprograma o envía ya.
+ * `programadoPara` («AAAA-MM-DDTHH:mm», hora de Buenos Aires) en «enviar» deja el envío programado.
  */
 export async function POST(request: Request) {
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   const body = (await request.json().catch(() => ({}))) as Record<string, any>;
+  if (body?.accion === "nuevo") {
+    const conversationId = typeof body?.conversationId === "string" ? body.conversationId : "";
+    if (!/^[0-9a-f-]{36}$/i.test(conversationId)) return NextResponse.json({ error: "Elegí una conversación." }, { status: 400 });
+    try {
+      const r = await crearPresupuestoManual({ conversationId, detalle: String(body?.detalle ?? "").slice(0, 2000) });
+      return NextResponse.json({ ...r, detalle: r.nuevo ? "Presupuesto creado: cargá el archivo y elegí cuándo enviarlo." : "Ese contacto ya tiene un presupuesto abierto: está en la lista." });
+    } catch (err: any) {
+      return NextResponse.json({ error: String(err?.message ?? err) }, { status: err instanceof PresupuestoError ? err.status : 500 });
+    }
+  }
   const budgetId = typeof body?.budgetId === "string" ? body.budgetId : "";
   if (!/^[0-9a-f-]{36}$/i.test(budgetId)) return NextResponse.json({ error: "Presupuesto inválido." }, { status: 400 });
   try {
@@ -39,8 +52,14 @@ export async function POST(request: Request) {
         alcance: typeof body?.alcance === "string" ? body.alcance : null,
         plazo: typeof body?.plazo === "string" ? body.plazo : null,
         notas: typeof body?.notas === "string" ? body.notas : null,
+        programadoPara: typeof body?.programadoPara === "string" && body.programadoPara ? body.programadoPara : null,
       });
       return NextResponse.json(r);
+    }
+    if (body.accion === "programacion") {
+      const pin = await confirmPin(request, body?.pin, "presupuesto" as any, { budgetId });
+      if (!pin.ok) return NextResponse.json({ error: pin.error }, { status: pin.status });
+      return NextResponse.json(await reprogramarPresupuesto(budgetId, String(body?.cuando ?? "")));
     }
     if (body.accion === "resultado") {
       const estado = String(body?.estado ?? "");
