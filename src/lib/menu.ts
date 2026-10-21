@@ -119,7 +119,6 @@ export function seccionesDePerfil(slug: SlugPerfil): SeccionMenu[] {
   const configuracion: ItemMenu[] = [
     { href: `${base}/configuracion`, label: "General" },
     { href: `${base}/agentes`, label: "Agentes IA" },
-    { href: comun(slug, "comparacion-agentes"), label: "Comparar agentes", match: "/comparacion-agentes" },
   ];
 
   return [
