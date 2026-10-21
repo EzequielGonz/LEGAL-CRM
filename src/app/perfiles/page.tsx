@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { LogoutButton } from "@/components/acceso/logout-button";
 import { type MarcaTarjeta } from "@/components/perfiles/perfil-selector";
 import { SelectorPerfilesPC } from "@/components/perfiles/selector-pc";
@@ -44,9 +43,6 @@ export default async function PerfilesPage() {
         </div>
         <SelectorPerfilesPC perfiles={perfiles} marcas={tarjetas} cifras={cifras} />
         <div className="mt-12 flex items-center justify-center gap-6 text-sm">
-          <Link href="/inicio" className="font-medium text-slate-400 transition hover:text-white">
-            Teléfono o computadora
-          </Link>
           <LogoutButton className="!text-slate-400 hover:!text-white" />
         </div>
       </main>

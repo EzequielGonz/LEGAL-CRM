@@ -4,6 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { detainedContactIds } from "@/lib/detention";
 import { requireSession } from "@/lib/acceso/autorizacion";
 import { textoBusquedaSeguro } from "@/lib/busqueda";
+import { AREAS_DE_PERFIL } from "@/lib/cartera-servidor";
 
 export const dynamic = "force-dynamic";
 
@@ -22,18 +23,41 @@ export async function GET(request: Request) {
   const canal = sp.get("canal");
   const atencion = sp.get("atencion");
   const q = textoBusquedaSeguro(sp.get("q"));
+  // 21/10: cada perfil ve solo sus chats (antes se mezclaban en Jurídico).
+  const perfil = sp.get("perfil") || "juridico";
+  const areasPerfil = AREAS_DE_PERFIL[perfil] ?? AREAS_DE_PERFIL.juridico;
+  const base = sp.get("base");
+  const respuesta = sp.get("respuesta");
 
   const supabase = createAdminClient();
-  const contactsSel = q ? "contacts!inner(full_name, phone)" : "contacts(full_name, phone)";
+
+  // Opciones de los filtros: las bases cargadas del perfil.
+  if (sp.get("opciones") === "1") {
+    const { data: bases } = await supabase
+      .from("imported_bases")
+      .select("id, name, created_at")
+      .in("area", areasPerfil)
+      .is("archived_at", null)
+      .gt("created_rows", 0)
+      .order("created_at", { ascending: false })
+      .limit(50);
+    return NextResponse.json({ bases: (bases ?? []).map((b: any) => ({ id: b.id, nombre: b.name, fecha: b.created_at })) });
+  }
+
+  const contactsSel = q || base ? "contacts!inner(full_name, phone, imported_base_id)" : "contacts(full_name, phone, imported_base_id)";
   const channelsSel = canal ? "channels!inner(type)" : "channels(type)";
-  const oppSel = atencion && atencion !== "detenidos" ? "opportunities!inner(attention_state, capture_state, attention_reason, attention_category)" : "opportunities(attention_state, capture_state, attention_reason, attention_category)";
+  const oppInner = (atencion && atencion !== "detenidos") || !!respuesta;
+  const oppSel = `opportunities${oppInner ? "!inner" : ""}(attention_state, capture_state, contact_state, attention_reason, attention_category)`;
 
   let query = supabase
     .from("conversations")
     .select(`id, area, status, last_message_at, ai_enabled, contact_id, ${contactsSel}, ${channelsSel}, ${oppSel}`, { count: "exact" })
     .order("last_message_at", { ascending: false, nullsFirst: false })
     .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
-  if (area) query = query.eq("area", area);
+  query = area && areasPerfil.includes(area) ? query.eq("area", area) : query.in("area", areasPerfil);
+  if (base) query = query.eq("contacts.imported_base_id", base);
+  if (respuesta === "respondieron") query = query.eq("opportunities.contact_state", "respondio");
+  else if (respuesta === "sin_respuesta") query = query.neq("opportunities.contact_state", "respondio");
   if (canal) query = query.eq("channels.type", canal);
   if (atencion === "detenidos") {
     // Vista secundaria (Etapa 3): conversaciones de contactos con detención vigente.

@@ -27,7 +27,7 @@ export function PhoneHeader({
               <span aria-hidden="true">←</span> Volver
             </Link>
           ) : (
-            <Link href="/inicio" className="flex items-center gap-2 rounded-full pr-2" aria-label="Elegir teléfono o computadora">
+            <Link href="/perfiles" className="flex items-center gap-2 rounded-full pr-2" aria-label="Ir a los perfiles">
               <MarcaPanel className="h-8 w-8" />
               <span className="text-sm font-semibold text-slate-900">Panel central</span>
             </Link>
