@@ -10,6 +10,9 @@ import { crearCampanaBorrador, type PedidoCampana } from "@/lib/asistente/campan
 import { asignarAgente } from "@/lib/agentes/servicio";
 import { programarPiezas, type PiezaPlan } from "@/lib/redes/programar";
 import { ctasDelPerfil } from "@/lib/redes/conexion";
+import { asignarRolABase, guardarRol } from "@/lib/agentes/roles";
+import { AREAS_DE_PERFIL } from "@/lib/cartera-servidor";
+import { slugDeRubro } from "@/lib/rubros";
 
 export class AccionNoDisponible extends Error {}
 
@@ -134,6 +137,14 @@ export async function confirmarAccion(id: string): Promise<{ estado: string; res
       const { clave, version, estado, area, motivo } = a.payload ?? {};
       const asignacion = await asignarAgente({ rubroId: a.rubro_id, area, clave, version: Number(version), estado, motivo: String(motivo ?? "Desde el asistente").slice(0, 300), actor: "asistente" });
       resultado = { estado: (asignacion as any)?.estado ?? estado };
+    } else if (a.tipo === "guardar_rol") {
+      const p = a.payload ?? {};
+      const rol = await guardarRol(a.rubro_id, String(p.area ?? ""), { id: p.id ?? null, nombre: p.nombre, objetivo: p.objetivo, tono: p.tono, instrucciones: p.instrucciones }, "asistente");
+      resultado = { rol_id: rol.id, nombre: rol.nombre, guardado: true };
+    } else if (a.tipo === "asignar_rol_base") {
+      const slug = slugDeRubro(a.rubro_id);
+      await asignarRolABase(a.rubro_id, AREAS_DE_PERFIL[slug] ?? [slug], String(a.payload?.base_id ?? ""), a.payload?.rol_id ?? null);
+      resultado = { asignado: true, rol_id: a.payload?.rol_id ?? null };
     } else {
       throw new Error("Tipo de propuesta desconocido.");
     }
