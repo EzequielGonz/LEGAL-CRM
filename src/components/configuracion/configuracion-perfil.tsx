@@ -9,6 +9,7 @@ import { NavegacionAjustes, type GrupoNav } from "@/components/configuracion/nav
 import { BriefMarca } from "@/components/contenido/contenido-etapa3";
 import type { SlugPerfil } from "@/lib/marca";
 import { HorarioAtencion } from "@/components/configuracion/horario-atencion";
+import { conEstadoReal } from "@/lib/canales-estado";
 
 /**
  * Configuración de Coberturas médicas, Autos 0 km y Marketing (rediseño
@@ -19,7 +20,8 @@ import { HorarioAtencion } from "@/components/configuracion/horario-atencion";
  */
 export async function ConfiguracionPerfil({ slug }: { slug: Exclude<SlugPerfil, "juridico"> }) {
   const supabase = createClient();
-  const { data: channels } = await supabase.from("channels").select("*").eq("area", slug).order("type");
+  const { data: canalesBase } = await supabase.from("channels").select("*").eq("area", slug).order("type");
+  const channels = conEstadoReal(canalesBase);
   const conectados = (channels ?? []).filter((c) => c.is_connected).length;
   const grupos: GrupoNav[] = [
     { id: "marca", titulo: "Perfil y marca", resumen: "Nombre, logo, colores y líneas" },
@@ -58,7 +60,7 @@ export async function ConfiguracionPerfil({ slug }: { slug: Exclude<SlugPerfil, 
           titulo="Canales"
           alcance="perfil"
           palabras="whatsapp conexión"
-          descripcion="El estado de conexión se actualiza solo al cargar las credenciales del perfil en las variables privadas del servidor (Vercel)."
+          descripcion="Conectado: las credenciales del canal están cargadas en Vercel. El formulario de la landing no necesita credenciales."
         >
           <ul className="divide-y divide-slate-100">
             {(channels ?? []).map((c) => (

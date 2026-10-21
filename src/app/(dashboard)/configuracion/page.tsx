@@ -21,6 +21,7 @@ import { GrupoAjustes } from "@/components/configuracion/grupo-ajustes";
 import { NavegacionAjustes, type GrupoNav } from "@/components/configuracion/navegacion-ajustes";
 import { BriefMarca } from "@/components/contenido/contenido-etapa3";
 import { HorarioAtencion } from "@/components/configuracion/horario-atencion";
+import { conEstadoReal } from "@/lib/canales-estado";
 
 export const dynamic = "force-dynamic";
 
@@ -34,7 +35,7 @@ export default async function ConfiguracionPage() {
   // adicionales siguen siendo globales (no tienen columna de área), así
   // que se quedan acá sin cambios.
   const [
-    { data: channels },
+    { data: canalesBase },
     { data: studios },
     { data: adminProfile },
     { data: notificationPhones },
@@ -63,7 +64,8 @@ export default async function ConfiguracionPage() {
 
   const adminPhone: string | null = adminProfile?.phone ?? null;
 
-  const conectados = (channels ?? []).filter((c) => c.is_connected).length;
+  const channels = conEstadoReal(canalesBase);
+  const conectados = channels.filter((c) => c.is_connected).length;
   const pausaActiva = pause.aiRepliesPaused || pause.outboundPaused;
   const grupos: GrupoNav[] = [
     { id: "marca", titulo: "Perfil y marca", resumen: "Nombre, logo, colores, líneas y estudios" },
@@ -118,7 +120,7 @@ export default async function ConfiguracionPage() {
           titulo="Canales"
           alcance="perfil"
           palabras="whatsapp instagram facebook conexión"
-          descripcion="El estado de conexión se actualiza solo al configurar las credenciales en las variables privadas del servidor."
+          descripcion="Conectado: las credenciales del canal están cargadas en Vercel. El formulario de la landing no necesita credenciales."
         >
           <ul className="divide-y divide-slate-100">
             {(channels ?? []).map((c) => (
