@@ -33,10 +33,21 @@ const ATTENTION_LABEL: Record<string, string> = {
  * Lista del Inbox con filtros, búsqueda, total y páginas del lado del
  * servidor (bloques 1.5 y 1.8). Lo que entra se ve sin recargar.
  */
-export function ConversationList() {
+export function ConversationList({ perfil = "juridico" }: { perfil?: string }) {
   const params = useParams<{ id?: string }>();
   const router = useRouter();
   const searchParams = useSearchParams();
+  // 21/10: cada perfil tiene su lista. Jurídico abre el chat al lado (/inbox);
+  // los demás, en la conversación con el marco de su perfil.
+  const juridico = perfil === "juridico";
+  const lista = juridico ? "/inbox" : `/panel/${perfil}/chats`;
+  const [bases, setBases] = useState<{ id: string; nombre: string }[]>([]);
+  useEffect(() => {
+    fetch(`/api/inbox?opciones=1&perfil=${perfil}`, { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : { bases: [] }))
+      .then((d) => setBases(d.bases ?? []))
+      .catch(() => setBases([]));
+  }, [perfil]);
   const [items, setItems] = useState<ConversationListItem[]>([]);
   const [total, setTotal] = useState(0);
   const [pageSize, setPageSize] = useState(40);
@@ -48,7 +59,9 @@ export function ConversationList() {
 
   const load = useCallback(async () => {
     try {
-      const res = await fetch(`/api/inbox?${qs}`, { cache: "no-store" });
+      const sp = new URLSearchParams(qs);
+      sp.set("perfil", perfil);
+      const res = await fetch(`/api/inbox?${sp.toString()}`, { cache: "no-store" });
       if (!res.ok) return;
       const data = await res.json();
       setItems(data.items ?? []);
@@ -57,7 +70,7 @@ export function ConversationList() {
     } finally {
       setLoading(false);
     }
-  }, [qs]);
+  }, [qs, perfil]);
 
   useEffect(() => {
     load();
@@ -72,7 +85,7 @@ export function ConversationList() {
     if (value) sp.set(key, value);
     else sp.delete(key);
     sp.delete("pagina");
-    const base = params?.id ? `/inbox/${params.id}` : "/inbox";
+    const base = juridico && params?.id ? `/inbox/${params.id}` : lista;
     router.push(`${base}?${sp.toString()}`);
   }
 
@@ -80,17 +93,18 @@ export function ConversationList() {
     const sp = new URLSearchParams(searchParams.toString());
     if (p > 1) sp.set("pagina", String(p));
     else sp.delete("pagina");
-    const base = params?.id ? `/inbox/${params.id}` : "/inbox";
+    const base = juridico && params?.id ? `/inbox/${params.id}` : lista;
     router.push(`${base}?${sp.toString()}`);
   }
 
   const pages = Math.max(1, Math.ceil(total / pageSize));
   const keep = qs ? `?${qs}` : "";
+  const hrefChat = (id: string) => (juridico ? `/inbox/${id}${keep}` : `/conversacion/${id}?volver=${encodeURIComponent(`${lista}${keep}`)}`);
 
   return (
     // Teléfono y tablet chica: lista o conversación, una a la vez (la
     // conversación tiene su «Volver»); desde 768 px, las dos lado a lado.
-    <div className={`${params?.id ? "hidden md:flex" : "flex"} h-full w-full shrink-0 flex-col border-r border-slate-200 bg-white md:w-72 xl:w-80`}>
+    <div className={`${params?.id ? "hidden md:flex" : "flex"} h-full w-full shrink-0 flex-col border-r border-slate-200 bg-white ${juridico ? "md:w-72 xl:w-80" : ""}`}>
       <div className="space-y-2 border-b border-slate-200 p-3">
         <form
           onSubmit={(e) => {
@@ -127,21 +141,47 @@ export function ConversationList() {
             );
           })}
         </div>
-        <div className="solo-avanzado grid grid-cols-2 gap-2">
+        {/* 21/10: filtros a la vista (base, respuesta y canal). */}
+        <div className="grid grid-cols-2 gap-2">
           <select
-            className="w-full rounded-lg border border-slate-300 px-2 py-1.5 text-sm outline-none focus-gold"
-            aria-label="Área"
-            defaultValue={searchParams.get("area") ?? ""}
-            onChange={(e) => setFilter("area", e.target.value)}
+            className="col-span-2 w-full rounded-lg border border-slate-300 px-2 py-1.5 text-sm outline-none focus-gold"
+            aria-label="Base"
+            value={searchParams.get("base") ?? ""}
+            onChange={(e) => setFilter("base", e.target.value)}
           >
-            <option value="">Todas las áreas</option>
-            <option value="civil">Civil</option>
-            <option value="penal">Penal</option>
+            <option value="">Todas las bases y entrantes</option>
+            {bases.map((b) => (
+              <option key={b.id} value={b.id}>
+                {b.nombre}
+              </option>
+            ))}
           </select>
           <select
             className="w-full rounded-lg border border-slate-300 px-2 py-1.5 text-sm outline-none focus-gold"
+            aria-label="Respuesta"
+            value={searchParams.get("respuesta") ?? ""}
+            onChange={(e) => setFilter("respuesta", e.target.value)}
+          >
+            <option value="">Con y sin respuesta</option>
+            <option value="respondieron">Respondieron</option>
+            <option value="sin_respuesta">Sin respuesta</option>
+          </select>
+          {juridico ? (
+            <select
+              className="w-full rounded-lg border border-slate-300 px-2 py-1.5 text-sm outline-none focus-gold"
+              aria-label="Área"
+              value={searchParams.get("area") ?? ""}
+              onChange={(e) => setFilter("area", e.target.value)}
+            >
+              <option value="">Civil y Penal</option>
+              <option value="civil">Civil</option>
+              <option value="penal">Penal</option>
+            </select>
+          ) : null}
+          <select
+            className="w-full rounded-lg border border-slate-300 px-2 py-1.5 text-sm outline-none focus-gold"
             aria-label="Canal"
-            defaultValue={searchParams.get("canal") ?? ""}
+            value={searchParams.get("canal") ?? ""}
             onChange={(e) => setFilter("canal", e.target.value)}
           >
             <option value="">Todos los canales</option>
@@ -169,7 +209,7 @@ export function ConversationList() {
         {items.map((item) => (
           <Link
             key={item.id}
-            href={`/inbox/${item.id}${keep}`}
+            href={hrefChat(item.id)}
             className={`block border-b border-slate-100 px-4 py-3 hover:bg-slate-50 ${params?.id === item.id ? "bg-slate-100" : ""}`}
           >
             <div className="mb-1 flex items-center justify-between gap-2">

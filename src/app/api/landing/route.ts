@@ -1,13 +1,10 @@
 import { NextResponse } from "next/server";
 import { findOrCreateContact, findOrCreateConversation } from "@/lib/contacts";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { sendWhatsAppTemplate } from "@/lib/whatsapp/client";
-import { isApprovedInCatalog } from "@/lib/plantillas";
-import { getAutomationPause } from "@/lib/automation-pause";
 import { originHash } from "@/lib/acceso/pin";
-import { contactBlockReason } from "@/lib/detention";
 import { normalizarLead, origenPermitido } from "@/lib/landing-lead";
 import { ensureOpportunity } from "@/lib/opportunities";
+import { normalizePhoneAR } from "@/lib/phone";
 
 export const dynamic = "force-dynamic";
 
@@ -39,7 +36,10 @@ export async function POST(request: Request) {
   const perfilParam = new URL(request.url).searchParams.get("perfil");
   const lead = normalizarLead(body as Record<string, unknown> | null, perfilParam);
   if ("error" in lead) return json({ error: lead.error }, 400);
-  const { area, nombre: full_name, telefono: phone, email, pagina } = lead;
+  const { area, nombre: full_name, email, pagina } = lead;
+  // 21/10: el teléfono queda en el formato de WhatsApp (549…), así la respuesta
+  // por WhatsApp cae en la misma ficha y el primer mensaje a los 5 min sale bien.
+  const phone = normalizePhoneAR(lead.telefono).phone ?? lead.telefono;
   const consulta = pagina ? `Consulta desde la web (${pagina}):\n${lead.consulta}` : lead.consulta;
 
   const supabase = createAdminClient();
@@ -113,23 +113,8 @@ export async function POST(request: Request) {
     }
   }
 
-  // Best-effort: plantilla de continuidad por WhatsApp. No sale con la pausa
-  // general activa ni a un contacto detenido; nunca bloquea la respuesta.
-  if (process.env.LANDING_WHATSAPP_TEMPLATE) {
-    try {
-      const pause = await getAutomationPause();
-      const blocked = await contactBlockReason(contact.id);
-      // Pregunta 22: solo si la plantilla figura aprobada en el catálogo leído de Meta.
-      const approved = !pause.outboundPaused && !blocked && (await isApprovedInCatalog(process.env.LANDING_WHATSAPP_TEMPLATE, "es_AR"));
-      if (approved) {
-        await sendWhatsAppTemplate(area, phone, process.env.LANDING_WHATSAPP_TEMPLATE, "es_AR", [full_name]);
-      } else if (!pause.outboundPaused && !blocked) {
-        console.warn("Plantilla de la landing no confirmada como aprobada en el catálogo: no se envió.");
-      }
-    } catch (err) {
-      console.error("No se pudo enviar la plantilla de continuidad de la landing:", err);
-    }
-  }
+  // 21/10: el primer mensaje por WhatsApp sale a los 5 minutos desde el
+  // latido (src/lib/landing-seguimiento.ts), con la plantilla aprobada del rubro.
 
   return json({ ok: true });
 }

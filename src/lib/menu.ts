@@ -73,7 +73,8 @@ export function seccionesDePerfil(slug: SlugPerfil): SeccionMenu[] {
   // vale la pena, agrupado; la base fría vive en Prospectos, por base.
   const conversaciones: ItemMenu[] = [
     { href: comun(slug, "conversaciones"), label: "Oportunidades", match: "/conversaciones" },
-    ...(j ? [{ href: "/inbox", label: "Todos los chats" }] : []),
+    // 21/10: «Todos los chats» en los cuatro perfiles, cada uno con los suyos.
+    { href: j ? "/inbox" : `${base}/chats`, label: "Todos los chats" },
     ...(mk ? [{ href: `${base}/consultas-directas`, label: "Consultas directas" }] : []),
     { href: comun(slug, "recuperar"), label: "Revisión", match: "/recuperar" },
     ...(j ? [{ href: "/revision", label: "Incidencias" }] : []),

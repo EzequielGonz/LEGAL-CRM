@@ -8,6 +8,7 @@ import { ejecutarCitaTareasVencidas } from "@/lib/citas";
 import { publicarVencidas } from "@/lib/contenido/cola";
 import { getTareasServidor } from "@/lib/tareas-servidor";
 import { asegurarAvisosDeLineas } from "@/lib/whatsapp/avisos-servidor";
+import { contactarFormulariosDeLanding } from "@/lib/landing-seguimiento";
 import { avanzarExtraccion } from "@/lib/marketing/extraer";
 import { registrarLatido } from "@/lib/salud";
 
@@ -110,9 +111,20 @@ export async function POST(request: Request) {
       }
     }
 
+    // 7) Formularios de las landings (21/10): a los 5 minutos, el agente le
+    //    escribe por WhatsApp con la plantilla aprobada del rubro.
+    let formularios: unknown = null;
+    if (Date.now() - inicio < 50_000) {
+      try {
+        formularios = await contactarFormulariosDeLanding();
+      } catch (err: any) {
+        formularios = { error: String(err?.message ?? err) };
+      }
+    }
+
     // Tablero de salud: deja la hora del último latido.
     await registrarLatido(true, { ms: Date.now() - inicio });
-    return NextResponse.json({ ok: true, results, seguimiento, marketing, servidor, extraccion, avisos });
+    return NextResponse.json({ ok: true, results, seguimiento, marketing, servidor, extraccion, avisos, formularios });
   } catch (err: any) {
     await registrarLatido(false, { error: String(err?.message ?? err).slice(0, 200) });
     return NextResponse.json({ error: String(err.message ?? err) }, { status: 500 });

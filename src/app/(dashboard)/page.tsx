@@ -6,5 +6,5 @@ import { redirect } from "next/navigation";
 // nunca se salta directo al dashboard, ni siquiera si ya se eligió
 // "Computadora" en una visita anterior.
 export default function RootPage() {
-  redirect("/inicio");
+  redirect("/perfiles");
 }
