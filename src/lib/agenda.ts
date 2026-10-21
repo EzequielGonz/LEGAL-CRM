@@ -1,6 +1,5 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import type { Area } from "@/lib/supabase/database.types";
-import { argentinaMidnight, argentinaParts } from "@/lib/contacto/reglas";
 
 export interface Slot {
   starts_at: string;
@@ -46,20 +45,21 @@ export async function getAvailableSlots(
     rulesByWeekday.set(rule.weekday, arr);
   }
 
-  // Las reglas están en hora de Argentina y el servidor (Vercel) corre en UTC:
-  // los días y horarios se calculan con el offset fijo de Argentina (21/10).
-  let dia = argentinaParts(now).day;
-  while (argentinaMidnight(dia) < horizon && slots.length < limit) {
-    const medianoche = argentinaMidnight(dia).getTime();
-    const weekday = argentinaParts(new Date(medianoche + 12 * 3_600_000)).weekday;
+  const cursor = new Date(now);
+  cursor.setMinutes(cursor.getMinutes() >= 30 ? 60 : 30, 0, 0); // redondeo a la próxima media hora
+
+  while (cursor < horizon && slots.length < limit) {
+    const weekday = cursor.getDay();
     const dayRules = rulesByWeekday.get(weekday) ?? [];
 
     for (const rule of dayRules) {
       const [startH, startM] = rule.start_time.split(":").map(Number);
       const [endH, endM] = rule.end_time.split(":").map(Number);
 
-      const dayStart = new Date(medianoche + (startH * 60 + (startM || 0)) * 60_000);
-      const dayEnd = new Date(medianoche + (endH * 60 + (endM || 0)) * 60_000);
+      const dayStart = new Date(cursor);
+      dayStart.setHours(startH, startM, 0, 0);
+      const dayEnd = new Date(cursor);
+      dayEnd.setHours(endH, endM, 0, 0);
 
       for (
         let slotStart = new Date(dayStart);
@@ -85,7 +85,9 @@ export async function getAvailableSlots(
       if (slots.length >= limit) break;
     }
 
-    dia = argentinaParts(new Date(medianoche + 36 * 3_600_000)).day;
+    cursor.setDate(cursor.getDate() + 1);
+    cursor.setHours(0, 0, 0, 0);
+    if (slots.length >= limit) break;
   }
 
   return slots;
