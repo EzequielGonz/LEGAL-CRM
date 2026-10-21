@@ -20,7 +20,7 @@ test("menú: seis secciones iguales en los cuatro perfiles, sin rutas de Jurídi
     assert.deepEqual(secc.map((x) => x.label), ["Inicio", "Conversaciones", "Contactos", "Captación", "Redes y contenido", "Configuración"]);
     const hrefs = secc.flatMap((x) => x.tabs.map((i) => i.href));
     assert.equal(new Set(hrefs).size, hrefs.length, `sin duplicados en ${s}`);
-    assert.ok(hrefs.some((h) => h.startsWith("/comparacion-agentes?perfil=" + s)));
+    assert.ok(!hrefs.some((h) => h.includes("comparacion-agentes")), "sin comparación de agentes (21/10)");
     // La agenda vive dentro de Contactos (como «Citas»).
     assert.ok(secc[2].tabs.some((t) => t.label === "Citas"));
     if (s !== "juridico") {

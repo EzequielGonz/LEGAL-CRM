@@ -111,10 +111,13 @@ export async function processWhatsAppPayload(payload: any): Promise<ProcessSumma
 export function resolveAreaAndPlatform(
   pageOrIgId: string
 ): { area: Area; platform: "instagram" | "facebook" } | null {
-  if (pageOrIgId === process.env.FACEBOOK_CIVIL_PAGE_ID) return { area: "civil", platform: "facebook" };
-  if (pageOrIgId === process.env.FACEBOOK_PENAL_PAGE_ID) return { area: "penal", platform: "facebook" };
-  if (pageOrIgId === process.env.INSTAGRAM_CIVIL_BUSINESS_ID) return { area: "civil", platform: "instagram" };
-  if (pageOrIgId === process.env.INSTAGRAM_PENAL_BUSINESS_ID) return { area: "penal", platform: "instagram" };
+  if (!pageOrIgId) return null;
+  // 21/10: todos los perfiles (antes solo Civil y Penal).
+  for (const area of ["civil", "penal", "agencia_0km", "coberturas_medicas", "marketing"] as Area[]) {
+    const k = area.toUpperCase();
+    if (pageOrIgId === process.env[`FACEBOOK_${k}_PAGE_ID`]) return { area, platform: "facebook" };
+    if (pageOrIgId === process.env[`INSTAGRAM_${k}_BUSINESS_ID`]) return { area, platform: "instagram" };
+  }
   return null;
 }
 

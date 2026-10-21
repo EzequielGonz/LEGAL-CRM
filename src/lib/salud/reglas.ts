@@ -28,9 +28,9 @@ export interface DatosSalud {
   perfiles: { slug: string; nombre: string; whatsapp: boolean; agenteActivo: boolean; agenteListo: boolean; faltante: string[] }[];
   /** Turnos del agente con error en las últimas 24 h y total de turnos. */
   turnos24h: { errores: number; total: number };
-  incidentesFatales: number;
   presupuestosAtrasados: number;
-  vertexConfigurado: boolean;
+  /** Líneas que mandan pero no reciben avisos de Meta (mensajes entrantes ni estados). */
+  avisosMeta?: { nombre: string; sinAvisos: boolean; resultado: string | null }[];
 }
 
 const MIN = 60_000;
@@ -108,18 +108,16 @@ export function evaluarSalud(d: DatosSalud): ItemSalud[] {
   // Calidad de las respuestas
   if (d.turnos24h.errores > 0) {
     const alto = d.turnos24h.total > 0 && d.turnos24h.errores / d.turnos24h.total > 0.1;
-    items.push({ clave: "errores_ia", estado: alto ? "rojo" : "amarillo", titulo: `${d.turnos24h.errores} respuesta(s) de la IA con error en 24 h`, detalle: `De ${d.turnos24h.total} turnos.`, accion: "Ver en Comparación de agentes", href: "/comparacion-agentes" });
+    items.push({ clave: "errores_ia", estado: alto ? "rojo" : "amarillo", titulo: `${d.turnos24h.errores} respuesta(s) de la IA con error en 24 h`, detalle: `De ${d.turnos24h.total} turnos.`, accion: "Ver las conversaciones", href: "/inbox" });
   }
-  if (d.incidentesFatales > 0) {
-    items.push({ clave: "incidentes", estado: "rojo", titulo: `${d.incidentesFatales} incidente(s) fatal(es) sin resolver`, detalle: "Un candidato de la comparación quedó detenido.", accion: "Revisar incidentes", href: "/comparacion-agentes" });
+  for (const a of d.avisosMeta ?? []) {
+    if (a.sinAvisos) {
+      items.push({ clave: `avisos_${a.nombre}`, estado: "rojo", titulo: `${a.nombre}: Meta no avisa los mensajes de esta línea`, detalle: `Envía, pero no llegan respuestas ni estados de entrega, así que el agente no puede responder.${a.resultado ? ` Último intento de conexión: ${a.resultado}` : ""}`, accion: "Ver las líneas", href: "/configuracion" });
+    }
   }
   if (d.presupuestosAtrasados > 0) {
     items.push({ clave: "presupuestos", estado: "rojo", titulo: `${d.presupuestosAtrasados} presupuesto(s) pedido(s) hace más de 20 h`, detalle: "Se prometió en menos de 24 h.", accion: "Cargar presupuesto", href: "/panel/marketing/presupuestos" });
   }
-  if (!d.vertexConfigurado) {
-    items.push({ clave: "vertex", estado: "amarillo", titulo: "Candidato C sin configurar", detalle: "Faltan las variables de Google Cloud para el modelo ajustado; compiten A y B.", accion: "Ver la guía", href: "/comparacion-agentes" });
-  }
-
   const orden: Record<EstadoSalud, number> = { rojo: 0, amarillo: 1, verde: 2 };
   return items.sort((a, b) => orden[a.estado] - orden[b.estado]);
 }
@@ -176,8 +174,8 @@ export function lecturaSimple(i: ItemSalud): LecturaSimple {
   if (i.clave === "errores_ia") {
     return { que: `La IA tuvo ${i.titulo.split(" ")[0]} error(es) al responder en las últimas 24 h.`, quien: "panel", accion: "Ver qué pasó", href: i.href ?? null };
   }
-  if (i.clave === "vertex") {
-    return { que: "La tercera opción de la comparación de agentes no está configurada: por ahora se comparan dos.", quien: "tecnico", accion: null, href: null };
+  if (base === "avisos") {
+    return { que: `${perfilDe(i.titulo)}: los mensajes que contestan por esta línea no llegan al panel, así que el agente no responde. El sistema intenta conectarla solo.`, quien: "tecnico", accion: null, href: null };
   }
   return { que: `${i.titulo}. ${i.detalle}`, quien: "panel", accion: i.accion ?? null, href: i.href ?? null };
 }

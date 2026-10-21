@@ -2,6 +2,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { getAutomationPause } from "@/lib/automation-pause";
 import { agentReadiness } from "@/lib/profiles";
 import { envPrefixForArea } from "@/lib/rubros";
+import { leerEstadoAvisos } from "@/lib/whatsapp/avisos-servidor";
 import { evaluarSalud, type DatosSalud, type ItemSalud } from "./reglas";
 
 export { evaluarSalud, resumenSalud, type ItemSalud, type EstadoSalud } from "./reglas";
@@ -45,7 +46,7 @@ export async function leerSalud(ahora = new Date()): Promise<ItemSalud[]> {
     }
   };
 
-  const [latido, pausa, cuarentena, entrante, agentes, turnos, errores, fatales, presupuestos] = await Promise.all([
+  const [latido, pausa, cuarentena, entrante, agentes, turnos, errores, avisos, presupuestos] = await Promise.all([
     seguro(async () => ((await s.from("system_settings").select("value").eq("key", CLAVE_LATIDO).maybeSingle()).data as any)?.value?.at ?? null, null),
     getAutomationPause(),
     seguro(async () => {
@@ -62,7 +63,7 @@ export async function leerSalud(ahora = new Date()): Promise<ItemSalud[]> {
     seguro(async () => ((await s.from("ai_agents").select("area, active")).data ?? []) as { area: string; active: boolean }[], []),
     seguro(async () => (await s.from("agent_turn_logs" as any).select("id", { count: "exact", head: true }).gte("created_at", hace24)).count ?? 0, 0),
     seguro(async () => (await s.from("agent_turn_logs" as any).select("id", { count: "exact", head: true }).gte("created_at", hace24).eq("resultado", "error")).count ?? 0, 0),
-    seguro(async () => (await s.from("agent_incidents" as any).select("id", { count: "exact", head: true }).eq("gravedad", "fatal").is("resuelto_at", null)).count ?? 0, 0),
+    seguro(() => leerEstadoAvisos(), {} as Awaited<ReturnType<typeof leerEstadoAvisos>>),
     seguro(async () => (await s.from("marketing_budgets" as any).select("id", { count: "exact", head: true }).eq("estado", "pedido").lte("pedido_at", hace20)).count ?? 0, 0),
   ]);
 
@@ -89,9 +90,12 @@ export async function leerSalud(ahora = new Date()): Promise<ItemSalud[]> {
     ultimoEntrante: entrante,
     perfiles,
     turnos24h: { errores, total: turnos },
-    incidentesFatales: fatales,
     presupuestosAtrasados: presupuestos,
-    vertexConfigurado: Boolean(process.env.GCP_PROJECT_ID && process.env.GCP_SERVICE_ACCOUNT_JSON && process.env.GCP_BUCKET),
+    avisosMeta: Object.values(avisos).map((a) => ({
+      nombre: PERFILES.find((p) => p.area === a.area)?.nombre ?? a.area,
+      sinAvisos: a.sinAvisos,
+      resultado: a.resultado ?? null,
+    })),
   };
   return evaluarSalud(datos);
 }

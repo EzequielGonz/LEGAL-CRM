@@ -3,9 +3,8 @@ import type { Area } from "@/lib/supabase/database.types";
 const GRAPH_VERSION = "v21.0";
 
 function pageTokenFor(area: Area) {
-  return area === "civil"
-    ? process.env.FACEBOOK_CIVIL_PAGE_ACCESS_TOKEN!
-    : process.env.FACEBOOK_PENAL_PAGE_ACCESS_TOKEN!;
+  // 21/10: cada perfil con su página (antes solo Civil y Penal).
+  return process.env[`FACEBOOK_${area.toUpperCase()}_PAGE_ACCESS_TOKEN`] ?? "";
 }
 
 /**

@@ -7,8 +7,7 @@ import { runFollowupTick } from "@/lib/seguimiento/motor";
 import { ejecutarCitaTareasVencidas } from "@/lib/citas";
 import { publicarVencidas } from "@/lib/contenido/cola";
 import { getTareasServidor } from "@/lib/tareas-servidor";
-import { generarInformesVencidos } from "@/lib/experimento/servicio";
-import { evaluarPlantillasPendientes, revisarAjusteC } from "@/lib/experimento/acciones";
+import { asegurarAvisosDeLineas } from "@/lib/whatsapp/avisos-servidor";
 import { avanzarExtraccion } from "@/lib/marketing/extraer";
 import { registrarLatido } from "@/lib/salud";
 
@@ -99,25 +98,21 @@ export async function POST(request: Request) {
       }
     }
 
-    // 6) Comparación de agentes: informes de los días 7/14/21/28, estado del
-    //    ajuste de C y evaluación de plantillas en cola. No envía mensajes;
-    //    corre aunque nadie tenga el panel abierto.
-    const experimento: Record<string, unknown> = {};
-    for (const [clave, tarea] of [
-      ["informes", () => generarInformesVencidos()],
-      ["ajuste_c", () => revisarAjusteC()],
-      ["plantillas", () => (Date.now() - inicio < 40_000 ? evaluarPlantillasPendientes(2) : Promise.resolve("sin tiempo en este latido"))],
-    ] as const) {
+    // 6) Avisos de Meta (21/10): si una línea manda y no recibe avisos
+    //    (mensajes entrantes ni estados), se suscribe su cuenta al webhook del
+    //    panel. Reintenta como mucho cada 6 h por línea. No envía mensajes.
+    let avisos: unknown = null;
+    if (Date.now() - inicio < 45_000) {
       try {
-        experimento[clave] = await tarea();
+        avisos = await asegurarAvisosDeLineas();
       } catch (err: any) {
-        experimento[clave] = { error: String(err?.message ?? err) };
+        avisos = { error: String(err?.message ?? err) };
       }
     }
 
     // Tablero de salud: deja la hora del último latido.
     await registrarLatido(true, { ms: Date.now() - inicio });
-    return NextResponse.json({ ok: true, results, seguimiento, marketing, servidor, extraccion, experimento });
+    return NextResponse.json({ ok: true, results, seguimiento, marketing, servidor, extraccion, avisos });
   } catch (err: any) {
     await registrarLatido(false, { error: String(err?.message ?? err).slice(0, 200) });
     return NextResponse.json({ error: String(err.message ?? err) }, { status: 500 });

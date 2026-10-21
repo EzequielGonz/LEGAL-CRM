@@ -24,6 +24,8 @@ export const TIPOS_ACCION = [
   "asignar_linea_campana",
   "asignar_agente",
   "limite_campana",
+  "guardar_rol",
+  "asignar_rol_base",
 ] as const;
 export type TipoAccion = (typeof TIPOS_ACCION)[number];
 

@@ -3,6 +3,7 @@ import { AgentEditor } from "@/components/agentes/agent-editor";
 import { AgentesEtapa3 } from "@/components/agentes/agentes-etapa3";
 import { ResumenSeccion } from "@/components/nivel/resumen-seccion";
 import { PuntajeBots } from "@/components/agentes/puntaje-bots";
+import { RolesPorBase } from "@/components/agentes/roles-por-base";
 
 const NOMBRE_AREA: Record<string, string> = {
   civil: "Civil",
@@ -50,6 +51,8 @@ export async function AgentesPerfilView({
       ) : null}
 
       <PuntajeBots rubroId={rubroId} />
+
+      <RolesPorBase perfil={perfil} />
 
       <ResumenSeccion
         id="agentes"
