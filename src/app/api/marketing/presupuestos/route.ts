@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { requireSession } from "@/lib/acceso/autorizacion";
 import { confirmPin } from "@/lib/acceso/confirmar-pin";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { urlSubidaSaliente } from "@/lib/adjuntos/salientes";
 import { aprobarPresupuesto, cargarYEnviarPresupuesto, crearPresupuestoManual, PresupuestoError, reprogramarPresupuesto, urlSubidaPresupuesto } from "@/lib/marketing/presupuestos";
 
 export const dynamic = "force-dynamic";
@@ -37,6 +38,9 @@ export async function POST(request: Request) {
     if (body.accion === "subida") {
       return NextResponse.json(await urlSubidaPresupuesto(budgetId, String(body?.nombre ?? "presupuesto.pdf")));
     }
+    if (body.accion === "subida_extra") {
+      return NextResponse.json(await urlSubidaSaliente(`presupuesto-${budgetId}`, String(body?.nombre ?? "")));
+    }
     if (body.accion === "enviar") {
       const pin = await confirmPin(request, body?.pin, "presupuesto" as any, { budgetId });
       if (!pin.ok) return NextResponse.json({ error: pin.error }, { status: pin.status });
@@ -53,6 +57,7 @@ export async function POST(request: Request) {
         plazo: typeof body?.plazo === "string" ? body.plazo : null,
         notas: typeof body?.notas === "string" ? body.notas : null,
         programadoPara: typeof body?.programadoPara === "string" && body.programadoPara ? body.programadoPara : null,
+        adjuntos: Array.isArray(body?.adjuntos) ? body.adjuntos : [],
       });
       return NextResponse.json(r);
     }

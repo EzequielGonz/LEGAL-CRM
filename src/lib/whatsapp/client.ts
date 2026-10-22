@@ -109,6 +109,25 @@ export async function sendWhatsAppText(
   );
 }
 
+/** Foto, video o documento por enlace (dentro de la ventana de 24 h). 22/10. */
+export async function sendWhatsAppMedia(
+  area: Area,
+  to: string,
+  media: { kind: "image" | "video" | "document"; link: string; caption?: string; filename?: string },
+  opts: { credentialKey?: string | null } = {}
+) {
+  const { phoneNumberId, accessToken } = whatsappCredentials(area, opts.credentialKey);
+  const cuerpo: Record<string, unknown> = { link: media.link };
+  if (media.caption) cuerpo.caption = media.caption.slice(0, 1000);
+  if (media.kind === "document") cuerpo.filename = (media.filename ?? "archivo").slice(0, 200);
+  return postMessage(
+    phoneNumberId,
+    accessToken,
+    { messaging_product: "whatsapp", to, type: media.kind, [media.kind]: cuerpo },
+    "WhatsApp media send error"
+  );
+}
+
 /**
  * Envía un mensaje de plantilla aprobada (necesario para iniciar conversación
  * fuera de la ventana de 24hs, como en las campañas a bases cargadas).

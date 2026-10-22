@@ -17,7 +17,8 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getProfile } from "@/lib/profiles";
 import { RUBRO_IDS } from "@/lib/rubros";
-import { sendWhatsAppTemplate, whatsappCredentials } from "@/lib/whatsapp/client";
+import { sendWhatsAppMedia, sendWhatsAppTemplate, whatsappCredentials } from "@/lib/whatsapp/client";
+import { enlaceFirmado, tipoMedio } from "@/lib/adjuntos/salientes";
 import { insertMessageRow } from "@/lib/messaging";
 import { manualContactCheck } from "@/lib/detention";
 import { logMarketingEvent } from "./leads";
@@ -201,6 +202,28 @@ async function enviarDocumento(budget: any, conv: any) {
     delivery_status_at: sentAt,
     origin: "atencion_humana",
   });
+  // Fotos o videos que acompañan al presupuesto (22/10), después del archivo.
+  for (const a of (Array.isArray(budget.adjuntos) ? budget.adjuntos : []) as { path: string; nombre?: string }[]) {
+    const kind = tipoMedio(a.path);
+    if (!kind) continue;
+    try {
+      const rm: any = await sendWhatsAppMedia("marketing", to, { kind, link: await enlaceFirmado(a.path) }, { credentialKey });
+      await insertMessageRow(s, {
+        conversation_id: conv.id,
+        sender_type: "admin",
+        direction: "saliente",
+        body: `[${kind === "image" ? "Foto" : "Video"} del presupuesto${a.nombre ? `: ${a.nombre}` : ""}]`,
+        message_type: kind,
+        metadata: { saliente_path: a.path, saliente_bucket: "chat-salientes" },
+        external_message_id: rm?.messages?.[0]?.id ?? null,
+        delivery_status: "enviado",
+        delivery_status_at: ahora(),
+        origin: "atencion_humana",
+      });
+    } catch (err) {
+      console.error("[presupuesto] No se pudo enviar un adjunto:", err);
+    }
+  }
   await s.from("marketing_budgets").update({ estado: "enviado", enviado_at: sentAt, enviado_via: budget.plantilla_pendiente ? "plantilla" : "ventana", plantilla_pendiente: false, updated_at: sentAt }).eq("id", budget.id);
   // La IA retoma para cerrar.
   await s.from("conversations").update({ ai_enabled: true, status: "en_conversacion", last_message_at: sentAt }).eq("id", conv.id);
@@ -240,6 +263,8 @@ export async function cargarYEnviarPresupuesto(input: {
   notas?: string | null;
   /** «AAAA-MM-DDTHH:mm» en hora de Buenos Aires. Sin valor: sale en el momento. */
   programadoPara?: string | null;
+  /** Fotos o videos que acompañan (22/10), subidos antes con «subida_extra». */
+  adjuntos?: { path: string; nombre?: string }[];
 }): Promise<{ estado: "enviado" | "aviso_enviado" | "listo" | "programado"; detalle: string }> {
   const s = createAdminClient();
   const { data: b } = await s.from("marketing_budgets").select("*").eq("id", input.budgetId).maybeSingle();
@@ -265,6 +290,10 @@ export async function cargarYEnviarPresupuesto(input: {
       alcance: input.alcance?.slice(0, 2000) ?? null,
       plazo_entrega: input.plazo?.slice(0, 200) ?? null,
       notas: input.notas?.slice(0, 2000) ?? null,
+      adjuntos: (input.adjuntos ?? [])
+        .filter((a) => typeof a?.path === "string" && a.path.startsWith(`presupuesto-${input.budgetId}/`) && tipoMedio(a.path))
+        .slice(0, 10)
+        .map((a) => ({ path: a.path, nombre: String(a.nombre ?? "").slice(0, 200) })),
       listo_at: ahora(),
       updated_at: ahora(),
     })
