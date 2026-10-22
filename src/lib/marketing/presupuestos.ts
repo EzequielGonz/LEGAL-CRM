@@ -325,7 +325,12 @@ async function despacharPresupuesto(budgetId: string): Promise<{ estado: "enviad
   return { estado: "aviso_enviado", detalle: "La ventana estaba cerrada: salió la plantilla de aviso. El archivo se envía solo apenas la persona responda." };
 }
 
-/** Al llegar un mensaje: si hay un presupuesto listo esperando, se envía ahora (ventana abierta). */
+/**
+ * Al llegar un mensaje: si hay un presupuesto listo esperando, se envía ahora
+ * (ventana abierta) y la IA retoma la venta. Desde el 21/10 también sale el
+ * programado aunque todavía no haya llegado su hora: si la persona escribe,
+ * se aprovecha la conversación (pedido de la responsable).
+ */
 export async function entregarPresupuestoPendiente(conversationId: string): Promise<boolean> {
   const s = createAdminClient();
   const { data: conv } = await s
@@ -340,13 +345,30 @@ export async function entregarPresupuestoPendiente(conversationId: string): Prom
     .eq("contact_id", (conv as any).contact_id)
     .eq("estado", "listo")
     .not("archivo_path", "is", null)
-    // Los programados esperan su hora aunque la persona escriba antes (21/10).
-    .or("envio_programado_at.is.null,programado_procesado_at.not.is.null")
     .order("listo_at", { ascending: true })
     .limit(1)
     .maybeSingle();
   if (!b) return false;
-  await enviarDocumento(b, conv);
+  const programadoPendiente = !!(b as any).envio_programado_at && !(b as any).programado_procesado_at;
+  if (programadoPendiente) {
+    // Se toma el programado para que el latido no lo mande otra vez.
+    const marca = ahora();
+    const { data: tomado } = await s
+      .from("marketing_budgets")
+      .update({ programado_procesado_at: marca, updated_at: marca })
+      .eq("id", (b as any).id)
+      .is("programado_procesado_at", null)
+      .select("id")
+      .maybeSingle();
+    if (!tomado) return false; // el latido lo está mandando en este momento
+  }
+  try {
+    await enviarDocumento(b, conv);
+  } catch (err) {
+    // Si falla, el programado vuelve a quedar para su hora.
+    if (programadoPendiente) await s.from("marketing_budgets").update({ programado_procesado_at: null, updated_at: ahora() }).eq("id", (b as any).id);
+    throw err;
+  }
   return true;
 }
 
