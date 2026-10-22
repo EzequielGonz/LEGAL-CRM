@@ -125,7 +125,25 @@ export async function contarDetenidos(rubroId: string): Promise<number | null> {
 }
 
 export interface ResumenCifras {
-  ultimaBase: { nombre: string; fecha: string; cargados: number; contactados: number; respondieron: number; captados: number } | null;
+  /**
+   * 22/10: lo que está trabajando el perfil. Si hay una campaña enviando, esa
+   * campaña (con su base); si no, lo más reciente entre la última campaña y
+   * la última base cargada.
+   */
+  ultimaBase: {
+    nombre: string;
+    fecha: string;
+    cargados: number;
+    contactados: number;
+    respondieron: number;
+    captados: number;
+    tipo?: "campana" | "base";
+    /** Estado de la campaña (en_curso, pausada, finalizada…). */
+    estado?: string | null;
+    /** Base de la campaña, si se conoce. */
+    base?: string | null;
+    campanaId?: string | null;
+  } | null;
   semana: { desde: string; respuestas: number | null; captados: number | null; citas: number | null; derivados: number | null };
 }
 
@@ -146,6 +164,49 @@ export async function resumenCifras(rubroId: string, areas: string[], ahora = ne
     cuenta(s.from("opportunities").select("id", { count: "exact", head: true }).eq("rubro_id", rubroId).eq("derivation_state", "derivado").gte("derived_at", desde)),
   ]);
   let ultimaBase: ResumenCifras["ultimaBase"] = null;
+  // Campaña enviando (o la última campaña, si es más nueva que la última base).
+  const { data: camps } = await s
+    .from("campaigns")
+    .select("id, name, status, started_at, created_at")
+    .in("area", areas)
+    .is("archived_at", null)
+    .not("started_at", "is", null)
+    .order("started_at", { ascending: false })
+    .limit(10);
+  const lista = (camps ?? []) as { id: string; name: string; status: string; started_at: string; created_at: string }[];
+  const camp = lista.find((c) => c.status === "en_curso") ?? lista[0] ?? null;
+  const usarCampana = !!camp && (camp.status === "en_curso" || !base || new Date(camp.started_at) >= new Date((base as any).created_at));
+  if (camp && usarCampana) {
+    const [{ data: m }, { data: fila }] = await Promise.all([
+      s.rpc("campaign_metrics", { p_campaign: camp.id }),
+      s
+        .from("campaign_contacts")
+        .select("contact_id")
+        .eq("campaign_id", camp.id)
+        .limit(1)
+        .maybeSingle(),
+    ]);
+    let nombreBase: string | null = null;
+    const contactoEj = (fila as any)?.contact_id as string | undefined;
+    if (contactoEj) {
+      const { data: o } = await s.from("opportunities").select("imported_base_id, imported_bases(name, file_name)").eq("contact_id", contactoEj).not("imported_base_id", "is", null).limit(1).maybeSingle();
+      nombreBase = ((o as any)?.imported_bases?.name || (o as any)?.imported_bases?.file_name) ?? null;
+    }
+    const cm: any = m ?? {};
+    ultimaBase = {
+      nombre: camp.name || "Campaña sin nombre",
+      fecha: camp.started_at ?? camp.created_at,
+      cargados: Number(cm.prospectos ?? 0),
+      contactados: Number(cm.enviados ?? 0),
+      respondieron: Number(cm.personas_responden ?? 0),
+      captados: Number(cm.cierres ?? 0),
+      tipo: "campana",
+      estado: camp.status,
+      base: nombreBase,
+      campanaId: camp.id,
+    };
+    return { ultimaBase, semana: { desde, respuestas, captados, citas, derivados } };
+  }
   if (base) {
     const b: any = base;
     const deBase = () => s.from("opportunities").select("id", { count: "exact", head: true }).eq("rubro_id", rubroId).eq("imported_base_id", b.id);
@@ -162,6 +223,7 @@ export async function resumenCifras(rubroId: string, areas: string[], ahora = ne
       contactados: contactados ?? 0,
       respondieron: respondieron ?? 0,
       captados: capt ?? 0,
+      tipo: "base",
     };
   }
   return { ultimaBase, semana: { desde, respuestas, captados, citas, derivados } };

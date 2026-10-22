@@ -125,17 +125,29 @@ export function SelectorPerfilesPC({
                 {/* Última base y captados */}
                 <div className="mt-4 grid gap-4 sm:grid-cols-2">
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">Última base</p>
+                    <p className="text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">
+                      {b?.tipo === "campana" ? (b.estado === "en_curso" ? "Campaña enviando" : b.estado === "pausada" ? "Campaña pausada" : "Última campaña") : "Última base"}
+                    </p>
                     {b ? (
                       <div className="mt-2">
                         <p className="truncate text-sm font-medium text-slate-900" title={b.nombre}>
-                          {b.nombre} <span className="font-normal text-slate-500">· {fechaCorta(b.fecha)}</span>
+                          {b.tipo === "campana" && b.campanaId ? (
+                            <Link href={`${slug === "juridico" ? "" : `/panel/${slug}`}/campanas/${b.campanaId}`} className="hover:underline">
+                              {b.nombre}
+                            </Link>
+                          ) : (
+                            b.nombre
+                          )}{" "}
+                          <span className="font-normal text-slate-500">· {fechaCorta(b.fecha)}</span>
                         </p>
+                        {b.tipo === "campana" && b.base && <p className="truncate text-xs text-slate-500" title={b.base}>Base: {b.base}</p>}
                         <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-100" aria-hidden="true">
                           <div className="h-full rounded-full bg-gold-500" style={{ width: `${porcentaje(b.contactados, b.cargados)}%` }} />
                         </div>
                         <p className="mt-1.5 text-xs text-slate-600 tabular-nums">
-                          {n(b.cargados)} cargados · {n(b.contactados)} contactados · {n(b.respondieron)} respondieron · {n(b.captados)} captados
+                          {b.tipo === "campana"
+                            ? `${n(b.cargados)} destinatarios · ${n(b.contactados)} con envío · ${n(b.respondieron)} respondieron · ${n(b.captados)} cierres`
+                            : `${n(b.cargados)} cargados · ${n(b.contactados)} contactados · ${n(b.respondieron)} respondieron · ${n(b.captados)} captados`}
                         </p>
                       </div>
                     ) : (
