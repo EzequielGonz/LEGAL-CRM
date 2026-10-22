@@ -302,11 +302,12 @@ async function afterInboundSaved({
   }
 
   // Marketing (16/10): «Pide presupuesto» capta, pero la venta sigue con la IA
-  // hasta el cierre. Si hay un presupuesto listo esperando (se avisó con la
-  // plantilla), se envía ahora que la ventana está abierta.
+  // hasta el cierre. Si hay un presupuesto listo esperando (avisado con la
+  // plantilla o programado para más tarde), se envía ahora que la ventana
+  // está abierta y la IA retoma la venta en esta misma respuesta (21/10).
   if (area === "marketing") {
     try {
-      await entregarPresupuestoPendiente(conversation.id);
+      if (await entregarPresupuestoPendiente(conversation.id)) (conversation as any).ai_enabled = true;
     } catch (err) {
       console.error("[presupuesto] No se pudo enviar el presupuesto pendiente:", err);
     }
