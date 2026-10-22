@@ -44,14 +44,15 @@ function accesos(slug: SlugPerfil) {
 export function SelectorPerfilesPC({
   perfiles: inicial,
   marcas: marcasIniciales,
-  cifras,
+  cifras: cifrasIniciales,
 }: {
   perfiles: PerfilStats[];
   marcas: Partial<Record<SlugPerfil, MarcaTarjeta>>;
   cifras: Record<string, ResumenCifras | null>;
 }) {
   const router = useRouter();
-  const { perfiles, setPerfiles, aviso, pausar } = usePerfilesEnVivo(inicial);
+  const { perfiles, setPerfiles, aviso, pausar, cifras: cifrasVivas } = usePerfilesEnVivo(inicial, { cifras: cifrasIniciales });
+  const cifras = cifrasVivas ?? cifrasIniciales;
   const [marcas, setMarcas] = useState(marcasIniciales);
   const [editando, setEditando] = useState<string | null>(null);
 
