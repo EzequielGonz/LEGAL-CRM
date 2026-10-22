@@ -118,7 +118,7 @@ export function CargarPresupuesto({ budgetId, minimo, sugerido }: { budgetId: st
           <label className="mt-2 block">
             <span className="mb-1 block text-xs text-slate-700">Día y hora (hora de Buenos Aires)</span>
             <input type="datetime-local" required value={cuando} min={minimo} onChange={(e) => setCuando(e.target.value)} className="tactil rounded-lg border border-slate-300 px-2" />
-            <span className="mt-0.5 block text-xs text-slate-500">Se admite de lunes a sábado de 8 a 21. Si la ventana de 24 h está cerrada, a esa hora sale la plantilla de aviso.</span>
+            <span className="mt-0.5 block text-xs text-slate-500">Se admite de lunes a sábado de 8 a 21. Si el cliente escribe antes, sale en ese momento y la IA retoma la venta. Si a la hora elegida la ventana de 24 h está cerrada, sale la plantilla de aviso.</span>
           </label>
         )}
       </fieldset>
