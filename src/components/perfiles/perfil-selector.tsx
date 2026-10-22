@@ -9,8 +9,8 @@ import { variablesAcento } from "@/lib/acento";
 import { LogoPerfil } from "@/components/ui/logo-perfil";
 import { Icono } from "@/components/ui/icono-seccion";
 
-/** La vista previa se vuelve a pedir al servidor cada 30 s (pestaña visible). */
-const POLL_MS = 30000;
+/** La vista previa se vuelve a pedir al servidor cada 20 s (pestaña visible) y al abrir la pantalla. */
+const POLL_MS = 20000;
 
 export interface MarcaTarjeta {
   nombre: string;
@@ -210,24 +210,30 @@ export function EditarPerfil({ p, marca, onCerrar, onGuardado }: { p: PerfilStat
 
 /**
  * Vista previa en vivo de los perfiles (teléfono y computadora): se vuelve a
- * pedir cada 30 s con la pestaña visible, y permite pausar la campaña en curso.
+ * pedir al abrir y cada 20 s con la pestaña visible, y permite pausar la campaña en curso.
  */
-export function usePerfilesEnVivo(initial: PerfilStats[]) {
+export function usePerfilesEnVivo<C = unknown>(initial: PerfilStats[], opciones: { cifras?: C } = {}) {
   const [perfiles, setPerfiles] = useState(initial);
+  const [cifras, setCifras] = useState<C | undefined>(opciones.cifras);
   const [aviso, setAviso] = useState<string | null>(null);
+  const conCifras = opciones.cifras !== undefined;
 
   const refrescar = useCallback(async () => {
     try {
-      const res = await fetch("/api/perfiles/estado", { cache: "no-store" });
+      const res = await fetch(`/api/perfiles/estado${conCifras ? "?cifras=1" : ""}`, { cache: "no-store" });
       if (!res.ok) return;
-      const data = (await res.json()) as { perfiles: PerfilStats[] };
+      const data = (await res.json()) as { perfiles: PerfilStats[]; cifras?: C };
       if (Array.isArray(data.perfiles)) setPerfiles(data.perfiles);
+      if (data.cifras) setCifras(data.cifras);
     } catch {
       // sin conexión: se reintenta en el próximo ciclo
     }
-  }, []);
+  }, [conCifras]);
 
   useEffect(() => {
+    // 22/10: se actualiza apenas se abre la pantalla (el navegador puede
+    // mostrar una copia guardada al volver) y después cada POLL_MS.
+    refrescar();
     const tick = () => {
       if (document.visibilityState === "visible") refrescar();
     };
@@ -247,7 +253,7 @@ export function usePerfilesEnVivo(initial: PerfilStats[]) {
     refrescar();
   }
 
-  return { perfiles, setPerfiles, aviso, pausar };
+  return { perfiles, setPerfiles, cifras, aviso, pausar };
 }
 
 /**
