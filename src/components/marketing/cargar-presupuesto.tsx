@@ -14,6 +14,7 @@ import { createClient } from "@/lib/supabase/client";
 export function CargarPresupuesto({ budgetId, minimo, sugerido }: { budgetId: string; minimo: string; sugerido: string }) {
   const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
+  const [extras, setExtras] = useState<File[]>([]);
   const [monto, setMonto] = useState("");
   const [moneda, setMoneda] = useState("ARS");
   const [alcance, setAlcance] = useState("");
@@ -43,6 +44,18 @@ export function CargarPresupuesto({ budgetId, minimo, sugerido }: { budgetId: st
           if (!r1.ok) throw new Error(d1.error ?? "No se pudo preparar la subida.");
           const { error } = await createClient().storage.from("presupuestos").uploadToSignedUrl(d1.path, d1.token, file);
           if (error) throw new Error(`No se pudo subir el archivo: ${error.message}`);
+          // Fotos o videos que acompañan (22/10).
+          const adjuntos: { path: string; nombre: string }[] = [];
+          for (const x of extras) {
+            const esVideo = x.type.startsWith("video/");
+            if (x.size > (esVideo ? 16 : 5) * 1024 * 1024) throw new Error(`${x.name}: supera ${esVideo ? "16" : "5"} MB (límite de WhatsApp).`);
+            const rx = await fetch("/api/marketing/presupuestos", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ accion: "subida_extra", budgetId, nombre: x.name }) });
+            const dx = await rx.json().catch(() => ({}));
+            if (!rx.ok) throw new Error(dx.error ?? `No se pudo preparar ${x.name}.`);
+            const { error: ex } = await createClient().storage.from(dx.bucket).uploadToSignedUrl(dx.path, dx.token, x);
+            if (ex) throw new Error(`No se pudo subir ${x.name}: ${ex.message}`);
+            adjuntos.push({ path: dx.path, nombre: x.name });
+          }
           const r2 = await fetch("/api/marketing/presupuestos", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -58,6 +71,7 @@ export function CargarPresupuesto({ budgetId, minimo, sugerido }: { budgetId: st
               plazo,
               notas,
               programadoPara: modo === "programar" ? cuando : undefined,
+              adjuntos,
               pin,
             }),
           });
@@ -76,6 +90,11 @@ export function CargarPresupuesto({ budgetId, minimo, sugerido }: { budgetId: st
       <label className="block">
         <span className="mb-1 block text-xs font-medium text-slate-700">Archivo del presupuesto (PDF, imagen, Word o Excel)</span>
         <input type="file" required accept=".pdf,.png,.jpg,.jpeg,.doc,.docx,.xls,.xlsx" onChange={(e) => setFile(e.target.files?.[0] ?? null)} className="block w-full text-sm" />
+      </label>
+      <label className="block">
+        <span className="mb-1 block text-xs font-medium text-slate-700">Fotos o videos que acompañan (opcional, hasta 10)</span>
+        <input type="file" multiple accept="image/jpeg,image/png,image/webp,video/mp4,video/3gpp,video/quicktime" onChange={(e) => setExtras(Array.from(e.target.files ?? []).slice(0, 10))} className="block w-full text-sm" />
+        {extras.length > 0 && <span className="mt-0.5 block text-xs text-slate-600">{extras.length} archivo(s): salen después del presupuesto.</span>}
       </label>
       <div className="grid gap-2 sm:grid-cols-3">
         <label className="block">
