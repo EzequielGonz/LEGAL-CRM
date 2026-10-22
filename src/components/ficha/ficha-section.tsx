@@ -172,7 +172,7 @@ export async function FichaSection({
               <span className="font-medium">Después de derivar:</span>{" "}
               {resultadoPost ? RESULTADO_POSTERIOR_LABEL[resultadoPost] : "Sin resultado registrado"}
               {motivoPost ? ` · ${MOTIVO_NO_AVANCE_LABEL[motivoPost]}` : ""}
-              {opp.post_derivation_at ? ` · ${new Date(opp.post_derivation_at).toLocaleString("es-AR")}` : ""}
+              {opp.post_derivation_at ? ` · ${new Date(opp.post_derivation_at).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires" })}` : ""}
               {opp.post_derivation_note ? ` · ${opp.post_derivation_note}` : ""}
             </p>
           )}
@@ -235,7 +235,7 @@ export async function FichaSection({
           <ul className="space-y-1 text-xs">
             {(events ?? []).map((e: any) => (
               <li key={e.id} className="flex flex-wrap gap-x-2 text-slate-600">
-                <span className="text-slate-400">{new Date(e.at).toLocaleString("es-AR")}</span>
+                <span className="text-slate-400">{new Date(e.at).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires" })}</span>
                 <span className="font-medium">{ACTOR_LABEL[e.actor] ?? e.actor}</span>
                 <span>
                   {e.dimension}: {e.from_value ? `${e.from_value} → ` : ""}
