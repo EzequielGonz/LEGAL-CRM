@@ -1,5 +1,5 @@
 import { createAdminClient } from "@/lib/supabase/admin";
-import { sendWhatsAppText } from "@/lib/whatsapp/client";
+import { sendWhatsAppText, sendWhatsAppMedia } from "@/lib/whatsapp/client";
 import { sendMetaMessage } from "@/lib/meta/client";
 import { assertAutomaticContactAllowed, manualContactCheck } from "@/lib/detention";
 import type { Area, ChannelType, MessageSenderType } from "@/lib/supabase/database.types";
@@ -83,10 +83,13 @@ export async function sendOutboundMessage({
   finalAckToken = null,
   origin,
   clock = () => new Date(),
+  media = null,
 }: {
   conversationId: string;
   senderType: MessageSenderType;
   body: string;
+  /** Foto o video adjunto (solo WhatsApp, 22/10): enlace firmado que Meta descarga. */
+  media?: { kind: "image" | "video" | "document"; link: string; path: string; filename?: string } | null;
   /** permiso de un solo uso para el acuse final de la IA tras derivar a una persona */
   finalAckToken?: string | null;
   /**
@@ -162,8 +165,12 @@ export async function sendOutboundMessage({
     // activa); si no, por la conexión de siempre del área.
     const line = (conversation as any).profile_lines;
     const credentialKey = line && line.active ? (line.credential_key as string) : null;
-    const result: any = await sendWhatsAppText(area, to, body, { credentialKey });
+    const result: any = media
+      ? await sendWhatsAppMedia(area, to, { kind: media.kind, link: media.link, caption: body || undefined, filename: media.filename }, { credentialKey })
+      : await sendWhatsAppText(area, to, body, { credentialKey });
     externalId = result?.messages?.[0]?.id ?? null;
+  } else if (media) {
+    throw new Error("Por ahora las fotos y los videos se mandan solo por WhatsApp.");
   } else if (channelType === "instagram" || channelType === "facebook") {
     if (!identity) throw new Error(`El contacto no tiene identidad de ${channelType}.`);
     const result: any = await sendMetaMessage(area, channelType, identity.external_user_id, body);
@@ -178,7 +185,8 @@ export async function sendOutboundMessage({
     conversation_id: conversationId,
     sender_type: senderType,
     direction: "saliente",
-    body,
+    body: media ? `[${media.kind === "image" ? "Foto" : media.kind === "video" ? "Video" : "Archivo"}${media.filename ? `: ${media.filename}` : ""}]${body ? ` ${body}` : ""}` : body,
+    ...(media ? { message_type: media.kind, metadata: { saliente_path: media.path, saliente_bucket: "chat-salientes" } } : {}),
     external_message_id: externalId,
     delivery_status: externalId ? "enviado" : null,
     delivery_status_at: externalId ? sentAt : null,
