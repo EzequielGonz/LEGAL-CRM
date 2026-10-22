@@ -81,7 +81,7 @@ export function CampaignMetricsPanel({ m, compact = false, enlaceRespondieron }:
       {extras.length > 0 && <p className="mt-2 text-xs text-slate-600">{extras.join(" · ")}</p>}
       <p className="mt-2 text-xs text-slate-500">
         Cuenta destinatarios; «Enviados» cuenta mensajes.
-        {m.actualizado ? ` Última actividad: ${new Date(m.actualizado).toLocaleString("es-AR")}.` : " Todavía sin actividad."}
+        {m.actualizado ? ` Última actividad: ${new Date(m.actualizado).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires" })}.` : " Todavía sin actividad."}
       </p>
     </div>
   );

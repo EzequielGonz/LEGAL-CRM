@@ -84,11 +84,11 @@ export async function BasesListView({
                 {b.invalid_rows ? <> · <span className="tabular-nums">{b.invalid_rows.toLocaleString("es-AR")}</span> requieren corrección</> : null}
                 {q ? <> · respondieron <span className="tabular-nums">{q.respondieron}</span> de <span className="tabular-nums">{q.contactados}</span> contactados</> : null}
                 {" · "}
-                <span className="tabular-nums">{new Date(b.created_at).toLocaleDateString("es-AR")}</span>
+                <span className="tabular-nums">{new Date(b.created_at).toLocaleDateString("es-AR", { timeZone: "America/Argentina/Buenos_Aires" })}</span>
               </p>
               <p className="solo-avanzado text-xs text-slate-600">
                 {b.source_label} · {b.total_rows} filas · {b.created_rows} nuevos · {b.duplicate_rows} duplicados ·{" "}
-                {b.invalid_rows} inválidos · {new Date(b.created_at).toLocaleDateString("es-AR")}
+                {b.invalid_rows} inválidos · {new Date(b.created_at).toLocaleDateString("es-AR", { timeZone: "America/Argentina/Buenos_Aires" })}
                 {s?.contactados_anteriormente ? ` · ${s.contactados_anteriormente} contactados antes de la carga` : ""}
                 {s?.conflictos ? ` · ${s.conflictos} conflictos` : ""}
               </p>

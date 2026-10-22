@@ -77,7 +77,7 @@ export default async function BibliotecaPage({ searchParams }: { searchParams: {
           <ul className="space-y-1 text-xs text-slate-700">
             {(versiones ?? []).map((v: any) => (
               <li key={`${v.clave}-${v.version}`}>
-                {new Date(v.created_at).toLocaleString("es-AR")} · {v.clave} v{v.version} · {v.created_by}
+                {new Date(v.created_at).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires" })} · {v.clave} v{v.version} · {v.created_by}
                 {v.motivo ? ` · ${v.motivo}` : ""}
               </li>
             ))}

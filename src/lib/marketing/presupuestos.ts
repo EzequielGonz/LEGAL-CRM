@@ -21,6 +21,10 @@ import { sendWhatsAppTemplate, whatsappCredentials } from "@/lib/whatsapp/client
 import { insertMessageRow } from "@/lib/messaging";
 import { manualContactCheck } from "@/lib/detention";
 import { logMarketingEvent } from "./leads";
+import { getAutomationPause } from "@/lib/automation-pause";
+import { loadContactCalendar } from "@/lib/contacto/calendario";
+import { isContactAllowed } from "@/lib/contacto/reglas";
+import { describirProgramacion, validarProgramacion } from "./programacion";
 import {
   avanzarEtapa,
   fusionarDatosVenta,
@@ -234,12 +238,21 @@ export async function cargarYEnviarPresupuesto(input: {
   alcance?: string | null;
   plazo?: string | null;
   notas?: string | null;
-}): Promise<{ estado: "enviado" | "aviso_enviado" | "listo"; detalle: string }> {
+  /** «AAAA-MM-DDTHH:mm» en hora de Buenos Aires. Sin valor: sale en el momento. */
+  programadoPara?: string | null;
+}): Promise<{ estado: "enviado" | "aviso_enviado" | "listo" | "programado"; detalle: string }> {
   const s = createAdminClient();
   const { data: b } = await s.from("marketing_budgets").select("*").eq("id", input.budgetId).maybeSingle();
   if (!b) throw new PresupuestoError("Presupuesto inexistente.", 404);
   if (!["pedido", "listo"].includes((b as any).estado)) throw new PresupuestoError(`El presupuesto está «${(b as any).estado}».`, 409);
   if (!input.archivoPath.startsWith(`${input.budgetId}/`)) throw new PresupuestoError("El archivo no corresponde a este presupuesto.", 400);
+  let programado: Date | null = null;
+  if (input.programadoPara) {
+    const { calendar } = await loadContactCalendar();
+    const v = validarProgramacion(input.programadoPara, new Date(), calendar);
+    if (!v.ok) throw new PresupuestoError(v.error, 400);
+    programado = v.instante;
+  }
   await s
     .from("marketing_budgets")
     .update({
@@ -262,7 +275,27 @@ export async function cargarYEnviarPresupuesto(input: {
       ...(input.plazo ? { notas: [`Plazo de entrega ofrecido: ${input.plazo}`] } : {}),
     },
   });
-  const { data: listo } = await s.from("marketing_budgets").select("*").eq("id", input.budgetId).single();
+  if (programado) {
+    await s
+      .from("marketing_budgets")
+      .update({ envio_programado_at: programado.toISOString(), programado_procesado_at: null, programado_error: null, updated_at: ahora() })
+      .eq("id", input.budgetId);
+    return { estado: "programado", detalle: `Presupuesto guardado. Sale solo el ${describirProgramacion(programado)} (hora de Buenos Aires).` };
+  }
+  await s.from("marketing_budgets").update({ envio_programado_at: null, updated_at: ahora() }).eq("id", input.budgetId);
+  return despacharPresupuesto(input.budgetId);
+}
+
+/**
+ * Manda un presupuesto «listo» con su archivo: con la ventana de 24 h abierta
+ * sale el documento; si no, la plantilla de aviso y el archivo queda para
+ * cuando la persona responda.
+ */
+async function despacharPresupuesto(budgetId: string): Promise<{ estado: "enviado" | "aviso_enviado" | "listo"; detalle: string }> {
+  const s = createAdminClient();
+  const input = { budgetId };
+  const { data: listo } = await s.from("marketing_budgets").select("*").eq("id", budgetId).single();
+  if (!listo || (listo as any).estado !== "listo" || !(listo as any).archivo_path) throw new PresupuestoError("El presupuesto no tiene archivo cargado o ya no está listo.", 409);
   const { conv, ultimoEntrante } = await conversacionDe(listo);
   if (ventanaAbierta(ultimoEntrante)) {
     await enviarDocumento(listo, conv);
@@ -307,12 +340,100 @@ export async function entregarPresupuestoPendiente(conversationId: string): Prom
     .eq("contact_id", (conv as any).contact_id)
     .eq("estado", "listo")
     .not("archivo_path", "is", null)
+    // Los programados esperan su hora aunque la persona escriba antes (21/10).
+    .or("envio_programado_at.is.null,programado_procesado_at.not.is.null")
     .order("listo_at", { ascending: true })
     .limit(1)
     .maybeSingle();
   if (!b) return false;
   await enviarDocumento(b, conv);
   return true;
+}
+
+/**
+ * Latido: manda los presupuestos programados cuya hora ya llegó (21/10).
+ * Respeta la pausa general y el horario de salidas de la empresa (si el
+ * latido llega tarde y ya son las 21, espera a la próxima franja). Cada uno
+ * se toma una sola vez (marca atómica): si el envío falla, queda el error a
+ * la vista y no se reintenta solo.
+ */
+export async function enviarPresupuestosProgramados(ahoraFecha = new Date(), limite = 3): Promise<{ enviados: number; pendientes: string[] }> {
+  const s = createAdminClient();
+  const { data: vencidos } = await s
+    .from("marketing_budgets")
+    .select("id")
+    .eq("estado", "listo")
+    .not("archivo_path", "is", null)
+    .is("programado_procesado_at", null)
+    .lte("envio_programado_at", ahoraFecha.toISOString())
+    .order("envio_programado_at", { ascending: true })
+    .limit(limite);
+  if (!vencidos?.length) return { enviados: 0, pendientes: [] };
+  const pausa = await getAutomationPause();
+  if (pausa.outboundPaused) return { enviados: 0, pendientes: [`${vencidos.length} presupuesto(s) retenido(s) por la pausa general`] };
+  const { calendar } = await loadContactCalendar(ahoraFecha);
+  if (!isContactAllowed(ahoraFecha, calendar)) return { enviados: 0, pendientes: [`${vencidos.length} presupuesto(s) esperan la próxima franja de envío`] };
+
+  let enviados = 0;
+  const pendientes: string[] = [];
+  for (const v of vencidos as { id: string }[]) {
+    const marca = ahora();
+    const { data: tomado } = await s
+      .from("marketing_budgets")
+      .update({ programado_procesado_at: marca, updated_at: marca })
+      .eq("id", v.id)
+      .is("programado_procesado_at", null)
+      .select("id")
+      .maybeSingle();
+    if (!tomado) continue; // otro latido ya lo tomó
+    try {
+      const r = await despacharPresupuesto(v.id);
+      if (r.estado !== "listo") enviados++;
+      else pendientes.push(r.detalle);
+    } catch (err: any) {
+      const detalle = String(err?.message ?? err).slice(0, 500);
+      await s.from("marketing_budgets").update({ programado_error: detalle, updated_at: ahora() }).eq("id", v.id);
+      pendientes.push(detalle);
+    }
+  }
+  return { enviados, pendientes };
+}
+
+/** Cambia la hora programada, la quita o lo manda ya («ahora»). */
+export async function reprogramarPresupuesto(budgetId: string, cuando: string): Promise<{ estado: string; detalle: string }> {
+  const s = createAdminClient();
+  const { data: b } = await s.from("marketing_budgets").select("id, estado, archivo_path, programado_procesado_at").eq("id", budgetId).maybeSingle();
+  if (!b) throw new PresupuestoError("Presupuesto inexistente.", 404);
+  if ((b as any).estado !== "listo" || !(b as any).archivo_path) throw new PresupuestoError("Solo se puede reprogramar un presupuesto con archivo que todavía no salió.", 409);
+  if (cuando === "ahora") {
+    await s.from("marketing_budgets").update({ envio_programado_at: null, programado_procesado_at: null, programado_error: null, updated_at: ahora() }).eq("id", budgetId);
+    return despacharPresupuesto(budgetId);
+  }
+  const { calendar } = await loadContactCalendar();
+  const v = validarProgramacion(cuando, new Date(), calendar);
+  if (!v.ok) throw new PresupuestoError(v.error, 400);
+  await s
+    .from("marketing_budgets")
+    .update({ envio_programado_at: v.instante.toISOString(), programado_procesado_at: null, programado_error: null, plantilla_pendiente: false, updated_at: ahora() })
+    .eq("id", budgetId);
+  return { estado: "programado", detalle: `Reprogramado: sale el ${describirProgramacion(v.instante)} (hora de Buenos Aires).` };
+}
+
+/**
+ * Presupuesto cargado por el equipo sin que la persona lo haya pedido por el
+ * agente (21/10): se abre sobre una conversación de Marketing existente.
+ */
+export async function crearPresupuestoManual(input: { conversationId: string; detalle: string }): Promise<{ id: string; nuevo: boolean }> {
+  const s = createAdminClient();
+  const { data: conv } = await s.from("conversations").select("id, contact_id, area").eq("id", input.conversationId).maybeSingle();
+  if (!conv || (conv as any).area !== "marketing") throw new PresupuestoError("Elegí una conversación de Kocos Marketing.", 400);
+  const { data: opp } = await s.from("opportunities").select("id").eq("contact_id", (conv as any).contact_id).eq("area", "marketing").order("created_at", { ascending: false }).limit(1).maybeSingle();
+  return pedirPresupuesto({
+    contactId: (conv as any).contact_id,
+    opportunityId: (opp as any)?.id ?? null,
+    conversationId: (conv as any).id,
+    detalle: input.detalle.trim() || "Presupuesto cargado por el equipo",
+  });
 }
 
 /** Guía de venta + presupuesto para el contexto del agente de Marketing. */

@@ -10,6 +10,7 @@ import { getTareasServidor } from "@/lib/tareas-servidor";
 import { asegurarAvisosDeLineas } from "@/lib/whatsapp/avisos-servidor";
 import { contactarFormulariosDeLanding } from "@/lib/landing-seguimiento";
 import { avanzarExtraccion } from "@/lib/marketing/extraer";
+import { enviarPresupuestosProgramados } from "@/lib/marketing/presupuestos";
 import { registrarLatido } from "@/lib/salud";
 
 // El análisis de negocios (descargar la web + IA) necesita más de los 10s por defecto.
@@ -122,9 +123,20 @@ export async function POST(request: Request) {
       }
     }
 
+    // 8) Presupuestos de Marketing programados (21/10): salen a la hora que
+    //    eligió el equipo, con pausa general y horario de salidas respetados.
+    let presupuestos: unknown = null;
+    if (Date.now() - inicio < 52_000) {
+      try {
+        presupuestos = await enviarPresupuestosProgramados();
+      } catch (err: any) {
+        presupuestos = { error: String(err?.message ?? err) };
+      }
+    }
+
     // Tablero de salud: deja la hora del último latido.
     await registrarLatido(true, { ms: Date.now() - inicio });
-    return NextResponse.json({ ok: true, results, seguimiento, marketing, servidor, extraccion, avisos, formularios });
+    return NextResponse.json({ ok: true, results, seguimiento, marketing, servidor, extraccion, avisos, formularios, presupuestos });
   } catch (err: any) {
     await registrarLatido(false, { error: String(err?.message ?? err).slice(0, 200) });
     return NextResponse.json({ error: String(err.message ?? err) }, { status: 500 });

@@ -116,7 +116,7 @@ export async function CasosList({
                   {r.capture_state === "perdido" && r.capture_reason ? ` · ${r.capture_reason}` : ""}
                 </td>
                 <td className="px-4 py-3 text-slate-400">
-                  {new Date(r.derived_at ?? r.captured_at ?? r.updated_at).toLocaleDateString("es-AR")}
+                  {new Date(r.derived_at ?? r.captured_at ?? r.updated_at).toLocaleDateString("es-AR", { timeZone: "America/Argentina/Buenos_Aires" })}
                 </td>
               </tr>
             ))}

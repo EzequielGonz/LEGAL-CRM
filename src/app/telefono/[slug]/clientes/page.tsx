@@ -107,8 +107,8 @@ export default async function TelefonoClientesPage({
               </span>
             </div>
             <p className="mt-1 text-xs text-slate-400">
-              Captado {r.captured_at ? new Date(r.captured_at).toLocaleDateString("es-AR") : "—"}
-              {r.derivation_state === "derivado" && r.derived_at ? ` · derivado ${new Date(r.derived_at).toLocaleDateString("es-AR")}` : ""}
+              Captado {r.captured_at ? new Date(r.captured_at).toLocaleDateString("es-AR", { timeZone: "America/Argentina/Buenos_Aires" }) : "—"}
+              {r.derivation_state === "derivado" && r.derived_at ? ` · derivado ${new Date(r.derived_at).toLocaleDateString("es-AR", { timeZone: "America/Argentina/Buenos_Aires" })}` : ""}
               {r.derivation_recipient ? ` · ${r.derivation_recipient}` : ""}
             </p>
           </Link>
