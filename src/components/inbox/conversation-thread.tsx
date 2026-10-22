@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { Area, Message } from "@/lib/supabase/database.types";
 import { AreaBadge, SourceBadge, StatusBadge } from "@/components/ui/badge";
 import { mergePoll, type DeliveryUpdate } from "@/lib/inbox/estados";
+import { createClient } from "@/lib/supabase/client";
 
 export interface ThreadContact {
   id: string;
@@ -73,6 +74,8 @@ export function ConversationThread({
   const [draft, setDraft] = useState("");
   const [sending, setSending] = useState(false);
   const [sendError, setSendError] = useState<string | null>(null);
+  const [archivo, setArchivo] = useState<File | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const lastAtRef = useRef<string | null>(
     initialMessages.length ? initialMessages[initialMessages.length - 1].created_at : null
@@ -112,14 +115,35 @@ export function ConversationThread({
   }, [messages.length]);
 
   async function handleSend() {
-    if (!draft.trim() || sending) return;
+    if ((!draft.trim() && !archivo) || sending) return;
     setSending(true);
     setSendError(null);
     try {
+      // Foto o video (22/10): se sube primero al depósito privado.
+      let adjunto: { path: string; nombre: string } | null = null;
+      if (archivo) {
+        const esVideo = archivo.type.startsWith("video/");
+        if (archivo.size > (esVideo ? 16 : 5) * 1024 * 1024) {
+          setSendError(esVideo ? "El video supera 16 MB (límite de WhatsApp)." : "La foto supera 5 MB (límite de WhatsApp).");
+          return;
+        }
+        const r1 = await fetch(`/api/conversations/${conversationId}/subida`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ nombre: archivo.name }) });
+        const d1 = await r1.json().catch(() => ({}));
+        if (!r1.ok) {
+          setSendError(d1.error ?? "No se pudo preparar la subida.");
+          return;
+        }
+        const { error: upErr } = await createClient().storage.from(d1.bucket).uploadToSignedUrl(d1.path, d1.token, archivo);
+        if (upErr) {
+          setSendError(`No se pudo subir el archivo: ${upErr.message}`);
+          return;
+        }
+        adjunto = { path: d1.path, nombre: archivo.name };
+      }
       const res = await fetch(`/api/conversations/${conversationId}/messages`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ body: draft }),
+        body: JSON.stringify({ body: draft, adjunto }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
@@ -129,6 +153,8 @@ export function ConversationThread({
         return;
       }
       setDraft("");
+      setArchivo(null);
+      if (fileRef.current) fileRef.current.value = "";
       // El chat pasa a atención humana antes de enviar el mensaje manual.
       setAiOn(false);
       await traerNuevos();
@@ -232,6 +258,12 @@ export function ConversationThread({
             </label>
             <span className="text-xs text-slate-600">{aiOn ? "Si escribís vos, el agente se apaga en este chat." : "Responde una persona; el agente no escribe."}</span>
           </div>
+          {archivo && (
+            <p className="mb-2 flex items-center gap-2 text-xs text-slate-700">
+              Adjunto: {archivo.name}
+              <button type="button" onClick={() => { setArchivo(null); if (fileRef.current) fileRef.current.value = ""; }} className="underline">Quitar</button>
+            </p>
+          )}
           {sendError && <p role="alert" className="mb-2 text-sm font-medium text-red-700">{sendError}</p>}
           <div className="flex min-w-0 gap-2">
             <input
@@ -246,6 +278,10 @@ export function ConversationThread({
               aria-label="Mensaje"
               className="min-w-0 flex-1 rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
             />
+            <label className="tactil inline-flex cursor-pointer items-center rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-700 hover:bg-slate-50" title="Adjuntar foto o video">
+              📎<span className="sr-only">Adjuntar foto o video</span>
+              <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/3gpp,video/quicktime" className="sr-only" onChange={(e) => setArchivo(e.target.files?.[0] ?? null)} />
+            </label>
             <button onClick={handleSend} disabled={sending} className="btn-gold">
               {sending ? "Enviando..." : "Enviar"}
             </button>
