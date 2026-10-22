@@ -220,7 +220,7 @@ export async function CampaignDetailView({
                     </>
                   ) : null}
                 </td>
-                <td className="px-4 py-3 tabular-nums text-slate-600">{r.sent_at ? new Date(r.sent_at).toLocaleString("es-AR") : "—"}</td>
+                <td className="px-4 py-3 tabular-nums text-slate-600">{r.sent_at ? new Date(r.sent_at).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires" }) : "—"}</td>
                 <td className="px-4 py-3">
                   <span className="flex flex-wrap gap-2">
                     {r.contact_id && (
