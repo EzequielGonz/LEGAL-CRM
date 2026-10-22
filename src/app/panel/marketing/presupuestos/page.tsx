@@ -128,7 +128,7 @@ export default async function PidePresupuestoPage({ searchParams }: { searchPara
               </div>
               {b.estado === "listo" && b.envio_programado_at && !b.programado_procesado_at && (
                 <div className="mt-3 rounded-lg border border-sky-200 bg-sky-50 p-3 text-sm">
-                  <p className="font-medium text-sky-900">Programado: sale el {describirProgramacion(new Date(b.envio_programado_at))} (hora de Buenos Aires).</p>
+                  <p className="font-medium text-sky-900">Programado: sale el {describirProgramacion(new Date(b.envio_programado_at))} (hora de Buenos Aires). Si el cliente escribe antes, sale en ese momento y la IA retoma la venta.</p>
                   <details className="mt-2">
                     <summary className="cursor-pointer text-xs font-medium text-sky-900">Cambiar la hora o mandarlo ya</summary>
                     <div className="mt-2 grid gap-3 sm:grid-cols-2">
