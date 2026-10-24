@@ -11,6 +11,7 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { searchGooglePlaces } from "./google-places";
 import { importScrapedPlaces } from "./import-scrape";
+import { inicioDelDiaAR } from "@/lib/hora-ar";
 import { cantidadParaZona, consultaZona, validarExtraccion, zonasDeExtraccion, type LimitesOutscraper } from "./venta";
 
 export class ExtraccionError extends Error {
@@ -34,8 +35,8 @@ export async function leerLimites(): Promise<LimitesOutscraper> {
 
 /** Negocios reservados hoy (topes pedidos en extracciones no canceladas). */
 export async function usadosHoy(): Promise<number> {
-  const inicio = new Date();
-  inicio.setHours(0, 0, 0, 0);
+  // 24/10: el tope diario se reinicia a la medianoche de Argentina (antes, a la del servidor en UTC: 21 h AR).
+  const inicio = inicioDelDiaAR();
   const { data } = await createAdminClient()
     .from("marketing_extracciones" as any)
     .select("cantidad_max, encontrados, estado")
