@@ -22,6 +22,7 @@ import { enlaceFirmado, tipoMedio } from "@/lib/adjuntos/salientes";
 import { insertMessageRow } from "@/lib/messaging";
 import { manualContactCheck } from "@/lib/detention";
 import { logMarketingEvent } from "./leads";
+import { derivarPorPresupuesto } from "./derivar-presupuesto";
 import { getAutomationPause } from "@/lib/automation-pause";
 import { loadContactCalendar } from "@/lib/contacto/calendario";
 import { isContactAllowed } from "@/lib/contacto/reglas";
@@ -228,6 +229,8 @@ async function enviarDocumento(budget: any, conv: any) {
   // La IA retoma para cerrar.
   await s.from("conversations").update({ ai_enabled: true, status: "en_conversacion", last_message_at: sentAt }).eq("id", conv.id);
   await registrarVenta(conv.contact_id, { etapa: "presupuesto_enviado" });
+  // 24/10: con el presupuesto enviado, deja de figurar como «captado para derivar».
+  await derivarPorPresupuesto(conv.contact_id, sentAt);
 }
 
 async function conversacionDe(budget: any) {
