@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { ImageResponse } from "next/og";
 import { FECHAS_REDES, PLAN_REDES, TIPOS_REDES } from "@/lib/redes/plan-redes";
 import { LOGOS_REDES } from "@/lib/redes/logos-redes";
+import { FECHAS_REDES_EXTRA, PLAN_REDES_EXTRA, TIPOS_REDES_EXTRA } from "@/lib/redes/plan-redes-extra";
 
 /**
  * Piezas del plan de redes de 15 días (21/10). Cada imagen tiene su dirección
@@ -10,6 +11,7 @@ import { LOGOS_REDES } from "@/lib/redes/logos-redes";
  *
  * Archivo: <rubro>-d<día>-<n>.png  (carrusel n=1..5, posteo n=1)
  *          <rubro>-d<día>-h.png     (historia)
+ *          <rubro>-e<día>-<n>.png  y  <rubro>-e<día>-h<1..4>.png  (ampliación del 24/10)
  */
 export const dynamic = "force-dynamic";
 
@@ -173,15 +175,22 @@ function Lienzo({ cod, m, alto, pad, children }: { cod: string; m: Marca; alto: 
 }
 
 export async function GET(_req: Request, { params }: { params: { archivo: string } }) {
-  const r = /^(vita|cob|0km|mkt)-d(\d{1,2})-([1-5]|h)\.png$/.exec(params.archivo);
+  const r = /^(vita|cob|0km|mkt)-([de])(\d{1,2})-([1-5]|h[1-4]?)\.png$/.exec(params.archivo);
   if (!r) return new Response("No existe", { status: 404 });
-  const [, cod, diaTxt, parte] = r;
+  const [, cod, serie, diaTxt, parteTxt] = r;
+  const extra = serie === "e";
   const dia = Number(diaTxt);
-  if (dia < 1 || dia > FECHAS_REDES.length) return new Response("No existe", { status: 404 });
-  const plan = PLAN_REDES[cod];
+  const fechas = extra ? FECHAS_REDES_EXTRA : FECHAS_REDES;
+  const tipos: readonly string[] = extra ? TIPOS_REDES_EXTRA : TIPOS_REDES;
+  if (dia < 1 || dia > fechas.length) return new Response("No existe", { status: 404 });
+  // En el plan original la historia es «h»; en la ampliación hay cuatro por día («h1»..«h4»).
+  if (parteTxt.startsWith("h") && (extra ? parteTxt.length !== 2 : parteTxt.length !== 1)) return new Response("No existe", { status: 404 });
+  const parte = parteTxt.startsWith("h") ? "h" : parteTxt;
+  const plan = (extra ? PLAN_REDES_EXTRA : PLAN_REDES)[cod];
   const m = MARCAS[cod];
   const k = dia - 1;
-  const tipo = TIPOS_REDES[k];
+  const tipo = tipos[k];
+  const ih = extra && parte === "h" ? k * 4 + Number(parteTxt.slice(1)) - 1 : k;
   const familiaTitulo = m.serif ? "Lora" : "Inter";
   const padPost = cod === "vita" ? "120px" : "96px";
 
@@ -191,7 +200,7 @@ export async function GET(_req: Request, { params }: { params: { archivo: string
 
   if (parte === "h") {
     alto = 1920;
-    const h = plan.historias[k];
+    const h = plan.historias[ih];
     todo = `${m.nombre}${m.sub}${h.etq}${plano(h.titulo)}${h.texto}${h.boton}Tocá el botón o respondé esta historia${m.ig}`;
     nodo = (
       <Lienzo cod={cod} m={m} alto={alto} pad="250px 90px 300px 90px">
@@ -211,7 +220,7 @@ export async function GET(_req: Request, { params }: { params: { archivo: string
     );
   } else if (tipo === "P") {
     if (parte !== "1") return new Response("No existe", { status: 404 });
-    const ip = TIPOS_REDES.slice(0, k).filter((t) => t === "P").length;
+    const ip = tipos.slice(0, k).filter((t) => t === "P").length;
     const p = plan.posts[ip];
     todo = `${m.nombre}${m.sub}${p.etq}${plano(p.titulo)}${p.texto}WhatsApp ${plan.wa}${plan.web}`;
     nodo = (
@@ -231,7 +240,7 @@ export async function GET(_req: Request, { params }: { params: { archivo: string
       </Lienzo>
     );
   } else {
-    const ic = TIPOS_REDES.slice(0, k).filter((t) => t === "C").length;
+    const ic = tipos.slice(0, k).filter((t) => t === "C").length;
     const c = plan.carruseles[ic];
     const n = 5;
     const i = Number(parte) - 1;
