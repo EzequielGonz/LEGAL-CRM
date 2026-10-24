@@ -58,7 +58,7 @@ export async function CampanasListView({
 }) {
   const verArchivadas = searchParams?.archivadas === "1";
   const supabase = createClient();
-  const [{ data: campaigns, error }, { data: channels }, { data: campaignLines }] = await Promise.all([
+  const [{ data: campaigns, error }, { data: channels }, { data: campaignLines }, { data: basesCargadas }, { data: rolesPerfil }] = await Promise.all([
     supabase
       .from("campaigns")
       .select("*")
@@ -73,6 +73,9 @@ export async function CampanasListView({
       .eq("active", true)
       .eq("use_for_campaigns", true)
       .order("created_at"),
+    // 24/10: al preparar la campaña se elige una base ya cargada y el rol del bot.
+    supabase.from("imported_bases").select("id, name, file_name, total_rows, created_rows, created_at").in("area", areas).is("archived_at", null).order("created_at", { ascending: false }).limit(60),
+    supabase.from("agent_roles" as any).select("id, nombre").eq("rubro_id", rubroId).is("archived_at", null).order("updated_at", { ascending: false }),
   ]);
   const funnels = new Map(
     await Promise.all((campaigns ?? []).map(async (c: any) => [c.id, await getCampaignFunnelCounts(supabase, c.id)] as const))
@@ -122,7 +125,14 @@ export async function CampanasListView({
 
       {!verArchivadas ? (
         <div>
-          <NewCampaignForm channels={channels ?? []} lines={campaignLines ?? []} redirectBase={basePath} perfil={perfilDe(basePath)} />
+          <NewCampaignForm
+            channels={channels ?? []}
+            lines={campaignLines ?? []}
+            redirectBase={basePath}
+            perfil={perfilDe(basePath)}
+            bases={((basesCargadas ?? []) as any[]).map((b) => ({ id: b.id, nombre: b.name || b.file_name || "Base sin nombre", filas: b.total_rows ?? b.created_rows ?? null }))}
+            roles={((rolesPerfil ?? []) as any[]).map((r) => ({ id: r.id, nombre: r.nombre }))}
+          />
         </div>
       ) : null}
 

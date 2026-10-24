@@ -29,6 +29,7 @@ export async function POST(request: Request) {
     line_id,
     run_days,
     template_id,
+    agent_role_id,
   } = body;
 
   // La plantilla se elige del catálogo (pregunta 22) y puede quedar para
@@ -64,6 +65,15 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "La línea elegida no pertenece a este perfil." }, { status: 400 });
     }
     lineId = line.id;
+  }
+  // 24/10: rol del bot para esta campaña (opcional). Tiene que ser del mismo perfil.
+  let rolId: string | null = null;
+  if (typeof agent_role_id === "string" && agent_role_id) {
+    const { data: rol } = await supabase.from("agent_roles" as any).select("id, rubro_id, archived_at").eq("id", agent_role_id).maybeSingle();
+    if (!rol || (rol as any).rubro_id !== AREA_TO_RUBRO_ID[channel.area as string] || (rol as any).archived_at) {
+      return NextResponse.json({ error: "El rol elegido no es de este perfil o está archivado." }, { status: 400 });
+    }
+    rolId = (rol as any).id;
   }
   // Días de ejecución: los domingos no se envía (pregunta 39), así que no se guardan.
   const runDays = Array.isArray(run_days)
@@ -105,6 +115,7 @@ export async function POST(request: Request) {
       template_id: templateId,
       status: "borrador",
       line_id: lineId,
+      agent_role_id: rolId,
       run_days: runDays && runDays.length > 0 && runDays.length < 6 ? runDays : null,
       // Ritmo "seguro" para no generar bloqueos de WhatsApp: por defecto un
       // tiempo al azar entre 50s y 200s antes de cada mensaje nuevo (no un

@@ -13,8 +13,14 @@ export function NewCampaignForm({
   lines = [],
   redirectBase = "/campanas",
   perfil,
+  bases = [],
+  roles = [],
 }: {
   channels: { id: string; label: string }[];
+  /** 24/10: bases ya cargadas del perfil, para elegir en vez de escribir. */
+  bases?: { id: string; nombre: string; filas: number | null }[];
+  /** 24/10: roles del bot del perfil (vale solo para esta campaña). */
+  roles?: { id: string; nombre: string }[];
   /** Líneas del perfil habilitadas para campañas (bloque 1.4). Se puede asignar después. */
   lines?: { id: string; label: string }[];
   /** Base de la URL a la que navegar después de crear la campaña, seguida
@@ -31,6 +37,8 @@ export function NewCampaignForm({
   const [channelId, setChannelId] = useState(channels[0]?.id ?? "");
   const [template, setTemplate] = useState("");
   const [lineId, setLineId] = useState(lines.length === 1 ? lines[0].id : "");
+  const [baseId, setBaseId] = useState("");
+  const [rolId, setRolId] = useState("");
   const [minDelaySeconds, setMinDelaySeconds] = useState(50);
   const [maxDelaySeconds, setMaxDelaySeconds] = useState(200);
   const [batchSize, setBatchSize] = useState(10);
@@ -65,6 +73,8 @@ export function NewCampaignForm({
         batch_pause_seconds: batchPauseSeconds,
         daily_send_limit: dailyLimit === "" ? null : dailyLimit,
         line_id: lineId || null,
+        base_id: baseId || undefined,
+        agent_role_id: rolId || null,
       }),
     });
     const data = await res.json();
@@ -120,6 +130,33 @@ export function NewCampaignForm({
       <p className="text-sm text-slate-700">
         Crear una campaña solo la prepara: no envía nada. Los mensajes salen recién cuando la lanzás y lo confirmás.
       </p>
+      {bases.length > 0 && (
+        <div>
+          <label htmlFor="campana-base" className="mb-1 block text-sm font-medium text-slate-700">Base</label>
+          <select
+            id="campana-base"
+            value={baseId}
+            onChange={(e) => {
+              const id = e.target.value;
+              setBaseId(id);
+              const b = bases.find((x) => x.id === id);
+              if (b && !name.trim()) setName(b.nombre);
+            }}
+            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
+          >
+            <option value="">Elegir después (o cargar un archivo nuevo en la campaña)</option>
+            {bases.map((b) => (
+              <option key={b.id} value={b.id}>
+                {b.nombre}
+                {b.filas != null ? ` · ${b.filas} filas` : ""}
+              </option>
+            ))}
+          </select>
+          <p className="mt-1 text-xs text-slate-600">
+            Sus contactos entran como pendientes (sin detenidos ni ya contactados). No se envía nada hasta que la lances.
+          </p>
+        </div>
+      )}
       <div>
         <label htmlFor="campana-nombre" className="mb-1 block text-sm font-medium text-slate-700">Nombre</label>
         <input
@@ -168,6 +205,23 @@ export function NewCampaignForm({
         <p className="mt-1 text-xs text-slate-600">
           Sin línea asignada la campaña queda en borrador y no se puede lanzar. Las líneas se cargan en Configuración.
         </p>
+      </div>
+      <div>
+        <label htmlFor="campana-rol" className="mb-1 block text-sm font-medium text-slate-700">Rol del bot en esta campaña</label>
+        <select
+          id="campana-rol"
+          value={rolId}
+          onChange={(e) => setRolId(e.target.value)}
+          className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
+        >
+          <option value="">Sin rol propio (usa el de la base o el bot del perfil)</option>
+          {roles.map((r) => (
+            <option key={r.id} value={r.id}>
+              {r.nombre}
+            </option>
+          ))}
+        </select>
+        <p className="mt-1 text-xs text-slate-600">Vale solo para esta campaña. Se puede cambiar o editar después desde la campaña.</p>
       </div>
       <div>
         <p className="mb-1 block text-sm font-medium text-slate-700">Plantilla (catálogo de la línea)</p>
