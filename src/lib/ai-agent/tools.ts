@@ -120,7 +120,7 @@ export const AGENT_TOOLS: FunctionDeclaration[] = [
   {
     name: "finalizar_consulta",
     description:
-      "Cierra la conversación de una consulta de accidente laboral (solo área Civil). Usala UNA sola vez, al final. " +
+      "Cierra la conversación de una consulta legal de cualquier tema (accidente laboral, despido, tránsito, familia, sucesión, penal u otro; solo línea Civil). Usala UNA sola vez, al final. " +
       "resultado='completado': ya tenés los datos del caso y la persona te dijo cuándo le queda cómodo que la contacten de nuevo; el caso pasa al equipo del estudio. " +
       "resultado='caso_resuelto': la persona ya resolvió su situación. " +
       "resultado='no_interesado': pidió que no la contactemos más o no quiere seguir. " +

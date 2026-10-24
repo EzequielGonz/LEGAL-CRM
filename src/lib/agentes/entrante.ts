@@ -108,7 +108,7 @@ const GUIA_POR_AREA: Record<string, GuiaEntrante> = {
   marketing: {
     reemplazaGuion: false,
     texto:
-      "Esta persona no viene de la prospección: NO hay análisis previo de su negocio. No menciones «lo que encontramos» ni problemas detectados: descubrilos preguntando. Preguntá de qué es su negocio y dónde está, qué tiene hoy (web, redes, cómo le llegan los clientes), qué quiere lograr (más consultas, más ventas, automatizar la atención) y qué le frena. Después mostrale cómo lo resolvemos y proponé una llamada corta o un presupuesto. Cerrá como indica tu guion.",
+      "Esta persona no viene de la prospección: NO hay análisis previo de su negocio. No menciones «lo que encontramos» ni problemas detectados: descubrilos preguntando. Preguntá de qué es su negocio y dónde está, qué tiene hoy (web, redes, cómo le llegan los clientes), qué quiere lograr (más consultas, más ventas, automatizar la atención) y qué le frena. Si te pasa su sitio web o el nombre y la zona del negocio y quiere escuchar una propuesta, usá analizar_negocio para tener hallazgos reales. Después mostrale cómo lo resolvemos y proponé una llamada corta o un presupuesto. Cerrá como indica tu guion.",
   },
 };
 
