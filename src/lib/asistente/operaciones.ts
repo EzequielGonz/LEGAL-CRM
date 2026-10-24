@@ -4,6 +4,8 @@
  * se ejecuta recién cuando la responsable confirma (ver permisos.ts): el
  * asistente nunca envía, lanza ni activa nada por su cuenta.
  */
+import { NOMBRES_CHATS } from "@/lib/asistente/chats-declaraciones";
+import { ejecutarChats } from "@/lib/asistente/chats";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { AREA_TO_RUBRO_ID } from "@/lib/rubros";
 import { AREAS_DE_PERFIL } from "@/lib/cartera-servidor";
@@ -34,6 +36,8 @@ export const NOMBRES_OPERACIONES = [
   "listar_roles",
   "proponer_rol",
   "proponer_rol_base",
+  // 24/10: chats (src/lib/asistente/chats.ts).
+  ...NOMBRES_CHATS,
 ] as const;
 
 const norm = (t: unknown) =>
@@ -105,6 +109,7 @@ async function campanasDelPerfil(slug: string, estados?: string[]) {
 }
 
 export async function ejecutarOperacion(nombre: string, args: Record<string, unknown>, ctx: ContextoOperacion): Promise<Record<string, unknown>> {
+  if ((NOMBRES_CHATS as readonly string[]).includes(nombre)) return ejecutarChats(nombre, args, ctx);
   const s = createAdminClient();
   switch (nombre) {
     case "opciones_campana": {
