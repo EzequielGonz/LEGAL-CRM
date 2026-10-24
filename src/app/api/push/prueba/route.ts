@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     kind: "prueba",
     title: "Aviso de prueba",
     body: "Si ves esto, los avisos del panel llegan a este dispositivo.",
-    url: "/telefono",
+    url: "/perfiles",
     tag: "prueba",
     deviceId,
   });

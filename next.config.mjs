@@ -6,6 +6,13 @@ const nextConfig = {
   // Bloque 1.12: encabezados de seguridad para todas las respuestas. No se
   // declara una Content-Security-Policy todavía: necesita nonces para los
   // scripts de Next.js y las fuentes de Google, y se prepara aparte.
+  // 24/10: la vista de Teléfono se retiró; el panel normal se adapta al celular.
+  async redirects() {
+    return [
+      { source: "/telefono", destination: "/perfiles", permanent: false },
+      { source: "/telefono/:path*", destination: "/perfiles", permanent: false },
+    ];
+  },
   async headers() {
     return [
       {

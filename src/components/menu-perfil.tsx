@@ -10,10 +10,11 @@ import { seccionActiva, seccionesDePerfil } from "@/lib/menu";
 import { Icono } from "@/components/ui/icono-seccion";
 import { LogoPerfil } from "@/components/ui/logo-perfil";
 import { abrirAsistente } from "@/components/asistente/asistente-panel";
+import { SelectorModo } from "@/components/ui/selector-modo";
 
 /**
- * Menú de los cuatro perfiles (renovado 18/10): barra clara con seis
- * secciones, iguales en todos los perfiles. Cambia la marca (logo, nombre y
+ * Menú de los cuatro perfiles (renovado 18/10; 24/10: grupos «Trabajo» y
+ * «Configurar», modo oscuro o claro), igual en todos los perfiles. Cambia la marca (logo, nombre y
  * color del acento). Las vistas de cada sección se eligen con las pestañas
  * de arriba del contenido. En pantallas chicas se pliega en una barra con
  * botón «Menú». Abajo, la Bandeja para Claude (tarjeta negra, 19/10) justo
@@ -84,23 +85,30 @@ export function MenuPerfil({ slug, nombre, logo }: { slug: SlugPerfil; nombre?: 
         </Link>
 
         <nav aria-label="Secciones del perfil" className="flex-1 overflow-y-auto px-3 py-4">
-          <ul className="space-y-0.5">
-            {secciones.map((s) => {
-              const esActiva = activa?.seccion.clave === s.clave;
-              return (
-                <li key={s.clave}>
-                  <Link
-                    href={s.href}
-                    aria-current={esActiva ? "page" : undefined}
-                    className="menu-item flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium"
-                  >
-                    <Icono nombre={s.icono} className="h-[18px] w-[18px] shrink-0" />
-                    <span>{s.label}</span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+          {(["trabajo", "configurar"] as const).map((g) => (
+            <div key={g} className={g === "configurar" ? "mt-5" : undefined}>
+              <p className="menu-grupo px-3 pb-1.5 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-slate-500">{g === "trabajo" ? "Trabajo" : "Configurar"}</p>
+              <ul className="space-y-0.5">
+                {secciones
+                  .filter((s) => s.grupo === g)
+                  .map((s) => {
+                    const esActiva = activa?.seccion.clave === s.clave;
+                    return (
+                      <li key={s.clave}>
+                        <Link
+                          href={s.href}
+                          aria-current={esActiva ? "page" : undefined}
+                          className="menu-item flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium"
+                        >
+                          <Icono nombre={s.icono} className="h-[18px] w-[18px] shrink-0" />
+                          <span>{s.label}</span>
+                        </Link>
+                      </li>
+                    );
+                  })}
+              </ul>
+            </div>
+          ))}
         </nav>
 
         <EntradaBandeja slug={slug} activa={pathname === "/bandeja"} />
@@ -122,6 +130,7 @@ export function MenuPerfil({ slug, nombre, logo }: { slug: SlugPerfil; nombre?: 
         </div>
 
         <div className="menu-pie border-t border-slate-100 px-3 py-2">
+          <SelectorModo />
           <Link href="/perfiles" className="block rounded-lg px-3 py-1.5 text-xs font-medium">
             Cambiar de perfil
           </Link>

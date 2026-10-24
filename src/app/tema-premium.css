@@ -1,0 +1,262 @@
+/* ---------------------------------------------------------------------
+   Modo oscuro premium (24/10, boceto v3 aprobado): fondo casi negro, superficies
+   grafito y el acento de cada perfil (dorado en Jurídico). Se activa con
+   <html data-modo="oscuro"> (por defecto) y se apaga con el selector del menú
+   (modo claro = la paleta de siempre). Invierte la escala slate y suaviza el
+   acento; corrige los blancos fijos de las hojas anteriores.
+   Generado con un script a partir de globals.css (no editar los números a mano).
+   --------------------------------------------------------------------- */
+html[data-modo="oscuro"], html[data-modo="oscuro"] [data-tema="juridico"] {
+  --c-slate-50: 12 13 16;
+  --c-slate-100: 22 23 28;
+  --c-slate-200: 40 41 47;
+  --c-slate-300: 64 65 72;
+  --c-slate-400: 111 107 95;
+  --c-slate-500: 150 145 130;
+  --c-slate-600: 178 172 156;
+  --c-slate-700: 206 200 184;
+  --c-slate-800: 224 219 205;
+  --c-slate-900: 236 232 220;
+  --c-slate-950: 248 245 237;
+  --c-gold-50: 27 25 22;
+  --c-gold-100: 38 35 26;
+  --c-gold-200: 61 53 35;
+  --c-gold-300: 106 90 53;
+  --c-gold-400: 159 134 74;
+  --c-gold-500: 201 168 90;
+  --c-gold-600: 209 180 113;
+  --c-gold-700: 217 194 140;
+  --c-gold-800: 225 207 164;
+  --c-gold-900: 233 220 189;
+  --c-gold-950: 242 233 214;
+}
+html[data-modo="oscuro"] [data-tema="coberturas_medicas"] {
+  --c-slate-50: 12 13 16;
+  --c-slate-100: 22 23 28;
+  --c-slate-200: 40 41 47;
+  --c-slate-300: 64 65 72;
+  --c-slate-400: 111 107 95;
+  --c-slate-500: 150 145 130;
+  --c-slate-600: 178 172 156;
+  --c-slate-700: 206 200 184;
+  --c-slate-800: 224 219 205;
+  --c-slate-900: 236 232 220;
+  --c-slate-950: 248 245 237;
+  --c-gold-50: 21 28 20;
+  --c-gold-100: 28 39 23;
+  --c-gold-200: 42 62 29;
+  --c-gold-300: 70 106 42;
+  --c-gold-400: 102 159 56;
+  --c-gold-500: 127 200 67;
+  --c-gold-600: 145 208 93;
+  --c-gold-700: 165 216 123;
+  --c-gold-800: 185 225 152;
+  --c-gold-900: 204 233 180;
+  --c-gold-950: 223 241 208;
+}
+html[data-modo="oscuro"] [data-tema="agencia_0km"] {
+  --c-slate-50: 12 13 16;
+  --c-slate-100: 22 23 28;
+  --c-slate-200: 40 41 47;
+  --c-slate-300: 64 65 72;
+  --c-slate-400: 111 107 95;
+  --c-slate-500: 150 145 130;
+  --c-slate-600: 178 172 156;
+  --c-slate-700: 206 200 184;
+  --c-slate-800: 224 219 205;
+  --c-slate-900: 236 232 220;
+  --c-slate-950: 248 245 237;
+  --c-gold-50: 14 24 33;
+  --c-gold-100: 15 32 45;
+  --c-gold-200: 17 49 70;
+  --c-gold-300: 22 82 120;
+  --c-gold-400: 28 120 178;
+  --c-gold-500: 33 150 224;
+  --c-gold-600: 64 165 228;
+  --c-gold-700: 100 182 233;
+  --c-gold-800: 133 197 238;
+  --c-gold-900: 166 213 243;
+  --c-gold-950: 200 229 247;
+}
+html[data-modo="oscuro"] [data-tema="marketing"] {
+  --c-slate-50: 12 13 16;
+  --c-slate-100: 22 23 28;
+  --c-slate-200: 40 41 47;
+  --c-slate-300: 64 65 72;
+  --c-slate-400: 111 107 95;
+  --c-slate-500: 150 145 130;
+  --c-slate-600: 178 172 156;
+  --c-slate-700: 206 200 184;
+  --c-slate-800: 224 219 205;
+  --c-slate-900: 236 232 220;
+  --c-slate-950: 248 245 237;
+  --c-gold-50: 31 21 17;
+  --c-gold-100: 46 27 18;
+  --c-gold-200: 74 38 20;
+  --c-gold-300: 132 62 24;
+  --c-gold-400: 199 89 28;
+  --c-gold-500: 252 110 32;
+  --c-gold-600: 252 130 63;
+  --c-gold-700: 253 154 99;
+  --c-gold-800: 253 175 132;
+  --c-gold-900: 254 197 166;
+  --c-gold-950: 254 219 199;
+}
+html[data-modo="oscuro"] {
+  --superficie: 19 20 25;
+  --superficie-alta: 26 27 33;
+  --linea: 255 255 255;
+  color-scheme: dark;
+}
+html[data-modo="oscuro"] body,
+html[data-modo="oscuro"] [data-tema] {
+  background:
+    radial-gradient(1100px 520px at 78% -8%, rgb(var(--c-gold-500) / 0.13) 0%, transparent 60%),
+    rgb(var(--c-slate-50));
+  background-attachment: fixed;
+  color: rgb(var(--c-slate-900));
+}
+html[data-modo="oscuro"] main#contenido { background: transparent; }
+
+/* Superficies: lo que era blanco pasa a grafito con borde fino. */
+html[data-modo="oscuro"] .bg-white,
+html[data-modo="oscuro"] .menu-estudio,
+html[data-modo="oscuro"] li.tarjeta-perfil[data-tema],
+html[data-modo="oscuro"] .tarjeta-perfil-tel,
+html[data-modo="oscuro"] .pestana[aria-current="page"],
+html[data-modo="oscuro"] .mas-opciones button,
+html[data-modo="oscuro"] .chip-filtro,
+html[data-modo="oscuro"] .chip-opcion,
+html[data-modo="oscuro"] .selector-nivel-opcion[aria-checked="true"],
+html[data-modo="oscuro"] .barra-salud a[class~="rounded-lg"] {
+  background-color: rgb(var(--superficie)) !important;
+  background-image: none !important;
+}
+html[data-modo="oscuro"] .bg-white\/80, html[data-modo="oscuro"] .bg-white\/90, html[data-modo="oscuro"] .bg-white\/70 { background-color: rgb(var(--superficie) / 0.85) !important; }
+html[data-modo="oscuro"] .menu-estudio { background: rgb(10 11 14 / 0.75) !important; border-right: 1px solid rgb(var(--c-gold-500) / 0.14) !important; }
+html[data-modo="oscuro"] .from-white { --tw-gradient-from: rgb(var(--superficie)) var(--tw-gradient-from-position) !important; --tw-gradient-to: rgb(var(--superficie) / 0) var(--tw-gradient-to-position) !important; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important; }
+html[data-modo="oscuro"] .shadow-sm, html[data-modo="oscuro"] .shadow, html[data-modo="oscuro"] .shadow-md { box-shadow: 0 1px 0 rgb(255 255 255 / 0.03), 0 8px 24px -12px rgb(0 0 0 / 0.6) !important; }
+html[data-modo="oscuro"] [data-tema] :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not(.pin-campo), select, textarea),
+html[data-modo="oscuro"] [data-tema] :is(button, a)[class~="border-slate-300"]:not(:disabled),
+html[data-modo="oscuro"] [data-tema] input[type="file"]::file-selector-button {
+  background-color: rgb(var(--superficie-alta)) !important;
+  color: rgb(var(--c-slate-900));
+}
+html[data-modo="oscuro"] ::placeholder { color: rgb(var(--c-slate-500)); }
+
+/* Fondos oscuros que con la escala invertida quedarían claros: se mantienen oscuros y cálidos. */
+html[data-modo="oscuro"] .bg-slate-900,
+html[data-modo="oscuro"] .bg-slate-950,
+html[data-modo="oscuro"] .bg-slate-800 {
+  background-color: rgb(var(--c-gold-500) / 0.14) !important;
+  box-shadow: inset 0 0 0 1px rgb(var(--c-gold-500) / 0.28);
+  color: rgb(var(--c-slate-950));
+}
+html[data-modo="oscuro"] .bg-slate-900 .text-white, html[data-modo="oscuro"] .bg-slate-950 .text-white,
+html[data-modo="oscuro"] .text-white { color: rgb(248 245 237); }
+html[data-modo="oscuro"] .hover\:bg-slate-800:hover, html[data-modo="oscuro"] .hover\:bg-slate-900:hover { background-color: rgb(var(--c-gold-500) / 0.22) !important; }
+
+/* Botón principal: dorado del perfil. */
+html[data-modo="oscuro"] .btn-gold,
+html[data-modo="oscuro"] .btn-gold-sm {
+  background-image: linear-gradient(145deg, rgb(var(--c-gold-600)), rgb(var(--c-gold-500)) 55%, rgb(var(--c-gold-400))) !important;
+  color: rgb(12 13 16) !important;
+  box-shadow: none !important;
+  font-weight: 600;
+}
+html[data-modo="oscuro"] .btn-gold:hover:not(:disabled), html[data-modo="oscuro"] .btn-gold-sm:hover:not(:disabled) { filter: brightness(1.08); }
+
+/* Bordes finos y translúcidos. */
+html[data-modo="oscuro"] .border-slate-100, html[data-modo="oscuro"] .border-slate-200, html[data-modo="oscuro"] .divide-slate-100 > * + *, html[data-modo="oscuro"] .divide-slate-200 > * + * { border-color: rgb(255 255 255 / 0.07) !important; }
+html[data-modo="oscuro"] .border-slate-300 { border-color: rgb(255 255 255 / 0.13) !important; }
+
+/* Títulos con serif elegante, como el boceto. */
+html[data-modo="oscuro"] main h1 { font-family: var(--font-serif), Georgia, serif; font-weight: 600; letter-spacing: -0.01em; color: rgb(250 247 240); }
+html[data-modo="oscuro"] .cifra-premium { font-family: var(--font-serif), Georgia, serif; }
+
+/* Avisos de color: fondos translúcidos y texto claro, con el mismo matiz. */
+html[data-modo="oscuro"] .bg-red-50, html[data-modo="oscuro"] .bg-red-100 { background-color: rgb(239 68 68 / 0.12) !important; }
+html[data-modo="oscuro"] .bg-red-200 { background-color: rgb(239 68 68 / 0.22) !important; }
+html[data-modo="oscuro"] :is(.text-red-600, .text-red-700, .text-red-800, .text-red-900, .text-red-950) { color: rgb(246 152 152) !important; }
+html[data-modo="oscuro"] :is(.border-red-100, .border-red-200, .border-red-300) { border-color: rgb(239 68 68 / 0.35) !important; }
+html[data-modo="oscuro"] .bg-amber-50, html[data-modo="oscuro"] .bg-amber-100 { background-color: rgb(245 158 11 / 0.12) !important; }
+html[data-modo="oscuro"] .bg-amber-200 { background-color: rgb(245 158 11 / 0.22) !important; }
+html[data-modo="oscuro"] :is(.text-amber-600, .text-amber-700, .text-amber-800, .text-amber-900, .text-amber-950) { color: rgb(250 202 121) !important; }
+html[data-modo="oscuro"] :is(.border-amber-100, .border-amber-200, .border-amber-300) { border-color: rgb(245 158 11 / 0.35) !important; }
+html[data-modo="oscuro"] .bg-yellow-50, html[data-modo="oscuro"] .bg-yellow-100 { background-color: rgb(234 179 8 / 0.12) !important; }
+html[data-modo="oscuro"] .bg-yellow-200 { background-color: rgb(234 179 8 / 0.22) !important; }
+html[data-modo="oscuro"] :is(.text-yellow-600, .text-yellow-700, .text-yellow-800, .text-yellow-900, .text-yellow-950) { color: rgb(243 213 119) !important; }
+html[data-modo="oscuro"] :is(.border-yellow-100, .border-yellow-200, .border-yellow-300) { border-color: rgb(234 179 8 / 0.35) !important; }
+html[data-modo="oscuro"] .bg-orange-50, html[data-modo="oscuro"] .bg-orange-100 { background-color: rgb(249 115 22 / 0.12) !important; }
+html[data-modo="oscuro"] .bg-orange-200 { background-color: rgb(249 115 22 / 0.22) !important; }
+html[data-modo="oscuro"] :is(.text-orange-600, .text-orange-700, .text-orange-800, .text-orange-900, .text-orange-950) { color: rgb(252 178 127) !important; }
+html[data-modo="oscuro"] :is(.border-orange-100, .border-orange-200, .border-orange-300) { border-color: rgb(249 115 22 / 0.35) !important; }
+html[data-modo="oscuro"] .bg-emerald-50, html[data-modo="oscuro"] .bg-emerald-100 { background-color: rgb(16 185 129 / 0.12) !important; }
+html[data-modo="oscuro"] .bg-emerald-200 { background-color: rgb(16 185 129 / 0.22) !important; }
+html[data-modo="oscuro"] :is(.text-emerald-600, .text-emerald-700, .text-emerald-800, .text-emerald-900, .text-emerald-950) { color: rgb(124 216 186) !important; }
+html[data-modo="oscuro"] :is(.border-emerald-100, .border-emerald-200, .border-emerald-300) { border-color: rgb(16 185 129 / 0.35) !important; }
+html[data-modo="oscuro"] .bg-green-50, html[data-modo="oscuro"] .bg-green-100 { background-color: rgb(34 197 94 / 0.12) !important; }
+html[data-modo="oscuro"] .bg-green-200 { background-color: rgb(34 197 94 / 0.22) !important; }
+html[data-modo="oscuro"] :is(.text-green-600, .text-green-700, .text-green-800, .text-green-900, .text-green-950) { color: rgb(133 223 166) !important; }
+html[data-modo="oscuro"] :is(.border-green-100, .border-green-200, .border-green-300) { border-color: rgb(34 197 94 / 0.35) !important; }
+html[data-modo="oscuro"] .bg-blue-50, html[data-modo="oscuro"] .bg-blue-100 { background-color: rgb(59 130 246 / 0.12) !important; }
+html[data-modo="oscuro"] .bg-blue-200 { background-color: rgb(59 130 246 / 0.22) !important; }
+html[data-modo="oscuro"] :is(.text-blue-600, .text-blue-700, .text-blue-800, .text-blue-900, .text-blue-950) { color: rgb(147 186 250) !important; }
+html[data-modo="oscuro"] :is(.border-blue-100, .border-blue-200, .border-blue-300) { border-color: rgb(59 130 246 / 0.35) !important; }
+html[data-modo="oscuro"] .bg-sky-50, html[data-modo="oscuro"] .bg-sky-100 { background-color: rgb(14 165 233 / 0.12) !important; }
+html[data-modo="oscuro"] .bg-sky-200 { background-color: rgb(14 165 233 / 0.22) !important; }
+html[data-modo="oscuro"] :is(.text-sky-600, .text-sky-700, .text-sky-800, .text-sky-900, .text-sky-950) { color: rgb(122 206 243) !important; }
+html[data-modo="oscuro"] :is(.border-sky-100, .border-sky-200, .border-sky-300) { border-color: rgb(14 165 233 / 0.35) !important; }
+html[data-modo="oscuro"] .bg-indigo-50, html[data-modo="oscuro"] .bg-indigo-100 { background-color: rgb(99 102 241 / 0.12) !important; }
+html[data-modo="oscuro"] .bg-indigo-200 { background-color: rgb(99 102 241 / 0.22) !important; }
+html[data-modo="oscuro"] :is(.text-indigo-600, .text-indigo-700, .text-indigo-800, .text-indigo-900, .text-indigo-950) { color: rgb(169 171 247) !important; }
+html[data-modo="oscuro"] :is(.border-indigo-100, .border-indigo-200, .border-indigo-300) { border-color: rgb(99 102 241 / 0.35) !important; }
+html[data-modo="oscuro"] .bg-rose-50, html[data-modo="oscuro"] .bg-rose-100 { background-color: rgb(244 63 94 / 0.12) !important; }
+html[data-modo="oscuro"] .bg-rose-200 { background-color: rgb(244 63 94 / 0.22) !important; }
+html[data-modo="oscuro"] :is(.text-rose-600, .text-rose-700, .text-rose-800, .text-rose-900, .text-rose-950) { color: rgb(249 149 166) !important; }
+html[data-modo="oscuro"] :is(.border-rose-100, .border-rose-200, .border-rose-300) { border-color: rgb(244 63 94 / 0.35) !important; }
+html[data-modo="oscuro"] .bg-violet-50, html[data-modo="oscuro"] .bg-violet-100 { background-color: rgb(139 92 246 / 0.12) !important; }
+html[data-modo="oscuro"] .bg-violet-200 { background-color: rgb(139 92 246 / 0.22) !important; }
+html[data-modo="oscuro"] :is(.text-violet-600, .text-violet-700, .text-violet-800, .text-violet-900, .text-violet-950) { color: rgb(191 165 250) !important; }
+html[data-modo="oscuro"] :is(.border-violet-100, .border-violet-200, .border-violet-300) { border-color: rgb(139 92 246 / 0.35) !important; }
+html[data-modo="oscuro"] .bg-teal-50, html[data-modo="oscuro"] .bg-teal-100 { background-color: rgb(20 184 166 / 0.12) !important; }
+html[data-modo="oscuro"] .bg-teal-200 { background-color: rgb(20 184 166 / 0.22) !important; }
+html[data-modo="oscuro"] :is(.text-teal-600, .text-teal-700, .text-teal-800, .text-teal-900, .text-teal-950) { color: rgb(126 216 206) !important; }
+html[data-modo="oscuro"] :is(.border-teal-100, .border-teal-200, .border-teal-300) { border-color: rgb(20 184 166 / 0.35) !important; }
+
+/* Foco visible también en oscuro. */
+html[data-modo="oscuro"] :is(a, button, [role="button"], summary, input, select, textarea, [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline-color: rgb(var(--c-gold-500));
+  box-shadow: 0 0 0 5px rgb(12 13 16);
+}
+html[data-modo="oscuro"] ::-webkit-scrollbar-track { background: rgb(var(--c-slate-50)); }
+html[data-modo="oscuro"] ::-webkit-scrollbar-thumb { background: rgb(var(--c-slate-200)); border-color: rgb(var(--c-slate-50)); }
+
+/* ---- Tablero de Hoy (24/10) — vale en los dos modos ---- */
+.kpi-hoy {
+  background: rgb(255 255 255);
+  border-color: rgb(var(--c-slate-200));
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.kpi-hoy:hover { border-color: rgb(var(--c-gold-500) / 0.55); }
+.kpi-hoy.kpi-destacado {
+  background: linear-gradient(150deg, rgb(var(--c-gold-500) / 0.22), rgb(var(--c-gold-500) / 0.06));
+  border-color: rgb(var(--c-gold-500) / 0.5);
+}
+.kpi-hoy.kpi-destacado .cifra-premium { color: rgb(var(--c-gold-700)); }
+.kpi-hoy.kpi-apagado .cifra-premium { color: rgb(var(--c-slate-400)); }
+.kpi-hoy.kpi-activo { box-shadow: 0 0 0 2px rgb(var(--c-gold-500) / 0.6); }
+.cifra-premium { font-family: var(--font-serif), Georgia, serif; letter-spacing: -0.01em; }
+html[data-modo="oscuro"] .kpi-hoy { background: rgb(255 255 255 / 0.035); border-color: rgb(255 255 255 / 0.07); }
+html[data-modo="oscuro"] .kpi-hoy.kpi-destacado { background: linear-gradient(150deg, rgb(var(--c-gold-500) / 0.28), rgb(var(--c-gold-500) / 0.08)); border-color: rgb(var(--c-gold-500) / 0.45); }
+html[data-modo="oscuro"] .kpi-hoy.kpi-destacado .cifra-premium { color: rgb(var(--c-gold-800)); }
+html[data-modo="oscuro"] .chip-estado { background: rgb(255 255 255 / 0.04) !important; border-color: rgb(255 255 255 / 0.09) !important; color: rgb(var(--c-slate-800)); }
+html[data-modo="oscuro"] .menu-item[aria-current="page"] {
+  background: linear-gradient(90deg, rgb(var(--c-gold-500) / 0.2), rgb(var(--c-gold-500) / 0.04)) !important;
+  color: rgb(var(--c-gold-900)) !important;
+  box-shadow: inset 2px 0 rgb(var(--c-gold-500));
+}
+html[data-modo="oscuro"] .menu-item { color: rgb(var(--c-slate-700)); }
+html[data-modo="oscuro"] .menu-item:hover { background: rgb(255 255 255 / 0.04); }
+html[data-modo="oscuro"] .barra-movil { background: rgb(10 11 14 / 0.9) !important; border-color: rgb(255 255 255 / 0.07) !important; }
+html[data-modo="oscuro"] .encabezado-panel { background: rgb(12 13 16 / 0.7) !important; border-color: rgb(255 255 255 / 0.06) !important; backdrop-filter: blur(8px); }

@@ -1,5 +1,6 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getProfileMetrics } from "@/lib/metrics";
+import { personasQueEscribieron } from "@/lib/estadisticas-personas";
 
 /**
  * Vista previa de cada perfil (pantalla de perfiles y teléfono). Usa el
@@ -23,7 +24,7 @@ export type PerfilStats = RubroRow & {
   /** Qué requiere acción de una persona (atención humana, captados sin derivar, revisión). */
   accion: { humano: number; sin_derivar: number; revision: number };
   casos: { id: string; full_name: string | null; phone: string | null }[];
-  /** Mensajes recibidos en las últimas 24 h (null = no se pudo leer). */
+  /** Personas que escribieron en las últimas 24 h (24/10; null = no se pudo leer). */
   recibidos24h: number | null;
   /** Campaña más reciente sin archivar. */
   campana: { id: string; nombre: string; estado: string } | null;
@@ -64,12 +65,8 @@ export async function loadPerfiles(): Promise<PerfilStats[]> {
           .eq("capture_state", "captado")
           .order("captured_at", { ascending: false, nullsFirst: false })
           .limit(CASOS_PREVIEW_LIMIT),
-        supabase
-          .from("messages")
-          .select("id, conversations!inner(area)", { count: "exact", head: true })
-          .eq("direction", "entrante")
-          .gte("created_at", desde)
-          .in("conversations.area", areas),
+        // 24/10: personas que escribieron en 24 h (no mensajes).
+        personasQueEscribieron(areas, desde),
         supabase.from("campaigns").select("id, name, status").in("area", areas).is("archived_at", null).order("created_at", { ascending: false }).limit(1),
         supabase.from("content_pieces").select("id", { count: "exact", head: true }).eq("rubro_id", r.id).eq("estado", "programada"),
         supabase
@@ -92,7 +89,7 @@ export async function loadPerfiles(): Promise<PerfilStats[]> {
           full_name: o.contacts?.full_name ?? null,
           phone: o.contacts?.phone ?? null,
         })),
-        recibidos24h: recibidos.error ? null : recibidos.count ?? 0,
+        recibidos24h: recibidos,
         campana: c ? { id: c.id, nombre: c.name, estado: c.status } : null,
         programadas: programadas.error ? null : programadas.count ?? 0,
       };

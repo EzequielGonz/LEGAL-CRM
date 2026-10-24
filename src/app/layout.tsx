@@ -6,6 +6,8 @@ import "./controles.css";
 import "./marca.css";
 import "./renovacion.css";
 import "./afinado.css";
+import "./tema-premium.css";
+import { SCRIPT_MODO } from "@/lib/modo";
 
 // Fuentes autoalojadas por Next (16/10). Inter para toda la operación;
 // Playfair solo para la marca y las pantallas de ingreso (bloque 4).
@@ -48,7 +50,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es" className={`${sans.variable} ${serif.variable}`}>
+    <html lang="es" data-modo="oscuro" suppressHydrationWarning className={`${sans.variable} ${serif.variable}`}>
+      <head>
+        {/* 24/10: modo oscuro premium por defecto; el claro se elige en el menú y se recuerda. */}
+        <script dangerouslySetInnerHTML={{ __html: SCRIPT_MODO }} />
+      </head>
       <body className="antialiased">
         {children}
       </body>
