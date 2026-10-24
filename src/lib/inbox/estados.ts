@@ -7,6 +7,8 @@ export interface DeliveryUpdate {
   id: string;
   delivery_status: string | null;
   delivery_status_at: string | null;
+  /** Errores que informó Meta si no se entregó (23/10: se explican en el chat). */
+  delivery_error?: unknown;
 }
 
 export function mergeDeliveryUpdates<T extends { id: string; delivery_status?: string | null; delivery_status_at?: string | null }>(
@@ -20,7 +22,7 @@ export function mergeDeliveryUpdates<T extends { id: string; delivery_status?: s
     const u = byId.get(m.id);
     if (u && (u.delivery_status ?? null) !== (m.delivery_status ?? null)) {
       changed = true;
-      return { ...m, delivery_status: u.delivery_status, delivery_status_at: u.delivery_status_at };
+      return { ...m, delivery_status: u.delivery_status, delivery_status_at: u.delivery_status_at, ...(u.delivery_error !== undefined ? { delivery_error: u.delivery_error } : {}) };
     }
     return m;
   });
