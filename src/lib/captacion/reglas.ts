@@ -256,7 +256,7 @@ export interface TratamientoAtencion {
   /** Se informa un número de una menor (bloqueo duro). */
   menor: boolean;
   /** Respuesta esperada del agente. */
-  respuesta: "disculpa_breve" | "aviso_de_persona" | "explicar_procedencia" | "reconocer_sin_inventar" | "ninguna";
+  respuesta: "disculpa_breve" | "aviso_de_persona" | "explicar_procedencia" | "reconocer_sin_inventar" | "disculpa_datos" | "ninguna";
   label: string;
 }
 
@@ -291,11 +291,14 @@ export const TRATAMIENTO_ATENCION: Record<MotivoAtencion, TratamientoAtencion> =
   mensaje_posterior_captado: T("comercial", "Mensaje posterior de una persona captada", { principal: true, pausarChat: true }),
   contacto_detenido_escribio: T("comercial", "Escribió un contacto detenido", { principal: true, pausarChat: true }),
 
-  pregunta_procedencia: T("procedencia", "Pregunta de dónde sacamos su contacto", { respuesta: "explicar_procedencia" }),
+  // 24/10 (decisión de la responsable): origen de los datos, reclamo o pedido
+  // de baja → disculpa automática sin explicar el origen y detención. No pasa
+  // a atención humana: el origen lo atiende el equipo de marketing.
+  pregunta_procedencia: T("procedencia", "Pregunta de dónde sacamos su contacto", { detener: "no_contacto", pausarChat: true, respuesta: "disculpa_datos" }),
 
-  procedencia_no_comprobable: T("solicitud_datos", "Procedencia no comprobable", { principal: true, pausarChat: true, respuesta: "reconocer_sin_inventar" }),
-  reclamo_datos: T("solicitud_datos", "Reclamo sobre sus datos", { principal: true, pausarChat: true, respuesta: "reconocer_sin_inventar" }),
-  solicitud_eliminacion: T("solicitud_datos", "Pide eliminar sus datos", { principal: true, pausarChat: true, respuesta: "reconocer_sin_inventar" }),
+  procedencia_no_comprobable: T("solicitud_datos", "Procedencia no comprobable", { detener: "no_contacto", pausarChat: true, respuesta: "disculpa_datos" }),
+  reclamo_datos: T("solicitud_datos", "Reclamo sobre sus datos", { detener: "no_contacto", pausarChat: true, respuesta: "disculpa_datos" }),
+  solicitud_eliminacion: T("solicitud_datos", "Pide eliminar sus datos", { detener: "no_contacto", pausarChat: true, respuesta: "disculpa_datos" }),
 
   numero_de_menor: T("excepcion_datos", "Número informado como de una menor", { principal: true, pausarChat: true, detener: "no_contacto", menor: true, respuesta: "disculpa_breve" }),
   numero_de_tercero: T("excepcion_datos", "Número de un tercero", { principal: true, pausarChat: true, detener: "numero_equivocado", respuesta: "disculpa_breve" }),
