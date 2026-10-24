@@ -10,7 +10,8 @@ import { registerMessageAttachments, saveInboundAttachments } from "@/lib/adjunt
 import type { Area, ChannelType, SourceType } from "@/lib/supabase/database.types";
 import { decidirRespuestaEntrante, type DecisionEntrante } from "@/lib/contacto/origen";
 import { loadContactCalendar } from "@/lib/contacto/calendario";
-import { solicitarAtencion } from "@/lib/captacion";
+import { registrarDetencion, solicitarAtencion } from "@/lib/captacion";
+import { pideOrigenOBajaDeDatos, TEXTO_DISCULPA_DATOS } from "@/lib/agentes/automaticos";
 import { agentReadiness } from "@/lib/profiles";
 import { AREA_TO_RUBRO_ID } from "@/lib/rubros";
 import { TEXTO_PEDIDO_TEXTO, correspondePedidoTexto, detectarFuente, identificadoresValidos } from "@/lib/fuente";
@@ -301,6 +302,17 @@ async function afterInboundSaved({
     return result;
   }
 
+  // 24/10 (decisión de la responsable): «¿de dónde sacaron mi número?» o
+  // «borren mis datos» → disculpa automática, sin explicar el origen (el
+  // agente es asesor y no tiene ese dato; lo atiende el equipo de
+  // marketing), y se detiene el contacto. No pasa a atención humana.
+  const pedidoDatos = aiReadable ? pideOrigenOBajaDeDatos(body) : null;
+  if (pedidoDatos) {
+    await atenderPedidoDeDatos({ contact, conversation, pedido: pedidoDatos });
+    result.respuesta = { responder: false, motivo: "detenido" };
+    return result;
+  }
+
   // Marketing (16/10): «Pide presupuesto» capta, pero la venta sigue con la IA
   // hasta el cierre. Si hay un presupuesto listo esperando (avisado con la
   // plantilla o programado para más tarde), se envía ahora que la ventana
@@ -371,7 +383,7 @@ async function afterInboundSaved({
   if (!decision.responder) {
     // Adjunto que el agente no puede leer (2.6): si la IA podría responder
     // (misma compuerta, como si fuera texto), se pide que lo escriba. Como
-    // mucho una vez cada 12 horas por conversación. Sin transcripción.
+    // mucho una vez cada 30 minutos por conversación (24/10). Sin transcripción.
     if (decision.motivo === "no_legible") {
       const comoTexto = decidirRespuestaEntrante(
         { entrante24hHabilitado: entrante24h, agenteActivo, pausaIa: pause.aiRepliesPaused, chatTomado: !conversation.ai_enabled, legible: true, detenido: false, captado: false, ventanaAbierta: true },
@@ -388,7 +400,43 @@ async function afterInboundSaved({
 }
 
 /**
- * Reserva del pedido de texto (una vez cada 12 h) con comparación y
+ * Pedido sobre los datos (24/10): disculpa fija (si la IA puede responder en
+ * ese chat) y detención «pidió no ser contactado». La disculpa sale antes de
+ * detener: con la detención vigente ya no podría salir.
+ */
+async function atenderPedidoDeDatos({
+  contact,
+  conversation,
+  pedido,
+}: {
+  contact: any;
+  conversation: any;
+  pedido: "origen" | "baja";
+}) {
+  const pause = await getAutomationPause();
+  if (conversation.ai_enabled && !pause.aiRepliesPaused) {
+    try {
+      await sendOutboundMessage({ conversationId: conversation.id, senderType: "agente_ia", body: TEXTO_DISCULPA_DATOS, origin: "respuesta_entrante" });
+    } catch (err) {
+      if (!(err instanceof AutomaticSendBlockedError)) console.error("[datos] No se pudo enviar la disculpa:", err);
+    }
+  }
+  try {
+    await registrarDetencion({
+      contactId: contact.id,
+      motivo: "no_contacto",
+      actor: "ia",
+      nota: pedido === "origen" ? "Preguntó de dónde salieron sus datos: disculpa automática (regla 24/10)." : "Pidió la baja o el borrado de sus datos: disculpa automática (regla 24/10).",
+      motivoAtencion: pedido === "origen" ? "pregunta_procedencia" : "solicitud_eliminacion",
+    });
+  } catch (err) {
+    console.error("[datos] No se pudo registrar la detención:", err);
+  }
+  // Con la detención vigente el bot ya no responde en ese chat ni se le envían campañas.
+}
+
+/**
+ * Reserva del pedido de texto (una vez cada 30 min) con comparación y
  * reemplazo: si dos audios llegan juntos, solo uno cambia la marca y envía.
  */
 async function pedirTexto(supabase: ReturnType<typeof createAdminClient>, conversationId: string, now: Date) {
