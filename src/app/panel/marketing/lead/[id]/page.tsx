@@ -29,7 +29,7 @@ const SEVERITY_COLOR: Record<string, string> = {
 };
 
 function fmt(date: string) {
-  return new Date(date).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", day: "2-digit", month: "2-digit", year: "2-digit", hour: "2-digit", minute: "2-digit" });
+  return new Date(date).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", hourCycle: "h23", day: "2-digit", month: "2-digit", year: "2-digit", hour: "2-digit", minute: "2-digit" });
 }
 
 export default async function LeadPage({ params }: { params: { id: string } }) {

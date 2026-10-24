@@ -119,7 +119,7 @@ export default async function PidePresupuestoPage({ searchParams }: { searchPara
                 <p className="mt-1 text-xs text-slate-700">
                   Presupuesto: {b.moneda} {Number(b.monto).toLocaleString("es-AR")}
                   {b.plazo_entrega ? ` · entrega ${b.plazo_entrega}` : ""}
-                  {b.enviado_at ? ` · enviado ${new Date(b.enviado_at).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires" })}${b.enviado_via === "plantilla" ? " (tras la plantilla)" : ""}` : ""}
+                  {b.enviado_at ? ` · enviado ${new Date(b.enviado_at).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", hourCycle: "h23", dateStyle: "short", timeStyle: "short" })}${b.enviado_via === "plantilla" ? " (tras la plantilla)" : ""}` : ""}
                 </p>
               )}
               <div className="mt-2 flex flex-wrap gap-2 text-sm">
