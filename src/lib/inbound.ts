@@ -284,10 +284,10 @@ async function afterInboundSaved({
   // 24/10 (decisión de la responsable): un contacto detenido que vuelve a
   // escribir SÍ recibe respuesta del agente (por si dice algo relevante); la
   // detención sigue frenando campañas, seguimientos y recontactos. Solo con
-  // bloqueo duro (número de una menor) o si no se pudo verificar la
+  // el número de una menor o si no se pudo verificar la
   // detención, no se responde y queda para una persona.
   const block = await contactBlockReason(contact.id);
-  if (block && (block.hardBlock || block.minorReported || !block.detentionId)) {
+  if (block && (block.minorReported || !block.detentionId)) {
     if (opportunityId) {
       try {
         await setOpportunityState({
