@@ -13,6 +13,7 @@ import { ctasDelPerfil } from "@/lib/redes/conexion";
 import { asignarRolABase, guardarRol } from "@/lib/agentes/roles";
 import { AREAS_DE_PERFIL } from "@/lib/cartera-servidor";
 import { slugDeRubro } from "@/lib/rubros";
+import { TIPOS_CHATS, ejecutarAccionChat } from "@/lib/asistente/chats";
 
 export class AccionNoDisponible extends Error {}
 
@@ -145,6 +146,8 @@ export async function confirmarAccion(id: string): Promise<{ estado: string; res
       const slug = slugDeRubro(a.rubro_id);
       await asignarRolABase(a.rubro_id, AREAS_DE_PERFIL[slug] ?? [slug], String(a.payload?.base_id ?? ""), a.payload?.rol_id ?? null);
       resultado = { asignado: true, rol_id: a.payload?.rol_id ?? null };
+    } else if (TIPOS_CHATS.includes(a.tipo)) {
+      resultado = await ejecutarAccionChat(a);
     } else {
       throw new Error("Tipo de propuesta desconocido.");
     }

@@ -9,6 +9,7 @@
  *    las que pueden contactar personas piden confirmación reforzada.
  */
 import type { SlugPerfil } from "@/lib/marca";
+import { DECLARACIONES_CHATS } from "@/lib/asistente/chats-declaraciones";
 
 export const DECLARACIONES = [
   {
@@ -65,7 +66,7 @@ export const DECLARACIONES = [
   },
   {
     name: "proponer_pausa_campana",
-    description: "Deja como PROPUESTA pausar la campaña en curso del perfil (pausar nunca envía mensajes). Para cargar o reanudar una campaña, usá ir_a_pantalla.",
+    description: "Deja como PROPUESTA pausar la campaña en curso del perfil (pausar nunca envía mensajes). Para reanudarla, usá proponer_lanzamiento.",
     parametersJsonSchema: {
       type: "object",
       properties: { motivo: { type: "string" } },
@@ -199,6 +200,8 @@ export const DECLARACIONES = [
       required: ["destino"],
     },
   },
+  // 24/10: chats (leer, responder, tomar o soltar, captar y derivar).
+  ...DECLARACIONES_CHATS,
 ];
 
 /** Pantallas a las que el asistente puede llevar (rutas internas, sin datos). Pura. */

@@ -26,6 +26,12 @@ export const TIPOS_ACCION = [
   "limite_campana",
   "guardar_rol",
   "asignar_rol_base",
+  // 24/10: chats.
+  "responder_chat",
+  "tomar_chat",
+  "soltar_chat",
+  "marcar_captado",
+  "marcar_derivado",
 ] as const;
 export type TipoAccion = (typeof TIPOS_ACCION)[number];
 
@@ -34,7 +40,8 @@ export const TIPOS_QUE_GASTAN: string[] = [];
 
 export function nivelDeAccion(tipo: string, payload: Record<string, unknown> = {}): NivelAccion {
   if (TIPOS_QUE_GASTAN.includes(tipo)) return "pin";
-  if (tipo === "lanzar_campana") return "contacto";
+  // Lanzar una campaña o responder un chat le escriben a personas reales.
+  if (tipo === "lanzar_campana" || tipo === "responder_chat") return "contacto";
   // Activar un agente ya exigía PIN en el panel; apagar o pausar, no.
   if (tipo === "asignar_agente") return payload.estado === "activa" ? "pin" : "cambio";
   return "cambio";

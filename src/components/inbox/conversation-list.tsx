@@ -37,8 +37,7 @@ export function ConversationList({ perfil = "juridico" }: { perfil?: string }) {
   const params = useParams<{ id?: string }>();
   const router = useRouter();
   const searchParams = useSearchParams();
-  // 21/10: cada perfil tiene su lista. Jurídico abre el chat al lado (/inbox);
-  // los demás, en la conversación con el marco de su perfil.
+  // 21/10: cada perfil tiene su lista; 24/10: en todos, el chat se abre al lado.
   const juridico = perfil === "juridico";
   const lista = juridico ? "/inbox" : `/panel/${perfil}/chats`;
   const [bases, setBases] = useState<{ id: string; nombre: string }[]>([]);
@@ -85,7 +84,7 @@ export function ConversationList({ perfil = "juridico" }: { perfil?: string }) {
     if (value) sp.set(key, value);
     else sp.delete(key);
     sp.delete("pagina");
-    const base = juridico && params?.id ? `/inbox/${params.id}` : lista;
+    const base = params?.id ? `${lista}/${params.id}` : lista;
     router.push(`${base}?${sp.toString()}`);
   }
 
@@ -93,18 +92,19 @@ export function ConversationList({ perfil = "juridico" }: { perfil?: string }) {
     const sp = new URLSearchParams(searchParams.toString());
     if (p > 1) sp.set("pagina", String(p));
     else sp.delete("pagina");
-    const base = juridico && params?.id ? `/inbox/${params.id}` : lista;
+    const base = params?.id ? `${lista}/${params.id}` : lista;
     router.push(`${base}?${sp.toString()}`);
   }
 
   const pages = Math.max(1, Math.ceil(total / pageSize));
   const keep = qs ? `?${qs}` : "";
-  const hrefChat = (id: string) => (juridico ? `/inbox/${id}${keep}` : `/conversacion/${id}?volver=${encodeURIComponent(`${lista}${keep}`)}`);
+  // 24/10: un solo chat. En los cuatro perfiles la conversación se abre al lado de la lista.
+  const hrefChat = (id: string) => `${lista}/${id}${keep}`;
 
   return (
     // Teléfono y tablet chica: lista o conversación, una a la vez (la
     // conversación tiene su «Volver»); desde 768 px, las dos lado a lado.
-    <div className={`${params?.id ? "hidden md:flex" : "flex"} h-full w-full shrink-0 flex-col border-r border-slate-200 bg-white ${juridico ? "md:w-72 xl:w-80" : ""}`}>
+    <div className={`${params?.id ? "hidden md:flex" : "flex"} h-full w-full shrink-0 flex-col border-r border-slate-200 bg-white md:w-72 xl:w-80`}>
       <div className="space-y-2 border-b border-slate-200 p-3">
         <form
           onSubmit={(e) => {

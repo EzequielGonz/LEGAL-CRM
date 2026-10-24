@@ -10,7 +10,7 @@ import { AdjuntosLista } from "@/components/adjuntos/adjuntos-lista";
 import { ResumenSeccion } from "@/components/nivel/resumen-seccion";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Revisión" };
+export const metadata = { title: "Incidencias" };
 
 const PAGE_SIZE = 50;
 
@@ -51,7 +51,7 @@ export default async function RevisionPage({
   return (
     <div>
       <div className="mb-4">
-        <h1 className="text-2xl font-semibold text-slate-900">Revisión</h1>
+        <h1 className="text-2xl font-semibold text-slate-900">Incidencias</h1>
         <p className="mt-1 text-sm text-slate-700">
           Lo que necesita la decisión de una persona. Cada acción pide una nota y queda registrada; nada se borra.
         </p>
