@@ -5,13 +5,15 @@
  * no recibir mensajes, enojo o número equivocado. Las bases son compradas: el
  * origen se explica con la verdad, sin decir que la persona consultó al estudio.
  */
-export function reglaDeRechazo(slug: string): string[] {
+export function reglaDeRechazo(slug: string, modo: "campana" | "entrante" = "campana"): string[] {
   const detenerYa = "- Si pide que no le escriban más, se enoja o es un número equivocado: usá detener_contacto y respondé solo una disculpa breve. Nunca insistas en estos casos.";
   if (slug === "marketing") {
     return ["- Si la persona rechaza el contacto, se enoja, es un número equivocado, ya resolvió su caso o ya tiene abogado: usá detener_contacto y respondé solo una disculpa breve."];
   }
   const oferta =
-    slug === "juridico" || slug === "civil" || slug === "penal"
+    (slug === "juridico" || slug === "civil" || slug === "penal") && modo === "entrante"
+      ? "ofrecé una evaluación sin costo de su caso como segunda opinión"
+      : slug === "juridico" || slug === "civil" || slug === "penal"
       ? "ofrecé una revisión gratis como segunda opinión (muchas veces hay una diferencia a cobrar con la ART)"
       : slug === "coberturas_medicas"
       ? "ofrecé que un asesor le compare sin costo si puede pagar menos por la misma cobertura o una mejor"

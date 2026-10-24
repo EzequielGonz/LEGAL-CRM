@@ -4,27 +4,33 @@
  * prueba nunca se desfasa de lo que responde en producción.
  */
 import type { Area } from "@/lib/supabase/database.types";
-import { rubroSlugDe } from "@/lib/captacion";
-import { CRITERIO_POR_RUBRO } from "@/lib/captacion/reglas";
+import { AREA_TO_RUBRO_ID, RUBRO_IDS } from "@/lib/rubros";
+import { CRITERIO_POR_RUBRO, type RubroSlug } from "@/lib/captacion/reglas";
 import { reglaDeRechazo } from "@/lib/captacion/insistencia";
+import { guionSegunModo, type ModoContacto } from "@/lib/agentes/entrante";
+
+export type { ModoContacto } from "@/lib/agentes/entrante";
+
+/** 24/10: datos deseables de Jurídico para quien escribe por su cuenta (cualquier tema legal). */
+const DESEABLES_JURIDICO_ENTRANTE = ["tema_legal", "que_paso", "localidad", "urgencia"];
 
 /** Criterio de captación y límites del rubro, desde la configuración (no del prompt editable). */
-export function criterioDelRubro(area: Area, rubroId: string | null): string {
-  let slug;
-  try {
-    slug = rubroSlugDe({ rubro_id: rubroId, area });
-  } catch {
-    return "";
-  }
+export function criterioDelRubro(area: Area, rubroId: string | null, modo: ModoContacto = "campana"): string {
+  // Misma resolución que captacion/rubroSlugDe, sin importar la base (así se prueba sin dependencias).
+  const porId = (id: string | null | undefined) => (Object.entries(RUBRO_IDS) as [RubroSlug, string][]).find(([, v]) => v === id)?.[0];
+  const slug = porId(rubroId) ?? porId(AREA_TO_RUBRO_ID[area]);
+  if (!slug) return "";
   const c = CRITERIO_POR_RUBRO[slug];
+  if (!c) return "";
+  const deseables = modo === "entrante" && slug === "juridico" ? DESEABLES_JURIDICO_ENTRANTE : c.deseables;
   return [
     "Captación (regla del sistema):",
     `- Hay captación solo con: ${c.aceptacion}. Cuando la persona lo acepte, usá la herramienta captar con la evidencia (lo que dijo).`,
     "- Agendar no es captar. Compartir datos no es derivar. Derivar lo hace una persona.",
-    `- Datos deseables (si faltan no impiden captar): ${c.deseables.join(", ")}.`,
+    `- Datos deseables (si faltan no impiden captar): ${deseables.join(", ")}.`,
     c.zonaAplica ? "- La ubicación se registra con registrar_ubicacion (AMBA, fuera de AMBA o sin confirmar). Nunca supongas AMBA." : "",
     `- Nunca prometas ni informes: ${c.limites.join(", ")}.`,
-    ...reglaDeRechazo(slug),
+    ...reglaDeRechazo(slug, modo),
     "- Si pide una persona, pregunta algo fuera de tu alcance o comparte datos sensibles: usá escalar_a_humano con la categoría que corresponda.",
   ]
     .filter(Boolean)
@@ -44,6 +50,8 @@ export function buildSystemPrompt(
     qualificationData: Record<string, unknown>;
     campaignName: string | null;
     isFirstReplyToCampaign: boolean;
+    /** 24/10: «entrante» si escribió por su cuenta (sin base ni campaña). Por defecto «campana». */
+    modo?: ModoContacto;
   },
   identity: { presentationName: string; brandName: string }
 ) {
@@ -57,17 +65,21 @@ export function buildSystemPrompt(
     knownFacts.push(`- Viene de la campaña: "${contactContext.campaignName}"`);
   }
 
+  // 24/10: en campaña el guion del agente queda intacto (más «si trae otro tema, atendelo»);
+  // si escribió por su cuenta, venta consultiva general del rubro.
+  const { guion, criterios, datos } = guionSegunModo(contactContext.area, contactContext.modo ?? "campana", agent);
+
   return [
     // Identidad cargada a mano en el perfil (bloque 1.4): no sale del código.
     `Te presentás como ${identity.presentationName}, de ${identity.brandName}. No uses otro nombre ni otra marca, no inventes una persona real, matrícula ni disponibilidad humana, y si te preguntan si sos una automatización respondé con la verdad.`,
     "",
-    agent.system_prompt,
+    guion,
     "",
     "Criterios de calificación comercial (evaluá contra esto con la herramienta evaluar_calificacion):",
-    ...(agent.qualification_criteria ?? []).map((c) => `- ${c}`),
+    ...criterios.map((c) => `- ${c}`),
     "",
     "Datos que tenés que recolectar (usá guardar_datos_calificacion a medida que los obtengas):",
-    ...(agent.required_fields ?? []).map((f) => `- ${f}`),
+    ...datos.map((f) => `- ${f}`),
     "",
     knownFacts.length > 0
       ? [
