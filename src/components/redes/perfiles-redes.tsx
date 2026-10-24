@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { PaginaFacebook, PerfilInstagram } from "@/lib/redes/facebook-pagina";
+import { InstagramPorEnlace } from "@/components/redes/instagram-por-enlace";
 
 interface Respuesta {
   vinculacion: { facebook: boolean; instagram: boolean; variables: { pagina: string; token: string; instagram: string } };
@@ -196,9 +197,13 @@ export function PerfilesRedes({ perfil, enlaceInstagram, bioSugerida }: { perfil
             </div>
           </div>
         ) : r.vinculacion.instagram ? (
-          <p className="rounded-xl bg-amber-50 p-3 text-sm text-amber-900">No se pudo leer Instagram: {r.instagram.error ?? "sin datos"}.</p>
+          <div className="space-y-3">
+            <p className="rounded-xl bg-amber-50 p-3 text-sm text-amber-900">No se pudo leer Instagram: {r.instagram.error ?? "sin datos"}.</p>
+            <InstagramPorEnlace perfil={perfil} />
+          </div>
         ) : (
-          <SinVincular red="Instagram" variables={[r.vinculacion.variables.instagram]} />
+          // 24/10: sin la API vinculada, el perfil se ve por su enlace público.
+          <InstagramPorEnlace perfil={perfil} />
         )}
         {ig?.biografia ? <p className="mt-4 whitespace-pre-wrap rounded-xl bg-slate-50 p-3 text-sm text-slate-700">{ig.biografia}</p> : null}
 
