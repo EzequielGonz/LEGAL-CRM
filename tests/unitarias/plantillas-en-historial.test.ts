@@ -83,5 +83,5 @@ test("reglas de rechazo: «ahora no» sin insistir en los 4 rubros y sin decir �
     assert.match(r, /Nunca digas «base»/);
     assert.doesNotMatch(r, /insistí UNA sola vez preguntando qué día/);
   }
-  assert.match(reglaDeRechazo("coberturas_medicas").join("\n"), /ya compró\/contrató: insistí UNA sola vez/);
+  assert.match(reglaDeRechazo("coberturas_medicas").join("\n"), /ya compró\/contrató.*«no me interesa».*insistí UNA sola vez/);
 });
