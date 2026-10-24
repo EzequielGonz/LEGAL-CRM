@@ -1,7 +1,7 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendWhatsAppText, sendWhatsAppMedia } from "@/lib/whatsapp/client";
 import { sendMetaMessage } from "@/lib/meta/client";
-import { assertAutomaticContactAllowed, ContactDetainedError, manualContactCheck } from "@/lib/detention";
+import { assertAutomaticContactAllowed, contactBlockReason, ContactDetainedError, manualContactCheck } from "@/lib/detention";
 import type { Area, ChannelType, MessageSenderType } from "@/lib/supabase/database.types";
 import { getAutomationPause } from "@/lib/automation-pause";
 import { loadContactCalendar } from "@/lib/contacto/calendario";
@@ -147,11 +147,19 @@ export async function sendOutboundMessage({
     // 23/10: si el contacto quedó detenido mientras la IA armaba la respuesta
     // (p. ej. dos mensajes seguidos y el primero registró la detención), no
     // sale nada y se registra como bloqueado, no como error del sistema.
-    try {
-      await assertAutomaticContactAllowed(contactId);
-    } catch (err) {
-      if (err instanceof ContactDetainedError) throw new AutomaticSendBlockedError("contacto_detenido", err.message);
-      throw err;
+    // 24/10: la respuesta a un mensaje de la persona sí sale aunque esté
+    // detenida (la detención frena lo que inicia la empresa), salvo bloqueo
+    // duro (número de una menor) o si no se pudo verificar la detención.
+    if (origen === "respuesta_entrante") {
+      const b = await contactBlockReason(contactId);
+      if (b && (b.hardBlock || b.minorReported || !b.detentionId)) throw new AutomaticSendBlockedError("contacto_detenido", b.label);
+    } else {
+      try {
+        await assertAutomaticContactAllowed(contactId);
+      } catch (err) {
+        if (err instanceof ContactDetainedError) throw new AutomaticSendBlockedError("contacto_detenido", err.message);
+        throw err;
+      }
     }
     // Revalidación atómica inmediatamente antes de enviar.
     const { data: gate, error: gateError } = await supabase.rpc("claim_ai_send", {
