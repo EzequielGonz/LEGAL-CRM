@@ -322,7 +322,7 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
     });
   // Contexto de las herramientas. Si la IA deriva a una persona, la
   // herramienta deja acá el permiso de un solo uso para el acuse final.
-  const toolCtx: ToolContext = { area, contact, conversationId, finalAckToken: null, opportunityId, pendingDetention: null };
+  const toolCtx: ToolContext = { area, contact, conversationId, finalAckToken: null, opportunityId, pendingDetention: null, postergo: esPostergaFirme(ultimaRespuesta) };
   // Horario de atención (18/10, todos los perfiles): fuera de la franja de asesores igual se capta.
   systemWithBrief = `${systemWithBrief}\n\n${bloqueHorarioAtencion(new Date())}`;
 
@@ -459,7 +459,12 @@ interface ToolContext {
   opportunityId: string | null;
   /** detención a registrar después de la disculpa */
   pendingDetention: { motivo: DetentionMotive; menor: boolean; nota: string; motivoAtencion: string } | null;
+  /** 24/10: respondió «ahora no» a la plantilla: no se detiene ni se califica */
+  postergo?: boolean;
 }
+
+const NOTA_AHORA_NO =
+  "Es un «ahora no»: no se detiene ni se califica (regla del 24/10). Respondé solo un cierre corto y cálido: quedás a disposición por acá cuando quiera retomarlo.";
 
 /** Atención humana o detención pedida por el agente (clasificación 12.2). */
 async function atencionDelAgente(ctx: ToolContext, motivoAtencion: MotivoAtencion, detalle: string) {
@@ -533,6 +538,7 @@ async function executeTool(
     }
 
     case "evaluar_calificacion": {
+      if (ctx.postergo) return { output: { ok: false, nota: NOTA_AHORA_NO } };
       await supabase
         .from("contacts")
         .update({
@@ -920,6 +926,7 @@ async function executeTool(
     }
 
     case "detener_contacto": {
+      if (ctx.postergo) return { output: { ok: false, nota: NOTA_AHORA_NO } };
       const motivoAtencion = String(input.motivo ?? "");
       const t = clasificarAtencion(motivoAtencion);
       if (!t.detener) return { output: { error: "Motivo de detención no válido." } };

@@ -70,7 +70,7 @@ export function instruccionRespuesta(clase: ClaseRespuesta, texto: string, esBot
     case "baja":
       return `${que} Pidió no recibir más mensajes: usá detener_contacto con el motivo que corresponda y respondé SOLO una disculpa breve (por ejemplo «Disculpá la molestia, no te vamos a escribir más. Que tengas un buen día.»). No insistas ni ofrezcas nada.`;
     case "posterga":
-      return `${que} Es un «ahora no»: NO insistas, no preguntes qué día u horario le queda mejor y no ofrezcas mandarle nada. Respondé UNA sola vez, corto y cálido, que no hay problema y que quedás a disposición por acá cuando quiera retomarlo. No prometas volver a escribirle.`;
+      return `${que} Es un «ahora no»: NO insistas, no preguntes qué día u horario le queda mejor y no ofrezcas mandarle nada. Respondé UNA sola vez, corto y cálido, que no hay problema y que quedás a disposición por acá cuando quiera retomarlo. No prometas volver a escribirle. No uses detener_contacto, evaluar_calificacion ni registres un resultado: la persona sigue disponible.`;
     case "reprogramar":
       return `${que} Quiere otro momento: preguntale qué día y horario le queda mejor y seguí desde ahí.`;
     case "resuelto":
