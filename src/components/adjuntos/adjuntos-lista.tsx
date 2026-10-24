@@ -46,8 +46,8 @@ export function AdjuntosLista({ rows, showConversation = false }: { rows: Attach
                 </span>
               </p>
               <p className="text-xs text-slate-400">
-                Recibido {new Date(a.received_at).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires" })}
-                {canSave && a.expires_at ? ` · se puede guardar hasta ${new Date(a.expires_at).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires" })}` : ""}
+                Recibido {new Date(a.received_at).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", hourCycle: "h23", dateStyle: "short", timeStyle: "short" })}
+                {canSave && a.expires_at ? ` · se puede guardar hasta ${new Date(a.expires_at).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", hourCycle: "h23", dateStyle: "short", timeStyle: "short" })}` : ""}
                 {a.status !== "guardado" && a.last_error ? ` · ${a.last_error}` : ""}
               </p>
             </div>

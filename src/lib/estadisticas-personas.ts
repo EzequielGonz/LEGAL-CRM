@@ -141,18 +141,31 @@ export async function resumenPersonas(rubroId: string, areas: string[], ahora = 
   return { conteos, listas };
 }
 
-/** Personas distintas que escribieron desde una fecha (en lugar de contar mensajes). */
+/**
+ * Personas distintas que escribieron desde una fecha (en lugar de contar
+ * mensajes). Cuenta contactos, no conversaciones, y lee de a 1000 filas
+ * (el tope de Supabase) para no quedarse corta cuando hay muchos mensajes.
+ */
 export async function personasQueEscribieron(areas: string[], desde: string): Promise<number | null> {
   try {
-    const { data, error } = await createAdminClient()
-      .from("messages")
-      .select("conversation_id, conversations!inner(area)")
-      .eq("direction", "entrante")
-      .gte("created_at", desde)
-      .in("conversations.area", areas)
-      .limit(20000);
-    if (error) throw error;
-    return new Set(((data ?? []) as any[]).map((m) => m.conversation_id)).size;
+    const s = createAdminClient();
+    const personas = new Set<string>();
+    const LOTE = 1000;
+    for (let desdeFila = 0; desdeFila < 50_000; desdeFila += LOTE) {
+      const { data, error } = await s
+        .from("messages")
+        .select("id, conversation_id, conversations!inner(area, contact_id)")
+        .eq("direction", "entrante")
+        .gte("created_at", desde)
+        .in("conversations.area", areas)
+        .order("id", { ascending: true })
+        .range(desdeFila, desdeFila + LOTE - 1);
+      if (error) throw error;
+      const filas = (data ?? []) as any[];
+      for (const m of filas) personas.add(m.conversations?.contact_id ?? m.conversation_id);
+      if (filas.length < LOTE) break;
+    }
+    return personas.size;
   } catch (err) {
     console.error("[personas] No se pudo contar quiénes escribieron:", err);
     return null;
