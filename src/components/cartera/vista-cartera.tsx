@@ -108,7 +108,7 @@ export async function PaginaCartera({ vista, searchParams }: { vista: VistaCarte
             <p className="text-xs text-slate-500">Desde el lunes</p>
             <dl className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
               {[
-                ["Mensajes recibidos", semana?.semana.respuestas],
+                ["Personas que escribieron", semana?.semana.respuestas],
                 ["Captados", semana?.semana.captados],
                 ["Citas", semana?.semana.citas],
                 ["Derivados", semana?.semana.derivados],
