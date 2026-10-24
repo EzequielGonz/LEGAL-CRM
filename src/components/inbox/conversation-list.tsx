@@ -220,7 +220,7 @@ export function ConversationList({ perfil = "juridico" }: { perfil?: string }) {
               {item.last_message_preview ?? "Sin mensajes todavía"}
             </p>
             <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-0.5 text-xs [overflow-wrap:anywhere]">
-              {item.last_message_at && <span className="tabular-nums text-slate-600">{new Date(item.last_message_at).toLocaleString("es-AR", { dateStyle: "short", timeStyle: "short" })}</span>}
+              {item.last_message_at && <span className="tabular-nums text-slate-600">{new Date(item.last_message_at).toLocaleString("es-AR", { dateStyle: "short", timeStyle: "short", hourCycle: "h23", timeZone: "America/Argentina/Buenos_Aires" })}</span>}
               {item.attention_state && ATTENTION_LABEL[item.attention_state] && (
                 <span className="font-medium text-amber-800">
                   {ATTENTION_LABEL[item.attention_state]}
@@ -237,7 +237,7 @@ export function ConversationList({ perfil = "juridico" }: { perfil?: string }) {
       </div>
 
       <div className="flex items-center justify-between border-t border-slate-200 px-3 py-2 text-xs text-slate-700">
-        <span className="tabular-nums">{total.toLocaleString("es-AR")} conversaciones</span>
+        <span className="tabular-nums">{loading && total === 0 ? "Cargando conversaciones…" : `${total.toLocaleString("es-AR")} conversaciones`}</span>
         <span className="flex items-center gap-2">
           <button type="button" aria-label="Página anterior" disabled={page <= 1} onClick={() => goPage(page - 1)} className="tactil px-2 disabled:text-slate-400">
             ←
