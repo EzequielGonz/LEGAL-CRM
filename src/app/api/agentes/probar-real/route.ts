@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
 /**
- * «Probar el bot real» (24/10). POST { perfil, area?, base_id?, campaign_id?, mensajes[], apertura? }.
+ * «Probar el bot real» (24/10). POST { perfil, area?, base_id?, campaign_id?, mensajes[], apertura?, boton? }.
  * Usa el mismo prompt y el mismo modelo que responden hoy, con mensajes
  * ficticios. No escribe a nadie, no agenda y no cambia estados.
  */
@@ -45,6 +45,7 @@ export async function POST(request: Request) {
       baseId,
       mensajes,
       apertura: typeof body?.apertura === "string" ? body.apertura.slice(0, 1500) : null,
+      boton: body?.boton === true,
     });
     return NextResponse.json({ ok: true, ...r });
   } catch (err) {

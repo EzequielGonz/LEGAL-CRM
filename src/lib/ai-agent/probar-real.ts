@@ -6,6 +6,7 @@ import { buildSystemPrompt, criterioDelRubro } from "./prompt";
 import { GUIA_CAPTACION_Y_CIERRE } from "@/lib/agentes/guia-cierre";
 import { instruccionesDeRol } from "@/lib/agentes/roles";
 import { modoDelContacto } from "@/lib/agentes/entrante";
+import { bloqueBoton, clasificarRespuesta, instruccionUltimaRespuesta } from "@/lib/agentes/plantillas-en-historial";
 import { identificadorModelo } from "@/lib/agentes/modelo";
 import { bloqueHorarioAtencion } from "@/lib/horario-atencion";
 import { toolsForArea } from "./tools";
@@ -36,7 +37,7 @@ export interface TurnoPrueba {
   herramientas: string[];
 }
 
-export async function probarBotReal(input: { area: Area; rubroId: string | null; baseId?: string | null; campaignId?: string | null; mensajes: string[]; apertura?: string | null }): Promise<{
+export async function probarBotReal(input: { area: Area; rubroId: string | null; baseId?: string | null; campaignId?: string | null; mensajes: string[]; apertura?: string | null; boton?: boolean }): Promise<{
   turnos: TurnoPrueba[];
   rol: string | null;
   modelo: string | null;
@@ -76,13 +77,19 @@ export async function probarBotReal(input: { area: Area; rubroId: string | null;
   const tokens = { entrada: 0, salida: 0 };
   let modeloRespuesta: string | null = null;
 
-  for (const m of input.mensajes.slice(0, 8)) {
-    contents.push({ role: "user", parts: [{ text: m }] });
+  const lista = input.mensajes.slice(0, 8);
+  for (let idx = 0; idx < lista.length; idx++) {
+    const m = lista[idx];
+    // 24/10: la primera respuesta a la apertura puede ser un botón de la plantilla (igual que en vivo).
+    const esBoton = !!input.boton && !!apertura && idx === 0;
+    const instr = instruccionUltimaRespuesta({ texto: m, esBoton, aPlantilla: !!apertura && idx === 0, clase: clasificarRespuesta(m) });
+    const systemTurno = instr ? `${system}\n\nRespuesta a la plantilla (regla del sistema, manda sobre el guion):\n${instr}` : system;
+    contents.push({ role: "user", parts: [{ text: esBoton ? bloqueBoton(m) : m }] });
     turnos.push({ rol: "persona", texto: m, herramientas: [] });
     const usadas: string[] = [];
     let texto = "";
     for (let i = 0; i < 4; i++) {
-      const r = await gemini().models.generateContent({ model: modelo, contents, config: { systemInstruction: system, tools: [{ functionDeclarations: tools as any }] } });
+      const r = await gemini().models.generateContent({ model: modelo, contents, config: { systemInstruction: systemTurno, tools: [{ functionDeclarations: tools as any }] } });
       const u: any = (r as any).usageMetadata ?? {};
       tokens.entrada += u.promptTokenCount ?? 0;
       tokens.salida += u.candidatesTokenCount ?? 0;
