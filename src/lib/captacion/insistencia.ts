@@ -11,7 +11,7 @@
  * día y horario. Vale para el botón y para el texto equivalente.
  */
 const AHORA_NO =
-  "- Si dice «ahora no», «no por ahora», «más adelante», que está ocupado o que no tiene tiempo (con un botón o con sus palabras): NO insistas, no preguntes día ni horario y no ofrezcas mandarle nada. Respondé con un único mensaje, corto y cálido, que no hay problema y que quedás a disposición por acá cuando quiera retomarlo. No prometas volver a escribirle.";
+  "- Si dice «ahora no», «no por ahora», «más adelante», que está ocupado o que no tiene tiempo (con un botón o con sus palabras): NO insistas, no preguntes día ni horario y no ofrezcas mandarle nada. Respondé con un único mensaje, corto y cálido, que no hay problema y que quedás a disposición por acá cuando quiera retomarlo. No prometas volver a escribirle. No uses detener_contacto ni evaluar_calificacion: la persona sigue disponible.";
 const SIN_BASE =
   "- Nunca digas «base», «base de datos» ni que lo das de baja «de la base»: si pide no recibir más mensajes, decí que no le vamos a escribir más. Nunca prometas escribirle «en unos días».";
 
