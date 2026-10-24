@@ -20,7 +20,7 @@ export function itemsDelPerfil(items: ItemSalud[], slug: string): ItemSalud[] {
   const nombre = NOMBRE[slug] ?? slug;
   return items.filter((i) => {
     if (GLOBALES.has(i.clave)) return true;
-    if (i.clave.startsWith("whatsapp_") || i.clave.startsWith("agente_")) return i.clave.endsWith(`_${slug}`);
+    if (i.clave.startsWith("whatsapp_") || i.clave.startsWith("agente_") || i.clave.startsWith("calidad_")) return i.clave.endsWith(`_${slug}`);
     if (i.clave === "presupuestos") return slug === "marketing";
     if (i.clave === "errores_ia") return !/\(([^)]+)\)/.test(i.detalle) || i.detalle.includes(`(${nombre})`);
     return true;

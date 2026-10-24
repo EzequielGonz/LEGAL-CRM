@@ -106,8 +106,8 @@ export function detectarFuente(input: {
   return { fuente: "no_informada", detalle: null };
 }
 
-/** Pedido de texto ante un adjunto que el agente no puede leer: como mucho uno cada 12 horas. */
-export const PEDIDO_TEXTO_HORAS = 12;
+/** 24/10: cada audio o archivo recibe el pedido de que lo escriba (como mucho uno cada 30 minutos; antes 12 h y el segundo audio quedaba sin respuesta). */
+export const PEDIDO_TEXTO_HORAS = 0.5;
 export const TEXTO_PEDIDO_TEXTO =
   "Recibí tu mensaje, pero por ahora no puedo escuchar audios ni abrir archivos. ¿Me lo podés escribir en un mensaje de texto?";
 
