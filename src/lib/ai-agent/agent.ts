@@ -42,6 +42,8 @@ import { instruccionesDeRol } from "@/lib/agentes/roles";
 import { buildSystemPrompt, criterioDelRubro } from "./prompt";
 import { GUIA_CAPTACION_Y_CIERRE } from "@/lib/agentes/guia-cierre";
 import { modoDelContacto } from "@/lib/agentes/entrante";
+import { historialConPlantillas } from "@/lib/agentes/historial-servidor";
+import { esPostergaFirme, instruccionUltimaRespuesta } from "@/lib/agentes/plantillas-en-historial";
 
 const MAX_TOOL_ITERATIONS = 6;
 
@@ -165,15 +167,18 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
 
   const { data: messageRows } = await supabase
     .from("messages")
-    .select("direction, body")
+    .select("direction, body, metadata")
     .eq("conversation_id", conversationId)
     .order("created_at", { ascending: false })
     .limit(HISTORY_LIMIT);
   // Se piden los ÚLTIMOS mensajes (antes se tomaban los primeros 30 y en
   // charlas largas el agente no veía lo más reciente) y se ordenan.
   const ordenados = [...(messageRows ?? [])].reverse();
+  // 24/10: las plantillas se ven con su texto real y sus botones, y la
+  // respuesta con botón queda marcada y clasificada (vale para cualquier plantilla).
+  const { filas: conPlantillas, ultima: ultimaRespuesta } = await historialConPlantillas(ordenados as any[]);
 
-  const messages = buildHistory(ordenados);
+  const messages = buildHistory(conPlantillas);
   if (messages.length === 0 || messages[messages.length - 1].role !== "user") {
     // No hay nada nuevo del prospecto para responder.
     return;
@@ -277,6 +282,9 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
   if (rol) systemWithBrief = `${systemWithBrief}\n\n${rol}`;
   // Responder siempre (21/10): llegue por campaña, landing, redes o un «hola» suelto.
   systemWithBrief = `${systemWithBrief}\n\n${BLOQUE_RESPONDER_SIEMPRE}`;
+  // 24/10: qué hacer con la respuesta a la plantilla (botón o equivalente).
+  const instruccionRespuesta = instruccionUltimaRespuesta(ultimaRespuesta);
+  if (instruccionRespuesta) systemWithBrief = `${systemWithBrief}\n\nRespuesta a la plantilla (regla del sistema, manda sobre el guion):\n${instruccionRespuesta}`;
   const tools = toolsForArea(area);
   let escalated = false;
   let finalText = "";
@@ -393,7 +401,7 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
   try {
     if (finalText) {
       try {
-        await sendOutboundMessage({
+        const enviado = await sendOutboundMessage({
           conversationId,
           senderType: "agente_ia",
           body: finalText,
@@ -401,6 +409,12 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
           // Solo el acuse que sigue a una derivación de esta misma respuesta.
           finalAckToken: escalated ? toolCtx.finalAckToken : null,
         });
+        // 24/10: después de un «ahora no» no se recontacta (la persona sigue disponible para seguimientos y campañas).
+        if (esPostergaFirme(ultimaRespuesta) && (enviado as any)?.messageId) {
+          await (supabase.from("messages") as any)
+            .update({ metadata: { recontacto_estado: "descartado", recontacto_motivo: "pidió «ahora no»" } })
+            .eq("id", (enviado as any).messageId);
+        }
       } catch (err) {
         if (err instanceof AutomaticSendBlockedError) {
           // Al revalidar antes de enviar ya no correspondía (pausa general o
@@ -751,7 +765,7 @@ async function executeTool(
         output: {
           ok: true,
           instruccion:
-            "Decile con naturalidad que quedás atento y que le escribimos en unos días para retomar. No presiones.",
+            "Decile con naturalidad que quedás atento por acá para cuando quiera retomarlo. No prometas escribirle en unos días ni presiones.",
         },
       };
     }

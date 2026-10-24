@@ -124,7 +124,7 @@ export function instruccionRecontacto(paso: PasoRecontacto, horasSinRespuesta: n
   const comun = [
     "[Nota interna del sistema: esto NO lo escribió la persona.]",
     `La persona no responde desde hace unas ${Math.max(1, Math.round(horasSinRespuesta))} h. Antes de escribir, decidí si corresponde:`,
-    "- escribir = false si dijo que no le interesa, pidió que no le escriban, se enojó, dijo que ya lo resolvió, es un número equivocado, la charla ya quedó cerrada (se despidieron, ya agendó o la deriva una persona) o no mostró ningún interés real.",
+    "- escribir = false si dijo que no le interesa, pidió que no le escriban, dijo «ahora no», «no por ahora» o que está ocupado (con un botón o con sus palabras), se enojó, dijo que ya lo resolvió, es un número equivocado, la charla ya quedó cerrada (se despidieron, ya agendó o la deriva una persona) o no mostró ningún interés real.",
     "- escribir = true si mostró interés (respondió, preguntó o contó su situación) y quedó sin contestar.",
     "Si escribís: español rioplatense, breve (una o dos frases), cálido, sin presión, sin inventar datos, plazos, montos ni turnos, sin repetir textual tu último mensaje y sin presentarte de nuevo como si fuera el primer contacto.",
   ];
