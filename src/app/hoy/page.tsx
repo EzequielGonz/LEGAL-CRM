@@ -13,11 +13,23 @@ import { Icono } from "@/components/ui/icono-seccion";
 import { VISTAS_CARTERA, cuandoCorto, enlaceConversacion, iniciales } from "@/lib/cartera";
 import { AREAS_DE_PERFIL, contarGrupo, resumenCifras } from "@/lib/cartera-servidor";
 import { getCampaignFunnelCounts } from "@/lib/campaigns";
+import { TableroHoy } from "@/components/inicio/tablero-hoy";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Inicio" };
+export const metadata = { title: "Hoy" };
 
 const MOSTRAR_CAPTADOS = 6;
+
+/** Saludo según la hora de Buenos Aires (24/10). */
+function saludo(ahora = new Date()): string {
+  const h = Number(new Intl.DateTimeFormat("es-AR", { hour: "numeric", hourCycle: "h23", timeZone: "America/Argentina/Buenos_Aires" }).format(ahora));
+  return h < 12 ? "Buen día" : h < 20 ? "Buenas tardes" : "Buenas noches";
+}
+
+function fechaHoy(ahora = new Date()): string {
+  const t = new Intl.DateTimeFormat("es-AR", { weekday: "long", day: "numeric", month: "long", timeZone: "America/Argentina/Buenos_Aires" }).format(ahora);
+  return t.charAt(0).toUpperCase() + t.slice(1);
+}
 
 function Numero({ n, texto }: { n: number | null | undefined; texto: string }) {
   return (
@@ -34,7 +46,7 @@ function Numero({ n, texto }: { n: number | null | undefined; texto: string }) {
  * seguimientos, derivados sin resultado) y dos cifras chicas: la semana y la
  * última base. Las quejas y la atención humana no van acá. Solo lectura.
  */
-export default async function InicioPerfilPage({ searchParams }: { searchParams: { perfil?: string } }) {
+export default async function InicioPerfilPage({ searchParams }: { searchParams: { perfil?: string; grupo?: string } }) {
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
   const perfil = searchParams.perfil ?? "juridico";
@@ -98,13 +110,15 @@ export default async function InicioPerfilPage({ searchParams }: { searchParams:
       <div className="mx-auto max-w-5xl space-y-6">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-semibold text-slate-950">Resumen</h1>
-            <p className="mt-1 text-sm text-slate-600">Lo que podés cerrar hoy, empezando por los captados.</p>
+            <h1 className="text-3xl font-semibold text-slate-950">{saludo()}</h1>
+            <p className="mt-1 text-sm text-slate-600">{fechaHoy()} · personas, no mensajes</p>
           </div>
           <BotonAsistente variante="suave" texto="Resumen de hoy">
             Pedile algo
           </BotonAsistente>
         </div>
+
+        <TableroHoy slug={slug} rubroId={rubroId} areas={areas} grupo={searchParams.grupo} />
 
         {errores > 0 && (
           <p className="rounded-xl bg-red-50 p-3 text-sm font-medium text-red-800">
@@ -123,7 +137,7 @@ export default async function InicioPerfilPage({ searchParams }: { searchParams:
                   Captados para derivar
                   {totalCaptados !== null && <span className="ml-2 rounded-full bg-gold-500/15 px-2 py-0.5 align-middle text-xs font-semibold text-gold-800 tabular-nums">{totalCaptados}</span>}
                 </h2>
-                <p className="text-sm text-slate-600">Aceptaron el siguiente paso y falta pasarlos al profesional.</p>
+                <p className="text-sm text-slate-600">Aceptaron el siguiente paso y falta pasarlos {slug === "juridico" ? "al profesional" : slug === "marketing" ? "al equipo" : "al asesor"}.</p>
               </div>
             </div>
             {(totalCaptados ?? 0) > 0 && (
@@ -242,7 +256,7 @@ export default async function InicioPerfilPage({ searchParams }: { searchParams:
             <p className="text-sm font-semibold text-slate-900">Esta semana</p>
             <p className="text-xs text-slate-500">Desde el lunes</p>
             <div className="mt-4 grid grid-cols-4 gap-3">
-              <Numero n={cifras?.semana.respuestas} texto="mensajes recibidos" />
+              <Numero n={cifras?.semana.respuestas} texto="personas escribieron" />
               <Numero n={cifras?.semana.citas} texto="citas" />
               <Numero n={cifras?.semana.captados} texto="captados" />
               <Numero n={cifras?.semana.derivados} texto="derivados" />
