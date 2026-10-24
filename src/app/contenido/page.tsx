@@ -24,7 +24,7 @@ const ESTADO_LABEL: Record<string, string> = {
   incierta: "Incierta: se reconcilia antes de repetir",
 };
 const fecha = (iso: string | null, tz = "America/Argentina/Buenos_Aires") =>
-  iso ? new Date(iso).toLocaleString("es-AR", { timeZone: tz, dateStyle: "short", timeStyle: "short" }) : "Sin fecha";
+  iso ? new Date(iso).toLocaleString("es-AR", { timeZone: tz, hourCycle: "h23", dateStyle: "short", timeStyle: "short" }) : "Sin fecha";
 const cifra = (v: number | null | undefined) => (v === null || v === undefined ? "Sin datos" : v.toLocaleString("es-AR"));
 
 /**
