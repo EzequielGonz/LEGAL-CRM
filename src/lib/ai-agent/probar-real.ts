@@ -5,6 +5,7 @@ import type { Area } from "@/lib/supabase/database.types";
 import { buildSystemPrompt, criterioDelRubro } from "./prompt";
 import { GUIA_CAPTACION_Y_CIERRE } from "@/lib/agentes/guia-cierre";
 import { instruccionesDeRol } from "@/lib/agentes/roles";
+import { modoDelContacto } from "@/lib/agentes/entrante";
 import { identificadorModelo } from "@/lib/agentes/modelo";
 import { bloqueHorarioAtencion } from "@/lib/horario-atencion";
 import { toolsForArea } from "./tools";
@@ -35,7 +36,7 @@ export interface TurnoPrueba {
   herramientas: string[];
 }
 
-export async function probarBotReal(input: { area: Area; rubroId: string | null; baseId?: string | null; mensajes: string[]; apertura?: string | null }): Promise<{
+export async function probarBotReal(input: { area: Area; rubroId: string | null; baseId?: string | null; campaignId?: string | null; mensajes: string[]; apertura?: string | null }): Promise<{
   turnos: TurnoPrueba[];
   rol: string | null;
   modelo: string | null;
@@ -50,14 +51,21 @@ export async function probarBotReal(input: { area: Area; rubroId: string | null;
     brandName: profile?.brand_name?.trim() || "la marca",
   };
   const apertura = input.apertura?.trim() || "";
+  // 24/10: con base, campaña o apertura se prueba como contacto de campaña; si no, como alguien que escribe por su cuenta.
+  let campana: { name: string; agent_role_id: string | null } | null = null;
+  if (input.campaignId) {
+    const { data } = await s.from("campaigns" as any).select("name, agent_role_id").eq("id", input.campaignId).maybeSingle();
+    campana = (data as any) ?? null;
+  }
+  const modo = modoDelContacto({ importedBaseId: input.baseId ?? null, campaignId: campana ? input.campaignId : null, campaignName: apertura ? "prueba" : null });
   let system = buildSystemPrompt(
     agente as any,
-    { area: input.area, fullName: null, dniCuil: null, qualificationData: {}, campaignName: null, isFirstReplyToCampaign: !!apertura },
+    { area: input.area, fullName: null, dniCuil: null, qualificationData: {}, campaignName: campana?.name ?? null, isFirstReplyToCampaign: !!apertura, modo },
     identidad
   );
-  const crit = criterioDelRubro(input.area, input.rubroId);
+  const crit = criterioDelRubro(input.area, input.rubroId, modo);
   if (crit) system = `${system}\n\n${crit}`;
-  const rol = input.baseId ? await instruccionesDeRol({ imported_base_id: input.baseId }) : "";
+  const rol = await instruccionesDeRol({ imported_base_id: input.baseId ?? null }, { rolId: campana?.agent_role_id ?? null, campana: campana?.name ?? null });
   if (rol) system = `${system}\n\n${rol}`;
   system = `${system}\n\n${GUIA_CAPTACION_Y_CIERRE}\n\n${bloqueHorarioAtencion(new Date())}`;
 
