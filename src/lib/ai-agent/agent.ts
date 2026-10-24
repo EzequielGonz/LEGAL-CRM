@@ -44,6 +44,8 @@ import { GUIA_CAPTACION_Y_CIERRE } from "@/lib/agentes/guia-cierre";
 import { modoDelContacto } from "@/lib/agentes/entrante";
 import { historialConPlantillas } from "@/lib/agentes/historial-servidor";
 import { esPostergaFirme, instruccionUltimaRespuesta } from "@/lib/agentes/plantillas-en-historial";
+import { motivoParaNoResponder, TEXTO_SIN_RESPUESTA } from "@/lib/agentes/automaticos";
+import { bloqueFichaNegocio, leerFichaNegocio } from "@/lib/agentes/ficha-negocio";
 
 const MAX_TOOL_ITERATIONS = 6;
 
@@ -167,7 +169,7 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
 
   const { data: messageRows } = await supabase
     .from("messages")
-    .select("direction, body, metadata, created_at")
+    .select("direction, sender_type, body, metadata, created_at")
     .eq("conversation_id", conversationId)
     .order("created_at", { ascending: false })
     .limit(HISTORY_LIMIT);
@@ -184,6 +186,33 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
   const ultimoEntranteVisto = [...ordenados].reverse().find((m: any) => m.direction === "entrante")?.created_at ?? null;
   if (messages.length === 0 || messages[messages.length - 1].role !== "user") {
     // No hay nada nuevo del prospecto para responder.
+    return;
+  }
+
+  // 24/10: del otro lado hay un contestador automático (o un bucle con uno):
+  // no se responde, no se usan herramientas, no se deriva a una persona y no
+  // se guardan datos. Cuando escriba una persona real, el bot responde.
+  const sinResponder = motivoParaNoResponder(ordenados as any[], new Date());
+  if (sinResponder) {
+    await registrarTurno({
+      experimentId: null,
+      candidato: null,
+      precio: null,
+      opportunityId: null,
+      conversationId,
+      rubroId: contact.rubro_id ?? null,
+      proveedor: "gemini_api",
+      modeloPedido: identificadorModelo(),
+      modeloRespuesta: null,
+      llamadas: 0,
+      tokensEntrada: 0,
+      tokensSalida: 0,
+      tokensRazonamiento: 0,
+      latenciaMs: 0,
+      herramientas: [],
+      resultado: "bloqueado",
+      error: TEXTO_SIN_RESPUESTA[sinResponder],
+    });
     return;
   }
 
@@ -283,6 +312,9 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
   // 24/10: manda el rol de la campaña; si la campaña no tiene, el de la base.
   const rol = await instruccionesDeRol(contact, { rolId: rolDeCampana, campana: campaignName });
   if (rol) systemWithBrief = `${systemWithBrief}\n\n${rol}`;
+  // 24/10: ficha del negocio del rubro (datos reales cargados por el equipo, editable en Bot IA).
+  const ficha = await leerFichaNegocio(contact.rubro_id ?? profileIdForArea(area) ?? null);
+  if (ficha) systemWithBrief = `${systemWithBrief}\n\n${bloqueFichaNegocio(ficha)}`;
   // Responder siempre (21/10): llegue por campaña, landing, redes o un «hola» suelto.
   systemWithBrief = `${systemWithBrief}\n\n${BLOQUE_RESPONDER_SIEMPRE}`;
   // 24/10: qué hacer con la respuesta a la plantilla (botón o equivalente).
@@ -515,6 +547,7 @@ const INSTRUCCION_RESPUESTA: Record<string, string> = {
   aviso_de_persona: "Avisale con calidez que una persona del equipo va a seguir la conversación. No prometas plazos.",
   explicar_procedencia: "Explicá con la verdad de dónde proviene el contacto, sin inventar datos.",
   reconocer_sin_inventar: "Reconocé su pedido, decile que una persona lo va a revisar y no inventes de dónde salió su contacto.",
+  disculpa_datos: "Respondé solo esta disculpa, sin explicar ni inventar de dónde salió su contacto (no tenés ese dato): «Te pido disculpas por la molestia. Desde acá no tengo el detalle de cómo nos llegó tu contacto, pero ya registré tu pedido y no te vamos a volver a escribir. ¡Que tengas un buen día!»",
   ninguna: "No respondas nada más.",
 };
 
