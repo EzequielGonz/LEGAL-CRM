@@ -78,7 +78,7 @@ test("menú: Conversaciones y Contactos abren la cartera; las listas completas s
   assert.ok(s[1].href.startsWith("/conversaciones?"));
   assert.ok(s[2].href.startsWith("/contactos?"));
   assert.ok(s[2].tabs.some((t) => t.label === "Prospectos" && t.href.startsWith("/prospectos-por-base?")));
-  assert.ok(s[4].tabs.some((t) => t.label === "Perfiles" && !t.oculto));
+  assert.ok(s[5].tabs.some((t) => t.label === "Perfil de WhatsApp y redes" && !t.oculto));
   assert.equal(seccionActiva(s, "/oportunidades", "perfil=agencia_0km&indicador=captado_sin_derivar")?.seccion.clave, "conversaciones");
   assert.equal(seccionActiva(s, "/oportunidades", "perfil=agencia_0km&indicador=derivado")?.seccion.clave, "contactos");
   assert.equal(seccionActiva(s, "/recuperar", "perfil=agencia_0km")?.seccion.clave, "conversaciones");

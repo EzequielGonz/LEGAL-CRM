@@ -90,7 +90,7 @@ export function SelectorPerfilesPC({
                     <div className="mt-2 flex flex-wrap gap-1.5">
                       {p.accion.sin_derivar > 0 && <Chip tono="urgente">{p.accion.sin_derivar === 1 ? "1 captado sin derivar" : `${p.accion.sin_derivar} captados sin derivar`}</Chip>}
                       {p.accion.humano > 0 && <Chip tono="urgente">{p.accion.humano === 1 ? "1 pide una persona" : `${p.accion.humano} piden una persona`}</Chip>}
-                      {(p.recibidos24h ?? 0) > 0 && <Chip tono="info">{p.recibidos24h} mensaje(s) en 24 h</Chip>}
+                      {(p.recibidos24h ?? 0) > 0 && <Chip tono="info">{p.recibidos24h} persona(s) escribieron en 24 h</Chip>}
                       {p.campana && <Chip tono={p.campana.estado === "en_curso" ? "ok" : "info"}>Campaña {ESTADO_CAMPANA[p.campana.estado] ?? p.campana.estado}</Chip>}
                       {(p.programadas ?? 0) > 0 && <Chip tono="info">{p.programadas} publicaciones programadas</Chip>}
                       {pendientes === 0 && !(p.recibidos24h ?? 0) && <Chip tono="ok">Todo al día</Chip>}
@@ -109,7 +109,7 @@ export function SelectorPerfilesPC({
                   <p className="text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">Esta semana</p>
                   <dl className="mt-2 grid grid-cols-4 gap-2">
                     {[
-                      { t: "Mensajes", v: c?.semana.respuestas },
+                      { t: "Escribieron", v: c?.semana.respuestas },
                       { t: "Captados", v: c?.semana.captados },
                       { t: "Citas", v: c?.semana.citas },
                       { t: "Derivados", v: c?.semana.derivados },
