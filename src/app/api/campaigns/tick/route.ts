@@ -91,14 +91,21 @@ export async function POST(request: Request) {
     //    nadie, así que corre aunque la pausa general esté puesta. Si este
     //    latido ya usó mucho tiempo, queda para el próximo (la búsqueda puede
     //    tardar hasta ~45 s y la función tiene 60 s).
+    //    24/10: hasta 3 zonas por latido mientras sobre tiempo (antes una sola:
+    //    una extracción de 40 zonas tardaba horas).
     let extraccion: unknown = "sin tiempo en este latido";
-    if (Date.now() - inicio < 12_000) {
+    const pasos: unknown[] = [];
+    for (let z = 0; z < 3 && Date.now() - inicio < 12_000; z++) {
       try {
-        extraccion = await avanzarExtraccion();
+        const paso = await avanzarExtraccion();
+        pasos.push(paso);
+        if (typeof paso === "string" && (paso.startsWith("sin extracciones") || paso.startsWith("otra ejecución") || paso.endsWith(": lista"))) break;
       } catch (err: any) {
-        extraccion = { error: String(err?.message ?? err) };
+        pasos.push({ error: String(err?.message ?? err) });
+        break;
       }
     }
+    if (pasos.length) extraccion = pasos.length === 1 ? pasos[0] : pasos;
 
     // 6) Avisos de Meta (21/10): si una línea manda y no recibe avisos
     //    (mensajes entrantes ni estados), se suscribe su cuenta al webhook del
