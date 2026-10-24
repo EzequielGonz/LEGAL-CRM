@@ -78,7 +78,7 @@ export function CalendarioPublicaciones({ piezas: inicial }: { piezas: PiezaCale
           <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
             {lista.map((p) => {
               const e = estadoVisible(p);
-              const hora = p.programada_para ? new Date(p.programada_para).toLocaleTimeString("es-AR", { timeZone: TZ, hour: "2-digit", minute: "2-digit" }) : "";
+              const hora = p.programada_para ? new Date(p.programada_para).toLocaleTimeString("es-AR", { timeZone: TZ, hourCycle: "h23", hour: "2-digit", minute: "2-digit" }) : "";
               const abiertaEsta = abierta === p.id;
               return (
                 <li key={p.id} className="flex gap-3 rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
