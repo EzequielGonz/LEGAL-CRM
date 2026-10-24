@@ -23,10 +23,11 @@ export function validarRol(p: PedidoRol): { ok: true; rol: { nombre: string; obj
 }
 
 /** Bloque que se suma al prompt del agente. Pura. */
-export function bloqueDeRol(rol: Pick<Rol, "nombre" | "objetivo" | "tono" | "instrucciones">, nombreBase: string | null): string {
+export function bloqueDeRol(rol: Pick<Rol, "nombre" | "objetivo" | "tono" | "instrucciones">, nombreBase: string | null, origen: "base" | "campana" = "base"): string {
+  const de = origen === "campana" ? "esta campaña" : "esta base";
   return [
-    `Rol para esta base${nombreBase ? ` («${nombreBase}»)` : ""}: ${rol.nombre}.`,
-    "Este rol lo definió la responsable para este grupo de clientes y se SUMA a tu guion general: la base general sigue vigente (presentación, reglas, insistencia y cierre). El rol agrega o ajusta el enfoque para esta base; si algo del rol choca con las reglas estrictas del sistema, valen las reglas. Nunca le digas «base» a la persona.",
+    `Rol para ${de}${nombreBase ? ` («${nombreBase}»)` : ""}: ${rol.nombre}.`,
+    `Este rol lo definió la responsable para este grupo de clientes y se SUMA a tu guion general: la base general sigue vigente (presentación, reglas, insistencia y cierre). El rol agrega o ajusta el enfoque para ${de}; si algo del rol choca con las reglas estrictas del sistema, valen las reglas. Nunca le digas «base» a la persona.`,
     rol.objetivo ? `Objetivo: ${rol.objetivo}` : "",
     rol.tono ? `Tono: ${rol.tono}` : "",
     "Instrucciones:",

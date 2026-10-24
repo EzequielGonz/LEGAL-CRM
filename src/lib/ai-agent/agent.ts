@@ -41,6 +41,7 @@ import { registrarTurno } from "@/lib/experimento/servicio";
 import { instruccionesDeRol } from "@/lib/agentes/roles";
 import { buildSystemPrompt, criterioDelRubro } from "./prompt";
 import { GUIA_CAPTACION_Y_CIERRE } from "@/lib/agentes/guia-cierre";
+import { modoDelContacto } from "@/lib/agentes/entrante";
 
 const MAX_TOOL_ITERATIONS = 6;
 
@@ -185,7 +186,7 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
   // la plantilla), esta es su primera respuesta.
   const { data: latestCampaignContact } = await supabase
     .from("campaign_contacts")
-    .select("campaigns(name)")
+    .select("campaign_id, campaigns(name, agent_role_id)")
     .eq("contact_id", contact.id)
     .order("sent_at", { ascending: false, nullsFirst: false })
     .limit(1)
@@ -193,6 +194,9 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
   const campaignName = (latestCampaignContact as any)?.campaigns?.name ?? null;
   const isFirstReplyToCampaign =
     !!campaignName && contact.status === "esperando_respuesta_prospecto";
+  // 24/10: sin base ni campaña, escribió por su cuenta → bot general con venta consultiva.
+  const modo = modoDelContacto({ importedBaseId: contact.imported_base_id ?? null, campaignName, campaignId: (latestCampaignContact as any)?.campaign_id ?? null });
+  const rolDeCampana = (latestCampaignContact as any)?.campaigns?.agent_role_id ?? null;
 
   // Sacamos al contacto de "esperando respuesta" apenas responde: si no,
   // un segundo mensaje suyo antes de que la IA llegue a calificarlo dispara
@@ -217,6 +221,7 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
     qualificationData: contact.qualification_data ?? {},
     campaignName,
     isFirstReplyToCampaign,
+    modo,
   }, identity);
   // Marketing (16/10): si la persona acepta escuchar la propuesta, recién ahí
   // se hace el análisis profundo con fuentes reales (con el modelo del
@@ -238,7 +243,7 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
   // Marketing: se suma lo que el sistema sabe del negocio (análisis), la guía de venta y cómo registrar el resultado.
   const marketingBrief =
     area === "marketing" ? [await buildMarketingBrief(contact.id), await briefVenta(contact.id).catch(() => "")].filter(Boolean).join("\n\n") : "";
-  const criterio = criterioDelRubro(area, contact.rubro_id ?? null);
+  const criterio = criterioDelRubro(area, contact.rubro_id ?? null, modo);
   const withCriterio = criterio ? `${system}\n\n${criterio}` : system;
   let systemWithBrief = marketingBrief ? `${withCriterio}\n\n${marketingBrief}` : withCriterio;
   // Etapa 3: si hay una asignación ACTIVA de la biblioteca para esta área, el
@@ -267,7 +272,8 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
     console.error("[agente] No se pudo leer la asignación de la biblioteca; se usa la configuración actual:", err);
   }
   // Rol de la base (21/10): si la base del contacto tiene un rol cargado, se suma.
-  const rol = await instruccionesDeRol(contact);
+  // 24/10: manda el rol de la campaña; si la campaña no tiene, el de la base.
+  const rol = await instruccionesDeRol(contact, { rolId: rolDeCampana, campana: campaignName });
   if (rol) systemWithBrief = `${systemWithBrief}\n\n${rol}`;
   // Responder siempre (21/10): llegue por campaña, landing, redes o un «hola» suelto.
   systemWithBrief = `${systemWithBrief}\n\n${BLOQUE_RESPONDER_SIEMPRE}`;

@@ -24,8 +24,23 @@ export interface Rol {
   updated_at?: string;
 }
 
-/** Instrucciones del rol de la base del contacto (o "" si no tiene). */
-export async function instruccionesDeRol(contact: { imported_base_id?: string | null }): Promise<string> {
+/**
+ * Instrucciones del rol del contacto (o "" si no tiene).
+ * 24/10: si su campaña tiene rol, manda ese (vale solo para esa campaña);
+ * si no, el de la base.
+ */
+export async function instruccionesDeRol(
+  contact: { imported_base_id?: string | null },
+  campana: { rolId?: string | null; campana?: string | null } = {}
+): Promise<string> {
+  if (campana.rolId) {
+    try {
+      const { data: rol } = await createAdminClient().from("agent_roles" as any).select("nombre, objetivo, tono, instrucciones, archived_at").eq("id", campana.rolId).maybeSingle();
+      if (rol && !(rol as any).archived_at) return bloqueDeRol(rol as any, campana.campana ?? null, "campana");
+    } catch (err) {
+      console.error("[roles] No se pudo leer el rol de la campaña:", err);
+    }
+  }
   if (!contact?.imported_base_id) return "";
   try {
     const s = createAdminClient();
@@ -80,6 +95,7 @@ export async function archivarRol(rubroId: string, id: string, nota: string): Pr
   if (error) throw new Error(error.message);
   // Las bases que lo usaban vuelven al agente del perfil.
   await s.from("imported_bases" as any).update({ agent_role_id: null } as any).eq("agent_role_id", id);
+  await s.from("campaigns" as any).update({ agent_role_id: null } as any).eq("agent_role_id", id);
 }
 
 /** Carga (o saca, con rolId null) un rol a una base del mismo perfil. */
@@ -93,4 +109,24 @@ export async function asignarRolABase(rubroId: string, areas: string[], baseId: 
   }
   const { error } = await s.from("imported_bases" as any).update({ agent_role_id: rolId } as any).eq("id", baseId);
   if (error) throw new Error(error.message);
+}
+
+/** 24/10: carga (o saca, con rolId null) un rol a una campaña del mismo perfil. Vale solo para esa campaña. */
+export async function asignarRolACampana(rubroId: string, areas: string[], campaignId: string, rolId: string | null, actor = "panel"): Promise<void> {
+  const s = createAdminClient();
+  const { data: camp } = await s.from("campaigns" as any).select("id, area, agent_role_id").eq("id", campaignId).maybeSingle();
+  if (!camp || !areas.includes((camp as any).area)) throw new Error("La campaña no es de este perfil.");
+  if (rolId) {
+    const { data: rol } = await s.from("agent_roles" as any).select("id, rubro_id, archived_at").eq("id", rolId).maybeSingle();
+    if (!rol || (rol as any).rubro_id !== rubroId || (rol as any).archived_at) throw new Error("El rol no es de este perfil o está archivado.");
+  }
+  const { error } = await s.from("campaigns" as any).update({ agent_role_id: rolId } as any).eq("id", campaignId);
+  if (error) throw new Error(error.message);
+  await s.from("ops_change_log").insert({
+    actor,
+    action: "rol_de_campana",
+    target: `campaigns:${campaignId}`,
+    before: { agent_role_id: (camp as any).agent_role_id ?? null },
+    after: { agent_role_id: rolId },
+  } as any);
 }

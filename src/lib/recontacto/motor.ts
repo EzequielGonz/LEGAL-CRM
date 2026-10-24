@@ -21,6 +21,7 @@ import { agentReadiness, getProfile, profileIdForArea } from "@/lib/profiles";
 import { identificadorModelo } from "@/lib/agentes/modelo";
 import { validarTextoSalida } from "@/lib/agentes/contrato";
 import { instruccionesDeRol } from "@/lib/agentes/roles";
+import { modoDelContacto } from "@/lib/agentes/entrante";
 import { GUIA_CAPTACION_Y_CIERRE } from "@/lib/agentes/guia-cierre";
 import { perfilDeArea } from "@/lib/navegacion";
 import { buildSystemPrompt, criterioDelRubro } from "@/lib/ai-agent/prompt";
@@ -220,14 +221,24 @@ export async function procesarRecontactos(opts: { enviar?: boolean; presupuestoM
       const profile = await getProfile(profileIdForArea(area)!);
       const identidad = { presentationName: profile?.agent_presentation_name?.trim() ?? "", brandName: profile?.brand_name?.trim() ?? "" };
       const contacto = c.contacts ?? {};
+      // 24/10: mismo modo y rol que el agente en vivo (campaña o escribió por su cuenta).
+      const { data: ultimaCampana } = await s
+        .from("campaign_contacts")
+        .select("campaign_id, campaigns(name, agent_role_id)")
+        .eq("contact_id", c.contact_id)
+        .order("sent_at", { ascending: false, nullsFirst: false })
+        .limit(1)
+        .maybeSingle();
+      const campNombre = (ultimaCampana as any)?.campaigns?.name ?? null;
+      const modo = modoDelContacto({ importedBaseId: contacto.imported_base_id ?? null, campaignName: campNombre, campaignId: (ultimaCampana as any)?.campaign_id ?? null });
       let system = buildSystemPrompt(
         agente as any,
-        { area, fullName: contacto.full_name ?? null, dniCuil: contacto.dni_cuil ?? null, qualificationData: contacto.qualification_data ?? {}, campaignName: null, isFirstReplyToCampaign: false },
+        { area, fullName: contacto.full_name ?? null, dniCuil: contacto.dni_cuil ?? null, qualificationData: contacto.qualification_data ?? {}, campaignName: null, isFirstReplyToCampaign: false, modo },
         identidad
       );
-      const crit = criterioDelRubro(area, contacto.rubro_id ?? null);
+      const crit = criterioDelRubro(area, contacto.rubro_id ?? null, modo);
       if (crit) system = `${system}\n\n${crit}`;
-      const rol = await instruccionesDeRol(contacto);
+      const rol = await instruccionesDeRol(contacto, { rolId: (ultimaCampana as any)?.campaigns?.agent_role_id ?? null, campana: campNombre });
       if (rol) system = `${system}\n\n${rol}`;
       system = `${system}\n\n${GUIA_CAPTACION_Y_CIERRE}`;
 
