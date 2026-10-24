@@ -167,7 +167,7 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
 
   const { data: messageRows } = await supabase
     .from("messages")
-    .select("direction, body, metadata")
+    .select("direction, body, metadata, created_at")
     .eq("conversation_id", conversationId)
     .order("created_at", { ascending: false })
     .limit(HISTORY_LIMIT);
@@ -179,6 +179,9 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
   const { filas: conPlantillas, ultima: ultimaRespuesta } = await historialConPlantillas(ordenados as any[]);
 
   const messages = buildHistory(conPlantillas);
+  // 24/10: para no responder dos veces cuando llegan dos mensajes seguidos.
+  const inicioTurno = new Date().toISOString();
+  const ultimoEntranteVisto = [...ordenados].reverse().find((m: any) => m.direction === "entrante")?.created_at ?? null;
   if (messages.length === 0 || messages[messages.length - 1].role !== "user") {
     // No hay nada nuevo del prospecto para responder.
     return;
@@ -396,6 +399,25 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
     const detalle = String(err?.message ?? err).slice(0, 400);
     await registrar("error", { error: detalle });
     throw err;
+  }
+
+  // 24/10: si mientras tanto llegó otro mensaje de la persona (lo responde ese
+  // turno, con todo el contexto) o ya salió otra respuesta del bot, esta no sale.
+  if (finalText && !escalated) {
+    const { data: ultimoAhora } = await supabase
+      .from("messages")
+      .select("direction, sender_type, created_at")
+      .eq("conversation_id", conversationId)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    const u: any = ultimoAhora;
+    const otraRespuesta = u && u.direction === "saliente" && u.sender_type === "agente_ia" && Date.parse(u.created_at) > Date.parse(inicioTurno);
+    const otroEntrante = u && u.direction === "entrante" && ultimoEntranteVisto && Date.parse(u.created_at) > Date.parse(ultimoEntranteVisto);
+    if (otraRespuesta || otroEntrante) {
+      await registrar("bloqueado", { error: otraRespuesta ? "Ya salió otra respuesta del bot en este chat: no se duplica." : "Llegó otro mensaje: lo responde el turno siguiente." });
+      return;
+    }
   }
 
   try {
