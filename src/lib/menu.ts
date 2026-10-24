@@ -2,6 +2,9 @@
  * Menú del panel (reorganización 18/10). Seis secciones iguales en los
  * cuatro perfiles; cada sección agrupa sus vistas en pestañas:
  *
+ * 24/10: dos grupos. Trabajo (Hoy · Chats · Contactos · Campañas) y
+ * Configurar (Bot IA · Línea y plantillas · Redes · Ajustes).
+ *
  *  1. Inicio          — resumen (captados primero), estadísticas y salud.
  *  2. Conversaciones  — chats y lo que pide una persona.
  *  3. Contactos       — oportunidades, citas, seguimiento y cerrados.
@@ -29,10 +32,12 @@ export interface ItemMenu {
   oculto?: boolean;
 }
 
-export type ClaveSeccion = "inicio" | "conversaciones" | "contactos" | "captacion" | "redes" | "configuracion";
+export type ClaveSeccion = "inicio" | "conversaciones" | "contactos" | "captacion" | "bot" | "linea" | "redes" | "configuracion";
 
 export interface SeccionMenu {
   clave: ClaveSeccion;
+  /** 24/10: «trabajo» (lo diario) o «configurar». */
+  grupo: "trabajo" | "configurar";
   label: string;
   /** Nombre del ícono (ver `Icono`). */
   icono: string;
@@ -54,8 +59,8 @@ function comun(slug: SlugPerfil, ruta: string, extra?: Record<string, string>): 
   return `/${ruta}?${p.toString()}`;
 }
 
-function seccion(clave: ClaveSeccion, label: string, icono: string, tabs: ItemMenu[]): SeccionMenu {
-  return { clave, label, icono, href: tabs[0].href, tabs };
+function seccion(clave: ClaveSeccion, label: string, icono: string, tabs: ItemMenu[], grupo: SeccionMenu["grupo"] = "trabajo"): SeccionMenu {
+  return { clave, label, icono, href: tabs[0].href, tabs, grupo };
 }
 
 export function seccionesDePerfil(slug: SlugPerfil): SeccionMenu[] {
@@ -76,7 +81,7 @@ export function seccionesDePerfil(slug: SlugPerfil): SeccionMenu[] {
     // 21/10: «Todos los chats» en los cuatro perfiles, cada uno con los suyos.
     { href: j ? "/inbox" : `${base}/chats`, label: "Todos los chats" },
     ...(mk ? [{ href: `${base}/consultas-directas`, label: "Consultas directas" }] : []),
-    { href: comun(slug, "recuperar"), label: "Revisión", match: "/recuperar" },
+    { href: comun(slug, "recuperar"), label: "Para recuperar", match: "/recuperar" },
     ...(j ? [{ href: "/revision", label: "Incidencias" }] : []),
     { href: comun(slug, "oportunidades", { indicador: "en_conversacion" }), label: "Lista", match: "/oportunidades", indicadores: INDICADORES_CONVERSACION, oculto: true },
   ];
@@ -103,7 +108,8 @@ export function seccionesDePerfil(slug: SlugPerfil): SeccionMenu[] {
     ...(mk
       ? [
           { href: `${base}/extraer`, label: "Extraer negocios" },
-          { href: `${base}/captacion`, label: "Análisis" },
+          // 24/10: el buscador viejo («Análisis») queda dentro de Extraer negocios.
+          { href: `${base}/captacion`, label: "Búsquedas anteriores", oculto: true },
         ]
       : []),
   ];
@@ -111,24 +117,30 @@ export function seccionesDePerfil(slug: SlugPerfil): SeccionMenu[] {
   const redes: ItemMenu[] = [
     { href: comun(slug, "redes"), label: "Publicaciones", match: "/redes", exacto: true },
     { href: comun(slug, "contenido"), label: "Contenido", match: "/contenido" },
-    { href: comun(slug, "redes/perfiles"), label: "Perfiles", match: "/redes/perfiles" },
-    { href: comun(slug, "redes/whatsapp"), label: "Perfil de WhatsApp", match: "/redes/whatsapp", oculto: true },
-    { href: comun(slug, "redes/plantillas"), label: "Plantillas", match: "/redes/plantillas" },
     { href: comun(slug, "redes/publicidad"), label: "Publicidad", match: "/redes/publicidad" },
   ];
 
-  const configuracion: ItemMenu[] = [
-    { href: `${base}/configuracion`, label: "General" },
-    { href: `${base}/agentes`, label: "Agentes IA" },
+  // 24/10: la línea de WhatsApp (calidad, plantillas y perfil) tiene sección propia.
+  const linea: ItemMenu[] = [
+    { href: comun(slug, "redes/plantillas"), label: "Plantillas", match: "/redes/plantillas" },
+    { href: comun(slug, "redes/perfiles"), label: "Perfil de WhatsApp y redes", match: "/redes/perfiles" },
+    { href: comun(slug, "redes/whatsapp"), label: "Perfil de WhatsApp", match: "/redes/whatsapp", oculto: true },
   ];
 
+  // 24/10: el bot tiene sección propia (antes estaba dentro de Configuración).
+  const bot: ItemMenu[] = [{ href: `${base}/agentes`, label: "Bot IA" }];
+
+  const configuracion: ItemMenu[] = [{ href: `${base}/configuracion`, label: "Ajustes" }];
+
   return [
-    seccion("inicio", "Inicio", "inicio", inicio),
-    seccion("conversaciones", "Conversaciones", "inbox", conversaciones),
+    seccion("inicio", "Hoy", "inicio", inicio),
+    seccion("conversaciones", "Chats", "inbox", conversaciones),
     seccion("contactos", "Contactos", "prospectos", contactos),
-    seccion("captacion", "Captación", "campanas", captacion),
-    seccion("redes", "Redes y contenido", "contenido", redes),
-    seccion("configuracion", "Configuración", "configuracion", configuracion),
+    seccion("captacion", "Campañas", "campanas", captacion),
+    seccion("bot", "Bot IA", "agentes", bot, "configurar"),
+    seccion("linea", "Línea y plantillas", "consultas", linea, "configurar"),
+    seccion("redes", "Redes", "redes", redes, "configurar"),
+    seccion("configuracion", "Ajustes", "configuracion", configuracion, "configurar"),
   ];
 }
 
