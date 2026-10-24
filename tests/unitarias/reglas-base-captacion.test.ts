@@ -124,7 +124,8 @@ test("A14: rechazo, enojo o número equivocado → disculpa breve y detención, 
     const t = clasificarAtencion(m);
     assert.equal(t.categoria, "detencion");
     assert.equal(t.principal, false, m);
-    assert.equal(t.pausarChat, true);
+    // 24/10: la detención no apaga al agente en el chat (sigue atendiendo si la persona vuelve a escribir).
+    assert.equal(t.pausarChat, false);
     assert.equal(t.respuesta, "disculpa_breve");
     assert.ok(t.detener);
   }

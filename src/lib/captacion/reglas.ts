@@ -274,14 +274,18 @@ const T = (
   respuesta: o.respuesta ?? "ninguna",
 });
 
+// 24/10 (decisión de la responsable): una detención disculpa y deja de
+// contactar por iniciativa de la empresa (campañas, seguimientos,
+// recontactos), pero NO apaga al agente en ese chat: si la persona vuelve a
+// escribir algo relevante, el bot la atiende.
 export const TRATAMIENTO_ATENCION: Record<MotivoAtencion, TratamientoAtencion> = {
-  no_quiere_mensajes: T("detencion", "Pidió no recibir mensajes", { detener: "no_contacto", pausarChat: true, respuesta: "disculpa_breve" }),
-  enojo_por_contacto: T("detencion", "Enojo por el contacto", { detener: "enojo", pausarChat: true, respuesta: "disculpa_breve" }),
-  numero_equivocado: T("detencion", "Número equivocado", { detener: "numero_equivocado", pausarChat: true, respuesta: "disculpa_breve" }),
-  caso_resuelto: T("detencion", "Caso o necesidad ya resuelta", { detener: "necesidad_resuelta", pausarChat: true, respuesta: "disculpa_breve" }),
-  abogado_existente: T("detencion", "Ya tiene abogado", { detener: "abogado_existente", pausarChat: true, respuesta: "disculpa_breve" }),
-  compra_otro_canal: T("detencion", "Compró o contrató por otro canal", { detener: "compra_otro_canal", pausarChat: true, respuesta: "disculpa_breve" }),
-  desinteres: T("detencion", "No le interesa", { detener: "desinteres", pausarChat: true, respuesta: "disculpa_breve" }),
+  no_quiere_mensajes: T("detencion", "Pidió no recibir mensajes", { detener: "no_contacto", respuesta: "disculpa_breve" }),
+  enojo_por_contacto: T("detencion", "Enojo por el contacto", { detener: "enojo", respuesta: "disculpa_breve" }),
+  numero_equivocado: T("detencion", "Número equivocado", { detener: "numero_equivocado", respuesta: "disculpa_breve" }),
+  caso_resuelto: T("detencion", "Caso o necesidad ya resuelta", { detener: "necesidad_resuelta", respuesta: "disculpa_breve" }),
+  abogado_existente: T("detencion", "Ya tiene abogado", { detener: "abogado_existente", respuesta: "disculpa_breve" }),
+  compra_otro_canal: T("detencion", "Compró o contrató por otro canal", { detener: "compra_otro_canal", respuesta: "disculpa_breve" }),
+  desinteres: T("detencion", "No le interesa", { detener: "desinteres", respuesta: "disculpa_breve" }),
 
   pide_persona: T("comercial", "Pide hablar con una persona", { principal: true, pausarChat: true, respuesta: "aviso_de_persona" }),
   precio_fuera_alcance: T("comercial", "Consulta de precio que corresponde a una persona", { principal: true, pausarChat: true, respuesta: "aviso_de_persona" }),
@@ -294,11 +298,11 @@ export const TRATAMIENTO_ATENCION: Record<MotivoAtencion, TratamientoAtencion> =
   // 24/10 (decisión de la responsable): origen de los datos, reclamo o pedido
   // de baja → disculpa automática sin explicar el origen y detención. No pasa
   // a atención humana: el origen lo atiende el equipo de marketing.
-  pregunta_procedencia: T("procedencia", "Pregunta de dónde sacamos su contacto", { detener: "no_contacto", pausarChat: true, respuesta: "disculpa_datos" }),
+  pregunta_procedencia: T("procedencia", "Pregunta de dónde sacamos su contacto", { detener: "no_contacto", respuesta: "disculpa_datos" }),
 
-  procedencia_no_comprobable: T("solicitud_datos", "Procedencia no comprobable", { detener: "no_contacto", pausarChat: true, respuesta: "disculpa_datos" }),
-  reclamo_datos: T("solicitud_datos", "Reclamo sobre sus datos", { detener: "no_contacto", pausarChat: true, respuesta: "disculpa_datos" }),
-  solicitud_eliminacion: T("solicitud_datos", "Pide eliminar sus datos", { detener: "no_contacto", pausarChat: true, respuesta: "disculpa_datos" }),
+  procedencia_no_comprobable: T("solicitud_datos", "Procedencia no comprobable", { detener: "no_contacto", respuesta: "disculpa_datos" }),
+  reclamo_datos: T("solicitud_datos", "Reclamo sobre sus datos", { detener: "no_contacto", respuesta: "disculpa_datos" }),
+  solicitud_eliminacion: T("solicitud_datos", "Pide eliminar sus datos", { detener: "no_contacto", respuesta: "disculpa_datos" }),
 
   numero_de_menor: T("excepcion_datos", "Número informado como de una menor", { principal: true, pausarChat: true, detener: "no_contacto", menor: true, respuesta: "disculpa_breve" }),
   numero_de_tercero: T("excepcion_datos", "Número de un tercero", { principal: true, pausarChat: true, detener: "numero_equivocado", respuesta: "disculpa_breve" }),

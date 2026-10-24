@@ -16,6 +16,7 @@ import { GoogleGenAI, type Content } from "@google/genai";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { AutomaticSendBlockedError, sendOutboundMessage } from "@/lib/messaging";
 import { getAutomationPause } from "@/lib/automation-pause";
+import { contactBlockReason } from "@/lib/detention";
 import { loadContactCalendar } from "@/lib/contacto/calendario";
 import { agentReadiness, getProfile, profileIdForArea } from "@/lib/profiles";
 import { identificadorModelo } from "@/lib/agentes/modelo";
@@ -33,6 +34,7 @@ import {
   excluidoDelRecontacto,
   instruccionRecontacto,
   leerDecision,
+  MINIMO_ENTRE_MENSAJES_MS,
   planRecontacto,
   recontactoEncendido,
   type PasoRecontacto,
@@ -131,14 +133,33 @@ export async function procesarRecontactos(opts: { enviar?: boolean; presupuestoM
 
   const s = createAdminClient();
   const desde = new Date(ahora.getTime() - 24 * 3_600_000).toISOString();
-  const { data: convs, error } = await s
-    .from("conversations")
-    .select("id, area, status, ai_enabled, contact_id, contacts(*)")
-    .eq("ai_enabled", true)
-    .gte("last_message_at", desde)
-    .order("last_message_at", { ascending: true })
-    .limit(300);
-  if (error) return { ...r, estado: `No se pudieron leer las conversaciones: ${error.message}` };
+  // 24/10: se parte de las respuestas del bot todavía sin evaluar (antes se
+  // tomaban las 300 conversaciones más viejas del día, casi todas con solo la
+  // plantilla de campaña, y las charlas recientes nunca se revisaban).
+  const { data: pendientes, error: errPend } = await (s.from("messages") as any)
+    .select("conversation_id, created_at")
+    .eq("direction", "saliente")
+    .eq("sender_type", "agente_ia")
+    .in("origin", ["respuesta_entrante", "recuperacion"])
+    .is("metadata->>recontacto_estado", null)
+    .gte("created_at", desde)
+    .lte("created_at", new Date(ahora.getTime() - MINIMO_ENTRE_MENSAJES_MS).toISOString())
+    .order("created_at", { ascending: true })
+    .limit(500);
+  if (errPend) return { ...r, estado: `No se pudieron leer los mensajes: ${errPend.message}` };
+  const ids = Array.from(new Set(((pendientes ?? []) as { conversation_id: string }[]).map((m) => m.conversation_id))).slice(0, 200);
+  const convs: any[] = [];
+  for (let i = 0; i < ids.length; i += 100) {
+    const { data, error } = await s
+      .from("conversations")
+      .select("id, area, status, ai_enabled, contact_id, contacts(*)")
+      .in("id", ids.slice(i, i + 100))
+      .eq("ai_enabled", true);
+    if (error) return { ...r, estado: `No se pudieron leer las conversaciones: ${error.message}` };
+    convs.push(...(data ?? []));
+  }
+  // Mismo orden: primero las que esperan hace más tiempo.
+  convs.sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id));
 
   for (const c of (convs ?? []) as any[]) {
     if (Date.now() - inicio > presupuesto) break;
@@ -184,6 +205,14 @@ export async function procesarRecontactos(opts: { enviar?: boolean; presupuestoM
       .order("updated_at", { ascending: false })
       .limit(1)
       .maybeSingle();
+    // 24/10: a un contacto detenido no se le escribe por iniciativa propia.
+    const bloqueo = await contactBlockReason(c.contact_id);
+    if (bloqueo) {
+      if (enviar) await marcar(s, ultimo, "descartado", `contacto detenido (${bloqueo.label})`);
+      r.descartados++;
+      r.detalle.push({ conversacion: c.id, perfil, accion: "descartado", paso: plan.paso, motivo: "contacto detenido" });
+      continue;
+    }
     const excluido = excluidoDelRecontacto({
       aiEnabled: c.ai_enabled,
       estadoConversacion: c.status,

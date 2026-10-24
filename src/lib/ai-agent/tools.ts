@@ -83,7 +83,7 @@ export const AGENT_TOOLS: FunctionDeclaration[] = [
   {
     name: "detener_contacto",
     description:
-      "Detiene el contacto cuando la persona no quiere más mensajes, se enoja por el contacto, es un número equivocado, ya resolvió su necesidad, ya tiene abogado, ya contrató por otro canal, no le interesa, pregunta de dónde sacamos su contacto o pide borrar sus datos. Después respondé SOLO la disculpa que te indica el resultado de la herramienta. Apaga tus respuestas automáticas.",
+      "Detiene el contacto cuando la persona no quiere más mensajes, se enoja por el contacto, es un número equivocado, ya resolvió su necesidad, ya tiene abogado, ya contrató por otro canal, no le interesa, pregunta de dónde sacamos su contacto o pide borrar sus datos. Después respondé SOLO la disculpa que te indica el resultado de la herramienta y quedá a disposición. No se le vuelve a escribir por iniciativa propia, pero si la persona vuelve a escribir, la seguís atendiendo.",
     parametersJsonSchema: {
       type: "object",
       properties: {
@@ -155,7 +155,7 @@ export const MARKETING_TOOLS: FunctionDeclaration[] = [
       "resultado='aprobado': aceptó la propuesta y quiere avanzar (el sistema avisa al equipo técnico y cierra el caso: después avisale al prospecto que lo derivás al equipo técnico para empezar el proyecto). " +
       "resultado='en_duda': duda, quiere pensarlo o dice que en otro momento (el sistema le hace seguimiento por WhatsApp). " +
       "resultado='no_interesado': dijo claramente que no o pidió que no lo contactemos más. " +
-      "Apaga tus respuestas automáticas salvo en 'en_duda'.",
+      "Solo en 'aprobado' apaga tus respuestas automáticas (sigue una persona); en 'no_interesado' disculpate, quedá a disposición y seguí atendiendo si vuelve a escribir.",
     parametersJsonSchema: {
       type: "object",
       properties: {

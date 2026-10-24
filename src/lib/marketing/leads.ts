@@ -271,7 +271,8 @@ export async function setMarketingOutcome({
   await supabase.from("contacts").update({ status: "cerrado_perdido" }).eq("id", contactId);
   await supabase
     .from("conversations")
-    .update({ status: "cerrado_perdido", ai_enabled: false })
+    // 24/10: se cierra sin apagar al agente (por si la persona dice algo más relevante).
+    .update({ status: "cerrado_perdido" })
     .eq("id", conversationId);
   await logMarketingEvent({ leadId: lead.id, contactId, type: "no_interesado", detail: { motivo } });
 }
