@@ -2,9 +2,7 @@ import { GoogleGenAI, type Content, type Part } from "@google/genai";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getProfile, profileIdForArea } from "@/lib/profiles";
 import type { Area } from "@/lib/supabase/database.types";
-import { rubroSlugDe } from "@/lib/captacion";
-import { CRITERIO_POR_RUBRO } from "@/lib/captacion/reglas";
-import { reglaDeRechazo } from "@/lib/captacion/insistencia";
+import { buildSystemPrompt, criterioDelRubro } from "./prompt";
 import { GUIA_CAPTACION_Y_CIERRE } from "@/lib/agentes/guia-cierre";
 import { instruccionesDeRol } from "@/lib/agentes/roles";
 import { identificadorModelo } from "@/lib/agentes/modelo";
@@ -21,64 +19,9 @@ import { toolsForArea } from "./tools";
  * Las herramientas no se ejecutan: se contestan como simuladas, así que no
  * escribe a nadie, no agenda y no cambia estados.
  *
- * Para el programador: el armado replica buildSystemPrompt y
- * criterioDelRubro de agent.ts sin tocar ese archivo (el que responde en
- * producción). Si cambian ahí, conviene mover esas dos funciones a un
- * módulo común e importarlas desde los dos lados.
+ * El prompt sale de ./prompt, el mismo módulo que usa agent.ts: lo que
+ * cambie ahí se prueba igual acá.
  */
-
-function criterio(area: Area, rubroId: string | null): string {
-  let slug;
-  try {
-    slug = rubroSlugDe({ rubro_id: rubroId, area });
-  } catch {
-    return "";
-  }
-  const c = CRITERIO_POR_RUBRO[slug];
-  return [
-    "Captación (regla del sistema):",
-    `- Hay captación solo con: ${c.aceptacion}. Cuando la persona lo acepte, usá la herramienta captar con la evidencia (lo que dijo).`,
-    "- Agendar no es captar. Compartir datos no es derivar. Derivar lo hace una persona.",
-    `- Datos deseables (si faltan no impiden captar): ${c.deseables.join(", ")}.`,
-    c.zonaAplica ? "- La ubicación se registra con registrar_ubicacion (AMBA, fuera de AMBA o sin confirmar). Nunca supongas AMBA." : "",
-    `- Nunca prometas ni informes: ${c.limites.join(", ")}.`,
-    ...reglaDeRechazo(slug),
-    "- Si pide una persona, pregunta algo fuera de tu alcance o comparte datos sensibles: usá escalar_a_humano con la categoría que corresponda.",
-  ]
-    .filter(Boolean)
-    .join("\n");
-}
-
-function promptBase(agent: { system_prompt: string; qualification_criteria: string[]; required_fields: string[] }, area: Area, conApertura: boolean, identidad: { presentationName: string; brandName: string }) {
-  return [
-    `Te presentás como ${identidad.presentationName}, de ${identidad.brandName}. No uses otro nombre ni otra marca, no inventes una persona real, matrícula ni disponibilidad humana, y si te preguntan si sos una automatización respondé con la verdad.`,
-    "",
-    agent.system_prompt,
-    "",
-    "Criterios de calificación comercial (evaluá contra esto con la herramienta evaluar_calificacion):",
-    ...(agent.qualification_criteria ?? []).map((c) => `- ${c}`),
-    "",
-    "Datos que tenés que recolectar (usá guardar_datos_calificacion a medida que los obtengas):",
-    ...(agent.required_fields ?? []).map((f) => `- ${f}`),
-    "",
-    "Todavía no hay datos previos cargados de este prospecto.",
-    "",
-    conApertura
-      ? area !== "penal"
-        ? "Este prospecto viene de una campaña: el mensaje inicial ya se lo mandamos nosotros en tu nombre y ahora te está respondiendo por primera vez. Seguí desde ahí, de forma natural, según el guión de tu rol."
-        : "Este prospecto viene de una campaña (le escribiste vos primero con un mensaje inicial y ahora te está respondiendo por primera vez). Antes de seguir calificando, arrancá preguntando si su situación sigue vigente o si ya la resolvió — si ya la resolvió, agradecé y cerrá la conversación amablemente sin insistir."
-      : "",
-    "Reglas estrictas:",
-    "- NUNCA inventes información, plazos, montos ni asesoramiento legal específico.",
-    "- NUNCA te presentes como abogado/a: sos un asistente que organiza la consulta.",
-    "- Si piden hablar con una persona, o la situación lo amerita, usá escalar_a_humano.",
-    "- Antes de ofrecer un turno, usá consultar_disponibilidad para ver horarios reales.",
-    "- Para confirmar un turno, usá agendar_cita con el horario exacto elegido.",
-    "- Respondé en español rioplatense, de forma breve, clara y empática.",
-  ]
-    .filter(Boolean)
-    .join("\n");
-}
 
 let _cliente: GoogleGenAI | null = null;
 function gemini() {
@@ -107,8 +50,12 @@ export async function probarBotReal(input: { area: Area; rubroId: string | null;
     brandName: profile?.brand_name?.trim() || "la marca",
   };
   const apertura = input.apertura?.trim() || "";
-  let system = promptBase(agente as any, input.area, !!apertura, identidad);
-  const crit = criterio(input.area, input.rubroId);
+  let system = buildSystemPrompt(
+    agente as any,
+    { area: input.area, fullName: null, dniCuil: null, qualificationData: {}, campaignName: null, isFirstReplyToCampaign: !!apertura },
+    identidad
+  );
+  const crit = criterioDelRubro(input.area, input.rubroId);
   if (crit) system = `${system}\n\n${crit}`;
   const rol = input.baseId ? await instruccionesDeRol({ imported_base_id: input.baseId }) : "";
   if (rol) system = `${system}\n\n${rol}`;
