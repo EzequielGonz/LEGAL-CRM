@@ -216,9 +216,9 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
     return;
   }
 
-  // 24/10: un contacto detenido que vuelve a escribir sí recibe respuesta, salvo bloqueo duro (número de una menor).
+  // 24/10: un contacto detenido que vuelve a escribir sí recibe respuesta, salvo el número de una menor.
   const bloqueo = await contactBlockReason(contact.id);
-  if (bloqueo && (bloqueo.hardBlock || bloqueo.minorReported || !bloqueo.detentionId)) return;
+  if (bloqueo && (bloqueo.minorReported || !bloqueo.detentionId)) return;
 
   // ¿Viene de una campaña? Se busca en campaign_contacts por contact_id (no
   // por contacts.campaign_id, que solo queda seteado en el flujo viejo de
