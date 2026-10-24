@@ -281,10 +281,13 @@ async function afterInboundSaved({
     console.error("[oportunidad] No se pudo leer la oportunidad:", err);
   }
 
-  // Un contacto detenido que vuelve a escribir no recibe respuesta
-  // automática: queda marcado para que lo atienda una persona.
+  // 24/10 (decisión de la responsable): un contacto detenido que vuelve a
+  // escribir SÍ recibe respuesta del agente (por si dice algo relevante); la
+  // detención sigue frenando campañas, seguimientos y recontactos. Solo con
+  // bloqueo duro (número de una menor) o si no se pudo verificar la
+  // detención, no se responde y queda para una persona.
   const block = await contactBlockReason(contact.id);
-  if (block) {
+  if (block && (block.hardBlock || block.minorReported || !block.detentionId)) {
     if (opportunityId) {
       try {
         await setOpportunityState({
@@ -306,7 +309,8 @@ async function afterInboundSaved({
   // «borren mis datos» → disculpa automática, sin explicar el origen (el
   // agente es asesor y no tiene ese dato; lo atiende el equipo de
   // marketing), y se detiene el contacto. No pasa a atención humana.
-  const pedidoDatos = aiReadable ? pideOrigenOBajaDeDatos(body) : null;
+  // Si ya estaba detenido, la disculpa no se repite: responde el agente con la nota de contacto detenido.
+  const pedidoDatos = aiReadable && !block ? pideOrigenOBajaDeDatos(body) : null;
   if (pedidoDatos) {
     await atenderPedidoDeDatos({ contact, conversation, pedido: pedidoDatos });
     result.respuesta = { responder: false, motivo: "detenido" };
@@ -432,7 +436,7 @@ async function atenderPedidoDeDatos({
   } catch (err) {
     console.error("[datos] No se pudo registrar la detención:", err);
   }
-  // Con la detención vigente el bot ya no responde en ese chat ni se le envían campañas.
+  // Con la detención vigente no se le envían campañas, seguimientos ni recontactos; si vuelve a escribir, el agente lo atiende.
 }
 
 /**
