@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { conVolver, etiquetaVolver, volverSeguro } from "@/lib/navegacion";
 
 /** Dirección actual completa (ruta + consulta), para usarla como origen. */
@@ -46,10 +46,24 @@ export function EnlaceVolver({
   textoRespaldo?: string;
   className?: string;
 }) {
+  const router = useRouter();
   const destino = volverSeguro(volver);
-  const texto = destino ? etiquetaVolver(destino) : textoRespaldo ?? etiquetaVolver(respaldo);
+  // 24/10: sin origen guardado, si se llegó desde otra pantalla del panel, vuelve a esa (no al inicio).
+  const texto = destino ? etiquetaVolver(destino) : textoRespaldo ?? "Volver";
+  const alTocar = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (destino || textoRespaldo) return;
+    try {
+      const mismoSitio = !document.referrer || new URL(document.referrer).origin === window.location.origin;
+      if (mismoSitio && window.history.length > 1) {
+        e.preventDefault();
+        router.back();
+      }
+    } catch {
+      /* sin referencia: sigue el enlace de respaldo */
+    }
+  };
   return (
-    <Link href={destino ?? respaldo} className={className}>
+    <Link href={destino ?? respaldo} className={className} onClick={alTocar}>
       <span aria-hidden="true">←</span> {texto}
     </Link>
   );
