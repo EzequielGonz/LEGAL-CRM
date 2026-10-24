@@ -4,6 +4,7 @@ import { AgentesEtapa3 } from "@/components/agentes/agentes-etapa3";
 import { ResumenSeccion } from "@/components/nivel/resumen-seccion";
 import { PuntajeBots } from "@/components/agentes/puntaje-bots";
 import { RolesPorBase } from "@/components/agentes/roles-por-base";
+import { ProbarBotReal } from "@/components/agentes/probar-bot-real";
 
 const NOMBRE_AREA: Record<string, string> = {
   civil: "Civil",
@@ -40,7 +41,7 @@ export async function AgentesPerfilView({
   return (
     <div className="mx-auto max-w-5xl space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold text-slate-900">Agentes IA</h1>
+        <h1 className="text-2xl font-semibold text-slate-900">Bot IA</h1>
         <p className="mt-1 text-sm text-slate-700">{descripcion}</p>
       </div>
 
@@ -51,6 +52,8 @@ export async function AgentesPerfilView({
       ) : null}
 
       <PuntajeBots rubroId={rubroId} />
+
+      <ProbarBotReal perfil={perfil} areas={areas} />
 
       <RolesPorBase perfil={perfil} />
 
@@ -66,13 +69,13 @@ export async function AgentesPerfilView({
             ? "El agente está apagado: los mensajes quedan para una persona"
             : `Responde en ${activos.length} de ${(agents ?? []).length} áreas`
         }
-        detalle={<p>Probar una conversación usa datos ficticios: no escribe a nadie ni agenda citas reales.</p>}
+        detalle={<p>«Probar el bot real» responde con la misma configuración de hoy y mensajes ficticios: no escribe a nadie ni agenda citas reales.</p>}
         tono={activos.length === (agents ?? []).length && activos.length > 0 ? "ok" : "atencion"}
         puntos={(agents ?? []).map((a: any) => ({
           texto: `${NOMBRE_AREA[a.area] ?? a.area}: ${a.active ? "responde la IA" : "apagado, responde una persona"}`,
           tono: a.active ? ("ok" as const) : ("atencion" as const),
         }))}
-        principal={{ texto: "Probar una conversación", href: "#agentes-probar" }}
+        principal={{ texto: "Probar el bot real", href: "#probar-bot" }}
         personalizar={{ href: "#agentes-config", texto: "Personalizar instrucciones" }}
       />
 
