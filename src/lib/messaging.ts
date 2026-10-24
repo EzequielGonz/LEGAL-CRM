@@ -148,11 +148,11 @@ export async function sendOutboundMessage({
     // (p. ej. dos mensajes seguidos y el primero registró la detención), no
     // sale nada y se registra como bloqueado, no como error del sistema.
     // 24/10: la respuesta a un mensaje de la persona sí sale aunque esté
-    // detenida (la detención frena lo que inicia la empresa), salvo bloqueo
-    // duro (número de una menor) o si no se pudo verificar la detención.
+    // detenida (la detención frena lo que inicia la empresa), salvo el
+    // número de una menor o si no se pudo verificar la detención.
     if (origen === "respuesta_entrante") {
       const b = await contactBlockReason(contactId);
-      if (b && (b.hardBlock || b.minorReported || !b.detentionId)) throw new AutomaticSendBlockedError("contacto_detenido", b.label);
+      if (b && (b.minorReported || !b.detentionId)) throw new AutomaticSendBlockedError("contacto_detenido", b.label);
     } else {
       try {
         await assertAutomaticContactAllowed(contactId);

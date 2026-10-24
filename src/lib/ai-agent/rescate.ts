@@ -86,7 +86,7 @@ async function rescatarConversacion(conversationId: string, ahora: Date): Promis
   // 4) Misma compuerta que un mensaje recién llegado.
   const contact = c.contacts;
   const bloqueo = await contactBlockReason(contact.id);
-  if (bloqueo && (bloqueo.hardBlock || bloqueo.minorReported || !bloqueo.detentionId)) return null;
+  if (bloqueo && (bloqueo.minorReported || !bloqueo.detentionId)) return null;
   try {
     const opp = await ensureOpportunity({ contactId: contact.id, conversationId });
     let captado = opp.row?.capture_state === "captado";
