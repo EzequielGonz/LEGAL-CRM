@@ -3,6 +3,7 @@
  * estados ni envía nada. Los grupos de oportunidades cuentan y listan con
  * los mismos indicadores que sus listas completas (`/oportunidades`).
  */
+import { personasQueEscribieron } from "@/lib/estadisticas-personas";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { contarIndicador, indicadorPorClave, listarIndicador } from "@/lib/indicadores";
 import { estadoCorto } from "@/lib/inicio";
@@ -144,6 +145,7 @@ export interface ResumenCifras {
     base?: string | null;
     campanaId?: string | null;
   } | null;
+  /** respuestas = personas distintas que escribieron (24/10; antes, mensajes). */
   semana: { desde: string; respuestas: number | null; captados: number | null; citas: number | null; derivados: number | null };
 }
 
@@ -158,7 +160,8 @@ export async function resumenCifras(rubroId: string, areas: string[], ahora = ne
   const [{ data: base }, respuestas, captados, citas, derivados] = await Promise.all([
     // 20/10: la última base con contactos nuevos (un archivo repetido queda con 0 y no cuenta).
     s.from("imported_bases").select("id, name, file_name, created_at, created_rows, total_rows").in("area", areas).is("archived_at", null).gt("created_rows", 0).order("created_at", { ascending: false }).limit(1).maybeSingle(),
-    cuenta(s.from("messages").select("id, conversations!inner(area)", { count: "exact", head: true }).eq("direction", "entrante").gte("created_at", desde).in("conversations.area", areas)),
+    // 24/10: personas que escribieron (no mensajes).
+    personasQueEscribieron(areas, desde),
     cuenta(s.from("opportunities").select("id", { count: "exact", head: true }).eq("rubro_id", rubroId).eq("capture_state", "captado").gte("captured_at", desde)),
     cuenta(s.from("appointments").select("id", { count: "exact", head: true }).in("area", areas).gte("created_at", desde).neq("status", "cancelada")),
     cuenta(s.from("opportunities").select("id", { count: "exact", head: true }).eq("rubro_id", rubroId).eq("derivation_state", "derivado").gte("derived_at", desde)),
