@@ -34,7 +34,7 @@ export function bloqueHorarioAtencion(ahora: Date): string {
   return [
     `${base} Ahora es FUERA del horario de los asesores.`,
     "Atendé igual, con normalidad, y buscá captar: entendé qué necesita, conseguí los datos que faltan y calificá como siempre.",
-    `Cuando corresponda el siguiente paso, acordá día y franja para que un asesor lo llame ${proximaFranja(ahora)} (si tenés consultar_disponibilidad y agendar_cita, usalas; si no, guardá el día y la franja que prefiere con guardar_datos_calificacion en el campo disponibilidad_para_contacto).`,
+    "Cuando corresponda el siguiente paso, preguntá qué franja le queda mejor y guardala con guardar_datos_calificacion en el campo disponibilidad_para_contacto. No prometas día ni hora: decí que una persona del equipo se va a comunicar con vos (24/10).",
     "No digas que no hay nadie ni dejes la charla para mañana: seguí atendiendo vos y dejá todo listo para que el asesor solo cierre.",
   ].join(" ");
 }

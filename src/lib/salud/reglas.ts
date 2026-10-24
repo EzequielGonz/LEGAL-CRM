@@ -31,6 +31,8 @@ export interface DatosSalud {
   presupuestosAtrasados: number;
   /** Líneas que mandan pero no reciben avisos de Meta (mensajes entrantes ni estados). */
   avisosMeta?: { nombre: string; sinAvisos: boolean; resultado: string | null }[];
+  /** 24/10: calidad de cada línea según Meta (la vigila el latido). */
+  calidadLineas?: { slug: string; nombre: string; linea: string; calidad: string | null; pausadas: string[] }[];
 }
 
 const MIN = 60_000;
@@ -122,6 +124,20 @@ export function evaluarSalud(d: DatosSalud): ItemSalud[] {
   for (const a of d.avisosMeta ?? []) {
     if (a.sinAvisos) {
       items.push({ clave: `avisos_${a.nombre}`, estado: "rojo", titulo: `${a.nombre}: Meta no avisa los mensajes de esta línea`, detalle: `Envía, pero no llegan respuestas ni estados de entrega, así que el agente no puede responder.${a.resultado ? ` Último intento de conexión: ${a.resultado}` : ""}`, accion: "Ver las líneas", href: "/configuracion" });
+    }
+  }
+  for (const c of d.calidadLineas ?? []) {
+    if (c.calidad === "baja") {
+      items.push({
+        clave: `calidad_${c.slug}`,
+        estado: "rojo",
+        titulo: `${c.nombre}: la línea ${c.linea} tiene calidad baja en Meta`,
+        detalle: `Sus campañas se pausan solas mientras siga así${c.pausadas.length ? ` (pausadas: ${c.pausadas.join(", ")})` : ""}. Las respuestas a quien escribe siguen funcionando.`,
+        accion: "Revisar la calidad en el Administrador de WhatsApp y las plantillas",
+        href: "/campanas",
+      });
+    } else if (c.calidad === "media") {
+      items.push({ clave: `calidad_${c.slug}`, estado: "amarillo", titulo: `${c.nombre}: la línea ${c.linea} tiene calidad media en Meta`, detalle: "Conviene bajar el ritmo de las campañas y revisar las plantillas con más bloqueos o rechazos.", href: "/campanas" });
     }
   }
   if (d.presupuestosAtrasados > 0) {

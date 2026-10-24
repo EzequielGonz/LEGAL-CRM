@@ -164,6 +164,8 @@ export async function campaignReadiness(campaign: {
       else if (opciones.comprobarMeta !== false) {
         const real = await consultarEstadoLinea(line.credential_key, { memoria: true });
         if (!real.ok && real.estado !== "no_comprobado") missing.push(`La línea «${line.label}» no está lista en Meta: ${real.etiqueta}. ${real.detalle}`);
+        // 24/10: con calidad baja en Meta no se envían campañas por esa línea (se pausan y se avisa).
+        else if (real.calidad === "baja") missing.push(`La línea «${line.label}» tiene calidad baja en Meta: no se envían campañas hasta que mejore.`);
       }
     }
   }

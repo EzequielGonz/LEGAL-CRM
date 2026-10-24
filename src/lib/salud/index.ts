@@ -1,7 +1,8 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getAutomationPause } from "@/lib/automation-pause";
 import { agentReadiness } from "@/lib/profiles";
-import { envPrefixForArea } from "@/lib/rubros";
+import { envPrefixForArea, RUBRO_IDS } from "@/lib/rubros";
+import { leerEstadoCalidad } from "@/lib/whatsapp/calidad-servidor";
 import { leerEstadoAvisos } from "@/lib/whatsapp/avisos-servidor";
 import { evaluarSalud, type DatosSalud, type ItemSalud } from "./reglas";
 
@@ -103,6 +104,14 @@ export async function leerSalud(ahora = new Date()): Promise<ItemSalud[]> {
     })
   );
 
+  // 24/10: calidad de las líneas (lo último que consultó el latido).
+  const calidad = await seguro(() => leerEstadoCalidad(), { at: null, lineas: {} } as Awaited<ReturnType<typeof leerEstadoCalidad>>);
+  const SLUG_POR_RUBRO: Record<string, string> = Object.fromEntries(Object.entries(RUBRO_IDS).map(([slug, id]) => [id, slug]));
+  const calidadLineas = Object.values(calidad.lineas).map((l) => {
+    const slug = SLUG_POR_RUBRO[l.rubroId] ?? l.rubroId;
+    return { slug, nombre: PERFILES.find((p) => p.slug === slug)?.nombre ?? slug, linea: l.label, calidad: l.calidad, pausadas: l.pausadas ?? [] };
+  });
+
   const datos: DatosSalud = {
     ahora,
     ultimoLatido: latido,
@@ -113,6 +122,7 @@ export async function leerSalud(ahora = new Date()): Promise<ItemSalud[]> {
     perfiles,
     turnos24h: { errores, total: turnos, ultimo: ultimoError },
     presupuestosAtrasados: presupuestos,
+    calidadLineas,
     avisosMeta: Object.values(avisos).map((a) => ({
       nombre: PERFILES.find((p) => p.area === a.area)?.nombre ?? a.area,
       sinAvisos: a.sinAvisos,

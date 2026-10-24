@@ -10,6 +10,7 @@ import { bloqueBoton, clasificarRespuesta, instruccionUltimaRespuesta } from "@/
 import { identificadorModelo } from "@/lib/agentes/modelo";
 import { bloqueHorarioAtencion } from "@/lib/horario-atencion";
 import { toolsForArea } from "./tools";
+import { bloqueFichaNegocio, leerFichaNegocio } from "@/lib/agentes/ficha-negocio";
 
 /**
  * «Probar el bot real» (24/10). Arma el prompt con las MISMAS piezas que
@@ -68,6 +69,8 @@ export async function probarBotReal(input: { area: Area; rubroId: string | null;
   if (crit) system = `${system}\n\n${crit}`;
   const rol = await instruccionesDeRol({ imported_base_id: input.baseId ?? null }, { rolId: campana?.agent_role_id ?? null, campana: campana?.name ?? null });
   if (rol) system = `${system}\n\n${rol}`;
+  const ficha = await leerFichaNegocio(input.rubroId ?? profileIdForArea(input.area) ?? null);
+  if (ficha) system = `${system}\n\n${bloqueFichaNegocio(ficha)}`;
   system = `${system}\n\n${GUIA_CAPTACION_Y_CIERRE}\n\n${bloqueHorarioAtencion(new Date())}`;
 
   const tools = toolsForArea(input.area);

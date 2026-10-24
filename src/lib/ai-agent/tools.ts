@@ -70,7 +70,7 @@ export const AGENT_TOOLS: FunctionDeclaration[] = [
   {
     name: "escalar_a_humano",
     description:
-      "Pasa la conversación a una persona del equipo cuando la persona pide hablar con alguien, consulta algo fuera de tu alcance (precios, decisiones del profesional), comparte datos sensibles o pregunta de dónde sacamos su contacto. Elegí la categoría. Salvo la consulta de procedencia, apaga tus respuestas automáticas en esta conversación.",
+      "Pasa la conversación a una persona del equipo cuando la persona pide hablar con alguien, consulta algo fuera de tu alcance (precios, decisiones del profesional) o comparte datos sensibles. Elegí la categoría. Apaga tus respuestas automáticas en esta conversación. Nunca la uses con un mensaje automático de otro negocio (ausencia, menú de opciones).",
     parametersJsonSchema: {
       type: "object",
       properties: {
@@ -83,7 +83,7 @@ export const AGENT_TOOLS: FunctionDeclaration[] = [
   {
     name: "detener_contacto",
     description:
-      "Detiene el contacto cuando la persona no quiere más mensajes, se enoja por el contacto, es un número equivocado, ya resolvió su necesidad, ya tiene abogado, ya contrató por otro canal o no le interesa. Después respondé SOLO una disculpa breve. Apaga tus respuestas automáticas.",
+      "Detiene el contacto cuando la persona no quiere más mensajes, se enoja por el contacto, es un número equivocado, ya resolvió su necesidad, ya tiene abogado, ya contrató por otro canal, no le interesa, pregunta de dónde sacamos su contacto o pide borrar sus datos. Después respondé SOLO la disculpa que te indica el resultado de la herramienta. Apaga tus respuestas automáticas.",
     parametersJsonSchema: {
       type: "object",
       properties: {
@@ -110,7 +110,7 @@ export const AGENT_TOOLS: FunctionDeclaration[] = [
   {
     name: "registrar_ubicacion",
     description:
-      "Registra la ubicación de la persona en tres valores: amba, fuera (fuera de AMBA) o sin_confirmar. Nunca supongas AMBA: si no lo dijo, es sin_confirmar.",
+      "Registra la ubicación de la persona: amba o fuera (fuera de AMBA). Usala solo cuando la persona dijo dónde está (o es dudosa: sin_confirmar). No la llames en un saludo ni supongas AMBA.",
     parametersJsonSchema: {
       type: "object",
       properties: { zona: { type: "string", enum: ["amba", "fuera", "sin_confirmar"] } },

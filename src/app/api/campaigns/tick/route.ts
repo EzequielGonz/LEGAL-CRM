@@ -14,6 +14,8 @@ import { enviarPresupuestosProgramados } from "@/lib/marketing/presupuestos";
 import { registrarLatido } from "@/lib/salud";
 import { procesarRecontactos } from "@/lib/recontacto/motor";
 import { sincronizarCatalogosSiToca } from "@/lib/plantillas/auto-asignar";
+import { rescatarTurnosPerdidos } from "@/lib/ai-agent/rescate";
+import { vigilarCalidadLineas } from "@/lib/whatsapp/calidad-servidor";
 
 // El análisis de negocios (descargar la web + IA) necesita más de los 10s por defecto.
 export const maxDuration = 60;
@@ -66,6 +68,27 @@ export async function POST(request: Request) {
       recontacto = await procesarRecontactos({ presupuestoMs: 15_000 });
     } catch (err: any) {
       recontacto = { error: String(err?.message ?? err) };
+    }
+
+    // 2 ter) Turnos perdidos (24/10): un mensaje de texto que quedó sin
+    //    respuesta y sin turno del bot registrado se reintenta una vez, con la
+    //    misma compuerta (pausa, chat tomado, detención, captado, horario).
+    let rescate: unknown = null;
+    if (Date.now() - inicio < 20_000) {
+      try {
+        rescate = await rescatarTurnosPerdidos({ presupuestoMs: 10_000, maximo: 1 });
+      } catch (err: any) {
+        rescate = { error: String(err?.message ?? err) };
+      }
+    }
+
+    // 2 quater) Calidad de las líneas (24/10): con calidad baja en Meta se
+    //    pausan las campañas de esa línea y se avisa. Solo lee de Meta.
+    let calidad: unknown = null;
+    try {
+      calidad = await vigilarCalidadLineas();
+    } catch (err: any) {
+      calidad = { error: String(err?.message ?? err) };
     }
 
     // 3) Pipeline de Marketing: analiza negocios nuevos, suma los mejor
@@ -167,7 +190,7 @@ export async function POST(request: Request) {
 
     // Tablero de salud: deja la hora del último latido.
     await registrarLatido(true, { ms: Date.now() - inicio });
-    return NextResponse.json({ ok: true, results, seguimiento, recontacto, marketing, servidor, extraccion, avisos, formularios, presupuestos, catalogo });
+    return NextResponse.json({ ok: true, results, seguimiento, recontacto, rescate, calidad, marketing, servidor, extraccion, avisos, formularios, presupuestos, catalogo });
   } catch (err: any) {
     await registrarLatido(false, { error: String(err?.message ?? err).slice(0, 200) });
     return NextResponse.json({ error: String(err.message ?? err) }, { status: 500 });

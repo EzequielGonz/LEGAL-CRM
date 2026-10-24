@@ -28,7 +28,7 @@ export function criterioDelRubro(area: Area, rubroId: string | null, modo: ModoC
     `- Hay captación solo con: ${c.aceptacion}. Cuando la persona lo acepte, usá la herramienta captar con la evidencia (lo que dijo).`,
     "- Agendar no es captar. Compartir datos no es derivar. Derivar lo hace una persona.",
     `- Datos deseables (si faltan no impiden captar): ${deseables.join(", ")}.`,
-    c.zonaAplica ? "- La ubicación se registra con registrar_ubicacion (AMBA, fuera de AMBA o sin confirmar). Nunca supongas AMBA." : "",
+    c.zonaAplica ? "- Cuando la persona diga dónde está, registrala con registrar_ubicacion (AMBA o fuera de AMBA). No la llames si no mencionó una zona y nunca supongas AMBA." : "",
     `- Nunca prometas ni informes: ${c.limites.join(", ")}.`,
     ...reglaDeRechazo(slug, modo),
     "- Si pide una persona, pregunta algo fuera de tu alcance o comparte datos sensibles: usá escalar_a_humano con la categoría que corresponda.",
@@ -104,6 +104,10 @@ export function buildSystemPrompt(
     "- Antes de ofrecer un turno, usá consultar_disponibilidad para ver horarios reales.",
     "- Para confirmar un turno, usá agendar_cita con el horario exacto elegido.",
     "- Respondé en español rioplatense, de forma breve, clara y empática.",
+    // 24/10 (decisión de la responsable): la persona que sigue la gestión la asigna el equipo a mano.
+    "- No prometas día ni hora del contacto de un asesor, vendedor o abogado. Podés preguntar qué franja le queda mejor y guardarla, pero al cerrar decí solo que una persona del equipo se va a comunicar con vos, sin «hoy», «mañana», «por la mañana» ni horarios.",
+    "- Nunca digas que le corresponde una indemnización, compensación, reclamo o cobertura, ni que va a cobrar, ganar o ahorrar: eso lo evalúa el equipo con su caso.",
+    "- Usá las herramientas solo cuando hay un dato real y nuevo para registrar (no en un saludo).",
   ]
     .filter(Boolean)
     .join("\n");

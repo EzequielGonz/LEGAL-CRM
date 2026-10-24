@@ -60,7 +60,9 @@ test("horario de atención: asesores lunes a sábado de 8 a 21; fuera de horario
   const fuera = bloqueHorarioAtencion(new Date("2026-10-23T01:00:00Z"));
   assert.match(fuera, /FUERA del horario/);
   assert.match(fuera, /buscá captar/);
-  assert.match(fuera, /asesor lo llame mañana desde las 8/);
+  // 24/10: sin prometer día ni hora del llamado.
+  assert.match(fuera, /No prometas día ni hora/);
+  assert.doesNotMatch(fuera, /mañana desde las 8/);
   assert.doesNotMatch(bloqueHorarioAtencion(new Date("2026-10-22T13:00:00Z")), /FUERA/);
 });
 
