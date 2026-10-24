@@ -22,6 +22,8 @@ import { identificadorModelo } from "@/lib/agentes/modelo";
 import { validarTextoSalida } from "@/lib/agentes/contrato";
 import { instruccionesDeRol } from "@/lib/agentes/roles";
 import { modoDelContacto } from "@/lib/agentes/entrante";
+import { historialConPlantillas } from "@/lib/agentes/historial-servidor";
+import { esPostergaFirme } from "@/lib/agentes/plantillas-en-historial";
 import { GUIA_CAPTACION_Y_CIERRE } from "@/lib/agentes/guia-cierre";
 import { perfilDeArea } from "@/lib/navegacion";
 import { buildSystemPrompt, criterioDelRubro } from "@/lib/ai-agent/prompt";
@@ -242,7 +244,14 @@ export async function procesarRecontactos(opts: { enviar?: boolean; presupuestoM
       if (rol) system = `${system}\n\n${rol}`;
       system = `${system}\n\n${GUIA_CAPTACION_Y_CIERRE}`;
 
-      const contents = historial([...lista].reverse());
+      // 24/10: con el texto real de las plantillas y los botones marcados; tras un «ahora no» no se escribe.
+      const { filas: conPlantillas, ultima } = await historialConPlantillas([...lista].reverse());
+      if (esPostergaFirme(ultima)) {
+        await marcar(s, reservado, "descartado", "pidió «ahora no»");
+        r.descartados++;
+        continue;
+      }
+      const contents = historial(conPlantillas);
       const horas = (ahora.getTime() - new Date(ultimo.created_at).getTime()) / 3_600_000;
       contents.push({ role: "user", parts: [{ text: instruccionRecontacto(plan.paso, horas) }] });
       const resp = await gemini().models.generateContent({
