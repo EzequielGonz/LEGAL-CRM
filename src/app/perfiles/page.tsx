@@ -1,6 +1,7 @@
 import { LogoutButton } from "@/components/acceso/logout-button";
 import { type MarcaTarjeta } from "@/components/perfiles/perfil-selector";
 import { SelectorPerfilesPC } from "@/components/perfiles/selector-pc";
+import { EnVivoRubros } from "@/components/perfiles/en-vivo-rubros";
 import { SalaLampara } from "@/components/ui/lampara-dibujo";
 import { MarcaPanel } from "@/components/ui/marca-panel";
 import { loadPerfiles } from "@/lib/perfiles-stats";
@@ -36,6 +37,8 @@ export default async function PerfilesPage() {
     <div className="escena-oscura sala-perfil flex min-h-screen items-start justify-center px-4 py-12 sm:px-6">
       <SalaLampara />
       <main id="perfiles" className="escena-capa relative w-full max-w-6xl">
+        {/* 24/10: seguimiento en vivo de los cuatro rubros (esquina superior en la computadora). */}
+        <EnVivoRubros nombres={Object.fromEntries(perfiles.map((p) => [p.slug, tarjetas[p.slug as SlugPerfil]?.nombre ?? p.name]))} />
         <div className="mb-10 text-center">
           <MarcaPanel className="sello-grande mx-auto mb-5" />
           <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">¿Con qué perfil trabajás?</h1>
