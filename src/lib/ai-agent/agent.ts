@@ -32,7 +32,7 @@ import {
 } from "@/lib/captacion";
 import { clasificarAtencion, type MotivoAtencion } from "@/lib/captacion/reglas";
 import { crearCitaIa } from "@/lib/citas";
-import type { DetentionMotive } from "@/lib/detention";
+import { contactBlockReason, type DetentionMotive } from "@/lib/detention";
 import { instruccionReparacion, validarTextoSalida } from "@/lib/agentes/contrato";
 import { armarContexto, armarResumen } from "@/lib/agentes/contexto";
 import { asignacionActiva } from "@/lib/agentes/servicio";
@@ -216,6 +216,10 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
     return;
   }
 
+  // 24/10: un contacto detenido que vuelve a escribir sí recibe respuesta, salvo bloqueo duro (número de una menor).
+  const bloqueo = await contactBlockReason(contact.id);
+  if (bloqueo && (bloqueo.hardBlock || bloqueo.minorReported || !bloqueo.detentionId)) return;
+
   // ¿Viene de una campaña? Se busca en campaign_contacts por contact_id (no
   // por contacts.campaign_id, que solo queda seteado en el flujo viejo de
   // importación directa a una campaña) la más reciente en la que participó.
@@ -312,6 +316,10 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
   // 24/10: manda el rol de la campaña; si la campaña no tiene, el de la base.
   const rol = await instruccionesDeRol(contact, { rolId: rolDeCampana, campana: campaignName });
   if (rol) systemWithBrief = `${systemWithBrief}\n\n${rol}`;
+  // 24/10: contacto detenido que vuelve a escribir: el agente lo atiende, sin ofrecer ni insistir.
+  if (bloqueo) {
+    systemWithBrief = `${systemWithBrief}\n\nContacto detenido (regla del sistema): esta persona ya pidió no recibir mensajes o cerró la gestión (${bloqueo.label}). Ahora volvió a escribir: respondé con respeto a lo que dice. Si trae una consulta o algo relevante, atendela como siempre; si no, contestá breve y quedá a disposición. No le ofrezcas servicios por tu cuenta, no insistas y no repitas la disculpa si ya la diste.`;
+  }
   // 24/10: ficha del negocio del rubro (datos reales cargados por el equipo, editable en Bot IA).
   const ficha = await leerFichaNegocio(contact.rubro_id ?? profileIdForArea(area) ?? null);
   if (ficha) systemWithBrief = `${systemWithBrief}\n\n${bloqueFichaNegocio(ficha)}`;
@@ -525,6 +533,9 @@ async function atencionDelAgente(ctx: ToolContext, motivoAtencion: MotivoAtencio
   const t = clasificarAtencion(motivoAtencion);
   if (t.pausarChat) {
     await pauseWithFinalAck(ctx, t.principal ? "requiere_atencion_humana" : "cerrado_perdido");
+  } else if (t.detener) {
+    // 24/10: la detención no apaga al agente en el chat (por si la persona dice algo más relevante).
+    await createAdminClient().from("conversations").update({ status: "cerrado_perdido" }).eq("id", ctx.conversationId);
   }
   const r = await solicitarAtencion({
     opportunityId: ctx.opportunityId,
@@ -741,7 +752,8 @@ async function executeTool(
       }
 
       if (resultado === "caso_resuelto" || resultado === "no_interesado") {
-        await pauseWithFinalAck(ctx, "cerrado_perdido", "resuelto");
+        // 24/10: se cierra sin apagar al agente en el chat (por si la persona dice algo más relevante).
+        await supabase.from("conversations").update({ status: "cerrado_perdido", intake_step: "resuelto" }).eq("id", ctx.conversationId);
         await supabase.from("contacts").update({ status: "no_califica" }).eq("id", ctx.contact.id);
         // Disculpa breve y detención con motivo (archivo secundario).
         const r = await solicitarAtencion({
