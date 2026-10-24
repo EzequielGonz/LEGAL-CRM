@@ -27,11 +27,13 @@ test("el texto de «Volver» dice adónde lleva", () => {
   assert.equal(etiquetaVolver("/prospectos?area=civil"), "Volver a la lista");
   assert.equal(etiquetaVolver("/inbox/1"), "Volver a la conversación");
   assert.equal(etiquetaVolver("/conversacion/1"), "Volver a la conversación");
+  assert.equal(etiquetaVolver("/panel/marketing/chats/abc"), "Volver a la conversación");
+  assert.equal(etiquetaVolver("/panel/marketing/chats"), "Volver a la lista");
   assert.equal(etiquetaVolver("/telefono/marketing/clientes?estado=x"), "Volver a la lista");
   assert.equal(etiquetaVolver("/telefono/marketing"), "Volver al teléfono");
   assert.equal(etiquetaVolver("/panel/marketing"), "Volver al panel");
   assert.equal(etiquetaVolver("/"), "Volver al panel");
-  assert.equal(etiquetaVolver("/revision?vista=detenciones"), "Volver a Revisión");
+  assert.equal(etiquetaVolver("/revision?vista=detenciones"), "Volver a Incidencias");
   assert.equal(etiquetaVolver(null), "Volver");
 });
 
