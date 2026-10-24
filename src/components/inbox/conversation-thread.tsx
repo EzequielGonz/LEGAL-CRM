@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { Area, Message } from "@/lib/supabase/database.types";
 import { AreaBadge, SourceBadge, StatusBadge } from "@/components/ui/badge";
 import { mergePoll, type DeliveryUpdate } from "@/lib/inbox/estados";
+import { explicarError, lineaError } from "@/lib/envios/explicacion";
 import { createClient } from "@/lib/supabase/client";
 
 export interface ThreadContact {
@@ -22,6 +23,7 @@ type ThreadMessage = Message & {
   duplicate_of?: string | null;
   delivery_status?: string | null;
   delivery_status_at?: string | null;
+  delivery_error?: unknown;
 };
 
 /**
@@ -244,6 +246,11 @@ export function ConversationThread({
                     ? ` · ${DELIVERY_LABEL[m.delivery_status] ?? m.delivery_status}`
                     : ""}
                 </p>
+                {m.direction === "saliente" && m.delivery_status === "fallido" && (
+                  <p className="mt-1 rounded bg-red-50 px-2 py-1 text-xs text-red-800">
+                    <strong className="font-semibold">{lineaError(m.delivery_error)}.</strong> {explicarError(m.delivery_error).porque}
+                  </p>
+                )}
               </div>
             </div>
           ))}

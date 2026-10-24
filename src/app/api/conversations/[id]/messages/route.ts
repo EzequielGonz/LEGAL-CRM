@@ -32,7 +32,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
     query,
     supabase
       .from("messages")
-      .select("id, delivery_status, delivery_status_at")
+      .select("id, delivery_status, delivery_status_at, delivery_error")
       .eq("conversation_id", params.id)
       .eq("direction", "saliente")
       .not("delivery_status", "is", null)

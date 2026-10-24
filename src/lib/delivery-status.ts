@@ -1,5 +1,6 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { DELIVERY_RANK, mapDeliveryStatus } from "@/lib/webhooks/whatsapp-parse";
+import { esProblemaDeCuenta, explicarError, lineaError } from "@/lib/envios/explicacion";
 
 /**
  * Guarda un estado de entrega de WhatsApp (sent/delivered/read/failed):
@@ -8,6 +9,12 @@ import { DELIVERY_RANK, mapDeliveryStatus } from "@/lib/webhooks/whatsapp-parse"
  *   "entregado" que llega tarde no pisa un "leído");
  * - en el destinatario de campaña (`campaign_contacts`), por el id que
  *   devolvió Meta al enviar la plantilla, sin pisar "respondió".
+ *
+ * 23/10: si Meta avisa por acá un error de la cuenta o de la plantilla (por
+ * ejemplo 131042, pago pendiente), no es culpa del destinatario: queda
+ * pendiente (se reenvía al reanudar) y la campaña se pausa con el motivo
+ * explicado, igual que cuando el error llega al enviar. Antes seguía
+ * enviando y quemaba la base como «falló».
  */
 export async function applyDeliveryStatus(status: any): Promise<void> {
   const mapped = mapDeliveryStatus(status?.status);
@@ -49,6 +56,24 @@ export async function applyDeliveryStatus(status: any): Promise<void> {
   if (campaignStatus) {
     const from =
       campaignStatus === "entregado" ? ["enviado"] : campaignStatus === "leido" ? ["enviado", "entregado"] : ["enviado", "entregado"];
+    if (campaignStatus === "fallo" && errors && esProblemaDeCuenta(errors)) {
+      const x = explicarError(errors);
+      const { data: filas } = await supabase
+        .from("campaign_contacts")
+        .update({ status: "pendiente", error: `Pendiente: ${lineaError(errors)}. ${x.queHacer}`.slice(0, 1000) })
+        .eq("message_id", wamid)
+        .in("status", from)
+        .select("campaign_id");
+      const campanas = Array.from(new Set(((filas ?? []) as any[]).map((f) => f.campaign_id).filter(Boolean)));
+      for (const id of campanas) {
+        await supabase
+          .from("campaigns")
+          .update({ status: "pausada", pause_reason: `${lineaError(errors)}. ${x.queHacer}`.slice(0, 500), paused_at: new Date().toISOString() })
+          .eq("id", id)
+          .eq("status", "en_curso");
+      }
+      return;
+    }
     const update: Record<string, unknown> = { status: campaignStatus };
     if (campaignStatus === "fallo") {
       update.error = errors ? JSON.stringify(errors).slice(0, 1000) : "Meta informó que no se pudo entregar.";

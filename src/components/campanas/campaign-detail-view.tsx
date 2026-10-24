@@ -14,6 +14,7 @@ import { effectiveSendHours } from "@/lib/horario";
 import { statusLabel } from "@/lib/plantillas/catalogo";
 import { CAMPAIGN_STATUS_LABEL } from "@/lib/campaign-status";
 import { EnlaceAvanzado } from "@/components/nivel/nivel";
+import { agruparErrores, explicarError, leerErrorGuardado, lineaError } from "@/lib/envios/explicacion";
 
 const PAGE_SIZE = 100;
 
@@ -78,7 +79,7 @@ export async function CampaignDetailView({
     .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
   if (filter.statuses) recipientsQuery = recipientsQuery.in("status", filter.statuses);
 
-  const [{ data: recipients, count }, metrics, { data: line }, { data: template }] = await Promise.all([
+  const [{ data: recipients, count }, metrics, { data: line }, { data: template }, { data: conError }] = await Promise.all([
     recipientsQuery,
     getCampaignMetrics(campaignId),
     campaign.line_id
@@ -87,7 +88,17 @@ export async function CampaignDetailView({
     campaign.template_id
       ? supabase.from("whatsapp_templates").select("name, language, status").eq("id", campaign.template_id).maybeSingle()
       : Promise.resolve({ data: null as any }),
+    // 23/10: por qué fallaron (o quedaron pendientes por un error de Meta), agrupado por número de error.
+    supabase
+      .from("campaign_contacts")
+      .select("error")
+      .eq("campaign_id", campaignId)
+      .in("status", ["fallo", "pendiente", "revisar"])
+      .not("error", "is", null)
+      .limit(5000),
   ]);
+  // Solo los que traen número de error de Meta (las pausas internas no son errores de envío).
+  const gruposError = agruparErrores(((conError ?? []) as any[]).map((r) => r.error).filter((e) => typeof e === "string" && leerErrorGuardado(e).codigo !== null));
   const hours = effectiveSendHours(campaign);
   const detailPath = `${backHref}/${campaignId}`;
   // 20/10: desde cada destinatario se entra a su ficha y a su chat.
@@ -178,6 +189,28 @@ export async function CampaignDetailView({
         </div>
       )}
 
+      {gruposError.length > 0 && (
+        <section className="mb-6 rounded-xl border border-red-200 bg-white p-4" aria-labelledby="por-que-fallaron">
+          <h2 id="por-que-fallaron" className="text-base font-semibold text-slate-900">Por qué fallaron los envíos</h2>
+          <p className="mt-1 text-sm text-slate-600">Agrupado por número de error de Meta (WhatsApp). Incluye los que quedaron pendientes por un problema de la cuenta.</p>
+          <ul className="mt-3 space-y-3">
+            {gruposError.map((g) => (
+              <li key={g.codigo ?? g.titulo} className="rounded-lg border border-slate-200 p-3 text-sm">
+                <p className="font-semibold text-slate-900">
+                  {g.codigo !== null ? `Error ${g.codigo} · ` : ""}{g.titulo}{" "}
+                  <span className="tabular-nums font-normal text-slate-600">({g.cantidad} {g.cantidad === 1 ? "envío" : "envíos"})</span>
+                </p>
+                <p className="mt-1 text-slate-700"><strong className="font-semibold">Por qué ocurre:</strong> {g.porque}</p>
+                <p className="mt-1 text-slate-700"><strong className="font-semibold">Qué hacer:</strong> {g.queHacer}</p>
+                {(g.origen === "cuenta" || g.origen === "plantilla") && (
+                  <p className="mt-1 text-xs font-medium text-red-800">Es un problema de la {g.origen === "cuenta" ? "cuenta o la línea" : "plantilla"}, no de los destinatarios.</p>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       <div id="destinatarios" className="mb-3 flex scroll-mt-24 flex-wrap gap-2">
         {FILTERS.map((f) => (
           <Link
@@ -211,8 +244,16 @@ export async function CampaignDetailView({
                 <td className="px-4 py-3 text-slate-600">{r.contacts?.phone}</td>
                 <td className="px-4 py-3">
                   {STATUS_LABEL[r.status] ?? r.status}
-                  {r.status === "fallo" && r.error ? <span className="block text-xs text-red-700">{String(r.error).slice(0, 160)}</span> : null}
-                  {r.status === "pendiente" && r.error ? <span className="block text-xs text-slate-600">{String(r.error).slice(0, 160)}</span> : null}
+                  {r.status === "fallo" && r.error ? (
+                    <span className="block text-xs text-red-700">
+                      <strong className="font-semibold">{lineaError(r.error)}.</strong> {explicarError(r.error).porque}
+                    </span>
+                  ) : null}
+                  {r.status === "pendiente" && r.error ? (
+                    <span className="block text-xs text-slate-600">
+                      {explicarError(r.error).codigo !== null ? <><strong className="font-semibold">{lineaError(r.error)}.</strong> {explicarError(r.error).queHacer}</> : String(r.error).slice(0, 200)}
+                    </span>
+                  ) : null}
                   {r.status === "revisar" ? (
                     <>
                       <span className="block text-xs text-amber-900">{String(r.review_reason ?? r.error ?? "").slice(0, 240)}</span>
