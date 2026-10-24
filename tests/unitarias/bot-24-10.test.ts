@@ -66,6 +66,9 @@ test("horario, atención, pedido de texto, calidad, rescate, ficha", () => {
   assert.doesNotMatch(fuera, /mañana desde las 8/);
   const t = clasificarAtencion("solicitud_eliminacion");
   assert.equal(t.principal, false); assert.equal(t.detener, "no_contacto"); assert.equal(t.respuesta, "disculpa_datos");
+  // La detención no apaga al agente; el número de una menor sí.
+  assert.equal(clasificarAtencion("no_quiere_mensajes").pausarChat, false);
+  assert.equal(clasificarAtencion("numero_de_menor").pausarChat, true);
   const now = new Date();
   assert.equal(correspondePedidoTexto(new Date(now.getTime() - 10 * 60_000), now), false);
   assert.equal(correspondePedidoTexto(new Date(now.getTime() - 30 * 60_000), now), true);
