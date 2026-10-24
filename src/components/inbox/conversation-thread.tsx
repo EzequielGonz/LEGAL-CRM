@@ -241,7 +241,7 @@ export function ConversationThread({
                   }`}
                 >
                   {m.sender_type === "agente_ia" ? "Agente IA · " : m.sender_type === "admin" ? "Admin · " : ""}
-                  {new Date(m.created_at).toLocaleString("es-AR")}
+                  {new Date(m.created_at).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", hourCycle: "h23", day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" })}
                   {m.direction === "saliente" && m.delivery_status
                     ? ` · ${DELIVERY_LABEL[m.delivery_status] ?? m.delivery_status}`
                     : ""}
