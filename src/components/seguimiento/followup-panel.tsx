@@ -4,6 +4,9 @@ import { FOLLOWUP_TASK_STATUS_LABEL } from "@/lib/seguimiento/circuito";
 import { getAutomationPause } from "@/lib/automation-pause";
 import { FollowupConfigControl, FollowupReviewActions, RepescaBaseButton } from "@/components/seguimiento/followup-controls";
 import { ResumenSeccion } from "@/components/nivel/resumen-seccion";
+import { RecontactoControl } from "@/components/seguimiento/recontacto-control";
+import { leerConfigRecontacto } from "@/lib/recontacto/motor";
+import { slugDeRubro } from "@/lib/rubros";
 
 function fmt(iso: string | null | undefined): string {
   if (!iso) return "—";
@@ -54,7 +57,8 @@ function TaskLine({ t, actions }: { t: FollowupTaskRow; actions?: boolean }) {
  * lo que necesita revisión, enviados, detenidos y la base para campaña manual.
  */
 export async function FollowupPanel({ rubroId }: { rubroId: string }) {
-  const [o, pause] = await Promise.all([followupOverview(rubroId), getAutomationPause()]);
+  const perfil = slugDeRubro(rubroId);
+  const [o, pause, recontacto] = await Promise.all([followupOverview(rubroId), getAutomationPause(), leerConfigRecontacto().catch(() => null)]);
   const pendientesBase = o.agotadas.filter((a: any) => !a.repesca_base_id);
 
   const encendido = !!o.config.enabledSince;
@@ -85,6 +89,17 @@ export async function FollowupPanel({ rubroId }: { rubroId: string }) {
         ]}
         personalizar={{ href: "#seg-config", texto: encendido ? "Personalizar o apagar" : "Ver cómo se enciende" }}
       />
+
+      <section id="seg-recontacto" aria-labelledby="seg-recontacto-t" className="rounded-xl border border-slate-200 bg-white p-5">
+        <h2 id="seg-recontacto-t" className="mb-1 text-base font-semibold text-slate-900">Recontacto del bot en las 24 h</h2>
+        <p className="mb-3 text-sm text-slate-700">
+          Si la persona mostró interés y dejó de responder, el bot le vuelve a escribir con texto libre dentro de la ventana de 24 h de Meta:
+          a las 2 h retoma lo último que se habló y, si sigue sin contestar, a las 2 h más la saluda y queda a disposición. Después no insiste.
+          Lunes a sábado de 8 a 21: si el plazo cae después del cierre, sale 10 minutos antes; si ya cerró, a las 8 del día hábil siguiente.
+          Antes de escribir revisa la charla y no escribe si no hay interés real. No usa plantillas: es distinto del seguimiento de abajo.
+        </p>
+        {recontacto ? <RecontactoControl perfil={perfil} encendido={recontacto[perfil] !== false} /> : <p className="text-sm text-red-700">No se pudo leer la configuración.</p>}
+      </section>
 
       <section id="seg-config" tabIndex={-1} className="solo-avanzado rounded-xl border border-slate-200 bg-white p-5">
         <h2 className="mb-1 text-base font-semibold text-slate-900">Cómo funciona</h2>

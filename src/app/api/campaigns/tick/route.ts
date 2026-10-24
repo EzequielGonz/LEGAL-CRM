@@ -12,6 +12,8 @@ import { contactarFormulariosDeLanding } from "@/lib/landing-seguimiento";
 import { avanzarExtraccion } from "@/lib/marketing/extraer";
 import { enviarPresupuestosProgramados } from "@/lib/marketing/presupuestos";
 import { registrarLatido } from "@/lib/salud";
+import { procesarRecontactos } from "@/lib/recontacto/motor";
+import { sincronizarCatalogosSiToca } from "@/lib/plantillas/auto-asignar";
 
 // El análisis de negocios (descargar la web + IA) necesita más de los 10s por defecto.
 export const maxDuration = 60;
@@ -54,6 +56,16 @@ export async function POST(request: Request) {
       seguimiento = await runFollowupTick();
     } catch (err: any) {
       seguimiento = { error: String(err?.message ?? err) };
+    }
+
+    // 2 bis) Recontacto del bot (24/10): a quien mostró interés y dejó de
+    //    responder, a las 2 h le vuelve a escribir dentro de la ventana de 24 h
+    //    (texto libre, hasta dos veces). Respeta pausa general y horario.
+    let recontacto: unknown = null;
+    try {
+      recontacto = await procesarRecontactos({ presupuestoMs: 15_000 });
+    } catch (err: any) {
+      recontacto = { error: String(err?.message ?? err) };
     }
 
     // 3) Pipeline de Marketing: analiza negocios nuevos, suma los mejor
@@ -141,9 +153,21 @@ export async function POST(request: Request) {
       }
     }
 
+    // 9) Catálogo de plantillas (24/10): una vez por hora se relee de Meta y
+    //    se asigna sola cada plantilla aprobada que sigue la convención de
+    //    nombres. Solo lee de Meta y asigna: no envía nada.
+    let catalogo: unknown = null;
+    if (Date.now() - inicio < 40_000) {
+      try {
+        catalogo = await sincronizarCatalogosSiToca();
+      } catch (err: any) {
+        catalogo = { error: String(err?.message ?? err) };
+      }
+    }
+
     // Tablero de salud: deja la hora del último latido.
     await registrarLatido(true, { ms: Date.now() - inicio });
-    return NextResponse.json({ ok: true, results, seguimiento, marketing, servidor, extraccion, avisos, formularios, presupuestos });
+    return NextResponse.json({ ok: true, results, seguimiento, recontacto, marketing, servidor, extraccion, avisos, formularios, presupuestos, catalogo });
   } catch (err: any) {
     await registrarLatido(false, { error: String(err?.message ?? err).slice(0, 200) });
     return NextResponse.json({ error: String(err.message ?? err) }, { status: 500 });
