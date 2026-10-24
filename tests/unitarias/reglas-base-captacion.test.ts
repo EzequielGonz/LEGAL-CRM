@@ -140,8 +140,13 @@ test("A15: pide una persona o un precio fuera de alcance → atención comercial
     assert.equal(t.pausarChat, true);
     assert.equal(t.detener, null);
   }
-  // La consulta de procedencia no pausa ni es pendiente principal.
-  assert.equal(clasificarAtencion("pregunta_procedencia").pausarChat, false);
+  // 24/10: origen de los datos o pedido de baja → disculpa y detención, sin pendiente principal.
+  for (const m of ["pregunta_procedencia", "procedencia_no_comprobable", "reclamo_datos", "solicitud_eliminacion"] as const) {
+    const t = clasificarAtencion(m);
+    assert.equal(t.principal, false);
+    assert.equal(t.detener, "no_contacto");
+    assert.equal(t.respuesta, "disculpa_datos");
+  }
   // Un motivo desconocido se conserva como registro histórico, sin pausar.
   const h = clasificarAtencion("algo_raro");
   assert.equal(h.motivo, "motivo_historico");
@@ -216,11 +221,12 @@ test("2.8: la fuente se acredita solo con referencia; sin referencia queda «no 
   assert.equal(detectarFuente({ channelType: "whatsapp", body: "Hola", contactSource: "base_de_datos" }).fuente, "base_importada");
 });
 
-test("2.6: el pedido de texto ante un audio sale como mucho una vez cada 12 horas", () => {
+test("2.6: el pedido de texto ante un audio sale como mucho una vez cada 30 minutos (24/10)", () => {
   const now = new Date("2026-10-19T13:00:00Z");
   assert.equal(correspondePedidoTexto(null, now), true);
-  assert.equal(correspondePedidoTexto(new Date(now.getTime() - 3_600_000), now), false);
-  assert.equal(correspondePedidoTexto(new Date(now.getTime() - 12 * 3_600_000), now), true);
+  // 24/10: como mucho un pedido cada 30 minutos (antes 12 h).
+  assert.equal(correspondePedidoTexto(new Date(now.getTime() - 10 * 60_000), now), false);
+  assert.equal(correspondePedidoTexto(new Date(now.getTime() - 30 * 60_000), now), true);
 });
 
 // Bloque 4 — Biblioteca de agentes: solo configuración, nunca activa.
