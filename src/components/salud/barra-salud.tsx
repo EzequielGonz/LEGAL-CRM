@@ -2,6 +2,7 @@ import Link from "next/link";
 import { unstable_cache } from "next/cache";
 import { leerSalud, resumenSalud, type ItemSalud } from "@/lib/salud";
 import { lecturaSimple } from "@/lib/salud/reglas";
+import { itemsDelPerfil } from "@/lib/salud/por-perfil";
 import { Icono } from "@/components/ui/icono-seccion";
 
 const COLOR: Record<ItemSalud["estado"], string> = {
@@ -25,7 +26,8 @@ const saludResumida = unstable_cache(() => leerSalud(), ["barra-salud"], { reval
 export async function BarraSalud({ slug }: { slug: string }) {
   let items: ItemSalud[] = [];
   try {
-    items = await saludResumida();
+    // 24/10: solo lo global y lo de este perfil.
+    items = itemsDelPerfil(await saludResumida(), slug);
   } catch {
     return null;
   }
