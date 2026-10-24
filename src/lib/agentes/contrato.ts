@@ -67,7 +67,7 @@ const DETECTORES: { motivo: MotivoRetencion; re: RegExp[] }[] = [
   },
   {
     motivo: "diagnostico_o_dictamen",
-    re: [/\bte\s+corresponde\s+(?:una\s+)?indemnizaci[oó]n/i, /\bla\s+indemnizaci[oó]n\s+(?:ser[ií]a|es|va a ser)\b/i, /\b(?:tienen|ten[eé]s)\s+(?:la\s+)?(?:culpa|responsabilidad)\b/i, /\bprescribi[oó]\b/i, /\bten[eé]s\s+(?:un\s+)?caso\s+ganado\b/i, /\bdiagn[oó]stico\s+es\b/i, /\bla\s+cartilla\s+incluye\b/i, /\bten[eé]s\s+cobertura\s+(?:asegurada|garantizada)\b/i],
+    re: [/\bte\s+corresponde\s+(?:una\s+)?indemnizaci[oó]n/i, /\b(?:te\s+|le\s+)?corresponde(?:r[ií]a)?\s+(?:una\s+|un\s+)?(?:compensaci[oó]n|resarcimiento|reparaci[oó]n|indemnizaci[oó]n|reclamo)\b/i, /\bten[eé]s\s+derecho\s+a\s+(?:cobrar|reclamar|una\s+(?:indemnizaci[oó]n|compensaci[oó]n))/i, /\bla\s+indemnizaci[oó]n\s+(?:ser[ií]a|es|va a ser)\b/i, /\b(?:tienen|ten[eé]s)\s+(?:la\s+)?(?:culpa|responsabilidad)\b/i, /\bprescribi[oó]\b/i, /\bten[eé]s\s+(?:un\s+)?caso\s+ganado\b/i, /\bdiagn[oó]stico\s+es\b/i, /\bla\s+cartilla\s+incluye\b/i, /\bten[eé]s\s+cobertura\s+(?:asegurada|garantizada)\b/i],
   },
   {
     motivo: "testimonio_o_caso",
@@ -81,6 +81,20 @@ export interface ValidacionSalida {
   fragmentos: string[];
 }
 
+const VERBO_CONTACTO = /\b(?:llam|contact|comunic|escrib)\w*/i;
+const CUANDO = /\b(?:hoy|ma[nñ]ana|esta\s+(?:tarde|noche)|(?:por|a)\s+la\s+(?:ma[nñ]ana|tarde|noche)|a\s+las\s+\d|el\s+(?:lunes|martes|mi[eé]rcoles|jueves|viernes|s[aá]bado|domingo)|en\s+(?:\d+|unos|un\s+par\s+de)\s+(?:minutos|horas)|en\s+un\s+rato|ahora\s+mismo)\b/i;
+
+/** Oración afirmativa que promete cuándo se lo contacta (devuelve el fragmento). Pura. */
+export function prometeHorario(texto: string): string | null {
+  for (const oracion of (texto ?? "").split(/(?<=[.!?\n])/)) {
+    if (oracion.includes("?")) continue;
+    const v = oracion.match(VERBO_CONTACTO);
+    const c = oracion.match(CUANDO);
+    if (v && c) return oracion.trim().slice(0, 120);
+  }
+  return null;
+}
+
 export function validarTextoSalida(texto: string, opts: { permitirCifras?: boolean } = {}): ValidacionSalida {
   const t = (texto ?? "").trim();
   const motivos: MotivoRetencion[] = [];
@@ -88,6 +102,12 @@ export function validarTextoSalida(texto: string, opts: { permitirCifras?: boole
   if (!t) return { ok: false, motivos: ["texto_vacio"], fragmentos };
   if (t.length > MAX_TEXTO) motivos.push("texto_largo");
   if ((t.match(/\n{2,}/g) ?? []).length > 3) motivos.push("varios_mensajes");
+  // 24/10: promesa de día u hora del contacto (solo en oraciones afirmativas; preguntar la franja está bien).
+  const promesa = prometeHorario(t);
+  if (promesa) {
+    motivos.push("plazo_o_resultado_prometido");
+    fragmentos.push(promesa);
+  }
   for (const d of DETECTORES) {
     if (opts.permitirCifras && (d.motivo === "precio_o_importe" || d.motivo === "cuotas_o_financiacion")) continue;
     for (const re of d.re) {
