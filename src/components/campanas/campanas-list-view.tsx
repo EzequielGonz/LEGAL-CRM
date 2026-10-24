@@ -5,6 +5,7 @@ import { DeleteCampaignButton } from "@/components/campanas/delete-campaign-butt
 import { ArchivedToggle } from "@/components/ui/archived-toggle";
 import { ResumenSeccion } from "@/components/nivel/resumen-seccion";
 import { getCampaignFunnelCounts } from "@/lib/campaigns";
+import { getCampaignMetrics } from "@/lib/campaign-metrics";
 import { CAMPAIGN_STATUS_LABEL } from "@/lib/campaign-status";
 import { esSlugPerfil, type SlugPerfil } from "@/lib/marca";
 
@@ -13,6 +14,16 @@ function perfilDe(basePath: string): SlugPerfil | undefined {
   if (basePath === "/campanas") return "juridico";
   const m = /^\/panel\/([a-z0-9_]+)\/campanas/.exec(basePath);
   return m && esSlugPerfil(m[1]) ? m[1] : undefined;
+}
+
+/**
+ * Qué está pasando con la campaña (24/10): el motivo real de la pausa y, si
+ * terminó con destinatarios sin enviar, cuántos quedaron.
+ */
+function queHace(c: { status: string; pause_reason?: string | null }, pendientes: number | null): string {
+  if (c.status === "pausada" && c.pause_reason) return `Pausada · motivo: ${c.pause_reason.replace(/\.$/, "")}. No envía nada hasta que la reanudes.`;
+  if (c.status === "finalizada" && pendientes) return `Terminada con ${pendientes.toLocaleString("es-AR")} destinatario(s) sin enviar (no se van a enviar solos).`;
+  return QUE_HACE[c.status] ?? "";
 }
 
 /** Qué significa cada estado, en palabras simples. */
@@ -66,6 +77,8 @@ export async function CampanasListView({
   const funnels = new Map(
     await Promise.all((campaigns ?? []).map(async (c: any) => [c.id, await getCampaignFunnelCounts(supabase, c.id)] as const))
   );
+  // 24/10: las cifras de envío salen del mismo cálculo que el detalle y el Inicio.
+  const metricas = new Map(await Promise.all((campaigns ?? []).map(async (c: any) => [c.id, await getCampaignMetrics(c.id).catch(() => null)] as const)));
   const cuenta = (estado: string) => (campaigns ?? []).filter((c: any) => c.status === estado).length;
   const enCurso = cuenta("en_curso");
 
@@ -116,6 +129,7 @@ export async function CampanasListView({
       <ul className="space-y-3" aria-label="Campañas">
         {(campaigns ?? []).map((c: any) => {
           const f = funnels.get(c.id);
+          const m = metricas.get(c.id);
           return (
             <li key={c.id} className="card-lift flex flex-wrap items-start justify-between gap-3 rounded-xl border border-slate-200 bg-white p-5 hover:border-slate-400">
               <div className="min-w-0 flex-1">
@@ -127,10 +141,11 @@ export async function CampanasListView({
                   </h3>
                   <span className="shrink-0 rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-800">{CAMPAIGN_STATUS_LABEL[c.status] ?? c.status}</span>
                 </div>
-                <p className="text-sm text-slate-700">{QUE_HACE[c.status] ?? ""}</p>
+                <p className={`text-sm ${c.status === "pausada" && c.pause_reason ? "font-medium text-amber-800" : "text-slate-700"}`}>{queHace(c, m ? m.pendientes + (m.a_revisar ?? 0) : null)}</p>
                 <p className="mt-1 text-sm text-slate-700">
-                  <span className="tabular-nums">{f?.enviados ?? 0}</span> de <span className="tabular-nums">{f?.total ?? 0}</span> enviados ·{" "}
-                  <span className="tabular-nums">{f?.respondieron ?? 0}</span> respondieron · <span className="tabular-nums">{f?.agendados ?? 0}</span> agendados
+                  <span className="tabular-nums">{m?.enviados ?? f?.enviados ?? 0}</span> de <span className="tabular-nums">{m?.prospectos ?? f?.total ?? 0}</span> enviados
+                  {m?.fallidos ? <> · <span className="tabular-nums">{m.fallidos}</span> fallaron</> : null} ·{" "}
+                  <span className="tabular-nums">{m?.personas_responden ?? f?.respondieron ?? 0}</span> respondieron · <span className="tabular-nums">{f?.agendados ?? 0}</span> agendados
                 </p>
                 <p className="solo-avanzado mt-1 text-xs text-slate-600 [overflow-wrap:anywhere]">
                   Plantilla {c.message_template_name ?? "sin elegir"}

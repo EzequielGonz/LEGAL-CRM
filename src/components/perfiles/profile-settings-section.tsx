@@ -34,7 +34,9 @@ export async function ProfileSettingsSection({ slug }: { slug: string }) {
   const lines = ((linesData ?? []) as ProfileLine[]).map((l) => ({ ...l, credentials: credentialStatus(l.credential_key), estado: estados[l.credential_key] ?? null }));
 
   const areas = areasForProfile(profile.id);
-  const registered = new Set(lines.filter((l) => l.active).map((l) => l.credential_key));
+  // 24/10: una conexión que ya usa otro perfil no se ofrece para «asignar» acá (evita mezclar líneas).
+  const { data: todasLasLineas } = await supabase.from("profile_lines").select("credential_key, active");
+  const registered = new Set(((todasLasLineas ?? []) as { credential_key: string; active: boolean }[]).filter((l) => l.active).map((l) => l.credential_key));
   const detected = detectedCredentialKeys()
     .filter((k) => !registered.has(k))
     .map((k) => ({ key: k, credentials: credentialStatus(k) }));

@@ -130,6 +130,15 @@ export async function CampaignDetailView({
             Estado: <strong className="font-semibold">{CAMPAIGN_STATUS_LABEL[campaign.status] ?? campaign.status}</strong>
             {campaign.status === "borrador" || campaign.status === "pausada" ? " — no envía nada hasta que la lances y lo confirmes." : ""}
           </p>
+          {/* 24/10: el motivo real de la pausa, arriba de todo. */}
+          {campaign.status === "pausada" && (campaign as any).pause_reason ? (
+            <p className="mt-1 rounded-lg bg-amber-50 px-3 py-2 text-sm font-medium text-amber-900">Motivo de la pausa: {(campaign as any).pause_reason}</p>
+          ) : null}
+          {campaign.status === "finalizada" && metrics && metrics.pendientes + (metrics.a_revisar ?? 0) > 0 ? (
+            <p className="mt-1 rounded-lg bg-amber-50 px-3 py-2 text-sm font-medium text-amber-900">
+              Terminada con {(metrics.pendientes + (metrics.a_revisar ?? 0)).toLocaleString("es-AR")} destinatario(s) sin enviar: no se envían solos.
+            </p>
+          ) : null}
           {/* Simple: lo que hace falta para poder enviar, en una lista corta. */}
           <ul className="solo-simple mt-2 space-y-1 text-sm text-slate-800" aria-label="Antes de enviar">
             <li><Marca ok={!!line} /> Línea que envía: {line ? `${line.label}${line.phone_display ? ` (${line.phone_display})` : ""}` : "sin asignar"}</li>
@@ -170,25 +179,7 @@ export async function CampaignDetailView({
         </div>
       </div>
 
-      <div id="campana-config" tabIndex={-1} className="mb-6">
-        <CampaignSetupSection campaignId={campaign.id} />
-      </div>
-
-      <div className="mb-6">
-        <CampaignMetricsPanel m={metrics} enlaceRespondieron={`${detailPath}?estado=respondieron#destinatarios`} />
-      </div>
-
-      {!campaign.archived_at && (
-        <div className="mb-6">
-          <CsvUploader
-            campaignId={campaign.id}
-            area={campaign.area}
-            basesPath={basesPath}
-            basesCargadas={((basesCargadas ?? []) as any[]).map((b) => ({ id: b.id, nombre: b.name || b.file_name || "Base sin nombre", filas: b.total_rows ?? b.created_rows ?? null, fecha: b.created_at }))}
-          />
-        </div>
-      )}
-
+      {/* 24/10: los motivos de falla, antes de la configuración. */}
       {gruposError.length > 0 && (
         <section className="mb-6 rounded-xl border border-red-200 bg-white p-4" aria-labelledby="por-que-fallaron">
           <h2 id="por-que-fallaron" className="text-base font-semibold text-slate-900">Por qué fallaron los envíos</h2>
@@ -209,6 +200,25 @@ export async function CampaignDetailView({
             ))}
           </ul>
         </section>
+      )}
+
+      <div id="campana-config" tabIndex={-1} className="mb-6">
+        <CampaignSetupSection campaignId={campaign.id} />
+      </div>
+
+      <div className="mb-6">
+        <CampaignMetricsPanel m={metrics} enlaceRespondieron={`${detailPath}?estado=respondieron#destinatarios`} />
+      </div>
+
+      {!campaign.archived_at && (
+        <div className="mb-6">
+          <CsvUploader
+            campaignId={campaign.id}
+            area={campaign.area}
+            basesPath={basesPath}
+            basesCargadas={((basesCargadas ?? []) as any[]).map((b) => ({ id: b.id, nombre: b.name || b.file_name || "Base sin nombre", filas: b.total_rows ?? b.created_rows ?? null, fecha: b.created_at }))}
+          />
+        </div>
       )}
 
       <div id="destinatarios" className="mb-3 flex scroll-mt-24 flex-wrap gap-2">
@@ -261,7 +271,7 @@ export async function CampaignDetailView({
                     </>
                   ) : null}
                 </td>
-                <td className="px-4 py-3 tabular-nums text-slate-600">{r.sent_at ? new Date(r.sent_at).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires" }) : "—"}</td>
+                <td className="px-4 py-3 tabular-nums text-slate-600">{r.sent_at ? new Date(r.sent_at).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", hourCycle: "h23" }) : "—"}</td>
                 <td className="px-4 py-3">
                   <span className="flex flex-wrap gap-2">
                     {r.contact_id && (
