@@ -2,8 +2,8 @@
 /**
  * 24/10 (aprobado por la responsable): fuera de Marketing, el bot insiste una
  * sola vez con algo útil antes de detener, salvo ante un pedido explícito de
- * no recibir mensajes, enojo o número equivocado. Las bases son compradas: el
- * origen se explica con la verdad, sin decir que la persona consultó al estudio.
+ * no recibir mensajes, enojo o número equivocado. Las bases son compradas: ante
+ * una pregunta por el origen, disculpa y detención (regla ORIGEN, 24/10).
  */
 /**
  * 24/10 (aprobado por la responsable): ante un «ahora no» no se insiste, en
@@ -12,6 +12,14 @@
  */
 const AHORA_NO =
   "- Si dice «ahora no», «no por ahora», «más adelante», que está ocupado o que no tiene tiempo (con un botón o con sus palabras): NO insistas, no preguntes día ni horario y no ofrezcas mandarle nada. Respondé con un único mensaje, corto y cálido, que no hay problema y que quedás a disposición por acá cuando quiera retomarlo. No prometas volver a escribirle. No uses detener_contacto ni evaluar_calificacion: la persona sigue disponible.";
+/**
+ * 24/10 (decisión de la responsable, reemplaza la de explicar el origen):
+ * quien pregunta de dónde salió su número o pide la baja recibe una disculpa
+ * y se lo detiene. El agente es asesor y no tiene el dato del origen (lo
+ * atiende el equipo de marketing): no lo explica ni lo inventa.
+ */
+const ORIGEN =
+  "- Si dice que no hizo ninguna consulta, pregunta de dónde salió su número o pide que borren sus datos: usá detener_contacto (motivo pregunta_procedencia o solicitud_eliminacion) y respondé solo la disculpa que te indica la herramienta. Sos asesor y no tenés el dato de cómo llegó su contacto (lo maneja el equipo de marketing): no lo expliques ni inventes detalles.";
 const SIN_BASE =
   "- Nunca digas «base», «base de datos» ni que lo das de baja «de la base»: si pide no recibir más mensajes, decí que no le vamos a escribir más. Nunca prometas escribirle «en unos días».";
 
@@ -21,6 +29,7 @@ export function reglaDeRechazo(slug: string, modo: "campana" | "entrante" = "cam
     return [
       "- Si la persona rechaza el contacto, se enoja, es un número equivocado, ya resolvió su caso o ya tiene abogado: usá detener_contacto y respondé solo una disculpa breve.",
       AHORA_NO,
+      ORIGEN,
       SIN_BASE,
     ];
   }
@@ -38,7 +47,7 @@ export function reglaDeRechazo(slug: string, modo: "campana" | "entrante" = "cam
     `- Si dice que ya lo resolvió, que ya tiene abogado o asesor, o que ya compró/contrató, o responde «no, gracias» o «no me interesa» sin más (con un botón o con sus palabras): insistí UNA sola vez, breve y sin presión: ${oferta}.`,
     AHORA_NO,
     "- Si pide otro día u horario para hablar, preguntale cuál le queda mejor.",
-    "- Si dice que no hizo ninguna consulta o pregunta de dónde salió su número, respondé con esta idea (con tus palabras, breve): sos asesor del estudio y los contactos los administra el equipo de marketing; su contacto figura como una consulta que llegó por redes o internet (Facebook, Instagram o alguna página web de consultas), a veces de hace tiempo; si prefiere, se lo da de baja ahora mismo, y si no, en un minuto le contás qué revisan. No digas que consultó al estudio ni inventes detalles del origen.",
+    ORIGEN,
     "- Si ya insististe una vez en esta conversación y vuelve a decir que no (o no le interesa): usá detener_contacto y respondé solo una disculpa breve. Nunca insistas dos veces.",
     SIN_BASE,
   ];
