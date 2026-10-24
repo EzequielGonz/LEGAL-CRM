@@ -151,12 +151,12 @@ export function AccessSettings({
           <p className="text-xs text-slate-400">Todavía no hay registros.</p>
         ) : (
           <ul className="divide-y divide-slate-100 text-xs">
-            {events.map((e) => (
+            {[...events].sort((a, b) => new Date(b.at).getTime() - new Date(a.at).getTime()).map((e) => (
               <li key={e.id} className="flex justify-between gap-3 py-1.5">
                 <span className="text-slate-700">{EVENT_LABEL[e.kind] ?? e.kind}</span>
                 <span className="text-slate-400">
                   {e.device ? `${e.device} · ` : ""}
-                  {new Date(e.at).toLocaleString("es-AR")}
+                  {new Date(e.at).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", hourCycle: "h23", day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}
                 </span>
               </li>
             ))}

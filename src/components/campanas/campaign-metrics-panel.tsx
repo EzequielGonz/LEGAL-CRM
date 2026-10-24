@@ -29,7 +29,8 @@ export function CampaignMetricsPanel({ m, compact = false, enlaceRespondieron }:
   const tiles: { corto: string; largo: string; valor: number; tono: Tono; href?: string }[] = [
     { corto: "Prospectos", largo: "Prospectos", valor: m.prospectos, tono: "fuerte" },
     { corto: "Pendientes", largo: "Pendientes", valor: m.pendientes, tono: "suave" },
-    { corto: "Enviados", largo: "Mensajes enviados", valor: m.mensajes_enviados, tono: "fuerte" },
+    // 24/10: «Con envío» cuenta destinatarios (igual que la lista y el Inicio); los mensajes van abajo.
+    { corto: "Con envío", largo: "Destinatarios con envío", valor: m.enviados, tono: "fuerte" },
     { corto: "Respondieron", largo: "Personas que respondieron", valor: m.personas_responden, tono: "fuerte", href: enlaceRespondieron },
     { corto: "Sin respuesta", largo: "Sin respuesta", valor: m.sin_respuesta, tono: "suave" },
     { corto: "Seguimiento", largo: "En seguimiento", valor: m.en_seguimiento, tono: "fuerte" },
@@ -37,6 +38,7 @@ export function CampaignMetricsPanel({ m, compact = false, enlaceRespondieron }:
     { corto: "Cierres", largo: "Cierres", valor: m.cierres, tono: m.cierres > 0 ? "logro" : "fuerte" },
   ];
   const extras = [
+    m.mensajes_enviados > 0 ? `${m.mensajes_enviados.toLocaleString("es-AR")} mensajes enviados en total (plantillas y respuestas)` : null,
     m.fallidos > 0 ? `${m.fallidos} envíos fallidos` : null,
     (m.a_revisar ?? 0) > 0 ? `${m.a_revisar} a revisar (no se reenvían solos)` : null,
     (m.en_envio ?? 0) > 0 ? `${m.en_envio} en envío` : null,
@@ -80,8 +82,8 @@ export function CampaignMetricsPanel({ m, compact = false, enlaceRespondieron }:
       </dl>
       {extras.length > 0 && <p className="mt-2 text-xs text-slate-600">{extras.join(" · ")}</p>}
       <p className="mt-2 text-xs text-slate-500">
-        Cuenta destinatarios; «Enviados» cuenta mensajes.
-        {m.actualizado ? ` Última actividad: ${new Date(m.actualizado).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires" })}.` : " Todavía sin actividad."}
+        Todas las cifras cuentan destinatarios.
+        {m.actualizado ? ` Última actividad: ${new Date(m.actualizado).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", hourCycle: "h23" })}.` : " Todavía sin actividad."}
       </p>
     </div>
   );
