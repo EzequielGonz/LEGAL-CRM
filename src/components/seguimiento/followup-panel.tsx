@@ -8,7 +8,7 @@ import { ResumenSeccion } from "@/components/nivel/resumen-seccion";
 function fmt(iso: string | null | undefined): string {
   if (!iso) return "—";
   return new Date(iso).toLocaleString("es-AR", {
-    timeZone: "America/Argentina/Buenos_Aires",
+    timeZone: "America/Argentina/Buenos_Aires", hourCycle: "h23",
     weekday: "short",
     day: "2-digit",
     month: "2-digit",

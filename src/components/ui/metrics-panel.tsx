@@ -82,7 +82,7 @@ export function MetricsPanel({
         </div>
       )}
       <p className="text-xs text-slate-400">
-        Unidad: oportunidad (una por consulta). Actualizado {new Date(m.calculado_en).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires" })}.
+        Unidad: oportunidad (una por consulta). Actualizado {new Date(m.calculado_en).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", hourCycle: "h23", dateStyle: "short", timeStyle: "short" })}.
       </p>
     </div>
   );

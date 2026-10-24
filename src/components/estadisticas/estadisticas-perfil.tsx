@@ -105,7 +105,7 @@ export async function EstadisticasPerfil({ slug, ruta, extra }: { slug: SlugPerf
                   <AreaBadge area={c.area} />
                   <span className="min-w-0 truncate text-slate-800">{c.contacts?.full_name ?? "Sin nombre"}</span>
                 </span>
-                <span className="text-xs tabular-nums text-slate-600">{new Date(c.starts_at).toLocaleString("es-AR", { dateStyle: "medium", timeStyle: "short" })}</span>
+                <span className="text-xs tabular-nums text-slate-600">{new Date(c.starts_at).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", hourCycle: "h23", dateStyle: "medium", timeStyle: "short" })}</span>
               </li>
             ))}
           </ul>

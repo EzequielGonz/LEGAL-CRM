@@ -19,7 +19,7 @@ function horaArgentina(d: Date): string {
   return d.toLocaleTimeString("es-AR", {
     hour: "2-digit",
     minute: "2-digit",
-    timeZone: "America/Argentina/Buenos_Aires",
+    timeZone: "America/Argentina/Buenos_Aires", hourCycle: "h23",
   });
 }
 

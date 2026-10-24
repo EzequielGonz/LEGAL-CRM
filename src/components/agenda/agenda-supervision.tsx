@@ -214,7 +214,7 @@ export async function AgendaSupervision({
                       </div>
                     )}
                   </td>
-                  <td className="px-4 py-2 text-sm tabular-nums text-slate-700">{r.when ? new Date(r.when).toLocaleString("es-AR", { dateStyle: "short", timeStyle: "short" }) : "—"}</td>
+                  <td className="px-4 py-2 text-sm tabular-nums text-slate-700">{r.when ? new Date(r.when).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", hourCycle: "h23", dateStyle: "short", timeStyle: "short" }) : "—"}</td>
                 </tr>
               ))}
               {rows.length === 0 && (

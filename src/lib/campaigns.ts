@@ -247,7 +247,7 @@ async function tickLocked(
       action: "outside_send_window",
       detail: `Fuera del horario permitido (lunes a sábado, ${hours.start}-${hours.end}hs, Argentina, con las excepciones del calendario). Reanuda el ${sendWindow.opensAt.toLocaleString(
         "es-AR",
-        { timeZone: "America/Argentina/Buenos_Aires", weekday: "long", hour: "2-digit", minute: "2-digit" }
+        { timeZone: "America/Argentina/Buenos_Aires", hourCycle: "h23", weekday: "long", hour: "2-digit", minute: "2-digit" }
       )}.`,
     };
   }
@@ -259,7 +259,7 @@ async function tickLocked(
       return {
         campaignId,
         action: "batch_pause",
-        detail: `En pausa entre lotes hasta ${pausedUntil.toLocaleTimeString("es-AR")}`,
+        detail: `En pausa entre lotes hasta ${pausedUntil.toLocaleTimeString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", hourCycle: "h23" })}`,
       };
     }
     // Ya pasó la pausa: la cerramos y arrancamos un lote nuevo.

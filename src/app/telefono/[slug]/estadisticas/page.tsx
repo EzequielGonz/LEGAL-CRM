@@ -97,7 +97,7 @@ export default async function TelefonoEstadisticasPage({
           <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Perfil</h2>
           <MetricsPanel metrics={metrics} compact perfil={profile.rubroId} volver={`/telefono/${params.slug}/estadisticas`} />
           {metrics && (
-            <p className="mt-2 text-xs text-slate-400">Calculado {new Date(metrics.calculado_en).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires" })}. Mismas cifras que en la computadora.</p>
+            <p className="mt-2 text-xs text-slate-400">Calculado {new Date(metrics.calculado_en).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", hourCycle: "h23", dateStyle: "short", timeStyle: "short" })}. Mismas cifras que en la computadora.</p>
           )}
         </section>
       </main>

@@ -241,7 +241,7 @@ export function GeneradorPiezas({ perfil }: { perfil: string }) {
             <li key={i} className="rounded-lg border border-slate-200 p-2">
               <div className="mb-1 aspect-square w-full overflow-hidden rounded bg-slate-100" dangerouslySetInnerHTML={{ __html: p.svg }} />
               <p className="text-xs text-slate-500">
-                {p.canal} · {p.pilar} · {new Date(p.fecha).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", dateStyle: "short", timeStyle: "short" })}
+                {p.canal} · {p.pilar} · {new Date(p.fecha).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", hourCycle: "h23", dateStyle: "short", timeStyle: "short" })}
               </p>
               <p className="whitespace-pre-line text-sm text-slate-800">{p.texto}</p>
               {p.motivosRetencion?.length > 0 && <p className="mt-1 text-xs font-medium text-amber-800">Quedaría retenida: {p.motivosRetencion.join("; ")}</p>}

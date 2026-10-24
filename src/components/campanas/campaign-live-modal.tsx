@@ -85,7 +85,7 @@ function formatPhone(phone: string | null): string {
 // del dispositivo que esté mirando la pantalla.
 function formatResumeTime(iso: string): string {
   return new Date(iso).toLocaleString("es-AR", {
-    timeZone: "America/Argentina/Buenos_Aires",
+    timeZone: "America/Argentina/Buenos_Aires", hourCycle: "h23",
     weekday: "short",
     hour: "2-digit",
     minute: "2-digit",
@@ -266,7 +266,7 @@ export function CampaignLiveModal({
 
           {lastUpdatedAt && (
             <p className="mt-1.5 text-xs leading-snug text-slate-400">
-              Actualizado {lastUpdatedAt.toLocaleTimeString("es-AR")}
+              Actualizado {lastUpdatedAt.toLocaleTimeString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", hourCycle: "h23" })}
               {" · "}
               si bloqueás la pantalla o cambiás de app, tocá ↻ al volver.
             </p>
@@ -339,7 +339,7 @@ export function CampaignLiveModal({
                       </p>
                       <p className="truncate text-xs text-slate-500">{formatPhone(s.lastSent.phone)}</p>
                       <p className="mt-1 text-xs text-slate-400">
-                        {new Date(s.lastSent.sent_at).toLocaleTimeString("es-AR")}
+                        {new Date(s.lastSent.sent_at).toLocaleTimeString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", hourCycle: "h23" })}
                       </p>
                     </>
                   ) : (

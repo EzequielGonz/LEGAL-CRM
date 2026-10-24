@@ -214,7 +214,7 @@ async function Incidencias({
                   </p>
                 )}
                 <p className="mt-1 text-xs text-slate-600">
-                  {new Date(r.created_at).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires" })}<span className="solo-avanzado"> · origen: {r.created_by}</span>
+                  {new Date(r.created_at).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", hourCycle: "h23", dateStyle: "short", timeStyle: "short" })}<span className="solo-avanzado"> · origen: {r.created_by}</span>
                   {r.status !== "abierta" && r.resolution_note ? ` · ${r.status}: ${r.resolution_note}` : ""}
                 </p>
               </div>
@@ -297,7 +297,7 @@ async function Detenciones({ searchParams, page }: { searchParams: { estado?: st
                     · {d.contacts?.phone ?? "—"}
                   </p>
                   <p className="mt-1 text-xs text-slate-400">
-                    {new Date(d.created_at).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires" })} · origen: {d.source}
+                    {new Date(d.created_at).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", hourCycle: "h23", dateStyle: "short", timeStyle: "short" })} · origen: {d.source}
                     {d.status === "levantada" && d.lift_reason ? ` · levantada: ${d.lift_reason}` : ""}
                   </p>
                 </div>
@@ -366,7 +366,7 @@ async function Retenidos({ searchParams, page }: { searchParams: { estado?: stri
                     {s.cantidad > 1 ? ` (+${s.cantidad - 1})` : ""}
                   </p>
                   <p className="mt-1 text-xs text-slate-400">
-                    {new Date(q.received_at).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires" })}
+                    {new Date(q.received_at).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", hourCycle: "h23", dateStyle: "short", timeStyle: "short" })}
                     {q.account_id ? ` · cuenta ${q.account_id}` : ""}
                     {q.detail ? ` · ${q.detail}` : ""}
                     {q.reviewed_action ? ` · ${q.reviewed_action}${q.note ? `: ${q.note}` : ""}` : ""}
