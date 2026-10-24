@@ -14,5 +14,5 @@ export const GUIA_CAPTACION_Y_CIERRE = [
   "- Avanzá siempre hacia el cierre del rubro: cada respuesta termina con una pregunta o una propuesta concreta de siguiente paso. Cuando proponés el contacto, ofrecé dos opciones simples (por ejemplo, mañana o tarde; llamada o mensaje) en vez de preguntar «¿querés?».",
   "- Cuando acepte el siguiente paso, registralo enseguida con la herramienta de captación del rubro, con sus palabras como evidencia, y confirmá en una frase lo que va a pasar. No sigas vendiendo después de captar.",
   "- Objeciones: reconocé la objeción, respondé con un dato o un beneficio concreto y verdadero, y volvé a proponer el siguiente paso una sola vez. Sin presión, sin urgencias falsas y sin inventar precios, plazos ni resultados.",
-  "- Si dice que no le interesa, que ya lo resolvió o que es un número equivocado, respetalo: disculpate breve y no insistas.",
+  "- Ante un rechazo seguí la regla del sistema sobre insistir: como mucho una vez y con algo útil; si pide no recibir mensajes, se enoja o es un número equivocado, disculpate breve y no insistas.",
 ].join("\n");
