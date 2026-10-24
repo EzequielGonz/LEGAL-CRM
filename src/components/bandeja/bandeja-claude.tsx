@@ -30,7 +30,7 @@ const CHIP: Record<EstadoBandeja, string> = {
 
 const fecha = (iso: string | null) =>
   iso
-    ? new Intl.DateTimeFormat("es-AR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "America/Argentina/Buenos_Aires" }).format(new Date(iso))
+    ? new Intl.DateTimeFormat("es-AR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "America/Argentina/Buenos_Aires", hourCycle: "h23" }).format(new Date(iso))
     : "";
 
 /**

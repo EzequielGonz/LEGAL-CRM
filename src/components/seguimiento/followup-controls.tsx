@@ -55,7 +55,7 @@ export function FollowupConfigControl({
           <p className="font-medium text-slate-800">Seguimiento automático</p>
           <p className="text-xs text-slate-500">
             {enabled
-              ? `Activo desde el ${new Date(enabledSince!).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires" })}. Solo entran las conversaciones interrumpidas después de esa fecha.`
+              ? `Activo desde el ${new Date(enabledSince!).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", hourCycle: "h23", dateStyle: "short", timeStyle: "short" })}. Solo entran las conversaciones interrumpidas después de esa fecha.`
               : "Apagado: no se programa ni se envía ningún seguimiento. Al activarlo, las conversaciones anteriores no entran solas."}
             {outboundPaused && " Mientras la pausa general de envíos esté activa, no se programa ni se envía nada."}
           </p>
