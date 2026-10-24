@@ -31,7 +31,7 @@ export interface Propuesta {
 
 const FORMATO: Record<string, string> = { post: "Posteo", historia: "Historia", carrusel: "Carrusel" };
 const fechaCorta = (iso: string) =>
-  new Date(iso).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+  new Date(iso).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", hourCycle: "h23", weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
 
 function VistaPiezas({ piezas }: { piezas: any[] }) {
   // Una fila por pieza (Instagram y Facebook comparten texto e imagen).

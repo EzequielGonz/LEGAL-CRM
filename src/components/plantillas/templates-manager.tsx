@@ -62,7 +62,7 @@ interface TemplateView {
 }
 
 const fmt = (iso: string | null | undefined) =>
-  iso ? new Date(iso).toLocaleString("es-AR", { dateStyle: "short", timeStyle: "short" }) : "—";
+  iso ? new Date(iso).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", hourCycle: "h23", dateStyle: "short", timeStyle: "short" }) : "—";
 
 function statusClass(status: string, missing: boolean): string {
   if (missing) return "bg-slate-100 text-slate-500";
