@@ -3,7 +3,7 @@ import { requireSession } from "@/lib/acceso/autorizacion";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { RUBRO_IDS, type RubroSlug } from "@/lib/rubros";
 import { AREAS_DE_PERFIL } from "@/lib/cartera-servidor";
-import { archivarRol, asignarRolABase, guardarRol, listarRoles } from "@/lib/agentes/roles";
+import { archivarRol, asignarRolABase, asignarRolACampana, guardarRol, listarRoles } from "@/lib/agentes/roles";
 
 export const dynamic = "force-dynamic";
 
@@ -13,6 +13,7 @@ export const dynamic = "force-dynamic";
  * POST { perfil, accion: "guardar", id?, nombre, objetivo, tono, instrucciones }
  * POST { perfil, accion: "archivar", id, nota? }
  * POST { perfil, accion: "asignar", base_id, rol_id|null }
+ * POST { perfil, accion: "asignar_campana", campaign_id, rol_id|null }   (24/10: vale solo para esa campaña)
  * No envía mensajes ni lanza campañas.
  */
 function perfilDe(v: unknown): RubroSlug | null {
@@ -57,6 +58,10 @@ export async function POST(request: Request) {
     }
     if (body.accion === "asignar" && typeof body.base_id === "string") {
       await asignarRolABase(rubroId, areas, body.base_id, typeof body.rol_id === "string" && body.rol_id ? body.rol_id : null);
+      return NextResponse.json({ ok: true });
+    }
+    if (body.accion === "asignar_campana" && typeof body.campaign_id === "string") {
+      await asignarRolACampana(rubroId, areas, body.campaign_id, typeof body.rol_id === "string" && body.rol_id ? body.rol_id : null);
       return NextResponse.json({ ok: true });
     }
     return NextResponse.json({ error: "Acción no válida" }, { status: 400 });

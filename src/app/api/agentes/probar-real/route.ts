@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
 /**
- * «Probar el bot real» (24/10). POST { perfil, area?, base_id?, mensajes[], apertura? }.
+ * «Probar el bot real» (24/10). POST { perfil, area?, base_id?, campaign_id?, mensajes[], apertura? }.
  * Usa el mismo prompt y el mismo modelo que responden hoy, con mensajes
  * ficticios. No escribe a nadie, no agenda y no cambia estados.
  */
@@ -31,8 +31,15 @@ export async function POST(request: Request) {
     if (!base || !areas.includes((base as any).area)) return NextResponse.json({ error: "Esa base no es de este perfil." }, { status: 400 });
     baseId = (base as any).id;
   }
+  let campaignId: string | null = null;
+  if (typeof body?.campaign_id === "string" && body.campaign_id) {
+    const { data: camp } = await createAdminClient().from("campaigns" as any).select("id, area").eq("id", body.campaign_id).maybeSingle();
+    if (!camp || !areas.includes((camp as any).area)) return NextResponse.json({ error: "Esa campaña no es de este perfil." }, { status: 400 });
+    campaignId = (camp as any).id;
+  }
   try {
     const r = await probarBotReal({
+      campaignId,
       area: area as any,
       rubroId: RUBRO_IDS[perfil],
       baseId,
