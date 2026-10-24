@@ -27,7 +27,7 @@ export interface DatosSalud {
   /** Por perfil: nombre visible, credenciales de WhatsApp y agente. */
   perfiles: { slug: string; nombre: string; whatsapp: boolean; agenteActivo: boolean; agenteListo: boolean; faltante: string[] }[];
   /** Turnos del agente con error en las últimas 24 h y total de turnos. */
-  turnos24h: { errores: number; total: number };
+  turnos24h: { errores: number; total: number; ultimo?: { conversacionId: string | null; contactoId: string | null; nombre: string | null; perfil: string | null; error: string | null; at: string } | null };
   presupuestosAtrasados: number;
   /** Líneas que mandan pero no reciben avisos de Meta (mensajes entrantes ni estados). */
   avisosMeta?: { nombre: string; sinAvisos: boolean; resultado: string | null }[];
@@ -108,7 +108,16 @@ export function evaluarSalud(d: DatosSalud): ItemSalud[] {
   // Calidad de las respuestas
   if (d.turnos24h.errores > 0) {
     const alto = d.turnos24h.total > 0 && d.turnos24h.errores / d.turnos24h.total > 0.1;
-    items.push({ clave: "errores_ia", estado: alto ? "rojo" : "amarillo", titulo: `${d.turnos24h.errores} respuesta(s) de la IA con error en 24 h`, detalle: `De ${d.turnos24h.total} turnos.`, accion: "Ver las conversaciones", href: "/inbox" });
+    const u = d.turnos24h.ultimo ?? null;
+    const quien = u ? `${u.nombre || "un prospecto sin nombre"}${u.perfil ? ` (${u.perfil})` : ""}` : null;
+    items.push({
+      clave: "errores_ia",
+      estado: alto ? "rojo" : "amarillo",
+      titulo: `${d.turnos24h.errores} respuesta(s) de la IA con error en 24 h`,
+      detalle: `De ${d.turnos24h.total} turnos.${quien ? ` Último: ${quien}. ${explicarErrorIA(u!.error)}` : ""}`,
+      accion: u?.conversacionId ? "Abrir la conversación" : "Ver las conversaciones",
+      href: u?.conversacionId ? `/inbox/${u.conversacionId}` : "/inbox",
+    });
   }
   for (const a of d.avisosMeta ?? []) {
     if (a.sinAvisos) {
@@ -172,10 +181,23 @@ export function lecturaSimple(i: ItemSalud): LecturaSimple {
     return { que: `El agente de ${perfilDe(i.titulo)} no puede responder porque faltan datos del perfil (${i.detalle.replace(/^Falta: /, "").replace(/\.$/, "")}).`, quien: "panel", accion: "Completar los datos", href: i.href ?? null };
   }
   if (i.clave === "errores_ia") {
-    return { que: `La IA tuvo ${i.titulo.split(" ")[0]} error(es) al responder en las últimas 24 h.`, quien: "panel", accion: "Ver qué pasó", href: i.href ?? null };
+    const extra = i.detalle.replace(/^De \d+ turnos\.\s*/, "");
+    return { que: `La IA tuvo ${i.titulo.split(" ")[0]} error(es) al responder en las últimas 24 h.${extra ? ` ${extra}` : ""}`, quien: "panel", accion: i.href && i.href !== "/inbox" ? "Abrir la conversación" : "Ver qué pasó", href: i.href ?? null };
   }
   if (base === "avisos") {
     return { que: `${perfilDe(i.titulo)}: los mensajes que contestan por esta línea no llegan al panel, así que el agente no responde. El sistema intenta conectarla solo.`, quien: "tecnico", accion: null, href: null };
   }
   return { que: `${i.titulo}. ${i.detalle}`, quien: "panel", accion: i.accion ?? null, href: i.href ?? null };
+}
+
+/** Errores del agente explicados en palabras simples (24/10). */
+export function explicarErrorIA(error: string | null | undefined): string {
+  const t = String(error ?? "").toLowerCase();
+  if (!t) return "No quedó registrado el motivo.";
+  if (t.includes("detenido")) return "Por qué: el contacto ya estaba detenido (por ejemplo, dijo que lo resolvió) y el agente intentó responderle; el sistema lo frenó y no salió ningún mensaje. No hay que hacer nada.";
+  if (t.includes("429") || t.includes("quota") || t.includes("rate")) return "Por qué: el proveedor de IA limitó la cantidad de pedidos por un momento. Si la persona sigue esperando, respondele a mano.";
+  if (t.includes("timeout") || t.includes("tiempo") || t.includes("abort")) return "Por qué: la IA tardó demasiado en contestar y se cortó. Revisá si la persona quedó sin respuesta.";
+  if (t.includes("131047") || t.includes("24 horas") || t.includes("24h")) return "Por qué: pasaron más de 24 horas desde el último mensaje del cliente y WhatsApp no deja mandar texto libre. Hace falta una plantilla.";
+  if (t.includes("pausa")) return "Por qué: las respuestas automáticas estaban en pausa.";
+  return `Por qué: ${String(error).slice(0, 200)}. Revisá la conversación por si la persona quedó sin respuesta.`;
 }
