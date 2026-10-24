@@ -1,7 +1,7 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendWhatsAppText, sendWhatsAppMedia } from "@/lib/whatsapp/client";
 import { sendMetaMessage } from "@/lib/meta/client";
-import { assertAutomaticContactAllowed, manualContactCheck } from "@/lib/detention";
+import { assertAutomaticContactAllowed, ContactDetainedError, manualContactCheck } from "@/lib/detention";
 import type { Area, ChannelType, MessageSenderType } from "@/lib/supabase/database.types";
 import { getAutomationPause } from "@/lib/automation-pause";
 import { loadContactCalendar } from "@/lib/contacto/calendario";
@@ -25,6 +25,8 @@ export class AutomaticSendBlockedError extends Error {
         ? "Fuera de la franja de lunes a sábado de 8 a 21: no se envió."
         : reason === "chat_pausado"
         ? "El chat está tomado por una persona: la respuesta de la IA no se envió."
+        : reason === "contacto_detenido"
+        ? `Contacto detenido: no se envió${detail ? ` (${detail})` : ""}.`
         : reason === "acuse_no_autorizado"
         ? "El acuse final no tiene un permiso vigente: no se envió."
         : `Salida automática bloqueada (${reason})${detail ? `: ${detail}` : ""}.`
@@ -142,7 +144,15 @@ export async function sendOutboundMessage({
     const check = await manualContactCheck(contactId, conversationId);
     if (!check.allowed) throw new Error(check.reason ?? "Contacto detenido.");
   } else {
-    await assertAutomaticContactAllowed(contactId);
+    // 23/10: si el contacto quedó detenido mientras la IA armaba la respuesta
+    // (p. ej. dos mensajes seguidos y el primero registró la detención), no
+    // sale nada y se registra como bloqueado, no como error del sistema.
+    try {
+      await assertAutomaticContactAllowed(contactId);
+    } catch (err) {
+      if (err instanceof ContactDetainedError) throw new AutomaticSendBlockedError("contacto_detenido", err.message);
+      throw err;
+    }
     // Revalidación atómica inmediatamente antes de enviar.
     const { data: gate, error: gateError } = await supabase.rpc("claim_ai_send", {
       p_conversation: conversationId,
