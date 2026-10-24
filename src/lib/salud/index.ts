@@ -46,7 +46,7 @@ export async function leerSalud(ahora = new Date()): Promise<ItemSalud[]> {
     }
   };
 
-  const [latido, pausa, cuarentena, entrante, agentes, turnos, errores, avisos, presupuestos] = await Promise.all([
+  const [latido, pausa, cuarentena, entrante, agentes, turnos, errores, avisos, presupuestos, ultimoError] = await Promise.all([
     seguro(async () => ((await s.from("system_settings").select("value").eq("key", CLAVE_LATIDO).maybeSingle()).data as any)?.value?.at ?? null, null),
     getAutomationPause(),
     seguro(async () => {
@@ -65,6 +65,28 @@ export async function leerSalud(ahora = new Date()): Promise<ItemSalud[]> {
     seguro(async () => (await s.from("agent_turn_logs" as any).select("id", { count: "exact", head: true }).gte("created_at", hace24).eq("resultado", "error")).count ?? 0, 0),
     seguro(() => leerEstadoAvisos(), {} as Awaited<ReturnType<typeof leerEstadoAvisos>>),
     seguro(async () => (await s.from("marketing_budgets" as any).select("id", { count: "exact", head: true }).eq("estado", "pedido").lte("pedido_at", hace20)).count ?? 0, 0),
+    // 24/10: el último error, para llevar directo a esa conversación y explicarlo.
+    seguro(async () => {
+      const { data } = await s
+        .from("agent_turn_logs" as any)
+        .select("conversation_id, error, created_at, conversations(contact_id, area, contacts(full_name))")
+        .gte("created_at", hace24)
+        .eq("resultado", "error")
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (!data) return null;
+      const d: any = data;
+      const area = d.conversations?.area ?? null;
+      return {
+        conversacionId: d.conversation_id ?? null,
+        contactoId: d.conversations?.contact_id ?? null,
+        nombre: d.conversations?.contacts?.full_name ?? null,
+        perfil: area ? PERFILES.find((p) => p.area === area || (p.slug === "juridico" && area === "penal"))?.nombre ?? area : null,
+        error: d.error ?? null,
+        at: d.created_at,
+      };
+    }, null),
   ]);
 
   const perfiles = await Promise.all(
@@ -89,7 +111,7 @@ export async function leerSalud(ahora = new Date()): Promise<ItemSalud[]> {
     secretoMeta: Boolean(process.env.META_APP_SECRET?.trim() || process.env.META_APP_SECRETS?.trim()),
     ultimoEntrante: entrante,
     perfiles,
-    turnos24h: { errores, total: turnos },
+    turnos24h: { errores, total: turnos, ultimo: ultimoError },
     presupuestosAtrasados: presupuestos,
     avisosMeta: Object.values(avisos).map((a) => ({
       nombre: PERFILES.find((p) => p.area === a.area)?.nombre ?? a.area,
