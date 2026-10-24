@@ -39,6 +39,7 @@ import { asignacionActiva } from "@/lib/agentes/servicio";
 import { identificadorModelo } from "@/lib/agentes/modelo";
 import { registrarTurno } from "@/lib/experimento/servicio";
 import { instruccionesDeRol } from "@/lib/agentes/roles";
+import { reglaDeRechazo } from "@/lib/captacion/insistencia";
 import { GUIA_CAPTACION_Y_CIERRE } from "@/lib/agentes/guia-cierre";
 
 const MAX_TOOL_ITERATIONS = 6;
@@ -106,7 +107,7 @@ function criterioDelRubro(area: Area, rubroId: string | null): string {
     `- Datos deseables (si faltan no impiden captar): ${c.deseables.join(", ")}.`,
     c.zonaAplica ? "- La ubicación se registra con registrar_ubicacion (AMBA, fuera de AMBA o sin confirmar). Nunca supongas AMBA." : "",
     `- Nunca prometas ni informes: ${c.limites.join(", ")}.`,
-    "- Si la persona rechaza el contacto, se enoja, es un número equivocado, ya resolvió su caso o ya tiene abogado: usá detener_contacto y respondé solo una disculpa breve.",
+    ...reglaDeRechazo(slug),
     "- Si pide una persona, pregunta algo fuera de tu alcance o comparte datos sensibles: usá escalar_a_humano con la categoría que corresponda.",
   ]
     .filter(Boolean)
