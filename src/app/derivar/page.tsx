@@ -14,5 +14,5 @@ export const dynamic = "force-dynamic";
 export default async function DerivarPage() {
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
-  redirect("/telefono");
+  redirect("/perfiles");
 }
