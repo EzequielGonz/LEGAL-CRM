@@ -1,0 +1,47 @@
+/* ---------------------------------------------------------------------
+   Ajustes del modo oscuro (24/10, revisión en producción): piezas que las
+   hojas anteriores pintan con blanco fijo o con la escala slate oscura (que
+   en oscuro queda invertida y se vería clara).
+   --------------------------------------------------------------------- */
+
+/* Botones suaves y barras con blanco fijo. */
+html[data-modo="oscuro"] :is(.btn-suave, .btn-suave-sm, .barra-telefono) {
+  background-color: rgb(var(--superficie-alta)) !important;
+  background-image: none !important;
+  border-color: rgb(255 255 255 / 0.1) !important;
+  color: rgb(var(--c-slate-800));
+}
+html[data-modo="oscuro"] :is(.btn-suave, .btn-suave-sm):hover:not(:disabled) {
+  background-color: rgb(255 255 255 / 0.08) !important;
+  color: rgb(var(--c-slate-950));
+}
+
+/* Aviso de salud: sin el degradé claro. */
+html[data-modo="oscuro"] .barra-salud { background-image: none !important; }
+html[data-modo="oscuro"] .barra-salud a[class~="rounded-lg"] { color: rgb(var(--c-slate-900)) !important; }
+
+/* Elegir perfil: la sala queda oscura (antes tomaba la escala invertida). */
+html[data-modo="oscuro"] .escena-oscura.sala-perfil { background: rgb(10 11 14); }
+html[data-modo="oscuro"] .sala-perfil .sala-pared {
+  background:
+    radial-gradient(70% 55% at 50% 0%, rgb(var(--c-gold-500) / 0.1), transparent 70%),
+    linear-gradient(180deg, rgb(14 15 19), rgb(8 9 11) 80%);
+}
+html[data-modo="oscuro"] .sala-perfil .sala-piso {
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.05), transparent 2px),
+    linear-gradient(180deg, rgb(10 11 14), #050505 100%);
+}
+
+/* Botones y chips que usaban fondo oscuro con texto blanco. */
+html[data-modo="oscuro"] [data-tema] button[class~="bg-slate-900"]:not(:disabled) {
+  background-image: none !important;
+  color: rgb(var(--c-slate-950)) !important;
+}
+html[data-modo="oscuro"] :is(.chip-filtro[aria-current], .chip-opcion[aria-pressed="true"], .chip-opcion:has(input:checked)) {
+  background: rgb(var(--c-gold-500) / 0.18) !important;
+  border-color: rgb(var(--c-gold-500) / 0.45) !important;
+  color: rgb(var(--c-gold-900)) !important;
+}
+html[data-modo="oscuro"] .pestanas-seccion { background: rgb(255 255 255 / 0.04); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.06); }
+html[data-modo="oscuro"] .pin-progreso span { background: rgb(255 255 255 / 0.15); }

@@ -58,5 +58,8 @@ test("roles: validación y bloque para el agente", () => {
     const b = bloqueDeRol(v.rol, "Base 20/10");
     assert.match(b, /Rol para esta base \(«Base 20\/10»\): Inmobiliarias/);
     assert.match(b, /Objetivo: agendar llamada/);
+    // 24/10: el rol se suma a la base general, no la reemplaza.
+    assert.match(b, /se SUMA a tu guion general/);
+    assert.doesNotMatch(b, /por encima del guion general/);
   }
 });

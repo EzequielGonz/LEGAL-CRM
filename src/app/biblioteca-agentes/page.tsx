@@ -4,18 +4,24 @@ import { createClient } from "@/lib/supabase/server";
 import { MODO_LABEL, limitesEfectivos, type AgenteBiblioteca, type Modo } from "@/lib/agentes/biblioteca";
 import { volverSeguro } from "@/lib/indicadores";
 import { BibliotecaEditor } from "@/components/agentes/biblioteca-editor";
+import { MarcoPerfil } from "@/components/perfiles/marco-perfil";
+import { esSlugPerfil, type SlugPerfil } from "@/lib/marca";
 
 export const dynamic = "force-dynamic";
 
 /**
  * Etapa 2 · Bloque 4 — Biblioteca de agentes: principal y cuatro derivados,
  * configuración y versiones. Etapa 3: las acciones (probar, evaluar,
- * crear, asignar) viven en «Agentes IA» de cada perfil.
+ * crear, asignar) viven en «Bot IA» de cada perfil.
  */
-export default async function BibliotecaPage({ searchParams }: { searchParams: { volver?: string } }) {
+export default async function BibliotecaPage({ searchParams }: { searchParams: { volver?: string; perfil?: string } }) {
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
   const volver = volverSeguro(searchParams.volver);
+  // 24/10: dentro del marco del perfil (antes se abría sin menú).
+  const desdeVolver = /^\/panel\/([a-z0-9_]+)/.exec(volver ?? "")?.[1];
+  const pedido = searchParams.perfil ?? desdeVolver;
+  const slug: SlugPerfil = pedido && esSlugPerfil(pedido) ? pedido : "juridico";
   const supabase = createClient();
   const [{ data, error }, { data: rubros }, { data: versiones }] = await Promise.all([
     supabase.from("agent_library").select("*").order("clave"),
@@ -53,22 +59,22 @@ export default async function BibliotecaPage({ searchParams }: { searchParams: {
   );
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-10">
-      <header className="border-b border-slate-200 bg-white px-5 py-5">
-        <div className="mx-auto flex max-w-5xl items-start justify-between gap-4">
+    <MarcoPerfil slug={slug}>
+      <header className="mx-auto max-w-5xl pb-2">
+        <div className="flex items-start justify-between gap-4">
           <div>
             <h1 className="text-xl font-semibold text-slate-950">Biblioteca de agentes</h1>
-            <p className="text-sm text-slate-600">Solo configuración: ninguno responde mensajes. El agente que responde hoy se maneja en «Agentes IA» de cada perfil.</p>
+            <p className="text-sm text-slate-600">Solo configuración: ninguno responde mensajes. El agente que responde hoy se maneja en «Bot IA» de cada perfil.</p>
           </div>
-          <Link href={volver ?? "/inicio"} className="tactil inline-flex items-center text-sm font-medium text-slate-600 hover:text-slate-950">
+          <Link href={volver ?? (slug === "juridico" ? "/agentes" : `/panel/${slug}/agentes`)} className="tactil inline-flex items-center text-sm font-medium text-slate-600 hover:text-slate-950">
             ← Volver
           </Link>
         </div>
       </header>
-      <main className="mx-auto max-w-5xl space-y-4 px-4 py-5">
+      <div className="mx-auto max-w-5xl space-y-4 py-3">
         {error && <p className="rounded-lg bg-red-50 p-3 text-sm font-medium text-red-800">No se pudo leer la biblioteca. Reintentá en un momento.</p>}
         <p className="rounded-lg bg-slate-100 p-3 text-sm text-slate-800">
-          Acá se configuran nombres, objetivos y límites con historial de versiones. Probar conversación, pedir mejora, ver resultados, crear y asignar agentes están en «Agentes IA» de cada perfil. Ningún agente de esta biblioteca responde hasta tener una versión publicada, una asignación activa y la pausa general levantada.
+          Acá se configuran nombres, objetivos y límites con historial de versiones. Probar conversación, pedir mejora, ver resultados, crear y asignar agentes están en «Bot IA» de cada perfil. Ningún agente de esta biblioteca responde hasta tener una versión publicada, una asignación activa y la pausa general levantada.
         </p>
         {principal && tarjeta(principal)}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">{derivados.map(tarjeta)}</div>
@@ -83,7 +89,7 @@ export default async function BibliotecaPage({ searchParams }: { searchParams: {
             ))}
           </ul>
         </section>
-      </main>
-    </div>
+      </div>
+    </MarcoPerfil>
   );
 }

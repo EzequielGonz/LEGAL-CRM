@@ -82,7 +82,7 @@ export function RolesPorBase({ perfil }: { perfil: string }) {
         <div>
           <h2 id="roles-titulo" className="text-lg font-semibold text-slate-900">Roles por base</h2>
           <p className="mt-1 max-w-2xl text-sm text-slate-700">
-            Guardá cómo tiene que abordar el agente a un tipo de cliente y cargalo a una base. Los contactos de esa base reciben ese trato; todo lo demás lo responde el agente del perfil.
+            El bot siempre usa su base general (guion, reglas y cierre). Un rol se suma encima para una base: agrega o ajusta cómo abordar a ese tipo de cliente, sin borrar la base general.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -163,7 +163,7 @@ export function RolesPorBase({ perfil }: { perfil: string }) {
                         className="btn-suave text-xs"
                         disabled={busy}
                         onClick={() => {
-                          if (confirm(`¿Archivar el rol «${r.nombre}»? Las bases que lo usan vuelven al agente del perfil.`)) enviar({ accion: "archivar", id: r.id }, "Rol archivado.");
+                          if (confirm(`¿Archivar el rol «${r.nombre}»? Las bases que lo usan quedan solo con la base general.`)) enviar({ accion: "archivar", id: r.id }, "Rol archivado.");
                         }}
                       >
                         Archivar
@@ -194,12 +194,12 @@ export function RolesPorBase({ perfil }: { perfil: string }) {
                     aria-label={`Rol para la base ${b.name}`}
                     value={b.agent_role_id ?? ""}
                     disabled={busy}
-                    onChange={(e) => enviar({ accion: "asignar", base_id: b.id, rol_id: e.target.value || null }, e.target.value ? "Rol cargado a la base." : "La base volvió al agente del perfil.")}
+                    onChange={(e) => enviar({ accion: "asignar", base_id: b.id, rol_id: e.target.value || null }, e.target.value ? "Rol cargado a la base." : "La base quedó solo con la base general.")}
                   >
-                    <option value="">Agente del perfil</option>
+                    <option value="">Solo la base general</option>
                     {roles.map((r) => (
                       <option key={r.id} value={r.id}>
-                        {r.nombre}
+                        Base general + {r.nombre}
                       </option>
                     ))}
                   </select>
