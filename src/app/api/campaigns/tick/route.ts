@@ -16,6 +16,7 @@ import { procesarRecontactos } from "@/lib/recontacto/motor";
 import { sincronizarCatalogosSiToca } from "@/lib/plantillas/auto-asignar";
 import { rescatarTurnosPerdidos } from "@/lib/ai-agent/rescate";
 import { vigilarCalidadLineas } from "@/lib/whatsapp/calidad-servidor";
+import { procesarPedidoPlantillas } from "@/lib/plantillas/pedido-meta";
 
 // El análisis de negocios (descargar la web + IA) necesita más de los 10s por defecto.
 export const maxDuration = 60;
@@ -50,6 +51,16 @@ export async function POST(request: Request) {
   try {
     // 1) Primero lo que manda mensajes (campañas), que es lo sensible al ritmo.
     const results = await tickAllActiveCampaigns();
+
+    // 1 bis) Pedido de plantillas a Meta (25/10): si la responsable dejó un
+    //    pedido, se registran esas plantillas para revisión una sola vez.
+    //    No envía mensajes a nadie. Sin pedido es una sola lectura.
+    let plantillas: unknown = null;
+    try {
+      plantillas = await procesarPedidoPlantillas();
+    } catch (err: any) {
+      plantillas = { error: String(err?.message ?? err) };
+    }
 
     // 2) Seguimiento general de los cuatro perfiles (bloque 2.3): programa los
     //    contactos 2 y 3 y manda los vencidos. Aislado: si falla, no afecta al resto.
@@ -190,7 +201,7 @@ export async function POST(request: Request) {
 
     // Tablero de salud: deja la hora del último latido.
     await registrarLatido(true, { ms: Date.now() - inicio });
-    return NextResponse.json({ ok: true, results, seguimiento, recontacto, rescate, calidad, marketing, servidor, extraccion, avisos, formularios, presupuestos, catalogo });
+    return NextResponse.json({ ok: true, results, plantillas, seguimiento, recontacto, rescate, calidad, marketing, servidor, extraccion, avisos, formularios, presupuestos, catalogo });
   } catch (err: any) {
     await registrarLatido(false, { error: String(err?.message ?? err).slice(0, 200) });
     return NextResponse.json({ error: String(err.message ?? err) }, { status: 500 });
