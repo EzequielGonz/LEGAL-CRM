@@ -1,13 +1,14 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { aparece, normalizar, seleccionar, versionParaConversacion, MAX_CARACTERES, type ItemConocimiento, type RubroConocimiento } from "../../src/lib/conocimiento/seleccion";
 import { veredicto, tasas, sumar, MINIMO_CONVERSACIONES } from "../../src/lib/conocimiento/estadisticas";
 
-// El mismo contenido que carga la migración 0511 (generada por docs/conocimiento/v2/generar.py): se lee del SQL.
+// El mismo contenido que carga la migración 0511 en cuatro partes (generada por docs/conocimiento/v2/generar.py): se lee del SQL.
 function leerMigracion(): ItemConocimiento[] {
-  const sql = readFileSync(join(__dirname, "../../supabase/migrations/0511_conocimiento_v2_contenido.sql"), "utf8");
+  const dir = join(__dirname, "../../supabase/migrations");
+  const sql = readdirSync(dir).filter((f) => /^0511_conocimiento_v2_contenido_parte\d\.sql$/.test(f)).sort().map((f) => readFileSync(join(dir, f), "utf8")).join("\n");
   const v = (x: string) => (x === "null" ? null : x.replace(/^\$k\$|\$k\$(::date)?$/g, ""));
   const filas = sql.split(/\n  \(2, /).slice(1);
   return filas.map((f) => {
