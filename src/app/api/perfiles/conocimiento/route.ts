@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
  * GET  ?dias=14                         → versiones, versión vigente y comparación v1/v2 por perfil.
  * GET  ?items=1&perfil=<slug>&version=2 → contenido de la versión para ese perfil.
  * POST { accion: "asignar", perfil, version, comparar_con?, porcentaje? } → cambia la versión que rige.
- * POST { accion: "editar", version, clave, contenido?, activo? }          → edita un ítem.
+ * POST { accion: "editar", version, clave, contenido?, activo?, titulo?, disparadores? } → edita un ítem.
  * Ningún cambio envía mensajes ni toca campañas; todo queda en el historial de cambios.
  */
 function perfilDe(v: unknown): RubroConocimiento | null {
@@ -54,7 +54,7 @@ export async function POST(request: Request) {
     if (body?.accion === "editar") {
       if (typeof body?.clave !== "string") return NextResponse.json({ error: "Falta el ítem." }, { status: 400 });
       const version = Number(body?.version) === 1 ? 1 : 2;
-      return NextResponse.json(await editarItem(version, body.clave, { contenido: body?.contenido, activo: body?.activo }, "panel"));
+      return NextResponse.json(await editarItem(version, body.clave, { contenido: body?.contenido, activo: body?.activo, titulo: body?.titulo, disparadores: body?.disparadores }, "panel"));
     }
     return NextResponse.json({ error: "Acción no válida." }, { status: 400 });
   } catch (err) {
