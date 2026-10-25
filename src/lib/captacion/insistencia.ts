@@ -44,7 +44,7 @@ export function reglaDeRechazo(slug: string, modo: "campana" | "entrante" = "cam
   return [
     "- Prioridad: estas reglas sobre rechazos y sobre el origen del contacto prevalecen sobre el guion del rubro. Si el guion dice «no insistas», «respondé exactamente» otra frase sobre el origen o menciona que «nos figuraba tu registro como caso pendiente», no lo uses: seguí estas reglas.",
     detenerYa,
-    `- Si dice que ya lo resolvió, que ya tiene abogado o asesor, o que ya compró/contrató, o responde «no, gracias» o «no me interesa» sin más (con un botón o con sus palabras): insistí UNA sola vez, breve y sin presión: ${oferta}.`,
+    `- Si dice que ya lo resolvió, que ya tiene abogado o asesor, o que ya compró/contrató, o responde «no, gracias» o «no me interesa» sin más (con un botón o con sus palabras): insistí UNA sola vez, breve y sin presión: ${oferta}.${slug === "juridico" || slug === "civil" || slug === "penal" ? " Si ya tiene abogado, no lo cuestiones ni hables mal de él: solo preguntá si le serviría una segunda opinión; si dice que no, detener_contacto." : ""}`,
     AHORA_NO,
     "- Si pide otro día u horario para hablar, preguntale cuál le queda mejor.",
     ORIGEN,

@@ -2,6 +2,7 @@ import { LogoutButton } from "@/components/acceso/logout-button";
 import { type MarcaTarjeta } from "@/components/perfiles/perfil-selector";
 import { SelectorPerfilesPC } from "@/components/perfiles/selector-pc";
 import { EnVivoRubros } from "@/components/perfiles/en-vivo-rubros";
+import { ConocimientoBot } from "@/components/perfiles/conocimiento-bot";
 import { SalaLampara } from "@/components/ui/lampara-dibujo";
 import { MarcaPanel } from "@/components/ui/marca-panel";
 import { loadPerfiles } from "@/lib/perfiles-stats";
@@ -45,6 +46,8 @@ export default async function PerfilesPage() {
           <p className="mt-2 text-sm text-slate-400">Lo pendiente de cada perfil, la semana y la última base. Elegí uno para entrar al panel.</p>
         </div>
         <SelectorPerfilesPC perfiles={perfiles} marcas={tarjetas} cifras={cifras} />
+        {/* 25/10: versiones del conocimiento del bot (v1/v2) y su comparación con resultados reales. */}
+        <ConocimientoBot nombres={Object.fromEntries(perfiles.map((p) => [p.slug, tarjetas[p.slug as SlugPerfil]?.nombre ?? p.name]))} />
         <div className="mt-12 flex items-center justify-center gap-6 text-sm">
           <LogoutButton className="!text-slate-400 hover:!text-white" />
         </div>

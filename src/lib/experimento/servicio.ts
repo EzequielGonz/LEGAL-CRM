@@ -179,6 +179,9 @@ export interface RegistroTurno {
   motivos?: string[];
   error?: string | null;
   uso?: "conversacion" | "analisis" | "evaluacion_plantillas";
+  /** 25/10: versión del conocimiento del bot y fichas usadas en la respuesta. */
+  knowledgeVersion?: number | null;
+  knowledgeItems?: string[];
 }
 
 /** Registra un turno; nunca interrumpe la respuesta si falla el registro. */
@@ -205,6 +208,7 @@ export async function registrarTurno(r: RegistroTurno): Promise<void> {
       validador_motivos: r.motivos ?? [],
       error: r.error ? String(r.error).slice(0, 500) : null,
       uso: r.uso ?? "conversacion",
+      ...(r.knowledgeVersion != null ? { knowledge_version: r.knowledgeVersion, knowledge_items: r.knowledgeItems ?? [] } : {}),
     });
   } catch (err) {
     console.error("[experimento] No se pudo registrar el turno:", err);

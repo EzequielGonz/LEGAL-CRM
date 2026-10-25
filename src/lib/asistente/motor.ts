@@ -6,6 +6,7 @@
 import { GoogleGenAI } from "@google/genai";
 import { contextoCrm } from "@/lib/asistente/contexto-crm";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { resumenConocimiento } from "@/lib/conocimiento/panel";
 import { getProfileMetrics } from "@/lib/metrics";
 import { identificadorModelo } from "@/lib/agentes/modelo";
 import { puntajeBot } from "@/lib/agentes/puntaje";
@@ -228,6 +229,12 @@ async function ejecutar(nombre: string, args: Record<string, unknown>, ctx: Cont
     case "estado_bots": {
       const p = puntajeBot(await getProfileMetrics(ctx.rubroId));
       return { puntaje: p.puntaje, etiqueta: p.etiqueta, conversaciones: p.conversaciones, captados: p.captados, componentes: p.componentes, sugerencia: p.sugerencia };
+    }
+    case "comparar_versiones_bot": {
+      const r = await resumenConocimiento(Number(args.dias) || 14);
+      const p = r.perfiles.find((x) => x.rubro === ctx.slug);
+      if (!p) return { error: "Este perfil no tiene versiones de conocimiento." };
+      return { periodo_dias: r.dias, version_vigente: p.asignacion, v1: p.v1, v2: p.v2, veredicto: p.veredicto.texto, fichas_mas_usadas: p.fichas, nota: "v1 incluye las respuestas anteriores al 25/10. Cambiar de versión se hace desde Perfiles › Conocimiento del bot." };
     }
     case "proponer_publicaciones": {
       const pedido = normalizarPedido(args, hoyEnArgentina());
