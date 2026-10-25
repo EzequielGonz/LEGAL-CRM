@@ -3,7 +3,7 @@
 ## Qué incluye
 
 - **v1** = el bot como estaba el 24/10 (reglas del sistema, guion de `ai_agents`, criterio del rubro, rol de la base o campaña y ficha del negocio). No tiene ítems: con v1 el pedido al modelo queda exactamente igual que antes.
-- **v2** = v1 sin cambios + un bloque de conocimiento que se suma **por debajo** de las reglas, el rol y la ficha (el bloque lo dice explícitamente). Contenido (166 ítems; fuente en `docs/conocimiento/v2/`: `extraer_fichas.py` saca las 148 fichas del Word a `fichas_origen.json`, `generar.py` arma `v2.json` y la migración 0511):
+- **v2** = v1 sin cambios + un bloque de conocimiento que se suma **por debajo** de las reglas, el rol y la ficha (el bloque lo dice explícitamente). Contenido (166 ítems; fuente en `docs/conocimiento/v2/`: `extraer_fichas.py` saca las 148 fichas del Word a `fichas_origen.json`, `generar.py` arma `v2.json` y la migración 0511 en cuatro partes):
   - Base general (2): cómo vender por WhatsApp (diagnóstico de objeciones, autonomía, pasos chicos, sus palabras, precio sin números) y límites/seguridad/emergencias (911, 144, 137; jerarquía de autoridad; no pedir datos sensibles; otros negocios del grupo).
   - Base por rubro (4) y temas (14) que se suman solo si la charla los toca (ART, tránsito, sucesiones, familia, laboral/civil, penal; financiación, usado/gastos; régimen de salud, continuidad; métricas, tecnología).
   - 148 fichas de objeción del Word (O001–O148), adaptadas: qué puede haber detrás, pregunta para entender, enfoque y qué evitar, más la nota de la regla vigente cuando corresponde. Cuatro quedan apagadas porque ya las resuelve una regla determinista: O002 y O003 (origen), O014 (baja) y O018 (ahora no).
@@ -22,7 +22,7 @@ Ley 24.557 art. 6 (trayecto), Ley 17.418 art. 46 (aviso del siniestro en tres d�
 ## Migraciones
 
 - `0510_conocimiento_versiones.sql`: tablas `bot_knowledge_versions`, `bot_knowledge_items`, `bot_knowledge_assignment` (RLS, sin permisos públicos), columnas `knowledge_version` y `knowledge_items` en `agent_turn_logs`, funciones `conocimiento_estadisticas` y `conocimiento_fichas` (solo lectura, sin permisos públicos). Arranca todo en v1.
-- `0511_conocimiento_v2_contenido.sql`: contenido de v2, generado con `python3 -I docs/conocimiento/v2/generar.py`. `on conflict do nothing`: no pisa ítems editados.
+- `0511_conocimiento_v2_contenido_parte1.sql` a `parte4.sql`: contenido de v2 (así figuran en el historial de la base), generado con `python3 -I docs/conocimiento/v2/generar.py`. `on conflict do nothing`: no pisa ítems editados.
 - Volver atrás: en Perfiles, «Usar v1» (o `update bot_knowledge_assignment set version = 1, comparar_con = null, porcentaje = 100`). No hace falta borrar nada.
 
 ## Pruebas

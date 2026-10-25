@@ -40,11 +40,17 @@ def arr(a):
 filas = []
 for x in items:
     filas.append(f"  (2, {q(x['clave'])}, {q(x['capa'])}, {q(x['rubro'])}, {q(x['titulo'])}, {arr(x['disparadores'])}, {q(x['contenido'])}, {q(x['fuente'])}, {q(x['verificado']) + '::date' if x['verificado'] else 'null'}, {str(x['activo']).lower()}, {x['orden']})")
-sql = f"""-- 25/10 · Contenido de la versión 2 del conocimiento del bot (Biblioteca Maestra de Ventas).
+# Cuatro partes (así se aplicaron en la base: 0511_conocimiento_v2_contenido_parte1..4).
+PARTES = 4
+tam = -(-len(filas) // PARTES)
+mig = os.path.join(aqui, "..", "..", "..", "supabase", "migrations")
+for n in range(PARTES):
+    trozo = filas[n * tam:(n + 1) * tam]
+    sql = f"""-- 25/10 · Contenido de la versión 2 del conocimiento del bot (Biblioteca Maestra de Ventas), parte {n + 1} de {PARTES}.
 -- Generado por docs/conocimiento/v2/generar.py. Repetible sin error: inserta lo que falta y
 -- no pisa ítems que el equipo ya editó (on conflict do nothing).
--- {len(items)} ítems: {sum(1 for x in items if x['capa']=='general')} generales, {sum(1 for x in items if x['capa']=='rubro')} de base por rubro, {sum(1 for x in items if x['capa']=='tema')} temas, {sum(1 for x in items if x['capa']=='objecion')} fichas de objeción ({sum(1 for x in items if not x['activo'])} inactivas porque las resuelve una regla del sistema).
+-- En total {len(items)} ítems: {sum(1 for x in items if x['capa']=='general')} generales, {sum(1 for x in items if x['capa']=='rubro')} de base por rubro, {sum(1 for x in items if x['capa']=='tema')} temas, {sum(1 for x in items if x['capa']=='objecion')} fichas de objeción ({sum(1 for x in items if not x['activo'])} inactivas porque las resuelve una regla del sistema). Esta parte: {len(trozo)}.
 insert into public.bot_knowledge_items (version, clave, capa, rubro, titulo, disparadores, contenido, fuente, verificado_el, activo, orden) values
-""" + ",\n".join(filas) + "\non conflict (version, clave) do nothing;\n"
-open(os.path.join(aqui, "..", "..", "..", "supabase", "migrations", "0511_conocimiento_v2_contenido.sql"), "w").write(sql)
+""" + ",\n".join(trozo) + "\non conflict (version, clave) do nothing;\n"
+    open(os.path.join(mig, f"0511_conocimiento_v2_contenido_parte{n + 1}.sql"), "w").write(sql)
 print(len(items), "ítems;", sum(len(x["contenido"]) for x in items), "caracteres")
