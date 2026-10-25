@@ -75,24 +75,24 @@ export function EnVivoRubros({ nombres }: { nombres: Record<string, string> }) {
   return (
     <aside
       aria-label="Seguimiento en vivo de los rubros"
-      className="z-20 mb-8 w-full rounded-2xl border border-white/10 bg-slate-900/85 p-3 text-slate-200 shadow-xl backdrop-blur lg:fixed lg:right-4 lg:top-4 lg:mb-0 lg:w-80"
+      className="z-20 mb-8 w-full rounded-2xl border border-slate-200 bg-white p-3 text-slate-900 shadow-sm lg:fixed lg:right-4 lg:top-4 lg:mb-0 lg:w-80"
     >
       <div className="flex items-center justify-between gap-2">
-        <button type="button" onClick={() => setAbierto(!abierto)} className="flex items-center gap-2 text-sm font-semibold text-white" aria-expanded={abierto}>
+        <button type="button" onClick={() => setAbierto(!abierto)} className="flex items-center gap-2 text-sm font-semibold text-slate-900" aria-expanded={abierto}>
           <span className="relative flex h-2.5 w-2.5">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
             <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400" />
           </span>
           En vivo
         </button>
-        <div role="group" aria-label="Período" className="flex rounded-lg border border-white/10 p-0.5 text-xs">
+        <div role="group" aria-label="Período" className="flex rounded-lg border border-slate-200 p-0.5 text-xs">
           {(["hoy", "todo"] as Rango[]).map((r) => (
             <button
               key={r}
               type="button"
               onClick={() => elegir(r)}
               aria-pressed={rango === r}
-              className={`rounded-md px-2.5 py-1 font-medium ${rango === r ? "bg-white text-slate-900" : "text-slate-300 hover:text-white"}`}
+              className={`rounded-md px-2.5 py-1 font-medium ${rango === r ? "bg-slate-900 text-white" : "text-slate-600 hover:text-slate-900"}`}
             >
               {r === "hoy" ? "Hoy" : "Base completa"}
             </button>
@@ -102,15 +102,15 @@ export function EnVivoRubros({ nombres }: { nombres: Record<string, string> }) {
 
       {abierto && (
         <div className="mt-3 max-h-[75vh] space-y-2 overflow-y-auto pr-0.5">
-          {error && <p className="rounded-lg bg-red-500/15 px-2 py-1.5 text-xs text-red-200">{error}</p>}
-          {!rubros && !error && <p className="px-1 py-2 text-xs text-slate-400">Cargando…</p>}
+          {error && <p className="rounded-lg border border-amber-200 bg-amber-50 px-2 py-1.5 text-xs text-amber-800">{error}</p>}
+          {!rubros && !error && <p className="px-1 py-2 text-xs text-slate-500">Cargando…</p>}
           {rubros?.map((c) => {
             const pctResp = c.entregados ? Math.round(((c.escribieron ?? 0) / c.entregados) * 100) : null;
             return (
-              <div key={c.perfil} className="rounded-xl border border-white/10 bg-white/5 p-2.5">
+              <div key={c.perfil} className="rounded-xl border border-slate-200 bg-slate-50 p-2.5">
                 <div className="mb-1.5 flex items-center justify-between gap-2">
-                  <p className="truncate text-sm font-semibold text-white">{nombres[c.perfil] ?? c.perfil}</p>
-                  <span className={`shrink-0 rounded-full px-2 py-0.5 text-[11px] font-medium ${c.campanasEnCurso ? "bg-emerald-400/15 text-emerald-300" : "bg-white/10 text-slate-400"}`}>
+                  <p className="truncate text-sm font-semibold text-slate-900">{nombres[c.perfil] ?? c.perfil}</p>
+                  <span className={`shrink-0 rounded-full px-2 py-0.5 text-[11px] font-medium ${c.campanasEnCurso ? "border border-emerald-200 bg-emerald-50 text-emerald-800" : "bg-slate-200 text-slate-600"}`}>
                     {c.campanasEnCurso ? `${c.campanasEnCurso} enviando` : "sin campaña en curso"}
                   </span>
                 </div>
@@ -126,13 +126,13 @@ export function EnVivoRubros({ nombres }: { nombres: Record<string, string> }) {
                     ["Derivados", c.derivados],
                   ].map(([label, v]) => (
                     <div key={label as string}>
-                      <dt className="text-[10px] uppercase tracking-wide text-slate-400">{label}</dt>
-                      <dd className={`text-sm font-semibold tabular-nums ${label === "Fallidos" && (v as number) > 0 ? "text-amber-300" : "text-white"}`}>{n(v as number | null)}</dd>
+                      <dt className="text-[10px] uppercase tracking-wide text-slate-500">{label}</dt>
+                      <dd className={`text-sm font-semibold tabular-nums ${label === "Fallidos" && (v as number) > 0 ? "text-amber-700" : "text-slate-900"}`}>{n(v as number | null)}</dd>
                     </div>
                   ))}
                   <div>
-                    <dt className="text-[10px] uppercase tracking-wide text-slate-400">Respuesta</dt>
-                    <dd className="text-sm font-semibold tabular-nums text-white">{pctResp === null ? "—" : `${pctResp}%`}</dd>
+                    <dt className="text-[10px] uppercase tracking-wide text-slate-500">Respuesta</dt>
+                    <dd className="text-sm font-semibold tabular-nums text-slate-900">{pctResp === null ? "—" : `${pctResp}%`}</dd>
                   </div>
                 </dl>
               </div>

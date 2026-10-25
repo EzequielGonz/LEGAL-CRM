@@ -76,7 +76,7 @@ export async function listarItems(version: number, rubro: RubroConocimiento) {
   return data ?? [];
 }
 
-export async function editarItem(version: number, clave: string, cambios: { contenido?: unknown; activo?: unknown }, actor: string) {
+export async function editarItem(version: number, clave: string, cambios: { contenido?: unknown; activo?: unknown; titulo?: unknown; disparadores?: unknown }, actor: string) {
   const s = createAdminClient();
   const { data: antes } = await s.from("bot_knowledge_items" as any).select("*").eq("version", version).eq("clave", clave).maybeSingle();
   if (!antes) throw new Error("No existe ese ítem.");
@@ -87,15 +87,25 @@ export async function editarItem(version: number, clave: string, cambios: { cont
     upd.contenido = t;
   }
   if (typeof cambios.activo === "boolean") upd.activo = cambios.activo;
-  if (!("contenido" in upd) && !("activo" in upd)) throw new Error("No hay cambios.");
+  if (typeof cambios.titulo === "string") {
+    const t = cambios.titulo.trim();
+    if (t.length < 2 || t.length > 160) throw new Error("El título tiene que tener entre 2 y 160 caracteres.");
+    upd.titulo = t;
+  }
+  if (Array.isArray(cambios.disparadores)) {
+    const lista = Array.from(new Set(cambios.disparadores.filter((d): d is string => typeof d === "string").map((d) => d.toLowerCase().replace(/\s+/g, " ").trim()).filter((d) => d.length >= 2 && d.length <= 60)));
+    if (lista.length > 40) throw new Error("Hasta 40 disparadores por ítem.");
+    upd.disparadores = lista;
+  }
+  if (!["contenido", "activo", "titulo", "disparadores"].some((k) => k in upd)) throw new Error("No hay cambios.");
   const { error } = await s.from("bot_knowledge_items" as any).update(upd).eq("version", version).eq("clave", clave);
   if (error) throw error;
   await s.from("ops_change_log" as any).insert({
     actor,
     action: "conocimiento_item",
     target: `v${version}:${clave}`,
-    before: { contenido: (antes as any).contenido, activo: (antes as any).activo },
-    after: { contenido: upd.contenido ?? (antes as any).contenido, activo: upd.activo ?? (antes as any).activo },
+    before: { titulo: (antes as any).titulo, disparadores: (antes as any).disparadores, contenido: (antes as any).contenido, activo: (antes as any).activo },
+    after: { titulo: upd.titulo ?? (antes as any).titulo, disparadores: upd.disparadores ?? (antes as any).disparadores, contenido: upd.contenido ?? (antes as any).contenido, activo: upd.activo ?? (antes as any).activo },
     note: "Edición de un ítem del conocimiento del bot desde Perfiles.",
   });
   limpiarCacheConocimiento();
