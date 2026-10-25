@@ -46,6 +46,7 @@ import { historialConPlantillas } from "@/lib/agentes/historial-servidor";
 import { esPostergaFirme, instruccionUltimaRespuesta } from "@/lib/agentes/plantillas-en-historial";
 import { motivoParaNoResponder, TEXTO_SIN_RESPUESTA } from "@/lib/agentes/automaticos";
 import { bloqueFichaNegocio, leerFichaNegocio } from "@/lib/agentes/ficha-negocio";
+import { conocimientoParaTurno } from "@/lib/conocimiento/servicio";
 
 const MAX_TOOL_ITERATIONS = 6;
 
@@ -312,6 +313,15 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
   } catch (err) {
     console.error("[agente] No se pudo leer la asignación de la biblioteca; se usa la configuración actual:", err);
   }
+  // 25/10: conocimiento del bot por versiones (v1 = sin cambios; v2 = biblioteca de ventas
+  // y del rubro). Va por debajo de las reglas, el rol y la ficha, que se suman después.
+  const conocimiento = await conocimientoParaTurno({
+    rubroId: contact.rubro_id ?? null,
+    area,
+    conversationId,
+    entrantes: ordenados.filter((m: any) => m.direction === "entrante" && m.body).map((m: any) => String(m.body)),
+  });
+  if (conocimiento.texto) systemWithBrief = `${systemWithBrief}\n\n${conocimiento.texto}`;
   // Rol de la base (21/10): si la base del contacto tiene un rol cargado, se suma.
   // 24/10: manda el rol de la campaña; si la campaña no tiene, el de la base.
   const rol = await instruccionesDeRol(contact, { rolId: rolDeCampana, campana: campaignName });
@@ -361,6 +371,8 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
       latenciaMs: Date.now() - t0,
       herramientas: uso.herramientas,
       resultado,
+      knowledgeVersion: conocimiento.version,
+      knowledgeItems: conocimiento.claves,
       ...extra,
     });
   // Contexto de las herramientas. Si la IA deriva a una persona, la
