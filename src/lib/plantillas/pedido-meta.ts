@@ -29,8 +29,9 @@ export async function procesarPedidoPlantillas(): Promise<unknown> {
   await s.from("system_settings").upsert({ key: CLAVE, value: { ...pedido, procesado_el, resultado: "en curso" } }, { onConflict: "key" });
 
   const envios = lista.length ? await enviarPlantillasDeArchivo(lista, true) : [];
-  const resumen = envios.flatMap((e) =>
-    e.error ? [{ rubro: e.rubro, estado: "error", detalle: e.error }] : e.resultados.map((r) => ({ rubro: e.rubro, nombre: r.nombre, estado: r.estado, detalle: r.detalle ?? null }))
+  type Fila = { rubro: string; nombre: string | null; estado: string; detalle: string | null };
+  const resumen: Fila[] = envios.flatMap((e): Fila[] =>
+    e.error ? [{ rubro: e.rubro, nombre: null, estado: "error", detalle: e.error }] : e.resultados.map((r) => ({ rubro: e.rubro, nombre: r.nombre, estado: r.estado, detalle: r.detalle ?? null }))
   );
   const resultado = { envios: resumen, no_encontradas: faltan };
   await s.from("system_settings").upsert({ key: CLAVE, value: { ...pedido, procesado_el, resultado } }, { onConflict: "key" });
