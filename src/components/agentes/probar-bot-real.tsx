@@ -6,6 +6,7 @@ interface Turno {
   rol: "persona" | "bot";
   texto: string;
   herramientas: string[];
+  conocimiento?: string[];
 }
 interface Base {
   id: string;
@@ -46,6 +47,8 @@ export function ProbarBotReal({ perfil, areas }: { perfil: string; areas: string
   const [turnos, setTurnos] = useState<Turno[] | null>(null);
   const [rolUsado, setRolUsado] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  // 25/10: versión del conocimiento para comparar («» = la vigente del perfil).
+  const [version, setVersion] = useState<"" | "1" | "2">("");
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -68,12 +71,12 @@ export function ProbarBotReal({ perfil, areas }: { perfil: string; areas: string
       const r = await fetch("/api/agentes/probar-real", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ perfil, area, base_id: baseId || null, mensajes, apertura: apertura.trim() || null }),
+        body: JSON.stringify({ perfil, area, base_id: baseId || null, mensajes, apertura: apertura.trim() || null, version: version ? Number(version) : null }),
       });
       const j = await r.json().catch(() => ({}));
       if (!r.ok) throw new Error(j.error ?? "No se pudo probar el bot.");
       setTurnos(j.turnos ?? []);
-      setRolUsado(j.rol ? "Base general + rol de la base" : "Base general");
+      setRolUsado(`${j.rol ? "Base general + rol de la base" : "Base general"} · conocimiento v${j.version ?? 1}`);
     } catch (e) {
       setError(String((e as Error).message));
     } finally {
@@ -116,6 +119,14 @@ export function ProbarBotReal({ perfil, areas }: { perfil: string; areas: string
             ))}
           </select>
         </label>
+        <label className="text-sm">
+          <span className="block font-medium text-slate-800">Versión del conocimiento</span>
+          <select className="tactil mt-1 w-full rounded-lg border border-slate-300 bg-white px-2" value={version} onChange={(e) => setVersion(e.target.value as "" | "1" | "2")}>
+            <option value="">La que rige hoy en el perfil</option>
+            <option value="1">v1 · Bot del 24/10</option>
+            <option value="2">v2 · Biblioteca de ventas</option>
+          </select>
+        </label>
       </div>
       <label className="mt-3 block text-sm">
         <span className="block font-medium text-slate-800">Mensaje que le mandamos primero (opcional)</span>
@@ -144,6 +155,7 @@ export function ProbarBotReal({ perfil, areas }: { perfil: string; areas: string
               <p className="mb-0.5 text-[11px] font-semibold uppercase tracking-wide text-slate-500">{t.rol === "persona" ? "Persona" : "Bot"}</p>
               <p className="whitespace-pre-wrap">{t.texto}</p>
               {t.herramientas.length ? <p className="mt-1 text-[11px] text-slate-500">En la charla real {t.herramientas.map((h) => NOMBRE_HERRAMIENTA[h] ?? h).join(", ")}.</p> : null}
+              {t.conocimiento?.length ? <p className="mt-1 text-[11px] text-slate-500">Conocimiento que tuvo en cuenta: {t.conocimiento.join(" · ")}.</p> : null}
             </li>
           ))}
         </ol>

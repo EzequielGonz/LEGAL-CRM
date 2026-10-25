@@ -11,6 +11,7 @@ import { identificadorModelo } from "@/lib/agentes/modelo";
 import { bloqueHorarioAtencion } from "@/lib/horario-atencion";
 import { toolsForArea } from "./tools";
 import { bloqueFichaNegocio, leerFichaNegocio } from "@/lib/agentes/ficha-negocio";
+import { conocimientoParaTurno } from "@/lib/conocimiento/servicio";
 
 /**
  * «Probar el bot real» (24/10). Arma el prompt con las MISMAS piezas que
@@ -36,10 +37,13 @@ export interface TurnoPrueba {
   rol: "persona" | "bot";
   texto: string;
   herramientas: string[];
+  /** 25/10: ítems de conocimiento usados en esa respuesta (v2). */
+  conocimiento?: string[];
 }
 
-export async function probarBotReal(input: { area: Area; rubroId: string | null; baseId?: string | null; campaignId?: string | null; mensajes: string[]; apertura?: string | null; boton?: boolean }): Promise<{
+export async function probarBotReal(input: { area: Area; rubroId: string | null; baseId?: string | null; campaignId?: string | null; mensajes: string[]; apertura?: string | null; boton?: boolean; version?: number | null }): Promise<{
   turnos: TurnoPrueba[];
+  version: number;
   rol: string | null;
   modelo: string | null;
   tokens: { entrada: number; salida: number };
@@ -67,11 +71,16 @@ export async function probarBotReal(input: { area: Area; rubroId: string | null;
   );
   const crit = criterioDelRubro(input.area, input.rubroId, modo);
   if (crit) system = `${system}\n\n${crit}`;
+  // 25/10: igual que en vivo, el conocimiento va después del criterio y antes del rol y la ficha.
+  const antes = system;
+  system = "";
   const rol = await instruccionesDeRol({ imported_base_id: input.baseId ?? null }, { rolId: campana?.agent_role_id ?? null, campana: campana?.name ?? null });
   if (rol) system = `${system}\n\n${rol}`;
   const ficha = await leerFichaNegocio(input.rubroId ?? profileIdForArea(input.area) ?? null);
   if (ficha) system = `${system}\n\n${bloqueFichaNegocio(ficha)}`;
   system = `${system}\n\n${GUIA_CAPTACION_Y_CIERRE}\n\n${bloqueHorarioAtencion(new Date())}`;
+  const despues = system;
+  let versionUsada = 1;
 
   const tools = toolsForArea(input.area);
   const modelo = identificadorModelo();
@@ -86,6 +95,9 @@ export async function probarBotReal(input: { area: Area; rubroId: string | null;
     // 24/10: la primera respuesta a la apertura puede ser un botón de la plantilla (igual que en vivo).
     const esBoton = !!input.boton && !!apertura && idx === 0;
     const instr = instruccionUltimaRespuesta({ texto: m, esBoton, aPlantilla: !!apertura && idx === 0, clase: clasificarRespuesta(m) });
+    const con = await conocimientoParaTurno({ rubroId: input.rubroId, area: input.area, conversationId: null, entrantes: lista.slice(0, idx + 1), forzarVersion: input.version ?? null });
+    versionUsada = con.version;
+    const system = `${antes}${con.texto ? `\n\n${con.texto}` : ""}${despues}`;
     const systemTurno = instr ? `${system}\n\nRespuesta a la plantilla (regla del sistema, manda sobre el guion):\n${instr}` : system;
     contents.push({ role: "user", parts: [{ text: esBoton ? bloqueBoton(m) : m }] });
     turnos.push({ rol: "persona", texto: m, herramientas: [] });
@@ -127,7 +139,7 @@ export async function probarBotReal(input: { area: Area; rubroId: string | null;
         }),
       });
     }
-    turnos.push({ rol: "bot", texto: texto || "(sin texto)", herramientas: usadas });
+    turnos.push({ rol: "bot", texto: texto || "(sin texto)", herramientas: usadas, conocimiento: con.titulos });
   }
-  return { turnos, rol: rol || null, modelo: modeloRespuesta ?? modelo, tokens };
+  return { turnos, version: versionUsada, rol: rol || null, modelo: modeloRespuesta ?? modelo, tokens };
 }
