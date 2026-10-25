@@ -34,6 +34,12 @@ export const DECLARACIONES = [
     parametersJsonSchema: { type: "object", properties: {} },
   },
   {
+    name: "comparar_versiones_bot",
+    description:
+      "Compara el conocimiento del bot del perfil: v1 (bot del 24/10) contra v2 (biblioteca de ventas), con resultados reales del período: conversaciones, cuántas siguieron la charla, captación, pasaron a una persona, bajas, qué fichas de objeción usó la v2 y un veredicto que no declara ganador con pocos datos. Usala cuando pregunten si el bot nuevo funciona mejor o qué versión conviene.",
+    parametersJsonSchema: { type: "object", properties: { dias: { type: "integer", description: "Período en días (7, 14 o 30). Por defecto 14." } } },
+  },
+  {
     name: "proponer_publicaciones",
     description:
       "Arma un calendario de publicaciones para Instagram y/o Facebook del perfil (posteos con imagen, carruseles e historias; sin videos) y lo deja como PROPUESTA para que la responsable confirme. Usala cuando pidan programar publicaciones, historias o carruseles.",
