@@ -121,12 +121,14 @@ export function ConversationThread({
     setSending(true);
     setSendError(null);
     try {
-      // Foto o video (22/10): se sube primero al depósito privado.
+      // Foto, video o PDF (22/10; PDF 01/11): se sube primero al depósito privado.
       let adjunto: { path: string; nombre: string } | null = null;
       if (archivo) {
         const esVideo = archivo.type.startsWith("video/");
-        if (archivo.size > (esVideo ? 16 : 5) * 1024 * 1024) {
-          setSendError(esVideo ? "El video supera 16 MB (límite de WhatsApp)." : "La foto supera 5 MB (límite de WhatsApp).");
+        const esPdf = archivo.type === "application/pdf" || archivo.name.toLowerCase().endsWith(".pdf");
+        // Imágenes 5 MB (WhatsApp); video y PDF 16 MB (tope del depósito).
+        if (archivo.size > (esVideo || esPdf ? 16 : 5) * 1024 * 1024) {
+          setSendError(esVideo ? "El video supera 16 MB (límite de WhatsApp)." : esPdf ? "El PDF supera 16 MB: comprimilo o dividilo." : "La foto supera 5 MB (límite de WhatsApp).");
           return;
         }
         const r1 = await fetch(`/api/conversations/${conversationId}/subida`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ nombre: archivo.name }) });
@@ -285,9 +287,9 @@ export function ConversationThread({
               aria-label="Mensaje"
               className="min-w-0 flex-1 rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
             />
-            <label className="tactil inline-flex cursor-pointer items-center rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-700 hover:bg-slate-50" title="Adjuntar foto o video">
-              📎<span className="sr-only">Adjuntar foto o video</span>
-              <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/3gpp,video/quicktime" className="sr-only" onChange={(e) => setArchivo(e.target.files?.[0] ?? null)} />
+            <label className="tactil inline-flex cursor-pointer items-center rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-700 hover:bg-slate-50" title="Adjuntar foto, video o PDF">
+              📎<span className="sr-only">Adjuntar foto, video o PDF</span>
+              <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/3gpp,video/quicktime,application/pdf,.pdf" className="sr-only" onChange={(e) => setArchivo(e.target.files?.[0] ?? null)} />
             </label>
             <button onClick={handleSend} disabled={sending} className="btn-gold">
               {sending ? "Enviando..." : "Enviar"}
