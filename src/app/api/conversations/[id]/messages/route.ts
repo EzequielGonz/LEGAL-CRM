@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { sendOutboundMessage } from "@/lib/messaging";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireSession } from "@/lib/acceso/autorizacion";
-import { enlaceFirmado, tipoMedio } from "@/lib/adjuntos/salientes";
+import { enlaceFirmado, tipoAdjunto } from "@/lib/adjuntos/salientes";
 
 export const dynamic = "force-dynamic";
 
@@ -54,10 +54,10 @@ export async function POST(request: Request, { params }: { params: { id: string 
   const { body, adjunto } = await request.json().catch(() => ({ body: null, adjunto: null }));
   const texto = typeof body === "string" ? body : "";
 
-  // Foto o video (22/10): { path, nombre } subido antes con /subida.
-  let media: { kind: "image" | "video"; link: string; path: string; filename?: string } | null = null;
+  // Foto, video o PDF (22/10; PDF 01/11): { path, nombre } subido antes con /subida.
+  let media: { kind: "image" | "video" | "document"; link: string; path: string; filename?: string } | null = null;
   if (adjunto && typeof adjunto?.path === "string") {
-    const kind = tipoMedio(String(adjunto.path));
+    const kind = tipoAdjunto(String(adjunto.path));
     if (!kind || !adjunto.path.startsWith(`${params.id}/`)) return NextResponse.json({ error: "Adjunto inválido." }, { status: 400 });
     try {
       media = { kind, link: await enlaceFirmado(adjunto.path), path: adjunto.path, filename: typeof adjunto.nombre === "string" ? adjunto.nombre.slice(0, 200) : undefined };
