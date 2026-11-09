@@ -23,6 +23,10 @@ def portada_ms(v):
     return int(min(e['t1'] - .25, e['seg'][0]['t'] + 1.7) * 1000)
 
 plan = []; reels_usados = set(); estaticas = []
+import re
+YA = {}
+if os.path.exists('/home/user/LEGAL-CRM/docs/redes/programadas.jsonl'):
+    YA = {(j['marca'], j['fecha'], j['tipo']): j['pieza'] for j in map(json.loads, filter(str.strip, open('/home/user/LEGAL-CRM/docs/redes/programadas.jsonl'))) if j.get('ok')}
 for m in MARCAS:
     B = base[m]
     # reels: prioridad voz original, voz gancho B, voz corta, después las versiones con música
@@ -33,6 +37,8 @@ for m in MARCAS:
             cand.append({'v': k + '-b', 'a': aud, 'pr': pr + 1, 'k': k})
             if k + '-c' in tl: cand.append({'v': k + '-c', 'a': aud, 'pr': pr + 2, 'k': k})
     for c in cand: c['usos'] = 0; c['ult'] = -99
+    from collections import Counter
+    cnt = {c: Counter() for c in ('post', 'car', 'cont', 'his')}
     # rotación de guiones por día para piezas fijas
     for d in range(DIAS):
         fecha = INICIO + datetime.timedelta(days=d)
@@ -48,28 +54,52 @@ for m in MARCAS:
             f = f"{c['v']}-{c['a']}.mp4"; reels_usados.add(c['v'])
             plan.append({'marca': m, 'fecha': f'{fecha}T{h}:00', 'tipo': 'reel', 'archivos': [f], 'texto': texto(c['v']),
                          'ai': c['a'] == 'voz', 'portada_ms': portada_ms(c['v']), 'pieza': f"{c['v']}-{c['a']}"})
-        # carrusel: 8 originales y 7 con gancho B
-        orden_car = B + [k + '-b' for k in B]
-        v = orden_car[d % len(orden_car)]
-        n = len(tl[v]['escenas']); fs = [f'{v}-car{i}.jpg' for i in range(n)]
-        estaticas += [(v, 'carrusel', i, '', f) for i, f in enumerate(fs)]
-        plan.append({'marca': m, 'fecha': f'{fecha}T{H_CAR}:00', 'tipo': 'carrusel', 'archivos': fs, 'texto': texto(v), 'pieza': f'{v}-carrusel'})
-        # posts: 10 h gancho (original o B), 19 h escena de contenido de otro guion
-        vh = (B[d % len(B)] if d < 8 else B[d % len(B)] + '-b') if True else None
-        fh = f'{vh}-post0.jpg'; estaticas.append((vh, 'post', 0, 'wa', fh))
+        # piezas fijas: guiones distintos entre sí y, si se puede, distintos de los reels del día.
+        # La primera vez que sale un guion va el original; la segunda, el gancho B.
+        tomados = set(hoy) | {re.sub(r'(-b|-c)?(-voz|-tendencia|-post\d+|-carrusel|-his0|-hisC)$', '', pz)
+                              for (m2, fe, t2), pz in YA.items() if m2 == m and fe.startswith(str(fecha))}
+        def elegir(cat, off):
+            cands = sorted(B, key=lambda k: (cnt[cat][k], (B.index(k) - d - off) % len(B)))
+            k = next((x for x in cands if x not in tomados), cands[0])
+            cnt[cat][k] += 1; tomados.add(k); return k
+        kh = elegir('post', 0); vh = kh if cnt['post'][kh] == 1 else kh + '-b'
+        fh = f'{vh}-post0.jpg'
         plan.append({'marca': m, 'fecha': f'{fecha}T{H_POST[0]}:00', 'tipo': 'post', 'archivos': [fh], 'texto': texto(vh), 'pieza': f'{vh}-post0'})
-        kc = B[(d + 3) % len(B)]; esc = tl[kc]['escenas']
+        kcar = elegir('car', 2); v = kcar if cnt['car'][kcar] == 1 else kcar + '-b'
+        n = len(tl[v]['escenas']); fs = [f'{v}-car{i}.jpg' for i in range(n)]
+        plan.append({'marca': m, 'fecha': f'{fecha}T{H_CAR}:00', 'tipo': 'carrusel', 'archivos': fs, 'texto': texto(v), 'pieza': f'{v}-carrusel'})
+        kc = elegir('cont', 4); esc = tl[kc]['escenas']
         idxs = [i for i, e in enumerate(esc) if e['tipo'] in ('lista', 'dato', 'sello', 'objeto', 'compara') or (e['tipo'] == 'titulo' and e.get('sub'))]
-        ic = idxs[(d // len(B)) % len(idxs)] if idxs else 0
-        fc = f'{kc}-post{ic}.jpg'; estaticas.append((kc, 'post', ic, 'wa', fc))
+        ic = idxs[(cnt['cont'][kc] - 1) % len(idxs)] if idxs else 0
+        fc = f'{kc}-post{ic}.jpg'
         plan.append({'marca': m, 'fecha': f'{fecha}T{H_POST[1]}:00', 'tipo': 'post', 'archivos': [fc], 'texto': texto(kc), 'pieza': f'{kc}-post{ic}'})
-        # historias: 9:30 gancho, 18:30 cierre «Respondé esta historia con PALABRA» del mismo guion
-        vs = B[(d + 5) % len(B)] if d < 8 else B[(d + 5) % len(B)] + '-b'
-        ks = vs[:-2] if vs.endswith('-b') else vs
+        ks = elegir('his', 6); vs = ks if cnt['his'][ks] == 1 else ks + '-b'
         f0 = f'{vs}-his0.jpg'; fC = f'{ks}-hisC.jpg'
-        estaticas.append((vs, 'historia', 0, 'historia', f0)); estaticas.append((ks, 'historia', len(tl[ks]['escenas']) - 1, '', fC))
         plan.append({'marca': m, 'fecha': f'{fecha}T{H_HIS[0]}:00', 'tipo': 'historia', 'archivos': [f0], 'texto': '', 'pieza': f'{vs}-his0'})
         plan.append({'marca': m, 'fecha': f'{fecha}T{H_HIS[1]}:00', 'tipo': 'historia', 'archivos': [fC], 'texto': '', 'pieza': f'{ks}-hisC'})
+# lo que ya quedó programado en Metricool manda sobre el plan
+import re
+LEDGER = '/home/user/LEGAL-CRM/docs/redes/programadas.jsonl'
+def desde_pieza(pz):
+    if pz.endswith('-carrusel'):
+        v = pz[:-9]; return [f'{v}-car{i}.jpg' for i in range(len(tl[v]['escenas']))], texto(v)
+    if re.search(r'-post\d+$', pz): v = re.sub(r'-post\d+$', '', pz); return [pz + '.jpg'], texto(v)
+    if pz.endswith(('-his0', '-hisC')): return [pz + '.jpg'], ''
+    return [pz + '.mp4'], texto(pz.rsplit('-', 1)[0])
+if os.path.exists(LEDGER):
+    hechos = {(j['marca'], j['fecha'], j['tipo']): j['pieza'] for j in map(json.loads, filter(str.strip, open(LEDGER))) if j.get('ok')}
+    for p in plan:
+        pz = hechos.get((p['marca'], p['fecha'], p['tipo']))
+        if pz and pz != p['pieza']:
+            p['archivos'], p['texto'] = desde_pieza(pz); p['pieza'] = pz
+# piezas fijas necesarias, derivadas del plan final
+for p in plan:
+    for f in p['archivos']:
+        if f.endswith('.mp4'): continue
+        mm = re.match(r'(.+)-(car|post)(\d+)\.jpg$', f)
+        if mm: estaticas.append((mm[1], 'carrusel' if mm[2] == 'car' else 'post', int(mm[3]), '' if mm[2] == 'car' else 'wa', f)); continue
+        v = f[:-9]
+        estaticas.append((v, 'historia', 0, 'historia', f) if f.endswith('-his0.jpg') else (v, 'historia', len(tl[v]['escenas']) - 1, '', f))
 for p in plan: p['urls'] = [f"{DOM[p['marca']]}/redes/{f}" for f in p['archivos']]
 plan.sort(key=lambda p: (p['fecha'], p['marca']))
 # orden de render de reels por primer uso
