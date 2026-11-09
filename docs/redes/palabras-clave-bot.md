@@ -70,3 +70,14 @@ Las piezas cierran con «Escribinos PALABRA por WhatsApp». Si la persona escrib
 - «WEB»: publicación «Tu web tarda en cargar. Y se van.». Decía: Si tu web tarda 3 segundos en vez de 1, aumenta un 32 % la probabilidad de que la gente se vaya (Think with Google, 2017).
 Cómo seguir: preguntá por su negocio de a una pregunta (rubro y cómo le llegan hoy las consultas). No des precios ni prometas resultados. Ofrecé que alguien del equipo revise su caso.
 ```
+
+## Segunda tanda (09/11/2026, del análisis de competencia)
+
+Se sumaron al final del rol, con el mismo criterio: solo contexto, sin tocar lo existente. El texto anterior quedó en `ai_agent_prompt_history` y el cambio, en `ops_change_log`.
+
+| Área | Palabra | Pieza | Desde |
+| --- | --- | --- | --- |
+| civil (VITA) | NUNCA | «Después de un choque, nunca digas esto.» | 17/11 |
+| marketing | API | «WhatsApp, Business o API: ¿cuál te conviene?» | 17/11 |
+
+Los ganchos nuevos de temas existentes usan palabras que el bot ya conoce: FIRMA (`vita-firmas-d`), FAMILIA (`cob-familia-d`) y LLAVE (`autos-lista-d`).

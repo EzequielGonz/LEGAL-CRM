@@ -36,6 +36,14 @@ GB = {  # id: (título con *acento*, voz, fondo)
  'mkt-ausencia': ('Son las 23:41 *y te escribieron.*', 'Son las once y cuarenta y uno de la noche, y te escribieron.', 'claro'),
  'mkt-seguir': ('Dijo «lo pienso». *¿Y vos qué hiciste?*', 'Dijo lo pienso. ¿Y vos qué hiciste?', 'claro'),
  'mkt-google': ('Tu local no aparece *en Google Maps.*', 'Tu local no aparece en Google Maps.', 'oscuro'),
+ 'vita-nunca': ('Lo que decís en la calle *puede jugarte en contra.*', 'Lo que decís en la calle puede jugarte en contra.', 'oscuro'),
+ 'mkt-api': ('¿Tu negocio necesita *la API de WhatsApp?*', '¿Tu negocio necesita la API de WhatsApp?', 'claro'),
+}
+# Ganchos D (09/11, del análisis de competencia): otra entrada para temas que ya funcionan.
+GD = {
+ 'vita-firmas': ('¿Qué pasa si firmás *el acuerdo del seguro?*', '¿Qué pasa si firmás el acuerdo del seguro?', 'oscuro'),
+ 'cob-familia': ('¿Cuánto cuesta sumar *a tu pareja?*', '¿Cuánto cuesta sumar a tu pareja?', 'claro'),
+ 'autos-lista': ('El error más caro *al comprar un 0 km.*', 'El error más caro al comprar un cero kilómetro.', 'oscuro'),
 }
 CUERPO = {
  'vita-firmas': 'Después de un choque, el seguro del otro puede ofrecerte un acuerdo rápido. Lo que firmás puede cerrar tu reclamo: pedilo por escrito, no firmes el mismo día y consultá antes.',
@@ -70,6 +78,8 @@ CUERPO = {
  'mkt-ausencia': 'Mensaje de ausencia con horarios, respuestas a las preguntas de siempre y turnos o pedidos que no esperan a mañana.',
  'mkt-seguir': '«Lo pienso» no es un no: hacé seguimiento a las 24 horas, a los 3 días y a la semana, con algo nuevo.',
  'mkt-google': 'Perfil de empresa con horarios, fotos reales del local y WhatsApp y web enlazados: así te encuentran cuando te buscan.',
+ 'vita-nunca': 'Después de un choque, evitá decir que fue tu culpa, que estás bien o aceptar un arreglo de palabra. Pedí los datos del otro conductor y andá al médico aunque te sientas bien.',
+ 'mkt-api': 'WhatsApp Business alcanza si atendés vos: perfil de empresa, catálogo, respuestas rápidas y mensaje de ausencia. La API sirve cuando atienden varias personas, con CRM y automatizaciones, y tiene costo según los mensajes.',
 }
 TAGS = {'vita': '#accidentedetransito #ART #abogados #CABA #GBA', 'cob': '#prepagas #obrasocial #saludargentina #AMBA',
         'autos': '#0km #autos #plandeahorro #CABA', 'mkt': '#marketingdigital #whatsappbusiness #pymes #emprendedores'}
@@ -78,7 +88,7 @@ def plano(s): return s.replace('*', '')
 
 textos = {}
 for f in sorted(glob.glob('reels/*.json')):
-    if f.endswith('.tl.json') or f[:-5].endswith(('-b', '-c')): continue
+    if f.endswith('.tl.json') or f[:-5].endswith(('-b', '-c', '-d')): continue
     g = json.load(open(f)); i = g['id']
     if i not in GB: continue
     t, v, fondo = GB[i]
@@ -90,11 +100,17 @@ for f in sorted(glob.glob('reels/*.json')):
         clave = next((e for e in g['escenas'][1:-1] if e['tipo'] == 'lista'), g['escenas'][-2])
         c['escenas'] = [g['escenas'][0], clave, g['escenas'][-1]]
         json.dump(c, open(f'reels/{i}-c.json', 'w'), ensure_ascii=False, indent=1)
+    if i in GD:
+        td, vd, fd = GD[i]
+        dd = copy.deepcopy(g); dd['id'] = i + '-d'
+        dd['escenas'][0] = dict(tipo='titulo', fondo=fd, titulo=td, segs=[vd])
+        json.dump(dd, open(f'reels/{i}-d.json', 'w'), ensure_ascii=False, indent=1)
     gancho = plano(g['escenas'][0].get('titulo') or g['escenas'][0].get('cita') or t)
     partes = [gancho, CUERPO[i], f"Escribinos «{g['palabra']}» por WhatsApp: el botón está en el perfil."]
     if AVISO[g['marca']]: partes.append(AVISO[g['marca']])
     if any(e['tipo'] in ('notif', 'chat', 'compara') for e in g['escenas']): partes.append('Situación ilustrativa.')
     partes.append(TAGS[g['marca']])
     textos[i] = {'marca': g['marca'], 'palabra': g['palabra'], 'gancho': gancho, 'ganchoB': plano(t), 'texto': '\n\n'.join(partes)}
+    if i in GD: textos[i]['ganchoD'] = plano(GD[i][0])
 json.dump(textos, open('textos.json', 'w'), ensure_ascii=False, indent=1)
 print(len(textos), 'textos;', len(glob.glob('reels/*-b.json')), 'variantes B;', len(glob.glob('reels/*-c.json')), 'versiones cortas')

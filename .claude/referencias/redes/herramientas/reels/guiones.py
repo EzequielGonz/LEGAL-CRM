@@ -272,6 +272,29 @@ R['mkt-google'] = dict(marca='mkt', estilo='A', palabra='GOOGLE', escenas=[
   dict(tipo='cierre', fondo='oscuro', enviar='Mandáselo a quien tiene un local', segs=['Escribinos «Google» por WhatsApp. El botón está en el perfil.']),
 ], revision='Kocos Marketing')
 
+# ---------------- Del análisis de competencia (09/11) ----------------
+# Mecánicas que rinden en cada rubro, adaptadas: la advertencia «nunca digas esto» (jurídico)
+# y la comparación de tres opciones con veredicto (marketing).
+R['vita-nunca'] = dict(marca='vita', estilo='B', palabra='NUNCA', escenas=[
+  dict(tipo='titulo', fondo='oscuro', titulo='Después de un choque, *nunca digas esto.*', segs=['Después de un choque, nunca digas esto.']),
+  dict(tipo='lista', fondo='claro', titulo='Nunca digas', items=['«Fue mi culpa»', '«Estoy bien, no fue nada»', '«Arreglemos acá»'],
+       segs=['Nunca digas:', 'fue mi culpa,', 'estoy bien, no fue nada,', 'o arreglemos acá.']),
+  dict(tipo='titulo', fondo='oscuro', titulo='Mejor, *esto.*', sub='Pedí los datos del otro conductor, andá al médico aunque te sientas bien y no aceptes arreglos de palabra.',
+       segs=['Mejor, esto:', 'pedí los datos del otro conductor, andá al médico aunque te sientas bien, y no aceptes arreglos de palabra.']),
+  dict(tipo='cierre', fondo='oscuro', enviar='Mandáselo a quien maneja todos los días', segs=['Escribinos «nunca» por WhatsApp. El botón está en el perfil.']),
+], fuente='Guía «Qué hacer después de un choque» del sitio (errores comunes)', revision='Abogada o abogado de VITA')
+
+R['mkt-api'] = dict(marca='mkt', estilo='B', palabra='API', escenas=[
+  dict(tipo='titulo', fondo='claro', titulo='WhatsApp, Business o API: *¿cuál te conviene?*', segs=['WhatsApp, WhatsApp Business, o la API.', '¿Cuál te conviene?']),
+  dict(tipo='lista', fondo='oscuro', titulo='WhatsApp Business', items=['Perfil de empresa y catálogo', 'Respuestas rápidas y mensaje de ausencia', 'Gratis, para un equipo chico'],
+       segs=['WhatsApp Business:', 'perfil de empresa y catálogo,', 'respuestas rápidas y mensaje de ausencia,', 'gratis, para un equipo chico.']),
+  dict(tipo='lista', fondo='claro', titulo='La API de WhatsApp', items=['Varias personas en el mismo número', 'Conectada a tu CRM y automatizaciones', 'Con costo según los mensajes'],
+       segs=['La API de WhatsApp:', 'varias personas en el mismo número,', 'conectada a tu CRM y a automatizaciones,', 'con un costo según los mensajes.']),
+  dict(tipo='titulo', fondo='oscuro', titulo='El veredicto: *depende de cuántos atienden.*', sub='Si atendés vos, Business alcanza. Si son varios y llegan muchas consultas, la API.',
+       segs=['El veredicto: depende de cuántos atienden.', 'Si atendés vos, Business alcanza. Si son varios y llegan muchas consultas, la API.']),
+  dict(tipo='cierre', fondo='oscuro', enviar='Mandáselo a quien atiende el WhatsApp del negocio', segs=['Escribinos «API» por WhatsApp. El botón está en el perfil.']),
+], revision='Kocos Marketing')
+
 os.makedirs('reels', exist_ok=True)
 for k, v in R.items():
     v['id'] = k

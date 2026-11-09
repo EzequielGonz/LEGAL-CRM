@@ -9,13 +9,20 @@ H_POST = ['10:00', '19:00']; H_CAR = '12:30'; H_HIS = ['09:30', '18:30']
 INICIO = datetime.date(2026, 11, 10); DIAS = 15
 textos = json.load(open('textos.json'))
 tl = {os.path.basename(f)[:-8]: json.load(open(f)) for f in glob.glob('reels/*.tl.json')}
-base = {m: sorted(i for i in tl if i.startswith(m + '-') and not i.endswith(('-b', '-c'))) for m in MARCAS}
+# Contenido nuevo del análisis de competencia (09/11): solo para reels y desde el día 7 (17/11),
+# así los días ya programados se calculan igual que antes.
+NUEVOS = {'vita-nunca': 'vita', 'mkt-api': 'mkt'}
+GANCHOS_D = {'vita-firmas': 'vita', 'cob-familia': 'cob', 'autos-lista': 'autos'}
+DESDE = 7
+base = {m: sorted(i for i in tl if i.startswith(m + '-') and not i.endswith(('-b', '-c', '-d')) and i not in NUEVOS) for m in MARCAS}
 
 def texto(v):
-    k = v[:-2] if v.endswith(('-b', '-c')) else v
+    k = v[:-2] if v.endswith(('-b', '-c', '-d')) else v
     t = textos[k]['texto']
     if v.endswith('-b') and textos[k].get('ganchoB'):
         t = t.replace(textos[k]['gancho'], textos[k]['ganchoB'], 1)
+    if v.endswith('-d') and textos[k].get('ganchoD'):
+        t = t.replace(textos[k]['gancho'], textos[k]['ganchoD'], 1)
     return t
 
 def portada_ms(v):
@@ -36,7 +43,18 @@ for m in MARCAS:
             cand.append({'v': k, 'a': aud, 'pr': pr, 'k': k})
             cand.append({'v': k + '-b', 'a': aud, 'pr': pr + 1, 'k': k})
             if k + '-c' in tl: cand.append({'v': k + '-c', 'a': aud, 'pr': pr + 2, 'k': k})
+    for nuevo, mm_ in NUEVOS.items():
+        if mm_ != m: continue
+        for aud, pr in (('voz', 0), ('tendencia', 3)):
+            cand.append({'v': nuevo, 'a': aud, 'pr': pr, 'k': nuevo, 'desde': DESDE})
+            cand.append({'v': nuevo + '-b', 'a': aud, 'pr': pr + 1, 'k': nuevo, 'desde': DESDE})
+            if nuevo + '-c' in tl: cand.append({'v': nuevo + '-c', 'a': aud, 'pr': pr + 2, 'k': nuevo, 'desde': DESDE})
+    for k_, mm_ in GANCHOS_D.items():
+        if mm_ != m: continue
+        for aud, pr in (('voz', 0), ('tendencia', 3)):
+            cand.append({'v': k_ + '-d', 'a': aud, 'pr': pr, 'k': k_, 'desde': DESDE})
     for c in cand: c['usos'] = 0; c['ult'] = -99
+    ultimo_tema = {}  # día en que salió por última vez cada tema nuevo: día por medio como mucho
     from collections import Counter
     cnt = {c: Counter() for c in ('post', 'car', 'cont', 'his')}
     # rotación de guiones por día para piezas fijas
@@ -44,12 +62,14 @@ for m in MARCAS:
         fecha = INICIO + datetime.timedelta(days=d)
         hoy = set(); elegidos = []
         for _ in range(5):
-            ok = [c for c in cand if c['k'] not in hoy and c['usos'] < 2 and (c['usos'] == 0 or d - c['ult'] >= 7)]
-            if not ok: ok = [c for c in cand if c['k'] not in hoy and c['usos'] < 2]
-            if not ok: ok = [c for c in cand if c['usos'] < 2]
-            if not ok: ok = [c for c in cand if c['k'] not in hoy]
-            ok.sort(key=lambda c: (c['usos'], c['pr'], (B.index(c['k']) - d) % len(B)))
+            disp = [c for c in cand if d >= c.get('desde', 0) and ('desde' not in c or d - ultimo_tema.get(c['k'], -99) >= 2)]
+            ok = [c for c in disp if c['k'] not in hoy and c['usos'] < 2 and (c['usos'] == 0 or d - c['ult'] >= 7)]
+            if not ok: ok = [c for c in disp if c['k'] not in hoy and c['usos'] < 2]
+            if not ok: ok = [c for c in disp if c['usos'] < 2]
+            if not ok: ok = [c for c in disp if c['k'] not in hoy]
+            ok.sort(key=lambda c: (c['usos'], c['pr'], (B.index(c['k']) - d) % len(B) if c['k'] in B else -1))
             c = ok[0]; c['usos'] += 1; c['ult'] = d; hoy.add(c['k']); elegidos.append(c)
+            if 'desde' in c: ultimo_tema[c['k']] = d
         for h, c in zip(H_REEL, elegidos):
             f = f"{c['v']}-{c['a']}.mp4"; reels_usados.add(c['v'])
             plan.append({'marca': m, 'fecha': f'{fecha}T{h}:00', 'tipo': 'reel', 'archivos': [f], 'texto': texto(c['v']),
