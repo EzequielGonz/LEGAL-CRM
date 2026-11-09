@@ -8,6 +8,7 @@ Panel de captación para cuatro perfiles (Jurídico con Civil y Penal, Cobertura
 - `.claude/skills/kocos-crm-contexto`: etapas, autorizaciones, estado operativo, entrega y migraciones.
 - Según la tarea: `kocos-crm-reglas-de-captacion` (recorridos de prospectos), `kocos-crm-diseno-y-accesibilidad` (pantallas y experiencia), `kocos-crm-pruebas-de-aceptacion` (pruebas y entrega segura), `kocos-landings-seo-y-conversion`, `kocos-contenido-y-publicacion`, `kocos-agentes-entrenamiento-y-evaluacion`.
 - `.claude/referencias/casos-de-aceptacion.md`: casos A01–A35 con su correspondencia y estado.
+- Piezas de redes (diseño, redacción, animación): `.claude/referencias/redes/direccion-de-arte.md` y `.claude/referencias/redes/marcas.md`, con los logos y la herramienta de revisión en la misma carpeta.
 - `.claude/referencias/bandeja-claude.md`: qué hacer cuando la responsable dice «ok» para que Claude tome las tareas de la Bandeja para Claude.
 - Las demás carpetas de `.claude/skills` son de terceros (ver `PROCEDENCIA.md`); si contradicen al proyecto, prevalece el proyecto.
 
