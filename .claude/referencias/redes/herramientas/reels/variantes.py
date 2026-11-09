@@ -64,7 +64,7 @@ CUERPO = {
  'cob-cartilla': 'Antes de elegir por precio, mirá la guardia más cercana, los especialistas que usás y las farmacias adheridas.',
  'autos-lista': 'Al precio de lista, en general, se suman flete, formularios y patentamiento, sellos y seguro. Pedí siempre el precio llave en mano.',
  'autos-plan': 'En un plan de ahorro, la cuota se calcula sobre el precio actual del auto: si sube el modelo, sube la cuota.',
- 'autos-voto': '¿0 km o usado de 2 años? Depende de cuánto tenés hoy, cuánto podés pagar por mes y si tenés un usado para entregar.',
+ 'autos-voto': 'Depende de cuánto tenés hoy, cuánto podés pagar por mes y si tenés un usado para entregar.',
  'autos-retiro': 'El día del retiro, revisá que el chasis coincida con los papeles, buscá rayones o golpes y pedí manual, llave de repuesto y kit.',
  'autos-usado': 'Tu usado vale más con el service al día y sus comprobantes, los papeles en regla y sin deudas de patentes ni multas.',
  'autos-anticipo': 'Antes de elegir entre anticipo y cuota, definí la cuota que podés pagar sin ahogarte y armá el resto alrededor.',

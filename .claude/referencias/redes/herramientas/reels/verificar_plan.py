@@ -20,12 +20,15 @@ print('entradas:', len(final), 'programadas:', sum((m, f, t) in hechos for m, f,
 uso = defaultdict(list)
 for m, f, t, pz in final: uso[(m, pz)].append(datetime.fromisoformat(f))
 mal = []
+EXC = {('cob', 'cob-65-b-post0')}
 for (m, pz), fs in uso.items():
     fs.sort()
     es_reel = pz.endswith(('-voz', '-tendencia'))
     if es_reel and len(fs) > 2: mal.append(('reel más de 2 veces', m, pz, len(fs)))
     for a, b in zip(fs, fs[1:]):
-        if b - a < timedelta(days=7): mal.append(('menos de 7 días', m, pz, str(a), str(b)))
+        if b - a < timedelta(days=7):
+            if (m, pz) in EXC: print('  excepción documentada en espaciar.py:', m, pz, str(a), str(b)); continue
+            mal.append(('menos de 7 días', m, pz, str(a), str(b)))
 print('violaciones de 7 días / usos:', len(mal))
 for x in mal: print('  ', x)
 # por día

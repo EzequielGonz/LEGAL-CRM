@@ -114,7 +114,13 @@ for p in P:
 
 def reels_del_dia(m, dia):
     rs = [p['pieza'] for p in P if p['marca'] == m and p['tipo'] == 'reel' and p['fecha'].startswith(dia)]
-    return {tema_pieza(x) for x in rs}, {re.sub(r'-(voz|tendencia)$', '', x) for x in rs}
+    return {tema_pieza(x) for x in rs}, {texto_de_reel(x) for x in rs}
+
+
+def texto_de_reel(pz):
+    # versión del texto de un reel: la versión C usa el texto original
+    v = re.sub(r'-(voz|tendencia)$', '', pz)
+    return v[:-2] if v.endswith('-c') else v
 
 
 def variante(pz):
@@ -128,7 +134,7 @@ textos_reels = defaultdict(list)
 for p in P:
     if p['tipo'] == 'reel':
         k = (p['marca'], p['fecha'], 'reel')
-        textos_reels[p['marca']].append((dt(p['fecha']), re.sub(r'-(voz|tendencia)$', '', hechos.get(k, p['pieza']))))
+        textos_reels[p['marca']].append((dt(p['fecha']), texto_de_reel(hechos.get(k, p['pieza']))))
 VENTANA_TEXTO = timedelta(days=3)
 
 
@@ -138,14 +144,15 @@ def texto_cercano(m, v, cuando):
     return any(abs(cuando - c) < VENTANA_TEXTO for c, vv in textos_reels[m] if vv == v)
 
 
-def puntaje(m, pz, cuando, tomados_hoy, rh, preferida):
+def puntaje(m, pz, cuando, feed_hoy, hist_hoy, rh, preferida):
     gap = cuando - ult[(m, pz)]
     t = tema_pieza(pz)
     reels_hoy, ganchos_hoy = rh
     return (gap < SEMANA,                                  # la regla de 7 días manda
             usos[(m, pz)] >= 2,                            # cada pieza fija sale 2 veces como mucho, si se puede
-            t in tomados_hoy,                              # no repetir tema entre fijas del día
+            t in feed_hoy,                                 # no repetir tema entre posts y carrusel del día
             variante(pz) in ganchos_hoy,                   # no repetir el mismo texto que un reel del día
+            t in hist_hoy,                                 # mejor que no repita el tema de las historias del día
             t in reels_hoy,                                # tema distinto de los reels del día
             usos[(m, pz)],                                 # lo menos usado primero
             texto_cercano(m, variante(pz), cuando),        # si se puede, el mismo texto no vuelve antes de 3 días
@@ -154,14 +161,22 @@ def puntaje(m, pz, cuando, tomados_hoy, rh, preferida):
             -gap.total_seconds(), pz)
 
 
+# Excepciones elegidas a mano cuando todas las opciones tienen algún problema. Cobertura del 21/11 a las 19:00:
+# ese día los 8 temas ya salen en reels, historias, el post de la mañana y el carrusel. Las piezas que cumplen
+# los 7 días repiten el texto de un reel del día o el tema del carrusel. Se elige «65» con gancho B, que sale
+# 6 días y 9 horas después de su uso anterior y acompaña el tema de las historias de ese día.
+EXCEPCIONES = {('cob', '2026-11-21T19:00:00', 'post'): 'cob-65-b-post0'}
+
 cambios = []
 por_dia = defaultdict(list)
 for p in pendientes:
     por_dia[(p['marca'], p['fecha'][:10])].append(p)
 for (m, dia), ps in sorted(por_dia.items(), key=lambda x: (x[0][1], x[0][0])):
     ps.sort(key=lambda p: p['fecha'])
-    tomados = {tema_pieza(hechos[(m, q['fecha'], q['tipo'])]) for q in P
-               if q['marca'] == m and q['fecha'].startswith(dia) and es_fija(q['tipo']) and (m, q['fecha'], q['tipo']) in hechos}
+    ya = [(q['tipo'], tema_pieza(hechos[(m, q['fecha'], q['tipo'])])) for q in P
+          if q['marca'] == m and q['fecha'].startswith(dia) and es_fija(q['tipo']) and (m, q['fecha'], q['tipo']) in hechos]
+    feed = {t for tp, t in ya if tp != 'historia'}
+    hist = {t for tp, t in ya if tp == 'historia'}
     rh = reels_del_dia(m, dia)
     # historias: primero se elige el tema del par (mañana y tarde), después el resto
     hs = [p for p in ps if p['tipo'] == 'historia']
@@ -177,10 +192,12 @@ for (m, dia), ps in sorted(por_dia.items(), key=lambda x: (x[0][1], x[0][0])):
             ops0 = [h for h in inv[m]['his0'] if tema_pieza(h) == k]
             if not ops0: continue
             c_t = dt(tarde['fecha']) if tarde else dt(mañana['fecha'])
-            h0 = min(ops0, key=lambda h: puntaje(m, h, dt(mañana['fecha']) if mañana else c_t, tomados, rh, lambda x: True))
-            s0 = puntaje(m, h0, dt(mañana['fecha']) if mañana else c_t, tomados, rh, lambda x: True)
-            sc = puntaje(m, c, c_t, tomados, rh, lambda x: True)
-            mejores.append(((s0[0] or sc[0], s0[1] or sc[1], s0[2], s0[4], sc[5] + s0[5], s0[7], s0[9] + sc[9]), h0, c))
+            t0 = dt(mañana['fecha']) if mañana else c_t
+            h0 = min(ops0, key=lambda h: puntaje(m, h, t0, feed | hist, set(), rh, lambda x: True))
+            s0 = puntaje(m, h0, t0, feed | hist, set(), rh, lambda x: True)
+            sc = puntaje(m, c, c_t, feed | hist, set(), rh, lambda x: True)
+            # orden: 7 días, usos, tema ya usado hoy, tema de los reels, usos totales, tema reciente, distancia
+            mejores.append(((s0[0] or sc[0], s0[1] or sc[1], s0[2], s0[5], sc[6] + s0[6], s0[8], s0[10] + sc[10]), h0, c))
         mejores.sort(key=lambda x: x[0])
         _, h0, c = mejores[0]
         for p, pz in ((mañana, h0), (tarde, c)):
@@ -188,7 +205,7 @@ for (m, dia), ps in sorted(por_dia.items(), key=lambda x: (x[0][1], x[0][0])):
             if pz != p['pieza']: cambios.append((m, p['fecha'], p['tipo'], p['pieza'], pz))
             p['pieza'] = pz; p['archivos'] = [pz + '.jpg']; p['texto'] = ''
             anotar(m, pz, dt(p['fecha']), True)
-        tomados.add(tema_pieza(c))
+        hist.add(tema_pieza(c))
     for p in ps:
         if p['tipo'] == 'historia': continue
         cuando = dt(p['fecha'])
@@ -199,7 +216,7 @@ for (m, dia), ps in sorted(por_dia.items(), key=lambda x: (x[0][1], x[0][0])):
             ops = inv[m]['post']
             mañana_ = p['fecha'].endswith('10:00:00')
             pref = (lambda x: x.endswith('-post0')) if mañana_ else (lambda x: not x.endswith('-post0'))
-        pz = min(ops, key=lambda x: puntaje(m, x, cuando, tomados, rh, pref))
+        pz = EXCEPCIONES.get((m, p['fecha'], p['tipo'])) or min(ops, key=lambda x: puntaje(m, x, cuando, feed, hist, rh, pref))
         if pz != p['pieza']: cambios.append((m, p['fecha'], p['tipo'], p['pieza'], pz))
         if p['tipo'] == 'carrusel':
             v = pz[:-len('-carrusel')]; p['archivos'] = inv[m]['carrusel'][v]; p['texto'] = texto(v)
@@ -207,7 +224,7 @@ for (m, dia), ps in sorted(por_dia.items(), key=lambda x: (x[0][1], x[0][0])):
             v = re.sub(r'-post\d+$', '', pz); p['archivos'] = [pz + '.jpg']; p['texto'] = texto(v)
         p['pieza'] = pz
         anotar(m, pz, cuando, True)
-        tomados.add(tema_pieza(pz))
+        feed.add(tema_pieza(pz))
 
 # Reels a menos de 7 × 24 horas: intercambio de horario dentro del día
 reels = [p for p in P if p['tipo'] == 'reel']
@@ -227,7 +244,21 @@ for p in sorted(reels, key=lambda p: p['fecha']):
             break
         p['fecha'], q['fecha'] = q['fecha'], p['fecha']
 
+def desde_pieza(pz):
+    if pz.endswith('-carrusel'):
+        v = pz[:-len('-carrusel')]; return [f'{v}-car{i}.jpg' for i in range(len(tl[v]['escenas']))], texto(v)
+    if re.search(r'-post\d+$', pz): return [pz + '.jpg'], texto(re.sub(r'-post\d+$', '', pz))
+    if pz.endswith(('-his0', '-hisC')): return [pz + '.jpg'], ''
+    return [pz + '.mp4'], texto(re.sub(r'-(voz|tendencia)$', '', pz))
+
+
 for p in P:
+    k = (p['marca'], p['fecha'], p['tipo'])
+    if k in hechos and hechos[k] != p['pieza']:
+        # el plan refleja lo que de verdad quedó programado (incluidas las correcciones)
+        p['pieza'] = hechos[k]; p['archivos'], p['texto'] = desde_pieza(hechos[k])
+    if p['tipo'] == 'reel' and k not in hechos:
+        p['texto'] = texto(re.sub(r'-(voz|tendencia)$', '', p['pieza']))
     p['urls'] = [f"{DOM[p['marca']]}/redes/{f}" for f in p['archivos']]
 P.sort(key=lambda p: (p['fecha'], p['marca']))
 D['espaciado'] = True

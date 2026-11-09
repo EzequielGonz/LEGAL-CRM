@@ -8,7 +8,7 @@ for l in open(LEDGER):
     if l.strip():
         j = json.loads(l)
         if j.get('ok'): hechos[(j['marca'], j['fecha'], j['tipo'])] = j['pieza']
-LIB = {tuple(x) for x in json.load(open('liberar.json'))}
+LIB = {tuple(x) for x in json.load(open('liberar.json'))} if os.path.exists('liberar.json') else set()
 for k in LIB: hechos.pop(k, None)
 P = json.load(open('plan.json'))['plan']
 fin = [(p['marca'], p['fecha'], p['tipo'], hechos.get((p['marca'], p['fecha'], p['tipo']), p['pieza']), (p['marca'], p['fecha'], p['tipo']) not in hechos) for p in P]
