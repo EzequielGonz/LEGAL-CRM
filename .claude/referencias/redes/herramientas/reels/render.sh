@@ -1,6 +1,6 @@
 #!/bin/bash
 # Renderiza fotogramas (1080x1920) y codifica las dos versiones de cada reel.
-cd "$(dirname "$0")"; mkdir -p out fr
+cd "$(dirname "$0")"; mkdir -p out fr; DIR=$(basename "$PWD")
 for id in "$@"; do
   rm -rf fr/$id
   for k in 0 1 2 3; do N=4 K=$k node fotogramas.js "http://127.0.0.1:8765/$DIR/motor.html?r=$id" fr/$id 1 30 > /tmp/fr-$id-$k.log 2>&1 & done; wait
