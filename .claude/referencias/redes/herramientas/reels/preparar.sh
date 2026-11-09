@@ -1,6 +1,6 @@
 #!/bin/bash
 # Prepara la carpeta de trabajo: fuentes de Google Fonts (licencia OFL) y logos del proyecto.
-cd "$(dirname "$0")"; mkdir -p fonts logos reels aud
+cd "$(dirname "$0")"; mkdir -p fonts logos reels aud vendor
 cp ../../logos/*.png logos/
 UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/126.0 Safari/537.36"
 baja(){ curl -s -A "$UA" "https://fonts.googleapis.com/css2?family=$1" | grep -o "https://fonts.gstatic.com[^)]*" | head -1; }
@@ -12,4 +12,6 @@ for w in 400 500 600 700 800; do
   curl -s -o fonts/PlusJakartaSans-W$w.ttf "$(curl -s "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@$w" | grep -o 'https://[^)]*' | head -1)"
   curl -s -o fonts/Outfit-W$w.ttf "$(curl -s "https://fonts.googleapis.com/css2?family=Outfit:wght@$w" | grep -o 'https://[^)]*' | head -1)"
 done
+# GSAP 3.13 y complementos (gratis desde abril de 2025, licencia estándar de GSAP)
+for f in gsap SplitText DrawSVGPlugin ScrambleTextPlugin CustomEase MorphSVGPlugin; do curl -s -o vendor/$f.min.js https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/$f.min.js; done
 pip install -q edge-tts numpy 2>/dev/null; ls fonts | wc -l
