@@ -198,3 +198,94 @@
 {"marca": "cob", "fecha": "2026-11-14T20:30:00", "tipo": "reel", "pieza": "cob-65-tendencia", "ok": true, "detalle": "id 422079248", "registrado": "2026-11-09T16:29:22Z"}
 {"marca": "mkt", "fecha": "2026-11-14T20:30:00", "tipo": "reel", "pieza": "mkt-bio-tendencia", "ok": true, "detalle": "id 422079293", "registrado": "2026-11-09T16:29:22Z"}
 {"marca": "vita", "fecha": "2026-11-14T20:30:00", "tipo": "reel", "pieza": "vita-trayecto-tendencia", "ok": true, "detalle": "id 422079350", "registrado": "2026-11-09T16:29:22Z"}
+{"marca": "autos", "fecha": "2026-11-15T08:30:00", "tipo": "reel", "pieza": "autos-anticipo-tendencia", "ok": true, "detalle": "id 422085767", "registrado": "2026-11-09T16:34:28Z"}
+{"marca": "cob", "fecha": "2026-11-15T08:30:00", "tipo": "reel", "pieza": "cob-aumento-tendencia", "ok": true, "detalle": "id 422085829", "registrado": "2026-11-09T16:34:28Z"}
+{"marca": "mkt", "fecha": "2026-11-15T08:30:00", "tipo": "reel", "pieza": "mkt-chats-tendencia", "ok": true, "detalle": "id 422086047", "registrado": "2026-11-09T16:34:28Z"}
+{"marca": "vita", "fecha": "2026-11-15T08:30:00", "tipo": "reel", "pieza": "vita-24h-tendencia", "ok": true, "detalle": "id 422086108", "registrado": "2026-11-09T16:34:28Z"}
+{"marca": "autos", "fecha": "2026-11-15T09:30:00", "tipo": "historia", "pieza": "autos-retiro-his0", "ok": true, "detalle": "id 422086338", "registrado": "2026-11-09T16:34:28Z"}
+{"marca": "cob", "fecha": "2026-11-15T09:30:00", "tipo": "historia", "pieza": "cob-cartilla-his0", "ok": true, "detalle": "id 422086513", "registrado": "2026-11-09T16:34:28Z"}
+{"marca": "mkt", "fecha": "2026-11-15T09:30:00", "tipo": "historia", "pieza": "mkt-consulta-his0", "ok": true, "detalle": "id 422086549", "registrado": "2026-11-09T16:34:28Z"}
+{"marca": "vita", "fecha": "2026-11-15T09:30:00", "tipo": "historia", "pieza": "vita-culpa-his0", "ok": true, "detalle": "id 422086618", "registrado": "2026-11-09T16:34:28Z"}
+{"marca": "autos", "fecha": "2026-11-15T10:00:00", "tipo": "post", "pieza": "autos-voto-post0", "ok": true, "detalle": "id 422086790", "registrado": "2026-11-09T16:37:30Z"}
+{"marca": "cob", "fecha": "2026-11-15T10:00:00", "tipo": "post", "pieza": "cob-65-b-post0", "ok": true, "detalle": "id 422087084", "registrado": "2026-11-09T16:37:30Z"}
+{"marca": "mkt", "fecha": "2026-11-15T10:00:00", "tipo": "post", "pieza": "mkt-ausencia-b-post0", "ok": true, "detalle": "id 422087353", "registrado": "2026-11-09T16:37:30Z"}
+{"marca": "vita", "fecha": "2026-11-15T10:00:00", "tipo": "post", "pieza": "vita-sin-seguro-post0", "ok": true, "detalle": "id 422087606", "registrado": "2026-11-09T16:37:30Z"}
+{"marca": "autos", "fecha": "2026-11-15T11:00:00", "tipo": "reel", "pieza": "autos-lista-tendencia", "ok": true, "detalle": "id 422087693", "registrado": "2026-11-09T16:37:30Z"}
+{"marca": "cob", "fecha": "2026-11-15T11:00:00", "tipo": "reel", "pieza": "cob-cambio-tendencia", "ok": true, "detalle": "id 422087814", "registrado": "2026-11-09T16:37:30Z"}
+{"marca": "mkt", "fecha": "2026-11-15T11:00:00", "tipo": "reel", "pieza": "mkt-consulta-tendencia", "ok": true, "detalle": "id 422087864", "registrado": "2026-11-09T16:37:30Z"}
+{"marca": "vita", "fecha": "2026-11-15T11:00:00", "tipo": "reel", "pieza": "vita-alta-tendencia", "ok": true, "detalle": "id 422087907", "registrado": "2026-11-09T16:37:30Z"}
+{"marca": "autos", "fecha": "2026-11-15T12:30:00", "tipo": "carrusel", "pieza": "autos-retiro-b-carrusel", "ok": true, "detalle": "id 422091186", "registrado": "2026-11-09T16:38:03Z"}
+{"marca": "cob", "fecha": "2026-11-15T12:30:00", "tipo": "carrusel", "pieza": "cob-cartilla-b-carrusel", "ok": true, "detalle": "id 422091266", "registrado": "2026-11-09T16:38:03Z"}
+{"marca": "mkt", "fecha": "2026-11-15T12:30:00", "tipo": "carrusel", "pieza": "mkt-bio-carrusel", "ok": true, "detalle": "id 422091369", "registrado": "2026-11-09T16:38:03Z"}
+{"marca": "vita", "fecha": "2026-11-15T12:30:00", "tipo": "carrusel", "pieza": "vita-trayecto-carrusel", "ok": true, "detalle": "id 422091427", "registrado": "2026-11-09T16:38:03Z"}
+{"marca": "autos", "fecha": "2026-11-15T13:30:00", "tipo": "reel", "pieza": "autos-plan-tendencia", "ok": true, "detalle": "id 422091481", "registrado": "2026-11-09T16:38:03Z"}
+{"marca": "cob", "fecha": "2026-11-15T13:30:00", "tipo": "reel", "pieza": "cob-mono-b-tendencia", "ok": true, "detalle": "id 422091548", "registrado": "2026-11-09T16:38:03Z"}
+{"marca": "mkt", "fecha": "2026-11-15T13:30:00", "tipo": "reel", "pieza": "mkt-precio-b-tendencia", "ok": true, "detalle": "id 422091615", "registrado": "2026-11-09T16:38:03Z"}
+{"marca": "vita", "fecha": "2026-11-15T13:30:00", "tipo": "reel", "pieza": "vita-art-tendencia", "ok": true, "detalle": "id 422091688", "registrado": "2026-11-09T16:38:03Z"}
+{"marca": "autos", "fecha": "2026-11-15T17:00:00", "tipo": "reel", "pieza": "autos-sorteo-b-tendencia", "ok": true, "detalle": "id 422091908", "registrado": "2026-11-09T16:38:30Z"}
+{"marca": "cob", "fecha": "2026-11-15T17:00:00", "tipo": "reel", "pieza": "cob-preexistencia-b-tendencia", "ok": true, "detalle": "id 422092015", "registrado": "2026-11-09T16:38:30Z"}
+{"marca": "mkt", "fecha": "2026-11-15T17:00:00", "tipo": "reel", "pieza": "mkt-seguir-b-tendencia", "ok": true, "detalle": "id 422092151", "registrado": "2026-11-09T16:38:30Z"}
+{"marca": "vita", "fecha": "2026-11-15T17:00:00", "tipo": "reel", "pieza": "vita-culpa-tendencia", "ok": true, "detalle": "id 422092182", "registrado": "2026-11-09T16:38:30Z"}
+{"marca": "autos", "fecha": "2026-11-15T18:30:00", "tipo": "historia", "pieza": "autos-retiro-hisC", "ok": true, "detalle": "id 422092209", "registrado": "2026-11-09T16:38:30Z"}
+{"marca": "cob", "fecha": "2026-11-15T18:30:00", "tipo": "historia", "pieza": "cob-cartilla-hisC", "ok": true, "detalle": "id 422092264", "registrado": "2026-11-09T16:38:30Z"}
+{"marca": "mkt", "fecha": "2026-11-15T18:30:00", "tipo": "historia", "pieza": "mkt-consulta-hisC", "ok": true, "detalle": "id 422092306", "registrado": "2026-11-09T16:38:30Z"}
+{"marca": "vita", "fecha": "2026-11-15T18:30:00", "tipo": "historia", "pieza": "vita-culpa-hisC", "ok": true, "detalle": "id 422092341", "registrado": "2026-11-09T16:38:30Z"}
+{"marca": "autos", "fecha": "2026-11-15T19:00:00", "tipo": "post", "pieza": "autos-seguro-post2", "ok": true, "detalle": "id 422092531", "registrado": "2026-11-09T16:39:02Z"}
+{"marca": "cob", "fecha": "2026-11-15T19:00:00", "tipo": "post", "pieza": "cob-familia-post2", "ok": true, "detalle": "id 422092600", "registrado": "2026-11-09T16:39:02Z"}
+{"marca": "mkt", "fecha": "2026-11-15T19:00:00", "tipo": "post", "pieza": "mkt-google-post1", "ok": true, "detalle": "id 422092670", "registrado": "2026-11-09T16:39:02Z"}
+{"marca": "vita", "fecha": "2026-11-15T19:00:00", "tipo": "post", "pieza": "vita-danos-post1", "ok": true, "detalle": "id 422092740", "registrado": "2026-11-09T16:39:02Z"}
+{"marca": "autos", "fecha": "2026-11-15T20:30:00", "tipo": "reel", "pieza": "autos-usado-b-tendencia", "ok": true, "detalle": "id 422092828", "registrado": "2026-11-09T16:39:02Z"}
+{"marca": "cob", "fecha": "2026-11-15T20:30:00", "tipo": "reel", "pieza": "cob-recibo-b-tendencia", "ok": true, "detalle": "id 422092914", "registrado": "2026-11-09T16:39:02Z"}
+{"marca": "mkt", "fecha": "2026-11-15T20:30:00", "tipo": "reel", "pieza": "mkt-web-b-tendencia", "ok": true, "detalle": "id 422093005", "registrado": "2026-11-09T16:39:02Z"}
+{"marca": "vita", "fecha": "2026-11-15T20:30:00", "tipo": "reel", "pieza": "vita-firmas-b-tendencia", "ok": true, "detalle": "id 422093088", "registrado": "2026-11-09T16:39:02Z"}
+{"marca": "autos", "fecha": "2026-11-16T08:30:00", "tipo": "reel", "pieza": "autos-voto-b-tendencia", "ok": true, "detalle": "id 422093864", "registrado": "2026-11-09T16:39:50Z"}
+{"marca": "cob", "fecha": "2026-11-16T08:30:00", "tipo": "reel", "pieza": "cob-65-b-tendencia", "ok": true, "detalle": "id 422093950", "registrado": "2026-11-09T16:39:50Z"}
+{"marca": "mkt", "fecha": "2026-11-16T08:30:00", "tipo": "reel", "pieza": "mkt-ausencia-b-tendencia", "ok": true, "detalle": "id 422094021", "registrado": "2026-11-09T16:39:50Z"}
+{"marca": "vita", "fecha": "2026-11-16T08:30:00", "tipo": "reel", "pieza": "vita-sin-seguro-b-tendencia", "ok": true, "detalle": "id 422094117", "registrado": "2026-11-09T16:39:50Z"}
+{"marca": "autos", "fecha": "2026-11-16T09:30:00", "tipo": "historia", "pieza": "autos-seguro-his0", "ok": true, "detalle": "id 422094162", "registrado": "2026-11-09T16:39:50Z"}
+{"marca": "cob", "fecha": "2026-11-16T09:30:00", "tipo": "historia", "pieza": "cob-familia-his0", "ok": true, "detalle": "id 422094225", "registrado": "2026-11-09T16:39:50Z"}
+{"marca": "mkt", "fecha": "2026-11-16T09:30:00", "tipo": "historia", "pieza": "mkt-google-his0", "ok": true, "detalle": "id 422094274", "registrado": "2026-11-09T16:39:50Z"}
+{"marca": "vita", "fecha": "2026-11-16T09:30:00", "tipo": "historia", "pieza": "vita-danos-his0", "ok": true, "detalle": "id 422094308", "registrado": "2026-11-09T16:39:50Z"}
+{"marca": "autos", "fecha": "2026-11-16T10:00:00", "tipo": "post", "pieza": "autos-usado-post0", "ok": true, "detalle": "id 422094548", "registrado": "2026-11-09T16:40:22Z"}
+{"marca": "cob", "fecha": "2026-11-16T10:00:00", "tipo": "post", "pieza": "cob-preexistencia-post0", "ok": true, "detalle": "id 422094594", "registrado": "2026-11-09T16:40:22Z"}
+{"marca": "mkt", "fecha": "2026-11-16T10:00:00", "tipo": "post", "pieza": "mkt-seguir-post0", "ok": true, "detalle": "id 422094661", "registrado": "2026-11-09T16:40:22Z"}
+{"marca": "vita", "fecha": "2026-11-16T10:00:00", "tipo": "post", "pieza": "vita-firmas-post0", "ok": true, "detalle": "id 422094709", "registrado": "2026-11-09T16:40:22Z"}
+{"marca": "autos", "fecha": "2026-11-16T11:00:00", "tipo": "reel", "pieza": "autos-anticipo-b-tendencia", "ok": true, "detalle": "id 422094779", "registrado": "2026-11-09T16:40:22Z"}
+{"marca": "cob", "fecha": "2026-11-16T11:00:00", "tipo": "reel", "pieza": "cob-aumento-b-tendencia", "ok": true, "detalle": "id 422094848", "registrado": "2026-11-09T16:40:22Z"}
+{"marca": "mkt", "fecha": "2026-11-16T11:00:00", "tipo": "reel", "pieza": "mkt-bio-b-tendencia", "ok": true, "detalle": "id 422094925", "registrado": "2026-11-09T16:40:22Z"}
+{"marca": "vita", "fecha": "2026-11-16T11:00:00", "tipo": "reel", "pieza": "vita-trayecto-b-tendencia", "ok": true, "detalle": "id 422095048", "registrado": "2026-11-09T16:40:22Z"}
+{"marca": "autos", "fecha": "2026-11-16T12:30:00", "tipo": "carrusel", "pieza": "autos-seguro-b-carrusel", "ok": true, "detalle": "id 422095315", "registrado": "2026-11-09T16:40:54Z"}
+{"marca": "cob", "fecha": "2026-11-16T12:30:00", "tipo": "carrusel", "pieza": "cob-recibo-carrusel", "ok": true, "detalle": "id 422095411", "registrado": "2026-11-09T16:40:54Z"}
+{"marca": "mkt", "fecha": "2026-11-16T12:30:00", "tipo": "carrusel", "pieza": "mkt-web-carrusel", "ok": true, "detalle": "id 422095486", "registrado": "2026-11-09T16:40:54Z"}
+{"marca": "vita", "fecha": "2026-11-16T12:30:00", "tipo": "carrusel", "pieza": "vita-culpa-b-carrusel", "ok": true, "detalle": "id 422095593", "registrado": "2026-11-09T16:40:54Z"}
+{"marca": "autos", "fecha": "2026-11-16T13:30:00", "tipo": "reel", "pieza": "autos-lista-b-tendencia", "ok": true, "detalle": "id 422095629", "registrado": "2026-11-09T16:40:54Z"}
+{"marca": "cob", "fecha": "2026-11-16T13:30:00", "tipo": "reel", "pieza": "cob-cambio-b-tendencia", "ok": true, "detalle": "id 422095673", "registrado": "2026-11-09T16:40:54Z"}
+{"marca": "mkt", "fecha": "2026-11-16T13:30:00", "tipo": "reel", "pieza": "mkt-chats-b-tendencia", "ok": true, "detalle": "id 422095761", "registrado": "2026-11-09T16:40:54Z"}
+{"marca": "vita", "fecha": "2026-11-16T13:30:00", "tipo": "reel", "pieza": "vita-24h-b-tendencia", "ok": true, "detalle": "id 422095835", "registrado": "2026-11-09T16:40:54Z"}
+{"marca": "autos", "fecha": "2026-11-16T17:00:00", "tipo": "reel", "pieza": "autos-plan-b-tendencia", "ok": true, "detalle": "id 422096079", "registrado": "2026-11-09T16:41:20Z"}
+{"marca": "cob", "fecha": "2026-11-16T17:00:00", "tipo": "reel", "pieza": "cob-cartilla-b-tendencia", "ok": true, "detalle": "id 422096141", "registrado": "2026-11-09T16:41:20Z"}
+{"marca": "mkt", "fecha": "2026-11-16T17:00:00", "tipo": "reel", "pieza": "mkt-consulta-b-tendencia", "ok": true, "detalle": "id 422096198", "registrado": "2026-11-09T16:41:20Z"}
+{"marca": "vita", "fecha": "2026-11-16T17:00:00", "tipo": "reel", "pieza": "vita-alta-b-tendencia", "ok": true, "detalle": "id 422096296", "registrado": "2026-11-09T16:41:20Z"}
+{"marca": "autos", "fecha": "2026-11-16T18:30:00", "tipo": "historia", "pieza": "autos-seguro-hisC", "ok": true, "detalle": "id 422096328", "registrado": "2026-11-09T16:41:20Z"}
+{"marca": "cob", "fecha": "2026-11-16T18:30:00", "tipo": "historia", "pieza": "cob-familia-hisC", "ok": true, "detalle": "id 422096363", "registrado": "2026-11-09T16:41:20Z"}
+{"marca": "mkt", "fecha": "2026-11-16T18:30:00", "tipo": "historia", "pieza": "mkt-google-hisC", "ok": true, "detalle": "id 422096421", "registrado": "2026-11-09T16:41:20Z"}
+{"marca": "vita", "fecha": "2026-11-16T18:30:00", "tipo": "historia", "pieza": "vita-danos-hisC", "ok": true, "detalle": "id 422096459", "registrado": "2026-11-09T16:41:20Z"}
+{"marca": "vita", "fecha": "2026-11-13T19:00:00", "tipo": "post", "pieza": "vita-culpa-b-post0", "ok": true, "detalle": "id 422107262 (actualizada: antes vita-culpa-post0, id 421773924; repetía imagen a menos de 7 días)", "registrado": "2026-11-09T16:49:59Z"}
+{"marca": "autos", "fecha": "2026-11-14T10:00:00", "tipo": "post", "pieza": "autos-lista-b-post0", "ok": true, "detalle": "id 422107325 (actualizada: antes autos-lista-post0, id 422076432; repetía imagen a menos de 7 días)", "registrado": "2026-11-09T16:49:59Z"}
+{"marca": "vita", "fecha": "2026-11-15T10:00:00", "tipo": "post", "pieza": "vita-trayecto-b-post0", "ok": true, "detalle": "id 422107380 (actualizada: antes vita-sin-seguro-post0, id 422087606; repetía imagen a menos de 7 días)", "registrado": "2026-11-09T16:49:59Z"}
+{"marca": "vita", "fecha": "2026-11-15T12:30:00", "tipo": "carrusel", "pieza": "vita-sin-seguro-b-carrusel", "ok": true, "detalle": "id 422107455 (actualizada: antes vita-trayecto-carrusel, id 422091427; repetía imagen a menos de 7 días)", "registrado": "2026-11-09T16:49:59Z"}
+{"marca": "cob", "fecha": "2026-11-15T19:00:00", "tipo": "post", "pieza": "cob-mono-post1", "ok": true, "detalle": "id 422107870 (actualizada: antes cob-familia-post2, id 422092600; repetía imagen a menos de 7 días)", "registrado": "2026-11-09T16:50:35Z"}
+{"marca": "mkt", "fecha": "2026-11-15T19:00:00", "tipo": "post", "pieza": "mkt-google-b-post0", "ok": true, "detalle": "id 422107932 (actualizada: antes mkt-google-post1, id 422092670; repetía imagen a menos de 7 días)", "registrado": "2026-11-09T16:50:35Z"}
+{"marca": "vita", "fecha": "2026-11-15T19:00:00", "tipo": "post", "pieza": "vita-danos-b-post0", "ok": true, "detalle": "id 422108009 (actualizada: antes vita-danos-post1, id 422092740; repetía imagen a menos de 7 días)", "registrado": "2026-11-09T16:50:35Z"}
+{"marca": "cob", "fecha": "2026-11-16T10:00:00", "tipo": "post", "pieza": "cob-preexistencia-b-post0", "ok": true, "detalle": "id 422108112 (actualizada: antes cob-preexistencia-post0, id 422094594; repetía imagen a menos de 7 días)", "registrado": "2026-11-09T16:50:35Z"}
+{"marca": "mkt", "fecha": "2026-11-16T10:00:00", "tipo": "post", "pieza": "mkt-seguir-b-post0", "ok": true, "detalle": "id 422108212 (actualizada: antes mkt-seguir-post0, id 422094661; repetía imagen a menos de 7 días)", "registrado": "2026-11-09T16:50:35Z"}
+{"marca": "cob", "fecha": "2026-11-16T12:30:00", "tipo": "carrusel", "pieza": "cob-mono-b-carrusel", "ok": true, "detalle": "id 422108314 (actualizada: antes cob-recibo-carrusel, id 422095411; repetía imagen a menos de 7 días)", "registrado": "2026-11-09T16:50:35Z"}
+{"marca": "mkt", "fecha": "2026-11-16T12:30:00", "tipo": "carrusel", "pieza": "mkt-precio-b-carrusel", "ok": true, "detalle": "id 422108392 (actualizada: antes mkt-web-carrusel, id 422095486; repetía imagen a menos de 7 días)", "registrado": "2026-11-09T16:50:35Z"}
+{"marca": "autos", "fecha": "2026-11-16T19:00:00", "tipo": "post", "pieza": "autos-sorteo-post1", "ok": true, "detalle": "id 422108883", "registrado": "2026-11-09T16:51:14Z"}
+{"marca": "cob", "fecha": "2026-11-16T19:00:00", "tipo": "post", "pieza": "cob-recibo-b-post0", "ok": true, "detalle": "id 422108959", "registrado": "2026-11-09T16:51:14Z"}
+{"marca": "mkt", "fecha": "2026-11-16T19:00:00", "tipo": "post", "pieza": "mkt-web-b-post0", "ok": true, "detalle": "id 422109026", "registrado": "2026-11-09T16:51:14Z"}
+{"marca": "vita", "fecha": "2026-11-16T19:00:00", "tipo": "post", "pieza": "vita-24h-post0", "ok": true, "detalle": "id 422109081", "registrado": "2026-11-09T16:51:14Z"}
+{"marca": "autos", "fecha": "2026-11-16T20:30:00", "tipo": "reel", "pieza": "autos-retiro-b-tendencia", "ok": true, "detalle": "id 422109111", "registrado": "2026-11-09T16:51:14Z"}
+{"marca": "cob", "fecha": "2026-11-16T20:30:00", "tipo": "reel", "pieza": "cob-familia-b-tendencia", "ok": true, "detalle": "id 422109182", "registrado": "2026-11-09T16:51:14Z"}
+{"marca": "mkt", "fecha": "2026-11-16T20:30:00", "tipo": "reel", "pieza": "mkt-google-b-tendencia", "ok": true, "detalle": "id 422109221", "registrado": "2026-11-09T16:51:14Z"}
+{"marca": "vita", "fecha": "2026-11-16T20:30:00", "tipo": "reel", "pieza": "vita-art-b-tendencia", "ok": true, "detalle": "id 422109277", "registrado": "2026-11-09T16:51:14Z"}
