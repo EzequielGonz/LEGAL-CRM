@@ -17,6 +17,15 @@ Cubre los procedimientos «crm-premium-content» (25.6) y «crm-content-publishi
 
 Nunca: conversaciones privadas o fichas de leads convertidas en contenido, testimonios o clientes ficticios, precios, resultados, credenciales o garantías no autorizados. Los agentes de estrategia, redacción, diseño, validación y publicación son distintos del asistente comercial; comparten hechos del perfil, no conversaciones.
 
+## Dirección de arte, redacción y revisión visual
+
+Antes de diseñar o escribir una pieza de redes, leer `.claude/referencias/redes/direccion-de-arte.md` y `.claude/referencias/redes/marcas.md`.
+
+- **`direccion-de-arte.md`:** la ficha de cada pieza (destinatario, objetivo, mensaje, apoyo y acción), composición y zonas seguras, la vista de preparación separada del archivo final, redacción, animación y la revisión visual obligatoria.
+- **`marcas.md`:** logos originales en `logos/`, paletas, tipografías, tono, límites, recursos faltantes y contradicciones abiertas.
+
+Exportar y revisar las piezas con `node .claude/referencias/redes/herramientas/revisar-piezas.mjs <pagina.html> <salida>`. Mirar las imágenes en su tamaño y a tamaño de teléfono antes de entregar: renderizar en 4K no reemplaza esa revisión.
+
 ## Política de autopublicación (definida una vez por perfil y canal)
 
 Formatos, frecuencia, temas y alcance autorizados; la puesta en marcha valida biblioteca, plantillas y destinos. Una vez habilitada, las piezas que cumplen se programan y publican **sin aprobación manual individual**. Se **retienen con motivo** y continúan las demás: falta de evidencia, afirmaciones nuevas sensibles, conflicto de marca, incumplimiento de formato. Las incidencias repetidas se agrupan. La habilitación inicial y los cambios fuera del alcance sí requieren una decisión expresa.
