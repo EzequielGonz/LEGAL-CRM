@@ -69,6 +69,8 @@ export function LineasWasender({ slug, marca }: { slug: SlugPerfil; marca: strin
   const [area, setArea] = useState("");
   const [qr, setQr] = useState<{ lineaId: string; imagen: string | null } | null>(null);
   const [verArchivadas, setVerArchivadas] = useState(false);
+  // Líneas que le avisan a otro entorno (por ejemplo, todavía a la Preview).
+  const [avisaAfuera, setAvisaAfuera] = useState<Record<string, boolean>>({});
   const qrRef = useRef(qr);
   qrRef.current = qr;
 
@@ -94,6 +96,21 @@ export function LineasWasender({ slug, marca }: { slug: SlugPerfil; marca: strin
   }, [areas, area]);
 
   const reemplazar = (l: Linea) => setLineas((ls) => (ls ?? []).map((x) => (x.id === l.id ? l : x)));
+  const anotarDestino = (id: string, recibeAqui: unknown) => {
+    if (typeof recibeAqui === "boolean") setAvisaAfuera((m) => ({ ...m, [id]: !recibeAqui }));
+  };
+
+  // Al abrir, se consulta una vez a qué entorno avisa cada línea conectada.
+  const consultadas = useRef(false);
+  useEffect(() => {
+    if (consultadas.current || !lineas) return;
+    consultadas.current = true;
+    for (const l of lineas.filter((x) => !x.archivada_at && x.estado === "connected")) {
+      pedir(`/api/wasender/lineas/${l.id}/estado?perfil=${slug}`)
+        .then((j) => anotarDestino(l.id, j.recibeAqui))
+        .catch(() => undefined);
+    }
+  }, [lineas, slug]);
 
   // Mientras se muestra el QR, se consulta el estado hasta que la línea queda conectada.
   useEffect(() => {
@@ -168,6 +185,20 @@ export function LineasWasender({ slug, marca }: { slug: SlugPerfil; marca: strin
       const j = await pedir(`/api/wasender/lineas/${l.id}/estado?perfil=${slug}`);
       if (j.linea) reemplazar(j.linea);
       if (j.qrImagen) setQr({ lineaId: l.id, imagen: j.qrImagen });
+      anotarDestino(l.id, j.recibeAqui);
+    } catch (e: any) {
+      setError(e.message);
+    }
+  }
+
+  async function recibirAqui(l: Linea) {
+    setError(null);
+    setAviso(null);
+    try {
+      const j = await pedir(`/api/wasender/lineas/${l.id}/conectar`, { method: "POST", body: JSON.stringify({ perfil: slug, accion: "recibir_aqui" }) });
+      if (j.linea) reemplazar(j.linea);
+      anotarDestino(l.id, j.recibeAqui ?? true);
+      setAviso(`Los mensajes de «${l.nombre}» ahora llegan a este panel.`);
     } catch (e: any) {
       setError(e.message);
     }
@@ -297,6 +328,14 @@ export function LineasWasender({ slug, marca }: { slug: SlugPerfil; marca: strin
                     <span className={clsx("rounded-full border px-2.5 py-0.5 text-xs font-medium", TONO[est.tono])}>{est.texto}</span>
                   </div>
                   {l.ultimo_error && <p className="mt-2 text-xs text-red-700">{l.ultimo_error}</p>}
+                  {avisaAfuera[l.id] && (
+                    <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+                      <p>Esta línea le avisa a otro entorno: los mensajes que recibe no llegan a este panel.</p>
+                      <button type="button" onClick={() => recibirAqui(l)} className="tactil rounded-lg bg-amber-900 px-3 text-sm font-semibold text-white hover:bg-amber-800">
+                        Recibir en este panel
+                      </button>
+                    </div>
+                  )}
                   <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm">
                     <Interruptor activo={l.habilitada} onClick={() => cambiar(l, { habilitada: !l.habilitada })} texto="Envía mensajes" ayuda="Apagada no sale nada por esta línea." />
                     <Interruptor activo={l.responde_con_bot} onClick={() => cambiar(l, { responde_con_bot: !l.responde_con_bot })} texto="Responde el bot" ayuda="Apagado, los chats quedan para una persona." />

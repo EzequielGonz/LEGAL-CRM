@@ -166,6 +166,8 @@ export interface DetalleLinea {
   apiKey: string | null;
   webhookSecret: string | null;
   telefono: string | null;
+  /** Dirección a la que la línea avisa. Puede llevar el bypass de la Preview: nunca sale del servidor. */
+  webhookUrl: string | null;
 }
 
 export async function verLinea(sesionId: string, deps: ClienteDeps = {}): Promise<DetalleLinea> {
@@ -176,7 +178,21 @@ export async function verLinea(sesionId: string, deps: ClienteDeps = {}): Promis
     apiKey: typeof data?.api_key === "string" ? data.api_key : null,
     webhookSecret: typeof data?.webhook_secret === "string" ? data.webhook_secret : null,
     telefono: typeof data?.phone_number === "string" ? data.phone_number : null,
+    webhookUrl: typeof data?.webhook_url === "string" ? data.webhook_url : null,
   };
+}
+
+/** Cambia la dirección a la que la línea avisa (por ejemplo, de la Preview a producción). No toca la conexión. */
+export async function actualizarWebhook(sesionId: string, webhookUrl: string, deps: ClienteDeps = {}): Promise<void> {
+  await llamar(
+    `/whatsapp-sessions/${encodeURIComponent(sesionId)}`,
+    {
+      metodo: "PUT",
+      token: tokenDeCuenta(deps.env ?? process.env),
+      cuerpo: { webhook_url: webhookUrl, webhook_enabled: true, webhook_events: [...EVENTOS_WEBHOOK] },
+    },
+    deps
+  );
 }
 
 /** Pide conectar la línea por QR. Devuelve el estado y, si hace falta escanear, el texto del QR. */

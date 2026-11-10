@@ -4,6 +4,7 @@ import { cifrar, descifrar, claveCifradoLista } from "@/lib/wasender/cifrado";
 import {
   EVENTOS_WEBHOOK,
   WasenderError,
+  actualizarWebhook,
   WASENDER_API,
   conectarLinea,
   crearLinea,
@@ -294,7 +295,7 @@ test("wasender: en modo prueba el chat queda en atención humana entre mensajes 
 // ---------------------------------------------------------------- etapa 2: líneas, QR y dirección del webhook
 
 import { esNumeroDeMeta, etiquetaEstado, pideQr, puedeHabilitar, telefonoValido, ultimosDigitos } from "@/lib/wasender/reglas";
-import { configuracionWasender, direccionWebhook } from "@/lib/wasender/webhook-url";
+import { configuracionWasender, direccionWebhook, recibeEnEsteEntorno } from "@/lib/wasender/webhook-url";
 import { qrComoImagen } from "@/lib/wasender/qr";
 
 test("wasender: estados de la línea en palabras simples y cuándo mostrar el QR", () => {
@@ -325,6 +326,28 @@ test("wasender: en la Preview el webhook lleva la dirección fija de la rama y e
   assert.match(sin.falta.join(" "), /Protection Bypass/);
   const prod = direccionWebhook("linea-1", { VERCEL_ENV: "production", NEXT_PUBLIC_APP_URL: "https://panel-ficticio.vercel.app/" });
   assert.equal(prod.url, "https://panel-ficticio.vercel.app/api/webhooks/wasender?linea=linea-1");
+});
+
+test("wasender: se sabe si la línea le avisa a este entorno, sin mirar el bypass", () => {
+  const prod = { VERCEL_ENV: "production", NEXT_PUBLIC_APP_URL: "https://panel-ficticio.vercel.app" };
+  const dePreview = "https://rama-ficticia.vercel.app/api/webhooks/wasender?linea=linea-1&x-vercel-protection-bypass=bypass-ficticio";
+  assert.equal(recibeEnEsteEntorno(dePreview, "linea-1", prod), false);
+  assert.equal(recibeEnEsteEntorno("https://panel-ficticio.vercel.app/api/webhooks/wasender?linea=linea-1", "linea-1", prod), true);
+  assert.equal(recibeEnEsteEntorno("https://panel-ficticio.vercel.app/api/webhooks/wasender?linea=otra", "linea-1", prod), false);
+  const preview = { VERCEL_ENV: "preview", VERCEL_BRANCH_URL: "rama-ficticia.vercel.app", VERCEL_AUTOMATION_BYPASS_SECRET: "otro-bypass" };
+  assert.equal(recibeEnEsteEntorno(dePreview, "linea-1", preview), true);
+  assert.equal(recibeEnEsteEntorno(null, "linea-1", prod), null);
+  assert.equal(recibeEnEsteEntorno("no es una dirección", "linea-1", prod), false);
+});
+
+test("wasender: cambiar a dónde avisa la línea usa el token de la cuenta y no toca la conexión", async () => {
+  const f = falso(200, { success: true, data: {} });
+  await actualizarWebhook("123", "https://panel-ficticio.vercel.app/api/webhooks/wasender?linea=linea-1", { fetchImpl: f.fetchImpl, env: ENV });
+  assert.equal(f.llamadas.length, 1);
+  assert.equal(f.llamadas[0].metodo, "PUT");
+  assert.equal(f.llamadas[0].url, `${WASENDER_API}/whatsapp-sessions/123`);
+  assert.equal(f.llamadas[0].auth, "Bearer pat-ficticio");
+  assert.deepEqual(Object.keys(f.llamadas[0].cuerpo).sort(), ["webhook_enabled", "webhook_events", "webhook_url"]);
 });
 
 test("wasender: la pantalla dice qué falta configurar sin mostrar ningún valor", () => {

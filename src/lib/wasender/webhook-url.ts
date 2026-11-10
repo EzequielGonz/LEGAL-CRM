@@ -37,6 +37,22 @@ export function direccionWebhook(lineaId: string, env: Env = process.env): Direc
 }
 
 /**
+ * ¿La línea le avisa a este entorno? Compara solo el servidor de las dos
+ * direcciones (sin el bypass). null si no se puede saber.
+ */
+export function recibeEnEsteEntorno(webhookActual: string | null, lineaId: string, env: Env = process.env): boolean | null {
+  const propia = direccionWebhook(lineaId, env).url;
+  if (!propia || !webhookActual) return null;
+  try {
+    const a = new URL(webhookActual);
+    const b = new URL(propia);
+    return a.host === b.host && a.pathname === b.pathname && a.searchParams.get("linea") === lineaId;
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Qué falta en la configuración privada para usar Wasender. Solo nombres y,
  * como mucho, el largo de la clave de cifrado: nunca un valor.
  */

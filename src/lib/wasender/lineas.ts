@@ -2,10 +2,10 @@ import { randomUUID } from "node:crypto";
 import { createAdminClient } from "@/lib/supabase/admin";
 import type { Area } from "@/lib/supabase/database.types";
 import { cifrar, claveCifradoLista } from "@/lib/wasender/cifrado";
-import { conectarLinea, crearLinea as crearEnWasender, desconectarLinea, obtenerQr, verLinea, WasenderError, type ClienteDeps } from "@/lib/wasender/cliente";
+import { actualizarWebhook, conectarLinea, crearLinea as crearEnWasender, desconectarLinea, obtenerQr, verLinea, WasenderError, type ClienteDeps } from "@/lib/wasender/cliente";
 import { qrComoImagen } from "@/lib/wasender/qr";
 import { esNumeroDeMeta, pideQr, puedeHabilitar, telefonoValido, ultimosDigitos } from "@/lib/wasender/reglas";
-import { direccionWebhook } from "@/lib/wasender/webhook-url";
+import { direccionWebhook, recibeEnEsteEntorno } from "@/lib/wasender/webhook-url";
 
 /**
  * Líneas de Wasender (10/11): alta, QR, estado, cambios y archivo. Todo en
@@ -182,6 +182,8 @@ async function completarClaves(supabase: Db, fila: any, det: { apiKey: string | 
 export interface EstadoConQr {
   linea: LineaVista;
   qrImagen: string | null;
+  /** Si la línea le avisa a este entorno (producción o la Preview). null si no se pudo saber. */
+  recibeAqui?: boolean | null;
 }
 
 /** Consulta el estado en Wasender y, si hace falta escanear, el QR. */
@@ -206,7 +208,33 @@ export async function estadoYQr(lineaId: string, deps: ClienteDeps & { supabase?
     const qr = await obtenerQr(fila.sesion_id, deps).catch(() => null);
     if (qr) qrImagen = qrComoImagen(qr);
   }
-  return { linea: aVista(await cargar(lineaId, supabase)), qrImagen };
+  return { linea: aVista(await cargar(lineaId, supabase)), qrImagen, recibeAqui: recibeEnEsteEntorno(det.webhookUrl, lineaId, env) };
+}
+
+/**
+ * Hace que la línea le avise a este entorno (10/11: al pasar de la Preview a
+ * producción). Solo cambia la dirección en Wasender: la conexión, el QR y los
+ * interruptores quedan igual. Si Wasender renovó el secreto, se guarda cifrado.
+ */
+export async function recibirAqui(lineaId: string, deps: ClienteDeps & { supabase?: Db } = {}): Promise<EstadoConQr> {
+  const supabase = deps.supabase ?? createAdminClient();
+  const env = deps.env ?? process.env;
+  const fila = await cargar(lineaId, supabase);
+  if (!fila) throw new ErrorLinea("Línea no encontrada.", 404);
+  if (fila.archivada_at) throw new ErrorLinea("La línea está archivada.");
+  if (!fila.sesion_id) throw new ErrorLinea("La línea no se llegó a crear en Wasender.");
+  if (!claveCifradoLista(env)) throw new ErrorLinea("Falta la clave de cifrado (WASENDER_CLAVE_CIFRADO) en este entorno.");
+  const webhook = direccionWebhook(lineaId, env);
+  if (!webhook.url) throw new ErrorLinea(`Falta: ${webhook.falta.join(" y ")}.`);
+  await actualizarWebhook(fila.sesion_id, webhook.url, deps);
+  const det = await verLinea(fila.sesion_id, deps);
+  if (det.webhookSecret) {
+    await (supabase.from("wasender_lineas" as any) as any).update({ webhook_secret_cifrado: cifrar(det.webhookSecret, env) }).eq("id", lineaId);
+  }
+  await registrar(supabase, "wasender_recibir_en_este_entorno", lineaId, {
+    after: { entorno: webhook.esPreview ? "preview" : "produccion", servidor: new URL(webhook.url).host },
+  });
+  return { linea: aVista(await cargar(lineaId, supabase)), qrImagen: null, recibeAqui: recibeEnEsteEntorno(det.webhookUrl, lineaId, env) };
 }
 
 /** Pide a Wasender conectar la línea (genera el QR). */

@@ -63,9 +63,20 @@ La responsable decidió pasar todo a Wasender, con los números al final.
   - Lo que no se puede deducir, como la hora de un turno, queda «[revisar n]» y la plantilla queda inactiva.
   - Los botones de respuesta rápida pasan a «Respondé: …».
 
+## Paso a producción (10/11)
+
+La responsable pidió pasar todo a producción para seguir desde el panel real.
+- **Código:** la rama `wasender-integracion` se integró en `main` sin conflictos (avance directo).
+- **Base:** sin cambios nuevos. `0600` y `0601` ya estaban aplicadas en la base compartida.
+- **Variables en Vercel para producción:**
+  - `WASENDER_PAT` y `WASENDER_CLAVE_CIFRADO` las carga la responsable.
+  - La clave de cifrado tiene que ser **la misma** que en la Preview, si no las claves de las líneas ya guardadas no se pueden leer.
+  - `WASENDER_HABILITADO=true` habilita el envío en general, pero cada línea sigue apagada hasta que se prenda «Envía mensajes».
+- **Botón «Recibir en este panel»:** una línea conectada desde la Preview le sigue avisando a la Preview. La pantalla lo detecta y ofrece el botón, que le pasa a Wasender la dirección de producción. No toca la conexión, el QR ni los interruptores, y queda en `ops_change_log`.
+- **Pausas:** se conservan la pausa general, los agentes, campañas y seguimiento como estaban. Las líneas de Meta funcionan igual.
+
 ## Qué no incluye todavía
 
 - **Etapa 4:** calidad estimada y estadísticas por línea.
 - **Etapa 5:** campañas con Wasender.
 - **Archivos mandados desde el celular:** aparecen como «[Imagen]» y no se guardan; los que manda la persona sí.
-- **Producción:** sin cambios hasta que la responsable apruebe la Preview.
