@@ -50,9 +50,22 @@
 4. **Encender:** con la línea conectada, prender «Envía mensajes». «Responde el bot» viene prendido.
 5. **Probar** escribiéndole al chip desde otro celular propio. Nunca a terceros.
 
+## Bloque 1: plantillas propias (10/11)
+
+La responsable decidió pasar todo a Wasender, con los números al final.
+- **Pestaña «Plantillas»** en la sección Wasender, con:
+  - las variables `{{nombre}}`, `{{asesor}}` y `{{marca}}`;
+  - variantes del mismo mensaje;
+  - vista previa;
+  - archivo con motivo.
+- **Copia de las plantillas aprobadas de Meta** para los cuatro perfiles, con un botón. Sin los avisos internos ni la de ejemplo.
+  - Las variables se traducen según la asignación de la plantilla. Si no tiene asignación, se deducen por el texto («Hola {{n}}», «soy {{n}}», «de {{n}}»).
+  - Lo que no se puede deducir, como la hora de un turno, queda «[revisar n]» y la plantilla queda inactiva.
+  - Los botones de respuesta rápida pasan a «Respondé: …».
+
 ## Qué no incluye todavía
 
-- **Etapa 4:** plantillas propias, calidad estimada y estadísticas por línea.
+- **Etapa 4:** calidad estimada y estadísticas por línea.
 - **Etapa 5:** campañas con Wasender.
 - **Archivos mandados desde el celular:** aparecen como «[Imagen]» y no se guardan; los que manda la persona sí.
 - **Producción:** sin cambios hasta que la responsable apruebe la Preview.

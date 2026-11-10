@@ -133,7 +133,10 @@ export function seccionesDePerfil(slug: SlugPerfil): SeccionMenu[] {
   const configuracion: ItemMenu[] = [{ href: `${base}/configuracion`, label: "Ajustes" }];
 
   // 10/11: Wasender (líneas por QR), debajo de Campañas en los cuatro perfiles.
-  const wasender: ItemMenu[] = [{ href: comun(slug, "wasender"), label: "Líneas", match: "/wasender" }];
+  const wasender: ItemMenu[] = [
+    { href: comun(slug, "wasender"), label: "Líneas", match: "/wasender" },
+    { href: comun(slug, "wasender/plantillas"), label: "Plantillas", match: "/wasender/plantillas" },
+  ];
 
   return [
     seccion("inicio", "Hoy", "inicio", inicio),

@@ -456,3 +456,60 @@ test("wasender: la pantalla dice si la clave de cifrado no llega o si es corta, 
   const falta = configuracionWasender({ VERCEL_ENV: "preview" }).items.find((i) => i.clave === "WASENDER_CLAVE_CIFRADO")!;
   assert.match(falta.detalle!, /Preview/);
 });
+
+// ---------------------------------------------------------------- bloque 1: plantillas propias
+
+import { completar, copiarDesdeMeta, elegirVariante, perfilPorNombreMeta, usoDesdeMeta, validarPlantilla, variablesDe } from "@/lib/wasender/plantillas";
+import { seccionActiva, seccionesDePerfil } from "@/lib/menu";
+
+test("wasender: las plantillas solo aceptan {{nombre}}, {{asesor}} y {{marca}}", () => {
+  assert.deepEqual(variablesDe("Hola {{ Nombre }}, soy {{asesor}} de {{marca}}"), ["nombre", "asesor", "marca"]);
+  assert.deepEqual(validarPlantilla({ nombre: "a", cuerpo: "Hola {{nombre}}", variantes: [] }), []);
+  const p = validarPlantilla({ nombre: "", cuerpo: "Hola {{1}}", variantes: [" "] });
+  assert.deepEqual(p.map((x) => x.campo), ["nombre", "cuerpo", "variante 1"]);
+});
+
+test("wasender: sin nombre de la persona no quedan comas ni espacios sueltos", () => {
+  assert.equal(completar("Hola {{nombre}}, soy {{asesor}} de {{marca}}.", { nombre: "Laura", asesor: "Martín", marca: "Kocos" }), "Hola Laura, soy Martín de Kocos.");
+  assert.equal(completar("Hola {{nombre}}, ¿cómo estás?", { nombre: null }), "Hola, ¿cómo estás?");
+});
+
+test("wasender: cada persona recibe siempre la misma variante y se reparten todas", () => {
+  const vs = ["B", "C"];
+  assert.equal(elegirVariante("A", vs, "contacto-1"), elegirVariante("A", vs, "contacto-1"));
+  const vistas = new Set(Array.from({ length: 60 }, (_, i) => elegirVariante("A", vs, `c-${i}`)));
+  assert.deepEqual([...vistas].sort(), ["A", "B", "C"]);
+  assert.equal(elegirVariante("A", ["", " "], "x"), "A");
+});
+
+test("wasender: una plantilla de Meta se copia con variables con nombre y los botones como texto", () => {
+  const c = copiarDesdeMeta("Hola {{1}}, te escribe {{2}} de {{3}}. ¿Seguís buscando auto?", ["contacto.nombre", "perfil.presentacion", "perfil.marca"], ["Sí, sigo buscando", "Ya compré", "No me escriban más"]);
+  assert.equal(c.cuerpo, "Hola {{nombre}}, te escribe {{asesor}} de {{marca}}. ¿Seguís buscando auto?\n\nRespondé: «Sí, sigo buscando», «Ya compré» o «No me escriban más».");
+  assert.deepEqual(c.sinTraducir, []);
+  // Sin asignación: cada variable se deduce por el texto que la precede.
+  assert.equal(copiarDesdeMeta("Hola {{1}}, soy {{2}} de {{3}}.", null).cuerpo, "Hola {{nombre}}, soy {{asesor}} de {{marca}}.");
+  assert.equal(copiarDesdeMeta("Hola, soy {{1}}, de {{2}}. ¿Tienen un momento?", null).cuerpo, "Hola, soy {{asesor}}, de {{marca}}. ¿Tienen un momento?");
+  assert.equal(copiarDesdeMeta("Hola {{1}}, te escribimos de {{2}} por tu consulta.", null).cuerpo, "Hola {{nombre}}, te escribimos de {{marca}} por tu consulta.");
+  assert.equal(copiarDesdeMeta("Hola, {{1}}. Soy {{2}}, del equipo de {{3}}.", null).cuerpo, "Hola, {{nombre}}. Soy {{asesor}}, del equipo de {{marca}}.");
+  const hora = copiarDesdeMeta("Hola {{1}}, quedamos hoy a las {{2}}.", null);
+  assert.equal(hora.cuerpo, "Hola {{nombre}}, quedamos hoy a las [revisar 2].");
+  assert.deepEqual(hora.sinTraducir, ["{{2}}"]);
+  const raro = copiarDesdeMeta("Turno a las {{2}}", ["contacto.nombre", "cita.hora"]);
+  assert.equal(raro.cuerpo, "Turno a las [revisar 2]");
+  assert.deepEqual(raro.sinTraducir, ["{{2}}"]);
+  assert.equal(perfilPorNombreMeta("autos_recupero_a"), "agencia_0km");
+  assert.equal(perfilPorNombreMeta("form_recibido_cob"), "coberturas_medicas");
+  assert.equal(perfilPorNombreMeta("kocos_apertura"), "marketing");
+  assert.equal(perfilPorNombreMeta("jur_base_fria"), "juridico");
+  assert.equal(perfilPorNombreMeta("hello_world"), null);
+  assert.equal(usoDesdeMeta("seguimiento_3", "x"), "seguimiento");
+  assert.equal(usoDesdeMeta(null, "autos_reagendar"), "seguimiento");
+});
+
+test("wasender: el menú tiene Líneas y Plantillas, y cada ruta marca su pestaña", () => {
+  const s = seccionesDePerfil("marketing");
+  const w = s.find((x) => x.clave === "wasender")!;
+  assert.deepEqual(w.tabs.map((t) => t.label), ["Líneas", "Plantillas"]);
+  assert.equal(seccionActiva(s, "/wasender/plantillas", "perfil=marketing")?.tab.label, "Plantillas");
+  assert.equal(seccionActiva(s, "/wasender", "perfil=marketing")?.tab.label, "Líneas");
+});

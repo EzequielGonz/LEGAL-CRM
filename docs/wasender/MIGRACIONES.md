@@ -34,3 +34,16 @@ Resultado del 10/11: 3 tablas con RLS, 2 columnas y 0 permisos públicos.
 - Si se descarta Wasender, el código de `main` no usa estas tablas ni columnas, y quedan vacías e inofensivas.
 - Las líneas se archivan con motivo desde el panel.
 - Para dejar de recibir, se desconectan las sesiones en Wasender.
+
+## `0601_wasender_plantillas_origen`
+
+Aplicada el 10/11/2026. Antes se comprobó que las columnas no existían y que la tabla estaba vacía.
+
+**Qué agrega** a `wasender_plantillas`:
+- **`origen`:** `panel` o `meta`.
+- **`meta_nombre`:** nombre de la plantilla de Meta de la que se copió.
+- **Dos índices únicos:**
+  - una plantilla de Meta se copia una sola vez por perfil;
+  - dos plantillas activas del mismo perfil no comparten nombre.
+
+Solo agrega. Se puede repetir sin error. Las plantillas de Meta se leen y no se modifican.
