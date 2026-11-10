@@ -82,14 +82,17 @@ async function numerosDeMeta(supabase: Db): Promise<string[]> {
 
 export class ErrorLinea extends Error {
   status: number;
-  constructor(message: string, status = 400) {
+  /** Código para que la pantalla sepa qué preguntar (por ejemplo, «numero_de_meta»). */
+  codigo: string | null;
+  constructor(message: string, status = 400, codigo: string | null = null) {
     super(message);
     this.status = status;
+    this.codigo = codigo;
   }
 }
 
 export async function crearLinea(
-  datos: { rubroId: string; area: Area; nombre: string; telefono: string },
+  datos: { rubroId: string; area: Area; nombre: string; telefono: string; confirmaFueraDeMeta?: boolean },
   deps: ClienteDeps & { supabase?: Db } = {}
 ): Promise<LineaVista> {
   const supabase = deps.supabase ?? createAdminClient();
@@ -100,8 +103,15 @@ export async function crearLinea(
   if (!telefono) throw new ErrorLinea("El número tiene que tener entre 8 y 15 dígitos, con el código de país (por ejemplo +54 9 11 …).");
   if (!(env.WASENDER_PAT ?? "").trim()) throw new ErrorLinea("Falta cargar el token de la cuenta de Wasender (WASENDER_PAT) en Vercel.");
   if (!claveCifradoLista(env)) throw new ErrorLinea("Falta cargar la clave de cifrado (WASENDER_CLAVE_CIFRADO) en Vercel.");
-  if (esNumeroDeMeta(telefono, await numerosDeMeta(supabase))) {
-    throw new ErrorLinea("Ese número figura en una línea de Meta. No se conecta por QR: dejaría de funcionar en Meta.");
+  // Un número que figura en Meta solo se conecta si la responsable confirma que ya lo sacó de Meta
+  // (en WhatsApp Manager). Así no se escanea por error una línea que sigue funcionando en Meta.
+  const deMeta = esNumeroDeMeta(telefono, await numerosDeMeta(supabase));
+  if (deMeta && datos.confirmaFueraDeMeta !== true) {
+    throw new ErrorLinea(
+      "Ese número figura como línea de Meta. Si todavía está en Meta, no lo conectes: dejaría de funcionar allá. Si ya lo sacaste de Meta (WhatsApp Manager → eliminar el número), confirmalo para seguir.",
+      409,
+      "numero_de_meta"
+    );
   }
 
   const id = randomUUID();
@@ -155,7 +165,9 @@ export async function crearLinea(
     throw new ErrorLinea(`No se pudo crear la línea en Wasender: ${detalle}`, 502);
   }
 
-  await registrar(supabase, "wasender_crear_linea", id, { after: { rubro_id: datos.rubroId, area: datos.area, nombre, telefono: ultimosDigitos(telefono) } });
+  await registrar(supabase, "wasender_crear_linea", id, {
+    after: { rubro_id: datos.rubroId, area: datos.area, nombre, telefono: ultimosDigitos(telefono), ...(deMeta ? { confirmo_fuera_de_meta: true } : {}) },
+  });
   return aVista(await cargar(id, supabase));
 }
 

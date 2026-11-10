@@ -32,7 +32,14 @@ export async function POST(request: Request) {
   const area = (perfil.areas.length === 1 ? perfil.areas[0] : body?.area) as Area;
   if (!perfil.areas.includes(area)) return NextResponse.json({ error: "Elegí el área de la línea." }, { status: 400 });
   try {
-    const linea = await crearLinea({ rubroId: perfil.rubroId, area, nombre: String(body?.nombre ?? ""), telefono: String(body?.telefono ?? "") });
+    const linea = await crearLinea({
+      rubroId: perfil.rubroId,
+      area,
+      nombre: String(body?.nombre ?? ""),
+      telefono: String(body?.telefono ?? ""),
+      // Solo si la responsable confirmó en la pantalla que ese número ya no está en Meta.
+      confirmaFueraDeMeta: body?.confirma_fuera_de_meta === true,
+    });
     return NextResponse.json({ ok: true, linea });
   } catch (err) {
     return respuestaError(err);

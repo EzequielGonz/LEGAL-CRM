@@ -48,7 +48,7 @@ const CONSULTA_QR_MS = 4000;
 async function pedir(url: string, init?: RequestInit) {
   const res = await fetch(url, { cache: "no-store", ...init, headers: { "Content-Type": "application/json", ...(init?.headers ?? {}) } });
   const json = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(json?.error ?? `Error ${res.status}`);
+  if (!res.ok) throw Object.assign(new Error(json?.error ?? `Error ${res.status}`), { codigo: json?.codigo ?? null });
   return json;
 }
 
@@ -123,7 +123,20 @@ export function LineasWasender({ slug, marca }: { slug: SlugPerfil; marca: strin
     setError(null);
     setAviso(null);
     try {
-      const j = await pedir("/api/wasender/lineas", { method: "POST", body: JSON.stringify({ perfil: slug, area, nombre, telefono }) });
+      const crear = (confirma: boolean) =>
+        pedir("/api/wasender/lineas", { method: "POST", body: JSON.stringify({ perfil: slug, area, nombre, telefono, confirma_fuera_de_meta: confirma }) });
+      let j: any;
+      try {
+        j = await crear(false);
+      } catch (err: any) {
+        // El número figura como línea de Meta: solo se sigue si se confirma que ya se sacó de Meta.
+        if (err?.codigo !== "numero_de_meta") throw err;
+        const ok = window.confirm(
+          "Ese número figura como línea de Meta.\n\n¿Ya lo eliminaste de Meta (WhatsApp Manager)? Si sigue en Meta y lo conectás por QR, deja de funcionar allá.\n\nAceptar: ya lo saqué de Meta, seguir.\nCancelar: no agregarlo."
+        );
+        if (!ok) throw new Error("No se agregó: el número sigue figurando como línea de Meta.");
+        j = await crear(true);
+      }
       setLineas((ls) => [...(ls ?? []), j.linea]);
       setNombre("");
       setTelefono("");

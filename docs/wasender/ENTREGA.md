@@ -20,7 +20,7 @@
 - **Al crearse la línea:**
   - queda apagada y en modo prueba;
   - su clave y su secreto se guardan cifrados.
-- **Números de Meta:** no deja agregar un número que figura en una línea de Meta.
+- **Números de Meta:** si el número figura como línea de Meta, la pantalla pide confirmar que ya se eliminó de Meta (en WhatsApp Manager) antes de agregarlo. La confirmación queda en `ops_change_log`. Así se pueden pasar números de Meta a Wasender sin escanear por error uno que sigue en Meta.
 - **QR:** «Conectar con QR» muestra el QR como imagen. La pantalla consulta el estado cada 4 s hasta que la línea queda conectada.
 - **Interruptores de cada línea:** «Envía mensajes», «Responde el bot» y «Modo prueba».
 - **Otras acciones:** desconectar y archivar con motivo. No se borra nada.

@@ -22,7 +22,7 @@ export async function lineaDelPerfil(lineaId: string, rubroId: string): Promise<
 }
 
 export function respuestaError(err: unknown): NextResponse {
-  if (err instanceof ErrorLinea) return NextResponse.json({ error: err.message }, { status: err.status });
+  if (err instanceof ErrorLinea) return NextResponse.json({ error: err.message, ...(err.codigo ? { codigo: err.codigo } : {}) }, { status: err.status });
   if (err instanceof WasenderError) return NextResponse.json({ error: err.message }, { status: 502 });
   const msg = String((err as any)?.message ?? err);
   console.error("[wasender]", msg);
