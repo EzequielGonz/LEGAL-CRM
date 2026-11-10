@@ -24,7 +24,7 @@ interface Linea {
 
 interface Config {
   lista: boolean;
-  items: { clave: string; texto: string; ok: boolean }[];
+  items: { clave: string; texto: string; ok: boolean; detalle?: string }[];
 }
 
 const AREA: Record<string, string> = {
@@ -227,7 +227,10 @@ export function LineasWasender({ slug, marca }: { slug: SlugPerfil; marca: strin
             <p className="font-semibold">Falta configurar en Vercel</p>
             <ul className="mt-1 list-disc space-y-0.5 pl-5">
               {faltan.map((i) => (
-                <li key={i.clave}>{i.texto}</li>
+                <li key={i.clave}>
+                  {i.texto}
+                  {i.detalle && <span className="block text-xs text-amber-800">{i.detalle}</span>}
+                </li>
               ))}
             </ul>
           </div>

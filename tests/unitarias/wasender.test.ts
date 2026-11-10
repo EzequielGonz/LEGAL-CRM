@@ -446,3 +446,13 @@ test("wasender: con la firma correcta se guarda el estado de la línea; si se ca
     process.env.WASENDER_CLAVE_CIFRADO = anterior;
   }
 });
+
+test("wasender: la pantalla dice si la clave de cifrado no llega o si es corta, sin mostrarla", () => {
+  const corta = configuracionWasender({ VERCEL_ENV: "preview", WASENDER_CLAVE_CIFRADO: "corta-123" });
+  const item = corta.items.find((i) => i.clave === "WASENDER_CLAVE_CIFRADO")!;
+  assert.equal(item.ok, false);
+  assert.match(item.detalle!, /tiene 9 caracteres y necesita al menos 16/);
+  assert.ok(!JSON.stringify(corta).includes("corta-123"));
+  const falta = configuracionWasender({ VERCEL_ENV: "preview" }).items.find((i) => i.clave === "WASENDER_CLAVE_CIFRADO")!;
+  assert.match(falta.detalle!, /Preview/);
+});

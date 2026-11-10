@@ -36,12 +36,25 @@ export function direccionWebhook(lineaId: string, env: Env = process.env): Direc
   return { url: `https://${base}/api/webhooks/wasender?${p.toString()}`, falta, esPreview };
 }
 
-/** Qué falta en la configuración privada para usar Wasender (solo nombres, nunca valores). */
-export function configuracionWasender(env: Env = process.env): { lista: boolean; items: { clave: string; texto: string; ok: boolean }[] } {
+/**
+ * Qué falta en la configuración privada para usar Wasender. Solo nombres y,
+ * como mucho, el largo de la clave de cifrado: nunca un valor.
+ */
+export function configuracionWasender(env: Env = process.env): { lista: boolean; items: { clave: string; texto: string; ok: boolean; detalle?: string }[] } {
   const esPreview = env.VERCEL_ENV === "preview";
+  const largoClave = (env.WASENDER_CLAVE_CIFRADO ?? "").trim().length;
+  const donde = esPreview ? "No llega a este despliegue: revisá que el nombre sea exacto, que esté marcada para «Preview» y volvé a desplegar." : "No está cargada en este entorno.";
   const items = [
-    { clave: "WASENDER_PAT", texto: "Token de la cuenta de Wasender (WASENDER_PAT)", ok: !!(env.WASENDER_PAT ?? "").trim() },
-    { clave: "WASENDER_CLAVE_CIFRADO", texto: "Clave para guardar cifradas las claves de las líneas (WASENDER_CLAVE_CIFRADO)", ok: (env.WASENDER_CLAVE_CIFRADO ?? "").trim().length >= 16 },
+    { clave: "WASENDER_PAT", texto: "Token de la cuenta de Wasender (WASENDER_PAT)", ok: !!(env.WASENDER_PAT ?? "").trim(), detalle: donde },
+    {
+      clave: "WASENDER_CLAVE_CIFRADO",
+      texto: "Clave para guardar cifradas las claves de las líneas (WASENDER_CLAVE_CIFRADO)",
+      ok: largoClave >= 16,
+      detalle:
+        largoClave === 0
+          ? donde
+          : `Está cargada, pero tiene ${largoClave} caracteres y necesita al menos 16. Cambiala por una frase más larga y volvé a desplegar.`,
+    },
     ...(esPreview
       ? [{ clave: "VERCEL_AUTOMATION_BYPASS_SECRET", texto: "Acceso de Wasender a la Preview (Protection Bypass for Automation)", ok: !!(env.VERCEL_AUTOMATION_BYPASS_SECRET ?? "").trim() }]
       : []),
