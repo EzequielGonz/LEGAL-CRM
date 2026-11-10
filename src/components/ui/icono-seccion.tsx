@@ -40,6 +40,8 @@ const DIBUJOS: Record<string, Dibujo> = {
   enviar: { l: "M20.5 3.5 10 14M20.5 3.5 14 20.5l-4-6.5-6.5-4Z", r: "M20.5 3.5 14 20.5l-4-6.5-6.5-4Z" },
   cerrar: { l: "M6 6l12 12M18 6 6 18" },
   alerta: { l: "M12 4 21 19.5H3ZM12 10v4.5M12 17.3h.01", r: "M12 4 21 19.5H3Z" },
+  // 10/11: Wasender (líneas conectadas por QR).
+  wasender: { l: "M4.5 4.5h5v5h-5zM14.5 4.5h5v5h-5zM4.5 14.5h5v5h-5zM14.5 14.5h2v2h-2zM17.5 17.5h2v2h-2zM14.5 19.5h1M19.5 14.5v1", r: "M4.5 4.5h5v5h-5zM14.5 4.5h5v5h-5zM4.5 14.5h5v5h-5z" },
 };
 
 const POR_RUTA: [RegExp, string][] = [
@@ -57,6 +59,7 @@ const POR_RUTA: [RegExp, string][] = [
   [/extraer/, "extraer"],
   [/bases/, "bases"],
   [/campanas|campana/, "campanas"],
+  [/wasender/, "wasender"],
   [/captacion/, "captacion"],
   [/contenido/, "contenido"],
   [/^redes$/, "redes"],

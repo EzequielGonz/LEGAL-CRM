@@ -290,3 +290,52 @@ test("wasender: en modo prueba el chat queda en atención humana entre mensajes 
   assert.equal(t.wasender_toma_automatica_at, auto);
   assert.deepEqual(cambiosDevolver(), { ai_enabled: true, status: "en_conversacion" });
 });
+
+// ---------------------------------------------------------------- etapa 2: líneas, QR y dirección del webhook
+
+import { esNumeroDeMeta, etiquetaEstado, pideQr, puedeHabilitar, telefonoValido, ultimosDigitos } from "@/lib/wasender/reglas";
+import { configuracionWasender, direccionWebhook } from "@/lib/wasender/webhook-url";
+import { qrComoImagen } from "@/lib/wasender/qr";
+
+test("wasender: estados de la línea en palabras simples y cuándo mostrar el QR", () => {
+  assert.equal(etiquetaEstado("connected").texto, "Conectada");
+  assert.equal(etiquetaEstado("NEED_SCAN").tono, "aviso");
+  assert.equal(etiquetaEstado("raro").texto, "Estado: raro");
+  assert.equal(pideQr("need_scan"), true);
+  assert.equal(pideQr("connected"), false);
+  assert.equal(puedeHabilitar("connected"), true);
+  assert.equal(puedeHabilitar("need_scan"), false);
+});
+
+test("wasender: número válido y nunca una línea que ya está en Meta", () => {
+  assert.equal(telefonoValido("+54 9 11 0000-0000"), "+5491100000000");
+  assert.equal(telefonoValido("123"), null);
+  assert.equal(esNumeroDeMeta("+5491100000000", ["+54 9 11 0000-0000"]), true);
+  assert.equal(esNumeroDeMeta("+5491100000000", ["011 0000-0000"]), true);
+  assert.equal(esNumeroDeMeta("+5491100000000", ["+54 9 11 2222-3333", null, ""]), false);
+  assert.equal(ultimosDigitos("+5491100001234"), "…1234");
+});
+
+test("wasender: en la Preview el webhook lleva la dirección fija de la rama y el acceso de Vercel; sin acceso, avisa qué falta", () => {
+  const preview = { VERCEL_ENV: "preview", VERCEL_BRANCH_URL: "rama-ficticia.vercel.app", VERCEL_AUTOMATION_BYPASS_SECRET: "bypass-ficticio" };
+  const d = direccionWebhook("linea-1", preview);
+  assert.equal(d.url, "https://rama-ficticia.vercel.app/api/webhooks/wasender?linea=linea-1&x-vercel-protection-bypass=bypass-ficticio");
+  const sin = direccionWebhook("linea-1", { VERCEL_ENV: "preview", VERCEL_BRANCH_URL: "rama-ficticia.vercel.app" });
+  assert.equal(sin.url, null);
+  assert.match(sin.falta.join(" "), /Protection Bypass/);
+  const prod = direccionWebhook("linea-1", { VERCEL_ENV: "production", NEXT_PUBLIC_APP_URL: "https://panel-ficticio.vercel.app/" });
+  assert.equal(prod.url, "https://panel-ficticio.vercel.app/api/webhooks/wasender?linea=linea-1");
+});
+
+test("wasender: la pantalla dice qué falta configurar sin mostrar ningún valor", () => {
+  const c = configuracionWasender({ VERCEL_ENV: "preview", WASENDER_PAT: "x" });
+  assert.equal(c.lista, false);
+  assert.deepEqual(c.items.filter((i) => !i.ok).map((i) => i.clave), ["WASENDER_CLAVE_CIFRADO", "VERCEL_AUTOMATION_BYPASS_SECRET", "WASENDER_HABILITADO"]);
+  assert.ok(!JSON.stringify(c).includes('"x"'));
+  assert.equal(configuracionWasender({ ...ENV, VERCEL_ENV: "preview", VERCEL_AUTOMATION_BYPASS_SECRET: "b" }).lista, true);
+});
+
+test("wasender: el QR se dibuja como imagen (no como HTML)", () => {
+  const img = qrComoImagen("2@qr-ficticio-de-prueba,abc,def");
+  assert.match(img, /^data:image\/gif;base64,[A-Za-z0-9+/=]+$/);
+});

@@ -32,7 +32,7 @@ export interface ItemMenu {
   oculto?: boolean;
 }
 
-export type ClaveSeccion = "inicio" | "conversaciones" | "contactos" | "captacion" | "bot" | "linea" | "redes" | "configuracion";
+export type ClaveSeccion = "inicio" | "conversaciones" | "contactos" | "captacion" | "wasender" | "bot" | "linea" | "redes" | "configuracion";
 
 export interface SeccionMenu {
   clave: ClaveSeccion;
@@ -132,11 +132,15 @@ export function seccionesDePerfil(slug: SlugPerfil): SeccionMenu[] {
 
   const configuracion: ItemMenu[] = [{ href: `${base}/configuracion`, label: "Ajustes" }];
 
+  // 10/11: Wasender (líneas por QR), debajo de Campañas en los cuatro perfiles.
+  const wasender: ItemMenu[] = [{ href: comun(slug, "wasender"), label: "Líneas", match: "/wasender" }];
+
   return [
     seccion("inicio", "Hoy", "inicio", inicio),
     seccion("conversaciones", "Chats", "inbox", conversaciones),
     seccion("contactos", "Contactos", "prospectos", contactos),
     seccion("captacion", "Campañas", "campanas", captacion),
+    seccion("wasender", "Wasender", "wasender", wasender),
     seccion("bot", "Bot IA", "agentes", bot, "configurar"),
     seccion("linea", "Línea y plantillas", "consultas", linea, "configurar"),
     seccion("redes", "Redes", "redes", redes, "configurar"),
