@@ -61,3 +61,18 @@ Aplicada el 10/11/2026. Figura como `20261110183838`. Antes se comprobó que las
 - **En `wasender_lineas`:** `limite_diario`, de 1 a 1000 o vacío.
 
 **Cómo revertir:** no se borra nada. Sin campañas de Wasender, las columnas quedan vacías y el motor sigue igual para Meta.
+
+## `0603_wasender_equivalencias`
+
+Aplicada el 10/11/2026. Figura como `20261110235642`. Antes se comprobó que las columnas no existían y que la última migración era la `0602`.
+
+**Qué agrega** en `wasender_lineas` (solo agrega, se puede repetir sin error):
+- **`reemplaza_linea_meta_id` y `reemplaza_desde`:** qué línea de Meta reemplaza y desde cuándo.
+- **`para_avisos`:** si los avisos internos del perfil salen por esta línea.
+- **Dos índices únicos:**
+  - una línea de Meta la reemplaza una sola línea de Wasender activa;
+  - hay una sola línea de avisos por perfil.
+
+Al aplicarla, ninguna línea tenía equivalencia: todo sigue saliendo como antes.
+
+**Cómo revertir:** quitar la equivalencia desde la pantalla. La línea de Meta nunca se modificó.

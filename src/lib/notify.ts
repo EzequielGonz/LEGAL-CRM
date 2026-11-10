@@ -1,5 +1,5 @@
 import { createAdminClient } from "@/lib/supabase/admin";
-import { sendWhatsAppText } from "@/lib/whatsapp/client";
+import { enviarAvisoInterno } from "@/lib/wasender/avisos";
 import { normalizePhoneAR } from "@/lib/phone";
 import type { Area } from "@/lib/supabase/database.types";
 
@@ -32,7 +32,7 @@ function formatQualificationData(data: Record<string, unknown>): string {
  * teléfono cargado desde Configuración quedaba guardado en la base pero
  * nunca se usaba realmente para mandar nada.
  */
-async function getAdminPhones(): Promise<string[]> {
+export async function getAdminPhones(): Promise<string[]> {
   const supabase = createAdminClient();
 
   const rawEnvPhones = process.env.ADMIN_WHATSAPP_PHONES ?? process.env.ADMIN_WHATSAPP_PHONE ?? "";
@@ -139,7 +139,7 @@ export async function notifyAdminOfClosedAppointment(appointmentId: string) {
   let anySent = false;
   for (const phone of adminPhones) {
     try {
-      await sendWhatsAppText(area, phone, messageBody);
+      await enviarAvisoInterno(area, phone, messageBody);
       anySent = true;
     } catch (err: any) {
       sendErrors.push(`${phone}: ${String(err.message ?? err)}`);
@@ -235,7 +235,7 @@ export async function notifyAdminOfQualifiedIntake(contactId: string) {
   let anySent = false;
   for (const phone of adminPhones) {
     try {
-      await sendWhatsAppText(area, phone, messageBody);
+      await enviarAvisoInterno(area, phone, messageBody);
       anySent = true;
     } catch (err: any) {
       sendErrors.push(`${phone}: ${String(err.message ?? err)}`);

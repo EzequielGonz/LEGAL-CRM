@@ -587,3 +587,32 @@ test("wasender campañas: los errores se tratan igual que con Meta", () => {
   assert.equal(caida.certainNotSent, false);
   assert.equal(clasificarFallaWasender(new Error("timeout")).kind, "incierto");
 });
+
+// ---------------------------------------------------------------- equivalencias y avisos (bloque 2)
+import { claveMetaDelArea, decidirDestinoAviso, lineaMetaEfectiva } from "@/lib/wasender/equivalencias";
+
+const LINEAS_META = [
+  { id: "meta-civil", credential_key: "WHATSAPP_CIVIL" },
+  { id: "meta-penal", credential_key: "WHATSAPP_PENAL" },
+  { id: "meta-autos", credential_key: "WHATSAPP_AGENCIA_0KM" },
+];
+
+test("wasender equivalencias: la línea de Meta de un chat es la misma que usa el envío por Meta", () => {
+  assert.equal(claveMetaDelArea("civil"), "WHATSAPP_CIVIL");
+  assert.equal(claveMetaDelArea("agencia_0km"), "WHATSAPP_AGENCIA_0KM");
+  // Chat con su línea activa.
+  assert.equal(lineaMetaEfectiva({ area: "civil", line_id: "meta-penal", linea: { active: true } }, LINEAS_META), "meta-penal");
+  // Línea apagada: Meta usa la conexión de siempre del área.
+  assert.equal(lineaMetaEfectiva({ area: "civil", line_id: "meta-penal", linea: { active: false } }, LINEAS_META), "meta-civil");
+  // Chat sin línea (los más viejos): conexión de siempre del área.
+  assert.equal(lineaMetaEfectiva({ area: "civil", line_id: null, linea: null }, LINEAS_META), "meta-civil");
+  assert.equal(lineaMetaEfectiva({ area: "agencia_0km", line_id: null, linea: null }, LINEAS_META), "meta-autos");
+  assert.equal(lineaMetaEfectiva({ area: "marketing", line_id: null, linea: null }, LINEAS_META), null);
+});
+
+test("wasender avisos: línea de avisos, si no la que reemplaza al área, y si no Meta como siempre", () => {
+  assert.deepEqual(decidirDestinoAviso({ lineaAvisos: null, reemplazoDelArea: null }), { proveedor: "meta" });
+  assert.deepEqual(decidirDestinoAviso({ lineaAvisos: "w1", reemplazoDelArea: null }), { proveedor: "wasender", lineaId: "w1", obligatorio: false });
+  assert.deepEqual(decidirDestinoAviso({ lineaAvisos: null, reemplazoDelArea: "w2" }), { proveedor: "wasender", lineaId: "w2", obligatorio: true });
+  assert.deepEqual(decidirDestinoAviso({ lineaAvisos: "w1", reemplazoDelArea: "w2" }), { proveedor: "wasender", lineaId: "w1", obligatorio: true });
+});

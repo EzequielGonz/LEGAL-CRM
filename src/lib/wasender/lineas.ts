@@ -33,10 +33,15 @@ export interface LineaVista {
   tiene_clave: boolean;
   /** Máximo de mensajes de campaña por día (todas las campañas de la línea). */
   limite_diario: number | null;
+  /** Bloque 2: línea de Meta que esta línea reemplaza (sus chats salen por acá). */
+  reemplaza_linea_meta_id: string | null;
+  reemplaza_desde: string | null;
+  /** Bloque 2: los avisos internos del perfil salen por esta línea. */
+  para_avisos: boolean;
 }
 
 const COLUMNAS =
-  "id, rubro_id, area, nombre, telefono, sesion_id, estado, estado_at, habilitada, responde_con_bot, modo_prueba, ultimo_error, created_at, archivada_at, motivo_archivo, api_key_cifrada, limite_diario";
+  "id, rubro_id, area, nombre, telefono, sesion_id, estado, estado_at, habilitada, responde_con_bot, modo_prueba, ultimo_error, created_at, archivada_at, motivo_archivo, api_key_cifrada, limite_diario, reemplaza_linea_meta_id, reemplaza_desde, para_avisos";
 
 function aVista(f: any): LineaVista {
   return {
@@ -56,7 +61,16 @@ function aVista(f: any): LineaVista {
     motivo_archivo: f.motivo_archivo ?? null,
     tiene_clave: !!f.api_key_cifrada,
     limite_diario: typeof f.limite_diario === "number" ? f.limite_diario : null,
+    reemplaza_linea_meta_id: f.reemplaza_linea_meta_id ?? null,
+    reemplaza_desde: f.reemplaza_desde ?? null,
+    para_avisos: !!f.para_avisos,
   };
+}
+
+/** Líneas de Meta del perfil, para elegir cuál reemplaza una línea de Wasender. */
+export async function lineasMetaDelPerfil(rubroId: string, supabase: Db = createAdminClient()): Promise<{ id: string; label: string; telefono: string | null; activa: boolean }[]> {
+  const { data } = await supabase.from("profile_lines").select("id, label, phone_display, active").eq("rubro_id", rubroId).order("created_at");
+  return ((data ?? []) as any[]).map((l) => ({ id: l.id, label: l.label, telefono: l.phone_display ?? null, activa: !!l.active }));
 }
 
 export async function listarLineas(rubroId: string, supabase: Db = createAdminClient()): Promise<LineaVista[]> {
@@ -267,7 +281,15 @@ export async function desconectar(lineaId: string, deps: ClienteDeps & { supabas
 
 export async function editarLinea(
   lineaId: string,
-  cambios: { nombre?: unknown; habilitada?: unknown; responde_con_bot?: unknown; modo_prueba?: unknown; limite_diario?: unknown },
+  cambios: {
+    nombre?: unknown;
+    habilitada?: unknown;
+    responde_con_bot?: unknown;
+    modo_prueba?: unknown;
+    limite_diario?: unknown;
+    reemplaza_linea_meta_id?: unknown;
+    para_avisos?: unknown;
+  },
   supabase: Db = createAdminClient()
 ): Promise<LineaVista> {
   const fila = await cargar(lineaId, supabase);
@@ -293,6 +315,32 @@ export async function editarLinea(
       if (!Number.isInteger(n) || n < 1 || n > 1000) throw new ErrorLinea("El máximo por día tiene que ser un número entero entre 1 y 1000.");
       update.limite_diario = n;
     }
+  }
+  // Bloque 2: qué línea de Meta reemplaza. Decisión explícita de la responsable; la línea de Meta no se toca.
+  if (cambios.reemplaza_linea_meta_id !== undefined) {
+    const metaId = cambios.reemplaza_linea_meta_id ? String(cambios.reemplaza_linea_meta_id) : null;
+    if (metaId) {
+      const { data: meta } = await supabase.from("profile_lines").select("id, rubro_id, area, label").eq("id", metaId).maybeSingle();
+      if (!meta || (meta as any).rubro_id !== fila.rubro_id) throw new ErrorLinea("Esa línea de Meta no es de este perfil.");
+      // Misma área: así, cuando la persona responde por Wasender, cae en el mismo chat de siempre.
+      if ((meta as any).area !== fila.area) throw new ErrorLinea(`«${(meta as any).label}» es del área ${(meta as any).area} y esta línea es del área ${fila.area}: tienen que ser de la misma área.`);
+      const { data: otra } = await (supabase.from("wasender_lineas" as any) as any)
+        .select("id, nombre")
+        .eq("reemplaza_linea_meta_id", metaId)
+        .is("archivada_at", null)
+        .neq("id", lineaId)
+        .maybeSingle();
+      if (otra) throw new ErrorLinea(`Esa línea de Meta ya la reemplaza «${otra.nombre}».`, 409);
+    }
+    update.reemplaza_linea_meta_id = metaId;
+    update.reemplaza_desde = metaId ? new Date().toISOString() : null;
+  }
+  if (typeof cambios.para_avisos === "boolean") {
+    if (cambios.para_avisos) {
+      // Una sola línea de avisos por perfil: la anterior deja de serlo.
+      await (supabase.from("wasender_lineas" as any) as any).update({ para_avisos: false }).eq("rubro_id", fila.rubro_id).neq("id", lineaId).eq("para_avisos", true);
+    }
+    update.para_avisos = cambios.para_avisos;
   }
   if (!Object.keys(update).length) throw new ErrorLinea("Nada para guardar.");
   const { error } = await (supabase.from("wasender_lineas" as any) as any).update(update).eq("id", lineaId);

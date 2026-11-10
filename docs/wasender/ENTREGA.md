@@ -95,6 +95,29 @@ Pedido de la responsable: la creación, la configuración y el algoritmo de env�
 - **Base:** migración `0602_wasender_campanas`. Ver `MIGRACIONES.md`.
 - **Pendiente para después** (lo pidió la responsable): rotación de plantillas.
 
+## Bloque 2: paso de líneas de Meta y avisos internos (10/11)
+
+**Equivalencia de líneas.** En cada línea de Wasender aparece «Reemplaza a la línea de Meta».
+- **Al elegir una (pide confirmación):** todo lo que el panel le escriba a los chats de esa línea de Meta sale por la línea de Wasender: bot, chat manual, citas y recontacto.
+- **Chats sin línea:** también se cubren los chats que salían por la conexión de siempre del área (en Jurídico son 1.641 chats sin línea asignada). Se usa la misma regla del envío por Meta: la línea del chat si está activa; si no, la del área.
+- **Condiciones:**
+  - la línea de Meta tiene que ser del mismo perfil y de la misma área;
+  - cada línea de Meta la reemplaza una sola línea de Wasender;
+  - queda registrado en `ops_change_log`.
+- **La línea de Meta no se modifica ni se borra.** Al quitar la equivalencia, todo vuelve a salir por Meta.
+- **Campañas de Meta:** una campaña de Meta que usa una línea ya reemplazada no se lanza ni sigue enviando. Avisa que hay que cambiarla a Wasender.
+
+**Avisos internos al equipo.** Son tres: nuevo cliente agendado, caso calificado y lead de Marketing. Salen por una sola puerta (`src/lib/wasender/avisos.ts`), que elige por dónde:
+1. la línea de Wasender del perfil marcada «Avisos internos del perfil»;
+2. si no hay ninguna marcada, la que reemplaza a la conexión de siempre del área;
+3. si no hay ninguna, por Meta, como hasta ahora.
+- **Respaldo:** si la línea de avisos está apagada y la conexión del área sigue en Meta, el aviso sale por Meta para no perderse. Si la conexión del área ya se pasó a Wasender, queda el error registrado.
+- **Eco:** el eco de un aviso a un teléfono del equipo no crea un chat ni pasa nada a atención humana.
+
+**Base:** migración `0603_wasender_equivalencias`. Ver `MIGRACIONES.md`.
+
+**Todavía por Meta (bloque 4):** el seguimiento con plantillas, los formularios web y los presupuestos de Marketing.
+
 ## Qué no incluye todavía
 
 - **Etapa 4:** calidad estimada y estadísticas por línea.

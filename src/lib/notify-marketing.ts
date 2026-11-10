@@ -1,5 +1,5 @@
 import { createAdminClient } from "@/lib/supabase/admin";
-import { sendWhatsAppText } from "@/lib/whatsapp/client";
+import { enviarAvisoInterno } from "@/lib/wasender/avisos";
 import { normalizePhoneAR } from "@/lib/phone";
 
 /**
@@ -123,7 +123,7 @@ export async function notifyMarketingHandoff(
   let anySent = false;
   for (const phone of adminPhones) {
     try {
-      await sendWhatsAppText("marketing", phone, messageBody);
+      await enviarAvisoInterno("marketing", phone, messageBody);
       anySent = true;
     } catch (err: any) {
       sendErrors.push(`${phone}: ${String(err.message ?? err)}`);

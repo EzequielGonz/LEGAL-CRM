@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { requireSession } from "@/lib/acceso/autorizacion";
-import { crearLinea, listarLineas } from "@/lib/wasender/lineas";
+import { crearLinea, lineasMetaDelPerfil, listarLineas } from "@/lib/wasender/lineas";
 import { perfilDe, respuestaError } from "@/lib/wasender/rutas";
 import { configuracionWasender } from "@/lib/wasender/webhook-url";
 import type { Area } from "@/lib/supabase/database.types";
@@ -15,8 +15,8 @@ export async function GET(request: Request) {
   const perfil = perfilDe(new URL(request.url).searchParams.get("perfil"));
   if (!perfil) return NextResponse.json({ error: "Perfil inválido." }, { status: 400 });
   try {
-    const lineas = await listarLineas(perfil.rubroId);
-    return NextResponse.json({ lineas, areas: perfil.areas, configuracion: configuracionWasender() }, { headers: { "Cache-Control": "no-store" } });
+    const [lineas, lineasMeta] = await Promise.all([listarLineas(perfil.rubroId), lineasMetaDelPerfil(perfil.rubroId)]);
+    return NextResponse.json({ lineas, lineasMeta, areas: perfil.areas, configuracion: configuracionWasender() }, { headers: { "Cache-Control": "no-store" } });
   } catch (err) {
     return respuestaError(err);
   }

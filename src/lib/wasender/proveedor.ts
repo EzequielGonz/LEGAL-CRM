@@ -1,4 +1,5 @@
 import { createAdminClient } from "@/lib/supabase/admin";
+import { reemplazoDeConversacion } from "@/lib/wasender/equivalencias";
 
 /**
  * Por dónde sale un mensaje de WhatsApp de una conversación (10/11).
@@ -7,7 +8,9 @@ import { createAdminClient } from "@/lib/supabase/admin";
  * vez. Si ese mensaje llegó por una línea de Wasender, sale por esa línea; si
  * llegó por Meta, sale exactamente como siempre. Si la persona todavía no
  * escribió y la conversación la empezó Wasender (campaña o envío desde su
- * sección), sale por esa línea. Nunca se pasa sola de una línea a otra.
+ * sección), sale por esa línea. Si la línea de Meta del chat se pasó a
+ * Wasender (bloque 2, equivalencia marcada a mano), sale por la línea que la
+ * reemplaza. Nunca se pasa sola de una línea a otra.
  */
 
 export interface FilaSalida {
@@ -53,8 +56,12 @@ export async function salidaDeConversacion(conversationId: string, supabase = cr
       return (data as FilaSalida | null) ?? null;
     };
     const entrante = await ultimo("entrante");
-    if (entrante) return decidirSalida(entrante, null);
-    return decidirSalida(null, await ultimo("saliente"));
+    const decision = entrante ? decidirSalida(entrante, null) : decidirSalida(null, await ultimo("saliente"));
+    if (decision.proveedor === "wasender") return decision;
+    // Bloque 2: si la línea de Meta de este chat se pasó a Wasender (equivalencia
+    // marcada por la responsable), sale por la línea de Wasender que la reemplaza.
+    const reemplazo = await reemplazoDeConversacion(conversationId, supabase);
+    return reemplazo ? { proveedor: "wasender", lineaId: reemplazo } : decision;
   } catch (err) {
     console.error("[wasender] No se pudo decidir por dónde sale el mensaje; sale como siempre:", err);
     return { proveedor: "meta" };

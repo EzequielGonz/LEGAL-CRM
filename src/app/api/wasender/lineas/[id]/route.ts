@@ -20,6 +20,8 @@ export async function PATCH(request: Request, { params }: { params: { id: string
       responde_con_bot: body?.responde_con_bot,
       modo_prueba: body?.modo_prueba,
       limite_diario: body?.limite_diario,
+      reemplaza_linea_meta_id: body?.reemplaza_linea_meta_id,
+      para_avisos: body?.para_avisos,
     });
     return NextResponse.json({ ok: true, linea });
   } catch (err) {

@@ -156,6 +156,13 @@ export async function campaignReadiness(campaign: {
       if (!line.active) missing.push(`La línea «${line.label}» está desactivada`);
       if (!line.use_for_campaigns) missing.push(`La línea «${line.label}» no está habilitada para campañas`);
       if (rubroId && line.rubro_id !== rubroId) missing.push(`La línea «${line.label}» es de otro perfil`);
+      // 10/11 (Wasender, bloque 2): si el número de esta línea se pasó a Wasender, por Meta ya no sale.
+      const { data: reemplazo } = await (createAdminClient().from("wasender_lineas" as any) as any)
+        .select("nombre")
+        .eq("reemplaza_linea_meta_id", line.id)
+        .is("archivada_at", null)
+        .maybeSingle();
+      if (reemplazo) missing.push(`La línea «${line.label}» se pasó a Wasender («${reemplazo.nombre}»): cambiá el método de envío de la campaña a Wasender`);
       const cred = credentialStatus(line.credential_key);
       if (!cred.ok) missing.push(`Credenciales de la línea «${line.label}» (${line.credential_key}_*) en la configuración privada`);
       // Estado real en Meta (18/10): variables cargadas no alcanzan si el número está «Pendiente» o el token no sirve.

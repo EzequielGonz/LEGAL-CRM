@@ -21,6 +21,16 @@ interface Linea {
   motivo_archivo: string | null;
   tiene_clave: boolean;
   limite_diario: number | null;
+  reemplaza_linea_meta_id: string | null;
+  reemplaza_desde: string | null;
+  para_avisos: boolean;
+}
+
+interface LineaMeta {
+  id: string;
+  label: string;
+  telefono: string | null;
+  activa: boolean;
 }
 
 interface Config {
@@ -61,6 +71,7 @@ async function pedir(url: string, init?: RequestInit) {
 export function LineasWasender({ slug, marca }: { slug: SlugPerfil; marca: string }) {
   const [lineas, setLineas] = useState<Linea[] | null>(null);
   const [areas, setAreas] = useState<string[]>([]);
+  const [lineasMeta, setLineasMeta] = useState<LineaMeta[]>([]);
   const [config, setConfig] = useState<Config | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [aviso, setAviso] = useState<string | null>(null);
@@ -80,6 +91,7 @@ export function LineasWasender({ slug, marca }: { slug: SlugPerfil; marca: strin
       const j = await pedir(`/api/wasender/lineas?perfil=${slug}`);
       setLineas(j.lineas ?? []);
       setAreas(j.areas ?? []);
+      setLineasMeta(j.lineasMeta ?? []);
       setConfig(j.configuracion ?? null);
       setError(null);
     } catch (e: any) {
@@ -211,6 +223,33 @@ export function LineasWasender({ slug, marca }: { slug: SlugPerfil; marca: strin
     try {
       const j = await pedir(`/api/wasender/lineas/${l.id}/conectar`, { method: "POST", body: JSON.stringify({ perfil: slug, accion: "desconectar" }) });
       if (j.linea) reemplazar(j.linea);
+    } catch (e: any) {
+      setError(e.message);
+    }
+  }
+
+  async function marcarEquivalencia(l: Linea, metaId: string) {
+    const meta = lineasMeta.find((m) => m.id === metaId);
+    const texto = meta
+      ? `¿«${l.nombre}» reemplaza a la línea de Meta «${meta.label}»?\n\nDesde ahora, todo lo que el panel le escriba a los chats de esa línea (bot, chat manual, citas y recontacto) sale por «${l.nombre}». Hacelo solo si ese número ya se sacó de Meta y está conectado acá. La línea de Meta no se borra.`
+      : `¿Quitar la equivalencia? Los chats de la línea de Meta vuelven a salir por Meta.`;
+    if (!window.confirm(texto)) return;
+    setError(null);
+    setAviso(null);
+    try {
+      const j = await pedir(`/api/wasender/lineas/${l.id}`, { method: "PATCH", body: JSON.stringify({ perfil: slug, reemplaza_linea_meta_id: metaId || null }) });
+      if (j.linea) reemplazar(j.linea);
+      setAviso(meta ? `Listo: los chats de «${meta.label}» salen por «${l.nombre}».` : "Equivalencia quitada.");
+    } catch (e: any) {
+      setError(e.message);
+    }
+  }
+
+  async function avisos(l: Linea) {
+    setError(null);
+    try {
+      await pedir(`/api/wasender/lineas/${l.id}`, { method: "PATCH", body: JSON.stringify({ perfil: slug, para_avisos: !l.para_avisos }) });
+      await cargar();
     } catch (e: any) {
       setError(e.message);
     }
@@ -360,6 +399,39 @@ export function LineasWasender({ slug, marca }: { slug: SlugPerfil; marca: strin
                       onClick={() => cambiar(l, { modo_prueba: !l.modo_prueba })}
                       texto="Modo prueba"
                       ayuda="Entre mensaje y mensaje el chat queda en atención humana, así producción no le escribe."
+                    />
+                  </div>
+                  <div className="mt-3 flex flex-wrap items-end gap-x-5 gap-y-3 text-sm">
+                    <label className="block">
+                      <span className="font-medium text-slate-800">Reemplaza a la línea de Meta</span>
+                      <select
+                        value={l.reemplaza_linea_meta_id ?? ""}
+                        onChange={(e) => marcarEquivalencia(l, e.target.value)}
+                        className="mt-1 block w-64 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm"
+                      >
+                        <option value="">Ninguna</option>
+                        {lineasMeta.map((m) => {
+                          const tomada = activas.some((x) => x.id !== l.id && x.reemplaza_linea_meta_id === m.id);
+                          return (
+                            <option key={m.id} value={m.id} disabled={tomada}>
+                              {m.label}
+                              {m.telefono ? ` (${m.telefono})` : ""}
+                              {tomada ? " · ya reemplazada" : ""}
+                            </option>
+                          );
+                        })}
+                      </select>
+                      <span className="mt-1 block text-xs text-slate-500">
+                        {l.reemplaza_linea_meta_id
+                          ? `Sus chats salen por esta línea desde el ${new Date(l.reemplaza_desde ?? Date.now()).toLocaleDateString("es-AR")}.`
+                          : "Elegila cuando el número ya se sacó de Meta."}
+                      </span>
+                    </label>
+                    <Interruptor
+                      activo={l.para_avisos}
+                      onClick={() => avisos(l)}
+                      texto="Avisos internos del perfil"
+                      ayuda="Los avisos al equipo (cliente agendado, caso calificado) salen por esta línea."
                     />
                   </div>
                   <div className="mt-3 flex flex-wrap gap-2">

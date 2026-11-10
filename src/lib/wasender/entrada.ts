@@ -4,6 +4,7 @@ import { handleInboundMessage } from "@/lib/inbound";
 import { applyDeliveryStatus } from "@/lib/delivery-status";
 import { findOrCreateContact, findOrCreateConversation } from "@/lib/contacts";
 import { insertMessageRow } from "@/lib/messaging";
+import { getAdminPhones } from "@/lib/notify";
 import { supabaseAttachmentStore } from "@/lib/adjuntos/guardar";
 import { ATTACHMENTS_BUCKET, ATTACHMENT_MAX_BYTES, baseMime, extensionFor, storageContentType, storagePathFor, type AttachmentKind } from "@/lib/adjuntos/modelo";
 import { descifrar } from "@/lib/wasender/cifrado";
@@ -175,6 +176,17 @@ async function conversacionExistente(supabase: Db, area: Area, telefono: string)
   return conv ?? null;
 }
 
+/** ¿Es un teléfono del equipo que recibe los avisos internos? Sin chat previo, su eco se ignora. */
+async function esTelefonoDelEquipo(telefono: string): Promise<boolean> {
+  try {
+    const telefonos = await getAdminPhones();
+    const digitos = telefono.replace(/\D/g, "");
+    return telefonos.some((t) => t.replace(/\D/g, "") === digitos);
+  } catch {
+    return false;
+  }
+}
+
 /** ¿Le salió una campaña a este número en los últimos minutos? */
 async function campanaRecienEnviada(supabase: Db, area: Area, telefono: string): Promise<boolean> {
   const { data: contacto } = await supabase.from("contacts").select("id").eq("area", area).eq("phone", telefono).maybeSingle();
@@ -219,6 +231,8 @@ async function procesarPropio(
     return "eco_campana";
   }
 
+  // Avisos internos al equipo (bloque 2): su eco no es un chat con un prospecto.
+  if (await esTelefonoDelEquipo(ev.telefono)) return "aviso_interno";
   // Lo escribió una persona desde el celular: queda en el chat y el chat pasa a atención humana.
   const { conversation } = existente ? { conversation: existente } : await conversacionDe(supabase, area, ev.telefono, null);
   const ahora = new Date().toISOString();
