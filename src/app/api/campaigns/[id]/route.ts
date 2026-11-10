@@ -3,6 +3,7 @@ import { setCampaignArchived } from "@/lib/archive";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { AREA_TO_RUBRO_ID } from "@/lib/rubros";
 import { requireSession } from "@/lib/acceso/autorizacion";
+import { validarEleccionWasender } from "@/lib/wasender/campanas";
 
 /**
  * Las campañas ya no se eliminan (pregunta 20): un DELETE la archiva (y la
@@ -32,13 +33,27 @@ export async function PATCH(request: Request, { params }: { params: { id: string
   const supabase = createAdminClient();
   const { data: campaign } = await supabase
     .from("campaigns")
-    .select("id, area, status, line_id, run_days, template_id, message_template_name, daily_send_limit")
+    .select("id, area, status, line_id, run_days, template_id, message_template_name, daily_send_limit, proveedor, wasender_line_id, wasender_plantilla_id" as any)
     .eq("id", params.id)
-    .maybeSingle();
+    .maybeSingle() as { data: any };
   if (!campaign) return NextResponse.json({ error: "Campaña no encontrada" }, { status: 404 });
 
   const update: Record<string, unknown> = {};
-  if (body?.line_id !== undefined) {
+  // 10/11: campañas por Wasender. El método se elige al crearla; acá se cambian su línea y su plantilla.
+  if ((campaign as any).proveedor === "wasender") {
+    const cambiaLinea = body?.wasender_line_id !== undefined;
+    const cambiaPlantilla = body?.wasender_plantilla_id !== undefined;
+    if (cambiaPlantilla && campaign.status === "en_curso") {
+      return NextResponse.json({ error: "Pausá la campaña para cambiar la plantilla." }, { status: 409 });
+    }
+    const lineaId = cambiaLinea ? (body.wasender_line_id || null) : undefined;
+    const plantillaId = cambiaPlantilla ? (body.wasender_plantilla_id || null) : undefined;
+    const problema = await validarEleccionWasender(AREA_TO_RUBRO_ID[campaign.area as string], { lineaId, plantillaId }, supabase);
+    if (problema) return NextResponse.json({ error: problema }, { status: 400 });
+    if (cambiaLinea) update.wasender_line_id = lineaId;
+    if (cambiaPlantilla) update.wasender_plantilla_id = plantillaId;
+  }
+  if (body?.line_id !== undefined && (campaign as any).proveedor !== "wasender") {
     if (body.line_id === null || body.line_id === "") update.line_id = null;
     else {
       const { data: line } = await supabase.from("profile_lines").select("id, rubro_id, active").eq("id", body.line_id).maybeSingle();
@@ -54,7 +69,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
       : [];
     update.run_days = days.length > 0 && days.length < 6 ? days : null;
   }
-  if (body?.template_id !== undefined) {
+  if (body?.template_id !== undefined && (campaign as any).proveedor !== "wasender") {
     if (campaign.status === "en_curso") {
       return NextResponse.json({ error: "Pausá la campaña para cambiar la plantilla." }, { status: 409 });
     }
@@ -100,6 +115,9 @@ export async function PATCH(request: Request, { params }: { params: { id: string
       template_id: campaign.template_id,
       message_template_name: campaign.message_template_name,
       daily_send_limit: (campaign as any).daily_send_limit,
+      ...((campaign as any).proveedor === "wasender"
+        ? { wasender_line_id: (campaign as any).wasender_line_id, wasender_plantilla_id: (campaign as any).wasender_plantilla_id }
+        : {}),
     },
     after: update,
   });

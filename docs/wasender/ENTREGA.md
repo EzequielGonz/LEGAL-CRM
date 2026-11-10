@@ -75,8 +75,27 @@ La responsable pidió pasar todo a producción para seguir desde el panel real.
 - **Botón «Recibir en este panel»:** una línea conectada desde la Preview le sigue avisando a la Preview. La pantalla lo detecta y ofrece el botón, que le pasa a Wasender la dirección de producción. No toca la conexión, el QR ni los interruptores, y queda en `ops_change_log`.
 - **Pausas:** se conservan la pausa general, los agentes, campañas y seguimiento como estaban. Las líneas de Meta funcionan igual.
 
+## Bloque 3: campañas por Wasender (10/11)
+
+Pedido de la responsable: la creación, la configuración y el algoritmo de envío son los mismos que con Meta; solo cambia el método de envío.
+- **«Método de envío»** en «Preparar una campaña»: Meta, como siempre, o Wasender. Con Wasender se elige una línea de Wasender y una plantilla propia en vez de la línea y la plantilla de Meta.
+- **Lo que no cambia:** base, nombre, rol del bot, ritmo, días, horario y límite diario. Con Wasender se elige la línea y la plantilla propia; lo demás es igual.
+- **El mismo motor** (`src/lib/campaigns.ts`). La campaña de Wasender usa el mismo tick, bloqueo, reserva atómica del destinatario, prioridad, detenidos, revalidación antes de enviar, espera al azar entre mínimo y máximo, lotes con pausa, límite diario de la campaña, días, horario y calendario. Las ramas nuevas son solo cuatro:
+  - **Antes de lanzar y en cada vuelta:** se comprueban la línea de Wasender (conectada, con «Envía mensajes» prendido, con clave y del perfil) y la plantilla propia (activa, del perfil y sin «[revisar]»).
+  - **Envío:** por la línea de Wasender, con la variante que le toca a esa persona y sus datos (`{{nombre}}`, `{{asesor}}`, `{{marca}}`).
+  - **Errores:** se clasifican con las mismas categorías que Meta.
+    - Si el problema es de la línea, el envío queda pendiente y la campaña se pausa.
+    - Si Wasender pide esperar, el envío vuelve a la cola.
+    - Si no se sabe si salió, queda para revisión y no se reenvía solo.
+    - Si el número no tiene WhatsApp, queda como fallido.
+  - **Registro:** en el chat queda el texto real que recibió la persona, el chat queda asociado a la línea de Wasender y la respuesta de la persona vuelve por esa línea con el bot.
+- **Máximo por día de cada línea de Wasender:** botón «Máximo por día» en la tarjeta de la línea. Suma todas sus campañas, igual que el límite de las líneas de Meta.
+- **Estados:** cuando Wasender confirma el envío, el destinatario guarda ese id, así entregado, leído y respondió llegan a las estadísticas de la campaña.
+- **Eco de la campaña:** si el aviso de «enviado» llega antes de que se guarde el mensaje, no se toma como escrito desde el celular y el chat no pasa a atención humana.
+- **Base:** migración `0602_wasender_campanas`. Ver `MIGRACIONES.md`.
+- **Pendiente para después** (lo pidió la responsable): rotación de plantillas.
+
 ## Qué no incluye todavía
 
 - **Etapa 4:** calidad estimada y estadísticas por línea.
-- **Etapa 5:** campañas con Wasender.
 - **Archivos mandados desde el celular:** aparecen como «[Imagen]» y no se guardan; los que manda la persona sí.

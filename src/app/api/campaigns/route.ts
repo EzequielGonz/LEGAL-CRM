@@ -3,6 +3,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { attachRecipients, baseContacts, contactPriorities, planRecipients, planSummary } from "@/lib/campaign-recipients";
 import { AREA_TO_RUBRO_ID } from "@/lib/rubros";
 import { requireSession } from "@/lib/acceso/autorizacion";
+import { validarEleccionWasender } from "@/lib/wasender/campanas";
 
 /**
  * Crea una campaña (siempre en borrador). Si viene `base_id` (toda una
@@ -31,6 +32,8 @@ export async function POST(request: Request) {
     template_id,
     agent_role_id,
   } = body;
+  // 10/11: método de envío. Todo lo demás (destinatarios, ritmo, días) es igual.
+  const porWasender = body?.proveedor === "wasender";
 
   // La plantilla se elige del catálogo (pregunta 22) y puede quedar para
   // después: sin plantilla aprobada la campaña queda en borrador y no se lanza.
@@ -59,7 +62,14 @@ export async function POST(request: Request) {
   // Línea asignada (opcional al crear: sin línea la campaña queda en borrador
   // y no se puede lanzar hasta asignarla). Tiene que ser del mismo perfil.
   let lineId: string | null = null;
-  if (line_id) {
+  let waLineaId: string | null = null;
+  let waPlantillaId: string | null = null;
+  if (porWasender) {
+    waLineaId = typeof body?.wasender_line_id === "string" && body.wasender_line_id ? body.wasender_line_id : null;
+    waPlantillaId = typeof body?.wasender_plantilla_id === "string" && body.wasender_plantilla_id ? body.wasender_plantilla_id : null;
+    const problema = await validarEleccionWasender(AREA_TO_RUBRO_ID[channel.area as string], { lineaId: waLineaId, plantillaId: waPlantillaId }, supabase);
+    if (problema) return NextResponse.json({ error: problema }, { status: 400 });
+  } else if (line_id) {
     const { data: line } = await supabase.from("profile_lines").select("id, rubro_id, area").eq("id", line_id).maybeSingle();
     if (!line || line.rubro_id !== AREA_TO_RUBRO_ID[channel.area as string]) {
       return NextResponse.json({ error: "La línea elegida no pertenece a este perfil." }, { status: 400 });
@@ -85,7 +95,7 @@ export async function POST(request: Request) {
   let templateId: string | null = null;
   let templateName: string | null =
     typeof message_template_name === "string" && message_template_name.trim() ? message_template_name.trim() : null;
-  if (template_id) {
+  if (template_id && !porWasender) {
     if (!lineId) {
       return NextResponse.json({ error: "Para elegir la plantilla, primero asigná la línea que envía." }, { status: 400 });
     }
@@ -115,6 +125,7 @@ export async function POST(request: Request) {
       template_id: templateId,
       status: "borrador",
       line_id: lineId,
+      ...(porWasender ? { proveedor: "wasender", wasender_line_id: waLineaId, wasender_plantilla_id: waPlantillaId } : {}),
       agent_role_id: rolId,
       run_days: runDays && runDays.length > 0 && runDays.length < 6 ? runDays : null,
       // Ritmo "seguro" para no generar bloqueos de WhatsApp: por defecto un

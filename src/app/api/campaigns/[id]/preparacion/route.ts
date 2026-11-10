@@ -3,6 +3,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { campaignReadiness } from "@/lib/profiles";
 import { getAutomationPause } from "@/lib/automation-pause";
 import { requireSession } from "@/lib/acceso/autorizacion";
+import { preparacionWasender, proveedorDe } from "@/lib/wasender/campanas";
 
 export const dynamic = "force-dynamic";
 
@@ -13,11 +14,12 @@ export async function GET(request: Request, { params }: { params: { id: string }
   const supabase = createAdminClient();
   const { data: campaign } = await supabase
     .from("campaigns")
-    .select("area, line_id, message_template_name, template_id, archived_at, status, pause_reason")
+    .select("area, line_id, message_template_name, template_id, archived_at, status, pause_reason, proveedor, wasender_line_id, wasender_plantilla_id" as any)
     .eq("id", params.id)
-    .maybeSingle();
+    .maybeSingle() as { data: any };
   if (!campaign) return NextResponse.json({ error: "Campaña no encontrada" }, { status: 404 });
-  const readiness = await campaignReadiness(campaign as any);
+  // 10/11: por Wasender se comprueban la línea y la plantilla propias.
+  const readiness = proveedorDe(campaign) === "wasender" ? await preparacionWasender(campaign, supabase) : await campaignReadiness(campaign as any);
   const pause = await getAutomationPause();
   const missing = [...readiness.missing];
   if (campaign.archived_at) missing.unshift("La campaña está archivada (recuperala primero)");

@@ -31,10 +31,12 @@ export interface LineaVista {
   archivada_at: string | null;
   motivo_archivo: string | null;
   tiene_clave: boolean;
+  /** Máximo de mensajes de campaña por día (todas las campañas de la línea). */
+  limite_diario: number | null;
 }
 
 const COLUMNAS =
-  "id, rubro_id, area, nombre, telefono, sesion_id, estado, estado_at, habilitada, responde_con_bot, modo_prueba, ultimo_error, created_at, archivada_at, motivo_archivo, api_key_cifrada";
+  "id, rubro_id, area, nombre, telefono, sesion_id, estado, estado_at, habilitada, responde_con_bot, modo_prueba, ultimo_error, created_at, archivada_at, motivo_archivo, api_key_cifrada, limite_diario";
 
 function aVista(f: any): LineaVista {
   return {
@@ -53,6 +55,7 @@ function aVista(f: any): LineaVista {
     archivada_at: f.archivada_at ?? null,
     motivo_archivo: f.motivo_archivo ?? null,
     tiene_clave: !!f.api_key_cifrada,
+    limite_diario: typeof f.limite_diario === "number" ? f.limite_diario : null,
   };
 }
 
@@ -264,7 +267,7 @@ export async function desconectar(lineaId: string, deps: ClienteDeps & { supabas
 
 export async function editarLinea(
   lineaId: string,
-  cambios: { nombre?: unknown; habilitada?: unknown; responde_con_bot?: unknown; modo_prueba?: unknown },
+  cambios: { nombre?: unknown; habilitada?: unknown; responde_con_bot?: unknown; modo_prueba?: unknown; limite_diario?: unknown },
   supabase: Db = createAdminClient()
 ): Promise<LineaVista> {
   const fila = await cargar(lineaId, supabase);
@@ -283,6 +286,14 @@ export async function editarLinea(
   }
   if (typeof cambios.responde_con_bot === "boolean") update.responde_con_bot = cambios.responde_con_bot;
   if (typeof cambios.modo_prueba === "boolean") update.modo_prueba = cambios.modo_prueba;
+  if (cambios.limite_diario !== undefined) {
+    if (cambios.limite_diario === null || cambios.limite_diario === "") update.limite_diario = null;
+    else {
+      const n = Number(cambios.limite_diario);
+      if (!Number.isInteger(n) || n < 1 || n > 1000) throw new ErrorLinea("El máximo por día tiene que ser un número entero entre 1 y 1000.");
+      update.limite_diario = n;
+    }
+  }
   if (!Object.keys(update).length) throw new ErrorLinea("Nada para guardar.");
   const { error } = await (supabase.from("wasender_lineas" as any) as any).update(update).eq("id", lineaId);
   if (error) throw new ErrorLinea(error.message);

@@ -536,3 +536,54 @@ test("wasender: el menú tiene Líneas y Plantillas, y cada ruta marca su pesta�
   assert.equal(seccionActiva(s, "/wasender/plantillas", "perfil=marketing")?.tab.label, "Plantillas");
   assert.equal(seccionActiva(s, "/wasender", "perfil=marketing")?.tab.label, "Líneas");
 });
+
+// ---------------------------------------------------------------- campañas (bloque 3)
+import { clasificarFallaWasender, faltantesWasender, proveedorDe, textoDeCampana } from "@/lib/wasender/campanas";
+import { LineaWasenderNoDisponible as NoDisponible } from "@/lib/wasender/envio";
+
+const PERFIL_OK = { brand_name: "Marca ficticia", agent_presentation_name: "Asesor ficticio" };
+const LINEA_OK = { id: "l1", rubro_id: "r1", nombre: "Chip 1", habilitada: true, estado: "connected", api_key_cifrada: "v1.x", archivada_at: null, limite_diario: null };
+const PLANTILLA_OK = { id: "p1", rubro_id: "r1", nombre: "Saludo", cuerpo: "Hola {{nombre}}, soy {{asesor}} de {{marca}}.", variantes: ["Buenas {{nombre}}! Te escribe {{asesor}}."], activa: true, archivada_at: null };
+
+test("wasender campañas: las existentes y las sin método son de Meta", () => {
+  assert.equal(proveedorDe({}), "meta");
+  assert.equal(proveedorDe({ proveedor: null }), "meta");
+  assert.equal(proveedorDe({ proveedor: "meta" }), "meta");
+  assert.equal(proveedorDe({ proveedor: "wasender" }), "wasender");
+});
+
+test("wasender campañas: lista para lanzar solo con línea conectada y prendida, y plantilla activa del perfil", () => {
+  const base = { area: "civil" as any, rubroId: "r1", perfil: PERFIL_OK, linea: LINEA_OK, lineaAsignada: true, plantilla: PLANTILLA_OK, plantillaAsignada: true };
+  assert.deepEqual(faltantesWasender(base, ENV), []);
+  assert.match(faltantesWasender({ ...base, lineaAsignada: false, linea: null }, ENV).join(" "), /Línea de Wasender asignada/);
+  assert.match(faltantesWasender({ ...base, linea: { ...LINEA_OK, habilitada: false } }, ENV).join(" "), /apagada/);
+  assert.match(faltantesWasender({ ...base, linea: { ...LINEA_OK, estado: "need_scan" } }, ENV).join(" "), /no está conectada/);
+  assert.match(faltantesWasender({ ...base, linea: { ...LINEA_OK, rubro_id: "otro" } }, ENV).join(" "), /otro perfil/);
+  assert.match(faltantesWasender(base, { ...ENV, WASENDER_HABILITADO: "" }).join(" "), /apagado en este entorno/);
+  assert.match(faltantesWasender({ ...base, plantilla: { ...PLANTILLA_OK, activa: false } }, ENV).join(" "), /inactiva/);
+  assert.match(faltantesWasender({ ...base, plantilla: { ...PLANTILLA_OK, cuerpo: "Turno el [revisar 2]" } }, ENV).join(" "), /\[revisar\]/);
+  assert.match(faltantesWasender({ ...base, perfil: { brand_name: "", agent_presentation_name: "A" } }, ENV).join(" "), /marca/);
+  // Si la plantilla no usa {{marca}}, la marca del perfil no hace falta.
+  assert.deepEqual(faltantesWasender({ ...base, perfil: { brand_name: "", agent_presentation_name: "A" }, plantilla: { ...PLANTILLA_OK, cuerpo: "Hola {{nombre}}", variantes: [] } }, ENV), []);
+});
+
+test("wasender campañas: cada persona recibe siempre la misma variante, con sus datos", () => {
+  const datos = { nombre: "Persona", asesor: "Asesor ficticio", marca: "Marca ficticia" };
+  const a = textoDeCampana(PLANTILLA_OK, datos, "contacto-1");
+  assert.equal(textoDeCampana(PLANTILLA_OK, datos, "contacto-1"), a);
+  assert.ok(!a.includes("{{"));
+  const textos = new Set(Array.from({ length: 30 }, (_, i) => textoDeCampana(PLANTILLA_OK, datos, `c-${i}`)));
+  assert.equal(textos.size, 2);
+  assert.equal(textoDeCampana({ cuerpo: "Hola {{nombre}}, ¿cómo va?", variantes: [] }, { ...datos, nombre: "" }, "x"), "Hola, ¿cómo va?");
+});
+
+test("wasender campañas: los errores se tratan igual que con Meta", () => {
+  assert.equal(clasificarFallaWasender(new NoDisponible("apagada")).kind, "cuenta");
+  assert.equal(clasificarFallaWasender(new WasenderError("x", 429, 5000)).kind, "transitorio");
+  assert.equal(clasificarFallaWasender(new WasenderError("x", 401)).kind, "cuenta");
+  assert.equal(clasificarFallaWasender(new WasenderError("The phone number is not on WhatsApp", 422)).kind, "contacto");
+  const caida = clasificarFallaWasender(new WasenderError("x", 502));
+  assert.equal(caida.kind, "incierto");
+  assert.equal(caida.certainNotSent, false);
+  assert.equal(clasificarFallaWasender(new Error("timeout")).kind, "incierto");
+});

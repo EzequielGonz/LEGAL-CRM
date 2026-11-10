@@ -47,3 +47,17 @@ Aplicada el 10/11/2026. Antes se comprobó que las columnas no existían y que l
   - dos plantillas activas del mismo perfil no comparten nombre.
 
 Solo agrega. Se puede repetir sin error. Las plantillas de Meta se leen y no se modifican.
+
+## `0602_wasender_campanas`
+
+Aplicada el 10/11/2026. Figura como `20261110183838`. Antes se comprobó que las columnas no existían y que la última migración era la `0601`.
+
+**Qué agrega** (solo agrega, se puede repetir sin error):
+- **En `campaigns`:**
+  - `proveedor`: `meta` por defecto, o `wasender`;
+  - `wasender_line_id`;
+  - `wasender_plantilla_id`.
+  Las 16 campañas existentes quedaron en `meta`, sin cambios.
+- **En `wasender_lineas`:** `limite_diario`, de 1 a 1000 o vacío.
+
+**Cómo revertir:** no se borra nada. Sin campañas de Wasender, las columnas quedan vacías y el motor sigue igual para Meta.

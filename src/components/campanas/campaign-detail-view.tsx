@@ -12,6 +12,7 @@ import { Pager, pageFromParam } from "@/components/ui/pager";
 import { getCampaignMetrics } from "@/lib/campaign-metrics";
 import { effectiveSendHours } from "@/lib/horario";
 import { statusLabel } from "@/lib/plantillas/catalogo";
+import { detalleWasender } from "@/lib/wasender/campanas";
 import { CAMPAIGN_STATUS_LABEL } from "@/lib/campaign-status";
 import { EnlaceAvanzado } from "@/components/nivel/nivel";
 import { agruparErrores, explicarError, leerErrorGuardado, lineaError } from "@/lib/envios/explicacion";
@@ -79,13 +80,19 @@ export async function CampaignDetailView({
     .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
   if (filter.statuses) recipientsQuery = recipientsQuery.in("status", filter.statuses);
 
+  // 10/11: en una campaña de Wasender, la línea y la plantilla son las propias.
+  const wa = (campaign as any).proveedor === "wasender" ? await detalleWasender(campaign as any) : null;
   const [{ data: recipients, count }, metrics, { data: line }, { data: template }, { data: conError }] = await Promise.all([
     recipientsQuery,
     getCampaignMetrics(campaignId),
-    campaign.line_id
+    wa
+      ? Promise.resolve({ data: wa.line as any })
+      : campaign.line_id
       ? supabase.from("profile_lines").select("label, phone_display").eq("id", campaign.line_id).maybeSingle()
       : Promise.resolve({ data: null as any }),
-    campaign.template_id
+    wa
+      ? Promise.resolve({ data: wa.template as any })
+      : campaign.template_id
       ? supabase.from("whatsapp_templates").select("name, language, status").eq("id", campaign.template_id).maybeSingle()
       : Promise.resolve({ data: null as any }),
     // 23/10: por qué fallaron (o quedaron pendientes por un error de Meta), agrupado por número de error.

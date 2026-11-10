@@ -8,6 +8,7 @@ import { getCampaignFunnelCounts } from "@/lib/campaigns";
 import { getCampaignMetrics } from "@/lib/campaign-metrics";
 import { CAMPAIGN_STATUS_LABEL } from "@/lib/campaign-status";
 import { esSlugPerfil, type SlugPerfil } from "@/lib/marca";
+import { opcionesWasender } from "@/lib/wasender/campanas";
 
 /** Perfil según la ruta: «/campanas» es Jurídico; «/panel/<perfil>/campanas» el resto. */
 function perfilDe(basePath: string): SlugPerfil | undefined {
@@ -77,6 +78,8 @@ export async function CampanasListView({
     supabase.from("imported_bases").select("id, name, file_name, total_rows, created_rows, created_at").in("area", areas).is("archived_at", null).order("created_at", { ascending: false }).limit(60),
     supabase.from("agent_roles" as any).select("id, nombre").eq("rubro_id", rubroId).is("archived_at", null).order("updated_at", { ascending: false }),
   ]);
+  // 10/11: líneas y plantillas de Wasender (tablas sin permisos públicos: se leen en el servidor).
+  const wasender = await opcionesWasender(rubroId).catch(() => null);
   const funnels = new Map(
     await Promise.all((campaigns ?? []).map(async (c: any) => [c.id, await getCampaignFunnelCounts(supabase, c.id)] as const))
   );
@@ -132,6 +135,7 @@ export async function CampanasListView({
             perfil={perfilDe(basePath)}
             bases={((basesCargadas ?? []) as any[]).map((b) => ({ id: b.id, nombre: b.name || b.file_name || "Base sin nombre", filas: b.total_rows ?? b.created_rows ?? null }))}
             roles={((rolesPerfil ?? []) as any[]).map((r) => ({ id: r.id, nombre: r.nombre }))}
+            wasender={wasender}
           />
         </div>
       ) : null}
@@ -158,8 +162,14 @@ export async function CampanasListView({
                   <span className="tabular-nums">{m?.personas_responden ?? f?.respondieron ?? 0}</span> respondieron · <span className="tabular-nums">{f?.agendados ?? 0}</span> agendados
                 </p>
                 <p className="solo-avanzado mt-1 text-xs text-slate-600 [overflow-wrap:anywhere]">
-                  Plantilla {c.message_template_name ?? "sin elegir"}
-                  {c.message_template_name && !c.template_id ? " (sin confirmar en el catálogo)" : ""}
+                  {c.proveedor === "wasender" ? (
+                    "Envía por Wasender"
+                  ) : (
+                    <>
+                      Plantilla {c.message_template_name ?? "sin elegir"}
+                      {c.message_template_name && !c.template_id ? " (sin confirmar en el catálogo)" : ""}
+                    </>
+                  )}
                 </p>
               </div>
               <span className="solo-avanzado shrink-0">

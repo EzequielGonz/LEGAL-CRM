@@ -15,7 +15,10 @@ export function NewCampaignForm({
   perfil,
   bases = [],
   roles = [],
+  wasender = null,
 }: {
+  /** 10/11: líneas y plantillas de Wasender del perfil. Con ellas aparece «Método de envío». */
+  wasender?: { lineas: { id: string; label: string }[]; plantillas: { id: string; label: string }[] } | null;
   channels: { id: string; label: string }[];
   /** 24/10: bases ya cargadas del perfil, para elegir en vez de escribir. */
   bases?: { id: string; nombre: string; filas: number | null }[];
@@ -37,6 +40,10 @@ export function NewCampaignForm({
   const [channelId, setChannelId] = useState(channels[0]?.id ?? "");
   const [template, setTemplate] = useState("");
   const [lineId, setLineId] = useState(lines.length === 1 ? lines[0].id : "");
+  const [metodo, setMetodo] = useState<"meta" | "wasender">("meta");
+  const [waLinea, setWaLinea] = useState(wasender?.lineas.length === 1 ? wasender.lineas[0].id : "");
+  const [waPlantilla, setWaPlantilla] = useState("");
+  const porWasender = metodo === "wasender";
   const [baseId, setBaseId] = useState("");
   const [rolId, setRolId] = useState("");
   const [minDelaySeconds, setMinDelaySeconds] = useState(50);
@@ -66,13 +73,14 @@ export function NewCampaignForm({
       body: JSON.stringify({
         name,
         channel_id: channelId,
-        template_id: template || null,
+        template_id: porWasender ? null : template || null,
         min_send_delay_seconds: minDelaySeconds,
         max_send_delay_seconds: maxDelaySeconds,
         batch_size: batchSize,
         batch_pause_seconds: batchPauseSeconds,
         daily_send_limit: dailyLimit === "" ? null : dailyLimit,
-        line_id: lineId || null,
+        line_id: porWasender ? null : lineId || null,
+        ...(porWasender ? { proveedor: "wasender", wasender_line_id: waLinea || null, wasender_plantilla_id: waPlantilla || null } : {}),
         base_id: baseId || undefined,
         agent_role_id: rolId || null,
       }),
@@ -184,6 +192,60 @@ export function NewCampaignForm({
           ))}
         </select>
       </div>
+      {wasender && (
+        <div>
+          <label htmlFor="campana-metodo" className="mb-1 block text-sm font-medium text-slate-700">Método de envío</label>
+          <select
+            id="campana-metodo"
+            value={metodo}
+            onChange={(e) => setMetodo(e.target.value === "wasender" ? "wasender" : "meta")}
+            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
+          >
+            <option value="meta">Meta (API oficial de WhatsApp)</option>
+            <option value="wasender">Wasender (líneas conectadas por QR)</option>
+          </select>
+          <p className="mt-1 text-xs text-slate-600">El ritmo, los días, el horario y los destinatarios funcionan igual con los dos métodos.</p>
+        </div>
+      )}
+      {porWasender && wasender ? (
+        <>
+          <div>
+            <label htmlFor="campana-wa-linea" className="mb-1 block text-sm font-medium text-slate-700">Línea que envía</label>
+            <select
+              id="campana-wa-linea"
+              value={waLinea}
+              onChange={(e) => setWaLinea(e.target.value)}
+              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
+            >
+              <option value="">Asignar después</option>
+              {wasender.lineas.map((l) => (
+                <option key={l.id} value={l.id}>
+                  {l.label}
+                </option>
+              ))}
+            </select>
+            <p className="mt-1 text-xs text-slate-600">Líneas de la sección Wasender. Tiene que estar conectada y con «Envía mensajes» prendido para lanzarla.</p>
+          </div>
+          <div>
+            <label htmlFor="campana-wa-plantilla" className="mb-1 block text-sm font-medium text-slate-700">Plantilla (Wasender)</label>
+            <select
+              id="campana-wa-plantilla"
+              value={waPlantilla}
+              onChange={(e) => setWaPlantilla(e.target.value)}
+              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
+            >
+              <option value="">Elegir después</option>
+              {wasender.plantillas.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.label}
+                </option>
+              ))}
+            </select>
+            <p className="mt-1 text-xs text-slate-600">Plantillas activas de Wasender → Plantillas. Cada persona recibe una de sus variantes.</p>
+          </div>
+        </>
+      ) : (
+      <>
       <div>
         <label htmlFor="campana-linea" className="mb-1 block text-sm font-medium text-slate-700">Línea que envía</label>
         <select
@@ -207,6 +269,15 @@ export function NewCampaignForm({
         </p>
       </div>
       <div>
+        <p className="mb-1 block text-sm font-medium text-slate-700">Plantilla (catálogo de la línea)</p>
+        <TemplatePicker lineId={lineId || null} value={template} onChange={setTemplate} ariaLabel="Plantilla (catálogo de la línea)" />
+        <p className="mt-1 text-xs text-slate-600">
+          Solo plantillas aprobadas según Meta y asignadas a la línea para campañas. Se puede elegir después.
+        </p>
+      </div>
+      </>
+      )}
+      <div>
         <label htmlFor="campana-rol" className="mb-1 block text-sm font-medium text-slate-700">Rol del bot en esta campaña</label>
         <select
           id="campana-rol"
@@ -222,13 +293,6 @@ export function NewCampaignForm({
           ))}
         </select>
         <p className="mt-1 text-xs text-slate-600">Vale solo para esta campaña. Se puede cambiar o editar después desde la campaña.</p>
-      </div>
-      <div>
-        <p className="mb-1 block text-sm font-medium text-slate-700">Plantilla (catálogo de la línea)</p>
-        <TemplatePicker lineId={lineId || null} value={template} onChange={setTemplate} ariaLabel="Plantilla (catálogo de la línea)" />
-        <p className="mt-1 text-xs text-slate-600">
-          Solo plantillas aprobadas según Meta y asignadas a la línea para campañas. Se puede elegir después.
-        </p>
       </div>
 
       <p className="solo-simple rounded-lg bg-slate-50 px-3 py-2 text-sm text-slate-700">

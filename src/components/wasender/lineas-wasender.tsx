@@ -20,6 +20,7 @@ interface Linea {
   archivada_at: string | null;
   motivo_archivo: string | null;
   tiene_clave: boolean;
+  limite_diario: number | null;
 }
 
 interface Config {
@@ -215,6 +216,21 @@ export function LineasWasender({ slug, marca }: { slug: SlugPerfil; marca: strin
     }
   }
 
+  async function cambiarLimite(l: Linea) {
+    const v = window.prompt(
+      `Máximo de mensajes de campaña por día para «${l.nombre}», sumando todas sus campañas. Vacío = sin máximo de la línea.`,
+      l.limite_diario ? String(l.limite_diario) : ""
+    );
+    if (v === null) return;
+    setError(null);
+    try {
+      const j = await pedir(`/api/wasender/lineas/${l.id}`, { method: "PATCH", body: JSON.stringify({ perfil: slug, limite_diario: v.trim() === "" ? null : v.trim() }) });
+      if (j.linea) reemplazar(j.linea);
+    } catch (e: any) {
+      setError(e.message);
+    }
+  }
+
   async function cambiar(l: Linea, cambios: Partial<Pick<Linea, "habilitada" | "responde_con_bot" | "modo_prueba">>) {
     setError(null);
     try {
@@ -361,6 +377,9 @@ export function LineasWasender({ slug, marca }: { slug: SlugPerfil; marca: strin
                         Desconectar
                       </button>
                     )}
+                    <button type="button" onClick={() => cambiarLimite(l)} className="tactil rounded-lg border border-slate-300 bg-white px-4 text-sm text-slate-700 hover:bg-slate-50">
+                      {l.limite_diario ? `Máximo ${l.limite_diario} por día` : "Máximo por día"}
+                    </button>
                     <button type="button" onClick={() => archivar(l)} className="tactil rounded-lg px-3 text-sm text-slate-500 underline hover:text-slate-700">
                       Archivar
                     </button>

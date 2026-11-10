@@ -25,7 +25,15 @@ export function CampaignSetup({
   legacyTemplateName,
   running,
   dailyLimit = null,
+  wasender = null,
 }: {
+  /** 10/11: campaña por Wasender: línea y plantilla propias en lugar de las de Meta. */
+  wasender?: {
+    lineas: { id: string; label: string }[];
+    plantillas: { id: string; label: string }[];
+    lineaId: string | null;
+    plantillaId: string | null;
+  } | null;
   campaignId: string;
   lines: { id: string; label: string; ok: boolean; motivo?: string | null; daily_limit: number | null }[];
   lineId: string | null;
@@ -44,6 +52,8 @@ export function CampaignSetup({
   const [days, setDays] = useState<number[]>((runDays ?? []).filter((d) => d >= 1 && d <= 6));
   const [tpl, setTpl] = useState(templateId ?? "");
   const [limite, setLimite] = useState(dailyLimit ? String(dailyLimit) : "");
+  const [waLinea, setWaLinea] = useState(wasender?.lineaId ?? "");
+  const [waPlantilla, setWaPlantilla] = useState(wasender?.plantillaId ?? "");
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -51,8 +61,12 @@ export function CampaignSetup({
     setBusy(true);
     setMsg(null);
     try {
-      const payload: Record<string, unknown> = { line_id: line || null, run_days: days, daily_send_limit: limite.trim() === "" ? null : Number(limite) };
-      if (!running && (tpl || null) !== (templateId ?? null)) payload.template_id = tpl || null;
+      const payload: Record<string, unknown> = wasender
+        ? { wasender_line_id: waLinea || null, run_days: days, daily_send_limit: limite.trim() === "" ? null : Number(limite) }
+        : { line_id: line || null, run_days: days, daily_send_limit: limite.trim() === "" ? null : Number(limite) };
+      if (wasender) {
+        if (!running && (waPlantilla || null) !== (wasender.plantillaId ?? null)) payload.wasender_plantilla_id = waPlantilla || null;
+      } else if (!running && (tpl || null) !== (templateId ?? null)) payload.template_id = tpl || null;
       const res = await fetch(`/api/campaigns/${campaignId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -74,6 +88,23 @@ export function CampaignSetup({
         </p>
       )}
       <div className="flex flex-wrap items-end gap-4">
+        {wasender ? (
+          <label className="text-xs font-medium text-slate-600">
+            Línea que envía (Wasender)
+            <select
+              value={waLinea}
+              onChange={(e) => setWaLinea(e.target.value)}
+              className="mt-1 block w-64 rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
+            >
+              <option value="">Sin asignar</option>
+              {wasender.lineas.map((l) => (
+                <option key={l.id} value={l.id}>
+                  {l.label}
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : (
         <label className="text-xs font-medium text-slate-600">
           Línea que envía
           <select
@@ -94,6 +125,7 @@ export function CampaignSetup({
             ))}
           </select>
         </label>
+        )}
         <div className="text-xs font-medium text-slate-600">
           Días de ejecución
           <div className="mt-1 flex gap-1">
@@ -116,9 +148,25 @@ export function CampaignSetup({
           </p>
         </div>
         <div className="w-72 text-xs font-medium text-slate-600">
-          Plantilla (catálogo de la línea)
+          {wasender ? "Plantilla (Wasender)" : "Plantilla (catálogo de la línea)"}
           <div className="mt-1 font-normal">
             {running ? (
+              <p className="text-slate-500">Pausá la campaña para cambiar la plantilla.</p>
+            ) : wasender ? (
+              <select
+                value={waPlantilla}
+                onChange={(e) => setWaPlantilla(e.target.value)}
+                aria-label="Plantilla (Wasender)"
+                className="block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
+              >
+                <option value="">Sin elegir</option>
+                {wasender.plantillas.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.label}
+                  </option>
+                ))}
+              </select>
+            ) : running ? (
               <p className="text-slate-500">Pausá la campaña para cambiar la plantilla.</p>
             ) : (
               <TemplatePicker lineId={line || null} value={tpl} onChange={setTpl} />
@@ -149,7 +197,7 @@ export function CampaignSetup({
         </button>
         {msg && <span className={`text-xs ${msg.ok ? "text-green-600" : "text-red-600"}`}>{msg.text}</span>}
       </div>
-      {lines.length === 0 && (
+      {!wasender && lines.length === 0 && (
         <p className="mt-2 text-xs text-amber-700">Este perfil no tiene líneas habilitadas para campañas: se registran en Configuración → Perfil, nombres y líneas.</p>
       )}
     </div>

@@ -8,7 +8,7 @@ import { supabaseAttachmentStore } from "@/lib/adjuntos/guardar";
 import { ATTACHMENTS_BUCKET, ATTACHMENT_MAX_BYTES, baseMime, extensionFor, storageContentType, storagePathFor, type AttachmentKind } from "@/lib/adjuntos/modelo";
 import { descifrar } from "@/lib/wasender/cifrado";
 import { descifrarArchivo } from "@/lib/wasender/cliente";
-import { elegirEco, type PendienteEco } from "@/lib/wasender/eco";
+import { elegirEco, type PendienteEco, VENTANA_ECO_MS } from "@/lib/wasender/eco";
 import { estadoComoMeta, firmaValida, traducirEvento, type EventoWasender } from "@/lib/wasender/eventos";
 import { lineaInterna } from "@/lib/wasender/lineas";
 import { wasenderHabilitado } from "@/lib/wasender/envio";
@@ -155,9 +155,14 @@ async function pendientesDe(supabase: Db, conversationId: string): Promise<Pendi
 async function emparejar(supabase: Db, linea: any, conversationId: string, claveId: string, eco: { cuerpo: string | null; tipoMensaje: string | null; esArchivo: boolean }): Promise<boolean> {
   const id = elegirEco(await pendientesDe(supabase, conversationId), { ...eco, lineaId: linea.id }, new Date());
   if (!id) return false;
-  const { data: fila } = await supabase.from("messages").select("metadata").eq("id", id).maybeSingle();
+  const { data: fila } = await supabase.from("messages").select("metadata, external_message_id").eq("id", id).maybeSingle();
   const metadata = { ...((fila as any)?.metadata ?? {}), wasender_pendiente: false, wasender_clave_id: claveId };
   await (supabase.from("messages") as any).update({ external_message_id: claveId, metadata }).eq("id", id);
+  // Campañas por Wasender (bloque 3): el destinatario guarda el mismo id, así entregado y leído llegan a la campaña.
+  const anterior = (fila as any)?.external_message_id;
+  if (typeof anterior === "string" && anterior.startsWith("wasender:")) {
+    await supabase.from("campaign_contacts").update({ message_id: claveId }).eq("message_id", anterior);
+  }
   return true;
 }
 
@@ -168,6 +173,20 @@ async function conversacionExistente(supabase: Db, area: Area, telefono: string)
   if (!contacto) return null;
   const { data: conv } = await supabase.from("conversations").select("*").eq("contact_id", (contacto as any).id).eq("channel_id", channelId).maybeSingle();
   return conv ?? null;
+}
+
+/** ¿Le salió una campaña a este número en los últimos minutos? */
+async function campanaRecienEnviada(supabase: Db, area: Area, telefono: string): Promise<boolean> {
+  const { data: contacto } = await supabase.from("contacts").select("id").eq("area", area).eq("phone", telefono).maybeSingle();
+  if (!contacto) return false;
+  const desde = new Date(Date.now() - VENTANA_ECO_MS).toISOString();
+  const { count } = await supabase
+    .from("campaign_contacts")
+    .select("id", { count: "exact", head: true })
+    .eq("contact_id", (contacto as any).id)
+    .in("status", ["enviando", "enviado"])
+    .or(`sent_at.gte.${desde},status.eq.enviando`);
+  return (count ?? 0) > 0;
 }
 
 /** Mensaje propio: eco de un envío del panel o mensaje escrito desde el celular. */
@@ -190,6 +209,15 @@ async function procesarPropio(
   if (existente && (await emparejar(supabase, linea, existente.id, ev.claveId, ev))) return "eco";
   // «message.sent» solo confirma envíos: si no hay envío del panel, no se inventa un mensaje.
   if (opciones.soloEco) return "eco_sin_envio";
+  // Campañas (bloque 3): si a este número le salió una campaña hace instantes, es su eco
+  // aunque el mensaje todavía no esté guardado. Se espera una vez más y, si no aparece,
+  // no se toma como escrito desde el celular (el chat no pasa a atención humana).
+  if (await campanaRecienEnviada(supabase, area, ev.telefono)) {
+    await esperar(ESPERA_ECO_MS);
+    const otra = existente ?? (await conversacionExistente(supabase, area, ev.telefono));
+    if (otra && (await emparejar(supabase, linea, otra.id, ev.claveId, ev))) return "eco";
+    return "eco_campana";
+  }
 
   // Lo escribió una persona desde el celular: queda en el chat y el chat pasa a atención humana.
   const { conversation } = existente ? { conversation: existente } : await conversacionDe(supabase, area, ev.telefono, null);

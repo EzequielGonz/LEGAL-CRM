@@ -13,6 +13,8 @@ import { classifySendFailure, failureNote, MAX_TRANSIENT_ATTEMPTS } from "@/lib/
 import { randomUUID } from "node:crypto";
 import { effectiveSendHours, getSendWindow, startOfArgentinaDay } from "@/lib/horario";
 import { loadContactCalendar } from "@/lib/contacto/calendario";
+import { clasificarFallaWasender, notaFallaWasender, preparacionWasender, proveedorDe, textoDeCampana } from "@/lib/wasender/campanas";
+import { enviarPorWasender } from "@/lib/wasender/envio";
 
 // El horario vive en src/lib/horario.ts (sin dependencias, se prueba solo); se
 // sigue exportando desde acá para quien ya lo importaba de este archivo.
@@ -206,15 +208,36 @@ async function tickLocked(
   }
   // Configuración del perfil, línea asignada (bloque 1.4) y plantilla del
   // catálogo (pregunta 22): si falta algo, no envía y el envío queda pendiente.
-  const readiness = await campaignReadiness(campaign);
-  if (!readiness.ready || !readiness.line || !readiness.template) {
+  // 10/11: una campaña puede enviar por Wasender. El motor y el ritmo son los
+  // mismos; cambian la preparación (línea y plantilla propias), el envío y el
+  // registro en el chat.
+  const porWasender = proveedorDe(campaign) === "wasender";
+  const wa = porWasender ? await preparacionWasender(campaign as any, supabase) : null;
+  if (wa && (!wa.ready || !wa.linea || !wa.plantilla)) {
+    return { campaignId, action: "not_running", detail: `Falta configurar: ${wa.missing.join("; ")}` };
+  }
+  // Límite diario de la línea de Wasender (sumando todas las campañas que la usan), igual que en Meta.
+  if (wa?.linea?.limite_diario) {
+    const { data: lineCampaigns } = await (supabase.from("campaigns") as any).select("id").eq("wasender_line_id", wa.linea.id);
+    const { count: sentByLine } = await supabase
+      .from("campaign_contacts")
+      .select("id", { count: "exact", head: true })
+      .in("campaign_id", (lineCampaigns ?? []).map((c: any) => c.id))
+      .in("status", ["enviado", "entregado", "leido", "respondio"])
+      .gte("sent_at", startOfArgentinaDay(now).toISOString());
+    if ((sentByLine ?? 0) >= wa.linea.limite_diario) {
+      return { campaignId, action: "daily_limit_reached", detail: `La línea «${wa.linea.nombre}» llegó a su límite de ${wa.linea.limite_diario} envíos por hoy.` };
+    }
+  }
+  const readiness = wa ? null : await campaignReadiness(campaign);
+  if (readiness && (!readiness.ready || !readiness.line || !readiness.template)) {
     return { campaignId, action: "not_running", detail: `Falta configurar: ${readiness.missing.join("; ")}` };
   }
-  const line = readiness.line;
-  const resolved = readiness.template;
-  const template = resolved.template;
+  const line = readiness?.line ?? null;
+  const resolved = readiness?.template ?? null;
+  const template = resolved?.template ?? null;
   // Límite diario de la línea (sumando todas las campañas que la usan).
-  if (line.daily_limit) {
+  if (line?.daily_limit) {
     const { data: lineCampaigns } = await supabase.from("campaigns").select("id").eq("line_id", line.id);
     const { count: sentByLine } = await supabase
       .from("campaign_contacts")
@@ -226,7 +249,7 @@ async function tickLocked(
       return { campaignId, action: "daily_limit_reached", detail: `La línea «${line.label}» llegó a su límite de ${line.daily_limit} envíos por hoy.` };
     }
   }
-  const profile = await getProfile(line.rubro_id);
+  const profile = wa ? wa.perfil : await getProfile(line!.rubro_id);
   const senderName = profile?.agent_presentation_name?.trim() ?? "";
   const brandName = profile?.brand_name?.trim() ?? "";
 
@@ -381,11 +404,15 @@ async function tickLocked(
 
   // Variables de la plantilla con las fuentes elegidas. Si falta un dato de
   // este contacto, su envío no sale (nunca con una variable vacía).
-  const built = buildBodyParameters(resolved.analysis, resolved.sources, {
-    "contacto.nombre": name,
-    "perfil.presentacion": senderName,
-    "perfil.marca": brandName,
-  });
+  const built = resolved
+    ? buildBodyParameters(resolved.analysis, resolved.sources, {
+        "contacto.nombre": name,
+        "perfil.presentacion": senderName,
+        "perfil.marca": brandName,
+      })
+    : { ok: true as const, parameters: [] as Extract<ReturnType<typeof buildBodyParameters>, { ok: true }>["parameters"] };
+  // Wasender: el texto de la plantilla propia, con la variante de esta persona.
+  const textoWasender = wa ? textoDeCampana(wa.plantilla!, { nombre: name, asesor: senderName, marca: brandName }, claim.contact_id ?? claim.id) : null;
   if (!built.ok) {
     const what = built.missing.map((m) => `${m.label} para ${m.variable}`).join(", ");
     // Igual que "Sin teléfono": no hubo intento contra la API, no cuenta para el ritmo.
@@ -436,18 +463,26 @@ async function tickLocked(
   };
 
   let sendResult: any;
+  let envioWasender: Awaited<ReturnType<typeof enviarPorWasender>> | null = null;
   try {
-    sendResult = await sendWhatsAppTemplate(
-      campaign.area,
-      phone,
-      template.name,
-      template.language,
-      built.parameters,
-      { credentialKey: line.credential_key }
-    );
+    if (wa) {
+      envioWasender = await enviarPorWasender({ lineaId: wa.linea!.id, to: phone, body: textoWasender!, plantilla: wa.plantilla!.nombre }, { supabase });
+      // Sin identificador no se puede confirmar el envío: igual que con Meta, va a revisión.
+      if (!envioWasender.externalId) throw Object.assign(new Error("Wasender respondió sin el identificador del mensaje."), { sinConfirmar: true });
+      sendResult = { messages: [{ id: envioWasender.externalId }] };
+    } else {
+      sendResult = await sendWhatsAppTemplate(
+        campaign.area,
+        phone,
+        template!.name,
+        template!.language,
+        built.parameters,
+        { credentialKey: line!.credential_key }
+      );
+    }
   } catch (err) {
-    const failure = classifySendFailure(err);
-    const note = failureNote(failure);
+    const failure = wa ? clasificarFallaWasender(err) : classifySendFailure(err);
+    const note = wa ? notaFallaWasender(failure) : failureNote(failure);
     // Se hizo un intento real contra la API: cuenta para el ritmo.
     await supabase.from("campaigns").update(pacingUpdate).eq("id", campaignId);
 
@@ -455,7 +490,7 @@ async function tickLocked(
       // El problema no es de este contacto: su envío queda pendiente y la
       // campaña se pausa con el motivo, conservando cola y contadores.
       await finishClaim(supabase, claim.id, token, "pendiente", { error: `Pendiente: ${note}` });
-      if (failure.kind === "plantilla") await recordTemplateSendError(template.id, failure.detail);
+      if (failure.kind === "plantilla" && template) await recordTemplateSendError(template.id, failure.detail);
       await supabase
         .from("campaigns")
         .update({ status: "pausada", pause_reason: note, paused_at: new Date().toISOString() })
@@ -490,7 +525,7 @@ async function tickLocked(
   // al celular, no había forma de ver qué había contestado realmente la
   // API. Con este log, la próxima vez se puede revisar en los logs de Vercel.
   console.log(
-    `[campaigns] Respuesta de Meta al enviar a ${phone} (campaña ${campaign.id}):`,
+    `[campaigns] Respuesta de ${wa ? "Wasender" : "Meta"} al enviar a ${phone} (campaña ${campaign.id}):`,
     JSON.stringify(sendResult)
   );
 
@@ -515,20 +550,34 @@ async function tickLocked(
     });
     // La conversación queda asociada a la línea por la que salió el envío,
     // así las respuestas manuales salen por la misma línea.
-    await supabase.from("conversations").update({ line_id: line.id }).eq("id", conversation.id).is("line_id", null);
+    if (wa) await (supabase.from("conversations") as any).update({ wasender_line_id: wa.linea!.id }).eq("id", conversation.id);
+    else await supabase.from("conversations").update({ line_id: line!.id }).eq("id", conversation.id).is("line_id", null);
     const sentAt = new Date().toISOString();
-    const messageRow = {
+    // Wasender: queda el texto real que recibió la persona (el bot lo ve y el eco del envío se empareja por texto).
+    const messageRow = wa
+      ? {
+          conversation_id: conversation.id,
+          sender_type: "agente_ia",
+          direction: "saliente",
+          body: textoWasender!,
+          external_message_id: messageId,
+          delivery_status: "enviado",
+          delivery_status_at: sentAt,
+          metadata: { ...envioWasender!.metadata, campaign_id: campaign.id, wasender_plantilla_id: wa.plantilla!.id },
+          origin: "inicio_campana",
+        }
+      : {
       conversation_id: conversation.id,
       sender_type: "agente_ia",
       direction: "saliente",
       body:
         campaign.area === "marketing" && marketingHook
-          ? `[Mensaje inicial — plantilla ${template.name}${brandName ? ` · ${brandName}` : ""}] Primer contacto automático con el gancho del análisis.`
-          : `[Plantilla de campaña "${campaign.name}": ${template.name}] Primer contacto automático a ${name || "el prospecto"}.`,
+          ? `[Mensaje inicial — plantilla ${template!.name}${brandName ? ` · ${brandName}` : ""}] Primer contacto automático con el gancho del análisis.`
+          : `[Plantilla de campaña "${campaign.name}": ${template!.name}] Primer contacto automático a ${name || "el prospecto"}.`,
       external_message_id: messageId,
       delivery_status: "enviado",
       delivery_status_at: sentAt,
-      metadata: { campaign_id: campaign.id, template: template.name, template_id: template.id, template_language: template.language },
+      metadata: { campaign_id: campaign.id, template: template!.name, template_id: template!.id, template_language: template!.language },
       origin: "inicio_campana",
     };
     let { error: msgError } = await insertMessageRow(supabase, messageRow);
@@ -596,14 +645,20 @@ export async function launchCampaign(campaignId: string): Promise<TickResult> {
   if (campaign.archived_at) throw new Error("La campaña está archivada: recuperala antes de lanzarla.");
   const { data: full } = await supabase
     .from("campaigns")
-    .select("area, line_id, message_template_name, template_id")
+    .select("area, line_id, message_template_name, template_id, proveedor, wasender_line_id, wasender_plantilla_id" as any)
     .eq("id", campaignId)
     .single();
+  if (proveedorDe((full ?? {}) as any) === "wasender") {
+    // 10/11: por Wasender no hay aprobación de plantilla: se comprueban la línea y la plantilla propia.
+    const wa = await preparacionWasender(full as any, supabase);
+    if (!wa.ready) throw new CampaignNotReadyError(wa.missing);
+  } else {
   const readiness = await campaignReadiness(full as any);
   if (!readiness.ready || !readiness.line || !readiness.template) throw new CampaignNotReadyError(readiness.missing);
   // Estado real de la plantilla en Meta en el momento de lanzar (pregunta 22).
   const live = await confirmTemplateLive(readiness.template.template.id, readiness.line);
   if (!live.ok) throw new CampaignNotReadyError([live.message ?? "No se pudo confirmar la plantilla en Meta"]);
+  }
 
   await supabase
     .from("campaigns")
