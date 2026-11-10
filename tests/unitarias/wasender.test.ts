@@ -339,3 +339,110 @@ test("wasender: el QR se dibuja como imagen (no como HTML)", () => {
   const img = qrComoImagen("2@qr-ficticio-de-prueba,abc,def");
   assert.match(img, /^data:image\/gif;base64,[A-Za-z0-9+/=]+$/);
 });
+
+// ---------------------------------------------------------------- etapa 3: eco de los envíos y webhook
+
+import { elegirEco, normalizar, VENTANA_ECO_MS } from "@/lib/wasender/eco";
+import { procesarWebhook } from "@/lib/wasender/entrada";
+
+const AHORA = new Date("2026-11-10T15:00:00.000Z");
+const hace = (s: number) => new Date(AHORA.getTime() - s * 1000).toISOString();
+const pend = (id: string, body: string | null, segs: number, extra: Record<string, unknown> = {}, tipo: string | null = null) => ({
+  id,
+  body,
+  message_type: tipo,
+  created_at: hace(segs),
+  metadata: { wasender_pendiente: true, wasender_line_id: "linea-w", ...extra },
+});
+
+test("wasender: el eco de un envío del panel se empareja por texto, línea y hora; nunca se inventa", () => {
+  const lista = [pend("a", "Hola, ¿cómo estás?", 20), pend("b", "Te paso la info", 10)];
+  assert.equal(elegirEco(lista, { cuerpo: "te paso   la info", tipoMensaje: "text", esArchivo: false, lineaId: "linea-w" }, AHORA), "b");
+  // Otro texto: es un mensaje escrito desde el celular, no un eco.
+  assert.equal(elegirEco(lista, { cuerpo: "Otra cosa", tipoMensaje: "text", esArchivo: false, lineaId: "linea-w" }, AHORA), null);
+  // Otra línea o ya confirmado: no se empareja.
+  assert.equal(elegirEco(lista, { cuerpo: "Te paso la info", tipoMensaje: "text", esArchivo: false, lineaId: "otra" }, AHORA), null);
+  assert.equal(elegirEco([pend("c", "Hola", 5, { wasender_pendiente: false })], { cuerpo: "Hola", tipoMensaje: "text", esArchivo: false, lineaId: "linea-w" }, AHORA), null);
+  // Fuera de la ventana: no se empareja.
+  assert.equal(elegirEco([pend("d", "Hola", VENTANA_ECO_MS / 1000 + 5)], { cuerpo: "Hola", tipoMensaje: "text", esArchivo: false, lineaId: "linea-w" }, AHORA), null);
+  // Archivos: por tipo; sin texto legible, solo si hay un único envío pendiente.
+  const conFoto = [pend("e", "[Foto] mirá", 8, {}, "image"), pend("f", "Hola", 6)];
+  assert.equal(elegirEco(conFoto, { cuerpo: "[Imagen] mirá", tipoMensaje: "image", esArchivo: true, lineaId: "linea-w" }, AHORA), "e");
+  assert.equal(elegirEco([pend("g", "Hola", 3)], { cuerpo: null, tipoMensaje: null, esArchivo: false, lineaId: "linea-w" }, AHORA), "g");
+  assert.equal(elegirEco(conFoto, { cuerpo: null, tipoMensaje: null, esArchivo: false, lineaId: "linea-w" }, AHORA), null);
+  assert.equal(normalizar("  Hola\n  MUNDO "), "hola mundo");
+});
+
+const LINEA_ID = "0f0e0d0c-0b0a-4908-8706-050403020100";
+
+function baseFalsa(lineas: Record<string, any>) {
+  const registro = { eventos: [] as any[], updates: [] as any[] };
+  const from = (tabla: string) => {
+    const filtros: Record<string, unknown> = {};
+    const q: any = {
+      select: () => q,
+      eq: (c: string, v: unknown) => {
+        filtros[c] = v;
+        return q;
+      },
+      maybeSingle: async () => ({ data: tabla === "wasender_lineas" ? lineas[String(filtros.id)] ?? null : null, error: null }),
+      insert: async (fila: any) => {
+        if (tabla === "wasender_eventos") registro.eventos.push(fila);
+        return { error: null };
+      },
+      update: (cambios: any) => ({
+        eq: async (c: string, v: unknown) => {
+          registro.updates.push({ tabla, cambios, [c]: v });
+          return { error: null };
+        },
+      }),
+    };
+    return q;
+  };
+  return { supabase: { from } as any, registro };
+}
+
+test("wasender: el webhook sin la firma de la línea no procesa nada y queda retenido", async () => {
+  const anterior = process.env.WASENDER_CLAVE_CIFRADO;
+  process.env.WASENDER_CLAVE_CIFRADO = ENV.WASENDER_CLAVE_CIFRADO;
+  try {
+    const linea = { id: LINEA_ID, rubro_id: "r", area: "marketing", nombre: "Prueba", webhook_secret_cifrado: cifrar("secreto-ficticio", ENV), api_key_cifrada: null, habilitada: false, estado: "need_scan", archivada_at: null };
+    const { supabase, registro } = baseFalsa({ [LINEA_ID]: linea });
+
+    const desconocida = await procesarWebhook({ lineaId: "no-es-un-id", firma: "secreto-ficticio", payload: { event: "session.status", data: { status: "connected" } } }, { supabase });
+    assert.deepEqual([desconocida.ok, desconocida.motivo], [false, "linea_desconocida"]);
+
+    const mala = await procesarWebhook({ lineaId: LINEA_ID, firma: "otra", payload: { event: "messages.received", data: {} } }, { supabase });
+    assert.deepEqual([mala.ok, mala.motivo], [false, "firma_invalida"]);
+    assert.equal(registro.updates.length, 0);
+    assert.deepEqual(registro.eventos.map((e) => e.resultado), ["retenido", "retenido"]);
+    assert.ok(registro.eventos[1].payload, "lo retenido guarda el contenido para revisarlo");
+  } finally {
+    process.env.WASENDER_CLAVE_CIFRADO = anterior;
+  }
+});
+
+test("wasender: con la firma correcta se guarda el estado de la línea; si se cae, queda apagada", async () => {
+  const anterior = process.env.WASENDER_CLAVE_CIFRADO;
+  process.env.WASENDER_CLAVE_CIFRADO = ENV.WASENDER_CLAVE_CIFRADO;
+  try {
+    const linea = { id: LINEA_ID, rubro_id: "r", area: "marketing", nombre: "Prueba", webhook_secret_cifrado: cifrar("secreto-ficticio", ENV), api_key_cifrada: null, habilitada: true, estado: "connected", archivada_at: null };
+    const { supabase, registro } = baseFalsa({ [LINEA_ID]: linea });
+
+    const ok = await procesarWebhook({ lineaId: LINEA_ID, firma: "secreto-ficticio", payload: { event: "session.status", data: { status: "CONNECTED" } } }, { supabase });
+    assert.deepEqual(ok, { ok: true, resultados: ["sesion:connected"] });
+    assert.equal(registro.updates[0].cambios.estado, "connected");
+    assert.equal("habilitada" in registro.updates[0].cambios, false);
+
+    await procesarWebhook({ lineaId: LINEA_ID, firma: "secreto-ficticio", payload: { event: "session.status", data: { status: "LOGGED_OUT" } } }, { supabase });
+    assert.equal(registro.updates[1].cambios.habilitada, false);
+
+    const qr = await procesarWebhook({ lineaId: LINEA_ID, firma: "secreto-ficticio", payload: { event: "qrcode.updated", data: { qr: "2@x" } } }, { supabase });
+    assert.deepEqual(qr.resultados, ["qr"]);
+    assert.equal(registro.eventos.at(-1).resultado, "ignorado");
+    // Lo procesado no guarda el contenido completo.
+    assert.equal(registro.eventos.every((e) => e.resultado === "retenido" || e.payload === null), true);
+  } finally {
+    process.env.WASENDER_CLAVE_CIFRADO = anterior;
+  }
+});
