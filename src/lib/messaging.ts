@@ -7,6 +7,8 @@ import { getAutomationPause } from "@/lib/automation-pause";
 import { loadContactCalendar } from "@/lib/contacto/calendario";
 import { isContactAllowed } from "@/lib/contacto/reglas";
 import { politicaPorOrigen, type OrigenTarea } from "@/lib/contacto/origen";
+import { salidaDeConversacion } from "@/lib/wasender/proveedor";
+import { enviarPorWasender, LineaWasenderNoDisponible } from "@/lib/wasender/envio";
 
 /**
  * Una salida automática no se hizo porque, al revalidar inmediatamente antes
@@ -176,7 +178,23 @@ export async function sendOutboundMessage({
 
   // Id que devuelve el proveedor: permite guardar después si se entregó y se leyó.
   let externalId: string | null = null;
-  if (channelType === "whatsapp") {
+  // Wasender (10/11): si la persona escribió por última vez por una línea de
+  // Wasender, se responde por esa línea. Si no, sigue exactamente igual que
+  // siempre, por Meta (bloque siguiente, sin cambios).
+  const salida = channelType === "whatsapp" ? await salidaDeConversacion(conversationId) : null;
+  let metadataWasender: Record<string, unknown> | null = null;
+  if (salida?.proveedor === "wasender") {
+    const to = contact?.phone ?? identity?.external_user_id;
+    if (!to) throw new Error("El contacto no tiene teléfono para WhatsApp.");
+    try {
+      const r = await enviarPorWasender({ lineaId: salida.lineaId, to, body, media });
+      externalId = r.externalId;
+      metadataWasender = r.metadata;
+    } catch (err) {
+      if (err instanceof LineaWasenderNoDisponible && senderType !== "admin") throw new AutomaticSendBlockedError("wasender_no_disponible", err.message);
+      throw err;
+    }
+  } else if (channelType === "whatsapp") {
     const to = contact?.phone ?? identity?.external_user_id;
     if (!to) throw new Error("El contacto no tiene teléfono para WhatsApp.");
     // Se responde por la misma línea de la conversación (si se conoce y está
@@ -205,6 +223,7 @@ export async function sendOutboundMessage({
     direction: "saliente",
     body: media ? `[${media.kind === "image" ? "Foto" : media.kind === "video" ? "Video" : "Archivo"}${media.filename ? `: ${media.filename}` : ""}]${body ? ` ${body}` : ""}` : body,
     ...(media ? { message_type: media.kind, metadata: { saliente_path: media.path, saliente_bucket: "chat-salientes" } } : {}),
+    ...(metadataWasender ? { metadata: { ...(media ? { saliente_path: media.path, saliente_bucket: "chat-salientes" } : {}), ...metadataWasender } } : {}),
     external_message_id: externalId,
     delivery_status: externalId ? "enviado" : null,
     delivery_status_at: externalId ? sentAt : null,
