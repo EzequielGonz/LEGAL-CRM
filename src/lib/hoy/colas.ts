@@ -89,3 +89,63 @@ export async function colasDeHoy(rubroId: string, areas: string[]): Promise<Cola
   const porId = new Map(((nombres ?? []) as any[]).map((c) => [c.id as string, (c.full_name as string | null) ?? null]));
   return { esperan: filas.map((f) => ({ ...f, nombre: f.contactId ? porId.get(f.contactId) ?? null : null })), captadosSinDerivar };
 }
+
+/**
+ * Cola única de «Hoy» (12/11, reorganización). Antes la misma persona aparecía
+ * en tres listas distintas (esperan respuesta, por cerrar y captados para
+ * derivar), cada una con otro botón. Ahora cada persona aparece una sola vez,
+ * con lo primero que hay que hacer con ella y, si corresponde, lo segundo.
+ */
+export interface ItemCola {
+  clave: string;
+  contactId: string | null;
+  conversationId: string | null;
+  nombre: string | null;
+  /** Lo primero que hay que hacer. */
+  accion: "responder" | "derivar";
+  /** Además de responder, está captado y falta derivarlo. */
+  tambienDerivar: boolean;
+  detalle: string | null;
+  etiqueta: string | null;
+  at: string | null;
+}
+
+export interface EntradaCola {
+  contactId: string | null;
+  conversationId: string | null;
+  nombre: string | null;
+  detalle?: string | null;
+  etiqueta?: string | null;
+  at: string | null;
+}
+
+/** Une las tres fuentes sin repetir personas. Pura: se prueba sola. */
+export function unificarCola(d: { esperan: EntradaCola[]; porCerrar: EntradaCola[]; captados: EntradaCola[] }): ItemCola[] {
+  const porClave = new Map<string, ItemCola>();
+  const claveDe = (e: EntradaCola) => (e.contactId ? `c:${e.contactId}` : e.conversationId ? `v:${e.conversationId}` : null);
+  const sumar = (e: EntradaCola, accion: ItemCola["accion"]) => {
+    const clave = claveDe(e);
+    if (!clave) return;
+    const previo = porClave.get(clave);
+    if (!previo) {
+      porClave.set(clave, { clave, contactId: e.contactId, conversationId: e.conversationId, nombre: e.nombre, accion, tambienDerivar: false, detalle: e.detalle ?? null, etiqueta: e.etiqueta ?? null, at: e.at });
+      return;
+    }
+    // Ya estaba: se completa lo que falte, sin duplicar la fila.
+    if (accion === "derivar") previo.tambienDerivar = previo.accion === "responder";
+    previo.conversationId ??= e.conversationId;
+    previo.nombre ??= e.nombre;
+    previo.detalle ??= e.detalle ?? null;
+    previo.etiqueta ??= e.etiqueta ?? null;
+  };
+  for (const e of d.esperan) sumar(e, "responder");
+  for (const e of d.porCerrar) sumar(e, "responder");
+  for (const e of d.captados) sumar(e, "derivar");
+  const tiempo = (i: ItemCola) => (i.at ? Date.parse(i.at) : 0);
+  const items = [...porClave.values()];
+  // Primero quienes esperan una respuesta (el que más esperó arriba); después los que falta derivar (el más reciente arriba).
+  return [
+    ...items.filter((i) => i.accion === "responder").sort((a, b) => tiempo(a) - tiempo(b)),
+    ...items.filter((i) => i.accion === "derivar").sort((a, b) => tiempo(b) - tiempo(a)),
+  ];
+}

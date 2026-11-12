@@ -36,8 +36,8 @@ const citas = (filtro: FiltroCitas) => ({ tipo: "citas" as const, filtro });
 
 export const VISTAS_CARTERA: Record<VistaCartera, { titulo: string; bajada: string; grupos: GrupoCartera[] }> = {
   conversaciones: {
-    titulo: "Conversaciones",
-    bajada: "Las oportunidades reales, para cerrar. Cuando derivás a alguien, pasa a Contactos.",
+    titulo: "Oportunidades",
+    bajada: "Quién está más cerca de cerrar. Lo urgente está en Hoy; cuando derivás a alguien, pasa a Contactos.",
     grupos: [
       { clave: "captados", titulo: "Captados para derivar", detalle: "Aceptaron el siguiente paso: pasalos al profesional.", tono: "caliente", accion: "derivar", fuente: op("captado_sin_derivar") },
       { clave: "agendaron", titulo: "Agendaron", detalle: "Tienen una cita próxima y todavía no se derivaron.", tono: "caliente", accion: "ficha", fuente: citas("proximas_sin_derivar") },
@@ -46,8 +46,8 @@ export const VISTAS_CARTERA: Record<VistaCartera, { titulo: string; bajada: stri
     ],
   },
   contactos: {
-    titulo: "Contactos",
-    bajada: "Tu cartera: clientes, citas y seguimientos. La base fría está en Prospectos.",
+    titulo: "Cartera",
+    bajada: "Las personas que ya derivaste, sus citas y sus seguimientos. La base fría está en Prospectos.",
     grupos: [
       { clave: "clientes", titulo: "Clientes derivados", detalle: "Captados y derivados. Registrá cómo terminó cada uno.", tono: "ok", accion: "ficha", fuente: op("derivado") },
       { clave: "ventas", titulo: "Ventas concretadas", detalle: "Derivados que cerraron la operación.", tono: "ok", accion: "ficha", fuente: op("venta") },
@@ -59,8 +59,8 @@ export const VISTAS_CARTERA: Record<VistaCartera, { titulo: string; bajada: stri
     ],
   },
   recuperar: {
-    titulo: "Revisión",
-    bajada: "Lo que se cayó y todavía se puede recuperar.",
+    titulo: "Para recuperar",
+    bajada: "Charlas que se cayeron y todavía se pueden retomar.",
     grupos: [
       { clave: "caidos", titulo: "Seguimientos caídos", detalle: "El seguimiento no avanzó: decidí si se vuelve a intentar.", tono: "alerta", accion: "ficha", fuente: op("seguimiento_caido") },
       { clave: "frenados", titulo: "Dejaron de responder", detalle: "Respondieron y la charla quedó a medias hace más de 3 días.", tono: "alerta", accion: "chat", fuente: op("dejaron_de_responder") },

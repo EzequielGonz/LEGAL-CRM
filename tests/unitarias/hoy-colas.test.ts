@@ -39,3 +39,21 @@ test("ficha: si la persona escribió y el chat lo tiene una persona, el siguient
   // Un detenido sigue teniendo prioridad.
   assert.match(siguientePasoFicha({ ...base, detenido: true, chatTomado: true, esperaRespuesta: true }).texto, /detenido/);
 });
+
+import { unificarCola } from "@/lib/hoy/colas";
+
+test("hoy: cada persona aparece una sola vez en la cola, con lo primero que hay que hacer", () => {
+  const e = (contactId: string, at: string, extra: Record<string, unknown> = {}) => ({ contactId, conversationId: `v-${contactId}`, nombre: `Persona ${contactId}`, at, ...extra });
+  const cola = unificarCola({
+    esperan: [e("a", "2026-11-10T10:00:00Z", { detalle: "¿Me llaman?" }), e("b", "2026-11-09T10:00:00Z")],
+    porCerrar: [e("a", "2026-11-10T10:00:00Z", { detalle: "Volvió a escribir" }), e("c", "2026-11-08T10:00:00Z", { detalle: "Hizo una pregunta que el bot no sabe" })],
+    captados: [e("a", "2026-11-10T09:00:00Z"), e("d", "2026-11-11T09:00:00Z"), e("f", "2026-11-12T09:00:00Z")],
+  });
+  // «a» estaba en las tres listas: queda una sola fila, para responder y además derivar.
+  assert.deepEqual(cola.map((i) => i.contactId), ["c", "b", "a", "f", "d"]);
+  const a = cola.find((i) => i.contactId === "a")!;
+  assert.deepEqual([a.accion, a.tambienDerivar, a.detalle], ["responder", true, "¿Me llaman?"]);
+  assert.deepEqual([cola[3].accion, cola[3].tambienDerivar], ["derivar", false]);
+  // Sin contacto ni conversación no se puede abrir: no entra.
+  assert.equal(unificarCola({ esperan: [{ contactId: null, conversationId: null, nombre: null, at: null }], porCerrar: [], captados: [] }).length, 0);
+});

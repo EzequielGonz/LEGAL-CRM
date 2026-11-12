@@ -8,7 +8,7 @@ export const metadata = { title: "Inbox" };
 export default function InboxLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="marco-inbox flex h-[calc(100vh-4rem)]">
-      <h1 className="sr-only">Inbox</h1>
+      <h1 className="sr-only">Todos los chats</h1>
       <ConversationList />
       <div className="min-w-0 flex-1">{children}</div>
     </div>

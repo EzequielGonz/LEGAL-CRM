@@ -3,7 +3,8 @@ import { notFound } from "next/navigation";
 import { requirePageSession } from "@/lib/acceso/pagina";
 import { MarcoPerfil } from "@/components/perfiles/marco-perfil";
 import { Icono } from "@/components/ui/icono-seccion";
-import { rubroIdDe, enlaceIndicador } from "@/lib/indicadores";
+import { contarIndicador, indicadorPorClave, rubroIdDe, enlaceIndicador } from "@/lib/indicadores";
+import { colasDeHoy } from "@/lib/hoy/colas";
 import { esSlugPerfil, type SlugPerfil } from "@/lib/marca";
 import { conVolver } from "@/lib/navegacion";
 import { VISTAS_CARTERA, cuandoCorto, enlaceConversacion, grupoElegido, iniciales, type Tono, type VistaCartera } from "@/lib/cartera";
@@ -30,11 +31,11 @@ function Ficha({ f, slug, aqui, accion }: { f: FichaCartera; slug: SlugPerfil; a
         </span>
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm font-semibold text-slate-950">{f.nombre}</p>
-          <p className="truncate text-xs tabular-nums text-slate-500">{f.telefono ? `+${f.telefono.replace(/^\+/, "")}` : "Sin teléfono"}</p>
+          <p className="truncate text-[13px] tabular-nums text-slate-500">{f.telefono ? `+${f.telefono.replace(/^\+/, "")}` : "Sin teléfono"}</p>
         </div>
-        {f.area === "penal" ? <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-600">Penal</span> : null}
+        {f.area === "penal" ? <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[13px] font-medium text-slate-600">Penal</span> : null}
       </div>
-      <div className="mt-3 flex flex-wrap gap-1.5 text-xs">
+      <div className="mt-3 flex flex-wrap gap-1.5 text-[13px]">
         <span className="rounded-full bg-slate-100 px-2.5 py-1 font-medium text-slate-700">{f.estado}</span>
         {f.cita ? (
           <span className="inline-flex items-center gap-1 rounded-full bg-gold-500/10 px-2.5 py-1 font-semibold text-gold-800">
@@ -44,7 +45,7 @@ function Ficha({ f, slug, aqui, accion }: { f: FichaCartera; slug: SlugPerfil; a
           </span>
         ) : null}
       </div>
-      {f.actividad ? <p className="mt-2 text-[11px] text-slate-400">Última actividad {cuandoCorto(f.actividad)}</p> : null}
+      {f.actividad ? <p className="mt-2 text-[13px] text-slate-500">Última actividad {cuandoCorto(f.actividad)}</p> : null}
       <div className="mt-auto flex gap-2 pt-3">
         {ficha ? (
           <Link href={ficha} className={chatPrincipal ? "btn-suave-sm flex-1 justify-center" : "btn-gold-sm flex-1 justify-center"}>
@@ -80,7 +81,7 @@ export async function PaginaCartera({ vista, searchParams }: { vista: VistaCarte
   const conteos = await contarVista(rubroId, areas, vista);
   const g = grupoElegido(vista, searchParams.grupo, conteos);
   const aqui = `${ruta}?perfil=${slug}&grupo=${g.clave}`;
-  const [{ fichas, error }, detenidos, incidencias, semana, historico] = await Promise.all([
+  const [{ fichas, error }, detenidos, incidencias, semana, historico, esperan, porDerivar] = await Promise.all([
     listarGrupo(rubroId, areas, g),
     vista === "recuperar" ? contarDetenidos(rubroId) : Promise.resolve(null),
     vista === "recuperar" && slug === "juridico"
@@ -89,7 +90,16 @@ export async function PaginaCartera({ vista, searchParams }: { vista: VistaCarte
     // 20/10: en Conversaciones, la semana más reciente y el historial completo.
     vista === "conversaciones" ? resumenCifras(rubroId, areas).catch(() => null) : Promise.resolve(null),
     vista === "conversaciones" ? getProfileMetrics(rubroId).catch(() => null) : Promise.resolve(null),
+    // 12/11: en Oportunidades, cuántos esperan una respuesta (se atienden desde Hoy).
+    vista === "conversaciones" ? colasDeHoy(rubroId, areas).then((c) => c.esperan.length).catch(() => 0) : Promise.resolve(0),
+    // 12/11: en Cartera, cuántos captados falta derivar (así la cartera vacía dice dónde está la gente).
+    vista === "contactos" ? contarIndicador(rubroId, indicadorPorClave("captado_sin_derivar")!).then((r) => r.count ?? 0).catch(() => 0) : Promise.resolve(0),
   ]);
+  // 12/11: los grupos sin nadie no ocupan una tarjeta cada uno: van en un renglón.
+  const conGente = def.grupos.filter((x) => (conteos[x.clave] ?? 0) > 0 || conteos[x.clave] === null);
+  const vacios = def.grupos.filter((x) => conteos[x.clave] === 0);
+  const todoVacio = conGente.length === 0;
+  const columnas = conGente.length >= 4 ? "lg:grid-cols-4" : conGente.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2";
   const total = conteos[g.clave];
   const cifra = (n: number | null | undefined) => (n === null || n === undefined ? "—" : n.toLocaleString("es-AR"));
   const completa = g.fuente.tipo === "oportunidades" ? enlaceIndicador(slug, g.fuente.indicador, aqui) : `${slug === "juridico" ? "" : `/panel/${slug}`}/agenda`;
@@ -102,73 +112,90 @@ export async function PaginaCartera({ vista, searchParams }: { vista: VistaCarte
           <p className="mt-1 text-sm text-slate-600">{def.bajada}</p>
         </div>
 
-        {vista === "conversaciones" ? (
-          <section aria-labelledby="conv-semana" className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-            <h2 id="conv-semana" className="text-base font-semibold text-slate-950">Esta semana</h2>
-            <p className="text-xs text-slate-500">Desde el lunes</p>
-            <dl className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
-              {[
-                ["Personas que escribieron", semana?.semana.respuestas],
-                ["Captados", semana?.semana.captados],
-                ["Citas", semana?.semana.citas],
-                ["Derivados", semana?.semana.derivados],
-              ].map(([l, n]) => (
-                <div key={String(l)}>
-                  <dt className="text-xs text-slate-600">{l as string}</dt>
-                  <dd className="text-2xl font-semibold tabular-nums text-slate-950">{cifra(n as number | null | undefined)}</dd>
-                </div>
-              ))}
-            </dl>
-            <details className="mt-4 rounded-xl bg-slate-50 p-3 text-sm">
-              <summary className="font-medium text-slate-800">Historial completo</summary>
-              <dl className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
-                {[
-                  ["Oportunidades", historico?.oportunidades],
-                  ["Contactados sin respuesta", historico?.contacto.contactado_sin_respuesta],
-                  ["Respondieron", historico?.contacto.respondio],
-                  ["En conversación", historico?.captacion.en_conversacion],
-                  ["Captados", historico?.captacion.captado],
-                  ["Derivados", historico?.derivacion.derivado],
-                  ["Perdidos", historico?.captacion.perdido],
-                  ["Detenidos", historico?.detenidos],
-                  ["Mensajes enviados", historico?.mensajes.enviados],
-                  ["Mensajes recibidos", historico?.mensajes.recibidos],
-                ].map(([l, n]) => (
-                  <div key={String(l)}>
-                    <dt className="text-xs text-slate-600">{l as string}</dt>
-                    <dd className="text-lg font-semibold tabular-nums text-slate-950">{cifra(n as number | null | undefined)}</dd>
-                  </div>
-                ))}
-              </dl>
-            </details>
-          </section>
+        {vista === "conversaciones" && esperan > 0 ? (
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-amber-300 bg-amber-50 px-5 py-4">
+            <div>
+              <p className="text-base font-semibold text-slate-950">
+                {esperan} {esperan === 1 ? "persona espera" : "personas esperan"} tu respuesta
+              </p>
+              <p className="text-sm text-slate-700">Escribieron y el bot no les contesta porque el chat lo tiene una persona.</p>
+            </div>
+            <Link href={`/hoy?perfil=${slug}&cola=responder#hoy-cola`} className="btn-gold-sm">
+              Responder desde Hoy
+            </Link>
+          </div>
         ) : null}
 
-        <nav aria-label={`Grupos de ${def.titulo}`}>
-          <ul className={`grid grid-cols-2 gap-3 ${def.grupos.length > 4 ? "lg:grid-cols-4 xl:grid-cols-7" : "lg:grid-cols-4"}`}>
-            {def.grupos.map((x) => {
-              const n = conteos[x.clave];
-              const activo = x.clave === g.clave;
-              return (
-                <li key={x.clave}>
-                  <Link
-                    href={`${ruta}?perfil=${slug}&grupo=${x.clave}`}
-                    aria-current={activo ? "page" : undefined}
-                    className={`tarjeta-grupo flex h-full flex-col rounded-2xl border bg-white p-4 shadow-sm transition ${activo ? "border-transparent ring-2 ring-gold-500" : "border-slate-200 hover:border-slate-300 hover:shadow-md"}`}
-                  >
-                    <span className="flex items-center gap-2 text-xs font-medium text-slate-600">
-                      <span aria-hidden="true" className={`h-2 w-2 rounded-full ${PUNTO[x.tono]}`} />
+        {todoVacio ? null : (
+          <nav aria-label={`Grupos de ${def.titulo}`}>
+            <ul className={`grid grid-cols-2 gap-3 ${columnas}`}>
+              {conGente.map((x) => {
+                const n = conteos[x.clave];
+                const activo = x.clave === g.clave;
+                return (
+                  <li key={x.clave}>
+                    <Link
+                      href={`${ruta}?perfil=${slug}&grupo=${x.clave}`}
+                      aria-current={activo ? "page" : undefined}
+                      className={`tarjeta-grupo flex h-full flex-col rounded-2xl border bg-white p-4 shadow-sm transition ${activo ? "border-transparent ring-2 ring-gold-500" : "border-slate-200 hover:border-slate-300 hover:shadow-md"}`}
+                    >
+                      <span className="flex items-center gap-2 text-[13px] font-medium text-slate-600">
+                        <span aria-hidden="true" className={`h-2 w-2 rounded-full ${PUNTO[x.tono]}`} />
+                        {x.titulo}
+                      </span>
+                      <span className="mt-2 text-3xl font-semibold tabular-nums text-slate-950">{n === null ? "—" : n.toLocaleString("es-AR")}</span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+            {vacios.length > 0 ? (
+              <p className="mt-3 text-[13px] text-slate-600">
+                Sin nadie por ahora:{" "}
+                {vacios.map((x, i) => (
+                  <span key={x.clave}>
+                    {i > 0 ? " · " : ""}
+                    <Link href={`${ruta}?perfil=${slug}&grupo=${x.clave}`} className="underline underline-offset-2 hover:text-slate-900">
                       {x.titulo}
-                    </span>
-                    <span className={`mt-2 text-3xl font-semibold tabular-nums ${n ? "text-slate-950" : "text-slate-300"}`}>{n === null ? "—" : n.toLocaleString("es-AR")}</span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+                    </Link>
+                  </span>
+                ))}
+                .
+              </p>
+            ) : null}
+          </nav>
+        )}
 
-        <div className={vista === "recuperar" ? "grid gap-6 lg:grid-cols-[minmax(0,1fr)_18rem]" : ""}>
+        {todoVacio ? (
+          <div className="rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-10 text-center">
+            <p className="text-lg font-semibold text-slate-950">{vista === "contactos" ? "Tu cartera todavía está vacía" : `Nada en «${def.titulo}» por ahora`}</p>
+            <p className="mx-auto mt-1 max-w-xl text-sm text-slate-600">
+              {vista === "contactos"
+                ? "Acá aparecen las personas cuando las derivás, y sus citas y seguimientos. Todavía no derivaste a nadie."
+                : vista === "conversaciones"
+                ? "Cuando alguien acepte el siguiente paso, agende o esté conversando, aparece acá."
+                : "Cuando una charla se caiga y se pueda retomar, aparece acá."}
+            </p>
+            <div className="mt-4 flex flex-wrap justify-center gap-2">
+              {vista === "contactos" && porDerivar > 0 ? (
+                <Link href={`/hoy?perfil=${slug}&cola=derivar#hoy-cola`} className="btn-gold-sm">
+                  Derivar a los {porDerivar} captados
+                </Link>
+              ) : null}
+              {vista === "contactos" ? (
+                <Link href={`/prospectos-por-base?perfil=${slug}`} className="btn-suave-sm">
+                  Ver los prospectos por base
+                </Link>
+              ) : (
+                <Link href={`/hoy?perfil=${slug}`} className="btn-suave-sm">
+                  Ir a Hoy
+                </Link>
+              )}
+            </div>
+          </div>
+        ) : null}
+
+        <div className={todoVacio ? "hidden" : vista === "recuperar" ? "grid gap-6 lg:grid-cols-[minmax(0,1fr)_18rem]" : ""}>
           <section aria-labelledby="grupo-titulo" className="min-w-0">
             <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
               <div>
@@ -221,6 +248,50 @@ export async function PaginaCartera({ vista, searchParams }: { vista: VistaCarte
             </aside>
           ) : null}
         </div>
+
+        {vista === "conversaciones" ? (
+          <section aria-labelledby="conv-semana" className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            {/* 12/11: las cifras van después del trabajo, no antes. */}
+            <h2 id="conv-semana" className="text-base font-semibold text-slate-950">Esta semana</h2>
+            <p className="text-xs text-slate-500">Desde el lunes</p>
+            <dl className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {[
+                ["Personas que escribieron", semana?.semana.respuestas],
+                ["Captados", semana?.semana.captados],
+                ["Citas", semana?.semana.citas],
+                ["Derivados", semana?.semana.derivados],
+              ].map(([l, n]) => (
+                <div key={String(l)}>
+                  <dt className="text-xs text-slate-600">{l as string}</dt>
+                  <dd className="text-2xl font-semibold tabular-nums text-slate-950">{cifra(n as number | null | undefined)}</dd>
+                </div>
+              ))}
+            </dl>
+            <details className="mt-4 rounded-xl bg-slate-50 p-3 text-sm">
+              <summary className="font-medium text-slate-800">Historial completo</summary>
+              <dl className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                {[
+                  ["Oportunidades", historico?.oportunidades],
+                  ["Contactados sin respuesta", historico?.contacto.contactado_sin_respuesta],
+                  ["Respondieron", historico?.contacto.respondio],
+                  ["En conversación", historico?.captacion.en_conversacion],
+                  ["Captados", historico?.captacion.captado],
+                  ["Derivados", historico?.derivacion.derivado],
+                  ["Perdidos", historico?.captacion.perdido],
+                  ["Detenidos", historico?.detenidos],
+                  ["Mensajes enviados", historico?.mensajes.enviados],
+                  ["Mensajes recibidos", historico?.mensajes.recibidos],
+                ].map(([l, n]) => (
+                  <div key={String(l)}>
+                    <dt className="text-xs text-slate-600">{l as string}</dt>
+                    <dd className="text-lg font-semibold tabular-nums text-slate-950">{cifra(n as number | null | undefined)}</dd>
+                  </div>
+                ))}
+              </dl>
+            </details>
+          </section>
+        ) : null}
+
       </div>
     </MarcoPerfil>
   );
