@@ -222,6 +222,23 @@ export async function estadoLinea(apiKey: string, deps: ClienteDeps = {}): Promi
   return normalizarEstado(json?.status ?? json?.data?.status);
 }
 
+/**
+ * ¿El número tiene WhatsApp? (12/11). true o false solo cuando Wasender lo dice
+ * de forma explícita; null si no se pudo saber (error, límite, respuesta rara).
+ * Quien llama decide: con null se sigue como si no se hubiera consultado.
+ */
+export async function estaEnWhatsApp(apiKey: string, telefono: string, deps: ClienteDeps = {}): Promise<boolean | null> {
+  const numero = numeroInternacional(telefono);
+  if (!numero) return null;
+  try {
+    const json = await llamar(`/on-whatsapp/${encodeURIComponent(numero)}`, { metodo: "GET", token: apiKey }, deps);
+    const existe = json?.data?.exists;
+    return typeof existe === "boolean" ? existe : null;
+  } catch {
+    return null;
+  }
+}
+
 export interface MensajeSaliente {
   to: string;
   text?: string;

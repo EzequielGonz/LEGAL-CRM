@@ -6,6 +6,7 @@ import { actualizarWebhook, conectarLinea, crearLinea as crearEnWasender, descon
 import { qrComoImagen } from "@/lib/wasender/qr";
 import { esNumeroDeMeta, pideQr, puedeHabilitar, telefonoValido, ultimosDigitos } from "@/lib/wasender/reglas";
 import { direccionWebhook, recibeEnEsteEntorno } from "@/lib/wasender/webhook-url";
+import { limiteDiarioEfectivo } from "@/lib/wasender/ritmo";
 
 /**
  * Líneas de Wasender (10/11): alta, QR, estado, cambios y archivo. Todo en
@@ -38,13 +39,16 @@ export interface LineaVista {
   reemplaza_desde: string | null;
   /** Bloque 2: los avisos internos del perfil salen por esta línea. */
   para_avisos: boolean;
+  /** 12/11: calentamiento. Día en que está la línea y cuántos envíos de campaña puede hacer hoy. */
+  calentamiento: { dia: number; limite: number; porCalentamiento: boolean };
 }
 
 const COLUMNAS =
-  "id, rubro_id, area, nombre, telefono, sesion_id, estado, estado_at, habilitada, responde_con_bot, modo_prueba, ultimo_error, created_at, archivada_at, motivo_archivo, api_key_cifrada, limite_diario, reemplaza_linea_meta_id, reemplaza_desde, para_avisos";
+  "id, rubro_id, area, nombre, telefono, sesion_id, estado, estado_at, habilitada, responde_con_bot, modo_prueba, ultimo_error, created_at, archivada_at, motivo_archivo, api_key_cifrada, limite_diario, reemplaza_linea_meta_id, reemplaza_desde, para_avisos, calentamiento_desde";
 
 function aVista(f: any): LineaVista {
   return {
+    calentamiento: limiteDiarioEfectivo({ limiteDiario: f.limite_diario ?? null, calentamientoDesde: f.calentamiento_desde ?? null }),
     id: f.id,
     rubro_id: f.rubro_id,
     area: f.area,

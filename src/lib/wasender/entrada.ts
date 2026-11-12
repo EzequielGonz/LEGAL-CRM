@@ -405,8 +405,15 @@ export async function procesarWebhook(
     try {
       if (ev.tipo === "sesion") {
         const caida = ["logged_out", "expired", "disconnected", "need_scan"].includes(ev.estado);
+        // 12/11: si se vuelve a vincular después de quedar sin sesión, el calentamiento empieza de nuevo.
+        const revinculada = ev.estado === "connected" && ["logged_out", "expired", "need_scan"].includes(String(linea.estado ?? ""));
         await (supabase.from("wasender_lineas" as any) as any)
-          .update({ estado: ev.estado, estado_at: new Date().toISOString(), ...(caida ? { habilitada: false } : {}) })
+          .update({
+            estado: ev.estado,
+            estado_at: new Date().toISOString(),
+            ...(caida ? { habilitada: false } : {}),
+            ...(revinculada ? { calentamiento_desde: new Date().toISOString() } : {}),
+          })
           .eq("id", linea.id);
         if (caida) await pausarCampanasDeLinea(supabase, linea, ev.estado);
         resultados.push(`sesion:${ev.estado}`);

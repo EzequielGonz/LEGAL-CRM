@@ -13,7 +13,8 @@ import { classifySendFailure, failureNote, MAX_TRANSIENT_ATTEMPTS } from "@/lib/
 import { randomUUID } from "node:crypto";
 import { effectiveSendHours, getSendWindow, startOfArgentinaDay } from "@/lib/horario";
 import { loadContactCalendar } from "@/lib/contacto/calendario";
-import { clasificarFallaWasender, notaFallaWasender, preparacionWasender, proveedorDe, textoDeCampana } from "@/lib/wasender/campanas";
+import { clasificarFallaWasender, cupoDeLinea, frenoDeLinea, notaFallaWasender, numeroConWhatsApp, preparacionWasender, proveedorDe, textoDeCampana } from "@/lib/wasender/campanas";
+import { desfaseEnElMinuto, esperaIrregular } from "@/lib/wasender/ritmo";
 import { enviarPorWasender } from "@/lib/wasender/envio";
 
 // El horario vive en src/lib/horario.ts (sin dependencias, se prueba solo); se
@@ -220,17 +221,16 @@ async function tickLocked(
     await (supabase.from("campaigns") as any).update({ status: "pausada", pause_reason: motivo, paused_at: new Date().toISOString() }).eq("id", campaignId).eq("status", "en_curso");
     return { campaignId, action: "not_running", detail: motivo };
   }
-  // Límite diario de la línea de Wasender (sumando todas las campañas que la usan), igual que en Meta.
-  if (wa?.linea?.limite_diario) {
-    const { data: lineCampaigns } = await (supabase.from("campaigns") as any).select("id").eq("wasender_line_id", wa.linea.id);
-    const { count: sentByLine } = await supabase
-      .from("campaign_contacts")
-      .select("id", { count: "exact", head: true })
-      .in("campaign_id", (lineCampaigns ?? []).map((c: any) => c.id))
-      .in("status", ["enviado", "entregado", "leido", "respondio"])
-      .gte("sent_at", startOfArgentinaDay(now).toISOString());
-    if ((sentByLine ?? 0) >= wa.linea.limite_diario) {
-      return { campaignId, action: "daily_limit_reached", detail: `La línea «${wa.linea.nombre}» llegó a su límite de ${wa.linea.limite_diario} envíos por hoy.` };
+  // Límite del día de la línea de Wasender (sumando todas las campañas que la usan).
+  // 12/11: el límite es el menor entre el elegido y el del calentamiento de la línea.
+  if (wa?.linea) {
+    const cupo = await cupoDeLinea(wa.linea, startOfArgentinaDay(now), now, supabase);
+    if (cupo.agotado) return { campaignId, action: "daily_limit_reached", detail: cupo.detalle };
+    // Freno automático: si los últimos envíos fallaron o no se entregaron, se pausa sola.
+    const freno = await frenoDeLinea(wa.linea.id, now, supabase);
+    if (freno) {
+      await (supabase.from("campaigns") as any).update({ status: "pausada", pause_reason: freno.slice(0, 500), paused_at: new Date().toISOString() }).eq("id", campaignId).eq("status", "en_curso");
+      return { campaignId, action: "not_running", detail: freno };
     }
   }
   const readiness = wa ? null : await campaignReadiness(campaign);
@@ -334,6 +334,12 @@ async function tickLocked(
     }
   }
 
+  // 12/11 (solo Wasender): unos segundos al azar antes de enviar, para que los
+  // mensajes no salgan siempre en el segundo 00 de cada minuto.
+  if (wa && process.env.NODE_ENV !== "test") {
+    await new Promise((r) => setTimeout(r, desfaseEnElMinuto(Math.random, 20) * 1000));
+  }
+
   // 4) Reserva atómica del próximo destinatario. Primero los de prioridad
   // alta (fractura/muerte/amputación, priority=0) y dentro de cada nivel en
   // el orden en que se agregaron (`queued_at`). Ver computeCampaignPriority.
@@ -406,6 +412,14 @@ async function tickLocked(
     return { campaignId, action: "failed_send", detail: "Contacto sin teléfono" };
   }
 
+  // 12/11 (solo Wasender): se consulta si el número tiene WhatsApp antes de escribirle.
+  // Escribirle a números que no existen es de lo que más daña a una línea. Si Wasender
+  // no contesta la consulta, se sigue como siempre. No cuenta para el ritmo.
+  if (wa?.linea && (await numeroConWhatsApp(wa.linea, phone)) === false) {
+    await finishClaim(supabase, claim.id, token, "fallo", { error: "Sin WhatsApp: el número no tiene cuenta. No se le envió." });
+    return { campaignId, action: "failed_send", detail: "El número no tiene WhatsApp: no se envió" };
+  }
+
   // Variables de la plantilla con las fuentes elegidas. Si falta un dato de
   // este contacto, su envío no sale (nunca con una variable vacía).
   const built = resolved
@@ -463,7 +477,10 @@ async function tickLocked(
     // Sorteamos ACÁ el tiempo de espera hasta el próximo mensaje (no un
     // número fijo): así cada intervalo entre mensajes es distinto, dentro
     // del rango configurado, simulando el ritmo irregular de una persona.
-    next_delay_seconds: randomInt(campaign.min_send_delay_seconds, campaign.max_send_delay_seconds),
+    // 12/11 (solo Wasender): además, una de cada diez esperas es más larga.
+    next_delay_seconds: wa
+      ? esperaIrregular(campaign.min_send_delay_seconds, campaign.max_send_delay_seconds)
+      : randomInt(campaign.min_send_delay_seconds, campaign.max_send_delay_seconds),
   };
 
   let sendResult: any;

@@ -5,6 +5,9 @@ import { WasenderError } from "@/lib/wasender/cliente";
 import { LineaWasenderNoDisponible, motivoNoDisponible, type LineaParaEnviar } from "@/lib/wasender/envio";
 import { completar, elegirVariante, variablesDe } from "@/lib/wasender/plantillas";
 import type { SendFailure } from "@/lib/envios/errores";
+import { limiteDiarioEfectivo, MINIMO_TEXTOS_CAMPANA, motivoDeFreno, primerNombre, textosDistintos } from "@/lib/wasender/ritmo";
+import { descifrar } from "@/lib/wasender/cifrado";
+import { estaEnWhatsApp } from "@/lib/wasender/cliente";
 
 /**
  * Campañas por Wasender (10/11, bloque 3). La campaña es la misma de siempre:
@@ -26,6 +29,8 @@ export function proveedorDe(campana: { proveedor?: string | null }): Proveedor {
 export interface LineaCampana extends LineaParaEnviar {
   rubro_id: string;
   limite_diario: number | null;
+  /** Desde cuándo se cuenta el calentamiento de la línea (12/11). */
+  calentamiento_desde?: string | null;
 }
 
 export interface PlantillaCampana {
@@ -70,6 +75,11 @@ export function faltantesWasender(
     const textos = [p.cuerpo, ...p.variantes];
     if (textos.some((t) => /\[revisar/i.test(t))) missing.push(`La plantilla «${p.nombre}» tiene partes «[revisar]» sin completar`);
     const usadas = new Set(textos.flatMap((t) => variablesDe(t)));
+    // 12/11: sin variantes todos reciben el mismo texto, y eso es lo primero que WhatsApp detecta.
+    const distintos = textosDistintos(p.cuerpo, p.variantes);
+    if (distintos < MINIMO_TEXTOS_CAMPANA) {
+      missing.push(`La plantilla «${p.nombre}» necesita ${MINIMO_TEXTOS_CAMPANA} textos distintos para salir en una campaña (tiene ${distintos}): sumale variantes en Wasender → Plantillas`);
+    }
     if (d.perfil && usadas.has("marca") && !d.perfil.brand_name?.trim()) missing.push("Nombre del perfil o marca (perfil)");
     if (d.perfil && usadas.has("asesor") && !d.perfil.agent_presentation_name?.trim()) missing.push("Nombre de presentación del agente (perfil)");
   }
@@ -78,11 +88,12 @@ export function faltantesWasender(
 
 /**
  * Texto que recibe una persona. Cada persona recibe siempre la misma variante
- * (por su id). Si la plantilla usa {{nombre}} y la persona no tiene nombre,
- * se saca la variable sin dejar el saludo roto.
+ * (por su id). Se saluda con el primer nombre (12/11): nombre y dos apellidos
+ * delata que el mensaje salió de una base. Si la persona no tiene un nombre
+ * usable, se saca la variable sin dejar el saludo roto.
  */
 export function textoDeCampana(p: { cuerpo: string; variantes: string[] }, datos: { nombre: string; asesor: string; marca: string }, semilla: string): string {
-  return completar(elegirVariante(p.cuerpo, p.variantes, semilla), datos).trim();
+  return completar(elegirVariante(p.cuerpo, p.variantes, semilla), { ...datos, nombre: primerNombre(datos.nombre) }).trim();
 }
 
 /**
@@ -134,7 +145,7 @@ export interface PreparacionWasender {
   perfil: { brand_name?: string | null; agent_presentation_name?: string | null } | null;
 }
 
-const COLUMNAS_LINEA = "id, rubro_id, nombre, habilitada, estado, api_key_cifrada, archivada_at, limite_diario";
+const COLUMNAS_LINEA = "id, rubro_id, nombre, habilitada, estado, api_key_cifrada, archivada_at, limite_diario, calentamiento_desde";
 const COLUMNAS_PLANTILLA = "id, rubro_id, nombre, cuerpo, variantes, activa, archivada_at";
 
 /** Lee la línea y la plantilla de la campaña y dice qué falta. */
@@ -229,4 +240,77 @@ export async function detalleWasender(
     line: l ? { label: `Wasender · ${l.nombre}`, phone_display: l.telefono ?? null } : null,
     template: p ? { name: p.nombre, language: "es", status: p.activa ? "WASENDER" : "WASENDER INACTIVA" } : null,
   };
+}
+
+const ENVIADOS = ["enviado", "entregado", "leido", "respondio"];
+
+async function campanasDeLinea(lineaId: string, supabase: Db): Promise<string[]> {
+  const { data } = await (supabase.from("campaigns") as any).select("id").eq("wasender_line_id", lineaId);
+  return ((data ?? []) as any[]).map((c) => c.id as string);
+}
+
+/**
+ * Límite del día de la línea (12/11): el menor entre el elegido y el del
+ * calentamiento, contando lo que ya salió hoy por todas sus campañas.
+ */
+export async function cupoDeLinea(
+  linea: LineaCampana,
+  inicioDelDia: Date,
+  ahora: Date,
+  supabase: Db = createAdminClient()
+): Promise<{ limite: number; dia: number; porCalentamiento: boolean; enviadosHoy: number; agotado: boolean; detalle: string }> {
+  const efectivo = limiteDiarioEfectivo({ limiteDiario: linea.limite_diario, calentamientoDesde: linea.calentamiento_desde ?? null }, ahora);
+  const ids = await campanasDeLinea(linea.id, supabase);
+  let enviadosHoy = 0;
+  if (ids.length) {
+    const { count } = await supabase
+      .from("campaign_contacts")
+      .select("id", { count: "exact", head: true })
+      .in("campaign_id", ids)
+      .in("status", ENVIADOS)
+      .gte("sent_at", inicioDelDia.toISOString());
+    enviadosHoy = count ?? 0;
+  }
+  const detalle = efectivo.porCalentamiento
+    ? `La línea «${linea.nombre}» está en el día ${efectivo.dia} de calentamiento: hasta ${efectivo.limite} envíos por día. Mañana sigue sola.`
+    : `La línea «${linea.nombre}» llegó a su límite de ${efectivo.limite} envíos por hoy.`;
+  return { ...efectivo, enviadosHoy, agotado: enviadosHoy >= efectivo.limite, detalle };
+}
+
+/** Cuántos envíos se miran para el freno y cuánto se espera a que se entreguen. */
+export const VENTANA_FRENO = { cantidad: 20, esperaMin: 15, horas: 12 };
+
+/**
+ * Freno automático (12/11): mira los últimos envíos de la línea que ya tuvieron
+ * tiempo de entregarse. Devuelve el motivo para pausar, o null si puede seguir.
+ * La ventana es de 12 horas: si se reanuda antes, la misma tanda vuelve a
+ * frenar. Es a propósito: la línea necesita ese descanso.
+ */
+export async function frenoDeLinea(lineaId: string, ahora: Date, supabase: Db = createAdminClient()): Promise<string | null> {
+  const ids = await campanasDeLinea(lineaId, supabase);
+  if (!ids.length) return null;
+  const hasta = new Date(ahora.getTime() - VENTANA_FRENO.esperaMin * 60_000);
+  const inicio = new Date(ahora.getTime() - VENTANA_FRENO.horas * 3_600_000);
+  const { data } = await supabase
+    .from("campaign_contacts")
+    .select("status")
+    .in("campaign_id", ids)
+    .in("status", [...ENVIADOS, "fallo"])
+    .gte("sent_at", inicio.toISOString())
+    .lte("sent_at", hasta.toISOString())
+    .order("sent_at", { ascending: false })
+    .limit(VENTANA_FRENO.cantidad);
+  const filas = (data ?? []) as { status: string }[];
+  return motivoDeFreno({
+    enviados: filas.length,
+    fallidos: filas.filter((f) => f.status === "fallo").length,
+    sinEntregar: filas.filter((f) => f.status === "enviado").length,
+  });
+}
+
+/** Consulta si el número tiene WhatsApp con la clave de la línea. null = no se pudo saber. */
+export async function numeroConWhatsApp(linea: LineaCampana, telefono: string, env: Env = process.env): Promise<boolean | null> {
+  const apiKey = descifrar(linea.api_key_cifrada, env);
+  if (!apiKey) return null;
+  return estaEnWhatsApp(apiKey, telefono, { env });
 }

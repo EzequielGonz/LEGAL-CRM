@@ -18,15 +18,18 @@ Decisiones de la responsable (12/11):
 
 ## Pendiente (en este orden)
 
-### A. Conectar el ritmo nuevo al motor (punto 4) — solo en la rama de Wasender de `campaigns.ts`
-- [ ] Migración `0604_wasender_ritmo.sql` (solo agrega): `wasender_lineas.calentamiento_desde timestamptz` (por defecto `created_at`; se reinicia al reconectar con QR después de una caída). Comprobar antes la versión y el historial real de la base.
-- [ ] Límite diario de la línea = `limiteDiarioEfectivo` (hoy usa `limite_diario` directo). Mostrar «Día N de calentamiento · hasta X por día» en la línea y en el detalle de la campaña.
-- [ ] `faltantesWasender`: exigir `MINIMO_TEXTOS_CAMPANA` textos distintos en la plantilla de campaña.
-- [ ] `textoDeCampana`: usar `primerNombre`.
-- [ ] Espera: `esperaIrregular` para `next_delay_seconds` y `desfaseEnElMinuto` antes de enviar (revisar duración máxima de la función y del candado del tick).
-- [ ] Verificación del número antes de enviar (consulta de Wasender «está en WhatsApp»): leer la documentación de la API antes; si no tiene WhatsApp, el destinatario queda «sin WhatsApp» sin gastar envío.
-- [ ] Freno automático: armar la muestra (últimos 20 envíos de la línea con más de 10 min) y pausar con `motivoDeFreno`.
-- [ ] Redactar variantes de las plantillas de campaña de cada perfil (4 por plantilla, cortas, sin «Respondé: …»), como plantillas nuevas inactivas para que la responsable las revise. No editar las existentes.
+### A. Ritmo nuevo (punto 4) — conectado al motor (punto de control 2)
+- [x] Migración `0604_wasender_ritmo.sql` aplicada el 12/11 (solo agrega `wasender_lineas.calentamiento_desde`; producción no la lee).
+- [x] Límite del día = menor entre el elegido y el del calentamiento (`cupoDeLinea`). Se muestra en cada línea.
+- [x] Plantilla de campaña con 4 textos distintos como mínimo (`faltantesWasender`).
+- [x] Saludo con el primer nombre (`textoDeCampana`).
+- [x] Espera irregular y desfase de hasta 20 s dentro del minuto (solo Wasender).
+- [x] Verificación del número antes de enviar (`GET /on-whatsapp/{número}`; solo corta si Wasender dice `exists: false`). **Sin probar contra la API real**: la respuesta para un número inexistente no está documentada.
+- [x] Freno automático con ventana de 12 h (`frenoDeLinea`).
+- [x] El calentamiento se reinicia cuando la línea se vuelve a vincular.
+- [ ] Mostrar el calentamiento también en el detalle de la campaña.
+- [ ] Redactar variantes de las plantillas de campaña de cada perfil (4 textos por plantilla, cortos, sin «Respondé: …»), como plantillas nuevas inactivas para que la responsable las revise. No editar las existentes.
+- [ ] Pruebas unitarias de `cupoDeLinea` y `frenoDeLinea` con base falsa.
 
 ### B. Verdad en pantalla (puntos 1 a 3)
 - [ ] Hoy: dos colas nuevas, «Respondieron y nadie contestó» (entrante último, IA apagada o sin respuesta) y «Captados para derivar».

@@ -554,7 +554,7 @@ import { LineaWasenderNoDisponible as NoDisponible } from "@/lib/wasender/envio"
 
 const PERFIL_OK = { brand_name: "Marca ficticia", agent_presentation_name: "Asesor ficticio" };
 const LINEA_OK = { id: "l1", rubro_id: "r1", nombre: "Chip 1", habilitada: true, estado: "connected", api_key_cifrada: "v1.x", archivada_at: null, limite_diario: null };
-const PLANTILLA_OK = { id: "p1", rubro_id: "r1", nombre: "Saludo", cuerpo: "Hola {{nombre}}, soy {{asesor}} de {{marca}}.", variantes: ["Buenas {{nombre}}! Te escribe {{asesor}}."], activa: true, archivada_at: null };
+const PLANTILLA_OK = { id: "p1", rubro_id: "r1", nombre: "Saludo", cuerpo: "Hola {{nombre}}, soy {{asesor}} de {{marca}}.", variantes: ["Buenas {{nombre}}! Te escribe {{asesor}}.", "Hola {{nombre}}, ¿cómo va? Soy {{asesor}}.", "{{nombre}}, te escribe {{asesor}} de {{marca}}."], activa: true, archivada_at: null };
 
 test("wasender campañas: las existentes y las sin método son de Meta", () => {
   assert.equal(proveedorDe({}), "meta");
@@ -575,7 +575,9 @@ test("wasender campañas: lista para lanzar solo con línea conectada y prendida
   assert.match(faltantesWasender({ ...base, plantilla: { ...PLANTILLA_OK, cuerpo: "Turno el [revisar 2]" } }, ENV).join(" "), /\[revisar\]/);
   assert.match(faltantesWasender({ ...base, perfil: { brand_name: "", agent_presentation_name: "A" } }, ENV).join(" "), /marca/);
   // Si la plantilla no usa {{marca}}, la marca del perfil no hace falta.
-  assert.deepEqual(faltantesWasender({ ...base, perfil: { brand_name: "", agent_presentation_name: "A" }, plantilla: { ...PLANTILLA_OK, cuerpo: "Hola {{nombre}}", variantes: [] } }, ENV), []);
+  assert.deepEqual(faltantesWasender({ ...base, perfil: { brand_name: "", agent_presentation_name: "A" }, plantilla: { ...PLANTILLA_OK, cuerpo: "Hola {{nombre}}", variantes: ["Buenas {{nombre}}", "¿Cómo va, {{nombre}}?", "{{nombre}}, buen día"] } }, ENV), []);
+  // 12/11: sin variantes suficientes no sale en campaña.
+  assert.match(faltantesWasender({ ...base, plantilla: { ...PLANTILLA_OK, variantes: [] } }, ENV).join(" "), /necesita 4 textos distintos/);
 });
 
 test("wasender campañas: cada persona recibe siempre la misma variante, con sus datos", () => {
@@ -584,7 +586,9 @@ test("wasender campañas: cada persona recibe siempre la misma variante, con sus
   assert.equal(textoDeCampana(PLANTILLA_OK, datos, "contacto-1"), a);
   assert.ok(!a.includes("{{"));
   const textos = new Set(Array.from({ length: 30 }, (_, i) => textoDeCampana(PLANTILLA_OK, datos, `c-${i}`)));
-  assert.equal(textos.size, 2);
+  assert.equal(textos.size, 4);
+  // 12/11: se saluda con el primer nombre.
+  assert.match(textoDeCampana({ cuerpo: "Hola {{nombre}}.", variantes: [] }, { ...datos, nombre: "JUAN CARLOS PEREZ" }, "x"), /^Hola Juan\.$/);
   assert.equal(textoDeCampana({ cuerpo: "Hola {{nombre}}, ¿cómo va?", variantes: [] }, { ...datos, nombre: "" }, "x"), "Hola, ¿cómo va?");
 });
 

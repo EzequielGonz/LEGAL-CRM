@@ -24,6 +24,7 @@ interface Linea {
   reemplaza_linea_meta_id: string | null;
   reemplaza_desde: string | null;
   para_avisos: boolean;
+  calentamiento?: { dia: number; limite: number; porCalentamiento: boolean };
 }
 
 interface LineaMeta {
@@ -390,6 +391,13 @@ export function LineasWasender({ slug, marca }: { slug: SlugPerfil; marca: strin
                         Recibir en este panel
                       </button>
                     </div>
+                  )}
+                  {l.calentamiento && (
+                    <p className="mt-3 text-sm text-slate-700">
+                      {l.calentamiento.porCalentamiento
+                        ? `Día ${l.calentamiento.dia} de calentamiento: hoy puede enviar hasta ${l.calentamiento.limite} mensajes de campaña. Sube sola cada semana.`
+                        : `Campañas: hasta ${l.calentamiento.limite} mensajes por día.`}
+                    </p>
                   )}
                   <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm">
                     <Interruptor activo={l.habilitada} onClick={() => cambiar(l, { habilitada: !l.habilitada })} texto="Envía mensajes" ayuda="Apagada no sale nada por esta línea." />

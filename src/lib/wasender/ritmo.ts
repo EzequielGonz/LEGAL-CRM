@@ -114,7 +114,7 @@ export function motivoDeFreno(m: MuestraDeEnvios): string | null {
   if (m.enviados < MUESTRA_MINIMA_FRENO) return null;
   const pFallo = m.fallidos / m.enviados;
   const pSinEntregar = (m.fallidos + m.sinEntregar) / m.enviados;
-  if (pFallo >= 0.3) return `Freno automático: ${m.fallidos} de los últimos ${m.enviados} envíos fallaron. La línea puede estar limitada: esperá un día antes de reanudar.`;
-  if (pSinEntregar >= 0.5) return `Freno automático: ${m.fallidos + m.sinEntregar} de los últimos ${m.enviados} envíos no se entregaron. Revisá la línea antes de reanudar.`;
+  if (pFallo >= 0.3) return `Freno automático: ${m.fallidos} de los últimos ${m.enviados} envíos fallaron. La línea puede estar limitada. Se puede reanudar cuando pasen 12 horas del último envío.`;
+  if (pSinEntregar >= 0.5) return `Freno automático: ${m.fallidos + m.sinEntregar} de los últimos ${m.enviados} envíos no se entregaron. Revisá la línea; se puede reanudar cuando pasen 12 horas del último envío.`;
   return null;
 }
