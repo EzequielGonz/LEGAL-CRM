@@ -38,7 +38,7 @@ Decisiones de la responsable (12/11):
 - [ ] Campañas: la calidad de línea que muestra una campaña pausada de Meta queda vieja (se guarda en `pause_reason`). Solo lectura: mostrar al lado la calidad actual. No tocar el motor de Meta.
 - [ ] Destinatarios de avisos de captación (`capture_notice_recipients`, vacío en los 4 perfiles): ubicar la pantalla que los edita y dejar un acceso desde Hoy/Salud cuando está vacío. Los carga la responsable.
 - [ ] Reemplazar `window.prompt/confirm` de las pantallas de Wasender por diálogos propios.
-- [ ] En el chat tomado por una persona con mensaje sin responder, el aviso «no hace falta hacer nada por ahora» es falso: revisar el componente del chat.
+- [x] Ficha y chat: si la persona escribió y la IA está apagada en esa conversación, el «siguiente paso» pide responder (antes decía «no hace falta hacer nada»).
 
 ### C. Seguimiento y recontacto por Wasender (punto 5) — tarea #33
 - [x] Recontacto: los chats que salen por Wasender no dependen de la ventana de 24 h (`planRecontacto` con `sinVentana`, `recontacto/motor.ts`). Meta no cambia.

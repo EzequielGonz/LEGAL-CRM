@@ -26,3 +26,16 @@ test("hoy: los detenidos y los perdidos no entran en la cola", () => {
   const filas = chatsQueEsperan([chat("a"), chat("b")], [msj("a", "entrante", "2026-11-10T11:00:00Z"), msj("b", "entrante", "2026-11-10T12:00:00Z")], new Set(["a"]));
   assert.deepEqual(filas.map((f) => f.conversationId), ["b"]);
 });
+
+import { siguientePasoFicha } from "@/lib/inicio";
+
+test("ficha: si la persona escribió y el chat lo tiene una persona, el siguiente paso es responder", () => {
+  const base = { capture_state: "en_conversacion", attention_state: "ninguna", followup_state: "inactivo" };
+  assert.match(siguientePasoFicha({ ...base, chatTomado: true, esperaRespuesta: true }).texto, /está esperando/);
+  assert.equal(siguientePasoFicha({ ...base, chatTomado: true, esperaRespuesta: true }).urgente, true);
+  assert.match(siguientePasoFicha({ ...base, chatTomado: true, esperaRespuesta: false }).texto, /lo tiene una persona/);
+  // Con la IA prendida sigue igual que antes.
+  assert.match(siguientePasoFicha({ ...base, chatTomado: false, esperaRespuesta: true }).texto, /en curso con el agente/);
+  // Un detenido sigue teniendo prioridad.
+  assert.match(siguientePasoFicha({ ...base, detenido: true, chatTomado: true, esperaRespuesta: true }).texto, /detenido/);
+});

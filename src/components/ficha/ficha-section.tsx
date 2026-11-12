@@ -94,9 +94,21 @@ export async function FichaSection({
     </div>
   );
 
+  // 12/11: estado real del chat, para que el «siguiente paso» no diga que no hay nada que hacer
+  // cuando la persona escribió y la IA está apagada en esa conversación.
+  const convId = (opp as any)?.conversation_id as string | null | undefined;
+  const [{ data: conv }, { data: ultimoMsj }] = convId
+    ? await Promise.all([
+        supabase.from("conversations").select("ai_enabled").eq("id", convId).maybeSingle(),
+        supabase.from("messages").select("direction").eq("conversation_id", convId).order("created_at", { ascending: false }).limit(1).maybeSingle(),
+      ])
+    : [{ data: null }, { data: null }];
+
   const paso = siguientePasoFicha(
     opp
       ? {
+          chatTomado: conv ? (conv as any).ai_enabled === false : false,
+          esperaRespuesta: (ultimoMsj as any)?.direction === "entrante",
           capture_state: opp.capture_state,
           attention_state: opp.attention_state,
           derivation_state: opp.derivation_state,

@@ -44,10 +44,16 @@ export function siguientePasoFicha(o: {
   followup_state?: string | null;
   review_required?: boolean | null;
   detenido?: boolean;
+  /** 12/11: el chat lo tiene una persona (la IA está apagada en esa conversación). */
+  chatTomado?: boolean;
+  /** 12/11: el último mensaje del chat es de la persona de afuera. */
+  esperaRespuesta?: boolean;
 } | null): { texto: string; urgente: boolean } {
   if (!o) return { texto: "Todavía no tiene oportunidad registrada: no hay nada pendiente.", urgente: false };
   if (o.detenido) return { texto: "Contacto detenido: no sale ningún mensaje automático. Revisá el motivo antes de hacer algo.", urgente: true };
   if (o.attention_state === "requiere_humano") return { texto: "Pidió hablar con una persona: respondé desde la conversación.", urgente: true };
+  // 12/11: antes decía «no hace falta hacer nada» con la persona esperando y el bot apagado.
+  if (o.chatTomado && o.esperaRespuesta) return { texto: "Escribió y está esperando. El bot no le va a contestar porque el chat lo tiene una persona: respondele desde la conversación.", urgente: true };
   if (o.attention_state === "humano_en_curso") return { texto: "Una persona está atendiendo esta conversación.", urgente: false };
   if (o.capture_state === "captado" && o.derivation_state !== "derivado") return { texto: "Captado: falta derivarlo al profesional.", urgente: true };
   if (o.capture_state === "captado" && o.derivation_state === "derivado" && !o.post_derivation_state) return { texto: "Derivado: cuando sepas qué pasó, registrá el resultado.", urgente: false };
@@ -55,6 +61,7 @@ export function siguientePasoFicha(o: {
   if (o.followup_state === "caido") return { texto: "El seguimiento no avanzó: decidí si se vuelve a intentar.", urgente: false };
   if (o.capture_state === "perdido") return { texto: "Marcado como perdido: no hay acciones pendientes.", urgente: false };
   if (o.followup_state === "activo") return { texto: "En seguimiento automático: no hace falta hacer nada por ahora.", urgente: false };
+  if (o.chatTomado) return { texto: "El chat lo tiene una persona: el bot no responde hasta que lo devuelvas a la IA.", urgente: false };
   return { texto: "La conversación está en curso con el agente: no hace falta hacer nada por ahora.", urgente: false };
 }
 
