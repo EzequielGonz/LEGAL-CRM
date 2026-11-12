@@ -92,7 +92,7 @@ export async function TableroHoy({ slug, rubroId, areas, grupo }: { slug: SlugPe
       </ul>
 
       {(colas.esperan.length > 0 || (colas.captadosSinDerivar ?? 0) > 0) && (
-        <div className="grid gap-3 md:grid-cols-2">
+        <div className="grid items-start gap-3 md:grid-cols-2">
           {colas.esperan.length > 0 && (
             <div className="overflow-hidden rounded-2xl border border-amber-300 bg-white shadow-sm">
               <div className="border-b border-amber-200 bg-amber-50 px-5 py-3">

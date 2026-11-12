@@ -60,6 +60,13 @@ Decisiones de la responsable (12/11):
 - [ ] `docs/mejoras-1211/ENTREGA.md`, `INFORME.md`, `MIGRACIONES.md`.
 - [ ] Informe a la responsable con el enlace de la Preview y qué cambia al aprobar.
 
+## Revisión de la Preview (12/11, punto de control 5)
+- Recorrida en celular y escritorio (solo mirar): Hoy, Salud, Wasender y Para recuperar cargan con 200, sin errores de consola ni desborde.
+- Letra menor a 13 px en celular: Hoy pasó de 60 % a 16 %; Para recuperar, a 22 %. Botones chicos en Para recuperar: de 50 a 2.
+- «Esperan tu respuesta» muestra 10 chats de Jurídico (del 26/10 en adelante) y «Captados para derivar», 10.
+- Falta recorrer: los otros tres perfiles, el detalle de campaña, la ficha y el chat con el cambio del «siguiente paso».
+- Para abrir la Preview desde acá hizo falta un enlace temporal de Vercel (vence solo a las 23 h); la app sigue pidiendo el código de acceso.
+
 ## No hacer
 - No tocar `main` ni producción. No prender envíos, seguimiento ni campañas. No editar lo de Meta.
 - No escribir el código de acceso en ningún archivo. Recordar a la responsable que lo cambie.
