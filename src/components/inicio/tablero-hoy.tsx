@@ -174,7 +174,7 @@ export async function TableroHoy({
                 <span aria-hidden="true" className="avatar-ficha grid h-9 w-9 shrink-0 place-items-center rounded-full text-xs font-semibold">
                   {iniciales(f.nombre)}
                 </span>
-                <div className="min-w-0 flex-1">
+                <div className="min-w-[62%] flex-1 sm:min-w-0">
                   <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm font-semibold text-slate-950">
                     <span className="truncate">{f.nombre ?? "Sin nombre"}</span>
                     <span className={`rounded-full px-2 py-0.5 text-[13px] font-medium ${f.accion === "responder" ? "bg-amber-100 text-amber-900" : "bg-emerald-100 text-emerald-900"}`}>
@@ -183,12 +183,12 @@ export async function TableroHoy({
                     {f.tambienDerivar && <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[13px] font-medium text-emerald-900">Captado: falta derivar</span>}
                     {f.etiqueta && <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[13px] font-medium text-slate-700">{f.etiqueta}</span>}
                   </p>
-                  <p className="mt-0.5 truncate text-[13px] text-slate-600">
+                  <p className="mt-0.5 text-[13px] text-slate-600 sm:truncate">
                     {f.at ? cuandoCorto(f.at) : ""}
                     {f.detalle ? `${f.at ? " · " : ""}${f.detalle}` : ""}
                   </p>
                 </div>
-                <div className="flex shrink-0 gap-2">
+                <div className="flex w-full shrink-0 gap-2 pl-[3.25rem] sm:w-auto sm:pl-0 [&>a]:flex-1 [&>a]:justify-center sm:[&>a]:flex-none">
                   {f.accion === "responder" && f.conversationId ? (
                     <Link href={conVolver(enlaceConversacion(slug, f.conversationId), aqui)} className="btn-gold-sm">
                       Responder

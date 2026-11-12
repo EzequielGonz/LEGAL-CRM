@@ -16,50 +16,22 @@ Decisiones de la responsable (12/11):
 - [x] Interruptores de Wasender: ya no tapan el texto (`lineas-wasender.tsx`).
 - [x] Reglas puras del ritmo nuevo con pruebas: calentamiento, variantes mínimas, primer nombre, espera irregular, desfase en el minuto, freno automático (`src/lib/wasender/ritmo.ts`, `tests/unitarias/wasender-ritmo.test.ts`).
 
-## Pendiente (en este orden)
+## Hecho después (puntos de control 2 a 9)
+Ver `ENTREGA.md`. En resumen: ritmo nuevo conectado al motor, recontacto, seguimiento y segundo intento por Wasender, ocho plantillas nuevas inactivas, Hoy con una sola cola, Chats y Contactos reorganizados, Salud con Wasender, accesibilidad en celular.
 
-### A. Ritmo nuevo (punto 4) — conectado al motor (punto de control 2)
-- [x] Migración `0604_wasender_ritmo.sql` aplicada el 12/11 (solo agrega `wasender_lineas.calentamiento_desde`; producción no la lee).
-- [x] Límite del día = menor entre el elegido y el del calentamiento (`cupoDeLinea`). Se muestra en cada línea.
-- [x] Plantilla de campaña con 4 textos distintos como mínimo (`faltantesWasender`).
-- [x] Saludo con el primer nombre (`textoDeCampana`).
-- [x] Espera irregular y desfase de hasta 20 s dentro del minuto (solo Wasender).
-- [x] Verificación del número antes de enviar (`GET /on-whatsapp/{número}`; solo corta si Wasender dice `exists: false`). **Sin probar contra la API real**: la respuesta para un número inexistente no está documentada.
-- [x] Freno automático con ventana de 12 h (`frenoDeLinea`).
-- [x] El calentamiento se reinicia cuando la línea se vuelve a vincular.
-- [ ] Mostrar el calentamiento también en el detalle de la campaña.
-- [ ] Redactar variantes de las plantillas de campaña de cada perfil (4 textos por plantilla, cortos, sin «Respondé: …»), como plantillas nuevas inactivas para que la responsable las revise. No editar las existentes.
-- [ ] Pruebas unitarias de `cupoDeLinea` y `frenoDeLinea` con base falsa.
-
-### B. Verdad en pantalla (puntos 1 a 3)
-- [x] Hoy: «Esperan tu respuesta» y «Captados para derivar» (`src/lib/hoy/colas.ts`, `tablero-hoy.tsx`).
-- [x] Hoy: chip por línea de Wasender; la campaña no figura enviando si su línea no puede enviar; el puntaje del bot dice qué mide.
-- [x] Salud del sistema: un control por línea de Wasender (`src/lib/wasender/salud.ts`). Cierra la tarea #34.
-- [ ] Campañas: la calidad de línea que muestra una campaña pausada de Meta queda vieja (se guarda en `pause_reason`). Solo lectura: mostrar al lado la calidad actual. No tocar el motor de Meta.
-- [ ] Destinatarios de avisos de captación (`capture_notice_recipients`, vacío en los 4 perfiles): ubicar la pantalla que los edita y dejar un acceso desde Hoy/Salud cuando está vacío. Los carga la responsable.
-- [ ] Reemplazar `window.prompt/confirm` de las pantallas de Wasender por diálogos propios.
-- [x] Ficha y chat: si la persona escribió y la IA está apagada en esa conversación, el «siguiente paso» pide responder (antes decía «no hace falta hacer nada»).
-
-### C. Seguimiento y recontacto por Wasender (punto 5) — tarea #33
-- [x] Recontacto: los chats que salen por Wasender no dependen de la ventana de 24 h (`planRecontacto` con `sinVentana`, `recontacto/motor.ts`). Meta no cambia.
-- [ ] Seguimiento (`seguimiento/motor.ts`, `circuito.ts`): si el chat sale por Wasender (o su línea de Meta fue reemplazada), los contactos 2 y 3 salen por Wasender con plantilla propia (uso «seguimiento»), sin aprobación de Meta. Sigue apagado hasta que la responsable lo prenda (`followup_enabled_since`).
-- [x] Segundo intento a quien nunca respondió: regla pura con pruebas (`src/lib/seguimiento/segundo-intento.ts`) y decisión registrada en `.claude/referencias/reglas-comunes.md`.
-- [ ] Segundo intento en el motor: tarea en el tick que arma la cola (destinatarios de campañas de Wasender entregados, sin respuesta, sin detención, sin segundo intento), usa `planSegundoIntento`, respeta horario, `cupoDeLinea` y `frenoDeLinea`, y envía una plantilla propia de uso «segundo_intento» con variantes. Apagado por defecto, con interruptor por perfil. Registrar cada envío para que nunca haya un tercero.
-- [ ] Formularios web y presupuestos de Marketing por Wasender (resto de #33).
-
-### D. Orden y accesibilidad (punto 6)
-- [x] Títulos iguales a la pestaña («Chats», «Para recuperar»).
-- [x] Celular: letra mínima de 13 px, pestañas deslizables con la activa a la vista, botones de lista más altos (`src/app/accesible.css`). **Falta mirarlo en la Preview** en tamaño celular.
-- [ ] Celular: al abrir un chat, que lo primero que se vea sea la conversación.
-- [ ] Prospectos prioritarios de Marketing: paginar (hoy carga todo, más de 600 controles).
-- [ ] Contactos → Cartera: ocultar contadores en cero. Bases vacías o repetidas: proponer archivado (no archivar sin aprobación).
-- [ ] Bandeja humana: propuesta de limpieza de los 62 chats y las 55 incidencias (solo listar y proponer; cambios de datos, con aprobación).
-
-### E. Cierre
-- [ ] `npm run typecheck`, pruebas unitarias, `npm run lint`, `npm run build`.
-- [ ] Publicar la rama, comprobar la Preview y recorrerla (solo mirar).
-- [ ] `docs/mejoras-1211/ENTREGA.md`, `INFORME.md`, `MIGRACIONES.md`.
-- [ ] Informe a la responsable con el enlace de la Preview y qué cambia al aprobar.
+## Pendiente
+- [ ] Aplicar la migración 0605 al aprobar (ver `MIGRACIONES.md`).
+- [ ] Aviso de captación: la tabla `capture_notices` existe desde la etapa 2, pero **no hay pantalla para cargar destinatarios ni código que envíe el aviso**. Por eso los 23 avisos quedaron «sin destinatario». Hace falta construir las dos cosas (decisión de la responsable: a qué números y por qué línea).
+- [ ] Interruptor en pantalla para prender el segundo intento por perfil (hoy solo se prende en la base).
+- [ ] Formularios web y presupuestos de Marketing por Wasender (resto de la tarea #33).
+- [ ] Celular: que el chat abra mostrando la conversación.
+- [ ] Prospectos prioritarios de Marketing: paginar.
+- [ ] Reemplazar `window.prompt/confirm` de las pantallas de Wasender.
+- [ ] Todos los chats: la lista arranca pegada a las pestañas; falta un encabezado y accesos rápidos.
+- [ ] Bandeja humana e incidencias (268 cosas esperando decisión en Jurídico): propuesta de limpieza; los cambios de datos, con aprobación.
+- [ ] Bases vacías o repetidas: proponer archivado.
+- [ ] Probar de punta a punta con un chip conectado (tarea #29) y contra la API real la verificación del número.
+- [ ] Pruebas unitarias de `cupoDeLinea` y `frenoDeLinea` con base falsa; pruebas de integración.
 
 ## Revisión de la Preview (12/11, punto de control 5)
 - Recorrida en celular y escritorio (solo mirar): Hoy, Salud, Wasender y Para recuperar cargan con 200, sin errores de consola ni desborde.
