@@ -539,8 +539,8 @@ export function LineasWasender({ slug, marca }: { slug: SlugPerfil; marca: strin
 function Interruptor({ activo, onClick, texto, ayuda }: { activo: boolean; onClick: () => void; texto: string; ayuda: string }) {
   return (
     <button type="button" role="switch" aria-checked={activo} onClick={onClick} title={ayuda} className="tactil inline-flex items-center gap-2 text-slate-800">
-      <span className={clsx("relative inline-block h-5 w-9 rounded-full transition-colors", activo ? "bg-emerald-600" : "bg-slate-300")}>
-        <span className={clsx("absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-transform", activo ? "translate-x-4" : "translate-x-0.5")} />
+      <span className={clsx("relative inline-block h-5 w-9 shrink-0 rounded-full transition-colors", activo ? "bg-emerald-600" : "bg-slate-300")}>
+        <span className={clsx("absolute left-0 top-0.5 h-4 w-4 rounded-full bg-white shadow transition-transform", activo ? "translate-x-4" : "translate-x-0.5")} />
       </span>
       {texto}
     </button>

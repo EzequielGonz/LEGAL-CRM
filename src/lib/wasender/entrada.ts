@@ -126,7 +126,9 @@ async function procesarEntrante(supabase: Db, linea: any, ev: Extract<EventoWase
       await guardarArchivo(supabase, linea, ev, { messageId: r.messageId, conversationId: r.conversationId, contactId: r.contactId });
     }
     // Después: en modo prueba el chat queda en atención humana (producción no le escribe).
-    if (despuesDeProcesar(!!linea.modo_prueba) === "tomar") await tomarSiSigueConIa(supabase, r.conversationId, new Date());
+    // 12/11: Wasender entrega cada mensaje dos veces. La entrega repetida no toma el chat:
+    // si lo hiciera, apagaría la IA mientras la primera entrega todavía está respondiendo.
+    if (r.status !== "duplicado" && despuesDeProcesar(!!linea.modo_prueba) === "tomar") await tomarSiSigueConIa(supabase, r.conversationId, new Date());
   }
   return r.status;
 }
@@ -164,7 +166,51 @@ async function emparejar(supabase: Db, linea: any, conversationId: string, clave
   if (typeof anterior === "string" && anterior.startsWith("wasender:")) {
     await supabase.from("campaign_contacts").update({ message_id: claveId }).eq("message_id", anterior);
   }
+  await reaplicarEstados(supabase, claveId);
   return true;
+}
+
+/**
+ * 12/11: el aviso de entrega puede llegar antes que el eco. En ese momento el mensaje
+ * todavía tiene el id provisorio y el estado no encuentra a quién aplicarse (así se
+ * perdieron fallos del 10/11). Al emparejar, se vuelven a aplicar los estados guardados.
+ */
+async function reaplicarEstados(supabase: Db, claveId: string) {
+  try {
+    const { data } = await supabase.from("message_status_events").select("raw, status_at").eq("external_message_id", claveId).order("status_at", { ascending: true }).limit(10);
+    const vistos = new Set<string>();
+    for (const fila of (data ?? []) as any[]) {
+      const estado = String(fila?.raw?.status ?? "");
+      if (!estado || vistos.has(estado)) continue;
+      vistos.add(estado);
+      await applyDeliveryStatus(fila.raw);
+    }
+    if (vistos.size) await textoDeFallaWasender(supabase, claveId);
+  } catch (err) {
+    console.error("[wasender] No se pudieron reaplicar los estados:", err);
+  }
+}
+
+/** El texto de la falla nombra a Wasender (el genérico dice «Meta informó»). */
+async function textoDeFallaWasender(supabase: Db, claveId: string) {
+  await supabase
+    .from("campaign_contacts")
+    .update({ error: "Wasender informó que no se pudo entregar: el número puede no tener WhatsApp." })
+    .eq("message_id", claveId)
+    .eq("status", "fallo")
+    .like("error", "Meta informó%");
+}
+
+/** 12/11: si la línea se cae, sus campañas en curso se pausan con el motivo y no se reanudan solas. */
+async function pausarCampanasDeLinea(supabase: Db, linea: any, estado: string) {
+  await (supabase.from("campaigns") as any)
+    .update({
+      status: "pausada",
+      pause_reason: `La línea de Wasender «${linea.nombre}» se desconectó (${estado}). Reconectala con el QR y reanudá la campaña a mano.`,
+      paused_at: new Date().toISOString(),
+    })
+    .eq("wasender_line_id", linea.id)
+    .eq("status", "en_curso");
 }
 
 async function conversacionExistente(supabase: Db, area: Area, telefono: string): Promise<any | null> {
@@ -362,6 +408,7 @@ export async function procesarWebhook(
         await (supabase.from("wasender_lineas" as any) as any)
           .update({ estado: ev.estado, estado_at: new Date().toISOString(), ...(caida ? { habilitada: false } : {}) })
           .eq("id", linea.id);
+        if (caida) await pausarCampanasDeLinea(supabase, linea, ev.estado);
         resultados.push(`sesion:${ev.estado}`);
       } else if (ev.tipo === "mensaje") {
         if (!ev.deMi) {
@@ -383,6 +430,7 @@ export async function procesarWebhook(
       } else if (ev.tipo === "estado") {
         if (ev.deMi) {
           await applyDeliveryStatus({ id: ev.claveId, status: estadoComoMeta(ev.estado), timestamp: String(Math.floor(Date.now() / 1000)), recipient_id: ev.telefono });
+          if (ev.estado === "fallido") await textoDeFallaWasender(supabase, ev.claveId);
           resultados.push(`estado:${ev.estado}`);
         } else {
           resultados.push("estado:ajeno");

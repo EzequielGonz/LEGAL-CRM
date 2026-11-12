@@ -214,7 +214,11 @@ async function tickLocked(
   const porWasender = proveedorDe(campaign) === "wasender";
   const wa = porWasender ? await preparacionWasender(campaign as any, supabase) : null;
   if (wa && (!wa.ready || !wa.linea || !wa.plantilla)) {
-    return { campaignId, action: "not_running", detail: `Falta configurar: ${wa.missing.join("; ")}` };
+    // 12/11: antes la campaña seguía «en curso» sin enviar y retomaba sola al volver la línea.
+    // Ahora se pausa con el motivo y solo se reanuda a mano.
+    const motivo = `Se pausó sola: ${wa.missing.join("; ")}. Revisalo y reanudala a mano.`.slice(0, 500);
+    await (supabase.from("campaigns") as any).update({ status: "pausada", pause_reason: motivo, paused_at: new Date().toISOString() }).eq("id", campaignId).eq("status", "en_curso");
+    return { campaignId, action: "not_running", detail: motivo };
   }
   // Límite diario de la línea de Wasender (sumando todas las campañas que la usan), igual que en Meta.
   if (wa?.linea?.limite_diario) {

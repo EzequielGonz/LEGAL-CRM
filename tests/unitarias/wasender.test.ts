@@ -413,12 +413,19 @@ function baseFalsa(lineas: Record<string, any>) {
         if (tabla === "wasender_eventos") registro.eventos.push(fila);
         return { error: null };
       },
-      update: (cambios: any) => ({
-        eq: async (c: string, v: unknown) => {
-          registro.updates.push({ tabla, cambios, [c]: v });
-          return { error: null };
-        },
-      }),
+      // Acepta uno o varios filtros encadenados y registra el cambio una sola vez.
+      update: (cambios: any) => {
+        const fila: any = { tabla, cambios };
+        registro.updates.push(fila);
+        const u: any = {
+          eq: (c: string, v: unknown) => {
+            fila[c] = v;
+            return u;
+          },
+          then: (ok: (r: { error: null }) => unknown) => Promise.resolve({ error: null }).then(ok),
+        };
+        return u;
+      },
     };
     return q;
   };
@@ -459,6 +466,10 @@ test("wasender: con la firma correcta se guarda el estado de la línea; si se ca
 
     await procesarWebhook({ lineaId: LINEA_ID, firma: "secreto-ficticio", payload: { event: "session.status", data: { status: "LOGGED_OUT" } } }, { supabase });
     assert.equal(registro.updates[1].cambios.habilitada, false);
+    // 12/11: al caerse la línea, sus campañas en curso se pausan con el motivo (no se reanudan solas).
+    const pausa = registro.updates[2];
+    assert.deepEqual([pausa.tabla, pausa.cambios.status, pausa.wasender_line_id, pausa.status], ["campaigns", "pausada", LINEA_ID, "en_curso"]);
+    assert.match(pausa.cambios.pause_reason, /se desconectó/);
 
     const qr = await procesarWebhook({ lineaId: LINEA_ID, firma: "secreto-ficticio", payload: { event: "qrcode.updated", data: { qr: "2@x" } } }, { supabase });
     assert.deepEqual(qr.resultados, ["qr"]);
