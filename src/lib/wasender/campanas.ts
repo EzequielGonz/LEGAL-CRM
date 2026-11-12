@@ -271,6 +271,13 @@ export async function cupoDeLinea(
       .gte("sent_at", inicioDelDia.toISOString());
     enviadosHoy = count ?? 0;
   }
+  // Los segundos intentos de hoy gastan el mismo cupo (sin la migración 0605 la tabla no existe: cuenta 0).
+  const { count: segundos } = await (supabase.from("wasender_segundos_intentos" as any) as any)
+    .select("id", { count: "exact", head: true })
+    .eq("linea_id", linea.id)
+    .eq("status", "enviado")
+    .gte("sent_at", inicioDelDia.toISOString());
+  enviadosHoy += segundos ?? 0;
   const detalle = efectivo.porCalentamiento
     ? `La línea «${linea.nombre}» está en el día ${efectivo.dia} de calentamiento: hasta ${efectivo.limite} envíos por día. Mañana sigue sola.`
     : `La línea «${linea.nombre}» llegó a su límite de ${efectivo.limite} envíos por hoy.`;

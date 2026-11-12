@@ -18,6 +18,10 @@ import { classifySendFailure, failureNote, MAX_TRANSIENT_ATTEMPTS } from "@/lib/
 import { setOpportunityState, logOpportunityEvent } from "@/lib/opportunities";
 import { getProfile, getLine, getProfileLines, type ProfileLine } from "@/lib/profiles";
 import type { Area } from "@/lib/supabase/database.types";
+import { salidaDeConversacion } from "@/lib/wasender/proveedor";
+import { enviarPorWasender } from "@/lib/wasender/envio";
+import { clasificarFallaWasender, notaFallaWasender } from "@/lib/wasender/campanas";
+import { prepararEnvioWasender, textoDePlantilla } from "@/lib/seguimiento/wasender";
 
 /**
  * Etapa 2 · Bloque 2.3 — Motor del seguimiento general (cuatro perfiles).
@@ -378,64 +382,14 @@ async function applyTiming(supabase: Db, task: any, decision: Exclude<ExecutionD
   return { taskId: id, action: "conflicto", detail: decision.detail };
 }
 
-async function processTask(supabase: Db, task: any, now: Date, calendar: ContactCalendar, clock: () => Date): Promise<ExecResult> {
+/**
+ * Compuerta en la base inmediatamente antes de enviar (pausa general, datos
+ * coherentes, chat tomado, oportunidad cerrada, detención, respuesta de la
+ * persona). Devuelve el resultado si no se puede enviar, o null si puede seguir.
+ * La usan igual el envío por Meta y el de Wasender.
+ */
+async function pasarCompuerta(supabase: Db, task: any, token: string): Promise<ExecResult | null> {
   const id = task.id as string;
-  const timing = { base: new Date(task.base_at), scheduledAt: new Date(task.scheduled_at), targetHours: task.target_hours };
-  const first = decideAtExecution(timing, now, calendar);
-  if (first.action !== "enviar") return applyTiming(supabase, task, first, null);
-
-  // Datos para el envío.
-  const { data: conversation } = await supabase
-    .from("conversations")
-    .select("id, area, line_id, contact_id, contacts(id, full_name, phone)")
-    .eq("id", task.conversation_id)
-    .single();
-  const contact = (conversation as any)?.contacts;
-  if (!conversation || !contact?.phone) {
-    await updateTask(supabase, id, { status: "fallida", status_reason: "El contacto no tiene teléfono" });
-    return { taskId: id, action: "fallida", detail: "Sin teléfono" };
-  }
-
-  // La línea se valida antes de elegir plantilla y credenciales.
-  const lineCheck = await resolveLine(conversation as any, task);
-  if (!lineCheck.ok) {
-    await markPending(supabase, task, lineCheck.reason);
-    return { taskId: id, action: "pendiente", detail: lineCheck.reason };
-  }
-  const line = lineCheck.line;
-  const purposes = task.step === 3 ? (["seguimiento_3", "seguimiento"] as const) : (["seguimiento"] as const);
-  const check = await purposeTemplateCheck(line, [...purposes]);
-  if (!check.resolved) {
-    const reason = `Falta configurar: ${check.missing.join("; ")}. El seguimiento queda pendiente.`;
-    await updateTask(supabase, id, { status: "pendiente", status_reason: reason, line_id: line.id });
-    return { taskId: id, action: "pendiente", detail: reason };
-  }
-  const profile = await getProfile(task.rubro_id);
-  const built = buildBodyParameters(check.resolved.analysis, check.resolved.sources, {
-    "contacto.nombre": contact.full_name ?? "",
-    "perfil.presentacion": profile?.agent_presentation_name ?? "",
-    "perfil.marca": profile?.brand_name ?? "",
-  });
-  if (!built.ok) {
-    const reason = `No se envía: falta ${built.missing.map((m) => `${m.label} para ${m.variable}`).join(", ")}. Queda pendiente.`;
-    await updateTask(supabase, id, { status: "pendiente", status_reason: reason, line_id: line.id, template_id: check.resolved.template.id });
-    return { taskId: id, action: "pendiente", detail: reason };
-  }
-
-  // Hora y calendario de nuevo, después de las consultas y antes de reservar.
-  const beforeClaim = clock();
-  const fresh = await loadContactCalendar(beforeClaim);
-  if (fresh.error) return { taskId: id, action: "esperar", detail: fresh.error };
-  const second = decideAtExecution(timing, beforeClaim, fresh.calendar);
-  if (second.action !== "enviar") return applyTiming(supabase, task, second, null);
-
-  // Reserva: una sola ejecución puede enviarla.
-  const token = randomUUID();
-  const { data: claimed } = await supabase.rpc("followup_claim", { p_task: id, p_token: token });
-  if (claimed !== true) return { taskId: id, action: "ocupada" };
-  await supabase.from("followup_tasks").update({ line_id: line.id, template_id: check.resolved.template.id }).eq("id", id);
-
-  // Compuerta en la base inmediatamente antes de enviar.
   const { data: gate, error: gateError } = await supabase.rpc("followup_gate", { p_task: id, p_token: token });
   if (gateError || gate !== "ok") {
     const reasonKey = gateError ? "error_compuerta" : String(gate);
@@ -482,6 +436,218 @@ async function processTask(supabase: Db, task: any, now: Date, calendar: Contact
     }
     return { taskId: id, action: "cancelada", detail: text };
   }
+
+  return null;
+}
+
+/** Cierre de un contacto enviado: tarea, conversación y estados de la oportunidad. Igual para Meta y Wasender. */
+async function cerrarEnviada(supabase: Db, task: any, token: string, messageId: string, externalId: string | null, sentAt: string) {
+  const id = task.id as string;
+  await finish(supabase, id, token, "enviada", null, { messageId, externalId, sentAt });
+  await supabase.from("conversations").update({ last_message_at: sentAt }).eq("id", task.conversation_id);
+  await setOpportunityState({
+    opportunityId: task.opportunity_id,
+    dimension: "seguimiento",
+    field: "followup_state",
+    value: "activo",
+    actor: "sistema",
+    reason: `Contacto ${task.step} enviado`,
+    extra: { followup_reason: `Contacto ${task.step} enviado`, followup_next_at: null },
+    detail: { tarea: id, mensaje: messageId },
+  });
+  const { data: opp } = await supabase.from("opportunities").select("capture_state").eq("id", task.opportunity_id).single();
+  if (opp?.capture_state === "en_conversacion") {
+    await setOpportunityState({
+      opportunityId: task.opportunity_id,
+      dimension: "captacion",
+      field: "capture_state",
+      value: "en_seguimiento",
+      actor: "sistema",
+      reason: `Contacto ${task.step} de seguimiento enviado`,
+    });
+  }
+}
+
+/**
+ * Contacto de seguimiento por Wasender (12/11). Mismos pasos que por Meta:
+ * preparar, volver a mirar la hora, reservar, compuerta, última comprobación,
+ * enviar y registrar. Un resultado incierto queda a revisar y nunca se reenvía solo.
+ */
+async function processTaskWasender(
+  supabase: Db,
+  task: any,
+  conversation: { id: string; area: Area },
+  contact: { id: string; full_name: string | null; phone: string },
+  lineaId: string,
+  timing: { base: Date; scheduledAt: Date; targetHours: number },
+  clock: () => Date
+): Promise<ExecResult> {
+  const id = task.id as string;
+  const prep = await prepararEnvioWasender({ lineaId, rubroId: task.rubro_id, area: conversation.area, proposito: task.step === 3 ? "seguimiento_3" : "seguimiento_2" }, supabase);
+  if (!prep.ok) {
+    await markPending(supabase, task, prep.reason);
+    return { taskId: id, action: "pendiente", detail: prep.reason };
+  }
+  const texto = textoDePlantilla(
+    prep.plantilla,
+    { nombre: contact.full_name ?? "", asesor: prep.perfil?.agent_presentation_name?.trim() ?? "", marca: prep.perfil?.brand_name?.trim() ?? "" },
+    contact.id
+  );
+
+  // Hora y calendario de nuevo, después de las consultas y antes de reservar.
+  const beforeClaim = clock();
+  const fresh = await loadContactCalendar(beforeClaim);
+  if (fresh.error) return { taskId: id, action: "esperar", detail: fresh.error };
+  const second = decideAtExecution(timing, beforeClaim, fresh.calendar);
+  if (second.action !== "enviar") return applyTiming(supabase, task, second, null);
+
+  const token = randomUUID();
+  const { data: claimed } = await supabase.rpc("followup_claim", { p_task: id, p_token: token });
+  if (claimed !== true) return { taskId: id, action: "ocupada" };
+  // La compuerta reconoce la línea de Wasender por esta columna (migración 0605).
+  await (supabase.from("followup_tasks") as any).update({ wasender_line_id: prep.linea.id }).eq("id", id);
+
+  const frenada = await pasarCompuerta(supabase, task, token);
+  if (frenada) return frenada;
+
+  const atSend = clock();
+  const third = decideAtExecution(timing, atSend, fresh.calendar);
+  if (third.action !== "enviar") return applyTiming(supabase, task, third, token);
+
+  let envio: Awaited<ReturnType<typeof enviarPorWasender>>;
+  try {
+    envio = await enviarPorWasender({ lineaId: prep.linea.id, to: contact.phone, body: texto, plantilla: prep.plantilla.nombre }, { supabase });
+    if (!envio.externalId) throw new Error("Wasender respondió sin el identificador del mensaje.");
+  } catch (err) {
+    const f = clasificarFallaWasender(err);
+    const note = notaFallaWasender(f);
+    if (f.kind === "cuenta") {
+      await finish(supabase, id, token, "pendiente", note);
+      return { taskId: id, action: "pendiente", detail: note };
+    }
+    if (f.kind === "transitorio") {
+      const attempts = (task.attempts ?? 0) + 1;
+      if (attempts < MAX_TRANSIENT_ATTEMPTS) {
+        await finish(supabase, id, token, "programada", note);
+        return { taskId: id, action: "liberada", detail: note };
+      }
+      await finish(supabase, id, token, "fallida", `${note} Se alcanzó el límite de ${MAX_TRANSIENT_ATTEMPTS} intentos.`);
+      return { taskId: id, action: "fallida", detail: note };
+    }
+    if (f.kind === "contacto") {
+      await finish(supabase, id, token, "fallida", note);
+      return { taskId: id, action: "fallida", detail: note };
+    }
+    await finish(supabase, id, token, "a_revisar", note);
+    await logOpportunityEvent({ opportunityId: task.opportunity_id, actor: "sistema", dimension: "seguimiento", to: "a_revisar", reason: note, detail: { tarea: id, contacto: task.step } });
+    return { taskId: id, action: "a_revisar", detail: note };
+  }
+
+  const externalId = envio.externalId;
+  const sentAt = clock().toISOString();
+  let messageId: string | null = null;
+  for (let i = 0; i < SAVE_RETRIES && !messageId; i++) {
+    const { data: msg } = await insertMessageRow(
+      supabase,
+      {
+        conversation_id: task.conversation_id,
+        sender_type: "agente_ia",
+        direction: "saliente",
+        body: texto,
+        external_message_id: externalId,
+        delivery_status: "enviado",
+        delivery_status_at: sentAt,
+        created_at: sentAt,
+        metadata: { ...envio.metadata, automatico: "seguimiento", followup_task_id: id, followup_step: task.step },
+        origin: "seguimiento",
+      },
+      { select: "id" }
+    );
+    messageId = msg?.id ?? null;
+  }
+  if (!messageId) {
+    const note = `Wasender aceptó el contacto ${task.step} (${externalId}) pero no se pudo registrar en la conversación. No se reenvía.`;
+    await finish(supabase, id, token, "a_revisar", note, { externalId });
+    return { taskId: id, action: "a_revisar", detail: note };
+  }
+  await (supabase.from("conversations") as any).update({ wasender_line_id: prep.linea.id }).eq("id", task.conversation_id);
+  await cerrarEnviada(supabase, task, token, messageId, externalId, sentAt);
+  return { taskId: id, action: "enviada", detail: `contacto ${task.step} por Wasender` };
+}
+
+async function processTask(supabase: Db, task: any, now: Date, calendar: ContactCalendar, clock: () => Date): Promise<ExecResult> {
+  const id = task.id as string;
+  const timing = { base: new Date(task.base_at), scheduledAt: new Date(task.scheduled_at), targetHours: task.target_hours };
+  const first = decideAtExecution(timing, now, calendar);
+  if (first.action !== "enviar") return applyTiming(supabase, task, first, null);
+
+  // Datos para el envío.
+  const { data: conversation } = await supabase
+    .from("conversations")
+    .select("id, area, line_id, contact_id, contacts(id, full_name, phone)")
+    .eq("id", task.conversation_id)
+    .single();
+  const contact = (conversation as any)?.contacts;
+  if (!conversation || !contact?.phone) {
+    await updateTask(supabase, id, { status: "fallida", status_reason: "El contacto no tiene teléfono" });
+    return { taskId: id, action: "fallida", detail: "Sin teléfono" };
+  }
+
+  // 12/11 (bloque 4): si el chat sale por Wasender (habla por una línea de Wasender o
+  // su línea de Meta fue reemplazada), el contacto sale por ahí con una plantilla propia.
+  // El circuito, los plazos y la compuerta son los mismos. El camino de Meta no cambia.
+  const salida = await salidaDeConversacion(task.conversation_id, supabase);
+  if (salida.proveedor === "wasender") {
+    if ((conversation as any).contact_id !== task.contact_id) {
+      const reason = "La conversación no corresponde al contacto de la tarea: no se envía hasta revisarlo.";
+      await markPending(supabase, task, reason);
+      return { taskId: id, action: "pendiente", detail: reason };
+    }
+    return processTaskWasender(supabase, task, conversation as any, contact, salida.lineaId, timing, clock);
+  }
+
+  // La línea se valida antes de elegir plantilla y credenciales.
+  const lineCheck = await resolveLine(conversation as any, task);
+  if (!lineCheck.ok) {
+    await markPending(supabase, task, lineCheck.reason);
+    return { taskId: id, action: "pendiente", detail: lineCheck.reason };
+  }
+  const line = lineCheck.line;
+  const purposes = task.step === 3 ? (["seguimiento_3", "seguimiento"] as const) : (["seguimiento"] as const);
+  const check = await purposeTemplateCheck(line, [...purposes]);
+  if (!check.resolved) {
+    const reason = `Falta configurar: ${check.missing.join("; ")}. El seguimiento queda pendiente.`;
+    await updateTask(supabase, id, { status: "pendiente", status_reason: reason, line_id: line.id });
+    return { taskId: id, action: "pendiente", detail: reason };
+  }
+  const profile = await getProfile(task.rubro_id);
+  const built = buildBodyParameters(check.resolved.analysis, check.resolved.sources, {
+    "contacto.nombre": contact.full_name ?? "",
+    "perfil.presentacion": profile?.agent_presentation_name ?? "",
+    "perfil.marca": profile?.brand_name ?? "",
+  });
+  if (!built.ok) {
+    const reason = `No se envía: falta ${built.missing.map((m) => `${m.label} para ${m.variable}`).join(", ")}. Queda pendiente.`;
+    await updateTask(supabase, id, { status: "pendiente", status_reason: reason, line_id: line.id, template_id: check.resolved.template.id });
+    return { taskId: id, action: "pendiente", detail: reason };
+  }
+
+  // Hora y calendario de nuevo, después de las consultas y antes de reservar.
+  const beforeClaim = clock();
+  const fresh = await loadContactCalendar(beforeClaim);
+  if (fresh.error) return { taskId: id, action: "esperar", detail: fresh.error };
+  const second = decideAtExecution(timing, beforeClaim, fresh.calendar);
+  if (second.action !== "enviar") return applyTiming(supabase, task, second, null);
+
+  // Reserva: una sola ejecución puede enviarla.
+  const token = randomUUID();
+  const { data: claimed } = await supabase.rpc("followup_claim", { p_task: id, p_token: token });
+  if (claimed !== true) return { taskId: id, action: "ocupada" };
+  await supabase.from("followup_tasks").update({ line_id: line.id, template_id: check.resolved.template.id }).eq("id", id);
+
+  // Compuerta en la base inmediatamente antes de enviar.
+  const frenada = await pasarCompuerta(supabase, task, token);
+  if (frenada) return frenada;
 
   // Última comprobación de hora, calendario y plazo, justo antes de llamar a Meta.
   const atSend = clock();
@@ -562,29 +728,7 @@ async function processTask(supabase: Db, task: any, now: Date, calendar: Contact
     await finish(supabase, id, token, "a_revisar", note, { externalId });
     return { taskId: id, action: "a_revisar", detail: note };
   }
-  await finish(supabase, id, token, "enviada", null, { messageId, externalId, sentAt });
-  await supabase.from("conversations").update({ last_message_at: sentAt }).eq("id", task.conversation_id);
-  await setOpportunityState({
-    opportunityId: task.opportunity_id,
-    dimension: "seguimiento",
-    field: "followup_state",
-    value: "activo",
-    actor: "sistema",
-    reason: `Contacto ${task.step} enviado`,
-    extra: { followup_reason: `Contacto ${task.step} enviado`, followup_next_at: null },
-    detail: { tarea: id, mensaje: messageId },
-  });
-  const { data: opp } = await supabase.from("opportunities").select("capture_state").eq("id", task.opportunity_id).single();
-  if (opp?.capture_state === "en_conversacion") {
-    await setOpportunityState({
-      opportunityId: task.opportunity_id,
-      dimension: "captacion",
-      field: "capture_state",
-      value: "en_seguimiento",
-      actor: "sistema",
-      reason: `Contacto ${task.step} de seguimiento enviado`,
-    });
-  }
+  await cerrarEnviada(supabase, task, token, messageId, externalId, sentAt);
   return { taskId: id, action: "enviada", detail: `contacto ${task.step}` };
 }
 

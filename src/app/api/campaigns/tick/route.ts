@@ -13,6 +13,7 @@ import { avanzarExtraccion } from "@/lib/marketing/extraer";
 import { enviarPresupuestosProgramados } from "@/lib/marketing/presupuestos";
 import { registrarLatido } from "@/lib/salud";
 import { procesarRecontactos } from "@/lib/recontacto/motor";
+import { procesarSegundosIntentos } from "@/lib/seguimiento/segundo-intento-motor";
 import { sincronizarCatalogosSiToca } from "@/lib/plantillas/auto-asignar";
 import { rescatarTurnosPerdidos } from "@/lib/ai-agent/rescate";
 import { vigilarCalidadLineas } from "@/lib/whatsapp/calidad-servidor";
@@ -79,6 +80,18 @@ export async function POST(request: Request) {
       recontacto = await procesarRecontactos({ presupuestoMs: 15_000 });
     } catch (err: any) {
       recontacto = { error: String(err?.message ?? err) };
+    }
+
+    // 2 bis b) Segundo intento por Wasender (12/11): un solo mensaje más a quien recibió
+    //    la campaña y nunca respondió, entre 5 y 7 días después. Apagado por defecto en
+    //    todos los perfiles; sin la migración 0605 no hace nada.
+    let segundoIntento: unknown = null;
+    if (Date.now() - inicio < 25_000) {
+      try {
+        segundoIntento = await procesarSegundosIntentos();
+      } catch (err: any) {
+        segundoIntento = { error: String(err?.message ?? err) };
+      }
     }
 
     // 2 ter) Turnos perdidos (24/10): un mensaje de texto que quedó sin
@@ -201,7 +214,7 @@ export async function POST(request: Request) {
 
     // Tablero de salud: deja la hora del último latido.
     await registrarLatido(true, { ms: Date.now() - inicio });
-    return NextResponse.json({ ok: true, results, plantillas, seguimiento, recontacto, rescate, calidad, marketing, servidor, extraccion, avisos, formularios, presupuestos, catalogo });
+    return NextResponse.json({ ok: true, results, plantillas, seguimiento, recontacto, segundoIntento, rescate, calidad, marketing, servidor, extraccion, avisos, formularios, presupuestos, catalogo });
   } catch (err: any) {
     await registrarLatido(false, { error: String(err?.message ?? err).slice(0, 200) });
     return NextResponse.json({ error: String(err.message ?? err) }, { status: 500 });
