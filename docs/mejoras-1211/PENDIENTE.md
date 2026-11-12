@@ -32,22 +32,25 @@ Decisiones de la responsable (12/11):
 - [ ] Pruebas unitarias de `cupoDeLinea` y `frenoDeLinea` con base falsa.
 
 ### B. Verdad en pantalla (puntos 1 a 3)
-- [ ] Hoy: dos colas nuevas, «Respondieron y nadie contestó» (entrante último, IA apagada o sin respuesta) y «Captados para derivar».
-- [ ] Hoy: el chip de campaña no dice «enviando» si la línea no puede enviar; explicar «Bot 33/100».
-- [ ] Salud del sistema: líneas de Wasender (estado, habilitada, día de calentamiento, fallos de 24 h). Tarea #34.
-- [ ] Campañas: la calidad de línea que se muestra en una campaña pausada debe ser la actual.
-- [ ] Destinatarios de avisos de captación: revisar la pantalla existente y dejar el acceso a la vista (los carga la responsable).
+- [x] Hoy: «Esperan tu respuesta» y «Captados para derivar» (`src/lib/hoy/colas.ts`, `tablero-hoy.tsx`).
+- [x] Hoy: chip por línea de Wasender; la campaña no figura enviando si su línea no puede enviar; el puntaje del bot dice qué mide.
+- [x] Salud del sistema: un control por línea de Wasender (`src/lib/wasender/salud.ts`). Cierra la tarea #34.
+- [ ] Campañas: la calidad de línea que muestra una campaña pausada de Meta queda vieja (se guarda en `pause_reason`). Solo lectura: mostrar al lado la calidad actual. No tocar el motor de Meta.
+- [ ] Destinatarios de avisos de captación (`capture_notice_recipients`, vacío en los 4 perfiles): ubicar la pantalla que los edita y dejar un acceso desde Hoy/Salud cuando está vacío. Los carga la responsable.
 - [ ] Reemplazar `window.prompt/confirm` de las pantallas de Wasender por diálogos propios.
+- [ ] En el chat tomado por una persona con mensaje sin responder, el aviso «no hace falta hacer nada por ahora» es falso: revisar el componente del chat.
 
 ### C. Seguimiento y recontacto por Wasender (punto 5) — tarea #33
-- [ ] Seguimiento (`seguimiento/motor.ts`): si el chat habla por Wasender o su línea de Meta fue reemplazada, sale por Wasender con plantilla propia y sin ventana de 24 h. Sigue apagado hasta que la responsable lo prenda.
-- [ ] Recontacto (`recontacto/motor.ts`): por Wasender no depende de la ventana de 24 h.
-- [ ] Segundo intento a quien nunca respondió: uno solo, a los 5 a 7 días, con otro texto, por Wasender, dentro del límite diario y del calentamiento. Actualizar la regla 5 en `.claude/referencias/reglas-comunes.md` con fecha y decisión.
+- [x] Recontacto: los chats que salen por Wasender no dependen de la ventana de 24 h (`planRecontacto` con `sinVentana`, `recontacto/motor.ts`). Meta no cambia.
+- [ ] Seguimiento (`seguimiento/motor.ts`, `circuito.ts`): si el chat sale por Wasender (o su línea de Meta fue reemplazada), los contactos 2 y 3 salen por Wasender con plantilla propia (uso «seguimiento»), sin aprobación de Meta. Sigue apagado hasta que la responsable lo prenda (`followup_enabled_since`).
+- [ ] Segundo intento a quien nunca respondió (decisión de la responsable del 12/11): uno solo, a los 5 a 7 días, con otro texto, por Wasender, dentro del límite del día y del calentamiento, de lunes a sábado en horario. Regla pura con pruebas + tarea en el tick, apagado por defecto con interruptor por perfil. Actualizar la regla 5 de `.claude/referencias/reglas-comunes.md` con fecha y decisión.
+- [ ] Formularios web y presupuestos de Marketing por Wasender (resto de #33).
 
 ### D. Orden y accesibilidad (punto 6)
-- [ ] Títulos iguales a la pestaña («Chats», «Para recuperar»).
-- [ ] Celular: pestañas que no se corten; el chat abre mostrando la conversación; letra mínima de 13 px en Hoy, Para recuperar y Prospectos.
-- [ ] Prospectos prioritarios de Marketing: paginar.
+- [x] Títulos iguales a la pestaña («Chats», «Para recuperar»).
+- [x] Celular: letra mínima de 13 px, pestañas deslizables con la activa a la vista, botones de lista más altos (`src/app/accesible.css`). **Falta mirarlo en la Preview** en tamaño celular.
+- [ ] Celular: al abrir un chat, que lo primero que se vea sea la conversación.
+- [ ] Prospectos prioritarios de Marketing: paginar (hoy carga todo, más de 600 controles).
 - [ ] Contactos → Cartera: ocultar contadores en cero. Bases vacías o repetidas: proponer archivado (no archivar sin aprobación).
 - [ ] Bandeja humana: propuesta de limpieza de los 62 chats y las 55 incidencias (solo listar y proponer; cambios de datos, con aprobación).
 

@@ -63,7 +63,9 @@ export function cierreDelDia(instante: Date, calendar: ContactCalendar = DEFAULT
 export function planRecontacto(
   input: { ultimoEntrante: Date | null; ultimoSaliente: Date | null; recontactosHechos: number },
   ahora: Date,
-  calendar: ContactCalendar = DEFAULT_CALENDAR
+  calendar: ContactCalendar = DEFAULT_CALENDAR,
+  /** 12/11: por Wasender no hay ventana de 24 h (es WhatsApp común). Por Meta no cambia nada. */
+  opciones: { sinVentana?: boolean } = {}
 ): PlanRecontacto {
   const { ultimoEntrante, ultimoSaliente } = input;
   if (!ultimoEntrante) return { accion: "nada", motivo: "sin_mensaje_de_la_persona" };
@@ -71,7 +73,7 @@ export function planRecontacto(
   if (input.recontactosHechos >= MAX_RECONTACTOS) return { accion: "nada", motivo: "ya_se_recontacto" };
   const paso = (input.recontactosHechos + 1) as PasoRecontacto;
 
-  const limite = ultimoEntrante.getTime() + CHANNEL_WINDOW_HOURS * HORA - MARGEN_VENTANA_MS;
+  const limite = opciones.sinVentana ? Number.POSITIVE_INFINITY : ultimoEntrante.getTime() + CHANNEL_WINDOW_HOURS * HORA - MARGEN_VENTANA_MS;
   const vence = ultimoSaliente.getTime() + ESPERA_RECONTACTO_MS;
   const minimo = ultimoSaliente.getTime() + MINIMO_ENTRE_MENSAJES_MS;
 

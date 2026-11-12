@@ -27,7 +27,7 @@ function fechaCorta(iso: string) {
 function accesos(slug: SlugPerfil) {
   const base = slug === "juridico" ? "" : `/panel/${slug}`;
   return [
-    { href: `/conversaciones?perfil=${slug}`, texto: "Conversaciones", icono: "inbox" },
+    { href: `/conversaciones?perfil=${slug}`, texto: "Chats", icono: "inbox" },
     { href: `/contactos?perfil=${slug}`, texto: "Contactos", icono: "cerrados" },
     { href: `${base}/campanas`, texto: "Campañas", icono: "campanas" },
     { href: `${base}/estadisticas`, texto: "Historial", icono: "estadisticas" },

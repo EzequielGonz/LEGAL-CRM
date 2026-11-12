@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { seccionActiva, seccionesDePerfil } from "@/lib/menu";
@@ -50,9 +51,16 @@ export function PestanasSeccion({ slug }: { slug: SlugPerfil }) {
   const search = useSearchParams();
   const activa = seccionActiva(seccionesDePerfil(slug), pathname, search?.toString() ?? null);
   const visibles = activa ? activa.seccion.tabs.filter((t) => !t.oculto) : [];
+  // 12/11: en el celular la pestaña en la que estás queda a la vista (antes podía quedar cortada).
+  const riel = useRef<HTMLElement>(null);
+  const hrefActivo = activa?.tab.href ?? null;
+  useEffect(() => {
+    const actual = riel.current?.querySelector<HTMLElement>('[aria-current="page"]');
+    if (actual && riel.current) riel.current.scrollLeft = Math.max(0, actual.offsetLeft - 16);
+  }, [hrefActivo]);
   if (!activa || visibles.length < 2) return null;
   return (
-    <nav aria-label={`Vistas de ${activa.seccion.label}`} className="pestanas-seccion">
+    <nav ref={riel} aria-label={`Vistas de ${activa.seccion.label}`} className="pestanas-seccion">
       {visibles.map((t) => (
         <Link key={t.href} href={t.href} aria-current={t.href === activa.tab.href ? "page" : undefined} className="pestana">
           {t.label}

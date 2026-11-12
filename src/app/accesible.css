@@ -1,0 +1,32 @@
+/*
+ * Accesibilidad en el celular (12/11). Lo que se vio usando el panel como usuaria:
+ * letra demasiado chica y pestañas que se cortan sin avisar que hay más.
+ * Solo ajusta tamaños en pantallas angostas; no cambia colores ni la versión de escritorio.
+ */
+@media (max-width: 640px) {
+  /* Piso de 13 px para el texto del panel (antes había 11 y 12 px en más de la mitad de «Hoy»). */
+  main#contenido :is(.text-xs, .text-\[11px\], .text-\[11\.5px\], .text-\[12px\], .text-\[10px\], .text-\[10\.5px\]) {
+    font-size: 0.8125rem;
+    line-height: 1.2rem;
+  }
+
+  /* Pestañas de sección: ocupan el ancho, se deslizan con el dedo y el borde
+     derecho se desvanece para que se note que siguen. */
+  .pestanas-seccion {
+    width: 100%;
+    padding-right: 1.75rem;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 2rem), transparent);
+    mask-image: linear-gradient(to right, #000 calc(100% - 2rem), transparent);
+  }
+  .pestana {
+    scroll-snap-align: start;
+    min-height: 2.75rem;
+  }
+
+  /* Botones chicos de las listas: alto cómodo para el dedo. */
+  main#contenido :is(.btn-gold-sm, .btn-suave-sm) {
+    min-height: 2.5rem;
+  }
+}

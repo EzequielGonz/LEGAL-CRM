@@ -29,6 +29,7 @@ import { GUIA_CAPTACION_Y_CIERRE } from "@/lib/agentes/guia-cierre";
 import { perfilDeArea } from "@/lib/navegacion";
 import { buildSystemPrompt, criterioDelRubro } from "@/lib/ai-agent/prompt";
 import type { Area } from "@/lib/supabase/database.types";
+import { salidaDeConversacion } from "@/lib/wasender/proveedor";
 import {
   CLAVE_RECONTACTO,
   excluidoDelRecontacto,
@@ -132,7 +133,10 @@ export async function procesarRecontactos(opts: { enviar?: boolean; presupuestoM
   if (errCal) return { ...r, estado: errCal };
 
   const s = createAdminClient();
-  const desde = new Date(ahora.getTime() - 24 * 3_600_000).toISOString();
+  // 12/11: los chats que hablan por Wasender no tienen ventana de 24 h; si hay alguna
+  // línea de Wasender, se mira hasta 72 h atrás (el fin de semana entero). Sin líneas, como siempre.
+  const { count: lineasWasender } = await (s.from("wasender_lineas" as any) as any).select("id", { count: "exact", head: true }).is("archivada_at", null).eq("habilitada", true);
+  const desde = new Date(ahora.getTime() - ((lineasWasender ?? 0) > 0 ? 72 : 24) * 3_600_000).toISOString();
   // 24/10: se parte de las respuestas del bot todavía sin evaluar (antes se
   // tomaban las 300 conversaciones más viejas del día, casi todas con solo la
   // plantilla de campaña, y las charlas recientes nunca se revisaban).
@@ -186,11 +190,13 @@ export async function procesarRecontactos(opts: { enviar?: boolean; presupuestoM
     const entrante = lista[iEntrante];
     const hechos = lista.slice(0, iEntrante).filter((m) => m.origin === "recuperacion" && m.metadata?.recontacto).length;
 
-    const plan = planRecontacto(
-      { ultimoEntrante: new Date(entrante.created_at), ultimoSaliente: new Date(ultimo.created_at), recontactosHechos: hechos },
-      ahora,
-      calendar
-    );
+    const datosPlan = { ultimoEntrante: new Date(entrante.created_at), ultimoSaliente: new Date(ultimo.created_at), recontactosHechos: hechos };
+    let plan = planRecontacto(datosPlan, ahora, calendar);
+    // 12/11: si lo único que lo frena es la ventana de 24 h de Meta y el chat sale por
+    // Wasender, se vuelve a planificar sin ventana. Los chats de Meta siguen igual.
+    if (plan.accion === "nada" && plan.motivo === "ventana_cerrada" && (await salidaDeConversacion(c.id, s)).proveedor === "wasender") {
+      plan = planRecontacto(datosPlan, ahora, calendar, { sinVentana: true });
+    }
     if (plan.accion === "nada") continue;
     if (plan.accion === "esperar") {
       r.esperando++;

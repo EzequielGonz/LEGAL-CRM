@@ -8,6 +8,7 @@ import "./renovacion.css";
 import "./afinado.css";
 import "./tema-premium.css";
 import "./tema-premium-ajustes.css";
+import "./accesible.css";
 import { SCRIPT_MODO } from "@/lib/modo";
 
 // Fuentes autoalojadas por Next (16/10). Inter para toda la operación;

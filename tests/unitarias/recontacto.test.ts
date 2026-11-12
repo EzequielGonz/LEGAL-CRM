@@ -37,6 +37,10 @@ test("si ya no hay tiempo antes del cierre, sale a las 8 del día hábil siguien
   // El sábado a la noche: el lunes ya pasó la ventana de 24 h.
   const sab = planRecontacto({ ultimoEntrante: ar("2026-10-24", "20:40"), ultimoSaliente: ar("2026-10-24", "20:45"), recontactosHechos: 0 }, ar("2026-10-24", "22:00"));
   assert.deepEqual(sab, { accion: "nada", motivo: "ventana_cerrada" });
+  // 12/11: por Wasender no hay ventana de 24 h: espera al lunes a las 8.
+  const sabWasender = planRecontacto({ ultimoEntrante: ar("2026-10-24", "20:40"), ultimoSaliente: ar("2026-10-24", "20:45"), recontactosHechos: 0 }, ar("2026-10-24", "22:00"), undefined, { sinVentana: true });
+  assert.equal(sabWasender.accion, "esperar");
+  assert.equal((sabWasender as any).programado.toISOString(), ar("2026-10-26", "08:00").toISOString());
 });
 
 test("nada si el último mensaje es de la persona o no escribió nunca", () => {
