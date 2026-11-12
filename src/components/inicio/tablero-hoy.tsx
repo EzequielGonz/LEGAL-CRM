@@ -7,6 +7,8 @@ import { puntajeBot } from "@/lib/agentes/puntaje";
 import { cuandoCorto, enlaceConversacion, iniciales } from "@/lib/cartera";
 import { conVolver } from "@/lib/navegacion";
 import type { SlugPerfil } from "@/lib/marca";
+import { colasDeHoy } from "@/lib/hoy/colas";
+import { enlaceIndicador } from "@/lib/indicadores";
 
 /**
  * Tablero de «Hoy» (24/10, boceto v3 aprobado): estado de la línea, la
@@ -20,13 +22,15 @@ export async function TableroHoy({ slug, rubroId, areas, grupo }: { slug: SlugPe
   const baseCampanas = slug === "juridico" ? "/campanas" : `/panel/${slug}/campanas`;
   const baseAgentes = slug === "juridico" ? "/agentes" : `/panel/${slug}/agentes`;
 
-  const [personas, { data: lineas }, metricas, { data: camps }] = await Promise.all([
+  const [colas, { data: lineasWa }, personas, { data: lineas }, metricas, { data: camps }] = await Promise.all([
+    colasDeHoy(rubroId, areas).catch(() => ({ esperan: [], captadosSinDerivar: null })),
+    (s.from("wasender_lineas" as any) as any).select("id, nombre, estado, habilitada").eq("rubro_id", rubroId).is("archivada_at", null),
     resumenPersonas(rubroId, areas),
     s.from("profile_lines").select("label, credential_key, active").eq("rubro_id", rubroId).eq("active", true),
     getProfileMetrics(rubroId).catch(() => null),
     s
       .from("campaigns")
-      .select("id, name, status, pause_reason")
+      .select("id, name, status, pause_reason, proveedor, wasender_line_id" as any)
       .in("area", areas)
       .is("archived_at", null)
       .in("status", ["en_curso", "pausada"])
@@ -48,14 +52,26 @@ export async function TableroHoy({ slug, rubroId, areas, grupo }: { slug: SlugPe
 
   const lista = (camps ?? []) as any[];
   const camp = lista.find((c) => c.status === "en_curso") ?? lista[0] ?? null;
+  // 12/11: una campaña «en curso» por una línea de Wasender que no puede enviar no está enviando.
+  const lineasWasender = (lineasWa ?? []) as { id: string; nombre: string; estado: string | null; habilitada: boolean }[];
+  const lineaDeCamp = camp?.proveedor === "wasender" ? lineasWasender.find((l) => l.id === camp.wasender_line_id) ?? null : null;
+  const campFrenada = camp?.status === "en_curso" && camp?.proveedor === "wasender" && (!lineaDeCamp || lineaDeCamp.estado !== "connected" || !lineaDeCamp.habilitada);
   const chipCampana = !camp
     ? { tono: "gris", texto: "Ninguna campaña activa", href: baseCampanas }
+    : campFrenada
+    ? { tono: "rojo", texto: `Campaña frenada · la línea de Wasender no puede enviar`, href: `${baseCampanas}/${camp.id}` }
     : camp.status === "en_curso"
     ? { tono: "verde", texto: `Campaña enviando · ${camp.name}`, href: `${baseCampanas}/${camp.id}` }
     : { tono: "amarillo", texto: `Campaña pausada · ${camp.pause_reason ? String(camp.pause_reason).slice(0, 60) : camp.name}`, href: `${baseCampanas}/${camp.id}` };
 
   const p = puntajeBot(metricas as any);
-  const chipBot = { tono: p.puntaje === null ? "gris" : p.puntaje >= 60 ? "verde" : p.puntaje >= 35 ? "amarillo" : "rojo", texto: `Bot ${p.puntaje === null ? "sin puntaje aún" : `${p.puntaje}/100`}`, href: baseAgentes };
+  const chipBot = { tono: p.puntaje === null ? "gris" : p.puntaje >= 60 ? "verde" : p.puntaje >= 35 ? "amarillo" : "rojo", texto: p.puntaje === null ? "Bot · todavía sin puntaje" : `Bot · ${p.puntaje} de 100 en captación y trato`, href: baseAgentes };
+  const baseWasender = `/wasender?perfil=${slug}`;
+  const chipsWasender = lineasWasender.map((l) => ({
+    tono: l.estado === "connected" ? (l.habilitada ? "verde" : "amarillo") : "rojo",
+    texto: `Wasender ${l.nombre} · ${l.estado === "connected" ? (l.habilitada ? "conectada" : "conectada, envíos apagados") : "desconectada: hay que escanear el QR"}`,
+    href: baseWasender,
+  }));
 
   const elegido: GrupoPersonas = (GRUPOS_PERSONAS.find((g) => g.clave === grupo)?.clave ?? "por_cerrar") as GrupoPersonas;
   const filas = personas.listas[elegido] ?? [];
@@ -70,7 +86,55 @@ export async function TableroHoy({ slug, rubroId, areas, grupo }: { slug: SlugPe
         <Chip tono={chipLinea.tono} texto={chipLinea.texto} />
         <Chip tono={chipCampana.tono} texto={chipCampana.texto} href={chipCampana.href} />
         <Chip tono={chipBot.tono} texto={chipBot.texto} href={chipBot.href} />
+        {chipsWasender.map((c) => (
+          <Chip key={c.texto} tono={c.tono} texto={c.texto} href={c.href} />
+        ))}
       </ul>
+
+      {(colas.esperan.length > 0 || (colas.captadosSinDerivar ?? 0) > 0) && (
+        <div className="grid gap-3 md:grid-cols-2">
+          {colas.esperan.length > 0 && (
+            <div className="overflow-hidden rounded-2xl border border-amber-300 bg-white shadow-sm">
+              <div className="border-b border-amber-200 bg-amber-50 px-5 py-3">
+                <p className="text-sm font-semibold text-slate-950">
+                  Esperan tu respuesta <span className="ml-1 tabular-nums">{colas.esperan.length}</span>
+                </p>
+                <p className="text-[13px] text-slate-700">Escribieron y el bot no les contesta porque el chat lo tiene una persona.</p>
+              </div>
+              <ul className="divide-y divide-slate-100">
+                {colas.esperan.slice(0, 6).map((f) => (
+                  <li key={f.conversationId} className="flex items-center gap-3 px-5 py-3">
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-semibold text-slate-950">{f.nombre ?? "Sin nombre"}</p>
+                      <p className="truncate text-[13px] text-slate-600">
+                        {cuandoCorto(f.desde)}
+                        {f.texto ? ` · ${f.texto}` : ""}
+                      </p>
+                    </div>
+                    <Link href={conVolver(enlaceConversacion(slug, f.conversationId), aqui)} className="btn-gold-sm shrink-0">
+                      Responder
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              {colas.esperan.length > 6 && <p className="border-t border-slate-100 px-5 py-2.5 text-[13px] text-slate-600">Y {colas.esperan.length - 6} más: aparecen a medida que respondés.</p>}
+            </div>
+          )}
+          {(colas.captadosSinDerivar ?? 0) > 0 && (
+            <div className="flex flex-col justify-between gap-3 rounded-2xl border border-emerald-300 bg-white p-5 shadow-sm">
+              <div>
+                <p className="text-sm font-semibold text-slate-950">
+                  Captados para derivar <span className="ml-1 tabular-nums">{colas.captadosSinDerivar}</span>
+                </p>
+                <p className="mt-1 text-[13px] text-slate-700">Ya aceptaron el siguiente paso. Falta pasarlos a quien los atiende y marcarlos como derivados.</p>
+              </div>
+              <Link href={enlaceIndicador(slug, "captado_sin_derivar", aqui)} className="btn-gold-sm self-start">
+                Ver y derivar
+              </Link>
+            </div>
+          )}
+        </div>
+      )}
 
       <ul className="grid grid-cols-2 gap-3 md:grid-cols-5">
         {GRUPOS_PERSONAS.map((g, i) => {

@@ -4,6 +4,7 @@ import { EnlaceAvanzado } from "@/components/nivel/nivel";
 import { esSlugPerfil, type SlugPerfil } from "@/lib/marca";
 import { leerSalud, resumenSalud, type ItemSalud } from "@/lib/salud";
 import { lecturaSimple } from "@/lib/salud/reglas";
+import { leerSaludWasender } from "@/lib/wasender/salud";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Salud del sistema" };
@@ -22,7 +23,9 @@ const ESTILO: Record<ItemSalud["estado"], { caja: string; punto: string; texto: 
  */
 export default async function SaludPage({ searchParams }: { searchParams: { perfil?: string } }) {
   const slug: SlugPerfil = esSlugPerfil(searchParams.perfil) ? searchParams.perfil : "juridico";
-  const items = await leerSalud();
+  // 12/11: las líneas de Wasender también son salud del sistema (antes no aparecían).
+  const [base, wasender] = await Promise.all([leerSalud(), leerSaludWasender().catch(() => [])]);
+  const items = [...base, ...wasender];
   const r = resumenSalud(items);
   const rojos = items.filter((i) => i.estado === "rojo");
   const amarillos = items.filter((i) => i.estado === "amarillo");

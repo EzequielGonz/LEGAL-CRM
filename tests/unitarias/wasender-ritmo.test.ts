@@ -80,3 +80,22 @@ test("freno: necesita muestra y salta con muchos fallos o sin entregar", () => {
   assert.match(motivoDeFreno({ enviados: 20, fallidos: 6, sinEntregar: 0 }) ?? "", /fallaron/);
   assert.match(motivoDeFreno({ enviados: 20, fallidos: 2, sinEntregar: 9 }) ?? "", /no se entregaron/);
 });
+
+import { saludDeLineas } from "@/lib/wasender/salud";
+
+test("salud: una línea caída frena la operación; apagada es para revisar; conectada muestra su tope", () => {
+  const base = { rubro_id: "11111111-1111-1111-1111-111111111111", limite_diario: 60, calentamiento_desde: "2026-11-12T10:00:00Z", estado_at: "2026-11-11T17:29:00Z" };
+  const items = saludDeLineas(
+    [
+      { ...base, id: "a", nombre: "Chip A", estado: "logged_out", habilitada: false },
+      { ...base, id: "b", nombre: "Chip B", estado: "connected", habilitada: false },
+      { ...base, id: "c", nombre: "Chip C", estado: "connected", habilitada: true },
+    ],
+    { a: 1 },
+    AHORA
+  );
+  assert.deepEqual(items.map((i) => i.estado), ["rojo", "amarillo", "verde"]);
+  assert.match(items[0].detalle, /1 campaña\(s\) quedaron en pausa/);
+  assert.equal(items[0].href, "/wasender?perfil=juridico");
+  assert.match(items[2].detalle, /Día 1 de calentamiento: hasta 20/);
+});
