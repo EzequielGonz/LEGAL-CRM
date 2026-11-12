@@ -43,7 +43,8 @@ Decisiones de la responsable (12/11):
 ### C. Seguimiento y recontacto por Wasender (punto 5) — tarea #33
 - [x] Recontacto: los chats que salen por Wasender no dependen de la ventana de 24 h (`planRecontacto` con `sinVentana`, `recontacto/motor.ts`). Meta no cambia.
 - [ ] Seguimiento (`seguimiento/motor.ts`, `circuito.ts`): si el chat sale por Wasender (o su línea de Meta fue reemplazada), los contactos 2 y 3 salen por Wasender con plantilla propia (uso «seguimiento»), sin aprobación de Meta. Sigue apagado hasta que la responsable lo prenda (`followup_enabled_since`).
-- [ ] Segundo intento a quien nunca respondió (decisión de la responsable del 12/11): uno solo, a los 5 a 7 días, con otro texto, por Wasender, dentro del límite del día y del calentamiento, de lunes a sábado en horario. Regla pura con pruebas + tarea en el tick, apagado por defecto con interruptor por perfil. Actualizar la regla 5 de `.claude/referencias/reglas-comunes.md` con fecha y decisión.
+- [x] Segundo intento a quien nunca respondió: regla pura con pruebas (`src/lib/seguimiento/segundo-intento.ts`) y decisión registrada en `.claude/referencias/reglas-comunes.md`.
+- [ ] Segundo intento en el motor: tarea en el tick que arma la cola (destinatarios de campañas de Wasender entregados, sin respuesta, sin detención, sin segundo intento), usa `planSegundoIntento`, respeta horario, `cupoDeLinea` y `frenoDeLinea`, y envía una plantilla propia de uso «segundo_intento» con variantes. Apagado por defecto, con interruptor por perfil. Registrar cada envío para que nunca haya un tercero.
 - [ ] Formularios web y presupuestos de Marketing por Wasender (resto de #33).
 
 ### D. Orden y accesibilidad (punto 6)
