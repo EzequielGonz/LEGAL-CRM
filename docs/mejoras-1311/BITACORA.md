@@ -80,3 +80,25 @@ Sin datos personales, claves ni códigos de acceso. Complementa `PLAN-3.md` (qu�
 **Guiones de prueba** (directorio temporal de la sesión, no van al repositorio porque sus salidas tienen datos reales): `panel/mezcla/rastrear.js` (sigue cada enlace de un perfil y marca pantallas de otro), `ids.js` + `cruzar.js` (junta los identificadores de cada lista y le pregunta al panel de qué perfil son), `panel/limpieza/llamar.js` (simular, aplicar, releer, puntuar, encender), `panel/b/ver.js` y `desborde.js` (capturas y desbordes a 375 px).
 
 **Aprendido:** la relectura de Marketing devolvió un error de tiempo en la primera tanda (66 chats); al repetir el pedido terminó sola porque cada movimiento se anota antes de aplicarse. El proveedor de Wasender no documenta la vinculación por código (solo `qr` y `passkey`).
+
+## Corrida del 13/11 a la tarde (desde las 13:50; la responsable pidió empezar antes de la hora programada)
+
+| Commit | Qué |
+|---|---|
+| `831d2dc` | Plan 4: bloque I (audios), especificación |
+| `3f9fefd` | Audios: el bot entiende los mensajes de voz (migración 0610) |
+| `e4b0892` | Hoy solo con lo que lleva a una acción; embudo del período en Resultados; tabla vieja de casos retirada |
+| `6dbe2f4` | Líneas de Wasender con diálogos propios; lista de seguimiento de a 25 (hecho por un agente auxiliar, revisado) |
+| `b095207` | Asistente con permiso para todo: catálogo de 77 operaciones y menú a medida (migración 0611) |
+| `bbc29bc` | Seguridad: política de contenido, sin optimizador de imágenes, planillas sin `xlsx` |
+| `8058f0f` | Documentos: corrida de la tarde y plan de subida de Next |
+| `6658eab`, `d80dc16`, `72bf56e` | Diseño: vidrio, fondo vivo, profundidad y movimiento (primera fase) |
+| `56a965e` | Aviso a los dispositivos cuando entra un reclamo serio |
+
+**Cambios en la base:** migraciones `0610_audios_a_texto` y `0611_asistente_operaciones_y_menu`. `system_settings.audios_a_texto` encendida en los cuatro perfiles (queda en `ops_change_log`, acción `encender_audios_a_texto`). `ops_change_log` 230: prueba de «Pasar a texto» sobre 3 audios viejos.
+
+**Pruebas con efectos en producción (todas restauradas):** feriado de prueba del 8/12/2027 creado y archivado por el asistente; menú de Coberturas renombrado y deshecho.
+
+**Forma de trabajo:** las tareas simples y acotadas (inventario de rutas, diálogos, paginado) las hicieron agentes auxiliares con un modelo intermedio, por pedido de la responsable; el resultado se revisó antes de guardarlo. La vista previa de Vercel se usó solo para mirar el diseño.
+
+**No se pudo:** instalar la versión corregida de `xlsx` desde el sitio de su autor (no está en el registro oficial y la instalación desde otra dirección fue rechazada): se reemplazó la librería. Simular un audio entrante real.

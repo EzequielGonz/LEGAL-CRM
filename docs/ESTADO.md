@@ -61,7 +61,11 @@ Se actualiza al cierre de cada vuelta de trabajo. Sin datos personales, claves n
 - Bloques A (rubros separados), B (reglas nuevas) y C (limpieza de lo cargado): hechos, publicados y comprobados. Detalle, números y definiciones: `docs/mejoras-1311/AUDITORIA.md`.
 - Falta: resto del bloque D (pantallas), E (seguridad, funcionamiento, rendimiento), F (diseño), G (asistente). Ver la tabla «Estado» de `PLAN-4.md`.
 - Wasender con código: el proveedor no lo ofrece por su interfaz. 13/11, 10:20: la responsable dijo «yo me encargo»; no se sigue salvo que lo pida.
-- **Audios (13/11, 10:20):** la responsable pidió que el agente que responde entienda los audios. Especificado en `docs/mejoras-1311/PLAN-4.md`, bloque I; lo hace la corrida de las 14:51, después de lo que falta del bloque D. No está implementado.
+- **Audios:** hecho y encendido en los cuatro perfiles (13/11). Llave por perfil en Ajustes › Mensajes de voz. Falta ver entrar un audio real.
+- **Asistente con permiso para todo:** hecho (13/11). Propone cualquiera de las 77 operaciones del catálogo y la persona confirma; el código de acceso lo pone la responsable al confirmar. Menú a medida por perfil. No hay tarea que revise la Bandeja sola.
+- **Seguridad:** política de contenido activa; quedan 2 avisos de dependencias que piden subir Next a 15.5 (plan en `docs/mejoras-1311/AUDITORIA.md` §9).
+- **Diseño:** primera fase (vidrio y movimiento) hecha; el modo por defecto sigue oscuro hasta que la responsable decida.
+- **Cómo retomar:** `docs/mejoras-1311/PLAN-4.md`, tabla «Estado» y la línea «Lo que sigue».
 
 ## Aprendizajes de esta vuelta
 
