@@ -31,6 +31,8 @@ Todo lo de esta tabla está **publicado en producción** (`main` = `mejoras-1211
 
 ## Lo que queda para la próxima vuelta
 
+**Actualización del 13/11 a la madrugada:** la responsable revisó el panel y pidió más (mezcla entre perfiles, reglas nuevas de Caídos e incidencias, limpieza de lo cargado, pantallas que no llevan a nada, auditoría más exhaustiva y diseño más llamativo). Está todo en `PLAN-4.md`, que **va primero**. Lo de acá abajo sigue valiendo y se hace dentro de ese orden: el punto 0 es el bloque E del Plan 4, el 6 se hace con el diseño del bloque F, el 3 y el 4 entran en los bloques B y D.
+
 Orden de trabajo para la corrida de las 8:51: primero el punto 0 (auditoría general, con arreglos aplicados), después el 6 (modernización pantalla por pantalla), el 3 (una sola regla para «Te escribió») y el 4 (tabla vieja). Los puntos 1, 2 y 7 dependen de una fecha o de que la línea de Wasender esté conectada: no se pueden cerrar en esa corrida. El 5 queda pendiente. Hay una segunda corrida programada para las 14:51 por si queda algo. Detalle de todo lo hecho: `BITACORA.md`.
 
 0. **Auditoría general (pedido de la responsable del 13/11: «funcionamiento, sencillez de uso, seguridad completa, bugs, vulnerabilidades, errores, TODO, hasta el último detalle, y arreglalo y aplicalo»).** Va primero. Cada hallazgo se arregla, se prueba y se publica; lo que no se pueda arreglar en la corrida queda escrito en `AUDITORIA.md` con su gravedad y el arreglo propuesto. Lista mínima:

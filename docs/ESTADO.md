@@ -32,11 +32,12 @@ Se actualiza al cierre de cada vuelta de trabajo. Sin datos personales, claves n
 - Se trabaja con el modelo principal. Otro modelo, solo en tareas secundarias muy sencillas y sin margen de error.
 - El aviso de captación queda pendiente hasta que la responsable lo pida.
 - El panel tiene que poder usarse sin saber cómo está hecho: cada cifra se abre y muestra personas; textos en palabras, sin nombres internos.
+- **13/11, madrugada (Plan 4):** alguien pasa a Caídos cuando, después de dejar de contestar, a los 3 días recibe un mensaje más y pasan 24 horas sin respuesta; los que ya llevan más tiempo van directo. Incidencia de una persona es solo amenaza legal o denuncia, o queja de un cliente captado; enojo, rechazo, «ya tengo abogado» o «no me escriban» pasan solos a Perdidos o No contactar. Las fallas del sistema se avisan en un lugar propio, separado. Lo ya cargado se reclasifica solo, con motivo y con lista para deshacer. Diseño «bien llamativo» (vidrio, 3D, movimiento) tomando ideas de la referencia que mandó.
 - Producción se publica directo (`git push origin mejoras-1211:main`) después de typecheck, lint, pruebas y build, y se recorre como usuaria antes de informar.
 
 ## Dónde está cada cosa
 
-- Plan y pendientes de la vuelta en curso: `docs/mejoras-1311/PLAN-3.md`.
+- Plan y pendientes de la vuelta en curso: `docs/mejoras-1311/PLAN-4.md` (lo último que pidió la responsable; va primero) y `docs/mejoras-1311/PLAN-3.md` (lo anterior que sigue pendiente).
 - Qué se probó y qué no: `docs/mejoras-1311/INFORME.md`. Migraciones y cómo deshacer cambios de datos: `docs/mejoras-1311/MIGRACIONES.md`.
 - Bitácora detallada de la última vuelta (commits, archivos, cambios en la base, medidas, guiones de prueba): `docs/mejoras-1311/BITACORA.md`.
 - Análisis del bot y fichas agregadas: `docs/mejoras-1311/BOT-V2.md`.
@@ -45,7 +46,7 @@ Se actualiza al cierre de cada vuelta de trabajo. Sin datos personales, claves n
 ## Cómo retomar
 
 1. `git status` y `git log --oneline -5` en la rama `mejoras-1211` (tiene que coincidir con `main`).
-2. Leer «Lo que queda para la próxima vuelta» en `PLAN-3.md` y seguir ese orden.
+2. Leer `PLAN-4.md` completo y seguir su orden (A a F); después «Lo que queda para la próxima vuelta» en `PLAN-3.md`.
 3. Cargas grandes de datos (plantillas, variantes): por la API del panel con una sesión iniciada, no pegando SQL largo.
 4. Las pruebas con efectos se hacen con casos viejos y se dejan como estaban, con registro en `ops_change_log`.
 
