@@ -7,7 +7,7 @@
  * los botones para abrir la ficha o el chat. Solo lectura.
  */
 import { createAdminClient } from "@/lib/supabase/admin";
-import { PERIODOS, rangoDePeriodo, type ClavePeriodo } from "@/lib/hoy/periodos";
+import { PERIODOS, argumentosDeEtapa, rangoDePeriodo, type ClavePeriodo, type EtapaEmbudo } from "@/lib/hoy/periodos";
 
 export const VISTAS_RESULTADO = [
   { clave: "captados", titulo: "Captados", bajada: "Aceptaron el siguiente paso" },
@@ -15,6 +15,9 @@ export const VISTAS_RESULTADO = [
   { clave: "perdidos", titulo: "Perdidos", bajada: "Cerrados sin avanzar" },
   { clave: "respondieron", titulo: "Respondieron", bajada: "Escribieron en el período" },
   { clave: "contactados", titulo: "Contactados", bajada: "Recibieron el primer mensaje" },
+  { clave: "conversaron", titulo: "Conversaron", bajada: "Escribieron dos o más mensajes" },
+  { clave: "oportunidades", titulo: "Oportunidades reales", bajada: "Pidieron una persona, preguntaron precio o condiciones, o fueron captados" },
+  { clave: "ventas", titulo: "Ventas", bajada: "Derivados que cerraron la operación" },
 ] as const;
 export type ClaveResultado = (typeof VISTAS_RESULTADO)[number]["clave"];
 
@@ -192,6 +195,56 @@ export async function leerResultados(d: { rubroId: string; areas: string[]; ver:
       };
     });
     return { filas, total: count ?? filas.length, origenes: agruparOrigenes(todos.map(origenDe)), origenesParciales: todos.length >= TOPE_ORIGENES };
+  }
+
+  if (d.ver === "conversaron" || d.ver === "oportunidades" || d.ver === "ventas") {
+    // Las tres etapas nuevas salen de la misma función de la base que da la cifra del embudo.
+    const etapa: EtapaEmbudo = d.ver === "oportunidades" ? "oportunidad" : d.ver;
+    const args = argumentosDeEtapa(etapa, d.rubroId, d.areas, desde, hasta);
+    const [{ data: pag, count }, { data: paraOrigen }] = await Promise.all([
+      (s as any).rpc("embudo_etapa", args, { count: "exact" }).order("at", { ascending: false }).range(de, a),
+      (s as any).rpc("embudo_etapa", args).order("at", { ascending: false }).limit(600),
+    ]);
+    const lista = (pag ?? []) as { conversation_id: string | null; opportunity_id: string | null; at: string | null }[];
+    const todos = (paraOrigen ?? []) as typeof lista;
+    const idsConv = Array.from(new Set(todos.map((x) => x.conversation_id).filter(Boolean))) as string[];
+    const idsOpp = Array.from(new Set(todos.map((x) => x.opportunity_id).filter(Boolean))) as string[];
+    const convPag = lista.map((x) => x.conversation_id).filter(Boolean) as string[];
+    const [{ data: oppsPorId }, { data: oppsPorConv }, { data: convs }] = await Promise.all([
+      idsOpp.length ? (s.from("opportunities") as any).select(COLUMNAS_OPP + ", post_derivation_note, attention_reason").in("id", idsOpp) : Promise.resolve({ data: [] as any[] }),
+      !idsOpp.length && idsConv.length ? (s.from("opportunities") as any).select(COLUMNAS_OPP).in("conversation_id", idsConv) : Promise.resolve({ data: [] as any[] }),
+      convPag.length ? s.from("conversations").select("id, contact_id, contacts(full_name, phone)").in("id", convPag) : Promise.resolve({ data: [] as any[] }),
+    ]);
+    const todasOpp = [...((oppsPorId ?? []) as any[]), ...((oppsPorConv ?? []) as any[])];
+    const [campanas, bases] = await Promise.all([nombresDe(s, "campaigns", todasOpp.map((o) => o.campaign_id)), nombresDe(s, "imported_bases", todasOpp.map((o) => o.imported_base_id))]);
+    const oppPorId = new Map(todasOpp.map((o) => [o.id as string, o]));
+    const oppPorConv = new Map(todasOpp.map((o) => [o.conversation_id as string, o]));
+    const oppDe = (x: { conversation_id: string | null; opportunity_id: string | null }) => (x.opportunity_id ? oppPorId.get(x.opportunity_id) : x.conversation_id ? oppPorConv.get(x.conversation_id) : undefined);
+    const convDe = new Map(((convs ?? []) as any[]).map((c) => [c.id as string, c]));
+    const origenDe = (o: any) => (o ? origenEnPalabras({ campana: campanas.get(o.campaign_id), base: bases.get(o.imported_base_id), fuente: fuenteDe(o), detalleFuente: o.first_source_detail }) : "Sin origen registrado");
+    const filas: FilaResultado[] = lista.map((x, i) => {
+      const o = oppDe(x);
+      const c = x.conversation_id ? (convDe.get(x.conversation_id) as any) : null;
+      const detalle =
+        d.ver === "ventas"
+          ? o?.post_derivation_note ? `Nota: ${o.post_derivation_note}` : null
+          : d.ver === "oportunidades"
+            ? o?.capture_state === "captado" ? "Aceptó el siguiente paso" : o?.attention_reason ? String(o.attention_reason).split(":")[0] : null
+            : null;
+      return {
+        clave: x.opportunity_id ?? x.conversation_id ?? String(i),
+        contactId: o?.contact_id ?? c?.contact_id ?? null,
+        conversationId: x.conversation_id ?? null,
+        nombre: c?.contacts?.full_name ?? null,
+        telefono: c?.contacts?.phone ?? null,
+        at: x.at ?? null,
+        origen: origenDe(o),
+        base: o?.campaign_id && bases.get(o.imported_base_id) ? bases.get(o.imported_base_id)! : null,
+        estado: estadoDe(o),
+        detalle,
+      };
+    });
+    return { filas, total: count ?? filas.length, origenes: agruparOrigenes(todos.map((x) => origenDe(oppDe(x)))), origenesParciales: todos.length >= 600 };
   }
 
   if (d.ver === "contactados") {

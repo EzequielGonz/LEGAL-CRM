@@ -45,6 +45,9 @@ const VACIO: Record<ClaveResultado, string> = {
   perdidos: "No se cerró a nadie como perdido en este período.",
   respondieron: "Nadie escribió en este período.",
   contactados: "No salió ningún primer mensaje en este período.",
+  conversaron: "Nadie escribió dos o más mensajes en este período.",
+  oportunidades: "No hubo oportunidades reales en este período.",
+  ventas: "No se registró ninguna venta en este período.",
 };
 
 /**

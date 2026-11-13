@@ -59,7 +59,8 @@ test("hoy: cada persona aparece una sola vez en la cola, con lo primero que hay 
 });
 
 import { descarteDe } from "@/lib/hoy/descartes";
-import { rangoDePeriodo, tasa, variacion } from "@/lib/hoy/periodos";
+import { MOTIVOS_OPORTUNIDAD_REAL, argumentosDeEtapa, motivosDeOportunidadEnPalabras, rangoDePeriodo, tasa, variacion } from "@/lib/hoy/periodos";
+import { TRATAMIENTO_ATENCION } from "@/lib/captacion/reglas";
 
 test("hoy: reconoce los descartes claros y deja en atención humana todo lo dudoso", () => {
   assert.equal(descarteDe("Hola no gracias ya tengo abogado")?.clave, "ya_tiene_profesional");
@@ -108,4 +109,18 @@ test("redes: los accesos solo aceptan direcciones https del dominio que correspo
   assert.equal(lista.find((a) => a.clave === "instagram")?.url, "https://instagram.com/perfil_ficticio");
   assert.equal(lista.find((a) => a.clave === "facebook")?.url, null);
   assert.equal(lista.find((a) => a.clave === "whatsapp_web")?.url, "https://web.whatsapp.com/");
+});
+
+test("embudo: una oportunidad real es un pedido con interés, nunca una queja ni un contacto detenido", () => {
+  for (const m of MOTIVOS_OPORTUNIDAD_REAL) assert.equal(TRATAMIENTO_ATENCION[m].categoria, "comercial", m);
+  assert.ok(!MOTIVOS_OPORTUNIDAD_REAL.includes("contacto_detenido_escribio"));
+  assert.ok(!MOTIVOS_OPORTUNIDAD_REAL.includes("amenaza_legal") && !MOTIVOS_OPORTUNIDAD_REAL.includes("queja_cliente_captado"));
+  assert.deepEqual(motivosDeOportunidadEnPalabras().slice(0, 2), ["Pide hablar con una persona", "Consulta de precio que corresponde a una persona"]);
+});
+
+test("embudo: los motivos solo viajan en la etapa de oportunidades y «desde siempre» no deja fechas vacías", () => {
+  const a = argumentosDeEtapa("oportunidad", "r", ["civil"], null, null);
+  assert.equal(a.p_motivos.length, MOTIVOS_OPORTUNIDAD_REAL.length);
+  assert.ok(a.p_desde < a.p_hasta);
+  assert.deepEqual(argumentosDeEtapa("ventas", "r", ["civil"], new Date("2026-11-09T03:00:00Z"), new Date("2026-11-13T03:00:00Z")).p_motivos, []);
 });

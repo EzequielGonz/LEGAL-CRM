@@ -1,5 +1,6 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { inicioDeSemana } from "@/lib/cartera";
+import { TRATAMIENTO_ATENCION, type MotivoAtencion } from "@/lib/captacion/reglas";
 
 /**
  * Estadísticas de «Hoy» por período (12/11): la semana actual primero, y
@@ -40,10 +41,43 @@ export function rangoDePeriodo(clave: ClavePeriodo, ahora: Date = new Date()): {
   return { desde, hasta: inicioDeMes(ahora), antesDesde: inicioDeMes(ahora, -2), antesHasta: desde };
 }
 
+/**
+ * Motivos por los que alguien queda esperando a una persona y cuenta como
+ * oportunidad real (13/11): pidió hablar con alguien, preguntó precio o
+ * condiciones, o es un captado que volvió a escribir. Quejas, rechazos y
+ * contactos detenidos no entran.
+ */
+export const MOTIVOS_OPORTUNIDAD_REAL: MotivoAtencion[] = ["pide_persona", "precio_fuera_alcance", "decision_profesional", "mensaje_posterior_captado"];
+
+/** Los mismos motivos, como empiezan escritos en el historial de la oportunidad. Pura. */
+export function motivosDeOportunidadEnPalabras(): string[] {
+  return MOTIVOS_OPORTUNIDAD_REAL.map((m) => TRATAMIENTO_ATENCION[m].label);
+}
+
+export type EtapaEmbudo = "conversaron" | "oportunidad" | "ventas";
+
+/** Argumentos de la función de la base que devuelve las personas de una etapa. Pura. */
+export function argumentosDeEtapa(etapa: EtapaEmbudo, rubroId: string, areas: string[], desde: Date | null, hasta: Date | null) {
+  return {
+    p_etapa: etapa,
+    p_rubro: rubroId,
+    p_areas: areas,
+    p_desde: (desde ?? new Date("2020-01-01T00:00:00Z")).toISOString(),
+    p_hasta: (hasta ?? new Date("2100-01-01T00:00:00Z")).toISOString(),
+    p_motivos: etapa === "oportunidad" ? motivosDeOportunidadEnPalabras() : [],
+  };
+}
+
 export interface CifrasPeriodo {
   contactados: number | null;
   respondieron: number | null;
+  /** Escribieron dos o más mensajes. */
+  conversaron: number | null;
+  /** Quedaron esperando a una persona con interés, o fueron captados. */
+  oportunidades: number | null;
   captados: number | null;
+  /** Derivados que cerraron la operación. */
+  ventas: number | null;
   derivados: number | null;
   perdidos: number | null;
 }
@@ -79,7 +113,8 @@ export async function cifrasDePeriodo(rubroId: string, areas: string[], desde: D
   const { data: camps } = await s.from("campaigns").select("id").in("area", areas as any);
   const ids = ((camps ?? []) as any[]).map((c) => c.id);
   const opp = () => (s.from("opportunities") as any).select("id", { count: "exact", head: true }).eq("rubro_id", rubroId);
-  const [contactados, respondieron, captados, derivados, perdidos] = await Promise.all([
+  const etapa = (e: EtapaEmbudo) => cuenta((s as any).rpc("embudo_etapa", argumentosDeEtapa(e, rubroId, areas, desde, hasta), { count: "exact", head: true }));
+  const [contactados, respondieron, captados, derivados, perdidos, conversaron, oportunidades, ventas] = await Promise.all([
     ids.length
       ? cuenta(s.from("campaign_contacts").select("id", { count: "exact", head: true }).in("campaign_id", ids).in("status", ["enviado", "entregado", "leido", "respondio"]).gte("sent_at", d).lt("sent_at", h))
       : Promise.resolve(0),
@@ -88,6 +123,9 @@ export async function cifrasDePeriodo(rubroId: string, areas: string[], desde: D
     cuenta(opp().eq("capture_state", "captado").gte("captured_at", d).lt("captured_at", h)),
     cuenta(opp().eq("derivation_state", "derivado").gte("derived_at", d).lt("derived_at", h)),
     cuenta(opp().eq("capture_state", "perdido").gte("updated_at", d).lt("updated_at", h)),
+    etapa("conversaron"),
+    etapa("oportunidad"),
+    etapa("ventas"),
   ]);
-  return { contactados, respondieron, captados, derivados, perdidos };
+  return { contactados, respondieron, conversaron, oportunidades, captados, derivados, ventas, perdidos };
 }

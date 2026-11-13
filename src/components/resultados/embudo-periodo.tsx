@@ -3,8 +3,8 @@ import { cifrasDePeriodo, rangoDePeriodo, tasa, variacion, type ClavePeriodo } f
 import type { ClavePeriodoResultado, ClaveResultado } from "@/lib/resultados";
 
 /**
- * Embudo del período (13/11): contactados → respondieron → captados →
- * derivados, con cuántos pasan de una etapa a la otra y la comparación con el
+ * Embudo del período (13/11): contactados → respondieron → conversaron →
+ * oportunidades reales → captados → derivados → ventas, con cuántos pasan de una etapa a la otra y la comparación con el
  * período anterior. Cada etapa abre sus personas. Los perdidos van aparte:
  * no son una etapa. Usa las mismas cuentas que tenía «Hoy». Solo lectura.
  */
@@ -22,8 +22,11 @@ export async function EmbudoPeriodo({ slug, rubroId, areas, periodo, ver }: { sl
   const etapas: { ver: ClaveResultado; titulo: string; valor: number | null; antes: number | null; paso: string | null; fraccion: number | null; nota: string }[] = [
     { ver: "contactados", titulo: "Contactados", valor: c.contactados, antes: antes?.contactados ?? null, paso: null, fraccion: null, nota: "recibieron el primer mensaje" },
     { ver: "respondieron", titulo: "Respondieron", valor: c.respondieron, antes: antes?.respondieron ?? null, paso: tasa(c.respondieron, c.contactados), fraccion: parte(c.respondieron, c.contactados), nota: "de los contactados" },
+    { ver: "conversaron", titulo: "Conversaron", valor: c.conversaron, antes: antes?.conversaron ?? null, paso: tasa(c.conversaron, c.respondieron), fraccion: parte(c.conversaron, c.respondieron), nota: "de los que respondieron" },
+    { ver: "oportunidades", titulo: "Oportunidades reales", valor: c.oportunidades, antes: antes?.oportunidades ?? null, paso: tasa(c.oportunidades, c.respondieron), fraccion: parte(c.oportunidades, c.respondieron), nota: "de los que respondieron" },
     { ver: "captados", titulo: "Captados", valor: c.captados, antes: antes?.captados ?? null, paso: tasa(c.captados, c.respondieron), fraccion: parte(c.captados, c.respondieron), nota: "de los que respondieron" },
     { ver: "derivados", titulo: "Derivados", valor: c.derivados, antes: antes?.derivados ?? null, paso: tasa(c.derivados, c.captados), fraccion: parte(c.derivados, c.captados), nota: "de los captados" },
+    { ver: "ventas", titulo: "Ventas", valor: c.ventas, antes: antes?.ventas ?? null, paso: tasa(c.ventas, c.derivados), fraccion: parte(c.ventas, c.derivados), nota: "de los derivados" },
   ];
   const TONO = { sube: "text-emerald-700", baja: "text-red-700", igual: "text-slate-500", nada: "text-slate-500" } as const;
   const vPerdidos = antes ? variacion(c.perdidos, antes.perdidos) : null;
