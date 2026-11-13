@@ -697,12 +697,16 @@ export async function launchCampaign(campaignId: string): Promise<TickResult> {
   return tickCampaign(campaignId);
 }
 
-export async function pauseCampaign(campaignId: string, reason = "Pausada desde el panel") {
+export async function pauseCampaign(campaignId: string, reason = "Pausada desde el panel"): Promise<boolean> {
   const supabase = createAdminClient();
-  await supabase
+  const { data, error } = await supabase
     .from("campaigns")
     .update({ status: "pausada", pause_reason: reason, paused_at: new Date().toISOString() })
-    .eq("id", campaignId);
+    .eq("id", campaignId)
+    .select("id");
+  if (error) throw new Error(`No se pudo pausar la campaña: ${error.message}`);
+  // 13/11: avisa si la campaña no existe (antes respondía «ok» igual).
+  return (data ?? []).length > 0;
 }
 
 export interface CampaignStatusSnapshot {

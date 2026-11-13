@@ -26,7 +26,7 @@ export async function leerAjustesGenerales() {
   const [{ data: adminProfile }, { data: notificationPhones }, { data: pinRow }, { data: accessEvents }, { count: retenidos }, pause, calendar, tareas] = await Promise.all([
     // Con el PIN general ya no hay usuario logueado: se muestra el teléfono del perfil de administrador que ya existía.
     supabase.from("admin_profiles").select("phone").order("created_at", { ascending: true }).limit(1).maybeSingle(),
-    supabase.from("notification_phones").select("*").order("created_at", { ascending: true }),
+    supabase.from("notification_phones").select("*").is("archived_at", null).order("created_at", { ascending: true }),
     supabase.from("access_pin").select("source, updated_at").eq("id", true).maybeSingle(),
     supabase.from("access_events").select("id, at, kind, device").order("at", { ascending: false }).limit(15),
     supabase.from("webhook_quarantine").select("id", { count: "exact", head: true }).is("reviewed_at", null),

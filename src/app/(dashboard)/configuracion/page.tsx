@@ -33,8 +33,8 @@ export default async function ConfiguracionPage() {
   ]);
   const { calendar } = generales;
   const [{ data: civilRules }, { data: penalRules }] = await Promise.all([
-    supabase.from("availability_rules").select("*").eq("area", "civil").order("weekday"),
-    supabase.from("availability_rules").select("*").eq("area", "penal").order("weekday"),
+    supabase.from("availability_rules").select("*").eq("area", "civil").eq("active", true).order("weekday"),
+    supabase.from("availability_rules").select("*").eq("area", "penal").eq("active", true).order("weekday"),
   ]);
 
   const channels = conEstadoReal(canalesBase);

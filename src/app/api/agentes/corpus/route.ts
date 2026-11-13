@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { esUuid } from "@/lib/rutas/comprobar";
 import { requireSession } from "@/lib/acceso/autorizacion";
 import { exportarCorpus, sembrarCasosControl, sembrarCorpus, sembrarModulos } from "@/lib/agentes/servicio";
 import { planDistribucion } from "@/lib/agentes/corpus";
@@ -52,7 +53,9 @@ export async function PATCH(request: Request) {
   if (!["pendiente", "aprobado", "rechazado"].includes(body?.revision)) return NextResponse.json({ error: "Revisión no válida." }, { status: 400 });
   const cambios: Record<string, unknown> = { revision: body.revision, revisado_por: "operador", revisado_at: new Date().toISOString() };
   if (typeof body?.correccion === "string" && body.correccion.trim()) cambios.respuesta_correcta = body.correccion.trim().slice(0, 1200);
-  const { error } = await createAdminClient().from("training_cases").update(cambios).eq("id", String(body?.id ?? ""));
+  if (!esUuid(body?.id)) return NextResponse.json({ error: "Caso no válido." }, { status: 400 });
+  const { data, error } = await createAdminClient().from("training_cases").update(cambios).eq("id", body.id).select("id");
   if (error) return NextResponse.json({ error: "No se pudo guardar la revisión." }, { status: 500 });
+  if (!(data ?? []).length) return NextResponse.json({ error: "Ese caso no existe." }, { status: 404 });
   return NextResponse.json({ ok: true });
 }

@@ -59,7 +59,11 @@ export async function DELETE(request: Request) {
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   const supabase = createAdminClient();
-  const { error } = await supabase.from("marketing_scrape_jobs").delete().eq("status", "pendiente");
+  // 13/11: nada se borra. Las búsquedas pendientes pasan a «cancelada» y quedan en el historial.
+  const { data, error } = await (supabase.from("marketing_scrape_jobs") as any)
+    .update({ status: "cancelada", finished_at: new Date().toISOString(), error: "Cancelada desde el panel antes de ejecutarse" })
+    .eq("status", "pendiente")
+    .select("id");
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ ok: true, canceladas: (data ?? []).length });
 }

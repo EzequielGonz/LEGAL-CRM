@@ -43,7 +43,7 @@ export async function getAdminPhones(): Promise<string[]> {
 
   const [{ data: profiles }, { data: extraPhones }] = await Promise.all([
     supabase.from("admin_profiles").select("phone"),
-    supabase.from("notification_phones").select("phone"),
+    supabase.from("notification_phones").select("phone").is("archived_at", null),
   ]);
 
   const profilePhones = (profiles ?? [])

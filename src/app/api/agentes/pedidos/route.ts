@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { esUuid } from "@/lib/rutas/comprobar";
 import { requireSession } from "@/lib/acceso/autorizacion";
 import { createAdminClient } from "@/lib/supabase/admin";
 
@@ -33,7 +34,9 @@ export async function PATCH(request: Request) {
   if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => ({}));
   if (!["pendiente", "en_curso", "resuelto", "descartado"].includes(body?.estado)) return NextResponse.json({ error: "Estado no válido." }, { status: 400 });
-  const { error } = await createAdminClient().from("agent_requests").update({ estado: body.estado, resolucion: typeof body?.resolucion === "string" ? body.resolucion.slice(0, 1000) : null, updated_at: new Date().toISOString() }).eq("id", String(body?.id ?? ""));
+  if (!esUuid(body?.id)) return NextResponse.json({ error: "Pedido no válido." }, { status: 400 });
+  const { data, error } = await createAdminClient().from("agent_requests").update({ estado: body.estado, resolucion: typeof body?.resolucion === "string" ? body.resolucion.slice(0, 1000) : null, updated_at: new Date().toISOString() }).eq("id", body.id).select("id");
   if (error) return NextResponse.json({ error: "No se pudo actualizar." }, { status: 500 });
+  if (!(data ?? []).length) return NextResponse.json({ error: "Ese pedido no existe." }, { status: 404 });
   return NextResponse.json({ ok: true });
 }

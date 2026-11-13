@@ -15,6 +15,7 @@ export async function GET(request: Request) {
   const { data, error } = await supabase
     .from("notification_phones")
     .select("*")
+    .is("archived_at", null)
     .order("created_at", { ascending: true });
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });

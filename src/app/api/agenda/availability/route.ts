@@ -1,34 +1,29 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireSession } from "@/lib/acceso/autorizacion";
+import { validarReglasDeAgenda } from "@/lib/rutas/comprobar";
 
-/** Reemplaza las reglas de disponibilidad de un área (días/horarios/duración). */
+/**
+ * Reemplaza los horarios de un área (días, horarios, duración). 13/11: se
+ * revisan antes y el cambio va en una sola operación de la base: si algo
+ * falla, quedan los horarios que había. Los anteriores no se borran, quedan
+ * inactivos.
+ */
 export async function POST(request: Request) {
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
-  const { area, rules } = await request.json();
-
+  const body = await request.json().catch(() => null);
+  const area = body?.area;
   if (area !== "civil" && area !== "penal") {
     return NextResponse.json({ error: "Área inválida" }, { status: 400 });
   }
+  const v = validarReglasDeAgenda(body?.rules ?? []);
+  if (!v.ok) return NextResponse.json({ error: v.error }, { status: 400 });
 
-  const supabase = createAdminClient();
-
-  await supabase.from("availability_rules").delete().eq("area", area);
-
-  if (Array.isArray(rules) && rules.length > 0) {
-    const { error } = await supabase.from("availability_rules").insert(
-      rules.map((r: any) => ({
-        area,
-        weekday: r.weekday,
-        start_time: r.start_time,
-        end_time: r.end_time,
-        slot_duration_minutes: r.slot_duration_minutes ?? 30,
-        active: true,
-      }))
-    );
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  const { error } = await (createAdminClient() as any).rpc("reemplazar_disponibilidad", { p_area: area, p_reglas: v.reglas });
+  if (error) {
+    console.error("[agenda/availability]", error.message);
+    return NextResponse.json({ error: "No se pudieron guardar los horarios. Quedaron los que había." }, { status: 500 });
   }
-
   return NextResponse.json({ ok: true });
 }
