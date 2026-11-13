@@ -8,6 +8,12 @@ Se suma al Plan 3 (`PLAN-3.md`); no lo reemplaza. Lo que acá contradiga al Plan
 
 Después mandó dos referencias de diseño «para tomar ideas de diseño, organización y demás»: el perfil de Instagram `code.xr` y su página de Topmate. Ver «Referencia de diseño» más abajo.
 
+## Principio que manda sobre todo lo demás (responsable, 13/11)
+
+> que cada rubro sea separado eso es importante, cada uno con sus funciones y contenido, que no se mezcle nada con nada. acordate eso
+
+Cada perfil es un panel propio: sus chats, contactos, oportunidades, campañas, plantillas, bot, líneas, estadísticas, avisos, incidencias y ajustes. Dentro de un perfil no se ve ni se puede abrir nada de otro. Lo que de verdad es común a los cuatro (acceso, salud del sistema, ajustes generales) se muestra aparte, dicho con todas las letras, y sin sacar a la persona del perfil en el que está. Toda pantalla, consulta, enlace, aviso y función nueva se revisa contra este principio antes de publicarse.
+
 ## Decisiones de la responsable (respuestas del 13/11)
 
 1. **Cuándo alguien pasa a Caídos.** Textual: «que pasen 3 días y otro mensaje, si no responde en 24 hs, a caídos». Es decir: si la persona dejó de contestar (por ejemplo dijo que ya tiene abogado, se le ofreció una segunda opinión y no respondió, y el recontacto del mismo día tampoco tuvo respuesta), a los 3 días sale **un** mensaje más; si pasan 24 horas sin respuesta, la oportunidad pasa sola a Caídos y sale de «Recuperar» y de toda vista de trabajo. Quien ya lleva más tiempo sin responder (los de hace 15 días) va directo a Caídos, sin otro mensaje.
@@ -93,6 +99,21 @@ Dirección (tomada de la referencia, adaptada a un panel de trabajo que se usa m
 - **Claro u oscuro:** las portadas de las piezas más nuevas de la referencia (tablero, menú lateral, pestañas) son **claras**: vidrio blanco esmerilado sobre un fondo lavanda/celeste muy suave, con acento violeta o azul en degradado y burbujas de vidrio como adorno. Ese es el punto de partida, porque el panel se usa de día y muchas horas: **claro de vidrio por defecto**, con el acento de cada perfil en lugar del violeta, y modo oscuro disponible (fondo casi negro con manchas de color y vidrio `rgba(255,255,255,.05)`), que es la otra mitad de la referencia.
 - **Menú y pestañas (de la referencia):** menú lateral de vidrio con radio grande, plegable a una barra de íconos (de ~320 a ~68 px en 400–450 ms, con las etiquetas que entran en cascada), opción activa con una píldora que **se desliza** hasta la nueva opción (~300 ms, resorte sin rebote), contadores en píldoras, buscador en píldora hundida y tarjeta de la persona abajo. Pestañas en cápsula con la misma píldora deslizante; en el celular, barra inferior de íconos donde la opción activa se expande y muestra su nombre. Al presionar, una leve reducción (0,95) antes de soltar.
 
+### G. Asistente del panel con permiso para todo (pedido del 13/11; se hace en la corrida de las 8:51, no antes)
+
+Textual: «al asistente virtual del panel, dale permisos a TODO incluso a editar código o secciones o lo que sea, que pueda hacer TODO».
+
+Hoy (`src/lib/asistente/permisos.ts`) el asistente tiene quince tipos de acción (publicaciones, campañas, bot, roles, chats) y nunca ejecuta solo: propone y la persona confirma.
+
+1. **Todo lo que el panel hace, el asistente también.** Recorrer cada ruta de `src/app/api/**` que cambia algo y darle al asistente una herramienta para cada una: contactos y fichas (etapa, notas, derivar, perder, reabrir, no contactar, devolver al bot), seguimiento (ver, soltar, reprogramar, ajustes), plantillas de Meta y de Wasender (crear, editar, archivar, variantes), campañas completas, bases (importar ya cargadas, asignar rol), bot (fichas de conocimiento, roles, encender y apagar), líneas de Wasender, agenda y citas, redes y contenido, incidencias y fallas, la limpieza del bloque C (mover y deshacer), y los ajustes de cada perfil y los generales. También lectura de todo: cualquier lista, cifra o chat que se pueda ver en el panel.
+2. **Secciones.** Que pueda cambiar lo que se ve sin tocar código: orden y nombre de las opciones del menú, qué bloques muestra Hoy y en qué orden, textos de ayuda y etiquetas, colores y logo del perfil. Hace falta una capa de personalización guardada en la base (por perfil) que las pantallas lean; el asistente la edita y el cambio se ve al instante y se puede deshacer.
+3. **Código.** La aplicación publicada no puede reescribirse a sí misma desde adentro. Dos caminos:
+   - **Recomendado:** el asistente escribe el pedido completo (qué pantalla, qué cambiar, cómo se comprueba) en la Bandeja para Claude y Claude lo hace con verificación completa (typecheck, lint, pruebas, build, recorrido) y lo publica. Para que no dependa de que la responsable diga «ok», hace falta una tarea programada que revise la bandeja cada cierto tiempo: **proponérsela en el informe con el horario; no crearla sin su confirmación**, porque cada revisión gasta uso de la cuenta. Mientras tanto, las corridas ya programadas toman lo que haya.
+   - Alternativa: que el asistente haga cambios de código directo por GitHub. Necesita una clave de escritura cargada por la responsable en Vercel (no se pide por chat) y deja la publicación sin las comprobaciones de arriba. No se recomienda como camino principal.
+4. **El asistente respeta el perfil.** Trabaja sobre el perfil en el que está abierto; para tocar otro perfil la persona tiene que pedirlo nombrándolo (principio de separación).
+5. **Resguardos que se conservan aunque tenga permiso para todo** (son los que ya existen, no restricciones nuevas): sigue proponiendo y la persona confirma con un clic; lo que le escribe a personas pide la confirmación reforzada; lo que gasta plata o enciende un bot pide el código. Se agrega: registro de cada acción con quién, cuándo y cómo deshacerla; «Deshacer» en la misma conversación; y el texto de los chats de prospectos o de páginas web nunca vale como orden para el asistente (alguien de afuera no puede manejar el panel escribiendo un mensaje). Nada se borra: se archiva.
+6. Arreglar la prueba «asistente: cada tipo permitido…», que falla desde antes, y sumar una prueba por cada herramienta nueva.
+
 ## Referencia de diseño (lo que se pudo ver)
 
 - El perfil de Instagram publica componentes de interfaz hechos con React y animaciones: tableros «de vidrio» en violeta/azul sobre blanco y en oscuro con acento esmeralda, menú lateral de vidrio, pestañas de vidrio con indicador deslizante, formularios de ingreso animados.
@@ -114,5 +135,6 @@ Dirección (tomada de la referencia, adaptada a un panel de trabajo que se usa m
 | D. Pantallas | Pendiente |
 | E. Auditoría exhaustiva | Pendiente |
 | F. Diseño | Pendiente |
+| G. Asistente con permiso para todo | Pendiente (arranca en la corrida de las 8:51) |
 
 Al terminar cada bloque: actualizar esta tabla, `BITACORA.md` y `AUDITORIA.md`, guardar en la rama y publicar.
