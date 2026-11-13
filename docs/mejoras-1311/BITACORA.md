@@ -109,11 +109,11 @@ Rama de trabajo: `claude/relaxed-cerf-5oncz1` (la de este chat), publicada a `ma
 
 | Commit | Qué |
 |---|---|
-| `58c…` y `870805d` | Next 15.5.29 y React 19: dependencias y cambio de `params`, `searchParams` y `cookies` |
-| «Embudo: conversaron…» | Tres etapas nuevas y sus listas (migración 0612) |
-| «Hallazgos de rutas…» | Horarios en una operación, archivar en vez de borrar, avisar si no existe (migración 0613) |
-| «Latido: tiempos…» | Tiempos por etapa en Salud y aviso a los dispositivos por una falla del sistema |
-| «Diseño: menú plegable…» | Menú plegable, barra inferior, gráfico del período (migración 0614), portada |
+| `47ab6e0` y `870805d` | Next 15.5.29 y React 19: dependencias y cambio de `params`, `searchParams` y `cookies` |
+| `3e2627f` | Tres etapas nuevas y sus listas (migración 0612) |
+| `45fe6e5` | Horarios en una operación, archivar en vez de borrar, avisar si no existe (migración 0613) |
+| `d2aa492` | Tiempos por etapa en Salud y aviso a los dispositivos por una falla del sistema |
+| `8a53ce1`, `e57579d` | Menú plegable, barra inferior, gráfico del período (migración 0614), portada |
 
 **Cambios en la base:** migraciones `0612`, `0613`, `0614` (ver `MIGRACIONES.md`). `ops_change_log` 239: «Pasar a texto» sobre los 2 audios reales de hoy.
 
