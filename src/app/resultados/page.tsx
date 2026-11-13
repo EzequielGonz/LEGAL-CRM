@@ -73,7 +73,7 @@ export default async function Pagina({ searchParams }: { searchParams: { perfil?
       <div className="mx-auto max-w-5xl space-y-6">
         <div>
           <p className="text-sm text-slate-600">
-            <Link href={`/hoy?perfil=${slug}#hoy-cifras`} className="font-medium text-slate-800 underline underline-offset-2">
+            <Link href={`/hoy?perfil=${slug}#hoy-cifras`} className="tactil inline-flex items-center font-medium text-slate-800 underline underline-offset-2">
               Hoy
             </Link>{" "}
             / Resultados

@@ -99,14 +99,22 @@ export function PlantillasWasender({ slug, marca }: { slug: SlugPerfil; marca: s
     }
   }
 
+  // 13/11: archivar pide el motivo en la misma página (antes, una ventana del navegador).
+  const [porArchivar, setPorArchivar] = useState<{ id: string; motivo: string } | null>(null);
   async function archivar(p: Plantilla) {
-    const motivo = window.prompt(`¿Por qué archivás «${p.nombre}»? (no se borra: queda guardada con el motivo)`);
-    if (!motivo?.trim()) return;
+    const motivo = porArchivar?.id === p.id ? porArchivar.motivo.trim() : "";
+    if (!motivo) return;
+    setOcupado(true);
+    setError(null);
     try {
       await pedir(`/api/wasender/plantillas/${p.id}`, { method: "POST", body: JSON.stringify({ perfil: slug, accion: "archivar", motivo }) });
+      setPorArchivar(null);
+      setAviso(`«${p.nombre}» quedó archivada. No se borró: está en «Ver archivadas».`);
       await cargar();
     } catch (e: any) {
       setError(e.message);
+    } finally {
+      setOcupado(false);
     }
   }
 
@@ -248,8 +256,24 @@ export function PlantillasWasender({ slug, marca }: { slug: SlugPerfil; marca: s
                 ) : null}
                 <div className="mt-3 flex gap-3 text-sm">
                   <button type="button" onClick={() => setEdicion({ id: p.id, nombre: p.nombre, uso: p.uso, cuerpo: p.cuerpo, variantes: p.variantes, activa: p.activa, grupo: p.grupo ?? null })} className="tactil font-medium text-slate-800 underline">Editar</button>
-                  <button type="button" onClick={() => archivar(p)} className="tactil text-slate-500 underline">Archivar</button>
+                  <button type="button" onClick={() => setPorArchivar(porArchivar?.id === p.id ? null : { id: p.id, motivo: "" })} className="tactil text-slate-600 underline">Archivar</button>
                 </div>
+                {porArchivar?.id === p.id ? (
+                  <div className="mt-2 rounded-xl border border-slate-200 bg-slate-50 p-3">
+                    <label className="block text-sm text-slate-800">
+                      ¿Por qué archivás «{p.nombre}»? No se borra: queda guardada con el motivo y deja de poder elegirse.
+                      <input value={porArchivar.motivo} onChange={(e) => setPorArchivar({ id: p.id, motivo: e.target.value })} maxLength={500} className="tactil mt-1 block w-full rounded-lg border border-slate-300 bg-white px-3 text-sm" autoFocus />
+                    </label>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      <button type="button" disabled={ocupado || !porArchivar.motivo.trim()} onClick={() => archivar(p)} className="tactil rounded-lg bg-slate-900 px-4 text-sm font-semibold text-white disabled:opacity-50">
+                        {ocupado ? "Archivando…" : "Archivar la plantilla"}
+                      </button>
+                      <button type="button" onClick={() => setPorArchivar(null)} className="tactil rounded-lg border border-slate-300 bg-white px-4 text-sm text-slate-700">
+                        Cancelar
+                      </button>
+                    </div>
+                  </div>
+                ) : null}
               </li>
             ))}
           </ul>

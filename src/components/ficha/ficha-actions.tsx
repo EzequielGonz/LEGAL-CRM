@@ -314,7 +314,7 @@ export function FichaActions({
         {optionalFields.length > 0 && (
           <div className="mb-2 flex flex-wrap gap-2">
             {optionalFields.map((f) => (
-              <label key={f.key} className="flex items-center gap-1 rounded-full border border-slate-200 px-2 py-0.5 text-xs text-slate-600">
+              <label key={f.key} className="tactil inline-flex cursor-pointer items-center gap-2 rounded-full border border-slate-200 px-3 text-[13px] text-slate-700">
                 <input
                   type="checkbox"
                   checked={chosen.includes(f.key)}

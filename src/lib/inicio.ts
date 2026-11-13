@@ -61,7 +61,7 @@ export function siguientePasoFicha(o: {
   if (o.followup_state === "caido") return { texto: "El seguimiento no avanzó: decidí si se vuelve a intentar.", urgente: false };
   if (o.capture_state === "perdido") return { texto: "Marcado como perdido: no hay acciones pendientes.", urgente: false };
   if (o.followup_state === "activo") return { texto: "En seguimiento automático: no hace falta hacer nada por ahora.", urgente: false };
-  if (o.chatTomado) return { texto: "El chat lo tiene una persona: el bot no responde hasta que lo devuelvas a la IA.", urgente: false };
+  if (o.chatTomado) return { texto: "El chat lo tiene una persona: el bot no responde hasta que se lo devuelvas.", urgente: false };
   return { texto: "La conversación está en curso con el agente: no hace falta hacer nada por ahora.", urgente: false };
 }
 
