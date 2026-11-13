@@ -94,14 +94,16 @@ export function seccionesDePerfil(slug: SlugPerfil): SeccionMenu[] {
     { href: comun(slug, "contactos"), label: "Etapas", match: "/contactos" },
     { href: `${base}/agenda`, label: "Citas" },
     { href: `${base}/seguimiento`, label: "Seguimiento" },
-    { href: `${base}/casos-cerrados`, label: j ? "Captados y casos" : "Captados y clientes" },
+    // 13/11: captados, derivados y perdidos se ven en Hoy → Resultados (con origen y quién lo hizo).
+    // La tabla vieja queda accesible por su dirección, sin pestaña.
+    { href: `${base}/casos-cerrados`, label: j ? "Captados y casos" : "Captados y clientes", oculto: true },
     ...(mk
       ? [
           { href: `${base}/prospectos`, label: "Prioritarios" },
           { href: `${base}/presupuestos`, label: "Piden presupuesto" },
         ]
       : []),
-    { href: comun(slug, "prospectos-por-base"), label: "Prospectos", match: "/prospectos-por-base" },
+    { href: comun(slug, "prospectos-por-base"), label: "Por base", match: "/prospectos-por-base" },
     ...(j ? [{ href: "/prospectos", label: "Buscar en la base", oculto: true }] : []),
     { href: comun(slug, "oportunidades"), label: "Lista", match: "/oportunidades", oculto: true },
   ];

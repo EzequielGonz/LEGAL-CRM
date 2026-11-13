@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { AreaBadge } from "@/components/ui/badge";
+import { cuandoCorto, iniciales, previaLegible } from "@/lib/cartera";
 
 export interface ConversationListItem {
   id: string;
@@ -210,26 +211,34 @@ export function ConversationList({ perfil = "juridico" }: { perfil?: string }) {
           <Link
             key={item.id}
             href={hrefChat(item.id)}
-            className={`block border-b border-slate-100 px-4 py-3 hover:bg-slate-50 ${params?.id === item.id ? "bg-slate-100" : ""}`}
+            aria-current={params?.id === item.id ? "page" : undefined}
+            className={`flex gap-3 border-b border-slate-100 px-4 py-3 hover:bg-slate-50 ${params?.id === item.id ? "bg-slate-100" : ""}`}
           >
-            <div className="mb-1 flex items-center justify-between gap-2">
-              <span className="min-w-0 truncate text-sm font-medium text-slate-900">{item.contact_name ?? item.phone ?? "Sin nombre"}</span>
-              <AreaBadge area={item.area as any} />
-            </div>
-            <p className={`mb-1 truncate text-sm ${item.last_from_contact ? "font-medium text-slate-800" : "text-slate-600"}`}>
-              {item.last_message_preview ?? "Sin mensajes todavía"}
-            </p>
-            <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-0.5 text-xs [overflow-wrap:anywhere]">
-              {item.last_message_at && <span className="tabular-nums text-slate-600">{new Date(item.last_message_at).toLocaleString("es-AR", { dateStyle: "short", timeStyle: "short", hourCycle: "h23", timeZone: "America/Argentina/Buenos_Aires" })}</span>}
-              {item.attention_state && ATTENTION_LABEL[item.attention_state] && (
-                <span className="font-medium text-amber-800">
-                  {ATTENTION_LABEL[item.attention_state]}
-                  {item.attention_reason ? <span className="solo-avanzado font-normal"> · {item.attention_reason}</span> : null}
-                </span>
-              )}
-              {!item.ai_enabled && !item.attention_state && <span className="font-medium text-amber-800">Tomada por una persona</span>}
-              {item.detained && <span className="font-medium text-red-700">{item.detained === "detenido" ? "Detenido" : "Retenido"}</span>}
-            </div>
+            {/* 13/11: fila más clara: quién es, qué dijo último (en palabras) y cuándo. */}
+            <span aria-hidden="true" className="avatar-ficha mt-0.5 grid h-10 w-10 shrink-0 place-items-center rounded-full text-xs font-semibold">
+              {iniciales(item.contact_name)}
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="flex items-baseline justify-between gap-2">
+                <span className={`min-w-0 truncate text-[15px] text-slate-950 ${item.last_from_contact ? "font-semibold" : "font-medium"}`}>{item.contact_name ?? item.phone ?? "Sin nombre"}</span>
+                {item.last_message_at ? <span className="shrink-0 text-xs tabular-nums text-slate-600">{cuandoCorto(item.last_message_at)}</span> : null}
+              </span>
+              <span className={`mt-0.5 block text-sm [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2] [overflow:hidden] ${item.last_from_contact ? "font-medium text-slate-900" : "text-slate-600"}`}>
+                {previaLegible(item.last_message_preview)}
+              </span>
+              <span className="mt-1 flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-xs">
+                <AreaBadge area={item.area as any} />
+                {item.last_from_contact && !item.detained ? <span className="rounded-full bg-gold-500/20 px-2 py-0.5 font-semibold text-gold-900">Te escribió</span> : null}
+                {item.attention_state && ATTENTION_LABEL[item.attention_state] && (
+                  <span className="font-medium text-amber-800">
+                    {ATTENTION_LABEL[item.attention_state]}
+                    {item.attention_reason ? <span className="solo-avanzado font-normal"> · {item.attention_reason}</span> : null}
+                  </span>
+                )}
+                {!item.ai_enabled && !item.attention_state && <span className="font-medium text-amber-800">La atiende una persona</span>}
+                {item.detained && <span className="font-medium text-red-700">{item.detained === "detenido" ? "Detenido" : "Retenido"}</span>}
+              </span>
+            </span>
           </Link>
         ))}
         {!loading && items.length === 0 && <p className="p-4 text-sm text-slate-700">No hay conversaciones con estos filtros.</p>}

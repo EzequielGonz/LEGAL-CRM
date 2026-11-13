@@ -83,11 +83,22 @@ test("menú: Conversaciones y Contactos abren la cartera; las listas completas s
   const s = seccionesDePerfil("agencia_0km");
   assert.ok(s[1].href.startsWith("/conversaciones?"));
   assert.ok(s[2].href.startsWith("/contactos?"));
-  assert.ok(s[2].tabs.some((t) => t.label === "Prospectos" && t.href.startsWith("/prospectos-por-base?")));
+  assert.ok(s[2].tabs.some((t) => t.label === "Por base" && t.href.startsWith("/prospectos-por-base?")));
   // 10/11: se busca por clave (Wasender sumó una sección antes de esta).
   assert.ok(s.find((x) => x.clave === "linea")!.tabs.some((t) => t.label === "Perfil de WhatsApp y redes" && !t.oculto));
   assert.equal(seccionActiva(s, "/oportunidades", "perfil=agencia_0km&indicador=captado_sin_derivar")?.seccion.clave, "conversaciones");
   assert.equal(seccionActiva(s, "/oportunidades", "perfil=agencia_0km&indicador=derivado")?.seccion.clave, "contactos");
   assert.equal(seccionActiva(s, "/recuperar", "perfil=agencia_0km")?.seccion.clave, "conversaciones");
   assert.equal(seccionActiva(seccionesDePerfil("juridico"), "/revision", null)?.seccion.clave, "conversaciones");
+});
+
+import { previaLegible } from "@/lib/cartera";
+
+test("lista de chats: la vista previa se lee en palabras, sin nombres técnicos de plantillas", () => {
+  assert.equal(previaLegible('Vos: [Plantilla de campaña "GRAVES - META": estudio_juridico_vita_asesor] Primer contacto automático a Ana.'), "Vos: Primer mensaje de la campaña «GRAVES - META»");
+  assert.equal(previaLegible("[Audio]"), "Audio");
+  assert.equal(previaLegible("[Reacción 👍]"), "Reaccionó 👍");
+  assert.equal(previaLegible("[Mensaje no compatible: unsupported]"), "Mensaje que no se puede mostrar");
+  assert.equal(previaLegible("Hola, ¿cómo estás?"), "Hola, ¿cómo estás?");
+  assert.equal(previaLegible(null), "Sin mensajes todavía");
 });

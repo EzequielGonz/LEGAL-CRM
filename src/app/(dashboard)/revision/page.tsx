@@ -61,11 +61,17 @@ export default async function RevisionPage({
         <ResumenSeccion
           id="rev"
           estado={(() => {
-            const total = tabs.reduce((a, t) => a + (t.count ?? 0), 0);
+            // 13/11: las detenciones vigentes son un registro (gente a la que no se le escribe), no trabajo pendiente.
+            const total = tabs.filter((t) => t.key !== "detenciones").reduce((a, t) => a + (t.count ?? 0), 0);
             return total ? `${total.toLocaleString("es-AR")} cosa(s) esperan una decisión` : "No hay nada esperando una decisión";
           })()}
-          tono={tabs.some((t) => t.count) ? "atencion" : "ok"}
-          puntos={tabs.map((t) => ({ texto: t.label, cantidad: t.count, href: `/revision?vista=${t.key}`, tono: t.count ? ("atencion" as const) : ("ok" as const) }))}
+          tono={tabs.some((t) => t.key !== "detenciones" && t.count) ? "atencion" : "ok"}
+          puntos={tabs.map((t) => ({
+            texto: t.key === "detenciones" ? "Detenciones vigentes (registro, no es pendiente)" : t.label,
+            cantidad: t.count,
+            href: `/revision?vista=${t.key}`,
+            tono: t.count && t.key !== "detenciones" ? ("atencion" as const) : ("ok" as const),
+          }))}
         />
       </div>
 

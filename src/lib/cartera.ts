@@ -124,3 +124,21 @@ export function iniciales(nombre: string | null | undefined): string {
   if (!partes.length) return "·";
   return (partes[0][0] + (partes.length > 1 ? partes[partes.length - 1][0] : "")).toUpperCase();
 }
+
+/**
+ * Vista previa de un mensaje en palabras (13/11): la lista de chats mostraba
+ * textos internos («[Plantilla de campaña "X": nombre_tecnico] Primer contacto…»).
+ * Pura: se prueba sola.
+ */
+export function previaLegible(texto: string | null | undefined): string {
+  const t = String(texto ?? "").trim();
+  if (!t) return "Sin mensajes todavía";
+  const m = t.match(/^(Vos: )?\[Plantilla de campaña "([^"]+)":[^\]]*\]/);
+  if (m) return `${m[1] ?? ""}Primer mensaje de la campaña «${m[2]}»`;
+  return t
+    .replace(/^(Vos: )?\[Plantilla [^\]]*\]\s*/, "$1Mensaje de plantilla · ")
+    .replace(/\[Audio\]/g, "Audio")
+    .replace(/\[Reacción ([^\]]*)\]/g, "Reaccionó $1")
+    .replace(/\[Mensaje no compatible[^\]]*\]/g, "Mensaje que no se puede mostrar")
+    .replace(/ · $/, "");
+}
