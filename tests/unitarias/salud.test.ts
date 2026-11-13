@@ -71,7 +71,8 @@ test("error de la IA: lleva a la conversación y lo explica", () => {
     turnos24h: { errores: 1, total: 40, ultimo: { conversacionId: "c1", contactoId: "p1", nombre: "Prospecto de prueba", perfil: "Jurídico", error: "Contacto detenido: Necesidad resuelta.", at: "2026-10-16T11:00:00Z" } },
   });
   const i = items.find((x) => x.clave === "errores_ia")!;
-  assert.equal(i.href, "/inbox/c1");
+  // 13/11: por /conversacion/<id>, que abre el chat en el perfil al que pertenece.
+  assert.equal(i.href, "/conversacion/c1");
   const l = lecturaSimple(i);
   assert.equal(l.accion, "Abrir la conversación");
   assert.match(l.que, /Prospecto de prueba \(Jurídico\)/);

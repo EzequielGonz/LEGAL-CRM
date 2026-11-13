@@ -10,35 +10,32 @@ import { BriefMarca } from "@/components/contenido/contenido-etapa3";
 import type { SlugPerfil } from "@/lib/marca";
 import { HorarioAtencion } from "@/components/configuracion/horario-atencion";
 import { conEstadoReal } from "@/lib/canales-estado";
+import { GruposAjustesGenerales, SeccionCalendarioGeneral, leerAjustesGenerales } from "@/components/configuracion/ajustes-generales";
 
 /**
  * Configuración de Coberturas médicas, Autos 0 km y Marketing (rediseño
  * 17/10, bloque 3): los mismos grupos y el mismo comportamiento que
- * Jurídico. Acá van los ajustes de este perfil; los generales (pausa,
- * horario de contacto, avisos, acceso, sistema) valen para los cuatro
- * perfiles y se editan en un solo lugar, enlazado desde cada grupo.
+ * Jurídico. Primero los ajustes de este perfil; al final, los generales
+ * (pausa, horario de contacto, avisos, acceso, sistema), que valen para los
+ * cuatro perfiles y desde el 13/11 se editan acá mismo, sin salir del perfil.
  */
 export async function ConfiguracionPerfil({ slug }: { slug: Exclude<SlugPerfil, "juridico"> }) {
   const supabase = createClient();
-  const { data: canalesBase } = await supabase.from("channels").select("*").eq("area", slug).order("type");
+  const [{ data: canalesBase }, generales] = await Promise.all([supabase.from("channels").select("*").eq("area", slug).order("type"), leerAjustesGenerales()]);
   const channels = conEstadoReal(canalesBase);
   const conectados = (channels ?? []).filter((c) => c.is_connected).length;
   const grupos: GrupoNav[] = [
     { id: "marca", titulo: "Perfil y marca", resumen: "Nombre, logo, colores y líneas" },
     { id: "canales", titulo: "Canales, líneas y plantillas", resumen: `${conectados} de ${(channels ?? []).length} canales conectados` },
     { id: "agenda", titulo: "Agenda y horario de atención", resumen: "Respuesta 24 h · asesores de lunes a sábado de 8 a 21" },
-    { id: "generales", titulo: "Ajustes generales (todos los perfiles)", resumen: "Agenda, automatizaciones, avisos, acceso y sistema" },
+    { id: "agentes", titulo: "Bot de este perfil", resumen: "En Bot IA" },
+    ...generales.grupos,
   ];
-  const general = (ancla: string, texto: string) => (
-    <Link href={`/configuracion?nivel=avanzado#${ancla}`} className="font-medium underline">
-      {texto}
-    </Link>
-  );
   return (
     <div className="mx-auto max-w-4xl space-y-6">
       <div>
         <h1 className="text-2xl font-semibold text-slate-950">Configuración</h1>
-        <p className="mt-1 text-sm text-slate-600">Tocá un grupo para abrirlo. Los ajustes que comparten los cuatro perfiles se editan en un solo lugar, enlazado abajo.</p>
+        <p className="mt-1 text-sm text-slate-600">Tocá un grupo para abrirlo. Primero, los ajustes de este perfil; al final, los que valen para los cuatro.</p>
       </div>
 
       <NavegacionAjustes grupos={grupos} />
@@ -87,27 +84,24 @@ export async function ConfiguracionPerfil({ slug }: { slug: Exclude<SlugPerfil, 
         </SeccionAjustes>
         <SeccionAjustes id="agenda-enlaces" titulo="Citas y disponibilidad" alcance="perfil" palabras="citas turnos horarios feriados excepciones">
           <p className="text-sm text-slate-700">
-            Las citas de este perfil están en <Link href={`/panel/${slug}/agenda`} className="font-medium underline">Contactos › Citas</Link>. Los feriados y excepciones del horario se cargan en {general("calendario", "el calendario general")}.
+            Las citas de este perfil están en <Link href={`/panel/${slug}/agenda`} className="font-medium underline">Contactos › Citas</Link>. Los feriados y excepciones del horario valen para los cuatro perfiles y se cargan acá abajo.
+          </p>
+        </SeccionAjustes>
+        <SeccionCalendarioGeneral d={generales} />
+      </GrupoAjustes>
+
+      <GrupoAjustes id="agentes" titulo="Bot de este perfil" resumen="En Bot IA" soloAvanzado>
+        <SeccionAjustes id="agentes-config" titulo="Dónde se configura el bot" alcance="perfil" palabras="modelo versión prompt evaluación entrenamiento agente">
+          <p className="text-sm text-slate-700">
+            La configuración del bot de este perfil está en <Link href={`/panel/${slug}/agentes`} className="font-medium underline">Bot IA</Link>. No se cambia desde acá.
           </p>
         </SeccionAjustes>
       </GrupoAjustes>
 
-      <GrupoAjustes id="generales" titulo="Ajustes generales (todos los perfiles)" resumen={grupos[3].resumen}>
-        <SeccionAjustes id="generales-enlaces" titulo="Dónde están los ajustes que comparten los cuatro perfiles" alcance="general" nivel="simple" palabras="pausa horario avisos pin acceso tareas conexiones agentes">
-          <ul className="list-disc space-y-1 pl-5 text-sm text-slate-700">
-            <li>{general("pausa", "Pausa general")} y {general("tareas", "tareas del servidor")}</li>
-            <li>{general("calendario", "Horario de contacto, feriados y excepciones")}</li>
-            <li>{general("notificaciones", "Teléfonos de aviso")} y {general("avisos", "avisos web en este dispositivo")}</li>
-            <li>{general("acceso", "Acceso, PIN y sesiones")}</li>
-            <li>{general("conexiones", "Conexiones e integraciones")}</li>
-            <li>
-              Agentes de este perfil:{" "}
-              <Link href={`/panel/${slug}/agentes`} className="font-medium underline">Agentes IA</Link> y{" "}
-              <Link href={`/comparacion-agentes?perfil=${slug}`} className="font-medium underline">Comparación de agentes</Link>
-            </li>
-          </ul>
-        </SeccionAjustes>
-      </GrupoAjustes>
+      <p className="rounded-xl border border-slate-200 bg-slate-100 px-4 py-3 text-sm text-slate-700">
+        Los grupos que siguen valen para <strong>los cuatro perfiles</strong>: lo que cambies acá cambia en todos.
+      </p>
+      <GruposAjustesGenerales d={generales} hrefRetenidos={`/salud?perfil=${slug}#fallas`} />
       </div>
     </div>
   );

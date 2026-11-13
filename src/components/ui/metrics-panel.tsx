@@ -2,6 +2,7 @@ import Link from "next/link";
 import { StatCard } from "@/components/ui/stat-card";
 import { formatCount, formatRate, headlineRates, type ProfileMetrics } from "@/lib/metrics";
 import { enlaceIndicador } from "@/lib/indicadores";
+import { esSlugPerfil } from "@/lib/marca";
 
 /**
  * Panel de cifras de un perfil (mismo cálculo en PC y teléfono). Las tasas
@@ -74,7 +75,7 @@ export function MetricsPanel({
             <Row label="Mensajes recibidos" value={m.mensajes.recibidos} />
             <Row label="Seguimientos caídos" value={m.seguimiento.caido}  href={to("seguimiento_caido")} />
             <p className="mt-2 text-xs">
-              <Link href="/revision" className="text-slate-600 hover:underline">
+              <Link href={perfil && esSlugPerfil(perfil) ? `/incidencias?perfil=${perfil}` : "/incidencias"} className="text-slate-600 hover:underline">
                 {formatCount(m.incidencias_abiertas)} incidencias abiertas →
               </Link>
             </p>

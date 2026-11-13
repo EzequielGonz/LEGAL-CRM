@@ -20,6 +20,14 @@ export function EncabezadoPanel({ slug, nombre }: { slug: SlugPerfil; nombre?: s
   const marca = marcaDe(slug);
   const titulo = nombre?.trim() || marca.nombre;
   const hoy = new Intl.DateTimeFormat("es-AR", { weekday: "long", day: "numeric", month: "long", timeZone: "America/Argentina/Buenos_Aires" }).format(new Date());
+  // 13/11 · cada rubro separado: la pestaña del navegador dice primero en qué perfil se está.
+  const vista = activa?.tab.label ?? activa?.seccion.label ?? null;
+  useEffect(() => {
+    const t = window.setTimeout(() => {
+      document.title = vista ? `${titulo} · ${vista}` : titulo;
+    }, 0);
+    return () => window.clearTimeout(t);
+  }, [titulo, vista, pathname]);
 
   return (
     <div className="encabezado-panel">

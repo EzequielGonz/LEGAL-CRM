@@ -1,3 +1,4 @@
+import { perfilActivo } from "@/lib/perfil-activo";
 import { MarcoPerfil } from "@/components/perfiles/marco-perfil";
 import { LineasWasender } from "@/components/wasender/lineas-wasender";
 import { esSlugPerfil, marcaDe, type SlugPerfil } from "@/lib/marca";
@@ -10,7 +11,7 @@ export const metadata = { title: "Wasender" };
  * Las líneas nacen apagadas y en modo prueba; Meta sigue igual.
  */
 export default function WasenderPage({ searchParams }: { searchParams: { perfil?: string } }) {
-  const slug: SlugPerfil = esSlugPerfil(searchParams.perfil) ? searchParams.perfil : "juridico";
+  const slug: SlugPerfil = perfilActivo(searchParams.perfil);
   return (
     <MarcoPerfil slug={slug}>
       <LineasWasender slug={slug} marca={marcaDe(slug).nombre} />

@@ -1,3 +1,4 @@
+import { perfilActivo } from "@/lib/perfil-activo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requirePageSession } from "@/lib/acceso/pagina";
@@ -52,7 +53,7 @@ const VACIO: Record<ClaveResultado, string> = {
 export default async function Pagina({ searchParams }: { searchParams: { perfil?: string; ver?: string; periodo?: string; pagina?: string } }) {
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
-  const perfil = searchParams.perfil ?? "juridico";
+  const perfil = perfilActivo(searchParams.perfil);
   const rubroId = rubroIdDe(perfil);
   if (!rubroId || !esSlugPerfil(perfil)) notFound();
   const slug: SlugPerfil = perfil;

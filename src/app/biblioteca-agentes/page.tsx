@@ -1,3 +1,4 @@
+import { perfilActivo } from "@/lib/perfil-activo";
 import Link from "next/link";
 import { requirePageSession } from "@/lib/acceso/pagina";
 import { createClient } from "@/lib/supabase/server";
@@ -21,7 +22,7 @@ export default async function BibliotecaPage({ searchParams }: { searchParams: {
   // 24/10: dentro del marco del perfil (antes se abría sin menú).
   const desdeVolver = /^\/panel\/([a-z0-9_]+)/.exec(volver ?? "")?.[1];
   const pedido = searchParams.perfil ?? desdeVolver;
-  const slug: SlugPerfil = pedido && esSlugPerfil(pedido) ? pedido : "juridico";
+  const slug: SlugPerfil = perfilActivo(pedido);
   const supabase = createClient();
   const [{ data, error }, { data: rubros }, { data: versiones }] = await Promise.all([
     supabase.from("agent_library").select("*").order("clave"),

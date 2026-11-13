@@ -1,3 +1,4 @@
+import { perfilActivo } from "@/lib/perfil-activo";
 import { MarcoPerfil } from "@/components/perfiles/marco-perfil";
 import { BandejaClaude, type TareaVista } from "@/components/bandeja/bandeja-claude";
 import { esSlugPerfil, marcaDe, SLUGS_PERFIL, type SlugPerfil } from "@/lib/marca";
@@ -14,7 +15,7 @@ export const metadata = { title: "Bandeja para Claude" };
  * algo») sigue en Gemini; Claude no corre dentro del panel.
  */
 export default async function BandejaPage({ searchParams }: { searchParams: { perfil?: string } }) {
-  const slug: SlugPerfil = esSlugPerfil(searchParams.perfil) ? searchParams.perfil : "juridico";
+  const slug: SlugPerfil = perfilActivo(searchParams.perfil);
   let tareas: TareaBandeja[] = [];
   let errorLectura = false;
   try {

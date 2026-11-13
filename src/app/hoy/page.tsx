@@ -1,3 +1,4 @@
+import { perfilActivo } from "@/lib/perfil-activo";
 import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -51,7 +52,7 @@ function Numero({ n, texto }: { n: number | null | undefined; texto: string }) {
 export default async function InicioPerfilPage({ searchParams }: { searchParams: { perfil?: string; grupo?: string; cola?: string; todo?: string; periodo?: string } }) {
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
-  const perfil = searchParams.perfil ?? "juridico";
+  const perfil = perfilActivo(searchParams.perfil);
   const rubroId = rubroIdDe(perfil);
   if (!rubroId || !esSlugPerfil(perfil)) notFound();
   const slug: SlugPerfil = perfil;

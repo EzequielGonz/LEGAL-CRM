@@ -1,3 +1,4 @@
+import { perfilActivo } from "@/lib/perfil-activo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requirePageSession } from "@/lib/acceso/pagina";
@@ -42,11 +43,11 @@ export default async function OportunidadesPage({
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
 
-  const rubroIdLeido = rubroIdDe(searchParams.perfil ?? "juridico");
+  const perfil = perfilActivo(searchParams.perfil);
+  const rubroIdLeido = rubroIdDe(perfil);
   if (!rubroIdLeido) notFound();
   const rubroId: string = rubroIdLeido as string;
-  const perfil = searchParams.perfil ?? "juridico";
-  const slug: SlugPerfil = esSlugPerfil(perfil) ? perfil : "juridico";
+  const slug: SlugPerfil = perfil;
   const ind = indicadorPorClave(searchParams.indicador ?? "oportunidades") ?? indicadorPorClave("oportunidades")!;
   const orden: Orden = (Object.keys(ORDENES) as Orden[]).includes(searchParams.orden as Orden) ? (searchParams.orden as Orden) : "reciente";
   const pagina = Math.max(1, Number.parseInt(searchParams.pagina ?? "1", 10) || 1);

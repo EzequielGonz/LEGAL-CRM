@@ -34,7 +34,9 @@ test("asistente: crear una campaña, cambiar la línea o publicar no pueden envi
 });
 
 test("asistente: cada tipo permitido en la base tiene su nivel y el asistente no tiene herramientas de pago", () => {
-  assert.equal(TIPOS_ACCION.length, 8);
+  // Antes contaba un número fijo y fallaba cada vez que se sumaba una acción: lo que importa es que no haya repetidas y que cada una tenga nivel.
+  assert.equal(new Set(TIPOS_ACCION).size, TIPOS_ACCION.length);
+  for (const t of TIPOS_ACCION) assert.ok(["cambio", "contacto", "pin"].includes(nivelDeAccion(t)), `sin nivel: ${t}`);
   const nombres = DECLARACIONES.map((d) => d.name);
   for (const n of NOMBRES_OPERACIONES) assert.ok(nombres.includes(n), `falta declarar ${n}`);
   assert.ok(!nombres.some((n) => /pago|pagar|gasto|presupuesto|publicidad/.test(n)));

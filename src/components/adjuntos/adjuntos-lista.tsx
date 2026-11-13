@@ -58,7 +58,7 @@ export function AdjuntosLista({ rows, showConversation = false }: { rows: Attach
                 </a>
               )}
               {showConversation && a.conversation_id && (
-                <EnlaceDetalle href={`/inbox/${a.conversation_id}`} className="text-slate-500 hover:underline">
+                <EnlaceDetalle href={`/conversacion/${a.conversation_id}`} className="text-slate-500 hover:underline">
                   Conversación
                 </EnlaceDetalle>
               )}

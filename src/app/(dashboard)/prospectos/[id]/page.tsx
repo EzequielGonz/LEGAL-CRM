@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { AreaBadge, SourceBadge, StatusBadge } from "@/components/ui/badge";
 import { ContactEditForm } from "@/components/prospectos/contact-edit-form";
@@ -23,6 +23,10 @@ export default async function ProspectoDetailPage({ params, searchParams }: { pa
     .single();
 
   if (!contact) notFound();
+  // 13/11 · cada rubro separado: una persona de otro perfil se abre en la ficha de su perfil.
+  if (contact.area !== "civil" && contact.area !== "penal") {
+    redirect(`/ficha/${contact.id}${volver ? `?volver=${encodeURIComponent(volver)}` : ""}`);
+  }
 
   const { data: studios } = await supabase
     .from("studios")

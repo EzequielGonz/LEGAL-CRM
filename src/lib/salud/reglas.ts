@@ -4,6 +4,9 @@
  * pasa en una frase y qué hacer, con un enlace para resolverlo.
  */
 
+import { rutaDePerfil } from "@/lib/perfil-ruta";
+import type { SlugPerfil } from "@/lib/marca";
+
 export type EstadoSalud = "rojo" | "amarillo" | "verde";
 
 export interface ItemSalud {
@@ -13,6 +16,8 @@ export interface ItemSalud {
   detalle: string;
   accion?: string;
   href?: string;
+  /** Perfil al que pertenece el control (13/11). Sin perfil = de todo el sistema. */
+  perfil?: string;
 }
 
 export interface DatosSalud {
@@ -98,12 +103,12 @@ export function evaluarSalud(d: DatosSalud): ItemSalud[] {
   // Perfiles: línea de WhatsApp y agente
   for (const p of d.perfiles) {
     if (!p.whatsapp) {
-      items.push({ clave: `whatsapp_${p.slug}`, estado: "amarillo", titulo: `${p.nombre}: sin línea de WhatsApp`, detalle: "Faltan las credenciales de la línea en Vercel: no puede responder ni enviar por WhatsApp.", accion: "Cargar la línea", href: p.slug === "juridico" ? "/configuracion" : `/panel/${p.slug}/configuracion` });
+      items.push({ clave: `whatsapp_${p.slug}`, estado: "amarillo", titulo: `${p.nombre}: sin línea de WhatsApp`, detalle: "Faltan las credenciales de la línea en Vercel: no puede responder ni enviar por WhatsApp.", accion: "Cargar la línea", href: rutaDePerfil(p.slug as SlugPerfil, "configuracion") });
     }
     if (!p.agenteListo) {
-      items.push({ clave: `agente_${p.slug}`, estado: "rojo", titulo: `${p.nombre}: el agente no puede responder`, detalle: `Falta: ${p.faltante.join(", ")}.`, accion: "Completar el perfil", href: p.slug === "juridico" ? "/configuracion" : `/panel/${p.slug}/configuracion` });
+      items.push({ clave: `agente_${p.slug}`, estado: "rojo", titulo: `${p.nombre}: el agente no puede responder`, detalle: `Falta: ${p.faltante.join(", ")}.`, accion: "Completar el perfil", href: rutaDePerfil(p.slug as SlugPerfil, "configuracion") });
     } else if (!p.agenteActivo) {
-      items.push({ clave: `agente_${p.slug}`, estado: "amarillo", titulo: `${p.nombre}: agente apagado`, detalle: "Los mensajes quedan para atención manual.", accion: "Encender el agente", href: p.slug === "juridico" ? "/agentes" : `/panel/${p.slug}/agentes` });
+      items.push({ clave: `agente_${p.slug}`, estado: "amarillo", titulo: `${p.nombre}: agente apagado`, detalle: "Los mensajes quedan para atención manual.", accion: "Encender el agente", href: rutaDePerfil(p.slug as SlugPerfil, "agentes") });
     }
   }
 
@@ -118,7 +123,7 @@ export function evaluarSalud(d: DatosSalud): ItemSalud[] {
       titulo: `${d.turnos24h.errores} respuesta(s) de la IA con error en 24 h`,
       detalle: `De ${d.turnos24h.total} turnos.${quien ? ` Último: ${quien}. ${explicarErrorIA(u!.error)}` : ""}`,
       accion: u?.conversacionId ? "Abrir la conversación" : "Ver las conversaciones",
-      href: u?.conversacionId ? `/inbox/${u.conversacionId}` : "/inbox",
+      href: u?.conversacionId ? `/conversacion/${u.conversacionId}` : "/inbox",
     });
   }
   for (const a of d.avisosMeta ?? []) {
@@ -134,10 +139,10 @@ export function evaluarSalud(d: DatosSalud): ItemSalud[] {
         titulo: `${c.nombre}: la línea ${c.linea} tiene calidad baja en Meta`,
         detalle: `Sus campañas se pausan solas mientras siga así${c.pausadas.length ? ` (pausadas: ${c.pausadas.join(", ")})` : ""}. Las respuestas a quien escribe siguen funcionando.`,
         accion: "Revisar la calidad en el Administrador de WhatsApp y las plantillas",
-        href: "/campanas",
+        href: rutaDePerfil(c.slug as SlugPerfil, "campanas"),
       });
     } else if (c.calidad === "media") {
-      items.push({ clave: `calidad_${c.slug}`, estado: "amarillo", titulo: `${c.nombre}: la línea ${c.linea} tiene calidad media en Meta`, detalle: "Conviene bajar el ritmo de las campañas y revisar las plantillas con más bloqueos o rechazos.", href: "/campanas" });
+      items.push({ clave: `calidad_${c.slug}`, estado: "amarillo", titulo: `${c.nombre}: la línea ${c.linea} tiene calidad media en Meta`, detalle: "Conviene bajar el ritmo de las campañas y revisar las plantillas con más bloqueos o rechazos.", href: rutaDePerfil(c.slug as SlugPerfil, "campanas") });
     }
   }
   if (d.presupuestosAtrasados > 0) {

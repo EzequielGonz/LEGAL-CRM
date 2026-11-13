@@ -37,6 +37,7 @@ export function saludDeLineas(lineas: LineaParaSalud[], campanasPausadas: Record
       const pausadas = campanasPausadas[l.id] ?? 0;
       return {
         clave,
+        perfil: slug,
         estado: "rojo",
         titulo: `${perfil}: la línea de Wasender «${l.nombre}» está desconectada`,
         detalle: `No envía ni recibe${desde}.${pausadas ? ` ${pausadas} campaña(s) quedaron en pausa por esto.` : ""} Hay que volver a vincular el número con el QR.`,
@@ -45,11 +46,12 @@ export function saludDeLineas(lineas: LineaParaSalud[], campanasPausadas: Record
       };
     }
     if (!l.habilitada) {
-      return { clave, estado: "amarillo", titulo: `${perfil}: la línea de Wasender «${l.nombre}» está conectada con los envíos apagados`, detalle: "Recibe mensajes, pero no sale nada por ella: ni el bot ni las campañas.", accion: "Prender los envíos", href };
+      return { clave, perfil: slug, estado: "amarillo", titulo: `${perfil}: la línea de Wasender «${l.nombre}» está conectada con los envíos apagados`, detalle: "Recibe mensajes, pero no sale nada por ella: ni el bot ni las campañas.", accion: "Prender los envíos", href };
     }
     const c = limiteDiarioEfectivo({ limiteDiario: l.limite_diario, calentamientoDesde: l.calentamiento_desde }, ahora);
     return {
       clave,
+      perfil: slug,
       estado: "verde",
       titulo: `${perfil}: la línea de Wasender «${l.nombre}» está conectada`,
       detalle: c.porCalentamiento ? `Día ${c.dia} de calentamiento: hasta ${c.limite} mensajes de campaña por día.` : `Hasta ${c.limite} mensajes de campaña por día.`,

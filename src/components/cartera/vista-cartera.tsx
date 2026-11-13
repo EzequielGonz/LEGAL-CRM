@@ -1,3 +1,4 @@
+import { perfilActivo } from "@/lib/perfil-activo";
 import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -71,7 +72,7 @@ function Ficha({ f, slug, aqui, accion }: { f: FichaCartera; slug: SlugPerfil; a
 export async function PaginaCartera({ vista, searchParams }: { vista: VistaCartera; searchParams: { perfil?: string; grupo?: string } }) {
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
-  const perfil = searchParams.perfil ?? "juridico";
+  const perfil = perfilActivo(searchParams.perfil);
   const rubroId = rubroIdDe(perfil);
   if (!rubroId || !esSlugPerfil(perfil)) notFound();
   const slug: SlugPerfil = perfil;
@@ -108,8 +109,8 @@ async function CuerpoCartera({ vista, slug, rubroId, searchParams }: { vista: Vi
   const [{ fichas, error }, detenidos, incidencias, semana, historico, esperan, porDerivar] = await Promise.all([
     listarGrupo(rubroId, areas, g),
     vista === "recuperar" ? contarDetenidos(rubroId) : Promise.resolve(null),
-    vista === "recuperar" && slug === "juridico"
-      ? createAdminClient().from("incidences").select("id", { count: "exact", head: true }).eq("status", "abierta").then((r: any) => (r.error ? null : r.count ?? 0))
+    vista === "recuperar"
+      ? createAdminClient().from("incidences").select("id", { count: "exact", head: true }).eq("rubro_id", rubroId).eq("status", "abierta").then((r: any) => (r.error ? null : r.count ?? 0))
       : Promise.resolve(null),
     // 20/10: en Conversaciones, la semana más reciente y el historial completo.
     vista === "conversaciones" ? resumenCifras(rubroId, areas).catch(() => null) : Promise.resolve(null),
@@ -292,11 +293,11 @@ async function CuerpoCartera({ vista, slug, rubroId, searchParams }: { vista: Vi
                   Ver archivo{detenidos !== null ? ` (${detenidos.toLocaleString("es-AR")})` : ""}
                 </Link>
               </div>
-              {slug === "juridico" ? (
+              {incidencias !== null ? (
                 <div className="rounded-2xl border border-slate-200 bg-white p-4 text-sm shadow-sm">
                   <p className="font-semibold text-slate-900">Incidencias y controles</p>
                   <p className="mt-1 text-slate-600">Plantillas, archivos, mensajes retenidos y detenciones.</p>
-                  <Link href="/revision" className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-slate-800 underline underline-offset-2">
+                  <Link href={`/incidencias?perfil=${slug}`} className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-slate-800 underline underline-offset-2">
                     Abrir{incidencias ? ` (${incidencias.toLocaleString("es-AR")} abiertas)` : ""}
                   </Link>
                 </div>

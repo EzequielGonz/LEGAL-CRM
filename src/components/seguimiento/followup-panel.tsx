@@ -30,7 +30,7 @@ function Who({ name, phone, contactId, conversationId, perfil }: { name?: string
       </EnlaceDetalle>
       {phone && name ? <span className="ml-1 text-xs tabular-nums text-slate-600">{phone}</span> : null}
       {conversationId && (
-        <EnlaceDetalle href={perfil && esSlugPerfil(perfil) ? enlaceConversacion(perfil, conversationId) : `/inbox/${conversationId}`} className="tactil ml-2 inline-flex items-center text-[13px] font-medium text-slate-700 underline underline-offset-2">
+        <EnlaceDetalle href={perfil && esSlugPerfil(perfil) ? enlaceConversacion(perfil, conversationId) : `/conversacion/${conversationId}`} className="tactil ml-2 inline-flex items-center text-[13px] font-medium text-slate-700 underline underline-offset-2">
           Ver chat
         </EnlaceDetalle>
       )}

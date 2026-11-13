@@ -266,7 +266,7 @@ export async function FichaSection({
             ? {
                 aiEnabled: (conv as any).ai_enabled !== false,
                 esperaRespuesta: (ultimoMsj as any)?.direction === "entrante",
-                href: esSlugPerfil(slugPerfil) ? enlaceConversacion(slugPerfil, convId) : `/inbox/${convId}`,
+                href: esSlugPerfil(slugPerfil) ? enlaceConversacion(slugPerfil, convId) : `/conversacion/${convId}`,
               }
             : null
         }

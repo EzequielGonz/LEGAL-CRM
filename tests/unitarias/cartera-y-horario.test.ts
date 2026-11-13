@@ -89,7 +89,9 @@ test("menú: Conversaciones y Contactos abren la cartera; las listas completas s
   assert.equal(seccionActiva(s, "/oportunidades", "perfil=agencia_0km&indicador=captado_sin_derivar")?.seccion.clave, "conversaciones");
   assert.equal(seccionActiva(s, "/oportunidades", "perfil=agencia_0km&indicador=derivado")?.seccion.clave, "contactos");
   assert.equal(seccionActiva(s, "/recuperar", "perfil=agencia_0km")?.seccion.clave, "conversaciones");
-  assert.equal(seccionActiva(seccionesDePerfil("juridico"), "/revision", null)?.seccion.clave, "conversaciones");
+  assert.equal(seccionActiva(seccionesDePerfil("juridico"), "/incidencias", "perfil=juridico")?.seccion.clave, "conversaciones");
+  // 13/11: cada perfil tiene sus incidencias.
+  assert.equal(seccionActiva(seccionesDePerfil("agencia_0km"), "/incidencias", "perfil=agencia_0km")?.seccion.clave, "conversaciones");
 });
 
 import { previaLegible } from "@/lib/cartera";

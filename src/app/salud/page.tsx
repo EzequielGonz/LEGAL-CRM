@@ -1,3 +1,5 @@
+import { itemsDelPerfil } from "@/lib/salud/por-perfil";
+import { perfilActivo } from "@/lib/perfil-activo";
 import Link from "next/link";
 import { MarcoPerfil } from "@/components/perfiles/marco-perfil";
 import { EnlaceAvanzado } from "@/components/nivel/nivel";
@@ -22,10 +24,11 @@ const ESTILO: Record<ItemSalud["estado"], { caja: string; punto: string; texto: 
  * en los dos niveles. Solo lectura.
  */
 export default async function SaludPage({ searchParams }: { searchParams: { perfil?: string } }) {
-  const slug: SlugPerfil = esSlugPerfil(searchParams.perfil) ? searchParams.perfil : "juridico";
+  const slug: SlugPerfil = perfilActivo(searchParams.perfil);
   // 12/11: las líneas de Wasender también son salud del sistema (antes no aparecían).
   const [base, wasender] = await Promise.all([leerSalud(), leerSaludWasender().catch(() => [])]);
-  const items = [...base, ...wasender];
+  // 13/11 · cada rubro separado: en cada perfil, lo de todo el sistema y lo propio. Lo de otro perfil se ve en ese perfil.
+  const items = itemsDelPerfil([...base, ...wasender], slug);
   const r = resumenSalud(items);
   const rojos = items.filter((i) => i.estado === "rojo");
   const amarillos = items.filter((i) => i.estado === "amarillo");

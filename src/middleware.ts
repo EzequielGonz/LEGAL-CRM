@@ -6,6 +6,8 @@ import {
   signSession,
   validateSession,
 } from "@/lib/acceso/session";
+import { COOKIE_PERFIL, equivalenteEnPerfil, esRutaRaizJuridico, perfilDeReferente, perfilDeRuta } from "@/lib/perfil-ruta";
+import { esSlugPerfil } from "@/lib/marca";
 
 /**
  * Acceso con PIN general compartido (Etapa 1 · bloque 1.1).
@@ -43,7 +45,26 @@ export async function middleware(request: NextRequest) {
   const check = await validateSession(request.cookies.get(SESSION_COOKIE)?.value);
 
   if (check.status === "valida") {
+    // 13/11 · cada rubro separado. Una pantalla de la raíz (panel de Jurídico)
+    // pedida desde otro perfil se resuelve dentro de ese perfil: un enlace
+    // suelto ya no cambia de perfil sin avisar. El perfil de origen sale de la
+    // página desde la que se navega y, si esa no lo dice, del último usado.
+    const esPagina = !pathname.startsWith("/api/") && request.method === "GET";
+    const perfilParam = request.nextUrl.searchParams.get("perfil");
+    if (esPagina && esRutaRaizJuridico(pathname) && perfilParam !== "juridico") {
+      const recordado = request.cookies.get(COOKIE_PERFIL)?.value;
+      // Solo cuenta si se llega navegando desde el propio panel: una dirección escrita a mano o un marcador se respetan.
+      const referente = request.headers.get("referer");
+      const desdeElPanel = !!referente && referente.startsWith(`${request.nextUrl.origin}/`);
+      const origen = desdeElPanel ? perfilDeReferente(referente, request.nextUrl.origin) ?? (esSlugPerfil(recordado) ? recordado : null) : null;
+      const destino = equivalenteEnPerfil(pathname, search, esSlugPerfil(perfilParam) ? perfilParam : origen);
+      if (destino) return NextResponse.redirect(new URL(destino, request.url));
+    }
     const response = NextResponse.next();
+    const perfilVisto = esPagina ? perfilDeRuta(pathname, perfilParam) : null;
+    if (perfilVisto && request.cookies.get(COOKIE_PERFIL)?.value !== perfilVisto) {
+      response.cookies.set(COOKIE_PERFIL, perfilVisto, { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", path: "/", maxAge: 60 * 60 * 24 * 30 });
+    }
     // Sin vencimiento programado: mientras se use, la cookie se renueva.
     const ageSeconds = Math.floor(Date.now() / 1000) - check.session.iat;
     if (ageSeconds > SESSION_REFRESH_AFTER_SECONDS) {

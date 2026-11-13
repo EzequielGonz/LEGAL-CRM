@@ -1,3 +1,4 @@
+import { perfilActivo } from "@/lib/perfil-activo";
 import { notFound } from "next/navigation";
 import { requirePageSession } from "@/lib/acceso/pagina";
 import { createClient } from "@/lib/supabase/server";
@@ -41,7 +42,7 @@ const cifra = (v: number | null | undefined) => (v === null || v === undefined ?
 export default async function ContenidoPage({ searchParams }: { searchParams: { perfil?: string; volver?: string } }) {
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
-  const perfil = searchParams.perfil ?? "juridico";
+  const perfil = perfilActivo(searchParams.perfil);
   const rubroIdLeido = rubroIdDe(perfil);
   if (!rubroIdLeido || !esSlugPerfil(perfil)) notFound();
   const slug: SlugPerfil = perfil;

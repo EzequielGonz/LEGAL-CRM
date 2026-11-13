@@ -8,11 +8,19 @@ import { ReviewAction } from "@/components/revision/review-action";
 import { Pager, pageFromParam } from "@/components/ui/pager";
 import { AdjuntosLista } from "@/components/adjuntos/adjuntos-lista";
 import { ResumenSeccion } from "@/components/nivel/resumen-seccion";
+import { MarcoPerfil } from "@/components/perfiles/marco-perfil";
+import { requirePageSession } from "@/lib/acceso/pagina";
+import { perfilActivo } from "@/lib/perfil-activo";
+import { RUBRO_IDS } from "@/lib/rubros";
+import type { SlugPerfil } from "@/lib/marca";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Incidencias" };
 
 const PAGE_SIZE = 50;
+
+/** Ficha de una persona dentro de su perfil. */
+const fichaPorPerfil = (slug: SlugPerfil, contactId: string) => (slug === "juridico" ? `/prospectos/${contactId}` : `/ficha/${contactId}`);
 
 type Tab = "incidencias" | "detenciones" | "retenidos" | "adjuntos";
 
@@ -24,8 +32,13 @@ type Tab = "incidencias" | "detenciones" | "retenidos" | "adjuntos";
 export default async function RevisionPage({
   searchParams,
 }: {
-  searchParams: { vista?: string; estado?: string; tipo?: string; pagina?: string };
+  searchParams: { perfil?: string; vista?: string; estado?: string; tipo?: string; pagina?: string };
 }) {
+  const sesion = await requirePageSession();
+  if (!sesion.ok) return sesion.fallback;
+  // 13/11 · cada rubro separado: esta pantalla mostraba a personas de los cuatro perfiles dentro del panel de Jurídico.
+  const slug: SlugPerfil = perfilActivo(searchParams.perfil);
+  const rubroId = RUBRO_IDS[slug];
   const tab: Tab =
     searchParams.vista === "detenciones" || searchParams.vista === "retenidos" || searchParams.vista === "adjuntos"
       ? searchParams.vista
@@ -35,10 +48,10 @@ export default async function RevisionPage({
 
   const [{ count: openIncidences }, { count: activeDetentions }, { count: pendingQuarantine }, { count: unsavedAttachments }] =
     await Promise.all([
-      supabase.from("incidences").select("id", { count: "exact", head: true }).eq("status", "abierta"),
-      supabase.from("contact_detentions").select("id", { count: "exact", head: true }).eq("status", "vigente"),
+      supabase.from("incidences").select("id", { count: "exact", head: true }).eq("rubro_id", rubroId).eq("status", "abierta"),
+      supabase.from("contact_detentions").select("id", { count: "exact", head: true }).eq("rubro_id", rubroId).eq("status", "vigente"),
       supabase.from("webhook_quarantine").select("id", { count: "exact", head: true }).is("reviewed_at", null),
-      supabase.from("message_attachments").select("id", { count: "exact", head: true }).in("status", ["pendiente", "error"]),
+      supabase.from("message_attachments").select("id", { count: "exact", head: true }).eq("rubro_id", rubroId).in("status", ["pendiente", "error"]),
     ]);
 
   const tabs: { key: Tab; label: string; count: number | null }[] = [
@@ -49,6 +62,7 @@ export default async function RevisionPage({
   ];
 
   return (
+    <MarcoPerfil slug={slug}>
     <div>
       <div className="mb-4">
         <h1 className="text-2xl font-semibold text-slate-900">Incidencias</h1>
@@ -69,7 +83,7 @@ export default async function RevisionPage({
           puntos={tabs.map((t) => ({
             texto: t.key === "detenciones" ? "Detenciones vigentes (registro, no es pendiente)" : t.label,
             cantidad: t.count,
-            href: `/revision?vista=${t.key}`,
+            href: `/incidencias?perfil=${slug}&vista=${t.key}`,
             tono: t.count && t.key !== "detenciones" ? ("atencion" as const) : ("ok" as const),
           }))}
         />
@@ -79,7 +93,7 @@ export default async function RevisionPage({
         {tabs.map((t) => (
           <Link
             key={t.key}
-            href={`/revision?vista=${t.key}`}
+            href={`/incidencias?perfil=${slug}&vista=${t.key}`}
             aria-current={tab === t.key ? "page" : undefined}
             className={clsx(
               "tactil inline-flex items-center rounded-full border px-4 text-sm font-medium",
@@ -91,20 +105,25 @@ export default async function RevisionPage({
         ))}
       </div>
 
-      {tab === "incidencias" && <Incidencias searchParams={searchParams} page={page} />}
-      {tab === "detenciones" && <Detenciones searchParams={searchParams} page={page} />}
-      {tab === "retenidos" && <Retenidos searchParams={searchParams} page={page} />}
-      {tab === "adjuntos" && <Adjuntos searchParams={searchParams} page={page} />}
+      {tab === "incidencias" && <Incidencias searchParams={searchParams} page={page} slug={slug} rubroId={rubroId} />}
+      {tab === "detenciones" && <Detenciones searchParams={searchParams} page={page} slug={slug} rubroId={rubroId} />}
+      {tab === "retenidos" && <Retenidos searchParams={searchParams} page={page} slug={slug} />}
+      {tab === "adjuntos" && <Adjuntos searchParams={searchParams} page={page} slug={slug} rubroId={rubroId} />}
     </div>
+    </MarcoPerfil>
   );
 }
 
 async function Incidencias({
   searchParams,
   page,
+  slug,
+  rubroId,
 }: {
   searchParams: { estado?: string; tipo?: string };
   page: number;
+  slug: SlugPerfil;
+  rubroId: string;
 }) {
   const supabase = createClient();
   const estado = searchParams.estado === "todas" ? null : searchParams.estado === "cerradas" ? "cerradas" : "abierta";
@@ -114,6 +133,7 @@ async function Incidencias({
     .select("id, kind, status, detail, affected_count, created_at, created_by, resolution_note, resolved_at, conversation_id, contact_id, contacts(full_name, phone)", {
       count: "exact",
     })
+    .eq("rubro_id", rubroId)
     .order("created_at", { ascending: false })
     .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
   if (estado === "abierta") query = query.eq("status", "abierta");
@@ -135,7 +155,8 @@ async function Incidencias({
 
   return (
     <div>
-      <form action="/revision" method="GET" className="solo-avanzado mb-4 flex flex-wrap items-end gap-2 rounded-xl border border-slate-200 bg-white p-4">
+      <form action="/incidencias" method="GET" className="solo-avanzado mb-4 flex flex-wrap items-end gap-2 rounded-xl border border-slate-200 bg-white p-4">
+        <input type="hidden" name="perfil" value={slug} />
         <input type="hidden" name="vista" value="incidencias" />
         <div>
           <label htmlFor="revision-estado" className="mb-1 block text-sm font-medium text-slate-700">Estado</label>
@@ -168,7 +189,7 @@ async function Incidencias({
             <header className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 bg-slate-50 px-4 py-2">
               <h2 className="min-w-0 text-sm font-semibold text-slate-900 [overflow-wrap:anywhere]">
                 {g.contactId ? (
-                  <EnlaceDetalle href={`/prospectos/${g.contactId}`} className="underline-offset-2 hover:underline">
+                  <EnlaceDetalle href={fichaPorPerfil(slug, g.contactId)} className="underline-offset-2 hover:underline">
                     {g.titulo}
                   </EnlaceDetalle>
                 ) : (
@@ -181,7 +202,7 @@ async function Incidencias({
                 {g.conversationId ? (
                   <>
                     {" · "}
-                    <EnlaceDetalle href={`/inbox/${g.conversationId}`} className="font-medium text-slate-900 underline underline-offset-2">
+                    <EnlaceDetalle href={`/conversacion/${g.conversationId}`} className="font-medium text-slate-900 underline underline-offset-2">
                       Ver conversación
                     </EnlaceDetalle>
                   </>
@@ -204,7 +225,7 @@ async function Incidencias({
                 {r.contacts && (
                   <p className="solo-avanzado mt-1 text-xs text-slate-600">
                     {r.contact_id ? (
-                      <EnlaceDetalle href={`/prospectos/${r.contact_id}`} className="font-medium text-slate-700 hover:underline">
+                      <EnlaceDetalle href={fichaPorPerfil(slug, r.contact_id)} className="font-medium text-slate-700 hover:underline">
                         {r.contacts.full_name ?? "Sin nombre"}
                       </EnlaceDetalle>
                     ) : null}{" "}
@@ -212,7 +233,7 @@ async function Incidencias({
                     {r.conversation_id && (
                       <>
                         {" · "}
-                        <EnlaceDetalle href={`/inbox/${r.conversation_id}`} className="text-slate-700 hover:underline">
+                        <EnlaceDetalle href={`/conversacion/${r.conversation_id}`} className="text-slate-700 hover:underline">
                           Ver conversación
                         </EnlaceDetalle>
                       </>
@@ -248,19 +269,20 @@ async function Incidencias({
         ))}
         {(rows ?? []).length === 0 && <p className="rounded-xl border border-dashed border-slate-300 bg-white px-4 py-8 text-center text-sm text-slate-700">No hay incidencias con estos filtros.</p>}
         <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
-          <Pager basePath="/revision" params={{ vista: "incidencias", estado: searchParams.estado, tipo: searchParams.tipo }} page={page} pageSize={PAGE_SIZE} total={count ?? 0} unit="incidencias" />
+          <Pager basePath="/incidencias" params={{ perfil: slug, vista: "incidencias", estado: searchParams.estado, tipo: searchParams.tipo }} page={page} pageSize={PAGE_SIZE} total={count ?? 0} unit="incidencias" />
         </div>
       </div>
     </div>
   );
 }
 
-async function Detenciones({ searchParams, page }: { searchParams: { estado?: string }; page: number }) {
+async function Detenciones({ searchParams, page, slug, rubroId }: { searchParams: { estado?: string }; page: number; slug: SlugPerfil; rubroId: string }) {
   const supabase = createClient();
   const vigentes = searchParams.estado !== "levantadas";
   const { data: rows, count } = await supabase
     .from("contact_detentions")
     .select("id, motive, motives, minor_reported, source, status, created_at, lift_reason, lifted_at, contact_id, contacts(full_name, phone)", { count: "exact" })
+    .eq("rubro_id", rubroId)
     .eq("status", vigentes ? "vigente" : "levantada")
     .order("created_at", { ascending: false })
     .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
@@ -268,10 +290,10 @@ async function Detenciones({ searchParams, page }: { searchParams: { estado?: st
   return (
     <div>
       <div className="mb-3 flex flex-wrap gap-3 text-sm">
-        <Link href="/revision?vista=detenciones" className={clsx(vigentes ? "font-semibold text-slate-900" : "text-slate-500 hover:underline")}>
+        <Link href={`/incidencias?perfil=${slug}&vista=detenciones`} className={clsx(vigentes ? "font-semibold text-slate-900" : "text-slate-500 hover:underline")}>
           Vigentes
         </Link>
-        <Link href="/revision?vista=detenciones&estado=levantadas" className={clsx(!vigentes ? "font-semibold text-slate-900" : "text-slate-500 hover:underline")}>
+        <Link href={`/incidencias?perfil=${slug}&vista=detenciones&estado=levantadas`} className={clsx(!vigentes ? "font-semibold text-slate-900" : "text-slate-500 hover:underline")}>
           Levantadas
         </Link>
       </div>
@@ -294,7 +316,7 @@ async function Detenciones({ searchParams, page }: { searchParams: { estado?: st
                   )}
                   <p className="mt-1 text-xs text-slate-500">
                     {d.contact_id ? (
-                      <EnlaceDetalle href={`/prospectos/${d.contact_id}`} className="font-medium text-slate-700 hover:underline">
+                      <EnlaceDetalle href={fichaPorPerfil(slug, d.contact_id)} className="font-medium text-slate-700 hover:underline">
                         {d.contacts?.full_name ?? "Sin nombre"}
                       </EnlaceDetalle>
                     ) : (
@@ -324,13 +346,13 @@ async function Detenciones({ searchParams, page }: { searchParams: { estado?: st
           })}
           {(rows ?? []).length === 0 && <li className="px-4 py-8 text-center text-sm text-slate-400">No hay detenciones {vigentes ? "vigentes" : "levantadas"}.</li>}
         </ul>
-        <Pager basePath="/revision" params={{ vista: "detenciones", estado: searchParams.estado }} page={page} pageSize={PAGE_SIZE} total={count ?? 0} unit="detenciones" />
+        <Pager basePath="/incidencias" params={{ perfil: slug, vista: "detenciones", estado: searchParams.estado }} page={page} pageSize={PAGE_SIZE} total={count ?? 0} unit="detenciones" />
       </div>
     </div>
   );
 }
 
-async function Retenidos({ searchParams, page }: { searchParams: { estado?: string }; page: number }) {
+async function Retenidos({ searchParams, page, slug }: { searchParams: { estado?: string }; page: number; slug: SlugPerfil }) {
   const supabase = createClient();
   const pendientes = searchParams.estado !== "revisados";
   let query = supabase
@@ -344,10 +366,10 @@ async function Retenidos({ searchParams, page }: { searchParams: { estado?: stri
   return (
     <div>
       <div className="mb-3 flex flex-wrap gap-3 text-sm">
-        <Link href="/revision?vista=retenidos" className={clsx(pendientes ? "font-semibold text-slate-900" : "text-slate-500 hover:underline")}>
+        <Link href={`/incidencias?perfil=${slug}&vista=retenidos`} className={clsx(pendientes ? "font-semibold text-slate-900" : "text-slate-500 hover:underline")}>
           Pendientes
         </Link>
-        <Link href="/revision?vista=retenidos&estado=revisados" className={clsx(!pendientes ? "font-semibold text-slate-900" : "text-slate-500 hover:underline")}>
+        <Link href={`/incidencias?perfil=${slug}&vista=retenidos&estado=revisados`} className={clsx(!pendientes ? "font-semibold text-slate-900" : "text-slate-500 hover:underline")}>
           Revisados
         </Link>
       </div>
@@ -389,18 +411,19 @@ async function Retenidos({ searchParams, page }: { searchParams: { estado?: stri
           })}
           {(rows ?? []).length === 0 && <li className="px-4 py-8 text-center text-sm text-slate-400">No hay mensajes {pendientes ? "pendientes" : "revisados"}.</li>}
         </ul>
-        <Pager basePath="/revision" params={{ vista: "retenidos", estado: searchParams.estado }} page={page} pageSize={PAGE_SIZE} total={count ?? 0} unit="eventos" />
+        <Pager basePath="/incidencias" params={{ perfil: slug, vista: "retenidos", estado: searchParams.estado }} page={page} pageSize={PAGE_SIZE} total={count ?? 0} unit="eventos" />
       </div>
     </div>
   );
 }
 
-async function Adjuntos({ searchParams, page }: { searchParams: { estado?: string }; page: number }) {
+async function Adjuntos({ searchParams, page, slug, rubroId }: { searchParams: { estado?: string }; page: number; slug: SlugPerfil; rubroId: string }) {
   const supabase = createClient();
   const filtro = searchParams.estado === "todos" ? "todos" : searchParams.estado === "no_guardados" ? "no_guardados" : "sin_guardar";
   let query = supabase
     .from("message_attachments")
     .select("id, kind, status, file_name, size_bytes, received_at, expires_at, last_error, conversation_id, contact_id", { count: "exact" })
+    .eq("rubro_id", rubroId)
     .order("received_at", { ascending: false })
     .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
   if (filtro === "sin_guardar") query = query.in("status", ["pendiente", "error"]);
@@ -409,7 +432,7 @@ async function Adjuntos({ searchParams, page }: { searchParams: { estado?: strin
 
   const link = (estado: string | null, label: string, active: boolean) => (
     <Link
-      href={`/revision?vista=adjuntos${estado ? `&estado=${estado}` : ""}`}
+      href={`/incidencias?perfil=${slug}&vista=adjuntos${estado ? `&estado=${estado}` : ""}`}
       className={clsx(active ? "font-semibold text-slate-900" : "text-slate-500 hover:underline")}
     >
       {label}
@@ -429,7 +452,7 @@ async function Adjuntos({ searchParams, page }: { searchParams: { estado?: strin
       </p>
       <div className="rounded-xl border border-slate-200 bg-white p-3">
         <AdjuntosLista rows={(rows ?? []) as any[]} showConversation />
-        <Pager basePath="/revision" params={{ vista: "adjuntos", estado: searchParams.estado }} page={page} pageSize={PAGE_SIZE} total={count ?? 0} unit="archivos" />
+        <Pager basePath="/incidencias" params={{ perfil: slug, vista: "adjuntos", estado: searchParams.estado }} page={page} pageSize={PAGE_SIZE} total={count ?? 0} unit="archivos" />
       </div>
     </div>
   );

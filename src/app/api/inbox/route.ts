@@ -1,3 +1,4 @@
+import { perfilActivoApi } from "@/lib/perfil-activo";
 import { NextResponse } from "next/server";
 import { TRATAMIENTO_ATENCION } from "@/lib/captacion/reglas";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -26,8 +27,10 @@ export async function GET(request: Request) {
   const atencion = sp.get("atencion");
   const q = textoBusquedaSeguro(sp.get("q"));
   // 21/10: cada perfil ve solo sus chats (antes se mezclaban en Jurídico).
-  const perfil = sp.get("perfil") || "juridico";
-  const areasPerfil = AREAS_DE_PERFIL[perfil] ?? AREAS_DE_PERFIL.juridico;
+  // 13/11: sin perfil ya no se cae en Jurídico; vale el último perfil usado.
+  const perfil = perfilActivoApi(sp.get("perfil"));
+  if (!perfil) return NextResponse.json({ error: "Falta indicar el perfil." }, { status: 400 });
+  const areasPerfil = AREAS_DE_PERFIL[perfil];
   const base = sp.get("base");
   const respuesta = sp.get("respuesta");
 

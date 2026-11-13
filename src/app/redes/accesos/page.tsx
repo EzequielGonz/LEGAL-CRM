@@ -1,3 +1,4 @@
+import { perfilActivo } from "@/lib/perfil-activo";
 import { requirePageSession } from "@/lib/acceso/pagina";
 import { MarcoPerfil } from "@/components/perfiles/marco-perfil";
 import { esSlugPerfil, marcaDe, type SlugPerfil } from "@/lib/marca";
@@ -15,7 +16,7 @@ export const metadata = { title: "Accesos" };
 export default async function Pagina({ searchParams }: { searchParams: { perfil?: string } }) {
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
-  const slug: SlugPerfil = esSlugPerfil(searchParams.perfil) ? searchParams.perfil : "juridico";
+  const slug: SlugPerfil = perfilActivo(searchParams.perfil);
   const items = accesosDe(await leerAccesos(slug));
   return (
     <MarcoPerfil slug={slug}>

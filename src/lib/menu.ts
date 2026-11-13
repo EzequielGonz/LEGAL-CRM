@@ -86,7 +86,8 @@ export function seccionesDePerfil(slug: SlugPerfil): SeccionMenu[] {
     { href: comun(slug, "recuperar"), label: "Para recuperar", match: "/recuperar" },
     // 12/11: lo que no sirve tiene su lugar y no se mezcla con lo que sí.
     { href: comun(slug, "descartados"), label: "Descartados", match: "/descartados" },
-    ...(j ? [{ href: "/revision", label: "Incidencias" }] : []),
+    // 13/11: cada perfil tiene sus incidencias (antes solo Jurídico, y mostraba las de todos).
+    { href: comun(slug, "incidencias"), label: "Incidencias", match: "/incidencias" },
     { href: comun(slug, "oportunidades", { indicador: "en_conversacion" }), label: "Lista", match: "/oportunidades", indicadores: INDICADORES_CONVERSACION, oculto: true },
   ];
 

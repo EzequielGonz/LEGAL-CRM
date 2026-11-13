@@ -31,7 +31,7 @@ export function etiquetaVolver(volver: string | null | undefined): string {
   if (camino.startsWith("/ficha/") || /^\/prospectos\/[^/]+$/.test(camino) || /^\/panel\/marketing\/lead\//.test(camino)) return "Volver a la ficha";
   if (camino.startsWith("/inbox/") || camino.startsWith("/conversacion/") || /^\/panel\/[^/]+\/chats\/[^/]+$/.test(camino)) return "Volver a la conversación";
   if (camino === "/inicio" || camino === "/perfiles" || camino === "/hoy") return "Volver al inicio";
-  if (camino === "/revision") return "Volver a Incidencias";
+  if (camino === "/revision" || camino === "/incidencias") return "Volver a Incidencias";
   if (camino === "/telefono" || /^\/telefono\/[^/]+$/.test(camino)) return "Volver al teléfono";
   if (camino === "/" || /^\/panel\/[^/]+$/.test(camino)) return "Volver al panel";
   return "Volver a la lista";

@@ -124,7 +124,7 @@ export default async function PidePresupuestoPage({ searchParams }: { searchPara
               )}
               <div className="mt-2 flex flex-wrap gap-2 text-sm">
                 {c.id && <EnlaceDetalle href={`/ficha/${c.id}`} className="tactil inline-flex items-center rounded-lg border border-slate-300 px-3">Ficha</EnlaceDetalle>}
-                {b.conversation_id && <EnlaceDetalle href={`/inbox/${b.conversation_id}`} className="tactil inline-flex items-center rounded-lg border border-slate-300 px-3">Conversación</EnlaceDetalle>}
+                {b.conversation_id && <EnlaceDetalle href={`/panel/marketing/chats/${b.conversation_id}`} className="tactil inline-flex items-center rounded-lg border border-slate-300 px-3">Conversación</EnlaceDetalle>}
               </div>
               {b.estado === "listo" && b.envio_programado_at && !b.programado_procesado_at && (
                 <div className="mt-3 rounded-lg border border-sky-200 bg-sky-50 p-3 text-sm">
