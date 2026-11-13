@@ -70,6 +70,8 @@ export function seccionesDePerfil(slug: SlugPerfil): SeccionMenu[] {
 
   const inicio: ItemMenu[] = [
     { href: comun(slug, "hoy"), label: "Resumen", match: "/hoy" },
+    // 13/11: cada cifra con sus personas (quién se captó, se derivó o se cerró, y de dónde vino).
+    { href: comun(slug, "resultados"), label: "Resultados", match: "/resultados" },
     { href: `${base}/estadisticas`, label: "Historial" },
     { href: comun(slug, "salud"), label: "Salud del sistema", match: "/salud" },
   ];

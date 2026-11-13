@@ -3,10 +3,12 @@ import { followupOverview, type FollowupTaskRow } from "@/lib/seguimiento/panel"
 import { FOLLOWUP_TASK_STATUS_LABEL } from "@/lib/seguimiento/circuito";
 import { getAutomationPause } from "@/lib/automation-pause";
 import { FollowupConfigControl, FollowupReviewActions, RepescaBaseButton } from "@/components/seguimiento/followup-controls";
-import { ResumenSeccion } from "@/components/nivel/resumen-seccion";
+import { RUTA_SEGUIMIENTO } from "@/lib/seguimiento/criterio";
 import { RecontactoControl } from "@/components/seguimiento/recontacto-control";
 import { leerConfigRecontacto } from "@/lib/recontacto/motor";
 import { slugDeRubro } from "@/lib/rubros";
+import { enlaceConversacion } from "@/lib/cartera";
+import { esSlugPerfil } from "@/lib/marca";
 
 function fmt(iso: string | null | undefined): string {
   if (!iso) return "—";
@@ -20,7 +22,7 @@ function fmt(iso: string | null | undefined): string {
   });
 }
 
-function Who({ name, phone, contactId, conversationId }: { name?: string | null; phone?: string | null; contactId: string; conversationId?: string | null }) {
+function Who({ name, phone, contactId, conversationId, perfil }: { name?: string | null; phone?: string | null; contactId: string; conversationId?: string | null; perfil?: string }) {
   return (
     <span>
       <EnlaceDetalle href={`/ficha/${contactId}`} className="font-medium text-slate-800 hover:underline">
@@ -28,7 +30,7 @@ function Who({ name, phone, contactId, conversationId }: { name?: string | null;
       </EnlaceDetalle>
       {phone && name ? <span className="ml-1 text-xs tabular-nums text-slate-600">{phone}</span> : null}
       {conversationId && (
-        <EnlaceDetalle href={`/inbox/${conversationId}`} className="ml-2 text-xs font-medium text-slate-700 underline-offset-2 hover:underline">
+        <EnlaceDetalle href={perfil && esSlugPerfil(perfil) ? enlaceConversacion(perfil, conversationId) : `/inbox/${conversationId}`} className="ml-2 text-xs font-medium text-slate-700 underline-offset-2 hover:underline">
           conversación
         </EnlaceDetalle>
       )}
@@ -36,11 +38,11 @@ function Who({ name, phone, contactId, conversationId }: { name?: string | null;
   );
 }
 
-function TaskLine({ t, actions }: { t: FollowupTaskRow; actions?: boolean }) {
+function TaskLine({ t, actions, perfil }: { t: FollowupTaskRow; actions?: boolean; perfil?: string }) {
   return (
     <li className="space-y-1 py-2">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <Who name={t.contacts?.full_name} phone={t.contacts?.phone} contactId={t.contact_id} conversationId={t.conversation_id} />
+        <Who name={t.contacts?.full_name} phone={t.contacts?.phone} contactId={t.contact_id} conversationId={t.conversation_id} perfil={perfil} />
         <span className="text-xs text-slate-700">
           Contacto {t.step} · {FOLLOWUP_TASK_STATUS_LABEL[t.status] ?? t.status}
           {t.status === "enviada" ? ` · ${fmt(t.sent_at)}` : t.scheduled_at ? ` · ${fmt(t.scheduled_at)}` : ""}
@@ -70,60 +72,83 @@ export async function FollowupPanel({ rubroId }: { rubroId: string }) {
         </p>
       )}
 
-      <ResumenSeccion
-        id="seg"
-        estado={encendido ? "El seguimiento automático está encendido" : "El seguimiento automático está apagado"}
-        detalle={
-          <p>
-            {encendido
-              ? `Se le vuelve a escribir a quien respondió y dejó de contestar: a las ${o.config.targetHours} h, de lunes a sábado, hasta dos veces.`
-              : "No se programa ni se envía ningún seguimiento. Lo que ves abajo es lo que quedó de antes."}
-            {pause.outboundPaused ? " La pausa general de envíos está activa: no sale nada." : ""}
-          </p>
-        }
-        tono={o.atencion.length ? "atencion" : "info"}
-        puntos={[
-          { texto: "Necesitan revisión", cantidad: o.atencion.length, href: "#seg-revision", tono: o.atencion.length ? "atencion" : "ok" },
-          { texto: "Programados", cantidad: o.programadas.length, href: "#seg-programados", tono: "info" },
-          { texto: "Para una campaña manual", cantidad: pendientesBase.length, href: "#seg-base", tono: "info" },
-        ]}
-        personalizar={{ href: "#seg-config", texto: encendido ? "Personalizar o apagar" : "Ver cómo se enciende" }}
-      />
-
-      <section id="seg-recontacto" aria-labelledby="seg-recontacto-t" className="rounded-xl border border-slate-200 bg-white p-5">
-        <h2 id="seg-recontacto-t" className="mb-1 text-base font-semibold text-slate-900">Recontacto del bot en las 24 h</h2>
-        <p className="mb-3 text-sm text-slate-700">
-          Si la persona mostró interés y dejó de responder, el bot le vuelve a escribir con texto libre dentro de la ventana de 24 h de Meta:
-          a las 2 h retoma lo último que se habló y, si sigue sin contestar, a las 2 h más la saluda y queda a disposición. Después no insiste.
-          Lunes a sábado de 8 a 21: si el plazo cae después del cierre, sale 10 minutos antes; si ya cerró, a las 8 del día hábil siguiente.
-          Antes de escribir revisa la charla y no escribe si no hay interés real. No usa plantillas: es distinto del seguimiento de abajo.
+      {/* 13/11: el seguimiento funciona solo. Primero qué está pasando; después la ruta completa. */}
+      <section aria-labelledby="seg-estado" className={`rounded-2xl border p-5 ${encendido && !pause.outboundPaused ? "border-emerald-200 bg-emerald-50/60" : "border-amber-300 bg-amber-50"}`}>
+        <h2 id="seg-estado" className="text-lg font-semibold text-slate-950">
+          {pause.outboundPaused ? "La pausa general está activa: no sale ningún seguimiento" : encendido ? "El seguimiento funciona solo" : "El seguimiento de este perfil está apagado"}
+        </h2>
+        <p className="mt-1 max-w-3xl text-sm text-slate-700">
+          {encendido
+            ? "No hay que activar ni cargar nada. El bot relee cada conversación cortada y decide si corresponde volver a escribir o soltar; vos solo mirás acá qué hizo y con quién."
+            : "Alguien lo apagó a mano. Se vuelve a encender desde «Ajustes del seguimiento», más abajo."}
         </p>
-        {recontacto ? <RecontactoControl perfil={perfil} encendido={recontacto[perfil] !== false} /> : <p className="text-sm text-red-700">No se pudo leer la configuración.</p>}
+        <dl className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {[
+            { t: "Programados", n: o.programadas.length, h: "#seg-programados" },
+            { t: "Enviados", n: o.enviadas.length, h: "#seg-enviados" },
+            { t: "Soltados", n: o.detenidas.length, h: "#seg-soltados" },
+            { t: "Para revisar", n: o.atencion.length, h: "#seg-revision" },
+          ].map((x) => (
+            <a key={x.t} href={x.h} className="rounded-xl border border-slate-200 bg-white px-4 py-3 hover:bg-slate-50">
+              <dt className="text-[13px] font-medium text-slate-600">{x.t}</dt>
+              <dd className="text-2xl font-semibold tabular-nums text-slate-950">{x.n}</dd>
+            </a>
+          ))}
+        </dl>
       </section>
 
-      <section id="seg-config" tabIndex={-1} className="solo-avanzado rounded-xl border border-slate-200 bg-white p-5">
-        <h2 className="mb-1 text-base font-semibold text-slate-900">Cómo funciona</h2>
-        <p className="mb-3 text-sm text-slate-700">
-          Solo para quien respondió. Si la conversación se interrumpe, el contacto 2 sale a las {o.config.targetHours} horas
-          (entre 48 y 72, en la franja permitida de lunes a sábado de 8 a 21). Sin respuesta al contacto 2, se detiene. Si
-          responde y se vuelve a interrumpir, sale el contacto 3; después, quien no avanzó pasa a la base para campaña manual.
-          Los mensajes de una conversación activa no cuentan como intentos, y agotar el circuito no es una baja.
-        </p>
-        <FollowupConfigControl
-          rubroId={rubroId}
-          enabledSince={o.config.enabledSince}
-          targetHours={o.config.targetHours}
-          outboundPaused={pause.outboundPaused}
-        />
+      <section aria-labelledby="seg-ruta" className="rounded-2xl border border-slate-200 bg-white p-5">
+        <h2 id="seg-ruta" className="text-base font-semibold text-slate-950">
+          La ruta: cuándo insiste y cuándo suelta
+        </h2>
+        <ol className="mt-4 space-y-0">
+          {RUTA_SEGUIMIENTO.map((p, k) => (
+            <li key={p.clave} className="relative grid grid-cols-[2rem_minmax(0,1fr)] gap-x-3 pb-5 last:pb-0">
+              {k < RUTA_SEGUIMIENTO.length - 1 ? <span aria-hidden="true" className="absolute left-4 top-8 -ml-px h-[calc(100%-2rem)] w-0.5 bg-slate-200" /> : null}
+              <span aria-hidden="true" className={`grid h-8 w-8 place-items-center rounded-full text-[13px] font-semibold ${p.clave === "descarte" ? "bg-slate-200 text-slate-700" : "bg-gold-500/20 text-gold-900"}`}>
+                {p.clave === "descarte" ? "×" : k + 1}
+              </span>
+              <div>
+                <h3 className="text-[15px] font-semibold text-slate-950">{p.titulo}</h3>
+                <p className="mt-0.5 text-sm text-slate-800">{p.cuando}.</p>
+                <p className="mt-1 text-[13px] text-slate-600">
+                  <span className="font-medium text-slate-800">A quién:</span> {p.quien.charAt(0).toLowerCase() + p.quien.slice(1)}. <span className="font-medium text-slate-800">Cómo:</span>{" "}
+                  {p.como.charAt(0).toLowerCase() + p.como.slice(1)}.
+                </p>
+                <p className="mt-1 text-[13px] text-slate-600">
+                  <span className="font-medium text-slate-800">Cuándo suelta:</span> {p.suelta.charAt(0).toLowerCase() + p.suelta.slice(1)}.
+                </p>
+              </div>
+            </li>
+          ))}
+        </ol>
       </section>
+
+      <details id="seg-config" className="rounded-2xl border border-slate-200 bg-white p-5">
+        <summary className="tactil flex cursor-pointer items-center text-base font-semibold text-slate-950">Ajustes del seguimiento</summary>
+        <div className="mt-3 space-y-5">
+          <div>
+            <h3 className="text-sm font-semibold text-slate-900">Mensajes del mismo día</h3>
+            <p className="mb-2 text-sm text-slate-700">El bot retoma la charla a las 2 horas y una vez más 2 horas después.</p>
+            {recontacto ? <RecontactoControl perfil={perfil} encendido={recontacto[perfil] !== false} /> : <p className="text-sm text-red-700">No se pudo leer este ajuste. Recargá la página.</p>}
+          </div>
+          <div>
+            <h3 className="text-sm font-semibold text-slate-900">Mensajes a los 2 o 3 días</h3>
+            <p className="mb-2 text-sm text-slate-700">
+              Hoy salen a las {o.config.targetHours} horas del corte (se puede elegir entre 48 y 72). Apagarlo frena solo estos mensajes en este perfil.
+            </p>
+            <FollowupConfigControl rubroId={rubroId} enabledSince={o.config.enabledSince} targetHours={o.config.targetHours} outboundPaused={pause.outboundPaused} />
+          </div>
+        </div>
+      </details>
 
       <section id="seg-revision" tabIndex={-1} className="rounded-xl border border-slate-200 bg-white p-5">
         <h2 className="mb-2 text-base font-semibold text-slate-900">Necesitan revisión ({o.atencion.length})</h2>
         <ul className="divide-y divide-slate-100">
           {o.atencion.map((t) => (
-            <TaskLine key={t.id} t={t} actions />
+            <TaskLine key={t.id} t={t} actions perfil={perfil} />
           ))}
-          {o.atencion.length === 0 && <li className="py-2 text-sm text-slate-600">Nada para revisar.</li>}
+          {o.atencion.length === 0 && <li className="py-2 text-sm text-slate-600">Nada para revisar: todo salió o se soltó sin problemas.</li>}
         </ul>
       </section>
 
@@ -131,9 +156,9 @@ export async function FollowupPanel({ rubroId }: { rubroId: string }) {
         <h2 className="mb-2 text-base font-semibold text-slate-900">Programados ({o.programadas.length})</h2>
         <ul className="divide-y divide-slate-100">
           {o.programadas.map((t) => (
-            <TaskLine key={t.id} t={t} />
+            <TaskLine key={t.id} t={t} perfil={perfil} />
           ))}
-          {o.programadas.length === 0 && <li className="py-2 text-sm text-slate-600">No hay seguimientos programados.</li>}
+          {o.programadas.length === 0 && <li className="py-2 text-sm text-slate-600">Nadie tiene un mensaje programado ahora. Aparecen acá cuando una charla con respuesta queda cortada.</li>}
         </ul>
       </section>
 
@@ -154,23 +179,24 @@ export async function FollowupPanel({ rubroId }: { rubroId: string }) {
         </ul>
       </section>
 
-      <section className="solo-avanzado rounded-xl border border-slate-200 bg-white p-5">
+      <section id="seg-enviados" tabIndex={-1} className="rounded-xl border border-slate-200 bg-white p-5">
         <h2 className="mb-2 text-base font-semibold text-slate-900">Enviados recientes ({o.enviadas.length})</h2>
         <ul className="divide-y divide-slate-100">
           {o.enviadas.map((t) => (
-            <TaskLine key={t.id} t={t} />
+            <TaskLine key={t.id} t={t} perfil={perfil} />
           ))}
           {o.enviadas.length === 0 && <li className="py-2 text-sm text-slate-600">Todavía no salió ningún seguimiento.</li>}
         </ul>
       </section>
 
-      <section className="solo-avanzado rounded-xl border border-slate-200 bg-white p-5">
-        <h2 className="mb-2 text-base font-semibold text-slate-900">Detenidos ({o.detenidas.length})</h2>
+      <section id="seg-soltados" tabIndex={-1} className="rounded-xl border border-slate-200 bg-white p-5">
+        <h2 className="mb-1 text-base font-semibold text-slate-900">Soltados ({o.detenidas.length})</h2>
+        <p className="mb-2 text-sm text-slate-700">A quiénes se dejó de escribir y por qué. Si alguno vuelve a escribir, el bot lo atiende.</p>
         <ul className="divide-y divide-slate-100">
           {o.detenidas.map((d: any) => (
             <li key={d.id} className="flex flex-wrap items-center justify-between gap-2 py-2">
               <Who name={d.contacts?.full_name} phone={d.contacts?.phone} contactId={d.contact_id} />
-              <span className="text-xs text-slate-700">{d.followup_reason ?? "Detenido"}</span>
+              <span className="text-[13px] text-slate-700 [overflow-wrap:anywhere]">{d.followup_reason ?? "Sin respuesta"}</span>
             </li>
           ))}
           {o.detenidas.length === 0 && <li className="py-2 text-sm text-slate-600">Ninguno.</li>}

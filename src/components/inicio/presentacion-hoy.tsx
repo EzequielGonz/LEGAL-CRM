@@ -18,11 +18,11 @@ export async function PresentacionHoy({ slug, rubroId, areas, periodo, historial
   const n = (v: number | null) => (v === null ? "—" : v.toLocaleString("es-AR"));
 
   const cifras = [
-    { titulo: "Contactados", valor: c.contactados, antes: antes.contactados, nota: "primer mensaje enviado" },
-    { titulo: "Respondieron", valor: c.respondieron, antes: antes.respondieron, nota: tasa(c.respondieron, c.contactados) ? `${tasa(c.respondieron, c.contactados)} de los contactados` : "personas que escribieron" },
-    { titulo: "Captados", valor: c.captados, antes: antes.captados, nota: tasa(c.captados, c.respondieron) ? `${tasa(c.captados, c.respondieron)} de los que respondieron` : "aceptaron el siguiente paso" },
-    { titulo: "Derivados", valor: c.derivados, antes: antes.derivados, nota: "pasados a quien los atiende" },
-    { titulo: "Perdidos", valor: c.perdidos, antes: antes.perdidos, nota: "cerrados sin avanzar" },
+    { ver: "contactados", titulo: "Contactados", valor: c.contactados, antes: antes.contactados, nota: "primer mensaje enviado" },
+    { ver: "respondieron", titulo: "Respondieron", valor: c.respondieron, antes: antes.respondieron, nota: tasa(c.respondieron, c.contactados) ? `${tasa(c.respondieron, c.contactados)} de los contactados` : "personas que escribieron" },
+    { ver: "captados", titulo: "Captados", valor: c.captados, antes: antes.captados, nota: tasa(c.captados, c.respondieron) ? `${tasa(c.captados, c.respondieron)} de los que respondieron` : "aceptaron el siguiente paso" },
+    { ver: "derivados", titulo: "Derivados", valor: c.derivados, antes: antes.derivados, nota: "pasados a quien los atiende" },
+    { ver: "perdidos", titulo: "Perdidos", valor: c.perdidos, antes: antes.perdidos, nota: "cerrados sin avanzar" },
   ];
   const TONO = { sube: "text-emerald-700", baja: "text-red-700", igual: "text-slate-500", nada: "text-slate-500" } as const;
 
@@ -56,11 +56,17 @@ export async function PresentacionHoy({ slug, rubroId, areas, periodo, historial
           // En «Perdidos», subir no es bueno: el color se invierte.
           const tono = x.titulo === "Perdidos" && v.tono !== "igual" && v.tono !== "nada" ? (v.tono === "sube" ? "baja" : "sube") : v.tono;
           return (
-            <div key={x.titulo} className={`bg-white p-5 ${k === 0 ? "col-span-2 md:col-span-1" : ""}`}>
+            <div key={x.titulo} className={`relative bg-white p-5 transition-colors focus-within:bg-slate-50 hover:bg-slate-50 ${k === 0 ? "col-span-2 md:col-span-1" : ""}`}>
               <dt className="text-[13px] font-medium text-slate-600">{x.titulo}</dt>
               <dd className="cifra-premium mt-1 text-4xl font-semibold tabular-nums text-slate-950">{n(x.valor)}</dd>
               <dd className="mt-1 text-[13px] text-slate-600">{x.nota}</dd>
               <dd className={`mt-2 text-[13px] font-medium ${TONO[tono]}`}>{v.texto}</dd>
+              {/* 13/11: cada cifra se abre y muestra las personas, con su origen y quién lo hizo. */}
+              <dd className="mt-3">
+                <Link href={`/resultados?perfil=${slug}&ver=${x.ver}&periodo=${actual.clave}`} className="text-[13px] font-semibold text-slate-900 underline underline-offset-2 after:absolute after:inset-0">
+                  Ver quiénes<span className="sr-only"> · {x.titulo.toLowerCase()}, {actual.titulo.toLowerCase()}</span>
+                </Link>
+              </dd>
             </div>
           );
         })}
