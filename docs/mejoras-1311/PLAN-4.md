@@ -122,6 +122,8 @@ Hoy (`src/lib/asistente/permisos.ts`) el asistente tiene quince tipos de acción
 
 Textual: «para conectar las líneas de wasender, no solo incluí el qr, sino también la función del código». En «Líneas de Wasender», además del QR, ofrecer la vinculación por código (el código de ocho caracteres que WhatsApp pide en «Vincular con el número de teléfono»): la persona escribe el número de la línea, el panel pide el código al proveedor y lo muestra grande, con los pasos en el teléfono y el tiempo que dura. Comprobar en la documentación del proveedor cómo se pide ese código antes de escribir nada. No se puede probar de punta a punta sin el teléfono de la responsable: dejar dicho hasta dónde se probó.
 
+**Revisado el 13/11 a las 9:40 (documentación del proveedor: conectar sesión, código QR, estado de la sesión, avisos y ayuda):** la interfaz de Wasender para programas **no ofrece** vincular con el código de ocho caracteres. Al conectar una sesión acepta solo dos métodos: `qr` (el que ya usa el panel) y `passkey`, que no es un código para tipear en el teléfono sino una aprobación desde una extensión del navegador o un programa de escritorio. No hay ningún pedido que devuelva un código de vinculación ni un aviso que lo traiga. **No se implementó nada**: no se inventa un pedido que el proveedor no documenta. Falta que la responsable diga dónde ve «el código» (¿en el panel web de Wasender?) o mande una captura; si el proveedor lo tiene solo en su web, la salida es un botón «Conectar con código en Wasender» que abra esa pantalla, y si es el método `passkey`, se puede sumar.
+
 ## Referencia de diseño (lo que se pudo ver)
 
 - El perfil de Instagram publica componentes de interfaz hechos con React y animaciones: tableros «de vidrio» en violeta/azul sobre blanco y en oscuro con acento esmeralda, menú lateral de vidrio, pestañas de vidrio con indicador deslizante, formularios de ingreso animados.
@@ -135,15 +137,15 @@ Textual: «para conectar las líneas de wasender, no solo incluí el qr, sino ta
 
 ## Estado
 
-| Bloque | Estado |
+| Bloque | Estado (13/11, 9:55) |
 |--------|--------|
-| A. Mezcla entre perfiles | Diagnóstico avanzado (ver «Avance del bloque A»); sin arreglos todavía |
-| B. Reglas nuevas | Pendiente |
-| C. Limpieza de datos | Pendiente |
-| D. Pantallas | Pendiente |
-| E. Auditoría exhaustiva | Pendiente |
+| A. Mezcla entre perfiles | **Hecho, publicado y comprobado** (440 pantallas sin saltos; 1.361 personas y chats de las listas, todos del perfil correcto). Falta: avisos a los dispositivos y vista del teléfono (`/telefono`), que no se miraron |
+| B. Reglas nuevas | **Hecho y publicado**: quién habló último en la oportunidad, Caídos (72 h + 24 h; motor encendido), «Oportunidades reales» con puntaje de interés, reclamos serios (amenaza legal y queja de captado), «perdido ya no pide persona», «Posible captación a revisar», «Para recuperar» retirado. Falta: bloque «Fallas del sistema» en Salud con contador y aviso; aviso a los dispositivos al abrirse un reclamo; `reglas-comunes.md` §5 y §6 ya actualizadas |
+| C. Limpieza de datos | **Hecha en los cuatro perfiles** (lote `limpieza-1311`, 468 movimientos, cada uno con deshacer; ver `AUDITORIA.md` §3). «Deshacer» probado |
+| D. Pantallas | Parcial: tarjeta que abre a la persona (hecho), Hoy con las definiciones nuevas (hecho), desbordes en el celular (hecho). Falta: portada de perfiles que no se actualiza, quitar de Hoy lo que no lleva a una acción, estadísticas con embudo y origen, tabla vieja «Captados y casos», menores de la bitácora, botones «Es captado / No lo es» y «Volver a intentar» en la ficha |
+| E. Auditoría exhaustiva | Parcial: `AUDITORIA.md` con 14 hallazgos arreglados. Falta: seguridad completa, funcionamiento (errores de producción, latido, carreras), rendimiento |
 | F. Diseño | Pendiente |
-| H. Wasender: conectar con código además del QR | Pendiente |
-| G. Asistente con permiso para todo | Pendiente (arranca en la corrida de las 8:51) |
+| G. Asistente con permiso para todo | Pendiente. Ya se arregló la prueba que fallaba |
+| H. Wasender: conectar con código además del QR | Revisado: el proveedor no lo ofrece por su interfaz para programas. Falta una definición de la responsable (ver bloque H) |
 
 Al terminar cada bloque: actualizar esta tabla, `BITACORA.md` y `AUDITORIA.md`, guardar en la rama y publicar.

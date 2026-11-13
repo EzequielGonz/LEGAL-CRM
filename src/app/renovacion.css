@@ -454,9 +454,14 @@ summary.chip-filtro::-webkit-details-marker,
 }
 
 /* ---------- Configuración: grupos como tarjetas ---------- */
+.grupos-ajustes > * {
+  min-width: 0;
+}
 .grupos-ajustes {
   display: grid;
   gap: 0.75rem;
+  /* 13/11: la columna no se ensancha con textos largos (direcciones, nombres): en el celular desbordaba. */
+  grid-template-columns: minmax(0, 1fr);
 }
 @media (min-width: 640px) {
   .grupos-ajustes {

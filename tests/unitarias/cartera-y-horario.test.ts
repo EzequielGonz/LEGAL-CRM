@@ -33,7 +33,8 @@ test("cartera: grupo pedido, si no el primero con algo, si no el primero", () =>
 
 test("cartera: quiere hablar con alguien excluye perdidos y quejas", () => {
   const ind = indicadorPorClave("piden_persona")!;
-  assert.ok(ind.conds.some((c) => c.op === "neq" && c.col === "capture_state" && c.value === "perdido"));
+  // 13/11: ni perdidos ni captados (los captados están en «Para cerrar»: una persona no aparece en dos listas).
+  assert.ok(ind.conds.some((c) => c.op === "in" && c.col === "capture_state" && !c.value.includes("perdido") && !c.value.includes("captado")));
   assert.ok(ind.conds.some((c) => c.op === "or" && c.value.includes("attention_category.neq.detencion")));
   // PostgREST admite un solo filtro «o» por consulta: cada indicador lleva como mucho uno.
   for (const c of ["piden_persona", "repesca", "perdido_comercial", "dejaron_de_responder"]) assert.ok(indicadorPorClave(c)!.conds.filter((x) => x.op === "or").length <= 1, c);

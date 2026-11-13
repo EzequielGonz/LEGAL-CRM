@@ -98,7 +98,7 @@ export async function ConfiguracionPerfil({ slug }: { slug: Exclude<SlugPerfil, 
         </SeccionAjustes>
       </GrupoAjustes>
 
-      <p className="rounded-xl border border-slate-200 bg-slate-100 px-4 py-3 text-sm text-slate-700">
+      <p className="col-span-full rounded-xl border border-slate-200 bg-slate-100 px-4 py-3 text-sm text-slate-700">
         Los grupos que siguen valen para <strong>los cuatro perfiles</strong>: lo que cambies acá cambia en todos.
       </p>
       <GruposAjustesGenerales d={generales} hrefRetenidos={`/salud?perfil=${slug}#fallas`} />

@@ -65,3 +65,18 @@ Sin datos personales, claves ni códigos de acceso. Complementa `PLAN-3.md` (qu�
 - `campaign_metrics` se llama desde `cartera-servidor.ts` por cada campaña en cada carga.
 - En el teléfono, los chips de Hoy miden 33 px de alto (el mínimo cómodo es 36 a 40).
 - `window.prompt` / `window.confirm`: quitado de plantillas de Wasender; revisar el resto de las pantallas de Wasender (líneas).
+
+
+## Corrida del 13/11 a las 8:51 (Plan 4)
+
+**Commits:** `20d2faa` (cada rubro separado), `07e855e` (reglas del 13/11 y limpieza) y el que acompaña a este texto (desbordes en el celular, «Oportunidades reales» sin captados, documentos).
+
+**Migraciones aplicadas** (historial comprobado antes; la última era la 0606): `0607_reglas_caidos_atencion_limpieza` (columnas `last_inbound_at`, `last_outbound_at`, `ultima_palabra`, `interest_*`, `posible_captacion*` en `opportunities`, con carga inicial desde los mensajes; disparador `messages_ultima_actividad`; función `caidos_candidatos`; plazo por defecto 72; tipos de incidencia `amenaza_legal` y `queja_cliente_captado`; tabla `limpieza_movimientos`) y `0608_categoria_reclamo` (categoría `reclamo`; una sola incidencia de reclamo abierta por persona y tipo).
+
+**Cambios de datos, con registro en `ops_change_log`:** 217 (plazo de seguimiento 60 → 72 h en los cuatro perfiles), 218 (inicio de la limpieza, con la simulación), 219 (fin de la limpieza, con los conteos y el encendido del motor de caídos).
+
+**Archivos nuevos:** `src/lib/perfil-ruta.ts`, `perfil-activo.ts`, `seguimiento/caidos.ts`, `seguimiento/caidos-motor.ts`, `atencion/reclamos.ts`, `atencion/interes.ts`, `limpieza/reglas.ts`, `limpieza/servidor.ts`, `components/configuracion/ajustes-generales.tsx`, `components/limpieza/boton-deshacer.tsx`, `app/incidencias/page.tsx` (movida desde `(dashboard)/revision`), `app/revision/page.tsx` (redirección), `app/limpieza/page.tsx`, `app/api/limpieza/route.ts`, y las pruebas `separacion-perfiles`, `seguimiento-caidos`, `atencion-reclamos-interes`, `limpieza-reglas`.
+
+**Guiones de prueba** (directorio temporal de la sesión, no van al repositorio porque sus salidas tienen datos reales): `panel/mezcla/rastrear.js` (sigue cada enlace de un perfil y marca pantallas de otro), `ids.js` + `cruzar.js` (junta los identificadores de cada lista y le pregunta al panel de qué perfil son), `panel/limpieza/llamar.js` (simular, aplicar, releer, puntuar, encender), `panel/b/ver.js` y `desborde.js` (capturas y desbordes a 375 px).
+
+**Aprendido:** la relectura de Marketing devolvió un error de tiempo en la primera tanda (66 chats); al repetir el pedido terminó sola porque cada movimiento se anota antes de aplicarse. El proveedor de Wasender no documenta la vinculación por código (solo `qr` y `passkey`).

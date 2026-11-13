@@ -29,7 +29,7 @@ function Ficha({ f, slug, aqui, accion }: { f: FichaCartera; slug: SlugPerfil; a
   const principal = chatPrincipal ? chat : ficha ?? chat;
   const nivel = nivelDeInteres(f.interes);
   return (
-    <li className="ficha-cartera group relative flex flex-col rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition focus-within:border-slate-400 hover:border-slate-300 hover:shadow-md">
+    <li className="ficha-cartera group relative flex min-w-0 flex-col rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition focus-within:border-slate-400 hover:border-slate-300 hover:shadow-md">
       <div className="flex items-start gap-3">
         <span aria-hidden="true" className="avatar-ficha grid h-10 w-10 shrink-0 place-items-center rounded-full text-sm font-semibold">
           {iniciales(f.nombre)}
@@ -298,7 +298,7 @@ async function CuerpoCartera({ vista, slug, rubroId, searchParams }: { vista: Vi
                 <p className="mt-1 text-sm text-slate-600">Cuando haya alguien acá, aparece su ficha con el acceso al chat.</p>
               </div>
             ) : (
-              <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
                 {fichas.map((f) => (
                   <Ficha key={f.id} f={f} slug={slug} aqui={aqui} accion={g.accion} />
                 ))}

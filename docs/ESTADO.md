@@ -15,6 +15,8 @@ Se actualiza al cierre de cada vuelta de trabajo. Sin datos personales, claves n
 - **Seguimiento automático** (contactos 2 y 3) en los cuatro perfiles, desde el 12/11 8:00. Antes de cada contacto el bot decide si corresponde insistir. No se apaga ni se vuelve a encender sin que la responsable lo pida.
 - **Segundo intento por Wasender** para primeros mensajes enviados desde el 13/11.
 - **Cierre automático de descartes** a las 6 horas.
+- **Caídos automáticos** (desde el 13/11): mensaje de seguimiento a las 72 horas y 24 horas de espera; lo viejo cae sin otro mensaje. Para apagarlo: borrar `caidos_automaticos` de `system_settings`.
+- **Reclamos serios**: una amenaza legal contra nosotros o la queja de un cliente captado abre una incidencia del perfil y el bot no contesta.
 - **Recontacto del mismo día** (2 h + 2 h), desde el 24/10.
 - **Bot: conocimiento versión 2** predefinido en los cuatro perfiles. La versión 1 se conserva.
 
@@ -54,7 +56,17 @@ Se actualiza al cierre de cada vuelta de trabajo. Sin datos personales, claves n
 3. Cargas grandes de datos (plantillas, variantes): por la API del panel con una sesión iniciada, no pegando SQL largo.
 4. Las pruebas con efectos se hacen con casos viejos y se dejan como estaban, con registro en `ops_change_log`.
 
+## Qué quedó hecho el 13/11 a la mañana (Plan 4)
+
+- Bloques A (rubros separados), B (reglas nuevas) y C (limpieza de lo cargado): hechos, publicados y comprobados. Detalle, números y definiciones: `docs/mejoras-1311/AUDITORIA.md`.
+- Falta: resto del bloque D (pantallas), E (seguridad, funcionamiento, rendimiento), F (diseño), G (asistente). Ver la tabla «Estado» de `PLAN-4.md`.
+- Wasender con código: el proveedor no lo ofrece por su interfaz; falta que la responsable diga dónde lo ve.
+
 ## Aprendizajes de esta vuelta
+
+- Publicar primero a `main` y después subir la rama: si se suben las dos seguidas, Vercel construye primero la vista previa y producción espera en la cola.
+- Los pasos con riesgo (mover archivos, publicar) conviene correrlos en comandos separados y cortos.
+- La limpieza y cualquier relectura con el bot van por tandas dentro de los 60 segundos de una función: el pedido se repite hasta que no quedan pendientes.
 
 - Las tareas en segundo plano se cortan si la cuenta llega al límite de uso: guardar un punto de control en la rama antes de lanzarlas y no depender de que terminen.
 - `followup_enabled_since` define desde cuándo entran conversaciones al seguimiento: lo anterior nunca entra solo.
