@@ -15,22 +15,23 @@ Agregados durante el trabajo:
 > las estadisticas que sumaste son basicas, no puedo ver nada, quien se derivo, quien se cerro, no puedo ver nada, solo numeros, tiene que ser todo funcional, entra al panel y usalo como si realmente fueras a trabajar […] no sabes ni de donde salen los clientes cerrados
 > guarda un punto de control antes de que se te acabe el limite de uso y programa una tarea para terminar todo si es que no terminas para 8:51 am.
 
-## Bloques y estado (se actualiza al avanzar)
+## Bloques y estado (actualizado 13/11 5:10, hora de Argentina)
 
 | # | Bloque | Estado |
 |---|--------|--------|
-| 1 | Seguimiento automático: el bot decide antes de cada contacto 2 y 3 (`src/lib/seguimiento/criterio*.ts`, enganchado en `motor.ts`); por Wasender redacta el mensaje y la plantilla es respaldo | Implementado, sin publicar |
-| 1b | Cierre automático de descartes (quien dice que no / ya lo resolvió) desde el latido, cada 10 min, a las 6 h (`src/lib/hoy/descartes-motor.ts`) | Implementado y con pruebas, sin publicar |
-| 1c | Encendido sin interruptor: migración 0606 **aplicada el 13/11** (valor por defecto, columna `grupo` en plantillas de Wasender y `wasender_rotar_inicio` en campañas). Falta el paso de datos: poner `followup_enabled_since = '2026-11-12T11:00:00Z'` en los 4 perfiles **después de publicar** el código, con registro en `ops_change_log` | A medias |
-| 1d | Pantalla «Seguimiento» con la ruta a la vista (`RUTA_SEGUIMIENTO`) y qué pasó con cada persona | Pendiente |
-| 2 | Estadísticas de Hoy que se abren: cada cifra lleva a la lista de personas (quién, cuándo, de qué base o campaña, quién derivó o cerró, motivo) y a los casos cerrados con su origen | Pendiente |
-| 3 | Plantillas de inicio: 10 por rubro, 40 variantes; grupo «inicio» y rotación en campañas de Wasender | Redacción en curso (tarea en segundo plano → `plantillas-inicio.json`); falta generador, migración y rotación |
-| 4 | Bot v2: fichas nuevas (solo altas) y selección mejorada | En curso (tarea en segundo plano → `BOT-V2.md` y `conocimiento-v2-agregados.sql`, sin aplicar) |
-| 5 | Ficha del cliente: probar botones con casos viejos, «Devolver al bot», simplificar | En curso (tarea en segundo plano → `FICHA.md`) |
-| 6 | Velocidad: diagnóstico con arreglos listos | En curso (tarea en segundo plano → `RENDIMIENTO.md`); falta aplicar |
+| 1 | Seguimiento automático: el bot decide antes de cada contacto 2 y 3; por Wasender redacta el mensaje | **Publicado y encendido** en los 4 perfiles desde el 12/11 8:00 (registro 172 de `ops_change_log`). Ya hay 2 contactos programados en Jurídico para el sábado 14/11 |
+| 1b | Cierre automático de descartes a las 6 h | **Publicado y funcionando** (cerró 3 el 13/11 4:20) |
+| 1c | Migración 0606 | **Aplicada** |
+| 1d | Pantalla «Seguimiento» con la ruta a la vista | **Publicado** |
+| 1e | Segundo intento por Wasender (5 a 7 días) | **Encendido** para primeros mensajes desde el 13/11; plantillas `…_segundo_intento` activadas |
+| 2 | «Resultados»: cada cifra de Hoy se abre con las personas, su origen y quién las derivó o cerró | **Publicado y recorrido en producción** |
+| 3 | Plantillas de inicio: 10 por perfil, 40 variantes; rotación en campañas de Wasender | **Publicado y cargado** (40 plantillas activas, grupo «inicio»). Textos en `PLANTILLAS-INICIO.md` |
+| 4 | Bot v2: 14 fichas nuevas (solo altas) y reacciones sin pedido de texto | Fichas **cargadas**; el arreglo de reacciones **publicado**. Ver `BOT-V2.md` |
+| 5 | Ficha: «Quién atiende», «Devolver al bot», botones claros | **Publicado**; falta probar «Devolver al bot» con un caso viejo en producción y dejarlo como estaba |
+| 6 | Velocidad | Pendiente (Hoy tarda 4,5 a 6,7 s) |
 | 7 | Orden: una sola definición de atención humana, captados sin derivar en dos pantallas, Incidencias sin contar detenciones, una sola «Prospectos», Ajustes en pestañas, pantallas vacías, Prioritarios paginado, encabezado del inbox | Pendiente |
-| 8 | Diseño: lista de chats, ficha, tablas y formularios menos técnicos (sin nombres crudos de plantillas ni textos internos a la vista) | Pendiente |
-| 9 | Verificar (typecheck, lint, pruebas, build), publicar, recorrer producción como usuaria e informar | Pendiente |
+| 8 | Diseño: lista de chats, tablas viejas («Captados y casos» sigue siendo una tabla solo de Jurídico), formularios | Pendiente |
+| 9 | Informe final | Pendiente |
 
 ## Decisiones tomadas
 
@@ -46,8 +47,8 @@ Agregados durante el trabajo:
 3. Seguir la tabla de arriba en orden; al terminar cada bloque, actualizarla.
 4. Publicar: `git push origin mejoras-1211:main`, esperar el despliegue y recorrer producción.
 
-## Punto de control · 13/11 4:30 (hora de Argentina)
+## Notas para retomar
 
-- Las cuatro tareas en segundo plano (plantillas, bot v2, ficha y velocidad) se cortaron por el límite de uso de la cuenta antes de entregar archivos. No dejaron cambios en el repo. Hay que relanzarlas o hacerlas a mano: los encargos completos están en la conversación y se resumen en la tabla (bloques 3 a 6).
-- Lo implementado hasta acá pasa typecheck y sus pruebas (`tests/unitarias/seguimiento-criterio.test.ts`). No está publicado en producción.
-- El seguimiento sigue **apagado** en la base hasta publicar.
+- Las tareas en segundo plano del principio se cortaron por el límite de uso y no dejaron nada: todo lo de arriba se hizo en la sesión principal.
+- Caso viejo elegido para probar «Devolver al bot»: conversación `c18c12b1-d190-4ee8-9e3a-8fc913536a24` (Jurídico, último mensaje nuestro del 26/10). Estado original: `ai_enabled = false`, `status = requiere_atencion_humana`, oportunidad `a2186219-69a8-4051-9153-7e92b61b5d99` con `attention_state = ia`. Después de la prueba hay que dejarlo igual.
+- La prueba que falla en la suite («asistente: cada tipo permitido…») es anterior y ajena a estos cambios.
