@@ -28,6 +28,24 @@ Síntoma: chats, contactos y oportunidades de un rubro aparecen en otro.
 - Corregir el código y, si hay filas mal etiquetadas, corregirlas con registro en `ops_change_log` (sin borrar).
 - Prueba unitaria o de integración que falle si una consulta nueva olvida el perfil.
 
+#### Avance del bloque A (13/11, 6:15, antes de la corrida de las 8:51)
+
+Medido en la base (todo en cero, la base está bien etiquetada): conversaciones con área distinta a la de su contacto; oportunidades con área o perfil distinto al de su contacto o su conversación; contactos, destinatarios u oportunidades de una campaña o base de otra área; conversaciones con una línea (de Meta o de Wasender) de otro perfil; conversaciones sin oportunidad; un contacto con chats en dos áreas. Solo hay 5 teléfonos que existen en dos perfiles a la vez (4 con chat en ambos): son personas distintas en la base, una por perfil, y está bien que así sea.
+
+**Conclusión: la mezcla no está en los datos, está en las pantallas.** Encontrado hasta ahora:
+
+1. **Incidencias (`/revision`) no filtra por perfil.** `src/app/(dashboard)/revision/page.tsx` lee `incidences`, `contact_detentions`, `webhook_quarantine` y `message_attachments` enteras y las muestra dentro del panel de Jurídico: ahí aparecen personas de los cuatro perfiles. Lo mismo `src/app/api/revision/**`. Se resuelve junto con el bloque B (incidencias por perfil; fallas del sistema aparte).
+2. **Las pantallas de Jurídico viven en la raíz** (`/inbox`, `/campanas`, `/prospectos`, `/bases`, `/seguimiento`, `/agenda`, `/agentes`, `/estadisticas`, `/casos-cerrados`, `/configuracion`, `/revision`) con el marco fijo de Jurídico (`src/app/(dashboard)/layout.tsx`). Cualquier enlace a una de esas rutas desde otro perfil cambia de perfil sin avisar, y desde ahí el menú ya es el de Jurídico. Enlaces así ya ubicados:
+   - `src/lib/salud/reglas.ts`: calidad de línea baja o media → `href: "/campanas"` para cualquier perfil (tiene que ir a las campañas del perfil de esa línea); y `/inbox/${id}` o `/inbox` en los avisos de conversaciones (usar `/conversacion/${id}`, que ya redirige al perfil correcto, y la lista de chats del perfil).
+   - `src/components/configuracion/configuracion-perfil.tsx`: «Ajustes generales (todos los perfiles)» → `/configuracion?nivel=avanzado#…`, que abre el panel de Jurídico. Hace falta que los ajustes generales se abran dentro del perfil desde el que se entró.
+   - `src/components/adjuntos/adjuntos-lista.tsx` y `src/app/panel/marketing/presupuestos/page.tsx`: `/inbox/${conversation_id}` fijo.
+   - `src/components/ui/metrics-panel.tsx` y `src/components/cartera/vista-cartera.tsx`: enlace a `/revision`.
+3. **Salud y la barra de salud muestran avisos de todos los perfiles dentro de cualquiera.** En Salud de Autos aparece «Jurídico: la línea de Wasender está desconectada» con el botón «Conectar con QR», que lleva a `/wasender?perfil=juridico`. Propuesta: en cada perfil, primero lo suyo; lo de otros perfiles plegado bajo «Otros perfiles» y con el nombre del perfil en el botón.
+4. **Más de veinte pantallas caen en Jurídico cuando el enlace no trae `?perfil=`** (`searchParams.perfil ?? "juridico"` en Hoy, Resultados, Oportunidades, Contenido, «Por base», la cartera, Redes, Wasender, Salud, Bandeja…). Un solo enlace que pierda el parámetro muestra gente de Jurídico con la sensación de seguir en el otro perfil. Arreglo de fondo: recordar el perfil activo (una cookie que se escribe en el middleware al entrar a cualquier pantalla con `?perfil=` o `/panel/<perfil>/`) y usarlo como respaldo en lugar de Jurídico, en una sola función compartida; y que el encabezado muestre siempre, bien visible, en qué perfil se está.
+5. La biblioteca de bots (`/biblioteca-agentes`) y `/api/agentes/biblioteca` muestran los bots de los cuatro perfiles: es así por diseño, pero conviene decirlo en la pantalla.
+
+Falta: (a) comprobar lista por lista que los ids que muestra cada pantalla son del perfil (juntar los enlaces a ficha, chat y oportunidad de Hoy, Chats, Contactos, Recuperar, Descartados, Resultados, Seguimiento, «Por base», Oportunidades, Campañas, Agenda y Captados en cada perfil, y cruzarlos con la base); (b) terminar el recorrido de enlaces en Jurídico y Coberturas (quedó hecho en Autos y Marketing, 70 pantallas cada uno); (c) revisar los avisos a los dispositivos y la vista del teléfono (`/telefono`), que no se llegaron a mirar. El guion del recorrido quedó en el directorio temporal de la sesión (`panel/mezcla/rastrear.js`): entra a un perfil, sigue cada enlace y marca toda pantalla cuyo `data-tema` sea de otro perfil y toda respuesta de la API con áreas o perfiles ajenos; ojo que quita `volver` de las direcciones, así que `/biblioteca-agentes` da un falso positivo.
+
 ### B. Reglas nuevas de clasificación
 
 - **Caídos automáticos.** Mapear la decisión 1 al circuito actual (`src/lib/seguimiento/**`, reglas comunes §5): el «mensaje a los 3 días» es el contacto 2 (hoy 60 h por defecto: llevarlo a 72 h); nuevo paso: 24 horas después del contacto 2 sin respuesta → `caído` con motivo «No respondió al seguimiento». También cae quien el bot decidió no insistir (ya está). «Recuperar» solo muestra a quienes todavía están dentro del circuito. Regla pura con pruebas; motor en el latido con candado contra dobles pasadas.
@@ -90,7 +108,7 @@ Dirección (tomada de la referencia, adaptada a un panel de trabajo que se usa m
 
 | Bloque | Estado |
 |--------|--------|
-| A. Mezcla entre perfiles | Pendiente |
+| A. Mezcla entre perfiles | Diagnóstico avanzado (ver «Avance del bloque A»); sin arreglos todavía |
 | B. Reglas nuevas | Pendiente |
 | C. Limpieza de datos | Pendiente |
 | D. Pantallas | Pendiente |
