@@ -139,3 +139,23 @@ export function previaLegible(texto: string | null | undefined): string {
     .replace(/\[Mensaje no compatible[^\]]*\]/g, "Mensaje que no se puede mostrar")
     .replace(/ · $/, "");
 }
+
+/**
+ * 13/11 · La tabla vieja «Captados y casos» se retiró: cada una de sus
+ * pestañas tiene su lista en Contactos. La dirección vieja lleva a la nueva.
+ */
+export function destinoDeCasosViejos(slug: string, vista: string | null | undefined): string {
+  const q = `perfil=${slug}`;
+  switch (vista) {
+    case "derivados":
+      return `/contactos?${q}&grupo=clientes`;
+    case "seguimiento":
+      return `/contactos?${q}&grupo=seguimiento`;
+    case "caidos":
+      return `/descartados?${q}&grupo=caidos`;
+    case "perdidos":
+      return `/descartados?${q}&grupo=perdidos`;
+    default:
+      return `/conversaciones?${q}&grupo=captados`;
+  }
+}

@@ -1,5 +1,7 @@
 import { perfilActivo } from "@/lib/perfil-activo";
 import Link from "next/link";
+import { Suspense } from "react";
+import { EmbudoPeriodo } from "@/components/resultados/embudo-periodo";
 import { notFound } from "next/navigation";
 import { requirePageSession } from "@/lib/acceso/pagina";
 import { MarcoPerfil } from "@/components/perfiles/marco-perfil";
@@ -74,7 +76,7 @@ export default async function Pagina({ searchParams }: { searchParams: { perfil?
       <div className="mx-auto max-w-5xl space-y-6">
         <div>
           <p className="text-sm text-slate-600">
-            <Link href={`/hoy?perfil=${slug}#hoy-cifras`} className="tactil inline-flex items-center font-medium text-slate-800 underline underline-offset-2">
+            <Link href={`/hoy?perfil=${slug}`} className="tactil inline-flex items-center font-medium text-slate-800 underline underline-offset-2">
               Hoy
             </Link>{" "}
             / Resultados
@@ -89,18 +91,6 @@ export default async function Pagina({ searchParams }: { searchParams: { perfil?
           </p>
         </div>
 
-        <nav aria-label="Qué ver" className="flex flex-wrap gap-2">
-          {VISTAS_RESULTADO.map((v) => (
-            <Link
-              key={v.clave}
-              href={href(v.clave, periodo)}
-              aria-current={v.clave === ver ? "page" : undefined}
-              className={`tactil inline-flex items-center rounded-full border px-4 text-sm font-medium ${v.clave === ver ? "border-slate-900 bg-slate-900 text-white" : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"}`}
-            >
-              {v.titulo}
-            </Link>
-          ))}
-        </nav>
         <nav aria-label="Período" className="flex flex-wrap gap-2">
           {PERIODOS_RESULTADO.map((p) => (
             <Link
@@ -113,6 +103,11 @@ export default async function Pagina({ searchParams }: { searchParams: { perfil?
             </Link>
           ))}
         </nav>
+
+        {/* 13/11: el embudo del período; cada etapa abre sus personas (reemplaza a los botones «Qué ver»). */}
+        <Suspense fallback={<div role="status" aria-label="Cargando el embudo" className="h-44 animate-pulse rounded-2xl bg-slate-200/60" />}>
+          <EmbudoPeriodo slug={slug} rubroId={rubroId} areas={AREAS_DE_PERFIL[slug]} periodo={periodo} ver={ver} />
+        </Suspense>
 
         {r.origenes.length > 0 ? (
           <section aria-labelledby="res-origen" className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">

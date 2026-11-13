@@ -289,6 +289,7 @@ export function FichaActions({
 
       {form && (
         <div className="flex flex-wrap items-center gap-2 rounded-lg bg-slate-50 p-3">
+          {form.accion === "derivar" && <p className="w-full text-[13px] text-slate-700">No le avisa a nadie: solo deja anotado que ya se lo pasaste a quien lo atiende.</p>}
           {form.accion === "detener" && (
             <select value={detMotive} onChange={(e) => setDetMotive(e.target.value)} className="tactil rounded-lg border border-slate-300 px-2 text-sm outline-none focus-gold" aria-label="Motivo">
               {Object.entries(DETENTION_OPTIONS).map(([k, l]) => (

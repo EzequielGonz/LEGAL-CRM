@@ -64,6 +64,14 @@ export interface EnMarcha {
   href: string;
 }
 
+/** Algo que el bot lleva adelante solo: «7 en charla con el bot», «127 de 192 enviados de …». */
+export interface DatoDelBot {
+  texto: string;
+  n: number | null | undefined;
+  de?: number | null;
+  href: string;
+}
+
 export async function TableroHoy({
   slug,
   rubroId,
@@ -71,6 +79,7 @@ export async function TableroHoy({
   grupo,
   captados = [],
   enMarcha = [],
+  delBot = [],
   filtroCola,
   verTodo = false,
 }: {
@@ -81,6 +90,7 @@ export async function TableroHoy({
   /** Captados que falta derivar (los trae la página, con su cita si tienen). */
   captados?: EntradaCola[];
   enMarcha?: EnMarcha[];
+  delBot?: DatoDelBot[];
   filtroCola?: string;
   verTodo?: boolean;
 }) {
@@ -167,6 +177,13 @@ export async function TableroHoy({
   const porMotivo = new Map<string, number>();
   for (const d of colas.descartes) porMotivo.set(d.descarte.etiqueta, (porMotivo.get(d.descarte.etiqueta) ?? 0) + 1);
   const resumenDescartes = [...porMotivo.entries()].map(([t, n]) => `${n} ${t.toLowerCase()}`).join(", ");
+  // 13/11: fuera de las dos listas, solo lo que pide una acción y tiene a alguien.
+  const trabados = personas.conteos.bot_trabado ?? 0;
+  const tareas: (EnMarcha & { activo?: boolean })[] = [
+    ...(trabados > 0 ? [{ titulo: "El bot se trabó", n: trabados, detalle: "No supo qué responder: contestales vos", href: `${aqui}&grupo=bot_trabado#hoy-lista`, activo: elegido === "bot_trabado" }] : []),
+    ...enMarcha.filter((m) => (m.n ?? 0) > 0),
+  ];
+  const bot = delBot.filter((d) => d.n !== null && d.n !== undefined && (d.n > 0 || d.de != null));
 
   return (
     <section aria-labelledby="hoy-tablero" className="tablero-hoy space-y-4">
@@ -244,29 +261,23 @@ export async function TableroHoy({
         </div>
       )}
 
-      {/* 2) Para mirar: lo que puede necesitarte, sin ser urgente. */}
-      <div>
-        <p className="mb-2 text-sm font-semibold text-slate-950">Para mirar</p>
-        <ul className="grid grid-cols-2 gap-3 md:grid-cols-4">
-          {GRUPOS_PERSONAS.filter((g) => g.clave !== "por_cerrar").map((g) => {
-            const n = personas.conteos[g.clave];
-            const activo = g.clave === elegido;
-            return (
-              <li key={g.clave}>
-                <Link
-                  href={g.clave === "no_interesado" ? `/oportunidades?perfil=${slug}&indicador=detencion_reciente&volver=${encodeURIComponent(aqui)}` : `${aqui}&grupo=${g.clave}#hoy-lista`}
-                  aria-current={activo ? "true" : undefined}
-                  className={`kpi-hoy flex h-full flex-col rounded-2xl border p-4 ${g.tarea && n ? "" : "kpi-apagado"} ${activo ? "kpi-activo" : ""}`}
-                >
-                  <span className="text-[13px] font-medium text-slate-600">{g.titulo}</span>
-                  <span className="cifra-premium mt-1.5 text-3xl font-semibold tabular-nums text-slate-950">{n === null ? "—" : n.toLocaleString("es-AR")}</span>
-                  <span className="mt-1 text-[13px] text-slate-500">{g.detalle}</span>
+      {/* 2) También hoy: solo lo que pide algo tuyo y tiene a alguien. Sin nadie, no se muestra. */}
+      {tareas.length > 0 && (
+        <div>
+          <p className="mb-2 text-sm font-semibold text-slate-950">También hoy</p>
+          <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
+            {tareas.map((t) => (
+              <li key={t.titulo}>
+                <Link href={t.href} aria-current={t.activo ? "true" : undefined} className={`kpi-hoy flex h-full flex-col rounded-2xl border p-4 ${t.activo ? "kpi-activo" : ""}`}>
+                  <span className="text-[13px] font-medium text-slate-600">{t.titulo}</span>
+                  <span className="cifra-premium mt-1.5 text-3xl font-semibold tabular-nums text-slate-950">{(t.n ?? 0).toLocaleString("es-AR")}</span>
+                  <span className="mt-1 text-[13px] text-slate-500">{t.detalle}</span>
                 </Link>
               </li>
-            );
-          })}
-        </ul>
-      </div>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {elegido && (
         <div id="hoy-lista" className="scroll-mt-24 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
@@ -313,17 +324,19 @@ export async function TableroHoy({
         </div>
       )}
 
-      {/* 3) En marcha: lo que avanza solo. */}
-      {enMarcha.length > 0 && (
-        <div>
-          <p className="mb-2 text-sm font-semibold text-slate-950">En marcha</p>
-          <ul className="grid grid-cols-2 gap-3 md:grid-cols-4">
-            {enMarcha.map((m) => (
-              <li key={m.titulo}>
-                <Link href={m.href} className={`kpi-hoy flex h-full flex-col rounded-2xl border p-4 ${m.n ? "" : "kpi-apagado"}`}>
-                  <span className="text-[13px] font-medium text-slate-600">{m.titulo}</span>
-                  <span className="cifra-premium mt-1.5 text-3xl font-semibold tabular-nums text-slate-950">{m.n === null || m.n === undefined ? "—" : m.n.toLocaleString("es-AR")}</span>
-                  <span className="mt-1 text-[13px] text-slate-500">{m.detalle}</span>
+      {/* 3) Lo que el bot lleva adelante solo: una línea, cada dato abre su lista. */}
+      {bot.length > 0 && (
+        <div className="rounded-2xl border border-slate-200 bg-white px-5 py-4">
+          <p className="text-sm font-semibold text-slate-950">Qué está haciendo el bot</p>
+          <ul className="mt-2 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-700">
+            {bot.map((d) => (
+              <li key={d.texto} className="min-w-0">
+                <Link href={d.href} className="tactil inline-flex max-w-full items-baseline gap-1.5 underline-offset-2 hover:underline">
+                  <span className="font-semibold tabular-nums text-slate-950">
+                    {(d.n ?? 0).toLocaleString("es-AR")}
+                    {d.de != null ? ` de ${d.de.toLocaleString("es-AR")}` : ""}
+                  </span>
+                  <span className="truncate">{d.texto}</span>
                 </Link>
               </li>
             ))}
@@ -348,6 +361,6 @@ function Chip({ tono, texto, href }: { tono: string; texto: string; href?: strin
       <span className="truncate">{texto}</span>
     </>
   );
-  const clase = "chip-estado inline-flex max-w-full items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700";
+  const clase = "chip-estado inline-flex min-h-[40px] max-w-full items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 sm:min-h-0";
   return <li className="max-w-full">{href ? <Link href={href} className={clase}>{cuerpo}</Link> : <span className={clase}>{cuerpo}</span>}</li>;
 }

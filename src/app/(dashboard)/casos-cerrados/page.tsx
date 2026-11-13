@@ -1,17 +1,9 @@
-import { CasosList } from "@/components/casos/casos-list";
-import { RUBRO_IDS } from "@/lib/rubros";
+import { redirect } from "next/navigation";
+import { destinoDeCasosViejos } from "@/lib/cartera";
 
 export const dynamic = "force-dynamic";
 
-/** Casos del perfil: captados (No derivado / Derivado), en seguimiento, caídos y perdidos. */
-export default function CasosPage({ searchParams }: { searchParams: { vista?: string; q?: string; pagina?: string } }) {
-  return (
-    <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-slate-900">Casos</h1>
-        <p className="text-sm text-slate-500">Las acciones (derivar, tomar, detener) se hacen en la ficha de cada caso.</p>
-      </div>
-      <CasosList rubroId={RUBRO_IDS.juridico} basePath="/casos-cerrados" searchParams={searchParams} fichaBase="/prospectos" />
-    </div>
-  );
+/** 13/11: la tabla vieja «Captados y casos» se retiró. Cada pestaña lleva a su lista de Contactos. */
+export default function CasosPage({ searchParams }: { searchParams: { vista?: string } }) {
+  redirect(destinoDeCasosViejos("juridico", searchParams.vista));
 }
