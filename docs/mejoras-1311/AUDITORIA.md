@@ -75,13 +75,36 @@ De los 67 que habían quedado con la última palabra y sin respuesta, el bot rel
 
 Las definiciones viven en `src/lib/indicadores.ts`; las pantallas no escriben condiciones propias.
 
-## 5. Pendiente de la auditoría
+## 5. Seguridad (revisada el 13/11 a las 10:00)
 
-- **Seguridad completa** (sesión y pertenencia en cada ruta, ingreso por código, pedidos desde otra página, webhooks, secretos en el paquete del navegador, consejos de seguridad de la base, entradas, encabezados, `npm audit`): **no empezada en esta corrida**.
-- **Funcionamiento** (errores de producción de las últimas 24 horas, tiempos del latido, carreras): no empezado.
-- **Rendimiento** (`campaign_metrics`, consejos de rendimiento de la base): no empezado.
-- **Fallas del sistema en un lugar propio** (decisión de la responsable): las reglas de Salud ya separan lo del perfil de lo de todo el sistema, pero falta el bloque «Fallas del sistema» con su contador y su aviso.
-- **Aviso a los dispositivos cuando se abre una incidencia de reclamo**: falta.
-- **Hoy**: ya usa las definiciones nuevas; falta quitar lo que no lleva a una acción.
-- **Estadísticas con embudo y origen**: falta.
-- **Portada de perfiles que no se actualiza**: falta.
+| Qué se miró | Resultado |
+|---|---|
+| Sesión en las rutas del servidor | Las 7 rutas sin control de sesión son las que tienen que ser públicas (formulario de las landings, ingreso y salida, tres webhooks, latido), cada una con su propia verificación. Todas las demás exigen sesión, y además el middleware corta cualquier pedido sin sesión antes de llegar. |
+| Sesión en las pantallas | Todas pasan por el middleware; los paneles tienen además el control en su marco. |
+| Ingreso por código | Código guardado con `scrypt` y comparado en tiempo constante; bloqueo por origen después de los intentos fallidos; cookie `HttpOnly`, `Secure` y `SameSite=Lax`. Observación: la sesión dura 400 días mientras se use (decisión anterior, «sin vencimiento programado»); el cierre de sesión en todos los dispositivos existe. |
+| Pedidos desde otra página | `SameSite=Lax` impide que otra web dispare cambios con la sesión de la responsable. |
+| Webhooks | Meta: firma `X-Hub-Signature-256` verificada sobre el cuerpo crudo; lo que no valida va a retenidos. Wasender: secreto por línea. |
+| Latido | Secreto solo por encabezado, comparación en tiempo constante. |
+| Secretos en el navegador | Ningún archivo de cliente lee variables privadas; la clave de servicio no aparece en el paquete del navegador. |
+| Base de datos | Todas las tablas (incluidas las nuevas) con RLS y sin políticas para la clave pública: solo entra el servidor. Avisos del proveedor: extensión `pg_net` en el esquema público (viene así de la plataforma; sin acción) y protección de contraseñas filtradas (no aplica: el panel no usa cuentas de Supabase). |
+| Búsquedas que arman filtros | El texto de búsqueda de chats pasa por `textoBusquedaSeguro`; los demás filtros usan identificadores fijos o validados. |
+| HTML insertado | Solo en la vista previa de piezas propias de Contenido y en el guion del modo claro/oscuro. Nada que venga de un prospecto. |
+| Encabezados | `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`. **Falta** una política de contenido (CSP): necesita preparar los guiones de Next con un identificador por pedido. |
+| Dependencias (`npm audit --omit=dev`) | 4 avisos. `next` y `postcss` (crítico/alto): el arreglo exige subir Next de versión mayor; `npm audit fix` sin forzar rompió el build y se deshizo. El aviso de `postcss` afecta al procesamiento de CSS en la compilación, no a datos de prospectos. `xlsx` (alto): sin arreglo en npm; solo procesa planillas que sube alguien con sesión. **Pendiente:** planificar la subida de Next y reemplazar `xlsx` por la versión que publica su autor fuera de npm. |
+| Mezcla entre perfiles | Ver hallazgos 1 a 6: corregida y comprobada. Con un solo código compartido no hay permisos por perfil; la separación es de pantallas y consultas. |
+
+## 6. Funcionamiento y rendimiento
+
+- **Errores de producción (últimas 24 horas):** un solo grupo, 4 veces: la lista de campañas de Coberturas se quedó sin tiempo al calcular las cifras de una campaña. Causa: `campaign_metrics` contaba los mensajes de la campaña recorriendo toda la tabla de mensajes, y la lista la pedía una vez por campaña en cada carga. **Arreglado:** índice nuevo (migración `0609`) y las cifras de cada campaña se guardan 20 segundos.
+- **Portada de perfiles que no se actualizaba:** arreglado (se actualiza sola cada 30 segundos y al volver a la pestaña; al navegar ya no se muestra la copia vieja).
+- **Latido:** el motor de caídos corre desfasado de los descartes (minuto 5 y minuto 0 de cada diez) y cada cambio se aplica solo si la oportunidad sigue como se leyó. Tiempos por etapa: sin medir en esta corrida.
+
+## 7. Pendiente de la auditoría
+
+- **Política de contenido (CSP)** y plan de subida de Next / reemplazo de `xlsx` (ver §5).
+- **Latido:** medir tiempos por etapa y probar dos latidos a la vez.
+- **Aviso a los dispositivos** cuando se abre una incidencia de reclamo o aparece una falla del sistema.
+- **Hoy:** ya usa las definiciones nuevas; falta quitar lo que no lleva a una acción.
+- **Estadísticas con embudo y origen.**
+- **Tabla vieja «Captados y casos»** y menores de la bitácora.
+- **Vista del teléfono y avisos a dispositivos** respecto de la separación entre perfiles.

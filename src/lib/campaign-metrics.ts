@@ -1,3 +1,4 @@
+import { unstable_cache } from "next/cache";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { AREA_TO_RUBRO_ID } from "@/lib/rubros";
 
@@ -30,14 +31,33 @@ export interface CampaignMetrics {
   calculado_en: string;
 }
 
-export async function getCampaignMetrics(campaignId: string): Promise<CampaignMetrics | null> {
+async function leerCampaignMetrics(campaignId: string): Promise<CampaignMetrics | null> {
   const supabase = createAdminClient();
   const { data, error } = await supabase.rpc("campaign_metrics", { p_campaign: campaignId });
-  if (error) {
-    console.error("[campaña] No se pudieron calcular las cifras:", error.message);
-    return null;
-  }
+  // Un error no se guarda en memoria: se vuelve a intentar en el próximo pedido.
+  if (error) throw new Error(error.message);
   return (data as CampaignMetrics | null) ?? null;
+}
+
+/**
+ * 13/11 (auditoría): la lista de campañas pedía este cálculo una vez por
+ * campaña en cada carga y en producción llegó a quedarse sin tiempo. Se guarda
+ * 20 segundos por campaña; además la base tiene un índice nuevo (migración 0609).
+ */
+const campanaEnMemoria = unstable_cache(leerCampaignMetrics, ["campaign-metrics"], { revalidate: 20 });
+
+export async function getCampaignMetrics(campaignId: string): Promise<CampaignMetrics | null> {
+  try {
+    return await campanaEnMemoria(campaignId);
+  } catch (primero: any) {
+    // Fuera de una petición de Next (pruebas, tareas) no hay memoria: lectura directa.
+    try {
+      return await leerCampaignMetrics(campaignId);
+    } catch (err: any) {
+      console.error("[campaña] No se pudieron calcular las cifras:", err?.message ?? primero?.message ?? err);
+      return null;
+    }
+  }
 }
 
 /** Información de una campaña para confirmar antes de actuar (perfil, canal, línea, estado). */
