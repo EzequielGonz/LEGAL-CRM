@@ -394,7 +394,9 @@ async function afterInboundSaved({
         now,
         calendar
       );
-      if (comoTexto.responder) await pedirTexto(supabase, conversation.id, now);
+      // 13/11: una reacción (👍, ❤️) no es un audio ni un archivo: no se le pide que «lo escriba».
+      // Antes, después de un «Equivocado» + ❤️, el bot contestaba que no podía escuchar audios.
+      if (comoTexto.responder && !/^\[Reacción/.test(String(body ?? ""))) await pedirTexto(supabase, conversation.id, now);
     }
     return result;
   }

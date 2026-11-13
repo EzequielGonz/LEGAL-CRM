@@ -1,4 +1,4 @@
-// Genera el cuerpo y 40 variantes de cada plantilla de inicio y escribe el SQL.
+// Genera el cuerpo y 40 variantes de cada plantilla de inicio y la muestra para leer.
 // Uso: node docs/mejoras-1311/generar-variantes.mjs
 import { writeFileSync } from "node:fs";
 import { PLANTILLAS } from "./plantillas-inicio.mjs";
@@ -78,14 +78,8 @@ function variantesDe(t) {
   return { cuerpo, variantes, total };
 }
 
-const q = (s) => `'${s.replace(/'/g, "''")}'`;
-const sql = [
-  "-- Plantillas de inicio de Wasender (13/11): 10 por perfil, 40 variantes cada una.",
-  "-- Generado por docs/mejoras-1311/generar-variantes.mjs. Repetible sin error.",
-  "-- A las que ya existían solo se les SUMAN variantes (el cuerpo no cambia y las",
-  "-- variantes que tenían se conservan); las nuevas se crean si no existen.",
-];
 const resumen = {};
+const datos = [];
 const muestra = [];
 for (const [slug, lista] of Object.entries(PLANTILLAS)) {
   if (lista.length !== 10) throw new Error(`${slug}: ${lista.length} plantillas`);
@@ -94,20 +88,11 @@ for (const [slug, lista] of Object.entries(PLANTILLAS)) {
     const v = variantesDe(t);
     resumen[slug].push({ nombre: t.nombre, existente: t.existente, combinaciones: v.total });
     muestra.push(`## ${slug} · ${t.nombre}${t.existente ? "" : " (nueva)"} — ${t.angulo}\n\n${v.cuerpo}\n\nVariantes de ejemplo:\n- ${v.variantes[0].replace(/\n/g, " ⏎ ")}\n- ${v.variantes[19].replace(/\n/g, " ⏎ ")}\n- ${v.variantes[39].replace(/\n/g, " ⏎ ")}\n`);
-    const json = q(JSON.stringify(v.variantes));
-    const rubro = `(select id from public.rubros where slug = ${q(slug)})`;
-    if (t.existente) {
-      sql.push(
-        `update public.wasender_plantillas p set variantes = (select jsonb_agg(x.v order by x.orden) from (select distinct on (e.v) e.v, e.orden from jsonb_array_elements_text(coalesce(p.variantes, '[]'::jsonb) || ${json}::jsonb) with ordinality as e(v, orden) order by e.v, e.orden) x), grupo = 'inicio', activa = true, updated_at = now() where p.rubro_id = ${rubro} and p.nombre = ${q(t.nombre)} and p.archivada_at is null and p.cuerpo = ${q(v.cuerpo)};`
-      );
-    } else {
-      sql.push(
-        `insert into public.wasender_plantillas (rubro_id, nombre, uso, cuerpo, variantes, activa, origen, grupo) select ${rubro}, ${q(t.nombre)}, 'campana', ${q(v.cuerpo)}, ${json}::jsonb, true, 'panel', 'inicio' where not exists (select 1 from public.wasender_plantillas where rubro_id = ${rubro} and nombre = ${q(t.nombre)});`
-      );
-    }
+    datos.push({ perfil: slug, nombre: t.nombre, existente: t.existente, cuerpo: v.cuerpo, variantes: v.variantes });
   }
 }
 const aqui = new URL(".", import.meta.url).pathname;
-writeFileSync(aqui + "plantillas-inicio.sql", sql.join("\n") + "\n");
+// Los textos completos (para cargarlos por la API del panel) salen solo si se pide: SALIDA_JSON=ruta.
+if (process.env.SALIDA_JSON) writeFileSync(process.env.SALIDA_JSON, JSON.stringify(datos));
 writeFileSync(aqui + "PLANTILLAS-INICIO.md", `# Plantillas de inicio por Wasender · 13/11\n\n10 por perfil. Cada una tiene su texto base y 40 variantes con cambios mínimos (saludo, verbo, conectores, cierre). Acá va el texto base y tres variantes de muestra de cada una; las 40 se ven en Líneas y plantillas → Plantillas de Wasender.\n\n${muestra.join("\n")}`);
 console.log(JSON.stringify(resumen));
