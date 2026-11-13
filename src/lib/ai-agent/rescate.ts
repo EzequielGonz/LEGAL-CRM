@@ -55,7 +55,13 @@ export async function rescatarTurnosPerdidos({ presupuestoMs = 15_000, maximo = 
   return { revisadas: vistos.size, rescatadas: hechos.length };
 }
 
-async function rescatarConversacion(conversationId: string, ahora: Date): Promise<string | null> {
+/**
+ * 13/11: exportada para «Devolver al bot» desde la ficha. Con `maxMin` se amplía la
+ * franja (por defecto, la del rescate automático): al devolver un chat, el bot
+ * contesta el mensaje que quedó esperando si es de las últimas horas. La compuerta
+ * es la misma (pausa, detención, captado, agente activo y horario).
+ */
+export async function rescatarConversacion(conversationId: string, ahora: Date, opts: { maxMin?: number; minMin?: number } = {}): Promise<string | null> {
   const s = createAdminClient();
   // 1) El último mensaje del chat tiene que ser de la persona, de texto y en la franja.
   const { data: ultimo } = await s
@@ -66,7 +72,9 @@ async function rescatarConversacion(conversationId: string, ahora: Date): Promis
     .limit(1)
     .maybeSingle();
   const u: any = ultimo;
-  if (!u || u.direction !== "entrante" || !TIPOS_LEGIBLES.includes(u.message_type ?? "text") || !enFranjaDeRescate(u.created_at, ahora)) return null;
+  const edadMin = u ? (ahora.getTime() - Date.parse(u.created_at)) / 60_000 : -1;
+  const enFranja = edadMin >= (opts.minMin ?? RESCATE.minMin) && edadMin <= (opts.maxMin ?? RESCATE.maxMin);
+  if (!u || u.direction !== "entrante" || !TIPOS_LEGIBLES.includes(u.message_type ?? "text") || !enFranja) return null;
   // 2) Ningún turno del bot registrado después (respondido, retenido, bloqueado o con error ya se ve en el panel).
   const { count } = await (s.from("agent_turn_logs" as any) as any)
     .select("id", { count: "exact", head: true })

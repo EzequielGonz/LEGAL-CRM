@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { FichaSection } from "@/components/ficha/ficha-section";
 import { requirePageSession } from "@/lib/acceso/pagina";
-import { EnlaceDetalle, EnlaceVolver } from "@/components/ui/enlaces-navegacion";
+import { EnlaceVolver } from "@/components/ui/enlaces-navegacion";
 import { inicioDePerfil, volverSeguro } from "@/lib/navegacion";
 import { MarcoPerfil } from "@/components/perfiles/marco-perfil";
 
@@ -24,7 +24,6 @@ export default async function FichaPage({ params, searchParams }: { params: { id
     .maybeSingle();
   if (!contact) notFound();
   const volver = volverSeguro(searchParams.volver);
-  const conversations = ((contact as any).conversations ?? []) as { id: string }[];
   const rubro = (contact as any).rubros;
 
   return (
@@ -41,15 +40,6 @@ export default async function FichaPage({ params, searchParams }: { params: { id
           </div>
           <EnlaceVolver volver={volver} respaldo={inicioDePerfil(temaDe(rubro?.slug))} />
         </div>
-        {conversations.length > 0 && (
-          <div className="flex flex-wrap gap-2">
-            {conversations.map((c) => (
-              <EnlaceDetalle key={c.id} href={`/inbox/${c.id}`} className="tactil inline-flex items-center rounded-lg bg-slate-900 px-4 text-sm font-medium text-white hover:bg-slate-800">
-                Ver conversación
-              </EnlaceDetalle>
-            ))}
-          </div>
-        )}
         <div className="rounded-xl border border-slate-200 bg-white p-4">
           <FichaSection contactId={contact.id} />
         </div>

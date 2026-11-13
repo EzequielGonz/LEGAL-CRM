@@ -27,7 +27,10 @@ export function FichaActions({
   barrio,
   optionalFields,
   detention,
+  chat = null,
 }: {
+  /** 13/11: estado real del chat (quién lo atiende), para tomarlo o devolverlo al bot desde la ficha. */
+  chat?: { aiEnabled: boolean; esperaRespuesta: boolean; href: string | null } | null;
   opportunity: {
     id: string;
     capture_state: string;
@@ -52,6 +55,7 @@ export function FichaActions({
   const [value, setValue] = useState("");
   const [value2, setValue2] = useState("");
   const [detMotive, setDetMotive] = useState("desinteres");
+  const [confirmaDevolver, setConfirmaDevolver] = useState(false);
 
   const extras = optionalFields.filter((f) => chosen.includes(f.key));
   const faltantes = [!fullName?.trim() && "nombre y apellido", !barrio?.trim() && "barrio", !phone?.trim() && "teléfono"].filter(Boolean) as string[];
@@ -91,14 +95,25 @@ export function FichaActions({
         body: JSON.stringify({ accion, ...payload }),
       });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) setMsg({ ok: false, text: data.error ?? "No se pudo guardar." });
+      if (!res.ok) setMsg({ ok: false, text: data.error ?? "No se pudo guardar. Probá de nuevo; si sigue, recargá la página." });
       else {
-        setMsg({ ok: true, text: "Guardado." });
+        const texto =
+          accion === "atencion" && payload.estado === "ia"
+            ? data.respondio
+              ? "Listo: el bot volvió a atender y ya le contestó el mensaje que estaba esperando."
+              : "Listo: el bot volvió a atender este chat. Va a responder cuando la persona escriba."
+            : accion === "atencion"
+              ? "Listo: el chat es tuyo. El bot no va a responder hasta que se lo devuelvas."
+              : "Guardado.";
+        setMsg({ ok: true, text: texto });
         setForm(null);
+        setConfirmaDevolver(false);
         setValue("");
         setValue2("");
         router.refresh();
       }
+    } catch {
+      setMsg({ ok: false, text: "No hay conexión con el panel. Revisá internet y probá de nuevo." });
     } finally {
       setBusy(false);
     }
@@ -125,41 +140,103 @@ export function FichaActions({
     }
   }
 
-  const btn = "rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50";
+  const btn = "btn-suave-sm disabled:opacity-50";
+  const captado = opportunity?.capture_state === "captado";
 
   return (
     <div className="space-y-5">
+      {opportunity && chat && (
+        <section aria-labelledby="ficha-quien" className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="min-w-0">
+              <h3 id="ficha-quien" className="text-[13px] font-medium text-slate-600">
+                Quién atiende este chat
+              </h3>
+              <p className="text-base font-semibold text-slate-950">{detention ? "Nadie: el contacto está detenido" : chat.aiEnabled ? "El bot" : "Una persona del equipo"}</p>
+              <p className="mt-0.5 text-[13px] text-slate-600">
+                {detention
+                  ? "No sale ningún mensaje automático. Para volver a atenderlo, primero hay que levantar la detención."
+                  : chat.aiEnabled
+                    ? captado
+                      ? "Ya está captado: el bot no sigue vendiendo. Si escribe, pasa a una persona."
+                      : "Responde solo. Si querés escribirle vos, tomá el chat."
+                    : chat.esperaRespuesta
+                      ? "Escribió y está esperando. El bot no le contesta mientras el chat sea tuyo."
+                      : "El bot no responde en este chat hasta que se lo devuelvas."}
+              </p>
+            </div>
+            {!detention && (
+              <div className="flex shrink-0 flex-wrap items-center gap-2">
+                {chat.href ? (
+                  <a href={chat.href} className={chat.esperaRespuesta && !chat.aiEnabled ? "btn-gold-sm" : btn}>
+                    {chat.esperaRespuesta && !chat.aiEnabled ? "Responder" : "Abrir el chat"}
+                  </a>
+                ) : null}
+                {chat.aiEnabled ? (
+                  <button type="button" className={btn} disabled={busy} onClick={() => run("atencion", { estado: "humano_en_curso" })}>
+                    {busy ? "Guardando…" : "Tomar el chat"}
+                  </button>
+                ) : captado ? null : (
+                  <button type="button" className={chat.esperaRespuesta ? btn : "btn-gold-sm"} disabled={busy} onClick={() => setConfirmaDevolver(true)}>
+                    Devolver al bot
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+          {confirmaDevolver && (
+            <div className="mt-3 rounded-lg border border-slate-200 bg-white p-3">
+              <p className="text-sm text-slate-800">
+                El bot vuelve a atender este chat.{" "}
+                {chat.esperaRespuesta
+                  ? "Si el mensaje que quedó sin respuesta es de las últimas 23 horas, el bot le contesta ahora (respeta el horario y las pausas)."
+                  : "No manda nada ahora: responde cuando la persona vuelva a escribir."}
+              </p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                <button type="button" className="btn-gold-sm" disabled={busy} onClick={() => run("atencion", { estado: "ia" })}>
+                  {busy ? "Devolviendo…" : "Sí, devolver al bot"}
+                </button>
+                <button type="button" className={btn} disabled={busy} onClick={() => setConfirmaDevolver(false)}>
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          )}
+        </section>
+      )}
+
       {opportunity && (
         <div className="flex flex-wrap gap-2">
           {opportunity.capture_state === "captado" ? (
             opportunity.derivation_state === "derivado" ? (
-              <button type="button" className={btn} disabled={busy} onClick={() => setForm({ accion: "no_derivar", label: "Volver a No derivado", field: "nota", placeholder: "Motivo" })}>
-                Volver a No derivado
+              <button type="button" className={btn} disabled={busy} onClick={() => setForm({ accion: "no_derivar", label: "Deshacer la derivación", field: "nota", placeholder: "Por qué se deshace" })}>
+                Deshacer la derivación
               </button>
             ) : (
-              <button type="button" className="btn-gold px-3 py-1.5 text-xs" disabled={busy} onClick={() => setForm({ accion: "derivar", label: "Marcar Derivado", field: "destinatario", placeholder: "Destinatario (opcional)" })}>
-                Marcar Derivado
+              <button type="button" className="btn-gold-sm" disabled={busy} onClick={() => setForm({ accion: "derivar", label: "Marcar como derivado", field: "destinatario", placeholder: "A quién se lo pasaste (opcional)" })}>
+                Marcar como derivado
               </button>
             )
           ) : (
-            <button type="button" className={btn} disabled={busy} onClick={() => setForm({ accion: "captar", label: "Marcar Captado", field: "nota", placeholder: "Qué aceptó la persona (evidencia)" })}>
-              Marcar Captado
+            <button type="button" className={btn} disabled={busy} onClick={() => setForm({ accion: "captar", label: "Marcar como captado", field: "nota", placeholder: "Qué aceptó la persona" })}>
+              Marcar como captado
             </button>
           )}
           {opportunity.capture_state !== "perdido" && (
-            <button type="button" className={btn} disabled={busy} onClick={() => setForm({ accion: "perder", label: "Marcar Perdido", field: "motivo", placeholder: "Motivo" })}>
-              Marcar Perdido
+            <button type="button" className={btn} disabled={busy} onClick={() => setForm({ accion: "perder", label: "Cerrar como perdido", field: "motivo", placeholder: "Por qué se cierra" })}>
+              Cerrar como perdido
             </button>
           )}
-          {opportunity.attention_state !== "humano_en_curso" ? (
-            <button type="button" className={btn} disabled={busy} onClick={() => run("atencion", { estado: "humano_en_curso" })}>
-              Tomar (atención humana)
-            </button>
-          ) : (
-            <button type="button" className={btn} disabled={busy} onClick={() => run("atencion", { estado: "ia" })}>
-              Devolver a la IA
-            </button>
-          )}
+          {!chat &&
+            (opportunity.attention_state !== "humano_en_curso" ? (
+              <button type="button" className={btn} disabled={busy} onClick={() => run("atencion", { estado: "humano_en_curso" })}>
+                Tomar el chat
+              </button>
+            ) : (
+              <button type="button" className={btn} disabled={busy} onClick={() => run("atencion", { estado: "ia" })}>
+                Devolver al bot
+              </button>
+            ))}
           {opportunity.followup_state === "activo" && (
             <>
               <button type="button" className={btn} disabled={busy} onClick={() => setForm({ accion: "seguimiento", label: "Seguimiento completado", field: "nota", placeholder: "Nota del seguimiento", extra: { estado: "completado" } })}>
@@ -176,8 +253,8 @@ export function FichaActions({
             </button>
           )}
           {!detention && (
-            <button type="button" className={btn} disabled={busy} onClick={() => setForm({ accion: "detener", label: "Detener contacto", field: "nota", placeholder: "Nota (opcional)" })}>
-              Detener contacto…
+            <button type="button" className={btn} disabled={busy} onClick={() => setForm({ accion: "detener", label: "No escribirle más", field: "nota", placeholder: "Nota (opcional)" })}>
+              No escribirle más…
             </button>
           )}
         </div>
@@ -186,7 +263,7 @@ export function FichaActions({
       {form && (
         <div className="flex flex-wrap items-center gap-2 rounded-lg bg-slate-50 p-3">
           {form.accion === "detener" && (
-            <select value={detMotive} onChange={(e) => setDetMotive(e.target.value)} className="rounded-lg border border-slate-300 px-2 py-1.5 text-xs outline-none focus-gold">
+            <select value={detMotive} onChange={(e) => setDetMotive(e.target.value)} className="tactil rounded-lg border border-slate-300 px-2 text-sm outline-none focus-gold" aria-label="Motivo">
               {Object.entries(DETENTION_OPTIONS).map(([k, l]) => (
                 <option key={k} value={k}>
                   {l}
@@ -194,34 +271,39 @@ export function FichaActions({
               ))}
             </select>
           )}
-          <input value={value} onChange={(e) => setValue(e.target.value)} placeholder={form.placeholder} className="min-w-[14rem] flex-1 rounded-lg border border-slate-300 px-2 py-1.5 text-xs outline-none focus-gold" autoFocus />
+          <input value={value} onChange={(e) => setValue(e.target.value)} placeholder={form.placeholder} className="tactil min-w-[14rem] flex-1 rounded-lg border border-slate-300 px-3 text-sm outline-none focus-gold" aria-label={form.placeholder} autoFocus />
           {form.accion === "derivar" && (
-            <input value={value2} onChange={(e) => setValue2(e.target.value)} placeholder="Nota (opcional)" className="min-w-[10rem] flex-1 rounded-lg border border-slate-300 px-2 py-1.5 text-xs outline-none focus-gold" />
+            <input value={value2} onChange={(e) => setValue2(e.target.value)} placeholder="Nota (opcional)" className="tactil min-w-[10rem] flex-1 rounded-lg border border-slate-300 px-3 text-sm outline-none focus-gold" aria-label="Nota (opcional)" />
           )}
           <button
             type="button"
             disabled={busy}
-            className="btn-gold px-3 py-1.5 text-xs"
+            className="btn-gold-sm"
             onClick={() =>
               form.accion === "detener"
                 ? detener()
                 : run(form.accion, form.accion === "derivar" ? { destinatario: value, nota: value2 } : { ...(form.extra ?? {}), [form.field]: value })
             }
           >
-            {busy ? "Guardando..." : form.label}
+            {busy ? "Guardando…" : form.label}
           </button>
-          <button type="button" onClick={() => setForm(null)} className="text-xs text-slate-500 hover:underline">
+          <button type="button" onClick={() => setForm(null)} className={btn}>
             Cancelar
           </button>
         </div>
       )}
-      {msg && <p className={`text-xs ${msg.ok ? "text-green-600" : "text-red-600"}`}>{msg.text}</p>}
+      {msg && (
+        <p role="status" className={`rounded-lg border px-3 py-2 text-sm font-medium ${msg.ok ? "border-emerald-300 bg-emerald-50 text-emerald-900" : "border-red-300 bg-red-50 text-red-900"}`}>
+          {msg.text}
+        </p>
+      )}
 
-      <div>
-        <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Texto para compartir</h3>
+      <details open={captado} className="rounded-xl border border-slate-200 p-4">
+        <summary className="tactil flex cursor-pointer items-center text-sm font-semibold text-slate-900">Datos para pasarle a quien lo atiende</summary>
+        <div className="mt-3">
         {faltantes.length > 0 && (
-          <p className="mb-2 text-xs text-amber-700">
-            Datos faltantes: {faltantes.join(", ")}. Se puede compartir y derivar igual.
+          <p className="mb-2 text-[13px] text-amber-800">
+            Falta: {faltantes.join(", ")}. Se puede compartir y derivar igual.
           </p>
         )}
         {optionalFields.length > 0 && (
@@ -241,14 +323,15 @@ export function FichaActions({
         <pre className="whitespace-pre-wrap rounded-lg border border-slate-200 bg-slate-50 p-3 font-sans text-sm text-slate-800">{text}</pre>
         <div className="mt-2 flex gap-2">
           <button type="button" onClick={copy} className={btn}>
-            {copied ? "Copiado ✓" : "Copiar"}
+            {copied ? "Copiado" : "Copiar"}
           </button>
           <button type="button" onClick={share} className={btn}>
             Compartir…
           </button>
         </div>
-        <p className="mt-1 text-xs text-slate-400">Compartir o copiar no cambia el estado. Después de entregarlo, marcá Derivado.</p>
-      </div>
+        <p className="mt-2 text-[13px] text-slate-600">Copiar o compartir no cambia nada. Cuando se lo hayas pasado, tocá «Marcar como derivado».</p>
+        </div>
+      </details>
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import { rescatarConversacion } from "@/lib/ai-agent/rescate";
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { setOpportunityState } from "@/lib/opportunities";
@@ -5,6 +6,8 @@ import { requireSession } from "@/lib/acceso/autorizacion";
 import { CaptacionError, registrarCaptacion, registrarResultadoPosterior, registrarZona, solicitarAtencion } from "@/lib/captacion";
 
 export const dynamic = "force-dynamic";
+// 13/11: «Devolver al bot» puede incluir una respuesta del bot en el mismo pedido.
+export const maxDuration = 60;
 
 /**
  * Acciones manuales sobre una oportunidad (bloques 1.7 y 1.8). Son las
@@ -118,6 +121,19 @@ export async function POST(request: Request, { params }: { params: { id: string 
                   { ai_enabled: false, ai_ack_token: null, ai_ack_expires_at: null, human_takeover_at: new Date().toISOString() }
             )
             .eq("id", opp.conversation_id);
+          if (estado === "ia") {
+            // 13/11: al devolver el chat al bot, la conversación deja de figurar como «espera a una persona»…
+            await supabase.from("conversations").update({ status: "en_conversacion" }).eq("id", opp.conversation_id).eq("status", "requiere_atencion_humana");
+            // …y si la persona había escrito y quedó sin respuesta (últimas 23 h), el bot le contesta
+            // ahora, con la compuerta de siempre (pausa, detención, captado, agente activo y horario).
+            let respondio = false;
+            try {
+              respondio = !!(await rescatarConversacion(opp.conversation_id, new Date(), { minMin: 0, maxMin: 23 * 60 }));
+            } catch (err) {
+              console.error("[ficha] devolver al bot:", err);
+            }
+            return NextResponse.json({ ok: true, respondio });
+          }
         }
         break;
       }

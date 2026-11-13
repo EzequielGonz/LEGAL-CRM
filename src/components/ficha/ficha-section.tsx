@@ -15,6 +15,8 @@ import { AdjuntosLista } from "@/components/adjuntos/adjuntos-lista";
 import { ResultadoPosteriorForm } from "@/components/ficha/resultado-posterior-form";
 import { FUENTE_LABEL, esFuente } from "@/lib/fuente";
 import { siguientePasoFicha } from "@/lib/inicio";
+import { enlaceConversacion } from "@/lib/cartera";
+import { esSlugPerfil } from "@/lib/marca";
 import {
   CATEGORIA_ATENCION_LABEL,
   MOTIVO_NO_AVANCE_LABEL,
@@ -26,7 +28,9 @@ import {
   normalizarZona,
 } from "@/lib/captacion/reglas";
 
-const ACTOR_LABEL: Record<string, string> = { ia: "IA", operador: "Operador", sistema: "Sistema", migracion: "Migración" };
+const ACTOR_LABEL: Record<string, string> = { ia: "El bot", operador: "Una persona del equipo", sistema: "El sistema", migracion: "Carga inicial" };
+const AREA_A_PERFIL: Record<string, string> = { civil: "juridico", penal: "juridico", agencia_0km: "agencia_0km", coberturas_medicas: "coberturas_medicas", marketing: "marketing" };
+const DIMENSION: Record<string, string> = { captacion: "Etapa", atencion: "Quién atiende", seguimiento: "Seguimiento", derivacion: "Derivación", contacto: "Contacto", resultado_posterior: "Después de derivar", revision: "Revisión" };
 const AREA_LABEL: Record<string, string> = { civil: "Civil", penal: "Penal", agencia_0km: "Agencia 0KM", coberturas_medicas: "Coberturas médicas", marketing: "Marketing" };
 
 /**
@@ -104,6 +108,7 @@ export async function FichaSection({
       ])
     : [{ data: null }, { data: null }];
 
+  const slugPerfil = AREA_A_PERFIL[contact.area] ?? "juridico";
   const paso = siguientePasoFicha(
     opp
       ? {
@@ -123,8 +128,8 @@ export async function FichaSection({
   return (
     <div className="space-y-4">
       {/* Simple: una frase con el siguiente paso; el detalle completo queda en Avanzado. */}
-      <p className={`solo-simple rounded-lg border p-3 text-sm ${paso.urgente ? "border-amber-400 bg-amber-50 font-medium text-amber-950" : "border-slate-200 bg-white text-slate-800"}`}>
-        <span className="block text-xs font-medium uppercase tracking-wide text-slate-600">Siguiente paso</span>
+      <p className={`rounded-lg border p-3 text-sm ${paso.urgente ? "border-amber-400 bg-amber-50 font-medium text-amber-950" : "border-slate-200 bg-white text-slate-800"}`}>
+        <span className="block text-[13px] font-medium text-slate-600">Qué sigue</span>
         {paso.texto}
       </p>
       {block && block.detentionId && (
@@ -231,34 +236,42 @@ export async function FichaSection({
         barrio={barrio}
         optionalFields={optional}
         detention={block && block.detentionId ? { id: block.detentionId, label: block.label, hard: block.hardBlock } : null}
+        chat={
+          convId && conv
+            ? {
+                aiEnabled: (conv as any).ai_enabled !== false,
+                esperaRespuesta: (ultimoMsj as any)?.direction === "entrante",
+                href: esSlugPerfil(slugPerfil) ? enlaceConversacion(slugPerfil, convId) : `/inbox/${convId}`,
+              }
+            : null
+        }
       />
 
       <div>
-        <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Archivos que mandó</h3>
+        <h3 className="mb-2 text-sm font-semibold text-slate-900">Archivos que mandó</h3>
         <AdjuntosLista rows={(attachments ?? []) as any[]} showConversation={!compact} />
       </div>
 
       <div>
-        <div className="solo-avanzado">
-        <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-600">Historial</h3>
-        {(events ?? []).length === 0 ? (
-          <p className="text-xs text-slate-400">Sin cambios registrados.</p>
-        ) : (
-          <ul className="space-y-1 text-xs">
-            {(events ?? []).map((e: any) => (
-              <li key={e.id} className="flex flex-wrap gap-x-2 text-slate-600">
-                <span className="text-slate-400">{new Date(e.at).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", hourCycle: "h23", dateStyle: "short", timeStyle: "short" })}</span>
-                <span className="font-medium">{ACTOR_LABEL[e.actor] ?? e.actor}</span>
-                <span>
-                  {e.dimension}: {e.from_value ? `${e.from_value} → ` : ""}
-                  {e.to_value ?? ""}
-                </span>
-                {e.reason && <span className="text-slate-400">({e.reason})</span>}
-              </li>
-            ))}
-          </ul>
-        )}
-        </div>
+        <details className="rounded-xl border border-slate-200 p-4">
+          <summary className="tactil flex cursor-pointer items-center text-sm font-semibold text-slate-900">Qué pasó con esta persona ({(events ?? []).length})</summary>
+          {(events ?? []).length === 0 ? (
+            <p className="mt-2 text-sm text-slate-600">Todavía no hay cambios registrados.</p>
+          ) : (
+            <ol className="mt-3 space-y-2">
+              {(events ?? []).map((e: any) => (
+                <li key={e.id} className="text-sm text-slate-800">
+                  <span className="text-[13px] tabular-nums text-slate-500">
+                    {new Date(e.at).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", hourCycle: "h23", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
+                  </span>{" "}
+                  · <span className="font-medium">{DIMENSION[e.dimension] ?? String(e.dimension).replaceAll("_", " ")}</span>
+                  {e.to_value ? `: ${String(e.to_value).replaceAll("_", " ")}` : ""} <span className="text-slate-600">· {ACTOR_LABEL[e.actor] ?? e.actor}</span>
+                  {e.reason ? <span className="block text-[13px] text-slate-600 [overflow-wrap:anywhere]">{e.reason}</span> : null}
+                </li>
+              ))}
+            </ol>
+          )}
+        </details>
         {compact && opp && (
           <EnlaceDetalle href={fullHref ?? `/prospectos/${contactId}`} className="tactil mt-2 inline-flex items-center text-sm text-slate-700 hover:underline">
             Ver ficha completa →
