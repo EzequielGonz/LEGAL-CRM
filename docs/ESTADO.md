@@ -36,7 +36,7 @@ Se actualiza al cierre de cada vuelta de trabajo. Sin datos personales, claves n
 - **Cada rubro va separado** (13/11): cada perfil con sus funciones y su contenido; nada de un perfil se ve ni se abre desde otro. Manda sobre cualquier pantalla o función nueva.
 - **Asistente del panel con permiso para todo** (13/11): que pueda hacer todo lo que hace el panel, cambiar secciones y pedir cambios de código. Detalle y resguardos en `PLAN-4.md`, bloque G.
 - **Asistente** (13/11): sigue pidiendo confirmación antes de ejecutar. La tarea que revisa sola la Bandeja para Claude, por ahora no.
-- **Quedaron sin respuesta** (13/11): si lo último que dijo la persona concretó una llamada, pasa a captado; si no, queda en «Quedaron sin respuesta». No se les escribe solos.
+- **Quedaron sin respuesta** (13/11): si lo último que dijo la persona concretó una llamada, pasa a captado; si no, queda en «Quedaron sin respuesta»; ante la duda, va a «Posible captación a revisar». No se les escribe solos.
 - Producción se publica directo (`git push origin mejoras-1211:main`) después de typecheck, lint, pruebas y build, y se recorre como usuaria antes de informar.
 
 ## Dónde está cada cosa
