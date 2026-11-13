@@ -24,6 +24,8 @@ export interface DatosSalud {
   ahora: Date;
   /** Última vez que corrió el latido del servidor (null = nunca registrado). */
   ultimoLatido: string | null;
+  /** 13/11: cuánto tardó el último latido y cada etapa, en milisegundos. */
+  latidoTiempos?: { ms: number | null; etapas: Record<string, number> } | null;
   pausa: { ia: boolean; envios: boolean; problema?: string | null };
   /** Webhooks en cuarentena sin revisar en las últimas 24 h, con su motivo más reciente. */
   cuarentena24h: { cantidad: number; motivo: string | null };
@@ -51,6 +53,35 @@ function haceTexto(desde: Date, ahora: Date): string {
   return `hace ${Math.round(h / 24)} días`;
 }
 
+const ETAPA_LATIDO: Record<string, string> = {
+  campanas: "campañas",
+  plantillas: "pedido de plantillas",
+  seguimiento: "seguimiento",
+  recontacto: "recontacto",
+  segundo_intento: "segundo intento",
+  descartes: "descartes",
+  caidos: "caídos",
+  rescate: "mensajes sin respuesta",
+  calidad: "calidad de las líneas",
+  marketing: "prospección de Marketing",
+  tareas_servidor: "citas y publicaciones",
+  extraccion: "búsqueda de negocios",
+  avisos_meta: "avisos de Meta",
+  formularios: "formularios web",
+  presupuestos: "presupuestos",
+  catalogo: "catálogo de plantillas",
+  fallas: "revisión de fallas",
+};
+
+/** Cuánto tardó el último latido y qué etapa se llevó más tiempo, en palabras. Pura. */
+export function tiemposDelLatido(t: DatosSalud["latidoTiempos"]): string {
+  if (!t || typeof t.ms !== "number") return "";
+  const seg = (ms: number) => `${(ms / 1000).toFixed(1).replace(".", ",")} s`;
+  const lenta = Object.entries(t.etapas ?? {}).filter(([, v]) => typeof v === "number").sort((a, b) => b[1] - a[1])[0];
+  const cerca = t.ms > 50_000 ? " Está cerca del límite de 60 segundos." : "";
+  return ` Tardó ${seg(t.ms)}${lenta && lenta[1] >= 500 ? `; lo más lento fue ${ETAPA_LATIDO[lenta[0]] ?? lenta[0]} (${seg(lenta[1])})` : ""}.${cerca}`;
+}
+
 export function evaluarSalud(d: DatosSalud): ItemSalud[] {
   const items: ItemSalud[] = [];
 
@@ -63,7 +94,7 @@ export function evaluarSalud(d: DatosSalud): ItemSalud[] {
     items.push(
       atraso > 5 * MIN
         ? { clave: "latido", estado: "rojo", titulo: "El latido del servidor se detuvo", detalle: `Último latido ${haceTexto(ult, d.ahora)}.`, accion: "Revisar la tarea «campaigns-tick» y CRON_SECRET", href: "/configuracion#tareas" }
-        : { clave: "latido", estado: "verde", titulo: "Latido del servidor", detalle: `Último latido ${haceTexto(ult, d.ahora)}.` }
+        : { clave: "latido", estado: "verde", titulo: "Latido del servidor", detalle: `Último latido ${haceTexto(ult, d.ahora)}.${tiemposDelLatido(d.latidoTiempos)}` }
     );
   }
 

@@ -48,7 +48,7 @@ export async function leerSalud(ahora = new Date()): Promise<ItemSalud[]> {
   };
 
   const [latido, pausa, cuarentena, entrante, agentes, turnos, errores, avisos, presupuestos, ultimoError] = await Promise.all([
-    seguro(async () => ((await s.from("system_settings").select("value").eq("key", CLAVE_LATIDO).maybeSingle()).data as any)?.value?.at ?? null, null),
+    seguro(async () => ((await s.from("system_settings").select("value").eq("key", CLAVE_LATIDO).maybeSingle()).data as any)?.value ?? null, null),
     getAutomationPause(),
     seguro(async () => {
       const { data, count } = await s
@@ -114,7 +114,8 @@ export async function leerSalud(ahora = new Date()): Promise<ItemSalud[]> {
 
   const datos: DatosSalud = {
     ahora,
-    ultimoLatido: latido,
+    ultimoLatido: (latido as any)?.at ?? null,
+    latidoTiempos: latido ? { ms: typeof (latido as any).ms === "number" ? (latido as any).ms : null, etapas: (latido as any).etapas ?? {} } : null,
     pausa: { ia: pausa.aiRepliesPaused, envios: pausa.outboundPaused, problema: pausa.configProblem ?? pausa.readError ?? null },
     cuarentena24h: cuarentena,
     secretoMeta: Boolean(process.env.META_APP_SECRET?.trim() || process.env.META_APP_SECRETS?.trim()),

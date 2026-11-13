@@ -20,6 +20,7 @@ import { sincronizarCatalogosSiToca } from "@/lib/plantillas/auto-asignar";
 import { rescatarTurnosPerdidos } from "@/lib/ai-agent/rescate";
 import { vigilarCalidadLineas } from "@/lib/whatsapp/calidad-servidor";
 import { procesarPedidoPlantillas } from "@/lib/plantillas/pedido-meta";
+import { avisarFallasDelSistema, avisarLatidoFallido } from "@/lib/salud/avisar-fallas";
 
 // El análisis de negocios (descargar la web + IA) necesita más de los 10s por defecto.
 export const maxDuration = 60;
@@ -51,9 +52,19 @@ export async function POST(request: Request) {
   }
 
   const inicio = Date.now();
+  // 13/11: cuánto tarda cada etapa, para verlo en Salud (antes solo se sabía el total).
+  const etapas: Record<string, number> = {};
+  let marcaAnterior = inicio;
+  const marca = (nombre: string) => {
+    const ahora = Date.now();
+    etapas[nombre] = ahora - marcaAnterior;
+    marcaAnterior = ahora;
+  };
   try {
     // 1) Primero lo que manda mensajes (campañas), que es lo sensible al ritmo.
     const results = await tickAllActiveCampaigns();
+
+    marca("campanas");
 
     // 1 bis) Pedido de plantillas a Meta (25/10): si la responsable dejó un
     //    pedido, se registran esas plantillas para revisión una sola vez.
@@ -65,6 +76,8 @@ export async function POST(request: Request) {
       plantillas = { error: String(err?.message ?? err) };
     }
 
+    marca("plantillas");
+
     // 2) Seguimiento general de los cuatro perfiles (bloque 2.3): programa los
     //    contactos 2 y 3 y manda los vencidos. Aislado: si falla, no afecta al resto.
     let seguimiento: Record<string, unknown> = {};
@@ -73,6 +86,8 @@ export async function POST(request: Request) {
     } catch (err: any) {
       seguimiento = { error: String(err?.message ?? err) };
     }
+
+    marca("seguimiento");
 
     // 2 bis) Recontacto del bot (24/10): a quien mostró interés y dejó de
     //    responder, a las 2 h le vuelve a escribir dentro de la ventana de 24 h
@@ -83,6 +98,8 @@ export async function POST(request: Request) {
     } catch (err: any) {
       recontacto = { error: String(err?.message ?? err) };
     }
+
+    marca("recontacto");
 
     // 2 bis b) Segundo intento por Wasender (12/11): un solo mensaje más a quien recibió
     //    la campaña y nunca respondió, entre 5 y 7 días después. Apagado por defecto en
@@ -96,6 +113,8 @@ export async function POST(request: Request) {
       }
     }
 
+    marca("segundo_intento");
+
     // 2 bis c) Descartes (13/11): quien dijo con claridad que no sigue y lleva horas sin
     //    novedades se cierra solo como perdido, con su motivo. Cada 10 minutos; no envía nada.
     let descartes: unknown = null;
@@ -107,6 +126,8 @@ export async function POST(request: Request) {
       }
     }
 
+    marca("descartes");
+
     // 2 bis d) Caídos (13/11): quien dejó de contestar y terminó el circuito pasa a Caídos
     //    (mensaje a los 3 días, 24 horas de espera). Cada 10 minutos, desfasado; no envía nada.
     let caidos: unknown = null;
@@ -117,6 +138,8 @@ export async function POST(request: Request) {
         caidos = { error: String(err?.message ?? err) };
       }
     }
+
+    marca("caidos");
 
     // 2 ter) Turnos perdidos (24/10): un mensaje de texto que quedó sin
     //    respuesta y sin turno del bot registrado se reintenta una vez, con la
@@ -130,6 +153,8 @@ export async function POST(request: Request) {
       }
     }
 
+    marca("rescate");
+
     // 2 quater) Calidad de las líneas (24/10): con calidad baja en Meta se
     //    pausan las campañas de esa línea y se avisa. Solo lee de Meta.
     let calidad: unknown = null;
@@ -138,6 +163,8 @@ export async function POST(request: Request) {
     } catch (err: any) {
       calidad = { error: String(err?.message ?? err) };
     }
+
+    marca("calidad");
 
     // 3) Pipeline de Marketing: analiza negocios nuevos, suma los mejor
     //    calificados a la prospección automática (sus seguimientos ya van por el punto 2).
@@ -149,6 +176,8 @@ export async function POST(request: Request) {
     } catch (err: any) {
       marketing = { error: String(err?.message ?? err) };
     }
+
+    marca("marketing");
 
     // 4) Etapa 3: tareas del servidor (citas de Fase 2 y publicación de
     //    contenido), solo si el ejecutor está encendido desde Configuración.
@@ -170,6 +199,8 @@ export async function POST(request: Request) {
       }
     }
 
+    marca("tareas_servidor");
+
     // 5) Extraer negocios (Marketing): una zona por latido. No contacta a
     //    nadie, así que corre aunque la pausa general esté puesta. Si este
     //    latido ya usó mucho tiempo, queda para el próximo (la búsqueda puede
@@ -190,6 +221,8 @@ export async function POST(request: Request) {
     }
     if (pasos.length) extraccion = pasos.length === 1 ? pasos[0] : pasos;
 
+    marca("extraccion");
+
     // 6) Avisos de Meta (21/10): si una línea manda y no recibe avisos
     //    (mensajes entrantes ni estados), se suscribe su cuenta al webhook del
     //    panel. Reintenta como mucho cada 6 h por línea. No envía mensajes.
@@ -202,6 +235,8 @@ export async function POST(request: Request) {
       }
     }
 
+    marca("avisos_meta");
+
     // 7) Formularios de las landings (21/10): a los 5 minutos, el agente le
     //    escribe por WhatsApp con la plantilla aprobada del rubro.
     let formularios: unknown = null;
@@ -213,6 +248,8 @@ export async function POST(request: Request) {
       }
     }
 
+    marca("formularios");
+
     // 8) Presupuestos de Marketing programados (21/10): salen a la hora que
     //    eligió el equipo, con pausa general y horario de salidas respetados.
     let presupuestos: unknown = null;
@@ -223,6 +260,8 @@ export async function POST(request: Request) {
         presupuestos = { error: String(err?.message ?? err) };
       }
     }
+
+    marca("presupuestos");
 
     // 9) Catálogo de plantillas (24/10): una vez por hora se relee de Meta y
     //    se asigna sola cada plantilla aprobada que sigue la convención de
@@ -236,11 +275,26 @@ export async function POST(request: Request) {
       }
     }
 
-    // Tablero de salud: deja la hora del último latido.
-    await registrarLatido(true, { ms: Date.now() - inicio });
-    return NextResponse.json({ ok: true, results, plantillas, seguimiento, recontacto, segundoIntento, descartes, rescate, calidad, marketing, servidor, extraccion, avisos, formularios, presupuestos, catalogo });
+    marca("catalogo");
+
+    // 10) Fallas del sistema (13/11): cada 10 minutos se revisan y, si hay una nueva, se avisa
+    //     a los dispositivos del equipo (una vez por tipo, perfil y día). No le escribe a nadie más.
+    let fallas: unknown = null;
+    if (new Date().getUTCMinutes() % 10 === 2 && Date.now() - inicio < 45_000) {
+      try {
+        fallas = await avisarFallasDelSistema();
+      } catch (err: any) {
+        fallas = { error: String(err?.message ?? err) };
+      }
+      marca("fallas");
+    }
+
+    // Tablero de salud: deja la hora del último latido y cuánto tardó cada etapa.
+    await registrarLatido(true, { ms: Date.now() - inicio, etapas });
+    return NextResponse.json({ ok: true, results, plantillas, seguimiento, recontacto, segundoIntento, descartes, rescate, calidad, marketing, servidor, extraccion, avisos, formularios, presupuestos, catalogo, fallas });
   } catch (err: any) {
-    await registrarLatido(false, { error: String(err?.message ?? err).slice(0, 200) });
+    await registrarLatido(false, { error: String(err?.message ?? err).slice(0, 200), ms: Date.now() - inicio, etapas });
+    await avisarLatidoFallido();
     return NextResponse.json({ error: String(err.message ?? err) }, { status: 500 });
   }
 }
