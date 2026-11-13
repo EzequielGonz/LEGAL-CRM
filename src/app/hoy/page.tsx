@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requirePageSession } from "@/lib/acceso/pagina";
@@ -54,6 +55,46 @@ export default async function InicioPerfilPage({ searchParams }: { searchParams:
   const rubroId = rubroIdDe(perfil);
   if (!rubroId || !esSlugPerfil(perfil)) notFound();
   const slug: SlugPerfil = perfil;
+  return (
+    <MarcoPerfil slug={slug}>
+      <div className="mx-auto max-w-5xl space-y-6">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-semibold text-slate-950">{saludo()}</h1>
+            <p className="mt-1 text-sm text-slate-600">{fechaHoy()} · personas, no mensajes</p>
+          </div>
+          <BotonAsistente variante="suave" texto="Resumen de hoy">
+            Pedile algo
+          </BotonAsistente>
+        </div>
+
+        {/* 13/11: el marco y el saludo se pintan enseguida; los datos llegan apenas están. */}
+        <Suspense fallback={<EsqueletoHoy />}>
+          <CuerpoHoy slug={slug} rubroId={rubroId} searchParams={searchParams} />
+        </Suspense>
+      </div>
+    </MarcoPerfil>
+  );
+}
+
+function EsqueletoHoy() {
+  return (
+    <div role="status" aria-label="Cargando el tablero de hoy" className="space-y-6">
+      <div className="flex flex-wrap gap-2">
+        {[40, 56, 44].map((w, i) => (
+          <span key={i} className="h-9 animate-pulse rounded-full bg-slate-200/70" style={{ width: `${w * 4}px` }} />
+        ))}
+      </div>
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="h-72 animate-pulse rounded-2xl bg-slate-200/60" />
+        <div className="h-72 animate-pulse rounded-2xl bg-slate-200/60" />
+      </div>
+      <div className="h-40 animate-pulse rounded-2xl bg-slate-200/60" />
+    </div>
+  );
+}
+
+async function CuerpoHoy({ slug, rubroId, searchParams }: { slug: SlugPerfil; rubroId: string; searchParams: { grupo?: string; cola?: string; todo?: string; periodo?: string } }) {
   const aqui = `/hoy?perfil=${slug}`;
   const areas = AREAS_DE_PERFIL[slug];
   const prefijo = slug === "juridico" ? "" : `/panel/${slug}`;
@@ -106,18 +147,7 @@ export default async function InicioPerfilPage({ searchParams }: { searchParams:
   }).filter((p) => p.clave !== "captado_sin_derivar" && p.clave !== "derivado_sin_resultado");
 
   return (
-    <MarcoPerfil slug={slug}>
-      <div className="mx-auto max-w-5xl space-y-6">
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-semibold text-slate-950">{saludo()}</h1>
-            <p className="mt-1 text-sm text-slate-600">{fechaHoy()} · personas, no mensajes</p>
-          </div>
-          <BotonAsistente variante="suave" texto="Resumen de hoy">
-            Pedile algo
-          </BotonAsistente>
-        </div>
-
+    <>
         <TableroHoy
           slug={slug}
           rubroId={rubroId}
@@ -182,7 +212,9 @@ export default async function InicioPerfilPage({ searchParams }: { searchParams:
         {slug === "marketing" ? <CircuitosMarketing /> : null}
 
         {/* 12/11: estadísticas como una presentación; la semana actual primero. */}
-        <PresentacionHoy slug={slug} rubroId={rubroId} areas={areas} periodo={searchParams.periodo} historial={`${prefijo}/estadisticas`} />
+        <Suspense fallback={<div role="status" aria-label="Cargando las cifras" className="h-56 animate-pulse rounded-2xl bg-slate-200/60" />}>
+          <PresentacionHoy slug={slug} rubroId={rubroId} areas={areas} periodo={searchParams.periodo} historial={`${prefijo}/estadisticas`} />
+        </Suspense>
 
         <section aria-labelledby="hoy-base">
           <h2 id="hoy-base" className="sr-only">
@@ -226,7 +258,6 @@ export default async function InicioPerfilPage({ searchParams }: { searchParams:
             </li>
           </ul>
         </section>
-      </div>
-    </MarcoPerfil>
+    </>
   );
 }

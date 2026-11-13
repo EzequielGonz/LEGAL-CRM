@@ -1,3 +1,4 @@
+import { unstable_cache } from "next/cache";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 /**
@@ -34,7 +35,7 @@ export interface Rate {
   definition: string;
 }
 
-export async function getProfileMetrics(rubroId: string): Promise<ProfileMetrics | null> {
+async function leerProfileMetrics(rubroId: string): Promise<ProfileMetrics | null> {
   const supabase = createAdminClient();
   const { data, error } = await supabase.rpc("profile_metrics", { p_rubro: rubroId });
   if (error) {
@@ -42,6 +43,23 @@ export async function getProfileMetrics(rubroId: string): Promise<ProfileMetrics
     return null;
   }
   return data as ProfileMetrics;
+}
+
+/**
+ * Métricas del perfil. 13/11: se guardan un minuto. Es la consulta que más
+ * tiempo le lleva a la base (unos 300 ms en Jurídico) y la piden Hoy, Chats,
+ * Contactos, el historial y el puntaje del bot en cada carga; son totales
+ * históricos, así que un minuto de demora no cambia ninguna decisión.
+ */
+const metricasEnMemoria = unstable_cache(leerProfileMetrics, ["profile-metrics"], { revalidate: 60 });
+
+export async function getProfileMetrics(rubroId: string): Promise<ProfileMetrics | null> {
+  try {
+    return await metricasEnMemoria(rubroId);
+  } catch {
+    // Fuera de una petición de Next (pruebas, tareas): sin memoria.
+    return leerProfileMetrics(rubroId);
+  }
 }
 
 export function rate(label: string, numerator: number, denominator: number, definition: string): Rate {

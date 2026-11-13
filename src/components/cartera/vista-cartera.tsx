@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requirePageSession } from "@/lib/acceso/pagina";
@@ -74,6 +75,29 @@ export async function PaginaCartera({ vista, searchParams }: { vista: VistaCarte
   const rubroId = rubroIdDe(perfil);
   if (!rubroId || !esSlugPerfil(perfil)) notFound();
   const slug: SlugPerfil = perfil;
+  return (
+    <MarcoPerfil slug={slug}>
+      {/* 13/11: el marco se pinta enseguida; la lista llega apenas está. */}
+      <Suspense
+        fallback={
+          <div role="status" aria-label="Cargando" className="mx-auto max-w-6xl space-y-6">
+            <h1 className="text-2xl font-semibold text-slate-950">{VISTAS_CARTERA[vista].titulo}</h1>
+            <div className="flex flex-wrap gap-2">
+              {[32, 40, 36, 28].map((w, i) => (
+                <span key={i} className="h-10 animate-pulse rounded-full bg-slate-200/70" style={{ width: `${w * 4}px` }} />
+              ))}
+            </div>
+            <div className="h-96 animate-pulse rounded-2xl bg-slate-200/60" />
+          </div>
+        }
+      >
+        <CuerpoCartera vista={vista} slug={slug} rubroId={rubroId} searchParams={searchParams} />
+      </Suspense>
+    </MarcoPerfil>
+  );
+}
+
+async function CuerpoCartera({ vista, slug, rubroId, searchParams }: { vista: VistaCartera; slug: SlugPerfil; rubroId: string; searchParams: { perfil?: string; grupo?: string } }) {
   const areas = AREAS_DE_PERFIL[slug];
   const def = VISTAS_CARTERA[vista];
   const ruta = vista === "recuperar" ? "/recuperar" : `/${vista}`;
@@ -105,7 +129,6 @@ export async function PaginaCartera({ vista, searchParams }: { vista: VistaCarte
   const completa = g.fuente.tipo === "oportunidades" ? enlaceIndicador(slug, g.fuente.indicador, aqui) : `${slug === "juridico" ? "" : `/panel/${slug}`}/agenda`;
 
   return (
-    <MarcoPerfil slug={slug}>
       <div className="mx-auto max-w-6xl space-y-6">
         <div>
           <h1 className="text-2xl font-semibold text-slate-950">{def.titulo}</h1>
@@ -326,6 +349,5 @@ export async function PaginaCartera({ vista, searchParams }: { vista: VistaCarte
         ) : null}
 
       </div>
-    </MarcoPerfil>
   );
 }
