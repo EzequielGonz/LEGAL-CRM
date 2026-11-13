@@ -19,9 +19,12 @@ Se actualiza a medida que avanza el trabajo. Gravedad: **crítica** (rompe la op
 | 9 | **«Te escribió» significaba cosas distintas** en Hoy (9) y en el filtro de chats (7). | Media | Arreglado y publicado: una sola definición (la última palabra es de la persona y nadie le contestó), guardada en la oportunidad por la base. |
 | 10 | **Las 55 incidencias abiertas eran diferencias de la migración del 10/10**, no reclamos. | Media | Archivadas en la limpieza, con nota. Desde ahora solo abren incidencia una amenaza legal contra nosotros o la queja de un cliente captado. |
 | 11 | **En Contactos, tocar una persona no hacía nada**: solo funcionaban los dos botones de abajo. | Media | Arreglado y publicado: toda la tarjeta abre a la persona. |
-| 12 | **En el celular, Descartados y Ajustes se desbordaban hacia el costado** (una grilla se ensanchaba con nombres o direcciones largas). | Media | Arreglado (pendiente de publicar junto con este documento). |
+| 12 | **En el celular, Descartados y Ajustes se desbordaban hacia el costado** (una grilla se ensanchaba con nombres o direcciones largas). | Media | Arreglado y publicado (`6854fa9`). Comprobado: 36 pantallas de los cuatro perfiles a 375 px, sin desborde ni errores. |
 | 13 | **La prueba «asistente: cada tipo permitido…» fallaba desde hace semanas** porque contaba un número fijo de acciones. | Baja | Arreglada: comprueba que no haya acciones repetidas y que cada una tenga nivel. |
 | 14 | **Una misma persona aparecía en «Para cerrar» y en «Oportunidades reales»** (captados que volvieron a escribir). | Baja | Arreglado: quien ya aceptó está solo en «Para cerrar». |
+| 15 | **En Hoy, «Se enfriaron» y «Pidieron una persona» usaban otra cuenta**: después de la limpieza «Se enfriaron» mostraba 168 en Marketing (los que ya eran Caídos). | Media | Arreglado y publicado (`b82065b`): se llaman «En seguimiento» y «Oportunidades reales» y usan la misma definición que las listas. Comprobado en los cuatro perfiles: Hoy y Chats muestran los mismos números. |
+| 16 | **La lista de campañas de un perfil dio error de tiempo en producción** (4 veces el 13/11). | Media | Arreglado y publicado (`8718a66`): índice nuevo y cifras guardadas 20 segundos. |
+| 17 | **Las cifras de la portada de perfiles no se actualizaban** hasta recargar a mano. | Media | Arreglado y publicado (`868f09f`). |
 
 ## 2. Comprobaciones hechas en producción
 
@@ -51,7 +54,7 @@ De los 67 que habían quedado con la última palabra y sin respuesta, el bot rel
 | | Antes | Después |
 |---|---|---|
 | Figuran esperando a una persona | 94 | 18 (Jurídico 8, Marketing 5, Autos 4, Coberturas 1) |
-| De esos, sin haber aceptado todavía («Oportunidades reales») | no se distinguía | se mide después de publicar el arreglo 14 |
+| De esos, sin haber aceptado todavía («Oportunidades reales») | no se distinguía | 7 (Jurídico 3, Marketing 3, Autos 1, Coberturas 0). Los otros 11 ya aceptaron y están en «Para cerrar» |
 | Dejaron de responder y seguían a la vista | 347 | 0 (265 en Caídos; el resto, releído) |
 | Incidencias abiertas | 55 | 0 |
 | Perdidos que seguían pidiendo una persona | 113 chats | 0 |

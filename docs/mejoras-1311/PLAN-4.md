@@ -148,4 +148,6 @@ Textual: «para conectar las líneas de wasender, no solo incluí el qr, sino ta
 | G. Asistente con permiso para todo | Pendiente. Ya se arregló la prueba que fallaba |
 | H. Wasender: conectar con código además del QR | Revisado: el proveedor no lo ofrece por su interfaz para programas. Falta una definición de la responsable (ver bloque H) |
 
+**Para la corrida de las 14:51:** seguir, en este orden, con (1) lo que falta del bloque D (Hoy sin lo que no lleva a una acción, estadísticas con embudo y origen, tabla vieja «Captados y casos», menores de la bitácora); (2) bloque G (asistente con permiso para todo); (3) lo que falta de E (política de contenido, tiempos del latido, aviso a los dispositivos por reclamo o falla); (4) bloque F (diseño), por fases. Último commit publicado de la corrida de las 8:51: ver `git log`.
+
 Al terminar cada bloque: actualizar esta tabla, `BITACORA.md` y `AUDITORIA.md`, guardar en la rama y publicar.
