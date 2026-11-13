@@ -60,7 +60,8 @@ Se actualiza al cierre de cada vuelta de trabajo. Sin datos personales, claves n
 
 - Bloques A (rubros separados), B (reglas nuevas) y C (limpieza de lo cargado): hechos, publicados y comprobados. Detalle, números y definiciones: `docs/mejoras-1311/AUDITORIA.md`.
 - Falta: resto del bloque D (pantallas), E (seguridad, funcionamiento, rendimiento), F (diseño), G (asistente). Ver la tabla «Estado» de `PLAN-4.md`.
-- Wasender con código: el proveedor no lo ofrece por su interfaz; falta que la responsable diga dónde lo ve.
+- Wasender con código: el proveedor no lo ofrece por su interfaz. 13/11, 10:20: la responsable dijo «yo me encargo»; no se sigue salvo que lo pida.
+- **Audios (13/11, 10:20):** la responsable pidió que el agente que responde entienda los audios. Especificado en `docs/mejoras-1311/PLAN-4.md`, bloque I; lo hace la corrida de las 14:51, después de lo que falta del bloque D. No está implementado.
 
 ## Aprendizajes de esta vuelta
 
