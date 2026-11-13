@@ -14,6 +14,7 @@ import { enviarPresupuestosProgramados } from "@/lib/marketing/presupuestos";
 import { registrarLatido } from "@/lib/salud";
 import { procesarRecontactos } from "@/lib/recontacto/motor";
 import { procesarSegundosIntentos } from "@/lib/seguimiento/segundo-intento-motor";
+import { cerrarDescartesAutomaticos } from "@/lib/hoy/descartes-motor";
 import { sincronizarCatalogosSiToca } from "@/lib/plantillas/auto-asignar";
 import { rescatarTurnosPerdidos } from "@/lib/ai-agent/rescate";
 import { vigilarCalidadLineas } from "@/lib/whatsapp/calidad-servidor";
@@ -91,6 +92,17 @@ export async function POST(request: Request) {
         segundoIntento = await procesarSegundosIntentos();
       } catch (err: any) {
         segundoIntento = { error: String(err?.message ?? err) };
+      }
+    }
+
+    // 2 bis c) Descartes (13/11): quien dijo con claridad que no sigue y lleva horas sin
+    //    novedades se cierra solo como perdido, con su motivo. Cada 10 minutos; no envía nada.
+    let descartes: unknown = null;
+    if (new Date().getUTCMinutes() % 10 === 0 && Date.now() - inicio < 25_000) {
+      try {
+        descartes = await cerrarDescartesAutomaticos();
+      } catch (err: any) {
+        descartes = { error: String(err?.message ?? err) };
       }
     }
 
@@ -214,7 +226,7 @@ export async function POST(request: Request) {
 
     // Tablero de salud: deja la hora del último latido.
     await registrarLatido(true, { ms: Date.now() - inicio });
-    return NextResponse.json({ ok: true, results, plantillas, seguimiento, recontacto, segundoIntento, rescate, calidad, marketing, servidor, extraccion, avisos, formularios, presupuestos, catalogo });
+    return NextResponse.json({ ok: true, results, plantillas, seguimiento, recontacto, segundoIntento, descartes, rescate, calidad, marketing, servidor, extraccion, avisos, formularios, presupuestos, catalogo });
   } catch (err: any) {
     await registrarLatido(false, { error: String(err?.message ?? err).slice(0, 200) });
     return NextResponse.json({ error: String(err.message ?? err) }, { status: 500 });

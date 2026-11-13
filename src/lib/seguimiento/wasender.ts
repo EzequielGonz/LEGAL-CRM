@@ -69,6 +69,8 @@ export function faltantesSeguimiento(
     plantilla: PlantillaSeguimiento | null;
     proposito: Proposito;
     perfil: { brand_name?: string | null; agent_presentation_name?: string | null } | null;
+    /** 13/11: en los contactos 2 y 3 el bot puede redactar el mensaje; la plantilla es el respaldo. */
+    plantillaOpcional?: boolean;
   },
   env: Env = process.env
 ): string | null {
@@ -78,6 +80,7 @@ export function faltantesSeguimiento(
   const motivo = motivoNoDisponible(d.linea, env);
   if (motivo) return motivo.replace(/: no se envió\.$/, ": queda pendiente.");
   if (!d.plantilla) {
+    if (d.plantillaOpcional) return null;
     const nombre = d.proposito === "segundo_intento" ? "«…_segundo_intento» (uso campaña)" : `«…_${d.proposito}» (uso seguimiento)`;
     return `Falta una plantilla de Wasender activa cuyo nombre termine en ${nombre}: queda pendiente.`;
   }
@@ -88,12 +91,12 @@ export function faltantesSeguimiento(
 }
 
 export type PreparacionSeguimiento =
-  | { ok: true; linea: LineaSeguimiento; plantilla: PlantillaSeguimiento; perfil: { brand_name?: string | null; agent_presentation_name?: string | null } | null }
+  | { ok: true; linea: LineaSeguimiento; plantilla: PlantillaSeguimiento | null; perfil: { brand_name?: string | null; agent_presentation_name?: string | null } | null }
   | { ok: false; reason: string };
 
 /** Lee la línea, las plantillas del perfil y dice si se puede enviar. */
 export async function prepararEnvioWasender(
-  d: { lineaId: string; rubroId: string; area: Area | string; proposito: Proposito },
+  d: { lineaId: string; rubroId: string; area: Area | string; proposito: Proposito; plantillaOpcional?: boolean },
   supabase: Db = createAdminClient(),
   env: Env = process.env
 ): Promise<PreparacionSeguimiento> {
@@ -107,7 +110,7 @@ export async function prepararEnvioWasender(
   ]);
   const lista: PlantillaSeguimiento[] = ((plantillas ?? []) as any[]).map((p) => ({ ...p, variantes: Array.isArray(p.variantes) ? p.variantes.filter((v: unknown) => typeof v === "string") : [] }));
   const plantilla = elegirPlantilla(lista, d.proposito);
-  const reason = faltantesSeguimiento({ linea: (linea as LineaSeguimiento | null) ?? null, rubroId: d.rubroId, area: String(d.area), plantilla, proposito: d.proposito, perfil: perfil as any }, env);
+  const reason = faltantesSeguimiento({ linea: (linea as LineaSeguimiento | null) ?? null, rubroId: d.rubroId, area: String(d.area), plantilla, proposito: d.proposito, perfil: perfil as any, plantillaOpcional: d.plantillaOpcional }, env);
   if (reason) return { ok: false, reason };
-  return { ok: true, linea: linea as LineaSeguimiento, plantilla: plantilla!, perfil: perfil as any };
+  return { ok: true, linea: linea as LineaSeguimiento, plantilla, perfil: perfil as any };
 }

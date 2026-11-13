@@ -22,6 +22,8 @@ import { salidaDeConversacion } from "@/lib/wasender/proveedor";
 import { enviarPorWasender } from "@/lib/wasender/envio";
 import { clasificarFallaWasender, notaFallaWasender } from "@/lib/wasender/campanas";
 import { prepararEnvioWasender, textoDePlantilla } from "@/lib/seguimiento/wasender";
+import { consultarCriterio } from "@/lib/seguimiento/criterio-servidor";
+import { motivoNoInsistir } from "@/lib/seguimiento/criterio";
 
 /**
  * Etapa 2 · Bloque 2.3 — Motor del seguimiento general (cuatro perfiles).
@@ -469,6 +471,27 @@ async function cerrarEnviada(supabase: Db, task: any, token: string, messageId: 
 }
 
 /**
+ * 13/11: el bot leyó la conversación y decidió que no corresponde insistir.
+ * La tarea se cancela con su motivo y la oportunidad deja de recibir contactos
+ * automáticos (queda «caído», igual que cuando no responde al contacto 2).
+ */
+async function noInsistir(supabase: Db, task: any, motivo: string): Promise<ExecResult> {
+  const reason = motivoNoInsistir(task.step, motivo);
+  await updateTask(supabase, task.id, { status: "cancelada", status_reason: reason });
+  await setOpportunityState({
+    opportunityId: task.opportunity_id,
+    dimension: "seguimiento",
+    field: "followup_state",
+    value: "caido",
+    actor: "sistema",
+    reason,
+    extra: { followup_reason: reason, followup_next_at: null },
+    detail: { tarea: task.id, contacto: task.step, decidio: "bot" },
+  });
+  return { taskId: task.id, action: "cancelada", detail: reason };
+}
+
+/**
  * Contacto de seguimiento por Wasender (12/11). Mismos pasos que por Meta:
  * preparar, volver a mirar la hora, reservar, compuerta, última comprobación,
  * enviar y registrar. Un resultado incierto queda a revisar y nunca se reenvía solo.
@@ -483,16 +506,33 @@ async function processTaskWasender(
   clock: () => Date
 ): Promise<ExecResult> {
   const id = task.id as string;
-  const prep = await prepararEnvioWasender({ lineaId, rubroId: task.rubro_id, area: conversation.area, proposito: task.step === 3 ? "seguimiento_3" : "seguimiento_2" }, supabase);
+  const prep = await prepararEnvioWasender(
+    { lineaId, rubroId: task.rubro_id, area: conversation.area, proposito: task.step === 3 ? "seguimiento_3" : "seguimiento_2", plantillaOpcional: true },
+    supabase
+  );
   if (!prep.ok) {
     await markPending(supabase, task, prep.reason);
     return { taskId: id, action: "pendiente", detail: prep.reason };
   }
-  const texto = textoDePlantilla(
-    prep.plantilla,
-    { nombre: contact.full_name ?? "", asesor: prep.perfil?.agent_presentation_name?.trim() ?? "", marca: prep.perfil?.brand_name?.trim() ?? "" },
-    contact.id
-  );
+  // 13/11: el bot decide si corresponde y, por Wasender, redacta el mensaje.
+  // Si no pudo decidir, sale la plantilla de respaldo (la regla ya limita plazos y cantidad).
+  const criterio = await consultarCriterio({ conversationId: conversation.id, area: conversation.area, contactId: contact.id, paso: task.step, textoLibre: true, ahora: clock() }, supabase);
+  if (criterio && !criterio.escribir) return noInsistir(supabase, task, criterio.motivo);
+  const texto =
+    criterio?.texto ||
+    (prep.plantilla
+      ? textoDePlantilla(
+          prep.plantilla,
+          { nombre: contact.full_name ?? "", asesor: prep.perfil?.agent_presentation_name?.trim() ?? "", marca: prep.perfil?.brand_name?.trim() ?? "" },
+          contact.id
+        )
+      : "");
+  if (!texto) {
+    const reason = "El bot no pudo redactar el mensaje y el perfil no tiene una plantilla de respaldo: queda pendiente y se reintenta.";
+    await markPending(supabase, task, reason);
+    return { taskId: id, action: "pendiente", detail: reason };
+  }
+  const redactadoPorBot = !!criterio?.texto;
 
   // Hora y calendario de nuevo, después de las consultas y antes de reservar.
   const beforeClaim = clock();
@@ -516,7 +556,7 @@ async function processTaskWasender(
 
   let envio: Awaited<ReturnType<typeof enviarPorWasender>>;
   try {
-    envio = await enviarPorWasender({ lineaId: prep.linea.id, to: contact.phone, body: texto, plantilla: prep.plantilla.nombre }, { supabase });
+    envio = await enviarPorWasender({ lineaId: prep.linea.id, to: contact.phone, body: texto, plantilla: redactadoPorBot ? undefined : prep.plantilla?.nombre }, { supabase });
     if (!envio.externalId) throw new Error("Wasender respondió sin el identificador del mensaje.");
   } catch (err) {
     const f = clasificarFallaWasender(err);
@@ -558,7 +598,7 @@ async function processTaskWasender(
         delivery_status: "enviado",
         delivery_status_at: sentAt,
         created_at: sentAt,
-        metadata: { ...envio.metadata, automatico: "seguimiento", followup_task_id: id, followup_step: task.step },
+        metadata: { ...envio.metadata, automatico: "seguimiento", followup_task_id: id, followup_step: task.step, redactado_por: redactadoPorBot ? "bot" : "plantilla", ...(criterio?.motivo ? { criterio: criterio.motivo } : {}) },
         origin: "seguimiento",
       },
       { select: "id" }
@@ -631,6 +671,14 @@ async function processTask(supabase: Db, task: any, now: Date, calendar: Contact
     await updateTask(supabase, id, { status: "pendiente", status_reason: reason, line_id: line.id, template_id: check.resolved.template.id });
     return { taskId: id, action: "pendiente", detail: reason };
   }
+
+  // 13/11: el bot relee la conversación y decide si corresponde insistir. Por Meta
+  // sale la plantilla aprobada; si el bot no pudo decidir, vale la regla de siempre.
+  const criterio = await consultarCriterio(
+    { conversationId: (conversation as any).id, area: (conversation as any).area as Area, contactId: contact.id, paso: task.step, textoLibre: false, ahora: clock() },
+    supabase
+  );
+  if (criterio && !criterio.escribir) return noInsistir(supabase, task, criterio.motivo);
 
   // Hora y calendario de nuevo, después de las consultas y antes de reservar.
   const beforeClaim = clock();

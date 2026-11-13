@@ -95,11 +95,12 @@ export async function procesarSegundosIntentos(opts: { now?: Date; maxPorVuelta?
       if (plan.accion !== "enviar") continue;
 
       const prep = await prepararEnvioWasender({ lineaId: campana.wasender_line_id, rubroId: perfil.id, area: campana.area, proposito: "segundo_intento" }, s);
-      if (!prep.ok) {
-        r.detalle.push(prep.reason);
+      if (!prep.ok || !prep.plantilla) {
+        r.detalle.push(prep.ok ? "Falta la plantilla del segundo intento." : prep.reason);
         lineasUsadas.add(campana.wasender_line_id);
         continue;
       }
+      const plantilla = prep.plantilla;
       // Límite del día (con calentamiento), freno automático y pausa entre envíos de la línea.
       const cupo = await cupoDeLinea(prep.linea, startOfArgentinaDay(ahora), ahora, s);
       if (cupo.agotado) {
@@ -121,7 +122,7 @@ export async function procesarSegundosIntentos(opts: { now?: Date; maxPorVuelta?
       const { data: contacto } = await s.from("contacts").select("id, full_name, phone").eq("id", c.contact_id).maybeSingle();
       if (!(contacto as any)?.phone) continue;
       const texto = textoDePlantilla(
-        prep.plantilla,
+        plantilla,
         { nombre: (contacto as any).full_name ?? "", asesor: prep.perfil?.agent_presentation_name?.trim() ?? "", marca: prep.perfil?.brand_name?.trim() ?? "" },
         c.contact_id
       );
@@ -134,7 +135,7 @@ export async function procesarSegundosIntentos(opts: { now?: Date; maxPorVuelta?
         campaign_id: c.campaign_id,
         campaign_contact_id: c.id,
         linea_id: prep.linea.id,
-        plantilla: prep.plantilla.nombre,
+        plantilla: plantilla.nombre,
       });
       if (!registroId) continue;
       lineasUsadas.add(prep.linea.id);
@@ -147,7 +148,7 @@ export async function procesarSegundosIntentos(opts: { now?: Date; maxPorVuelta?
       }
 
       try {
-        const envio = await enviarPorWasender({ lineaId: prep.linea.id, to: (contacto as any).phone, body: texto, plantilla: prep.plantilla.nombre }, { supabase: s });
+        const envio = await enviarPorWasender({ lineaId: prep.linea.id, to: (contacto as any).phone, body: texto, plantilla: plantilla.nombre }, { supabase: s });
         if (!envio.externalId) throw new Error("Wasender respondió sin el identificador del mensaje.");
         const sentAt = new Date().toISOString();
         const { data: msg } = await insertMessageRow(
