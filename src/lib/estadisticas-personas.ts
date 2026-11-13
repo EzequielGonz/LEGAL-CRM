@@ -1,6 +1,7 @@
 /** Estadísticas por personas: lectura en el servidor (reglas en estadisticas-personas-reglas.ts). */
 import { createAdminClient } from "@/lib/supabase/admin";
-import { esTrabaReal, grupoPorMotivo, seEnfrio, type GrupoPersonas } from "./estadisticas-personas-reglas";
+import { esTrabaReal, grupoPorMotivo, type GrupoPersonas } from "./estadisticas-personas-reglas";
+import { indicadorPorClave, listarIndicador } from "@/lib/indicadores";
 
 export * from "./estadisticas-personas-reglas";
 
@@ -64,6 +65,17 @@ export async function resumenPersonas(rubroId: string, areas: string[], ahora = 
     console.error("[personas] No se pudo leer la atención:", err);
   }
 
+  // 1 bis) 13/11: «Pidieron una persona» usa la misma cuenta que «Oportunidades reales».
+  try {
+    const r = await listarIndicador(rubroId, indicadorPorClave("piden_persona")!);
+    if (!r.error) {
+      conteos.pide_persona = r.total;
+      listas.pide_persona = (r.filas as any[]).slice(0, LIMITE_LISTA).map((o) => ({ contactId: o.contact_id ?? null, conversationId: o.conversation_id ?? null, nombre: o.contacts?.full_name ?? null, motivo: o.attention_reason ?? null, at: o.last_inbound_at ?? o.updated_at ?? null }));
+    }
+  } catch (err) {
+    console.error("[personas] No se pudieron leer las oportunidades reales:", err);
+  }
+
   // 2) Bot trabado: turnos retenidos o con error real en los últimos 7 días, por conversación.
   try {
     const { data, error } = await s
@@ -96,43 +108,19 @@ export async function resumenPersonas(rubroId: string, areas: string[], ahora = 
     console.error("[personas] No se pudo leer el bot trabado:", err);
   }
 
-  // 3) Se enfrió: respondieron alguna vez, lo último fue nuestro y pasaron +48 h.
+  // 3) Se enfriaron. 13/11: una sola definición, la del indicador «En seguimiento» (no escriben
+  //    hace más de 3 días y el sistema todavía lo intenta). Antes contaba también a los que ya
+  //    habían caído: después de la limpieza mostraba cientos.
   try {
-    const { data: opps, error } = await s
-      .from("opportunities")
-      .select("conversation_id, contact_id, contact_state, capture_state, attention_reason, contacts(full_name)")
-      .eq("rubro_id", rubroId)
-      .eq("contact_state", "respondio")
-      .is("attention_reason", null)
-      .not("capture_state", "in", "(captado,perdido)")
-      .gte("updated_at", hace30)
-      .limit(400);
-    if (error) throw error;
-    const filas = ((opps ?? []) as any[]).filter((o) => o.conversation_id);
-    const ids = filas.map((o) => o.conversation_id);
-    const ultimos = new Map<string, { direction: string; created_at: string }>();
-    for (let i = 0; i < ids.length; i += 100) {
-      const lote = ids.slice(i, i + 100);
-      const { data: msgs } = await s
-        .from("messages")
-        .select("conversation_id, direction, created_at")
-        .in("conversation_id", lote)
-        .gte("created_at", hace30)
-        .order("created_at", { ascending: false })
-        .limit(2000);
-      for (const m of (msgs ?? []) as any[]) if (!ultimos.has(m.conversation_id)) ultimos.set(m.conversation_id, m);
-    }
-    const frias = filas.filter((o) => {
-      const u = ultimos.get(o.conversation_id);
-      return seEnfrio({ respondio: true, ultimoEsNuestro: u?.direction === "saliente", ultimoAt: u?.created_at ?? null }, ahora);
-    });
-    conteos.se_enfrio = frias.length;
-    listas.se_enfrio = frias.slice(0, LIMITE_LISTA).map((o) => ({
+    const r = await listarIndicador(rubroId, indicadorPorClave("dejaron_de_responder")!);
+    if (r.error) throw new Error(r.error);
+    conteos.se_enfrio = r.total;
+    listas.se_enfrio = (r.filas as any[]).slice(0, LIMITE_LISTA).map((o) => ({
       contactId: o.contact_id ?? null,
-      conversationId: o.conversation_id,
+      conversationId: o.conversation_id ?? null,
       nombre: o.contacts?.full_name ?? null,
-      motivo: "No contesta desde hace más de 48 h",
-      at: ultimos.get(o.conversation_id)?.created_at ?? null,
+      motivo: o.followup_next_at ? "Tiene un mensaje de seguimiento programado" : "No contesta hace más de 3 días",
+      at: o.last_inbound_at ?? null,
     }));
   } catch (err) {
     console.error("[personas] No se pudo leer los que se enfriaron:", err);

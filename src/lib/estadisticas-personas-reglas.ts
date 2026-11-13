@@ -16,9 +16,9 @@ export type GrupoPersonas = "por_cerrar" | "pide_persona" | "bot_trabado" | "se_
 
 export const GRUPOS_PERSONAS: { clave: GrupoPersonas; titulo: string; detalle: string; tarea: boolean }[] = [
   { clave: "por_cerrar", titulo: "Por cerrar", detalle: "interés + una duda que el bot no sabe", tarea: true },
-  { clave: "pide_persona", titulo: "Pidieron una persona", detalle: "interesados", tarea: true },
+  { clave: "pide_persona", titulo: "Oportunidades reales", detalle: "esperan a una persona", tarea: true },
   { clave: "bot_trabado", titulo: "Bot trabado", detalle: "no supo o no pudo responder", tarea: true },
-  { clave: "se_enfrio", titulo: "Se enfriaron", detalle: "+48 h sin responder", tarea: true },
+  { clave: "se_enfrio", titulo: "En seguimiento", detalle: "+3 días sin responder", tarea: true },
   { clave: "no_interesado", titulo: "No interesados", detalle: "bajas y quejas · solo cifra", tarea: false },
 ];
 

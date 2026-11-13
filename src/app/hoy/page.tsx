@@ -136,7 +136,7 @@ async function CuerpoHoy({ slug, rubroId, searchParams }: { slug: SlugPerfil; ru
   const paraCerrar = [
     { titulo: "Agendaron", n: agendaron, detalle: "Tienen cita próxima", href: `/conversaciones?perfil=${slug}&grupo=agendaron`, icono: "agenda" },
     { titulo: "Hablando ahora", n: hablando, detalle: "Charla en curso", href: `/conversaciones?perfil=${slug}&grupo=hablando`, icono: "consultas" },
-    { titulo: "En seguimiento", n: cuenta.seguimiento_activo.count, detalle: "Seguimiento automático", href: `/contactos?perfil=${slug}&grupo=seguimiento`, icono: "seguimiento" },
+    // 13/11: «En seguimiento» se muestra una sola vez, en las cifras por personas (misma definición que en Contactos).
     { titulo: "Derivados sin resultado", n: cuenta.derivado_sin_resultado.count, detalle: "Anotá cómo terminó", href: enlaceIndicador(slug, "derivado_sin_resultado", aqui), icono: "cerrados" },
   ];
 
