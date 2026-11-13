@@ -8,6 +8,8 @@ import { variablesAcento } from "@/lib/acento";
 import { EnfocarAncla } from "@/components/ui/enfocar-ancla";
 import { MasOpciones, NivelProvider } from "@/components/nivel/nivel";
 import { AsistentePanel } from "@/components/asistente/asistente-panel";
+import { leerMenuPersonal } from "@/lib/personalizacion/servidor";
+import { RUBRO_IDS } from "@/lib/rubros";
 
 /**
  * Marco común de los paneles (renovado 18/10): paleta del perfil
@@ -24,16 +26,18 @@ export async function MarcoPerfil({ slug, children, sinSalud = false }: { slug: 
   } catch (err) {
     console.error("[marco] No se pudo leer la marca del perfil:", err);
   }
+  // 13/11: menú a medida de este perfil (nombres, orden y secciones ocultas). Sin dato, el de fábrica.
+  const menu = await leerMenuPersonal(RUBRO_IDS[slug]).catch(() => null);
   const estilo = (variablesAcento(marca.acento) ?? undefined) as React.CSSProperties | undefined;
   return (
     <NivelProvider>
       <div data-tema={slug} style={estilo} className="min-h-screen lg:flex">
         <Suspense fallback={<div className="hidden w-[16rem] shrink-0 border-r border-slate-200 bg-white lg:block" aria-hidden="true" />}>
-          <MenuPerfil slug={slug} nombre={marca.nombre} logo={marca.logo} />
+          <MenuPerfil slug={slug} nombre={marca.nombre} logo={marca.logo} menu={menu} />
         </Suspense>
         <main id="contenido" tabIndex={-1} className="min-w-0 flex-1 bg-slate-50 lg:h-screen lg:overflow-y-auto">
           <Suspense fallback={<div className="encabezado-panel" aria-hidden="true" />}>
-            <EncabezadoPanel slug={slug} nombre={marca.nombre} />
+            <EncabezadoPanel slug={slug} nombre={marca.nombre} menu={menu} />
           </Suspense>
           <div className="lienzo-contenido">
             {!sinSalud && (
@@ -42,7 +46,7 @@ export async function MarcoPerfil({ slug, children, sinSalud = false }: { slug: 
               </Suspense>
             )}
             <Suspense fallback={null}>
-              <PestanasSeccion slug={slug} />
+              <PestanasSeccion slug={slug} menu={menu} />
             </Suspense>
             {children}
             <MasOpciones />

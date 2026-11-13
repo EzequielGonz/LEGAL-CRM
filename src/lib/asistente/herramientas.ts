@@ -196,6 +196,75 @@ export const DECLARACIONES = [
       required: ["base"],
     },
   },
+  // 13/11 · «dale permisos a TODO»: cualquier operación del panel, el menú del perfil y los pedidos de código.
+  {
+    name: "operaciones_del_panel",
+    description:
+      "Busca en el catálogo de operaciones del panel (todo lo que se puede hacer desde las pantallas: personas, chats, seguimiento, campañas, bases, plantillas, líneas, bot, agenda, redes, incidencias, marketing y ajustes). Devuelve la clave de cada operación, qué hace, qué datos pide y qué confirmación lleva. Usala SIEMPRE antes de proponer_operacion, y cuando te pregunten qué podés hacer. Solo lectura.",
+    parametersJsonSchema: {
+      type: "object",
+      properties: {
+        buscar: { type: "string", description: "Palabras de lo que se quiere hacer (por ejemplo: «archivar base», «reprogramar cita», «horario de atención»)" },
+        grupo: { type: "string", description: "Opcional: personas, chats, seguimiento, campañas, bases, plantillas, líneas, bot, agenda, redes y contenido, incidencias, marketing, ajustes del perfil, ajustes generales, pedidos a Claude" },
+      },
+    },
+  },
+  {
+    name: "proponer_operacion",
+    description:
+      "Deja como PROPUESTA una operación del catálogo (la clave sale de operaciones_del_panel). No ejecuta nada: se hace cuando la responsable confirma, con las mismas validaciones que la pantalla. El perfil es siempre el que está abierto: no lo mandes. Si una herramienta específica cubre el pedido (campañas, chats, bot, publicaciones), usá esa.",
+    parametersJsonSchema: {
+      type: "object",
+      properties: {
+        clave: { type: "string", description: "Clave exacta de la operación" },
+        sobre: { type: "string", description: "Sobre qué cosa, si la operación pide identificar una sola: nombre o teléfono de la persona, nombre de la campaña, la base, la línea o la plantilla, o su identificador" },
+        identificar: { type: "object", description: "Solo si la operación pide identificar más de una cosa: un dato por cada una, con el nombre que figura en «necesita_identificar»" },
+        parametros: { type: "object", description: "Datos de la operación, con los nombres exactos que devolvió operaciones_del_panel" },
+      },
+      required: ["clave"],
+    },
+  },
+  {
+    name: "proponer_menu",
+    description:
+      "Deja como PROPUESTA cambios en el menú de ESTE perfil: renombrar una sección o una pestaña, ocultar o volver a mostrar una sección, o moverla de lugar. No toca otros perfiles. Hoy y Ajustes no se pueden ocultar. Se puede deshacer.",
+    parametersJsonSchema: {
+      type: "object",
+      properties: {
+        cambios: {
+          type: "array",
+          description: "Uno o más cambios",
+          items: {
+            type: "object",
+            properties: {
+              seccion: { type: "string", description: "Sección del menú (por su nombre: Hoy, Chats, Contactos, Campañas, Bot IA, Líneas y plantillas, Redes, Ajustes)" },
+              nombre: { type: "string", description: "Nombre nuevo de la sección (vacío = volver al original)" },
+              oculta: { type: "boolean", description: "true para ocultarla, false para volver a mostrarla" },
+              posicion: { type: "integer", description: "Lugar dentro de su grupo, empezando en 1" },
+              pestana: { type: "string", description: "Nombre actual de una pestaña de esa sección, para renombrarla" },
+              nombre_pestana: { type: "string", description: "Nombre nuevo de la pestaña (vacío = volver al original)" },
+            },
+            required: ["seccion"],
+          },
+        },
+        restablecer: { type: "boolean", description: "true para volver al menú original del perfil" },
+      },
+    },
+  },
+  {
+    name: "pedir_cambio_de_codigo",
+    description:
+      "Para lo que no se puede hacer desde el panel porque hay que programarlo (una pantalla nueva, cambiar cómo funciona algo, un diseño, un arreglo): deja como PROPUESTA una tarea en la Bandeja para Claude con el pedido completo. Al confirmar queda anotada; Claude la toma cuando la responsable le avisa. No cambia nada en el momento.",
+    parametersJsonSchema: {
+      type: "object",
+      properties: {
+        pantalla: { type: "string", description: "Qué pantalla o parte del panel" },
+        que_cambiar: { type: "string", description: "Qué hay que cambiar, con el detalle que dio la responsable" },
+        como_se_comprueba: { type: "string", description: "Cómo se ve que quedó bien hecho" },
+      },
+      required: ["que_cambiar"],
+    },
+  },
   {
     name: "ir_a_pantalla",
     description:

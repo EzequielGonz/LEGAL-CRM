@@ -14,6 +14,8 @@ import { asignarRolABase, guardarRol } from "@/lib/agentes/roles";
 import { AREAS_DE_PERFIL } from "@/lib/cartera-servidor";
 import { slugDeRubro } from "@/lib/rubros";
 import { TIPOS_CHATS, ejecutarAccionChat } from "@/lib/asistente/chats";
+import { ejecutarOperacionPanel, type LlamadaInterna } from "@/lib/asistente/panel-operaciones";
+import { aplicarPersonalizacionMenu, deshacerPersonalizacionMenu, leerMenuDirecto, restablecerMenu } from "@/lib/personalizacion/servidor";
 
 export class AccionNoDisponible extends Error {}
 
@@ -51,7 +53,7 @@ async function avanzarPublicaciones(a: any): Promise<{ estado: string; resultado
   return { estado, resultado, pendientes };
 }
 
-export async function confirmarAccion(id: string): Promise<{ estado: string; resultado: unknown; pendientes?: number }> {
+export async function confirmarAccion(id: string, http?: LlamadaInterna): Promise<{ estado: string; resultado: unknown; pendientes?: number }> {
   const s = createAdminClient();
   const { data: tomada } = await s
     .from("asistente_acciones" as any)
@@ -148,6 +150,11 @@ export async function confirmarAccion(id: string): Promise<{ estado: string; res
       resultado = { asignado: true, rol_id: a.payload?.rol_id ?? null };
     } else if (TIPOS_CHATS.includes(a.tipo)) {
       resultado = await ejecutarAccionChat(a);
+    } else if (a.tipo === "operacion_panel") {
+      if (!http) throw new Error("No se pudo llamar al panel para ejecutar la operación.");
+      resultado = await ejecutarOperacionPanel(a, http);
+    } else if (a.tipo === "personalizar_menu") {
+      resultado = a.payload?.restablecer === true ? await restablecerMenu(a.rubro_id, "asistente") : await aplicarPersonalizacionMenu(a.rubro_id, a.payload?.cambios, "asistente");
     } else {
       throw new Error("Tipo de propuesta desconocido.");
     }
@@ -181,6 +188,18 @@ export async function deshacerCambioBot(id: string): Promise<boolean> {
   if (!ag || String((ag as any).system_prompt) !== String(a.payload?.nuevo)) return false;
   const { error } = await s.from("ai_agents").update({ system_prompt: a.payload.anterior, updated_at: new Date().toISOString() }).eq("id", a.payload.agente_id);
   if (error) return false;
+  await s.from("asistente_acciones" as any).update({ resultado: { ...(a.resultado ?? {}), deshecho: true, deshecho_at: new Date().toISOString() } }).eq("id", id);
+  return true;
+}
+
+/** Vuelve el menú del perfil a como estaba antes de un cambio confirmado (si nadie lo cambió después). */
+export async function deshacerCambioMenu(id: string): Promise<boolean> {
+  const s = createAdminClient();
+  const { data } = await s.from("asistente_acciones" as any).select("*").eq("id", id).eq("tipo", "personalizar_menu").eq("estado", "ejecutada").maybeSingle();
+  const a: any = data;
+  if (!a || a.resultado?.deshecho) return false;
+  const ok = await deshacerPersonalizacionMenu(a.rubro_id, a.resultado?.antes ?? {}, a.resultado?.despues ?? (await leerMenuDirecto(a.rubro_id)) ?? {}, "asistente");
+  if (!ok) return false;
   await s.from("asistente_acciones" as any).update({ resultado: { ...(a.resultado ?? {}), deshecho: true, deshecho_at: new Date().toISOString() } }).eq("id", id);
   return true;
 }

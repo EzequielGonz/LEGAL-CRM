@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { seccionActiva, seccionesDePerfil } from "@/lib/menu";
+import type { MenuPersonal } from "@/lib/personalizacion/menu";
 import { marcaDe, type SlugPerfil } from "@/lib/marca";
 import { Icono } from "@/components/ui/icono-seccion";
 import { abrirAsistente } from "@/components/asistente/asistente-panel";
@@ -13,10 +14,10 @@ import { abrirAsistente } from "@/components/asistente/asistente-panel";
  * sección), la fecha y el acceso al asistente. La ruta es solo orientación
  * visual: el menú ya marca la página actual para el lector de pantalla.
  */
-export function EncabezadoPanel({ slug, nombre }: { slug: SlugPerfil; nombre?: string | null }) {
+export function EncabezadoPanel({ slug, nombre, menu = null }: { slug: SlugPerfil; nombre?: string | null; menu?: MenuPersonal | null }) {
   const pathname = usePathname() ?? "/";
   const search = useSearchParams();
-  const activa = seccionActiva(seccionesDePerfil(slug), pathname, search?.toString() ?? null);
+  const activa = seccionActiva(seccionesDePerfil(slug, menu), pathname, search?.toString() ?? null);
   const marca = marcaDe(slug);
   const titulo = nombre?.trim() || marca.nombre;
   const hoy = new Intl.DateTimeFormat("es-AR", { weekday: "long", day: "numeric", month: "long", timeZone: "America/Argentina/Buenos_Aires" }).format(new Date());
@@ -54,10 +55,10 @@ export function EncabezadoPanel({ slug, nombre }: { slug: SlugPerfil; nombre?: s
 }
 
 /** Pestañas de la sección actual: las vistas que agrupa (18/10). */
-export function PestanasSeccion({ slug }: { slug: SlugPerfil }) {
+export function PestanasSeccion({ slug, menu = null }: { slug: SlugPerfil; menu?: MenuPersonal | null }) {
   const pathname = usePathname() ?? "/";
   const search = useSearchParams();
-  const activa = seccionActiva(seccionesDePerfil(slug), pathname, search?.toString() ?? null);
+  const activa = seccionActiva(seccionesDePerfil(slug, menu), pathname, search?.toString() ?? null);
   const visibles = activa ? activa.seccion.tabs.filter((t) => !t.oculto) : [];
   // 12/11: en el celular la pestaña en la que estás queda a la vista (antes podía quedar cortada).
   const riel = useRef<HTMLElement>(null);

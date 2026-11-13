@@ -90,6 +90,8 @@ function textoResultado(p: Propuesta): string | null {
   if (p.tipo === "limite_campana") return r.limite_diario ? `Listo: la campaña envía como máximo ${r.limite_diario} mensajes por día.` : "Listo: la campaña quedó sin límite diario propio.";
   if (p.tipo === "lanzar_campana") return "Campaña lanzada: los envíos siguen el ritmo y el horario configurados. Podés pausarla cuando quieras.";
   if (p.tipo === "asignar_agente") return `Agente ${r.estado === "activa" ? "activado" : r.estado === "pausada" ? "pausado" : "apagado"}.`;
+  if (p.tipo === "personalizar_menu") return r.deshecho ? "Cambio deshecho: el menú volvió a como estaba." : "Listo: el menú de este perfil ya cambió. Si no lo ves, recargá la página.";
+  if (p.tipo === "operacion_panel") return `Hecho: ${String(r.operacion ?? p.titulo).toLowerCase()}.`;
   return "Listo.";
 }
 
@@ -181,7 +183,7 @@ export function TarjetaPropuesta({ p, alCambiar }: { p: Propuesta; alCambiar: (p
       )}
       {p.estado === "descartada" && <p className="mt-2 text-xs text-slate-500">Descartada: no se hizo nada.</p>}
       {(p.estado === "ejecutada" || p.estado === "error") && hecho && <p className={`mt-2 text-xs font-medium ${p.estado === "error" ? "text-red-700" : "text-emerald-700"}`}>{hecho}</p>}
-      {p.estado === "ejecutada" && p.tipo === "cambio_agente" && !p.resultado?.deshecho && (
+      {p.estado === "ejecutada" && (p.tipo === "cambio_agente" || p.tipo === "personalizar_menu") && !p.resultado?.deshecho && (
         <button type="button" disabled={ocupado} onClick={deshacer} className="mt-2 text-xs font-medium text-slate-700 underline">
           Deshacer el cambio
         </button>

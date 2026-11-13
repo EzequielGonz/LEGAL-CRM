@@ -4,6 +4,7 @@ import { AccionNoDisponible, confirmarAccion, descartarAccion } from "@/lib/asis
 import { confirmPin } from "@/lib/acceso/confirmar-pin";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { faltaParaConfirmar, nivelDeAccion } from "@/lib/asistente/permisos";
+import { nivelDePropuestaPanel } from "@/lib/asistente/panel-operaciones";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -25,16 +26,19 @@ export async function POST(request: Request, { params }: { params: { id: string 
   if (!g) return NextResponse.json({ error: "Esta propuesta ya se confirmó, se descartó o no existe." }, { status: 409 });
   // Una propuesta ya en marcha (tandas de publicaciones) no vuelve a pedir PIN.
   if (g.estado === "propuesta") {
-    const nivel = nivelDeAccion(g.tipo, g.payload ?? {});
+    // Operación del panel: el nivel se recalcula con el catálogo del servidor.
+    const nivel = g.tipo === "operacion_panel" ? nivelDePropuestaPanel(g.payload) : nivelDeAccion(g.tipo, g.payload ?? {});
     const falta = faltaParaConfirmar(nivel, body);
     if (falta) return NextResponse.json({ error: falta.mensaje, requiere: falta.codigo }, { status: 428 });
     if (nivel === "pin") {
-      const pin = await confirmPin(request, body?.pin, "asignacion_agente", { origen: "asistente", tipo: g.tipo, propuesta: params.id });
+      const pin = await confirmPin(request, body?.pin, "asignacion_agente", { origen: "asistente", tipo: g.tipo, propuesta: params.id, ...(g.tipo === "operacion_panel" ? { operacion: String(g.payload?.clave ?? "") } : {}) });
       if (!pin.ok) return NextResponse.json({ error: pin.error, requiere: "pin" }, { status: pin.status });
     }
   }
   try {
-    return NextResponse.json(await confirmarAccion(params.id));
+    // La operación del panel se ejecuta llamando a la ruta de la pantalla con esta misma sesión.
+    const http = { origen: new URL(request.url).origin, cookie: request.headers.get("cookie"), pin: typeof body?.pin === "string" ? body.pin.trim() : undefined };
+    return NextResponse.json(await confirmarAccion(params.id, http));
   } catch (err) {
     if (err instanceof AccionNoDisponible) return NextResponse.json({ error: err.message }, { status: 409 });
     console.error("[asistente/confirmar]", err);

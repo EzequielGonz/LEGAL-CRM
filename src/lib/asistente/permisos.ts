@@ -11,6 +11,10 @@
  *  - pin:      además pide el PIN. Es el caso de todo lo que gasta plata y
  *              de activar un agente (control que ya existía en el panel).
  *
+ * 13/11 («dale permisos a TODO», y después «el asistente dejalo así», con la
+ * confirmación): el asistente puede proponer cualquier operación del panel.
+ * Los tres niveles se conservan tal cual.
+ *
  * Función pura: la usan la ruta de confirmación, el panel y las pruebas.
  */
 export type NivelAccion = "cambio" | "contacto" | "pin";
@@ -32,6 +36,9 @@ export const TIPOS_ACCION = [
   "soltar_chat",
   "marcar_captado",
   "marcar_derivado",
+  // 13/11: cualquier operación del panel (catálogo en src/lib/asistente/catalogo.ts) y el menú del perfil.
+  "operacion_panel",
+  "personalizar_menu",
 ] as const;
 export type TipoAccion = (typeof TIPOS_ACCION)[number];
 
@@ -40,6 +47,9 @@ export const TIPOS_QUE_GASTAN: string[] = [];
 
 export function nivelDeAccion(tipo: string, payload: Record<string, unknown> = {}): NivelAccion {
   if (TIPOS_QUE_GASTAN.includes(tipo)) return "pin";
+  // Operación del panel: el nivel se calculó con el catálogo al armar la propuesta y el
+  // servidor lo vuelve a calcular al confirmar. Sin dato válido, el más exigente.
+  if (tipo === "operacion_panel") return payload.nivel === "cambio" || payload.nivel === "contacto" ? payload.nivel : "pin";
   // Lanzar una campaña o responder un chat le escriben a personas reales.
   if (tipo === "lanzar_campana" || tipo === "responder_chat") return "contacto";
   // Activar un agente ya exigía PIN en el panel; apagar o pausar, no.

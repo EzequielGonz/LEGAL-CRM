@@ -18,6 +18,7 @@
  * ?perfil=<slug>. Puro: sin dependencias del navegador ni de la base.
  */
 import type { SlugPerfil } from "@/lib/marca";
+import { aplicarMenuPersonal, type MenuPersonal } from "@/lib/personalizacion/menu";
 
 export interface ItemMenu {
   href: string;
@@ -44,6 +45,8 @@ export interface SeccionMenu {
   /** Primera pestaña: a dónde lleva el ítem del menú. */
   href: string;
   tabs: ItemMenu[];
+  /** 13/11: el perfil la ocultó de su menú (sigue abriendo por su dirección). */
+  oculta?: boolean;
 }
 
 /** Compatibilidad: un grupo por sección, con sus pestañas como ítems. */
@@ -63,7 +66,13 @@ function seccion(clave: ClaveSeccion, label: string, icono: string, tabs: ItemMe
   return { clave, label, icono, href: tabs[0].href, tabs, grupo };
 }
 
-export function seccionesDePerfil(slug: SlugPerfil): SeccionMenu[] {
+/** Menú del perfil. Con `personal` (13/11), aplica los nombres, el orden y lo oculto que eligió ese perfil. */
+export function seccionesDePerfil(slug: SlugPerfil, personal?: MenuPersonal | null): SeccionMenu[] {
+  const fabrica = seccionesDeFabrica(slug);
+  return personal ? aplicarMenuPersonal(fabrica, personal) : fabrica;
+}
+
+function seccionesDeFabrica(slug: SlugPerfil): SeccionMenu[] {
   const j = slug === "juridico";
   const base = j ? "" : `/panel/${slug}`;
   const mk = slug === "marketing";

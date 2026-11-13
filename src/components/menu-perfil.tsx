@@ -7,6 +7,7 @@ import clsx from "clsx";
 import { LogoutButton } from "@/components/acceso/logout-button";
 import { marcaDe, type SlugPerfil } from "@/lib/marca";
 import { seccionActiva, seccionesDePerfil } from "@/lib/menu";
+import type { MenuPersonal } from "@/lib/personalizacion/menu";
 import { Icono } from "@/components/ui/icono-seccion";
 import { LogoPerfil } from "@/components/ui/logo-perfil";
 import { abrirAsistente } from "@/components/asistente/asistente-panel";
@@ -20,11 +21,11 @@ import { SelectorModo } from "@/components/ui/selector-modo";
  * botón «Menú». Abajo, la Bandeja para Claude (tarjeta negra, 19/10) justo
  * arriba del asistente IA («Pedile algo», Gemini).
  */
-export function MenuPerfil({ slug, nombre, logo }: { slug: SlugPerfil; nombre?: string | null; logo?: string | null }) {
+export function MenuPerfil({ slug, nombre, logo, menu = null }: { slug: SlugPerfil; nombre?: string | null; logo?: string | null; menu?: MenuPersonal | null }) {
   const pathname = usePathname() ?? "/";
   const search = useSearchParams();
   const marca = marcaDe(slug);
-  const secciones = seccionesDePerfil(slug);
+  const secciones = seccionesDePerfil(slug, menu);
   const activa = seccionActiva(secciones, pathname, search?.toString() ?? null);
   const [abierto, setAbierto] = useState(false);
   const titulo = nombre?.trim() || marca.nombre;
@@ -90,7 +91,7 @@ export function MenuPerfil({ slug, nombre, logo }: { slug: SlugPerfil; nombre?: 
               <p className="menu-grupo px-3 pb-1.5 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-slate-500">{g === "trabajo" ? "Trabajo" : "Configurar"}</p>
               <ul className="space-y-0.5">
                 {secciones
-                  .filter((s) => s.grupo === g)
+                  .filter((s) => s.grupo === g && (!s.oculta || activa?.seccion.clave === s.clave))
                   .map((s) => {
                     const esActiva = activa?.seccion.clave === s.clave;
                     return (
