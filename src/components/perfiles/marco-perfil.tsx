@@ -32,7 +32,7 @@ export async function MarcoPerfil({ slug, children, sinSalud = false }: { slug: 
   const estilo = (variablesAcento(marca.acento) ?? undefined) as React.CSSProperties | undefined;
   return (
     <NivelProvider>
-      <div data-tema={slug} style={estilo} className="min-h-screen lg:flex">
+      <div data-tema={slug} style={estilo} className="marco-panel min-h-screen lg:flex">
         <Suspense fallback={<div className="hidden w-[16rem] shrink-0 border-r border-slate-200 bg-white lg:block" aria-hidden="true" />}>
           <MenuPerfil slug={slug} nombre={marca.nombre} logo={marca.logo} menu={menu} />
         </Suspense>

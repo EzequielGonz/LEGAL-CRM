@@ -42,18 +42,18 @@ html[data-modo="oscuro"] {
 }
 
 /* ---------------------------------------------------------------- fondo vivo */
-[data-tema] {
+.marco-panel {
   position: relative;
   isolation: isolate;
 }
-html:not([data-modo="oscuro"]) [data-tema] {
+html:not([data-modo="oscuro"]) .marco-panel {
   background: rgb(244 246 250);
 }
-html:not([data-modo="oscuro"]) [data-tema] main#contenido {
+html:not([data-modo="oscuro"]) .marco-panel main#contenido {
   background: transparent;
 }
-[data-tema]::before,
-[data-tema]::after {
+.marco-panel::before,
+.marco-panel::after {
   content: "";
   position: fixed;
   z-index: -1;
@@ -62,14 +62,14 @@ html:not([data-modo="oscuro"]) [data-tema] main#contenido {
   filter: blur(70px);
   opacity: var(--mancha);
 }
-[data-tema]::before {
+.marco-panel::before {
   top: -18vh;
   right: -8vw;
   width: 58vw;
   height: 58vh;
   background: radial-gradient(closest-side, rgb(var(--c-gold-500)), transparent);
 }
-[data-tema]::after {
+.marco-panel::after {
   bottom: -22vh;
   left: 12vw;
   width: 46vw;
@@ -185,8 +185,8 @@ html[data-modo="oscuro"] .anillo-avance .anillo-pista { stroke: rgb(255 255 255 
 /* ----------------------------------------------------------------- movimiento */
 @media (prefers-reduced-motion: no-preference) {
   /* Fondo: deriva muy lenta (40 a 55 s por ida). */
-  [data-tema]::before { animation: mancha-a 44s ease-in-out infinite alternate; }
-  [data-tema]::after { animation: mancha-b 56s ease-in-out infinite alternate; }
+  .marco-panel::before { animation: mancha-a 44s ease-in-out infinite alternate; }
+  .marco-panel::after { animation: mancha-b 56s ease-in-out infinite alternate; }
 
   /* La pantalla entra con un fundido corto y 10 px de recorrido. */
   .lienzo-contenido > :not(.barra-salud):not(.pestanas-seccion):not([data-sin-entrada]) {
