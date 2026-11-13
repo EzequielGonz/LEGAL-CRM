@@ -1,3 +1,4 @@
+import { vistaPreviaDeMensaje } from "@/lib/audios/reglas";
 import { perfilActivoApi } from "@/lib/perfil-activo";
 import { NextResponse } from "next/server";
 import { TRATAMIENTO_ATENCION } from "@/lib/captacion/reglas";
@@ -103,6 +104,22 @@ export async function GET(request: Request) {
     detainedContactIds(rows.map((r) => r.contact_id)),
   ]);
   const lastById = new Map<string, any>(((last ?? []) as any[]).map((m) => [m.conversation_id, m]));
+  // 13/11: si lo último que mandó la persona es un audio ya pasado a texto, la lista muestra lo que dijo.
+  const conAudio = ((last ?? []) as any[]).filter((m) => m.message_type === "audio" && m.direction === "entrante").map((m) => m.conversation_id);
+  const dichoPorChat = new Map<string, string>();
+  if (conAudio.length) {
+    const { data: audios } = await (supabase.from("messages") as any)
+      .select("conversation_id, created_at, audio_texto")
+      .in("conversation_id", conAudio)
+      .eq("message_type", "audio")
+      .eq("audio_texto_estado", "hecha")
+      .order("created_at", { ascending: false })
+      .limit(conAudio.length * 3);
+    for (const a of (audios ?? []) as any[]) {
+      const lm = lastById.get(a.conversation_id);
+      if (lm && !dichoPorChat.has(a.conversation_id) && Date.parse(a.created_at) === Date.parse(lm.created_at) && a.audio_texto) dichoPorChat.set(a.conversation_id, a.audio_texto);
+    }
+  }
 
   return NextResponse.json({
     page,
@@ -121,7 +138,7 @@ export async function GET(request: Request) {
         contact_name: r.contacts?.full_name ?? null,
         phone: r.contacts?.phone ?? null,
         channel_type: r.channels?.type ?? "whatsapp",
-        last_message_preview: lm ? `${lm.direction === "saliente" ? "Vos: " : ""}${(lm.body ?? "").slice(0, 90)}` : null,
+        last_message_preview: lm ? (dichoPorChat.has(r.id) ? vistaPreviaDeMensaje({ body: lm.body, audio_texto: dichoPorChat.get(r.id), audio_texto_estado: "hecha" }).slice(0, 90) : `${lm.direction === "saliente" ? "Vos: " : ""}${(lm.body ?? "").slice(0, 90)}`) : null,
         last_from_contact: lm ? lm.direction === "entrante" : false,
         attention_state: opp?.attention_state ?? null,
         // Etapa 3: la cola humana muestra el motivo en palabras (12.2).

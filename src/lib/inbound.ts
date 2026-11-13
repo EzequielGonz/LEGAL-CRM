@@ -11,12 +11,13 @@ import { registerMessageAttachments, saveInboundAttachments } from "@/lib/adjunt
 import type { Area, ChannelType, SourceType } from "@/lib/supabase/database.types";
 import { decidirRespuestaEntrante, type DecisionEntrante } from "@/lib/contacto/origen";
 import { loadContactCalendar } from "@/lib/contacto/calendario";
-import { registrarDetencion, solicitarAtencion } from "@/lib/captacion";
+import { registrarDetencion, rubroSlugDe, solicitarAtencion } from "@/lib/captacion";
 import { pideOrigenOBajaDeDatos, TEXTO_DISCULPA_DATOS } from "@/lib/agentes/automaticos";
 import { agentReadiness } from "@/lib/profiles";
 import { AREA_TO_RUBRO_ID } from "@/lib/rubros";
 import { TEXTO_PEDIDO_TEXTO, correspondePedidoTexto, detectarFuente, identificadoresValidos } from "@/lib/fuente";
 import { AutomaticSendBlockedError, sendOutboundMessage } from "@/lib/messaging";
+import { audioDeAdjunto, transcribirEntrante, type AudioCrudo } from "@/lib/audios/transcribir";
 
 export interface InboundResult {
   status: "guardado" | "duplicado";
@@ -50,6 +51,7 @@ export async function handleInboundMessage({
   aiReadable = true,
   lineId = null,
   now,
+  audio,
 }: {
   area: Area;
   channelType: ChannelType;
@@ -69,6 +71,8 @@ export async function handleInboundMessage({
   lineId?: string | null;
   /** Solo pruebas: hora con la que se decide la política de respuesta. */
   now?: Date;
+  /** Cómo traer el audio cuando no viene de Meta (Wasender lo baja por su cuenta). */
+  audio?: () => Promise<AudioCrudo | null>;
 }): Promise<InboundResult> {
   const supabase = createAdminClient();
 
@@ -145,7 +149,7 @@ export async function handleInboundMessage({
   // Originales de audios, fotos, videos y documentos: se registran ahora y
   // se guardan en el almacenamiento privado al final (con tope de tiempo y
   // tamaño; lo que no entra se guarda al abrirlo). Nunca frena el guardado
-  // del mensaje. Sin transcripción ni respuesta automática.
+  // del mensaje. Fotos, videos y documentos: sin lectura ni respuesta automática.
   let attachmentIds: string[] = [];
   if (inserted?.id) {
     try {
@@ -165,6 +169,29 @@ export async function handleInboundMessage({
     }
   }
 
+  // 13/11 · Audios: si el perfil lo tiene encendido, el audio se pasa a texto
+  // antes de decidir nada. Con el texto, el mensaje vale como uno escrito para
+  // todo lo que sigue (no contacto, baja, reclamo, respuesta del agente). Si
+  // no se pudo (apagado, largo, no se entiende, error), sigue como siempre.
+  let legible = aiReadable;
+  let dicho = body;
+  if (inserted?.id && messageType === "audio") {
+    const traer = audio ?? (attachmentIds[0] ? () => audioDeAdjunto(supabase, attachmentIds[0]) : null);
+    if (traer) {
+      let perfil: string | null = null;
+      try {
+        perfil = rubroSlugDe({ rubro_id: (contact as any).rubro_id ?? null, area });
+      } catch {
+        perfil = null;
+      }
+      const t = perfil ? await transcribirEntrante({ supabase, messageId: inserted.id, perfil, obtener: traer }) : null;
+      if (t?.estado === "hecha") {
+        legible = true;
+        dicho = t.texto;
+      }
+    }
+  }
+
   try {
     return await afterInboundSaved({
       supabase,
@@ -173,11 +200,11 @@ export async function handleInboundMessage({
       conversation,
       insertedId: inserted?.id,
       lineId,
-      aiReadable,
+      aiReadable: legible,
       now,
       channelType,
       metadata,
-      body,
+      body: dicho,
     });
   } finally {
     if (attachmentIds.length) await saveInboundAttachments(attachmentIds);

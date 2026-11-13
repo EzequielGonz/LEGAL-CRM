@@ -104,6 +104,10 @@ async function procesarEntrante(supabase: Db, linea: any, ev: Extract<EventoWase
     await tomarSiSigueConIa(supabase, conversation.id, new Date());
   }
 
+  // 13/11 · El archivo se baja una sola vez: lo usan la transcripción del audio y el guardado.
+  let bajada: Promise<Uint8Array> | null = null;
+  const bajar = () => (bajada ??= bajarArchivo(linea, ev));
+
   const r = await handleInboundMessage({
     area,
     channelType: "whatsapp",
@@ -118,12 +122,13 @@ async function procesarEntrante(supabase: Db, linea: any, ev: Extract<EventoWase
     aiReadable: ev.legible,
     // La línea de Meta de la conversación no se toca.
     lineId: null,
+    audio: ev.tipoMensaje === "audio" && ev.archivo ? async () => ({ bytes: await bajar(), mime: ev.archivo!.mimeType }) : undefined,
   });
 
   if (r.conversationId) {
     await (supabase.from("conversations") as any).update({ wasender_line_id: linea.id }).eq("id", r.conversationId);
     if (r.status === "guardado" && ev.archivo && r.messageId && r.contactId) {
-      await guardarArchivo(supabase, linea, ev, { messageId: r.messageId, conversationId: r.conversationId, contactId: r.contactId });
+      await guardarArchivo(supabase, linea, ev, { messageId: r.messageId, conversationId: r.conversationId, contactId: r.contactId }, bajar);
     }
     // Después: en modo prueba el chat queda en atención humana (producción no le escribe).
     // 12/11: Wasender entrega cada mensaje dos veces. La entrega repetida no toma el chat:
@@ -308,12 +313,25 @@ async function procesarPropio(
   return "desde_celular";
 }
 
-/** Descarga el archivo recibido (el enlace de Wasender dura 1 hora) y lo guarda en el almacenamiento privado. */
+/** Baja el archivo recibido (el enlace de Wasender dura 1 hora). */
+async function bajarArchivo(linea: any, ev: Extract<EventoWasender, { tipo: "mensaje" }>): Promise<Uint8Array> {
+  const apiKey = descifrar(linea.api_key_cifrada);
+  if (!apiKey) throw new Error("La línea no tiene su clave guardada.");
+  const url = await descifrarArchivo(apiKey, { claveId: ev.claveId, contenido: ev.archivo!.contenido });
+  const res = await fetch(url, { signal: AbortSignal.timeout(20_000) });
+  if (!res.ok) throw new Error(`Wasender devolvió ${res.status} al bajar el archivo.`);
+  const bytes = new Uint8Array(await res.arrayBuffer());
+  if (bytes.byteLength > ATTACHMENT_MAX_BYTES) throw new Error("El archivo supera el tamaño máximo.");
+  return bytes;
+}
+
+/** Guarda el archivo recibido en el almacenamiento privado (lo baja si todavía no se bajó). */
 async function guardarArchivo(
   supabase: Db,
   linea: any,
   ev: Extract<EventoWasender, { tipo: "mensaje" }>,
-  ids: { messageId: string; conversationId: string; contactId: string }
+  ids: { messageId: string; conversationId: string; contactId: string },
+  bajar: () => Promise<Uint8Array> = () => bajarArchivo(linea, ev)
 ) {
   const archivo = ev.archivo!;
   const kind = TIPO_ADJUNTO[ev.tipoMensaje] ?? "documento";
@@ -337,13 +355,7 @@ async function guardarArchivo(
     received_at: new Date().toISOString(),
   };
   try {
-    const apiKey = descifrar(linea.api_key_cifrada);
-    if (!apiKey) throw new Error("La línea no tiene su clave guardada.");
-    const url = await descifrarArchivo(apiKey, { claveId: ev.claveId, contenido: archivo.contenido });
-    const res = await fetch(url, { signal: AbortSignal.timeout(20_000) });
-    if (!res.ok) throw new Error(`Wasender devolvió ${res.status} al bajar el archivo.`);
-    const bytes = new Uint8Array(await res.arrayBuffer());
-    if (bytes.byteLength > ATTACHMENT_MAX_BYTES) throw new Error("El archivo supera el tamaño máximo.");
+    const bytes = await bajar();
     const ext = extensionFor(mime, archivo.nombre);
     const path = storagePathFor({ area: linea.area, conversationId: ids.conversationId, attachmentId, ext });
     await supabaseAttachmentStore(supabase).put(path, bytes, storageContentType(mime));

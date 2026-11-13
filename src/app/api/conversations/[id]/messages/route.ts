@@ -28,7 +28,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
     .limit(500);
   if (after && !Number.isNaN(Date.parse(after))) query = query.gt("created_at", after);
 
-  const [{ data, error }, { data: estados }] = await Promise.all([
+  const [{ data, error }, { data: estados }, { data: audios }] = await Promise.all([
     query,
     supabase
       .from("messages")
@@ -38,9 +38,17 @@ export async function GET(request: Request, { params }: { params: { id: string }
       .not("delivery_status", "is", null)
       .order("created_at", { ascending: false })
       .limit(200),
+    // 13/11: audios que se pasaron a texto (el texto puede llegar después que el mensaje).
+    (supabase.from("messages") as any)
+      .select("id, audio_texto, audio_texto_estado, audio_texto_detalle")
+      .eq("conversation_id", params.id)
+      .eq("message_type", "audio")
+      .not("audio_texto_estado", "is", null)
+      .order("created_at", { ascending: false })
+      .limit(50),
   ]);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ messages: data ?? [], estados: estados ?? [] });
+  return NextResponse.json({ messages: data ?? [], estados: estados ?? [], audios: audios ?? [] });
 }
 
 /**

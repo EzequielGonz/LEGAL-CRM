@@ -12,6 +12,7 @@ import { BriefMarca } from "@/components/contenido/contenido-etapa3";
 import { HorarioAtencion } from "@/components/configuracion/horario-atencion";
 import { conEstadoReal } from "@/lib/canales-estado";
 import { GruposAjustesGenerales, SeccionCalendarioGeneral, leerAjustesGenerales } from "@/components/configuracion/ajustes-generales";
+import { GrupoAudios, grupoNavAudios, leerAudiosDePerfil } from "@/components/configuracion/grupo-audios";
 
 export const dynamic = "force-dynamic";
 
@@ -24,10 +25,11 @@ export default async function ConfiguracionPage() {
   // dedicado (/panel/<rubro>/configuracion). Notificaciones y números
   // adicionales siguen siendo globales (no tienen columna de área), así
   // que se quedan acá sin cambios.
-  const [{ data: canalesBase }, { data: studios }, generales] = await Promise.all([
+  const [{ data: canalesBase }, { data: studios }, generales, audios] = await Promise.all([
     supabase.from("channels").select("*").in("area", ["civil", "penal"]).order("area").order("type"),
     supabase.from("studios").select("*").in("area", ["civil", "penal"]).order("area"),
     leerAjustesGenerales(),
+    leerAudiosDePerfil("juridico"),
   ]);
   const { calendar } = generales;
   const [{ data: civilRules }, { data: penalRules }] = await Promise.all([
@@ -41,6 +43,7 @@ export default async function ConfiguracionPage() {
     { id: "marca", titulo: "Perfil y marca", resumen: "Nombre, logo, colores, líneas y estudios" },
     { id: "canales", titulo: "Canales, líneas y plantillas", resumen: `${conectados} de ${(channels ?? []).length} canales conectados` },
     { id: "agenda", titulo: "Agenda, disponibilidad, horarios y excepciones", resumen: `${calendar.upcoming?.length ?? 0} excepciones próximas` },
+    grupoNavAudios(audios),
     { id: "agentes", titulo: "Agentes, versiones, modelos y evaluaciones", resumen: "En Agentes IA y Comparación de agentes" },
     ...generales.grupos,
   ];
@@ -120,6 +123,8 @@ export default async function ConfiguracionPage() {
         </SeccionAjustes>
         <SeccionCalendarioGeneral d={generales} />
       </GrupoAjustes>
+
+      <GrupoAudios perfil="juridico" encendido={audios} />
 
       <GrupoAjustes id="agentes" titulo="Agentes, versiones, modelos y evaluaciones" resumen={resumenDe("agentes")} soloAvanzado>
         <SeccionAjustes id="agentes-config" titulo="Dónde se configuran los agentes" alcance="perfil" palabras="modelo versión prompt evaluación entrenamiento">

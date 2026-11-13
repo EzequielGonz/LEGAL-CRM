@@ -47,6 +47,7 @@ import { esPostergaFirme, instruccionUltimaRespuesta } from "@/lib/agentes/plant
 import { motivoParaNoResponder, TEXTO_SIN_RESPUESTA } from "@/lib/agentes/automaticos";
 import { bloqueFichaNegocio, leerFichaNegocio } from "@/lib/agentes/ficha-negocio";
 import { conocimientoParaTurno } from "@/lib/conocimiento/servicio";
+import { NOTA_AUDIO_PARA_AGENTE, cuerpoParaAgente, hayAudioSinContestar } from "@/lib/audios/reglas";
 
 const MAX_TOOL_ITERATIONS = 6;
 
@@ -170,13 +171,15 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
 
   const { data: messageRows } = await supabase
     .from("messages")
-    .select("direction, sender_type, body, metadata, created_at")
+    .select("direction, sender_type, body, metadata, created_at, audio_texto, audio_texto_estado")
     .eq("conversation_id", conversationId)
     .order("created_at", { ascending: false })
     .limit(HISTORY_LIMIT);
   // Se piden los ÚLTIMOS mensajes (antes se tomaban los primeros 30 y en
   // charlas largas el agente no veía lo más reciente) y se ordenan.
-  const ordenados = [...(messageRows ?? [])].reverse();
+  // 13/11: un audio que se pudo pasar a texto se lee como lo que dijo la persona.
+  const ordenados = [...((messageRows ?? []) as any[])].reverse().map((m) => ({ ...m, body: cuerpoParaAgente(m) }));
+  const conAudio = hayAudioSinContestar(ordenados);
   // 24/10: las plantillas se ven con su texto real y sus botones, y la
   // respuesta con botón queda marcada y clasificada (vale para cualquier plantilla).
   const { filas: conPlantillas, ultima: ultimaRespuesta } = await historialConPlantillas(ordenados as any[]);
@@ -335,6 +338,8 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
   if (ficha) systemWithBrief = `${systemWithBrief}\n\n${bloqueFichaNegocio(ficha)}`;
   // Responder siempre (21/10): llegue por campaña, landing, redes o un «hola» suelto.
   systemWithBrief = `${systemWithBrief}\n\n${BLOQUE_RESPONDER_SIEMPRE}`;
+  // 13/11: la persona mandó un audio que se pudo pasar a texto. Se suma una nota; el rol no se toca.
+  if (conAudio) systemWithBrief = `${systemWithBrief}\n\n${NOTA_AUDIO_PARA_AGENTE}`;
   // 24/10: qué hacer con la respuesta a la plantilla (botón o equivalente).
   const instruccionRespuesta = instruccionUltimaRespuesta(ultimaRespuesta);
   if (instruccionRespuesta) systemWithBrief = `${systemWithBrief}\n\nRespuesta a la plantilla (regla del sistema, manda sobre el guion):\n${instruccionRespuesta}`;

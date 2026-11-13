@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Area, Message } from "@/lib/supabase/database.types";
 import { AreaBadge, SourceBadge, StatusBadge } from "@/components/ui/badge";
-import { mergePoll, type DeliveryUpdate } from "@/lib/inbox/estados";
+import { mergeAudios, mergePoll, type AudioUpdate, type DeliveryUpdate } from "@/lib/inbox/estados";
+import { AudioTexto } from "@/components/inbox/audio-texto";
 import { explicarError, lineaError } from "@/lib/envios/explicacion";
 import { createClient } from "@/lib/supabase/client";
 
@@ -24,6 +25,9 @@ type ThreadMessage = Message & {
   delivery_status?: string | null;
   delivery_status_at?: string | null;
   delivery_error?: unknown;
+  audio_texto?: string | null;
+  audio_texto_estado?: string | null;
+  audio_texto_detalle?: string | null;
 };
 
 /**
@@ -91,9 +95,9 @@ export function ConversationThread({
     try {
       const res = await fetch(`/api/conversations/${conversationId}/messages${qs}`, { cache: "no-store" });
       if (!res.ok) return;
-      const data = (await res.json()) as { messages?: ThreadMessage[]; estados?: DeliveryUpdate[] };
+      const data = (await res.json()) as { messages?: ThreadMessage[]; estados?: DeliveryUpdate[]; audios?: AudioUpdate[] };
       const recibidos = data.messages ?? [];
-      setMessages((prev) => mergePoll(prev, recibidos, data.estados ?? []));
+      setMessages((prev) => mergeAudios(mergePoll(prev, recibidos, data.estados ?? []), data.audios ?? []));
       if (recibidos.length) lastAtRef.current = recibidos[recibidos.length - 1].created_at;
     } catch {
       // sin conexión: se reintenta en el próximo ciclo
@@ -221,6 +225,9 @@ export function ConversationThread({
                   <div className="mt-1.5 space-y-1">
                     {m.message_type === "audio" && (
                       <audio controls preload="none" className="max-w-full" src={`/api/adjuntos/mensaje/${m.id}`} />
+                    )}
+                    {m.message_type === "audio" && (
+                      <AudioTexto messageId={m.id} audio={m} onCambio={(a) => setMessages((prev) => mergeAudios(prev, [{ id: m.id, ...a }]))} />
                     )}
                     {Array.from({ length: attachmentCount(m) }, (_, n) => (
                       <a

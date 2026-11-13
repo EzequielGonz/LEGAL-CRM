@@ -11,6 +11,7 @@ import type { SlugPerfil } from "@/lib/marca";
 import { HorarioAtencion } from "@/components/configuracion/horario-atencion";
 import { conEstadoReal } from "@/lib/canales-estado";
 import { GruposAjustesGenerales, SeccionCalendarioGeneral, leerAjustesGenerales } from "@/components/configuracion/ajustes-generales";
+import { GrupoAudios, grupoNavAudios, leerAudiosDePerfil } from "@/components/configuracion/grupo-audios";
 
 /**
  * Configuración de Coberturas médicas, Autos 0 km y Marketing (rediseño
@@ -21,13 +22,14 @@ import { GruposAjustesGenerales, SeccionCalendarioGeneral, leerAjustesGenerales 
  */
 export async function ConfiguracionPerfil({ slug }: { slug: Exclude<SlugPerfil, "juridico"> }) {
   const supabase = createClient();
-  const [{ data: canalesBase }, generales] = await Promise.all([supabase.from("channels").select("*").eq("area", slug).order("type"), leerAjustesGenerales()]);
+  const [{ data: canalesBase }, generales, audios] = await Promise.all([supabase.from("channels").select("*").eq("area", slug).order("type"), leerAjustesGenerales(), leerAudiosDePerfil(slug)]);
   const channels = conEstadoReal(canalesBase);
   const conectados = (channels ?? []).filter((c) => c.is_connected).length;
   const grupos: GrupoNav[] = [
     { id: "marca", titulo: "Perfil y marca", resumen: "Nombre, logo, colores y líneas" },
     { id: "canales", titulo: "Canales, líneas y plantillas", resumen: `${conectados} de ${(channels ?? []).length} canales conectados` },
     { id: "agenda", titulo: "Agenda y horario de atención", resumen: "Respuesta 24 h · asesores de lunes a sábado de 8 a 21" },
+    grupoNavAudios(audios),
     { id: "agentes", titulo: "Bot de este perfil", resumen: "En Bot IA" },
     ...generales.grupos,
   ];
@@ -89,6 +91,8 @@ export async function ConfiguracionPerfil({ slug }: { slug: Exclude<SlugPerfil, 
         </SeccionAjustes>
         <SeccionCalendarioGeneral d={generales} />
       </GrupoAjustes>
+
+      <GrupoAudios perfil={slug} encendido={audios} />
 
       <GrupoAjustes id="agentes" titulo="Bot de este perfil" resumen="En Bot IA" soloAvanzado>
         <SeccionAjustes id="agentes-config" titulo="Dónde se configura el bot" alcance="perfil" palabras="modelo versión prompt evaluación entrenamiento agente">

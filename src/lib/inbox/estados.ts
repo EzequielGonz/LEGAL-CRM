@@ -40,3 +40,28 @@ export function mergePoll<T extends { id: string; delivery_status?: string | nul
   const extra = nuevos.filter((m) => !known.has(m.id));
   return extra.length ? [...list, ...extra] : list;
 }
+
+/** Texto de un audio que se pasó a texto después de que el mensaje ya estaba en pantalla (13/11). */
+export interface AudioUpdate {
+  id: string;
+  audio_texto?: string | null;
+  audio_texto_estado?: string | null;
+  audio_texto_detalle?: string | null;
+}
+
+export function mergeAudios<T extends { id: string; audio_texto?: string | null; audio_texto_estado?: string | null; audio_texto_detalle?: string | null }>(
+  prev: T[],
+  audios: AudioUpdate[]
+): T[] {
+  if (!audios.length) return prev;
+  const byId = new Map(audios.map((a) => [a.id, a]));
+  let changed = false;
+  const list = prev.map((m) => {
+    const a = byId.get(m.id);
+    if (!a) return m;
+    if ((a.audio_texto ?? null) === (m.audio_texto ?? null) && (a.audio_texto_estado ?? null) === (m.audio_texto_estado ?? null)) return m;
+    changed = true;
+    return { ...m, audio_texto: a.audio_texto ?? null, audio_texto_estado: a.audio_texto_estado ?? null, audio_texto_detalle: a.audio_texto_detalle ?? null };
+  });
+  return changed ? list : prev;
+}
