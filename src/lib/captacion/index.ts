@@ -287,6 +287,24 @@ export async function solicitarAtencion(input: {
       created_by: input.actor,
     });
     if (errInc && (errInc as any).code !== "23505") console.error("[atencion] No se pudo abrir la incidencia:", errInc.message);
+    // 13/11: un reclamo serio se avisa en el momento a los dispositivos del equipo. Sin datos de la
+    // persona en el aviso (se lee en la pantalla bloqueada); una sola vez por persona y tipo.
+    if (!errInc) {
+      try {
+        const slug = RUBRO_SLUG_BY_ID[opp.rubro_id] ?? null;
+        const { sendToDevices } = await import("@/lib/push");
+        await sendToDevices({
+          title: t.motivo === "amenaza_legal" ? "Reclamo serio: amenaza legal o denuncia" : "Reclamo serio: queja de un cliente captado",
+          body: "Entró recién. El bot dejó de contestarle: abrí Incidencias para verlo.",
+          url: slug ? `/incidencias?perfil=${slug}` : "/perfiles",
+          tag: "incidencia-reclamo",
+          kind: "aviso",
+          eventKey: `incidencia:${opp.id}:${t.motivo}`,
+        });
+      } catch (err) {
+        console.error("[atencion] No se pudo avisar a los dispositivos:", err);
+      }
+    }
   }
 
   let detencionPendiente: DetentionMotive | null = null;
