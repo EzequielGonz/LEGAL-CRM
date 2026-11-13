@@ -13,7 +13,7 @@ import { classifySendFailure, failureNote, MAX_TRANSIENT_ATTEMPTS } from "@/lib/
 import { randomUUID } from "node:crypto";
 import { effectiveSendHours, getSendWindow, startOfArgentinaDay } from "@/lib/horario";
 import { loadContactCalendar } from "@/lib/contacto/calendario";
-import { clasificarFallaWasender, cupoDeLinea, frenoDeLinea, notaFallaWasender, numeroConWhatsApp, preparacionWasender, proveedorDe, textoDeCampana } from "@/lib/wasender/campanas";
+import { clasificarFallaWasender, cupoDeLinea, elegirPlantillaDeInicio, frenoDeLinea, notaFallaWasender, numeroConWhatsApp, preparacionWasender, proveedorDe, textoDeCampana } from "@/lib/wasender/campanas";
 import { desfaseEnElMinuto, esperaIrregular } from "@/lib/wasender/ritmo";
 import { enviarPorWasender } from "@/lib/wasender/envio";
 
@@ -430,7 +430,9 @@ async function tickLocked(
       })
     : { ok: true as const, parameters: [] as Extract<ReturnType<typeof buildBodyParameters>, { ok: true }>["parameters"] };
   // Wasender: el texto de la plantilla propia, con la variante de esta persona.
-  const textoWasender = wa ? textoDeCampana(wa.plantilla!, { nombre: name, asesor: senderName, marca: brandName }, claim.contact_id ?? claim.id) : null;
+  // 13/11: con rotación, a cada persona le toca una de las plantillas de inicio del perfil.
+  const plantillaWa = wa ? elegirPlantillaDeInicio(wa.rotacion, claim.contact_id ?? claim.id) ?? wa.plantilla! : null;
+  const textoWasender = plantillaWa ? textoDeCampana(plantillaWa, { nombre: name, asesor: senderName, marca: brandName }, claim.contact_id ?? claim.id) : null;
   if (!built.ok) {
     const what = built.missing.map((m) => `${m.label} para ${m.variable}`).join(", ");
     // Igual que "Sin teléfono": no hubo intento contra la API, no cuenta para el ritmo.
@@ -487,7 +489,7 @@ async function tickLocked(
   let envioWasender: Awaited<ReturnType<typeof enviarPorWasender>> | null = null;
   try {
     if (wa) {
-      envioWasender = await enviarPorWasender({ lineaId: wa.linea!.id, to: phone, body: textoWasender!, plantilla: wa.plantilla!.nombre }, { supabase });
+      envioWasender = await enviarPorWasender({ lineaId: wa.linea!.id, to: phone, body: textoWasender!, plantilla: plantillaWa!.nombre }, { supabase });
       // Sin identificador no se puede confirmar el envío: igual que con Meta, va a revisión.
       if (!envioWasender.externalId) throw Object.assign(new Error("Wasender respondió sin el identificador del mensaje."), { sinConfirmar: true });
       sendResult = { messages: [{ id: envioWasender.externalId }] };
@@ -584,7 +586,7 @@ async function tickLocked(
           external_message_id: messageId,
           delivery_status: "enviado",
           delivery_status_at: sentAt,
-          metadata: { ...envioWasender!.metadata, campaign_id: campaign.id, wasender_plantilla_id: wa.plantilla!.id },
+          metadata: { ...envioWasender!.metadata, campaign_id: campaign.id, wasender_plantilla_id: plantillaWa!.id },
           origin: "inicio_campana",
         }
       : {
@@ -666,7 +668,7 @@ export async function launchCampaign(campaignId: string): Promise<TickResult> {
   if (campaign.archived_at) throw new Error("La campaña está archivada: recuperala antes de lanzarla.");
   const { data: full } = await supabase
     .from("campaigns")
-    .select("area, line_id, message_template_name, template_id, proveedor, wasender_line_id, wasender_plantilla_id" as any)
+    .select("area, line_id, message_template_name, template_id, proveedor, wasender_line_id, wasender_plantilla_id, wasender_rotar_inicio" as any)
     .eq("id", campaignId)
     .single();
   if (proveedorDe((full ?? {}) as any) === "wasender") {

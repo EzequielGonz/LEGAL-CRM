@@ -33,6 +33,9 @@ export function CampaignSetup({
     plantillas: { id: string; label: string }[];
     lineaId: string | null;
     plantillaId: string | null;
+    /** 13/11: la campaña rota entre las plantillas de inicio del perfil. */
+    rotar?: boolean;
+    rotacion?: { plantillas: number; textos: number };
   } | null;
   campaignId: string;
   lines: { id: string; label: string; ok: boolean; motivo?: string | null; daily_limit: number | null }[];
@@ -53,7 +56,7 @@ export function CampaignSetup({
   const [tpl, setTpl] = useState(templateId ?? "");
   const [limite, setLimite] = useState(dailyLimit ? String(dailyLimit) : "");
   const [waLinea, setWaLinea] = useState(wasender?.lineaId ?? "");
-  const [waPlantilla, setWaPlantilla] = useState(wasender?.plantillaId ?? "");
+  const [waPlantilla, setWaPlantilla] = useState(wasender?.rotar ? "rotar" : wasender?.plantillaId ?? "");
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -65,7 +68,11 @@ export function CampaignSetup({
         ? { wasender_line_id: waLinea || null, run_days: days, daily_send_limit: limite.trim() === "" ? null : Number(limite) }
         : { line_id: line || null, run_days: days, daily_send_limit: limite.trim() === "" ? null : Number(limite) };
       if (wasender) {
-        if (!running && (waPlantilla || null) !== (wasender.plantillaId ?? null)) payload.wasender_plantilla_id = waPlantilla || null;
+        const antes = wasender.rotar ? "rotar" : wasender.plantillaId ?? "";
+        if (!running && waPlantilla !== antes) {
+          payload.wasender_rotar_inicio = waPlantilla === "rotar";
+          payload.wasender_plantilla_id = waPlantilla === "rotar" ? null : waPlantilla || null;
+        }
       } else if (!running && (tpl || null) !== (templateId ?? null)) payload.template_id = tpl || null;
       const res = await fetch(`/api/campaigns/${campaignId}`, {
         method: "PATCH",
@@ -160,6 +167,11 @@ export function CampaignSetup({
                 className="block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
               >
                 <option value="">Sin elegir</option>
+                {wasender.rotacion?.plantillas || wasender.rotar ? (
+                  <option value="rotar">
+                    Rotar las {wasender.rotacion?.plantillas ?? 0} plantillas de inicio ({wasender.rotacion?.textos ?? 0} textos)
+                  </option>
+                ) : null}
                 {wasender.plantillas.map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.label}

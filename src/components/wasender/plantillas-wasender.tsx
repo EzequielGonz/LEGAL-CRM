@@ -18,11 +18,13 @@ interface Plantilla {
   meta_nombre: string | null;
   archivada_at: string | null;
   motivo_archivo: string | null;
+  grupo?: "inicio" | null;
 }
 
 const USO: Record<UsoPlantilla, string> = { campana: "Primer mensaje (campaña)", seguimiento: "Seguimiento", manual: "Para mandar a mano" };
 
-const VACIA = { id: "", nombre: "", uso: "campana" as UsoPlantilla, cuerpo: "", variantes: [] as string[], activa: true };
+const VACIA = { id: "", nombre: "", uso: "campana" as UsoPlantilla, cuerpo: "", variantes: [] as string[], activa: true, grupo: null as "inicio" | null };
+const MAXIMO_VARIANTES = 60;
 
 async function pedir(url: string, init?: RequestInit) {
   const res = await fetch(url, { cache: "no-store", ...init, headers: { "Content-Type": "application/json", ...(init?.headers ?? {}) } });
@@ -154,18 +156,23 @@ export function PlantillasWasender({ slug, marca }: { slug: SlugPerfil; marca: s
             <span className="font-medium text-slate-800">Mensaje</span>
             <textarea value={edicion.cuerpo} rows={4} onChange={(e) => setEdicion({ ...edicion, cuerpo: e.target.value })} className="mt-1 block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm leading-relaxed" />
           </label>
-          <div className="space-y-2">
-            <p className="text-sm font-medium text-slate-800">Variantes (el mismo mensaje dicho de otra forma)</p>
-            {edicion.variantes.map((v, i) => (
-              <div key={i} className="flex gap-2">
-                <textarea value={v} rows={3} onChange={(e) => setEdicion({ ...edicion, variantes: edicion.variantes.map((x, j) => (j === i ? e.target.value : x)) })} className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm leading-relaxed" />
-                <button type="button" onClick={() => setEdicion({ ...edicion, variantes: edicion.variantes.filter((_, j) => j !== i) })} className="tactil self-start rounded-lg px-2 text-sm text-slate-500 underline">Quitar</button>
-              </div>
-            ))}
-            {edicion.variantes.length < 10 && (
-              <button type="button" onClick={() => setEdicion({ ...edicion, variantes: [...edicion.variantes, ""] })} className="tactil text-sm font-medium text-slate-700 underline">Agregar variante</button>
-            )}
-          </div>
+          <details className="rounded-xl border border-slate-200 p-3" open={edicion.variantes.length <= 4}>
+            <summary className="tactil flex cursor-pointer items-center text-sm font-medium text-slate-800">
+              Variantes: el mismo mensaje dicho de otra forma ({edicion.variantes.length})
+            </summary>
+            <div className="mt-2 space-y-2">
+              {edicion.variantes.map((v, i) => (
+                <div key={i} className="flex gap-2">
+                  <span className="w-6 shrink-0 pt-2 text-right text-xs tabular-nums text-slate-500">{i + 1}</span>
+                  <textarea aria-label={`Variante ${i + 1}`} value={v} rows={3} onChange={(e) => setEdicion({ ...edicion, variantes: edicion.variantes.map((x, j) => (j === i ? e.target.value : x)) })} className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm leading-relaxed" />
+                  <button type="button" onClick={() => setEdicion({ ...edicion, variantes: edicion.variantes.filter((_, j) => j !== i) })} className="tactil self-start rounded-lg px-2 text-sm text-slate-500 underline">Quitar</button>
+                </div>
+              ))}
+              {edicion.variantes.length < MAXIMO_VARIANTES && (
+                <button type="button" onClick={() => setEdicion({ ...edicion, variantes: [...edicion.variantes, ""] })} className="tactil text-sm font-medium text-slate-700 underline">Agregar variante</button>
+              )}
+            </div>
+          </details>
           {edicion.cuerpo.trim() && (
             <div className="rounded-xl bg-slate-50 p-3 text-sm text-slate-700">
               <p className="text-xs font-medium text-slate-500">Así le llega a «{ejemplo.nombre}»:</p>
@@ -183,6 +190,15 @@ export function PlantillasWasender({ slug, marca }: { slug: SlugPerfil; marca: s
             <input type="checkbox" checked={edicion.activa} onChange={(e) => setEdicion({ ...edicion, activa: e.target.checked })} />
             Activa (se puede elegir en campañas y seguimientos)
           </label>
+          {edicion.uso === "campana" ? (
+            <label className="flex items-start gap-2 text-sm text-slate-800">
+              <input type="checkbox" className="mt-1" checked={edicion.grupo === "inicio"} onChange={(e) => setEdicion({ ...edicion, grupo: e.target.checked ? "inicio" : null })} />
+              <span>
+                Plantilla de inicio
+                <span className="block text-[13px] text-slate-600">Las campañas que rotan plantillas eligen entre todas las de inicio activas del perfil.</span>
+              </span>
+            </label>
+          ) : null}
           <div className="flex gap-2">
             <button type="submit" disabled={ocupado || problemas.length > 0} className="tactil rounded-lg bg-slate-900 px-4 text-sm font-semibold text-white hover:bg-slate-800 disabled:opacity-50">Guardar</button>
             <button type="button" onClick={() => setEdicion(null)} className="tactil rounded-lg border border-slate-300 bg-white px-4 text-sm text-slate-700">Cancelar</button>
@@ -212,6 +228,7 @@ export function PlantillasWasender({ slug, marca }: { slug: SlugPerfil; marca: s
                           : ` · le faltan ${MINIMO_TEXTOS_CAMPANA - textosDistintos(p.cuerpo, p.variantes)} textos para salir en campañas`
                         : ""}
                       {p.origen === "meta" ? " · copiada de Meta" : ""}
+                      {p.grupo === "inicio" ? " · de inicio: rota en campañas" : ""}
                     </p>
                   </div>
                   <span className={clsx("rounded-full border px-2.5 py-0.5 text-xs font-medium", p.activa ? "border-emerald-300 bg-emerald-50 text-emerald-800" : "border-amber-300 bg-amber-50 text-amber-800")}>
@@ -219,8 +236,18 @@ export function PlantillasWasender({ slug, marca }: { slug: SlugPerfil; marca: s
                   </span>
                 </div>
                 <p className="mt-2 whitespace-pre-line text-sm text-slate-700">{p.cuerpo}</p>
+                {p.variantes.length > 0 ? (
+                  <details className="mt-2">
+                    <summary className="tactil inline-flex cursor-pointer items-center text-[13px] font-medium text-slate-700 underline underline-offset-2">Ver las {p.variantes.length} variantes</summary>
+                    <ol className="mt-2 list-decimal space-y-1.5 pl-6 text-[13px] text-slate-700">
+                      {p.variantes.map((v, i) => (
+                        <li key={i} className="whitespace-pre-line">{v}</li>
+                      ))}
+                    </ol>
+                  </details>
+                ) : null}
                 <div className="mt-3 flex gap-3 text-sm">
-                  <button type="button" onClick={() => setEdicion({ id: p.id, nombre: p.nombre, uso: p.uso, cuerpo: p.cuerpo, variantes: p.variantes, activa: p.activa })} className="tactil font-medium text-slate-800 underline">Editar</button>
+                  <button type="button" onClick={() => setEdicion({ id: p.id, nombre: p.nombre, uso: p.uso, cuerpo: p.cuerpo, variantes: p.variantes, activa: p.activa, grupo: p.grupo ?? null })} className="tactil font-medium text-slate-800 underline">Editar</button>
                   <button type="button" onClick={() => archivar(p)} className="tactil text-slate-500 underline">Archivar</button>
                 </div>
               </li>

@@ -14,7 +14,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
   const supabase = createAdminClient();
   const { data: campaign } = await supabase
     .from("campaigns")
-    .select("area, line_id, message_template_name, template_id, archived_at, status, pause_reason, proveedor, wasender_line_id, wasender_plantilla_id" as any)
+    .select("area, line_id, message_template_name, template_id, archived_at, status, pause_reason, proveedor, wasender_line_id, wasender_plantilla_id, wasender_rotar_inicio" as any)
     .eq("id", params.id)
     .maybeSingle() as { data: any };
   if (!campaign) return NextResponse.json({ error: "Campaña no encontrada" }, { status: 404 });

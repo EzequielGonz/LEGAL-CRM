@@ -97,6 +97,28 @@ export function textoDeCampana(p: { cuerpo: string; variantes: string[] }, datos
 }
 
 /**
+ * 13/11 · Rotación: de las plantillas de inicio del perfil, las que pueden salir
+ * en una campaña (activas, sin archivar, sin «[revisar]» y con textos suficientes). Pura.
+ */
+export function plantillasDeInicioUsables(plantillas: PlantillaCampana[]): PlantillaCampana[] {
+  return plantillas
+    .filter((p) => p.activa && !p.archivada_at && ![p.cuerpo, ...p.variantes].some((t) => /\[revisar/i.test(t)) && textosDistintos(p.cuerpo, p.variantes) >= MINIMO_TEXTOS_CAMPANA)
+    .sort((a, b) => a.nombre.localeCompare(b.nombre));
+}
+
+/**
+ * Qué plantilla de inicio le toca a una persona: siempre la misma para esa
+ * persona, repartidas parejo entre todas. Se mezcla la semilla para que no
+ * coincida con la elección de variante dentro de la plantilla. Pura.
+ */
+export function elegirPlantillaDeInicio<T extends { nombre: string }>(rotacion: T[], semilla: string): T | null {
+  if (!rotacion.length) return null;
+  let h = 2166136261;
+  for (const c of `plantilla:${semilla}`) h = Math.imul(h ^ c.charCodeAt(0), 16777619) >>> 0;
+  return rotacion[h % rotacion.length];
+}
+
+/**
  * Traduce un error de Wasender a las mismas categorías que usa el motor con
  * Meta, así la campaña reacciona igual: problema de la línea → pendiente y
  * pausa; falla temporal → vuelve a la cola; sin confirmación → a revisión.
@@ -142,29 +164,46 @@ export interface PreparacionWasender {
   missing: string[];
   linea: LineaCampana | null;
   plantilla: PlantillaCampana | null;
+  /** 13/11: con rotación, todas las plantillas de inicio entre las que se reparte. Vacío = una sola plantilla. */
+  rotacion: PlantillaCampana[];
   perfil: { brand_name?: string | null; agent_presentation_name?: string | null } | null;
 }
 
 const COLUMNAS_LINEA = "id, rubro_id, nombre, habilitada, estado, api_key_cifrada, archivada_at, limite_diario, calentamiento_desde";
 const COLUMNAS_PLANTILLA = "id, rubro_id, nombre, cuerpo, variantes, activa, archivada_at";
+/** 13/11: marca que usan los selectores para «rotar entre las plantillas de inicio». */
+export const ROTAR_INICIO = "rotar";
 
 /** Lee la línea y la plantilla de la campaña y dice qué falta. */
 export async function preparacionWasender(
-  campana: { area: Area; wasender_line_id?: string | null; wasender_plantilla_id?: string | null },
+  campana: { area: Area; wasender_line_id?: string | null; wasender_plantilla_id?: string | null; wasender_rotar_inicio?: boolean | null },
   supabase: Db = createAdminClient(),
   env: Env = process.env
 ): Promise<PreparacionWasender> {
   const rubroId = profileIdForArea(campana.area);
-  const [perfil, linea, plantilla] = await Promise.all([
+  const rotar = campana.wasender_rotar_inicio === true;
+  const limpia = (x: any): PlantillaCampana => ({ ...x, variantes: Array.isArray(x.variantes) ? x.variantes.filter((v: unknown) => typeof v === "string") : [] });
+  const [perfil, linea, plantilla, deInicio] = await Promise.all([
     rubroId ? getProfile(rubroId) : Promise.resolve(null),
     campana.wasender_line_id
       ? (supabase.from("wasender_lineas" as any) as any).select(COLUMNAS_LINEA).eq("id", campana.wasender_line_id).maybeSingle().then((r: any) => r.data ?? null)
       : Promise.resolve(null),
-    campana.wasender_plantilla_id
+    !rotar && campana.wasender_plantilla_id
       ? (supabase.from("wasender_plantillas" as any) as any).select(COLUMNAS_PLANTILLA).eq("id", campana.wasender_plantilla_id).maybeSingle().then((r: any) => r.data ?? null)
       : Promise.resolve(null),
+    rotar && rubroId
+      ? (supabase.from("wasender_plantillas" as any) as any)
+          .select(COLUMNAS_PLANTILLA)
+          .eq("rubro_id", rubroId)
+          .eq("grupo", "inicio")
+          .eq("uso", "campana")
+          .is("archivada_at", null)
+          .then((r: any) => ((r.data ?? []) as any[]).map(limpia))
+      : Promise.resolve([] as PlantillaCampana[]),
   ]);
-  const p = plantilla ? { ...plantilla, variantes: Array.isArray(plantilla.variantes) ? plantilla.variantes.filter((v: unknown) => typeof v === "string") : [] } : null;
+  const rotacion = rotar ? plantillasDeInicioUsables(deInicio as PlantillaCampana[]) : [];
+  // Con rotación, la primera sirve para comprobar marca y asesor (todas usan las mismas variables).
+  const p = rotar ? rotacion[0] ?? null : plantilla ? limpia(plantilla) : null;
   const missing = faltantesWasender(
       {
         area: campana.area,
@@ -173,11 +212,17 @@ export async function preparacionWasender(
         linea,
         lineaAsignada: !!campana.wasender_line_id,
         plantilla: p,
-        plantillaAsignada: !!campana.wasender_plantilla_id,
+        plantillaAsignada: rotar ? rotacion.length > 0 : !!campana.wasender_plantilla_id,
       },
       env
     );
-  return { ready: missing.length === 0, missing, linea, plantilla: p, perfil: perfil as any };
+  if (rotar && !rotacion.length) {
+    const i = missing.indexOf("Plantilla de Wasender de la campaña");
+    const texto = "Plantillas de inicio: el perfil no tiene ninguna activa y con textos suficientes (Líneas y plantillas → Plantillas de Wasender)";
+    if (i >= 0) missing[i] = texto;
+    else missing.push(texto);
+  }
+  return { ready: missing.length === 0, missing, linea, plantilla: p, rotacion, perfil: perfil as any };
 }
 
 /** Líneas y plantillas de Wasender de un perfil, para elegir al crear o configurar una campaña. */
@@ -189,12 +234,17 @@ export async function opcionesWasender(rubroId: string, supabase: Db = createAdm
       .is("archivada_at", null)
       .order("created_at"),
     (supabase.from("wasender_plantillas" as any) as any)
-      .select("id, nombre, uso, activa")
+      .select("id, nombre, uso, activa, grupo, cuerpo, variantes, archivada_at, rubro_id")
       .eq("rubro_id", rubroId)
       .is("archivada_at", null)
       .order("nombre"),
   ]);
+  const deInicio = plantillasDeInicioUsables(
+    ((plantillas ?? []) as any[]).filter((p) => p.grupo === "inicio" && p.uso === "campana").map((p) => ({ ...p, variantes: Array.isArray(p.variantes) ? p.variantes.filter((v: unknown) => typeof v === "string") : [] }))
+  );
   return {
+    /** 13/11: cuántas plantillas de inicio pueden rotar y cuántos textos distintos suman. */
+    rotacion: { plantillas: deInicio.length, textos: deInicio.reduce((n, p) => n + textosDistintos(p.cuerpo, p.variantes), 0) },
     lineas: ((lineas ?? []) as any[]).map((l) => ({
       id: l.id as string,
       label: `${l.nombre}${l.estado === "connected" ? "" : " (desconectada)"}${l.habilitada ? "" : " (apagada)"}${l.limite_diario ? ` · ${l.limite_diario}/día` : ""}`,
@@ -225,7 +275,7 @@ export async function validarEleccionWasender(
 
 /** Línea y plantilla de una campaña de Wasender, con la forma que muestra el detalle de campañas. */
 export async function detalleWasender(
-  campana: { wasender_line_id?: string | null; wasender_plantilla_id?: string | null },
+  campana: { wasender_line_id?: string | null; wasender_plantilla_id?: string | null; wasender_rotar_inicio?: boolean | null },
   supabase: Db = createAdminClient()
 ): Promise<{ line: { label: string; phone_display: string | null } | null; template: { name: string; language: string; status: string } | null }> {
   const [l, p] = await Promise.all([
@@ -238,7 +288,11 @@ export async function detalleWasender(
   ]);
   return {
     line: l ? { label: `Wasender · ${l.nombre}`, phone_display: l.telefono ?? null } : null,
-    template: p ? { name: p.nombre, language: "es", status: p.activa ? "WASENDER" : "WASENDER INACTIVA" } : null,
+    template: campana.wasender_rotar_inicio
+      ? { name: "Rota entre las plantillas de inicio del perfil", language: "es", status: "WASENDER" }
+      : p
+        ? { name: p.nombre, language: "es", status: p.activa ? "WASENDER" : "WASENDER INACTIVA" }
+        : null,
   };
 }
 

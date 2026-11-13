@@ -23,9 +23,14 @@ export interface PlantillaVista {
   updated_at: string;
   archivada_at: string | null;
   motivo_archivo: string | null;
+  /** 13/11: «inicio» = primer mensaje en frío que rota dentro de una campaña. */
+  grupo: "inicio" | null;
 }
 
-const COLUMNAS = "id, nombre, uso, cuerpo, variantes, activa, origen, meta_nombre, updated_at, archivada_at, motivo_archivo";
+/** 13/11: tope de variantes por plantilla (antes 10): el pedido es 40 por plantilla de inicio. */
+export const MAXIMO_VARIANTES = 60;
+
+const COLUMNAS = "id, nombre, uso, cuerpo, variantes, activa, origen, meta_nombre, updated_at, archivada_at, motivo_archivo, grupo";
 const tabla = (s: Db) => s.from("wasender_plantillas" as any) as any;
 
 function aVista(f: any): PlantillaVista {
@@ -45,8 +50,10 @@ function limpiar(body: any) {
     nombre: String(body?.nombre ?? "").trim().slice(0, 80),
     uso,
     cuerpo: String(body?.cuerpo ?? ""),
-    variantes: variantes.slice(0, 10),
+    variantes: variantes.slice(0, MAXIMO_VARIANTES),
     activa: body?.activa !== false,
+    // El grupo solo cambia si quien guarda lo manda (una edición vieja no lo borra).
+    ...(body && "grupo" in body ? { grupo: body.grupo === "inicio" && uso === "campana" ? ("inicio" as const) : null } : {}),
   };
 }
 

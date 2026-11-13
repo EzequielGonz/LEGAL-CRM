@@ -33,7 +33,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
   const supabase = createAdminClient();
   const { data: campaign } = await supabase
     .from("campaigns")
-    .select("id, area, status, line_id, run_days, template_id, message_template_name, daily_send_limit, proveedor, wasender_line_id, wasender_plantilla_id" as any)
+    .select("id, area, status, line_id, run_days, template_id, message_template_name, daily_send_limit, proveedor, wasender_line_id, wasender_plantilla_id, wasender_rotar_inicio" as any)
     .eq("id", params.id)
     .maybeSingle() as { data: any };
   if (!campaign) return NextResponse.json({ error: "Campaña no encontrada" }, { status: 404 });
@@ -42,16 +42,18 @@ export async function PATCH(request: Request, { params }: { params: { id: string
   // 10/11: campañas por Wasender. El método se elige al crearla; acá se cambian su línea y su plantilla.
   if ((campaign as any).proveedor === "wasender") {
     const cambiaLinea = body?.wasender_line_id !== undefined;
-    const cambiaPlantilla = body?.wasender_plantilla_id !== undefined;
+    const cambiaRotar = typeof body?.wasender_rotar_inicio === "boolean";
+    const cambiaPlantilla = body?.wasender_plantilla_id !== undefined || cambiaRotar;
     if (cambiaPlantilla && campaign.status === "en_curso") {
       return NextResponse.json({ error: "Pausá la campaña para cambiar la plantilla." }, { status: 409 });
     }
     const lineaId = cambiaLinea ? (body.wasender_line_id || null) : undefined;
-    const plantillaId = cambiaPlantilla ? (body.wasender_plantilla_id || null) : undefined;
+    const plantillaId = cambiaPlantilla ? (body.wasender_rotar_inicio === true ? null : body.wasender_plantilla_id || null) : undefined;
     const problema = await validarEleccionWasender(AREA_TO_RUBRO_ID[campaign.area as string], { lineaId, plantillaId }, supabase);
     if (problema) return NextResponse.json({ error: problema }, { status: 400 });
     if (cambiaLinea) update.wasender_line_id = lineaId;
     if (cambiaPlantilla) update.wasender_plantilla_id = plantillaId;
+    if (cambiaRotar) update.wasender_rotar_inicio = body.wasender_rotar_inicio;
   }
   if (body?.line_id !== undefined && (campaign as any).proveedor !== "wasender") {
     if (body.line_id === null || body.line_id === "") update.line_id = null;

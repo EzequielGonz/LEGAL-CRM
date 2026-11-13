@@ -11,7 +11,7 @@ export async function CampaignSetupSection({ campaignId }: { campaignId: string 
   const supabase = createClient();
   const { data: campaign } = await supabase
     .from("campaigns")
-    .select("id, area, status, line_id, run_days, archived_at, template_id, message_template_name, daily_send_limit, agent_role_id, proveedor, wasender_line_id, wasender_plantilla_id" as any)
+    .select("id, area, status, line_id, run_days, archived_at, template_id, message_template_name, daily_send_limit, agent_role_id, proveedor, wasender_line_id, wasender_plantilla_id, wasender_rotar_inicio" as any)
     .eq("id", campaignId)
     .maybeSingle() as { data: any };
   if (!campaign) return null;
@@ -25,7 +25,7 @@ export async function CampaignSetupSection({ campaignId }: { campaignId: string 
     .order("created_at");
   // 10/11: campaña por Wasender → su línea y su plantilla propias.
   const porWasender = campaign.proveedor === "wasender";
-  const wa = porWasender && rubroId ? await opcionesWasender(rubroId).catch(() => ({ lineas: [], plantillas: [] })) : null;
+  const wa = porWasender && rubroId ? await opcionesWasender(rubroId).catch(() => ({ lineas: [], plantillas: [], rotacion: { plantillas: 0, textos: 0 } })) : null;
   const estados = porWasender ? {} as Record<string, any> : await consultarEstadosLineas((lines ?? []).map((l: any) => l.credential_key));
   return (
     <div className="space-y-4">
@@ -38,7 +38,7 @@ export async function CampaignSetupSection({ campaignId }: { campaignId: string 
       legacyTemplateName={campaign.template_id ? null : campaign.message_template_name ?? null}
       running={campaign.status === "en_curso"}
       dailyLimit={(campaign as any).daily_send_limit ?? null}
-      wasender={wa ? { ...wa, lineaId: campaign.wasender_line_id ?? null, plantillaId: campaign.wasender_plantilla_id ?? null } : null}
+      wasender={wa ? { ...wa, lineaId: campaign.wasender_line_id ?? null, plantillaId: campaign.wasender_plantilla_id ?? null, rotar: (campaign as any).wasender_rotar_inicio === true } : null}
       lines={(lines ?? []).map((l: any) => ({
         id: l.id,
         label: l.label,

@@ -18,7 +18,7 @@ export function NewCampaignForm({
   wasender = null,
 }: {
   /** 10/11: líneas y plantillas de Wasender del perfil. Con ellas aparece «Método de envío». */
-  wasender?: { lineas: { id: string; label: string }[]; plantillas: { id: string; label: string }[] } | null;
+  wasender?: { lineas: { id: string; label: string }[]; plantillas: { id: string; label: string }[]; rotacion?: { plantillas: number; textos: number } } | null;
   channels: { id: string; label: string }[];
   /** 24/10: bases ya cargadas del perfil, para elegir en vez de escribir. */
   bases?: { id: string; nombre: string; filas: number | null }[];
@@ -80,7 +80,7 @@ export function NewCampaignForm({
         batch_pause_seconds: batchPauseSeconds,
         daily_send_limit: dailyLimit === "" ? null : dailyLimit,
         line_id: porWasender ? null : lineId || null,
-        ...(porWasender ? { proveedor: "wasender", wasender_line_id: waLinea || null, wasender_plantilla_id: waPlantilla || null } : {}),
+        ...(porWasender ? { proveedor: "wasender", wasender_line_id: waLinea || null, wasender_plantilla_id: waPlantilla === "rotar" ? null : waPlantilla || null, wasender_rotar_inicio: waPlantilla === "rotar" } : {}),
         base_id: baseId || undefined,
         agent_role_id: rolId || null,
       }),
@@ -235,13 +235,18 @@ export function NewCampaignForm({
               className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
             >
               <option value="">Elegir después</option>
+              {wasender.rotacion?.plantillas ? (
+                <option value="rotar">
+                  Rotar las {wasender.rotacion.plantillas} plantillas de inicio ({wasender.rotacion.textos} textos distintos) · recomendado
+                </option>
+              ) : null}
               {wasender.plantillas.map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.label}
                 </option>
               ))}
             </select>
-            <p className="mt-1 text-xs text-slate-600">Plantillas activas de Wasender → Plantillas. Cada persona recibe una de sus variantes.</p>
+            <p className="mt-1 text-xs text-slate-600">Con «Rotar», cada persona recibe una plantilla de inicio distinta y una de sus variantes: es lo que menos se parece a un envío masivo. Con una sola plantilla, recibe una de sus variantes.</p>
           </div>
         </>
       ) : (

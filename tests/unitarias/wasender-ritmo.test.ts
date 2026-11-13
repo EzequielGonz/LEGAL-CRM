@@ -99,3 +99,45 @@ test("salud: una línea caída frena la operación; apagada es para revisar; con
   assert.equal(items[0].href, "/wasender?perfil=juridico");
   assert.match(items[2].detalle, /Día 1 de calentamiento: hasta 20/);
 });
+
+import { elegirPlantillaDeInicio, plantillasDeInicioUsables, textoDeCampana } from "@/lib/wasender/campanas";
+
+test("rotación: solo plantillas activas, sin archivar, sin «[revisar]» y con textos suficientes", () => {
+  const base = { id: "x", rubro_id: "r", activa: true, archivada_at: null };
+  const cuatro = ["B", "C", "D"];
+  const usables = plantillasDeInicioUsables([
+    { ...base, nombre: "b_ok", cuerpo: "A", variantes: cuatro },
+    { ...base, nombre: "a_ok", cuerpo: "A", variantes: cuatro },
+    { ...base, nombre: "inactiva", cuerpo: "A", variantes: cuatro, activa: false },
+    { ...base, nombre: "archivada", cuerpo: "A", variantes: cuatro, archivada_at: "2026-11-01" },
+    { ...base, nombre: "pocos", cuerpo: "A", variantes: ["B"] },
+    { ...base, nombre: "revisar", cuerpo: "Hola [revisar 1]", variantes: cuatro },
+  ]);
+  assert.deepEqual(usables.map((p) => p.nombre), ["a_ok", "b_ok"]);
+});
+
+test("rotación: cada persona recibe siempre la misma plantilla y se reparten entre todas", () => {
+  const rotacion = Array.from({ length: 10 }, (_, i) => ({ nombre: `p${i}` }));
+  assert.equal(elegirPlantillaDeInicio([], "x"), null);
+  assert.equal(elegirPlantillaDeInicio(rotacion, "contacto-1")?.nombre, elegirPlantillaDeInicio(rotacion, "contacto-1")?.nombre);
+  const usadas = new Set<string>();
+  const cuenta = new Map<string, number>();
+  for (let i = 0; i < 2000; i++) {
+    const n = elegirPlantillaDeInicio(rotacion, `c0ffee00-0000-4000-8000-${String(i).padStart(12, "0")}`)!.nombre;
+    usadas.add(n);
+    cuenta.set(n, (cuenta.get(n) ?? 0) + 1);
+  }
+  assert.equal(usadas.size, 10);
+  for (const [, n] of cuenta) assert.ok(n > 120 && n < 290, `reparto desparejo: ${n}`);
+});
+
+test("rotación: con 10 plantillas de 41 textos, 400 personas reciben más de 200 mensajes distintos", () => {
+  const rotacion = Array.from({ length: 10 }, (_, p) => ({ nombre: `p${p}`, cuerpo: `P${p} base {{nombre}}`, variantes: Array.from({ length: 40 }, (_, v) => `P${p} v${v} {{nombre}}`) }));
+  const textos = new Set<string>();
+  for (let i = 0; i < 400; i++) {
+    const id = `c0ffee00-0000-4000-8000-${String(i * 7919).padStart(12, "0")}`;
+    const p = elegirPlantillaDeInicio(rotacion, id)!;
+    textos.add(textoDeCampana(p, { nombre: "", asesor: "", marca: "" }, id));
+  }
+  assert.ok(textos.size > 200, `solo ${textos.size} textos distintos`);
+});

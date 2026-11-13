@@ -64,9 +64,11 @@ export async function POST(request: Request) {
   let lineId: string | null = null;
   let waLineaId: string | null = null;
   let waPlantillaId: string | null = null;
+  // 13/11: en vez de una plantilla, rotar entre las plantillas de inicio del perfil.
+  const waRotar = porWasender && body?.wasender_rotar_inicio === true;
   if (porWasender) {
     waLineaId = typeof body?.wasender_line_id === "string" && body.wasender_line_id ? body.wasender_line_id : null;
-    waPlantillaId = typeof body?.wasender_plantilla_id === "string" && body.wasender_plantilla_id ? body.wasender_plantilla_id : null;
+    waPlantillaId = !waRotar && typeof body?.wasender_plantilla_id === "string" && body.wasender_plantilla_id ? body.wasender_plantilla_id : null;
     const problema = await validarEleccionWasender(AREA_TO_RUBRO_ID[channel.area as string], { lineaId: waLineaId, plantillaId: waPlantillaId }, supabase);
     if (problema) return NextResponse.json({ error: problema }, { status: 400 });
   } else if (line_id) {
@@ -125,7 +127,7 @@ export async function POST(request: Request) {
       template_id: templateId,
       status: "borrador",
       line_id: lineId,
-      ...(porWasender ? { proveedor: "wasender", wasender_line_id: waLineaId, wasender_plantilla_id: waPlantillaId } : {}),
+      ...(porWasender ? { proveedor: "wasender", wasender_line_id: waLineaId, wasender_plantilla_id: waPlantillaId, wasender_rotar_inicio: waRotar } : {}),
       agent_role_id: rolId,
       run_days: runDays && runDays.length > 0 && runDays.length < 6 ? runDays : null,
       // Ritmo "seguro" para no generar bloqueos de WhatsApp: por defecto un
