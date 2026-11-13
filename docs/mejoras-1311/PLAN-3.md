@@ -29,13 +29,15 @@ Todo lo de esta tabla está **publicado en producción** (`main` = `mejoras-1211
 | 6 | Velocidad: marco inmediato en Hoy, Chats y Contactos; métricas en memoria | Hecho y medido |
 | 7 | Orden: lista de chats en palabras y con filtros plegados, Incidencias sin detenciones, menú de Contactos | Hecho |
 
-## Lo que queda para la próxima vuelta (en este orden)
+## Lo que queda para la próxima vuelta
+
+Orden de trabajo para la corrida de las 8:51: primero el punto 6 (modernización pantalla por pantalla), después el 3 (una sola regla para «Te escribió») y el 4 (tabla vieja). Los puntos 1, 2 y 7 dependen de una fecha o de que la línea de Wasender esté conectada: no se pueden cerrar en esa corrida. El 5 queda pendiente.
 
 1. Mirar el primer seguimiento real (sábado 14/11 desde las 20:44): qué decidió el bot en cada caso (`followup_tasks.status_reason` y Contactos → Seguimiento → Soltados / Enviados).
 2. Con la línea de Wasender conectada (la responsable dijo «mañana las probamos en horario normal»): campaña con «Rotar las plantillas de inicio», seguimiento redactado por el bot, segundo intento, y las funciones pendientes de «Líneas y plantillas» (probar una plantilla con un nombre de ejemplo, envío de prueba al teléfono del equipo, últimos fallos de la línea).
 3. **«Atención humana», a medio unificar.** Los filtros «Esperan tu respuesta» y «Los atiende una persona» de «Todos los chats» ya miran el estado real del chat, igual que la ficha. Medido en producción el 13/11 en Jurídico: el filtro da 7 y Hoy muestra 9 (3 en «Atención humana» + 6 captados con «Te escribió»). La diferencia de 2 sale de que Hoy suma además a quienes el bot derivó a una persona en los últimos 7 días (`personas.listas.por_cerrar`, por el estado de la oportunidad) aunque el último mensaje del chat sea nuestro. Falta decidir una sola regla: o Hoy deja de marcar «Te escribió» cuando ya se le contestó, o el filtro suma también a los derivados por el bot. Recomendado: lo primero (que «Te escribió» signifique siempre que la última palabra es de la persona) y mostrar a los otros como «Para cerrar».
 4. Reemplazar o retirar la tabla vieja «Captados y casos» (quedó sin pestaña; solo existe por su dirección y solo sirve para Jurídico).
-5. Aviso de captación: pantalla y envío (falta que la responsable diga a quién y por qué línea).
+5. Aviso de captación: **pendiente por decisión de la responsable (13/11). No tocar hasta que lo pida.**
 6. **Pasada de modernización pantalla por pantalla (pedido expreso del 13/11: «más moderno, rápido, funcional, entendible»).** Usar estas skills, en este orden, y corregir en la misma pasada lo que marquen:
    - `vectorlab-ux-skills:ux-audit` (compuerta de diez puntos, con capturas a 375 y 1280), más `page-patterns`, `forms`, `empty-states`, `loaders`, `errors`, `labels` y `verbs` de la misma familia cuando la pantalla los toque.
    - `vercel-react-best-practices` para la carga: marco inmediato con `Suspense` (como ya tienen Hoy y la cartera), componentes de cliente pesados con `dynamic()`, nada de consultas en serie.
