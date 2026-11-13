@@ -53,6 +53,8 @@ export function ConversationList({ perfil = "juridico" }: { perfil?: string }) {
   const [pageSize, setPageSize] = useState(40);
   const [loading, setLoading] = useState(true);
   const [q, setQ] = useState(searchParams.get("q") ?? "");
+  const filtrosPuestos = ["base", "respuesta", "area", "canal"].filter((k) => searchParams.get(k)).length;
+  const [verFiltros, setVerFiltros] = useState(filtrosPuestos > 0);
 
   const page = Math.max(1, Number(searchParams.get("pagina")) || 1);
   const qs = searchParams.toString();
@@ -142,7 +144,14 @@ export function ConversationList({ perfil = "juridico" }: { perfil?: string }) {
             );
           })}
         </div>
-        {/* 21/10: filtros a la vista (base, respuesta y canal). */}
+        {/* 13/11: la lista primero. Los filtros finos quedan plegados y avisan cuántos hay puestos. */}
+        <div className="rounded-lg border border-slate-200">
+          <button type="button" aria-expanded={verFiltros} onClick={() => setVerFiltros((v) => !v)} className="tactil flex w-full items-center justify-between px-3 text-left text-sm font-medium text-slate-800">
+            <span>{verFiltros ? "Ocultar filtros" : "Más filtros"}</span>
+            {filtrosPuestos > 0 ? <span className="rounded-full bg-gold-500/20 px-2 py-0.5 text-xs font-semibold text-gold-900">{filtrosPuestos} puesto(s)</span> : <span className="text-xs text-slate-500">base, respuesta, canal</span>}
+          </button>
+          {verFiltros ? (
+          <div className="p-2 pt-0">
         <div className="grid grid-cols-2 gap-2">
           <select
             className="col-span-2 w-full rounded-lg border border-slate-300 px-2 py-1.5 text-sm outline-none focus-gold"
@@ -191,6 +200,9 @@ export function ConversationList({ perfil = "juridico" }: { perfil?: string }) {
             <option value="facebook">Facebook</option>
             <option value="landing">Landing</option>
           </select>
+        </div>
+          </div>
+          ) : null}
         </div>
         <select
           className="solo-avanzado w-full rounded-lg border border-slate-300 px-2 py-1.5 text-sm outline-none focus-gold"

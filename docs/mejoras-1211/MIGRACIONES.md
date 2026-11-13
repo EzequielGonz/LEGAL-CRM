@@ -6,7 +6,7 @@ Historial real comprobado el 12/11 antes de tocar nada: la última migración ap
 Agrega `wasender_lineas.calentamiento_desde` (con valor por defecto). Solo agrega; el panel publicado no la lee. Hizo falta aplicarla para que la Preview pudiera mostrar la pantalla de líneas.
 Revertir: no hace falta; la columna puede quedar sin uso.
 
-## 0605_wasender_seguimiento — ESCRITA, SIN APLICAR
+## 0605_wasender_seguimiento — APLICADA el 12/11 (17:50)
 - `followup_tasks.wasender_line_id` (vacía = Meta).
 - `followup_gate`: si la tarea tiene línea de Wasender comprueba esa línea; si no, las comprobaciones de Meta quedan exactamente como estaban. Antes de aplicar, confirmar que la función de la base sigue siendo la de 0201 (el 12/11 coincidía línea por línea).
 - `rubros.segundo_intento_desde` (apagado) y la tabla `wasender_segundos_intentos` (un registro por contacto, con RLS y sin borrado).
