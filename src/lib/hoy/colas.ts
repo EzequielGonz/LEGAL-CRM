@@ -1,4 +1,5 @@
 import { createAdminClient } from "@/lib/supabase/admin";
+import { descarteDe, type Descarte } from "@/lib/hoy/descartes";
 
 /**
  * Colas de «Hoy» (12/11). Dos listas que antes no estaban a la vista:
@@ -52,8 +53,13 @@ export function chatsQueEsperan(chats: ChatDeCola[], mensajes: MensajeDeCola[], 
 
 const DIAS_VENTANA = 21;
 
+export type FilaConNombre = FilaEspera & { nombre: string | null; oportunidadId: string | null; captado: boolean };
+
 export interface ColasHoy {
-  esperan: (FilaEspera & { nombre: string | null })[];
+  /** Escribieron y hay que contestarles. */
+  esperan: FilaConNombre[];
+  /** Escribieron algo que es un descarte claro (ya tiene abogado, lo resolvió…): no son trabajo. */
+  descartes: (FilaConNombre & { descarte: Descarte })[];
   captadosSinDerivar: number | null;
 }
 
@@ -73,21 +79,34 @@ export async function colasDeHoy(rubroId: string, areas: string[]): Promise<Cola
   ]);
   const lista = (chats ?? []) as ChatDeCola[];
   const captadosSinDerivar = errorCaptados ? null : captados ?? 0;
-  if (!lista.length) return { esperan: [], captadosSinDerivar };
+  if (!lista.length) return { esperan: [], descartes: [], captadosSinDerivar };
 
   const ids = lista.map((c) => c.id);
   const [{ data: mensajes }, { data: opps }] = await Promise.all([
     s.from("messages").select("conversation_id, direction, created_at, body").in("conversation_id", ids).gte("created_at", desde).is("duplicate_of", null).order("created_at", { ascending: false }).limit(1500),
-    s.from("opportunities").select("conversation_id, attention_category, capture_state").in("conversation_id", ids),
+    s.from("opportunities").select("id, conversation_id, attention_category, capture_state").in("conversation_id", ids),
   ]);
   const excluidos = new Set<string>(
     ((opps ?? []) as any[]).filter((o) => o.attention_category === "detencion" || o.capture_state === "perdido").map((o) => o.conversation_id as string)
   );
-  const filas = chatsQueEsperan(lista, (mensajes ?? []) as MensajeDeCola[], excluidos).slice(0, 30);
+  const oppDe = new Map(((opps ?? []) as any[]).map((o) => [o.conversation_id as string, o]));
+  const filas = chatsQueEsperan(lista, (mensajes ?? []) as MensajeDeCola[], excluidos).slice(0, 60);
   const contactos = Array.from(new Set(filas.map((f) => f.contactId).filter(Boolean))) as string[];
   const { data: nombres } = contactos.length ? await s.from("contacts").select("id, full_name").in("id", contactos) : { data: [] as any[] };
   const porId = new Map(((nombres ?? []) as any[]).map((c) => [c.id as string, (c.full_name as string | null) ?? null]));
-  return { esperan: filas.map((f) => ({ ...f, nombre: f.contactId ? porId.get(f.contactId) ?? null : null })), captadosSinDerivar };
+  const completas: FilaConNombre[] = filas.map((f) => ({
+    ...f,
+    nombre: f.contactId ? porId.get(f.contactId) ?? null : null,
+    oportunidadId: (oppDe.get(f.conversationId)?.id as string | undefined) ?? null,
+    captado: oppDe.get(f.conversationId)?.capture_state === "captado",
+  }));
+  // Un captado nunca se descarta solo por una frase: lo mira una persona.
+  const descartes = completas.flatMap((f) => {
+    const d = f.captado ? null : descarteDe(f.texto);
+    return d ? [{ ...f, descarte: d }] : [];
+  });
+  const claves = new Set(descartes.map((d) => d.conversationId));
+  return { esperan: completas.filter((f) => !claves.has(f.conversationId)), descartes, captadosSinDerivar };
 }
 
 /**

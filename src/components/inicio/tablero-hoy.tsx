@@ -7,7 +7,8 @@ import { puntajeBot } from "@/lib/agentes/puntaje";
 import { cuandoCorto, enlaceConversacion, iniciales } from "@/lib/cartera";
 import { conVolver } from "@/lib/navegacion";
 import type { SlugPerfil } from "@/lib/marca";
-import { colasDeHoy, unificarCola, type EntradaCola } from "@/lib/hoy/colas";
+import { colasDeHoy, unificarCola, type EntradaCola, type ItemCola } from "@/lib/hoy/colas";
+import { CerrarDescartes } from "@/components/inicio/cerrar-descartes";
 
 /**
  * Tablero de «Hoy» (24/10, boceto v3 aprobado): estado de la línea, la
@@ -15,11 +16,42 @@ import { colasDeHoy, unificarCola, type EntradaCola } from "@/lib/hoy/colas";
  * del grupo elegido (por defecto, «Por cerrar»), con acceso directo al chat.
  * Solo lectura.
  */
-const FILTROS = [
-  { clave: "todo", texto: "Todo" },
-  { clave: "responder", texto: "Responder" },
-  { clave: "derivar", texto: "Derivar" },
-] as const;
+function FilaTrabajo({ f, slug, aqui, modo }: { f: ItemCola; slug: SlugPerfil; aqui: string; modo: "atender" | "captado" }) {
+  const chat = f.conversationId ? conVolver(enlaceConversacion(slug, f.conversationId), aqui) : null;
+  const ficha = f.contactId ? conVolver(`/ficha/${f.contactId}`, aqui) : null;
+  const escribio = modo === "captado" && f.accion === "responder";
+  return (
+    <li className="flex flex-wrap items-center gap-x-3 gap-y-2 px-5 py-3">
+      <span aria-hidden="true" className="avatar-ficha grid h-9 w-9 shrink-0 place-items-center rounded-full text-xs font-semibold">
+        {iniciales(f.nombre)}
+      </span>
+      <div className="min-w-[55%] flex-1 sm:min-w-0">
+        <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm font-semibold text-slate-950">
+          <span className="truncate">{f.nombre ?? "Sin nombre"}</span>
+          {escribio && <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[13px] font-medium text-amber-900">Te escribió</span>}
+          {f.etiqueta && <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[13px] font-medium text-slate-700">{f.etiqueta}</span>}
+        </p>
+        <p className="mt-0.5 text-[13px] text-slate-600 sm:truncate">
+          {f.at ? cuandoCorto(f.at) : ""}
+          {f.detalle ? `${f.at ? " · " : ""}${f.detalle}` : ""}
+        </p>
+      </div>
+      <div className="flex w-full shrink-0 gap-2 pl-12 sm:w-auto sm:pl-0 [&>a]:flex-1 [&>a]:justify-center sm:[&>a]:flex-none">
+        {modo === "atender" ? (
+          <>
+            {chat && <Link href={chat} className="btn-gold-sm">Responder</Link>}
+            {ficha && <Link href={ficha} className="btn-suave-sm">Ficha</Link>}
+          </>
+        ) : (
+          <>
+            {ficha && <Link href={ficha} className="btn-gold-sm">Derivar</Link>}
+            {chat && <Link href={chat} className="btn-suave-sm">{escribio ? "Responder" : "Chat"}</Link>}
+          </>
+        )}
+      </div>
+    </li>
+  );
+}
 
 /** Cuántas personas de la cola se muestran sin pedir «ver todas». */
 const VISIBLES_EN_COLA = 12;
@@ -57,7 +89,7 @@ export async function TableroHoy({
   const baseAgentes = slug === "juridico" ? "/agentes" : `/panel/${slug}/agentes`;
 
   const [colas, { data: lineasWa }, personas, { data: lineas }, metricas, { data: camps }] = await Promise.all([
-    colasDeHoy(rubroId, areas).catch(() => ({ esperan: [], captadosSinDerivar: null })),
+    colasDeHoy(rubroId, areas).catch(() => ({ esperan: [], descartes: [], captadosSinDerivar: null })),
     (s.from("wasender_lineas" as any) as any).select("id, nombre, estado, habilitada").eq("rubro_id", rubroId).is("archivada_at", null),
     resumenPersonas(rubroId, areas),
     s.from("profile_lines").select("label, credential_key, active").eq("rubro_id", rubroId).eq("active", true),
@@ -112,16 +144,22 @@ export async function TableroHoy({
   const filas = elegido ? personas.listas[elegido] ?? [] : [];
   const infoGrupo = elegido ? GRUPOS_PERSONAS.find((g) => g.clave === elegido)! : null;
 
+  // 12/11 (pedido de la responsable): atención humana y captados van separados, y los
+  // descartes (ya tiene abogado, lo resolvió, no le interesa) no se muestran como trabajo.
+  const descartadas = new Set(colas.descartes.map((d) => d.conversationId));
   const cola = unificarCola({
     esperan: colas.esperan.map((f) => ({ contactId: f.contactId, conversationId: f.conversationId, nombre: f.nombre, detalle: f.texto ? `«${f.texto}»` : null, at: f.desde })),
-    porCerrar: (personas.listas.por_cerrar ?? []).map((f) => ({ contactId: f.contactId ?? null, conversationId: f.conversationId ?? null, nombre: f.nombre ?? null, detalle: motivoLegible(f.motivo), at: f.at ?? null })),
+    porCerrar: (personas.listas.por_cerrar ?? [])
+      .filter((f) => !(f.conversationId && descartadas.has(f.conversationId)))
+      .map((f) => ({ contactId: f.contactId ?? null, conversationId: f.conversationId ?? null, nombre: f.nombre ?? null, detalle: motivoLegible(f.motivo), at: f.at ?? null })),
     captados,
   });
-  const nResponder = cola.filter((i) => i.accion === "responder").length;
-  const nDerivar = cola.length - nResponder;
-  const filtro = filtroCola === "responder" || filtroCola === "derivar" ? filtroCola : "todo";
-  const filtrada = filtro === "todo" ? cola : cola.filter((i) => i.accion === filtro || (filtro === "derivar" && i.tambienDerivar));
-  const visibles = verTodo ? filtrada.slice(0, 80) : filtrada.slice(0, VISIBLES_EN_COLA);
+  const clavesCaptados = new Set(captados.map((c) => (c.contactId ? `c:${c.contactId}` : `v:${c.conversationId}`)));
+  const paraDerivar = cola.filter((i) => clavesCaptados.has(i.clave));
+  const atender = cola.filter((i) => !clavesCaptados.has(i.clave));
+  const porMotivo = new Map<string, number>();
+  for (const d of colas.descartes) porMotivo.set(d.descarte.etiqueta, (porMotivo.get(d.descarte.etiqueta) ?? 0) + 1);
+  const resumenDescartes = [...porMotivo.entries()].map(([t, n]) => `${n} ${t.toLowerCase()}`).join(", ");
 
   return (
     <section aria-labelledby="hoy-tablero" className="tablero-hoy space-y-4">
@@ -137,93 +175,67 @@ export async function TableroHoy({
         ))}
       </ul>
 
-      {/* 1) Para hacer ahora: una sola cola, cada persona una vez. */}
-      <div id="hoy-cola" className="scroll-mt-24 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 px-5 py-4">
-          <div>
-            <p className="text-lg font-semibold text-slate-950">Para hacer ahora</p>
-            <p className="text-sm text-slate-600">
-              {cola.length === 0
-                ? "Nadie espera nada tuyo."
-                : `${cola.length} ${cola.length === 1 ? "persona" : "personas"}: ${nResponder} para responder y ${nDerivar} para derivar. Cada una aparece una sola vez.`}
+      {/* 1) Dos listas separadas: a quién hay que contestarle y a quién hay que derivar. Nadie se repite. */}
+      <div id="hoy-cola" className="grid scroll-mt-24 items-start gap-4 lg:grid-cols-2">
+        <div className="overflow-hidden rounded-2xl border border-amber-300 bg-white shadow-sm">
+          <div className="border-b border-amber-200 bg-amber-50 px-5 py-3.5">
+            <p className="text-base font-semibold text-slate-950">
+              Atención humana <span className="ml-1 tabular-nums">{atender.length}</span>
             </p>
+            <p className="text-[13px] text-slate-700">Escribieron y el bot no les contesta: respondeles vos.</p>
           </div>
-          {cola.length > 0 && (
-            <nav aria-label="Filtrar la cola" className="flex flex-wrap gap-1.5">
-              {FILTROS.map((f) => (
-                <Link
-                  key={f.clave}
-                  href={`${aqui}${f.clave === "todo" ? "" : `&cola=${f.clave}`}#hoy-cola`}
-                  aria-current={filtro === f.clave ? "true" : undefined}
-                  className={`tactil inline-flex items-center rounded-full border px-3 text-sm font-medium ${filtro === f.clave ? "border-slate-900 bg-slate-900 text-white" : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"}`}
-                >
-                  {f.texto} <span className="ml-1.5 tabular-nums opacity-80">{f.clave === "todo" ? cola.length : f.clave === "responder" ? nResponder : nDerivar}</span>
-                </Link>
+          {atender.length === 0 ? (
+            <p className="px-5 py-8 text-center text-sm text-slate-600">Nadie espera una respuesta tuya.</p>
+          ) : (
+            <ul className="divide-y divide-slate-100">
+              {(verTodo ? atender : atender.slice(0, VISIBLES_EN_COLA)).map((f) => (
+                <FilaTrabajo key={f.clave} f={f} slug={slug} aqui={aqui} modo="atender" />
               ))}
-            </nav>
+            </ul>
+          )}
+          {!verTodo && atender.length > VISIBLES_EN_COLA && (
+            <p className="border-t border-slate-100 px-5 py-3 text-sm">
+              <Link href={`${aqui}&todo=1#hoy-cola`} className="font-medium text-slate-800 underline underline-offset-2">Ver los {atender.length}</Link>
+            </p>
           )}
         </div>
-        {visibles.length === 0 ? (
-          <p className="px-5 py-8 text-center text-sm text-slate-600">
-            {cola.length === 0 ? "Cuando alguien escriba y necesite una persona, o acepte el siguiente paso, aparece acá." : "Nada en este filtro."}
-          </p>
-        ) : (
-          <ul className="divide-y divide-slate-100">
-            {visibles.map((f) => (
-              <li key={f.clave} className="flex flex-wrap items-center gap-x-4 gap-y-2 px-5 py-3.5">
-                <span aria-hidden="true" className="avatar-ficha grid h-9 w-9 shrink-0 place-items-center rounded-full text-xs font-semibold">
-                  {iniciales(f.nombre)}
-                </span>
-                <div className="min-w-[62%] flex-1 sm:min-w-0">
-                  <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm font-semibold text-slate-950">
-                    <span className="truncate">{f.nombre ?? "Sin nombre"}</span>
-                    <span className={`rounded-full px-2 py-0.5 text-[13px] font-medium ${f.accion === "responder" ? "bg-amber-100 text-amber-900" : "bg-emerald-100 text-emerald-900"}`}>
-                      {f.accion === "responder" ? "Espera respuesta" : "Captado: falta derivar"}
-                    </span>
-                    {f.tambienDerivar && <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[13px] font-medium text-emerald-900">Captado: falta derivar</span>}
-                    {f.etiqueta && <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[13px] font-medium text-slate-700">{f.etiqueta}</span>}
-                  </p>
-                  <p className="mt-0.5 text-[13px] text-slate-600 sm:truncate">
-                    {f.at ? cuandoCorto(f.at) : ""}
-                    {f.detalle ? `${f.at ? " · " : ""}${f.detalle}` : ""}
-                  </p>
-                </div>
-                <div className="flex w-full shrink-0 gap-2 pl-[3.25rem] sm:w-auto sm:pl-0 [&>a]:flex-1 [&>a]:justify-center sm:[&>a]:flex-none">
-                  {f.accion === "responder" && f.conversationId ? (
-                    <Link href={conVolver(enlaceConversacion(slug, f.conversationId), aqui)} className="btn-gold-sm">
-                      Responder
-                    </Link>
-                  ) : f.contactId ? (
-                    <Link href={conVolver(`/ficha/${f.contactId}`, aqui)} className="btn-gold-sm">
-                      Derivar
-                    </Link>
-                  ) : null}
-                  {f.accion === "responder" && f.tambienDerivar && f.contactId ? (
-                    <Link href={conVolver(`/ficha/${f.contactId}`, aqui)} className="btn-suave-sm">
-                      Derivar
-                    </Link>
-                  ) : f.accion === "derivar" && f.conversationId ? (
-                    <Link href={conVolver(enlaceConversacion(slug, f.conversationId), aqui)} className="btn-suave-sm">
-                      Chat
-                    </Link>
-                  ) : f.contactId ? (
-                    <Link href={conVolver(`/ficha/${f.contactId}`, aqui)} className="btn-suave-sm">
-                      Ficha
-                    </Link>
-                  ) : null}
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-        {filtrada.length > visibles.length && (
-          <p className="border-t border-slate-100 px-5 py-3 text-sm">
-            <Link href={`${aqui}${filtro === "todo" ? "" : `&cola=${filtro}`}&todo=1#hoy-cola`} className="font-medium text-slate-800 underline underline-offset-2">
-              Ver las {filtrada.length}
-            </Link>
-          </p>
-        )}
+
+        <div className="overflow-hidden rounded-2xl border border-emerald-300 bg-white shadow-sm">
+          <div className="border-b border-emerald-200 bg-emerald-50 px-5 py-3.5">
+            <p className="text-base font-semibold text-slate-950">
+              Captados para derivar <span className="ml-1 tabular-nums">{paraDerivar.length}</span>
+            </p>
+            <p className="text-[13px] text-slate-700">Ya aceptaron el siguiente paso: pasalos a quien los atiende.</p>
+          </div>
+          {paraDerivar.length === 0 ? (
+            <p className="px-5 py-8 text-center text-sm text-slate-600">Nadie pendiente de derivar.</p>
+          ) : (
+            <ul className="divide-y divide-slate-100">
+              {(verTodo ? paraDerivar : paraDerivar.slice(0, VISIBLES_EN_COLA)).map((f) => (
+                <FilaTrabajo key={f.clave} f={f} slug={slug} aqui={aqui} modo="captado" />
+              ))}
+            </ul>
+          )}
+          {!verTodo && paraDerivar.length > VISIBLES_EN_COLA && (
+            <p className="border-t border-slate-100 px-5 py-3 text-sm">
+              <Link href={`${aqui}&todo=1#hoy-cola`} className="font-medium text-slate-800 underline underline-offset-2">Ver los {paraDerivar.length}</Link>
+            </p>
+          )}
+        </div>
       </div>
+
+      {/* Descartes: se reconocen y no se mezclan con el trabajo. */}
+      {colas.descartes.length > 0 && (
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-5 py-3.5">
+          <p className="min-w-0 text-sm text-slate-700">
+            <span className="font-semibold text-slate-950">
+              {colas.descartes.length} {colas.descartes.length === 1 ? "respondió" : "respondieron"} que no {colas.descartes.length === 1 ? "sigue" : "siguen"}
+            </span>{" "}
+            ({resumenDescartes}). No {colas.descartes.length === 1 ? "aparece" : "aparecen"} arriba.
+          </p>
+          <CerrarDescartes perfil={slug} cantidad={colas.descartes.length} />
+        </div>
+      )}
 
       {/* 2) Para mirar: lo que puede necesitarte, sin ser urgente. */}
       <div>

@@ -14,6 +14,7 @@ import { VISTAS_CARTERA, cuandoCorto, enlaceConversacion, iniciales } from "@/li
 import { AREAS_DE_PERFIL, contarGrupo, resumenCifras } from "@/lib/cartera-servidor";
 import { getCampaignFunnelCounts } from "@/lib/campaigns";
 import { TableroHoy } from "@/components/inicio/tablero-hoy";
+import { PresentacionHoy } from "@/components/inicio/presentacion-hoy";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Hoy" };
@@ -46,7 +47,7 @@ function Numero({ n, texto }: { n: number | null | undefined; texto: string }) {
  * seguimientos, derivados sin resultado) y dos cifras chicas: la semana y la
  * última base. Las quejas y la atención humana no van acá. Solo lectura.
  */
-export default async function InicioPerfilPage({ searchParams }: { searchParams: { perfil?: string; grupo?: string; cola?: string; todo?: string } }) {
+export default async function InicioPerfilPage({ searchParams }: { searchParams: { perfil?: string; grupo?: string; cola?: string; todo?: string; periodo?: string } }) {
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
   const perfil = searchParams.perfil ?? "juridico";
@@ -180,20 +181,13 @@ export default async function InicioPerfilPage({ searchParams }: { searchParams:
 
         {slug === "marketing" ? <CircuitosMarketing /> : null}
 
-        <section aria-labelledby="hoy-cifras" className="grid gap-3 md:grid-cols-2">
-          <h2 id="hoy-cifras" className="sr-only">
-            Cifras
+        {/* 12/11: estadísticas como una presentación; la semana actual primero. */}
+        <PresentacionHoy slug={slug} rubroId={rubroId} areas={areas} periodo={searchParams.periodo} historial={`${prefijo}/estadisticas`} />
+
+        <section aria-labelledby="hoy-base">
+          <h2 id="hoy-base" className="sr-only">
+            Última base
           </h2>
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-            <p className="text-sm font-semibold text-slate-900">Esta semana</p>
-            <p className="text-xs text-slate-500">Desde el lunes</p>
-            <div className="mt-4 grid grid-cols-4 gap-3">
-              <Numero n={cifras?.semana.respuestas} texto="personas escribieron" />
-              <Numero n={cifras?.semana.citas} texto="citas" />
-              <Numero n={cifras?.semana.captados} texto="captados" />
-              <Numero n={cifras?.semana.derivados} texto="derivados" />
-            </div>
-          </div>
           <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">

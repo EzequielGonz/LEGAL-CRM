@@ -57,3 +57,38 @@ test("hoy: cada persona aparece una sola vez en la cola, con lo primero que hay 
   // Sin contacto ni conversación no se puede abrir: no entra.
   assert.equal(unificarCola({ esperan: [{ contactId: null, conversationId: null, nombre: null, at: null }], porCerrar: [], captados: [] }).length, 0);
 });
+
+import { descarteDe } from "@/lib/hoy/descartes";
+import { rangoDePeriodo, tasa, variacion } from "@/lib/hoy/periodos";
+
+test("hoy: reconoce los descartes claros y deja en atención humana todo lo dudoso", () => {
+  assert.equal(descarteDe("Hola no gracias ya tengo abogado")?.clave, "ya_tiene_profesional");
+  assert.equal(descarteDe("Mi caso ya está resuelto")?.clave, "ya_resuelto");
+  assert.equal(descarteDe("No me interesa, gracias")?.clave, "no_interesa");
+  assert.equal(descarteDe("no gracias")?.clave, "no_interesa");
+  assert.equal(descarteDe("Número equivocado")?.clave, "numero_equivocado");
+  assert.equal(descarteDe("No me escriban más")?.clave, "no_escribir");
+  // Interés, dudas o frases que siguen la charla: nunca son descarte.
+  for (const t of ["A la tarde", "Sí, sigamos", "Ya tengo abogado pero quisiera otra opinión", "¿Cuánto sale?", "No ahora me viene bien justo estoy desocupado", "Sos un muy buen asesor", "", null]) {
+    assert.equal(descarteDe(t as any), null, String(t));
+  }
+});
+
+test("hoy: los períodos de la presentación y su comparación", () => {
+  const ahora = new Date("2026-11-12T18:00:00Z"); // jueves 12/11, 15 h de Argentina
+  const sem = rangoDePeriodo("semana", ahora);
+  assert.equal(sem.desde.toISOString(), "2026-11-09T03:00:00.000Z");
+  assert.equal(sem.antesDesde.toISOString(), "2026-11-02T03:00:00.000Z");
+  const pasada = rangoDePeriodo("semana_pasada", ahora);
+  assert.deepEqual([pasada.desde.toISOString(), pasada.hasta.toISOString()], ["2026-11-02T03:00:00.000Z", "2026-11-09T03:00:00.000Z"]);
+  const mes = rangoDePeriodo("mes", ahora);
+  assert.equal(mes.desde.toISOString(), "2026-11-01T03:00:00.000Z");
+  const mesPasado = rangoDePeriodo("mes_pasado", ahora);
+  assert.deepEqual([mesPasado.desde.toISOString(), mesPasado.hasta.toISOString()], ["2026-10-01T03:00:00.000Z", "2026-11-01T03:00:00.000Z"]);
+  assert.equal(variacion(12, 10).texto, "+20 % (antes 10)");
+  assert.equal(variacion(5, 10).tono, "baja");
+  assert.equal(variacion(3, 3).tono, "igual");
+  assert.equal(variacion(null, 3).tono, "nada");
+  assert.equal(tasa(5, 200), "2,5 %");
+  assert.equal(tasa(5, 0), null);
+});
