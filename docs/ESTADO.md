@@ -39,7 +39,7 @@ Se actualiza al cierre de cada vuelta de trabajo. Sin datos personales, claves n
 
 ## Dónde está cada cosa
 
-- Plan y pendientes de la vuelta en curso: `docs/mejoras-1311/PLAN-4.md` (lo último que pidió la responsable; va primero) y `docs/mejoras-1311/PLAN-3.md` (lo anterior que sigue pendiente).
+- Plan y pendientes de la vuelta en curso: `docs/mejoras-1311/PLAN-4.md` (lo último que pidió la responsable; va primero) con su especificación de trabajo en `docs/mejoras-1311/PLAN-4-DETALLE.md` (orden, datos medidos, pasos, criterios de aceptación) y `docs/mejoras-1311/PLAN-3.md` (lo anterior que sigue pendiente).
 - Qué se probó y qué no: `docs/mejoras-1311/INFORME.md`. Migraciones y cómo deshacer cambios de datos: `docs/mejoras-1311/MIGRACIONES.md`.
 - Bitácora detallada de la última vuelta (commits, archivos, cambios en la base, medidas, guiones de prueba): `docs/mejoras-1311/BITACORA.md`.
 - Análisis del bot y fichas agregadas: `docs/mejoras-1311/BOT-V2.md`.
@@ -48,7 +48,7 @@ Se actualiza al cierre de cada vuelta de trabajo. Sin datos personales, claves n
 ## Cómo retomar
 
 1. `git status` y `git log --oneline -5` en la rama `mejoras-1211` (tiene que coincidir con `main`).
-2. Leer `PLAN-4.md` completo y seguir su orden (A a F); después «Lo que queda para la próxima vuelta» en `PLAN-3.md`.
+2. Leer `PLAN-4.md` y `PLAN-4-DETALLE.md` completos y seguir el orden del detalle (A → B → C → D → G → E → F); después «Lo que queda para la próxima vuelta» en `PLAN-3.md`.
 3. Cargas grandes de datos (plantillas, variantes): por la API del panel con una sesión iniciada, no pegando SQL largo.
 4. Las pruebas con efectos se hacen con casos viejos y se dejan como estaban, con registro en `ops_change_log`.
 
