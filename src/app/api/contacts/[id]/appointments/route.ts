@@ -11,7 +11,8 @@ import { requireSession } from "@/lib/acceso/autorizacion";
  * avisarle al administrador de una cita que agendó la IA sin que él
  * estuviera en la conversación — acá ya la está cargando él mismo.
  */
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   const { starts_at, duration_minutes, consultation_type } = await request.json();

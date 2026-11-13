@@ -24,8 +24,9 @@ const ESTILO: Record<ItemSalud["estado"], { caja: string; punto: string; texto: 
  * Avanzado: el tablero completo con el detalle técnico. Los problemas se ven
  * en los dos niveles. Solo lectura.
  */
-export default async function SaludPage({ searchParams }: { searchParams: { perfil?: string } }) {
-  const slug: SlugPerfil = perfilActivo(searchParams.perfil);
+export default async function SaludPage(props: { searchParams: Promise<{ perfil?: string }> }) {
+  const searchParams = await props.searchParams;
+  const slug: SlugPerfil = await perfilActivo(searchParams.perfil);
   // 12/11: las líneas de Wasender también son salud del sistema (antes no aparecían).
   const [base, wasender, fallas] = await Promise.all([leerSalud(), leerSaludWasender().catch(() => []), leerFallas(slug).catch(() => [])]);
   // 13/11 · cada rubro separado: en cada perfil, lo de todo el sistema y lo propio. Lo de otro perfil se ve en ese perfil.

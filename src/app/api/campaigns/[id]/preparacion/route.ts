@@ -8,7 +8,8 @@ import { preparacionWasender, proveedorDe } from "@/lib/wasender/campanas";
 export const dynamic = "force-dynamic";
 
 /** Qué falta para poder lanzar la campaña (se muestra junto al botón). */
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   const supabase = createAdminClient();

@@ -10,7 +10,8 @@ import { validarEleccionWasender } from "@/lib/wasender/campanas";
  * pausa si estaba en curso). Destinatarios, resultados y conversaciones
  * quedan intactos; recuperarla no reanuda envíos.
  */
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   try {
@@ -26,7 +27,8 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
  * ejecución (1 = lunes … 6 = sábado; vacío = de lunes a sábado; los
  * domingos no se envía, pregunta 39) y plantilla del catálogo (pregunta 22).
  */
-export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+export async function PATCH(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => ({}));

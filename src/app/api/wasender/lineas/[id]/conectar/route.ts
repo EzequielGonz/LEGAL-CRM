@@ -7,7 +7,8 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 30;
 
 /** Conectar (genera el QR), desconectar, o hacer que la línea le avise a este entorno (accion: "recibir_aqui"). */
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => ({}));

@@ -16,7 +16,8 @@ const STATUS_LABEL: Record<string, string> = {
  * del sistema. 13/11 (seguridad): se escribe con «write-excel-file»; se
  * dejó de usar «xlsx» (SheetJS), que tiene avisos sin arreglo en el registro.
  */
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   const supabase = createAdminClient();

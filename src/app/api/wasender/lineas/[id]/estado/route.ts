@@ -7,7 +7,8 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 30;
 
 /** Estado en vivo de la línea en Wasender y, si hace falta escanear, el QR (como imagen). */
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   const perfil = perfilDe(new URL(request.url).searchParams.get("perfil"));

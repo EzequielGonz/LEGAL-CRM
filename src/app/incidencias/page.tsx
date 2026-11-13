@@ -29,15 +29,16 @@ type Tab = "incidencias" | "detenciones" | "retenidos" | "adjuntos";
  * vigentes, mensajes retenidos por seguridad y archivos recibidos que
  * todavía no se guardaron. Todo se resuelve con una nota; nada se borra.
  */
-export default async function RevisionPage({
-  searchParams,
-}: {
-  searchParams: { perfil?: string; vista?: string; estado?: string; tipo?: string; pagina?: string };
-}) {
+export default async function RevisionPage(
+  props: {
+    searchParams: Promise<{ perfil?: string; vista?: string; estado?: string; tipo?: string; pagina?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
   // 13/11 · cada rubro separado: esta pantalla mostraba a personas de los cuatro perfiles dentro del panel de Jurídico.
-  const slug: SlugPerfil = perfilActivo(searchParams.perfil);
+  const slug: SlugPerfil = await perfilActivo(searchParams.perfil);
   const rubroId = RUBRO_IDS[slug];
   const tab: Tab =
     searchParams.vista === "detenciones" || searchParams.vista === "retenidos" || searchParams.vista === "adjuntos"

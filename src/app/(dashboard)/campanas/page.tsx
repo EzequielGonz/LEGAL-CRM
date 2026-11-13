@@ -5,7 +5,8 @@ export const dynamic = "force-dynamic";
 export const metadata = { title: "Campañas" };
 
 // Jurídico: campañas de Civil y Penal (cada perfil tiene las suyas).
-export default function CampanasPage({ searchParams }: { searchParams: { archivadas?: string } }) {
+export default async function CampanasPage(props: { searchParams: Promise<{ archivadas?: string }> }) {
+  const searchParams = await props.searchParams;
   return (
     <CampanasListView
       areas={["civil", "penal"]}

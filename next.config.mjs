@@ -33,11 +33,7 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: false,
   },
-  // 13/11: al volver a una pantalla se piden los datos de nuevo. Antes Next mostraba
-  // la copia de los últimos 30 segundos y las cifras parecían no actualizarse.
-  experimental: {
-    staleTimes: { dynamic: 0 },
-  },
+  // Con Next 15 la navegación ya no muestra copias viejas: el ajuste `staleTimes` dejó de hacer falta.
   // Bloque 1.12: encabezados de seguridad para todas las respuestas.
   // 13/11: se suma la política de contenido (ver CSP arriba).
   // 24/10: la vista de Teléfono se retiró; el panel normal se adapta al celular.

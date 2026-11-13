@@ -3,7 +3,8 @@ import { BasesListView } from "@/components/bases/bases-list-view";
 export const dynamic = "force-dynamic";
 
 // Jurídico: bases de sus áreas internas (Civil y Penal).
-export default async function BasesPage({ searchParams }: { searchParams: { archivadas?: string } }) {
+export default async function BasesPage(props: { searchParams: Promise<{ archivadas?: string }> }) {
+  const searchParams = await props.searchParams;
   return (
     <BasesListView
       areas={["civil", "penal"]}

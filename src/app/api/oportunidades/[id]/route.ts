@@ -30,7 +30,8 @@ export const maxDuration = 60;
  *  - "zona": { zona: "amba" | "fuera" | "sin_confirmar" }
  *  - "no_es_captacion": { nota? } → quita la marca «Posible captación a revisar»
  */
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => ({}));

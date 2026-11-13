@@ -10,11 +10,12 @@ export const metadata = { title: "Citas" };
  * derivar, seguimientos y atención humana, gestionados desde acá mismo con
  * la ficha al costado. La disponibilidad horaria vive en Configuración (Etapa 3).
  */
-export default async function AgendaPage({
-  searchParams,
-}: {
-  searchParams: { tab?: string; ficha?: string; pagina?: string };
-}) {
+export default async function AgendaPage(
+  props: {
+    searchParams: Promise<{ tab?: string; ficha?: string; pagina?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   return (
     <div>
       <h1 className="mb-1 text-2xl font-semibold text-slate-950">Citas</h1>

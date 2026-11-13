@@ -12,7 +12,8 @@ const UUID = /^[0-9a-f-]{36}$/i;
  * body: { accion: "descartar", motivo }. Solo vale si está pendiente o en
  * espera: lo que Claude está trabajando o ya terminó no se descarta desde acá.
  */
-export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+export async function PATCH(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   if (!UUID.test(params.id)) return NextResponse.json({ error: "Tarea no válida." }, { status: 400 });

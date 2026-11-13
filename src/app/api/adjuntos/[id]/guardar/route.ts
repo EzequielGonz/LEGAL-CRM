@@ -8,7 +8,8 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
 /** "Guardar ahora": descarga el original de Meta y lo guarda en el almacenamiento privado. */
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   if (!isUuid(params.id)) return NextResponse.json({ error: "Identificador inválido." }, { status: 400 });

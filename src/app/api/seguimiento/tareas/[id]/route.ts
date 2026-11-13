@@ -8,7 +8,8 @@ export const dynamic = "force-dynamic";
  * Etapa 2 · Bloque 2.3 — Revisión de una tarea de seguimiento.
  * PATCH { action: "descartar" | "reintentar" | "marcar_enviado", confirm_uncertain?: boolean, note?: string }
  */
-export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+export async function PATCH(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   if (!/^[0-9a-f-]{36}$/i.test(params.id)) return NextResponse.json({ error: "Tarea no encontrada." }, { status: 404 });

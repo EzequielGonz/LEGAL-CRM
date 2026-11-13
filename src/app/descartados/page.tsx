@@ -4,6 +4,7 @@ export const dynamic = "force-dynamic";
 export const metadata = { title: "Descartados" };
 
 /** Descartados (12/11): perdidos y pedidos de no contacto, fuera del trabajo del día. Solo lectura. */
-export default function Pagina({ searchParams }: { searchParams: { perfil?: string; grupo?: string } }) {
+export default async function Pagina(props: { searchParams: Promise<{ perfil?: string; grupo?: string }> }) {
+  const searchParams = await props.searchParams;
   return <PaginaCartera vista="descartados" searchParams={searchParams} />;
 }

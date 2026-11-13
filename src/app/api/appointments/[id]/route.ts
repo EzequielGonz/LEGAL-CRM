@@ -15,7 +15,8 @@ const ESTADOS = ["pendiente", "confirmada", "realizada", "ausente", "cancelada"]
  *
  * body: { estado, nota? }
  */
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => ({}));

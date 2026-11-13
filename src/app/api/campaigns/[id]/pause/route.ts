@@ -3,7 +3,8 @@ import { pauseCampaign } from "@/lib/campaigns";
 import { requireSession } from "@/lib/acceso/autorizacion";
 
 /** Pausa con motivo (bloque 1.8). body opcional: { motivo } */
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => ({}));

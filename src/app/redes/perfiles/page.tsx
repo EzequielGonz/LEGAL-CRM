@@ -12,10 +12,11 @@ export const dynamic = "force-dynamic";
 export const metadata = { title: "Perfiles de redes" };
 
 /** Redes y contenido › Perfiles (reorganización 2, 18/10): Facebook, Instagram y WhatsApp de la marca. */
-export default async function PerfilesRedesPage({ searchParams }: { searchParams: { perfil?: string } }) {
+export default async function PerfilesRedesPage(props: { searchParams: Promise<{ perfil?: string }> }) {
+  const searchParams = await props.searchParams;
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
-  const { slug, rubroId } = perfilDePagina(searchParams.perfil);
+  const { slug, rubroId } = await perfilDePagina(searchParams.perfil);
   const [conexion, marcas] = await Promise.all([leerConexion(rubroId).catch(() => null), marcasResueltas().catch(() => null)]);
   const nombre = marcas?.[slug]?.nombre ?? marcaDe(slug).nombre;
   const bio = [nombre, marcaDe(slug).bajada, "Escribinos por WhatsApp desde el enlace."].filter(Boolean).join("\n");

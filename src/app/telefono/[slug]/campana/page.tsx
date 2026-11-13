@@ -12,7 +12,8 @@ export const dynamic = "force-dynamic";
  * base, elegir campaña y línea y confirmar. Cargar no envía: solo la
  * confirmación final inicia, y solo si la campaña está lista.
  */
-export default async function TelefonoCampanaPage({ params }: { params: { slug: string } }) {
+export default async function TelefonoCampanaPage(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const profile = phoneProfile(params.slug);
   if (!profile) notFound();
   const supabase = createClient();

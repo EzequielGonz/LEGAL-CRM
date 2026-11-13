@@ -67,10 +67,11 @@ function Cifra({ n, texto }: { n: number | null; texto: string }) {
  * cargada y plegada. Al abrir una base se ven sus primeros contactos y el
  * acceso a la base completa. Solo lectura.
  */
-export default async function ProspectosPorBasePage({ searchParams }: { searchParams: { perfil?: string; q?: string } }) {
+export default async function ProspectosPorBasePage(props: { searchParams: Promise<{ perfil?: string; q?: string }> }) {
+  const searchParams = await props.searchParams;
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
-  const perfil = perfilActivo(searchParams.perfil);
+  const perfil = await perfilActivo(searchParams.perfil);
   const rubroId = rubroIdDe(perfil);
   if (!rubroId || !esSlugPerfil(perfil)) notFound();
   const slug: SlugPerfil = perfil;

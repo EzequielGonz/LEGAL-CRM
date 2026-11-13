@@ -6,13 +6,14 @@ export const dynamic = "force-dynamic";
 // Una búsqueda de captación de Marketing es una base más: mismo detalle,
 // filtros, calidad y preparación de campaña (bloque 1.6), con su descarga
 // en Excel. Filtrar por área evita entrar a una búsqueda de otro perfil.
-export default async function CaptacionDetailPage({
-  params,
-  searchParams,
-}: {
-  params: { id: string };
-  searchParams: { pagina?: string; filtro?: string };
-}) {
+export default async function CaptacionDetailPage(
+  props: {
+    params: Promise<{ id: string }>;
+    searchParams: Promise<{ pagina?: string; filtro?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   return (
     <BaseDetailView
       baseId={params.id}

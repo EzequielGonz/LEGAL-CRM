@@ -12,11 +12,12 @@ export const dynamic = "force-dynamic";
  * ordenados de mejor a peor oportunidad. Desde acá también se prende o
  * apaga el envío automático del primer mensaje a los mejor calificados.
  */
-export default async function ProspectosPage({
-  searchParams,
-}: {
-  searchParams: { prioridad?: string; estado?: string; etapa?: string };
-}) {
+export default async function ProspectosPage(
+  props: {
+    searchParams: Promise<{ prioridad?: string; estado?: string; etapa?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   const supabase = createClient();
 
   let query = supabase

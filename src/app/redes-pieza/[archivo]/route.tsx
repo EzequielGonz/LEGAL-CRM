@@ -1,3 +1,4 @@
+import type React from "react";
 import type { ReactNode } from "react";
 import { ImageResponse } from "next/og";
 import { FECHAS_REDES, PLAN_REDES, TIPOS_REDES } from "@/lib/redes/plan-redes";
@@ -174,7 +175,8 @@ function Lienzo({ cod, m, alto, pad, children }: { cod: string; m: Marca; alto: 
   );
 }
 
-export async function GET(_req: Request, { params }: { params: { archivo: string } }) {
+export async function GET(_req: Request, props: { params: Promise<{ archivo: string }> }) {
+  const params = await props.params;
   const r = /^(vita|cob|0km|mkt)-([de])(\d{1,2})-([1-5]|h[1-4]?)\.png$/.exec(params.archivo);
   if (!r) return new Response("No existe", { status: 404 });
   const [, cod, serie, diaTxt, parteTxt] = r;
@@ -194,7 +196,7 @@ export async function GET(_req: Request, { params }: { params: { archivo: string
   const familiaTitulo = m.serif ? "Lora" : "Inter";
   const padPost = cod === "vita" ? "120px" : "96px";
 
-  let nodo: JSX.Element;
+  let nodo: React.JSX.Element;
   let alto = 1350;
   let todo = "";
 

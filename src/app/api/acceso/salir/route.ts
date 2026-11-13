@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 /** Cierre manual de la sesión de este dispositivo. */
 export async function POST(request: Request) {
-  const session = await readSignedSession(cookies().get(SESSION_COOKIE)?.value);
+  const session = await readSignedSession((await cookies()).get(SESSION_COOKIE)?.value);
   await logAccessEvent("salida", {
     origin: await originHash(request),
     device: deviceSummary(request),

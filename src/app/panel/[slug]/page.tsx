@@ -16,7 +16,8 @@ export const dynamic = "force-dynamic";
  * ni su bot conectados (eso es el resto de la Fase 2 en adelante) — por
  * eso por ahora muestran un aviso en vez de un panel vacío o roto.
  */
-export default async function PanelRubroPage({ params }: { params: { slug: string } }) {
+export default async function PanelRubroPage(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
   if (params.slug === "juridico") {

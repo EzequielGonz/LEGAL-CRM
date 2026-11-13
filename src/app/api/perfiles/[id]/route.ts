@@ -18,7 +18,8 @@ function clean(v: unknown, max = 120): string | null | undefined {
  * perfil no cambia: renombrar conserva todos los vínculos. Los perfiles no
  * se eliminan.
  */
-export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+export async function PATCH(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => ({}));

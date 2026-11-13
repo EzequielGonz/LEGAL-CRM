@@ -11,7 +11,8 @@ export const maxDuration = 60;
  * «Pasar a texto»: transcribe un audio ya recibido y guarda el texto en el
  * mensaje. No responde, no cambia el estado de la persona y no envía nada.
  */
-export async function POST(request: Request, { params }: { params: { messageId: string } }) {
+export async function POST(request: Request, props: { params: Promise<{ messageId: string }> }) {
+  const params = await props.params;
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   if (!isUuid(params.messageId)) return NextResponse.json({ error: "Identificador inválido." }, { status: 400 });

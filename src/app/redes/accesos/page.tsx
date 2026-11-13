@@ -13,10 +13,11 @@ export const metadata = { title: "Accesos" };
  * Accesos a las redes (12/11): Instagram, Facebook y WhatsApp de cada perfil a un
  * clic, cada uno en su ventana al lado del panel.
  */
-export default async function Pagina({ searchParams }: { searchParams: { perfil?: string } }) {
+export default async function Pagina(props: { searchParams: Promise<{ perfil?: string }> }) {
+  const searchParams = await props.searchParams;
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
-  const slug: SlugPerfil = perfilActivo(searchParams.perfil);
+  const slug: SlugPerfil = await perfilActivo(searchParams.perfil);
   const items = accesosDe(await leerAccesos(slug));
   return (
     <MarcoPerfil slug={slug}>

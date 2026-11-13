@@ -5,7 +5,8 @@ import { deshacerCambioBot, deshacerCambioMenu } from "@/lib/asistente/acciones"
 export const dynamic = "force-dynamic";
 
 /** Deshacer un cambio confirmado: el bot vuelve a sus instrucciones anteriores, o el menú a como estaba. */
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   if (!/^[0-9a-f-]{36}$/i.test(params.id)) return NextResponse.json({ error: "Propuesta no válida." }, { status: 400 });

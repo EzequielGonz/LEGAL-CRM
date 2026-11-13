@@ -52,10 +52,13 @@ const VACIO: Record<ClaveResultado, string> = {
  * Quién, cuándo, de dónde vino, quién lo hizo y por qué, con la ficha y el
  * chat a un clic. Solo lectura.
  */
-export default async function Pagina({ searchParams }: { searchParams: { perfil?: string; ver?: string; periodo?: string; pagina?: string } }) {
+export default async function Pagina(
+  props: { searchParams: Promise<{ perfil?: string; ver?: string; periodo?: string; pagina?: string }> }
+) {
+  const searchParams = await props.searchParams;
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
-  const perfil = perfilActivo(searchParams.perfil);
+  const perfil = await perfilActivo(searchParams.perfil);
   const rubroId = rubroIdDe(perfil);
   if (!rubroId || !esSlugPerfil(perfil)) notFound();
   const slug: SlugPerfil = perfil;

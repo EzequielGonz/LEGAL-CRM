@@ -51,7 +51,8 @@ type Params = {
  * Prospectos (bloques 1.5 y 1.8): una fila por oportunidad, con sus estados
  * que coexisten. Búsqueda, filtros, totales y paginación en el servidor.
  */
-export default async function ProspectosPage({ searchParams }: { searchParams: Params }) {
+export default async function ProspectosPage(props: { searchParams: Promise<Params> }) {
+  const searchParams = await props.searchParams;
   const supabase = createClient();
   const page = pageFromParam(searchParams.pagina);
 

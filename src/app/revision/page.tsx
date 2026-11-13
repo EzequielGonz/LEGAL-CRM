@@ -6,8 +6,9 @@ import { redirect } from "next/navigation";
  * suya en /incidencias?perfil=…; esta dirección queda para no romper enlaces
  * y avisos viejos, y lleva al perfil en el que se está.
  */
-export default function RevisionAnterior({ searchParams }: { searchParams: Record<string, string | undefined> }) {
-  const p = new URLSearchParams(Object.entries(searchParams ?? {}).filter((e): e is [string, string] => typeof e[1] === "string"));
-  const q = p.toString();
-  redirect(`/incidencias${q ? `?${q}` : ""}`);
+export default async function RevisionAnterior(props: { searchParams: Promise<Record<string, string | undefined>> }) {
+ const searchParams = await props.searchParams;
+ const p = new URLSearchParams(Object.entries(searchParams ?? {}).filter((e): e is [string, string] => typeof e[1] === "string"));
+ const q = p.toString();
+ redirect(`/incidencias${q ? `?${q}` : ""}`);
 }

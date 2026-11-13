@@ -14,8 +14,9 @@ export const metadata = { title: "Bandeja para Claude" };
  * abre un chat del proyecto y dice «ok». El asistente del panel («Pedile
  * algo») sigue en Gemini; Claude no corre dentro del panel.
  */
-export default async function BandejaPage({ searchParams }: { searchParams: { perfil?: string } }) {
-  const slug: SlugPerfil = perfilActivo(searchParams.perfil);
+export default async function BandejaPage(props: { searchParams: Promise<{ perfil?: string }> }) {
+  const searchParams = await props.searchParams;
+  const slug: SlugPerfil = await perfilActivo(searchParams.perfil);
   let tareas: TareaBandeja[] = [];
   let errorLectura = false;
   try {

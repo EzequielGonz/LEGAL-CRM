@@ -7,8 +7,9 @@ export const dynamic = "force-dynamic";
 export const metadata = { title: "Plantillas de Wasender" };
 
 /** Plantillas propias de Wasender (10/11): sin aprobación de Meta, con variables y variantes. */
-export default function PlantillasWasenderPage({ searchParams }: { searchParams: { perfil?: string } }) {
-  const slug: SlugPerfil = perfilActivo(searchParams.perfil);
+export default async function PlantillasWasenderPage(props: { searchParams: Promise<{ perfil?: string }> }) {
+  const searchParams = await props.searchParams;
+  const slug: SlugPerfil = await perfilActivo(searchParams.perfil);
   return (
     <MarcoPerfil slug={slug}>
       <PlantillasWasender slug={slug} marca={marcaDe(slug).nombre} />

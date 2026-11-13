@@ -3,7 +3,8 @@ import { CampaignNotReadyError, launchCampaign } from "@/lib/campaigns";
 import { AutomationPausedError } from "@/lib/automation-pause";
 import { requireSession } from "@/lib/acceso/autorizacion";
 
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   try {

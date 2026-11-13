@@ -23,7 +23,8 @@ export const maxDuration = 60;
  *
  * Body: { base_id, include_previously_contacted? }
  */
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => null);

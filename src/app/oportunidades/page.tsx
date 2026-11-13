@@ -35,15 +35,16 @@ export const dynamic = "force-dynamic";
  * filtros, orden y posición. Sirve para los cuatro perfiles, en
  * computadora y en teléfono.
  */
-export default async function OportunidadesPage({
-  searchParams,
-}: {
-  searchParams: { perfil?: string; indicador?: string; orden?: string; pagina?: string; volver?: string };
-}) {
+export default async function OportunidadesPage(
+  props: {
+    searchParams: Promise<{ perfil?: string; indicador?: string; orden?: string; pagina?: string; volver?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
 
-  const perfil = perfilActivo(searchParams.perfil);
+  const perfil = await perfilActivo(searchParams.perfil);
   const rubroIdLeido = rubroIdDe(perfil);
   if (!rubroIdLeido) notFound();
   const rubroId: string = rubroIdLeido as string;

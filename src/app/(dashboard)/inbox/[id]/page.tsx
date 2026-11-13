@@ -7,7 +7,11 @@ import { EnlaceVolver } from "@/components/ui/enlaces-navegacion";
 
 export const dynamic = "force-dynamic";
 
-export default async function ConversationPage({ params, searchParams }: { params: { id: string }; searchParams?: Record<string, string | undefined> }) {
+export default async function ConversationPage(
+  props: { params: Promise<{ id: string }>; searchParams?: Promise<Record<string, string | undefined>> }
+) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   // Al llegar desde una lista (indicador, búsqueda), «Volver» conserva filtros, orden y página.
   const volver = volverSeguro(searchParams?.volver);
   const supabase = createClient();

@@ -88,7 +88,7 @@ function Ficha({ f, slug, aqui, accion }: { f: FichaCartera; slug: SlugPerfil; a
 export async function PaginaCartera({ vista, searchParams }: { vista: VistaCartera; searchParams: { perfil?: string; grupo?: string } }) {
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
-  const perfil = perfilActivo(searchParams.perfil);
+  const perfil = await perfilActivo(searchParams.perfil);
   const rubroId = rubroIdDe(perfil);
   if (!rubroId || !esSlugPerfil(perfil)) notFound();
   const slug: SlugPerfil = perfil;

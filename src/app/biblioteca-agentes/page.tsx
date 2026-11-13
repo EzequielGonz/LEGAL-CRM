@@ -16,14 +16,15 @@ export const dynamic = "force-dynamic";
  * configuración y versiones. Etapa 3: las acciones (probar, evaluar,
  * crear, asignar) viven en «Bot IA» de cada perfil.
  */
-export default async function BibliotecaPage({ searchParams }: { searchParams: { volver?: string; perfil?: string } }) {
+export default async function BibliotecaPage(props: { searchParams: Promise<{ volver?: string; perfil?: string }> }) {
+  const searchParams = await props.searchParams;
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
   const volver = volverSeguro(searchParams.volver);
   // 24/10: dentro del marco del perfil (antes se abría sin menú).
   const desdeVolver = /^\/panel\/([a-z0-9_]+)/.exec(volver ?? "")?.[1];
   const pedido = searchParams.perfil ?? desdeVolver;
-  const slug: SlugPerfil = perfilActivo(pedido);
+  const slug: SlugPerfil = await perfilActivo(pedido);
   const supabase = createClient();
   const [{ data, error }, { data: rubros }, { data: versiones }] = await Promise.all([
     supabase.from("agent_library").select("*").order("clave"),

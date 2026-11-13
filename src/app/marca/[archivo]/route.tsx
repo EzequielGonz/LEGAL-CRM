@@ -23,7 +23,8 @@ export function generateStaticParams() {
   return Object.keys(MEDIDAS).map((archivo) => ({ archivo }));
 }
 
-export function GET(_req: Request, { params }: { params: { archivo: string } }) {
+export async function GET(_req: Request, props: { params: Promise<{ archivo: string }> }) {
+  const params = await props.params;
   const m = MEDIDAS[params.archivo];
   if (!m) return new Response("No existe", { status: 404 });
   const interior = Math.round(m.lado * (1 - 2 * m.margen));

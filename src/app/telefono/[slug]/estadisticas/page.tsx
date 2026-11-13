@@ -17,13 +17,14 @@ export const dynamic = "force-dynamic";
  * con selector; si no hay activa, la última realizada; si no hay campañas,
  * se dice así, sin cifras de ejemplo.
  */
-export default async function TelefonoEstadisticasPage({
-  params,
-  searchParams,
-}: {
-  params: { slug: string };
-  searchParams: { campana?: string };
-}) {
+export default async function TelefonoEstadisticasPage(
+  props: {
+    params: Promise<{ slug: string }>;
+    searchParams: Promise<{ campana?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const profile = phoneProfile(params.slug);
   if (!profile) notFound();
   const supabase = createClient();

@@ -22,7 +22,8 @@ const EDITABLE_FIELDS = [
  * ganado/perdido) o derivarlo a un estudio jurídico. Solo toca los campos
  * que vengan en el body — no pisa el resto del registro.
  */
-export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+export async function PATCH(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   const body = await request.json();

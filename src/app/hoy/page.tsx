@@ -34,10 +34,13 @@ function fechaHoy(ahora = new Date()): string {
  * y una línea con lo que el bot lleva adelante. Las cifras del período están
  * en Resultados. Solo lectura.
  */
-export default async function InicioPerfilPage({ searchParams }: { searchParams: { perfil?: string; grupo?: string; cola?: string; todo?: string; periodo?: string } }) {
+export default async function InicioPerfilPage(
+  props: { searchParams: Promise<{ perfil?: string; grupo?: string; cola?: string; todo?: string; periodo?: string }> }
+) {
+  const searchParams = await props.searchParams;
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
-  const perfil = perfilActivo(searchParams.perfil);
+  const perfil = await perfilActivo(searchParams.perfil);
   const rubroId = rubroIdDe(perfil);
   if (!rubroId || !esSlugPerfil(perfil)) notFound();
   const slug: SlugPerfil = perfil;

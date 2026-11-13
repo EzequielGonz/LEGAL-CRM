@@ -7,7 +7,7 @@ import { perfilActivo } from "@/lib/perfil-activo";
  * último en el que se estuvo (13/11: antes caía en Jurídico); si no hay
  * ninguno, se vuelve a elegir perfil.
  */
-export function perfilDePagina(perfil: unknown): { slug: SlugPerfil; rubroId: string } {
-  const slug = perfilActivo(perfil);
+export async function perfilDePagina(perfil: unknown): Promise<{ slug: SlugPerfil; rubroId: string }> {
+  const slug = await perfilActivo(perfil);
   return { slug, rubroId: RUBRO_IDS[slug] };
 }

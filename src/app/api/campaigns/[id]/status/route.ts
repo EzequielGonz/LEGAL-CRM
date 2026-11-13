@@ -8,7 +8,8 @@ import { requireSession } from "@/lib/acceso/autorizacion";
  * ese panel está abierto). Nunca dispara envíos: eso lo sigue haciendo
  * únicamente el cron que pega a /api/campaigns/tick.
  */
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   try {

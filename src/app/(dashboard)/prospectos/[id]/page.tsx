@@ -10,7 +10,11 @@ import { volverSeguro } from "@/lib/navegacion";
 
 export const dynamic = "force-dynamic";
 
-export default async function ProspectoDetailPage({ params, searchParams }: { params: { id: string }; searchParams?: { volver?: string } }) {
+export default async function ProspectoDetailPage(
+  props: { params: Promise<{ id: string }>; searchParams?: Promise<{ volver?: string }> }
+) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const volver = volverSeguro(searchParams?.volver);
   const supabase = createClient();
 

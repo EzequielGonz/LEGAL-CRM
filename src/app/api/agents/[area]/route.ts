@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireSession } from "@/lib/acceso/autorizacion";
 
-export async function POST(request: Request, { params }: { params: { area: string } }) {
+export async function POST(request: Request, props: { params: Promise<{ area: string }> }) {
+  const params = await props.params;
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   if (params.area !== "civil" && params.area !== "penal") {

@@ -8,10 +8,11 @@ export const dynamic = "force-dynamic";
 export const metadata = { title: "Publicidad" };
 
 /** Redes y contenido › Publicidad (18/10): configuración lista y apagada. */
-export default async function PublicidadPage({ searchParams }: { searchParams: { perfil?: string } }) {
+export default async function PublicidadPage(props: { searchParams: Promise<{ perfil?: string }> }) {
+  const searchParams = await props.searchParams;
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
-  const { slug } = perfilDePagina(searchParams.perfil);
+  const { slug } = await perfilDePagina(searchParams.perfil);
   return (
     <MarcoPerfil slug={slug}>
       <div className="mx-auto max-w-3xl">

@@ -16,10 +16,11 @@ export const metadata = { title: "Publicaciones" };
  * Redes y contenido › Publicaciones (18/10): el calendario de lo que sale en
  * Instagram y Facebook, la conexión con Metricool y el pedido al asistente.
  */
-export default async function PublicacionesPage({ searchParams }: { searchParams: { perfil?: string } }) {
+export default async function PublicacionesPage(props: { searchParams: Promise<{ perfil?: string }> }) {
+  const searchParams = await props.searchParams;
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
-  const { slug, rubroId } = perfilDePagina(searchParams.perfil);
+  const { slug, rubroId } = await perfilDePagina(searchParams.perfil);
   const desde = new Date(Date.now() - 3 * 24 * 3600 * 1000).toISOString();
   const [conexion, { data: proximas }, { data: recientes }] = await Promise.all([
     leerConexion(rubroId),

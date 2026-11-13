@@ -23,10 +23,13 @@ const ORDEN = ["concreto_llamada", "posible_captacion", "relectura_rechazo", "re
  * Movidos en la limpieza del 13/11 (pedido de la responsable: «Reclasificar
  * solo», con una lista para revisar y deshacer). Cada perfil ve solo lo suyo.
  */
-export default async function LimpiezaPage({ searchParams }: { searchParams: { perfil?: string; regla?: string; pagina?: string } }) {
+export default async function LimpiezaPage(
+  props: { searchParams: Promise<{ perfil?: string; regla?: string; pagina?: string }> }
+) {
+  const searchParams = await props.searchParams;
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
-  const slug: SlugPerfil = perfilActivo(searchParams.perfil);
+  const slug: SlugPerfil = await perfilActivo(searchParams.perfil);
   const regla = searchParams.regla && TEXTO_REGLA[searchParams.regla] ? searchParams.regla : null;
   const pagina = pageFromParam(searchParams.pagina);
   const { filas, total, porRegla } = await listarMovimientos(RUBRO_IDS[slug], { regla, pagina, tamano: TAMANO });

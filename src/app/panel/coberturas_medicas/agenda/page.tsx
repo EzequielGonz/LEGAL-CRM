@@ -6,11 +6,12 @@ export const metadata = { title: "Citas" };
 
 // Agenda del perfil (bloque 1.8): misma supervisión que Jurídico, con la
 // ficha al costado y las mismas acciones.
-export default async function AgendaPage({
-  searchParams,
-}: {
-  searchParams: { tab?: string; ficha?: string; pagina?: string };
-}) {
+export default async function AgendaPage(
+  props: {
+    searchParams: Promise<{ tab?: string; ficha?: string; pagina?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   return (
     <div>
       <h1 className="mb-1 text-2xl font-semibold text-slate-950">Citas</h1>

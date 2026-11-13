@@ -11,7 +11,8 @@ export const dynamic = "force-dynamic";
  * «cancelada» con su historial. Si ya estaba programada en Metricool, se
  * borra también allá.
  */
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   if (!/^[0-9a-f-]{36}$/i.test(params.id)) return NextResponse.json({ error: "Pieza no válida." }, { status: 400 });

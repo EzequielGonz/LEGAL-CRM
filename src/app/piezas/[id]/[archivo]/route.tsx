@@ -21,7 +21,8 @@ function claro(hex: string): boolean {
   return 0.299 * r + 0.587 * g + 0.114 * b > 170;
 }
 
-export async function GET(_req: Request, { params }: { params: { id: string; archivo: string } }) {
+export async function GET(_req: Request, props: { params: Promise<{ id: string; archivo: string }> }) {
+  const params = await props.params;
   const m = /^(\d{1,2})\.png$/.exec(params.archivo);
   if (!m || !/^[0-9a-f-]{36}$/i.test(params.id)) return new Response("No existe", { status: 404 });
   const indice = Number(m[1]) - 1;

@@ -22,13 +22,14 @@ const ESTADOS = [
  * completa (con su texto para compartir). Los captados con datos faltantes
  * siguen visibles y se pueden derivar.
  */
-export default async function TelefonoClientesPage({
-  params,
-  searchParams,
-}: {
-  params: { slug: string };
-  searchParams: { q?: string; estado?: string; pagina?: string };
-}) {
+export default async function TelefonoClientesPage(
+  props: {
+    params: Promise<{ slug: string }>;
+    searchParams: Promise<{ q?: string; estado?: string; pagina?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const profile = phoneProfile(params.slug);
   if (!profile) notFound();
   const supabase = createClient();

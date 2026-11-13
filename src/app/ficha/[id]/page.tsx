@@ -13,7 +13,11 @@ export const dynamic = "force-dynamic";
  * Ficha completa de un contacto, apta para teléfono y para los paneles de
  * cada perfil (bloque 1.7). Las acciones son las mismas que en Prospectos.
  */
-export default async function FichaPage({ params, searchParams }: { params: { id: string }; searchParams: { volver?: string } }) {
+export default async function FichaPage(
+  props: { params: Promise<{ id: string }>; searchParams: Promise<{ volver?: string }> }
+) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
   const supabase = createClient();

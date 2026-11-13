@@ -16,7 +16,8 @@ const UUID = /^[0-9a-f-]{36}$/i;
  * Según el nivel (ver permisos.ts): «contacto» exige { confirmar_envio: true }
  * y «pin» exige { pin }. El nivel sale de la propuesta guardada, nunca del pedido.
  */
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   if (!UUID.test(params.id)) return NextResponse.json({ error: "Propuesta no válida." }, { status: 400 });
@@ -47,7 +48,8 @@ export async function POST(request: Request, { params }: { params: { id: string 
 }
 
 /** Descartar una propuesta (no se ejecuta). */
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   if (!UUID.test(params.id)) return NextResponse.json({ error: "Propuesta no válida." }, { status: 400 });

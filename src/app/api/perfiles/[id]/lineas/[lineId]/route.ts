@@ -5,7 +5,11 @@ import { requireSession } from "@/lib/acceso/autorizacion";
 export const dynamic = "force-dynamic";
 
 /** Editar o desactivar una línea (no se eliminan). */
-export async function PATCH(request: Request, { params }: { params: { id: string; lineId: string } }) {
+export async function PATCH(
+  request: Request,
+  props: { params: Promise<{ id: string; lineId: string }> }
+) {
+  const params = await props.params;
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => ({}));

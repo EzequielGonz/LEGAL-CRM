@@ -13,7 +13,8 @@ export const dynamic = "force-dynamic";
  * estado de entrega actual de los mensajes salientes recientes, para que
  * el Inbox actualice "Enviado → Entregado → Leído" en los que ya muestra.
  */
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   const { searchParams } = new URL(request.url);
@@ -56,7 +57,8 @@ export async function GET(request: Request, { params }: { params: { id: string }
  * humana ANTES de enviar (dentro de sendOutboundMessage), así una
  * respuesta de la IA que se estuviera generando ya no puede salir encima.
  */
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   const { body, adjunto } = await request.json().catch(() => ({ body: null, adjunto: null }));

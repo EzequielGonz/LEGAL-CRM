@@ -8,7 +8,8 @@ export const dynamic = "force-dynamic";
  * Etapa 2 · Bloque 2.0 — Archivar una excepción del calendario (no se borra).
  * PATCH { archive: true, reason?: string }
  */
-export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+export async function PATCH(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => ({}));

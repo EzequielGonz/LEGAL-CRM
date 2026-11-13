@@ -29,7 +29,8 @@ function horasDesde(iso: string) {
  * de 24 h, la carga del archivo y el resultado. Pide presupuesto = captado;
  * aprobado = cerrado.
  */
-export default async function PidePresupuestoPage({ searchParams }: { searchParams: { ver?: string } }) {
+export default async function PidePresupuestoPage(props: { searchParams: Promise<{ ver?: string }> }) {
+  const searchParams = await props.searchParams;
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
   const ver = searchParams.ver === "todos" ? "todos" : "abiertos";

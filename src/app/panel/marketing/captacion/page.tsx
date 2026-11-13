@@ -7,11 +7,12 @@ import { ScrapeQueueForm } from "@/components/marketing/scrape-queue-form";
 
 export const dynamic = "force-dynamic";
 
-export default async function CaptacionMarketingPage({
-  searchParams,
-}: {
-  searchParams: { archivadas?: string };
-}) {
+export default async function CaptacionMarketingPage(
+  props: {
+    searchParams: Promise<{ archivadas?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   const verArchivadas = searchParams?.archivadas === "1";
   const supabase = createClient();
   const [{ data: bases }, { data: jobs }] = await Promise.all([

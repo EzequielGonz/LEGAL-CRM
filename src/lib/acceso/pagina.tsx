@@ -1,3 +1,4 @@
+import type React from "react";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { SESSION_COOKIE, validateSession, type SessionPayload } from "@/lib/acceso/session";
@@ -14,10 +15,10 @@ import { SESSION_COOKIE, validateSession, type SessionPayload } from "@/lib/acce
  * Vigencia no comprobable (la base no respondió) → se muestra un aviso
  * que reintenta solo, sin borrar la cookie.
  */
-export type PageSession = { ok: true; session: SessionPayload } | { ok: false; fallback: JSX.Element };
+export type PageSession = { ok: true; session: SessionPayload } | { ok: false; fallback: React.JSX.Element };
 
 export async function requirePageSession(): Promise<PageSession> {
-  const check = await validateSession(cookies().get(SESSION_COOKIE)?.value);
+  const check = await validateSession((await cookies()).get(SESSION_COOKIE)?.value);
   if (check.status === "valida") return { ok: true, session: check.session };
   if (check.status === "no_comprobable") return { ok: false, fallback: <SesionNoComprobable /> };
   redirect("/login");

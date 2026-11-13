@@ -6,7 +6,8 @@ import { requireSession } from "@/lib/acceso/autorizacion";
  * Prende o apaga la IA en una conversación. Apagarla es tomar el chat: se
  * anula cualquier acuse final pendiente de la IA.
  */
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   const { ai_enabled } = await request.json();

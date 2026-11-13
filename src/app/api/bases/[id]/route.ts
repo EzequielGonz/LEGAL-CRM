@@ -7,7 +7,8 @@ import { requireSession } from "@/lib/acceso/autorizacion";
  * conservan el archivo original, las filas, los contactos y sus vínculos;
  * desde Bases → "Ver archivadas" se consulta y se recupera.
  */
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   try {

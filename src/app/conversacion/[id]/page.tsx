@@ -10,14 +10,18 @@ export const dynamic = "force-dynamic";
  * Marketing. Desde el 24/10 hay un solo chat: se abre en la lista del perfil
  * (/panel/<perfil>/chats/<id>), igual que el Inbox de Jurídico.
  */
-export default async function ConversacionPerfilPage({ params, searchParams }: { params: { id: string }; searchParams?: { volver?: string } }) {
-  const sesion = await requirePageSession();
-  if (!sesion.ok) return sesion.fallback;
-  const volver = volverSeguro(searchParams?.volver);
-  const { data: conversation } = await createClient().from("conversations").select("id, contacts(area)").eq("id", params.id).single();
-  if (!conversation) notFound();
-  const area = (conversation.contacts as any)?.area as string | undefined;
-  const extra = volver ? `?volver=${encodeURIComponent(volver)}` : "";
-  if (!area || area === "civil" || area === "penal") redirect(`/inbox/${conversation.id}${extra}`);
-  redirect(`/panel/${area}/chats/${conversation.id}${extra}`);
+export default async function ConversacionPerfilPage(
+ props: { params: Promise<{ id: string }>; searchParams?: Promise<{ volver?: string }> }
+) {
+ const searchParams = await props.searchParams;
+ const params = await props.params;
+ const sesion = await requirePageSession();
+ if (!sesion.ok) return sesion.fallback;
+ const volver = volverSeguro(searchParams?.volver);
+ const { data: conversation } = await createClient().from("conversations").select("id, contacts(area)").eq("id", params.id).single();
+ if (!conversation) notFound();
+ const area = (conversation.contacts as any)?.area as string | undefined;
+ const extra = volver ? `?volver=${encodeURIComponent(volver)}` : "";
+ if (!area || area === "civil" || area === "penal") redirect(`/inbox/${conversation.id}${extra}`);
+ redirect(`/panel/${area}/chats/${conversation.id}${extra}`);
 }

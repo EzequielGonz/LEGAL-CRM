@@ -39,10 +39,11 @@ const cifra = (v: number | null | undefined) => (v === null || v === undefined ?
  * Las dos vistas usan los mismos datos y la misma API. Nada se publica sin
  * política habilitada, cuenta conectada y ejecutor encendido.
  */
-export default async function ContenidoPage({ searchParams }: { searchParams: { perfil?: string; volver?: string } }) {
+export default async function ContenidoPage(props: { searchParams: Promise<{ perfil?: string; volver?: string }> }) {
+  const searchParams = await props.searchParams;
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
-  const perfil = perfilActivo(searchParams.perfil);
+  const perfil = await perfilActivo(searchParams.perfil);
   const rubroIdLeido = rubroIdDe(perfil);
   if (!rubroIdLeido || !esSlugPerfil(perfil)) notFound();
   const slug: SlugPerfil = perfil;

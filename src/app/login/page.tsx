@@ -12,11 +12,12 @@ export const dynamic = "force-dynamic";
  * Configuración (pidiendo el actual) y se recupera desde la configuración
  * privada del servidor (ACCESS_PIN_RESET).
  */
-export default async function LoginPage({
-  searchParams,
-}: {
-  searchParams: { next?: string };
-}) {
+export default async function LoginPage(
+  props: {
+    searchParams: Promise<{ next?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   let configured = true;
   try {
     configured = (await ensurePinState()).configured;

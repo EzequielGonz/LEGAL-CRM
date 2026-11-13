@@ -5,7 +5,8 @@ import { requireSession } from "@/lib/acceso/autorizacion";
 export const dynamic = "force-dynamic";
 
 /** Resolver o descartar una incidencia (queda la nota y el momento; nunca se borra). */
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => ({}));

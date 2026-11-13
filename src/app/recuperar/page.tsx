@@ -7,6 +7,7 @@ import { perfilActivo } from "@/lib/perfil-activo";
  * responde, pasa solo a Caídos). La dirección queda para no romper enlaces y
  * lleva a Descartados → Caídos del perfil.
  */
-export default function Pagina({ searchParams }: { searchParams: { perfil?: string } }) {
-  redirect(`/descartados?perfil=${perfilActivo(searchParams.perfil)}&grupo=caidos`);
+export default async function Pagina(props: { searchParams: Promise<{ perfil?: string }> }) {
+ const searchParams = await props.searchParams;
+ redirect(`/descartados?perfil=${await perfilActivo(searchParams.perfil)}&grupo=caidos`);
 }

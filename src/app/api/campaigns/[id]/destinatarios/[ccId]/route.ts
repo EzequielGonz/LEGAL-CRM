@@ -11,7 +11,8 @@ export const dynamic = "force-dynamic";
  *  - descartar: queda como fallido, con la nota.
  * Nada se envía desde acá.
  */
-export async function POST(request: Request, { params }: { params: { id: string; ccId: string } }) {
+export async function POST(request: Request, props: { params: Promise<{ id: string; ccId: string }> }) {
+  const params = await props.params;
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => ({}));

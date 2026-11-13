@@ -10,7 +10,8 @@ export const dynamic = "force-dynamic";
  * circuito normal (se guarda el mensaje; la pausa general y las
  * detenciones siguen aplicando). "Descartar" lo deja marcado, sin borrarlo.
  */
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => ({}));
