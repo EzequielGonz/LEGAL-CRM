@@ -1,0 +1,260 @@
+/*
+ * Vidrio, profundidad y movimiento (13/11 · «subí un poco más el diseño del
+ * panel, detalles en motion, 3d […] dale más estética»; eligió «bien llamativo»).
+ *
+ * Qué suma, en los dos modos y con el color de cada perfil:
+ *  - fondo vivo: manchas del color del perfil que derivan muy lento;
+ *  - vidrio: menú, encabezado y tarjetas translúcidos, con borde que toma luz
+ *    desde arriba y sombra amplia;
+ *  - profundidad: las tarjetas de cifras se inclinan con el cursor y se elevan;
+ *  - movimiento: la pantalla entra con un fundido corto, las filas en cascada
+ *    una sola vez y la opción activa del menú se desliza.
+ *
+ * Límites: solo se animan `transform` y `opacity`; con «reducir movimiento»
+ * del sistema no se mueve nada; en el celular no hay inclinación y el
+ * desenfoque es menor; las listas de trabajo (filas, chats) no llevan vidrio
+ * propio para que sigan siendo densas y rápidas.
+ */
+
+:root {
+  --vidrio-fondo: rgb(255 255 255 / 0.7);
+  --vidrio-fondo-alto: rgb(255 255 255 / 0.82);
+  --vidrio-borde: rgb(255 255 255 / 0.95);
+  --vidrio-borde-bajo: rgb(15 23 42 / 0.08);
+  --vidrio-brillo: inset 0 1px 0 rgb(255 255 255 / 0.9);
+  --vidrio-sombra: 0 22px 48px -28px rgb(15 23 42 / 0.3), 0 2px 8px -3px rgb(15 23 42 / 0.08);
+  --vidrio-sombra-alta: 0 30px 60px -26px rgb(var(--c-gold-500) / 0.45), 0 8px 18px -10px rgb(15 23 42 / 0.18);
+  --desenfoque: 18px;
+  --mancha: 0.2;
+}
+html[data-modo="oscuro"] {
+  --vidrio-fondo: rgb(255 255 255 / 0.045);
+  --vidrio-fondo-alto: rgb(255 255 255 / 0.07);
+  --vidrio-borde: rgb(255 255 255 / 0.13);
+  --vidrio-borde-bajo: rgb(255 255 255 / 0.05);
+  --vidrio-brillo: inset 0 1px 0 rgb(255 255 255 / 0.09);
+  --vidrio-sombra: 0 26px 56px -30px rgb(0 0 0 / 0.85), 0 2px 10px -4px rgb(0 0 0 / 0.5);
+  --vidrio-sombra-alta: 0 32px 64px -28px rgb(var(--c-gold-500) / 0.4), 0 10px 22px -12px rgb(0 0 0 / 0.7);
+  --mancha: 0.17;
+}
+@media (max-width: 640px) {
+  :root { --desenfoque: 10px; }
+}
+
+/* ---------------------------------------------------------------- fondo vivo */
+[data-tema] {
+  position: relative;
+  isolation: isolate;
+}
+html:not([data-modo="oscuro"]) [data-tema] {
+  background: rgb(244 246 250);
+}
+html:not([data-modo="oscuro"]) [data-tema] main#contenido {
+  background: transparent;
+}
+[data-tema]::before,
+[data-tema]::after {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 9999px;
+  filter: blur(70px);
+  opacity: var(--mancha);
+}
+[data-tema]::before {
+  top: -18vh;
+  right: -8vw;
+  width: 58vw;
+  height: 58vh;
+  background: radial-gradient(closest-side, rgb(var(--c-gold-500)), transparent);
+}
+[data-tema]::after {
+  bottom: -22vh;
+  left: 12vw;
+  width: 46vw;
+  height: 52vh;
+  background: radial-gradient(closest-side, rgb(var(--c-gold-700, var(--c-gold-500))), transparent);
+  opacity: calc(var(--mancha) * 0.75);
+}
+
+/* --------------------------------------------------------------------- vidrio */
+/* Menú lateral y encabezado: vidrio con desenfoque (son dos capas fijas). */
+#menu-perfil,
+.encabezado-panel,
+.barra-movil {
+  background: var(--vidrio-fondo) !important;
+  -webkit-backdrop-filter: blur(var(--desenfoque)) saturate(1.5);
+  backdrop-filter: blur(var(--desenfoque)) saturate(1.5);
+}
+#menu-perfil {
+  border-right: 1px solid var(--vidrio-borde-bajo) !important;
+  box-shadow: var(--vidrio-brillo), 18px 0 46px -34px rgb(15 23 42 / 0.35);
+}
+.encabezado-panel {
+  border-bottom: 1px solid var(--vidrio-borde-bajo) !important;
+}
+
+/* Tarjetas del contenido: translúcidas, borde con luz de arriba y sombra amplia.
+   Sin desenfoque propio: puede haber decenas por pantalla. */
+main#contenido :is(section, div, details, ul, ol, form, article)[class~="rounded-2xl"][class~="border"]:not(.kpi-hoy) {
+  background-color: var(--vidrio-fondo) !important;
+  border-color: var(--vidrio-borde-bajo) !important;
+  border-top-color: var(--vidrio-borde) !important;
+  box-shadow: var(--vidrio-brillo), var(--vidrio-sombra);
+}
+/* Las que tienen color propio (ámbar de «Atención humana», verde de «Para derivar») conservan su borde. */
+main#contenido :is(div, section)[class~="rounded-2xl"][class~="border"]:is([class*="border-amber"], [class*="border-emerald"], [class*="border-red"], [class*="border-gold"]) {
+  border-color: revert-layer !important;
+}
+
+/* Tarjetas de cifras y bloques principales: vidrio completo, con desenfoque. */
+.kpi-hoy,
+#res-embudo,
+.tablero-hoy > div[class~="rounded-2xl"],
+.grupo-ajustes {
+  -webkit-backdrop-filter: blur(var(--desenfoque)) saturate(1.4);
+  backdrop-filter: blur(var(--desenfoque)) saturate(1.4);
+}
+.kpi-hoy {
+  position: relative;
+  overflow: hidden;
+  background: var(--vidrio-fondo-alto) !important;
+  border-color: var(--vidrio-borde-bajo) !important;
+  border-top-color: var(--vidrio-borde) !important;
+  box-shadow: var(--vidrio-brillo), var(--vidrio-sombra);
+}
+/* Brillo que sigue al cursor (lo mueve `EfectosVidrio`). */
+.kpi-hoy::after,
+[data-inclinar]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(260px circle at var(--bx, 50%) var(--by, 0%), rgb(var(--c-gold-500) / 0.22), transparent 62%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+[data-inclinar] { position: relative; }
+
+/* Píldoras: filtros, pestañas y chips de estado. */
+.pestanas-seccion,
+.chip-estado {
+  -webkit-backdrop-filter: blur(calc(var(--desenfoque) * 0.6));
+  backdrop-filter: blur(calc(var(--desenfoque) * 0.6));
+  box-shadow: var(--vidrio-brillo), 0 10px 26px -20px rgb(15 23 42 / 0.4);
+}
+.pestana[aria-current="page"] {
+  box-shadow: var(--vidrio-brillo), 0 8px 18px -12px rgb(var(--c-gold-500) / 0.55);
+}
+
+/* Menú: la opción activa es una píldora luminosa que se desliza (`.menu-pildora`). */
+#menu-perfil nav { position: relative; }
+.menu-pildora {
+  position: absolute;
+  left: 0.75rem;
+  right: 0.75rem;
+  top: 0;
+  border-radius: 0.75rem;
+  background: linear-gradient(90deg, rgb(var(--c-gold-500) / 0.24), rgb(var(--c-gold-500) / 0.07));
+  box-shadow: inset 2px 0 rgb(var(--c-gold-500)), var(--vidrio-brillo), 0 10px 24px -14px rgb(var(--c-gold-500) / 0.7);
+  pointer-events: none;
+  opacity: 0;
+}
+.menu-pildora[data-lista="1"] { opacity: 1; }
+html #menu-perfil[data-pildora="1"] .menu-item[aria-current="page"] {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+#menu-perfil .menu-item { position: relative; z-index: 1; }
+
+/* Barras de «De dónde vienen»: degradado del color del perfil y extremos redondos. */
+#res-origen ~ ul span[aria-hidden="true"] > span,
+section[aria-labelledby="res-origen"] ul span[aria-hidden="true"] > span {
+  background: linear-gradient(90deg, rgb(var(--c-gold-500) / 0.55), rgb(var(--c-gold-500))) !important;
+  box-shadow: 0 0 14px -2px rgb(var(--c-gold-500) / 0.7);
+}
+
+/* Anillo de avance del embudo. */
+.anillo-avance { display: block; }
+.anillo-avance .anillo-pista { stroke: rgb(var(--c-slate-200) / 0.9); }
+html[data-modo="oscuro"] .anillo-avance .anillo-pista { stroke: rgb(255 255 255 / 0.09); }
+.anillo-avance .anillo-valor { filter: drop-shadow(0 0 6px rgb(var(--c-gold-500) / 0.55)); }
+
+/* ----------------------------------------------------------------- movimiento */
+@media (prefers-reduced-motion: no-preference) {
+  /* Fondo: deriva muy lenta (40 a 55 s por ida). */
+  [data-tema]::before { animation: mancha-a 44s ease-in-out infinite alternate; }
+  [data-tema]::after { animation: mancha-b 56s ease-in-out infinite alternate; }
+
+  /* La pantalla entra con un fundido corto y 10 px de recorrido. */
+  .lienzo-contenido > :not(.barra-salud):not(.pestanas-seccion):not([data-sin-entrada]) {
+    animation: pantalla-entra 320ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+
+  /* Filas de las dos listas de Hoy y de Resultados: en cascada, una sola vez. */
+  .tablero-hoy ul[class~="divide-y"] > li,
+  section[aria-labelledby="res-lista"] ul > li {
+    animation: fila-entra 300ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+  .tablero-hoy ul[class~="divide-y"] > li:nth-child(1), section[aria-labelledby="res-lista"] ul > li:nth-child(1) { animation-delay: 60ms; }
+  .tablero-hoy ul[class~="divide-y"] > li:nth-child(2), section[aria-labelledby="res-lista"] ul > li:nth-child(2) { animation-delay: 95ms; }
+  .tablero-hoy ul[class~="divide-y"] > li:nth-child(3), section[aria-labelledby="res-lista"] ul > li:nth-child(3) { animation-delay: 130ms; }
+  .tablero-hoy ul[class~="divide-y"] > li:nth-child(4), section[aria-labelledby="res-lista"] ul > li:nth-child(4) { animation-delay: 165ms; }
+  .tablero-hoy ul[class~="divide-y"] > li:nth-child(5), section[aria-labelledby="res-lista"] ul > li:nth-child(5) { animation-delay: 200ms; }
+  .tablero-hoy ul[class~="divide-y"] > li:nth-child(6), section[aria-labelledby="res-lista"] ul > li:nth-child(6) { animation-delay: 235ms; }
+  .tablero-hoy ul[class~="divide-y"] > li:nth-child(n + 7), section[aria-labelledby="res-lista"] ul > li:nth-child(n + 7) { animation-delay: 270ms; }
+
+  /* La píldora del menú viaja hasta la opción nueva. */
+  .menu-pildora[data-animar="1"] { transition: transform 320ms cubic-bezier(0.22, 0.9, 0.24, 1), height 320ms cubic-bezier(0.22, 0.9, 0.24, 1), opacity 160ms ease; }
+
+  /* Al presionar, una leve reducción antes de soltar. */
+  :is(.btn-gold, .btn-gold-sm, .btn-suave, .btn-suave-sm, .menu-item, .pestana, .chip-filtro, .chip-estado):active {
+    transform: scale(0.97);
+    transition: transform 90ms ease;
+  }
+}
+
+/* Profundidad: solo con cursor fino (en el celular no hay inclinación). */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .kpi-hoy,
+  [data-inclinar] {
+    transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--ty, 0px));
+    transition: transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 260ms ease, border-color 150ms ease;
+    will-change: transform;
+  }
+  .kpi-hoy:hover,
+  [data-inclinar]:hover {
+    --ty: -5px;
+    box-shadow: var(--vidrio-brillo), var(--vidrio-sombra-alta);
+  }
+  .kpi-hoy:hover::after,
+  [data-inclinar]:hover::after { opacity: 1; }
+
+  /* Tarjetas comunes: se elevan apenas al pasar. */
+  main#contenido a[class~="rounded-2xl"][class~="border"]:not(.kpi-hoy) {
+    transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 220ms ease;
+  }
+  main#contenido a[class~="rounded-2xl"][class~="border"]:not(.kpi-hoy):hover {
+    transform: translateY(-3px);
+    box-shadow: var(--vidrio-brillo), var(--vidrio-sombra-alta);
+  }
+}
+
+@keyframes mancha-a {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(-9vw, 7vh, 0) scale(1.18); }
+}
+@keyframes mancha-b {
+  from { transform: translate3d(0, 0, 0) scale(1.05); }
+  to { transform: translate3d(11vw, -8vh, 0) scale(0.9); }
+}
+@keyframes pantalla-entra {
+  from { opacity: 0; transform: translate3d(0, 10px, 0); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes fila-entra {
+  from { opacity: 0; transform: translate3d(0, 8px, 0); }
+  to { opacity: 1; transform: none; }
+}

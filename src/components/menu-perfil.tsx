@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import clsx from "clsx";
@@ -32,6 +32,60 @@ export function MenuPerfil({ slug, nombre, logo, menu = null }: { slug: SlugPerf
   const logoUrl = logo?.trim() || marca.logo;
 
   useEffect(() => setAbierto(false), [pathname]);
+
+  // 13/11: la opción activa es una píldora que se desliza. El menú se vuelve a montar al
+  // cambiar de sección, así que la posición anterior se recuerda en la pestaña y la píldora
+  // arranca desde ahí.
+  const navRef = useRef<HTMLElement | null>(null);
+  const pildoraRef = useRef<HTMLSpanElement | null>(null);
+  const claveActiva = activa?.seccion.clave ?? null;
+  const usarEfecto = typeof window === "undefined" ? useEffect : useLayoutEffect;
+  usarEfecto(() => {
+    const nav = navRef.current;
+    const pildora = pildoraRef.current;
+    const aside = nav?.closest<HTMLElement>("#menu-perfil");
+    if (!nav || !pildora || !aside) return;
+    const item = nav.querySelector<HTMLElement>('a.menu-item[aria-current="page"]');
+    if (!item) {
+      pildora.dataset.lista = "0";
+      aside.dataset.pildora = "0";
+      return;
+    }
+    const y = item.getBoundingClientRect().top - nav.getBoundingClientRect().top + nav.scrollTop;
+    const alto = item.offsetHeight;
+    const CLAVE = `menu-pildora:${slug}`;
+    let previa: { y: number; alto: number } | null = null;
+    try {
+      previa = JSON.parse(sessionStorage.getItem(CLAVE) ?? "null");
+    } catch {
+      previa = null;
+    }
+    const poner = (p: { y: number; alto: number }) => {
+      pildora.style.transform = `translate3d(0, ${p.y}px, 0)`;
+      pildora.style.height = `${p.alto}px`;
+    };
+    aside.dataset.pildora = "1";
+    if (previa && typeof previa.y === "number" && Math.abs(previa.y - y) > 1 && pildora.dataset.lista !== "1") {
+      pildora.dataset.animar = "0";
+      poner(previa);
+      pildora.dataset.lista = "1";
+      requestAnimationFrame(() =>
+        requestAnimationFrame(() => {
+          pildora.dataset.animar = "1";
+          poner({ y, alto });
+        })
+      );
+    } else {
+      pildora.dataset.animar = pildora.dataset.lista === "1" ? "1" : "0";
+      poner({ y, alto });
+      pildora.dataset.lista = "1";
+    }
+    try {
+      sessionStorage.setItem(CLAVE, JSON.stringify({ y, alto }));
+    } catch {
+      // sin almacenamiento: la píldora aparece en su lugar, sin recorrido
+    }
+  }, [claveActiva, slug, secciones.length]);
 
   // Título de la pestaña del navegador: «Vista · Marca».
   const pantalla = activa ? (activa.seccion.tabs.length > 1 ? activa.tab.label : activa.seccion.label) : "Panel";
@@ -85,7 +139,8 @@ export function MenuPerfil({ slug, nombre, logo, menu = null }: { slug: SlugPerf
           </span>
         </Link>
 
-        <nav aria-label="Secciones del perfil" className="flex-1 overflow-y-auto px-3 py-4">
+        <nav ref={navRef} aria-label="Secciones del perfil" className="flex-1 overflow-y-auto px-3 py-4">
+          <span ref={pildoraRef} aria-hidden="true" className="menu-pildora" />
           {(["trabajo", "configurar"] as const).map((g) => (
             <div key={g} className={g === "configurar" ? "mt-5" : undefined}>
               <p className="menu-grupo px-3 pb-1.5 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-slate-500">{g === "trabajo" ? "Trabajo" : "Configurar"}</p>

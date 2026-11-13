@@ -9,6 +9,7 @@ import { EnfocarAncla } from "@/components/ui/enfocar-ancla";
 import { MasOpciones, NivelProvider } from "@/components/nivel/nivel";
 import { AsistentePanel } from "@/components/asistente/asistente-panel";
 import { leerMenuPersonal } from "@/lib/personalizacion/servidor";
+import { EfectosVidrio } from "@/components/ui/efectos-vidrio";
 import { RUBRO_IDS } from "@/lib/rubros";
 
 /**
@@ -53,6 +54,7 @@ export async function MarcoPerfil({ slug, children, sinSalud = false }: { slug: 
           </div>
         </main>
         <EnfocarAncla />
+        <EfectosVidrio />
         <AsistentePanel slug={slug} />
       </div>
     </NivelProvider>
