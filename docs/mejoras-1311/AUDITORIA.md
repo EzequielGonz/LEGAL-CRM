@@ -197,3 +197,50 @@ Al relevar las 97 rutas que cambian algo aparecieron cosas que no son del asiste
 5. Después: cerrar la política de contenido (guiones firmados por pedido en lugar de «en línea»).
 
 **Tiempo estimado:** una vuelta de trabajo dedicada. **Riesgo si no se hace:** los avisos que quedan son de caída del servicio y de almacenamiento intermedio; los dos críticos apuntan al optimizador de imágenes, que ya está apagado.
+
+
+## 10. Corrida del 13/11 a la noche
+
+### 10.1 Subida de Next (hecho)
+
+- Next pasó de 14.2.35 a **15.5.29** y React a 19. El programa de migración cambió 116 archivos; a mano quedaron la lectura del perfil activo (`perfilActivo` y `perfilActivoApi` ahora esperan la cookie) y dos tipos.
+- El ajuste `staleTimes` se quitó: con Next 15 la navegación ya no muestra copias viejas.
+- **Avisos de dependencias: 0** (`npm audit`, con y sin las de desarrollo). El aviso de `postcss` que traía Next adentro se cerró fijando la versión corregida (`overrides` en `package.json`).
+- `next lint` sigue funcionando en la línea 15 y avisa que se va en la 16: pasarlo a ESLint directo queda para esa subida.
+- Pendiente del plan original: firmar cada guion para cerrar del todo la política de contenido.
+
+### 10.2 Embudo completo
+
+Etapas, en orden: contactados → respondieron → conversaron → oportunidades reales → captados → derivados → ventas. Las tres nuevas salen de `embudo_etapa` (migración 0612), que da la cifra y la lista de personas: no pueden diferir.
+
+| Etapa | Qué cuenta |
+|---|---|
+| Conversaron | Personas que escribieron dos o más mensajes en el período (sin duplicados) |
+| Oportunidades reales | Quedaron esperando a una persona por pedir hablar con alguien, preguntar precio o condiciones, una decisión del profesional o por ser un captado que volvió a escribir; más los captados del período. No entran contactos detenidos que escribieron, quejas ni consultas fuera de alcance. La lista de motivos está en `MOTIVOS_OPORTUNIDAD_REAL` (`src/lib/hoy/periodos.ts`) |
+| Ventas | Derivados con el resultado «Operación concretada», por la fecha de ese resultado |
+
+Comprobado contra una consulta directa (Jurídico, semana del 9 al 13/11): 22 respondieron, 12 conversaron, 3 oportunidades reales, 3 captados, 0 ventas. Coberturas: 2 conversaron. Los otros dos perfiles, 0.
+
+Debajo del embudo, **«Día por día»**: personas que respondieron y captados por día, y los primeros mensajes que salieron (función `embudo_por_dia`, migración 0614). Tiene tabla para lectores de pantalla.
+
+### 10.3 Hallazgos del inventario de rutas (§8.5)
+
+| # | Hallazgo | Qué se hizo |
+|---|---|---|
+| 1 | Horarios de la agenda se borraban y después se insertaban | Se revisan antes y se cambian en una sola operación de la base; si falla, quedan los que había. Los anteriores quedan inactivos, no se borran |
+| 2 | «Vaciar la cola» y quitar un teléfono de avisos borraban filas | Las búsquedas pendientes pasan a «cancelada»; el teléfono se archiva con fecha y deja de recibir avisos |
+| 3 | Rutas que decían «ok» sin comprobar | Pausar campaña, cancelar cita, IA de un chat, revisar un caso y estado de un pedido de mejora responden «no existe» (404) si no encuentran nada, e «inválido» (400) si el identificador está mal formado |
+| 4 | Un pedido mal formado borraba el teléfono principal | Solo se quita si se pide a propósito |
+| 5 | Editar la página de Facebook o el perfil de WhatsApp manda todos los campos | **No se tocó**: lo hecho con Meta no se pisa ni se edita (regla de la responsable). Queda para que ella decida |
+| 6 | «Recibir acá» desde una vista previa | Rechazado fuera del panel publicado |
+
+### 10.4 Latido y fallas del sistema
+
+- El latido guarda cuánto tardó cada etapa; Salud lo muestra en palabras («Tardó 3,2 s; lo más lento fue…») y avisa si se acerca al límite de 60 segundos.
+- **Aviso a los dispositivos por una falla del sistema:** cada 10 minutos se revisan las fallas de cada perfil; si hay una que frena el trabajo (5 o más mensajes que no salieron, el bot que no pudo contestar, 3 o más audios sin pasar a texto, un mensaje retenido), llega un aviso que abre «Fallas del sistema» en Salud. Uno por tipo, por perfil y por día. Si el latido termina con error, un aviso por hora como mucho. No lleva datos de nadie.
+- **Hoy no hay ningún dispositivo con los avisos activados**: hasta que se active uno (Ajustes › Avisos), no llega nada.
+- No se probó correr dos latidos a la vez: haría falta dispararlo a mano en producción.
+
+### 10.5 Diseño, fases siguientes
+
+Menú que se pliega a una barra de íconos en la computadora (se recuerda en el navegador), barra inferior en el celular con las secciones de trabajo y «Más», gráfico del período y portada de perfiles con profundidad. El modo por defecto queda oscuro (la responsable dijo que así anda bien).

@@ -18,7 +18,7 @@ export async function GraficoPeriodo({ rubroId, areas, periodo }: { rubroId: str
 
   const W = 720;
   const H = 230;
-  const margen = { izq: 34, der: 14, arriba: 14, abajo: 30 };
+  const margen = { izq: 40, der: 30, arriba: 14, abajo: 30 };
   const base = H - margen.abajo;
   const tope = topeDeEje(Math.max(...serie.map((d) => Math.max(d.respondieron, d.captados))));
   const pResp = puntosDeSerie(serie.map((d) => d.respondieron), W, H, tope, margen);

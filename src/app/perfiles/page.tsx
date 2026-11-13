@@ -37,7 +37,7 @@ export default async function PerfilesPage() {
   const cifras: Record<string, ResumenCifras | null> = Object.fromEntries(filas);
 
   return (
-    <div className="escena-oscura sala-perfil flex min-h-screen items-start justify-center px-4 py-12 sm:px-6">
+    <div className="escena-oscura sala-perfil flex min-h-screen items-start justify-center px-4 py-12 sm:px-6 min-[1024px]:max-[1823px]:pr-[21.5rem]">
       <SalaLampara />
       {/* 13/11: las tarjetas se inclinan con el cursor, como las cifras del panel. */}
       <EfectosVidrio />
