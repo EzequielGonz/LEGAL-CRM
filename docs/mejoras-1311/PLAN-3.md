@@ -15,23 +15,29 @@ Agregados durante el trabajo:
 > las estadisticas que sumaste son basicas, no puedo ver nada, quien se derivo, quien se cerro, no puedo ver nada, solo numeros, tiene que ser todo funcional, entra al panel y usalo como si realmente fueras a trabajar […] no sabes ni de donde salen los clientes cerrados
 > guarda un punto de control antes de que se te acabe el limite de uso y programa una tarea para terminar todo si es que no terminas para 8:51 am.
 
-## Bloques y estado (actualizado 13/11 5:10, hora de Argentina)
+## Bloques y estado (actualizado 13/11 5:50, hora de Argentina)
+
+Todo lo de esta tabla está **publicado en producción** (`main` = `mejoras-1211`). Detalle de qué se probó y qué no: `INFORME.md`.
 
 | # | Bloque | Estado |
 |---|--------|--------|
-| 1 | Seguimiento automático: el bot decide antes de cada contacto 2 y 3; por Wasender redacta el mensaje | **Publicado y encendido** en los 4 perfiles desde el 12/11 8:00 (registro 172 de `ops_change_log`). Ya hay 2 contactos programados en Jurídico para el sábado 14/11 |
-| 1b | Cierre automático de descartes a las 6 h | **Publicado y funcionando** (cerró 3 el 13/11 4:20) |
-| 1c | Migración 0606 | **Aplicada** |
-| 1d | Pantalla «Seguimiento» con la ruta a la vista | **Publicado** |
-| 1e | Segundo intento por Wasender (5 a 7 días) | **Encendido** para primeros mensajes desde el 13/11; plantillas `…_segundo_intento` activadas |
-| 2 | «Resultados»: cada cifra de Hoy se abre con las personas, su origen y quién las derivó o cerró | **Publicado y recorrido en producción** |
-| 3 | Plantillas de inicio: 10 por perfil, 40 variantes; rotación en campañas de Wasender | **Publicado y cargado** (40 plantillas activas, grupo «inicio»). Textos en `PLANTILLAS-INICIO.md` |
-| 4 | Bot v2: 14 fichas nuevas (solo altas) y reacciones sin pedido de texto | Fichas **cargadas**; el arreglo de reacciones **publicado**. Ver `BOT-V2.md` |
-| 5 | Ficha: «Quién atiende», «Devolver al bot», botones claros | **Publicado**; falta probar «Devolver al bot» con un caso viejo en producción y dejarlo como estaba |
-| 6 | Velocidad | Pendiente (Hoy tarda 4,5 a 6,7 s) |
-| 7 | Orden: una sola definición de atención humana, captados sin derivar en dos pantallas, Incidencias sin contar detenciones, una sola «Prospectos», Ajustes en pestañas, pantallas vacías, Prioritarios paginado, encabezado del inbox | Pendiente |
-| 8 | Diseño: lista de chats, tablas viejas («Captados y casos» sigue siendo una tabla solo de Jurídico), formularios | Pendiente |
-| 9 | Informe final | Pendiente |
+| 1 | Seguimiento automático (el bot decide; por Wasender redacta), pantalla con la ruta, descartes automáticos, segundo intento | Hecho y encendido |
+| 2 | «Resultados»: cada cifra con sus personas, origen y quién lo hizo | Hecho |
+| 3 | Plantillas de inicio 10 × 40 por perfil y rotación en campañas de Wasender | Hecho y cargado |
+| 4 | Bot v2: 14 fichas nuevas; reacciones sin pedido de texto | Hecho |
+| 5 | Ficha: quién atiende, devolver al bot, etapa y origen, botones claros | Hecho y probado con un caso viejo |
+| 6 | Velocidad: marco inmediato en Hoy, Chats y Contactos; métricas en memoria | Hecho y medido |
+| 7 | Orden: lista de chats en palabras y con filtros plegados, Incidencias sin detenciones, menú de Contactos | Hecho |
+
+## Lo que queda para la próxima vuelta (en este orden)
+
+1. Mirar el primer seguimiento real (sábado 14/11 desde las 20:44): qué decidió el bot en cada caso (`followup_tasks.status_reason` y Contactos → Seguimiento → Soltados / Enviados).
+2. Con la línea de Wasender conectada (la responsable dijo «mañana las probamos en horario normal»): campaña con «Rotar las plantillas de inicio», seguimiento redactado por el bot, segundo intento, y las funciones pendientes de «Líneas y plantillas» (probar una plantilla con un nombre de ejemplo, envío de prueba al teléfono del equipo, últimos fallos de la línea).
+3. Unificar la definición de «atención humana» entre Hoy (chat tomado + última palabra de la persona) y los filtros de «Todos los chats» (estado de la oportunidad).
+4. Reemplazar o retirar la tabla vieja «Captados y casos» (quedó sin pestaña; solo existe por su dirección y solo sirve para Jurídico).
+5. Aviso de captación: pantalla y envío (falta que la responsable diga a quién y por qué línea).
+6. Diseño: repasar con la guía `ux-audit` las pantallas que no se tocaron hoy (Campañas → detalle, Agenda, Ajustes, Redes).
+7. Medir el efecto de las fichas nuevas del bot (informe programado del 20/11).
 
 ## Decisiones tomadas
 

@@ -7,7 +7,7 @@ Rama `mejoras-1211`, publicada en `main` (producción: legal-crm-nine.vercel.app
 1. **Seguimiento automático.** Antes de cada contacto 2 o 3 el bot relee la conversación y decide si corresponde insistir; por Wasender además redacta el mensaje. Encendido en los cuatro perfiles. Pantalla «Seguimiento» con la ruta completa y a quiénes se soltó.
 2. **Descartes automáticos.** Quien dice con claridad que no sigue se cierra solo como perdido a las 6 horas, con su motivo.
 3. **Resultados.** Cada cifra de Hoy se abre y muestra las personas: cuándo, de qué campaña o base vinieron, quién las captó, derivó o cerró y por qué. Pestaña nueva en Hoy.
-4. **Plantillas de inicio.** 10 por perfil con 40 variantes cada una (40 plantillas, 1.612 textos). Las campañas por Wasender pueden rotar entre todas.
+4. **Plantillas de inicio.** 10 por perfil con 40 variantes cada una (40 plantillas, más de 1.600 textos distintos). Las campañas por Wasender pueden rotar entre todas.
 5. **Bot v2.** 14 fichas nuevas (solo altas). Una reacción ya no recibe el pedido de «escribilo en texto».
 6. **Ficha.** «Quién atiende este chat» con «Devolver al bot» y «Tomar el chat», etapa y origen a la vista, botones con nombre claro, historial en palabras.
 7. **Velocidad.** Hoy, Chats y Contactos pintan el marco y el título en menos de medio segundo; las métricas del perfil se guardan un minuto.
