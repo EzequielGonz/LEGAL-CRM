@@ -5,6 +5,7 @@ Panel de captación para cuatro perfiles (Jurídico con Civil y Penal, Cobertura
 ## Leer primero
 
 - `.claude/referencias/reglas-comunes.md`: las reglas de negocio y de operación, en un solo lugar y con versión. **Obligatoria antes de tocar comportamiento.**
+- `docs/ESTADO.md`: memoria de trabajo. Qué está encendido hoy, decisiones recientes de la responsable y cómo retomar lo que quedó en curso. Se actualiza al cierre de cada vuelta.
 - `.claude/skills/kocos-crm-contexto`: etapas, autorizaciones, estado operativo, entrega y migraciones.
 - Según la tarea: `kocos-crm-reglas-de-captacion` (recorridos de prospectos), `kocos-crm-diseno-y-accesibilidad` (pantallas y experiencia), `kocos-crm-pruebas-de-aceptacion` (pruebas y entrega segura), `kocos-landings-seo-y-conversion`, `kocos-contenido-y-publicacion`, `kocos-agentes-entrenamiento-y-evaluacion`.
 - `.claude/referencias/casos-de-aceptacion.md`: casos A01–A35 con su correspondencia y estado.
