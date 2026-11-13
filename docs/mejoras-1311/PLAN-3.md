@@ -36,7 +36,13 @@ Todo lo de esta tabla está **publicado en producción** (`main` = `mejoras-1211
 3. (Hecho el 13/11: los filtros «Esperan tu respuesta» y «Los atiende una persona» de «Todos los chats» usan la misma definición que Hoy y la ficha.)
 4. Reemplazar o retirar la tabla vieja «Captados y casos» (quedó sin pestaña; solo existe por su dirección y solo sirve para Jurídico).
 5. Aviso de captación: pantalla y envío (falta que la responsable diga a quién y por qué línea).
-6. Diseño: repasar con la guía `ux-audit` las pantallas que no se tocaron hoy (Campañas → detalle, Agenda, Ajustes, Redes).
+6. **Pasada de modernización pantalla por pantalla (pedido expreso del 13/11: «más moderno, rápido, funcional, entendible»).** Usar estas skills, en este orden, y corregir en la misma pasada lo que marquen:
+   - `vectorlab-ux-skills:ux-audit` (compuerta de diez puntos, con capturas a 375 y 1280), más `page-patterns`, `forms`, `empty-states`, `loaders`, `errors`, `labels` y `verbs` de la misma familia cuando la pantalla los toque.
+   - `vercel-react-best-practices` para la carga: marco inmediato con `Suspense` (como ya tienen Hoy y la cartera), componentes de cliente pesados con `dynamic()`, nada de consultas en serie.
+   - `supabase-postgres-best-practices` para las consultas lentas: `pg_stat_statements` mostró `profile_metrics` (ya en memoria un minuto) y `campaign_metrics` (140 ms, 20.000 llamadas: revisar quién la llama y guardarla igual).
+   - `design:accessibility-review` al terminar cada pantalla.
+   Pantallas que faltan, de más usada a menos: detalle de una campaña y lista de campañas; conversación abierta (hilo del chat); Agenda / Citas; «Por base»; Bot IA (probar el bot y conocimiento); Líneas de Wasender; Ajustes; Redes (Accesos, Publicaciones, Contenido, Publicidad); Salud del sistema; los paneles `/panel/<perfil>/…` que todavía usan tablas viejas («Prioritarios» de Marketing sin paginar, «Captados y casos»).
+   En cada una: qué decide la persona ahí, un solo botón principal, textos en palabras (sin ids ni nombres internos), estados vacíos que digan qué hacer, y cada número que se pueda abrir.
 7. Medir el efecto de las fichas nuevas del bot (informe programado del 20/11).
 
 ## Decisiones tomadas
