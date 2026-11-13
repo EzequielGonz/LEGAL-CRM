@@ -29,16 +29,16 @@ export async function EmbudoPeriodo({ slug, rubroId, areas, periodo, ver }: { sl
   const vPerdidos = antes ? variacion(c.perdidos, antes.perdidos) : null;
 
   return (
-    <section id="res-embudo" aria-labelledby="res-embudo-titulo" className="scroll-mt-24 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <section id="res-embudo" aria-labelledby="res-embudo-titulo" className="scroll-mt-24 space-y-3">
       <h2 id="res-embudo-titulo" className="sr-only">
         Embudo del período
       </h2>
-      <ol className="grid grid-cols-2 gap-px bg-slate-100 md:grid-cols-4">
+      <ol className="grid grid-cols-2 gap-3 md:grid-cols-4">
         {etapas.map((e) => {
           const v = antes ? variacion(e.valor, e.antes) : null;
           const activa = e.ver === ver;
           return (
-            <li key={e.ver} className={`relative p-5 transition-colors focus-within:bg-slate-50 hover:bg-slate-50 ${activa ? "bg-gold-500/10" : "bg-white"}`}>
+            <li key={e.ver} className={`kpi-hoy relative rounded-2xl border p-5 ${activa ? "kpi-activo" : ""}`}>
               <div className="flex items-start justify-between gap-3">
                 <p className="text-[13px] font-medium text-slate-600">{e.titulo}</p>
                 {e.fraccion !== null ? <AnilloAvance fraccion={e.fraccion} /> : null}
@@ -56,7 +56,7 @@ export async function EmbudoPeriodo({ slug, rubroId, areas, periodo, ver }: { sl
           );
         })}
       </ol>
-      <p className={`relative flex flex-wrap items-baseline gap-x-2 gap-y-1 border-t border-slate-100 px-5 py-3 text-sm ${ver === "perdidos" ? "bg-gold-500/10" : ""}`}>
+      <p className={`relative flex flex-wrap items-baseline gap-x-2 gap-y-1 rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm ${ver === "perdidos" ? "kpi-activo" : ""}`}>
         <span className="font-semibold tabular-nums text-slate-950">{n(c.perdidos)}</span>
         <span className="text-slate-700">cerrados sin avanzar (perdidos)</span>
         {/* En perdidos, subir no es bueno: el color se invierte. */}

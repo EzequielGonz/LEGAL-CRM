@@ -25,7 +25,7 @@
   --vidrio-sombra: 0 22px 48px -28px rgb(15 23 42 / 0.3), 0 2px 8px -3px rgb(15 23 42 / 0.08);
   --vidrio-sombra-alta: 0 30px 60px -26px rgb(var(--c-gold-500) / 0.45), 0 8px 18px -10px rgb(15 23 42 / 0.18);
   --desenfoque: 18px;
-  --mancha: 0.2;
+  --mancha: 0.3;
 }
 html[data-modo="oscuro"] {
   --vidrio-fondo: rgb(255 255 255 / 0.045);
@@ -35,7 +35,7 @@ html[data-modo="oscuro"] {
   --vidrio-brillo: inset 0 1px 0 rgb(255 255 255 / 0.09);
   --vidrio-sombra: 0 26px 56px -30px rgb(0 0 0 / 0.85), 0 2px 10px -4px rgb(0 0 0 / 0.5);
   --vidrio-sombra-alta: 0 32px 64px -28px rgb(var(--c-gold-500) / 0.4), 0 10px 22px -12px rgb(0 0 0 / 0.7);
-  --mancha: 0.17;
+  --mancha: 0.34;
 }
 @media (max-width: 640px) {
   :root { --desenfoque: 10px; }
@@ -70,12 +70,27 @@ html:not([data-modo="oscuro"]) .marco-panel main#contenido {
   background: radial-gradient(closest-side, rgb(var(--c-gold-500)), transparent);
 }
 .marco-panel::after {
-  bottom: -22vh;
-  left: 12vw;
-  width: 46vw;
-  height: 52vh;
+  bottom: -24vh;
+  left: 14vw;
+  width: 50vw;
+  height: 56vh;
   background: radial-gradient(closest-side, rgb(var(--c-gold-700, var(--c-gold-500))), transparent);
-  opacity: calc(var(--mancha) * 0.75);
+  opacity: calc(var(--mancha) * 0.8);
+}
+/* Tercera mancha, más chica, detrás del contenido: le da profundidad al vidrio. */
+main#contenido::before {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  top: 34vh;
+  right: 22vw;
+  width: 30vw;
+  height: 34vh;
+  border-radius: 9999px;
+  background: radial-gradient(closest-side, rgb(var(--c-gold-300, var(--c-gold-500))), transparent);
+  filter: blur(80px);
+  opacity: calc(var(--mancha) * 0.55);
+  pointer-events: none;
 }
 
 /* --------------------------------------------------------------------- vidrio */
@@ -97,15 +112,15 @@ html:not([data-modo="oscuro"]) .marco-panel main#contenido {
 
 /* Tarjetas del contenido: translúcidas, borde con luz de arriba y sombra amplia.
    Sin desenfoque propio: puede haber decenas por pantalla. */
-main#contenido :is(section, div, details, ul, ol, form, article)[class~="rounded-2xl"][class~="border"]:not(.kpi-hoy) {
+main#contenido :is(section, div, details, ul, ol, form, article)[class~="rounded-2xl"][class~="border"]:not(.kpi-hoy):not([class*="border-amber"]):not([class*="border-emerald"]):not([class*="border-red"]):not([class*="border-gold"]) {
   background-color: var(--vidrio-fondo) !important;
   border-color: var(--vidrio-borde-bajo) !important;
   border-top-color: var(--vidrio-borde) !important;
   box-shadow: var(--vidrio-brillo), var(--vidrio-sombra);
 }
-/* Las que tienen color propio (ámbar de «Atención humana», verde de «Para derivar») conservan su borde. */
+/* Las que tienen color propio (ámbar de «Atención humana», verde de «Para derivar») conservan su borde y suman la sombra. */
 main#contenido :is(div, section)[class~="rounded-2xl"][class~="border"]:is([class*="border-amber"], [class*="border-emerald"], [class*="border-red"], [class*="border-gold"]) {
-  border-color: revert-layer !important;
+  box-shadow: var(--vidrio-brillo), var(--vidrio-sombra);
 }
 
 /* Tarjetas de cifras y bloques principales: vidrio completo, con desenfoque. */
@@ -187,6 +202,7 @@ html[data-modo="oscuro"] .anillo-avance .anillo-pista { stroke: rgb(255 255 255 
   /* Fondo: deriva muy lenta (40 a 55 s por ida). */
   .marco-panel::before { animation: mancha-a 44s ease-in-out infinite alternate; }
   .marco-panel::after { animation: mancha-b 56s ease-in-out infinite alternate; }
+  main#contenido::before { animation: mancha-a 38s ease-in-out infinite alternate-reverse; }
 
   /* La pantalla entra con un fundido corto y 10 px de recorrido. */
   .lienzo-contenido > :not(.barra-salud):not(.pestanas-seccion):not([data-sin-entrada]) {
@@ -257,4 +273,15 @@ html[data-modo="oscuro"] .anillo-avance .anillo-pista { stroke: rgb(255 255 255 
 @keyframes fila-entra {
   from { opacity: 0; transform: translate3d(0, 8px, 0); }
   to { opacity: 1; transform: none; }
+}
+
+/* Título de la pantalla: toma un reflejo del color del perfil. */
+main#contenido h1 {
+  background-image: linear-gradient(100deg, currentColor 0%, currentColor 55%, rgb(var(--c-gold-500)) 130%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+@media (forced-colors: active) {
+  main#contenido h1 { -webkit-text-fill-color: currentColor; background-image: none; }
 }
