@@ -118,3 +118,17 @@ test("separación: fuera del panel de Jurídico no hay enlaces fijos a sus panta
   }
   assert.deepEqual(malos, [], "armar el enlace con rutaDePerfil() o /conversacion/<id>");
 });
+
+import { armarFallas } from "../../src/lib/salud/fallas";
+
+test("fallas del sistema: aparte de las incidencias, con qué hacer y dentro del perfil", () => {
+  assert.deepEqual(armarFallas("marketing", { fallidos24h: 0, seguimientos: 0, bot24h: 0, archivos: 0, retenidos: 0 }), []);
+  const f = armarFallas("agencia_0km", { fallidos24h: 14, seguimientos: 1, bot24h: 2, archivos: 0, retenidos: 3 });
+  assert.deepEqual(f.map((x) => x.clave), ["fallidos", "seguimientos", "bot", "retenidos"]);
+  assert.equal(f[0].titulo, "14 mensajes no salieron en las últimas 24 horas");
+  assert.equal(f[1].titulo, "1 seguimiento no pudo salir");
+  assert.equal(f[0].href, "/panel/agencia_0km/campanas");
+  assert.equal(f[3].alcance, "sistema");
+  for (const x of f) assert.ok(x.href.includes("agencia_0km"), `el enlace queda en el perfil: ${x.href}`);
+  assert.equal(armarFallas("juridico", { fallidos24h: 1, seguimientos: 0, bot24h: 0, archivos: 0, retenidos: 0 })[0].href, "/campanas");
+});

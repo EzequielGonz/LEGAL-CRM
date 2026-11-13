@@ -252,6 +252,8 @@ export async function FichaSection({
                 derivation_state: opp.derivation_state,
                 review_required: opp.review_required,
                 followup_state: opp.followup_state,
+                posible_captacion: (opp as any).posible_captacion === true,
+                posible_captacion_reason: (opp as any).posible_captacion_reason ?? null,
               }
             : null
         }

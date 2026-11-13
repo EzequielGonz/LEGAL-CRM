@@ -1,3 +1,4 @@
+import { RefrescoAutomatico } from "@/components/ui/refresco-automatico";
 import { LogoutButton } from "@/components/acceso/logout-button";
 import { type MarcaTarjeta } from "@/components/perfiles/perfil-selector";
 import { SelectorPerfilesPC } from "@/components/perfiles/selector-pc";
@@ -38,6 +39,8 @@ export default async function PerfilesPage() {
     <div className="escena-oscura sala-perfil flex min-h-screen items-start justify-center px-4 py-12 sm:px-6">
       <SalaLampara />
       <main id="perfiles" className="escena-capa relative w-full max-w-6xl">
+        {/* 13/11: las tarjetas se actualizan solas cada 30 segundos y al volver a la pestaña. */}
+        <RefrescoAutomatico cadaMs={30_000} />
         {/* 24/10: seguimiento en vivo de los cuatro rubros (esquina superior en la computadora). */}
         <EnVivoRubros nombres={Object.fromEntries(perfiles.map((p) => [p.slug, tarjetas[p.slug as SlugPerfil]?.nombre ?? p.name]))} />
         <div className="mb-10 text-center">

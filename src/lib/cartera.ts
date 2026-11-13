@@ -68,7 +68,7 @@ export const VISTAS_CARTERA: Record<VistaCartera, { titulo: string; bajada: stri
     bajada: "Los que ya no siguen. Están acá para consultarlos; no aparecen en Hoy ni en Activos.",
     grupos: [
       { clave: "sin_respuesta", titulo: "Quedaron sin respuesta", detalle: "Escribieron hace más de una semana y nadie les contestó. Mirá el último mensaje y decidí si los retomás.", tono: "alerta", accion: "chat", fuente: op("quedaron_sin_respuesta") },
-      { clave: "caidos", titulo: "Caídos", detalle: "Dejaron de contestar. Ya recibieron el último mensaje o pasó demasiado tiempo.", tono: "info", accion: "ficha", fuente: op("seguimiento_caido") },
+      { clave: "caidos", titulo: "Caídos", detalle: "Dejaron de contestar. Ya recibieron el último mensaje o pasó demasiado tiempo. Si alguno vuelve a escribir, vuelve solo a la conversación.", tono: "info", accion: "ficha", fuente: op("seguimiento_caido") },
       { clave: "perdidos", titulo: "Perdidos", detalle: "Dijeron que no, con su motivo. Revisá el motivo antes de reintentar.", tono: "info", accion: "ficha", fuente: op("perdido_comercial") },
       { clave: "no_contactar", titulo: "No quieren que les escriban", detalle: "Bajas, quejas y números equivocados. El bot ya no les escribe.", tono: "info", accion: "ficha", fuente: op("detencion_reciente") },
     ],

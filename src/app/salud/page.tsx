@@ -1,3 +1,4 @@
+import { leerFallas } from "@/lib/salud/fallas";
 import { itemsDelPerfil } from "@/lib/salud/por-perfil";
 import { perfilActivo } from "@/lib/perfil-activo";
 import Link from "next/link";
@@ -26,7 +27,7 @@ const ESTILO: Record<ItemSalud["estado"], { caja: string; punto: string; texto: 
 export default async function SaludPage({ searchParams }: { searchParams: { perfil?: string } }) {
   const slug: SlugPerfil = perfilActivo(searchParams.perfil);
   // 12/11: las líneas de Wasender también son salud del sistema (antes no aparecían).
-  const [base, wasender] = await Promise.all([leerSalud(), leerSaludWasender().catch(() => [])]);
+  const [base, wasender, fallas] = await Promise.all([leerSalud(), leerSaludWasender().catch(() => []), leerFallas(slug).catch(() => [])]);
   // 13/11 · cada rubro separado: en cada perfil, lo de todo el sistema y lo propio. Lo de otro perfil se ve en ese perfil.
   const items = itemsDelPerfil([...base, ...wasender], slug);
   const r = resumenSalud(items);
@@ -42,6 +43,31 @@ export default async function SaludPage({ searchParams }: { searchParams: { perf
             <span className="tabular-nums">{r.verde}</span> en orden. Se actualiza cada vez que entrás.
           </p>
         </div>
+
+        {/* 13/11 · fallas del sistema: problemas nuestros, aparte de las incidencias de personas. */}
+        <section id="fallas" aria-labelledby="salud-fallas" tabIndex={-1} className="scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <h2 id="salud-fallas" className="text-lg font-semibold text-slate-950">
+            Fallas del sistema
+          </h2>
+          <p className="mt-1 text-sm text-slate-600">Cosas que fallaron de nuestro lado: mensajes que no salieron, seguimientos trabados o el bot que no pudo contestar. No son reclamos de personas.</p>
+          {fallas.length === 0 ? (
+            <p className="mt-4 rounded-xl bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-900">Sin fallas en las últimas 24 horas.</p>
+          ) : (
+            <ul className="mt-4 divide-y divide-slate-100">
+              {fallas.map((f) => (
+                <li key={f.clave} className="flex flex-wrap items-center justify-between gap-3 py-3">
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-slate-950 [overflow-wrap:anywhere]">{f.titulo}</p>
+                    <p className="text-[13px] text-slate-600">{f.alcance === "sistema" ? "De todo el sistema" : "De este perfil"}</p>
+                  </div>
+                  <Link href={f.href} className="tactil inline-flex items-center rounded-lg border border-slate-300 px-3 text-sm font-medium text-slate-900 hover:bg-slate-50">
+                    {f.accion}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
 
         {/* Simple: lo que frena el trabajo, en palabras simples y con quién lo resuelve. */}
         <section aria-labelledby="salud-simple" className="solo-simple space-y-4">

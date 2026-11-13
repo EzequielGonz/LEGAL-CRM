@@ -51,7 +51,8 @@ async function leerProfileMetrics(rubroId: string): Promise<ProfileMetrics | nul
  * Contactos, el historial y el puntaje del bot en cada carga; son totales
  * históricos, así que un minuto de demora no cambia ninguna decisión.
  */
-const metricasEnMemoria = unstable_cache(leerProfileMetrics, ["profile-metrics"], { revalidate: 60 });
+// 13/11: de 60 a 20 segundos (la responsable veía cifras viejas al entrar a los perfiles).
+const metricasEnMemoria = unstable_cache(leerProfileMetrics, ["profile-metrics"], { revalidate: 20 });
 
 export async function getProfileMetrics(rubroId: string): Promise<ProfileMetrics | null> {
   try {

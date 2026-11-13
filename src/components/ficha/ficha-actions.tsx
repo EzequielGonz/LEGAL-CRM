@@ -38,6 +38,9 @@ export function FichaActions({
     derivation_state: string;
     review_required: boolean;
     followup_state?: string;
+    /** 13/11: el bot dudó si la persona concretó una llamada. */
+    posible_captacion?: boolean;
+    posible_captacion_reason?: string | null;
   } | null;
   contactId: string;
   fullName: string | null;
@@ -207,6 +210,25 @@ export function FichaActions({
               </div>
             </div>
           )}
+        </section>
+      )}
+
+      {opportunity?.posible_captacion && opportunity.capture_state !== "captado" && opportunity.capture_state !== "perdido" && (
+        <section aria-labelledby="posible-captacion" className="rounded-xl border border-amber-300 bg-amber-50 p-4">
+          <h3 id="posible-captacion" className="text-sm font-semibold text-amber-950">
+            Posible captación a revisar
+          </h3>
+          <p className="mt-1 text-sm text-amber-950 [overflow-wrap:anywhere]">
+            {opportunity.posible_captacion_reason || "Parece que aceptó una llamada, pero no queda claro."} Mirá el chat y decidí.
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <button type="button" className={btn} disabled={busy} onClick={() => setForm({ accion: "captar", label: "Es captado", field: "nota", placeholder: "Qué aceptó la persona (por ejemplo: pidió que la llamen mañana a las 10)" })}>
+              Es captado
+            </button>
+            <button type="button" className={btn} disabled={busy} onClick={() => void run("no_es_captacion", {})}>
+              No lo es
+            </button>
+          </div>
         </section>
       )}
 
