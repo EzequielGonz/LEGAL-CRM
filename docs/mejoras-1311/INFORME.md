@@ -32,11 +32,13 @@ Suite: 386 pruebas pasan; falla 1 que ya fallaba antes y no tiene relación («a
 
 | Pieza | Implementado | Probado | Publicado | Habilitado |
 |-------|--------------|---------|-----------|------------|
-| Next 15.5.29 y React 19 | Sí | Tipos, lint, 456 pruebas y build en verde; recorrido de la vista previa y de producción (ver abajo) | Ver abajo | — |
-| Embudo: conversaron, oportunidades reales, ventas | Sí | Pruebas unitarias; cifras comparadas con una consulta directa | Ver abajo | — |
-| Gráfico «Día por día» | Sí | Pruebas de la geometría; visto en los dos modos, semana y mes, computadora y celular | Ver abajo | — |
-| Rutas (horarios, archivar, «no existe») | Sí | Pruebas unitarias de las comprobaciones. **No se probó guardando horarios reales ni quitando un teléfono real** | Ver abajo | — |
-| Tiempos del latido en Salud | Sí | Prueba unitaria del texto; se ve con el primer latido después de publicar | Ver abajo | Sí |
-| Aviso por falla del sistema | Sí | Pruebas unitarias de qué se avisa y cuándo. **No se vio llegar un aviso: no hay dispositivos activados** | Ver abajo | Sí, cuando haya un dispositivo |
-| Menú plegable, barra inferior, portada | Sí | Vistos en la vista previa | Ver abajo | — |
+| Next 15.5.29 y React 19 | Sí | Tipos, lint, 456 pruebas y build en verde; recorrido de la vista previa y de producción (ver abajo) | Sí | — |
+| Embudo: conversaron, oportunidades reales, ventas | Sí | Pruebas unitarias; cifras comparadas con una consulta directa | Sí | — |
+| Gráfico «Día por día» | Sí | Pruebas de la geometría; visto en los dos modos, semana y mes, computadora y celular | Sí | — |
+| Rutas (horarios, archivar, «no existe») | Sí | Pruebas unitarias de las comprobaciones. **No se probó guardando horarios reales ni quitando un teléfono real** | Sí | — |
+| Tiempos del latido en Salud | Sí | Prueba unitaria del texto; se ve con el primer latido después de publicar | Sí | Sí |
+| Aviso por falla del sistema | Sí | Pruebas unitarias de qué se avisa y cuándo. **No se vio llegar un aviso: no hay dispositivos activados** | Sí | Sí, cuando haya un dispositivo |
+| Menú plegable, barra inferior, portada | Sí | Vistos en la vista previa | Sí | — |
 | Audios | — | «Pasar a texto» sobre los 2 audios reales de hoy: bien. **No se vio entrar un audio con la función encendida** | Sí | Sí |
+
+**Comprobado el 13/11 a la noche:** vista previa recorrida solo mirando (166 pantallas, sin fallas) antes de publicar. Producción publicada con la versión `25bbdf5` y recorrida como usuaria: **166 pantallas en la computadora y 55 en el celular, 0 con problemas**; sin errores en los registros del servidor; el latido corrió con la versión nueva en 3,2 segundos y dejó los tiempos por etapa. Suite: 456 pruebas pasan. `npm audit`: 0 avisos.

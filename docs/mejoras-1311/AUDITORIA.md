@@ -244,3 +244,7 @@ Debajo del embudo, **«Día por día»**: personas que respondieron y captados p
 ### 10.5 Diseño, fases siguientes
 
 Menú que se pliega a una barra de íconos en la computadora (se recuerda en el navegador), barra inferior en el celular con las secciones de trabajo y «Más», gráfico del período y portada de perfiles con profundidad. El modo por defecto queda oscuro (la responsable dijo que así anda bien).
+
+### 10.6 Comprobación
+
+Vista previa: 166 pantallas mirando, sin fallas. Producción (`25bbdf5`): 166 pantallas en la computadora y 55 en el celular, 0 con problemas; sin errores en los registros; latido de 3,2 segundos con los tiempos por etapa guardados.
