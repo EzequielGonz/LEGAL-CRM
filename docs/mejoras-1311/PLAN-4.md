@@ -168,6 +168,18 @@ Textual: «suma al bloque […] que el agente que responde los mensajes, pueda i
 | H. Wasender: conectar con código además del QR | Revisado: el proveedor no lo ofrece por su interfaz para programas. **13/11, 10:20: la responsable dijo «yo me encargo»**; no se hace nada más acá salvo que ella lo pida |
 | I. El agente entiende los audios | **Hecho, publicado y encendido en los cuatro perfiles** (13/11, 14:40). Probado con pruebas unitarias y, en producción, con «Pasar a texto» sobre 3 audios viejos (4 a 6 segundos cada uno, texto correcto). **Falta ver un audio real entrando**: no se puede simular sin mandarle un audio a una línea |
 
-**Lo que sigue (13/11, 16:30):** (1) subida de Next a 15.5 según `AUDITORIA.md` §9 (es lo único que cierra los 2 avisos de dependencias que quedan); (2) fases siguientes del diseño: menú plegable a íconos, barra inferior en el celular, gráfico grande de la semana, portada de perfiles y pasada pantalla por pantalla; decidir con la responsable si el modo por defecto pasa a claro; (3) etapas que faltan en el embudo («conversaron», «oportunidad real», «ventas»); (4) hallazgos del inventario de rutas (`AUDITORIA.md` §8.5); (5) tiempos del latido y aviso a los dispositivos por una falla del sistema (el de reclamos ya está). Sin caso real todavía: un audio entrando, un reclamo serio y una «posible captación». La tarea programada de las 14:51 llegó con todo esto ya en curso y se cerró con este estado.
+**Corrida del 13/11 a la noche (detalle en `AUDITORIA.md` §10):**
+
+| Pendiente de la tarde | Estado |
+|---|---|
+| Subida de Next a 15.5 | **Hecha**: Next 15.5.29 y React 19; avisos de dependencias en 0 |
+| Etapas «conversaron», «oportunidad real» y «ventas» | **Hechas**, con la lista de personas de cada una, y el gráfico «Día por día» |
+| Hallazgos del inventario de rutas | **Resueltos 5 de 6.** El de editar la página de Facebook y el perfil de WhatsApp no se tocó (lo hecho con Meta no se edita): lo decide la responsable |
+| Tiempos del latido | **Hecho**: se guardan por etapa y se leen en Salud. No se probó correr dos latidos a la vez |
+| Aviso a los dispositivos por una falla del sistema | **Hecho.** Hoy no hay ningún dispositivo con avisos activados: hay que activar uno en Ajustes › Avisos |
+| Diseño, fases siguientes | **Hechas**: menú plegable a íconos, barra inferior en el celular, gráfico del período, portada con profundidad y el panel «En vivo» que ya no tapa las tarjetas. El modo queda oscuro (la responsable dijo que así anda bien) |
+| Un audio real entrando | Ninguno entró después de encender la función. Se pasaron a texto los 2 audios reales recibidos hoy (13 y 71 segundos, bien). **Sigue faltando ver al bot contestar un audio que entra** |
+
+**Lo que sigue:** ver entrar un audio real y la respuesta del bot; activar los avisos en un dispositivo; decidir qué hacer con la edición de Facebook y WhatsApp desde Redes; pasada fina de diseño pantalla por pantalla; cerrar del todo la política de contenido (guiones firmados); cambiar el código de acceso.
 
 Al terminar cada bloque: actualizar esta tabla, `BITACORA.md` y `AUDITORIA.md`, guardar en la rama y publicar.

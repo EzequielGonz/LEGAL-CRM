@@ -102,3 +102,21 @@ Sin datos personales, claves ni códigos de acceso. Complementa `PLAN-3.md` (qu�
 **Forma de trabajo:** las tareas simples y acotadas (inventario de rutas, diálogos, paginado) las hicieron agentes auxiliares con un modelo intermedio, por pedido de la responsable; el resultado se revisó antes de guardarlo. La vista previa de Vercel se usó solo para mirar el diseño.
 
 **No se pudo:** instalar la versión corregida de `xlsx` desde el sitio de su autor (no está en el registro oficial y la instalación desde otra dirección fue rechazada): se reemplazó la librería. Simular un audio entrante real.
+
+## Corrida del 13/11 a la noche (chat nuevo, retomado desde el traspaso)
+
+Rama de trabajo: `claude/relaxed-cerf-5oncz1` (la de este chat), publicada a `main`.
+
+| Commit | Qué |
+|---|---|
+| `58c…` y `870805d` | Next 15.5.29 y React 19: dependencias y cambio de `params`, `searchParams` y `cookies` |
+| «Embudo: conversaron…» | Tres etapas nuevas y sus listas (migración 0612) |
+| «Hallazgos de rutas…» | Horarios en una operación, archivar en vez de borrar, avisar si no existe (migración 0613) |
+| «Latido: tiempos…» | Tiempos por etapa en Salud y aviso a los dispositivos por una falla del sistema |
+| «Diseño: menú plegable…» | Menú plegable, barra inferior, gráfico del período (migración 0614), portada |
+
+**Cambios en la base:** migraciones `0612`, `0613`, `0614` (ver `MIGRACIONES.md`). `ops_change_log` 239: «Pasar a texto» sobre los 2 audios reales de hoy.
+
+**Vista previa:** las de este proyecto piden iniciar sesión en Vercel. Para recorrerlas se creó un enlace compartido temporal de cada una (vence a las 23 horas) y solo se miró. El ingreso al panel desde la vista previa queda en el registro de accesos, como cualquier otro.
+
+**Guiones** (directorio temporal, no van al repo): `panel/recorrer.js` (recorre las pantallas de los cuatro perfiles y un detalle por lista; anota estado, errores y desbordes), `panel/mirar.js` y `elem.js` (capturas del diseño), `panel/audios.js` («Pasar a texto» por la ruta del panel).

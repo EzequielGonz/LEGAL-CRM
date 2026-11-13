@@ -39,7 +39,7 @@ Se actualiza al cierre de cada vuelta de trabajo. Sin datos personales, claves n
 - **Asistente del panel con permiso para todo** (13/11): que pueda hacer todo lo que hace el panel, cambiar secciones y pedir cambios de código. Detalle y resguardos en `PLAN-4.md`, bloque G.
 - **Asistente** (13/11): sigue pidiendo confirmación antes de ejecutar. La tarea que revisa sola la Bandeja para Claude, por ahora no.
 - **Quedaron sin respuesta** (13/11): si lo último que dijo la persona concretó una llamada, pasa a captado; si no, queda en «Quedaron sin respuesta»; ante la duda, va a «Posible captación a revisar». No se les escribe solos.
-- Producción se publica directo (`git push origin mejoras-1211:main`) después de typecheck, lint, pruebas y build, y se recorre como usuaria antes de informar.
+- Producción se publica directo a `main` desde la rama de trabajo del chat (antes `mejoras-1211`; el 13/11 a la noche, `claude/relaxed-cerf-5oncz1`) después de typecheck, lint, pruebas y build, y se recorre como usuaria antes de informar.
 
 ## Dónde está cada cosa
 
@@ -51,7 +51,7 @@ Se actualiza al cierre de cada vuelta de trabajo. Sin datos personales, claves n
 
 ## Cómo retomar
 
-1. `git status` y `git log --oneline -5` en la rama `mejoras-1211` (tiene que coincidir con `main`).
+1. `git status` y `git log --oneline -5` en la rama de trabajo (tiene que coincidir con `main`).
 2. Leer `PLAN-4.md` y `PLAN-4-DETALLE.md` completos y seguir el orden del detalle (A → B → C → D → G → E → F); después «Lo que queda para la próxima vuelta» en `PLAN-3.md`.
 3. Cargas grandes de datos (plantillas, variantes): por la API del panel con una sesión iniciada, no pegando SQL largo.
 4. Las pruebas con efectos se hacen con casos viejos y se dejan como estaban, con registro en `ops_change_log`.
@@ -67,6 +67,17 @@ Se actualiza al cierre de cada vuelta de trabajo. Sin datos personales, claves n
 - **Diseño:** primera fase (vidrio y movimiento) hecha; el modo por defecto sigue oscuro hasta que la responsable decida.
 - **Cómo retomar:** `docs/mejoras-1311/PLAN-4.md`, tabla «Estado» y la línea «Lo que sigue».
 
+## Qué quedó hecho el 13/11 a la noche
+
+- **Next 15.5.29 y React 19**; avisos de dependencias en 0.
+- **Embudo completo** (conversaron, oportunidades reales, ventas) y gráfico «Día por día» en Resultados.
+- **Rutas:** horarios de la agenda en una sola operación; «vaciar la cola» cancela y quitar un teléfono de avisos archiva (ya no borran); cinco rutas avisan si lo pedido no existe.
+- **Latido:** tiempos por etapa en Salud. **Fallas del sistema:** aviso a los dispositivos (uno por tipo, perfil y día). Hoy no hay dispositivos con avisos activados.
+- **Diseño:** menú plegable, barra inferior en el celular, portada con profundidad. Modo por defecto: oscuro (decisión de la responsable el 13/11).
+- **Sin tocar, para decidir:** la edición de la página de Facebook y del perfil de WhatsApp desde Redes manda todos los campos (lo hecho con Meta no se edita).
+- **Sigue faltando:** ver al bot contestar un audio real que entra; cambiar el código de acceso.
+- Detalle: `docs/mejoras-1311/AUDITORIA.md` §10 y la tabla de la corrida de la noche en `PLAN-4.md`.
+
 ## Aprendizajes de esta vuelta
 
 - Publicar primero a `main` y después subir la rama: si se suben las dos seguidas, Vercel construye primero la vista previa y producción espera en la cola.
@@ -76,3 +87,5 @@ Se actualiza al cierre de cada vuelta de trabajo. Sin datos personales, claves n
 - Las tareas en segundo plano se cortan si la cuenta llega al límite de uso: guardar un punto de control en la rama antes de lanzarlas y no depender de que terminen.
 - `followup_enabled_since` define desde cuándo entran conversaciones al seguimiento: lo anterior nunca entra solo.
 - La falla «asistente: cada tipo permitido…» de la suite es anterior y ajena.
+- Las vistas previas de Vercel piden sesión de Vercel: se recorren con un enlace compartido temporal, solo mirando.
+- Con Next 15, `params`, `searchParams` y `cookies()` se esperan (`await`); `perfilActivo()` también.

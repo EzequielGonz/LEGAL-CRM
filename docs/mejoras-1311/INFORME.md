@@ -27,3 +27,16 @@ Suite: 386 pruebas pasan; falla 1 que ya fallaba antes y no tiene relación («a
 - La tabla vieja «Captados y casos» sigue existiendo por su dirección (sin pestaña).
 - Cargar en la ficha de cada negocio los datos que el bot necesita para dar información concreta (ver `BOT-V2.md`).
 - Cambiar el código de acceso del panel: se usó durante todo el trabajo.
+
+## Corrida del 13/11 a la noche
+
+| Pieza | Implementado | Probado | Publicado | Habilitado |
+|-------|--------------|---------|-----------|------------|
+| Next 15.5.29 y React 19 | Sí | Tipos, lint, 456 pruebas y build en verde; recorrido de la vista previa y de producción (ver abajo) | Ver abajo | — |
+| Embudo: conversaron, oportunidades reales, ventas | Sí | Pruebas unitarias; cifras comparadas con una consulta directa | Ver abajo | — |
+| Gráfico «Día por día» | Sí | Pruebas de la geometría; visto en los dos modos, semana y mes, computadora y celular | Ver abajo | — |
+| Rutas (horarios, archivar, «no existe») | Sí | Pruebas unitarias de las comprobaciones. **No se probó guardando horarios reales ni quitando un teléfono real** | Ver abajo | — |
+| Tiempos del latido en Salud | Sí | Prueba unitaria del texto; se ve con el primer latido después de publicar | Ver abajo | Sí |
+| Aviso por falla del sistema | Sí | Pruebas unitarias de qué se avisa y cuándo. **No se vio llegar un aviso: no hay dispositivos activados** | Ver abajo | Sí, cuando haya un dispositivo |
+| Menú plegable, barra inferior, portada | Sí | Vistos en la vista previa | Ver abajo | — |
+| Audios | — | «Pasar a texto» sobre los 2 audios reales de hoy: bien. **No se vio entrar un audio con la función encendida** | Sí | Sí |
