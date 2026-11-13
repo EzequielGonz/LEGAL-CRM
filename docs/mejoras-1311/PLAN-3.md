@@ -33,7 +33,7 @@ Todo lo de esta tabla está **publicado en producción** (`main` = `mejoras-1211
 
 1. Mirar el primer seguimiento real (sábado 14/11 desde las 20:44): qué decidió el bot en cada caso (`followup_tasks.status_reason` y Contactos → Seguimiento → Soltados / Enviados).
 2. Con la línea de Wasender conectada (la responsable dijo «mañana las probamos en horario normal»): campaña con «Rotar las plantillas de inicio», seguimiento redactado por el bot, segundo intento, y las funciones pendientes de «Líneas y plantillas» (probar una plantilla con un nombre de ejemplo, envío de prueba al teléfono del equipo, últimos fallos de la línea).
-3. Unificar la definición de «atención humana» entre Hoy (chat tomado + última palabra de la persona) y los filtros de «Todos los chats» (estado de la oportunidad).
+3. (Hecho el 13/11: los filtros «Esperan tu respuesta» y «Los atiende una persona» de «Todos los chats» usan la misma definición que Hoy y la ficha.)
 4. Reemplazar o retirar la tabla vieja «Captados y casos» (quedó sin pestaña; solo existe por su dirección y solo sirve para Jurídico).
 5. Aviso de captación: pantalla y envío (falta que la responsable diga a quién y por qué línea).
 6. Diseño: repasar con la guía `ux-audit` las pantallas que no se tocaron hoy (Campañas → detalle, Agenda, Ajustes, Redes).

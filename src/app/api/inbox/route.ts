@@ -5,6 +5,8 @@ import { detainedContactIds } from "@/lib/detention";
 import { requireSession } from "@/lib/acceso/autorizacion";
 import { textoBusquedaSeguro } from "@/lib/busqueda";
 import { AREAS_DE_PERFIL } from "@/lib/cartera-servidor";
+import { rubroIdDe } from "@/lib/indicadores";
+import { colasDeHoy } from "@/lib/hoy/colas";
 
 export const dynamic = "force-dynamic";
 
@@ -46,7 +48,9 @@ export async function GET(request: Request) {
 
   const contactsSel = q || base ? "contacts!inner(full_name, phone, imported_base_id)" : "contacts(full_name, phone, imported_base_id)";
   const channelsSel = canal ? "channels!inner(type)" : "channels(type)";
-  const oppInner = (atencion && atencion !== "detenidos") || !!respuesta;
+  // 13/11: «esperan» y «tomados» miran el estado real del chat (igual que Hoy y la ficha), no la etiqueta de la oportunidad.
+  const porChat = atencion === "esperan" || atencion === "tomados";
+  const oppInner = (atencion && atencion !== "detenidos" && !porChat) || !!respuesta;
   const oppSel = `opportunities${oppInner ? "!inner" : ""}(attention_state, capture_state, contact_state, attention_reason, attention_category)`;
 
   let query = supabase
@@ -64,6 +68,14 @@ export async function GET(request: Request) {
     const { data: det } = await supabase.from("contact_detentions").select("contact_id").eq("status", "vigente").not("contact_id", "is", null).limit(2000);
     const ids = Array.from(new Set((det ?? []).map((d: any) => d.contact_id as string)));
     query = ids.length ? query.in("contact_id", ids) : query.eq("id", "00000000-0000-0000-0000-000000000000");
+  } else if (atencion === "esperan") {
+    // La misma lista que «Atención humana» de Hoy: el chat lo tiene una persona y la última palabra es de afuera.
+    const rubroId = rubroIdDe(perfil);
+    const { esperan } = rubroId ? await colasDeHoy(rubroId, areasPerfil) : { esperan: [] as { conversationId: string }[] };
+    const ids = esperan.map((e) => e.conversationId);
+    query = ids.length ? query.in("id", ids) : query.eq("id", "00000000-0000-0000-0000-000000000000");
+  } else if (atencion === "tomados") {
+    query = query.eq("ai_enabled", false);
   } else if (atencion) query = query.eq("opportunities.attention_state", atencion);
   // Nombre, teléfono y valores de las columnas importadas de sus bases (0204).
   if (q) query = query.or(`full_name.ilike.%${q}%,phone.ilike.%${q}%,base_text.ilike.%${q}%`, { referencedTable: "contacts" });

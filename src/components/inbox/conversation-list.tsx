@@ -124,11 +124,12 @@ export function ConversationList({ perfil = "juridico" }: { perfil?: string }) {
           />
         </form>
         {/* Simple: los tres conjuntos de todos los días. Los filtros detallados, en Avanzado (se siguen aplicando). */}
-        <div role="group" aria-label="Vistas rápidas" className="solo-simple flex flex-wrap gap-1.5">
+        <div role="group" aria-label="Vistas rápidas" className="flex flex-wrap gap-1.5">
           {[
             { v: "", t: "Todas" },
-            { v: "requiere_humano", t: "Esperan a una persona" },
-            { v: "humano_en_curso", t: "Atiende una persona" },
+            // 13/11: mismas definiciones que Hoy y la ficha (estado real del chat).
+            { v: "esperan", t: "Esperan tu respuesta" },
+            { v: "tomados", t: "Los atiende una persona" },
           ].map((o) => {
             const activa = (searchParams.get("atencion") ?? "") === o.v;
             return (
