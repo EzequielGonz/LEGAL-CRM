@@ -12,7 +12,11 @@ test("cartera: cada grupo de oportunidades usa un indicador existente y no inclu
       if (g.fuente.tipo === "oportunidades") assert.ok(indicadorPorClave(g.fuente.indicador), g.fuente.indicador);
     }
   }
-  const todas = Object.values(VISTAS_CARTERA).flatMap((v) => v.grupos.map((g) => (g.fuente.tipo === "oportunidades" ? g.fuente.indicador : "")));
+  // 12/11: la regla vale para las vistas de trabajo. «Descartados» es el archivo aparte donde sí van los detenidos.
+  const deTrabajo = [VISTAS_CARTERA.conversaciones, VISTAS_CARTERA.contactos, VISTAS_CARTERA.recuperar];
+  const todas = deTrabajo.flatMap((v) => v.grupos.map((g) => (g.fuente.tipo === "oportunidades" ? g.fuente.indicador : "")));
+  assert.deepEqual(VISTAS_CARTERA.descartados.grupos.map((g) => g.clave), ["perdidos", "no_contactar"]);
+  assert.ok(!VISTAS_CARTERA.recuperar.grupos.some((g) => g.clave === "perdidos"), "los perdidos ya no se mezclan con lo recuperable");
   for (const fria of ["oportunidades", "sin_contactar", "contactado_sin_respuesta", "nuevo", "requiere_humano", "detencion_reciente"]) assert.ok(!todas.includes(fria), fria);
   assert.equal(VISTAS_CARTERA.conversaciones.grupos[0].clave, "captados");
 });

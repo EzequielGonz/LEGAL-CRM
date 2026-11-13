@@ -16,7 +16,7 @@
  */
 import type { SlugPerfil } from "@/lib/marca";
 
-export type VistaCartera = "conversaciones" | "contactos" | "recuperar";
+export type VistaCartera = "conversaciones" | "contactos" | "recuperar" | "descartados";
 export type FiltroCitas = "proximas" | "proximas_sin_derivar" | "reagendadas" | "fase2";
 export type Tono = "caliente" | "ok" | "info" | "alerta";
 
@@ -36,8 +36,8 @@ const citas = (filtro: FiltroCitas) => ({ tipo: "citas" as const, filtro });
 
 export const VISTAS_CARTERA: Record<VistaCartera, { titulo: string; bajada: string; grupos: GrupoCartera[] }> = {
   conversaciones: {
-    titulo: "Oportunidades",
-    bajada: "Quién está más cerca de cerrar. Lo urgente está en Hoy; cuando derivás a alguien, pasa a Contactos.",
+    titulo: "Activos",
+    bajada: "Las conversaciones que sirven, de la más cerca de cerrar a la más lejos. Lo urgente está en Hoy; los descartados, en su pestaña.",
     grupos: [
       { clave: "captados", titulo: "Captados para derivar", detalle: "Aceptaron el siguiente paso: pasalos al profesional.", tono: "caliente", accion: "derivar", fuente: op("captado_sin_derivar") },
       { clave: "agendaron", titulo: "Agendaron", detalle: "Tienen una cita próxima y todavía no se derivaron.", tono: "caliente", accion: "ficha", fuente: citas("proximas_sin_derivar") },
@@ -46,8 +46,8 @@ export const VISTAS_CARTERA: Record<VistaCartera, { titulo: string; bajada: stri
     ],
   },
   contactos: {
-    titulo: "Cartera",
-    bajada: "Las personas que ya derivaste, sus citas y sus seguimientos. La base fría está en Prospectos.",
+    titulo: "Etapas",
+    bajada: "Todas las personas del perfil, según en qué etapa están. Chats es para conversar; acá ves el recorrido completo.",
     grupos: [
       { clave: "clientes", titulo: "Clientes derivados", detalle: "Captados y derivados. Registrá cómo terminó cada uno.", tono: "ok", accion: "ficha", fuente: op("derivado") },
       { clave: "ventas", titulo: "Ventas concretadas", detalle: "Derivados que cerraron la operación.", tono: "ok", accion: "ficha", fuente: op("venta") },
@@ -64,13 +64,22 @@ export const VISTAS_CARTERA: Record<VistaCartera, { titulo: string; bajada: stri
     grupos: [
       { clave: "caidos", titulo: "Seguimientos caídos", detalle: "El seguimiento no avanzó: decidí si se vuelve a intentar.", tono: "alerta", accion: "ficha", fuente: op("seguimiento_caido") },
       { clave: "frenados", titulo: "Dejaron de responder", detalle: "Respondieron y la charla quedó a medias hace más de 3 días.", tono: "alerta", accion: "chat", fuente: op("dejaron_de_responder") },
-      { clave: "perdidos", titulo: "Perdidos", detalle: "Perdidos por motivo comercial. Revisá el motivo antes de reintentar.", tono: "info", accion: "ficha", fuente: op("perdido_comercial") },
+    ],
+  },
+  // 12/11 (pedido de la responsable): lo que no sirve no se mezcla con lo que sí. Los perdidos
+  // y los que pidieron no ser contactados viven acá, fuera del trabajo del día. No se borra nada.
+  descartados: {
+    titulo: "Descartados",
+    bajada: "Los que ya no siguen. Están acá para consultarlos; no aparecen en Hoy ni en Activos.",
+    grupos: [
+      { clave: "perdidos", titulo: "Perdidos", detalle: "Cerrados sin avanzar, con su motivo. Revisá el motivo antes de reintentar.", tono: "info", accion: "ficha", fuente: op("perdido_comercial") },
+      { clave: "no_contactar", titulo: "No quieren que les escriban", detalle: "Bajas, quejas y números equivocados. El bot ya no les escribe.", tono: "info", accion: "ficha", fuente: op("detencion_reciente") },
     ],
   },
 };
 
 export function vistaCartera(v: unknown): VistaCartera {
-  return v === "contactos" || v === "recuperar" ? v : "conversaciones";
+  return v === "contactos" || v === "recuperar" || v === "descartados" ? v : "conversaciones";
 }
 
 /** Grupo elegido: el pedido si existe; si no, el primero con algo; si no, el primero. */

@@ -98,7 +98,7 @@ test("el último mensaje pesa más que los anteriores", () => {
 });
 
 test("versión por conversación: sin asignación v1, sin comparar la vigente, con 50/50 estable y repartida", () => {
-  assert.equal(versionParaConversacion(null, "x"), 1);
+  assert.equal(versionParaConversacion(null, "x"), 2);
   assert.equal(versionParaConversacion({ version: 2, comparar_con: null, porcentaje: 100 }, "x"), 2);
   const a = { version: 2, comparar_con: 1, porcentaje: 50 };
   assert.equal(versionParaConversacion(a, "abc"), versionParaConversacion(a, "abc"));

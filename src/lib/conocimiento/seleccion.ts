@@ -78,7 +78,8 @@ export function puntaje(item: Pick<ItemConocimiento, "disparadores">, ultimo: st
  * estable: la misma conversación cae siempre en la misma versión.
  */
 export function versionParaConversacion(asig: Asignacion | null, conversationId: string | null): number {
-  if (!asig) return 1;
+  // 12/11: la v2 es la predefinida (pedido de la responsable). La v1 sigue disponible para elegirla o comparar.
+  if (!asig) return 2;
   if (!asig.comparar_con || asig.porcentaje >= 100) return asig.version;
   if (asig.porcentaje <= 0) return asig.comparar_con;
   const h = hash(conversationId ?? "");

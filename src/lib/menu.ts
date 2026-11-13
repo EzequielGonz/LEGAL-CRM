@@ -77,20 +77,22 @@ export function seccionesDePerfil(slug: SlugPerfil): SeccionMenu[] {
   // Reorganización 2 (18/10): Conversaciones y Contactos muestran solo lo que
   // vale la pena, agrupado; la base fría vive en Prospectos, por base.
   const conversaciones: ItemMenu[] = [
-    { href: comun(slug, "conversaciones"), label: "Oportunidades", match: "/conversaciones" },
+    { href: comun(slug, "conversaciones"), label: "Activos", match: "/conversaciones" },
     // 21/10: «Todos los chats» en los cuatro perfiles, cada uno con los suyos.
     { href: j ? "/inbox" : `${base}/chats`, label: "Todos los chats" },
     ...(mk ? [{ href: `${base}/consultas-directas`, label: "Consultas directas" }] : []),
     { href: comun(slug, "recuperar"), label: "Para recuperar", match: "/recuperar" },
+    // 12/11: lo que no sirve tiene su lugar y no se mezcla con lo que sí.
+    { href: comun(slug, "descartados"), label: "Descartados", match: "/descartados" },
     ...(j ? [{ href: "/revision", label: "Incidencias" }] : []),
     { href: comun(slug, "oportunidades", { indicador: "en_conversacion" }), label: "Lista", match: "/oportunidades", indicadores: INDICADORES_CONVERSACION, oculto: true },
   ];
 
   const contactos: ItemMenu[] = [
-    { href: comun(slug, "contactos"), label: "Cartera", match: "/contactos" },
+    { href: comun(slug, "contactos"), label: "Etapas", match: "/contactos" },
     { href: `${base}/agenda`, label: "Citas" },
     { href: `${base}/seguimiento`, label: "Seguimiento" },
-    { href: `${base}/casos-cerrados`, label: j ? "Casos" : "Clientes cerrados" },
+    { href: `${base}/casos-cerrados`, label: j ? "Captados y casos" : "Captados y clientes" },
     ...(mk
       ? [
           { href: `${base}/prospectos`, label: "Prioritarios" },

@@ -89,7 +89,7 @@ export async function PaginaCartera({ vista, searchParams }: { vista: VistaCarte
       : Promise.resolve(null),
     // 20/10: en Conversaciones, la semana más reciente y el historial completo.
     vista === "conversaciones" ? resumenCifras(rubroId, areas).catch(() => null) : Promise.resolve(null),
-    vista === "conversaciones" ? getProfileMetrics(rubroId).catch(() => null) : Promise.resolve(null),
+    vista === "conversaciones" || vista === "contactos" ? getProfileMetrics(rubroId).catch(() => null) : Promise.resolve(null),
     // 12/11: en Oportunidades, cuántos esperan una respuesta (se atienden desde Hoy).
     vista === "conversaciones" ? colasDeHoy(rubroId, areas).then((c) => c.esperan.length).catch(() => 0) : Promise.resolve(0),
     // 12/11: en Cartera, cuántos captados falta derivar (así la cartera vacía dice dónde está la gente).
@@ -111,6 +111,37 @@ export async function PaginaCartera({ vista, searchParams }: { vista: VistaCarte
           <h1 className="text-2xl font-semibold text-slate-950">{def.titulo}</h1>
           <p className="mt-1 text-sm text-slate-600">{def.bajada}</p>
         </div>
+
+        {vista === "contactos" && historico ? (
+          <section aria-labelledby="etapas-embudo" className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <h2 id="etapas-embudo" className="text-base font-semibold text-slate-950">
+              El recorrido de {cifra(historico.oportunidades)} personas
+            </h2>
+            <p className="text-[13px] text-slate-600">De la base fría al cliente. Tocá una etapa para ver quiénes están ahí.</p>
+            <ol className="mt-4 grid grid-cols-2 gap-px overflow-hidden rounded-xl bg-slate-100 sm:grid-cols-3 lg:grid-cols-6">
+              {(
+                [
+                  ["Sin contactar", historico.contacto.sin_contactar, "sin_contactar", "todavía no se les escribió"],
+                  ["Sin respuesta", historico.contacto.contactado_sin_respuesta, "contactado_sin_respuesta", "se les escribió y no contestaron"],
+                  ["Respondieron", historico.contacto.respondio, "respondio", "contestaron al menos una vez"],
+                  ["En conversación", historico.captacion.en_conversacion, "hablando_ahora", "charla en curso"],
+                  ["Captados", historico.captacion.captado, "captado", "aceptaron el siguiente paso"],
+                  ["Derivados", historico.derivacion.derivado, "derivado", "pasados a quien los atiende"],
+                ] as [string, number | null | undefined, string, string][]
+              ).map(([titulo, n, clave, nota], k) => (
+                <li key={clave} className="bg-white">
+                  <Link href={enlaceIndicador(slug, clave, aqui)} className="flex h-full flex-col p-4 hover:bg-slate-50">
+                    <span className="text-[13px] font-medium text-slate-600">
+                      {k + 1}. {titulo}
+                    </span>
+                    <span className={`mt-1 text-2xl font-semibold tabular-nums ${n ? "text-slate-950" : "text-slate-400"}`}>{cifra(n)}</span>
+                    <span className="mt-1 text-[13px] text-slate-500">{nota}</span>
+                  </Link>
+                </li>
+              ))}
+            </ol>
+          </section>
+        ) : null}
 
         {vista === "conversaciones" && esperan > 0 ? (
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-amber-300 bg-amber-50 px-5 py-4">
@@ -168,12 +199,14 @@ export async function PaginaCartera({ vista, searchParams }: { vista: VistaCarte
 
         {todoVacio ? (
           <div className="rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-10 text-center">
-            <p className="text-lg font-semibold text-slate-950">{vista === "contactos" ? "Tu cartera todavía está vacía" : `Nada en «${def.titulo}» por ahora`}</p>
+            <p className="text-lg font-semibold text-slate-950">{vista === "contactos" ? "Todavía no derivaste a nadie" : `Nada en «${def.titulo}» por ahora`}</p>
             <p className="mx-auto mt-1 max-w-xl text-sm text-slate-600">
               {vista === "contactos"
-                ? "Acá aparecen las personas cuando las derivás, y sus citas y seguimientos. Todavía no derivaste a nadie."
+                ? "Debajo del recorrido aparecen tus clientes derivados, sus citas y sus seguimientos."
                 : vista === "conversaciones"
                 ? "Cuando alguien acepte el siguiente paso, agende o esté conversando, aparece acá."
+                : vista === "descartados"
+                ? "Cuando alguien se pierda o pida que no le escriban, queda acá."
                 : "Cuando una charla se caiga y se pueda retomar, aparece acá."}
             </p>
             <div className="mt-4 flex flex-wrap justify-center gap-2">
