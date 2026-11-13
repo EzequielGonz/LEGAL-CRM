@@ -92,8 +92,8 @@ Las definiciones viven en `src/lib/indicadores.ts`; las pantallas no escriben co
 | Base de datos | Todas las tablas (incluidas las nuevas) con RLS y sin políticas para la clave pública: solo entra el servidor. Avisos del proveedor: extensión `pg_net` en el esquema público (viene así de la plataforma; sin acción) y protección de contraseñas filtradas (no aplica: el panel no usa cuentas de Supabase). |
 | Búsquedas que arman filtros | El texto de búsqueda de chats pasa por `textoBusquedaSeguro`; los demás filtros usan identificadores fijos o validados. |
 | HTML insertado | Solo en la vista previa de piezas propias de Contenido y en el guion del modo claro/oscuro. Nada que venga de un prospecto. |
-| Encabezados | `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`. **Falta** una política de contenido (CSP): necesita preparar los guiones de Next con un identificador por pedido. |
-| Dependencias (`npm audit --omit=dev`) | 4 avisos. `next` y `postcss` (crítico/alto): el arreglo exige subir Next de versión mayor; `npm audit fix` sin forzar rompió el build y se deshizo. El aviso de `postcss` afecta al procesamiento de CSS en la compilación, no a datos de prospectos. `xlsx` (alto): sin arreglo en npm; solo procesa planillas que sube alguien con sesión. **Pendiente:** planificar la subida de Next y reemplazar `xlsx` por la versión que publica su autor fuera de npm. |
+| Encabezados | `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy` y, desde el 13/11 a la tarde, **política de contenido (CSP)**: programas y llamadas solo al propio panel y al almacenamiento, un único marco externo (la vista previa de Instagram), sin marcos ajenos y sin cambiar a dónde envían los formularios. Recorridas 106 pantallas en producción con la política activa: ningún bloqueo. Los guiones y estilos en línea siguen permitidos (Next los necesita); cerrarlos del todo va con la subida de versión. |
+| Dependencias (`npm audit --omit=dev`) | **De 4 avisos a 2** (13/11 a la tarde). Resueltos: `xlsx` (se dejó de usar: Excel se lee con `read-excel-file` y se escribe con `write-excel-file`; un `.xls` viejo ahora pide guardarlo como `.xlsx` o CSV) y `source-map-js` (actualizado). Quedan `next` y el `postcss` que trae adentro: no hay arreglo en la línea 14, hay que subir a 15.5.28 o más (ver §9). Mientras tanto se apagó el optimizador de imágenes de Next, que el panel no usa y es donde están los dos avisos críticos que aplican a un servidor propio; el panel no usa acciones de servidor, que es donde están los de caída del servicio. |
 | Mezcla entre perfiles | Ver hallazgos 1 a 6: corregida y comprobada. Con un solo código compartido no hay permisos por perfil; la separación es de pantallas y consultas. |
 
 ## 6. Funcionamiento y rendimiento
@@ -104,10 +104,96 @@ Las definiciones viven en `src/lib/indicadores.ts`; las pantallas no escriben co
 
 ## 7. Pendiente de la auditoría
 
-- **Política de contenido (CSP)** y plan de subida de Next / reemplazo de `xlsx` (ver §5).
+- **Subida de Next a la línea 15.5** (plan en §9). Es lo único que cierra los dos avisos de dependencias que quedan.
 - **Latido:** medir tiempos por etapa y probar dos latidos a la vez.
 - **Aviso a los dispositivos** cuando se abre una incidencia de reclamo o aparece una falla del sistema.
-- **Hoy:** ya usa las definiciones nuevas; falta quitar lo que no lleva a una acción.
-- **Estadísticas con embudo y origen.**
-- **Tabla vieja «Captados y casos»** y menores de la bitácora.
-- **Vista del teléfono y avisos a dispositivos** respecto de la separación entre perfiles.
+- **Diseño «bien llamativo»** (bloque F del plan).
+- **Estadísticas:** el embudo no tiene todavía las etapas «conversaron», «oportunidad real» y «ventas».
+- **Hallazgos del inventario de rutas** (§8.5): horarios de agenda que se reemplazan sin red, dos borrados de verdad y rutas que dicen «ok» sin comprobar.
+- **Sin caso real todavía:** un audio entrando, un reclamo serio y una «posible captación».
+
+## 8. Corrida de la tarde (13/11, desde las 13:50)
+
+### 8.1 Audios
+
+Ver `PLAN-4.md`, bloque I. Publicado y encendido en los cuatro perfiles. Comprobado con pruebas unitarias (10) y, en producción, con «Pasar a texto» sobre 3 audios viejos de Jurídico, Autos y Marketing: 4 a 6 segundos cada uno, texto correcto, duración leída del archivo (6, 15 y 15 segundos). Solo se escribió el texto en el mensaje (`ops_change_log` 230). Falta ver entrar un audio real: no se puede simular sin mandarle uno a una línea.
+
+### 8.2 Hoy: qué se queda y qué se fue
+
+| Bloque que había | Decisión |
+|---|---|
+| Chips de estado (línea, campaña, bot, Wasender) | Se quedan: avisan si algo está frenado. 40 px de alto en el celular |
+| «Atención humana» | Se queda: a quién hay que contestarle |
+| «Captados para derivar» | Se queda: a quién hay que pasar |
+| Aviso «N respondieron que no siguen» con su botón | Se queda: es una acción |
+| «Para mirar» → Oportunidades reales | Se fue: repetía la lista de arriba |
+| «Para mirar» → Bot trabado | Pasa a «También hoy», solo si hay alguien |
+| «Para mirar» → En seguimiento | Pasa a la línea «Qué está haciendo el bot» |
+| «Para mirar» → No interesados («solo cifra») | Se fue: no llevaba a ninguna acción |
+| «En marcha» → Agendaron | Pasa a «También hoy» como «Citas próximas», solo si hay |
+| «En marcha» → Hablando ahora | Pasa a «Qué está haciendo el bot» |
+| «En marcha» → Derivados sin resultado | Pasa a «También hoy», solo si hay |
+| «Campañas activas» | Pasa a «Qué está haciendo el bot» (enviados de cada campaña) |
+| «Esta semana» (cinco cifras por período) | Se mudó a Resultados, como embudo |
+| «Última base» | Se fue: está en Resultados e Historial |
+| «Más indicadores» (modo avanzado) | Se fue: las mismas listas están en Contactos y Salud |
+
+Hoy quedó en: chips, dos listas, «También hoy» (solo lo que pide algo y tiene a alguien), «Qué está haciendo el bot» (una línea, cada dato abre su lista) y el enlace a Resultados.
+
+### 8.3 Resultados
+
+Arriba, el embudo del período: contactados → respondieron → captados → derivados, con el porcentaje de paso entre etapas y la comparación con el período anterior; los perdidos van aparte porque no son una etapa. Cada etapa abre sus personas (reemplaza a los botones «Qué ver»). Debajo sigue «De dónde vienen». Usa las mismas cuentas que tenía Hoy (`src/lib/hoy/periodos.ts`), sin definiciones nuevas. Comprobado en producción (Jurídico, semana del 9 al 13/11: 220 → 22 → 3 → 2; 65 perdidos).
+
+La tabla vieja «Captados y casos» se retiró: su dirección lleva a la lista equivalente de Contactos (`destinoDeCasosViejos`).
+
+### 8.4 Asistente con permiso para todo
+
+- **Cómo quedó:** el asistente tiene sus herramientas propias de antes (campañas, chats, bot, roles, publicaciones) y, para todo lo demás, un catálogo de **77 operaciones** (`src/lib/asistente/catalogo.ts`). Busca la operación, pide lo que falte y la deja como propuesta. Al confirmar, el servidor llama **a la misma ruta que usa la pantalla**, con la sesión de quien confirma: no hay una copia de la lógica que pueda saltearse una validación.
+- **Perfil:** lo pone el servidor (el del panel donde está abierto). Las cosas se nombran por su nombre o por el teléfono de la persona y se comprueba que sean de ese perfil; lo de otro perfil se rechaza con el aviso de abrir el asistente ahí.
+- **Niveles (se conservan los tres y se recalculan en el servidor):** un clic; confirmación reforzada si puede salir un mensaje a una persona; código de acceso si gasta, enciende un bot o cambia un control general. El asistente nunca ve ni escribe el código.
+- **Secciones:** menú a medida por perfil (renombrar, ocultar y mover secciones, renombrar pestañas), con deshacer. Hoy y Ajustes no se pueden ocultar. Tabla `personalizacion_perfil` (migración 0611); historial en `ops_change_log`.
+- **Código:** lo que hay que programar se arma como pedido completo y queda en la Bandeja para Claude (no hay tarea que la revise sola: decisión de la responsable).
+- **Órdenes de afuera:** el texto de los chats, las bases y los archivos es dato; el asistente no propone acciones porque un mensaje de un contacto lo pida.
+- **Cobertura:** una prueba recorre las rutas del panel que cambian algo y exige que cada una esté en el catálogo, tenga herramienta propia o figure en `FUERA_DEL_CATALOGO` con su motivo (35 rutas afuera a propósito: las que piden subir un archivo, tipear un código que llega al teléfono, o ver algo en pantalla para decidir).
+- **Probado en producción (13/11, 14:45), con cosas inofensivas y restauradas:**
+
+| Pedido | Resultado |
+|---|---|
+| Agregar un feriado el 8/12/2027 (Coberturas) | Propuesta de un clic; al confirmar se creó por la ruta del calendario |
+| Quitar esa excepción | La encontró por el día; al confirmar quedó archivada |
+| Renombrar «Contactos» a «Clientes» en el menú | Confirmado y después deshecho: el menú volvió al original |
+| Poner la pausa general | Propuesta con «pide el código»; confirmar sin código: rechazado (428). Descartada |
+| Archivar desde Coberturas una campaña de Jurídico | No la encontró en ese perfil y avisó que hay que abrir el asistente en Jurídico |
+| «Quiero una pantalla nueva…» | Armó el pedido para la Bandeja para Claude. Descartado |
+| «¿Qué podés hacer con las líneas de Wasender?» | Listó las operaciones del grupo |
+
+### 8.5 Hallazgos del inventario de rutas (sin arreglar, para decidir)
+
+Al relevar las 97 rutas que cambian algo aparecieron cosas que no son del asistente pero conviene saber:
+
+1. **Horarios de la agenda (`agenda/availability`):** al guardar, borra todas las reglas del área y después inserta las nuevas, sin transacción. Si el guardado falla en el medio, se pierden los horarios. Por eso quedó fuera del catálogo. Arreglo: una sola operación en la base.
+2. **Dos borrados de verdad** (contra «nada se borra»): «vaciar la cola» de búsquedas de Google Maps borra las pendientes de todos los perfiles, y quitar un teléfono de avisos borra la fila. Arreglo: marcar como canceladas / archivadas.
+3. **Rutas que responden «ok» aunque el identificador no exista:** pausar campaña, cancelar cita (ruta vieja), encender o apagar la IA de un chat, revisar un caso del corpus, cambiar el estado de un pedido de mejora.
+4. **Cambiar el teléfono principal de avisos:** un pedido mal formado lo borra.
+5. **Editar la página de Facebook o el perfil de WhatsApp desde Redes:** manda todos los campos siempre; lo que se deja vacío pisa lo que hay en Meta.
+6. **«Recibir acá» en una línea de Wasender:** hecho desde una vista previa del sitio, desviaría los mensajes entrantes de producción.
+
+## 9. Plan para subir Next (de 14.2 a 15.5)
+
+**Por qué:** los avisos de `next` no tienen arreglo en la línea 14 (última: 14.2.35, la que está). La primera versión sin avisos es la 15.5.28. No se hizo en esta corrida porque cambia cómo se leen los datos de cada pedido en todas las pantallas y rutas, y eso pide una vuelta dedicada con recorrido completo.
+
+**Qué cambia (lo que toca a este panel):**
+1. `params` y `searchParams` de páginas y rutas pasan a ser promesas: hay que esperarlos. Afecta a unas 70 rutas y páginas con tramos dinámicos y a 63 páginas que leen `searchParams`. Next trae un programa que hace la mayor parte del cambio solo (`npx @next/codemod@latest next-async-request-api .`); lo que no pueda resolver lo deja marcado.
+2. `cookies()` y `headers()` también pasan a ser asíncronas (sesión, perfil activo).
+3. React pasa a la 19 (App Router lo exige). Revisar las librerías que dependen de React.
+4. Las rutas `GET` y la navegación dejan de guardarse en memoria por defecto: el ajuste `staleTimes` que se puso el 13/11 deja de hacer falta.
+5. `next lint` y la configuración de ESLint cambian de formato.
+
+**Pasos, en una rama aparte:**
+1. Subir `next`, `react`, `react-dom`, `eslint-config-next` y los tipos; correr el programa de migración.
+2. `typecheck`, `lint`, las 442 pruebas y `build` hasta dejarlos en verde.
+3. Probar en una vista previa **solo mirando** (comparte base y líneas con producción): ingreso, los cuatro perfiles, las 106 pantallas del recorrido, un chat, la ficha, el asistente y los webhooks con un evento de prueba firmado.
+4. Publicar un día de poco movimiento, con la versión anterior lista para volver atrás desde Vercel.
+5. Después: cerrar la política de contenido (guiones firmados por pedido en lugar de «en línea»).
+
+**Tiempo estimado:** una vuelta de trabajo dedicada. **Riesgo si no se hace:** los avisos que quedan son de caída del servicio y de almacenamiento intermedio; los dos críticos apuntan al optimizador de imágenes, que ya está apagado.
