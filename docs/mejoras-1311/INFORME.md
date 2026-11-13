@@ -15,7 +15,7 @@
 | Ficha: que el bot conteste el mensaje pendiente al devolver | Sí | **No probado con un caso real** (habría enviado un mensaje a una persona) | Sí | Sí |
 | Velocidad | Sí | Medido en producción: título visible en 0,4 s (antes, pantalla en blanco de 3 a 6,7 s); Hoy completo en 2,5 a 3 s (antes 4,5 a 6,7 s) | Sí | — |
 | Lista de chats, Incidencias, menú | Sí | Pruebas unitarias y captura en producción | Sí | — |
-| «Esperan tu respuesta» con la misma definición en Hoy, la ficha y los filtros de chats | Sí | Comparado en producción (ver abajo) | Sí | — |
+| «Esperan tu respuesta» en los filtros de chats según el estado real del chat | Sí | Comparado en producción: el filtro da 7 y Hoy 9. **No coinciden todavía**: Hoy suma a 2 personas que el bot derivó aunque ya se les contestó (ver `PLAN-3.md`, punto 3) | Sí | — |
 
 Suite: 386 pruebas pasan; falla 1 que ya fallaba antes y no tiene relación («asistente: cada tipo permitido…»).
 
@@ -23,6 +23,7 @@ Suite: 386 pruebas pasan; falla 1 que ya fallaba antes y no tiene relación («a
 
 - Ver el primer seguimiento real (sábado 14/11) y revisar qué decidió el bot.
 - Probar con la línea de Wasender conectada: campaña con rotación, seguimiento redactado por el bot y segundo intento.
+- Una sola regla para «Te escribió» / «Esperan tu respuesta» entre Hoy y los filtros de chats (hoy difieren en 2 personas).
 - La tabla vieja «Captados y casos» sigue existiendo por su dirección (sin pestaña).
 - Cargar en la ficha de cada negocio los datos que el bot necesita para dar información concreta (ver `BOT-V2.md`).
 - Cambiar el código de acceso del panel: se usó durante todo el trabajo.
