@@ -2,7 +2,7 @@ import { EnlaceDetalle } from "@/components/ui/enlaces-navegacion";
 import { followupOverview, type FollowupTaskRow } from "@/lib/seguimiento/panel";
 import { FOLLOWUP_TASK_STATUS_LABEL } from "@/lib/seguimiento/circuito";
 import { getAutomationPause } from "@/lib/automation-pause";
-import { FollowupConfigControl, FollowupReviewActions, RepescaBaseButton } from "@/components/seguimiento/followup-controls";
+import { FollowupConfigControl, FollowupReviewActions, ListaDeAPartes, RepescaBaseButton } from "@/components/seguimiento/followup-controls";
 import { RUTA_SEGUIMIENTO } from "@/lib/seguimiento/criterio";
 import { RecontactoControl } from "@/components/seguimiento/recontacto-control";
 import { leerConfigRecontacto } from "@/lib/recontacto/motor";
@@ -169,14 +169,15 @@ export async function FollowupPanel({ rubroId }: { rubroId: string }) {
           fueron contactados, hay que incluirlos a propósito.
         </p>
         <RepescaBaseButton rubroId={rubroId} count={pendientesBase.length} />
-        <ul className="mt-2 divide-y divide-slate-100">
-          {o.agotadas.slice(0, 50).map((a: any) => (
+        <ListaDeAPartes
+          className="mt-2 divide-y divide-slate-100"
+          filas={o.agotadas.map((a: any) => (
             <li key={a.id} className="flex flex-wrap items-center justify-between gap-2 py-2">
               <Who name={a.contacts?.full_name} phone={a.contacts?.phone} contactId={a.contact_id} />
               <span className="text-xs text-slate-700">{a.repesca_base_id ? "Ya está en una base" : "Sin base todavía"}</span>
             </li>
           ))}
-        </ul>
+        />
       </section>
 
       <section id="seg-enviados" tabIndex={-1} className="rounded-xl border border-slate-200 bg-white p-5">

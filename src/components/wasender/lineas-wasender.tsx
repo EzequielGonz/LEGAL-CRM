@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { Icono } from "@/components/ui/icono-seccion";
+import { useConfirmacion } from "@/components/ui/dialogo-confirmar";
 import type { SlugPerfil } from "@/lib/marca";
 import { etiquetaEstado, pideQr } from "@/lib/wasender/reglas";
 
@@ -84,6 +85,7 @@ export function LineasWasender({ slug, marca }: { slug: SlugPerfil; marca: strin
   const [verArchivadas, setVerArchivadas] = useState(false);
   // Líneas que le avisan a otro entorno (por ejemplo, todavía a la Preview).
   const [avisaAfuera, setAvisaAfuera] = useState<Record<string, boolean>>({});
+  const { pedir: preguntar, dialogo } = useConfirmacion();
   const qrRef = useRef(qr);
   qrRef.current = qr;
 
@@ -162,9 +164,13 @@ export function LineasWasender({ slug, marca }: { slug: SlugPerfil; marca: strin
       } catch (err: any) {
         // El número figura como línea de Meta: solo se sigue si se confirma que ya se sacó de Meta.
         if (err?.codigo !== "numero_de_meta") throw err;
-        const ok = window.confirm(
-          "Ese número figura como línea de Meta.\n\n¿Ya lo eliminaste de Meta (WhatsApp Manager)? Si sigue en Meta y lo conectás por QR, deja de funcionar allá.\n\nAceptar: ya lo saqué de Meta, seguir.\nCancelar: no agregarlo."
-        );
+        const ok = await preguntar({
+          titulo: "Ese número figura como línea de Meta. ¿Ya lo eliminaste de Meta (WhatsApp Manager)?",
+          texto: "Si sigue en Meta (WhatsApp Manager) y lo conectás por QR, deja de funcionar allá.\n\nSeguí solo si ya lo sacaste de Meta. Si no, no lo agregues.",
+          confirmar: "Ya lo saqué de Meta, seguir",
+          cancelar: "No agregarlo",
+          peligro: true,
+        });
         if (!ok) throw new Error("No se agregó: el número sigue figurando como línea de Meta.");
         j = await crear(true);
       }
@@ -219,7 +225,13 @@ export function LineasWasender({ slug, marca }: { slug: SlugPerfil; marca: strin
   }
 
   async function desconectar(l: Linea) {
-    if (!window.confirm(`¿Desconectar «${l.nombre}» de Wasender? Deja de enviar y recibir hasta que la vuelvas a conectar con el QR.`)) return;
+    const ok = await preguntar({
+      titulo: `¿Desconectar «${l.nombre}» de Wasender?`,
+      texto: "Deja de enviar y recibir hasta que la vuelvas a conectar con el QR.",
+      confirmar: "Desconectar",
+      peligro: true,
+    });
+    if (!ok) return;
     setError(null);
     try {
       const j = await pedir(`/api/wasender/lineas/${l.id}/conectar`, { method: "POST", body: JSON.stringify({ perfil: slug, accion: "desconectar" }) });
@@ -231,10 +243,21 @@ export function LineasWasender({ slug, marca }: { slug: SlugPerfil; marca: strin
 
   async function marcarEquivalencia(l: Linea, metaId: string) {
     const meta = lineasMeta.find((m) => m.id === metaId);
-    const texto = meta
-      ? `¿«${l.nombre}» reemplaza a la línea de Meta «${meta.label}»?\n\nDesde ahora, todo lo que el panel le escriba a los chats de esa línea (bot, chat manual, citas y recontacto) sale por «${l.nombre}». Hacelo solo si ese número ya se sacó de Meta y está conectado acá. La línea de Meta no se borra.`
-      : `¿Quitar la equivalencia? Los chats de la línea de Meta vuelven a salir por Meta.`;
-    if (!window.confirm(texto)) return;
+    const ok = await preguntar(
+      meta
+        ? {
+            titulo: `¿«${l.nombre}» reemplaza a la línea de Meta «${meta.label}»?`,
+            texto: `Desde ahora, todo lo que el panel le escriba a los chats de esa línea (bot, chat manual, citas y recontacto) sale por «${l.nombre}». Hacelo solo si ese número ya se sacó de Meta y está conectado acá. La línea de Meta no se borra.`,
+            confirmar: "Sí, reemplaza",
+          }
+        : {
+            titulo: "¿Quitar la equivalencia?",
+            texto: "Los chats de la línea de Meta vuelven a salir por Meta.",
+            confirmar: "Quitar",
+            peligro: true,
+          }
+    );
+    if (!ok) return;
     setError(null);
     setAviso(null);
     try {
@@ -257,11 +280,14 @@ export function LineasWasender({ slug, marca }: { slug: SlugPerfil; marca: strin
   }
 
   async function cambiarLimite(l: Linea) {
-    const v = window.prompt(
-      `Máximo de mensajes de campaña por día para «${l.nombre}», sumando todas sus campañas. Vacío = sin máximo de la línea.`,
-      l.limite_diario ? String(l.limite_diario) : ""
-    );
-    if (v === null) return;
+    const r = await preguntar({
+      titulo: `Máximo de mensajes por día de «${l.nombre}»`,
+      texto: "Máximo de mensajes de campaña por día, sumando todas sus campañas. Vacío = sin máximo de la línea.",
+      confirmar: "Guardar",
+      campo: { etiqueta: "Mensajes por día", valorInicial: l.limite_diario ? String(l.limite_diario) : "", tipo: "number", placeholder: "Sin máximo" },
+    });
+    if (r === null) return;
+    const v = r === true ? "" : r;
     setError(null);
     try {
       const j = await pedir(`/api/wasender/lineas/${l.id}`, { method: "PATCH", body: JSON.stringify({ perfil: slug, limite_diario: v.trim() === "" ? null : v.trim() }) });
@@ -282,8 +308,15 @@ export function LineasWasender({ slug, marca }: { slug: SlugPerfil; marca: strin
   }
 
   async function archivar(l: Linea) {
-    const motivo = window.prompt(`¿Por qué archivás «${l.nombre}»? (no se borra: queda guardada con el motivo)`);
-    if (!motivo?.trim()) return;
+    const r = await preguntar({
+      titulo: `¿Por qué archivás «${l.nombre}»?`,
+      texto: "No se borra: queda guardada con el motivo.",
+      confirmar: "Archivar",
+      peligro: true,
+      campo: { etiqueta: "Motivo", tipo: "text", placeholder: "Por ejemplo: chip dado de baja", obligatorio: true },
+    });
+    const motivo = typeof r === "string" ? r : "";
+    if (!motivo.trim()) return;
     setError(null);
     try {
       const j = await pedir(`/api/wasender/lineas/${l.id}`, { method: "POST", body: JSON.stringify({ perfil: slug, accion: "archivar", motivo }) });
@@ -300,6 +333,7 @@ export function LineasWasender({ slug, marca }: { slug: SlugPerfil; marca: strin
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
+      {dialogo}
       <div>
         <h1 className="text-2xl font-semibold text-slate-900">Wasender · {marca}</h1>
         <p className="mt-1 max-w-2xl text-sm text-slate-600">

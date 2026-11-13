@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 
 /**
@@ -228,6 +228,37 @@ export function RepescaBaseButton({ rubroId, count }: { rubroId: string; count: 
         {busy ? "Generando…" : `Generar base para campaña manual (${count})`}
       </button>
       {msg && <p className={`text-xs ${msg.ok ? "text-green-700" : "text-red-600"}`}>{msg.text}</p>}
+    </div>
+  );
+}
+
+/**
+ * Lista que muestra de a 25 filas (ya armadas en el servidor) y deja ver el
+ * resto con «Ver 25 más». Informa cuántas se ven del total.
+ */
+export function ListaDeAPartes({ filas, tamano = 25, className }: { filas: ReactNode[]; tamano?: number; className?: string }) {
+  const [visibles, setVisibles] = useState(tamano);
+  const total = filas.length;
+  const hasta = Math.min(visibles, total);
+  return (
+    <div>
+      <ul className={className}>{filas.slice(0, hasta)}</ul>
+      {total > tamano && (
+        <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
+          <p role="status" className="text-xs text-slate-700">
+            Mostrando {hasta} de {total}
+          </p>
+          {hasta < total && (
+            <button
+              type="button"
+              onClick={() => setVisibles((v) => v + tamano)}
+              className="tactil focus-gold rounded-lg border border-slate-300 bg-white px-4 text-sm font-medium text-slate-800 hover:bg-slate-50"
+            >
+              Ver {Math.min(tamano, total - hasta)} más
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }
