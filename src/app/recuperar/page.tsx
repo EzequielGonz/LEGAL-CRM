@@ -1,9 +1,12 @@
-import { PaginaCartera } from "@/components/cartera/vista-cartera";
+import { redirect } from "next/navigation";
+import { perfilActivo } from "@/lib/perfil-activo";
 
-export const dynamic = "force-dynamic";
-export const metadata = { title: "Para recuperar" };
-
-/** Revisión (reorganización 2, 18/10): grupos compactos con las fichas que valen la pena. */
-export default function Pagina({ searchParams }: { searchParams: { perfil?: string; grupo?: string } }) {
-  return <PaginaCartera vista="recuperar" searchParams={searchParams} />;
+/**
+ * «Para recuperar» se retiró el 13/11 (decisión de la responsable: quien deja
+ * de contestar recibe un mensaje más a los 3 días y, si en 24 horas no
+ * responde, pasa solo a Caídos). La dirección queda para no romper enlaces y
+ * lleva a Descartados → Caídos del perfil.
+ */
+export default function Pagina({ searchParams }: { searchParams: { perfil?: string } }) {
+  redirect(`/descartados?perfil=${perfilActivo(searchParams.perfil)}&grupo=caidos`);
 }

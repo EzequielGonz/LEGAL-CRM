@@ -1,3 +1,4 @@
+import { indicadorPorClave, listarIndicador } from "@/lib/indicadores";
 import Link from "next/link";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { GRUPOS_PERSONAS, motivoLegible, resumenPersonas, type GrupoPersonas } from "@/lib/estadisticas-personas";
@@ -88,7 +89,10 @@ export async function TableroHoy({
   const baseCampanas = slug === "juridico" ? "/campanas" : `/panel/${slug}/campanas`;
   const baseAgentes = slug === "juridico" ? "/agentes" : `/panel/${slug}/agentes`;
 
-  const [colas, { data: lineasWa }, personas, { data: lineas }, metricas, { data: camps }] = await Promise.all([
+  const [reales, posibles, colas, { data: lineasWa }, personas, { data: lineas }, metricas, { data: camps }] = await Promise.all([
+    // 13/11: «Oportunidades reales» (ordenadas por interés) y «Posible captación a revisar», con la misma definición que en Chats.
+    listarIndicador(rubroId, indicadorPorClave("piden_persona")!).catch(() => ({ filas: [] as any[] })),
+    listarIndicador(rubroId, indicadorPorClave("posible_captacion")!).catch(() => ({ filas: [] as any[] })),
     colasDeHoy(rubroId, areas).catch(() => ({ esperan: [], descartes: [], captadosSinDerivar: null })),
     (s.from("wasender_lineas" as any) as any).select("id, nombre, estado, habilitada").eq("rubro_id", rubroId).is("archivada_at", null),
     resumenPersonas(rubroId, areas),
@@ -149,9 +153,12 @@ export async function TableroHoy({
   const descartadas = new Set(colas.descartes.map((d) => d.conversationId));
   const cola = unificarCola({
     esperan: colas.esperan.map((f) => ({ contactId: f.contactId, conversationId: f.conversationId, nombre: f.nombre, detalle: f.texto ? `«${f.texto}»` : null, at: f.desde })),
-    porCerrar: (personas.listas.por_cerrar ?? [])
-      .filter((f) => !(f.conversationId && descartadas.has(f.conversationId)))
-      .map((f) => ({ contactId: f.contactId ?? null, conversationId: f.conversationId ?? null, nombre: f.nombre ?? null, detalle: motivoLegible(f.motivo), at: f.at ?? null })),
+    porCerrar: [
+      ...((posibles.filas ?? []) as any[]).map((o) => ({ contactId: o.contact_id ?? null, conversationId: o.conversation_id ?? null, nombre: o.contacts?.full_name ?? null, detalle: o.posible_captacion_reason ?? "El bot no está seguro de que haya concretado la llamada", etiqueta: "Posible captación a revisar", at: o.last_inbound_at ?? o.updated_at ?? null })),
+      ...((reales.filas ?? []) as any[])
+        .filter((o) => !(o.conversation_id && descartadas.has(o.conversation_id)))
+        .map((o) => ({ contactId: o.contact_id ?? null, conversationId: o.conversation_id ?? null, nombre: o.contacts?.full_name ?? null, detalle: o.interest_reason ?? motivoLegible(o.attention_reason), etiqueta: "Oportunidad real", at: o.last_inbound_at ?? o.updated_at ?? null })),
+    ],
     captados,
   });
   const clavesCaptados = new Set(captados.map((c) => (c.contactId ? `c:${c.contactId}` : `v:${c.conversationId}`)));

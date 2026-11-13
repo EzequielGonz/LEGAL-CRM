@@ -204,6 +204,9 @@ export const MOTIVOS_ATENCION = [
   "datos_sensibles",
   "mensaje_posterior_captado",
   "contacto_detenido_escribio",
+  // Reclamo serio (13/11): lo único que queda como incidencia de una persona
+  "amenaza_legal",
+  "queja_cliente_captado",
   // Procedencia
   "pregunta_procedencia",
   // Solicitud de datos (circuito propio)
@@ -232,6 +235,7 @@ export const CATEGORIAS_ATENCION = [
   "excepcion_datos",
   "incidencia_operativa",
   "registro_historico",
+  "reclamo",
 ] as const;
 export type CategoriaAtencion = (typeof CATEGORIAS_ATENCION)[number];
 
@@ -243,6 +247,7 @@ export const CATEGORIA_ATENCION_LABEL: Record<CategoriaAtencion, string> = {
   excepcion_datos: "Excepción de datos",
   incidencia_operativa: "Incidencia operativa",
   registro_historico: "Registro histórico",
+  reclamo: "Reclamo serio",
 };
 
 export interface TratamientoAtencion {
@@ -295,6 +300,12 @@ export const TRATAMIENTO_ATENCION: Record<MotivoAtencion, TratamientoAtencion> =
   mensaje_posterior_captado: T("comercial", "Mensaje posterior de una persona captada", { principal: true, pausarChat: true }),
   contacto_detenido_escribio: T("comercial", "Escribió un contacto detenido", { principal: true, pausarChat: true }),
 
+  // 13/11 (decisión de la responsable): «una incidencia tiene que ser un
+  // reclamo serio, un problema real». Solo estos dos motivos abren una
+  // incidencia: el bot deja de responder y lo toma una persona.
+  amenaza_legal: T("reclamo", "Amenaza legal o denuncia contra nosotros", { principal: true, pausarChat: true }),
+  queja_cliente_captado: T("reclamo", "Queja de un cliente captado", { principal: true, pausarChat: true }),
+
   // 24/10 (decisión de la responsable): origen de los datos, reclamo o pedido
   // de baja → disculpa automática sin explicar el origen y detención. No pasa
   // a atención humana: el origen lo atiende el equipo de marketing.
@@ -340,6 +351,7 @@ export const MOTIVOS_AGENTE: MotivoAtencion[] = [
   "decision_profesional",
   "consulta_fuera_alcance",
   "datos_sensibles",
+  "amenaza_legal",
   "pregunta_procedencia",
   "procedencia_no_comprobable",
   "reclamo_datos",

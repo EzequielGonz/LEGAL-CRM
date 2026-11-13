@@ -84,6 +84,7 @@ export type DecisionEntrante =
         | "no_legible"
         | "detenido"
         | "captado_mensaje_posterior"
+        | "reclamo_serio"
         | "agente_inactivo"
         | "ventana_cerrada"
         | "fuera_de_horario_sin_24h";
@@ -118,6 +119,7 @@ export const MOTIVO_ENTRANTE_TEXT: Record<Exclude<DecisionEntrante, { responder:
   no_legible: "El mensaje no es legible para el agente (audio, imagen o archivo): queda para una persona",
   detenido: "Contacto detenido: sin respuesta automática",
   captado_mensaje_posterior: "La persona ya está captada: su mensaje pasa a atención humana prioritaria",
+  reclamo_serio: "Reclamo serio (amenaza legal o queja de un cliente): se abre una incidencia y lo atiende una persona",
   agente_inactivo: "El agente del perfil está apagado o sin identidad configurada",
   ventana_cerrada: "La ventana de 24 horas del canal está cerrada: solo plantilla aprobada",
   fuera_de_horario_sin_24h: "Fuera del horario general y sin atención entrante 24 h habilitada en el perfil",

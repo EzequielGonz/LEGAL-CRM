@@ -45,11 +45,12 @@ test("2.3: el último mensaje lo mandó una persona del equipo: no es automátic
   assert.equal(decideCircuit(snap({ sender: "admin" }), { enabledSince, now: at(1) }).action, "nada");
 });
 
-test("2.3: sin respuesta al contacto 2 se espera el plazo y se detiene, sin repesca", () => {
+test("2.3: sin respuesta al contacto 2 se esperan 24 horas y pasa a Caídos, sin repesca", () => {
+  // 13/11 (decisión de la responsable): «si no responde en 24 hs, a caídos». Antes se esperaban 72 h.
   const sent = [{ step: 2 as const, sentAt: at(48) }];
   const s = snap({ lastAt: 48, sent });
-  assert.equal(decideCircuit(s, { enabledSince, now: at(100) }).action, "nada", "todavía dentro de las 72 h");
-  const d = decideCircuit(s, { enabledSince, now: at(48 + 72) });
+  assert.equal(decideCircuit(s, { enabledSince, now: at(48 + 23) }).action, "nada", "todavía dentro de las 24 h");
+  const d = decideCircuit(s, { enabledSince, now: at(48 + 24) });
   assert.equal(d.action, "detener");
   if (d.action === "detener") {
     assert.equal(d.state, "caido");
@@ -75,11 +76,12 @@ test("2.3: después del contacto 3, sin respuesta o sin avanzar: base para campa
   ];
   // Sin respuesta al 3.
   const sin = snap({ lastAt: 110, lastInboundAt: at(50), sent });
-  assert.equal(decideCircuit(sin, { enabledSince, now: at(150) }).action, "nada");
-  const d1 = decideCircuit(sin, { enabledSince, now: at(110 + 72) });
+  assert.equal(decideCircuit(sin, { enabledSince, now: at(110 + 23) }).action, "nada");
+  const d1 = decideCircuit(sin, { enabledSince, now: at(110 + 24) });
   assert.equal(d1.action, "detener");
   if (d1.action === "detener") {
-    assert.equal(d1.state, "completado");
+    // 13/11: queda en Caídos (y, como agotó el circuito, también en la base para campaña manual).
+    assert.equal(d1.state, "caido");
     assert.equal(d1.repesca, true);
   }
   // Respondió al 3, siguió un poco y volvió a interrumpirse: no hay contacto 4.

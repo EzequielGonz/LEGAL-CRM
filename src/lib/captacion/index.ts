@@ -261,7 +261,9 @@ export async function solicitarAtencion(input: {
     } else {
       // Detención, procedencia, incidencia o registro: queda clasificado sin
       // aparecer como trabajo pendiente en la atención principal.
-      await supabase.from("opportunities").update({ ...extra, updated_at: new Date().toISOString() }).eq("id", opp.id);
+      // 13/11: si antes pedía una persona, deja de pedirla (un rechazo no es trabajo para nadie).
+      const soltar = t.detener && opp.attention_state !== "ia" && opp.capture_state !== "captado" ? { attention_state: "ia" } : {};
+      await supabase.from("opportunities").update({ ...extra, ...soltar, updated_at: new Date().toISOString() }).eq("id", opp.id);
       await logOpportunityEvent({
         opportunityId: opp.id,
         actor: input.actor,
@@ -271,6 +273,20 @@ export async function solicitarAtencion(input: {
         detail: { categoria: t.categoria },
       });
     }
+  }
+
+  // 13/11: un reclamo serio abre una incidencia del perfil (una sola abierta por persona y tipo).
+  if (t.categoria === "reclamo" && opp?.rubro_id) {
+    const { error: errInc } = await (supabase.from("incidences") as any).insert({
+      rubro_id: opp.rubro_id,
+      kind: t.motivo,
+      contact_id: contactId,
+      opportunity_id: opp.id,
+      conversation_id: conversationId,
+      detail: { nota: input.nota ?? null, actor: input.actor },
+      created_by: input.actor,
+    });
+    if (errInc && (errInc as any).code !== "23505") console.error("[atencion] No se pudo abrir la incidencia:", errInc.message);
   }
 
   let detencionPendiente: DetentionMotive | null = null;

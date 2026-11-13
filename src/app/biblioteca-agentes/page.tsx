@@ -1,3 +1,4 @@
+import { RUBRO_IDS } from "@/lib/rubros";
 import { perfilActivo } from "@/lib/perfil-activo";
 import Link from "next/link";
 import { requirePageSession } from "@/lib/acceso/pagina";
@@ -31,7 +32,8 @@ export default async function BibliotecaPage({ searchParams }: { searchParams: {
   ]);
   const agentes = (data ?? []) as AgenteBiblioteca[];
   const principal = agentes.find((a) => a.rol === "principal") ?? null;
-  const derivados = agentes.filter((a) => a.rol === "derivado");
+  // 13/11 · cada rubro separado: en cada perfil, la base común y sus propios bots.
+  const derivados = agentes.filter((a) => a.rol === "derivado" && a.rubro_id === RUBRO_IDS[slug]);
   const rubroDe = (id: string | null) => (rubros ?? []).find((r: any) => r.id === id) as any;
 
   const tarjeta = (a: AgenteBiblioteca) => (

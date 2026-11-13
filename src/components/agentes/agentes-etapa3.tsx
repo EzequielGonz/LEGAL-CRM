@@ -39,14 +39,14 @@ export function AgentesEtapa3({ perfil, rubroId, areas, volver }: { perfil: stri
   const [error, setError] = useState<string | null>(null);
 
   const cargar = useCallback(async () => {
-    const [b, m] = await Promise.all([pedir("/api/agentes/biblioteca"), pedir("/api/agentes/modelo")]);
+    const [b, m] = await Promise.all([pedir(`/api/agentes/biblioteca?perfil=${encodeURIComponent(perfil)}`), pedir("/api/agentes/modelo")]);
     if (!b.ok) return setError("No se pudo leer la biblioteca de agentes.");
     setAgentes(b.data.agentes ?? []);
     if (m.ok) {
       setModelo(m.data);
       setAsignaciones(m.data.asignaciones ?? []);
     }
-  }, []);
+  }, [perfil]);
   useEffect(() => {
     void cargar();
   }, [cargar]);
@@ -76,7 +76,7 @@ export function AgentesEtapa3({ perfil, rubroId, areas, volver }: { perfil: stri
             Modelo activo: <strong>{modelo?.identificador ?? "…"}</strong> ({modelo?.proveedor ?? "…"}){modelo && !modelo.claveConfigurada ? " · sin clave configurada: las pruebas usan el generador simulado" : ""}. Las asignaciones de abajo dicen qué versión responde en cada área; sin asignación activa responde la configuración de arriba, como hasta ahora.
           </p>
         </div>
-        <a href={`/biblioteca-agentes?volver=${encodeURIComponent(volver)}`} className="solo-avanzado tactil inline-flex items-center rounded-lg border border-slate-300 px-3 text-sm text-slate-800 hover:bg-slate-50">
+        <a href={`/biblioteca-agentes?perfil=${encodeURIComponent(perfil)}&volver=${encodeURIComponent(volver)}`} className="solo-avanzado tactil inline-flex items-center rounded-lg border border-slate-300 px-3 text-sm text-slate-800 hover:bg-slate-50">
           Configurar
         </a>
       </div>

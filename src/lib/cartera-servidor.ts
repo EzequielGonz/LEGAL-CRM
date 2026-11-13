@@ -7,7 +7,7 @@ import { personasQueEscribieron } from "@/lib/estadisticas-personas";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { contarIndicador, indicadorPorClave, listarIndicador } from "@/lib/indicadores";
 import { estadoCorto } from "@/lib/inicio";
-import { VISTAS_CARTERA, inicioDeSemana, type FiltroCitas, type GrupoCartera, type VistaCartera } from "@/lib/cartera";
+import { VISTAS_CARTERA, cuandoCorto, inicioDeSemana, type FiltroCitas, type GrupoCartera, type VistaCartera } from "@/lib/cartera";
 
 export interface FichaCartera {
   id: string;
@@ -19,6 +19,10 @@ export interface FichaCartera {
   actividad: string | null;
   cita: { inicio: string; fase2: boolean; reagendada: boolean } | null;
   area: string | null;
+  /** 13/11 · una frase que explica por qué está en este grupo (interés, motivo de la caída, próximo paso). */
+  detalle?: string | null;
+  /** Puntaje de interés 0-100, si se calculó. */
+  interes?: number | null;
 }
 
 export const AREAS_DE_PERFIL: Record<string, string[]> = {
@@ -53,6 +57,19 @@ async function leerCitas(rubroId: string, areas: string[], filtro: FiltroCitas, 
   return { filas, error: null as string | null };
 }
 
+/** Frase de cada ficha según el grupo en el que aparece (13/11). Pura. */
+export function detalleDeFicha(indicador: string, o: { interest_reason?: string | null; followup_reason?: string | null; followup_next_at?: string | null; posible_captacion_reason?: string | null; capture_reason?: string | null }): string | null {
+  if (indicador === "piden_persona") return o.interest_reason ?? null;
+  if (indicador === "posible_captacion") return o.posible_captacion_reason ?? null;
+  if (indicador === "seguimiento_caido") return o.followup_reason ?? "Dejó de responder";
+  if (indicador === "dejaron_de_responder") {
+    if (o.followup_next_at) return `El próximo mensaje sale ${cuandoCorto(o.followup_next_at)}`;
+    return o.followup_reason ?? "En el plazo del seguimiento";
+  }
+  if (indicador === "perdido_comercial") return o.capture_reason ?? null;
+  return null;
+}
+
 const LIMITE_CONTEO_CITAS = 500;
 
 export async function contarGrupo(rubroId: string, areas: string[], g: GrupoCartera): Promise<number | null> {
@@ -75,7 +92,8 @@ export async function listarGrupo(rubroId: string, areas: string[], g: GrupoCart
   if (g.fuente.tipo === "oportunidades") {
     const ind = indicadorPorClave(g.fuente.indicador);
     if (!ind) return { fichas: [], error: "Lista desconocida" };
-    const r = await listarIndicador(rubroId, ind, { orden: "reciente" });
+    const clave = g.fuente.indicador;
+    const r = await listarIndicador(rubroId, ind);
     const filas = r.filas.slice(0, limite);
     // Cita próxima de cada uno (si tiene).
     const ids = filas.map((f: any) => f.contact_id).filter(Boolean);
@@ -95,9 +113,11 @@ export async function listarGrupo(rubroId: string, areas: string[], g: GrupoCart
           nombre: o.contacts?.full_name ?? "Sin nombre",
           telefono: o.contacts?.phone ?? null,
           estado: estadoCorto(o).texto,
-          actividad: o.updated_at ?? null,
+          actividad: o.last_inbound_at ?? o.updated_at ?? null,
           cita: c ? { inicio: c.starts_at, fase2: c.kind === "ia", reagendada: !!c.reschedule_of } : null,
           area: o.area ?? null,
+          detalle: detalleDeFicha(clave, o),
+          interes: clave === "piden_persona" ? (o.interest_score ?? null) : null,
         };
       }),
     };

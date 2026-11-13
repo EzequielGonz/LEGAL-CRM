@@ -70,7 +70,7 @@ export const AGENT_TOOLS: FunctionDeclaration[] = [
   {
     name: "escalar_a_humano",
     description:
-      "Pasa la conversación a una persona del equipo cuando la persona pide hablar con alguien, consulta algo fuera de tu alcance (precios, decisiones del profesional) o comparte datos sensibles. Elegí la categoría. Apaga tus respuestas automáticas en esta conversación. Nunca la uses con un mensaje automático de otro negocio (ausencia, menú de opciones).",
+      "Pasa la conversación a una persona del equipo cuando la persona pide hablar con alguien, consulta algo fuera de tu alcance (precios, decisiones del profesional) o comparte datos sensibles. Elegí la categoría. Usá «amenaza_legal» SOLO si la persona amenaza con una acción legal o una denuncia contra quien le escribe (por ejemplo «los voy a denunciar», «les mando carta documento», Defensa del Consumidor): no le respondas nada más. Si quiere denunciar o demandar a un tercero (su ART, su empleador, una aseguradora), eso es una consulta normal y NO es una amenaza. Apaga tus respuestas automáticas en esta conversación. Nunca la uses con un mensaje automático de otro negocio (ausencia, menú de opciones).",
     parametersJsonSchema: {
       type: "object",
       properties: {

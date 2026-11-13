@@ -16,7 +16,7 @@
  */
 import type { SlugPerfil } from "@/lib/marca";
 
-export type VistaCartera = "conversaciones" | "contactos" | "recuperar" | "descartados";
+export type VistaCartera = "conversaciones" | "contactos" | "descartados";
 export type FiltroCitas = "proximas" | "proximas_sin_derivar" | "reagendadas" | "fase2";
 export type Tono = "caliente" | "ok" | "info" | "alerta";
 
@@ -39,10 +39,12 @@ export const VISTAS_CARTERA: Record<VistaCartera, { titulo: string; bajada: stri
     titulo: "Activos",
     bajada: "Las conversaciones que sirven, de la más cerca de cerrar a la más lejos. Lo urgente está en Hoy; los descartados, en su pestaña.",
     grupos: [
-      { clave: "captados", titulo: "Captados para derivar", detalle: "Aceptaron el siguiente paso: pasalos al profesional.", tono: "caliente", accion: "derivar", fuente: op("captado_sin_derivar") },
+      { clave: "captados", titulo: "Para cerrar", detalle: "Captados: aceptaron el siguiente paso. Pasalos al profesional.", tono: "caliente", accion: "derivar", fuente: op("captado_sin_derivar") },
+      { clave: "posibles", titulo: "Posible captación a revisar", detalle: "El bot no está seguro de que hayan concretado la llamada: decidilo vos.", tono: "caliente", accion: "ficha", fuente: op("posible_captacion") },
+      { clave: "escribieron", titulo: "Te escribieron", detalle: "La última palabra es de ellos y nadie les contestó.", tono: "alerta", accion: "chat", fuente: op("te_escribio") },
+      { clave: "piden", titulo: "Oportunidades reales", detalle: "Esperan a una persona y tienen interés, ordenados del más cerca de cerrar al más lejos.", tono: "alerta", accion: "chat", fuente: op("piden_persona") },
       { clave: "agendaron", titulo: "Agendaron", detalle: "Tienen una cita próxima y todavía no se derivaron.", tono: "caliente", accion: "ficha", fuente: citas("proximas_sin_derivar") },
-      { clave: "hablando", titulo: "Hablando ahora", detalle: "La charla está en curso con el agente.", tono: "info", accion: "chat", fuente: op("hablando_ahora") },
-      { clave: "piden", titulo: "Quieren hablar con alguien", detalle: "Interesados que pidieron una persona: respondé desde el chat.", tono: "alerta", accion: "chat", fuente: op("piden_persona") },
+      { clave: "hablando", titulo: "Hablando ahora", detalle: "La charla está en curso con el bot.", tono: "info", accion: "chat", fuente: op("hablando_ahora") },
     ],
   },
   contactos: {
@@ -54,32 +56,27 @@ export const VISTAS_CARTERA: Record<VistaCartera, { titulo: string; bajada: stri
       { clave: "citas", titulo: "Citas próximas", detalle: "Todas las citas que vienen, incluidas las de Fase 2.", tono: "caliente", accion: "ficha", fuente: citas("proximas") },
       { clave: "reagendadas", titulo: "Citas reagendadas", detalle: "Se reprogramaron una vez: confirmá que se den.", tono: "alerta", accion: "ficha", fuente: citas("reagendadas") },
       { clave: "fase2", titulo: "Fase 2", detalle: "Revisión agendada con la IA.", tono: "info", accion: "ficha", fuente: citas("fase2") },
-      { clave: "seguimiento", titulo: "En seguimiento", detalle: "Seguimiento automático en curso.", tono: "info", accion: "chat", fuente: op("seguimiento_activo") },
-      { clave: "repesca", titulo: "En repesca", detalle: "Terminaron el seguimiento sin avanzar: para volver a intentar.", tono: "info", accion: "ficha", fuente: op("repesca") },
+      { clave: "seguimiento", titulo: "En seguimiento", detalle: "No escriben hace más de 3 días. El sistema les manda un mensaje más y, si en 24 horas no contestan, pasan a Caídos. No hay que hacer nada.", tono: "info", accion: "chat", fuente: op("dejaron_de_responder") },
+      { clave: "repesca", titulo: "En repesca", detalle: "Terminaron el seguimiento sin avanzar: para volver a intentar a mano.", tono: "info", accion: "ficha", fuente: op("repesca") },
     ],
   },
-  recuperar: {
-    titulo: "Para recuperar",
-    bajada: "Charlas que se cayeron y todavía se pueden retomar.",
-    grupos: [
-      { clave: "caidos", titulo: "Seguimientos caídos", detalle: "El seguimiento no avanzó: decidí si se vuelve a intentar.", tono: "alerta", accion: "ficha", fuente: op("seguimiento_caido") },
-      { clave: "frenados", titulo: "Dejaron de responder", detalle: "Respondieron y la charla quedó a medias hace más de 3 días.", tono: "alerta", accion: "chat", fuente: op("dejaron_de_responder") },
-    ],
-  },
-  // 12/11 (pedido de la responsable): lo que no sirve no se mezcla con lo que sí. Los perdidos
-  // y los que pidieron no ser contactados viven acá, fuera del trabajo del día. No se borra nada.
+  // 12/11 (pedido de la responsable): lo que no sirve no se mezcla con lo que sí.
+  // 13/11: «Para recuperar» se retiró. Quien dejó de contestar pasa solo a Caídos y vive acá,
+  // fuera del trabajo del día. No se borra nada.
   descartados: {
     titulo: "Descartados",
     bajada: "Los que ya no siguen. Están acá para consultarlos; no aparecen en Hoy ni en Activos.",
     grupos: [
-      { clave: "perdidos", titulo: "Perdidos", detalle: "Cerrados sin avanzar, con su motivo. Revisá el motivo antes de reintentar.", tono: "info", accion: "ficha", fuente: op("perdido_comercial") },
+      { clave: "sin_respuesta", titulo: "Quedaron sin respuesta", detalle: "Escribieron hace más de una semana y nadie les contestó. Mirá el último mensaje y decidí si los retomás.", tono: "alerta", accion: "chat", fuente: op("quedaron_sin_respuesta") },
+      { clave: "caidos", titulo: "Caídos", detalle: "Dejaron de contestar. Ya recibieron el último mensaje o pasó demasiado tiempo.", tono: "info", accion: "ficha", fuente: op("seguimiento_caido") },
+      { clave: "perdidos", titulo: "Perdidos", detalle: "Dijeron que no, con su motivo. Revisá el motivo antes de reintentar.", tono: "info", accion: "ficha", fuente: op("perdido_comercial") },
       { clave: "no_contactar", titulo: "No quieren que les escriban", detalle: "Bajas, quejas y números equivocados. El bot ya no les escribe.", tono: "info", accion: "ficha", fuente: op("detencion_reciente") },
     ],
   },
 };
 
 export function vistaCartera(v: unknown): VistaCartera {
-  return v === "contactos" || v === "recuperar" || v === "descartados" ? v : "conversaciones";
+  return v === "contactos" || v === "descartados" ? v : "conversaciones";
 }
 
 /** Grupo elegido: el pedido si existe; si no, el primero con algo; si no, el primero. */

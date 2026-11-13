@@ -13,18 +13,21 @@ test("cartera: cada grupo de oportunidades usa un indicador existente y no inclu
     }
   }
   // 12/11: la regla vale para las vistas de trabajo. «Descartados» es el archivo aparte donde sí van los detenidos.
-  const deTrabajo = [VISTAS_CARTERA.conversaciones, VISTAS_CARTERA.contactos, VISTAS_CARTERA.recuperar];
+  // 13/11: «Para recuperar» se retiró; quien deja de contestar pasa solo a Caídos, en Descartados.
+  const deTrabajo = [VISTAS_CARTERA.conversaciones, VISTAS_CARTERA.contactos];
   const todas = deTrabajo.flatMap((v) => v.grupos.map((g) => (g.fuente.tipo === "oportunidades" ? g.fuente.indicador : "")));
-  assert.deepEqual(VISTAS_CARTERA.descartados.grupos.map((g) => g.clave), ["perdidos", "no_contactar"]);
-  assert.ok(!VISTAS_CARTERA.recuperar.grupos.some((g) => g.clave === "perdidos"), "los perdidos ya no se mezclan con lo recuperable");
-  for (const fria of ["oportunidades", "sin_contactar", "contactado_sin_respuesta", "nuevo", "requiere_humano", "detencion_reciente"]) assert.ok(!todas.includes(fria), fria);
-  assert.equal(VISTAS_CARTERA.conversaciones.grupos[0].clave, "captados");
+  assert.deepEqual(VISTAS_CARTERA.descartados.grupos.map((g) => g.clave), ["sin_respuesta", "caidos", "perdidos", "no_contactar"]);
+  assert.ok(!("recuperar" in VISTAS_CARTERA), "«Para recuperar» ya no existe");
+  for (const fria of ["oportunidades", "sin_contactar", "contactado_sin_respuesta", "nuevo", "requiere_humano", "detencion_reciente", "seguimiento_caido", "perdido_comercial"]) assert.ok(!todas.includes(fria), fria);
+  assert.deepEqual(VISTAS_CARTERA.conversaciones.grupos.slice(0, 4).map((g) => g.clave), ["captados", "posibles", "escribieron", "piden"], "primero lo que está más cerca de cerrar");
 });
 
 test("cartera: grupo pedido, si no el primero con algo, si no el primero", () => {
   assert.equal(grupoElegido("contactos", "citas", {}).clave, "citas");
   assert.equal(grupoElegido("contactos", "otra", { clientes: 0, ventas: 0, citas: 3 }).clave, "citas");
-  assert.equal(grupoElegido("recuperar", undefined, {}).clave, "caidos");
+  assert.equal(grupoElegido("descartados", "caidos", {}).clave, "caidos");
+  assert.equal(grupoElegido("descartados", undefined, {}).clave, "sin_respuesta");
+  assert.equal(vistaCartera("recuperar"), "conversaciones");
   assert.equal(vistaCartera("cualquiera"), "conversaciones");
 });
 
@@ -35,7 +38,15 @@ test("cartera: quiere hablar con alguien excluye perdidos y quejas", () => {
   // PostgREST admite un solo filtro «o» por consulta: cada indicador lleva como mucho uno.
   for (const c of ["piden_persona", "repesca", "perdido_comercial", "dejaron_de_responder"]) assert.ok(indicadorPorClave(c)!.conds.filter((x) => x.op === "or").length <= 1, c);
   const frenados = indicadorPorClave("dejaron_de_responder")!;
-  assert.ok(frenados.conds.some((c) => c.op === "antes_de_horas" && c.value === 72));
+  assert.ok(frenados.conds.some((c) => c.op === "antes_de_horas" && c.value === 72 && c.col === "last_inbound_at"));
+  // 13/11 · una sola definición por nombre, sobre quién habló último.
+  assert.equal(indicadorPorClave("piden_persona")!.label, "Oportunidades reales");
+  assert.ok(indicadorPorClave("piden_persona")!.conds.some((c) => c.op === "eq" && c.col === "attention_state" && c.value === "requiere_humano"));
+  assert.ok(indicadorPorClave("te_escribio")!.conds.some((c) => c.op === "eq" && c.col === "ultima_palabra" && c.value === "persona"));
+  assert.ok(indicadorPorClave("quedaron_sin_respuesta")!.conds.some((c) => c.op === "antes_de_horas" && c.value === 168));
+  assert.ok(indicadorPorClave("posible_captacion")!.conds.some((c) => c.op === "eq" && c.col === "posible_captacion" && c.value === true));
+  assert.ok(indicadorPorClave("seguimiento_caido")!.conds.some((c) => c.op === "eq" && c.col === "followup_state" && c.value === "caido"));
+  for (const c of ["te_escribio", "quedaron_sin_respuesta", "posible_captacion", "hablando_ahora", "seguimiento_caido"]) assert.ok(indicadorPorClave(c)!.conds.filter((x) => x.op === "or").length <= 1, c);
 });
 
 test("semana y fechas en hora de Argentina", () => {
@@ -88,7 +99,8 @@ test("menú: Conversaciones y Contactos abren la cartera; las listas completas s
   assert.ok(s.find((x) => x.clave === "linea")!.tabs.some((t) => t.label === "Perfil de WhatsApp y redes" && !t.oculto));
   assert.equal(seccionActiva(s, "/oportunidades", "perfil=agencia_0km&indicador=captado_sin_derivar")?.seccion.clave, "conversaciones");
   assert.equal(seccionActiva(s, "/oportunidades", "perfil=agencia_0km&indicador=derivado")?.seccion.clave, "contactos");
-  assert.equal(seccionActiva(s, "/recuperar", "perfil=agencia_0km")?.seccion.clave, "conversaciones");
+  assert.equal(seccionActiva(s, "/descartados", "perfil=agencia_0km")?.seccion.clave, "conversaciones");
+  assert.ok(!s.some((x) => x.tabs.some((t) => t.label === "Para recuperar")), "«Para recuperar» se retiró del menú");
   assert.equal(seccionActiva(seccionesDePerfil("juridico"), "/incidencias", "perfil=juridico")?.seccion.clave, "conversaciones");
   // 13/11: cada perfil tiene sus incidencias.
   assert.equal(seccionActiva(seccionesDePerfil("agencia_0km"), "/incidencias", "perfil=agencia_0km")?.seccion.clave, "conversaciones");

@@ -83,11 +83,11 @@ export function seccionesDePerfil(slug: SlugPerfil): SeccionMenu[] {
     // 21/10: «Todos los chats» en los cuatro perfiles, cada uno con los suyos.
     { href: j ? "/inbox" : `${base}/chats`, label: "Todos los chats" },
     ...(mk ? [{ href: `${base}/consultas-directas`, label: "Consultas directas" }] : []),
-    { href: comun(slug, "recuperar"), label: "Para recuperar", match: "/recuperar" },
     // 12/11: lo que no sirve tiene su lugar y no se mezcla con lo que sí.
     { href: comun(slug, "descartados"), label: "Descartados", match: "/descartados" },
     // 13/11: cada perfil tiene sus incidencias (antes solo Jurídico, y mostraba las de todos).
     { href: comun(slug, "incidencias"), label: "Incidencias", match: "/incidencias" },
+    { href: comun(slug, "limpieza"), label: "Movidos en la limpieza", match: "/limpieza", oculto: true },
     { href: comun(slug, "oportunidades", { indicador: "en_conversacion" }), label: "Lista", match: "/oportunidades", indicadores: INDICADORES_CONVERSACION, oculto: true },
   ];
 

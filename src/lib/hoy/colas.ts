@@ -1,5 +1,6 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { descarteDe, type Descarte } from "@/lib/hoy/descartes";
+import { aplicarCondiciones, indicadorPorClave } from "@/lib/indicadores";
 
 /**
  * Colas de «Hoy» (12/11). Dos listas que antes no estaban a la vista:
@@ -52,6 +53,8 @@ export function chatsQueEsperan(chats: ChatDeCola[], mensajes: MensajeDeCola[], 
 }
 
 const DIAS_VENTANA = 21;
+/** Minutos que se le dan al bot para contestar antes de mostrar el chat como pendiente. */
+export const GRACIA_BOT_MIN = 10;
 
 export type FilaConNombre = FilaEspera & { nombre: string | null; oportunidadId: string | null; captado: boolean };
 
@@ -66,18 +69,23 @@ export interface ColasHoy {
 export async function colasDeHoy(rubroId: string, areas: string[]): Promise<ColasHoy> {
   const s = createAdminClient();
   const desde = new Date(Date.now() - DIAS_VENTANA * 24 * 3600 * 1000).toISOString();
-  const [{ data: chats }, { count: captados, error: errorCaptados }] = await Promise.all([
-    s
-      .from("conversations")
-      .select("id, contact_id, last_message_at")
-      .in("area", areas as any)
-      .eq("ai_enabled", false)
-      .gte("last_message_at", desde)
-      .order("last_message_at", { ascending: false })
+  // 13/11 · una sola definición de «Te escribieron» (indicador `te_escribio`): la última
+  // palabra es de la persona y nadie le contestó. Antes Hoy miraba solo los chats sin bot
+  // y el filtro de chats usaba otra cuenta: no coincidían.
+  const ind = indicadorPorClave("te_escribio")!;
+  const [{ data: opps0 }, { count: captados, error: errorCaptados }] = await Promise.all([
+    (aplicarCondiciones((s.from("opportunities") as any).select("conversation_id, contact_id, last_inbound_at").eq("rubro_id", rubroId), ind.conds) as any)
+      .not("conversation_id", "is", null)
+      .order("last_inbound_at", { ascending: false })
       .limit(150),
     s.from("opportunities").select("id", { count: "exact", head: true }).eq("rubro_id", rubroId).eq("capture_state", "captado").eq("derivation_state", "no_derivado"),
   ]);
-  const lista = (chats ?? []) as ChatDeCola[];
+  const candidatos = ((opps0 ?? []) as any[]).map((o) => ({ id: o.conversation_id as string, contact_id: (o.contact_id as string | null) ?? null, last_message_at: (o.last_inbound_at as string | null) ?? null }));
+  // Si el bot atiende el chat, se le dan diez minutos para contestar antes de mostrarlo como pendiente.
+  const { data: convs } = candidatos.length ? await s.from("conversations").select("id, ai_enabled").in("id", candidatos.map((c) => c.id)) : { data: [] as any[] };
+  const conBot = new Set(((convs ?? []) as any[]).filter((c) => c.ai_enabled).map((c) => c.id as string));
+  const margen = Date.now() - GRACIA_BOT_MIN * 60_000;
+  const lista: ChatDeCola[] = candidatos.filter((c) => !(conBot.has(c.id) && c.last_message_at && Date.parse(c.last_message_at) > margen));
   const captadosSinDerivar = errorCaptados ? null : captados ?? 0;
   if (!lista.length) return { esperan: [], descartes: [], captadosSinDerivar };
 

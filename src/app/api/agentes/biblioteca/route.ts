@@ -3,6 +3,8 @@ import { requireSession } from "@/lib/acceso/autorizacion";
 import { confirmPin } from "@/lib/acceso/confirmar-pin";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { esClaveAgente, validarCambioAgente } from "@/lib/agentes/biblioteca";
+import { esSlugPerfil } from "@/lib/marca";
+import { RUBRO_IDS } from "@/lib/rubros";
 
 export const dynamic = "force-dynamic";
 
@@ -16,12 +18,18 @@ export async function GET(request: Request) {
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   const supabase = createAdminClient();
+  // 13/11 · cada rubro separado: con ?perfil= llegan solo la base común y los bots de ese perfil.
+  const perfil = new URL(request.url).searchParams.get("perfil");
+  const rubroId = esSlugPerfil(perfil) ? RUBRO_IDS[perfil] : null;
+  let consulta = supabase.from("agent_library").select("*").order("rol", { ascending: false }).order("clave");
+  if (rubroId) consulta = consulta.or(`rubro_id.is.null,rubro_id.eq.${rubroId}`);
   const [{ data: agentes, error }, { data: versiones }] = await Promise.all([
-    supabase.from("agent_library").select("*").order("rol", { ascending: false }).order("clave"),
+    consulta,
     supabase.from("agent_library_versions").select("clave, version, motivo, created_by, created_at").order("created_at", { ascending: false }).limit(50),
   ]);
   if (error) return NextResponse.json({ error: "No se pudo leer la biblioteca." }, { status: 500 });
-  return NextResponse.json({ agentes: agentes ?? [], versiones: versiones ?? [] });
+  const claves = new Set(((agentes ?? []) as any[]).map((a) => a.clave));
+  return NextResponse.json({ agentes: agentes ?? [], versiones: rubroId ? ((versiones ?? []) as any[]).filter((v) => claves.has(v.clave)) : versiones ?? [] });
 }
 
 export async function PATCH(request: Request) {

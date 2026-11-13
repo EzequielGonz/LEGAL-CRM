@@ -50,7 +50,7 @@ test("2.0 (C08): jueves 20:15 + 60 h cae domingo 8:15 → sábado 20:15 (48 h), 
 
 test("2.0: se elige la franja válida más cercana al objetivo, dentro de 48 a 72 h", () => {
   // Lunes 10:00 + 60 h = miércoles 22:00 (fuera de horario) → miércoles 20:00 (58 h).
-  const r = chooseFollowupSlot(art("2026-10-19", 10, 0));
+  const r = chooseFollowupSlot(art("2026-10-19", 10, 0), { targetHours: 60 });
   assert.ok(r.ok);
   assert.equal(r.offsetHours, 58);
   assert.equal(formatArgentina(r.at), "miércoles 21/10/2026 20:00");
@@ -58,10 +58,14 @@ test("2.0: se elige la franja válida más cercana al objetivo, dentro de 48 a 7
   const r48 = chooseFollowupSlot(art("2026-10-19", 10, 0), { targetHours: 48 });
   assert.ok(r48.ok);
   assert.equal(r48.offsetHours, 48);
-  // Objetivo fuera de rango: se usa 60.
-  assert.equal(normalizeTargetHours(90), 60);
+  // Objetivo fuera de rango: se usa el de siempre. Desde el 13/11 son 72 h («que pasen 3 días y otro mensaje»).
+  assert.equal(normalizeTargetHours(90), 72);
   assert.equal(normalizeTargetHours("50"), 50);
-  assert.equal(normalizeTargetHours(55.5), 60);
+  assert.equal(normalizeTargetHours(55.5), 72);
+  // Sin objetivo: lunes 10:00 + 72 h = jueves 10:00, dentro del horario.
+  const r72 = chooseFollowupSlot(art("2026-10-19", 10, 0));
+  assert.ok(r72.ok);
+  assert.equal(r72.offsetHours, 72);
 });
 
 test("2.0: sin franja válida en el plazo, conflicto (no se amplía a lunes)", () => {
@@ -123,10 +127,10 @@ test("2.0: al ejecutar se repite la comprobación y nunca se amplía el plazo", 
 test("2.0: si la franja programada dejó de valer pero queda otra en el plazo, se reprograma", () => {
   // Lunes 10:00 → miércoles 20:00 (58 h). El miércoles se cierra: queda jueves 8:00 (70 h).
   const base = art("2026-10-19", 10, 0);
-  const first = chooseFollowupSlot(base);
+  const first = chooseFollowupSlot(base, { targetHours: 60 });
   assert.ok(first.ok);
   const cal = calendarWith([{ day: "2026-10-21", closed: true }]);
-  const d = decideAtExecution({ base, scheduledAt: first.at }, art("2026-10-21", 20, 0), cal);
+  const d = decideAtExecution({ base, scheduledAt: first.at, targetHours: 60 }, art("2026-10-21", 20, 0), cal);
   assert.equal(d.action, "reprogramar");
   if (d.action === "reprogramar") {
     assert.equal(d.offsetHours, 70);

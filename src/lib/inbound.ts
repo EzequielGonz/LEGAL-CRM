@@ -1,3 +1,4 @@
+import { reclamoEnMensaje } from "@/lib/atencion/reclamos";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { findOrCreateContact, findOrCreateConversation } from "@/lib/contacts";
 import { runAgentTurn } from "@/lib/ai-agent/agent";
@@ -331,6 +332,20 @@ async function afterInboundSaved({
       const { data: ml } = await supabase.from("marketing_leads").select("sale_stage").eq("contact_id", contact.id).maybeSingle();
       if (["presupuesto_pedido", "presupuesto_enviado"].includes((ml as any)?.sale_stage)) captado = false;
     }
+  }
+
+  // 2 bis) Reclamo serio (13/11): una amenaza legal o denuncia contra nosotros, o
+  //    la queja de un cliente captado, abre una incidencia del perfil, pasa a una
+  //    persona y el bot no contesta. El enojo y el «no me escriban» no entran acá.
+  const reclamo = reclamoEnMensaje(body, { captado });
+  if (reclamo && opportunityId) {
+    try {
+      await solicitarAtencion({ opportunityId, conversationId: conversation.id, motivo: reclamo.tipo, actor: "sistema", nota: reclamo.senal.que });
+    } catch (err) {
+      console.error("[oportunidad] No se pudo registrar el reclamo:", err);
+    }
+    result.respuesta = { responder: false, motivo: "reclamo_serio" };
+    return result;
   }
 
   // 3) Un captado que vuelve a escribir: su mensaje queda guardado y pasa a

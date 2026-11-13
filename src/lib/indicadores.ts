@@ -36,6 +36,8 @@ export interface Indicador {
   conds: Condicion[];
   /** Cifra equivalente del cálculo único del perfil (para comprobar que coinciden). */
   metrica?: (m: ProfileMetrics) => number;
+  /** Orden con el que conviene leer la lista (13/11). */
+  orden?: "reciente" | "antiguo" | "creado" | "interes" | "silencio";
 }
 
 const eq = (col: string, value: string | boolean): Condicion => ({ col, op: "eq", value });
@@ -62,15 +64,20 @@ export const INDICADORES: Indicador[] = [
   { clave: "humano_en_curso", label: "Atención humana en curso", grupo: "atencion", definicion: "Una persona tomó la conversación", conds: [eq("attention_state", "humano_en_curso")], metrica: (m) => m.atencion.humano_en_curso },
   { clave: "detencion_reciente", label: "Detenidos por la conversación", grupo: "atencion", definicion: "Rechazo, enojo, número equivocado o necesidad resuelta: archivo secundario, no es trabajo pendiente", conds: [eq("attention_category", "detencion")] },
   { clave: "seguimiento_activo", label: "Seguimiento activo", grupo: "seguimiento", definicion: "Con seguimiento automático en curso", conds: [eq("followup_state", "activo")], metrica: (m) => m.seguimiento.activo },
-  { clave: "seguimiento_caido", label: "Seguimientos caídos", grupo: "seguimiento", definicion: "Seguimiento que no avanzó", conds: [eq("followup_state", "caido")], metrica: (m) => m.seguimiento.caido },
+  { clave: "seguimiento_caido", label: "Caídos", grupo: "seguimiento", definicion: "Dejaron de contestar y se terminó el seguimiento (un mensaje más a los 3 días y 24 horas de espera)", orden: "silencio", conds: [eq("followup_state", "caido"), { col: "capture_state", op: "in", value: ["nuevo", "en_conversacion", "en_seguimiento"] }, sinDetencion], metrica: (m) => m.seguimiento.caido },
   // Reorganización 2 (18/10): las listas que valen la pena (oportunidades reales).
-  { clave: "piden_persona", label: "Quieren hablar con alguien", grupo: "atencion", definicion: "Pidieron una persona y siguen interesados (sin quejas ni pedidos de no contacto)", conds: [{ col: "attention_state", op: "in", value: ["requiere_humano", "humano_en_curso"] }, { col: "capture_state", op: "neq", value: "perdido" }, sinDetencion, { col: "updated_at", op: "desde_horas", value: 168 }] },
+  // 13/11 · una sola definición por nombre (docs/mejoras-1311/PLAN-4-DETALLE.md §4, B1).
+  // «Quién habló último» sale de columnas de la oportunidad que mantiene la base (migración 0607).
+  { clave: "piden_persona", label: "Oportunidades reales", grupo: "atencion", definicion: "Esperan a una persona del equipo y tienen interés: pidieron hablar con alguien, preguntaron precio o condiciones, o son clientes que volvieron a escribir. Sin rechazos, quejas ni pedidos de no contacto", orden: "interes", conds: [eq("attention_state", "requiere_humano"), { col: "capture_state", op: "neq", value: "perdido" }, sinDetencion, { col: "followup_state", op: "neq", value: "caido" }] },
+  { clave: "te_escribio", label: "Te escribieron", grupo: "atencion", definicion: "La última palabra del chat es de la persona y todavía nadie le contestó (últimos 7 días)", orden: "silencio", conds: [eq("ultima_palabra", "persona"), { col: "capture_state", op: "neq", value: "perdido" }, sinDetencion, { col: "last_inbound_at", op: "desde_horas", value: 168 }] },
+  { clave: "quedaron_sin_respuesta", label: "Quedaron sin respuesta", grupo: "seguimiento", definicion: "Escribieron hace más de 7 días y nadie les contestó: decidí si vale la pena retomarlos", orden: "silencio", conds: [eq("ultima_palabra", "persona"), { col: "capture_state", op: "in", value: ["nuevo", "en_conversacion", "en_seguimiento"] }, sinDetencion, eq("posible_captacion", false), { col: "last_inbound_at", op: "antes_de_horas", value: 168 }] },
+  { clave: "posible_captacion", label: "Posible captación a revisar", grupo: "captacion", definicion: "El bot dudó si la persona concretó una llamada: miralo y decidí si es captado", orden: "silencio", conds: [eq("posible_captacion", true), { col: "capture_state", op: "in", value: ["nuevo", "en_conversacion", "en_seguimiento"] }] },
   // 20/10: «Hablando ahora» = charla en curso de verdad: sin detenidos y con actividad en los últimos 3 días.
-  { clave: "hablando_ahora", label: "Hablando ahora", grupo: "captacion", definicion: "Conversación en curso, sin detención y con actividad en los últimos 3 días", conds: [eq("capture_state", "en_conversacion"), sinDetencion, { col: "updated_at", op: "desde_horas", value: 72 }] },
+  { clave: "hablando_ahora", label: "Hablando ahora", grupo: "captacion", definicion: "Conversación en curso: la persona escribió en los últimos 3 días", orden: "silencio", conds: [eq("capture_state", "en_conversacion"), sinDetencion, { col: "followup_state", op: "neq", value: "caido" }, { col: "last_inbound_at", op: "desde_horas", value: 72 }] },
   { clave: "venta", label: "Ventas concretadas", grupo: "derivacion", definicion: "Derivados con el resultado «Operación concretada»", conds: [eq("derivation_state", "derivado"), eq("post_derivation_state", "operacion_concretada")] },
   { clave: "repesca", label: "En repesca", grupo: "seguimiento", definicion: "Terminaron el seguimiento sin avanzar: para volver a intentar a mano", conds: [{ col: "capture_state", op: "neq", value: "captado" }, { col: "_or", op: "or", value: "followup_exhausted_at.not.is.null,repesca_base_id.not.is.null" }] },
   { clave: "perdido_comercial", label: "Perdidos", grupo: "captacion", definicion: "Perdidos por motivo comercial (sin contar quejas ni pedidos de no contacto)", conds: [eq("capture_state", "perdido"), sinDetencion] },
-  { clave: "dejaron_de_responder", label: "Dejaron de responder", grupo: "seguimiento", definicion: "Respondieron, la charla quedó a medias y no escriben hace más de 3 días", conds: [eq("contact_state", "respondio"), { col: "capture_state", op: "in", value: ["en_conversacion", "en_seguimiento"] }, { col: "updated_at", op: "antes_de_horas", value: 72 }, sinDetencion] },
+  { clave: "dejaron_de_responder", label: "En seguimiento", grupo: "seguimiento", definicion: "No escriben hace más de 3 días y el sistema todavía lo está intentando: sale un mensaje más y, si en 24 horas no contestan, pasan a Caídos", orden: "silencio", conds: [eq("contact_state", "respondio"), { col: "capture_state", op: "in", value: ["en_conversacion", "en_seguimiento"] }, sinDetencion, eq("ultima_palabra", "nosotros"), { col: "followup_state", op: "in", value: ["ninguno", "activo"] }, { col: "attention_state", op: "neq", value: "requiere_humano" }, { col: "last_inbound_at", op: "antes_de_horas", value: 72 }] },
   { clave: "revision_pendiente", label: "Revisión pendiente", grupo: "revision", definicion: "Marcadas para revisar por una persona", conds: [eq("review_required", true)], metrica: (m) => m.revision_pendiente },
   // Fuente acreditada (2.8): la primera comprobable; «no informada» si no hubo referencia.
   ...FUENTES.map(
@@ -134,6 +141,9 @@ export const ORDENES = {
   reciente: { col: "updated_at", asc: false, label: "Actividad más reciente" },
   antiguo: { col: "updated_at", asc: true, label: "Actividad más antigua" },
   creado: { col: "created_at", asc: false, label: "Creadas más recientes" },
+  // 13/11
+  interes: { col: "interest_score", asc: false, label: "Más interés primero" },
+  silencio: { col: "last_inbound_at", asc: false, label: "Último mensaje de la persona" },
 } as const;
 export type Orden = keyof typeof ORDENES;
 export const TAMANO_PAGINA = 50;
@@ -144,12 +154,13 @@ export async function listarIndicador(
   opts: { pagina?: number; orden?: Orden; periodo?: Periodo } = {}
 ): Promise<{ filas: any[]; total: number | null; error: string | null; pagina: number }> {
   const pagina = Math.max(1, Math.floor(opts.pagina ?? 1));
-  const orden = ORDENES[opts.orden ?? "reciente"] ?? ORDENES.reciente;
+  const orden = ORDENES[opts.orden ?? ind.orden ?? "reciente"] ?? ORDENES.reciente;
   const from = (pagina - 1) * TAMANO_PAGINA;
   const sel =
-    "id, contact_id, conversation_id, area, contact_state, capture_state, derivation_state, attention_state, attention_reason, followup_state, location_zone, capture_warnings, post_derivation_state, first_source, updated_at, created_at, contacts(full_name, phone)";
+    "id, contact_id, conversation_id, area, contact_state, capture_state, derivation_state, attention_state, attention_reason, followup_state, followup_reason, followup_next_at, capture_reason, interest_score, interest_reason, last_inbound_at, last_outbound_at, ultima_palabra, posible_captacion, posible_captacion_reason, location_zone, capture_warnings, post_derivation_state, first_source, updated_at, created_at, contacts(full_name, phone)";
   const { data, count, error } = await aplicarCondiciones(base(rubroId, sel, { count: "exact" }, opts.periodo), ind.conds)
-    .order(orden.col, { ascending: orden.asc })
+    .order(orden.col, { ascending: orden.asc, nullsFirst: false })
+    .order("updated_at", { ascending: false })
     .order("id", { ascending: true })
     .range(from, from + TAMANO_PAGINA - 1);
   return { filas: data ?? [], total: error ? null : count ?? 0, error: error ? String(error.message ?? error) : null, pagina };

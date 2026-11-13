@@ -29,8 +29,8 @@ const DAY_MS = 24 * HOUR_MS;
 /** Horario general: lunes a sábado de 8 a 21 (21 no incluido), hora de Argentina. */
 export const GENERAL_HOURS = { startHour: 8, endHour: 21 } as const;
 
-/** Seguimiento: entre 48 y 72 horas, 60 por defecto. */
-export const FOLLOWUP_RANGE = { minHours: 48, maxHours: 72, defaultTargetHours: 60 } as const;
+/** Seguimiento: entre 48 y 72 horas. Desde el 13/11, 72 por defecto («que pasen 3 días y otro mensaje»); antes, 60. */
+export const FOLLOWUP_RANGE = { minHours: 48, maxHours: 72, defaultTargetHours: 72 } as const;
 
 /** Ventana de atención del canal (WhatsApp): 24 horas desde el último mensaje de la persona. */
 export const CHANNEL_WINDOW_HOURS = 24;

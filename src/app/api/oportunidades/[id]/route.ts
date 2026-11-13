@@ -28,6 +28,7 @@ export const maxDuration = 60;
  *  - "atencion_motivo": { motivo, nota? } → clasificación 12.2 (pausa el chat
  *     y detiene cuando corresponde)
  *  - "zona": { zona: "amba" | "fuera" | "sin_confirmar" }
+ *  - "no_es_captacion": { nota? } → quita la marca «Posible captación a revisar»
  */
 export async function POST(request: Request, { params }: { params: { id: string } }) {
   const auth = await requireSession(request);
@@ -80,6 +81,13 @@ export async function POST(request: Request, { params }: { params: { id: string 
         }
         // Evento único con evidencia, advertencias y avisos internos pendientes.
         await registrarCaptacion({ opportunityId: opp.id, actor: "operador", aceptacion: true, evidencia: nota, zona: body?.zona });
+        if ((opp as any).posible_captacion) await (supabase.from("opportunities") as any).update({ posible_captacion: false }).eq("id", opp.id);
+        break;
+      }
+      // 13/11 · «Posible captación a revisar»: la persona miró el chat y no era una captación.
+      case "no_es_captacion": {
+        if (!(opp as any).posible_captacion) return NextResponse.json({ ok: true, sin_cambios: true });
+        await setOpportunityState({ opportunityId: opp.id, dimension: "captacion", field: "posible_captacion", value: null, actor: "operador", reason: nota || "Revisado: no era una captación", extra: { posible_captacion: false } });
         break;
       }
       case "perder": {

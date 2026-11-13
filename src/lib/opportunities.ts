@@ -129,6 +129,23 @@ export async function ensureOpportunity(input: {
 }
 
 /** Cambia un campo de estado y deja el evento (solo si cambió). */
+/**
+ * Qué más cambia cuando una oportunidad pasa a perdida (13/11). Pura.
+ * Invariante: perdido ⇒ no espera a una persona ni queda «a revisar».
+ */
+export function alPerderse(
+  field: string,
+  value: string | null,
+  actual: { attention_state?: string | null; posible_captacion?: boolean | null } | null
+): { oportunidad: Record<string, unknown>; atencionAntes: string | null } {
+  if (field !== "capture_state" || value !== "perdido" || !actual) return { oportunidad: {}, atencionAntes: null };
+  const oportunidad: Record<string, unknown> = {};
+  const pedia = actual.attention_state && actual.attention_state !== "ia" ? actual.attention_state : null;
+  if (pedia) oportunidad.attention_state = "ia";
+  if (actual.posible_captacion) oportunidad.posible_captacion = false;
+  return { oportunidad, atencionAntes: pedia };
+}
+
 export async function setOpportunityState(input: {
   opportunityId: string;
   dimension: Dimension;
@@ -148,11 +165,24 @@ export async function setOpportunityState(input: {
   const before = (current as any)?.[input.field] ?? null;
   if (before === input.value && !input.extra) return false;
 
+  // 13/11: quien se pierde deja de pedir una persona (antes quedaba marcado y
+  // aparecía como trabajo pendiente) y de estar «a revisar».
+  const alPerder = alPerderse(input.field, input.value, current as any);
+
   const { error } = await supabase
     .from("opportunities")
-    .update({ [input.field]: input.value, ...(input.extra ?? {}), updated_at: new Date().toISOString() })
+    .update({ [input.field]: input.value, ...alPerder.oportunidad, ...(input.extra ?? {}), updated_at: new Date().toISOString() })
     .eq("id", input.opportunityId);
   if (error) throw new Error(`No se pudo actualizar la oportunidad: ${error.message}`);
+  if (alPerder.atencionAntes) {
+    await logOpportunityEvent({ opportunityId: input.opportunityId, actor: input.actor, dimension: "atencion", from: alPerder.atencionAntes, to: "ia", reason: "Se cerró como perdido: ya no espera a una persona" });
+    const convId = (current as any)?.conversation_id as string | null;
+    if (convId) {
+      // El chat vuelve al bot: si la persona escribe otra vez, alguien le contesta (regla del 24/10).
+      await supabase.from("conversations").update({ status: "cerrado_perdido" }).eq("id", convId).eq("status", "requiere_atencion_humana");
+      await supabase.from("conversations").update({ ai_enabled: true }).eq("id", convId).eq("ai_enabled", false);
+    }
+  }
 
   if (before !== input.value) {
     await logOpportunityEvent({

@@ -15,6 +15,7 @@ import { registrarLatido } from "@/lib/salud";
 import { procesarRecontactos } from "@/lib/recontacto/motor";
 import { procesarSegundosIntentos } from "@/lib/seguimiento/segundo-intento-motor";
 import { cerrarDescartesAutomaticos } from "@/lib/hoy/descartes-motor";
+import { cerrarCaidos } from "@/lib/seguimiento/caidos-motor";
 import { sincronizarCatalogosSiToca } from "@/lib/plantillas/auto-asignar";
 import { rescatarTurnosPerdidos } from "@/lib/ai-agent/rescate";
 import { vigilarCalidadLineas } from "@/lib/whatsapp/calidad-servidor";
@@ -103,6 +104,17 @@ export async function POST(request: Request) {
         descartes = await cerrarDescartesAutomaticos();
       } catch (err: any) {
         descartes = { error: String(err?.message ?? err) };
+      }
+    }
+
+    // 2 bis d) Caídos (13/11): quien dejó de contestar y terminó el circuito pasa a Caídos
+    //    (mensaje a los 3 días, 24 horas de espera). Cada 10 minutos, desfasado; no envía nada.
+    let caidos: unknown = null;
+    if (new Date().getUTCMinutes() % 10 === 5 && Date.now() - inicio < 25_000) {
+      try {
+        caidos = await cerrarCaidos();
+      } catch (err: any) {
+        caidos = { error: String(err?.message ?? err) };
       }
     }
 

@@ -118,6 +118,10 @@ Hoy (`src/lib/asistente/permisos.ts`) el asistente tiene quince tipos de acción
 5. **Resguardos que se conservan aunque tenga permiso para todo** (son los que ya existen, no restricciones nuevas): sigue proponiendo y la persona confirma con un clic; lo que le escribe a personas pide la confirmación reforzada; lo que gasta plata o enciende un bot pide el código. Se agrega: registro de cada acción con quién, cuándo y cómo deshacerla; «Deshacer» en la misma conversación; y el texto de los chats de prospectos o de páginas web nunca vale como orden para el asistente (alguien de afuera no puede manejar el panel escribiendo un mensaje). Nada se borra: se archiva.
 6. Arreglar la prueba «asistente: cada tipo permitido…», que falla desde antes, y sumar una prueba por cada herramienta nueva.
 
+### H. Conectar las líneas de Wasender también con código (pedido del 13/11, durante la corrida)
+
+Textual: «para conectar las líneas de wasender, no solo incluí el qr, sino también la función del código». En «Líneas de Wasender», además del QR, ofrecer la vinculación por código (el código de ocho caracteres que WhatsApp pide en «Vincular con el número de teléfono»): la persona escribe el número de la línea, el panel pide el código al proveedor y lo muestra grande, con los pasos en el teléfono y el tiempo que dura. Comprobar en la documentación del proveedor cómo se pide ese código antes de escribir nada. No se puede probar de punta a punta sin el teléfono de la responsable: dejar dicho hasta dónde se probó.
+
 ## Referencia de diseño (lo que se pudo ver)
 
 - El perfil de Instagram publica componentes de interfaz hechos con React y animaciones: tableros «de vidrio» en violeta/azul sobre blanco y en oscuro con acento esmeralda, menú lateral de vidrio, pestañas de vidrio con indicador deslizante, formularios de ingreso animados.
@@ -139,6 +143,7 @@ Hoy (`src/lib/asistente/permisos.ts`) el asistente tiene quince tipos de acción
 | D. Pantallas | Pendiente |
 | E. Auditoría exhaustiva | Pendiente |
 | F. Diseño | Pendiente |
+| H. Wasender: conectar con código además del QR | Pendiente |
 | G. Asistente con permiso para todo | Pendiente (arranca en la corrida de las 8:51) |
 
 Al terminar cada bloque: actualizar esta tabla, `BITACORA.md` y `AUDITORIA.md`, guardar en la rama y publicar.
