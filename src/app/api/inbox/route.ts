@@ -72,8 +72,18 @@ export async function GET(request: Request) {
     // La misma lista que «Atención humana» de Hoy: el chat lo tiene una persona y la última palabra es de afuera.
     const rubroId = rubroIdDe(perfil);
     const { esperan } = rubroId ? await colasDeHoy(rubroId, areasPerfil) : { esperan: [] as { conversationId: string }[] };
-    const ids = esperan.map((e) => e.conversationId);
-    query = ids.length ? query.in("id", ids) : query.eq("id", "00000000-0000-0000-0000-000000000000");
+    const ids = new Set(esperan.map((e) => e.conversationId));
+    // Más los captados sin derivar que volvieron a escribir (en Hoy salen con «Te escribió» en su lista),
+    // aunque el chat siga a nombre del bot: a un captado le contesta una persona.
+    if (rubroId) {
+      const { data: capt } = await supabase.from("opportunities").select("conversation_id").eq("rubro_id", rubroId).eq("capture_state", "captado").eq("derivation_state", "no_derivado").not("conversation_id", "is", null).limit(300);
+      const cids = ((capt ?? []) as any[]).map((o) => o.conversation_id as string);
+      if (cids.length) {
+        const { data: ult } = await supabase.rpc("conversation_last_messages", { p_ids: cids });
+        for (const m of (ult ?? []) as any[]) if (m.direction === "entrante") ids.add(m.conversation_id);
+      }
+    }
+    query = ids.size ? query.in("id", Array.from(ids)) : query.eq("id", "00000000-0000-0000-0000-000000000000");
   } else if (atencion === "tomados") {
     query = query.eq("ai_enabled", false);
   } else if (atencion) query = query.eq("opportunities.attention_state", atencion);
