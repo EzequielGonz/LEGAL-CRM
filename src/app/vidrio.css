@@ -195,7 +195,6 @@ section[aria-labelledby="res-origen"] ul span[aria-hidden="true"] > span {
 .anillo-avance { display: block; }
 .anillo-avance .anillo-pista { stroke: rgb(var(--c-slate-200) / 0.9); }
 html[data-modo="oscuro"] .anillo-avance .anillo-pista { stroke: rgb(255 255 255 / 0.09); }
-.anillo-avance .anillo-valor { filter: drop-shadow(0 0 6px rgb(var(--c-gold-500) / 0.55)); }
 
 /* ----------------------------------------------------------------- movimiento */
 @media (prefers-reduced-motion: no-preference) {

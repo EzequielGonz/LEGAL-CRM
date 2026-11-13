@@ -39,7 +39,7 @@ export async function EmbudoPeriodo({ slug, rubroId, areas, periodo, ver }: { sl
           const activa = e.ver === ver;
           return (
             <li key={e.ver} className={`kpi-hoy relative rounded-2xl border p-5 ${activa ? "kpi-activo" : ""}`}>
-              <div className="flex items-start justify-between gap-3">
+              <div className="flex min-h-10 items-start justify-between gap-3">
                 <p className="text-[13px] font-medium text-slate-600">{e.titulo}</p>
                 {e.fraccion !== null ? <AnilloAvance fraccion={e.fraccion} /> : null}
               </div>
