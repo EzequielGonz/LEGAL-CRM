@@ -21,6 +21,8 @@ import { SelectorModo } from "@/components/ui/selector-modo";
  * botón «Menú». Abajo, la Bandeja para Claude (tarjeta negra, 19/10) justo
  * arriba del asistente IA («Pedile algo», Gemini).
  */
+const CLAVE_PLEGADO = "menu-plegado";
+
 export function MenuPerfil({ slug, nombre, logo, menu = null }: { slug: SlugPerfil; nombre?: string | null; logo?: string | null; menu?: MenuPersonal | null }) {
   const pathname = usePathname() ?? "/";
   const search = useSearchParams();
@@ -28,6 +30,24 @@ export function MenuPerfil({ slug, nombre, logo, menu = null }: { slug: SlugPerf
   const secciones = seccionesDePerfil(slug, menu);
   const activa = seccionActiva(secciones, pathname, search?.toString() ?? null);
   const [abierto, setAbierto] = useState(false);
+  // 13/11: en la computadora el menú se pliega a una barra de íconos. Se recuerda en el navegador.
+  const [plegado, setPlegado] = useState(false);
+  useEffect(() => {
+    try {
+      setPlegado(localStorage.getItem(CLAVE_PLEGADO) === "1");
+    } catch {
+      // sin almacenamiento: arranca desplegado
+    }
+  }, []);
+  const plegar = () =>
+    setPlegado((v) => {
+      try {
+        localStorage.setItem(CLAVE_PLEGADO, v ? "0" : "1");
+      } catch {
+        // no se recuerda, pero funciona
+      }
+      return !v;
+    });
   const titulo = nombre?.trim() || marca.nombre;
   const logoUrl = logo?.trim() || marca.logo;
 
@@ -85,7 +105,7 @@ export function MenuPerfil({ slug, nombre, logo, menu = null }: { slug: SlugPerf
     } catch {
       // sin almacenamiento: la píldora aparece en su lugar, sin recorrido
     }
-  }, [claveActiva, slug, secciones.length]);
+  }, [claveActiva, slug, secciones.length, plegado]);
 
   // Título de la pestaña del navegador: «Vista · Marca».
   const pantalla = activa ? (activa.seccion.tabs.length > 1 ? activa.tab.label : activa.seccion.label) : "Panel";
@@ -119,8 +139,41 @@ export function MenuPerfil({ slug, nombre, logo, menu = null }: { slug: SlugPerf
 
       {abierto && <div className="menu-velo lg:hidden" aria-hidden="true" onClick={() => setAbierto(false)} />}
 
+      {/* 13/11: barra inferior en el celular con las secciones de trabajo; la activa muestra su nombre. */}
+      <nav aria-label="Secciones principales" className="barra-inferior lg:hidden">
+        <ul>
+          {secciones
+            .filter((s) => s.grupo === "trabajo" && !s.oculta)
+            .slice(0, 4)
+            .map((s) => {
+              const esActiva = activa?.seccion.clave === s.clave;
+              return (
+                <li key={s.clave}>
+                  <Link href={s.href} aria-current={esActiva ? "page" : undefined} aria-label={s.label} className="barra-inferior-item">
+                    <Icono nombre={s.icono} className="h-5 w-5 shrink-0" />
+                    <span className="barra-inferior-nombre" aria-hidden="true">
+                      {s.label}
+                    </span>
+                  </Link>
+                </li>
+              );
+            })}
+          <li>
+            <button type="button" onClick={() => setAbierto((v) => !v)} aria-expanded={abierto} aria-controls="menu-perfil" aria-label="Más secciones" className="barra-inferior-item">
+              <svg viewBox="0 0 24 24" className="h-5 w-5 shrink-0" fill="none" aria-hidden="true" focusable="false">
+                <path d="M5 7h14M5 12h14M5 17h14" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+              </svg>
+              <span className="barra-inferior-nombre" aria-hidden="true">
+                Más
+              </span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+
       <aside
         id="menu-perfil"
+        data-plegado={plegado ? "1" : "0"}
         className={clsx(
           "menu-estudio z-20 flex h-screen w-[16rem] shrink-0 flex-col",
           "fixed inset-y-0 left-0 lg:sticky lg:top-0 lg:visible lg:translate-x-0",
@@ -133,11 +186,24 @@ export function MenuPerfil({ slug, nombre, logo, menu = null }: { slug: SlugPerf
         </a>
         <Link href="/perfiles" className="menu-marca mx-3 mt-4 flex items-center gap-3 rounded-xl px-2 py-2 hover:bg-slate-50" title="Cambiar de perfil">
           <LogoPerfil slug={slug} src={logoUrl} tamano="sm" />
-          <span className="min-w-0">
+          <span className="menu-texto min-w-0">
             <span className="block truncate text-sm font-semibold text-slate-950">{titulo}</span>
             <span className="block truncate text-xs text-slate-500">{marca.bajada}</span>
           </span>
         </Link>
+        <button
+          type="button"
+          onClick={plegar}
+          aria-expanded={!plegado}
+          aria-controls="menu-perfil"
+          aria-label={plegado ? "Desplegar el menú" : "Plegar el menú a íconos"}
+          title={plegado ? "Desplegar el menú" : "Plegar el menú"}
+          className="menu-plegar hidden lg:grid"
+        >
+          <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" aria-hidden="true" focusable="false">
+            <path d="M14.5 6 8.5 12l6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
 
         <nav ref={navRef} aria-label="Secciones del perfil" className="flex-1 overflow-y-auto px-3 py-4">
           <span ref={pildoraRef} aria-hidden="true" className="menu-pildora" />
@@ -154,10 +220,11 @@ export function MenuPerfil({ slug, nombre, logo, menu = null }: { slug: SlugPerf
                         <Link
                           href={s.href}
                           aria-current={esActiva ? "page" : undefined}
+                          title={plegado ? s.label : undefined}
                           className="menu-item flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium"
                         >
                           <Icono nombre={s.icono} className="h-[18px] w-[18px] shrink-0" />
-                          <span>{s.label}</span>
+                          <span className="menu-texto">{s.label}</span>
                         </Link>
                       </li>
                     );
@@ -167,25 +234,26 @@ export function MenuPerfil({ slug, nombre, logo, menu = null }: { slug: SlugPerf
           ))}
         </nav>
 
-        <EntradaBandeja slug={slug} activa={pathname === "/bandeja"} />
+        <EntradaBandeja slug={slug} activa={pathname === "/bandeja"} plegado={plegado} />
 
         <div className="px-3 pb-2">
           <button
             type="button"
             onClick={() => abrirAsistente()}
-            className="flex w-full items-center gap-3 rounded-xl border border-slate-200 bg-gradient-to-br from-white to-slate-50 px-3 py-2.5 text-left text-sm font-medium text-slate-800 shadow-sm hover:border-slate-300"
+            title={plegado ? "Pedile algo al asistente" : undefined}
+            className="menu-tarjeta flex w-full items-center gap-3 rounded-xl border border-slate-200 bg-gradient-to-br from-white to-slate-50 px-3 py-2.5 text-left text-sm font-medium text-slate-800 shadow-sm hover:border-slate-300"
           >
             <span className="grid h-8 w-8 place-items-center rounded-lg bg-gold-500/15 text-gold-700">
               <Icono nombre="asistente" className="h-[18px] w-[18px]" />
             </span>
-            <span className="min-w-0">
+            <span className="menu-texto min-w-0">
               <span className="block">Pedile algo</span>
               <span className="block truncate text-xs font-normal text-slate-500">Asistente del panel</span>
             </span>
           </button>
         </div>
 
-        <div className="menu-pie border-t border-slate-100 px-3 py-2">
+        <div className="menu-pie menu-texto border-t border-slate-100 px-3 py-2">
           <SelectorModo />
           <Link href="/perfiles" className="block rounded-lg px-3 py-1.5 text-xs font-medium">
             Cambiar de perfil
@@ -203,7 +271,7 @@ export function MenuPerfil({ slug, nombre, logo, menu = null }: { slug: SlugPerf
  * «en espera», lo avisa con un punto y el número; también muestra cuántas
  * hay pendientes.
  */
-function EntradaBandeja({ slug, activa }: { slug: SlugPerfil; activa: boolean }) {
+function EntradaBandeja({ slug, activa, plegado = false }: { slug: SlugPerfil; activa: boolean; plegado?: boolean }) {
   const [resumen, setResumen] = useState<{ pendiente: number; en_curso: number; en_espera: number } | null>(null);
   useEffect(() => {
     let vivo = true;
@@ -223,8 +291,9 @@ function EntradaBandeja({ slug, activa }: { slug: SlugPerfil; activa: boolean })
       <Link
         href={`/bandeja?perfil=${slug}`}
         aria-current={activa ? "page" : undefined}
+        title={plegado ? `Bandeja para Claude · ${detalle}` : undefined}
         className={clsx(
-          "flex w-full items-center gap-3 rounded-xl border px-3 py-2.5 text-left text-sm font-medium shadow-sm",
+          "menu-tarjeta flex w-full items-center gap-3 rounded-xl border px-3 py-2.5 text-left text-sm font-medium shadow-sm",
           activa ? "border-slate-500 bg-slate-950 text-white ring-2 ring-slate-400/60" : "border-slate-900 bg-slate-950 text-white hover:bg-slate-800"
         )}
       >
@@ -235,7 +304,7 @@ function EntradaBandeja({ slug, activa }: { slug: SlugPerfil; activa: boolean })
           </svg>
           {espera > 0 && <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full bg-amber-400 ring-2 ring-slate-950" aria-hidden="true" />}
         </span>
-        <span className="min-w-0 flex-1">
+        <span className="menu-texto min-w-0 flex-1">
           <span className="block">Bandeja para Claude</span>
           <span className={clsx("block truncate text-xs font-normal", espera ? "font-medium text-amber-300" : "text-slate-300")}>{detalle}</span>
         </span>

@@ -284,3 +284,126 @@ main#contenido h1 {
 @media (forced-colors: active) {
   main#contenido h1 { -webkit-text-fill-color: currentColor; background-image: none; }
 }
+
+/* ------------------------------------------------- gráfico del período (13/11) */
+.grafico-guia { stroke: rgb(var(--c-slate-200)); }
+.grafico-texto { fill: rgb(var(--c-slate-500)); font-variant-numeric: tabular-nums; }
+.grafico-punto { fill: rgb(255 255 255); }
+.grafico-barra { fill: rgb(var(--c-slate-400) / 0.55); }
+.grafico-captado, .grafico-marca-captado { fill: rgb(var(--c-slate-900)); background: rgb(var(--c-slate-900)); }
+.grafico-linea { filter: drop-shadow(0 6px 10px rgb(var(--c-gold-500) / 0.45)); }
+html[data-modo="oscuro"] .grafico-guia { stroke: rgb(255 255 255 / 0.08); }
+html[data-modo="oscuro"] .grafico-punto { fill: rgb(14 16 22); }
+html[data-modo="oscuro"] .grafico-captado, html[data-modo="oscuro"] .grafico-marca-captado { fill: rgb(255 255 255); background: rgb(255 255 255); }
+@media (prefers-reduced-motion: no-preference) {
+  /* La línea se dibuja de izquierda a derecha y el relleno aparece detrás. */
+  .grafico-linea { stroke-dasharray: 1; stroke-dashoffset: 1; animation: grafico-dibuja 900ms cubic-bezier(0.2, 0.8, 0.2, 1) 120ms forwards; }
+  .grafico-area, .grafico-punto, .grafico-captado { opacity: 0; animation: grafico-aparece 420ms ease 620ms forwards; }
+}
+@keyframes grafico-dibuja { to { stroke-dashoffset: 0; } }
+@keyframes grafico-aparece { to { opacity: 1; } }
+
+/* ---------------------------------------------- menú plegable a íconos (13/11) */
+.menu-plegar {
+  position: absolute;
+  top: 1.35rem;
+  right: -0.8rem;
+  z-index: 2;
+  height: 1.75rem;
+  width: 1.75rem;
+  place-items: center;
+  border-radius: 9999px;
+  border: 1px solid var(--vidrio-borde-bajo);
+  background: var(--vidrio-fondo-alto);
+  color: rgb(var(--c-slate-700));
+  box-shadow: var(--vidrio-brillo), 0 6px 14px -8px rgb(15 23 42 / 0.5);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+/* Zona de toque de 44 px aunque el botón se vea chico. */
+.menu-plegar::after { content: ""; position: absolute; inset: -0.5rem; }
+.menu-plegar:hover { color: rgb(var(--c-slate-950)); border-color: rgb(var(--c-gold-500) / 0.7); }
+html[data-modo="oscuro"] .menu-plegar { color: rgb(255 255 255 / 0.8); }
+@media (min-width: 1024px) {
+  #menu-perfil[data-plegado="1"] { width: 4.5rem; }
+  #menu-perfil[data-plegado="1"] .menu-plegar svg { transform: rotate(180deg); }
+  #menu-perfil[data-plegado="1"] .menu-texto,
+  #menu-perfil[data-plegado="1"] .menu-grupo {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+  #menu-perfil[data-plegado="1"] .menu-pie { display: none; }
+  #menu-perfil[data-plegado="1"] :is(.menu-item, .menu-marca, .menu-tarjeta) { justify-content: center; padding-left: 0; padding-right: 0; gap: 0; }
+  #menu-perfil[data-plegado="1"] .menu-marca { margin-left: 0.5rem; margin-right: 0.5rem; }
+  #menu-perfil[data-plegado="1"] .menu-item { min-height: 2.75rem; }
+  #menu-perfil[data-plegado="1"] nav > div + div { margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--vidrio-borde-bajo); }
+}
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  #menu-perfil { transition: width 380ms cubic-bezier(0.22, 0.9, 0.24, 1); }
+  .menu-plegar svg { transition: transform 300ms cubic-bezier(0.22, 0.9, 0.24, 1); }
+}
+
+/* ------------------------------------------ barra inferior en el celular (13/11) */
+.barra-inferior {
+  position: fixed;
+  left: 0.75rem;
+  right: 0.75rem;
+  bottom: calc(0.6rem + env(safe-area-inset-bottom, 0px));
+  z-index: 25;
+  border-radius: 9999px;
+  border: 1px solid var(--vidrio-borde-bajo);
+  border-top-color: var(--vidrio-borde);
+  background: var(--vidrio-fondo-alto);
+  -webkit-backdrop-filter: blur(16px) saturate(1.5);
+  backdrop-filter: blur(16px) saturate(1.5);
+  box-shadow: var(--vidrio-brillo), 0 18px 36px -18px rgb(15 23 42 / 0.55);
+}
+.barra-inferior ul { display: flex; align-items: center; justify-content: space-between; gap: 0.125rem; padding: 0.3rem; }
+.barra-inferior li { display: flex; min-width: 0; }
+.barra-inferior-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 2.75rem;
+  min-width: 2.75rem;
+  padding: 0 0.7rem;
+  border-radius: 9999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: rgb(var(--c-slate-600));
+}
+.barra-inferior-nombre { display: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 7.5rem; }
+.barra-inferior-item[aria-current="page"] {
+  color: rgb(var(--c-slate-950));
+  background: linear-gradient(90deg, rgb(var(--c-gold-500) / 0.3), rgb(var(--c-gold-500) / 0.12));
+  box-shadow: inset 0 0 0 1px rgb(var(--c-gold-500) / 0.55);
+}
+.barra-inferior-item[aria-current="page"] .barra-inferior-nombre { display: inline; }
+html[data-modo="oscuro"] .barra-inferior-item { color: rgb(255 255 255 / 0.7); }
+html[data-modo="oscuro"] .barra-inferior-item[aria-current="page"] { color: rgb(255 255 255); }
+@media (max-width: 1023.98px) {
+  /* El contenido deja lugar para la barra, que flota sobre el final de la pantalla. */
+  .con-barra-inferior { padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px)); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .barra-inferior-item { transition: background-color 200ms ease, color 200ms ease, transform 90ms ease; }
+  .barra-inferior-item:active { transform: scale(0.95); }
+  .barra-inferior-item[aria-current="page"] .barra-inferior-nombre { animation: grafico-aparece 260ms ease both; }
+}
+@media print { .barra-inferior { display: none; } }
+
+/* ------------------------------------------------ portada de perfiles (13/11) */
+/* Cada tarjeta toma un resplandor del color de su marca al pasar el cursor. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  li.perfil-pc[data-inclinar]:hover {
+    box-shadow: 0 36px 70px -30px rgb(var(--c-gold-500) / 0.6), 0 12px 26px -14px rgb(0 0 0 / 0.5);
+  }
+}
+li.perfil-pc .perfil-pc-cifra {
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.5);
+}

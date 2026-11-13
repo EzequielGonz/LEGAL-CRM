@@ -74,7 +74,7 @@ export function SelectorPerfilesPC({
           const pendientes = p.accion.sin_derivar + p.accion.humano;
           const ficha = (id: string) => (slug === "juridico" ? `/prospectos/${id}` : `/ficha/${id}`);
           return (
-            <li key={p.id} data-tema={slug} style={{ ...estilo, animationDelay: `${i * 70}ms` }} className="perfil-pc tarjeta-perfil relative flex flex-col overflow-hidden rounded-3xl">
+            <li key={p.id} data-tema={slug} data-inclinar style={{ ...estilo, animationDelay: `${i * 70}ms` }} className="perfil-pc tarjeta-perfil relative flex flex-col overflow-hidden rounded-3xl">
               <span className="absolute inset-x-0 top-0 h-1 bg-gold-500" aria-hidden="true" />
               <div className="flex flex-1 flex-col p-5 pt-6">
                 {/* Marca */}

@@ -1,3 +1,4 @@
+import { EfectosVidrio } from "@/components/ui/efectos-vidrio";
 import { RefrescoAutomatico } from "@/components/ui/refresco-automatico";
 import { LogoutButton } from "@/components/acceso/logout-button";
 import { type MarcaTarjeta } from "@/components/perfiles/perfil-selector";
@@ -38,6 +39,8 @@ export default async function PerfilesPage() {
   return (
     <div className="escena-oscura sala-perfil flex min-h-screen items-start justify-center px-4 py-12 sm:px-6">
       <SalaLampara />
+      {/* 13/11: las tarjetas se inclinan con el cursor, como las cifras del panel. */}
+      <EfectosVidrio />
       <main id="perfiles" className="escena-capa relative w-full max-w-6xl">
         {/* 13/11: las tarjetas se actualizan solas cada 30 segundos y al volver a la pestaña. */}
         <RefrescoAutomatico cadaMs={30_000} />

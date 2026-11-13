@@ -40,7 +40,7 @@ export async function MarcoPerfil({ slug, children, sinSalud = false }: { slug: 
           <Suspense fallback={<div className="encabezado-panel" aria-hidden="true" />}>
             <EncabezadoPanel slug={slug} nombre={marca.nombre} menu={menu} />
           </Suspense>
-          <div className="lienzo-contenido">
+          <div className="lienzo-contenido con-barra-inferior">
             {!sinSalud && (
               <Suspense fallback={null}>
                 <BarraSalud slug={slug} />

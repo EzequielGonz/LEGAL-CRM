@@ -1,6 +1,7 @@
 import { perfilActivo } from "@/lib/perfil-activo";
 import Link from "next/link";
 import { Suspense } from "react";
+import { GraficoPeriodo } from "@/components/resultados/grafico-periodo";
 import { EmbudoPeriodo } from "@/components/resultados/embudo-periodo";
 import { notFound } from "next/navigation";
 import { requirePageSession } from "@/lib/acceso/pagina";
@@ -113,6 +114,11 @@ export default async function Pagina(
         {/* 13/11: el embudo del período; cada etapa abre sus personas (reemplaza a los botones «Qué ver»). */}
         <Suspense fallback={<div role="status" aria-label="Cargando el embudo" className="h-44 animate-pulse rounded-2xl bg-slate-200/60" />}>
           <EmbudoPeriodo slug={slug} rubroId={rubroId} areas={AREAS_DE_PERFIL[slug]} periodo={periodo} ver={ver} />
+        </Suspense>
+
+        {/* 13/11: el período día por día. */}
+        <Suspense fallback={null}>
+          <GraficoPeriodo rubroId={rubroId} areas={AREAS_DE_PERFIL[slug]} periodo={periodo} />
         </Suspense>
 
         {r.origenes.length > 0 ? (
