@@ -29,6 +29,8 @@ Se actualiza al cierre de cada vuelta de trabajo. Sin datos personales, claves n
 - Nada se borra: se archiva con motivo.
 - El bot insiste una sola vez; cuando alguien se pierde, sale de la vista de trabajo.
 - Mejorar el bot es sumar fichas a la versión 2, no crear otra versión ni editar las existentes.
+- Se trabaja con el modelo principal. Otro modelo, solo en tareas secundarias muy sencillas y sin margen de error.
+- El aviso de captación queda pendiente hasta que la responsable lo pida.
 - El panel tiene que poder usarse sin saber cómo está hecho: cada cifra se abre y muestra personas; textos en palabras, sin nombres internos.
 - Producción se publica directo (`git push origin mejoras-1211:main`) después de typecheck, lint, pruebas y build, y se recorre como usuaria antes de informar.
 
@@ -36,6 +38,7 @@ Se actualiza al cierre de cada vuelta de trabajo. Sin datos personales, claves n
 
 - Plan y pendientes de la vuelta en curso: `docs/mejoras-1311/PLAN-3.md`.
 - Qué se probó y qué no: `docs/mejoras-1311/INFORME.md`. Migraciones y cómo deshacer cambios de datos: `docs/mejoras-1311/MIGRACIONES.md`.
+- Bitácora detallada de la última vuelta (commits, archivos, cambios en la base, medidas, guiones de prueba): `docs/mejoras-1311/BITACORA.md`.
 - Análisis del bot y fichas agregadas: `docs/mejoras-1311/BOT-V2.md`.
 - Plantillas de inicio (texto fuente y generador de variantes): `docs/mejoras-1311/plantillas-inicio.mjs`, `generar-variantes.mjs`.
 
