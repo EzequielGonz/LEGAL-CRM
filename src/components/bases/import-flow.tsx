@@ -219,7 +219,7 @@ export function ImportFlow({
           <input
             id="import-archivo"
             type="file"
-            accept=".csv,.xlsx,.xls"
+            accept=".csv,.xlsx"
             onChange={(e) => handleFile(e.target.files?.[0] ?? null)}
             className="w-full text-xs"
           />

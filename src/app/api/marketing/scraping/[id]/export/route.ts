@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import * as XLSX from "xlsx";
+import writeExcelFile from "write-excel-file/node";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireSession } from "@/lib/acceso/autorizacion";
 
@@ -13,8 +13,8 @@ const STATUS_LABEL: Record<string, string> = {
  * Genera un .xlsx descargable con todo lo que encontró una corrida de
  * captación de Google Maps — la misma información que se ve en la "Vista
  * de planilla" del panel, como archivo para guardar o compartir por fuera
- * del sistema. Usa la misma librería (`xlsx` / SheetJS) que ya usa el
- * importador de bases para leer Excel, solo que acá se usa para escribir.
+ * del sistema. 13/11 (seguridad): se escribe con «write-excel-file»; se
+ * dejó de usar «xlsx» (SheetJS), que tiene avisos sin arreglo en el registro.
  */
 export async function GET(request: Request, { params }: { params: { id: string } }) {
   const auth = await requireSession(request);
@@ -51,10 +51,10 @@ export async function GET(request: Request, { params }: { params: { id: string }
     "Google Place ID": r.raw_data?.google_place_id ?? "",
   }));
 
-  const worksheet = XLSX.utils.json_to_sheet(sheetRows);
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Negocios");
-  const buffer: Buffer = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" });
+  const titulos = ["Fila", "Estado", "Nombre", "Teléfono", "Dirección", "Sitio web", "Rating", "Cantidad de reseñas", "Categorías", "Google Place ID"] as const;
+  const celda = (v: unknown) => (typeof v === "number" && Number.isFinite(v) ? v : v === null || v === undefined ? "" : String(v));
+  const datos = [titulos.map((t) => ({ value: t, fontWeight: "bold" as const })), ...sheetRows.map((r: Record<string, unknown>) => titulos.map((t) => celda(r[t])))];
+  const buffer: Buffer = await writeExcelFile(datos as any, { sheet: "Negocios" }).toBuffer();
 
   const safeName = base.name.replace(/[^a-zA-Z0-9 _-]/g, "").trim() || "captacion";
 

@@ -96,7 +96,7 @@ export function PlantillasArchivo({ perfil }: { perfil: string }) {
         <span className="mt-1 text-xs text-slate-500">.csv, .xlsx o .json</span>
         <input
           type="file"
-          accept=".csv,.xlsx,.xls,.json,text/csv,application/json"
+          accept=".csv,.xlsx,.json,text/csv,application/json"
           className="sr-only"
           onChange={async (e) => {
             const f = e.target.files?.[0];
