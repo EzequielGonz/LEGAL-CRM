@@ -14,7 +14,8 @@ import { ReviewAction } from "@/components/revision/review-action";
 import { AdjuntosLista } from "@/components/adjuntos/adjuntos-lista";
 import { ResultadoPosteriorForm } from "@/components/ficha/resultado-posterior-form";
 import { FUENTE_LABEL, esFuente } from "@/lib/fuente";
-import { siguientePasoFicha } from "@/lib/inicio";
+import { estadoCorto, siguientePasoFicha } from "@/lib/inicio";
+import { fuenteDe, origenEnPalabras } from "@/lib/resultados";
 import { enlaceConversacion } from "@/lib/cartera";
 import { esSlugPerfil } from "@/lib/marca";
 import {
@@ -109,6 +110,15 @@ export async function FichaSection({
     : [{ data: null }, { data: null }];
 
   const slugPerfil = AREA_A_PERFIL[contact.area] ?? "juridico";
+  // 13/11: de dónde vino y en qué etapa está, a la vista (antes solo en Avanzado y con nombres internos).
+  const [campana, baseNombre] = opp
+    ? await Promise.all([
+        (opp as any).campaign_id ? supabase.from("campaigns").select("name").eq("id", (opp as any).campaign_id).maybeSingle().then((r) => (r.data as any)?.name ?? null) : Promise.resolve(null),
+        (opp as any).imported_base_id ? supabase.from("imported_bases").select("name").eq("id", (opp as any).imported_base_id).maybeSingle().then((r) => (r.data as any)?.name ?? null) : Promise.resolve(null),
+      ])
+    : [null, null];
+  const origen = opp ? origenEnPalabras({ campana, base: baseNombre, fuente: fuenteDe(opp as any), detalleFuente: (opp as any).first_source_detail }) : null;
+  const etapa = opp ? estadoCorto({ contact_state: opp.contact_state, capture_state: opp.capture_state, attention_state: opp.attention_state, derivation_state: opp.derivation_state, review_required: opp.review_required, detenido: !!(block && block.detentionId) }).texto : null;
   const paso = siguientePasoFicha(
     opp
       ? {
@@ -127,7 +137,22 @@ export async function FichaSection({
 
   return (
     <div className="space-y-4">
-      {/* Simple: una frase con el siguiente paso; el detalle completo queda en Avanzado. */}
+      {opp ? (
+        <dl className="grid gap-2 sm:grid-cols-2">
+          <div className="min-w-0 rounded-lg border border-slate-200 px-3 py-2">
+            <dt className="text-[13px] font-medium text-slate-600">Etapa</dt>
+            <dd className="text-sm font-semibold text-slate-950">{etapa}</dd>
+          </div>
+          <div className="min-w-0 rounded-lg border border-slate-200 px-3 py-2">
+            <dt className="text-[13px] font-medium text-slate-600">De dónde vino</dt>
+            <dd className="text-sm font-semibold text-slate-950 [overflow-wrap:anywhere]">
+              {origen}
+              {campana && baseNombre ? <span className="font-normal text-slate-600"> · base «{baseNombre}»</span> : null}
+            </dd>
+          </div>
+        </dl>
+      ) : null}
+      {/* Una frase con el siguiente paso; el detalle completo queda en Avanzado. */}
       <p className={`rounded-lg border p-3 text-sm ${paso.urgente ? "border-amber-400 bg-amber-50 font-medium text-amber-950" : "border-slate-200 bg-white text-slate-800"}`}>
         <span className="block text-[13px] font-medium text-slate-600">Qué sigue</span>
         {paso.texto}

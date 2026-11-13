@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { buildShareText, type ShareField } from "@/lib/ficha";
 
@@ -56,6 +56,10 @@ export function FichaActions({
   const [value2, setValue2] = useState("");
   const [detMotive, setDetMotive] = useState("desinteres");
   const [confirmaDevolver, setConfirmaDevolver] = useState(false);
+  // El cambio de quién atiende se ve al instante; cuando llegan los datos nuevos del servidor, mandan ellos.
+  const [atiendeBot, setAtiendeBot] = useState<boolean | null>(null);
+  useEffect(() => setAtiendeBot(null), [chat?.aiEnabled]);
+  const botAtiende = atiendeBot ?? chat?.aiEnabled ?? false;
 
   const extras = optionalFields.filter((f) => chosen.includes(f.key));
   const faltantes = [!fullName?.trim() && "nombre y apellido", !barrio?.trim() && "barrio", !phone?.trim() && "teléfono"].filter(Boolean) as string[];
@@ -106,6 +110,7 @@ export function FichaActions({
               ? "Listo: el chat es tuyo. El bot no va a responder hasta que se lo devuelvas."
               : "Guardado.";
         setMsg({ ok: true, text: texto });
+        if (accion === "atencion") setAtiendeBot(payload.estado === "ia");
         setForm(null);
         setConfirmaDevolver(false);
         setValue("");
@@ -152,11 +157,11 @@ export function FichaActions({
               <h3 id="ficha-quien" className="text-[13px] font-medium text-slate-600">
                 Quién atiende este chat
               </h3>
-              <p className="text-base font-semibold text-slate-950">{detention ? "Nadie: el contacto está detenido" : chat.aiEnabled ? "El bot" : "Una persona del equipo"}</p>
+              <p className="text-base font-semibold text-slate-950">{detention ? "Nadie: el contacto está detenido" : botAtiende ? "El bot" : "Una persona del equipo"}</p>
               <p className="mt-0.5 text-[13px] text-slate-600">
                 {detention
                   ? "No sale ningún mensaje automático. Para volver a atenderlo, primero hay que levantar la detención."
-                  : chat.aiEnabled
+                  : botAtiende
                     ? captado
                       ? "Ya está captado: el bot no sigue vendiendo. Si escribe, pasa a una persona."
                       : "Responde solo. Si querés escribirle vos, tomá el chat."
@@ -168,11 +173,11 @@ export function FichaActions({
             {!detention && (
               <div className="flex shrink-0 flex-wrap items-center gap-2">
                 {chat.href ? (
-                  <a href={chat.href} className={chat.esperaRespuesta && !chat.aiEnabled ? "btn-gold-sm" : btn}>
-                    {chat.esperaRespuesta && !chat.aiEnabled ? "Responder" : "Abrir el chat"}
+                  <a href={chat.href} className={chat.esperaRespuesta && !botAtiende ? "btn-gold-sm" : btn}>
+                    {chat.esperaRespuesta && !botAtiende ? "Responder" : "Abrir el chat"}
                   </a>
                 ) : null}
-                {chat.aiEnabled ? (
+                {botAtiende ? (
                   <button type="button" className={btn} disabled={busy} onClick={() => run("atencion", { estado: "humano_en_curso" })}>
                     {busy ? "Guardando…" : "Tomar el chat"}
                   </button>
