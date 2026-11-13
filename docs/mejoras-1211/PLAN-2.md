@@ -23,14 +23,29 @@
 - El camino de Meta no se toca. El bot v1 no se elimina.
 - El código de acceso no se escribe en archivos.
 
-## Estado
-- [x] Lo anterior (puntos 1 a 6): migración 0605 aplicada el 12/11 a las 17:50; rama pasada a `main`.
-- [ ] 0. Revisión completa como usuaria, función por función → `REVISION-2.md` con qué es incoherente, qué no funciona, qué no se usa y qué confunde.
-- [ ] 1. Hoy: «Atención humana» y «Captados» separados; descartados reconocidos y fuera de la vista.
-- [ ] 2. Hoy: estadísticas tipo presentación (semana actual primero; semana pasada, mes e historial detrás).
-- [ ] 3. Chats: ordenar; lo que sirve separado de lo que no.
-- [ ] 4. Chats y Contactos: unificar o darles sentido distinto.
-- [ ] 5. Bot v2 predefinido en todo el panel + mejora propuesta sobre sus estadísticas (sin eliminar lo actual).
-- [ ] 6. Línea y plantillas: funciones reales de Wasender.
-- [ ] 7. Redes: accesos por URL a perfiles y contenido (Instagram, Facebook, WhatsApp).
-- [ ] 8. Informe final y pendientes.
+## Estado (12/11, 21:30)
+- [x] Lo anterior (puntos 1 a 6): migración 0605 aplicada; rama pasada a `main`.
+- [x] 0. Revisión como usuaria, función por función (29 pantallas). Hallazgos principales abajo.
+- [x] 1. Hoy: «Atención humana» y «Captados para derivar» separados; descartes reconocidos por su último mensaje, fuera de la vista y con un botón para cerrarlos como perdidos.
+- [x] 2. Hoy: estadísticas como presentación (esta semana, semana pasada, este mes, mes pasado), cada una comparada con el período anterior; historial a un clic.
+- [x] 3. Chats: «Activos», «Todos los chats», «Para recuperar», «Descartados» (perdidos y pedidos de no contacto) e Incidencias. Los perdidos ya no se mezclan con lo recuperable.
+- [x] 4. Contactos: «Etapas», con el recorrido completo (sin contactar → sin respuesta → respondieron → en conversación → captados → derivados). Chats = conversar; Contactos = ver a todas las personas por etapa.
+- [x] 5a. Bot v2 predefinido: los cuatro perfiles al 100 % en la base (registrado en el historial de cambios) y valor por defecto en el código. La v1 no se elimina.
+- [ ] 5b. Mejora sobre las estadísticas de la v2 (versión 3, sin tocar v1 ni v2). Datos del 25/10 al 12/11: Autos v1 1 captado de 12 conversaciones, v2 2 de 16; Marketing v1 1 de 103, v2 3 de 51; **Jurídico v1 5 de 16, v2 4 de 17, con el doble de turnos (69 contra 35) y el doble de detenidos (8 contra 4)**; Coberturas sin muestra (v2 3 conversaciones). Las fichas de objeciones casi no se usan (la más usada, 6 veces): lo que pesa es la base general y la del rubro. Hipótesis para la v3: en Jurídico la v2 conversa de más antes de proponer el paso siguiente; acortar y proponer antes. Hay que leer las conversaciones de Jurídico con v2 que terminaron detenidas antes de escribir la v3. El código hoy solo admite versiones 1 y 2 (`cambiarAsignacion`, ruta de conocimiento, panel): hay que ampliarlo.
+- [x] 6. «Líneas y plantillas» ya no es solo de Meta: primero líneas y plantillas de Wasender, después las de Meta. La sección «Wasender» del menú de trabajo se unió ahí. Cada plantilla de campaña dice si está lista o cuántos textos le faltan.
+- [ ] 6b. Más funciones de Wasender en esa sección: probar una plantilla con un nombre de ejemplo, enviar una prueba al teléfono del equipo, ver los últimos envíos y fallos de la línea.
+- [x] 7. Redes → «Accesos»: Instagram, Facebook, WhatsApp Web, bandeja de Meta, Metricool y la web de cada perfil, cada uno en su ventana al lado del panel. Las direcciones del perfil de Instagram, de la página de Facebook y de la web las carga la responsable (no estaban guardadas en ningún lado).
+- [ ] 8. Pendiente de la revisión (ver abajo).
+
+## Hallazgos de la revisión (lo que sigue incoherente o sin uso)
+- «Captados sin derivar» aparece en seis pantallas (Hoy, Activos, Citas, Captados y casos, Buscar en la base, Historial). Falta dejarlo en dos: Hoy y Captados y casos.
+- «Atención humana» da cuatro números distintos: 0 (Pidieron una persona), 12 (esperan respuesta), 30 (Historial) y 62 (Citas). Hay que unificar la definición: «el último mensaje es de la persona y el bot no le va a contestar».
+- Incidencias (Jurídico): 270 cosas «esperan una decisión», de las cuales 215 son detenciones vigentes que no son trabajo. Separar o quitar las detenciones de esa cuenta.
+- Hay dos pantallas «Prospectos» (por base y buscador) con el mismo título.
+- Seguimiento: toda la pantalla en cero porque la función está apagada; conviene una sola frase y el botón para prenderla.
+- Contenido, Publicaciones y Publicidad: todo en cero o apagado; hoy las publicaciones se programan por fuera (Metricool).
+- Ajustes: una sola pantalla con 108 campos y 22 botones «Quitar». Conviene partirla en pestañas.
+- Bases: nombres repetidos («ART GRAVES» tres veces) y una base llamada «4».
+- Marketing → Prioritarios: 300 fichas en una sola página.
+- Aviso de captación: no hay pantalla para cargar destinatarios ni código que lo envíe.
+- Todos los chats: la lista arranca pegada a las pestañas, sin encabezado.

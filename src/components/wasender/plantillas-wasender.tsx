@@ -5,6 +5,7 @@ import clsx from "clsx";
 import { Icono } from "@/components/ui/icono-seccion";
 import type { SlugPerfil } from "@/lib/marca";
 import { completar, validarPlantilla, type UsoPlantilla } from "@/lib/wasender/plantillas";
+import { MINIMO_TEXTOS_CAMPANA, textosDistintos } from "@/lib/wasender/ritmo";
 
 interface Plantilla {
   id: string;
@@ -203,7 +204,13 @@ export function PlantillasWasender({ slug, marca }: { slug: SlugPerfil; marca: s
                     <p className="font-semibold text-slate-900">{p.nombre}</p>
                     <p className="text-xs text-slate-500">
                       {USO[p.uso]}
-                      {p.variantes.length ? ` · ${p.variantes.length + 1} versiones` : " · sin variantes"}
+                      {p.variantes.length ? ` · ${p.variantes.length + 1} textos` : " · 1 texto"}
+                      {/* 12/11: el ritmo nuevo pide 4 textos distintos para salir en una campaña. */}
+                      {p.uso === "campana"
+                        ? textosDistintos(p.cuerpo, p.variantes) >= MINIMO_TEXTOS_CAMPANA
+                          ? " · lista para campañas"
+                          : ` · le faltan ${MINIMO_TEXTOS_CAMPANA - textosDistintos(p.cuerpo, p.variantes)} textos para salir en campañas`
+                        : ""}
                       {p.origen === "meta" ? " · copiada de Meta" : ""}
                     </p>
                   </div>

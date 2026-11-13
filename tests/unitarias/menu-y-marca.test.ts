@@ -17,9 +17,12 @@ test("cada perfil tiene marca, logo https y tema propio; lo desconocido cae en J
 test("menú (24/10): Trabajo y Configurar, iguales en los cuatro perfiles, sin rutas de Jurídico en los demás", () => {
   for (const s of SLUGS_PERFIL) {
     const secc = seccionesDePerfil(s);
-    // 10/11: Wasender debajo de Campañas en los cuatro perfiles.
-    assert.deepEqual(secc.map((x) => x.label), ["Hoy", "Chats", "Contactos", "Campañas", "Wasender", "Bot IA", "Línea y plantillas", "Redes", "Ajustes"]);
-    assert.deepEqual(secc.map((x) => x.grupo), ["trabajo", "trabajo", "trabajo", "trabajo", "trabajo", "configurar", "configurar", "configurar", "configurar"]);
+    // 12/11: Wasender deja de ser una sección aparte y pasa a «Líneas y plantillas», junto con lo de Meta.
+    assert.deepEqual(secc.map((x) => x.label), ["Hoy", "Chats", "Contactos", "Campañas", "Bot IA", "Líneas y plantillas", "Redes", "Ajustes"]);
+    assert.deepEqual(secc.map((x) => x.grupo), ["trabajo", "trabajo", "trabajo", "trabajo", "configurar", "configurar", "configurar", "configurar"]);
+    // 12/11: Chats separa lo que sirve de lo descartado; Redes tiene los accesos.
+    assert.ok(secc[1].tabs.some((t) => t.label === "Descartados"));
+    assert.equal(secc[6].tabs[0].label, "Accesos");
     const hrefs = secc.flatMap((x) => x.tabs.map((i) => i.href));
     assert.equal(new Set(hrefs).size, hrefs.length, `sin duplicados en ${s}`);
     assert.ok(!hrefs.some((h) => h.includes("comparacion-agentes")), "sin comparación de agentes (21/10)");

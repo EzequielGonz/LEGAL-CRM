@@ -117,14 +117,20 @@ export function seccionesDePerfil(slug: SlugPerfil): SeccionMenu[] {
   ];
 
   const redes: ItemMenu[] = [
+    // 12/11: Instagram, Facebook y WhatsApp de cada perfil, a un clic.
+    { href: comun(slug, "redes/accesos"), label: "Accesos", match: "/redes/accesos" },
     { href: comun(slug, "redes"), label: "Publicaciones", match: "/redes", exacto: true },
     { href: comun(slug, "contenido"), label: "Contenido", match: "/contenido" },
     { href: comun(slug, "redes/publicidad"), label: "Publicidad", match: "/redes/publicidad" },
   ];
 
   // 24/10: la línea de WhatsApp (calidad, plantillas y perfil) tiene sección propia.
+  // 12/11: la sección ya no es solo de Meta. Primero las líneas y plantillas de Wasender
+  // (lo que se usa hoy); las de Meta quedan al lado, sin cambios.
   const linea: ItemMenu[] = [
-    { href: comun(slug, "redes/plantillas"), label: "Plantillas", match: "/redes/plantillas" },
+    { href: comun(slug, "wasender"), label: "Líneas de Wasender", match: "/wasender" },
+    { href: comun(slug, "wasender/plantillas"), label: "Plantillas de Wasender", match: "/wasender/plantillas" },
+    { href: comun(slug, "redes/plantillas"), label: "Plantillas de Meta", match: "/redes/plantillas" },
     { href: comun(slug, "redes/perfiles"), label: "Perfil de WhatsApp y redes", match: "/redes/perfiles" },
     { href: comun(slug, "redes/whatsapp"), label: "Perfil de WhatsApp", match: "/redes/whatsapp", oculto: true },
   ];
@@ -134,20 +140,13 @@ export function seccionesDePerfil(slug: SlugPerfil): SeccionMenu[] {
 
   const configuracion: ItemMenu[] = [{ href: `${base}/configuracion`, label: "Ajustes" }];
 
-  // 10/11: Wasender (líneas por QR), debajo de Campañas en los cuatro perfiles.
-  const wasender: ItemMenu[] = [
-    { href: comun(slug, "wasender"), label: "Líneas", match: "/wasender" },
-    { href: comun(slug, "wasender/plantillas"), label: "Plantillas", match: "/wasender/plantillas" },
-  ];
-
   return [
     seccion("inicio", "Hoy", "inicio", inicio),
     seccion("conversaciones", "Chats", "inbox", conversaciones),
     seccion("contactos", "Contactos", "prospectos", contactos),
     seccion("captacion", "Campañas", "campanas", captacion),
-    seccion("wasender", "Wasender", "wasender", wasender),
     seccion("bot", "Bot IA", "agentes", bot, "configurar"),
-    seccion("linea", "Línea y plantillas", "consultas", linea, "configurar"),
+    seccion("linea", "Líneas y plantillas", "wasender", linea, "configurar"),
     seccion("redes", "Redes", "redes", redes, "configurar"),
     seccion("configuracion", "Ajustes", "configuracion", configuracion, "configurar"),
   ];

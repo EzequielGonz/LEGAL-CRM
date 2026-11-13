@@ -92,3 +92,20 @@ test("hoy: los períodos de la presentación y su comparación", () => {
   assert.equal(tasa(5, 200), "2,5 %");
   assert.equal(tasa(5, 0), null);
 });
+
+import { accesosDe, direccionValida } from "@/lib/redes/accesos";
+
+test("redes: los accesos solo aceptan direcciones https del dominio que corresponde", () => {
+  assert.deepEqual(direccionValida("instagram", "instagram.com/perfil_ficticio"), { ok: true, url: "https://instagram.com/perfil_ficticio" });
+  assert.deepEqual(direccionValida("instagram", "  "), { ok: true, url: null });
+  assert.equal(direccionValida("instagram", "https://ejemplo.com/perfil").ok, false);
+  assert.equal(direccionValida("facebook", "http://facebook.com/pagina").ok, false);
+  assert.equal(direccionValida("facebook", "https://usuario:clave@facebook.com/pagina").ok, false);
+  assert.equal(direccionValida("instagram", "javascript:alert(1)").ok, false);
+  // Los accesos fijos (WhatsApp Web, bandeja de Meta…) no se pueden cambiar.
+  assert.equal(direccionValida("whatsapp_web", "https://web.whatsapp.com").ok, false);
+  const lista = accesosDe({ instagram: "https://instagram.com/perfil_ficticio" });
+  assert.equal(lista.find((a) => a.clave === "instagram")?.url, "https://instagram.com/perfil_ficticio");
+  assert.equal(lista.find((a) => a.clave === "facebook")?.url, null);
+  assert.equal(lista.find((a) => a.clave === "whatsapp_web")?.url, "https://web.whatsapp.com/");
+});
