@@ -83,9 +83,10 @@ Se actualiza al cierre de cada vuelta de trabajo. Sin datos personales, claves n
 ## Qué quedó hecho el 14/11
 
 - **Algoritmo de inicio (Wasender):** `src/lib/wasender/ritmo-humano.ts` (plan del día, tandas, pausas, elección del texto, parecido entre textos) conectado en `src/lib/campaigns.ts` y en el segundo intento. Migración 0615 (índice).
-- **Plantillas:** 12 nuevas por perfil para bases frías (22 por perfil, unos 1.100 textos cada uno). Generador: `docs/mejoras-1411/plantillas-frias.mjs`.
+- **Plantillas:** 12 nuevas por perfil para bases frías. En la segunda vuelta se archivaron las 40 viejas: rotan solo las nuevas (12 por perfil, unos 680 textos cada uno). Generador: `docs/mejoras-1411/plantillas-frias.mjs`.
 - **Velocidad:** sin precarga automática en enlaces de listas; marca y menú en paralelo; `profile_metrics` en una pasada (migración 0616, mismo resultado).
 - **Bot v2:** 12 fichas, contestadores nuevos reconocidos, sin «escribilo» ante stickers. `docs/mejoras-1411/BOT-V2-1411.md`.
+- **Segunda vuelta:** rotación al azar por defecto en Wasender; envíos repartidos en todo el día; el límite diario de una campaña de Wasender frena el día y no la campaña; informe de mejoras del bot con Gemini en Bot IA (migraciones 0617 y 0618); asistente con reglas para generar plantillas. Pendiente de autorización: la corrección de la confirmación después de captar (en la rama). `docs/mejoras-1411/SEGUNDA-VUELTA.md`.
 - Detalle: `docs/mejoras-1411/ENTREGA.md`, `INFORME.md`, `MIGRACIONES.md`.
 
 ## Aprendizajes de esta vuelta
@@ -101,3 +102,6 @@ Se actualiza al cierre de cada vuelta de trabajo. Sin datos personales, claves n
 - Con Next 15, `params`, `searchParams` y `cookies()` se esperan (`await`); `perfilActivo()` también.
 - Las variantes que cambian una o dos palabras arman un patrón igual: para variar de verdad hay que cambiar estructura (orden, arranque, largo). La pantalla de plantillas ahora avisa los textos casi iguales.
 - La precarga automática de Next en listas largas multiplica los pedidos al servidor: en listas, `prefetch={false}`.
+- Gemini puede tardar más de dos minutos con muchas conversaciones: todo lo que lo llame con textos largos va en segundo plano (`after`) con la pantalla consultando.
+- Un informe de IA sobre datos viejos marca problemas ya resueltos: darle fechas a cada conversación y la lista de correcciones (`RESUELTO_EN_EL_SISTEMA` en `informe-mejoras-reglas.ts`, actualizarla al corregir algo del bot).
+- Los cambios que alteran cómo responde el bot en charlas reales se publican con autorización expresa: quedan en la rama hasta entonces.
