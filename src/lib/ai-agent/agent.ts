@@ -586,6 +586,17 @@ async function pauseWithFinalAck(
   intakeStep: string | null = null
 ) {
   const supabase = createAdminClient();
+  // 14/11: si esta misma respuesta ya obtuvo el permiso (por ejemplo, «captar» y
+  // después «finalizar_consulta»), pedirlo de nuevo lo borraba (el chat ya está
+  // pausado) y la confirmación a la persona no salía. Se conserva el permiso y
+  // solo se actualiza el estado.
+  if (ctx.finalAckToken) {
+    await supabase
+      .from("conversations")
+      .update({ ai_enabled: false, status, ...(intakeStep ? { intake_step: intakeStep } : {}) })
+      .eq("id", ctx.conversationId);
+    return;
+  }
   const { data, error } = await supabase.rpc("grant_ai_final_ack", {
     p_conversation: ctx.conversationId,
     p_status: status,
