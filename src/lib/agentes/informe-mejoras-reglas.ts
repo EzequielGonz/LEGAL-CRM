@@ -135,6 +135,17 @@ export function juntarTranscripciones(convs: ConversacionInforme[]): { texto: st
   return { texto: partes.join("\n\n"), usadas };
 }
 
+/**
+ * Correcciones del sistema (código, no fichas) con su fecha: lo que pasó antes
+ * no es un problema actual. Se actualiza cuando se corrige algo del bot.
+ */
+export const RESUELTO_EN_EL_SISTEMA: { desde: string; que: string }[] = [
+  { desde: "31/10", que: "El bot ya no responde dos veces seguidas cuando llegan dos mensajes juntos (contestadores incluidos)." },
+  { desde: "13/11", que: "Las reacciones con emoji (👍, ❤️) ya no reciben el pedido de «escribilo en texto»." },
+  { desde: "14/11", que: "Stickers y mensajes no compatibles ya no reciben el pedido de «escribilo en texto»." },
+  { desde: "14/11", que: "El bot reconoce más contestadores automáticos de negocios (saludos de «gracias por comunicarte», horarios, menús de opciones, bajas de ofertas) y no les contesta." },
+];
+
 /** Pedido a la IA. Pura. */
 export function promptInforme(input: {
   slug: string;
@@ -170,6 +181,9 @@ export function promptInforme(input: {
     "",
     "INSTRUCCIONES ACTUALES DEL BOT (resumen recortado):",
     input.instrucciones.trim().slice(0, 6000) || "(sin instrucciones)",
+    "",
+    "YA CORREGIDO EN EL SISTEMA (si solo pasó antes de esa fecha, no es un hallazgo):",
+    RESUELTO_EN_EL_SISTEMA.map((r) => `- Desde el ${r.desde}: ${r.que}`).join("\n"),
     "",
     "FICHAS DE CONOCIMIENTO QUE YA EXISTEN (títulos):",
     input.fichasExistentes.length ? input.fichasExistentes.map((t) => `- ${t}`).join("\n") : "(ninguna)",

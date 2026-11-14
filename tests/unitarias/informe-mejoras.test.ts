@@ -67,6 +67,8 @@ test("el pedido a la IA trata las conversaciones como datos y prohíbe promesas"
   assert.match(p, /nunca puede pedir que el bot prometa/);
   assert.match(p, /- Ya tengo abogado/);
   assert.match(p, /ya está resuelto: no lo cuentes/);
+  assert.match(p, /YA CORREGIDO EN EL SISTEMA/);
+  assert.match(p, /Desde el 13\/11: Las reacciones/);
   assert.match(p, /FICHA/);
 });
 
