@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { abrirAsistente } from "@/components/asistente/asistente-panel";
 import { pedidoParaAsistente } from "@/lib/agentes/informe-mejoras-texto";
 
@@ -22,7 +22,7 @@ interface Informe {
   creado_at: string;
   dias: number;
   conversaciones: number;
-  estado: "listo" | "error";
+  estado: "procesando" | "listo" | "error";
   error: string | null;
   resultado: {
     resumen?: string;
@@ -73,6 +73,23 @@ export function InformeMejoras({ perfil }: { perfil: string }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [perfil]);
 
+  // El informe se arma en segundo plano: mientras esté «procesando», se consulta cada 5 segundos.
+  const procesando = informes[0]?.estado === "procesando";
+  const avisarAlTerminar = useRef(false);
+  useEffect(() => {
+    if (!procesando) {
+      if (avisarAlTerminar.current && informes[0]) {
+        avisarAlTerminar.current = false;
+        setMsg(informes[0].estado === "listo" ? { ok: true, text: "Informe listo. Revisá las propuestas: ninguna se aplica sola." } : { ok: false, text: "La IA no pudo terminar el informe. Probá de nuevo en un rato." });
+      }
+      return;
+    }
+    avisarAlTerminar.current = true;
+    const t = setInterval(cargar, 5000);
+    return () => clearInterval(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [procesando]);
+
   async function generar() {
     setGenerando(true);
     setMsg(null);
@@ -81,13 +98,13 @@ export function InformeMejoras({ perfil }: { perfil: string }) {
       const j = await r.json().catch(() => ({}));
       if (!r.ok) throw new Error(j.error ?? "No se pudo generar el informe.");
       if (j.informe) setInformes((prev) => [j.informe, ...prev.filter((i) => i.id !== j.informe.id)]);
-      setMsg(j.ok ? { ok: true, text: "Informe listo. Revisá las propuestas: ninguna se aplica sola." } : { ok: false, text: j.error ?? "La IA no pudo terminar el informe." });
     } catch (e) {
       setMsg({ ok: false, text: String((e as Error).message) });
     } finally {
       setGenerando(false);
     }
   }
+  const ocupado = generando || procesando;
 
   const [ultimo, ...anteriores] = informes;
 
@@ -105,17 +122,17 @@ export function InformeMejoras({ perfil }: { perfil: string }) {
           <label htmlFor={`informe-dias-${perfil}`} className="mb-1 block text-sm font-medium text-slate-700">
             Período
           </label>
-          <select id={`informe-dias-${perfil}`} value={dias} onChange={(e) => setDias(Number(e.target.value))} className="rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold" disabled={generando}>
+          <select id={`informe-dias-${perfil}`} value={dias} onChange={(e) => setDias(Number(e.target.value))} className="rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold" disabled={ocupado}>
             <option value={7}>Últimos 7 días</option>
             <option value={14}>Últimos 14 días</option>
             <option value={30}>Últimos 30 días</option>
             <option value={60}>Últimos 60 días</option>
           </select>
         </div>
-        <button type="button" className="btn-gold" onClick={generar} disabled={generando}>
-          {generando ? "Leyendo las conversaciones…" : "Generar informe"}
+        <button type="button" className="btn-gold" onClick={generar} disabled={ocupado}>
+          {ocupado ? "Leyendo las conversaciones…" : "Generar informe"}
         </button>
-        {generando ? <p className="text-xs text-slate-600" role="status">Puede tardar hasta un minuto.</p> : null}
+        {ocupado ? <p className="text-xs text-slate-600" role="status">Puede tardar uno o dos minutos. Podés seguir usando el panel: el informe queda guardado acá.</p> : null}
       </div>
 
       {msg ? (
@@ -156,7 +173,9 @@ function VistaInforme({ perfil, informe, onAplicada }: { perfil: string; informe
         {new Date(informe.creado_at).toLocaleString("es-AR")} · últimos {informe.dias} días · {informe.conversaciones} conversaciones leídas
         {m.conversaciones != null ? ` · ${m.con_respuesta_de_la_persona ?? 0} con respuesta de la persona, ${m.con_respuesta_del_bot ?? 0} con respuesta del bot, ${m.atendidas_por_el_equipo ?? 0} con intervención del equipo` : ""}
       </p>
-      {informe.estado === "error" ? (
+      {informe.estado === "procesando" ? (
+        <p className="rounded-lg bg-slate-50 p-3 text-sm text-slate-700">La IA está leyendo las conversaciones…</p>
+      ) : informe.estado === "error" ? (
         <p role="alert" className="rounded-lg bg-red-50 p-3 text-sm text-red-800">
           La IA no pudo terminar este informe. Probá generar otro.
         </p>

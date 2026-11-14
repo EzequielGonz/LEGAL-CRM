@@ -9,12 +9,14 @@
  * borra lo que hay.
  */
 import { anonimizar } from "./corpus";
+import { normalizar } from "@/lib/conocimiento/seleccion";
 
 export type DestinoPropuesta = "conocimiento" | "rol";
 export type CapaPropuesta = "tema" | "objecion" | "rubro";
 
 export interface MensajeInforme {
   direction: string;
+  created_at?: string | null;
   sender_type?: string | null;
   origin?: string | null;
   body?: string | null;
@@ -87,6 +89,13 @@ export function limpiarMensaje(texto: string, nombres: string[], max: number = L
   return t.length > max ? `${t.slice(0, max - 1)}…` : t;
 }
 
+/** «dd/mm» en hora de Argentina. Pura. */
+export function fechaCorta(iso: string): string {
+  const d = new Date(Date.parse(iso) - 3 * 3_600_000);
+  if (Number.isNaN(d.getTime())) return "";
+  return `${String(d.getUTCDate()).padStart(2, "0")}/${String(d.getUTCMonth() + 1).padStart(2, "0")}`;
+}
+
 function quienHabla(m: MensajeInforme): string {
   if (m.direction === "entrante") return "Persona";
   if (m.origin === "inicio_campana") return "Primer mensaje (campaña)";
@@ -104,7 +113,10 @@ export function transcripcion(c: ConversacionInforme, numero: number): string {
     lineas.push(`${quienHabla(m)}: ${limpiarMensaje(texto, c.nombres)}`);
   }
   if (!c.mensajes.some((m) => m.direction === "entrante")) return "";
-  return [`### Conversación ${numero}${c.estado ? ` (estado del contacto: ${c.estado})` : ""}`, ...lineas].join("\n");
+  const ultima = [...c.mensajes].reverse().find((m) => m.created_at)?.created_at;
+  const fecha = ultima ? fechaCorta(ultima) : "";
+  const datos = [fecha ? `último mensaje: ${fecha}` : "", c.estado ? `estado del contacto: ${c.estado}` : ""].filter(Boolean).join(", ");
+  return [`### Conversación ${numero}${datos ? ` (${datos})` : ""}`, ...lineas].join("\n");
 }
 
 /** Junta las transcripciones respetando el tope total. Pura. */
@@ -142,6 +154,7 @@ export function promptInforme(input: {
     "- No copies nombres, teléfonos, documentos, correos, direcciones ni datos de salud. Describí con tus palabras («una persona dijo que ya tenía abogado»).",
     "- Cada hallazgo tiene que estar en al menos dos conversaciones, salvo un error grave del bot (dato inventado, promesa, insistir después de un no). Decí en cuántas lo viste.",
     "- No propongas lo que ya dicen la ficha del negocio, las instrucciones del bot o las fichas de conocimiento existentes. Las propuestas se SUMAN al bot: no reescriben lo que hay.",
+    "- Cada conversación tiene la fecha de su último mensaje y cada ficha existente dice desde cuándo rige. Si un problema solo aparece en conversaciones anteriores a la ficha que lo cubre, ya está resuelto: no lo cuentes como hallazgo ni lo propongas. Si sigue pasando después, decilo («sigue pasando después del dd/mm»).",
     "- Una propuesta nunca puede pedir que el bot prometa resultados, montos, precios, plazos, aprobaciones o coberturas, ni que invente datos del negocio, ni que insista después de un no, ni que explique de dónde salió el contacto.",
     "- Destino «conocimiento»: una ficha que el bot lee cuando la persona dice ciertas palabras (disparadores). Capa «objecion» para una objeción o respuesta típica; «tema» para un tema del rubro; «rubro» solo si vale para TODAS las conversaciones del perfil.",
     "- Destino «rol»: un comportamiento aparte para un tipo de base o campaña (por ejemplo, un público distinto). Usalo solo si la mejora no sirve para todo el perfil.",
@@ -181,7 +194,8 @@ export function normalizarPropuesta(p: any): Propuesta | null {
   const capa: CapaPropuesta = p.capa === "objecion" || p.capa === "rubro" ? p.capa : "tema";
   const disparadores = (Array.isArray(p.disparadores) ? p.disparadores : [])
     .map((d: unknown) => String(d ?? "").toLowerCase().trim().slice(0, 40))
-    .filter((d: string) => d.replace(/\*$/, "").length >= 3 && !/^\d+$/.test(d))
+    // Un disparador sin letras (un emoji, un número) nunca coincide: no sirve.
+    .filter((d: string) => normalizar(d.replace(/\*$/, "")).replace(/[^a-z]/g, "").length >= 3)
     .filter((d: string, i: number, a: string[]) => a.indexOf(d) === i)
     .slice(0, 8);
   // Una ficha de tema u objeción sin disparadores nunca se usaría.

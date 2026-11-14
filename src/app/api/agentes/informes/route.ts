@@ -1,15 +1,16 @@
-import { NextResponse } from "next/server";
+import { after, NextResponse } from "next/server";
 import { requireSession } from "@/lib/acceso/autorizacion";
 import { RUBRO_IDS, type RubroSlug } from "@/lib/rubros";
-import { generarInforme, InformeError, listarInformes } from "@/lib/agentes/informe-mejoras";
+import { InformeError, listarInformes, prepararInforme } from "@/lib/agentes/informe-mejoras";
 
 export const dynamic = "force-dynamic";
-export const maxDuration = 120;
+export const maxDuration = 300;
 
 /**
  * Informes de mejora del bot (14/11).
  * GET  ?perfil=<slug>          → últimos informes del perfil.
- * POST { perfil, dias }        → la IA relee las conversaciones del período y deja hallazgos y propuestas.
+ * POST { perfil, dias }        → deja el informe «procesando» y la IA lo completa en segundo plano
+ *                                (la pantalla consulta con GET hasta que queda listo).
  * No envía mensajes ni cambia el bot: aplicar una propuesta es otra acción.
  */
 function perfilDe(v: unknown): RubroSlug | null {
@@ -41,8 +42,9 @@ export async function POST(request: Request) {
   const perfil = perfilDe(body?.perfil);
   if (!perfil) return NextResponse.json({ error: "Perfil no válido" }, { status: 400 });
   try {
-    const informe = await generarInforme(perfil, Number(body?.dias) || 14, "panel");
-    return NextResponse.json({ ok: informe.estado === "listo", informe, ...(informe.estado === "error" ? { error: "La IA no pudo terminar el informe. Probá de nuevo en un rato." } : {}) });
+    const { informe, completar } = await prepararInforme(perfil, Number(body?.dias) || 14, "panel");
+    if (completar) after(completar);
+    return NextResponse.json({ ok: true, informe }, { status: 202 });
   } catch (err) {
     return error(err);
   }

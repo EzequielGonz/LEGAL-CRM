@@ -7,7 +7,7 @@
  * envía mensajes, nunca edita ni borra fichas, roles o instrucciones que ya
  * existen, y todo queda en ops_change_log.
  */
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI, ThinkingLevel } from "@google/genai";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { identificadorModelo } from "@/lib/agentes/modelo";
 import { leerFichaNegocio } from "@/lib/agentes/ficha-negocio";
@@ -15,6 +15,7 @@ import { guardarRol } from "@/lib/agentes/roles";
 import { limpiarCacheConocimiento } from "@/lib/conocimiento/servicio";
 import { RUBRO_IDS, type RubroSlug } from "@/lib/rubros";
 import {
+  fechaCorta,
   fichaDesdePropuesta,
   juntarTranscripciones,
   metricasDelPeriodo,
@@ -41,7 +42,7 @@ export interface InformeMejora {
   dias: number;
   conversaciones: number;
   modelo: string | null;
-  estado: "listo" | "error";
+  estado: "procesando" | "listo" | "error";
   resultado: ResultadoInforme | Record<string, never>;
   metricas: Record<string, number>;
   aplicadas: { indice: number; destino: DestinoPropuesta; ref: string; at: string; por: string }[];
@@ -119,47 +120,74 @@ async function contextoDelBot(slug: RubroSlug): Promise<{ ficha: string; instruc
   const [ficha, agentes, items] = await Promise.all([
     leerFichaNegocio(RUBRO_IDS[slug]),
     s.from("ai_agents").select("area, system_prompt").in("area", AREAS_POR_PERFIL[slug] as any),
-    s.from("bot_knowledge_items" as any).select("titulo, rubro, activo").eq("version", 2).eq("activo", true),
+    s.from("bot_knowledge_items" as any).select("titulo, rubro, activo, updated_at").eq("version", 2).eq("activo", true),
   ]);
   const instrucciones = ((agentes.data ?? []) as any[]).map((a) => `[${a.area}]\n${String(a.system_prompt ?? "")}`).join("\n\n");
-  const fichas = ((items.data ?? []) as any[]).filter((i) => i.rubro === slug || i.rubro === "comun" || i.rubro === null).map((i) => String(i.titulo));
+  const fichas = ((items.data ?? []) as any[]).filter((i) => i.rubro === slug || i.rubro === "comun" || i.rubro === null).map((i) => `${String(i.titulo)}${i.updated_at ? ` (rige desde el ${fechaCorta(i.updated_at)})` : ""}`);
   return { ficha, instrucciones, fichas };
 }
 
-/** Genera y guarda un informe. Llama a la IA una vez. No envía mensajes ni cambia el bot. */
-export async function generarInforme(slug: RubroSlug, dias: number, actor: string): Promise<InformeMejora> {
+/** Más de esto «procesando» es que la función se cortó: se muestra como error. */
+export const MINUTOS_MAXIMOS_PROCESANDO = 6;
+
+/**
+ * Prepara un informe: lee y limpia las conversaciones, deja la fila
+ * «procesando» y devuelve `completar`, que llama a la IA y guarda el
+ * resultado (se corre en segundo plano, después de responder). Si ya hay uno
+ * procesándose para el perfil, devuelve ese. No envía mensajes ni cambia el bot.
+ */
+export async function prepararInforme(slug: RubroSlug, dias: number, actor: string): Promise<{ informe: InformeMejora; completar: (() => Promise<void>) | null }> {
   const d = Math.max(1, Math.min(90, Math.round(Number(dias) || 14)));
-  const desde = new Date(Date.now() - d * 86_400_000);
   const s = createAdminClient();
+  const enCurso = await (s.from("bot_informes_mejora" as any) as any)
+    .select(COLUMNAS)
+    .eq("rubro_id", RUBRO_IDS[slug])
+    .eq("estado", "procesando")
+    .gte("creado_at", new Date(Date.now() - MINUTOS_MAXIMOS_PROCESANDO * 60_000).toISOString())
+    .order("creado_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (enCurso.data) return { informe: enCurso.data as InformeMejora, completar: null };
+  if (!(process.env.GEMINI_API_KEY ?? "").trim()) throw new InformeError("La IA no está configurada en este entorno.", 503);
+  const desde = new Date(Date.now() - d * 86_400_000);
   const [convs, ctx] = await Promise.all([conversacionesDelPeriodo(slug, desde), contextoDelBot(slug)]);
   const metricas = metricasDelPeriodo(convs);
   const { texto, usadas } = juntarTranscripciones(convs);
   if (usadas < 3) throw new InformeError(`En los últimos ${d} días hay ${usadas} conversación(es) con respuesta de personas: hacen falta al menos 3 para un informe útil. Probá con más días.`);
-  if (!(process.env.GEMINI_API_KEY ?? "").trim()) throw new InformeError("La IA no está configurada en este entorno.", 503);
   const modelo = identificadorModelo();
-  const fila: Record<string, unknown> = { rubro_id: RUBRO_IDS[slug], creado_por: actor, dias: d, conversaciones: usadas, modelo, metricas };
-  try {
-    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-    const r: any = await ai.models.generateContent({
-      model: modelo,
-      contents: [{ role: "user", parts: [{ text: promptInforme({ slug, dias: d, ficha: ctx.ficha, instrucciones: ctx.instrucciones, fichasExistentes: ctx.fichas, transcripciones: texto, usadas }) }] }],
-      config: { responseMimeType: "application/json" },
-    });
-    const crudo = (r.candidates?.[0]?.content?.parts ?? []).map((p: any) => p.text ?? "").join("");
-    const u = r.usageMetadata ?? {};
-    Object.assign(fila, {
-      estado: "listo",
-      resultado: normalizarResultado(crudo),
-      tokens_entrada: u.promptTokenCount ?? null,
-      tokens_salida: (u.candidatesTokenCount ?? 0) + (u.thoughtsTokenCount ?? 0) || null,
-    });
-  } catch (err) {
-    console.error("[informe-bot] Falló la IA:", err);
-    Object.assign(fila, { estado: "error", error: String((err as Error)?.message ?? err).slice(0, 300) });
-  }
-  const { data, error } = await (s.from("bot_informes_mejora" as any) as any).insert(fila).select(COLUMNAS).single();
+  const { data, error } = await (s.from("bot_informes_mejora" as any) as any)
+    .insert({ rubro_id: RUBRO_IDS[slug], creado_por: actor, dias: d, conversaciones: usadas, modelo, metricas, estado: "procesando" })
+    .select(COLUMNAS)
+    .single();
   if (error) throw error;
-  return data as InformeMejora;
+  const informe = data as InformeMejora;
+  const prompt = promptInforme({ slug, dias: d, ficha: ctx.ficha, instrucciones: ctx.instrucciones, fichasExistentes: ctx.fichas, transcripciones: texto, usadas });
+  const completar = async () => {
+    const fila: Record<string, unknown> = {};
+    try {
+      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+      const r: any = await ai.models.generateContent({
+        model: modelo,
+        contents: [{ role: "user", parts: [{ text: prompt }] }],
+        // Razonamiento medio: el informe sale en menos tiempo y con calidad suficiente.
+        config: { responseMimeType: "application/json", thinkingConfig: { thinkingLevel: ThinkingLevel.MEDIUM } },
+      });
+      const crudo = (r.candidates?.[0]?.content?.parts ?? []).map((p: any) => p.text ?? "").join("");
+      const u = r.usageMetadata ?? {};
+      Object.assign(fila, {
+        estado: "listo",
+        resultado: normalizarResultado(crudo),
+        tokens_entrada: u.promptTokenCount ?? null,
+        tokens_salida: (u.candidatesTokenCount ?? 0) + (u.thoughtsTokenCount ?? 0) || null,
+      });
+    } catch (err) {
+      console.error("[informe-bot] Falló la IA:", err);
+      Object.assign(fila, { estado: "error", error: String((err as Error)?.message ?? err).slice(0, 300) });
+    }
+    const { error: e } = await (s.from("bot_informes_mejora" as any) as any).update(fila).eq("id", informe.id);
+    if (e) console.error("[informe-bot] No se pudo guardar el informe:", e);
+  };
+  return { informe, completar };
 }
 
 export async function listarInformes(slug: RubroSlug, limite = 5): Promise<InformeMejora[]> {
@@ -169,7 +197,10 @@ export async function listarInformes(slug: RubroSlug, limite = 5): Promise<Infor
     .order("creado_at", { ascending: false })
     .limit(Math.max(1, Math.min(20, limite)));
   if (error) throw error;
-  return (data ?? []) as InformeMejora[];
+  const vencido = Date.now() - MINUTOS_MAXIMOS_PROCESANDO * 60_000;
+  return ((data ?? []) as InformeMejora[]).map((i) =>
+    i.estado === "procesando" && Date.parse(i.creado_at) < vencido ? { ...i, estado: "error" as const, error: i.error ?? "La IA no terminó a tiempo." } : i
+  );
 }
 
 /**
