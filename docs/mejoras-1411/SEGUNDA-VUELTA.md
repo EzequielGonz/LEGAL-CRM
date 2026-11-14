@@ -18,7 +18,7 @@ Pedido de la responsable (14/11, después de la primera entrega):
 | 2d. Asistente: reglas para escribir plantillas de inicio para bases frías; crear una plantilla avisa si las variantes son casi iguales | Sí | Tipos y catálogo | Sí | Sí |
 | 3. Informe de mejoras del bot (Bot IA, los cuatro perfiles) | Sí | 11 pruebas unitarias; generado en producción en los cuatro perfiles | Sí | Sí |
 | 4a. Envíos repartidos en todo el día (hallazgo de la simulación) | Sí | Simulación de 12 días × 4 líneas; 2 pruebas unitarias | Sí | Rige con la primera campaña en curso |
-| 4b. Confirmación después de captar que se perdía (hallazgo del informe) | Sí | Tipos y pruebas existentes; sin prueba de integración (necesita Docker) | **No**: en la rama, espera autorización | No |
+| 4b. Confirmación después de captar que se perdía (hallazgo del informe) | Sí | Tipos y pruebas existentes; sin prueba de integración (necesita Docker) | Sí (autorizado el 14/11) | Sí |
 
 ## Informe de mejoras del bot
 
@@ -42,7 +42,7 @@ Pedido de la responsable (14/11, después de la primera entrega):
 
 ## Hallazgos verificados con datos reales
 
-- **Confirmación perdida al captar (Jurídico, 4 casos en 14 días)**: si el bot usaba «captar» y después «finalizar_consulta» en la misma respuesta, el segundo pedido de permiso del acuse borraba el primero y la persona que aceptaba la llamada no recibía la confirmación. Arreglado en la rama, sin publicar.
+- **Confirmación perdida al captar (Jurídico, 4 casos en 14 días)**: si el bot usaba «captar» y después «finalizar_consulta» en la misma respuesta, el segundo pedido de permiso del acuse borraba el primero y la persona que aceptaba la llamada no recibía la confirmación. Arreglado y publicado con autorización de la responsable.
 - **Insistencia después de «ya compré» en Autos**: todos los casos son del 24 al 26/10. Desde el 13/11 Autos usa la versión 2 del conocimiento con la ficha «Ya compré» (O201). Ya resuelto.
 - **Respuestas dobles en Marketing**: la última fue el 31/10. Ya resuelto.
 - **Campaña «ART - TEST WASENDER»**: 1.147 contactos pendientes y la línea asignada está archivada. Hay que asignarle una línea conectada antes de reanudarla.
@@ -57,5 +57,5 @@ Pedido de la responsable (14/11, después de la primera entrega):
 
 - Un envío real (sin líneas conectadas y sin envíos de prueba a personas).
 - Aplicar propuestas del informe: queda a decisión de la responsable.
-- La corrección de la confirmación después de captar, en una conversación real (no está publicada).
+- La corrección de la confirmación después de captar, en una conversación real (se va a ver con la próxima captación).
 - Pruebas de integración (necesitan Docker, que no está en este entorno).

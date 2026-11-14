@@ -86,7 +86,7 @@ Se actualiza al cierre de cada vuelta de trabajo. Sin datos personales, claves n
 - **Plantillas:** 12 nuevas por perfil para bases frías. En la segunda vuelta se archivaron las 40 viejas: rotan solo las nuevas (12 por perfil, unos 680 textos cada uno). Generador: `docs/mejoras-1411/plantillas-frias.mjs`.
 - **Velocidad:** sin precarga automática en enlaces de listas; marca y menú en paralelo; `profile_metrics` en una pasada (migración 0616, mismo resultado).
 - **Bot v2:** 12 fichas, contestadores nuevos reconocidos, sin «escribilo» ante stickers. `docs/mejoras-1411/BOT-V2-1411.md`.
-- **Segunda vuelta:** rotación al azar por defecto en Wasender; envíos repartidos en todo el día; el límite diario de una campaña de Wasender frena el día y no la campaña; informe de mejoras del bot con Gemini en Bot IA (migraciones 0617 y 0618); asistente con reglas para generar plantillas. Pendiente de autorización: la corrección de la confirmación después de captar (en la rama). `docs/mejoras-1411/SEGUNDA-VUELTA.md`.
+- **Segunda vuelta:** rotación al azar por defecto en Wasender; envíos repartidos en todo el día; el límite diario de una campaña de Wasender frena el día y no la campaña; informe de mejoras del bot con Gemini en Bot IA (migraciones 0617 y 0618); asistente con reglas para generar plantillas. La confirmación después de captar ya no se pierde (publicado con autorización). `docs/mejoras-1411/SEGUNDA-VUELTA.md`.
 - Detalle: `docs/mejoras-1411/ENTREGA.md`, `INFORME.md`, `MIGRACIONES.md`.
 
 ## Aprendizajes de esta vuelta
