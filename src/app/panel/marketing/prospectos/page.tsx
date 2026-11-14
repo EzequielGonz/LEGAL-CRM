@@ -64,7 +64,7 @@ export default async function ProspectosPage(
         <nav aria-label="Etapa de venta" className="mt-2 flex flex-wrap gap-1 text-xs">
           <Link href="/panel/marketing/prospectos" className={`rounded px-2 py-1 ${!searchParams.etapa ? "bg-slate-900 text-gold-100" : "border border-slate-300"}`}>Todas las etapas</Link>
           {Object.entries(ETAPA_LABEL).map(([k, v]) => (
-            <Link key={k} href={`/panel/marketing/prospectos?etapa=${k}`} className={`rounded px-2 py-1 ${searchParams.etapa === k ? "bg-slate-900 text-gold-100" : "border border-slate-300"}`}>{v}</Link>
+            <Link prefetch={false} key={k} href={`/panel/marketing/prospectos?etapa=${k}`} className={`rounded px-2 py-1 ${searchParams.etapa === k ? "bg-slate-900 text-gold-100" : "border border-slate-300"}`}>{v}</Link>
           ))}
         </nav>
       </div>

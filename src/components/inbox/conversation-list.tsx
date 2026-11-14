@@ -221,7 +221,7 @@ export function ConversationList({ perfil = "juridico" }: { perfil?: string }) {
 
       <div className="flex-1 overflow-y-auto">
         {items.map((item) => (
-          <Link
+          <Link prefetch={false}
             key={item.id}
             href={hrefChat(item.id)}
             aria-current={params?.id === item.id ? "page" : undefined}

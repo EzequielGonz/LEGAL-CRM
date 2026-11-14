@@ -168,7 +168,7 @@ export async function AgendaSupervision({
     <div>
       <div className="mb-4 flex flex-wrap gap-2">
         {TABS.map((t) => (
-          <Link
+          <Link prefetch={false}
             key={t.key}
             href={href({ tab: t.key === "citas" ? undefined : t.key })}
             aria-current={tab === t.key ? "page" : undefined}
@@ -248,7 +248,7 @@ export async function AgendaSupervision({
               </Link>
             </div>
             {conversationHref && (selectedContact.conversations ?? []).length > 0 && (
-              <Link href={`${conversationHref}/${selectedContact.conversations[0].id}`} className="tactil mb-3 inline-flex items-center text-sm font-medium text-slate-900 underline underline-offset-2">
+              <Link prefetch={false} href={`${conversationHref}/${selectedContact.conversations[0].id}`} className="tactil mb-3 inline-flex items-center text-sm font-medium text-slate-900 underline underline-offset-2">
                 Ver conversación →
               </Link>
             )}

@@ -171,7 +171,7 @@ export async function BaseDetailView({
 
   return (
     <div>
-      <Link href={basesPath} className="mb-4 inline-block text-sm text-slate-500 hover:underline">
+      <Link prefetch={false} href={basesPath} className="mb-4 inline-block text-sm text-slate-500 hover:underline">
         {backLabel}
       </Link>
 
@@ -186,7 +186,7 @@ export async function BaseDetailView({
         <div className="flex items-center gap-3">
           {headerExtra}
           {downloadUrl && (
-            <Link href={downloadUrl} className="text-sm text-gold-700 hover:underline">
+            <Link prefetch={false} href={downloadUrl} className="text-sm text-gold-700 hover:underline">
               Descargar archivo original
             </Link>
           )}
@@ -235,7 +235,7 @@ export async function BaseDetailView({
 
       <div className="mb-3 flex flex-wrap gap-2">
         {FILTERS.map((f) => (
-          <Link
+          <Link prefetch={false}
             key={f.key}
             href={f.key === "todas" ? detailPath : `${detailPath}?filtro=${f.key}`}
             className={clsx(

@@ -36,7 +36,7 @@ export function Pager({
       </span>
       <span className="flex items-center gap-3">
         {page > 1 ? (
-          <Link href={href(page - 1)} className="font-medium text-slate-700 hover:underline">
+          <Link prefetch={false} href={href(page - 1)} className="font-medium text-slate-700 hover:underline">
             ← Anterior
           </Link>
         ) : (
@@ -46,7 +46,7 @@ export function Pager({
           Página {page} de {pages}
         </span>
         {page < pages ? (
-          <Link href={href(page + 1)} className="font-medium text-slate-700 hover:underline">
+          <Link prefetch={false} href={href(page + 1)} className="font-medium text-slate-700 hover:underline">
             Siguiente →
           </Link>
         ) : (

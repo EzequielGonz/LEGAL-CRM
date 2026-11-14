@@ -49,7 +49,7 @@ export async function BarraSalud({ slug }: { slug: string }) {
             <strong className="font-semibold">{titulo}.</strong> {primero.que}
           </span>
         </p>
-        <Link href={verTodo} className="shrink-0 rounded-lg bg-white/70 px-3 py-1 text-xs font-semibold underline">
+        <Link prefetch={false} href={verTodo} className="shrink-0 rounded-lg bg-white/70 px-3 py-1 text-xs font-semibold underline">
           Ver qué hacer
         </Link>
       </div>
@@ -60,7 +60,7 @@ export async function BarraSalud({ slug }: { slug: string }) {
             {titulo}
             {r.rojo && r.amarillo ? ` · ${r.amarillo} para revisar` : ""}
           </p>
-          <Link href={verTodo} className="rounded-lg bg-white/70 px-3 py-1 text-xs font-semibold underline">
+          <Link prefetch={false} href={verTodo} className="rounded-lg bg-white/70 px-3 py-1 text-xs font-semibold underline">
             Ver tablero de salud
           </Link>
         </div>
@@ -69,7 +69,7 @@ export async function BarraSalud({ slug }: { slug: string }) {
             <li key={i.clave} className="rounded-lg bg-white/70 p-2 text-xs">
               <p className="font-semibold">{i.titulo}</p>
               <p className="mt-0.5 [overflow-wrap:anywhere]">{i.detalle}</p>
-              {i.accion && (i.href ? <Link href={i.href} className="mt-1 inline-block font-semibold underline">{i.accion} →</Link> : <p className="mt-1 font-semibold [overflow-wrap:anywhere]">{i.accion}</p>)}
+              {i.accion && (i.href ? <Link prefetch={false} href={i.href} className="mt-1 inline-block font-semibold underline">{i.accion} →</Link> : <p className="mt-1 font-semibold [overflow-wrap:anywhere]">{i.accion}</p>)}
             </li>
           ))}
         </ul>

@@ -76,7 +76,7 @@ export default async function TelefonoClientesPage(
         </form>
         <div className="flex gap-2">
           {ESTADOS.map((e) => (
-            <Link
+            <Link prefetch={false}
               key={e.key}
               href={`${basePath}?estado=${e.key}${q ? `&q=${encodeURIComponent(q)}` : ""}`}
               aria-current={estado === e.key ? "page" : undefined}
@@ -88,7 +88,7 @@ export default async function TelefonoClientesPage(
         </div>
 
         {(rows ?? []).map((r: any) => (
-          <Link
+          <Link prefetch={false}
             key={r.id}
             href={`/ficha/${r.contact_id}?volver=${volver}`}
             className="block rounded-3xl border border-slate-200 bg-white p-4 shadow-sm transition active:scale-[0.99]"

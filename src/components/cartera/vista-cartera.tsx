@@ -37,7 +37,7 @@ function Ficha({ f, slug, aqui, accion }: { f: FichaCartera; slug: SlugPerfil; a
         <div className="min-w-0 flex-1">
           {/* 13/11: toda la tarjeta abre a la persona (antes solo los botones de abajo). */}
           {principal ? (
-            <Link href={principal} className="block truncate text-sm font-semibold text-slate-950 outline-none after:absolute after:inset-0 after:rounded-2xl after:content-[''] focus-visible:after:ring-2 focus-visible:after:ring-slate-900">
+            <Link prefetch={false} href={principal} className="block truncate text-sm font-semibold text-slate-950 outline-none after:absolute after:inset-0 after:rounded-2xl after:content-[''] focus-visible:after:ring-2 focus-visible:after:ring-slate-900">
               {f.nombre}
             </Link>
           ) : (
@@ -66,12 +66,12 @@ function Ficha({ f, slug, aqui, accion }: { f: FichaCartera; slug: SlugPerfil; a
       {f.actividad ? <p className="mt-2 text-[13px] text-slate-500">Escribió {cuandoCorto(f.actividad)}</p> : null}
       <div className="relative z-10 mt-auto flex gap-2 pt-3">
         {ficha ? (
-          <Link href={ficha} className={chatPrincipal ? "btn-suave-sm flex-1 justify-center" : "btn-gold-sm flex-1 justify-center"}>
+          <Link prefetch={false} href={ficha} className={chatPrincipal ? "btn-suave-sm flex-1 justify-center" : "btn-gold-sm flex-1 justify-center"}>
             {accion === "derivar" ? "Derivar" : "Ficha"}
           </Link>
         ) : null}
         {chat ? (
-          <Link href={chat} className={chatPrincipal ? "btn-gold-sm flex-1 justify-center" : "btn-suave-sm flex-1 justify-center"}>
+          <Link prefetch={false} href={chat} className={chatPrincipal ? "btn-gold-sm flex-1 justify-center" : "btn-suave-sm flex-1 justify-center"}>
             Chat
           </Link>
         ) : null}
@@ -151,7 +151,7 @@ async function CuerpoCartera({ vista, slug, rubroId, searchParams }: { vista: Vi
           {vista === "descartados" ? (
             <p className="mt-2 text-sm text-slate-700">
               El 13/11 se reubicó a cada persona según lo que dice su chat.{" "}
-              <Link href={`/limpieza?perfil=${slug}`} className="font-medium text-slate-900 underline underline-offset-2">
+              <Link prefetch={false} href={`/limpieza?perfil=${slug}`} className="font-medium text-slate-900 underline underline-offset-2">
                 Ver los movidos en la limpieza
               </Link>
             </p>
@@ -176,7 +176,7 @@ async function CuerpoCartera({ vista, slug, rubroId, searchParams }: { vista: Vi
                 ] as [string, number | null | undefined, string, string][]
               ).map(([titulo, n, clave, nota], k) => (
                 <li key={clave} className="bg-white">
-                  <Link href={enlaceIndicador(slug, clave, aqui)} className="flex h-full flex-col p-4 hover:bg-slate-50">
+                  <Link prefetch={false} href={enlaceIndicador(slug, clave, aqui)} className="flex h-full flex-col p-4 hover:bg-slate-50">
                     <span className="text-[13px] font-medium text-slate-600">
                       {k + 1}. {titulo}
                     </span>
@@ -197,7 +197,7 @@ async function CuerpoCartera({ vista, slug, rubroId, searchParams }: { vista: Vi
               </p>
               <p className="text-sm text-slate-700">Escribieron y el bot no les contesta porque el chat lo tiene una persona.</p>
             </div>
-            <Link href={`/hoy?perfil=${slug}&cola=responder#hoy-cola`} className="btn-gold-sm">
+            <Link prefetch={false} href={`/hoy?perfil=${slug}&cola=responder#hoy-cola`} className="btn-gold-sm">
               Responder desde Hoy
             </Link>
           </div>
@@ -211,7 +211,7 @@ async function CuerpoCartera({ vista, slug, rubroId, searchParams }: { vista: Vi
                 const activo = x.clave === g.clave;
                 return (
                   <li key={x.clave}>
-                    <Link
+                    <Link prefetch={false}
                       href={`${ruta}?perfil=${slug}&grupo=${x.clave}`}
                       aria-current={activo ? "page" : undefined}
                       className={`tarjeta-grupo flex h-full flex-col rounded-2xl border bg-white p-4 shadow-sm transition ${activo ? "border-transparent ring-2 ring-gold-500" : "border-slate-200 hover:border-slate-300 hover:shadow-md"}`}
@@ -232,7 +232,7 @@ async function CuerpoCartera({ vista, slug, rubroId, searchParams }: { vista: Vi
                 {vacios.map((x, i) => (
                   <span key={x.clave}>
                     {i > 0 ? " · " : ""}
-                    <Link href={`${ruta}?perfil=${slug}&grupo=${x.clave}`} className="underline underline-offset-2 hover:text-slate-900">
+                    <Link prefetch={false} href={`${ruta}?perfil=${slug}&grupo=${x.clave}`} className="underline underline-offset-2 hover:text-slate-900">
                       {x.titulo}
                     </Link>
                   </span>
@@ -257,16 +257,16 @@ async function CuerpoCartera({ vista, slug, rubroId, searchParams }: { vista: Vi
             </p>
             <div className="mt-4 flex flex-wrap justify-center gap-2">
               {vista === "contactos" && porDerivar > 0 ? (
-                <Link href={`/hoy?perfil=${slug}&cola=derivar#hoy-cola`} className="btn-gold-sm">
+                <Link prefetch={false} href={`/hoy?perfil=${slug}&cola=derivar#hoy-cola`} className="btn-gold-sm">
                   Derivar a los {porDerivar} captados
                 </Link>
               ) : null}
               {vista === "contactos" ? (
-                <Link href={`/prospectos-por-base?perfil=${slug}`} className="btn-suave-sm">
+                <Link prefetch={false} href={`/prospectos-por-base?perfil=${slug}`} className="btn-suave-sm">
                   Ver los prospectos por base
                 </Link>
               ) : (
-                <Link href={`/hoy?perfil=${slug}`} className="btn-suave-sm">
+                <Link prefetch={false} href={`/hoy?perfil=${slug}`} className="btn-suave-sm">
                   Ir a Hoy
                 </Link>
               )}
@@ -285,7 +285,7 @@ async function CuerpoCartera({ vista, slug, rubroId, searchParams }: { vista: Vi
                 <p className="text-sm text-slate-600">{g.detalle}</p>
               </div>
               {(total ?? 0) > fichas.length ? (
-                <Link href={completa} className="btn-suave">
+                <Link prefetch={false} href={completa} className="btn-suave">
                   Ver los {total!.toLocaleString("es-AR")}
                 </Link>
               ) : null}

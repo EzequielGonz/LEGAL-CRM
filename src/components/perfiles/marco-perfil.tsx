@@ -21,14 +21,17 @@ import { RUBRO_IDS } from "@/lib/rubros";
  */
 export async function MarcoPerfil({ slug, children, sinSalud = false }: { slug: SlugPerfil; children: React.ReactNode; sinSalud?: boolean }) {
   let marca: { nombre: string | null; logo: string | null; acento: string | null } = { nombre: null, logo: null, acento: null };
-  try {
-    const m = (await marcasResueltas())[slug];
-    marca = { nombre: m.nombre, logo: m.logoPanel, acento: m.colores?.panel ?? null };
-  } catch (err) {
-    console.error("[marco] No se pudo leer la marca del perfil:", err);
-  }
+  // 14/11: marca y menú se leen a la vez (antes, una después de la otra).
   // 13/11: menú a medida de este perfil (nombres, orden y secciones ocultas). Sin dato, el de fábrica.
-  const menu = await leerMenuPersonal(RUBRO_IDS[slug]).catch(() => null);
+  const [marcas, menu] = await Promise.all([
+    marcasResueltas().catch((err) => {
+      console.error("[marco] No se pudo leer la marca del perfil:", err);
+      return null;
+    }),
+    leerMenuPersonal(RUBRO_IDS[slug]).catch(() => null),
+  ]);
+  const m = marcas?.[slug];
+  if (m) marca = { nombre: m.nombre, logo: m.logoPanel, acento: m.colores?.panel ?? null };
   const estilo = (variablesAcento(marca.acento) ?? undefined) as React.CSSProperties | undefined;
   return (
     <NivelProvider>

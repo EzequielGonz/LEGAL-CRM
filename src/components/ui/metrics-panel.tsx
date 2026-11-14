@@ -75,7 +75,7 @@ export function MetricsPanel({
             <Row label="Mensajes recibidos" value={m.mensajes.recibidos} />
             <Row label="Seguimientos caídos" value={m.seguimiento.caido}  href={to("seguimiento_caido")} />
             <p className="mt-2 text-xs">
-              <Link href={perfil && esSlugPerfil(perfil) ? `/incidencias?perfil=${perfil}` : "/incidencias"} className="text-slate-600 hover:underline">
+              <Link prefetch={false} href={perfil && esSlugPerfil(perfil) ? `/incidencias?perfil=${perfil}` : "/incidencias"} className="text-slate-600 hover:underline">
                 {formatCount(m.incidencias_abiertas)} incidencias abiertas →
               </Link>
             </p>
@@ -93,7 +93,7 @@ function Row({ label, value, href }: { label: string; value: number; href?: stri
   if (href) {
     return (
       <p className="border-b border-slate-50 last:border-0">
-        <Link href={href} className="flex justify-between rounded py-1 hover:bg-slate-50" aria-label={`${label}: ${value}. Ver la lista`}>
+        <Link prefetch={false} href={href} className="flex justify-between rounded py-1 hover:bg-slate-50" aria-label={`${label}: ${value}. Ver la lista`}>
           <span className="text-slate-600 underline-offset-2 hover:underline">{label}</span>
           <span className="font-medium text-slate-800">{value.toLocaleString("es-AR")}</span>
         </Link>

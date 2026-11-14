@@ -113,7 +113,7 @@ export default async function ProspectosPorBasePage(props: { searchParams: Promi
             </p>
           </div>
           {o.contact_id ? (
-            <Link href={conVolver(`/ficha/${o.contact_id}`, aqui)} className="btn-suave-sm">
+            <Link prefetch={false} href={conVolver(`/ficha/${o.contact_id}`, aqui)} className="btn-suave-sm">
               Ficha
             </Link>
           ) : null}
@@ -130,7 +130,7 @@ export default async function ProspectosPorBasePage(props: { searchParams: Promi
             <h1 className="text-2xl font-semibold text-slate-950">Prospectos</h1>
             <p className="mt-1 text-sm text-slate-600">La base fría, agrupada por cada base que cargaste. Abrí una para ver sus contactos.</p>
           </div>
-          <Link href={`${prefijo}/bases`} className="btn-suave">
+          <Link prefetch={false} href={`${prefijo}/bases`} className="btn-suave">
             <Icono nombre="bases" className="h-4 w-4" /> Cargar o gestionar bases
           </Link>
         </div>
@@ -150,7 +150,7 @@ export default async function ProspectosPorBasePage(props: { searchParams: Promi
           <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
             <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3">
               <h2 className="text-sm font-semibold text-slate-900">Resultados para «{searchParams.q?.trim()}»</h2>
-              <Link href={aqui} className="text-xs font-medium text-slate-600 underline">
+              <Link prefetch={false} href={aqui} className="text-xs font-medium text-slate-600 underline">
                 Limpiar
               </Link>
             </div>
@@ -183,7 +183,7 @@ export default async function ProspectosPorBasePage(props: { searchParams: Promi
               <div className="border-t border-slate-100">
                 {filas.length ? <Lista filas={filas} /> : <p className="px-4 py-4 text-sm text-slate-600">Esta base no tiene contactos.</p>}
                 <div className="border-t border-slate-100 px-4 py-3 text-right">
-                  <Link href={`${prefijo}/bases/${base.id}`} className="text-sm font-medium text-slate-800 underline underline-offset-2">
+                  <Link prefetch={false} href={`${prefijo}/bases/${base.id}`} className="text-sm font-medium text-slate-800 underline underline-offset-2">
                     Abrir la base completa
                   </Link>
                 </div>
@@ -215,7 +215,7 @@ export default async function ProspectosPorBasePage(props: { searchParams: Promi
               <div className="border-t border-slate-100">
                 <Lista filas={filasSinBase} />
                 <div className="border-t border-slate-100 px-4 py-3 text-right">
-                  <Link href={slug === "juridico" ? "/prospectos" : `/oportunidades?perfil=${slug}`} className="text-sm font-medium text-slate-800 underline underline-offset-2">
+                  <Link prefetch={false} href={slug === "juridico" ? "/prospectos" : `/oportunidades?perfil=${slug}`} className="text-sm font-medium text-slate-800 underline underline-offset-2">
                     Ver todos con filtros
                   </Link>
                 </div>

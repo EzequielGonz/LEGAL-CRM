@@ -40,13 +40,13 @@ function FilaTrabajo({ f, slug, aqui, modo }: { f: ItemCola; slug: SlugPerfil; a
       <div className="flex w-full shrink-0 gap-2 pl-12 sm:w-auto sm:pl-0 [&>a]:flex-1 [&>a]:justify-center sm:[&>a]:flex-none">
         {modo === "atender" ? (
           <>
-            {chat && <Link href={chat} className="btn-gold-sm">Responder</Link>}
-            {ficha && <Link href={ficha} className="btn-suave-sm">Ficha</Link>}
+            {chat && <Link prefetch={false} href={chat} className="btn-gold-sm">Responder</Link>}
+            {ficha && <Link prefetch={false} href={ficha} className="btn-suave-sm">Ficha</Link>}
           </>
         ) : (
           <>
-            {ficha && <Link href={ficha} className="btn-gold-sm">Derivar</Link>}
-            {chat && <Link href={chat} className="btn-suave-sm">{escribio ? "Responder" : "Chat"}</Link>}
+            {ficha && <Link prefetch={false} href={ficha} className="btn-gold-sm">Derivar</Link>}
+            {chat && <Link prefetch={false} href={chat} className="btn-suave-sm">{escribio ? "Responder" : "Chat"}</Link>}
           </>
         )}
       </div>
@@ -219,7 +219,7 @@ export async function TableroHoy({
           )}
           {!verTodo && atender.length > VISIBLES_EN_COLA && (
             <p className="border-t border-slate-100 px-5 py-3 text-sm">
-              <Link href={`${aqui}&todo=1#hoy-cola`} className="font-medium text-slate-800 underline underline-offset-2">Ver los {atender.length}</Link>
+              <Link prefetch={false} href={`${aqui}&todo=1#hoy-cola`} className="font-medium text-slate-800 underline underline-offset-2">Ver los {atender.length}</Link>
             </p>
           )}
         </div>
@@ -242,7 +242,7 @@ export async function TableroHoy({
           )}
           {!verTodo && paraDerivar.length > VISIBLES_EN_COLA && (
             <p className="border-t border-slate-100 px-5 py-3 text-sm">
-              <Link href={`${aqui}&todo=1#hoy-cola`} className="font-medium text-slate-800 underline underline-offset-2">Ver los {paraDerivar.length}</Link>
+              <Link prefetch={false} href={`${aqui}&todo=1#hoy-cola`} className="font-medium text-slate-800 underline underline-offset-2">Ver los {paraDerivar.length}</Link>
             </p>
           )}
         </div>
@@ -268,7 +268,7 @@ export async function TableroHoy({
           <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
             {tareas.map((t) => (
               <li key={t.titulo}>
-                <Link href={t.href} aria-current={t.activo ? "true" : undefined} className={`kpi-hoy flex h-full flex-col rounded-2xl border p-4 ${t.activo ? "kpi-activo" : ""}`}>
+                <Link prefetch={false} href={t.href} aria-current={t.activo ? "true" : undefined} className={`kpi-hoy flex h-full flex-col rounded-2xl border p-4 ${t.activo ? "kpi-activo" : ""}`}>
                   <span className="text-[13px] font-medium text-slate-600">{t.titulo}</span>
                   <span className="cifra-premium mt-1.5 text-3xl font-semibold tabular-nums text-slate-950">{(t.n ?? 0).toLocaleString("es-AR")}</span>
                   <span className="mt-1 text-[13px] text-slate-500">{t.detalle}</span>
@@ -285,7 +285,7 @@ export async function TableroHoy({
             <p className="text-sm font-semibold text-slate-950">
               {infoGrupo!.titulo} <span className="ml-1 tabular-nums text-slate-500">{personas.conteos[elegido] ?? "—"}</span>
             </p>
-            <Link href={`${aqui}#hoy-cola`} className="text-[13px] font-medium text-slate-700 underline underline-offset-2">
+            <Link prefetch={false} href={`${aqui}#hoy-cola`} className="text-[13px] font-medium text-slate-700 underline underline-offset-2">
               Cerrar la lista
             </Link>
           </div>
@@ -307,12 +307,12 @@ export async function TableroHoy({
                   </div>
                   <div className="flex shrink-0 gap-2">
                     {f.conversationId && (
-                      <Link href={conVolver(enlaceConversacion(slug, f.conversationId), aqui)} className="btn-gold-sm">
+                      <Link prefetch={false} href={conVolver(enlaceConversacion(slug, f.conversationId), aqui)} className="btn-gold-sm">
                         Abrir chat
                       </Link>
                     )}
                     {f.contactId && (
-                      <Link href={conVolver(`/ficha/${f.contactId}`, aqui)} className="btn-suave-sm">
+                      <Link prefetch={false} href={conVolver(`/ficha/${f.contactId}`, aqui)} className="btn-suave-sm">
                         Ficha
                       </Link>
                     )}
@@ -331,7 +331,7 @@ export async function TableroHoy({
           <ul className="mt-2 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-700">
             {bot.map((d) => (
               <li key={d.texto} className="min-w-0">
-                <Link href={d.href} className="tactil inline-flex max-w-full items-baseline gap-1.5 underline-offset-2 hover:underline">
+                <Link prefetch={false} href={d.href} className="tactil inline-flex max-w-full items-baseline gap-1.5 underline-offset-2 hover:underline">
                   <span className="font-semibold tabular-nums text-slate-950">
                     {(d.n ?? 0).toLocaleString("es-AR")}
                     {d.de != null ? ` de ${d.de.toLocaleString("es-AR")}` : ""}
@@ -362,5 +362,5 @@ function Chip({ tono, texto, href }: { tono: string; texto: string; href?: strin
     </>
   );
   const clase = "chip-estado inline-flex min-h-[40px] max-w-full items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 sm:min-h-0";
-  return <li className="max-w-full">{href ? <Link href={href} className={clase}>{cuerpo}</Link> : <span className={clase}>{cuerpo}</span>}</li>;
+  return <li className="max-w-full">{href ? <Link prefetch={false} href={href} className={clase}>{cuerpo}</Link> : <span className={clase}>{cuerpo}</span>}</li>;
 }

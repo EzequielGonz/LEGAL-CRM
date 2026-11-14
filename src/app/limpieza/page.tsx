@@ -56,11 +56,11 @@ export default async function LimpiezaPage(
         ) : (
           <>
             <nav aria-label="Tipos de movimiento" className="flex flex-wrap gap-2">
-              <Link href={`/limpieza?perfil=${slug}`} aria-current={!regla ? "page" : undefined} className={clsx("tactil inline-flex items-center rounded-full border px-4 text-sm font-medium", !regla ? "border-slate-900 bg-slate-900 text-white" : "border-slate-300 bg-white text-slate-900 hover:bg-slate-50")}>
+              <Link prefetch={false} href={`/limpieza?perfil=${slug}`} aria-current={!regla ? "page" : undefined} className={clsx("tactil inline-flex items-center rounded-full border px-4 text-sm font-medium", !regla ? "border-slate-900 bg-slate-900 text-white" : "border-slate-300 bg-white text-slate-900 hover:bg-slate-50")}>
                 Todos <span className="ml-1.5 tabular-nums">{todos.toLocaleString("es-AR")}</span>
               </Link>
               {reglas.map((r) => (
-                <Link key={r} href={`/limpieza?perfil=${slug}&regla=${r}`} aria-current={regla === r ? "page" : undefined} className={clsx("tactil inline-flex items-center rounded-full border px-4 text-sm font-medium", regla === r ? "border-slate-900 bg-slate-900 text-white" : "border-slate-300 bg-white text-slate-900 hover:bg-slate-50")}>
+                <Link prefetch={false} key={r} href={`/limpieza?perfil=${slug}&regla=${r}`} aria-current={regla === r ? "page" : undefined} className={clsx("tactil inline-flex items-center rounded-full border px-4 text-sm font-medium", regla === r ? "border-slate-900 bg-slate-900 text-white" : "border-slate-300 bg-white text-slate-900 hover:bg-slate-50")}>
                   {TEXTO_REGLA[r].titulo} <span className="ml-1.5 tabular-nums">{porRegla[r].toLocaleString("es-AR")}</span>
                 </Link>
               ))}
@@ -82,12 +82,12 @@ export default async function LimpiezaPage(
                     </div>
                     <div className="flex flex-wrap items-center gap-2">
                       {m.contactId ? (
-                        <Link href={ficha(m.contactId)} className="tactil inline-flex items-center rounded-lg border border-slate-300 px-3 text-sm text-slate-800 hover:bg-slate-50">
+                        <Link prefetch={false} href={ficha(m.contactId)} className="tactil inline-flex items-center rounded-lg border border-slate-300 px-3 text-sm text-slate-800 hover:bg-slate-50">
                           Abrir ficha
                         </Link>
                       ) : null}
                       {m.conversation_id ? (
-                        <Link href={conVolver(`/conversacion/${m.conversation_id}`, aqui)} className="tactil inline-flex items-center rounded-lg border border-slate-300 px-3 text-sm text-slate-800 hover:bg-slate-50">
+                        <Link prefetch={false} href={conVolver(`/conversacion/${m.conversation_id}`, aqui)} className="tactil inline-flex items-center rounded-lg border border-slate-300 px-3 text-sm text-slate-800 hover:bg-slate-50">
                           Ver chat
                         </Link>
                       ) : null}

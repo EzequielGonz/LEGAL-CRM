@@ -92,7 +92,7 @@ export default async function RevisionPage(
 
       <div className="mb-4 flex flex-wrap gap-2">
         {tabs.map((t) => (
-          <Link
+          <Link prefetch={false}
             key={t.key}
             href={`/incidencias?perfil=${slug}&vista=${t.key}`}
             aria-current={tab === t.key ? "page" : undefined}
@@ -291,10 +291,10 @@ async function Detenciones({ searchParams, page, slug, rubroId }: { searchParams
   return (
     <div>
       <div className="mb-3 flex flex-wrap gap-3 text-sm">
-        <Link href={`/incidencias?perfil=${slug}&vista=detenciones`} className={clsx(vigentes ? "font-semibold text-slate-900" : "text-slate-500 hover:underline")}>
+        <Link prefetch={false} href={`/incidencias?perfil=${slug}&vista=detenciones`} className={clsx(vigentes ? "font-semibold text-slate-900" : "text-slate-500 hover:underline")}>
           Vigentes
         </Link>
-        <Link href={`/incidencias?perfil=${slug}&vista=detenciones&estado=levantadas`} className={clsx(!vigentes ? "font-semibold text-slate-900" : "text-slate-500 hover:underline")}>
+        <Link prefetch={false} href={`/incidencias?perfil=${slug}&vista=detenciones&estado=levantadas`} className={clsx(!vigentes ? "font-semibold text-slate-900" : "text-slate-500 hover:underline")}>
           Levantadas
         </Link>
       </div>
@@ -367,10 +367,10 @@ async function Retenidos({ searchParams, page, slug }: { searchParams: { estado?
   return (
     <div>
       <div className="mb-3 flex flex-wrap gap-3 text-sm">
-        <Link href={`/incidencias?perfil=${slug}&vista=retenidos`} className={clsx(pendientes ? "font-semibold text-slate-900" : "text-slate-500 hover:underline")}>
+        <Link prefetch={false} href={`/incidencias?perfil=${slug}&vista=retenidos`} className={clsx(pendientes ? "font-semibold text-slate-900" : "text-slate-500 hover:underline")}>
           Pendientes
         </Link>
-        <Link href={`/incidencias?perfil=${slug}&vista=retenidos&estado=revisados`} className={clsx(!pendientes ? "font-semibold text-slate-900" : "text-slate-500 hover:underline")}>
+        <Link prefetch={false} href={`/incidencias?perfil=${slug}&vista=retenidos&estado=revisados`} className={clsx(!pendientes ? "font-semibold text-slate-900" : "text-slate-500 hover:underline")}>
           Revisados
         </Link>
       </div>
@@ -432,7 +432,7 @@ async function Adjuntos({ searchParams, page, slug, rubroId }: { searchParams: {
   const { data: rows, count } = await query;
 
   const link = (estado: string | null, label: string, active: boolean) => (
-    <Link
+    <Link prefetch={false}
       href={`/incidencias?perfil=${slug}&vista=adjuntos${estado ? `&estado=${estado}` : ""}`}
       className={clsx(active ? "font-semibold text-slate-900" : "text-slate-500 hover:underline")}
     >

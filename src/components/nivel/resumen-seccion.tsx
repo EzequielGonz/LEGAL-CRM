@@ -47,7 +47,7 @@ function Enlace({ href, className, children }: { href: string; className: string
     );
   }
   return (
-    <Link href={href} className={className}>
+    <Link prefetch={false} href={href} className={className}>
       {children}
     </Link>
   );

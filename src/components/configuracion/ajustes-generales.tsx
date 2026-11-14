@@ -118,7 +118,7 @@ export function GruposAjustesGenerales({ d, hrefRetenidos }: { d: DatosAjustesGe
           {d.retenidos > 0 ? (
             <p className="text-sm text-amber-900">
               Hay {d.retenidos} evento(s) de Meta retenidos sin revisar.{" "}
-              <Link href={hrefRetenidos} className="font-semibold underline">
+              <Link prefetch={false} href={hrefRetenidos} className="font-semibold underline">
                 Revisarlos
               </Link>
             </p>

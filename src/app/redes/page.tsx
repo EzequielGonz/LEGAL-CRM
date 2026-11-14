@@ -74,7 +74,7 @@ export default async function PublicacionesPage(props: { searchParams: Promise<{
             <ConexionRedes perfil={slug} inicial={conexion} />
             <p className="px-1 text-xs text-slate-500">
               Para crear una pieza suelta o ajustar la marca de las imágenes, usá{" "}
-              <Link href={`/contenido?perfil=${slug}`} className="font-medium text-slate-700 underline">
+              <Link prefetch={false} href={`/contenido?perfil=${slug}`} className="font-medium text-slate-700 underline">
                 Contenido
               </Link>
               .

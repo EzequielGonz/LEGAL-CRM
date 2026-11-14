@@ -83,7 +83,7 @@ export default async function Pagina(
       <div className="mx-auto max-w-5xl space-y-6">
         <div>
           <p className="text-sm text-slate-600">
-            <Link href={`/hoy?perfil=${slug}`} className="tactil inline-flex items-center font-medium text-slate-800 underline underline-offset-2">
+            <Link prefetch={false} href={`/hoy?perfil=${slug}`} className="tactil inline-flex items-center font-medium text-slate-800 underline underline-offset-2">
               Hoy
             </Link>{" "}
             / Resultados
@@ -100,7 +100,7 @@ export default async function Pagina(
 
         <nav aria-label="Período" className="flex flex-wrap gap-2">
           {PERIODOS_RESULTADO.map((p) => (
-            <Link
+            <Link prefetch={false}
               key={p.clave}
               href={href(ver, p.clave)}
               aria-current={p.clave === periodo ? "page" : undefined}
@@ -153,11 +153,11 @@ export default async function Pagina(
               <p className="text-base font-medium text-slate-900">{VACIO[ver]}</p>
               <p className="mt-1 text-sm text-slate-600">
                 Probá con otro período:{" "}
-                <Link href={href(ver, "mes")} className="font-medium underline underline-offset-2">
+                <Link prefetch={false} href={href(ver, "mes")} className="font-medium underline underline-offset-2">
                   este mes
                 </Link>{" "}
                 o{" "}
-                <Link href={href(ver, "todo")} className="font-medium underline underline-offset-2">
+                <Link prefetch={false} href={href(ver, "todo")} className="font-medium underline underline-offset-2">
                   desde siempre
                 </Link>
                 .
@@ -186,12 +186,12 @@ export default async function Pagina(
                   </div>
                   <div className="flex shrink-0 items-center gap-2">
                     {f.contactId ? (
-                      <Link href={conVolver(`/ficha/${f.contactId}`, aqui)} className="btn-gold-sm">
+                      <Link prefetch={false} href={conVolver(`/ficha/${f.contactId}`, aqui)} className="btn-gold-sm">
                         Abrir ficha
                       </Link>
                     ) : null}
                     {f.conversationId ? (
-                      <Link href={chat(f.conversationId)} className="btn-suave-sm">
+                      <Link prefetch={false} href={chat(f.conversationId)} className="btn-suave-sm">
                         Ver chat
                       </Link>
                     ) : null}

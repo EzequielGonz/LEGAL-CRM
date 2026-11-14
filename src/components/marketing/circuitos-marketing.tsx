@@ -29,7 +29,7 @@ function Circuito({ id, titulo, descripcion, pasos }: { id: string; titulo: stri
       <ol className="mt-3 space-y-2">
         {pasos.map((p, i) => (
           <li key={p.titulo}>
-            <Link
+            <Link prefetch={false}
               href={p.href}
               className={`flex min-h-[44px] items-start gap-3 rounded-xl border px-3 py-2 hover:bg-slate-50 ${p.atencion ? "border-amber-400" : "border-slate-200"}`}
             >

@@ -151,7 +151,7 @@ export default async function ProspectosPage(props: { searchParams: Promise<Para
               : Object.entries(v.params).every(([k, val]) => searchParams[k as keyof Params] === val) &&
                 Object.entries(searchParams).filter(([k, val]) => val && k !== "pagina").length === Object.keys(v.params).length;
           return (
-            <Link
+            <Link prefetch={false}
               key={v.texto}
               href={qs ? `/prospectos?${qs}` : "/prospectos"}
               aria-current={activa ? "page" : undefined}
@@ -197,7 +197,7 @@ export default async function ProspectosPage(props: { searchParams: Promise<Para
         <div role="group" aria-label="Filtros activos" className="mb-4 flex flex-wrap items-center gap-2 text-sm">
           <span className="text-slate-700">Filtros activos:</span>
           {activos.map((a) => (
-            <Link
+            <Link prefetch={false}
               key={a.clave}
               href={sinFiltro(a.clave)}
               className="tactil inline-flex items-center gap-1.5 rounded-full border border-slate-300 bg-white px-3 text-slate-800 hover:bg-slate-50"

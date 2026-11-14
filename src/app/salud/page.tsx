@@ -61,7 +61,7 @@ export default async function SaludPage(props: { searchParams: Promise<{ perfil?
                     <p className="text-sm font-semibold text-slate-950 [overflow-wrap:anywhere]">{f.titulo}</p>
                     <p className="text-[13px] text-slate-600">{f.alcance === "sistema" ? "De todo el sistema" : "De este perfil"}</p>
                   </div>
-                  <Link href={f.href} className="tactil inline-flex items-center rounded-lg border border-slate-300 px-3 text-sm font-medium text-slate-900 hover:bg-slate-50">
+                  <Link prefetch={false} href={f.href} className="tactil inline-flex items-center rounded-lg border border-slate-300 px-3 text-sm font-medium text-slate-900 hover:bg-slate-50">
                     {f.accion}
                   </Link>
                 </li>
@@ -85,7 +85,7 @@ export default async function SaludPage(props: { searchParams: Promise<{ perfil?
                     <p className="mt-1 text-base text-slate-900 [overflow-wrap:anywhere]">{l.que}</p>
                     <div className="mt-2 flex flex-wrap items-center gap-3">
                       {l.accion && l.href ? (
-                        <Link href={l.href} className="tactil inline-flex items-center rounded-lg bg-slate-900 px-4 text-sm font-semibold text-white hover:bg-slate-800">
+                        <Link prefetch={false} href={l.href} className="tactil inline-flex items-center rounded-lg bg-slate-900 px-4 text-sm font-semibold text-white hover:bg-slate-800">
                           {l.accion}
                         </Link>
                       ) : null}
@@ -113,7 +113,7 @@ export default async function SaludPage(props: { searchParams: Promise<{ perfil?
               <p className="mt-1 text-sm text-slate-700 [overflow-wrap:anywhere]">{i.detalle}</p>
               {i.accion &&
                 (i.href ? (
-                  <Link href={i.href} className="tactil mt-3 inline-flex items-center rounded-lg bg-slate-900 px-4 text-sm font-semibold text-white hover:bg-slate-800">
+                  <Link prefetch={false} href={i.href} className="tactil mt-3 inline-flex items-center rounded-lg bg-slate-900 px-4 text-sm font-semibold text-white hover:bg-slate-800">
                     {i.accion}
                   </Link>
                 ) : (

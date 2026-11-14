@@ -16,7 +16,7 @@ export function TarjetaLuz({
   children: React.ReactNode;
 }) {
   return (
-    <Link
+    <Link prefetch={false}
       href={href}
       style={style}
       className={`tarjeta-luz ${className}`}

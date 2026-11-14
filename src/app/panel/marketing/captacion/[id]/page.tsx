@@ -24,7 +24,7 @@ export default async function CaptacionDetailPage(
       searchParams={searchParams ?? {}}
       backLabel="← Volver a captación"
       headerExtra={
-        <Link href={`/api/marketing/scraping/${params.id}/export`} className="text-sm text-gold-700 hover:underline">
+        <Link prefetch={false} href={`/api/marketing/scraping/${params.id}/export`} className="text-sm text-gold-700 hover:underline">
           Descargar Excel
         </Link>
       }

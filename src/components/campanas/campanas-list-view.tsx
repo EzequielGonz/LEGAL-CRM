@@ -149,7 +149,7 @@ export async function CampanasListView({
               <div className="min-w-0 flex-1">
                 <div className="mb-1 flex flex-wrap items-start justify-between gap-x-3 gap-y-1">
                   <h3 className="min-w-0 font-medium text-slate-900 [overflow-wrap:anywhere]">
-                    <Link href={`${basePath}/${c.id}`} className="underline-offset-2 hover:underline">
+                    <Link prefetch={false} href={`${basePath}/${c.id}`} className="underline-offset-2 hover:underline">
                       {c.name}
                     </Link>
                   </h3>

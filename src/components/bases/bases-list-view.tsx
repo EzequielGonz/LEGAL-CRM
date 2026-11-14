@@ -65,7 +65,7 @@ export async function BasesListView({
             <li key={b.id} className="card-lift rounded-xl border border-slate-200 bg-white p-5 hover:border-slate-400">
               <div className="mb-1 flex flex-wrap items-start justify-between gap-2">
                 <h3 className="min-w-0 font-medium text-slate-900 [overflow-wrap:anywhere]">
-                  <Link href={`${basesPath}/${b.id}`} className="underline-offset-2 hover:underline">
+                  <Link prefetch={false} href={`${basesPath}/${b.id}`} className="underline-offset-2 hover:underline">
                     {b.name}
                   </Link>
                 </h3>

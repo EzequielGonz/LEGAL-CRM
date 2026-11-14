@@ -107,7 +107,7 @@ export default async function OportunidadesPage(
 
         <nav aria-label={`Listas de ${GRUPO_LABEL[ind.grupo] ?? ind.grupo}`} className="flex flex-wrap items-center gap-2">
           {delGrupo.map((i) => (
-            <Link
+            <Link prefetch={false}
               key={i.clave}
               href={enlaceIndicador(perfil, i.clave, volver)}
               aria-current={i.clave === ind.clave ? "page" : undefined}
@@ -127,7 +127,7 @@ export default async function OportunidadesPage(
                   <ul className="space-y-0.5">
                     {INDICADORES.filter((i) => i.grupo === g).map((i) => (
                       <li key={i.clave}>
-                        <Link
+                        <Link prefetch={false}
                           href={enlaceIndicador(perfil, i.clave, volver)}
                           aria-current={i.clave === ind.clave ? "page" : undefined}
                           className={
@@ -163,7 +163,7 @@ export default async function OportunidadesPage(
           </p>
           <nav aria-label="Orden" className="flex flex-wrap gap-2">
             {(Object.keys(ORDENES) as Orden[]).map((o) => (
-              <Link
+              <Link prefetch={false}
                 key={o}
                 href={con({ orden: o, pagina: "1" })}
                 aria-current={o === orden ? "true" : undefined}
@@ -208,14 +208,14 @@ export default async function OportunidadesPage(
                     </div>
                     </div>
                     <div className="flex shrink-0 gap-2">
-                      <Link
+                      <Link prefetch={false}
                         href={conVolver(`/ficha/${o.contact_id}`, aqui)}
                         className="btn-suave-sm"
                       >
                         Ficha
                       </Link>
                       {o.conversation_id && (
-                        <Link
+                        <Link prefetch={false}
                           href={conVolver(enlaceConversacion(slug, o.conversation_id), aqui)}
                           className="btn-gold-sm"
                         >
@@ -233,14 +233,14 @@ export default async function OportunidadesPage(
         {paginas > 1 && (
           <nav aria-label="Páginas" className="flex items-center justify-between text-sm">
             {pagina > 1 ? (
-              <Link href={con({ pagina: String(pagina - 1) })} className="btn-suave">
+              <Link prefetch={false} href={con({ pagina: String(pagina - 1) })} className="btn-suave">
                 ← Anterior
               </Link>
             ) : (
               <span />
             )}
             {pagina < paginas ? (
-              <Link href={con({ pagina: String(pagina + 1) })} className="btn-suave">
+              <Link prefetch={false} href={con({ pagina: String(pagina + 1) })} className="btn-suave">
                 Siguiente →
               </Link>
             ) : (

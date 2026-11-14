@@ -70,7 +70,7 @@ export default async function BibliotecaPage(props: { searchParams: Promise<{ vo
             <h1 className="text-xl font-semibold text-slate-950">Biblioteca de agentes</h1>
             <p className="text-sm text-slate-600">Solo configuración: ninguno responde mensajes. El agente que responde hoy se maneja en «Bot IA» de cada perfil.</p>
           </div>
-          <Link href={volver ?? (slug === "juridico" ? "/agentes" : `/panel/${slug}/agentes`)} className="tactil inline-flex items-center text-sm font-medium text-slate-600 hover:text-slate-950">
+          <Link prefetch={false} href={volver ?? (slug === "juridico" ? "/agentes" : `/panel/${slug}/agentes`)} className="tactil inline-flex items-center text-sm font-medium text-slate-600 hover:text-slate-950">
             ← Volver
           </Link>
         </div>

@@ -28,7 +28,7 @@ export function EnlaceDetalle({
 }) {
   const aqui = useDireccionActual();
   return (
-    <Link href={conVolver(href, aqui)} className={className} aria-label={ariaLabel}>
+    <Link prefetch={false} href={conVolver(href, aqui)} className={className} aria-label={ariaLabel}>
       {children}
     </Link>
   );
@@ -63,7 +63,7 @@ export function EnlaceVolver({
     }
   };
   return (
-    <Link href={destino ?? respaldo} className={className} onClick={alTocar}>
+    <Link prefetch={false} href={destino ?? respaldo} className={className} onClick={alTocar}>
       <span aria-hidden="true">←</span> {texto}
     </Link>
   );

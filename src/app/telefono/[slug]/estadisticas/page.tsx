@@ -68,7 +68,7 @@ export default async function TelefonoEstadisticasPage(
               {ordered.length > 1 && (
                 <div className="flex gap-2 overflow-x-auto pb-1">
                   {ordered.map((c) => (
-                    <Link
+                    <Link prefetch={false}
                       key={c.id}
                       href={`${basePath}?campana=${c.id}`}
                       aria-current={c.id === selected.id ? "page" : undefined}

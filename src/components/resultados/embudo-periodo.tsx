@@ -50,7 +50,7 @@ export async function EmbudoPeriodo({ slug, rubroId, areas, periodo, ver }: { sl
               <p className="mt-1 min-h-[2.5rem] text-[13px] text-slate-600">{e.paso ? <><span className="font-semibold text-slate-900">{e.paso}</span> {e.nota}</> : e.nota}</p>
               {v ? <p className={`mt-1 text-[13px] font-medium ${TONO[v.tono]}`}>{v.texto}</p> : null}
               <p className="mt-3">
-                <Link href={href(e.ver)} aria-current={activa ? "page" : undefined} className="text-[13px] font-semibold text-slate-900 underline underline-offset-2 after:absolute after:inset-0">
+                <Link prefetch={false} href={href(e.ver)} aria-current={activa ? "page" : undefined} className="text-[13px] font-semibold text-slate-900 underline underline-offset-2 after:absolute after:inset-0">
                   {activa ? "Viendo quiénes" : "Ver quiénes"}
                   <span className="sr-only"> · {e.titulo.toLowerCase()}</span>
                 </Link>
@@ -64,7 +64,7 @@ export async function EmbudoPeriodo({ slug, rubroId, areas, periodo, ver }: { sl
         <span className="text-slate-700">cerrados sin avanzar (perdidos)</span>
         {/* En perdidos, subir no es bueno: el color se invierte. */}
         {vPerdidos ? <span className={`text-[13px] font-medium ${TONO[vPerdidos.tono === "sube" ? "baja" : vPerdidos.tono === "baja" ? "sube" : vPerdidos.tono]}`}>{vPerdidos.texto}</span> : null}
-        <Link href={href("perdidos")} aria-current={ver === "perdidos" ? "page" : undefined} className="ml-auto text-[13px] font-semibold text-slate-900 underline underline-offset-2 after:absolute after:inset-0">
+        <Link prefetch={false} href={href("perdidos")} aria-current={ver === "perdidos" ? "page" : undefined} className="ml-auto text-[13px] font-semibold text-slate-900 underline underline-offset-2 after:absolute after:inset-0">
           {ver === "perdidos" ? "Viendo quiénes" : "Ver quiénes"}
           <span className="sr-only"> · perdidos</span>
         </Link>

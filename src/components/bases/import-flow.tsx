@@ -394,7 +394,7 @@ export function ImportFlow({
           </p>
           <div className="flex flex-wrap gap-2">
             {basesPath && (
-              <Link href={`${basesPath}/${repeated.id}`} className="btn-gold-sm">
+              <Link prefetch={false} href={`${basesPath}/${repeated.id}`} className="btn-gold-sm">
                 Ver esa base
               </Link>
             )}
@@ -482,7 +482,7 @@ export function ImportSummaryCard({
         )}
       </ul>
       {basesPath && (
-        <Link href={`${basesPath}/${summary.base_id}`} className="mt-3 inline-block btn-gold-sm">
+        <Link prefetch={false} href={`${basesPath}/${summary.base_id}`} className="mt-3 inline-block btn-gold-sm">
           Ver detalle y calidad de la base
         </Link>
       )}

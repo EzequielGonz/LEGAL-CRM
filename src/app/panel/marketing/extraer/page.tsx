@@ -36,7 +36,7 @@ export default async function ExtraerNegociosPage() {
                   <strong>{e.nombre_base}</strong> · {ESTADO[e.estado] ?? e.estado} · {e.creados} nuevos de {e.encontrados}
                 </span>
                 {e.base_id && (
-                  <Link href={`/panel/marketing/bases/${e.base_id}`} className="text-slate-700 underline">Ver en Bases</Link>
+                  <Link prefetch={false} href={`/panel/marketing/bases/${e.base_id}`} className="text-slate-700 underline">Ver en Bases</Link>
                 )}
               </li>
             ))}

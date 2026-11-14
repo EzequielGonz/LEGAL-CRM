@@ -166,7 +166,7 @@ async function CuerpoHoy({ slug, rubroId, searchParams }: { slug: SlugPerfil; ru
 
       <p className="text-sm text-slate-600">
         Los números de la semana y del mes, con de dónde vino cada persona, están en{" "}
-        <Link href={`/resultados?perfil=${slug}`} className="font-medium text-slate-900 underline underline-offset-2">
+        <Link prefetch={false} href={`/resultados?perfil=${slug}`} className="font-medium text-slate-900 underline underline-offset-2">
           Resultados
         </Link>
         .

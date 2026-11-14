@@ -126,7 +126,7 @@ export async function CampaignDetailView({
 
   return (
     <div>
-      <Link href={backHref} className="tactil mb-2 inline-flex items-center text-sm font-medium text-slate-700 underline-offset-2 hover:underline">
+      <Link prefetch={false} href={backHref} className="tactil mb-2 inline-flex items-center text-sm font-medium text-slate-700 underline-offset-2 hover:underline">
         ← Volver a campañas
       </Link>
 
@@ -230,7 +230,7 @@ export async function CampaignDetailView({
 
       <div id="destinatarios" className="mb-3 flex scroll-mt-24 flex-wrap gap-2">
         {FILTERS.map((f) => (
-          <Link
+          <Link prefetch={false}
             key={f.key}
             href={f.key === "todos" ? detailPath : `${detailPath}?estado=${f.key}`}
             className={clsx(
@@ -282,12 +282,12 @@ export async function CampaignDetailView({
                 <td className="px-4 py-3">
                   <span className="flex flex-wrap gap-2">
                     {r.contact_id && (
-                      <Link href={`/ficha/${r.contact_id}?volver=${encodeURIComponent(detailPath)}`} className="rounded-md border border-slate-200 bg-white px-2 py-1 text-xs font-medium text-slate-700 hover:border-slate-300">
+                      <Link prefetch={false} href={`/ficha/${r.contact_id}?volver=${encodeURIComponent(detailPath)}`} className="rounded-md border border-slate-200 bg-white px-2 py-1 text-xs font-medium text-slate-700 hover:border-slate-300">
                         Ficha
                       </Link>
                     )}
                     {r.contact_id && chatDe.get(r.contact_id) && (
-                      <Link href={enlaceChat(chatDe.get(r.contact_id)!)} className="rounded-md bg-slate-900 px-2 py-1 text-xs font-medium text-white">
+                      <Link prefetch={false} href={enlaceChat(chatDe.get(r.contact_id)!)} className="rounded-md bg-slate-900 px-2 py-1 text-xs font-medium text-white">
                         Chat
                       </Link>
                     )}

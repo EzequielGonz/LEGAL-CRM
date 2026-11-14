@@ -34,7 +34,7 @@ export function StatCard({
   const cls = "tarjeta-cifra group relative flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white";
   if (href) {
     return (
-      <Link href={href} className={cls} aria-label={`${label}: ${value}. Ver la lista`}>
+      <Link prefetch={false} href={href} className={cls} aria-label={`${label}: ${value}. Ver la lista`}>
         {body}
       </Link>
     );

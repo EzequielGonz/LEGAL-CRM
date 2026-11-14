@@ -86,7 +86,7 @@ export async function ConfiguracionPerfil({ slug }: { slug: Exclude<SlugPerfil, 
         </SeccionAjustes>
         <SeccionAjustes id="agenda-enlaces" titulo="Citas y disponibilidad" alcance="perfil" palabras="citas turnos horarios feriados excepciones">
           <p className="text-sm text-slate-700">
-            Las citas de este perfil están en <Link href={`/panel/${slug}/agenda`} className="font-medium underline">Contactos › Citas</Link>. Los feriados y excepciones del horario valen para los cuatro perfiles y se cargan acá abajo.
+            Las citas de este perfil están en <Link prefetch={false} href={`/panel/${slug}/agenda`} className="font-medium underline">Contactos › Citas</Link>. Los feriados y excepciones del horario valen para los cuatro perfiles y se cargan acá abajo.
           </p>
         </SeccionAjustes>
         <SeccionCalendarioGeneral d={generales} />
@@ -97,7 +97,7 @@ export async function ConfiguracionPerfil({ slug }: { slug: Exclude<SlugPerfil, 
       <GrupoAjustes id="agentes" titulo="Bot de este perfil" resumen="En Bot IA" soloAvanzado>
         <SeccionAjustes id="agentes-config" titulo="Dónde se configura el bot" alcance="perfil" palabras="modelo versión prompt evaluación entrenamiento agente">
           <p className="text-sm text-slate-700">
-            La configuración del bot de este perfil está en <Link href={`/panel/${slug}/agentes`} className="font-medium underline">Bot IA</Link>. No se cambia desde acá.
+            La configuración del bot de este perfil está en <Link prefetch={false} href={`/panel/${slug}/agentes`} className="font-medium underline">Bot IA</Link>. No se cambia desde acá.
           </p>
         </SeccionAjustes>
       </GrupoAjustes>

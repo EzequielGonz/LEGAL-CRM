@@ -67,7 +67,7 @@ export default async function CaptacionMarketingPage(
 
       <div className="space-y-3">
         {(bases ?? []).map((b) => (
-          <Link
+          <Link prefetch={false}
             key={b.id}
             href={`/panel/marketing/captacion/${b.id}`}
             className="block card-lift rounded-xl border border-slate-200 bg-white p-5 hover:border-gold-300"

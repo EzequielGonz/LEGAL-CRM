@@ -56,7 +56,7 @@ export function LeadList({
           {leads.map((l) => (
             <tr key={l.id} className="hover:bg-slate-50">
               <td className="px-4 py-3 align-top">
-                <Link href={`/panel/marketing/lead/${l.id}`} className="font-medium text-slate-900 hover:underline">
+                <Link prefetch={false} href={`/panel/marketing/lead/${l.id}`} className="font-medium text-slate-900 hover:underline">
                   {l.contacts?.full_name ?? "Sin nombre"}
                 </Link>
                 <p className="text-xs text-slate-400">{l.contacts?.phone ?? "—"}</p>

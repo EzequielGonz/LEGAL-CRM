@@ -198,7 +198,7 @@ export function ExtraerNegocios({ limites, usadosHoy, faltan, avisos }: { limite
                 <input value={pin} onChange={(e) => setPin(e.target.value)} type="password" inputMode="numeric" autoComplete="off" placeholder="PIN" required aria-label="PIN" className="tactil w-28 rounded-lg border border-slate-300 px-2" />
                 <button type="submit" className="tactil rounded-lg bg-slate-900 px-4 text-sm font-semibold text-gold-100">Ejecutar base</button>
               </form>
-              <Link href={`/panel/marketing/bases/${ext.base_id}`} className="tactil inline-flex items-center rounded-lg border border-slate-300 px-4 text-sm font-medium">Ver en Bases</Link>
+              <Link prefetch={false} href={`/panel/marketing/bases/${ext.base_id}`} className="tactil inline-flex items-center rounded-lg border border-slate-300 px-4 text-sm font-medium">Ver en Bases</Link>
             </div>
           )}
           {ejec && (

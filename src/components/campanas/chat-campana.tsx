@@ -175,7 +175,7 @@ export function ChatCampana({ slug, onCerrar }: { slug: SlugPerfil; onCerrar: ()
               {(m.enlaces ?? []).length > 0 && (
                 <div className="mt-2 flex flex-wrap gap-2">
                   {m.enlaces!.map((e) => (
-                    <Link key={e.href} href={e.href} className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-800 hover:border-slate-300">
+                    <Link prefetch={false} key={e.href} href={e.href} className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-800 hover:border-slate-300">
                       {e.texto}
                     </Link>
                   ))}
