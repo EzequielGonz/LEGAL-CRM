@@ -8,6 +8,7 @@ import type { SendFailure } from "@/lib/envios/errores";
 import { limiteDiarioEfectivo, MINIMO_TEXTOS_CAMPANA, motivoDeFreno, primerNombre, textosDistintos } from "@/lib/wasender/ritmo";
 import { descifrar } from "@/lib/wasender/cifrado";
 import { estaEnWhatsApp } from "@/lib/wasender/cliente";
+import { cupoDelDia, MEMORIA_TEXTOS, type EnvioReciente } from "@/lib/wasender/ritmo-humano";
 
 /**
  * Campañas por Wasender (10/11, bloque 3). La campaña es la misma de siempre:
@@ -94,6 +95,11 @@ export function faltantesWasender(
  */
 export function textoDeCampana(p: { cuerpo: string; variantes: string[] }, datos: { nombre: string; asesor: string; marca: string }, semilla: string): string {
   return completar(elegirVariante(p.cuerpo, p.variantes, semilla), { ...datos, nombre: primerNombre(datos.nombre) }).trim();
+}
+
+/** 14/11: completa un texto ya elegido (al azar) con el primer nombre, el asesor y la marca. */
+export function completarTextoDeCampana(texto: string, datos: { nombre: string; asesor: string; marca: string }): string {
+  return completar(texto, { ...datos, nombre: primerNombre(datos.nombre) }).trim();
 }
 
 /**
@@ -311,9 +317,12 @@ export async function cupoDeLinea(
   linea: LineaCampana,
   inicioDelDia: Date,
   ahora: Date,
-  supabase: Db = createAdminClient()
+  supabase: Db = createAdminClient(),
+  /** 14/11: parte del límite que se usa hoy según el plan del día (1 = todo). */
+  factorDelDia = 1
 ): Promise<{ limite: number; dia: number; porCalentamiento: boolean; enviadosHoy: number; agotado: boolean; detalle: string }> {
   const efectivo = limiteDiarioEfectivo({ limiteDiario: linea.limite_diario, calentamientoDesde: linea.calentamiento_desde ?? null }, ahora);
+  const delDia = factorDelDia < 1 ? cupoDelDia(efectivo.limite, factorDelDia) : efectivo.limite;
   const ids = await campanasDeLinea(linea.id, supabase);
   let enviadosHoy = 0;
   if (ids.length) {
@@ -335,7 +344,29 @@ export async function cupoDeLinea(
   const detalle = efectivo.porCalentamiento
     ? `La línea «${linea.nombre}» está en el día ${efectivo.dia} de calentamiento: hasta ${efectivo.limite} envíos por día. Mañana sigue sola.`
     : `La línea «${linea.nombre}» llegó a su límite de ${efectivo.limite} envíos por hoy.`;
+  if (enviadosHoy >= delDia && enviadosHoy < efectivo.limite) {
+    // Hoy la línea usa menos que su límite (plan del día): para que no salga siempre la misma cantidad.
+    return { ...efectivo, enviadosHoy, agotado: true, detalle: `La línea «${linea.nombre}» ya envió lo previsto para hoy (${enviadosHoy}). Mañana sigue sola.` };
+  }
   return { ...efectivo, enviadosHoy, agotado: enviadosHoy >= efectivo.limite, detalle };
+}
+
+/**
+ * 14/11: los últimos primeros mensajes de la línea (del más nuevo al más
+ * viejo), para no repetir plantilla ni un texto parecido. Se compara el texto
+ * base elegido (sin el nombre completado) cuando quedó guardado. Si no se pueden
+ * leer, devuelve una lista vacía y el envío sigue con la elección al azar.
+ */
+export async function enviosRecientesDeLinea(lineaId: string, supabase: Db = createAdminClient()): Promise<EnvioReciente[]> {
+  const { data, error } = await (supabase.from("messages") as any)
+    .select("body, metadata")
+    .eq("direction", "saliente")
+    .eq("origin", "inicio_campana")
+    .eq("metadata->>wasender_line_id", lineaId)
+    .order("created_at", { ascending: false })
+    .limit(MEMORIA_TEXTOS.textos);
+  if (error) return [];
+  return ((data ?? []) as any[]).map((m) => ({ plantillaId: (m.metadata?.wasender_plantilla_id as string) ?? null, texto: String(m.metadata?.wasender_texto_base ?? m.body ?? "") }));
 }
 
 /** Cuántos envíos se miran para el freno y cuánto se espera a que se entreguen. */

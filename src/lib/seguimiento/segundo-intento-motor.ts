@@ -10,6 +10,8 @@ import { enviarPorWasender } from "@/lib/wasender/envio";
 import { clasificarFallaWasender, cupoDeLinea, frenoDeLinea, notaFallaWasender } from "@/lib/wasender/campanas";
 import { prepararEnvioWasender, textoDePlantilla } from "@/lib/seguimiento/wasender";
 import { planSegundoIntento, SEGUNDO_INTENTO } from "@/lib/seguimiento/segundo-intento";
+import { GENERAL_SCHEDULE } from "@/lib/plantillas/catalogo";
+import { estadoDelPlan, fechaArgentina, minutosArgentina, planDelDia } from "@/lib/wasender/ritmo-humano";
 
 /**
  * Segundo intento a quien nunca respondió, por Wasender (decisión del 12/11).
@@ -101,8 +103,16 @@ export async function procesarSegundosIntentos(opts: { now?: Date; maxPorVuelta?
         continue;
       }
       const plantilla = prep.plantilla;
+      // 14/11: el mismo plan del día que las campañas de la línea (arranque, cierre, pausas y cantidad).
+      const planLinea = planDelDia(prep.linea.id, fechaArgentina(ahora), { inicio: GENERAL_SCHEDULE.startHour, fin: GENERAL_SCHEDULE.endHour });
+      const estadoLinea = estadoDelPlan(planLinea, minutosArgentina(ahora));
+      if (!estadoLinea.puede) {
+        r.detalle.push(estadoLinea.detalle);
+        lineasUsadas.add(prep.linea.id);
+        continue;
+      }
       // Límite del día (con calentamiento), freno automático y pausa entre envíos de la línea.
-      const cupo = await cupoDeLinea(prep.linea, startOfArgentinaDay(ahora), ahora, s);
+      const cupo = await cupoDeLinea(prep.linea, startOfArgentinaDay(ahora), ahora, s, planLinea.factorCupo);
       if (cupo.agotado) {
         r.detalle.push(cupo.detalle);
         lineasUsadas.add(prep.linea.id);

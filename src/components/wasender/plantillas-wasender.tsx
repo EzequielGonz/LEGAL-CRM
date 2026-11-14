@@ -6,6 +6,7 @@ import { Icono } from "@/components/ui/icono-seccion";
 import type { SlugPerfil } from "@/lib/marca";
 import { completar, validarPlantilla, type UsoPlantilla } from "@/lib/wasender/plantillas";
 import { MINIMO_TEXTOS_CAMPANA, textosDistintos } from "@/lib/wasender/ritmo";
+import { variantesMuyParecidas } from "@/lib/wasender/ritmo-humano";
 
 interface Plantilla {
   id: string;
@@ -181,6 +182,7 @@ export function PlantillasWasender({ slug, marca }: { slug: SlugPerfil; marca: s
               )}
             </div>
           </details>
+          <AvisoParecidas textos={[edicion.cuerpo, ...edicion.variantes]} />
           {edicion.cuerpo.trim() && (
             <div className="rounded-xl bg-slate-50 p-3 text-sm text-slate-700">
               <p className="text-xs font-medium text-slate-500">Así le llega a «{ejemplo.nombre}»:</p>
@@ -297,5 +299,22 @@ export function PlantillasWasender({ slug, marca }: { slug: SlugPerfil; marca: s
         </section>
       )}
     </div>
+  );
+}
+
+/**
+ * 14/11: avisa cuando dos textos de la plantilla son casi iguales. Para quien
+ * recibe, dos textos casi iguales cuentan como uno solo y arman un patrón.
+ */
+function AvisoParecidas({ textos }: { textos: string[] }) {
+  const pares = useMemo(() => variantesMuyParecidas(textos), [textos]);
+  if (!pares.length) return null;
+  const nombre = (i: number) => (i === 0 ? "el mensaje" : `la variante ${i}`);
+  const primeros = pares.slice(0, 3).map((p) => `${nombre(p.a)} y ${nombre(p.b)}`).join("; ");
+  return (
+    <p className="rounded-xl border border-amber-300 bg-amber-50 p-3 text-sm text-amber-800" role="status">
+      Hay {pares.length === 1 ? "un par de textos casi iguales" : `${pares.length} pares de textos casi iguales`} ({primeros}
+      {pares.length > 3 ? "…" : ""}). Conviene cambiar uno de cada par: textos casi iguales se notan como un patrón.
+    </p>
   );
 }

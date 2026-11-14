@@ -13,8 +13,9 @@ import { classifySendFailure, failureNote, MAX_TRANSIENT_ATTEMPTS } from "@/lib/
 import { randomUUID } from "node:crypto";
 import { effectiveSendHours, getSendWindow, startOfArgentinaDay } from "@/lib/horario";
 import { loadContactCalendar } from "@/lib/contacto/calendario";
-import { clasificarFallaWasender, cupoDeLinea, elegirPlantillaDeInicio, frenoDeLinea, notaFallaWasender, numeroConWhatsApp, preparacionWasender, proveedorDe, textoDeCampana } from "@/lib/wasender/campanas";
+import { clasificarFallaWasender, completarTextoDeCampana, cupoDeLinea, enviosRecientesDeLinea, frenoDeLinea, notaFallaWasender, numeroConWhatsApp, preparacionWasender, proveedorDe } from "@/lib/wasender/campanas";
 import { desfaseEnElMinuto, esperaIrregular } from "@/lib/wasender/ritmo";
+import { cortarTanda, elegirTextoAlAzar, estadoDelPlan, fechaArgentina, instanteDelDia, minutosArgentina, pausaEntreTandas, planDelDia } from "@/lib/wasender/ritmo-humano";
 import { enviarPorWasender } from "@/lib/wasender/envio";
 
 // El horario vive en src/lib/horario.ts (sin dependencias, se prueba solo); se
@@ -223,8 +224,13 @@ async function tickLocked(
   }
   // Límite del día de la línea de Wasender (sumando todas las campañas que la usan).
   // 12/11: el límite es el menor entre el elegido y el del calentamiento de la línea.
+  // 14/11: plan del día de la línea (arranque, cierre, pausas y cantidad distintos cada día).
+  const planWa = wa?.linea ? (() => {
+    const h = effectiveSendHours(campaign);
+    return planDelDia(wa.linea!.id, fechaArgentina(now), { inicio: h.start, fin: h.end });
+  })() : null;
   if (wa?.linea) {
-    const cupo = await cupoDeLinea(wa.linea, startOfArgentinaDay(now), now, supabase);
+    const cupo = await cupoDeLinea(wa.linea, startOfArgentinaDay(now), now, supabase, planWa?.factorCupo ?? 1);
     if (cupo.agotado) return { campaignId, action: "daily_limit_reached", detail: cupo.detalle };
     // Freno automático: si los últimos envíos fallaron o no se entregaron, se pausa sola.
     const freno = await frenoDeLinea(wa.linea.id, now, supabase);
@@ -277,6 +283,23 @@ async function tickLocked(
         { timeZone: "America/Argentina/Buenos_Aires", hourCycle: "h23", weekday: "long", hour: "2-digit", minute: "2-digit" }
       )}.`,
     };
+  }
+
+  // 0 bis) Solo Wasender (14/11): el plan del día de la línea. Antes del arranque
+  // o durante una pausa del día, la campaña queda en pausa hasta esa hora; después
+  // del cierre, espera a mañana. Meta no pasa por acá.
+  if (planWa) {
+    const estado = estadoDelPlan(planWa, minutosArgentina(now));
+    if (!estado.puede) {
+      if (estado.reanuda !== null) {
+        const hasta = instanteDelDia(now, estado.reanuda);
+        if (!campaign.batch_paused_until || new Date(campaign.batch_paused_until) < hasta) {
+          await supabase.from("campaigns").update({ batch_paused_until: hasta.toISOString() }).eq("id", campaignId);
+        }
+        return { campaignId, action: "batch_pause", detail: estado.detalle };
+      }
+      return { campaignId, action: "outside_send_window", detail: estado.detalle };
+    }
   }
 
   // 1) ¿Está en la pausa larga entre lotes?
@@ -431,8 +454,15 @@ async function tickLocked(
     : { ok: true as const, parameters: [] as Extract<ReturnType<typeof buildBodyParameters>, { ok: true }>["parameters"] };
   // Wasender: el texto de la plantilla propia, con la variante de esta persona.
   // 13/11: con rotación, a cada persona le toca una de las plantillas de inicio del perfil.
-  const plantillaWa = wa ? elegirPlantillaDeInicio(wa.rotacion, claim.contact_id ?? claim.id) ?? wa.plantilla! : null;
-  const textoWasender = plantillaWa ? textoDeCampana(plantillaWa, { nombre: name, asesor: senderName, marca: brandName }, claim.contact_id ?? claim.id) : null;
+  // 14/11: plantilla y texto al azar en cada envío, sin repetir las últimas plantillas de la
+  // línea ni un texto parecido a los recientes (también con una sola plantilla: elige variante).
+  const eleccionWa = wa
+    ? elegirTextoAlAzar(wa.rotacion.length ? wa.rotacion : [wa.plantilla!], await enviosRecientesDeLinea(wa.linea!.id, supabase))
+    : null;
+  const plantillaWa = wa ? eleccionWa?.plantilla ?? wa.plantilla! : null;
+  const textoWasender = plantillaWa
+    ? completarTextoDeCampana(eleccionWa?.texto ?? plantillaWa.cuerpo, { nombre: name, asesor: senderName, marca: brandName })
+    : null;
   if (!built.ok) {
     const what = built.missing.map((m) => `${m.label} para ${m.variable}`).join(", ");
     // Igual que "Sin teléfono": no hubo intento contra la API, no cuenta para el ritmo.
@@ -469,19 +499,25 @@ async function tickLocked(
   }
 
   const sentInBatchAfter = campaign.sent_in_batch + 1;
-  const batchDone = sentInBatchAfter >= campaign.batch_size;
+  // 14/11 (solo Wasender): tandas de largo variable y pausas entre tandas de largo variable.
+  const batchDone = wa ? cortarTanda(sentInBatchAfter, campaign.batch_size) : sentInBatchAfter >= campaign.batch_size;
+  const batchPauseSeconds = wa ? pausaEntreTandas(campaign.batch_pause_seconds) : campaign.batch_pause_seconds;
   const pacingUpdate = {
     last_sent_at: now.toISOString(),
     sent_in_batch: batchDone ? 0 : sentInBatchAfter,
     batch_paused_until: batchDone
-      ? new Date(now.getTime() + campaign.batch_pause_seconds * 1000).toISOString()
+      ? new Date(now.getTime() + batchPauseSeconds * 1000).toISOString()
       : null,
     // Sorteamos ACÁ el tiempo de espera hasta el próximo mensaje (no un
     // número fijo): así cada intervalo entre mensajes es distinto, dentro
     // del rango configurado, simulando el ritmo irregular de una persona.
     // 12/11 (solo Wasender): además, una de cada diez esperas es más larga.
+    // 14/11: el plan del día hace las esperas un poco más ágiles o más tranquilas según el día.
     next_delay_seconds: wa
-      ? esperaIrregular(campaign.min_send_delay_seconds, campaign.max_send_delay_seconds)
+      ? esperaIrregular(
+          Math.round(campaign.min_send_delay_seconds * (planWa?.factorEspera ?? 1)),
+          Math.round(campaign.max_send_delay_seconds * (planWa?.factorEspera ?? 1))
+        )
       : randomInt(campaign.min_send_delay_seconds, campaign.max_send_delay_seconds),
   };
 
@@ -586,7 +622,7 @@ async function tickLocked(
           external_message_id: messageId,
           delivery_status: "enviado",
           delivery_status_at: sentAt,
-          metadata: { ...envioWasender!.metadata, campaign_id: campaign.id, wasender_plantilla_id: plantillaWa!.id },
+          metadata: { ...envioWasender!.metadata, campaign_id: campaign.id, wasender_plantilla_id: plantillaWa!.id, ...(eleccionWa ? { wasender_texto_base: eleccionWa.texto } : {}) },
           origin: "inicio_campana",
         }
       : {
