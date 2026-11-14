@@ -180,6 +180,15 @@ const COLUMNAS_PLANTILLA = "id, rubro_id, nombre, cuerpo, variantes, activa, arc
 /** 13/11: marca que usan los selectores para «rotar entre las plantillas de inicio». */
 export const ROTAR_INICIO = "rotar";
 
+/**
+ * 14/11: sin una plantilla fija elegida, la campaña de Wasender rota sola entre
+ * las plantillas de inicio del perfil (el algoritmo de ritmo humano). La
+ * plantilla fija queda solo si alguien la elige a propósito. Pura.
+ */
+export function rotaInicio(campana: { wasender_rotar_inicio?: boolean | null; wasender_plantilla_id?: string | null }): boolean {
+  return campana.wasender_rotar_inicio === true || !campana.wasender_plantilla_id;
+}
+
 /** Lee la línea y la plantilla de la campaña y dice qué falta. */
 export async function preparacionWasender(
   campana: { area: Area; wasender_line_id?: string | null; wasender_plantilla_id?: string | null; wasender_rotar_inicio?: boolean | null },
@@ -187,7 +196,7 @@ export async function preparacionWasender(
   env: Env = process.env
 ): Promise<PreparacionWasender> {
   const rubroId = profileIdForArea(campana.area);
-  const rotar = campana.wasender_rotar_inicio === true;
+  const rotar = rotaInicio(campana);
   const limpia = (x: any): PlantillaCampana => ({ ...x, variantes: Array.isArray(x.variantes) ? x.variantes.filter((v: unknown) => typeof v === "string") : [] });
   const [perfil, linea, plantilla, deInicio] = await Promise.all([
     rubroId ? getProfile(rubroId) : Promise.resolve(null),
@@ -294,7 +303,7 @@ export async function detalleWasender(
   ]);
   return {
     line: l ? { label: `Wasender · ${l.nombre}`, phone_display: l.telefono ?? null } : null,
-    template: campana.wasender_rotar_inicio
+    template: rotaInicio(campana)
       ? { name: "Rota entre las plantillas de inicio del perfil", language: "es", status: "WASENDER" }
       : p
         ? { name: p.nombre, language: "es", status: p.activa ? "WASENDER" : "WASENDER INACTIVA" }
@@ -320,7 +329,7 @@ export async function cupoDeLinea(
   supabase: Db = createAdminClient(),
   /** 14/11: parte del límite que se usa hoy según el plan del día (1 = todo). */
   factorDelDia = 1
-): Promise<{ limite: number; dia: number; porCalentamiento: boolean; enviadosHoy: number; agotado: boolean; detalle: string }> {
+): Promise<{ limite: number; dia: number; porCalentamiento: boolean; enviadosHoy: number; agotado: boolean; detalle: string; delDia: number }> {
   const efectivo = limiteDiarioEfectivo({ limiteDiario: linea.limite_diario, calentamientoDesde: linea.calentamiento_desde ?? null }, ahora);
   const delDia = factorDelDia < 1 ? cupoDelDia(efectivo.limite, factorDelDia) : efectivo.limite;
   const ids = await campanasDeLinea(linea.id, supabase);
@@ -346,9 +355,9 @@ export async function cupoDeLinea(
     : `La línea «${linea.nombre}» llegó a su límite de ${efectivo.limite} envíos por hoy.`;
   if (enviadosHoy >= delDia && enviadosHoy < efectivo.limite) {
     // Hoy la línea usa menos que su límite (plan del día): para que no salga siempre la misma cantidad.
-    return { ...efectivo, enviadosHoy, agotado: true, detalle: `La línea «${linea.nombre}» ya envió lo previsto para hoy (${enviadosHoy}). Mañana sigue sola.` };
+    return { ...efectivo, delDia, enviadosHoy, agotado: true, detalle: `La línea «${linea.nombre}» ya envió lo previsto para hoy (${enviadosHoy}). Mañana sigue sola.` };
   }
-  return { ...efectivo, enviadosHoy, agotado: enviadosHoy >= efectivo.limite, detalle };
+  return { ...efectivo, delDia, enviadosHoy, agotado: enviadosHoy >= efectivo.limite, detalle };
 }
 
 /**

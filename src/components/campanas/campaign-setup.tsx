@@ -56,7 +56,7 @@ export function CampaignSetup({
   const [tpl, setTpl] = useState(templateId ?? "");
   const [limite, setLimite] = useState(dailyLimit ? String(dailyLimit) : "");
   const [waLinea, setWaLinea] = useState(wasender?.lineaId ?? "");
-  const [waPlantilla, setWaPlantilla] = useState(wasender?.rotar ? "rotar" : wasender?.plantillaId ?? "");
+  const [waPlantilla, setWaPlantilla] = useState(wasender?.rotar || !wasender?.plantillaId ? "rotar" : wasender.plantillaId);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -68,7 +68,7 @@ export function CampaignSetup({
         ? { wasender_line_id: waLinea || null, run_days: days, daily_send_limit: limite.trim() === "" ? null : Number(limite) }
         : { line_id: line || null, run_days: days, daily_send_limit: limite.trim() === "" ? null : Number(limite) };
       if (wasender) {
-        const antes = wasender.rotar ? "rotar" : wasender.plantillaId ?? "";
+        const antes = wasender.rotar || !wasender.plantillaId ? "rotar" : wasender.plantillaId;
         if (!running && waPlantilla !== antes) {
           payload.wasender_rotar_inicio = waPlantilla === "rotar";
           payload.wasender_plantilla_id = waPlantilla === "rotar" ? null : waPlantilla || null;
@@ -166,12 +166,9 @@ export function CampaignSetup({
                 aria-label="Plantilla (Wasender)"
                 className="block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
               >
-                <option value="">Sin elegir</option>
-                {wasender.rotacion?.plantillas || wasender.rotar ? (
-                  <option value="rotar">
-                    Rotar las {wasender.rotacion?.plantillas ?? 0} plantillas de inicio ({wasender.rotacion?.textos ?? 0} textos)
-                  </option>
-                ) : null}
+                <option value="rotar">
+                  Al azar entre las {wasender.rotacion?.plantillas ?? 0} plantillas de inicio ({wasender.rotacion?.textos ?? 0} textos)
+                </option>
                 {wasender.plantillas.map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.label}

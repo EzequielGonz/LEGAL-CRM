@@ -15,7 +15,7 @@ import { effectiveSendHours, getSendWindow, startOfArgentinaDay } from "@/lib/ho
 import { loadContactCalendar } from "@/lib/contacto/calendario";
 import { clasificarFallaWasender, completarTextoDeCampana, cupoDeLinea, enviosRecientesDeLinea, frenoDeLinea, notaFallaWasender, numeroConWhatsApp, preparacionWasender, proveedorDe } from "@/lib/wasender/campanas";
 import { desfaseEnElMinuto, esperaIrregular } from "@/lib/wasender/ritmo";
-import { cortarTanda, elegirTextoAlAzar, estadoDelPlan, fechaArgentina, instanteDelDia, minutosArgentina, pausaEntreTandas, planDelDia } from "@/lib/wasender/ritmo-humano";
+import { cortarTanda, elegirTextoAlAzar, esperaParaRepartir, estadoDelPlan, fechaArgentina, instanteDelDia, minutosArgentina, pausaEntreTandas, planDelDia } from "@/lib/wasender/ritmo-humano";
 import { enviarPorWasender } from "@/lib/wasender/envio";
 
 // El horario vive en src/lib/horario.ts (sin dependencias, se prueba solo); se
@@ -229,8 +229,11 @@ async function tickLocked(
     const h = effectiveSendHours(campaign);
     return planDelDia(wa.linea!.id, fechaArgentina(now), { inicio: h.start, fin: h.end });
   })() : null;
+  // 14/11: cuánto le falta hoy a la línea, para repartir los envíos hasta el cierre del plan.
+  let faltanHoyWa = Number.POSITIVE_INFINITY;
   if (wa?.linea) {
     const cupo = await cupoDeLinea(wa.linea, startOfArgentinaDay(now), now, supabase, planWa?.factorCupo ?? 1);
+    faltanHoyWa = cupo.delDia - cupo.enviadosHoy;
     if (cupo.agotado) return { campaignId, action: "daily_limit_reached", detail: cupo.detalle };
     // Freno automático: si los últimos envíos fallaron o no se entregaron, se pausa sola.
     const freno = await frenoDeLinea(wa.linea.id, now, supabase);
@@ -332,6 +335,12 @@ async function tickLocked(
       .in("status", ["enviado", "entregado", "leido", "respondio"])
       .gte("sent_at", startOfToday.toISOString());
 
+    if (wa) faltanHoyWa = Math.min(faltanHoyWa, campaign.daily_send_limit - (sentToday ?? 0));
+    // 14/11 (solo Wasender): el límite de la campaña frena el día, no la campaña: mañana sigue sola
+    // (lunes a sábado sin tener que reanudarla a mano). Meta queda como estaba.
+    if (wa && (sentToday ?? 0) >= campaign.daily_send_limit) {
+      return { campaignId, action: "daily_limit_reached", detail: `La campaña llegó a su límite de ${campaign.daily_send_limit} envíos por hoy. Mañana sigue sola.` };
+    }
     if ((sentToday ?? 0) >= campaign.daily_send_limit) {
       await supabase
         .from("campaigns")
@@ -513,10 +522,14 @@ async function tickLocked(
     // del rango configurado, simulando el ritmo irregular de una persona.
     // 12/11 (solo Wasender): además, una de cada diez esperas es más larga.
     // 14/11: el plan del día hace las esperas un poco más ágiles o más tranquilas según el día.
+    // 14/11 (segunda vuelta): nunca más rápido de lo necesario para repartir lo que falta del día hasta el cierre.
     next_delay_seconds: wa
-      ? esperaIrregular(
-          Math.round(campaign.min_send_delay_seconds * (planWa?.factorEspera ?? 1)),
-          Math.round(campaign.max_send_delay_seconds * (planWa?.factorEspera ?? 1))
+      ? Math.max(
+          esperaIrregular(
+            Math.round(campaign.min_send_delay_seconds * (planWa?.factorEspera ?? 1)),
+            Math.round(campaign.max_send_delay_seconds * (planWa?.factorEspera ?? 1))
+          ),
+          planWa ? esperaParaRepartir(planWa, minutosArgentina(now), faltanHoyWa - 1) : 0
         )
       : randomInt(campaign.min_send_delay_seconds, campaign.max_send_delay_seconds),
   };

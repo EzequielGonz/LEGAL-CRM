@@ -194,6 +194,31 @@ export function cupoDelDia(limite: number, factor: number): number {
   return Math.max(1, Math.min(limite, Math.floor(limite * factor)));
 }
 
+/** Minutos en los que todavía se puede enviar hoy desde `minutos` (sin contar las pausas del plan). Pura. */
+export function minutosHabilesRestantes(plan: PlanDelDia, minutos: number): number {
+  const desde = Math.max(minutos, plan.arranque);
+  if (desde >= plan.cierre) return 0;
+  let total = plan.cierre - desde;
+  for (const c of plan.cortes) total -= Math.max(0, Math.min(c.hasta, plan.cierre) - Math.max(c.desde, desde));
+  return Math.max(0, total);
+}
+
+/**
+ * 14/11 (segunda vuelta): espera mínima para repartir lo que falta del día
+ * hasta el cierre, en segundos. Sin esto, la línea mandaba todo el cupo a la
+ * mañana y a la tarde quedaba muda todos los días (un patrón). Se recalcula en
+ * cada envío, así que se corrige sola: si va atrasada, espera menos. El azar
+ * (0,45 a 1,55 veces el promedio) evita que el intervalo se vuelva regular.
+ * Si no falta nada o ya no queda tiempo, devuelve 0. Pura.
+ */
+export function esperaParaRepartir(plan: PlanDelDia, minutos: number, faltan: number, azar: () => number = Math.random): number {
+  if (!Number.isFinite(faltan) || faltan <= 0) return 0;
+  const restan = minutosHabilesRestantes(plan, minutos);
+  if (restan <= 0) return 0;
+  const promedio = (restan * 60) / faltan;
+  return Math.round(promedio * (0.45 + azar() * 1.1));
+}
+
 // ── 3 y 4. Parecido y elección del texto ─────────────────────────────────
 
 /** Texto comparable: minúsculas, sin acentos, sin signos ni variables. */

@@ -188,3 +188,24 @@ test("elección al azar: reparte entre plantillas y textos, y nunca deja de eleg
   assert.ok(elegirTextoAlAzar(PLANTILLAS, todo, azar));
   assert.equal(elegirTextoAlAzar([], [], azar), null);
 });
+
+// 14/11 (segunda vuelta): repartir el cupo del día hasta el cierre.
+import { esperaParaRepartir, minutosHabilesRestantes } from "../../src/lib/wasender/ritmo-humano";
+
+test("minutos hábiles que quedan descuentan las pausas del plan", () => {
+  const plan = { arranque: 9 * 60, cierre: 19 * 60, factorCupo: 1, factorEspera: 1, cortes: [{ desde: 13 * 60, hasta: 14 * 60, motivo: "mediodía" as const }] };
+  assert.equal(minutosHabilesRestantes(plan, 8 * 60), 9 * 60);
+  assert.equal(minutosHabilesRestantes(plan, 13 * 60 + 30), 5 * 60);
+  assert.equal(minutosHabilesRestantes(plan, 19 * 60), 0);
+});
+
+test("la espera reparte lo que falta hasta el cierre, con azar y sin pasarse", () => {
+  const plan = { arranque: 9 * 60, cierre: 19 * 60, factorCupo: 1, factorEspera: 1, cortes: [] };
+  // 600 minutos para 20 envíos: 30 minutos promedio (entre 13,5 y 46,5 con el azar).
+  assert.equal(esperaParaRepartir(plan, 9 * 60, 20, () => 0.5), 1800);
+  assert.equal(esperaParaRepartir(plan, 9 * 60, 20, () => 0), 810);
+  assert.equal(esperaParaRepartir(plan, 9 * 60, 20, () => 1), 2790);
+  assert.equal(esperaParaRepartir(plan, 9 * 60, 0), 0);
+  assert.equal(esperaParaRepartir(plan, 19 * 60, 5), 0);
+  assert.equal(esperaParaRepartir(plan, 9 * 60, Number.POSITIVE_INFINITY), 0);
+});

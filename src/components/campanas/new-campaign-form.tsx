@@ -42,7 +42,7 @@ export function NewCampaignForm({
   const [lineId, setLineId] = useState(lines.length === 1 ? lines[0].id : "");
   const [metodo, setMetodo] = useState<"meta" | "wasender">("meta");
   const [waLinea, setWaLinea] = useState(wasender?.lineas.length === 1 ? wasender.lineas[0].id : "");
-  const [waPlantilla, setWaPlantilla] = useState("");
+  const [waPlantilla, setWaPlantilla] = useState("rotar");
   const porWasender = metodo === "wasender";
   const [baseId, setBaseId] = useState("");
   const [rolId, setRolId] = useState("");
@@ -234,19 +234,18 @@ export function NewCampaignForm({
               onChange={(e) => setWaPlantilla(e.target.value)}
               className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
             >
-              <option value="">Elegir después</option>
-              {wasender.rotacion?.plantillas ? (
-                <option value="rotar">
-                  Rotar las {wasender.rotacion.plantillas} plantillas de inicio ({wasender.rotacion.textos} textos distintos) · recomendado
-                </option>
-              ) : null}
+              <option value="rotar">
+                {wasender.rotacion?.plantillas
+                  ? `Al azar entre las ${wasender.rotacion.plantillas} plantillas de inicio (${wasender.rotacion.textos} textos distintos) · recomendado`
+                  : "Al azar entre las plantillas de inicio del perfil · recomendado"}
+              </option>
               {wasender.plantillas.map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.label}
                 </option>
               ))}
             </select>
-            <p className="mt-1 text-xs text-slate-600">Con «Rotar», cada persona recibe una plantilla de inicio distinta y una de sus variantes: es lo que menos se parece a un envío masivo. Con una sola plantilla, recibe una de sus variantes.</p>
+            <p className="mt-1 text-xs text-slate-600">«Al azar» es el modo normal: cada persona recibe una plantilla de inicio y una variante elegidas al azar, sin repetir las últimas de la línea, con el ritmo del día. Elegí una plantilla fija solo si querés probar un texto puntual.</p>
           </div>
         </>
       ) : (
