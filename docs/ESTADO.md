@@ -8,7 +8,7 @@ covers: [estado, memoria, seguimiento, wasender, plantillas, bot, despliegue, pe
 
 Se actualiza al cierre de cada vuelta de trabajo. Sin datos personales, claves ni códigos de acceso. Ante una contradicción, mandan `CLAUDE.md` y `.claude/referencias/reglas-comunes.md`.
 
-Última actualización: 13/11/2026.
+Última actualización: 14/11/2026.
 
 ## Qué está encendido hoy
 
@@ -18,7 +18,8 @@ Se actualiza al cierre de cada vuelta de trabajo. Sin datos personales, claves n
 - **Caídos automáticos** (desde el 13/11): mensaje de seguimiento a las 72 horas y 24 horas de espera; lo viejo cae sin otro mensaje. Para apagarlo: borrar `caidos_automaticos` de `system_settings`.
 - **Reclamos serios**: una amenaza legal contra nosotros o la queja de un cliente captado abre una incidencia del perfil y el bot no contesta.
 - **Recontacto del mismo día** (2 h + 2 h), desde el 24/10.
-- **Bot: conocimiento versión 2** predefinido en los cuatro perfiles. La versión 1 se conserva.
+- **Bot: conocimiento versión 2** predefinido en los cuatro perfiles. La versión 1 se conserva. El 14/11 se sumaron 12 fichas (`fuente = 'mejora 14/11'`).
+- **Ritmo humano de Wasender** (14/11): plan del día por línea, tandas y pausas variables, texto al azar sin repetir. Rige solo cuando una campaña de Wasender está en curso con una línea conectada.
 
 ## Qué está apagado o en pausa
 
@@ -39,6 +40,7 @@ Se actualiza al cierre de cada vuelta de trabajo. Sin datos personales, claves n
 - **Asistente del panel con permiso para todo** (13/11): que pueda hacer todo lo que hace el panel, cambiar secciones y pedir cambios de código. Detalle y resguardos en `PLAN-4.md`, bloque G.
 - **Asistente** (13/11): sigue pidiendo confirmación antes de ejecutar. La tarea que revisa sola la Bandeja para Claude, por ahora no.
 - **Quedaron sin respuesta** (13/11): si lo último que dijo la persona concretó una llamada, pasa a captado; si no, queda en «Quedaron sin respuesta»; ante la duda, va a «Posible captación a revisar». No se les escribe solos.
+- **14/11 (inicio de conversación):** solo Wasender, Meta queda al margen y no se toca. Lunes a sábado sin días de descanso; nada con patrón fijo (hora de arranque, cantidad, tandas, pausas y texto cambian cada día y cada envío). La responsable conecta las líneas el 15/11.
 - Producción se publica directo a `main` desde la rama de trabajo del chat (antes `mejoras-1211`; el 13/11 a la noche, `claude/relaxed-cerf-5oncz1`) después de typecheck, lint, pruebas y build, y se recorre como usuaria antes de informar.
 
 ## Dónde está cada cosa
@@ -78,6 +80,14 @@ Se actualiza al cierre de cada vuelta de trabajo. Sin datos personales, claves n
 - **Sigue faltando:** ver al bot contestar un audio real que entra; cambiar el código de acceso.
 - Detalle: `docs/mejoras-1311/AUDITORIA.md` §10 y la tabla de la corrida de la noche en `PLAN-4.md`.
 
+## Qué quedó hecho el 14/11
+
+- **Algoritmo de inicio (Wasender):** `src/lib/wasender/ritmo-humano.ts` (plan del día, tandas, pausas, elección del texto, parecido entre textos) conectado en `src/lib/campaigns.ts` y en el segundo intento. Migración 0615 (índice).
+- **Plantillas:** 12 nuevas por perfil para bases frías (22 por perfil, unos 1.100 textos cada uno). Generador: `docs/mejoras-1411/plantillas-frias.mjs`.
+- **Velocidad:** sin precarga automática en enlaces de listas; marca y menú en paralelo; `profile_metrics` en una pasada (migración 0616, mismo resultado).
+- **Bot v2:** 12 fichas, contestadores nuevos reconocidos, sin «escribilo» ante stickers. `docs/mejoras-1411/BOT-V2-1411.md`.
+- Detalle: `docs/mejoras-1411/ENTREGA.md`, `INFORME.md`, `MIGRACIONES.md`.
+
 ## Aprendizajes de esta vuelta
 
 - Publicar primero a `main` y después subir la rama: si se suben las dos seguidas, Vercel construye primero la vista previa y producción espera en la cola.
@@ -89,3 +99,5 @@ Se actualiza al cierre de cada vuelta de trabajo. Sin datos personales, claves n
 - La falla «asistente: cada tipo permitido…» de la suite es anterior y ajena.
 - Las vistas previas de Vercel piden sesión de Vercel: se recorren con un enlace compartido temporal, solo mirando.
 - Con Next 15, `params`, `searchParams` y `cookies()` se esperan (`await`); `perfilActivo()` también.
+- Las variantes que cambian una o dos palabras arman un patrón igual: para variar de verdad hay que cambiar estructura (orden, arranque, largo). La pantalla de plantillas ahora avisa los textos casi iguales.
+- La precarga automática de Next en listas largas multiplica los pedidos al servidor: en listas, `prefetch={false}`.
