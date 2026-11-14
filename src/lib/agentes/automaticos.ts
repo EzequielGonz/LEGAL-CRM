@@ -36,11 +36,36 @@ const SENALES_AUTOMATICO: RegExp[] = [
   /\bseleccione una opcion\b|\belegi una (?:de las siguientes )?opcion(?:es)?\b|\bmenu principal\b/,
 ];
 
+/**
+ * 14/11: contestadores que se escapaban, vistos en los chats de la v2 (sobre
+ * todo en Marketing, donde 8 de 18 respuestas eran automáticas). Se suman a
+ * las señales del 24/10, que no cambian. Ninguna es algo que escriba una
+ * persona al responder un mensaje: todas son saludos de negocio, menús o
+ * avisos de un bot.
+ */
+const SENALES_AUTOMATICO_1411: RegExp[] = [
+  // «Gracias por comunicarte con [negocio]. ¿Cómo podemos ayudarte?»
+  /\bgracias por (?:comunicarte|comunicarse|contactarte|contactarse|contactarnos|escribirnos) con\b[^]{0,80}\b(?:como|en que) (?:te |le |los |las )?(?:podemos|podriamos) ayudar/,
+  // «Te comunicaste con [negocio]… seré tu asesor / en este momento…»
+  /\bte comunicaste con\b[^]{0,120}\b(?:sere tu asesor|en este momento|en breve|a la brevedad|horario)/,
+  // Horarios de atención del negocio.
+  /\bnuestros horarios de atencion (?:es|son)\b|\brecorda nuestros horarios\b|\ben nuestro horario comercial\b/,
+  // Menús de bots: «elegí una de las opciones», «superaste los intentos».
+  /\belegi una de las opciones\b|\bsuperaste los intentos\b/,
+  // Bajas automáticas de listas de ofertas.
+  /\bvolver a suscribirte\b|\bya no te vamos a (?:mandar|enviar) (?:las |mas )?ofertas\b/,
+  // Bot que saluda con el número de teléfono: «👋 5491…, quiero ayudarte con tu consulta».
+  /\b\d{10,13}, quiero ayudarte con tu consulta\b/,
+  /\bcuando quieras contratar algun servicio\b/,
+  /\bestoy de receso\b[^]{0,60}\bvuelvo\b/,
+];
+
 /** ¿El mensaje parece un contestador automático y no una persona? Pura. */
 export function esRespuestaAutomatica(texto: string | null | undefined): boolean {
   const t = normalizar(texto ?? "");
   if (!t) return false;
   if (SENALES_AUTOMATICO.some((re) => re.test(t))) return true;
+  if (SENALES_AUTOMATICO_1411.some((re) => re.test(t))) return true;
   // Menú numerado: tres o más opciones en líneas que empiezan con número o emoji de número.
   const opciones = (texto ?? "").split(/\n/).filter((l) => /^\s*(?:\d{1,2}\s*[).:\-–]|[0-9]️?⃣)/.test(l));
   return opciones.length >= 3;
