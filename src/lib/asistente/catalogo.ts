@@ -30,6 +30,35 @@ export const CATALOGO: readonly OperacionPanel[] = [
     efecto: "Desde la próxima respuesta el bot usa esta ficha. No envía nada.",
   },
   {
+    clave: "bot_informe_de_mejoras",
+    grupo: "bot",
+    titulo: "Generar el informe de mejoras del bot",
+    descripcion: "La IA relee las conversaciones reales del perfil del período (sin teléfonos, documentos, correos ni nombres) y deja hallazgos y propuestas en Bot IA → Informe de mejoras del bot. No cambia el bot: las propuestas se aplican aparte.",
+    metodo: "POST",
+    ruta: "agentes/informes",
+    perfil: PERFIL,
+    campos: [{ nombre: "dias", tipo: "numero", descripcion: "Cuántos días hacia atrás leer (7, 14, 30 o 60; por defecto 14)" }],
+    nivel: "cambio",
+    efecto: "Queda un informe nuevo en Bot IA. No cambia el bot ni le escribe a nadie.",
+  },
+  {
+    clave: "bot_sumar_ficha_conocimiento",
+    grupo: "bot",
+    titulo: "Sumar una ficha de conocimiento al bot del perfil",
+    descripcion: "Agrega al bot del perfil (agente base) una ficha nueva: qué hacer cuando la persona dice ciertas palabras. Solo suma: no edita ni borra lo que ya tiene. Úsala para aplicar una propuesta del informe de mejoras. Para un comportamiento aparte por base o campaña, usá proponer_rol.",
+    metodo: "POST",
+    ruta: "agentes/conocimiento",
+    perfil: PERFIL,
+    campos: [
+      { nombre: "titulo", tipo: "texto", obligatorio: true, descripcion: "Título corto de la ficha" },
+      { nombre: "contenido", tipo: "texto", obligatorio: true, descripcion: "Instrucciones para el bot, en viñetas que empiezan con «- » (hasta 4000 caracteres)" },
+      { nombre: "capa", tipo: "texto", valores: ["tema", "objecion", "rubro"], descripcion: "tema = tema del rubro; objecion = objeción o respuesta típica; rubro = vale para todas las conversaciones" },
+      { nombre: "disparadores", tipo: "lista", descripcion: "Palabras o frases cortas de la persona que activan la ficha (al menos 2; con * al final para prefijos). No hacen falta con capa rubro" },
+    ],
+    nivel: "cambio",
+    efecto: "Desde la próxima respuesta, el bot usa la ficha cuando la persona dice esas palabras. Se apaga desde Conocimiento.",
+  },
+  {
     clave: "bot_encender_apagar",
     grupo: "bot",
     titulo: "Encender o apagar el bot de un área",
@@ -321,7 +350,7 @@ export const CATALOGO: readonly OperacionPanel[] = [
       { nombre: "run_days", tipo: "lista", descripcion: "Días de envío, números del 1 al 6" },
       { nombre: "wasender_line_id", tipo: "texto", descripcion: "Línea de Wasender (por su nombre)" },
       { nombre: "wasender_plantilla_id", tipo: "texto", descripcion: "Plantilla de Wasender (por su nombre)" },
-      { nombre: "wasender_rotar_inicio", tipo: "si_no", descripcion: "sí = rota entre las plantillas de inicio; no = usa la plantilla fija (hay que mandarla en el mismo pedido)" },
+      { nombre: "wasender_rotar_inicio", tipo: "si_no", descripcion: "sí = al azar entre las plantillas de inicio (modo normal; también rige si no se manda una plantilla fija); no = usa la plantilla fija (hay que mandarla en el mismo pedido)" },
     ],
     referencias: [
       { campo: "wasender_line_id", que: "línea de Wasender", tabla: "wasender_lineas" },
@@ -1210,6 +1239,7 @@ export function operacionPorClave(clave: string): OperacionPanel | null {
  * toda ruta del panel esté en el catálogo, en una herramienta propia o acá.
  */
 export const FUERA_DEL_CATALOGO: Record<string, string> = {
+  "agentes/informes/[id]/aplicar": "Aplica una propuesta de un informe por su número: desde el asistente se usa «Sumar una ficha de conocimiento al bot del perfil» o proponer_rol con el texto de la propuesta.",
   "agenda/availability": "Reemplaza todos los horarios del área borrando primero los anteriores, sin deshacer si falla: hasta arreglar eso, se hace solo desde Ajustes.",
   "agentes/ajuste": "Autoriza un gasto de entrenamiento del modelo: se hace desde Bot IA, con la pantalla que muestra el costo.",
   "agentes/asignaciones": "Ya tiene herramienta propia (proponer_asignar_agente).",

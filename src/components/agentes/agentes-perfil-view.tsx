@@ -6,6 +6,7 @@ import { PuntajeBots } from "@/components/agentes/puntaje-bots";
 import { RolesPorBase } from "@/components/agentes/roles-por-base";
 import { ProbarBotReal } from "@/components/agentes/probar-bot-real";
 import { FichaNegocio } from "@/components/agentes/ficha-negocio";
+import { InformeMejoras } from "@/components/agentes/informe-mejoras";
 
 const NOMBRE_AREA: Record<string, string> = {
   civil: "Civil",
@@ -55,6 +56,8 @@ export async function AgentesPerfilView({
       <PuntajeBots rubroId={rubroId} />
 
       <ProbarBotReal perfil={perfil} areas={areas} />
+
+      <InformeMejoras perfil={perfil} />
 
       <FichaNegocio perfil={perfil} />
 
