@@ -13,3 +13,5 @@ Todas se aplicaron el 15/11 después de comprobar el historial real de la base (
 | 0625_permiso_mensaje_crisis | `grant_crisis_ack`: permiso de un solo uso para que las líneas de ayuda salgan aunque una persona haya tomado el chat. Deja el chat en atención humana. Probado en una transacción que se deshizo. Registro en `ops_change_log` 314. | `drop function public.grant_crisis_ack(uuid)`. |
 
 Cambio de datos (no es migración): tres plantillas de inicio de Marketing (anuncios, turnos y reseñas) cambiaron una pregunta sin referente por una con contexto en 56 variantes. Antes y después en `ops_change_log` 297 a 302.
+
+- **0633_asistente_laboratorio_simple** (15/11): amplía `asistente_acciones_tipo_check` con `version_bot_crear`, `version_bot_usar` y `version_bot_volver` (mantiene los 18 anteriores). Aplicada; registro 317 en `ops_change_log`. Volver atrás: restablecer la lista de 0626 cuando no queden propuestas de esos tipos sin archivar.
