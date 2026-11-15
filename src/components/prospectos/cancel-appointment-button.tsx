@@ -15,7 +15,7 @@ export function CancelAppointmentButton({ appointmentId }: { appointmentId: stri
   }
 
   return (
-    <button
+    <button type="button"
       onClick={cancel}
       disabled={loading}
       className="text-xs font-medium text-red-500 hover:underline disabled:opacity-60"

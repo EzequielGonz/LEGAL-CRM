@@ -13,6 +13,7 @@ import { VISTAS_CARTERA, cuandoCorto } from "@/lib/cartera";
 import { AREAS_DE_PERFIL, contarGrupo } from "@/lib/cartera-servidor";
 import { getCampaignFunnelCounts } from "@/lib/campaigns";
 import { TableroHoy } from "@/components/inicio/tablero-hoy";
+import { captadoEsperaDeMas } from "@/lib/hoy/colas";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Hoy" };
@@ -132,8 +133,16 @@ async function CuerpoHoy({ slug, rubroId, searchParams }: { slug: SlugPerfil; ru
     ...((activas ?? []) as any[]).map((c, i) => ({ texto: `enviados de «${c.name}»`, n: embudos[i]?.enviados ?? null, de: embudos[i]?.total ?? null, href: `${baseCampanas}/${c.id}` })),
   ];
 
+  // 15/11: captados que esperan el llamado hace más de 24 horas (sin cita).
+  const esperanDeMas = ((captados.filas ?? []) as any[]).filter((o) => !citaDe(o.contact_id) && captadoEsperaDeMas(o.captured_at ?? o.updated_at ?? null)).length;
+
   return (
     <>
+      {esperanDeMas > 0 && (
+        <p role="status" className="rounded-xl border border-amber-300 bg-amber-50 p-3 text-sm font-medium text-amber-900">
+          {esperanDeMas === 1 ? "Una persona captada espera" : `${esperanDeMas} personas captadas esperan`} el llamado hace más de 24 horas. Están marcadas «Más de 24 h» en la lista de abajo.
+        </p>
+      )}
       <TableroHoy
         slug={slug}
         rubroId={rubroId}
@@ -145,12 +154,13 @@ async function CuerpoHoy({ slug, rubroId, searchParams }: { slug: SlugPerfil; ru
         delBot={delBot}
         captados={(captados.filas ?? []).map((o: any) => {
           const cita = citaDe(o.contact_id);
+          const tarde = !cita && captadoEsperaDeMas(o.captured_at ?? o.updated_at ?? null);
           return {
             contactId: o.contact_id ?? null,
             conversationId: o.conversation_id ?? null,
             nombre: o.contacts?.full_name ?? null,
-            detalle: `Aceptó el siguiente paso${o.area === "penal" ? " · Penal" : ""}`,
-            etiqueta: cita ? `Cita ${cuandoCorto(cita.starts_at)}${cita.kind === "ia" ? " · Fase 2" : ""}` : null,
+            detalle: `${tarde ? "Espera el llamado hace más de 24 h · " : ""}Aceptó el siguiente paso${o.area === "penal" ? " · Penal" : ""}`,
+            etiqueta: cita ? `Cita ${cuandoCorto(cita.starts_at)}${cita.kind === "ia" ? " · Fase 2" : ""}` : tarde ? "Más de 24 h" : null,
             at: o.updated_at ?? null,
           };
         })}

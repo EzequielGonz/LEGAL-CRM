@@ -132,7 +132,7 @@ export function CalendarSettings({
       <p role="alert" className={error ? "text-sm font-medium text-red-700" : "sr-only"}>{error ?? ""}</p>
 
       {!open ? (
-        <button onClick={() => setOpen(true)} className="text-xs font-medium text-blue-600 hover:underline">
+        <button type="button" onClick={() => setOpen(true)} className="text-xs font-medium text-blue-600 hover:underline">
           + Agregar excepción
         </button>
       ) : (

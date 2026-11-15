@@ -167,7 +167,7 @@ export function ImportFlow({
 
   if (!open) {
     return (
-      <button onClick={() => setOpen(true)} className="btn-gold">
+      <button type="button" onClick={() => setOpen(true)} className="btn-gold">
         {openLabel}
       </button>
     );

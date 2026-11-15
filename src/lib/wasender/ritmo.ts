@@ -118,3 +118,24 @@ export function motivoDeFreno(m: MuestraDeEnvios): string | null {
   if (pSinEntregar >= 0.5) return `Freno automático: ${m.fallidos + m.sinEntregar} de los últimos ${m.enviados} envíos no se entregaron. Revisá la línea; se puede reanudar cuando pasen 12 horas del último envío.`;
   return null;
 }
+
+/**
+ * 15/11 (auditoría, negocio): si casi nadie contesta, la línea se está gastando
+ * sin resultado y WhatsApp lo castiga. Con 100 envíos o más en los últimos 7
+ * días y menos del 1 % de respuestas, se frena para revisar el mensaje o la base.
+ * Pura.
+ */
+export const FRENO_RESPUESTA = { minimoEnvios: 100, tasaMinima: 0.01, dias: 7 };
+export const PREFIJO_FRENO_RESPUESTA = "Freno por respuesta:";
+/** ¿La responsable lo salteó a mano en los últimos 7 días? Pura. */
+export function frenoRespuestaSalteado(ignoradoEn: string | null | undefined, ahora = new Date()): boolean {
+  if (!ignoradoEn) return false;
+  const t = Date.parse(ignoradoEn);
+  return Number.isFinite(t) && ahora.getTime() - t < FRENO_RESPUESTA.dias * 86_400_000;
+}
+export function motivoDeFrenoPorRespuesta(m: { enviados: number; respondieron: number }): string | null {
+  if (m.enviados < FRENO_RESPUESTA.minimoEnvios) return null;
+  if (m.respondieron / m.enviados >= FRENO_RESPUESTA.tasaMinima) return null;
+  return `${PREFIJO_FRENO_RESPUESTA} de los últimos ${m.enviados} envíos de la línea contestaron ${m.respondieron} (menos del 1 %). Revisá el mensaje o la base. Si la reanudás, sigue: este freno no la vuelve a parar en 7 días.`;
+}
+

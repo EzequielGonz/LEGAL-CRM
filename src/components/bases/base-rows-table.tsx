@@ -182,7 +182,7 @@ export function BaseRowsTable({
           Seleccionar los contactos de esta página ({selectable.length})
           {selected.size > 0 && <span className="text-xs text-slate-400">· {selected.size} seleccionados</span>}
         </label>
-        <button
+        <button type="button"
           onClick={() => {
             setScope(selected.size > 0 ? "seleccion" : "base");
             setShowCampaignForm(true);

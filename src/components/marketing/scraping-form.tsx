@@ -82,13 +82,13 @@ export function ScrapingForm() {
         </ul>
         {summary.warning && <p className="mt-2 text-amber-700">{summary.warning}</p>}
         <div className="mt-3 flex gap-2">
-          <button
+          <button type="button"
             onClick={() => router.push(`/panel/marketing/captacion/${summary.base_id}`)}
             className="btn-gold-sm"
           >
             Ver detalle
           </button>
-          <button
+          <button type="button"
             onClick={() => {
               setSummary(null);
               setOpen(false);
@@ -104,7 +104,7 @@ export function ScrapingForm() {
 
   if (!open) {
     return (
-      <button onClick={() => setOpen(true)} className="btn-gold">
+      <button type="button" onClick={() => setOpen(true)} className="btn-gold">
         + Buscar negocios en Google Maps
       </button>
     );

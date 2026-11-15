@@ -5,6 +5,7 @@ import { AREA_TO_RUBRO_ID } from "@/lib/rubros";
 import { requireSession } from "@/lib/acceso/autorizacion";
 import { validarEleccionWasender } from "@/lib/wasender/campanas";
 import { respuestaErrorInterno } from "@/lib/error-publico";
+import { apagaEntrenamiento, esResultadoSemana, valoresDeEntrenamiento } from "@/lib/campanas/entrenamiento";
 
 /**
  * Las campañas ya no se eliminan (pregunta 20): un DELETE la archiva (y la
@@ -36,7 +37,7 @@ export async function PATCH(request: Request, props: { params: Promise<{ id: str
   const supabase = createAdminClient();
   const { data: campaign } = await supabase
     .from("campaigns")
-    .select("id, area, status, line_id, run_days, template_id, message_template_name, daily_send_limit, proveedor, wasender_line_id, wasender_plantilla_id, wasender_rotar_inicio" as any)
+    .select("id, area, status, line_id, run_days, template_id, message_template_name, daily_send_limit, entrenamiento_desde, proveedor, wasender_line_id, wasender_plantilla_id, wasender_rotar_inicio" as any)
     .eq("id", params.id)
     .maybeSingle() as { data: any };
   if (!campaign) return NextResponse.json({ error: "Campaña no encontrada" }, { status: 404 });
@@ -105,6 +106,17 @@ export async function PATCH(request: Request, props: { params: Promise<{ id: str
       if (!Number.isInteger(n) || n < 1 || n > 1000) return NextResponse.json({ error: "El límite diario tiene que ser un número entero entre 1 y 1000." }, { status: 400 });
       update.daily_send_limit = n;
     }
+    // 15/11: un límite mayor que el del entrenamiento es decisión propia: el entrenamiento se apaga.
+    if (apagaEntrenamiento((update.daily_send_limit as number | null | undefined) ?? null)) update.entrenamiento_desde = null;
+  }
+  // 15/11: botón de entrenamiento en una campaña ya creada (20 por día, 7 días, ritmo prudente).
+  if (body?.entrenamiento === true) Object.assign(update, valoresDeEntrenamiento());
+  // 15/11: resultado de la semana de entrenamiento (día 7).
+  if (body?.resultado_semana !== undefined) {
+    if (!esResultadoSemana(body.resultado_semana)) return NextResponse.json({ error: "Elegí avanzó, no avanzó o vendido." }, { status: 400 });
+    update.resultado_semana = body.resultado_semana;
+    update.resultado_semana_at = new Date().toISOString();
+    update.resultado_semana_nota = typeof body.resultado_semana_nota === "string" ? body.resultado_semana_nota.slice(0, 500) : null;
   }
   if (Object.keys(update).length === 0) return NextResponse.json({ error: "Nada para guardar" }, { status: 400 });
 
@@ -120,6 +132,7 @@ export async function PATCH(request: Request, props: { params: Promise<{ id: str
       template_id: campaign.template_id,
       message_template_name: campaign.message_template_name,
       daily_send_limit: (campaign as any).daily_send_limit,
+      entrenamiento_desde: (campaign as any).entrenamiento_desde ?? null,
       ...((campaign as any).proveedor === "wasender"
         ? { wasender_line_id: (campaign as any).wasender_line_id, wasender_plantilla_id: (campaign as any).wasender_plantilla_id }
         : {}),

@@ -5,6 +5,7 @@ import { AREA_TO_RUBRO_ID } from "@/lib/rubros";
 import { requireSession } from "@/lib/acceso/autorizacion";
 import { validarEleccionWasender } from "@/lib/wasender/campanas";
 import { respuestaErrorInterno } from "@/lib/error-publico";
+import { ENTRENAMIENTO } from "@/lib/campanas/entrenamiento";
 
 /**
  * Crea una campaña (siempre en borrador). Si viene `base_id` (toda una
@@ -35,6 +36,9 @@ export async function POST(request: Request) {
   } = body;
   // 10/11: método de envío. Todo lo demás (destinatarios, ritmo, días) es igual.
   const porWasender = body?.proveedor === "wasender";
+  // 15/11: modo entrenamiento: 20 por día durante 7 días. El ritmo (esperas y lotes) lo trae el formulario,
+  // que arranca con el de entrenamiento y se puede ajustar a mano.
+  const entrenamiento = body?.entrenamiento === true ? { daily_send_limit: ENTRENAMIENTO.porDia, entrenamiento_desde: new Date().toISOString() } : null;
 
   // La plantilla se elige del catálogo (pregunta 22) y puede quedar para
   // después: sin plantilla aprobada la campaña queda en borrador y no se lanza.
@@ -151,7 +155,8 @@ export async function POST(request: Request) {
         typeof batch_pause_seconds === "number" && batch_pause_seconds > 0
           ? batch_pause_seconds
           : 300,
-    })
+      ...(entrenamiento ?? {}),
+    } as any)
     .select()
     .single();
 

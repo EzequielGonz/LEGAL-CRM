@@ -12,6 +12,7 @@ import { prepararEnvioWasender, textoDePlantilla } from "@/lib/seguimiento/wasen
 import { planSegundoIntento, SEGUNDO_INTENTO } from "@/lib/seguimiento/segundo-intento";
 import { GENERAL_SCHEDULE } from "@/lib/plantillas/catalogo";
 import { estadoDelPlan, fechaArgentina, minutosArgentina, planDelDia } from "@/lib/wasender/ritmo-humano";
+import { frenaPorTope, TEXTO_TOPE } from "@/lib/contacto/tope";
 
 /**
  * Segundo intento a quien nunca respondió, por Wasender (decisión del 12/11).
@@ -154,6 +155,11 @@ export async function procesarSegundosIntentos(opts: { now?: Date; maxPorVuelta?
       const [pausaAhora, bloqueoAhora] = await Promise.all([getAutomationPause(), contactBlockReason(c.contact_id)]);
       if (pausaAhora.outboundPaused || bloqueoAhora) {
         await marcar(s, registroId, bloqueoAhora ? "fallido" : "pendiente", bloqueoAhora ? "Contacto detenido: no se envió." : "Pausa general activa: no se envió.");
+        continue;
+      }
+      // 15/11: tope único de 3 automáticos sin respuesta por persona.
+      if (await frenaPorTope(c.contact_id, s)) {
+        await marcar(s, registroId, "fallido", TEXTO_TOPE);
         continue;
       }
 

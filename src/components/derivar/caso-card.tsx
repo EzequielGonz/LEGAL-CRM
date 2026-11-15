@@ -99,14 +99,14 @@ export function CasoCard({
       )}
 
       <div className="flex gap-2">
-        <button
+        <button type="button"
           onClick={handleEnviar}
           disabled={sending}
           className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#25D366] px-4 py-3.5 text-sm font-semibold text-white shadow-sm transition-transform active:scale-[0.98] disabled:opacity-60"
         >
           <Icono nombre="enviar" className="h-4 w-4" /> {derived ? "Reenviar a WhatsApp" : "Enviar a WhatsApp"}
         </button>
-        <button
+        <button type="button"
           onClick={handleCopiar}
           className="flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-3.5 text-sm font-semibold text-slate-700 shadow-sm transition-transform active:scale-[0.98]"
         >

@@ -148,7 +148,7 @@ export function ContactEditForm({
       </div>
 
       <div className="flex items-center gap-3">
-        <button
+        <button type="button"
           onClick={save}
           disabled={saving}
           className="btn-gold"

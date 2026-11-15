@@ -138,6 +138,7 @@ html:not([data-modo="oscuro"]) :is(.bg-slate-50, .bg-slate-100, .bg-white) > .op
 
 /* Regiones con desplazamiento propio que se pueden enfocar con teclado: foco visible. */
 [role="region"][tabindex="0"]:focus-visible,
-[role="log"][tabindex="0"]:focus-visible {
+[role="log"][tabindex="0"]:focus-visible,
+ul[tabindex="0"]:focus-visible {
   outline-offset: -3px;
 }

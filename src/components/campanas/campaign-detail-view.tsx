@@ -16,6 +16,7 @@ import { detalleWasender } from "@/lib/wasender/campanas";
 import { CAMPAIGN_STATUS_LABEL } from "@/lib/campaign-status";
 import { EnlaceAvanzado } from "@/components/nivel/nivel";
 import { agruparErrores, explicarError, leerErrorGuardado, lineaError } from "@/lib/envios/explicacion";
+import { EntrenamientoCampana } from "@/components/campanas/entrenamiento-campana";
 
 const PAGE_SIZE = 100;
 
@@ -172,6 +173,11 @@ export async function CampaignDetailView({
             {campaign.daily_send_limit ? ` · máx. ${campaign.daily_send_limit}/día` : ""}
             {" · "}envía de lunes a sábado, de {hours.start} a {hours.end}hs (Arg.)
           </p>
+          <EntrenamientoCampana
+            campaignId={campaign.id}
+            entrenamientoDesde={(campaign as any).entrenamiento_desde ?? null}
+            resultado={(campaign as any).resultado_semana ?? null}
+          />
         </div>
         <div className="flex flex-wrap items-start gap-2">
           <CampaignControls campaignId={campaign.id} campaignName={campaign.name} status={campaign.status} />

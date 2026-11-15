@@ -9,6 +9,7 @@ import { isContactAllowed } from "@/lib/contacto/reglas";
 import { politicaPorOrigen, type OrigenTarea } from "@/lib/contacto/origen";
 import { salidaDeConversacion } from "@/lib/wasender/proveedor";
 import { enviarPorWasender, LineaWasenderNoDisponible } from "@/lib/wasender/envio";
+import { frenaPorTope, ORIGENES_CON_TOPE } from "@/lib/contacto/tope";
 
 /**
  * Una salida automática no se hizo porque, al revalidar inmediatamente antes
@@ -29,6 +30,8 @@ export class AutomaticSendBlockedError extends Error {
         ? "El chat está tomado por una persona: la respuesta de la IA no se envió."
         : reason === "contacto_detenido"
         ? `Contacto detenido: no se envió${detail ? ` (${detail})` : ""}.`
+        : reason === "tope_por_contacto"
+        ? "La persona ya recibió 3 mensajes automáticos sin contestar: no se envió."
         : reason === "acuse_no_autorizado"
         ? "El acuse final no tiene un permiso vigente: no se envió."
         : `Salida automática bloqueada (${reason})${detail ? `: ${detail}` : ""}.`
@@ -156,6 +159,10 @@ export async function sendOutboundMessage({
       const b = await contactBlockReason(contactId);
       if (b && (b.minorReported || !b.detentionId)) throw new AutomaticSendBlockedError("contacto_detenido", b.label);
     } else {
+      // 15/11: tope único de 3 automáticos sin respuesta por persona.
+      if ((ORIGENES_CON_TOPE as readonly string[]).includes(origen) && (await frenaPorTope(contactId, supabase))) {
+        throw new AutomaticSendBlockedError("tope_por_contacto");
+      }
       try {
         await assertAutomaticContactAllowed(contactId);
       } catch (err) {

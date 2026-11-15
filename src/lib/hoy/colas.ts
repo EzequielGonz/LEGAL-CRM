@@ -176,3 +176,15 @@ export function unificarCola(d: { esperan: EntradaCola[]; porCerrar: EntradaCola
     ...items.filter((i) => i.accion === "derivar").sort((a, b) => tiempo(b) - tiempo(a)),
   ];
 }
+
+/**
+ * 15/11 (auditoría, negocio): un captado que espera el llamado más de 24 horas
+ * se marca en Hoy (el interés se enfría rápido). Pura.
+ */
+export const ESPERA_CAPTADO_HORAS = 24;
+export function captadoEsperaDeMas(capturadoEn: string | null | undefined, ahora = new Date()): boolean {
+  if (!capturadoEn) return false;
+  const t = Date.parse(capturadoEn);
+  return Number.isFinite(t) && ahora.getTime() - t > ESPERA_CAPTADO_HORAS * 3_600_000;
+}
+

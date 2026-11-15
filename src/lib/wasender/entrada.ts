@@ -428,6 +428,22 @@ export async function procesarWebhook(
           })
           .eq("id", linea.id);
         if (caida) await pausarCampanasDeLinea(supabase, linea, ev.estado);
+        // 15/11: aviso al teléfono cuando una línea que andaba se cae (sin datos de personas).
+        if (caida && !["logged_out", "expired", "disconnected", "need_scan"].includes(String(linea.estado ?? ""))) {
+          try {
+            const { sendToDevices } = await import("@/lib/push");
+            await sendToDevices({
+              title: "Se desconectó una línea",
+              body: `La línea «${linea.nombre ?? "sin nombre"}» quedó sin conexión y sus campañas se pausaron. Volvé a vincularla desde el panel.`,
+              url: "/wasender",
+              tag: "linea-caida",
+              kind: "aviso",
+              eventKey: `linea-caida:${linea.id}:${new Date().toISOString().slice(0, 13)}`,
+            });
+          } catch (err) {
+            console.error("[wasender] No se pudo avisar la caída de la línea:", err);
+          }
+        }
         resultados.push(`sesion:${ev.estado}`);
       } else if (ev.tipo === "mensaje") {
         if (!ev.deMi) {

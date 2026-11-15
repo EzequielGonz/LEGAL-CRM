@@ -30,7 +30,7 @@ export function StudioForm() {
 
   if (!open) {
     return (
-      <button onClick={() => setOpen(true)} className="text-xs font-medium text-blue-600 hover:underline">
+      <button type="button" onClick={() => setOpen(true)} className="text-xs font-medium text-blue-600 hover:underline">
         + Agregar estudio
       </button>
     );

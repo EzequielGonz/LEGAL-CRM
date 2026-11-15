@@ -163,15 +163,15 @@ export function FollowupReviewActions({ taskId, status }: { taskId: string; stat
     <div className="flex flex-wrap items-center gap-2 text-xs">
       {status === "a_revisar" ? (
         <>
-          <button disabled={busy} onClick={() => act("marcar_enviado")} className="rounded border border-slate-300 px-2 py-0.5 hover:bg-slate-50">
+          <button type="button" disabled={busy} onClick={() => act("marcar_enviado")} className="rounded border border-slate-300 px-2 py-0.5 hover:bg-slate-50">
             Le llegó: marcar enviado
           </button>
           {!confirmDouble ? (
-            <button disabled={busy} onClick={() => setConfirmDouble(true)} className="rounded border border-slate-300 px-2 py-0.5 hover:bg-slate-50">
+            <button type="button" disabled={busy} onClick={() => setConfirmDouble(true)} className="rounded border border-slate-300 px-2 py-0.5 hover:bg-slate-50">
               Reintentar…
             </button>
           ) : (
-            <button
+            <button type="button"
               disabled={busy}
               onClick={() => act("reintentar", { confirm_uncertain: true })}
               className="rounded border border-amber-400 bg-amber-50 px-2 py-0.5 text-amber-900"
@@ -181,11 +181,11 @@ export function FollowupReviewActions({ taskId, status }: { taskId: string; stat
           )}
         </>
       ) : (
-        <button disabled={busy} onClick={() => act("reintentar")} className="rounded border border-slate-300 px-2 py-0.5 hover:bg-slate-50">
+        <button type="button" disabled={busy} onClick={() => act("reintentar")} className="rounded border border-slate-300 px-2 py-0.5 hover:bg-slate-50">
           Reintentar
         </button>
       )}
-      <button disabled={busy} onClick={() => act("descartar")} className="rounded border border-slate-300 px-2 py-0.5 hover:bg-slate-50">
+      <button type="button" disabled={busy} onClick={() => act("descartar")} className="rounded border border-slate-300 px-2 py-0.5 hover:bg-slate-50">
         Descartar
       </button>
       {error && <span role="alert" className="text-red-600">{error}</span>}

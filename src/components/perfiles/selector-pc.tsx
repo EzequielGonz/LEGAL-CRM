@@ -114,9 +114,10 @@ export function SelectorPerfilesPC({
                       { t: "Citas", v: c?.semana.citas },
                       { t: "Derivados", v: c?.semana.derivados },
                     ].map((x) => (
-                      <div key={x.t} className="perfil-pc-cifra rounded-2xl px-3 py-2.5">
-                        <dd className="text-xl font-semibold tabular-nums text-slate-950">{n(x.v)}</dd>
+                      // 15/11: el término va antes que la cifra (dl válida); se ve igual con flex-col-reverse.
+                      <div key={x.t} className="perfil-pc-cifra flex flex-col-reverse rounded-2xl px-3 py-2.5">
                         <dt className="text-xs text-slate-500">{x.t}</dt>
+                        <dd className="text-xl font-semibold tabular-nums text-slate-950">{n(x.v)}</dd>
                       </div>
                     ))}
                   </dl>

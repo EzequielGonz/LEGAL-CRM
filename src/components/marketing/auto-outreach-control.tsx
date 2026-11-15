@@ -74,16 +74,16 @@ export function AutoOutreachControl({
           />
         </div>
         {active ? (
-          <button onClick={() => send("pausar")} disabled={loading} className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">
+          <button type="button" onClick={() => send("pausar")} disabled={loading} className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">
             Pausar
           </button>
         ) : (
-          <button onClick={() => send("activar")} disabled={loading} className="btn-gold">
+          <button type="button" onClick={() => send("activar")} disabled={loading} className="btn-gold">
             Activar
           </button>
         )}
         {active && (
-          <button onClick={() => send("activar")} disabled={loading} className="text-sm text-slate-500 hover:underline">
+          <button type="button" onClick={() => send("activar")} disabled={loading} className="text-sm text-slate-500 hover:underline">
             Guardar cambios
           </button>
         )}

@@ -5,7 +5,7 @@ import { WasenderError } from "@/lib/wasender/cliente";
 import { LineaWasenderNoDisponible, motivoNoDisponible, type LineaParaEnviar } from "@/lib/wasender/envio";
 import { completar, elegirVariante, variablesDe } from "@/lib/wasender/plantillas";
 import type { SendFailure } from "@/lib/envios/errores";
-import { limiteDiarioEfectivo, MINIMO_TEXTOS_CAMPANA, motivoDeFreno, primerNombre, textosDistintos } from "@/lib/wasender/ritmo";
+import { FRENO_RESPUESTA, limiteDiarioEfectivo, MINIMO_TEXTOS_CAMPANA, motivoDeFreno, motivoDeFrenoPorRespuesta, primerNombre, textosDistintos } from "@/lib/wasender/ritmo";
 import { descifrar } from "@/lib/wasender/cifrado";
 import { estaEnWhatsApp } from "@/lib/wasender/cliente";
 import { cupoDelDia, MEMORIA_TEXTOS, type EnvioReciente } from "@/lib/wasender/ritmo-humano";
@@ -387,7 +387,7 @@ export const VENTANA_FRENO = { cantidad: 20, esperaMin: 15, horas: 12 };
  * La ventana es de 12 horas: si se reanuda antes, la misma tanda vuelve a
  * frenar. Es a propósito: la línea necesita ese descanso.
  */
-export async function frenoDeLinea(lineaId: string, ahora: Date, supabase: Db = createAdminClient()): Promise<string | null> {
+export async function frenoDeLinea(lineaId: string, ahora: Date, supabase: Db = createAdminClient(), opts: { sinFrenoPorRespuesta?: boolean } = {}): Promise<string | null> {
   const ids = await campanasDeLinea(lineaId, supabase);
   if (!ids.length) return null;
   const hasta = new Date(ahora.getTime() - VENTANA_FRENO.esperaMin * 60_000);
@@ -402,11 +402,19 @@ export async function frenoDeLinea(lineaId: string, ahora: Date, supabase: Db = 
     .order("sent_at", { ascending: false })
     .limit(VENTANA_FRENO.cantidad);
   const filas = (data ?? []) as { status: string }[];
-  return motivoDeFreno({
+  const porEntrega = motivoDeFreno({
     enviados: filas.length,
     fallidos: filas.filter((f) => f.status === "fallo").length,
     sinEntregar: filas.filter((f) => f.status === "enviado").length,
   });
+  if (porEntrega || opts.sinFrenoPorRespuesta) return porEntrega;
+  // 15/11: freno por respuesta (menos del 1 % con 100 envíos o más en 7 días).
+  const desde = new Date(ahora.getTime() - FRENO_RESPUESTA.dias * 86_400_000).toISOString();
+  const [{ count: enviados }, { count: respondieron }] = await Promise.all([
+    supabase.from("campaign_contacts").select("id", { count: "exact", head: true }).in("campaign_id", ids).in("status", ENVIADOS).gte("sent_at", desde),
+    supabase.from("campaign_contacts").select("id", { count: "exact", head: true }).in("campaign_id", ids).eq("status", "respondio").gte("sent_at", desde),
+  ]);
+  return motivoDeFrenoPorRespuesta({ enviados: enviados ?? 0, respondieron: respondieron ?? 0 });
 }
 
 /** Consulta si el número tiene WhatsApp con la clave de la línea. null = no se pudo saber. */

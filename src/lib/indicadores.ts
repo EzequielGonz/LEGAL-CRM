@@ -157,7 +157,7 @@ export async function listarIndicador(
   const orden = ORDENES[opts.orden ?? ind.orden ?? "reciente"] ?? ORDENES.reciente;
   const from = (pagina - 1) * TAMANO_PAGINA;
   const sel =
-    "id, contact_id, conversation_id, area, contact_state, capture_state, derivation_state, attention_state, attention_reason, followup_state, followup_reason, followup_next_at, capture_reason, interest_score, interest_reason, last_inbound_at, last_outbound_at, ultima_palabra, posible_captacion, posible_captacion_reason, location_zone, capture_warnings, post_derivation_state, first_source, updated_at, created_at, contacts(full_name, phone)";
+    "id, contact_id, conversation_id, area, contact_state, capture_state, derivation_state, attention_state, attention_reason, followup_state, followup_reason, followup_next_at, capture_reason, interest_score, interest_reason, last_inbound_at, last_outbound_at, ultima_palabra, posible_captacion, posible_captacion_reason, location_zone, capture_warnings, post_derivation_state, first_source, captured_at, updated_at, created_at, contacts(full_name, phone)";
   const { data, count, error } = await aplicarCondiciones(base(rubroId, sel, { count: "exact" }, opts.periodo), ind.conds)
     .order(orden.col, { ascending: orden.asc, nullsFirst: false })
     .order("updated_at", { ascending: false })

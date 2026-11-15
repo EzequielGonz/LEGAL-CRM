@@ -82,19 +82,22 @@ export async function FollowupPanel({ rubroId }: { rubroId: string }) {
             ? "No hay que activar ni cargar nada. El bot relee cada conversación cortada y decide si corresponde volver a escribir o soltar; vos solo mirás acá qué hizo y con quién."
             : "Alguien lo apagó a mano. Se vuelve a encender desde «Ajustes del seguimiento», más abajo."}
         </p>
-        <dl className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {/* 15/11: son enlaces a cada lista, no una lista de definiciones (antes había <dt> dentro de <a>). */}
+        <ul className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
           {[
             { t: "Programados", n: o.programadas.length, h: "#seg-programados" },
             { t: "Enviados", n: o.enviadas.length, h: "#seg-enviados" },
             { t: "Soltados", n: o.detenidas.length, h: "#seg-soltados" },
             { t: "Para revisar", n: o.atencion.length, h: "#seg-revision" },
           ].map((x) => (
-            <a key={x.t} href={x.h} className="rounded-xl border border-slate-200 bg-white px-4 py-3 hover:bg-slate-50">
-              <dt className="text-[13px] font-medium text-slate-600">{x.t}</dt>
-              <dd className="text-2xl font-semibold tabular-nums text-slate-950">{x.n}</dd>
-            </a>
+            <li key={x.t}>
+              <a href={x.h} className="block rounded-xl border border-slate-200 bg-white px-4 py-3 hover:bg-slate-50">
+                <span className="block text-[13px] font-medium text-slate-600">{x.t}</span>
+                <span className="block text-2xl font-semibold tabular-nums text-slate-950">{x.n}</span>
+              </a>
+            </li>
           ))}
-        </dl>
+        </ul>
       </section>
 
       <section aria-labelledby="seg-ruta" className="rounded-2xl border border-slate-200 bg-white p-5">

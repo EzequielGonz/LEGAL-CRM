@@ -7,6 +7,7 @@ import { SendLimitsFields } from "./send-limits-fields";
 import { TemplatePicker } from "@/components/plantillas/template-picker";
 import { ChatCampana } from "@/components/campanas/chat-campana";
 import type { SlugPerfil } from "@/lib/marca";
+import { apagaEntrenamiento, ENTRENAMIENTO } from "@/lib/campanas/entrenamiento";
 
 export function NewCampaignForm({
   channels,
@@ -46,11 +47,27 @@ export function NewCampaignForm({
   const porWasender = metodo === "wasender";
   const [baseId, setBaseId] = useState("");
   const [rolId, setRolId] = useState("");
-  const [minDelaySeconds, setMinDelaySeconds] = useState(50);
-  const [maxDelaySeconds, setMaxDelaySeconds] = useState(200);
-  const [batchSize, setBatchSize] = useState(10);
-  const [batchPauseSeconds, setBatchPauseSeconds] = useState(300);
-  const [dailyLimit, setDailyLimit] = useState<number | "">("");
+  const [minDelaySeconds, setMinDelaySeconds] = useState<number>(ENTRENAMIENTO.ritmo.min_send_delay_seconds);
+  const [maxDelaySeconds, setMaxDelaySeconds] = useState<number>(ENTRENAMIENTO.ritmo.max_send_delay_seconds);
+  const [batchSize, setBatchSize] = useState<number>(ENTRENAMIENTO.ritmo.batch_size);
+  const [batchPauseSeconds, setBatchPauseSeconds] = useState<number>(ENTRENAMIENTO.ritmo.batch_pause_seconds);
+  const [dailyLimit, setDailyLimit] = useState<number | "">(ENTRENAMIENTO.porDia);
+  // 15/11: modo entrenamiento (20 por día durante 7 días, ritmo prudente). Se apaga si se elige un límite mayor.
+  const [entrenamiento, setEntrenamiento] = useState(true);
+  function usarEntrenamiento(si: boolean) {
+    setEntrenamiento(si);
+    if (si) {
+      setMinDelaySeconds(ENTRENAMIENTO.ritmo.min_send_delay_seconds);
+      setMaxDelaySeconds(ENTRENAMIENTO.ritmo.max_send_delay_seconds);
+      setBatchSize(ENTRENAMIENTO.ritmo.batch_size);
+      setBatchPauseSeconds(ENTRENAMIENTO.ritmo.batch_pause_seconds);
+      setDailyLimit(ENTRENAMIENTO.porDia);
+    }
+  }
+  function cambiarLimite(v: number | "") {
+    setDailyLimit(v);
+    if (apagaEntrenamiento(v === "" ? null : v)) setEntrenamiento(false);
+  }
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -79,6 +96,7 @@ export function NewCampaignForm({
         batch_size: batchSize,
         batch_pause_seconds: batchPauseSeconds,
         daily_send_limit: dailyLimit === "" ? null : dailyLimit,
+        entrenamiento,
         line_id: porWasender ? null : lineId || null,
         ...(porWasender ? { proveedor: "wasender", wasender_line_id: waLinea || null, wasender_plantilla_id: waPlantilla === "rotar" ? null : waPlantilla || null, wasender_rotar_inicio: waPlantilla === "rotar" } : {}),
         base_id: baseId || undefined,
@@ -299,8 +317,23 @@ export function NewCampaignForm({
         <p className="mt-1 text-xs text-slate-600">Vale solo para esta campaña. Se puede cambiar o editar después desde la campaña.</p>
       </div>
 
+      <div className="rounded-lg border border-slate-200 bg-white px-3 py-3">
+        <button
+          type="button"
+          aria-pressed={entrenamiento}
+          onClick={() => usarEntrenamiento(!entrenamiento)}
+          className={`inline-flex min-h-[44px] items-center gap-2 rounded-lg border px-3 py-2 text-sm font-semibold ${entrenamiento ? "border-emerald-700 bg-emerald-50 text-emerald-900" : "border-slate-300 text-slate-700 hover:bg-slate-50"}`}
+        >
+          <span aria-hidden="true">{entrenamiento ? "✓" : "○"}</span> Modo entrenamiento
+        </button>
+        <p className="mt-2 text-sm text-slate-700">
+          {entrenamiento
+            ? `Sale de a ${ENTRENAMIENTO.porDia} por día durante ${ENTRENAMIENTO.dias} días, con esperas largas y lotes de ${ENTRENAMIENTO.ritmo.batch_size}. Al día ${ENTRENAMIENTO.dias} te pedimos el resultado para decidir si subir. Nada se sube solo.`
+            : "Sin entrenamiento: el límite y el ritmo son los que elijas abajo. Podés ir por más volumen cuando quieras."}
+        </p>
+      </div>
       <p className="solo-simple rounded-lg bg-slate-50 px-3 py-2 text-sm text-slate-700">
-        Ritmo de envío: el recomendado (de a 10 mensajes, con esperas variables y pausas, para cuidar el número).{" "}
+        Ritmo de envío: {entrenamiento ? "el de entrenamiento" : "el recomendado (de a 10 mensajes, con esperas variables y pausas, para cuidar el número)"}.{" "}
         <EnlaceAvanzado href="#campana-ritmo" className="font-medium underline underline-offset-2">
           Personalizar
         </EnlaceAvanzado>
@@ -317,7 +350,7 @@ export function NewCampaignForm({
         batchPauseSeconds={batchPauseSeconds}
         onBatchPauseSecondsChange={setBatchPauseSeconds}
         dailyLimit={dailyLimit}
-        onDailyLimitChange={setDailyLimit}
+        onDailyLimitChange={cambiarLimite}
       />
       </div>
 

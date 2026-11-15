@@ -48,7 +48,7 @@ export function NotificationPhonesForm({ phones }: { phones: NotificationPhone[]
               {p.phone}
               {p.label && <span className="ml-2 text-xs text-slate-400">({p.label})</span>}
             </span>
-            <button
+            <button type="button"
               onClick={() => handleDelete(p.id)}
               disabled={deletingId === p.id}
               className="text-xs text-red-500 hover:underline disabled:opacity-50"
@@ -63,7 +63,7 @@ export function NotificationPhonesForm({ phones }: { phones: NotificationPhone[]
       </ul>
 
       {!open ? (
-        <button onClick={() => setOpen(true)} className="text-xs font-medium text-blue-600 hover:underline">
+        <button type="button" onClick={() => setOpen(true)} className="text-xs font-medium text-blue-600 hover:underline">
           + Agregar número
         </button>
       ) : (

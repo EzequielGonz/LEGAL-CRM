@@ -17,6 +17,8 @@ import { clasificarFallaWasender, completarTextoDeCampana, cupoDeLinea, enviosRe
 import { desfaseEnElMinuto, esperaIrregular } from "@/lib/wasender/ritmo";
 import { cortarTanda, elegirTextoAlAzar, esperaParaRepartir, estadoDelPlan, fechaArgentina, instanteDelDia, minutosArgentina, pausaEntreTandas, planDelDia } from "@/lib/wasender/ritmo-humano";
 import { enviarPorWasender } from "@/lib/wasender/envio";
+import { frenaPorTope, TEXTO_TOPE } from "@/lib/contacto/tope";
+import { frenoRespuestaSalteado, PREFIJO_FRENO_RESPUESTA } from "@/lib/wasender/ritmo";
 
 // El horario vive en src/lib/horario.ts (sin dependencias, se prueba solo); se
 // sigue exportando desde acá para quien ya lo importaba de este archivo.
@@ -236,7 +238,7 @@ async function tickLocked(
     faltanHoyWa = cupo.delDia - cupo.enviadosHoy;
     if (cupo.agotado) return { campaignId, action: "daily_limit_reached", detail: cupo.detalle };
     // Freno automático: si los últimos envíos fallaron o no se entregaron, se pausa sola.
-    const freno = await frenoDeLinea(wa.linea.id, now, supabase);
+    const freno = await frenoDeLinea(wa.linea.id, now, supabase, { sinFrenoPorRespuesta: frenoRespuestaSalteado((campaign as any).freno_respuesta_ignorado_at, now) });
     if (freno) {
       await (supabase.from("campaigns") as any).update({ status: "pausada", pause_reason: freno.slice(0, 500), paused_at: new Date().toISOString() }).eq("id", campaignId).eq("status", "en_curso");
       return { campaignId, action: "not_running", detail: freno };
@@ -435,6 +437,12 @@ async function tickLocked(
   if (block) {
     await finishClaim(supabase, claim.id, token, "opt_out", { error: `Detenido: ${block.label}` });
     return { campaignId, action: "failed_send", detail: `Contacto detenido (${block.label}), no se envió` };
+  }
+
+  // 15/11: tope único de 3 automáticos sin respuesta por persona (todas sus campañas y seguimientos).
+  if (await frenaPorTope(claim.contact_id, supabase)) {
+    await finishClaim(supabase, claim.id, token, "opt_out", { error: `Tope por persona: ${TEXTO_TOPE}` });
+    return { campaignId, action: "failed_send", detail: TEXTO_TOPE };
   }
 
   if (!phone) {
@@ -709,11 +717,13 @@ export async function launchCampaign(campaignId: string): Promise<TickResult> {
 
   const { data: campaign, error: campaignError } = await supabase
     .from("campaigns")
-    .select("started_at, archived_at")
+    .select("started_at, archived_at, pause_reason")
     .eq("id", campaignId)
     .single();
 
   if (campaignError || !campaign) throw new Error("Campaña no encontrada");
+  // 15/11: reanudar una campaña frenada por respuesta es decisión propia: ese freno no la vuelve a parar en 7 días.
+  const salteaFrenoRespuesta = String((campaign as any).pause_reason ?? "").startsWith(PREFIJO_FRENO_RESPUESTA);
   if (campaign.archived_at) throw new Error("La campaña está archivada: recuperala antes de lanzarla.");
   const { data: full } = await supabase
     .from("campaigns")
@@ -740,7 +750,8 @@ export async function launchCampaign(campaignId: string): Promise<TickResult> {
       batch_paused_until: null,
       pause_reason: null,
       paused_at: null,
-    })
+      ...(salteaFrenoRespuesta ? { freno_respuesta_ignorado_at: new Date().toISOString() } : {}),
+    } as any)
     .eq("id", campaignId);
 
   return tickCampaign(campaignId);
