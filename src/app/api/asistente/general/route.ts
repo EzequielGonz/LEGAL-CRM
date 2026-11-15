@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { requireSession } from "@/lib/acceso/autorizacion";
 import { conversarConAsistenteGeneral, validarImagenes, validarTextos, type MensajeAsistente } from "@/lib/asistente/motor";
-import { sanearResumenes } from "@/lib/asistente/general";
+import { resolverPerfil, sanearResumenes } from "@/lib/asistente/general";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -9,7 +9,7 @@ export const maxDuration = 60;
 /**
  * Asistente general (15/11), desde la pantalla de Perfiles: el mismo
  * asistente, para los cuatro perfiles. body: { mensajes, imagenes?, textos?,
- * archivos?: [resumen de cada planilla] }. De las planillas solo llega el
+ * archivos?: [resumen de cada planilla], contexto?: { tipo: "laboratorio", perfil } }. De las planillas solo llega el
  * resumen enmascarado (las filas se subieron aparte y no las ve el modelo).
  * Responde texto, propuestas (que se confirman aparte) y botones a pantallas.
  * No envía mensajes a nadie ni ejecuta acciones por su cuenta.
@@ -27,9 +27,12 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Escribí qué necesitás." }, { status: 400 });
   }
   if (!process.env.GEMINI_API_KEY) return NextResponse.json({ error: "El asistente necesita la clave de Gemini configurada en el servidor." }, { status: 503 });
+  // 15/11: abierto dentro del Laboratorio del bot, con un perfil elegido.
+  const perfilLab = body?.contexto?.tipo === "laboratorio" ? resolverPerfil(body.contexto.perfil) : null;
+  const contexto = perfilLab && "perfil" in perfilLab ? { tipo: "laboratorio" as const, perfil: perfilLab.perfil } : null;
   try {
     return NextResponse.json(
-      await conversarConAsistenteGeneral(mensajes, validarImagenes(body?.imagenes), { textos: validarTextos(body?.textos), archivos: sanearResumenes(body?.archivos) })
+      await conversarConAsistenteGeneral(mensajes, validarImagenes(body?.imagenes), { textos: validarTextos(body?.textos), archivos: sanearResumenes(body?.archivos), contexto })
     );
   } catch (err) {
     console.error("[asistente/general]", err);

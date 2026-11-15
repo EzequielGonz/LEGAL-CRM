@@ -28,6 +28,7 @@ import {
   resumenLaboratorio,
   revertirAplicacion,
 } from "@/lib/laboratorio/servicio";
+import { botsDeBase, cambiarInstrucciones, volverInstrucciones } from "@/lib/laboratorio/bot-base";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
@@ -42,6 +43,7 @@ export const maxDuration = 300;
  * GET ?vista=diferencias&perfil=&version=    → qué cambia si se aplica una versión a todo el perfil.
  * GET ?vista=comparativa&perfiles=a,b&dias=  → cifras por versión y por variante de A/B.
  * GET ?vista=simulaciones | ?vista=simulacion&id=
+ * GET ?vista=bots&perfil=                   → bot de base del perfil (instrucciones que rigen hoy).
  * POST { accion, ... }                       → ver `acciones` abajo.
  *
  * Nada de esto envía mensajes ni toca Meta. Aplicar algo es manual, con
@@ -78,6 +80,11 @@ export async function GET(request: Request) {
     if (vista === "comparativa") {
       const dias = Number(url.searchParams.get("dias") ?? 14) || 14;
       return NextResponse.json(await comparativa(perfiles(url.searchParams.get("perfiles")), dias), sinCache);
+    }
+    if (vista === "bots") {
+      const perfil = url.searchParams.get("perfil");
+      if (!esRubro(perfil)) return NextResponse.json({ error: "Perfil no válido." }, { status: 400 });
+      return NextResponse.json({ bots: await botsDeBase(perfil) }, sinCache);
     }
     if (vista === "simulaciones") return NextResponse.json({ simulaciones: await listarSimulaciones() }, sinCache);
     if (vista === "simulacion") {
@@ -161,6 +168,15 @@ export async function POST(request: Request) {
       case "cortar_ab":
         if (!esUuid(body.id)) return faltaId("la prueba");
         return NextResponse.json(await cortarPruebaAB(body.id, texto(body.nota), actor));
+      case "instrucciones_bot":
+      case "volver_instrucciones": {
+        // 15/11: bot de base (lo que responde hoy). Siempre a mano y con confirmación.
+        if (!esRubro(body.perfil)) return NextResponse.json({ error: "Perfil no válido" }, { status: 400 });
+        if (!esUuid(body.agente_id)) return faltaId("el bot");
+        if (body.confirmado !== true) return NextResponse.json({ error: "Falta confirmar el cambio." }, { status: 400 });
+        if (accion === "volver_instrucciones") return NextResponse.json(await volverInstrucciones(body.perfil, body.agente_id, actor));
+        return NextResponse.json(await cambiarInstrucciones(body.perfil, body.agente_id, body.instrucciones, body.anterior, actor));
+      }
       case "simular": {
         const { id, completar } = await prepararSimulacion(body, actor);
         after(completar);

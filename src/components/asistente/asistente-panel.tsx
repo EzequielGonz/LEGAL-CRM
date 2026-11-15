@@ -92,6 +92,9 @@ function textoResultado(p: Propuesta): string | null {
   if (p.tipo === "lanzar_campana") return "Campaña lanzada: los envíos siguen el ritmo y el horario configurados. Podés pausarla cuando quieras.";
   if (p.tipo === "asignar_agente") return `Agente ${r.estado === "activa" ? "activado" : r.estado === "pausada" ? "pausado" : "apagado"}.`;
   if (p.tipo === "personalizar_menu") return r.deshecho ? "Cambio deshecho: el menú volvió a como estaba." : "Listo: el menú de este perfil ya cambió. Si no lo ves, recargá la página.";
+  if (p.tipo === "version_bot_crear") return `Versión creada (v${r.version ?? "?"}). Todavía no rige: probala o usala desde «Versiones de este perfil».`;
+  if (p.tipo === "version_bot_usar") return `Listo: el bot ya usa la v${r.version ?? "?"} en las charlas nuevas (en hasta 1 minuto).`;
+  if (p.tipo === "version_bot_volver") return "Listo: el bot volvió a la versión anterior (en hasta 1 minuto).";
   if (p.tipo === "operacion_panel") return `Hecho: ${String(r.operacion ?? p.titulo).toLowerCase()}.`;
   return "Listo.";
 }

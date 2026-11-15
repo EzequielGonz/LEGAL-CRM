@@ -23,6 +23,7 @@ import { leerMenuPersonal } from "@/lib/personalizacion/servidor";
 import { validarPedido } from "@/lib/bandeja-claude";
 import { DECLARACIONES_GENERALES, NOMBRES_GENERALES, declaracionesConPerfil, resolverPerfil, sinPerfil, textoArchivosParaModelo, type ResumenArchivo } from "@/lib/asistente/general";
 import { ejecutarHerramientaGeneral, type CtxGeneral } from "@/lib/asistente/general-servidor";
+import { DECLARACIONES_LABORATORIO, NOMBRES_LABORATORIO, REGLAS_LABORATORIO, ejecutarHerramientaLaboratorio } from "@/lib/laboratorio/asistente";
 
 export interface MensajeAsistente {
   rol: "usuario" | "asistente";
@@ -477,25 +478,40 @@ const REGLAS_GENERAL = [
   "EJEMPLO de cómo seguir: la responsable adjunta «autos.xlsx» y «prepagas.csv» y dice «armá las campañas». Vos: «autos.xlsx parece de Autos 0 km (columnas Modelo y Celular) y prepagas.csv de Coberturas médicas (columna Obra social)»; después analizar_archivo y opciones_wasender para cada perfil; proponés nombre, línea y límite (entrenamiento encendido) y preguntás solo lo que falta (por ejemplo, si querés lanzarlas al confirmar); con eso, proponer_plan_campanas con una entrada por perfil, y le decís que revise el boceto.",
 ];
 
-function sistemaGeneral(): string {
+/** Dónde está abierto el asistente general: su pantalla propia o el laboratorio de un perfil. */
+export interface ContextoGeneral {
+  tipo: "laboratorio";
+  perfil: SlugPerfil;
+}
+
+function textoContexto(c: ContextoGeneral | null): string[] {
+  if (!c) return [];
+  return [
+    `DÓNDE ESTÁS: la responsable te abrió dentro del Laboratorio del bot, con el perfil «${c.perfil}» elegido. Salvo que nombre otro, trabajá sobre ese perfil. Ayudala a crear una versión nueva del bot, probarla sin escribirle a nadie y decidir si la usa. Respuestas cortas y en palabras simples.`,
+  ];
+}
+
+function sistemaGeneral(contexto: ContextoGeneral | null = null): string {
   return [
     `Sos el asistente general de la responsable del panel, para los cuatro perfiles a la vez (lo abre desde la pantalla de Perfiles, sin entrar a ninguno). ${IA_COMPLETA}`,
     ...REGLAS_ANTES_DEL_ALCANCE,
     ...ALCANCE_GENERAL,
     ...REGLAS_DESPUES_DEL_ALCANCE.map((l) => l.replace("Para cambiar el menú de este perfil", "Para cambiar el menú de un perfil")),
     ...REGLAS_GENERAL,
+    ...REGLAS_LABORATORIO,
+    ...textoContexto(contexto),
     contextoCrmGeneral(),
     `Hoy es ${hoyEnArgentina()} (hora de Argentina).`,
   ].join("\n");
 }
 
 /** Herramientas del asistente general: las del perfil con «perfil», más las propias. */
-export const DECLARACIONES_DEL_GENERAL = [...declaracionesConPerfil(DECLARACIONES as any[]), ...DECLARACIONES_GENERALES];
+export const DECLARACIONES_DEL_GENERAL = [...declaracionesConPerfil(DECLARACIONES as any[]), ...DECLARACIONES_GENERALES, ...DECLARACIONES_LABORATORIO];
 
 export async function conversarConAsistenteGeneral(
   mensajes: MensajeAsistente[],
   imagenes: ImagenAdjunta[] = [],
-  opciones: { textos?: TextoAdjunto[]; archivos?: ResumenArchivo[] } = {}
+  opciones: { textos?: TextoAdjunto[]; archivos?: ResumenArchivo[]; contexto?: ContextoGeneral | null } = {}
 ): Promise<RespuestaAsistente> {
   const propuestas: PropuestaVista[] = [];
   const enlaces: { href: string; texto: string }[] = [];
@@ -525,11 +541,12 @@ export async function conversarConAsistenteGeneral(
   };
   const ejecutarUna = async (nombre: string, args: Record<string, unknown>) => {
     if (NOMBRES_GENERALES.includes(nombre)) return ejecutarHerramientaGeneral(nombre, args, general);
+    if (NOMBRES_LABORATORIO.includes(nombre)) return ejecutarHerramientaLaboratorio(nombre, args, { guardar: general.guardar });
     const r = resolverPerfil(args.perfil);
     if ("error" in r) return { error: r.error };
     return ejecutar(nombre, sinPerfil(args), contextoDe(r.perfil));
   };
   const contents = armarContenidos(mensajes, imagenes, opciones.textos ?? [], textoArchivosParaModelo(archivos) || undefined);
-  const texto = await bucleConHerramientas(contents, sistemaGeneral(), DECLARACIONES_DEL_GENERAL, ejecutarUna);
+  const texto = await bucleConHerramientas(contents, sistemaGeneral(opciones.contexto ?? null), DECLARACIONES_DEL_GENERAL, ejecutarUna);
   return { texto: texto || "Listo.", propuestas, enlaces };
 }

@@ -1,22 +1,20 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
+import { useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
 import { Icono } from "@/components/ui/icono-seccion";
-import { useDialogo } from "@/components/ui/use-dialogo";
 import { TarjetaPropuesta, type Propuesta } from "@/components/asistente/asistente-panel";
 import { BocetoCampanas } from "@/components/asistente/boceto-campanas";
 import { MAX_ARCHIVOS, MAX_FILAS_ARCHIVO, repetidosEntreArchivos, resumirHoja, type ResumenArchivo } from "@/lib/asistente/general";
 
 /**
- * Panel del asistente general (15/11): el diálogo grande al costado
- * (pantalla completa en el teléfono) que abre el botón de la pantalla de
- * Perfiles (asistente-general.tsx). Se carga recién al abrirlo. Además de imágenes y PDF, acepta planillas (Excel o CSV): se
- * leen en el navegador, al asistente le llega solo un resumen enmascarado y
- * las filas se guardan aparte para importarlas recién al confirmar.
- * Cerrar (también con Escape) no descarta nada: la charla y las propuestas
- * siguen ahí al volver a abrir.
+ * Chat del asistente general (15/11). Desde el pedido de la responsable
+ * («demasiado complicado; que sea sencillo pero funcional») ya no es un
+ * diálogo al costado: se usa en su pantalla propia (/asistente), con accesos
+ * directos grandes arriba, y embebido en el Laboratorio del bot con el perfil
+ * elegido. Además de imágenes y PDF, acepta planillas (Excel o CSV): se leen
+ * en el navegador, al asistente le llega solo un resumen enmascarado y las
+ * filas se guardan aparte para importarlas recién al confirmar.
  */
 
 type EstadoArchivo = "leyendo" | "subiendo" | "revisar" | "listo" | "error";
@@ -52,12 +50,18 @@ interface Mensaje {
   error?: boolean;
 }
 
-const SUGERENCIAS = [
-  "Resumen de los cuatro perfiles",
-  "Te adjunto una planilla por perfil: armá las campañas",
-  "¿Cómo vienen los bots de cada perfil?",
-  "¿Qué captados falta derivar en todos los perfiles?",
-];
+/** Acceso directo: llena el chat y lo envía, lo deja escrito para completar o abre el selector de archivos. */
+export interface AccesoAsistente {
+  titulo: string;
+  descripcion: string;
+  accion: "enviar" | "rellenar" | "archivos";
+  texto: string;
+}
+
+export interface ContextoChat {
+  tipo: "laboratorio";
+  perfil: string;
+}
 
 const MAX_BYTES_ADJUNTOS = 3_400_000;
 const esPlanilla = (f: File) => /\.(csv|xlsx|xls)$/i.test(f.name);
@@ -81,7 +85,25 @@ async function imagenReducida(f: File): Promise<string> {
   return c.toDataURL("image/jpeg", 0.8);
 }
 
-export function PanelAsistenteGeneral({ abierto, alCerrar, alTenerCharla }: { abierto: boolean; alCerrar: () => void; alTenerCharla: (hay: boolean) => void }) {
+export function ChatAsistenteGeneral({
+  accesos = [],
+  contexto = null,
+  titulo = "Asistente general",
+  bajada = "Los cuatro perfiles · nada cambia sin tu confirmación",
+  vacio,
+  placeholder = "Ej.: con estas planillas armá una campaña por perfil",
+  alto = "h-[min(70vh,44rem)]",
+  alCambiarPropuesta,
+}: {
+  accesos?: AccesoAsistente[];
+  contexto?: ContextoChat | null;
+  titulo?: string;
+  bajada?: string;
+  vacio?: string;
+  placeholder?: string;
+  alto?: string;
+  alCambiarPropuesta?: () => void;
+}) {
   const [mensajes, setMensajes] = useState<Mensaje[]>([]);
   const [texto, setTexto] = useState("");
   const [pensando, setPensando] = useState(false);
@@ -93,17 +115,12 @@ export function PanelAsistenteGeneral({ abierto, alCerrar, alTenerCharla }: { ab
   const archivo = useRef<HTMLInputElement>(null);
   const lista = useRef<HTMLDivElement>(null);
   const entrada = useRef<HTMLTextAreaElement>(null);
-  const cerrar = alCerrar;
-  const dialogoRef = useDialogo<HTMLElement>(abierto, cerrar);
-
-  useEffect(() => {
-    if (abierto) window.setTimeout(() => entrada.current?.focus(), 50);
-  }, [abierto]);
+  const ids = useId();
   // Planes de campañas que quedaron sin confirmar, a medio hacer o con un paso que falló
   // (por ejemplo, si se cerró la pestaña o la sesión a mitad): se pueden retomar acá.
   const [pendientes, setPendientes] = useState<Propuesta[]>([]);
   useEffect(() => {
-    if (!abierto) return;
+    if (contexto) return;
     let vigente = true;
     fetch("/api/asistente/general/planes")
       .then((r) => (r.ok ? r.json() : { planes: [] }))
@@ -116,12 +133,9 @@ export function PanelAsistenteGeneral({ abierto, alCerrar, alTenerCharla }: { ab
     return () => {
       vigente = false;
     };
-  }, [abierto]);
+  }, [contexto]);
   const mensajesRef = useRef<Mensaje[]>([]);
   mensajesRef.current = mensajes;
-  useEffect(() => {
-    alTenerCharla(mensajes.length > 0);
-  }, [mensajes.length, alTenerCharla]);
   useEffect(() => {
     lista.current?.scrollTo({ top: lista.current.scrollHeight, behavior: "smooth" });
   }, [mensajes, pensando]);
@@ -237,6 +251,7 @@ export function PanelAsistenteGeneral({ abierto, alCerrar, alTenerCharla }: { ab
             mensajes: historial.filter((m) => !m.error).map((m) => ({ rol: m.rol, texto: m.texto })),
             imagenes: enviados.map((i) => ({ mime: i.mime, datos: i.datos })),
             archivos: resumenesListos(),
+            ...(contexto ? { contexto } : {}),
           }),
         });
         const data = await res.json().catch(() => ({}));
@@ -250,60 +265,67 @@ export function PanelAsistenteGeneral({ abierto, alCerrar, alTenerCharla }: { ab
     }
   }
 
-  const actualizarPropuesta = (i: number, p: Propuesta) =>
+  const actualizarPropuesta = (i: number, p: Propuesta) => {
     setMensajes((ms) => ms.map((m, k) => (k === i ? { ...m, propuestas: (m.propuestas ?? []).map((x) => (x.id === p.id ? p : x)) } : m)));
+    alCambiarPropuesta?.();
+  };
 
-  // Cerrado no muestra nada, pero sigue montado: la charla y las propuestas quedan para cuando se vuelva a abrir.
+  function usarAcceso(a: AccesoAsistente) {
+    if (a.accion === "enviar") return void enviar(a.texto);
+    setTexto(a.texto);
+    if (a.accion === "archivos") archivo.current?.click();
+    else window.setTimeout(() => entrada.current?.focus(), 0);
+  }
+
   return (
-    <>
-
-      {abierto &&
-        createPortal(
-        <div data-portal-dialogo="" className="fixed inset-0 z-50">
-          <div className="absolute inset-0 bg-slate-950/40" aria-hidden="true" onClick={cerrar} />
-          <aside
-            ref={dialogoRef}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="asistente-general-dialogo"
-            tabIndex={-1}
-            data-asistente=""
-            className="absolute inset-0 flex flex-col bg-white text-slate-900 shadow-2xl outline-none animate-fade-in sm:left-auto sm:w-full sm:max-w-3xl sm:border-l sm:border-slate-200"
-          >
+    <div className="flex flex-col gap-4">
+      {accesos.length > 0 && (
+        <ul aria-label="Accesos directos" className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {accesos.map((a) => (
+            <li key={a.titulo}>
+              <button
+                type="button"
+                onClick={() => usarAcceso(a)}
+                disabled={pensando}
+                className="flex h-full min-h-[44px] w-full flex-col items-start gap-1 rounded-2xl border border-slate-200 bg-white p-4 text-left text-slate-900 shadow-sm hover:border-slate-400 disabled:opacity-60"
+              >
+                <span className="text-base font-semibold">{a.titulo}</span>
+                <span className="text-sm text-slate-600">{a.descripcion}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+      <section aria-labelledby={`${ids}-titulo`} data-asistente="" className={`flex ${alto} flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white text-slate-900 shadow-sm`}>
             <header className="flex items-center justify-between gap-3 border-b border-slate-100 px-4 py-3">
               <div className="flex min-w-0 items-center gap-2.5">
                 <span aria-hidden="true" className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-gold-500/15 text-gold-700">
                   <Icono nombre="asistente" className="h-5 w-5" />
                 </span>
                 <div className="min-w-0">
-                  <h2 id="asistente-general-dialogo" className="text-sm font-semibold text-slate-950">
-                    Asistente general
+                  <h2 id={`${ids}-titulo`} className="text-sm font-semibold text-slate-950">
+                    {titulo}
                   </h2>
-                  <p className="truncate text-xs text-slate-600">Los cuatro perfiles · nada cambia sin tu confirmación</p>
+                  <p className="truncate text-xs text-slate-600">{bajada}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-1">
-                {(mensajes.length > 0 || planillas.length > 0) && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setMensajes([]);
-                      setPlanillas([]);
-                      setAdjuntos([]);
-                      telefonos.current.clear();
-                    }}
-                    className="tactil rounded-lg px-2.5 text-xs font-medium text-slate-700 hover:bg-slate-100"
-                  >
-                    Nueva charla
-                  </button>
-                )}
-                <button type="button" onClick={cerrar} className="tactil grid place-items-center rounded-lg text-slate-700 hover:bg-slate-100" aria-label="Cerrar el asistente general">
-                  <Icono nombre="cerrar" className="h-5 w-5" />
+              {(mensajes.length > 0 || planillas.length > 0) && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMensajes([]);
+                    setPlanillas([]);
+                    setAdjuntos([]);
+                    telefonos.current.clear();
+                  }}
+                  className="tactil rounded-lg px-2.5 text-sm font-medium text-slate-700 hover:bg-slate-100"
+                >
+                  Nueva charla
                 </button>
-              </div>
+              )}
             </header>
 
-            <div ref={lista} role="log" aria-live="polite" aria-label="Conversación con el asistente general" tabIndex={0} className="flex-1 space-y-4 overflow-y-auto bg-slate-50 px-4 py-4">
+            <div ref={lista} role="log" aria-live="polite" aria-label={`Conversación con el ${titulo.toLowerCase()}`} tabIndex={0} className="flex-1 space-y-4 overflow-y-auto bg-slate-50 px-4 py-4">
               {pendientes.length > 0 && (
                 <div className="rounded-xl border border-amber-300 bg-amber-50 p-3">
                   <p className="text-sm font-semibold text-amber-950">Quedaron campañas por revisar o a medio hacer</p>
@@ -312,23 +334,10 @@ export function PanelAsistenteGeneral({ abierto, alCerrar, alTenerCharla }: { ab
                 </div>
               )}
               {mensajes.length === 0 && (
-                <div>
-                  <p className="text-sm text-slate-700">
-                    Preguntame lo que quieras y pedime cosas de los cuatro perfiles. Podés adjuntar planillas (Excel o CSV), por ejemplo una por perfil. Te digo a qué perfil va cada una y cuántas personas hay para contactar. Después te armo un boceto de campaña por perfil para que lo revises. De cada planilla veo solo un resumen, con los teléfonos ocultos.
-                  </p>
-                  <div className="mt-4 flex flex-col gap-2">
-                    {SUGERENCIAS.map((s) => (
-                      <button key={s} type="button" onClick={() => {
-                          if (s.startsWith("Te adjunto")) {
-                            setTexto(s);
-                            archivo.current?.click();
-                          } else void enviar(s);
-                        }} className="min-h-[44px] rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-left text-sm text-slate-800 shadow-sm hover:border-slate-300">
-                        {s}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+                <p className="text-sm text-slate-700">
+                  {vacio ??
+                    "Escribime lo que necesites de los cuatro perfiles. Podés adjuntar planillas (Excel o CSV), por ejemplo una por perfil: te digo a qué perfil va cada una, cuántas personas hay para contactar y te armo un boceto de campaña para revisar. De cada planilla veo solo un resumen, con los teléfonos ocultos."}
+                </p>
               )}
               {mensajes.map((m, i) => {
                 const planes = (m.propuestas ?? []).filter((p) => p.tipo === "plan_campanas");
@@ -344,7 +353,7 @@ export function PanelAsistenteGeneral({ abierto, alCerrar, alTenerCharla }: { ab
                       {(m.enlaces ?? []).length > 0 && (
                         <div className="mt-2 flex flex-wrap gap-2">
                           {m.enlaces!.map((e) => (
-                            <Link prefetch={false} key={e.href} href={e.href} onClick={cerrar} className="inline-flex min-h-[44px] items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 text-xs font-medium text-slate-800 hover:border-slate-300">
+                            <Link prefetch={false} key={e.href} href={e.href} className="inline-flex min-h-[44px] items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 text-xs font-medium text-slate-800 hover:border-slate-300">
                               {e.texto} <Icono nombre="flecha" className="h-3.5 w-3.5" />
                             </Link>
                           ))}
@@ -440,11 +449,11 @@ export function PanelAsistenteGeneral({ abierto, alCerrar, alTenerCharla }: { ab
                     +
                   </span>
                 </button>
-                <label htmlFor="asistente-general-texto" className="sr-only">
-                  Pedido para el asistente general
+                <label htmlFor={`${ids}-texto`} className="sr-only">
+                  Tu pedido para el asistente
                 </label>
                 <textarea
-                  id="asistente-general-texto"
+                  id={`${ids}-texto`}
                   ref={entrada}
                   rows={2}
                   value={texto}
@@ -455,7 +464,7 @@ export function PanelAsistenteGeneral({ abierto, alCerrar, alTenerCharla }: { ab
                       enviar(texto);
                     }
                   }}
-                  placeholder="Ej.: con estas planillas armá una campaña por perfil"
+                  placeholder={placeholder}
                   className="sin-anillo max-h-40 min-h-[2.75rem] flex-1 resize-none border-0 bg-transparent p-1 text-sm text-slate-900 shadow-none focus:ring-0"
                 />
                 <button type="submit" disabled={pensando || leyendo || (!texto.trim() && adjuntos.length === 0)} className="btn-gold-sm tactil" aria-label={leyendo ? "Esperá a que terminen de subir las planillas" : "Enviar"}>
@@ -463,10 +472,7 @@ export function PanelAsistenteGeneral({ abierto, alCerrar, alTenerCharla }: { ab
                 </button>
               </div>
             </form>
-          </aside>
-        </div>,
-          document.body
-        )}
-    </>
+      </section>
+    </div>
   );
 }

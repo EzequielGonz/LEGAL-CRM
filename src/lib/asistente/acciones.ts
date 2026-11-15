@@ -16,6 +16,8 @@ import { slugDeRubro } from "@/lib/rubros";
 import { TIPOS_CHATS, ejecutarAccionChat } from "@/lib/asistente/chats";
 import { ejecutarOperacionPanel, type LlamadaInterna } from "@/lib/asistente/panel-operaciones";
 import { avanzarPlanCampanas } from "@/lib/asistente/general-servidor";
+import { aplicarVersionAPerfil, crearVersion, revertirAplicacion } from "@/lib/laboratorio/servicio";
+import { esRubro } from "@/lib/laboratorio/reglas";
 import { aplicarPersonalizacionMenu, deshacerPersonalizacionMenu, leerMenuDirecto, restablecerMenu } from "@/lib/personalizacion/servidor";
 
 export class AccionNoDisponible extends Error {}
@@ -78,6 +80,17 @@ export async function confirmarAccion(id: string, http?: LlamadaInterna): Promis
     } else if (a.tipo === "plan_campanas") {
       // 15/11 · asistente general: un paso por pedido, con lo hecho anotado (nunca tira error).
       return await avanzarPlanCampanas(a, http);
+    } else if (a.tipo === "version_bot_crear") {
+      // 15/11 · laboratorio simple: se crea la versión, pero no rige en ningún perfil.
+      const { pedido } = a.payload ?? {};
+      resultado = { ...(await crearVersion(pedido ?? {}, "asistente")), rige: false };
+    } else if (a.tipo === "version_bot_usar") {
+      const { perfil, version } = a.payload ?? {};
+      if (!esRubro(perfil)) throw new Error("Perfil no válido.");
+      resultado = { ...(await aplicarVersionAPerfil(perfil, Number(version), "asistente")), version: Number(version) };
+    } else if (a.tipo === "version_bot_volver") {
+      const { aplicacion_id } = a.payload ?? {};
+      resultado = await revertirAplicacion(String(aplicacion_id ?? ""), "Volver a la anterior, desde el asistente", "asistente");
     } else if (a.tipo === "cambio_agente") {
       const { agente_id, area, anterior, nuevo, pedido } = a.payload ?? {};
       const { data: ag } = await s.from("ai_agents").select("*").eq("id", agente_id).maybeSingle();

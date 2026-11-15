@@ -267,7 +267,7 @@ test("asistente general: pasos del plan (reintentar no repite lo hecho)", () => 
 });
 
 test("asistente general: la migración permite cada tipo de propuesta", () => {
-  const sql = readFileSync("supabase/migrations/0626_asistente_general.sql", "utf8");
+  const sql = readFileSync("supabase/migrations/0633_asistente_laboratorio_simple.sql", "utf8");
   for (const t of TIPOS_ACCION) assert.ok(sql.includes(`'${t}'`), `falta ${t} en la migración`);
   assert.ok(!/\b(drop table|delete from|truncate)\b/i.test(sql), "la migración no borra");
 });
@@ -286,7 +286,7 @@ test("asistente general: las filas guardadas solo se leen por su identificador, 
 });
 
 test("asistente general: no escucha el evento del asistente de perfil ni lo monta (convive con el Laboratorio)", () => {
-  for (const f of ["src/components/asistente/asistente-general.tsx", "src/components/asistente/panel-asistente-general.tsx", "src/components/asistente/boceto-campanas.tsx"]) {
+  for (const f of ["src/components/asistente/asistente-general.tsx", "src/components/asistente/chat-asistente-general.tsx", "src/components/asistente/boceto-campanas.tsx"]) {
     const codigo = readFileSync(f, "utf8");
     assert.ok(!/crm:asistente|abrirAsistente|<AsistentePanel\b/.test(codigo), `${f} no debe abrir ni escuchar el asistente de perfil`);
   }

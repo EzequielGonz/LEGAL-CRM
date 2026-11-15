@@ -41,6 +41,10 @@ export const TIPOS_ACCION = [
   "personalizar_menu",
   // 15/11: asistente general: importar una planilla, crear la campaña de Wasender y, si se pidió, lanzarla.
   "plan_campanas",
+  // 15/11: laboratorio simple: crear una versión del bot (no rige), usarla en un perfil o volver a la anterior.
+  "version_bot_crear",
+  "version_bot_usar",
+  "version_bot_volver",
 ] as const;
 export type TipoAccion = (typeof TIPOS_ACCION)[number];
 
