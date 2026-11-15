@@ -25,8 +25,9 @@ export async function POST(request: Request, props: { params: Promise<{ id: stri
   const { data: guardada } = await createAdminClient().from("asistente_acciones" as any).select("tipo, payload, estado").eq("id", params.id).maybeSingle();
   const g: any = guardada;
   if (!g) return NextResponse.json({ error: "Esta propuesta ya se confirmó, se descartó o no existe." }, { status: 409 });
-  // Una propuesta ya en marcha (tandas de publicaciones) no vuelve a pedir PIN.
-  if (g.estado === "propuesta") {
+  // Una propuesta ya en marcha (tandas de publicaciones, pasos de un plan) no vuelve a pedir PIN.
+  // Reintentar un plan de campañas que falló vuelve a pedir la confirmación que corresponda.
+  if (g.estado === "propuesta" || (g.tipo === "plan_campanas" && g.estado === "error")) {
     // Operación del panel: el nivel se recalcula con el catálogo del servidor.
     const nivel = g.tipo === "operacion_panel" ? nivelDePropuestaPanel(g.payload) : nivelDeAccion(g.tipo, g.payload ?? {});
     const falta = faltaParaConfirmar(nivel, body);

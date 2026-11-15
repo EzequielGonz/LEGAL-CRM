@@ -5,6 +5,7 @@ import { type MarcaTarjeta } from "@/components/perfiles/perfil-selector";
 import { SelectorPerfilesPC } from "@/components/perfiles/selector-pc";
 import { EnVivoRubros } from "@/components/perfiles/en-vivo-rubros";
 import { ConocimientoBot } from "@/components/perfiles/conocimiento-bot";
+import { AsistenteGeneral } from "@/components/asistente/asistente-general";
 import { SalaLampara } from "@/components/ui/lampara-dibujo";
 import { MarcaPanel } from "@/components/ui/marca-panel";
 import { leerRubrosActivos, loadPerfiles, type RubroRow } from "@/lib/perfiles-stats";
@@ -53,6 +54,8 @@ export default async function PerfilesPage() {
         <Suspense fallback={<EsqueletoTarjetas cantidad={rubros.length} />}>
           <TarjetasPerfiles rubros={rubros} marcas={tarjetas} />
         </Suspense>
+        {/* 15/11: asistente general (los cuatro perfiles, sin entrar a cada uno). */}
+        <AsistenteGeneral />
         {/* 25/10: versiones del conocimiento del bot (v1/v2) y su comparación con resultados reales. */}
         <ConocimientoBot nombres={nombres} />
         <div className="mt-12 flex items-center justify-center gap-6 text-sm">

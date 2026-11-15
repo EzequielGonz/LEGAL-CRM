@@ -38,3 +38,13 @@ const POR_PERFIL: Partial<Record<SlugPerfil, string[]>> = {
 export function contextoCrm(slug: SlugPerfil): string {
   return [...COMUN, ...(POR_PERFIL[slug] ?? [])].join("\n");
 }
+
+/**
+ * Asistente general (15/11): el mismo contexto, para los cuatro perfiles a la
+ * vez. Cambia solo la frase del perfil abierto y suma lo propio de cada perfil.
+ */
+export function contextoCrmGeneral(): string {
+  const comun = COMUN.map((l) => l.replace("Todo lo que hacés es dentro del perfil abierto.", "Desde el asistente general podés trabajar sobre cualquiera de los cuatro, de a uno por vez en cada herramienta (parámetro «perfil»), y nunca pasás datos de un perfil a otro."));
+  const propios = Object.values(POR_PERFIL).flatMap((x) => x ?? []);
+  return [...comun, ...propios].join("\n");
+}
