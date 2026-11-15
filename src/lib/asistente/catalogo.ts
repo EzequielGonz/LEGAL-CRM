@@ -1265,6 +1265,7 @@ export const FUERA_DEL_CATALOGO: Record<string, string> = {
   "marketing/presupuestos": "Mandar un presupuesto pide subir el archivo: se hace desde Piden presupuesto.",
   "marketing/scraping": "Reemplazada por «extraer negocios a una base», que no lanza nada sola.",
   "marketing/scraping/queue": "Barrido de muchas zonas que gasta después y cuyo «vaciar» borra de verdad: se usa solo desde Extraer negocios.",
+  "perfiles/laboratorio": "Laboratorio del bot (15/11): aplicar versiones, roles o pruebas A/B se hace desde Perfiles, viendo las diferencias antes de confirmar y con «Volver a lo anterior». El asistente puede proponer un rol nuevo (proponer_rol) o ideas para una versión, que se crea en el laboratorio.",
   "perfiles/[id]/lineas": "Registrar una línea de Meta pide las credenciales cargadas en la configuración privada: no se hace desde el chat.",
   "plantillas/archivo": "Pide subir un archivo de plantillas: se hace desde Plantillas de Meta.",
   "plantillas/asignaciones": "Asignar una plantilla a una línea pide elegirla viendo su texto y sus variables: se hace desde Plantillas de Meta.",

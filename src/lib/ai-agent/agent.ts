@@ -50,7 +50,9 @@ import { historialConPlantillas } from "@/lib/agentes/historial-servidor";
 import { esPostergaFirme, instruccionUltimaRespuesta } from "@/lib/agentes/plantillas-en-historial";
 import { motivoParaNoResponder, TEXTO_SIN_RESPUESTA } from "@/lib/agentes/automaticos";
 import { bloqueFichaNegocio, leerFichaNegocio } from "@/lib/agentes/ficha-negocio";
-import { conocimientoParaTurno } from "@/lib/conocimiento/servicio";
+import { conocimientoParaTurno, rubroDeConocimiento } from "@/lib/conocimiento/servicio";
+import { estadoLaboratorio, registrarVariante } from "@/lib/laboratorio/en-vivo";
+import { ajustesDeVersion, bloqueRolLaboratorio, componerInstrucciones, pedidoConModelo, planDelTurno } from "@/lib/laboratorio/reglas";
 import { NOTA_AUDIO_PARA_AGENTE, cuerpoParaAgente, hayAudioSinContestar } from "@/lib/audios/reglas";
 
 const MAX_TOOL_ITERATIONS = 6;
@@ -338,17 +340,44 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
   }
   // 25/10: conocimiento del bot por versiones (v1 = sin cambios; v2 = biblioteca de ventas
   // y del rubro). Va por debajo de las reglas, el rol y la ficha, que se suman después.
+  // 15/11: Laboratorio del bot. Una prueba A/B vigente de la campaña de esta charla
+  // decide versión y modelo; un rol aplicado desde el laboratorio (tipo de consulta o
+  // perfil) entra solo si no hay rol de campaña ni de base. Sin nada de eso, el plan
+  // es vacío y el pedido al modelo es idéntico al de siempre (ver src/lib/laboratorio/reglas.ts).
+  const estadoLab = await estadoLaboratorio();
+  const planLab = planDelTurno(estadoLab, {
+    rubro: rubroDeConocimiento(contact.rubro_id ?? null, area),
+    area,
+    modo,
+    campaignId: (latestCampaignContact as any)?.campaign_id ?? null,
+    conversationId,
+    conversacionCreadaAt: (conversation as any).created_at ?? null,
+    ahora: new Date(),
+  });
   const conocimiento = await conocimientoParaTurno({
     rubroId: contact.rubro_id ?? null,
     area,
     conversationId,
     entrantes: ordenados.filter((m: any) => m.direction === "entrante" && m.body).map((m: any) => String(m.body)),
+    ...(planLab.forzarVersion != null ? { forzarVersion: planLab.forzarVersion } : {}),
   });
-  if (conocimiento.texto) systemWithBrief = `${systemWithBrief}\n\n${conocimiento.texto}`;
+  const ajustesLab = ajustesDeVersion(estadoLab, planLab, conocimiento.version);
+  if (planLab.prueba) {
+    await registrarVariante({ pruebaId: planLab.prueba.id, conversationId, variante: planLab.prueba.variante, version: conocimiento.version, modelo: ajustesLab.modelo });
+  }
   // Rol de la base (21/10): si la base del contacto tiene un rol cargado, se suma.
   // 24/10: manda el rol de la campaña; si la campaña no tiene, el de la base.
   const rol = await instruccionesDeRol(contact, { rolId: rolDeCampana, campana: campaignName });
-  if (rol) systemWithBrief = `${systemWithBrief}\n\n${rol}`;
+  // Mismo orden de siempre: conocimiento → (ajustes de la versión del laboratorio) → rol.
+  systemWithBrief = componerInstrucciones({
+    system: systemWithBrief,
+    conocimiento: conocimiento.texto,
+    extras: ajustesLab.extras,
+    rol,
+    rolLaboratorio: planLab.rol ? bloqueRolLaboratorio(planLab.rol) : "",
+  });
+  // Modelo de la variante o de la versión del laboratorio; sin eso, el de siempre.
+  const modeloDelTurno = ajustesLab.modelo ?? modeloPedido;
   // 24/10: contacto detenido que vuelve a escribir: el agente lo atiende, sin ofrecer ni insistir.
   if (bloqueo) {
     systemWithBrief = `${systemWithBrief}\n\nContacto detenido (regla del sistema): esta persona ya pidió no recibir mensajes o cerró la gestión (${bloqueo.label}). Ahora volvió a escribir: respondé con respeto a lo que dice. Si trae una consulta o algo relevante, atendela como siempre; si no, contestá breve y quedá a disposición. No le ofrezcas servicios por tu cuenta, no insistas y no repitas la disculpa si ya la diste.`;
@@ -370,7 +399,7 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
   const t0 = Date.now();
   const uso = { llamadas: 0, entrada: 0, salida: 0, razonamiento: 0, modeloRespuesta: null as string | null, herramientas: [] as string[] };
   const llamarModelo: ModeloAgente = async (req) => {
-    const r = await modelo(req);
+    const r = await modelo(pedidoConModelo(req, ajustesLab.modelo));
     uso.llamadas++;
     uso.entrada += r.tokensEntrada ?? 0;
     uso.salida += r.tokensSalida ?? 0;
@@ -387,7 +416,7 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
       conversationId,
       rubroId: contact.rubro_id ?? null,
       proveedor: "gemini_api",
-      modeloPedido,
+      modeloPedido: modeloDelTurno,
       modeloRespuesta: uso.modeloRespuesta,
       llamadas: uso.llamadas,
       tokensEntrada: uso.entrada,

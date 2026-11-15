@@ -54,7 +54,14 @@ export interface TurnoPrueba {
   conocimiento?: string[];
 }
 
-export async function probarBotReal(input: { area: Area; rubroId: string | null; baseId?: string | null; campaignId?: string | null; mensajes: string[]; apertura?: string | null; boton?: boolean; version?: number | null }): Promise<{
+export async function probarBotReal(input: { area: Area; rubroId: string | null; baseId?: string | null; campaignId?: string | null; mensajes: string[]; apertura?: string | null; boton?: boolean; version?: number | null;
+  /** 15/11 (laboratorio): modelo de Gemini a probar; sin dato, el vigente. */
+  modelo?: string | null;
+  /** 15/11 (laboratorio): ajustes de una versión del laboratorio (tono, reglas, roles copiados), en el mismo lugar que en vivo. */
+  extras?: string | null;
+  /** 15/11 (laboratorio): rol aplicado por tipo de consulta o perfil; en vivo entra solo si no hay rol de campaña ni de base. */
+  rolLaboratorio?: string | null;
+}): Promise<{
   turnos: TurnoPrueba[];
   version: number;
   rol: string | null;
@@ -89,6 +96,7 @@ export async function probarBotReal(input: { area: Area; rubroId: string | null;
   system = "";
   const rol = await instruccionesDeRol({ imported_base_id: input.baseId ?? null }, { rolId: campana?.agent_role_id ?? null, campana: campana?.name ?? null });
   if (rol) system = `${system}\n\n${rol}`;
+  else if (input.rolLaboratorio) system = `${system}\n\n${input.rolLaboratorio}`;
   const ficha = await leerFichaNegocio(input.rubroId ?? profileIdForArea(input.area) ?? null);
   if (ficha) system = `${system}\n\n${bloqueFichaNegocio(ficha)}`;
   system = `${system}\n\n${GUIA_CAPTACION_Y_CIERRE}\n\n${bloqueHorarioAtencion(new Date())}`;
@@ -96,7 +104,7 @@ export async function probarBotReal(input: { area: Area; rubroId: string | null;
   let versionUsada = 1;
 
   const tools = toolsForArea(input.area);
-  const modelo = identificadorModelo();
+  const modelo = input.modelo?.trim() || identificadorModelo();
   const contents: Content[] = apertura ? [{ role: "model", parts: [{ text: apertura }] }] : [];
   const turnos: TurnoPrueba[] = apertura ? [{ rol: "bot", texto: apertura, herramientas: [] }] : [];
   const tokens = { entrada: 0, salida: 0 };
@@ -126,7 +134,7 @@ export async function probarBotReal(input: { area: Area; rubroId: string | null;
     const instr = instruccionUltimaRespuesta({ texto: m, esBoton, aPlantilla: !!apertura && idx === 0, clase: clasificarRespuesta(m) });
     const con = await conocimientoParaTurno({ rubroId: input.rubroId, area: input.area, conversationId: null, entrantes: lista.slice(0, idx + 1), forzarVersion: input.version ?? null });
     versionUsada = con.version;
-    const system = `${antes}${con.texto ? `\n\n${con.texto}` : ""}${despues}`;
+    const system = `${antes}${con.texto ? `\n\n${con.texto}` : ""}${input.extras ? `\n\n${input.extras}` : ""}${despues}`;
     const systemTurno = instr ? `${system}\n\nRespuesta a la plantilla (regla del sistema, manda sobre el guion):\n${instr}` : system;
     systemActual = systemTurno;
     contents.push({ role: "user", parts: [{ text: esBoton ? bloqueBoton(m) : m }] });

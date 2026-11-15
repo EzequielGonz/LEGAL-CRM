@@ -1,6 +1,17 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+
+// 15/11: Laboratorio del bot. Se carga solo cuando se abre (no pesa en la pantalla de perfiles).
+const LaboratorioBot = dynamic(() => import("./laboratorio/laboratorio-bot").then((m) => m.LaboratorioBot), {
+  ssr: false,
+  loading: () => (
+    <p role="status" className="mt-4 text-sm text-slate-600">
+      Cargando el laboratorio…
+    </p>
+  ),
+});
 
 /**
  * Conocimiento del bot por versiones (25/10), en la pantalla de perfiles.
@@ -76,6 +87,7 @@ export function ConocimientoBot({ nombres }: { nombres: Record<string, string> }
   const [error, setError] = useState<string | null>(null);
   const [aviso, setAviso] = useState<string | null>(null);
   const [abiertos, setAbiertos] = useState<string[]>([]);
+  const [laboratorio, setLaboratorio] = useState(false);
 
   useEffect(() => {
     try {
@@ -135,9 +147,21 @@ export function ConocimientoBot({ nombres }: { nombres: Record<string, string> }
     <section aria-labelledby="conocimiento-titulo" className="mt-12 rounded-2xl border border-slate-200 bg-white p-4 text-slate-900 shadow-sm sm:p-6">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h2 id="conocimiento-titulo" className="text-xl font-semibold text-slate-900">
-            Conocimiento del bot
-          </h2>
+          <div className="flex flex-wrap items-center gap-3">
+            <h2 id="conocimiento-titulo" className="text-xl font-semibold text-slate-900">
+              Conocimiento del bot
+            </h2>
+            <button
+              type="button"
+              onClick={() => setLaboratorio((x) => !x)}
+              aria-expanded={laboratorio}
+              aria-controls={laboratorio ? "laboratorio-bot" : undefined}
+              className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 text-sm font-semibold text-slate-900 hover:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900"
+            >
+              {laboratorio ? "Cerrar el laboratorio" : "Laboratorio del bot"}
+              <span aria-hidden="true" className={`transition-transform motion-reduce:transition-none ${laboratorio ? "rotate-180" : ""}`}>▾</span>
+            </button>
+          </div>
           <p className="mt-1 max-w-2xl text-sm text-slate-600">
             v1 es el bot como estaba el 24/10. v2 suma la biblioteca de ventas, objeciones y conocimiento de cada rubro, por debajo de las reglas, la ficha y el rol. Las cifras salen de conversaciones reales del período.
           </p>
@@ -151,6 +175,7 @@ export function ConocimientoBot({ nombres }: { nombres: Record<string, string> }
           </select>
         </label>
       </div>
+      {laboratorio && <LaboratorioBot id="laboratorio-bot" nombres={nombres} />}
       {error && <p role="alert" className="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800">{error}</p>}
       {aviso && <p role="status" className="mt-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700">{aviso}</p>}
       {!perfiles && !error && <p className="mt-4 text-sm text-slate-500">Cargando…</p>}
