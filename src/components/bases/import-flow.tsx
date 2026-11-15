@@ -8,7 +8,6 @@ import { parseSpreadsheetFileDetailed } from "@/lib/bases/parse-file";
 import { detectColumns, type ColumnMapping } from "@/lib/bases/mapping";
 import { headersOf, validateRows } from "@/lib/bases/validate";
 import type { ImportBaseSummary } from "@/lib/bases/import";
-import { createClient } from "@/lib/supabase/client";
 import { SpreadsheetPreview } from "./spreadsheet-preview";
 import { EnlaceAvanzado } from "@/components/nivel/nivel";
 
@@ -117,6 +116,8 @@ export function ImportFlow({
       });
       const urlData = await urlRes.json();
       if (!urlRes.ok) throw new Error(urlData.error ?? "No se pudo preparar la subida del archivo");
+      // 15/11: el cliente de Supabase se carga solo al subir el archivo (no va en el paquete inicial).
+      const { createClient } = await import("@/lib/supabase/client");
       const supabase = createClient();
       const { error: uploadError } = await supabase.storage
         .from("bases-originales")

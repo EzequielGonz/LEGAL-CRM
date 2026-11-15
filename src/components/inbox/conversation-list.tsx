@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { AreaBadge } from "@/components/ui/badge";
 import { cuandoCorto, iniciales, previaLegible } from "@/lib/cartera";
@@ -24,6 +24,8 @@ export interface ConversationListItem {
 
 /** La lista se vuelve a pedir al servidor cada 15 s (mientras se ve la pestaña). */
 const LIST_REFRESH_MS = 15000;
+/** Cada cuántas consultas se vuelve a contar el total (4 × 15 s = un minuto). */
+const TOTAL_CADA_CONSULTAS = 4;
 
 const ATTENTION_LABEL: Record<string, string> = {
   requiere_humano: "Requiere atención humana",
@@ -59,15 +61,32 @@ export function ConversationList({ perfil = "juridico" }: { perfil?: string }) {
   const page = Math.max(1, Number(searchParams.get("pagina")) || 1);
   const qs = searchParams.toString();
 
+  // 15/11: el total (que cuenta todas las conversaciones de esos filtros) se pide al abrir, al cambiar
+  // un filtro y, para que no quede viejo, una vez por minuto; cambiar de página o las consultas
+  // periódicas reusan el que ya se tiene.
+  const totalDe = useRef<{ filtros: string; consultas: number } | null>(null);
   const load = useCallback(async () => {
     try {
       const sp = new URLSearchParams(qs);
       sp.set("perfil", perfil);
+      const filtros = (() => {
+        const f = new URLSearchParams(sp);
+        f.delete("pagina");
+        return f.toString();
+      })();
+      const conocido = totalDe.current;
+      const reusar = !!conocido && conocido.filtros === filtros && conocido.consultas < TOTAL_CADA_CONSULTAS;
+      if (reusar) sp.set("sin_total", "1");
       const res = await fetch(`/api/inbox?${sp.toString()}`, { cache: "no-store" });
       if (!res.ok) return;
       const data = await res.json();
       setItems(data.items ?? []);
-      setTotal(data.total ?? 0);
+      if (typeof data.total === "number") {
+        setTotal(data.total);
+        totalDe.current = { filtros, consultas: 1 };
+      } else if (reusar && conocido) {
+        totalDe.current = { filtros, consultas: conocido.consultas + 1 };
+      }
       setPageSize(data.pageSize ?? 40);
     } finally {
       setLoading(false);

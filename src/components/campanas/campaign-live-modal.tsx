@@ -138,7 +138,10 @@ export function CampaignLiveModal({
 
     function startPolling() {
       if (pollRef.current) clearInterval(pollRef.current);
-      pollRef.current = setInterval(fetchSnapshot, POLL_MS);
+      // 15/11: con la pestaña oculta no consulta (al volver, handleWake pide la novedad al toque).
+      pollRef.current = setInterval(() => {
+        if (document.visibilityState === "visible") fetchSnapshot();
+      }, POLL_MS);
     }
 
     // Bug reportado: el panel se quedaba mostrando "69 enviados" aunque el

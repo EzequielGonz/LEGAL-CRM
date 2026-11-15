@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
 
 /**
  * Carga del presupuesto (16/10): sube el archivo directo al almacenamiento
@@ -42,6 +41,8 @@ export function CargarPresupuesto({ budgetId, minimo, sugerido }: { budgetId: st
           const r1 = await fetch("/api/marketing/presupuestos", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ accion: "subida", budgetId, nombre: file.name }) });
           const d1 = await r1.json().catch(() => ({}));
           if (!r1.ok) throw new Error(d1.error ?? "No se pudo preparar la subida.");
+          // 15/11: el cliente de Supabase se carga solo al subir (no va en el paquete inicial).
+          const { createClient } = await import("@/lib/supabase/client");
           const { error } = await createClient().storage.from("presupuestos").uploadToSignedUrl(d1.path, d1.token, file);
           if (error) throw new Error(`No se pudo subir el archivo: ${error.message}`);
           // Fotos o videos que acompañan (22/10).

@@ -58,9 +58,12 @@ export async function GET(request: Request) {
   const oppInner = (atencion && atencion !== "detenidos" && !porChat) || !!respuesta;
   const oppSel = `opportunities${oppInner ? "!inner" : ""}(attention_state, capture_state, contact_state, attention_reason, attention_category)`;
 
+  // 15/11: la lista pide ?sin_total=1 en las consultas periódicas que ya conocen el total de esos
+  // filtros; así no se cuenta toda la tabla cada 15 segundos (el total vuelve como null).
+  const sinTotal = sp.get("sin_total") === "1";
   let query = supabase
     .from("conversations")
-    .select(`id, area, status, last_message_at, ai_enabled, contact_id, ${contactsSel}, ${channelsSel}, ${oppSel}`, { count: "exact" })
+    .select(`id, area, status, last_message_at, ai_enabled, contact_id, ${contactsSel}, ${channelsSel}, ${oppSel}`, sinTotal ? undefined : { count: "exact" })
     .order("last_message_at", { ascending: false, nullsFirst: false })
     .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
   query = area && areasPerfil.includes(area) ? query.eq("area", area) : query.in("area", areasPerfil);
@@ -125,7 +128,7 @@ export async function GET(request: Request) {
   return NextResponse.json({
     page,
     pageSize: PAGE_SIZE,
-    total: count ?? 0,
+    total: sinTotal ? null : count ?? 0,
     items: rows.map((r) => {
       const opp = Array.isArray(r.opportunities) ? r.opportunities[0] : r.opportunities;
       const lm = lastById.get(r.id);

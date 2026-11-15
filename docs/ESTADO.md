@@ -41,6 +41,7 @@ Se actualiza al cierre de cada vuelta de trabajo. Sin datos personales, claves n
 - **Asistente** (13/11): sigue pidiendo confirmación antes de ejecutar. La tarea que revisa sola la Bandeja para Claude, por ahora no.
 - **Quedaron sin respuesta** (13/11): si lo último que dijo la persona concretó una llamada, pasa a captado; si no, queda en «Quedaron sin respuesta»; ante la duda, va a «Posible captación a revisar». No se les escribe solos.
 - **14/11 (inicio de conversación):** solo Wasender, Meta queda al margen y no se toca. Lunes a sábado sin días de descanso; nada con patrón fijo (hora de arranque, cantidad, tandas, pausas y texto cambian cada día y cada envío). La responsable conecta las líneas el 15/11.
+- **15/11 (auditoría):** textos internos («Wasender», «v1/v2», «JSON») no se cambian. «¿De dónde sacaron mi número?»: disculpa y «no tenemos el registro» (lo atiende otra área). Enojo: disculpa breve y cortar; amenaza o denuncia: además, avisar. Crisis: líneas de ayuda y cartel de urgencia en el panel. El bot nunca da precios: el precio lo define el equipo. Código de ingreso de 8 números. Campañas: botón de entrenamiento (20 por día, 7 días) sin quitar la elección manual de límite y ritmo. Tope de 3 automáticos sin respuesta por persona.
 - Producción se publica directo a `main` desde la rama de trabajo del chat (antes `mejoras-1211`; el 13/11 a la noche, `claude/relaxed-cerf-5oncz1`) después de typecheck, lint, pruebas y build, y se recorre como usuaria antes de informar.
 
 ## Dónde está cada cosa
@@ -94,6 +95,8 @@ Se actualiza al cierre de cada vuelta de trabajo. Sin datos personales, claves n
 - **Cierre al captar (todos los rubros):** al captar, el bot agradece, confirma quién se va a comunicar y se despide, sin preguntas; si el modelo no lo hace, sale el cierre fijo del rubro. `docs/mejoras-1411/CIERRE-AL-CAPTAR-1511.md`.
 - **Propuestas aplicadas:** Jurídico «turno médico pendiente» y «oferta baja de la aseguradora»; Autos «primera respuesta con interés» (adaptada: con Wasender no hay botones). Registros 294 a 296.
 - **Decisión:** con Wasender el primer mensaje no lleva botones (eran una limitación de Meta). Las fichas nuevas no dependen de un botón.
+
+- **Auditoría del 15/11 (bloques 1 a 4):** detalle en `docs/auditoria-1511/`. Bots: crisis con líneas de ayuda y cartel urgente; enojo y amenaza con disculpa y corte; contestadores en otros idiomas; validador de precios ampliado; captar solo con aceptación real; fechas en el historial; reintento si falla la IA; «Probar el bot real» igual al bot en vivo. Seguridad: código de 8 números (el de 6 sigue hasta cambiarlo), intentos atómicos con tope general, sesión de 7 días sin uso y 30 en total, agenda solo con horarios libres, errores genéricos. Panel: velocidad (0619) y accesibilidad. Negocio: entrenamiento de campañas, tope por persona, captados de más de 24 h en Hoy, freno por respuesta y aviso de línea caída. Migraciones 0619 a 0623 aplicadas.
 
 ## Aprendizajes de esta vuelta
 

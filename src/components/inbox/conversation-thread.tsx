@@ -6,7 +6,6 @@ import { AreaBadge, SourceBadge, StatusBadge } from "@/components/ui/badge";
 import { mergeAudios, mergePoll, type AudioUpdate, type DeliveryUpdate } from "@/lib/inbox/estados";
 import { AudioTexto } from "@/components/inbox/audio-texto";
 import { explicarError, lineaError } from "@/lib/envios/explicacion";
-import { createClient } from "@/lib/supabase/client";
 
 export interface ThreadContact {
   id: string;
@@ -141,6 +140,8 @@ export function ConversationThread({
           setSendError(d1.error ?? "No se pudo preparar la subida.");
           return;
         }
+        // 15/11: el cliente de Supabase se carga solo al subir un archivo (no va en el paquete inicial del chat).
+        const { createClient } = await import("@/lib/supabase/client");
         const { error: upErr } = await createClient().storage.from(d1.bucket).uploadToSignedUrl(d1.path, d1.token, archivo);
         if (upErr) {
           setSendError(`No se pudo subir el archivo: ${upErr.message}`);
@@ -200,7 +201,8 @@ export function ConversationThread({
           </div>
         </div>
 
-        <div className="flex-1 space-y-3 overflow-y-auto bg-slate-50 p-3 sm:p-5">
+        {/* 15/11 (accesibilidad): los mensajes nuevos se anuncian a los lectores de pantalla. */}
+        <div role="log" aria-live="polite" aria-label="Mensajes" className="flex-1 space-y-3 overflow-y-auto bg-slate-50 p-3 sm:p-5">
           {visibles.map((m) => (
             <div
               key={m.id}

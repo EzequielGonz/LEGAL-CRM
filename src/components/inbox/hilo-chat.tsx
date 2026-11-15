@@ -1,5 +1,7 @@
+import { Suspense } from "react";
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { ultimosMensajes } from "@/lib/chat-mensajes";
 import { ConversationThread } from "@/components/inbox/conversation-thread";
 import { FichaSection } from "@/components/ficha/ficha-section";
 import { volverSeguro, fichaDe } from "@/lib/navegacion";
@@ -18,7 +20,12 @@ function perfilDeArea(area: string | null | undefined): string {
 export async function HiloChat({ id, slug, searchParams }: { id: string; slug: string; searchParams?: Record<string, string | undefined> }) {
   const volver = volverSeguro(searchParams?.volver);
   const supabase = createClient();
-  const { data: conversation } = await supabase.from("conversations").select("id, ai_enabled, contacts(*)").eq("id", id).single();
+  // 15/11: conversación y mensajes a la vez (antes, uno después del otro). Del contacto, solo lo que se
+  // usa; de los mensajes, los últimos 300 con las columnas que dibuja el hilo (src/lib/chat-mensajes.ts).
+  const [{ data: conversation }, messages] = await Promise.all([
+    supabase.from("conversations").select("id, ai_enabled, contacts(id, full_name, phone, email, area, status, source, qualification_data)").eq("id", id).single(),
+    ultimosMensajes(supabase, id),
+  ]);
   if (!conversation) notFound();
   const contact = conversation.contacts as any;
   const duenio = perfilDeArea(contact?.area);
@@ -26,8 +33,6 @@ export async function HiloChat({ id, slug, searchParams }: { id: string; slug: s
     const destino = duenio === "juridico" ? `/inbox/${id}` : `/panel/${duenio}/chats/${id}`;
     redirect(`${destino}${volver ? `?volver=${encodeURIComponent(volver)}` : ""}`);
   }
-
-  const { data: messages } = await supabase.from("messages").select("*").eq("conversation_id", id).order("created_at", { ascending: true });
 
   const filtrosLista = new URLSearchParams(
     Object.entries(searchParams ?? {}).filter(([k, v]) => k !== "volver" && typeof v === "string") as [string, string][]
@@ -55,8 +60,13 @@ export async function HiloChat({ id, slug, searchParams }: { id: string; slug: s
           source: contact.source,
           qualification_data: contact.qualification_data ?? {},
         }}
-        initialMessages={messages ?? []}
-        ficha={<FichaSection contactId={contact.id} compact fullHref={fichaDe(contact.id, contact.area)} />}
+        initialMessages={messages}
+        ficha={
+          // 15/11: la ficha llega aparte; el hilo se muestra sin esperarla.
+          <Suspense fallback={null}>
+            <FichaSection contactId={contact.id} compact fullHref={fichaDe(contact.id, contact.area)} />
+          </Suspense>
+        }
       />
     </>
   );
