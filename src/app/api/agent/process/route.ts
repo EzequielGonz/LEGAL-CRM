@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { runAgentTurn } from "@/lib/ai-agent/agent";
 import { requireSession } from "@/lib/acceso/autorizacion";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 /**
  * Dispara manualmente un turno del agente IA para una conversación.
@@ -22,6 +23,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true });
   } catch (err: any) {
     console.error("Error corriendo el agente IA:", err);
-    return NextResponse.json({ error: String(err.message ?? err) }, { status: 500 });
+    return respuestaErrorInterno(err, "agent/process", 500);
   }
 }

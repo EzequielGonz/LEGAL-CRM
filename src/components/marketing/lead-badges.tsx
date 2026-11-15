@@ -16,7 +16,7 @@ export function PriorityBadge({ priority, score }: { priority: string | null; sc
       )}
     >
       {priority.charAt(0).toUpperCase() + priority.slice(1)}
-      {score != null && <span className="opacity-70">· {score}</span>}
+      {score != null && <span className="font-normal">· {score}</span>}
     </span>
   );
 }

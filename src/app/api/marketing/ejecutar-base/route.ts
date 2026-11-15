@@ -3,6 +3,7 @@ import { requireSession } from "@/lib/acceso/autorizacion";
 import { confirmPin } from "@/lib/acceso/confirmar-pin";
 import { ejecutarBase, requisitosEjecutarBase } from "@/lib/marketing/ejecutar-base";
 import { leerExtraccion } from "@/lib/marketing/extraer";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -41,6 +42,6 @@ export async function POST(request: Request) {
     const r = await ejecutarBase({ baseId, extraccionId, nombre: typeof body?.nombre === "string" ? body.nombre : nombre });
     return NextResponse.json(r, { status: r.ok ? 200 : 207 });
   } catch (err: any) {
-    return NextResponse.json({ error: String(err?.message ?? err) }, { status: 500 });
+    return respuestaErrorInterno(err, "marketing/ejecutar-base", 500);
   }
 }

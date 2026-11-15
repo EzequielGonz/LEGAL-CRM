@@ -4,6 +4,7 @@ import { searchGooglePlaces } from "@/lib/marketing/google-places";
 import { importScrapedPlaces } from "@/lib/marketing/import-scrape";
 import { launchCampaign } from "@/lib/campaigns";
 import { requireSession } from "@/lib/acceso/autorizacion";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 // Una búsqueda de hasta 60 negocios + hasta 2 pausas de 2s entre páginas de
 // Google puede llevar unos segundos — le damos margen extra a la función.
@@ -62,7 +63,7 @@ export async function POST(request: Request) {
       maxResults: typeof cantidad === "number" && cantidad > 0 ? cantidad : 20,
     });
   } catch (err: any) {
-    return NextResponse.json({ error: String(err.message ?? err) }, { status: 502 });
+    return respuestaErrorInterno(err, "marketing/scraping", 502);
   }
 
   if (places.length === 0) {
@@ -76,7 +77,7 @@ export async function POST(request: Request) {
   try {
     summary = await importScrapedPlaces({ rubroBuscado: rubro, zona, places });
   } catch (err: any) {
-    return NextResponse.json({ error: String(err.message ?? err) }, { status: 500 });
+    return respuestaErrorInterno(err, "marketing/scraping", 500);
   }
 
   let campaign_id: string | null = null;

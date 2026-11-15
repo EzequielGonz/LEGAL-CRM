@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireSession } from "@/lib/acceso/autorizacion";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 export const dynamic = "force-dynamic";
 
@@ -38,7 +39,7 @@ export async function POST(request: Request) {
   const { error } = await supabase
     .from("marketing_scrape_jobs")
     .insert(zonasClean.map((zona) => ({ rubro: rubroClean, zona, cantidad: perZone })));
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) return respuestaErrorInterno(error, "marketing/scraping/queue");
 
   return NextResponse.json({ ok: true, encoladas: zonasClean.length });
 }
@@ -64,6 +65,6 @@ export async function DELETE(request: Request) {
     .update({ status: "cancelada", finished_at: new Date().toISOString(), error: "Cancelada desde el panel antes de ejecutarse" })
     .eq("status", "pendiente")
     .select("id");
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) return respuestaErrorInterno(error, "marketing/scraping/queue");
   return NextResponse.json({ ok: true, canceladas: (data ?? []).length });
 }

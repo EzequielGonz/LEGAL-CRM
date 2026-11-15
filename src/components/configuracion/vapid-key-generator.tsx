@@ -73,7 +73,7 @@ export function VapidKeyGenerator() {
           </p>
         </div>
       )}
-      {error && <p className="text-red-600">{error}</p>}
+      {error && <p role="alert" className="text-red-600">{error}</p>}
     </div>
   );
 }

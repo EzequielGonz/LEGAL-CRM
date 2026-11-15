@@ -75,7 +75,7 @@ export function TemplatePicker({
           </option>
         ))}
       </select>
-      {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
+      {error && <p role="alert" className="mt-1 text-xs text-red-600">{error}</p>}
       {lineId && options && options.length === 0 && (
         <p className="mt-1 text-xs text-amber-700">
           Esta línea no tiene plantillas asignadas para campañas. Se leen de Meta y se asignan en Configuración → Plantillas de

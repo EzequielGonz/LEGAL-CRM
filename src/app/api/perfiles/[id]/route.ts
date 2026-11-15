@@ -2,6 +2,7 @@ import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireSession } from "@/lib/acceso/autorizacion";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 export const dynamic = "force-dynamic";
 
@@ -45,7 +46,7 @@ export async function PATCH(request: Request, props: { params: Promise<{ id: str
   if (!before) return NextResponse.json({ error: "Perfil no encontrado" }, { status: 404 });
 
   const { error } = await supabase.from("rubros").update(update).eq("id", params.id);
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) return respuestaErrorInterno(error, "perfiles/[id]");
   await supabase.from("ops_change_log").insert({
     actor: "panel",
     action: "editar_perfil",

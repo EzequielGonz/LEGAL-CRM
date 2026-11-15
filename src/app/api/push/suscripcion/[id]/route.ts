@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { setDeviceStatus } from "@/lib/push";
 import { requireSession } from "@/lib/acceso/autorizacion";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 export const dynamic = "force-dynamic";
 
@@ -17,6 +18,6 @@ export async function POST(request: Request, props: { params: Promise<{ id: stri
     await setDeviceStatus(params.id, status);
     return NextResponse.json({ ok: true });
   } catch (err: any) {
-    return NextResponse.json({ error: String(err?.message ?? err) }, { status: 500 });
+    return respuestaErrorInterno(err, "push/suscripcion/[id]", 500);
   }
 }

@@ -188,7 +188,7 @@ export function FollowupReviewActions({ taskId, status }: { taskId: string; stat
       <button disabled={busy} onClick={() => act("descartar")} className="rounded border border-slate-300 px-2 py-0.5 hover:bg-slate-50">
         Descartar
       </button>
-      {error && <span className="text-red-600">{error}</span>}
+      {error && <span role="alert" className="text-red-600">{error}</span>}
     </div>
   );
 }
@@ -227,7 +227,7 @@ export function RepescaBaseButton({ rubroId, count }: { rubroId: string; count: 
       >
         {busy ? "Generando…" : `Generar base para campaña manual (${count})`}
       </button>
-      {msg && <p className={`text-xs ${msg.ok ? "text-green-700" : "text-red-600"}`}>{msg.text}</p>}
+      {msg && <p role={msg.ok ? "status" : "alert"} className={`text-xs ${msg.ok ? "text-green-700" : "text-red-600"}`}>{msg.text}</p>}
     </div>
   );
 }

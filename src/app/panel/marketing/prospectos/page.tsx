@@ -81,8 +81,8 @@ export default async function ProspectosPage(
         className="mb-4 flex flex-wrap items-end gap-2 rounded-xl border border-slate-200 bg-white p-4"
       >
         <div>
-          <label className="mb-1 block text-xs font-medium text-slate-500">Prioridad</label>
-          <select
+          <label htmlFor="filtro-mkt-1" className="mb-1 block text-xs font-medium text-slate-500">Prioridad</label>
+          <select id="filtro-mkt-1"
             name="prioridad"
             defaultValue={searchParams.prioridad ?? ""}
             className="rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
@@ -94,8 +94,8 @@ export default async function ProspectosPage(
           </select>
         </div>
         <div>
-          <label className="mb-1 block text-xs font-medium text-slate-500">Estado</label>
-          <select
+          <label htmlFor="filtro-mkt-2" className="mb-1 block text-xs font-medium text-slate-500">Estado</label>
+          <select id="filtro-mkt-2"
             name="estado"
             defaultValue={searchParams.estado ?? ""}
             className="rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"

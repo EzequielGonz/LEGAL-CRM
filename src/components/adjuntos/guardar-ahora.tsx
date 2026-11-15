@@ -37,7 +37,7 @@ export function GuardarAhora({ attachmentId }: { attachmentId: string }) {
       >
         {busy ? "Guardando…" : "Guardar ahora"}
       </button>
-      {msg && <span className={`text-xs ${msg.ok ? "text-emerald-700" : "text-red-700"}`}>{msg.text}</span>}
+      {msg && <span role={msg.ok ? "status" : "alert"} className={`text-xs ${msg.ok ? "text-emerald-700" : "text-red-700"}`}>{msg.text}</span>}
     </span>
   );
 }

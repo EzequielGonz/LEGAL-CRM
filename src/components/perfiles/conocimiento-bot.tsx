@@ -270,7 +270,7 @@ function TarjetaRubro({
           <table className="w-full text-sm">
             <caption className="sr-only">Comparación de v1 y v2</caption>
             <thead>
-              <tr className="text-left text-[11px] uppercase tracking-wide text-slate-500">
+              <tr className="text-left text-xs uppercase tracking-wide text-slate-500">
                 <th scope="col" className="py-1 font-medium">Resultado</th>
                 <th scope="col" className="py-1 text-right font-medium">v1</th>
                 <th scope="col" className="py-1 text-right font-medium">v2</th>
@@ -369,7 +369,7 @@ function TarjetaRubro({
               className="w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm text-slate-900"
             />
           </label>
-          <div className="mt-2 max-h-[60vh] space-y-2 overflow-y-auto pr-1">
+          <div role="region" aria-label="Fichas del bot" tabIndex={0} className="mt-2 max-h-[60vh] space-y-2 overflow-y-auto pr-1">
             {!items && <p className="text-sm text-slate-500">Cargando…</p>}
             {items && visibles.length === 0 && <p className="text-sm text-slate-500">Nada coincide con la búsqueda.</p>}
             {visibles.map((i) => (
@@ -411,7 +411,7 @@ function ItemEditable({ item, onGuardar }: { item: Item; onGuardar: (i: Item, c:
   return (
     <details className={`rounded-lg border border-slate-200 bg-white p-2 ${item.activo ? "" : "opacity-60"}`}>
       <summary className="cursor-pointer text-sm text-slate-900">
-        <span className="mr-2 rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-slate-600">{CAPA[item.capa]}</span>
+        <span className="mr-2 rounded bg-slate-100 px-1.5 py-0.5 text-xs font-medium uppercase tracking-wide text-slate-600">{CAPA[item.capa]}</span>
         {item.titulo}
         {!item.activo && <span className="ml-2 text-xs text-slate-500">(apagado)</span>}
       </summary>
@@ -440,7 +440,7 @@ function ItemEditable({ item, onGuardar }: { item: Item; onGuardar: (i: Item, c:
           <p className="mt-2 whitespace-pre-wrap text-sm text-slate-700">{item.contenido}</p>
         </>
       )}
-      <p className="mt-1 text-[11px] text-slate-500">
+      <p className="mt-1 text-xs text-slate-500">
         {item.fuente}
         {item.verificado_el ? ` · norma verificada el ${item.verificado_el.split("-").reverse().join("/")}` : ""}
       </p>

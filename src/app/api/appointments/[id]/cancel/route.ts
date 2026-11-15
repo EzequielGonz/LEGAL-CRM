@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireSession } from "@/lib/acceso/autorizacion";
 import { esUuid } from "@/lib/rutas/comprobar";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 export async function POST(request: Request, props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -15,7 +16,7 @@ export async function POST(request: Request, props: { params: Promise<{ id: stri
     .eq("id", params.id)
     .select("id");
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) return respuestaErrorInterno(error, "appointments/[id]/cancel");
   if (!(data ?? []).length) return NextResponse.json({ error: "Esa cita no existe." }, { status: 404 });
   return NextResponse.json({ ok: true });
 }

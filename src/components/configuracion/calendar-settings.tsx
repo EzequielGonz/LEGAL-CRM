@@ -97,7 +97,7 @@ export function CalendarSettings({
         después, en la franja válida más cercana a las 60 horas; si no hay ninguna, queda como conflicto para revisar y no se envía.
       </p>
       {loadError && (
-        <p className="rounded-lg border border-red-200 bg-red-50 p-2 text-xs text-red-700">
+        <p role="alert" className="rounded-lg border border-red-200 bg-red-50 p-2 text-xs text-red-700">
           No se pudo leer el calendario ({loadError}). Mientras tanto no sale ningún envío automático.
         </p>
       )}

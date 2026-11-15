@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { ensureOpportunity, logOpportunityEvent } from "@/lib/opportunities";
 import { requireSession } from "@/lib/acceso/autorizacion";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 export const dynamic = "force-dynamic";
 
@@ -34,7 +35,7 @@ export async function POST(request: Request, props: { params: Promise<{ id: stri
   if (cita.status === estado) return NextResponse.json({ ok: true, sin_cambios: true });
 
   const { error } = await supabase.from("appointments").update({ status: estado }).eq("id", cita.id);
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) return respuestaErrorInterno(error, "appointments/[id]");
 
   try {
     const opp = await ensureOpportunity({ contactId: cita.contact_id, conversationId: cita.conversation_id, actor: "operador" });

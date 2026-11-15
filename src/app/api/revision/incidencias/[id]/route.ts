@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireSession } from "@/lib/acceso/autorizacion";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 export const dynamic = "force-dynamic";
 
@@ -29,7 +30,7 @@ export async function POST(request: Request, props: { params: Promise<{ id: stri
           resolution_note: nota,
         };
   const { data, error } = await supabase.from("incidences").update(update).eq("id", params.id).select("id, opportunity_id, kind").maybeSingle();
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) return respuestaErrorInterno(error, "revision/incidencias/[id]");
   if (!data) return NextResponse.json({ error: "Incidencia no encontrada" }, { status: 404 });
 
   if (data.opportunity_id) {

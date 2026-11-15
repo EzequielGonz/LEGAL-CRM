@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireSession } from "@/lib/acceso/autorizacion";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 export const dynamic = "force-dynamic";
 
@@ -29,7 +30,7 @@ export async function PATCH(request: Request, props: { params: Promise<{ id: str
     .is("archived_at", null)
     .select("*")
     .maybeSingle();
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) return respuestaErrorInterno(error, "calendario/[id]");
   if (!data) return NextResponse.json({ error: "La excepción no existe o ya estaba archivada." }, { status: 404 });
 
   await supabase.from("ops_change_log").insert({

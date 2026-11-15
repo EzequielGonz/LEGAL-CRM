@@ -4,6 +4,7 @@ import { attachRecipients, baseContacts, contactPriorities, planRecipients, plan
 import { AREA_TO_RUBRO_ID } from "@/lib/rubros";
 import { requireSession } from "@/lib/acceso/autorizacion";
 import { validarEleccionWasender } from "@/lib/wasender/campanas";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 /**
  * Crea una campaña (siempre en borrador). Si viene `base_id` (toda una
@@ -154,7 +155,7 @@ export async function POST(request: Request) {
     .select()
     .single();
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) return respuestaErrorInterno(error, "campaigns");
 
   // Destinatarios: de una base completa (base_id) o de una selección
   // (contact_ids). Un solo criterio para los dos casos (ver

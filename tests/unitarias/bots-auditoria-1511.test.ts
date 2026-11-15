@@ -103,3 +103,23 @@ test("reintento: corta por tiempo, reintenta una vez y si sale bien devuelve", a
   );
   assert.equal(n, 2);
 });
+
+import { isValidNewPinFormat, isValidPinFormat, isWeakPin } from "../../src/lib/acceso/pin";
+import { horarioOfrecido } from "../../src/lib/agenda";
+
+test("código de ingreso: 8 números para los nuevos; el de 6 sigue sirviendo para entrar", () => {
+  assert.ok(isValidPinFormat("123456") && isValidPinFormat("12345678"));
+  assert.ok(!isValidPinFormat("1234567") && !isValidPinFormat("abcdefgh"));
+  assert.ok(isValidNewPinFormat("48271936") && !isValidNewPinFormat("482719"));
+  for (const d of ["11111111", "12345678", "87654321", "12121212", "12341234", "19870315", "15031987"]) assert.ok(isWeakPin(d), d);
+  assert.ok(!isWeakPin("48271936"));
+});
+
+test("agendar: solo un horario libre y futuro de los que dio la agenda", () => {
+  const ahora = new Date("2026-11-16T12:00:00Z");
+  const slots = [{ starts_at: "2026-11-17T13:00:00.000Z", ends_at: "2026-11-17T13:30:00.000Z" }];
+  assert.deepEqual(horarioOfrecido("2026-11-17T13:00:30Z", slots, ahora), slots[0]);
+  assert.equal(horarioOfrecido("2026-11-17T15:00:00Z", slots, ahora), null);
+  assert.equal(horarioOfrecido("2026-11-15T13:00:00Z", slots, ahora), null);
+  assert.equal(horarioOfrecido("mañana a las 10", slots, ahora), null);
+});

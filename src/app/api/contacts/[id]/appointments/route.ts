@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createAppointment } from "@/lib/agenda";
 import { requireSession } from "@/lib/acceso/autorizacion";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 /**
  * Agenda manual: el administrador agenda una cita directamente desde la
@@ -46,6 +47,6 @@ export async function POST(request: Request, props: { params: Promise<{ id: stri
     });
     return NextResponse.json({ ok: true, appointment });
   } catch (err: any) {
-    return NextResponse.json({ error: String(err.message ?? err) }, { status: 500 });
+    return respuestaErrorInterno(err, "contacts/[id]/appointments", 500);
   }
 }

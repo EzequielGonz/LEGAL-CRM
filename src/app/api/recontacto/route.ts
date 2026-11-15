@@ -3,6 +3,7 @@ import { requireSession } from "@/lib/acceso/autorizacion";
 import { confirmPin } from "@/lib/acceso/confirmar-pin";
 import { esSlugPerfil } from "@/lib/marca";
 import { guardarConfigRecontacto, leerConfigRecontacto, procesarRecontactos } from "@/lib/recontacto/motor";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 export const dynamic = "force-dynamic";
 
@@ -34,6 +35,6 @@ export async function POST(request: Request) {
     const config = await guardarConfigRecontacto(body.perfil, body.encendido);
     return NextResponse.json({ ok: true, config });
   } catch (err: any) {
-    return NextResponse.json({ error: String(err?.message ?? err) }, { status: 500 });
+    return respuestaErrorInterno(err, "recontacto", 500);
   }
 }

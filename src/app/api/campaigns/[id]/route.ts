@@ -4,6 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { AREA_TO_RUBRO_ID } from "@/lib/rubros";
 import { requireSession } from "@/lib/acceso/autorizacion";
 import { validarEleccionWasender } from "@/lib/wasender/campanas";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 /**
  * Las campañas ya no se eliminan (pregunta 20): un DELETE la archiva (y la
@@ -108,7 +109,7 @@ export async function PATCH(request: Request, props: { params: Promise<{ id: str
   if (Object.keys(update).length === 0) return NextResponse.json({ error: "Nada para guardar" }, { status: 400 });
 
   const { error } = await supabase.from("campaigns").update(update).eq("id", params.id);
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) return respuestaErrorInterno(error, "campaigns/[id]");
   await supabase.from("ops_change_log").insert({
     actor: "panel",
     action: "configurar_campana",

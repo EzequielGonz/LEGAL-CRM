@@ -7,7 +7,7 @@ export const metadata = { title: "Ingreso" };
 export const dynamic = "force-dynamic";
 
 /**
- * Ingreso con el PIN general compartido (6 dígitos). No hay cuentas
+ * Ingreso con el PIN general compartido (8 dígitos; el anterior de 6 sigue sirviendo). No hay cuentas
  * personales ni recuperación por correo: el PIN se cambia desde
  * Configuración (pidiendo el actual) y se recupera desde la configuración
  * privada del servidor (ACCESS_PIN_RESET).

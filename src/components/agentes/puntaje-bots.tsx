@@ -57,7 +57,7 @@ export async function PuntajeBots({ rubroId }: { rubroId: string }) {
                   <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-100">
                     <div className="h-full rounded-full bg-gold-500" style={{ width: `${Math.round((c.puntos / c.maximo) * 100)}%` }} />
                   </div>
-                  <p className="mt-0.5 text-[11px] text-slate-500">{c.detalle}</p>
+                  <p className="mt-0.5 text-xs text-slate-500">{c.detalle}</p>
                 </li>
               ))}
             </ul>

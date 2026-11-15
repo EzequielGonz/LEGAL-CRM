@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { useRouter } from "next/navigation";
 
 /**
@@ -33,6 +33,7 @@ export function ReviewAction({
   const [confirm, setConfirm] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const idError = useId();
 
   async function send() {
     if (noteRequired && !note.trim()) {
@@ -79,6 +80,7 @@ export function ReviewAction({
   return (
     <div className="flex w-full flex-col gap-2 rounded-lg border border-slate-200 bg-slate-50 p-2">
       <input
+        aria-label={notePlaceholder || "Nota"}
         value={note}
         onChange={(e) => setNote(e.target.value)}
         placeholder={notePlaceholder}
@@ -87,13 +89,20 @@ export function ReviewAction({
       />
       {confirmWord && (
         <input
+          aria-label={`Escribí ${confirmWord} para confirmar`}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={error ? idError : undefined}
           value={confirm}
           onChange={(e) => setConfirm(e.target.value)}
           placeholder={`Escribí ${confirmWord} para confirmar`}
           className="w-full rounded-md border border-slate-300 px-2 py-1.5 text-xs outline-none focus-gold"
         />
       )}
-      {error && <p className="text-xs text-red-600">{error}</p>}
+      {error && (
+        <p id={idError} role="alert" className="text-xs text-red-700">
+          {error}
+        </p>
+      )}
       <div className="flex gap-2">
         <button type="button" onClick={send} disabled={busy} className={buttonClass}>
           {busy ? "Guardando..." : label}

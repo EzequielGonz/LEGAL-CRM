@@ -89,6 +89,8 @@ export default function LandingPage() {
           <div className="space-y-3">
             <input
               required
+              aria-label="Nombre y apellido"
+              autoComplete="name"
               placeholder="Nombre y apellido"
               value={form.full_name}
               onChange={(e) => setForm((f) => ({ ...f, full_name: e.target.value }))}
@@ -96,6 +98,9 @@ export default function LandingPage() {
             />
             <input
               required
+              aria-label="WhatsApp"
+              type="tel"
+              autoComplete="tel"
               placeholder="WhatsApp (ej: 5491122223333)"
               value={form.phone}
               onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))}
@@ -103,6 +108,8 @@ export default function LandingPage() {
             />
             <input
               type="email"
+              aria-label="Email (opcional)"
+              autoComplete="email"
               placeholder="Email (opcional)"
               value={form.email}
               onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
@@ -110,6 +117,7 @@ export default function LandingPage() {
             />
             <textarea
               required
+              aria-label="Tu consulta"
               placeholder="Contanos brevemente tu consulta"
               rows={4}
               value={form.consulta}
@@ -130,7 +138,7 @@ export default function LandingPage() {
           </button>
 
           {status === "error" && (
-            <p className="mt-3 text-center text-sm text-red-600">
+            <p role="alert" className="mt-3 text-center text-sm text-red-700">
               Hubo un problema al enviar tu consulta. Probá de nuevo en unos minutos.
             </p>
           )}

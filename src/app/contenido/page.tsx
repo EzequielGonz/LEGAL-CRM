@@ -77,7 +77,7 @@ export default async function ContenidoPage(props: { searchParams: Promise<{ per
           <EnlaceVolver volver={volver} respaldo={inicioDePerfil(slug)} />
         </div>
 
-        {p.error && <p className="rounded-lg bg-red-50 p-3 text-sm font-medium text-red-800">No se pudo leer el contenido: {p.error}. No es «vacío»: reintentá.</p>}
+        {p.error && <p role="alert" className="rounded-lg bg-red-50 p-3 text-sm font-medium text-red-800">No se pudo leer el contenido: {p.error}. No es «vacío»: reintentá.</p>}
 
         <ul className="grid grid-cols-2 gap-3 lg:grid-cols-4" aria-label="Panorama del contenido">
           {resumen.map((r) => (

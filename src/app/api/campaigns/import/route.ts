@@ -8,6 +8,7 @@ import {
   planRecipients,
 } from "@/lib/campaign-recipients";
 import { requireSession } from "@/lib/acceso/autorizacion";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 export const maxDuration = 60;
 
@@ -84,7 +85,7 @@ export async function POST(request: Request) {
     if (err instanceof RepeatedImportError) {
       baseId = err.previous.id;
     } else {
-      return NextResponse.json({ error: String(err?.message ?? err) }, { status: 500 });
+      return respuestaErrorInterno(err, "campaigns/import", 500);
     }
   }
 
@@ -107,6 +108,6 @@ export async function POST(request: Request) {
       yaEnCampana: plan.ya_en_campana,
     });
   } catch (err: any) {
-    return NextResponse.json({ error: String(err?.message ?? err) }, { status: 500 });
+    return respuestaErrorInterno(err, "campaigns/import", 500);
   }
 }

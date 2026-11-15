@@ -148,7 +148,9 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Foco visible en el color de la marca (contraste ≥ 3:1). */
+/* Foco visible (15/11): anillo de 3 px en tinta oscura (contraste ≥ 3:1 sobre
+   cualquier fondo claro, aunque el acento del perfil sea pálido) con el halo
+   blanco de globals.css debajo. El modo oscuro lo pisa en tema-premium.css. */
 a:focus-visible,
 button:focus-visible,
 [role="button"]:focus-visible,
@@ -157,9 +159,9 @@ input:focus-visible,
 select:focus-visible,
 textarea:focus-visible,
 [tabindex]:not([tabindex="-1"]):focus-visible {
-  outline: 2px solid rgb(var(--c-gold-600));
+  outline: 3px solid rgb(var(--c-slate-900));
   outline-offset: 2px;
-  box-shadow: none;
+  box-shadow: 0 0 0 5px #ffffff;
 }
 
 ::-webkit-scrollbar-thumb:hover {

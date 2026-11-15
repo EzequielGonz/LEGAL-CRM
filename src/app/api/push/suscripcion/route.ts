@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { registerDevice } from "@/lib/push";
 import { vapidConfig } from "@/lib/webpush";
 import { requireSession } from "@/lib/acceso/autorizacion";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 export const dynamic = "force-dynamic";
 
@@ -34,6 +35,6 @@ export async function POST(request: Request) {
     });
     return NextResponse.json({ ok: true, id });
   } catch (err: any) {
-    return NextResponse.json({ error: String(err?.message ?? err) }, { status: 500 });
+    return respuestaErrorInterno(err, "push/suscripcion", 500);
   }
 }

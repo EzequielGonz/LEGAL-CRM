@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useId } from "react";
 import { useRouter } from "next/navigation";
 
 // Ciudades principales de Argentina (capitales provinciales y grandes centros urbanos).
@@ -51,6 +51,8 @@ const CIUDADES_ARGENTINA = [
 /** Carga muchas búsquedas de Google Maps de una vez (una por ciudad) para el barrido nacional. */
 export function ScrapeQueueForm() {
   const router = useRouter();
+  // 15/11: cada etiqueta queda asociada a su campo.
+  const idCampos = useId();
   const [open, setOpen] = useState(false);
   const [rubro, setRubro] = useState("");
   const [cantidad, setCantidad] = useState(40);
@@ -95,8 +97,8 @@ export function ScrapeQueueForm() {
           </p>
           <div className="flex flex-wrap gap-3">
             <div>
-              <label className="mb-1 block text-xs font-medium text-slate-500">Rubro</label>
-              <input
+              <label htmlFor={`${idCampos}-1`} className="mb-1 block text-xs font-medium text-slate-500">Rubro</label>
+              <input id={`${idCampos}-1`}
                 value={rubro}
                 onChange={(e) => setRubro(e.target.value)}
                 placeholder="Ej: peluquerías"
@@ -105,8 +107,8 @@ export function ScrapeQueueForm() {
               />
             </div>
             <div>
-              <label className="mb-1 block text-xs font-medium text-slate-500">Negocios por ciudad (máx. 60)</label>
-              <input
+              <label htmlFor={`${idCampos}-2`} className="mb-1 block text-xs font-medium text-slate-500">Negocios por ciudad (máx. 60)</label>
+              <input id={`${idCampos}-2`}
                 type="number"
                 min={1}
                 max={60}
@@ -118,7 +120,7 @@ export function ScrapeQueueForm() {
           </div>
           <div>
             <div className="mb-1 flex items-center justify-between">
-              <label className="text-xs font-medium text-slate-500">Ciudades (una por línea)</label>
+              <label htmlFor={`${idCampos}-3`} className="text-xs font-medium text-slate-500">Ciudades (una por línea)</label>
               <button
                 type="button"
                 onClick={() => setZonasText(CIUDADES_ARGENTINA.join("\n"))}
@@ -127,7 +129,7 @@ export function ScrapeQueueForm() {
                 Cargar las {CIUDADES_ARGENTINA.length} ciudades principales de Argentina
               </button>
             </div>
-            <textarea
+            <textarea id={`${idCampos}-3`}
               value={zonasText}
               onChange={(e) => setZonasText(e.target.value)}
               rows={6}
@@ -142,7 +144,7 @@ export function ScrapeQueueForm() {
               <span className="text-xs text-slate-400">Hasta {zonas.length * cantidad} negocios en total</span>
             )}
           </div>
-          {error && <p className="text-sm text-red-600">{error}</p>}
+          {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
           {okMessage && <p className="text-sm text-green-700">{okMessage}</p>}
         </form>
       )}

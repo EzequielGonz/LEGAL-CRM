@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
 import type { SlugPerfil } from "@/lib/marca";
 import { Icono } from "@/components/ui/icono-seccion";
@@ -40,7 +40,7 @@ function VistaPiezas({ piezas }: { piezas: any[] }) {
   return (
     <details className="mt-2 rounded-lg bg-slate-50 p-2 text-xs text-slate-700">
       <summary className="cursor-pointer font-medium text-slate-800">Ver las {unicas.length} piezas</summary>
-      <ul className="mt-2 max-h-64 space-y-2 overflow-y-auto pr-1">
+      <ul aria-label="Piezas propuestas" tabIndex={0} className="mt-2 max-h-64 space-y-2 overflow-y-auto pr-1">
         {unicas.map((x, i) => (
           <li key={i} className="rounded-md border border-slate-200 bg-white p-2">
             <p className="text-xs font-semibold text-slate-500">
@@ -102,6 +102,7 @@ export function TarjetaPropuesta({ p, alCambiar }: { p: Propuesta; alCambiar: (p
   const nivel = nivelDeAccion(p.tipo, (p.detalle ?? {}) as Record<string, unknown>);
   const [entendido, setEntendido] = useState(false);
   const [pin, setPin] = useState("");
+  const idError = useId();
   const faltaConfirmacion = (nivel === "contacto" && !entendido) || (nivel === "pin" && pin.trim().length < 4);
 
   async function confirmar() {
@@ -163,7 +164,7 @@ export function TarjetaPropuesta({ p, alCambiar }: { p: Propuesta; alCambiar: (p
       {p.estado === "propuesta" && nivel === "pin" && (
         <label className="mt-3 block text-xs font-medium text-slate-700">
           PIN para confirmar
-          <input type="password" inputMode="numeric" autoComplete="off" value={pin} onChange={(e) => setPin(e.target.value.replace(/\D/g, "").slice(0, 8))} className="mt-1 block w-32 rounded-lg border border-slate-300 px-3 py-2 text-sm" />
+          <input type="password" inputMode="numeric" autoComplete="off" aria-invalid={error ? true : undefined} aria-describedby={error ? idError : undefined} value={pin} onChange={(e) => setPin(e.target.value.replace(/\D/g, "").slice(0, 8))} className="mt-1 block w-32 rounded-lg border border-slate-300 px-3 py-2 text-sm" />
         </label>
       )}
       {p.estado === "propuesta" && (
@@ -190,7 +191,7 @@ export function TarjetaPropuesta({ p, alCambiar }: { p: Propuesta; alCambiar: (p
         </button>
       )}
       {error && (
-        <p role="alert" className="mt-2 text-xs text-red-700">
+        <p id={idError} role="alert" className="mt-2 text-xs text-red-700">
           {error}
         </p>
       )}
@@ -379,7 +380,7 @@ export function AsistentePanel({ slug }: { slug: SlugPerfil }) {
             </div>
           )}
           <div className="flex items-end gap-2 rounded-xl border border-slate-200 bg-white p-2 focus-within:border-gold-500">
-            <input ref={archivo} type="file" accept="image/*" multiple className="hidden" onChange={(e) => adjuntar(e.target.files)} />
+            <input ref={archivo} type="file" accept="image/*" multiple aria-label="Adjuntar una imagen" tabIndex={-1} className="hidden" onChange={(e) => adjuntar(e.target.files)} />
             <button type="button" onClick={() => archivo.current?.click()} disabled={imagenes.length >= 3} className="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-slate-600 hover:bg-slate-100 disabled:opacity-40" aria-label="Adjuntar una imagen" title="Adjuntar una imagen">
               <span aria-hidden="true" className="text-lg leading-none">+</span>
             </button>

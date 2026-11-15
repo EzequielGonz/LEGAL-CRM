@@ -80,7 +80,7 @@ export function AgentesEtapa3({ perfil, rubroId, areas, volver }: { perfil: stri
           Configurar
         </a>
       </div>
-      {error && <p className="rounded-lg bg-red-50 p-2 text-sm text-red-800">{error}</p>}
+      {error && <p role="alert" className="rounded-lg bg-red-50 p-2 text-sm text-red-800">{error}</p>}
 
       <ul className="solo-avanzado grid grid-cols-1 gap-3 md:grid-cols-2">
         {principal && (

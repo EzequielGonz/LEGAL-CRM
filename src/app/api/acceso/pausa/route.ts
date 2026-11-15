@@ -12,6 +12,7 @@ import {
 } from "@/lib/acceso/pin";
 import { getAutomationPause } from "@/lib/automation-pause";
 import { requireSession } from "@/lib/acceso/autorizacion";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 export const dynamic = "force-dynamic";
 
@@ -62,7 +63,7 @@ export async function POST(request: Request) {
   const { error } = await supabase
     .from("system_settings")
     .upsert({ key: "automation_pause", value, updated_at: new Date().toISOString(), updated_by: "panel" }, { onConflict: "key" });
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) return respuestaErrorInterno(error, "acceso/pausa");
 
   // La tarea programada de campañas acompaña al interruptor de envíos.
   const { error: cronErr } = await supabase.rpc("set_campaign_tick_active", {

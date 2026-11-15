@@ -21,6 +21,7 @@ import { rescatarTurnosPerdidos } from "@/lib/ai-agent/rescate";
 import { vigilarCalidadLineas } from "@/lib/whatsapp/calidad-servidor";
 import { procesarPedidoPlantillas } from "@/lib/plantillas/pedido-meta";
 import { avisarFallasDelSistema, avisarLatidoFallido } from "@/lib/salud/avisar-fallas";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 // El análisis de negocios (descargar la web + IA) necesita más de los 10s por defecto.
 export const maxDuration = 60;
@@ -295,7 +296,7 @@ export async function POST(request: Request) {
   } catch (err: any) {
     await registrarLatido(false, { error: String(err?.message ?? err).slice(0, 200), ms: Date.now() - inicio, etapas });
     await avisarLatidoFallido();
-    return NextResponse.json({ error: String(err.message ?? err) }, { status: 500 });
+    return respuestaErrorInterno(err, "campaigns/tick", 500);
   }
 }
 

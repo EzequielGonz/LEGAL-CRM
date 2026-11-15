@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { useRouter } from "next/navigation";
 import { pedirConfirmacion } from "@/components/ui/dialogo-confirmar";
 
@@ -43,6 +43,9 @@ export function AccionConPin({
   const [pin, setPin] = useState("");
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  // 15/11: el aviso queda asociado al PIN; si el error es del PIN, el campo se marca inválido.
+  const idAviso = useId();
+  const pinInvalido = !!msg && !msg.ok && /pin/i.test(msg.text);
   const clase =
     variante === "peligro"
       ? "bg-red-700 text-white"
@@ -134,6 +137,8 @@ export function AccionConPin({
             placeholder="PIN"
             required
             aria-label="PIN"
+            aria-invalid={pinInvalido || undefined}
+            aria-describedby={msg ? idAviso : undefined}
             className="tactil w-28 rounded-lg border border-slate-300 px-2"
           />
         )}
@@ -141,7 +146,7 @@ export function AccionConPin({
           {busy ? "Procesando…" : etiqueta}
         </button>
       </div>
-      <p role="status" aria-live="polite" className={msg ? (msg.ok ? "text-emerald-700" : "font-medium text-red-700") : "sr-only"}>
+      <p id={idAviso} role="status" aria-live="polite" className={msg ? (msg.ok ? "text-emerald-700" : "font-medium text-red-700") : "sr-only"}>
         {msg?.text ?? ""}
       </p>
     </form>

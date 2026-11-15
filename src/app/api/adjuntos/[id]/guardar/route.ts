@@ -3,6 +3,7 @@ import { saveAttachment } from "@/lib/adjuntos/guardar";
 import { STATUS_LABEL } from "@/lib/adjuntos/modelo";
 import { isUuid } from "@/lib/adjuntos/respuesta";
 import { requireSession } from "@/lib/acceso/autorizacion";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -22,6 +23,6 @@ export async function POST(request: Request, props: { params: Promise<{ id: stri
       { status: outcome.status === "guardado" ? 200 : outcome.status === "ocupado" ? 409 : 422 }
     );
   } catch (err: any) {
-    return NextResponse.json({ error: String(err?.message ?? err) }, { status: 500 });
+    return respuestaErrorInterno(err, "adjuntos/[id]/guardar", 500);
   }
 }

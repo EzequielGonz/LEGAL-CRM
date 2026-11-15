@@ -45,7 +45,7 @@ export async function POST(request: Request) {
     .eq("id", rubroId)
     .select("id")
     .maybeSingle();
-  if (error) return NextResponse.json({ error: `No se pudo guardar: ${error.message}` }, { status: 500 });
+  if (error) return (console.error("[api] perfiles/atencion-24h:", error.message), NextResponse.json({ error: "No se pudo guardar: probá de nuevo en un momento." }, { status: 500 }));
   if (!data) return NextResponse.json({ error: "Perfil no encontrado." }, { status: 404 });
   return NextResponse.json({ ok: true, enabled: body.enabled });
 }

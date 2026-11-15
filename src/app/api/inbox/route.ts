@@ -9,6 +9,7 @@ import { textoBusquedaSeguro } from "@/lib/busqueda";
 import { AREAS_DE_PERFIL } from "@/lib/cartera-servidor";
 import { rubroIdDe } from "@/lib/indicadores";
 import { colasDeHoy } from "@/lib/hoy/colas";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 export const dynamic = "force-dynamic";
 
@@ -95,7 +96,7 @@ export async function GET(request: Request) {
   if (q) query = query.or(`full_name.ilike.%${q}%,phone.ilike.%${q}%,base_text.ilike.%${q}%`, { referencedTable: "contacts" });
 
   const { data, count, error } = await query;
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) return respuestaErrorInterno(error, "inbox");
 
   const rows = (data ?? []) as any[];
   const ids = rows.map((r) => r.id);

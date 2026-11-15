@@ -9,6 +9,8 @@ import {
   originHash,
   registerFailure,
   safeNextPath,
+  attemptOk,
+  tryAttempt,
   verifyPin,
 } from "@/lib/acceso/pin";
 import { SESSION_COOKIE, randomId, sessionCookieOptions, signSession } from "@/lib/acceso/session";
@@ -23,7 +25,11 @@ function horaArgentina(d: Date): string {
   });
 }
 
-/** Ingreso con el PIN general. 5 fallos desde un origen => pausa de 15 minutos solo para ese origen. */
+/**
+ * Ingreso con el PIN general. 5 intentos desde un origen => pausa de 15 minutos
+ * para ese origen; 30 fallos en total (todas las redes) => pausa general de 15
+ * minutos. 15/11: el intento se reserva antes de comprobar el código (atómico).
+ */
 export async function POST(request: Request) {
   const body = await request.json().catch(() => ({}));
   const pin = typeof body?.pin === "string" ? body.pin.trim() : "";
@@ -42,24 +48,30 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         error:
-          "El PIN todavía no está configurado. Hay que cargar ACCESS_PIN (6 dígitos) en la configuración privada del servidor.",
+          "El PIN todavía no está configurado. Hay que cargar ACCESS_PIN (8 dígitos) en la configuración privada del servidor.",
       },
       { status: 503 }
     );
   }
 
-  const locked = await lockedUntil(origin);
+  // 15/11: reserva atómica del intento. Sin la función en la base, la lectura anterior.
+  const intento = await tryAttempt(origin);
+  const locked = intento ? (intento.permitido ? null : intento.hasta) : await lockedUntil(origin);
   if (locked) {
-    await logAccessEvent("intento_bloqueado", { origin, device });
+    await logAccessEvent("intento_bloqueado", { origin, device, detail: intento?.general ? { general: true } : {} });
     return NextResponse.json(
-      { error: `Demasiados intentos desde este dispositivo o red. Podés volver a probar a las ${horaArgentina(locked)}.` },
+      {
+        error: intento?.general
+          ? `Hubo demasiados intentos fallidos. Por seguridad, el ingreso se pausó hasta las ${horaArgentina(locked)}.`
+          : `Demasiados intentos desde este dispositivo o red. Podés volver a probar a las ${horaArgentina(locked)}.`,
+      },
       { status: 429 }
     );
   }
 
   const ok = isValidPinFormat(pin) && (await verifyPin(pin, state.pinHash));
   if (!ok) {
-    const until = await registerFailure(origin);
+    const until = intento ? intento.hasta : await registerFailure(origin);
     await logAccessEvent("ingreso_fallido", { origin, device });
     if (until) {
       await logAccessEvent("bloqueo_origen", { origin, device, detail: { hasta: until.toISOString() } });
@@ -71,9 +83,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "PIN incorrecto." }, { status: 401 });
   }
 
-  await clearFailures(origin);
+  if (intento) await attemptOk(origin);
+  else await clearFailures(origin);
   const sid = randomId();
-  const token = await signSession({ v: state.sessionVersion, iat: Math.floor(Date.now() / 1000), sid });
+  const token = await signSession({ v: state.sessionVersion, iat: Math.floor(Date.now() / 1000), ini: Math.floor(Date.now() / 1000), sid, ...(pin.length === 6 ? { c6: true } : {}) });
   await logAccessEvent("ingreso", { origin, device, detail: { sesion: sid.slice(0, 8) } });
 
   const response = NextResponse.json({ ok: true, next: safeNextPath(body?.next) });

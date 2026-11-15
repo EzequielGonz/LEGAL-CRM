@@ -46,7 +46,7 @@ export default async function CaptacionMarketingPage(
             {jobCount("pendiente")} pendientes · {jobCount("ejecutando")} corriendo · {jobCount("listo")} listas ·{" "}
             {jobCount("error")} con error
           </p>
-          <ul className="max-h-56 space-y-1 overflow-y-auto text-xs text-slate-600">
+          <ul aria-label="Cola de búsquedas" tabIndex={0} className="max-h-56 space-y-1 overflow-y-auto text-xs text-slate-600">
             {(jobs ?? []).map((j: any) => (
               <li key={j.id} className="flex justify-between gap-3">
                 <span>

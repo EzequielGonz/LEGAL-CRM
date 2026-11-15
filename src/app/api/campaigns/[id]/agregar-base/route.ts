@@ -9,6 +9,7 @@ import {
 } from "@/lib/campaign-recipients";
 import { getCampaignInfo } from "@/lib/campaign-metrics";
 import { requireSession } from "@/lib/acceso/autorizacion";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -63,6 +64,6 @@ export async function POST(request: Request, props: { params: Promise<{ id: stri
     const agregados = await attachRecipients(campaign.id, plan);
     return NextResponse.json({ ok: true, agregados, plan: planSummary(plan), campaign });
   } catch (err: any) {
-    return NextResponse.json({ error: String(err?.message ?? err) }, { status: 500 });
+    return respuestaErrorInterno(err, "campaigns/[id]/agregar-base", 500);
   }
 }

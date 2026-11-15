@@ -40,7 +40,7 @@ export async function POST(request: Request) {
 
   const version = await bumpSessionVersion(state.sessionVersion);
   const sid = randomId();
-  const token = await signSession({ v: version, iat: Math.floor(Date.now() / 1000), sid });
+  const token = await signSession({ v: version, iat: Math.floor(Date.now() / 1000), ini: Math.floor(Date.now() / 1000), sid });
   await logAccessEvent("cierre_todas_sesiones", { origin, device, detail: { version } });
 
   const response = NextResponse.json({ ok: true });

@@ -17,8 +17,9 @@ export function PinLoginForm({ configured, next }: { configured: boolean; next: 
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!/^\d{6}$/.test(pin)) {
-      avisarError("El PIN tiene 6 números.");
+    // 15/11: los códigos nuevos tienen 8 números; el anterior de 6 sigue sirviendo.
+    if (!/^(\d{6}|\d{8})$/.test(pin)) {
+      avisarError("El PIN tiene 8 números (o 6, si todavía no lo cambiaste).");
       return;
     }
     setLoading(true);
@@ -59,7 +60,7 @@ export function PinLoginForm({ configured, next }: { configured: boolean; next: 
       {!configured ? (
         <p className="rounded-lg bg-amber-50 p-3 text-sm text-amber-800">
           El PIN todavía no está configurado. Hay que cargar la variable privada{" "}
-          <span className="font-mono">ACCESS_PIN</span> (6 números) en el servidor y volver a entrar.
+          <span className="font-mono">ACCESS_PIN</span> (8 números) en el servidor y volver a entrar.
         </p>
       ) : (
         <>
@@ -71,12 +72,12 @@ export function PinLoginForm({ configured, next }: { configured: boolean; next: 
             type="password"
             inputMode="numeric"
             autoComplete="current-password"
-            pattern="\d{6}"
-            maxLength={6}
+            pattern="\d{6}|\d{8}"
+            maxLength={8}
             required
             autoFocus
             value={pin}
-            onChange={(e) => setPin(e.target.value.replace(/\D/g, "").slice(0, 6))}
+            onChange={(e) => setPin(e.target.value.replace(/\D/g, "").slice(0, 8))}
             aria-invalid={error ? true : undefined}
             aria-describedby={error ? "pin-error" : undefined}
             className="pin-campo"
@@ -87,7 +88,7 @@ export function PinLoginForm({ configured, next }: { configured: boolean; next: 
             </p>
           )}
 
-          <button type="submit" disabled={loading || pin.length !== 6} className="btn-gold pin-boton w-full">
+          <button type="submit" disabled={loading || (pin.length !== 6 && pin.length !== 8)} className="btn-gold pin-boton w-full">
             {loading ? (
               <>
                 <span className="pin-spinner" aria-hidden="true" /> Ingresando...

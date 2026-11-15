@@ -2,7 +2,7 @@ import { bloqueHorarioAtencion } from "@/lib/horario-atencion";
 import { GoogleGenAI, type Content, type Part } from "@google/genai";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { AutomaticSendBlockedError, sendOutboundMessage } from "@/lib/messaging";
-import { getAvailableSlots, createAppointment } from "@/lib/agenda";
+import { getAvailableSlots, createAppointment, horarioOfrecido } from "@/lib/agenda";
 import { notifyAdminOfClosedAppointment, notifyAdminOfQualifiedIntake } from "@/lib/notify";
 import { notifyMarketingHandoff } from "@/lib/notify-marketing";
 import { toolsForArea } from "./tools";
@@ -707,12 +707,22 @@ async function executeTool(
     }
 
     case "agendar_cita": {
+      // 15/11: solo un horario libre y futuro de los que da la agenda (no uno inventado).
+      const libre = horarioOfrecido(input.starts_at, await getAvailableSlots(ctx.area, { limit: 400 }));
+      if (!libre) {
+        return {
+          output: {
+            ok: false,
+            error: "Ese horario no está libre o ya pasó. Usá consultar_disponibilidad y ofrecé dos de los horarios que devuelve.",
+          },
+        };
+      }
       const appointment = await createAppointment({
         contactId: ctx.contact.id,
         conversationId: ctx.conversationId,
         area: ctx.area,
-        startsAt: input.starts_at,
-        endsAt: input.ends_at,
+        startsAt: libre.starts_at,
+        endsAt: libre.ends_at,
       });
 
       await supabase

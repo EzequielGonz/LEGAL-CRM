@@ -152,8 +152,8 @@ function CampaignStep({
 
       {choice === "nueva" ? (
         <div className="space-y-3">
-          <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Nombre de la campaña" className={inputCls} />
-          <select value={channelId} onChange={(e) => setChannelId(e.target.value)} className={inputCls}>
+          <input aria-label="Nombre de la campaña" value={name} onChange={(e) => setName(e.target.value)} placeholder="Nombre de la campaña" className={inputCls} />
+          <select aria-label="Canal (WhatsApp)" value={channelId} onChange={(e) => setChannelId(e.target.value)} className={inputCls}>
             {channels.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.label}
@@ -161,6 +161,7 @@ function CampaignStep({
             ))}
           </select>
           <select
+            aria-label="Línea que envía"
             value={lineId}
             onChange={(e) => {
               setLineId(e.target.value);
@@ -189,7 +190,7 @@ function CampaignStep({
       ) : (
         <AddBaseToCampaign baseId={baseId} campaignId={choice} onAdded={() => setConfirmedCampaign(choice)} />
       )}
-      {error && <p className="text-xs text-red-600">{error}</p>}
+      {error && <p role="alert" className="text-xs text-red-600">{error}</p>}
       <p className="text-xs text-slate-400">Área: {area}</p>
     </div>
   );

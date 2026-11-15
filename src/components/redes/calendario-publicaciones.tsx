@@ -95,7 +95,7 @@ export function CalendarioPublicaciones({ piezas: inicial }: { piezas: PiezaCale
                       <span className="text-slate-400">·</span>
                       <span className="text-slate-600">{FORMATO[p.formato] ?? p.formato}</span>
                       {hora && <span className="text-slate-500">· {hora}</span>}
-                      <span className={`ml-auto rounded-full px-2 py-0.5 text-[11px] font-semibold ${e.clase}`}>{e.texto}</span>
+                      <span className={`ml-auto rounded-full px-2 py-0.5 text-xs font-semibold ${e.clase}`}>{e.texto}</span>
                     </div>
                     <p className="mt-1 line-clamp-2 text-sm font-medium text-slate-900">{p.titulo || p.texto}</p>
                     {p.motivo && p.estado !== "programada" && <p className="mt-1 line-clamp-2 text-xs text-amber-800">{p.motivo}</p>}

@@ -13,8 +13,16 @@ import { parseWhatsAppMessage, mapDeliveryStatus } from "@/lib/webhooks/whatsapp
 test("sesión: firma y lectura", async () => {
   const token = await signSession({ v: 1, iat: 1700000000, sid: "abc" });
   assert.deepEqual(await readSignedSession(token), { v: 1, iat: 1700000000, sid: "abc" });
-  const check = await validateSession(token);
+  // 15/11: una cookie de 2023 ya venció (7 días sin uso / 30 desde el ingreso).
+  assert.equal((await validateSession(token)).status, "vencida");
+  const ahora = Math.floor(Date.now() / 1000);
+  const vigente = await signSession({ v: 1, iat: ahora, ini: ahora - 10 * 86400, sid: "abc" });
+  const check = await validateSession(vigente);
   assert.equal(check.status, "no_comprobable", "sin base configurada, la vigencia no se puede comprobar y no se acepta por las dudas (bloque 1.12)");
+  const vieja = await signSession({ v: 1, iat: ahora, ini: ahora - 31 * 86400, sid: "abc" });
+  assert.equal((await validateSession(vieja)).status, "vencida", "a los 30 días del ingreso vence aunque se use");
+  const quieta = await signSession({ v: 1, iat: ahora - 8 * 86400, sid: "abc" });
+  assert.equal((await validateSession(quieta)).status, "vencida", "a los 7 días sin uso vence");
   assert.equal((await validateSession(undefined)).status, "ausente");
   assert.equal((await validateSession("basura")).status, "invalida");
 });

@@ -4,7 +4,10 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { hmacBase64Url, invalidateSessionVersionCache } from "@/lib/acceso/session";
 
 /**
- * PIN general compartido (6 dígitos). Solo para código de servidor (Node).
+ * PIN general compartido. Solo para código de servidor (Node).
+ * 15/11 (decisión de la responsable): los códigos nuevos tienen 8 dígitos; el
+ * de 6 que ya está cargado sigue sirviendo para ingresar hasta que se cambie
+ * (el panel muestra un aviso para cambiarlo).
  *
  * Configuración privada (variables de entorno en Vercel):
  * - ACCESS_PIN: PIN inicial. Se usa una única vez, cuando todavía no hay PIN
@@ -23,20 +26,30 @@ const scrypt = promisify(scryptCb) as unknown as (
 
 const SCRYPT = { N: 16384, r: 8, p: 1, keylen: 32 };
 
-export const PIN_LENGTH = 6;
+/** 15/11: largo de los códigos nuevos. */
+export const PIN_LENGTH = 8;
+/** Largo del código anterior: sigue sirviendo para ingresar hasta que se cambie. */
+export const PIN_LENGTH_ANTERIOR = 6;
 
+/** Formato aceptado para INGRESAR: 8 dígitos, o 6 (el código anterior). */
 export function isValidPinFormat(pin: unknown): pin is string {
-  return typeof pin === "string" && /^\d{6}$/.test(pin);
+  return typeof pin === "string" && /^(\d{6}|\d{8})$/.test(pin);
+}
+
+/** Formato de un código NUEVO (cambio desde el panel): exactamente 8 dígitos. */
+export function isValidNewPinFormat(pin: unknown): pin is string {
+  return typeof pin === "string" && /^\d{8}$/.test(pin);
 }
 
 /** PINs demasiado fáciles de adivinar (se rechazan al cambiarlo desde el panel). */
 export function isWeakPin(pin: string): boolean {
-  if (/^(\d)\1{5}$/.test(pin)) return true; // 000000, 111111…
+  if (/^(\d)\1+$/.test(pin)) return true; // 00000000, 11111111…
   const digits = pin.split("").map(Number);
   const asc = digits.every((d, i) => i === 0 || d === (digits[i - 1] + 1) % 10);
   const desc = digits.every((d, i) => i === 0 || d === (digits[i - 1] + 9) % 10);
-  if (asc || desc) return true; // 123456, 654321, 890123…
-  if (/^(\d\d)\1\1$/.test(pin) || /^(\d\d\d)\1$/.test(pin)) return true; // 121212, 123123
+  if (asc || desc) return true; // 12345678, 87654321, 89012345…
+  if (/^(\d\d)\1+$/.test(pin) || /^(\d\d\d\d)\1$/.test(pin) || /^(\d\d\d)\1$/.test(pin)) return true; // 12121212, 12341234
+  if (/^(19|20)\d\d(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])$/.test(pin) || /^(0[1-9]|[12]\d|3[01])(0[1-9]|1[0-2])(19|20)\d\d$/.test(pin)) return true; // fechas
   return false;
 }
 
@@ -115,6 +128,29 @@ export async function registerFailure(origin: string): Promise<Date | null> {
   return data ? new Date(data as string) : null;
 }
 
+/**
+ * 15/11: reserva el intento ANTES de comprobar el código (atómico, con tope por
+ * origen y general). `null` = la función todavía no existe en la base: quien
+ * llama sigue con la lectura anterior.
+ */
+export async function tryAttempt(origin: string): Promise<{ permitido: boolean; hasta: Date | null; general: boolean } | null> {
+  const supabase = createAdminClient();
+  const { data, error } = await (supabase as any).rpc("access_try_attempt", { p_origin: origin });
+  if (error || !data) {
+    if (error) console.error("[acceso] Reserva de intento:", error.message);
+    return null;
+  }
+  const d = data as { permitido: boolean; hasta: string | null; general: boolean };
+  return { permitido: !!d.permitido, hasta: d.hasta ? new Date(d.hasta) : null, general: !!d.general };
+}
+
+/** 15/11: ingreso correcto: el origen vuelve a cero y el contador general baja uno. */
+export async function attemptOk(origin: string): Promise<void> {
+  const supabase = createAdminClient();
+  const { error } = await (supabase as any).rpc("access_attempt_ok", { p_origin: origin });
+  if (error) await clearFailures(origin);
+}
+
 export async function clearFailures(origin: string): Promise<void> {
   const supabase = createAdminClient();
   await supabase
@@ -189,7 +225,7 @@ export async function ensurePinState(): Promise<PinState> {
   const resetPin = process.env.ACCESS_PIN_RESET?.trim();
   if (resetPin) {
     if (!isValidPinFormat(resetPin)) {
-      warnings.push("ACCESS_PIN_RESET está cargado pero no tiene 6 dígitos: no se aplicó.");
+      warnings.push("ACCESS_PIN_RESET está cargado pero no tiene 8 dígitos (o 6, el formato anterior): no se aplicó.");
     } else {
       const fingerprint = await hmacBase64Url("reset", resetPin);
       if (!row || row.reset_fingerprint !== fingerprint) {
@@ -237,7 +273,7 @@ export async function ensurePinState(): Promise<PinState> {
     return { configured: false, pinHash: null, sessionVersion: 1, source: null, updatedAt: null, warnings };
   }
   if (!isValidPinFormat(initialPin)) {
-    warnings.push("ACCESS_PIN está cargado pero no tiene 6 dígitos.");
+    warnings.push("ACCESS_PIN está cargado pero no tiene 8 dígitos (o 6, el formato anterior).");
     return { configured: false, pinHash: null, sessionVersion: 1, source: null, updatedAt: null, warnings };
   }
 

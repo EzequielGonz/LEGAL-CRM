@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useId } from "react";
 import { useRouter } from "next/navigation";
 import { SendLimitsFields } from "@/components/campanas/send-limits-fields";
 
@@ -16,6 +16,8 @@ interface ScrapeSummary {
 
 export function ScrapingForm() {
   const router = useRouter();
+  // 15/11: cada etiqueta queda asociada a su campo.
+  const idCampos = useId();
   const [open, setOpen] = useState(false);
   const [rubro, setRubro] = useState("");
   const [zona, setZona] = useState("");
@@ -114,8 +116,8 @@ export function ScrapingForm() {
       className="mb-6 space-y-3 rounded-xl border border-slate-200 bg-white p-5"
     >
       <div>
-        <label className="mb-1 block text-xs font-medium text-slate-600">Rubro del negocio</label>
-        <input
+        <label htmlFor={`${idCampos}-1`} className="mb-1 block text-xs font-medium text-slate-600">Rubro del negocio</label>
+        <input id={`${idCampos}-1`}
           required
           value={rubro}
           onChange={(e) => setRubro(e.target.value)}
@@ -124,8 +126,8 @@ export function ScrapingForm() {
         />
       </div>
       <div>
-        <label className="mb-1 block text-xs font-medium text-slate-600">Zona</label>
-        <input
+        <label htmlFor={`${idCampos}-2`} className="mb-1 block text-xs font-medium text-slate-600">Zona</label>
+        <input id={`${idCampos}-2`}
           required
           value={zona}
           onChange={(e) => setZona(e.target.value)}
@@ -134,10 +136,10 @@ export function ScrapingForm() {
         />
       </div>
       <div>
-        <label className="mb-1 block text-xs font-medium text-slate-600">
+        <label htmlFor={`${idCampos}-3`} className="mb-1 block text-xs font-medium text-slate-600">
           Cantidad de negocios a buscar
         </label>
-        <input
+        <input id={`${idCampos}-3`}
           required
           type="number"
           min={1}
@@ -159,10 +161,10 @@ export function ScrapingForm() {
       {autoSend && (
         <div className="space-y-3 rounded-lg border border-slate-200 bg-slate-50 p-4">
           <div>
-            <label className="mb-1 block text-xs font-medium text-slate-600">
+            <label htmlFor={`${idCampos}-4`} className="mb-1 block text-xs font-medium text-slate-600">
               Nombre de referencia de la plantilla (para enviar se elige del catálogo en la campaña)
             </label>
-            <input
+            <input id={`${idCampos}-4`}
               required={autoSend}
               value={template}
               onChange={(e) => setTemplate(e.target.value)}
@@ -185,7 +187,7 @@ export function ScrapingForm() {
         </div>
       )}
 
-      {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-xs text-red-600">{error}</p>}
+      {error && <p role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-xs text-red-600">{error}</p>}
 
       <div className="flex gap-2">
         <button type="submit" disabled={loading} className="btn-gold">

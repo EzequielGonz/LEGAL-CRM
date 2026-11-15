@@ -212,7 +212,7 @@ export default async function ProspectosPage(props: { searchParams: Promise<Para
         </div>
       )}
 
-      {error && <p className="mb-3 text-sm text-red-600">No se pudo cargar la lista: {error.message}</p>}
+      {error && <p role="alert" className="mb-3 text-sm text-red-600">No se pudo cargar la lista: {error.message}</p>}
 
       <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
         <table className="w-full text-sm">

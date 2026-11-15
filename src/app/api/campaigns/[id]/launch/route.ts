@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { CampaignNotReadyError, launchCampaign } from "@/lib/campaigns";
 import { AutomationPausedError } from "@/lib/automation-pause";
 import { requireSession } from "@/lib/acceso/autorizacion";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 export async function POST(request: Request, props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -17,6 +18,6 @@ export async function POST(request: Request, props: { params: Promise<{ id: stri
     if (err instanceof AutomationPausedError) {
       return NextResponse.json({ error: err.message, pausa_general: true }, { status: 409 });
     }
-    return NextResponse.json({ error: String(err.message ?? err) }, { status: 500 });
+    return respuestaErrorInterno(err, "campaigns/[id]/launch", 500);
   }
 }

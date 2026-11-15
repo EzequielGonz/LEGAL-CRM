@@ -54,7 +54,7 @@ export async function PATCH(request: Request) {
     .eq("version", actual.version)
     .select("*")
     .maybeSingle();
-  if (error) return NextResponse.json({ error: `No se pudo guardar: ${error.message}` }, { status: 500 });
+  if (error) return (console.error("[api] agentes/biblioteca:", error.message), NextResponse.json({ error: "No se pudo guardar: probá de nuevo en un momento." }, { status: 500 }));
   if (!guardado) return NextResponse.json({ error: "Otra persona cambió este agente recién. Recargá y volvé a intentar." }, { status: 409 });
   const { id: _id, ...snapshot } = guardado as any;
   await supabase.from("agent_library_versions").insert({

@@ -3,6 +3,7 @@ import { requireSession } from "@/lib/acceso/autorizacion";
 import { isUuid } from "@/lib/adjuntos/respuesta";
 import { ESTADO_AUDIO_TEXTO } from "@/lib/audios/reglas";
 import { transcribirMensaje } from "@/lib/audios/transcribir";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -27,6 +28,6 @@ export async function POST(request: Request, props: { params: Promise<{ messageI
       rotulo: ESTADO_AUDIO_TEXTO[t.estado],
     });
   } catch (err: any) {
-    return NextResponse.json({ error: String(err?.message ?? err) }, { status: 500 });
+    return respuestaErrorInterno(err, "audios/[messageId]/texto", 500);
   }
 }

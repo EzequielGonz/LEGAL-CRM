@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, useId } from "react";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
 import { SendLimitsFields } from "@/components/campanas/send-limits-fields";
@@ -72,6 +72,8 @@ export function BaseRowsTable({
 }) {
   const router = useRouter();
   const selectable = useMemo(() => rows.filter((r) => r.contact_id), [rows]);
+  // 15/11: cada etiqueta queda asociada a su campo.
+  const idCampos = useId();
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [showCampaignForm, setShowCampaignForm] = useState(false);
   const [scope, setScope] = useState<"base" | "seleccion">("base");
@@ -227,13 +229,13 @@ export function BaseRowsTable({
           </div>
 
           <div>
-            <label className="mb-1 block text-xs font-medium text-slate-600">Nombre de la campaña</label>
-            <input required value={campaignName} onChange={(e) => setCampaignName(e.target.value)} className={inputCls} />
+            <label htmlFor={`${idCampos}-1`} className="mb-1 block text-xs font-medium text-slate-600">Nombre de la campaña</label>
+            <input id={`${idCampos}-1`} required value={campaignName} onChange={(e) => setCampaignName(e.target.value)} className={inputCls} />
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
             <div>
-              <label className="mb-1 block text-xs font-medium text-slate-600">Canal (WhatsApp)</label>
-              <select value={channelId} onChange={(e) => setChannelId(e.target.value)} className={inputCls}>
+              <label htmlFor={`${idCampos}-2`} className="mb-1 block text-xs font-medium text-slate-600">Canal (WhatsApp)</label>
+              <select id={`${idCampos}-2`} value={channelId} onChange={(e) => setChannelId(e.target.value)} className={inputCls}>
                 {channels.map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.label}
@@ -242,8 +244,8 @@ export function BaseRowsTable({
               </select>
             </div>
             <div>
-              <label className="mb-1 block text-xs font-medium text-slate-600">Línea que envía</label>
-              <select
+              <label htmlFor={`${idCampos}-3`} className="mb-1 block text-xs font-medium text-slate-600">Línea que envía</label>
+              <select id={`${idCampos}-3`}
                 value={lineId}
                 onChange={(e) => {
                   setLineId(e.target.value);
@@ -261,7 +263,7 @@ export function BaseRowsTable({
             </div>
           </div>
           <div>
-            <label className="mb-1 block text-xs font-medium text-slate-600">Plantilla (catálogo de la línea)</label>
+            <span className="mb-1 block text-xs font-medium text-slate-600">Plantilla (catálogo de la línea)</span>
             <TemplatePicker lineId={lineId || null} value={template} onChange={setTemplate} className={inputCls} />
           </div>
 
@@ -278,7 +280,11 @@ export function BaseRowsTable({
             onDailyLimitChange={setDailyLimit}
           />
 
-          {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-xs text-red-600">{error}</p>}
+          {error && (
+            <p role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-xs text-red-700">
+              {error}
+            </p>
+          )}
 
           <div className="flex flex-wrap gap-2">
             <button type="submit" disabled={creating || !plan || plan.elegibles === 0} className="btn-gold">
@@ -299,7 +305,9 @@ export function BaseRowsTable({
         <table className="w-full text-sm">
           <thead className="border-b border-slate-200 bg-slate-50 text-left text-xs uppercase text-slate-500">
             <tr>
-              <th className="px-4 py-3"></th>
+              <th className="px-4 py-3">
+                <span className="sr-only">Elegir</span>
+              </th>
               <th className="px-4 py-3">Fila</th>
               <th className="px-4 py-3">Nombre</th>
               <th className="px-4 py-3">Teléfono</th>
@@ -312,7 +320,7 @@ export function BaseRowsTable({
               <tr key={r.id}>
                 <td className="px-4 py-2">
                   {r.contact_id && (
-                    <input type="checkbox" checked={selected.has(r.contact_id)} onChange={() => toggleOne(r.contact_id!)} />
+                    <input type="checkbox" aria-label={`Elegir la fila ${r.row_number}`} checked={selected.has(r.contact_id)} onChange={() => toggleOne(r.contact_id!)} />
                   )}
                 </td>
                 <td className="px-4 py-2 text-slate-400">{r.row_number}</td>

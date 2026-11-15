@@ -114,7 +114,7 @@ export function PlantillasArchivo({ perfil }: { perfil: string }) {
         />
       </label>
 
-      {error && <p className="mt-3 text-sm text-red-700">{error}</p>}
+      {error && <p role="alert" className="mt-3 text-sm text-red-700">{error}</p>}
 
       {vista && (
         <div className="mt-5 space-y-4">

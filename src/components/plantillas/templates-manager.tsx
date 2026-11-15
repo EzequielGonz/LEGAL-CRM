@@ -355,7 +355,7 @@ function TemplateDetail({
         {t.rejected_reason && t.rejected_reason !== "NONE" ? ` · motivo de rechazo: ${t.rejected_reason}` : ""}
       </p>
       {t.last_send_error && (
-        <p className="text-red-600">
+        <p role="alert" className="text-red-600">
           Último rechazo al enviar ({fmt(t.last_send_error_at)}): {t.last_send_error}
         </p>
       )}

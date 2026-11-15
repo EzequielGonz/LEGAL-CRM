@@ -247,7 +247,7 @@ export function ImportFlow({
           </div>
 
           {tooMany && (
-            <p className="rounded-lg bg-red-50 px-3 py-2 text-xs text-red-700">
+            <p role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-xs text-red-700">
               El archivo tiene {loaded.rows.length} filas: el máximo por importación es {MAX_ROWS}. Dividilo en partes más chicas.
             </p>
           )}
@@ -329,7 +329,7 @@ export function ImportFlow({
                     {showProblems ? "Ocultar motivos" : "Ver filas con motivos"}
                   </button>
                   {showProblems && (
-                    <ul className="mt-2 max-h-48 space-y-1 overflow-y-auto text-xs text-slate-600">
+                    <ul aria-label="Filas con motivos" tabIndex={0} className="mt-2 max-h-48 space-y-1 overflow-y-auto text-xs text-slate-600">
                       {validation.ejemplos.map((e) => (
                         <li key={`${e.rowNumber}-${e.reason}`}>
                           Fila {e.rowNumber}: {e.reason}

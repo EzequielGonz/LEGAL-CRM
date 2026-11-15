@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useId } from "react";
 import { useRouter } from "next/navigation";
 
 /** Prende / apaga el envío automático del primer mensaje a los prospectos mejor calificados. */
@@ -14,6 +14,8 @@ export function AutoOutreachControl({
   dailyLimit: number;
 }) {
   const router = useRouter();
+  // 15/11: cada etiqueta queda asociada a su campo.
+  const idCampos = useId();
   const [template, setTemplate] = useState(templateName);
   const [limit, setLimit] = useState<number>(dailyLimit);
   const [loading, setLoading] = useState(false);
@@ -53,8 +55,8 @@ export function AutoOutreachControl({
       </p>
       <div className="flex flex-wrap items-end gap-3">
         <div>
-          <label className="mb-1 block text-xs font-medium text-slate-500">Nombre de referencia de la plantilla</label>
-          <input
+          <label htmlFor={`${idCampos}-1`} className="mb-1 block text-xs font-medium text-slate-500">Nombre de referencia de la plantilla</label>
+          <input id={`${idCampos}-1`}
             value={template}
             onChange={(e) => setTemplate(e.target.value)}
             placeholder="kocos_primer_contacto"
@@ -62,8 +64,8 @@ export function AutoOutreachControl({
           />
         </div>
         <div>
-          <label className="mb-1 block text-xs font-medium text-slate-500">Máximo por día</label>
-          <input
+          <label htmlFor={`${idCampos}-2`} className="mb-1 block text-xs font-medium text-slate-500">Máximo por día</label>
+          <input id={`${idCampos}-2`}
             type="number"
             min={1}
             value={limit}
@@ -86,7 +88,7 @@ export function AutoOutreachControl({
           </button>
         )}
       </div>
-      {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+      {error && <p role="alert" className="mt-2 text-sm text-red-600">{error}</p>}
     </div>
   );
 }

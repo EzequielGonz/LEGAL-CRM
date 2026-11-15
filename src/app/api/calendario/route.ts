@@ -3,6 +3,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { listCalendarExceptions } from "@/lib/contacto/calendario";
 import { argentinaParts, exceptionProblems } from "@/lib/contacto/reglas";
 import { requireSession } from "@/lib/acceso/autorizacion";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 export const dynamic = "force-dynamic";
 
@@ -60,7 +61,7 @@ export async function POST(request: Request) {
         { status: 409 }
       );
     }
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return respuestaErrorInterno(error, "calendario");
   }
 
   await supabase.from("ops_change_log").insert({

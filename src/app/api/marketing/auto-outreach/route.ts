@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { AUTO_CAMPAIGN_NAME } from "@/lib/marketing/outreach";
 import { requireSession } from "@/lib/acceso/autorizacion";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 /**
  * Prende / apaga la prospección automática de Marketing: una campaña
@@ -90,7 +91,7 @@ export async function POST(request: Request) {
     batch_pause_seconds: 300,
     daily_send_limit: limit,
   });
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) return respuestaErrorInterno(error, "marketing/auto-outreach");
 
   return NextResponse.json({ ok: true, status: "en_curso" });
 }

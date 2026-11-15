@@ -26,7 +26,7 @@ export function SpreadsheetPreview({ rows }: { rows: Record<string, unknown>[] }
   }
 
   return (
-    <div className="max-h-96 overflow-auto rounded-xl border border-slate-200 bg-white">
+    <div role="region" aria-label="Vista previa del archivo" tabIndex={0} className="max-h-96 overflow-auto rounded-xl border border-slate-200 bg-white">
       <table className="w-full min-w-max text-xs">
         <thead className="sticky top-0 border-b border-slate-200 bg-slate-50 text-left uppercase text-slate-500">
           <tr>

@@ -76,7 +76,7 @@ export default async function BibliotecaPage(props: { searchParams: Promise<{ vo
         </div>
       </header>
       <div className="mx-auto max-w-5xl space-y-4 py-3">
-        {error && <p className="rounded-lg bg-red-50 p-3 text-sm font-medium text-red-800">No se pudo leer la biblioteca. Reintentá en un momento.</p>}
+        {error && <p role="alert" className="rounded-lg bg-red-50 p-3 text-sm font-medium text-red-800">No se pudo leer la biblioteca. Reintentá en un momento.</p>}
         <p className="rounded-lg bg-slate-100 p-3 text-sm text-slate-800">
           Acá se configuran nombres, objetivos y límites con historial de versiones. Probar conversación, pedir mejora, ver resultados, crear y asignar agentes están en «Bot IA» de cada perfil. Ningún agente de esta biblioteca responde hasta tener una versión publicada, una asignación activa y la pausa general levantada.
         </p>

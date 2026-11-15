@@ -48,7 +48,7 @@ export function BaseRawGrid({ rows }: { rows: BaseRawRow[] }) {
   }
 
   return (
-    <div className="max-h-[32rem] overflow-auto rounded-xl border border-slate-200 bg-white">
+    <div role="region" aria-label="Filas de la base tal como se cargaron" tabIndex={0} className="max-h-[32rem] overflow-auto rounded-xl border border-slate-200 bg-white">
       <table className="w-full min-w-max text-sm">
         <thead className="sticky top-0 border-b border-slate-200 bg-slate-50 text-left text-xs uppercase text-slate-500">
           <tr>

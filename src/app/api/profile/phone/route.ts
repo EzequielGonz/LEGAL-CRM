@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireSession } from "@/lib/acceso/autorizacion";
 import { leerTelefonoPrincipal } from "@/lib/rutas/comprobar";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 /**
  * Teléfono principal de avisos. Con el acceso por PIN general ya no hay
@@ -31,6 +32,6 @@ export async function POST(request: Request) {
     .from("admin_profiles")
     .update({ phone: leido.telefono })
     .eq("id", profile.id);
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) return respuestaErrorInterno(error, "profile/phone");
   return NextResponse.json({ ok: true });
 }

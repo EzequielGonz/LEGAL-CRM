@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useId } from "react";
 import { useRouter } from "next/navigation";
 import type { ConversationStatus } from "@/lib/supabase/database.types";
 import { STATUS_LABEL } from "@/components/ui/badge";
@@ -33,6 +33,8 @@ export function ContactEditForm({
   hideStatus?: boolean;
 }) {
   const router = useRouter();
+  // 15/11: cada etiqueta queda asociada a su campo.
+  const idCampos = useId();
   const [fullName, setFullName] = useState(contact.full_name ?? "");
   const [phone, setPhone] = useState(contact.phone ?? "");
   const [email, setEmail] = useState(contact.email ?? "");
@@ -68,32 +70,32 @@ export function ContactEditForm({
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="mb-1 block text-xs font-medium text-slate-600">Nombre completo</label>
-          <input
+          <label htmlFor={`${idCampos}-1`} className="mb-1 block text-xs font-medium text-slate-600">Nombre completo</label>
+          <input id={`${idCampos}-1`}
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
             className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
           />
         </div>
         <div>
-          <label className="mb-1 block text-xs font-medium text-slate-600">Teléfono</label>
-          <input
+          <label htmlFor={`${idCampos}-2`} className="mb-1 block text-xs font-medium text-slate-600">Teléfono</label>
+          <input id={`${idCampos}-2`}
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
           />
         </div>
         <div>
-          <label className="mb-1 block text-xs font-medium text-slate-600">Email</label>
-          <input
+          <label htmlFor={`${idCampos}-3`} className="mb-1 block text-xs font-medium text-slate-600">Email</label>
+          <input id={`${idCampos}-3`}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
           />
         </div>
         <div>
-          <label className="mb-1 block text-xs font-medium text-slate-600">DNI/CUIL</label>
-          <input
+          <label htmlFor={`${idCampos}-4`} className="mb-1 block text-xs font-medium text-slate-600">DNI/CUIL</label>
+          <input id={`${idCampos}-4`}
             value={dniCuil}
             onChange={(e) => setDniCuil(e.target.value)}
             className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
@@ -101,8 +103,8 @@ export function ContactEditForm({
         </div>
         {!hideStatus && (
         <div>
-          <label className="mb-1 block text-xs font-medium text-slate-600">Estado</label>
-          <select
+          <label htmlFor={`${idCampos}-5`} className="mb-1 block text-xs font-medium text-slate-600">Estado</label>
+          <select id={`${idCampos}-5`}
             value={status}
             onChange={(e) => setStatus(e.target.value as ConversationStatus)}
             className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
@@ -116,10 +118,10 @@ export function ContactEditForm({
         </div>
         )}
         <div>
-          <label className="mb-1 block text-xs font-medium text-slate-600">
+          <label htmlFor={`${idCampos}-6`} className="mb-1 block text-xs font-medium text-slate-600">
             Derivar a estudio jurídico
           </label>
-          <select
+          <select id={`${idCampos}-6`}
             value={studioId}
             onChange={(e) => setStudioId(e.target.value)}
             className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
@@ -135,8 +137,8 @@ export function ContactEditForm({
       </div>
 
       <div>
-        <label className="mb-1 block text-xs font-medium text-slate-600">Notas internas</label>
-        <textarea
+        <label htmlFor={`${idCampos}-7`} className="mb-1 block text-xs font-medium text-slate-600">Notas internas</label>
+        <textarea id={`${idCampos}-7`}
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
           rows={4}

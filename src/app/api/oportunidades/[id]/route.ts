@@ -4,6 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { setOpportunityState } from "@/lib/opportunities";
 import { requireSession } from "@/lib/acceso/autorizacion";
 import { CaptacionError, registrarCaptacion, registrarResultadoPosterior, registrarZona, solicitarAtencion } from "@/lib/captacion";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 export const dynamic = "force-dynamic";
 // 13/11: «Devolver al bot» puede incluir una respuesta del bot en el mismo pedido.
@@ -203,7 +204,7 @@ export async function POST(request: Request, props: { params: Promise<{ id: stri
     }
   } catch (err: any) {
     if (err instanceof CaptacionError) return NextResponse.json({ error: err.message }, { status: err.status });
-    return NextResponse.json({ error: String(err?.message ?? err) }, { status: 500 });
+    return respuestaErrorInterno(err, "oportunidades/[id]", 500);
   }
   return NextResponse.json({ ok: true });
 }

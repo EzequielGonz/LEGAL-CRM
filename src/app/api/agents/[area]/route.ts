@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireSession } from "@/lib/acceso/autorizacion";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 export async function POST(request: Request, props: { params: Promise<{ area: string }> }) {
   const params = await props.params;
@@ -24,6 +25,6 @@ export async function POST(request: Request, props: { params: Promise<{ area: st
     })
     .eq("area", params.area);
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) return respuestaErrorInterno(error, "agents/[area]");
   return NextResponse.json({ ok: true });
 }

@@ -217,6 +217,7 @@ export function PushControls({ showDevices = false }: { showDevices?: boolean })
       {support === "ok" && permission !== "denied" && !activeHere && (
         <div className="flex flex-wrap items-center gap-2">
           <input
+            aria-label="Nombre del dispositivo"
             value={label}
             onChange={(e) => setLabel(e.target.value)}
             placeholder="Nombre del dispositivo"
@@ -237,7 +238,7 @@ export function PushControls({ showDevices = false }: { showDevices?: boolean })
           </button>
         </div>
       )}
-      {msg && <p className={`text-xs ${msg.ok ? "text-green-600" : "text-red-600"}`}>{msg.text}</p>}
+      {msg && <p role={msg.ok ? "status" : "alert"} className={`text-xs ${msg.ok ? "text-green-600" : "text-red-600"}`}>{msg.text}</p>}
 
       {showDevices && (
         <div>

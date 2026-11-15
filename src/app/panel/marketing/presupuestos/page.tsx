@@ -87,7 +87,7 @@ export default async function PidePresupuestoPage(props: { searchParams: Promise
         </div>
       </details>
 
-      {error && <p className="text-sm text-red-700">No se pudo leer la lista ({error.message}). ¿Falta aplicar la migración 0311?</p>}
+      {error && <p role="alert" className="text-sm text-red-700">No se pudo leer la lista ({error.message}). ¿Falta aplicar la migración 0311?</p>}
       {!error && filas.length === 0 && <p className="rounded-xl border border-slate-200 bg-white p-4 text-sm text-slate-600">No hay pedidos de presupuesto {ver === "abiertos" ? "abiertos" : "todavía"}.</p>}
 
       <ul className="space-y-3">

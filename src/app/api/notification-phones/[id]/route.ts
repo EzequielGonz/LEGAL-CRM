@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireSession } from "@/lib/acceso/autorizacion";
 import { esUuid } from "@/lib/rutas/comprobar";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 /** Quita un teléfono de los avisos. 13/11: no se borra la fila, se archiva con fecha. */
 export async function DELETE(request: Request, props: { params: Promise<{ id: string }> }) {
@@ -15,7 +16,7 @@ export async function DELETE(request: Request, props: { params: Promise<{ id: st
     .is("archived_at", null)
     .select("id");
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) return respuestaErrorInterno(error, "notification-phones/[id]");
   if (!(data ?? []).length) return NextResponse.json({ error: "Ese teléfono no existe o ya estaba quitado." }, { status: 404 });
   return NextResponse.json({ ok: true });
 }

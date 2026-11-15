@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireSession } from "@/lib/acceso/autorizacion";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 const EDITABLE_FIELDS = [
   "full_name",
@@ -48,6 +49,6 @@ export async function PATCH(request: Request, props: { params: Promise<{ id: str
     .select()
     .single();
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) return respuestaErrorInterno(error, "contacts/[id]");
   return NextResponse.json({ ok: true, contact: data });
 }

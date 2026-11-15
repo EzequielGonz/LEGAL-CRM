@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireSession } from "@/lib/acceso/autorizacion";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 export async function POST(request: Request) {
   const auth = await requireSession(request);
@@ -15,6 +16,6 @@ export async function POST(request: Request) {
     contact_email: body.contact_email || null,
   });
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) return respuestaErrorInterno(error, "studios");
   return NextResponse.json({ ok: true });
 }

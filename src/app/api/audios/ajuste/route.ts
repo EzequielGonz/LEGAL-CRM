@@ -4,6 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { RUBRO_IDS } from "@/lib/rubros";
 import { audiosEncendidos } from "@/lib/audios/reglas";
 import { cambiarAudiosDePerfil, leerLlaveAudios } from "@/lib/audios/transcribir";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 export const dynamic = "force-dynamic";
 
@@ -31,6 +32,6 @@ export async function POST(request: Request) {
     });
     return NextResponse.json({ ok: true, perfil, encendido });
   } catch (err: any) {
-    return NextResponse.json({ error: String(err?.message ?? err) }, { status: 500 });
+    return respuestaErrorInterno(err, "audios/ajuste", 500);
   }
 }

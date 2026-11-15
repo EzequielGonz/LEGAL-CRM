@@ -17,8 +17,9 @@
  */
 
 :root {
-  --vidrio-fondo: rgb(255 255 255 / 0.7);
-  --vidrio-fondo-alto: rgb(255 255 255 / 0.82);
+  /* 15/11: más opaco en claro para que el texto sobre vidrio pase 4,5:1. */
+  --vidrio-fondo: rgb(255 255 255 / 0.82);
+  --vidrio-fondo-alto: rgb(255 255 255 / 0.9);
   --vidrio-borde: rgb(255 255 255 / 0.95);
   --vidrio-borde-bajo: rgb(15 23 42 / 0.08);
   --vidrio-brillo: inset 0 1px 0 rgb(255 255 255 / 0.9);
@@ -276,7 +277,8 @@ html[data-modo="oscuro"] .anillo-avance .anillo-pista { stroke: rgb(255 255 255 
 
 /* Título de la pantalla: toma un reflejo del color del perfil. */
 main#contenido h1 {
-  background-image: linear-gradient(100deg, currentColor 0%, currentColor 55%, rgb(var(--c-gold-500)) 130%);
+  /* 15/11: el reflejo empieza recién al 85 % para que todo el título conserve el contraste. */
+  background-image: linear-gradient(100deg, currentColor 0%, currentColor 85%, rgb(var(--c-gold-500)) 130%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;

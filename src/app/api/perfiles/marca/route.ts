@@ -4,6 +4,7 @@ import { requireSession } from "@/lib/acceso/autorizacion";
 import { esSlugPerfil, normalizarColores } from "@/lib/marca";
 import { RUBRO_IDS } from "@/lib/rubros";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 export const dynamic = "force-dynamic";
 
@@ -51,13 +52,13 @@ export async function POST(request: Request) {
     if (logo.size > 2 * 1024 * 1024) return NextResponse.json({ error: "El logo puede pesar hasta 2 MB.", campo: "logo" }, { status: 400 });
     const ruta = `${perfil}/logo-${Date.now()}.${ext}`;
     const { error } = await s.storage.from("marca").upload(ruta, await logo.arrayBuffer(), { contentType: logo.type, upsert: false });
-    if (error) return NextResponse.json({ error: `No se pudo subir el logo: ${error.message}`, campo: "logo" }, { status: 500 });
+    if (error) return (console.error("[api] perfiles/marca:", error.message), NextResponse.json({ error: "No se pudo subir el logo: probá de nuevo en un momento.", campo: "logo" }, { status: 500 }));
     cambios.logo_panel = s.storage.from("marca").getPublicUrl(ruta).data.publicUrl;
   } else if (form.get("quitar_logo") === "1") {
     cambios.logo_panel = null;
   }
   const { error } = await s.from("brand_briefs").update(cambios).eq("rubro_id", rubroId);
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) return respuestaErrorInterno(error, "perfiles/marca");
   if (interno) await s.from("rubros").update({ name: interno, settings_updated_at: new Date().toISOString() }).eq("id", rubroId);
   revalidateTag("marca-perfil");
   return NextResponse.json({ ok: true, logo: (cambios.logo_panel as string | null | undefined) ?? (previo as any)?.logo_panel ?? null });

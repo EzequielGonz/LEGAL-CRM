@@ -66,6 +66,8 @@ export default async function TelefonoClientesPage(
           <input type="hidden" name="estado" value={estado} />
           <input
             name="q"
+            type="search"
+            aria-label="Buscar por nombre o teléfono"
             defaultValue={searchParams.q ?? ""}
             placeholder="Nombre o teléfono"
             className="min-w-0 flex-1 rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm shadow-sm outline-none focus-gold"

@@ -43,6 +43,7 @@ export function AppointmentActions({ appointmentId, status }: { appointmentId: s
   return (
     <div className="flex flex-wrap items-center gap-1.5">
       <select
+        aria-label="Estado del turno"
         value={value}
         onChange={(e) => setValue(e.target.value)}
         className="rounded-lg border border-slate-300 px-2 py-1 text-xs outline-none focus-gold"
@@ -56,6 +57,7 @@ export function AppointmentActions({ appointmentId, status }: { appointmentId: s
       {value !== status && (
         <>
           <input
+            aria-label="Nota del cambio (opcional)"
             value={nota}
             onChange={(e) => setNota(e.target.value)}
             placeholder="Nota (opcional)"
@@ -66,7 +68,11 @@ export function AppointmentActions({ appointmentId, status }: { appointmentId: s
           </button>
         </>
       )}
-      {msg && <span className="text-xs text-slate-400">{msg}</span>}
+      {msg && (
+        <span role="status" className="text-xs text-slate-500">
+          {msg}
+        </span>
+      )}
     </div>
   );
 }

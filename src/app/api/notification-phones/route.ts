@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireSession } from "@/lib/acceso/autorizacion";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 /**
  * Teléfonos adicionales que reciben notificaciones de WhatsApp (caso
@@ -18,7 +19,7 @@ export async function GET(request: Request) {
     .is("archived_at", null)
     .order("created_at", { ascending: true });
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) return respuestaErrorInterno(error, "notification-phones");
   return NextResponse.json({ phones: data });
 }
 
@@ -38,6 +39,6 @@ export async function POST(request: Request) {
     .select()
     .single();
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) return respuestaErrorInterno(error, "notification-phones");
   return NextResponse.json({ phone: data });
 }

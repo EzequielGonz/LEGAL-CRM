@@ -65,10 +65,10 @@ export async function middleware(request: NextRequest) {
     if (perfilVisto && request.cookies.get(COOKIE_PERFIL)?.value !== perfilVisto) {
       response.cookies.set(COOKIE_PERFIL, perfilVisto, { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", path: "/", maxAge: 60 * 60 * 24 * 30 });
     }
-    // Sin vencimiento programado: mientras se use, la cookie se renueva.
+    // Mientras se use, la cookie se renueva (conserva la fecha de ingreso: a los 30 días vence igual).
     const ageSeconds = Math.floor(Date.now() / 1000) - check.session.iat;
     if (ageSeconds > SESSION_REFRESH_AFTER_SECONDS) {
-      const renewed = await signSession({ ...check.session, iat: Math.floor(Date.now() / 1000) });
+      const renewed = await signSession({ ...check.session, ini: check.session.ini ?? check.session.iat, iat: Math.floor(Date.now() / 1000) });
       response.cookies.set(SESSION_COOKIE, renewed, sessionCookieOptions());
     }
     return response;
@@ -97,6 +97,8 @@ export async function middleware(request: NextRequest) {
         error:
           check.status === "revocada"
             ? "La sesión se cerró en todos los dispositivos. Ingresá de nuevo con el PIN."
+            : check.status === "vencida"
+            ? "La sesión venció. Ingresá de nuevo con el PIN."
             : "Sesión requerida. Ingresá con el PIN del panel.",
         code: `sesion_${check.status}`,
       },

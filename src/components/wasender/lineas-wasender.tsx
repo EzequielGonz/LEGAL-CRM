@@ -417,7 +417,7 @@ export function LineasWasender({ slug, marca }: { slug: SlugPerfil; marca: strin
                     </div>
                     <span className={clsx("rounded-full border px-2.5 py-0.5 text-xs font-medium", TONO[est.tono])}>{est.texto}</span>
                   </div>
-                  {l.ultimo_error && <p className="mt-2 text-xs text-red-700">{l.ultimo_error}</p>}
+                  {l.ultimo_error && <p role="alert" className="mt-2 text-xs text-red-700">{l.ultimo_error}</p>}
                   {avisaAfuera[l.id] && (
                     <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
                       <p>Esta línea le avisa a otro entorno: los mensajes que recibe no llegan a este panel.</p>

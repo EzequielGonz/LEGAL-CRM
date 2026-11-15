@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { importBase, RepeatedImportError } from "@/lib/bases/import";
 import type { Area } from "@/lib/supabase/database.types";
 import { requireSession } from "@/lib/acceso/autorizacion";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 // Margen de seguridad: con el importador en lotes (ver src/lib/bases/import.ts)
 // esto no debería hacer falta ni de cerca, pero por las dudas le damos más
@@ -92,6 +93,6 @@ export async function POST(request: Request) {
         { status: 409 }
       );
     }
-    return NextResponse.json({ error: String(err.message ?? err) }, { status: 500 });
+    return respuestaErrorInterno(err, "bases", 500);
   }
 }

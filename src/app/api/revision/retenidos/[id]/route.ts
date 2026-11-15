@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { processMetaPayload, processWhatsAppPayload } from "@/lib/webhooks/process";
 import { requireSession } from "@/lib/acceso/autorizacion";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 export const dynamic = "force-dynamic";
 
@@ -47,6 +48,6 @@ export async function POST(request: Request, props: { params: Promise<{ id: stri
       note: nota,
     })
     .eq("id", item.id);
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) return respuestaErrorInterno(error, "revision/retenidos/[id]");
   return NextResponse.json({ ok: true, resumen });
 }

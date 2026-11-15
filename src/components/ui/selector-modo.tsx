@@ -39,9 +39,10 @@ export function SelectorModo({ className }: { className?: string }) {
       type="button"
       onClick={cambiar}
       className={className ?? "flex w-full items-center justify-between rounded-lg px-3 py-1.5 text-left text-xs font-medium"}
-      aria-label={modo === "oscuro" ? "Pasar a modo claro" : "Pasar a modo oscuro"}
+      // 15/11: nombre fijo y estado en aria-pressed (antes el nombre cambiaba según el modo).
+      aria-pressed={modo === "oscuro"}
     >
-      <span>{modo === "oscuro" ? "Modo claro" : "Modo oscuro"}</span>
+      <span>Modo oscuro</span>
       <span aria-hidden="true">{modo === "oscuro" ? "☀" : "☾"}</span>
     </button>
   );

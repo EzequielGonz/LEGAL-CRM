@@ -152,10 +152,10 @@ export function ProbarBotReal({ perfil, areas }: { perfil: string; areas: string
         <ol className="mt-4 space-y-2" aria-label="Conversación de prueba">
           {turnos.map((t, i) => (
             <li key={i} className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm ${t.rol === "persona" ? "ml-auto bg-slate-100 text-slate-900" : "bg-gold-500/10 text-slate-900"}`}>
-              <p className="mb-0.5 text-[11px] font-semibold uppercase tracking-wide text-slate-500">{t.rol === "persona" ? "Persona" : "Bot"}</p>
+              <p className="mb-0.5 text-xs font-semibold uppercase tracking-wide text-slate-500">{t.rol === "persona" ? "Persona" : "Bot"}</p>
               <p className="whitespace-pre-wrap">{t.texto}</p>
-              {t.herramientas.length ? <p className="mt-1 text-[11px] text-slate-500">En la charla real {t.herramientas.map((h) => NOMBRE_HERRAMIENTA[h] ?? h).join(", ")}.</p> : null}
-              {t.conocimiento?.length ? <p className="mt-1 text-[11px] text-slate-500">Conocimiento que tuvo en cuenta: {t.conocimiento.join(" · ")}.</p> : null}
+              {t.herramientas.length ? <p className="mt-1 text-xs text-slate-500">En la charla real {t.herramientas.map((h) => NOMBRE_HERRAMIENTA[h] ?? h).join(", ")}.</p> : null}
+              {t.conocimiento?.length ? <p className="mt-1 text-xs text-slate-500">Conocimiento que tuvo en cuenta: {t.conocimiento.join(" · ")}.</p> : null}
             </li>
           ))}
         </ol>

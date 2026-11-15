@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireSession } from "@/lib/acceso/autorizacion";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 export const dynamic = "force-dynamic";
 
@@ -31,7 +32,7 @@ export async function POST(request: Request, props: { params: Promise<{ id: stri
     p_confirm_uncertain: body?.confirmar_incierto === true,
     p_note: typeof body?.nota === "string" ? body.nota.slice(0, 300) : null,
   });
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) return respuestaErrorInterno(error, "campaigns/[id]/destinatarios/[ccId]");
   if (data === "requiere_confirmacion") {
     return NextResponse.json(
       { error: "No se sabe si Meta aceptó el envío anterior: para volver a la cola hay que confirmarlo (podría llegarle dos veces).", code: data },

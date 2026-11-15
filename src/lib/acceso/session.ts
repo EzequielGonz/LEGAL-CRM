@@ -1,8 +1,8 @@
 /**
  * Sesión del panel (PIN general compartido).
  *
- * - Sin vencimiento programado: la cookie se renueva sola mientras se usa
- *   (los navegadores limitan cada cookie a ~400 días, por eso se reemite).
+ * - 15/11 (auditoría): vence a los 7 días sin uso y, aunque se use, a los 30
+ *   días del ingreso. Mientras se usa, la cookie se renueva una vez por día.
  * - Cierre manual: "Cerrar sesión" borra la cookie de ese dispositivo.
  * - "Cerrar sesión en todos los dispositivos" sube `session_version` en la
  *   base y todas las cookies anteriores dejan de valer.
@@ -12,10 +12,15 @@
  */
 
 export const SESSION_COOKIE = "crm_sesion";
-/** ~400 días: el máximo que respetan los navegadores actuales. */
-export const SESSION_MAX_AGE_SECONDS = 400 * 24 * 60 * 60;
-/** Se reemite la cookie cuando tiene más de esta antigüedad. */
-export const SESSION_REFRESH_AFTER_SECONDS = 7 * 24 * 60 * 60;
+const DIA = 24 * 60 * 60;
+/** 15/11: vencimiento absoluto desde el ingreso con el PIN. */
+export const SESSION_ABSOLUTE_SECONDS = 30 * DIA;
+/** 15/11: vence si no se usa durante este tiempo. */
+export const SESSION_IDLE_SECONDS = 7 * DIA;
+/** Vida de la cookie en el navegador (igual al vencimiento absoluto). */
+export const SESSION_MAX_AGE_SECONDS = SESSION_ABSOLUTE_SECONDS;
+/** Se reemite la cookie cuando tiene más de esta antigüedad (así no vence por inactividad mientras se usa). */
+export const SESSION_REFRESH_AFTER_SECONDS = DIA;
 
 export type DeviceKind = "pc" | "telefono";
 
@@ -26,6 +31,16 @@ export interface SessionPayload {
   iat: number;
   /** id aleatorio de esta sesión (para el registro de accesos) */
   sid: string;
+  /** 15/11: ingreso con el PIN (segundos epoch). Las cookies anteriores no lo tienen: vale `iat`. */
+  ini?: number;
+  /** 15/11: ingresó con el código anterior de 6 números (el panel pide cambiarlo). */
+  c6?: boolean;
+}
+
+/** 15/11: ¿la sesión venció por inactividad o por antigüedad? Pura. */
+export function sesionVencida(p: Pick<SessionPayload, "iat" | "ini">, ahoraSeg = Math.floor(Date.now() / 1000)): boolean {
+  if (ahoraSeg - p.iat > SESSION_IDLE_SECONDS) return true;
+  return ahoraSeg - (p.ini ?? p.iat) > SESSION_ABSOLUTE_SECONDS;
 }
 
 const encoder = new TextEncoder();
@@ -184,6 +199,8 @@ export type SessionCheck =
   | { status: "invalida" }
   /** firma correcta pero las sesiones se cerraron en todos los dispositivos (o no hay PIN) */
   | { status: "revocada" }
+  /** 15/11: firma correcta pero venció (7 días sin uso o 30 desde el ingreso) */
+  | { status: "vencida" }
   /** firma correcta pero la vigencia no se pudo comprobar: error recuperable, la cookie se conserva */
   | { status: "no_comprobable"; reason: string; session: SessionPayload };
 
@@ -192,6 +209,7 @@ export async function validateSession(cookieValue: string | undefined | null): P
   if (!cookieValue) return { status: "ausente" };
   const payload = await readSignedSession(cookieValue);
   if (!payload) return { status: "invalida" };
+  if (sesionVencida(payload)) return { status: "vencida" };
   const version = await currentSessionVersion();
   if (!version.ok) return { status: "no_comprobable", reason: version.reason, session: payload };
   if (version.value === null || payload.v !== version.value) return { status: "revocada" };

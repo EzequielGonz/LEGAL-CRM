@@ -3,6 +3,7 @@ import {
   clearFailures,
   deviceSummary,
   ensurePinState,
+  isValidNewPinFormat,
   isValidPinFormat,
   isWeakPin,
   lockedUntil,
@@ -10,6 +11,8 @@ import {
   originHash,
   registerFailure,
   updatePin,
+  attemptOk,
+  tryAttempt,
   verifyPin,
 } from "@/lib/acceso/pin";
 import { requireSession } from "@/lib/acceso/autorizacion";
@@ -30,7 +33,8 @@ export async function POST(request: Request) {
   const origin = await originHash(request);
   const device = deviceSummary(request);
 
-  const locked = await lockedUntil(origin);
+  const intento = await tryAttempt(origin);
+  const locked = intento ? (intento.permitido ? null : intento.hasta) : await lockedUntil(origin);
   if (locked) {
     return NextResponse.json(
       { error: "Demasiados intentos fallidos desde este dispositivo o red. Esperá 15 minutos." },
@@ -44,14 +48,16 @@ export async function POST(request: Request) {
   }
 
   if (!(isValidPinFormat(actual) && (await verifyPin(actual, state.pinHash)))) {
-    const until = await registerFailure(origin);
+    const until = intento ? intento.hasta : await registerFailure(origin);
     await logAccessEvent("cambio_pin_fallido", { origin, device });
     if (until) await logAccessEvent("bloqueo_origen", { origin, device, detail: { hasta: until.toISOString() } });
     return NextResponse.json({ error: "El PIN actual no es correcto." }, { status: until ? 429 : 401 });
   }
 
-  if (!isValidPinFormat(nuevo)) {
-    return NextResponse.json({ error: "El PIN nuevo tiene que tener exactamente 6 números." }, { status: 400 });
+  // El actual ya se comprobó: el intento no cuenta como fallo.
+  if (intento) await attemptOk(origin);
+  if (!isValidNewPinFormat(nuevo)) {
+    return NextResponse.json({ error: "El PIN nuevo tiene que tener exactamente 8 números." }, { status: 400 });
   }
   if (nuevo !== confirmacion) {
     return NextResponse.json({ error: "La confirmación no coincide con el PIN nuevo." }, { status: 400 });

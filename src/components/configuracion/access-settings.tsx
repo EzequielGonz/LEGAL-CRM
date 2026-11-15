@@ -24,15 +24,16 @@ export interface AccessEventRow {
 }
 
 function PinInput(props: { value: string; onChange: (v: string) => void; placeholder: string }) {
+  // 15/11: hasta 8 números (el código anterior de 6 sigue sirviendo como «actual»).
   return (
     <input
       aria-label={props.placeholder}
       autoComplete="off"
       type="password"
       inputMode="numeric"
-      maxLength={6}
+      maxLength={8}
       value={props.value}
-      onChange={(e) => props.onChange(e.target.value.replace(/\D/g, "").slice(0, 6))}
+      onChange={(e) => props.onChange(e.target.value.replace(/\D/g, "").slice(0, 8))}
       placeholder={props.placeholder}
       className="w-36 rounded-lg border border-slate-300 px-3 py-2 text-center font-mono text-sm tracking-widest outline-none focus-gold"
     />
@@ -98,8 +99,8 @@ export function AccessSettings({
   return (
     <div className="space-y-5">
       <p className="text-xs text-slate-500">
-        PIN general de 6 números, sin vencimiento. La sesión de cada dispositivo sigue abierta hasta que se cierra a mano.
-        Después de 5 intentos fallidos desde un mismo dispositivo o red, ese origen espera 15 minutos (no afecta a las sesiones abiertas).
+        PIN general de 8 números (el anterior de 6 sigue sirviendo hasta que lo cambies). La sesión de cada dispositivo vence a los 7 días sin uso y, aunque se use, a los 30 días del ingreso.
+        Después de 5 intentos desde un mismo dispositivo o red, ese origen espera 15 minutos; si hay 30 intentos fallidos en total, el ingreso se pausa 15 minutos para todos (no afecta a las sesiones abiertas).
         {pinUpdatedAt && (
           <>
             {" "}Último cambio: {new Date(pinUpdatedAt).toLocaleString("es-AR")}
@@ -117,7 +118,7 @@ export function AccessSettings({
           <button
             type="button"
             onClick={cambiar}
-            disabled={busy || actual.length !== 6 || nuevo.length !== 6 || confirmacion.length !== 6}
+            disabled={busy || (actual.length !== 6 && actual.length !== 8) || nuevo.length !== 8 || confirmacion.length !== 8}
             className="btn-gold"
           >
             {busy ? "Guardando..." : "Cambiar PIN"}
@@ -136,7 +137,7 @@ export function AccessSettings({
           <button
             type="button"
             onClick={cerrarOtras}
-            disabled={pinOtras.length !== 6}
+            disabled={pinOtras.length !== 6 && pinOtras.length !== 8}
             className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50"
           >
             Cerrar en los demás

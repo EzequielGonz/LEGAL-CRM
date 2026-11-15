@@ -133,3 +133,13 @@ export async function createAppointment({
 
   return data;
 }
+
+/**
+ * 15/11 (auditoría): el bot solo agenda un horario libre y futuro, igual a uno
+ * de los que ofreció la agenda (con un minuto de tolerancia). Pura.
+ */
+export function horarioOfrecido(startsAt: unknown, slots: Slot[], ahora = new Date()): Slot | null {
+  const t = typeof startsAt === "string" ? Date.parse(startsAt) : NaN;
+  if (!Number.isFinite(t) || t <= ahora.getTime()) return null;
+  return slots.find((s) => Math.abs(Date.parse(s.starts_at) - t) <= 60_000) ?? null;
+}

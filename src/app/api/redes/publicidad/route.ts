@@ -3,6 +3,7 @@ import { requireSession } from "@/lib/acceso/autorizacion";
 import { esSlugPerfil } from "@/lib/marca";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { CONFIG_VACIA, validarConfigAnuncios } from "@/lib/redes/publicidad";
+import { respuestaErrorInterno } from "@/lib/error-publico";
 
 export const dynamic = "force-dynamic";
 
@@ -36,6 +37,6 @@ export async function PUT(request: Request) {
   const v = await leer();
   const valor = { habilitada: false, perfiles: { ...v.perfiles, [body.perfil]: config } };
   const { error } = await createAdminClient().from("system_settings").upsert({ key: "publicidad", value: valor, updated_at: new Date().toISOString(), updated_by: "panel" });
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) return respuestaErrorInterno(error, "redes/publicidad");
   return NextResponse.json({ habilitada: false, config });
 }

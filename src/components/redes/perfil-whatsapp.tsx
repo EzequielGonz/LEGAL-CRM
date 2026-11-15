@@ -49,17 +49,18 @@ function FormLinea({ perfil, linea }: { perfil: string; linea: LineaPerfil }) {
   return (
     <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
       <div className="flex flex-wrap items-center gap-4">
-        <label className="group relative grid h-20 w-20 cursor-pointer place-items-center overflow-hidden rounded-full bg-slate-100 text-xs text-slate-500 ring-1 ring-slate-200">
+        <label className="group relative grid h-20 w-20 cursor-pointer place-items-center overflow-hidden rounded-full bg-slate-100 text-xs text-slate-500 ring-1 ring-slate-200 focus-within:outline focus-within:outline-[3px] focus-within:outline-offset-2 focus-within:outline-slate-900">
           {vista ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={vista} alt="Foto de perfil" className="h-full w-full object-cover" />
           ) : (
             <span>Sin foto</span>
           )}
-          <span className="absolute inset-x-0 bottom-0 bg-slate-950/60 py-0.5 text-center text-[11px] font-medium text-white opacity-0 transition-opacity group-hover:opacity-100">Cambiar</span>
+          <span className="absolute inset-x-0 bottom-0 bg-slate-950/60 py-0.5 text-center text-xs font-medium text-white opacity-100 transition-opacity group-focus-within:opacity-100 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:group-focus-within:opacity-100">Cambiar</span>
           <input
             type="file"
             accept="image/jpeg,image/png"
+            aria-label="Elegir la foto de perfil"
             className="sr-only"
             onChange={(e) => {
               const f = e.target.files?.[0] ?? null;

@@ -142,7 +142,7 @@ export function ProfileSettings({
         <button type="button" onClick={saveProfile} disabled={saving} className="btn-gold">
           {saving ? "Guardando..." : "Guardar perfil"}
         </button>
-        {msg && <span className={`text-xs ${msg.ok ? "text-green-600" : "text-red-600"}`}>{msg.text}</span>}
+        {msg && <span role={msg.ok ? "status" : "alert"} className={`text-xs ${msg.ok ? "text-green-600" : "text-red-600"}`}>{msg.text}</span>}
       </div>
       {profile.whatsapp_phone && (
         <p className="text-xs text-slate-400">Teléfono que figuraba antes en este perfil (dato anterior, sin uso automático): {profile.whatsapp_phone}</p>

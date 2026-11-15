@@ -30,3 +30,114 @@
     min-height: 2.5rem;
   }
 }
+
+/* ------------------------------------------------------------------------
+ * Bloque 3 de accesibilidad (15/11), después de la revisión con axe.
+ * ---------------------------------------------------------------------- */
+
+/* Piso de letra en todas las pantallas y en todo el panel (no solo dentro de
+   main ni solo hasta 640 px): nada por debajo de 12 px. */
+:is(.text-\[10px\], .text-\[10\.5px\], .text-\[11px\], .text-\[11\.5px\]) {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+@media (max-width: 640px) {
+  :is(#menu-perfil, [data-asistente], [role="dialog"]) :is(.text-xs, .text-\[11px\], .text-\[11\.5px\], .text-\[12px\], .text-\[10px\], .text-\[10\.5px\]) {
+    font-size: 0.8125rem;
+    line-height: 1.2rem;
+  }
+}
+
+/* Debajo de lg las barras fijas (arriba la del celular, abajo la de secciones)
+   no tapan el control enfocado ni el destino de un ancla. */
+@media (max-width: 1023.98px) {
+  html {
+    scroll-padding: 4rem 0 6.5rem;
+  }
+}
+
+/* Objetivos táctiles en pantallas táctiles: el área para tocar llega a 44 px
+   sin cambiar el aspecto (alto mínimo y centrado; la letra no cambia). Cubre
+   también el asistente y los diálogos. */
+@media (pointer: coarse) {
+  :is(main#contenido, [data-asistente], [role="dialog"]) :is(.btn-gold-sm, .btn-suave-sm) {
+    min-height: 2.5rem;
+  }
+  /* Enlaces y botones de texto (sin fondo ni borde): crecer en alto no se nota. */
+  :is(main#contenido, [data-asistente], [role="dialog"], #menu-perfil) :is(button, a[href], summary, [role="tab"], [role="radio"]):not(.tactil):not([class*="bg-"]):not([class*="border"]):not([class*="h-"]):not(.pestana):not(.menu-item) {
+    min-height: 2.75rem;
+  }
+  :is(main#contenido, [data-asistente], [role="dialog"], #menu-perfil) :is(li, td, div) > a[href]:not(.tactil):not([class*="bg-"]):not([class*="border"]):not([class*="h-"]):not([class~="block"]):not([class*="flex"]):not([class*="grid"]):not(.pestana):not(.menu-item) {
+    display: inline-flex;
+    align-items: center;
+  }
+  /* Selectores segmentados («En vivo / Hoy / Base completa» y similares). */
+  :is(main#contenido, [data-asistente], [role="dialog"]) :is([role="tab"], [role="radio"], [aria-pressed]) {
+    min-height: 2.75rem;
+  }
+}
+
+/* Salto al contenido: colores fijos (en oscuro la tinta slate-900 se vuelve
+   clara y el texto blanco dejaba de leerse). */
+.skip-link,
+html[data-modo="oscuro"] .skip-link {
+  background: #0f172a !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff;
+  outline-color: #ffffff;
+}
+
+/* Verdes y ámbares de texto en modo claro: el tono 600 no llega a 4,5:1 sobre blanco. */
+html:not([data-modo="oscuro"]) .text-green-600 { color: rgb(21 128 61); }
+html:not([data-modo="oscuro"]) .text-amber-600 { color: rgb(180 83 9); }
+html:not([data-modo="oscuro"]) .text-emerald-600 { color: rgb(4 120 87); }
+
+/* Texto atenuado con opacidad dentro de chips: color sólido que pasa 4,5:1. */
+html:not([data-modo="oscuro"]) :is(.bg-slate-50, .bg-slate-100, .bg-white) > .opacity-70 {
+  opacity: 1;
+  color: rgb(var(--c-slate-600));
+}
+
+/* Quien pide menos transparencia en el sistema ve superficies opacas, sin desenfoque. */
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --vidrio-fondo: rgb(255 255 255);
+    --vidrio-fondo-alto: rgb(255 255 255);
+  }
+  html[data-modo="oscuro"] {
+    --vidrio-fondo: rgb(20 22 28);
+    --vidrio-fondo-alto: rgb(24 26 32);
+  }
+  #menu-perfil,
+  .encabezado-panel,
+  .barra-movil,
+  .barra-inferior,
+  .kpi-hoy,
+  #res-embudo,
+  .tablero-hoy > div[class~="rounded-2xl"],
+  .grupo-ajustes {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+  .barra-inferior { background: rgb(255 255 255); }
+  html[data-modo="oscuro"] .barra-inferior { background: rgb(18 20 26); }
+}
+
+/* Contador de cifras (EfectosVidrio): el valor real queda en su lugar, transparente
+   mientras se anima la copia de arriba, para que el lector de pantalla lo lea entero. */
+.cifra-contando {
+  color: transparent !important;
+  -webkit-text-fill-color: transparent;
+}
+.cifra-animada {
+  position: absolute;
+  inset: 0;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* Regiones con desplazamiento propio que se pueden enfocar con teclado: foco visible. */
+[role="region"][tabindex="0"]:focus-visible,
+[role="log"][tabindex="0"]:focus-visible {
+  outline-offset: -3px;
+}

@@ -12,6 +12,7 @@ import { leerMenuPersonal } from "@/lib/personalizacion/servidor";
 import { EfectosVidrio } from "@/components/ui/efectos-vidrio";
 import { RUBRO_IDS } from "@/lib/rubros";
 import { CartelCrisis } from "@/components/perfiles/cartel-crisis";
+import { AvisoCodigoAnterior } from "@/components/acceso/aviso-codigo-anterior";
 
 /**
  * Marco común de los paneles (renovado 18/10): paleta del perfil
@@ -52,6 +53,9 @@ export async function MarcoPerfil({ slug, children, sinSalud = false }: { slug: 
             {/* 15/11: persona en crisis sin resolver: va antes que todo. */}
             <Suspense fallback={null}>
               <CartelCrisis slug={slug} />
+            </Suspense>
+            <Suspense fallback={null}>
+              <AvisoCodigoAnterior />
             </Suspense>
             {!sinSalud && (
               <Suspense fallback={null}>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { ultimosMensajes } from "@/lib/chat-mensajes";
 import { ConversationThread } from "@/components/inbox/conversation-thread";
 import { ANALYSIS_LABEL, OutreachBadge, PriorityBadge } from "@/components/marketing/lead-badges";
 
@@ -36,34 +37,40 @@ export default async function LeadPage(props: { params: Promise<{ id: string }> 
   const params = await props.params;
   const supabase = createClient();
 
-  const { data: lead } = await supabase
-    .from("marketing_leads")
-    .select("*, contacts(*)")
-    .eq("id", params.id)
-    .maybeSingle();
+  // 15/11: el lead y su historial a la vez (el historial se busca por el mismo id del lead).
+  const [{ data: lead }, { data: events }] = await Promise.all([
+    supabase.from("marketing_leads").select("*, contacts(*)").eq("id", params.id).maybeSingle(),
+    supabase.from("marketing_events").select("*").eq("lead_id", params.id).order("created_at", { ascending: true }),
+  ]);
   if (!lead) notFound();
 
   const contact = (lead as any).contacts;
 
-  const [{ data: events }, { data: conversation }] = await Promise.all([
-    supabase.from("marketing_events").select("*").eq("lead_id", lead.id).order("created_at", { ascending: true }),
-    supabase
-      .from("conversations")
-      .select("id, ai_enabled")
-      .eq("contact_id", contact.id)
-      .order("last_message_at", { ascending: false, nullsFirst: false })
-      .limit(1)
-      .maybeSingle(),
-  ]);
+  const { data: conversation } = await supabase
+    .from("conversations")
+    .select("id, ai_enabled")
+    .eq("contact_id", contact.id)
+    .order("last_message_at", { ascending: false, nullsFirst: false })
+    .limit(1)
+    .maybeSingle();
 
-  const { data: messages } = conversation
-    ? await supabase.from("messages").select("*").eq("conversation_id", conversation.id).order("created_at", { ascending: true })
-    : { data: [] as any[] };
-
-  const fromProspect = (messages ?? []).filter((m: any) => m.direction === "entrante");
-  const fromUs = (messages ?? []).filter((m: any) => m.direction === "saliente");
-  const firstOut = fromUs[0];
-  const firstIn = fromProspect[0];
+  // 15/11: el hilo muestra los últimos 300 mensajes; las cifras de la ficha (cuántos mensajes de cada
+  // lado y cuánto tardó en responder) se siguen calculando sobre toda la conversación, con conteos y
+  // con el primer mensaje de cada lado, todo a la vez.
+  const cuenta = async (q: any): Promise<number> => (await q).count ?? 0;
+  const primero = async (direccion: "entrante" | "saliente") =>
+    ((await supabase.from("messages").select("created_at").eq("conversation_id", conversation!.id).eq("direction", direccion).order("created_at", { ascending: true }).limit(1).maybeSingle()).data as { created_at: string } | null) ?? undefined;
+  const [messages, totalDelProspecto, totalNuestros, firstIn, firstOut] = conversation
+    ? await Promise.all([
+        ultimosMensajes(supabase, conversation.id),
+        cuenta(supabase.from("messages").select("id", { count: "exact", head: true }).eq("conversation_id", conversation.id).eq("direction", "entrante")),
+        cuenta(supabase.from("messages").select("id", { count: "exact", head: true }).eq("conversation_id", conversation.id).eq("direction", "saliente")),
+        primero("entrante"),
+        primero("saliente"),
+      ])
+    : [[], 0, 0, undefined, undefined];
+  const fromProspect = { length: totalDelProspecto };
+  const fromUs = { length: totalNuestros };
   const replyMinutes =
     firstOut && firstIn && new Date(firstIn.created_at) > new Date(firstOut.created_at)
       ? Math.round((new Date(firstIn.created_at).getTime() - new Date(firstOut.created_at).getTime()) / 60000)
