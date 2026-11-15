@@ -31,7 +31,11 @@ test("bucle y pendientes", () => {
   assert.equal(motivoParaNoResponder([m("saliente", 100, "Hola"), m("entrante", 60, "Hola, sí")], ahora), null);
   const largo = "Hola, gracias por escribir a Estudio X, nuestro equipo te contesta pronto";
   assert.equal(motivoParaNoResponder([m("entrante", 300, largo + " ok"), m("saliente", 290, "a"), m("entrante", 280, "Que lindo saludarte che, contame mas de lo que buscas"), m("saliente", 200, "b"), m("entrante", 100, "Que lindo saludarte che, contame mas de lo que buscas")], ahora), "bucle_automatico");
-  const rapido = [m("saliente", 300, "a"), m("entrante", 295, "x1"), m("saliente", 250, "b"), m("entrante", 245, "x2"), m("saliente", 200, "c"), m("entrante", 196, "x3")];
+  // 15/11: las respuestas instantáneas cuentan como bot solo si son largas (una persona rápida contesta «sí», «dale»).
+  const r = (n: number) => `Respuesta número ${n} del menú automático del negocio`;
+  const rapido = [m("saliente", 300, "a"), m("entrante", 295, r(1)), m("saliente", 250, "b"), m("entrante", 245, r(2)), m("saliente", 200, "c"), m("entrante", 196, r(3))];
+  const rapidoCorto = [m("saliente", 300, "a"), m("entrante", 295, "x1"), m("saliente", 250, "b"), m("entrante", 245, "x2"), m("saliente", 200, "c"), m("entrante", 196, "x3")];
+  assert.equal(motivoParaNoResponder(rapidoCorto, ahora), null);
   assert.equal(motivoParaNoResponder(rapido, ahora), "bucle_automatico");
   assert.equal(motivoParaNoResponder(rapido.slice(0, 4), ahora), null);
   assert.equal(motivoParaNoResponder([m("entrante", 10, "Gracias por comunicarte, en breve te respondemos"), m("entrante", 5, "Hola soy Juan, quería consultar")], ahora), null);

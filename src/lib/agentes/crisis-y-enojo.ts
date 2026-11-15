@@ -23,6 +23,7 @@ const NO_LITERAL = "(?! de (?:risa|verguenza|amor|calor|frio|hambre|sueno|ganas|
 
 const SENALES_CRISIS: RegExp[] = [
   /\bsuicid\w*/,
+  /\bme (?:voy a|quiero) (?:quitar|sacar) la vida\b/,
   /\b(?:matarme|quitarme la vida|sacarme la vida|terminar con mi vida|acabar con mi vida|terminar con mi existencia)\b/,
   new RegExp(`\\bme (?:voy a|quiero|quisiera|kiero) (?:matar|morir|desaparecer para siempre)\\b${NO_LITERAL}`),
   /\bno (?:quiero|tengo ganas de|aguanto) (?:vivir|seguir viviendo|seguir con vida|estar vivo|estar viva)\b/,
@@ -60,7 +61,7 @@ const ENOJO: RegExp[] = [
   /\bbasta de (?:mensajes|escribir|escribirme|molestar|joder|mandar)\b/,
   /\bustedes son (?:unos |unas )?(?:pesad|forr|pelotud|bolud|chant|estafador|chorr|ladron|idiota|imbecil|mentiros)\w*/,
   /^(?:son|sos) (?:unos |unas |un |una )?(?:pesad|forr|pelotud|bolud|chant|estafador|chorr|ladron|idiota|imbecil|mentiros)\w*/,
-  /\bme (?:tienen|tenes|tiene) (?:re )?(?:podrid|hart|cansad|las bolas llenas)\w*/,
+  /\bme (?:tienen|tenes) (?:re )?(?:podrid|hart|cansad|las bolas llenas)\w*/,
   /\b(?:hdp|hijos? de (?:re)?puta|la concha de (?:tu|su|la) madre|andate a la mierda|vayanse a la mierda|metanse (?:el|los) )/,
   /\b(?:que|son re|son muy) pesad(?:o|a|os|as)\b(?! (?:el|la|los|las) )/,
   /\bdejen de mandarme (?:spam|mensajes)\b|\besto es spam\b|\bson spam\b/,

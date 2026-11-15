@@ -23,7 +23,7 @@ const NEGATIVO = [
   /\bno (tengo|me da el) tiempo\b/,
   /^no[.!]*$/,
   /\bdespues (te|les) (aviso|escribo)\b/,
-  /\blo (voy a )?pienso\b|\blo tengo que pensar\b|\bdejame pensarlo\b/,
+  /\blo (voy a pensar|pienso|pensamos|vamos a pensar)\b|\blo tengo que pensar\b|\bdejame pensarlo\b/,
 ];
 
 const POSITIVO = [
