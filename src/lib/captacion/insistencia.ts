@@ -37,7 +37,7 @@ export function reglaDeRechazo(slug: string, modo: "campana" | "entrante" = "cam
     (slug === "juridico" || slug === "civil" || slug === "penal") && modo === "entrante"
       ? "ofrecé una evaluación sin costo de su caso como segunda opinión"
       : slug === "juridico" || slug === "civil" || slug === "penal"
-      ? "ofrecé una revisión gratis como segunda opinión (muchas veces hay una diferencia a cobrar con la ART)"
+      ? "ofrecé una revisión gratis como segunda opinión, para que un profesional mire si quedó algo por revisar con la ART (sin prometer que haya algo para cobrar)"
       : slug === "coberturas_medicas"
       ? "ofrecé que un asesor le compare sin costo si puede pagar menos por la misma cobertura o una mejor"
       : "ofrecé que un asesor le cuente sin compromiso opciones y financiación";

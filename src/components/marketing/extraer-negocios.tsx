@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { PROVINCIAS_AR, TODA_ARGENTINA, nombreBaseSugerido } from "@/lib/marketing/venta";
+import { pedirConfirmacion } from "@/components/ui/dialogo-confirmar";
 
 interface Extraccion {
   id: string;
@@ -180,7 +181,7 @@ export function ExtraerNegocios({ limites, usadosHoy, faltan, avisos }: { limite
                 className="flex flex-wrap items-center gap-2"
                 onSubmit={async (e) => {
                   e.preventDefault();
-                  if (!window.confirm(`¿Ejecutar «${ext.nombre_base}»? Se crea la campaña con la apertura de Kocos Marketing y empieza a enviar (si no falta nada).`)) return;
+                  if (!(await pedirConfirmacion({ titulo: `¿Ejecutar «${ext.nombre_base}»?`, texto: "Se crea la campaña con la apertura de Kocos Marketing y empieza a enviar (si no falta nada).", confirmar: "Ejecutar" }))) return;
                   setEjec(null);
                   try {
                     const r = await fetch("/api/marketing/ejecutar-base", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ extraccionId: ext.id, pin }) });

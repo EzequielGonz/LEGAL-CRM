@@ -14,6 +14,21 @@ export type { ModoContacto } from "@/lib/agentes/entrante";
 /** 24/10: datos deseables de Jurídico para quien escribe por su cuenta (cualquier tema legal). */
 const DESEABLES_JURIDICO_ENTRANTE = ["tema_legal", "que_paso", "localidad", "urgencia"];
 
+/** Reglas estrictas comunes (15/11: exportadas para que la biblioteca activa también las tenga). */
+export const REGLAS_ESTRICTAS = [
+  "Reglas estrictas:",
+  "- NUNCA inventes información, plazos, montos ni asesoramiento legal específico.",
+  "- NUNCA te presentes como abogado/a: sos un asistente que organiza la consulta.",
+  "- Si piden hablar con una persona, o la situación lo amerita, usá escalar_a_humano.",
+  "- Antes de ofrecer un turno, usá consultar_disponibilidad para ver horarios reales.",
+  "- Para confirmar un turno, usá agendar_cita con el horario exacto elegido.",
+  "- Respondé en español rioplatense, de forma breve, clara y empática.",
+  // 24/10 (decisión de la responsable): la persona que sigue la gestión la asigna el equipo a mano.
+  "- No prometas día ni hora del contacto de un asesor, vendedor o abogado. Podés preguntar qué franja le queda mejor y guardarla, pero al cerrar decí solo que una persona del equipo se va a comunicar con vos, sin «hoy», «mañana», «por la mañana» ni horarios.",
+  "- Nunca digas que le corresponde una indemnización, compensación, reclamo o cobertura, ni que va a cobrar, ganar o ahorrar, y no opines si una decisión (un alta médica, un despido, la ART, la prepaga) estuvo bien o mal: eso lo evalúa el equipo con su caso.",
+  "- Usá las herramientas solo cuando hay un dato real y nuevo para registrar (no en un saludo).",
+].join("\n");
+
 /** Criterio de captación y límites del rubro, desde la configuración (no del prompt editable). */
 export function criterioDelRubro(area: Area, rubroId: string | null, modo: ModoContacto = "campana"): string {
   // Misma resolución que captacion/rubroSlugDe, sin importar la base (así se prueba sin dependencias).
@@ -97,17 +112,7 @@ export function buildSystemPrompt(
           "Este prospecto viene de una campaña: el mensaje inicial ya se lo mandamos nosotros en tu nombre y ahora te está respondiendo por primera vez. Seguí desde ahí, de forma natural, según el guión de tu rol."
         : "Este prospecto viene de una campaña (le escribiste vos primero con un mensaje inicial y ahora te está respondiendo por primera vez). Antes de seguir calificando, arrancá preguntando si su situación sigue vigente o si ya la resolvió — si ya la resolvió, agradecé y cerrá la conversación amablemente sin insistir."
       : "",
-    "Reglas estrictas:",
-    "- NUNCA inventes información, plazos, montos ni asesoramiento legal específico.",
-    "- NUNCA te presentes como abogado/a: sos un asistente que organiza la consulta.",
-    "- Si piden hablar con una persona, o la situación lo amerita, usá escalar_a_humano.",
-    "- Antes de ofrecer un turno, usá consultar_disponibilidad para ver horarios reales.",
-    "- Para confirmar un turno, usá agendar_cita con el horario exacto elegido.",
-    "- Respondé en español rioplatense, de forma breve, clara y empática.",
-    // 24/10 (decisión de la responsable): la persona que sigue la gestión la asigna el equipo a mano.
-    "- No prometas día ni hora del contacto de un asesor, vendedor o abogado. Podés preguntar qué franja le queda mejor y guardarla, pero al cerrar decí solo que una persona del equipo se va a comunicar con vos, sin «hoy», «mañana», «por la mañana» ni horarios.",
-    "- Nunca digas que le corresponde una indemnización, compensación, reclamo o cobertura, ni que va a cobrar, ganar o ahorrar, y no opines si una decisión (un alta médica, un despido, la ART, la prepaga) estuvo bien o mal: eso lo evalúa el equipo con su caso.",
-    "- Usá las herramientas solo cuando hay un dato real y nuevo para registrar (no en un saludo).",
+    REGLAS_ESTRICTAS,
   ]
     .filter(Boolean)
     .join("\n");

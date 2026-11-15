@@ -8,6 +8,7 @@ import { marcaDe, temaDe, type SlugPerfil } from "@/lib/marca";
 import { variablesAcento } from "@/lib/acento";
 import { LogoPerfil } from "@/components/ui/logo-perfil";
 import { Icono } from "@/components/ui/icono-seccion";
+import { pedirConfirmacion } from "@/components/ui/dialogo-confirmar";
 
 /** La vista previa se vuelve a pedir al servidor cada 20 s (pestaña visible) y al abrir la pantalla. */
 const POLL_MS = 20000;
@@ -50,23 +51,22 @@ export function MenuAcciones({ p, onPausar, modo = "pc" }: { p: PerfilStats; onP
   const item = "flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 hover:text-slate-950";
   return (
     <div ref={ref} className="relative">
-      <button type="button" onClick={() => setAbierto((v) => !v)} aria-haspopup="menu" aria-expanded={abierto} aria-label={`Más acciones de ${p.name}`} className="tactil grid place-items-center rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-900">
+      <button type="button" onClick={() => setAbierto((v) => !v)} aria-expanded={abierto} aria-label={`Más acciones de ${p.name}`} className="tactil grid place-items-center rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-900">
         <Icono nombre="puntos" className="h-5 w-5" />
       </button>
       {abierto && (
-        <div role="menu" className="absolute right-0 top-full z-30 mt-1 w-60 rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl animate-scale-in">
-          <Link role="menuitem" href={modo === "telefono" ? `/telefono/${slug}/campana` : `${base(slug)}/campanas`} className={item}>
+        <div className="absolute right-0 top-full z-30 mt-1 w-60 rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl animate-scale-in">
+          <Link href={modo === "telefono" ? `/telefono/${slug}/campana` : `${base(slug)}/campanas`} className={item}>
             <Icono nombre="campanas" className="h-4 w-4" /> Cargar campaña
           </Link>
           {p.campana && (
-            <Link role="menuitem" href={modo === "telefono" ? `/telefono/${slug}/estadisticas?campana=${p.campana.id}` : `${base(slug)}/campanas/${p.campana.id}`} className={item}>
+            <Link href={modo === "telefono" ? `/telefono/${slug}/estadisticas?campana=${p.campana.id}` : `${base(slug)}/campanas/${p.campana.id}`} className={item}>
               <Icono nombre="estadisticas" className="h-4 w-4" /> Revisar campaña
             </Link>
           )}
           {p.campana?.estado === "en_curso" && (
             <button
               type="button"
-              role="menuitem"
               className={item}
               onClick={() => {
                 setAbierto(false);
@@ -77,15 +77,15 @@ export function MenuAcciones({ p, onPausar, modo = "pc" }: { p: PerfilStats; onP
             </button>
           )}
           {p.campana?.estado === "pausada" && (
-            <Link role="menuitem" href={`${base(slug)}/campanas/${p.campana.id}`} className={item}>
+            <Link href={`${base(slug)}/campanas/${p.campana.id}`} className={item}>
               <Icono nombre="enviar" className="h-4 w-4" /> Reanudar campaña…
             </Link>
           )}
-          <Link role="menuitem" href={`/redes?perfil=${slug}`} className={item}>
+          <Link href={`/redes?perfil=${slug}`} className={item}>
             <Icono nombre="contenido" className="h-4 w-4" /> Programar publicaciones
           </Link>
           <div className="my-1 h-px bg-slate-100" />
-          <Link role="menuitem" href={`/panel/${slug}`} className={item}>
+          <Link href={`/panel/${slug}`} className={item}>
             <Icono nombre="flecha" className="h-4 w-4" /> {modo === "telefono" ? "Abrir el panel completo" : "Entrar al panel"}
           </Link>
         </div>
@@ -233,21 +233,33 @@ export function usePerfilesEnVivo<C = unknown>(initial: PerfilStats[], opciones:
   useEffect(() => {
     // 22/10: se actualiza apenas se abre la pantalla (el navegador puede
     // mostrar una copia guardada al volver) y después cada POLL_MS.
+    // 15/11: es el único camino que actualiza las tarjetas (se sacó la recarga
+    // completa de la página cada 30 s). Al volver a la pestaña o desde la copia
+    // guardada del navegador, solo si pasaron más de cinco segundos.
+    let ultimo = Date.now();
     refrescar();
     const tick = () => {
-      if (document.visibilityState === "visible") refrescar();
+      if (document.visibilityState !== "visible") return;
+      ultimo = Date.now();
+      refrescar();
+    };
+    const alVolver = () => {
+      if (document.visibilityState === "visible" && Date.now() - ultimo > 5_000) tick();
     };
     const interval = setInterval(tick, POLL_MS);
-    document.addEventListener("visibilitychange", tick);
+    document.addEventListener("visibilitychange", alVolver);
+    window.addEventListener("pageshow", alVolver);
     return () => {
       clearInterval(interval);
-      document.removeEventListener("visibilitychange", tick);
+      document.removeEventListener("visibilitychange", alVolver);
+      window.removeEventListener("pageshow", alVolver);
     };
   }, [refrescar]);
 
   async function pausar(p: PerfilStats) {
     if (!p.campana) return;
-    if (!window.confirm(`¿Pausar la campaña «${p.campana.nombre}»? Deja de enviar hasta que la reanudes.`)) return;
+    const campana = p.campana;
+    if (!(await pedirConfirmacion({ titulo: `¿Pausar la campaña «${campana.nombre}»?`, texto: "Deja de enviar hasta que la reanudes.", confirmar: "Pausar" }))) return;
     const res = await fetch(`/api/campaigns/${p.campana.id}/pause`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ motivo: "Pausada desde la pantalla de perfiles" }) });
     setAviso(res.ok ? `Campaña «${p.campana.nombre}» pausada.` : "No se pudo pausar la campaña.");
     refrescar();

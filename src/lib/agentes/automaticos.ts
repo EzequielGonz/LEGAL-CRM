@@ -60,12 +60,45 @@ const SENALES_AUTOMATICO_1411: RegExp[] = [
   /\bestoy de receso\b[^]{0,60}\bvuelvo\b/,
 ];
 
+/**
+ * 15/11: contestadores que se escapaban en la auditoría (saludos de bienvenida
+ * de negocios, asistentes virtuales, «escribí MENÚ», números dados de baja) y
+ * contestadores en inglés y portugués. Ninguno es algo que escriba una persona
+ * al contestar un mensaje.
+ */
+const SENALES_AUTOMATICO_1511: RegExp[] = [
+  // «Bienvenido/a a [negocio]» + «¿en qué podemos ayudarte?»
+  /\bbienvenid[oa]s? a\b[^]{0,80}\b(?:como|en que) (?:te |le |los |las )?(?:podemos|podriamos|puedo) ayudar/,
+  // «Soy Ana, la asistente virtual de…» / «soy un bot»
+  /\b(?:soy|te habla|te atiende|le atiende) (?:\w+, )?(?:el|la|tu|su)? ?(?:asistente|agente) virtual\b/,
+  /\bsoy un (?:bot|robot|asistente automatico|chatbot)\b/,
+  // «Escribí MENU / asesor / hola para…»
+  /\b(?:escribi|escriba|envia|envie|responde|responda|tipea|tipee) (?:la palabra )?["'«]?(?:menu|asesor|inicio|hola|ayuda|operador|ventas)["'»]?\b[^]{0,40}\b(?:para|y te|y le)\b/,
+  /\bpara (?:continuar|comenzar|empezar|volver al menu)[^]{0,20}\b(?:escribi|escriba|envia|envie|responde|responda|selecciona|seleccione|elegi|elija)\b/,
+  // Número dado de baja o cambiado.
+  /\beste numero (?:ya )?no (?:esta|se encuentra) (?:en uso|habilitado|activo|disponible)\b|\b(?:cambiamos|hemos cambiado) (?:de|nuestro) numero\b/,
+  // «Gracias por contactarte. Para presupuestos enviá…»
+  /\bgracias por (?:comunicarte|comunicarse|contactarte|contactarse|contactarnos|escribirnos)\b[^]{0,60}\bpara (?:presupuestos|pedidos|consultas|turnos|cotizaciones)\b/,
+  // Catálogos y pedidos de bot: «¿Querés hacer un pedido? Mirá nuestro catálogo: http…»
+  /\b(?:mira|mire|conoce|conozca|visita|visite) nuestro (?:catalogo|menu|sitio)\b[^]{0,40}https?:\/\//,
+  // Inglés.
+  /\b(?:thank you|thanks) for (?:contacting|reaching out|your message|messaging)\b/,
+  /\b(?:we are|we're|our office is|the office is) (?:currently )?(?:closed|out of the office|away|unavailable)\b/,
+  /\bwe(?:'ll| will) (?:get back to you|reply|respond)\b/,
+  /\b(?:this is an )?automat(?:ed|ic) (?:reply|response|message)\b/,
+  // Portugués.
+  /\bobrigad[oa] (?:por|pelo) (?:entrar em contato|seu contato|sua mensagem|contatar)\b/,
+  /\b(?:no momento|neste momento) (?:nao )?(?:estamos|podemos)\b[^]{0,40}\b(?:atender|responder|disponiveis)\b/,
+  /\bresponderemos (?:em breve|o mais breve)\b|\bmensagem automatica\b/,
+];
+
 /** ¿El mensaje parece un contestador automático y no una persona? Pura. */
 export function esRespuestaAutomatica(texto: string | null | undefined): boolean {
   const t = normalizar(texto ?? "");
   if (!t) return false;
   if (SENALES_AUTOMATICO.some((re) => re.test(t))) return true;
   if (SENALES_AUTOMATICO_1411.some((re) => re.test(t))) return true;
+  if (SENALES_AUTOMATICO_1511.some((re) => re.test(t))) return true;
   // Menú numerado: tres o más opciones en líneas que empiezan con número o emoji de número.
   const opciones = (texto ?? "").split(/\n/).filter((l) => /^\s*(?:\d{1,2}\s*[).:\-–]|[0-9]️?⃣)/.test(l));
   return opciones.length >= 3;
@@ -79,7 +112,7 @@ export interface MensajeHistorial {
 }
 
 /** Ventana y umbrales del tope de bucle. */
-export const TOPE_BUCLE = { ventanaMin: 15, respuestaInmediataSeg: 10, inmediatasMax: 3, largoRepetido: 40 };
+export const TOPE_BUCLE = { ventanaMin: 15, respuestaInmediataSeg: 10, inmediatasMax: 3, largoRepetido: 40, largoMinimoInmediata: 25 };
 
 export type MotivoSinRespuesta = "respuesta_automatica" | "bucle_automatico";
 
@@ -118,6 +151,9 @@ export function motivoParaNoResponder(historial: MensajeHistorial[], ahora: Date
     const cur = historial[k];
     if (Date.parse(cur.created_at) < desde) continue;
     if (prev.direction === "saliente" && (prev.sender_type ?? "agente_ia") === "agente_ia" && cur.direction === "entrante") {
+      // 15/11: una persona rápida contesta corto («sí», «ok», «dale», un número):
+      // eso no cuenta como bucle. Los contestadores mandan textos largos.
+      if (normalizar(cur.body ?? "").length < TOPE_BUCLE.largoMinimoInmediata) continue;
       const seg = (Date.parse(cur.created_at) - Date.parse(prev.created_at)) / 1000;
       if (seg >= 0 && seg <= TOPE_BUCLE.respuestaInmediataSeg) inmediatas++;
     }

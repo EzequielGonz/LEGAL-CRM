@@ -33,16 +33,34 @@ export function EfectosVidrio() {
       if (el.childElementCount > 0) return;
       const fin = soloNumero(el.textContent ?? "");
       if (fin === null) return;
-      const final = el.textContent ?? "";
+      // 15/11: no se reescribe el texto que maneja React. El valor real queda en su
+      // lugar (transparente mientras cuenta, así el lector de pantalla lo lee
+      // completo) y encima se anima una copia con aria-hidden que después se quita.
+      const estilo = getComputedStyle(el);
+      const copia = document.createElement("span");
+      copia.setAttribute("aria-hidden", "true");
+      copia.className = "cifra-animada";
+      copia.style.color = estilo.color;
+      copia.style.setProperty("-webkit-text-fill-color", estilo.color);
+      copia.textContent = "0";
+      const posicionPrevia = el.style.position;
+      if (estilo.position === "static") el.style.position = "relative";
+      el.classList.add("cifra-contando");
+      el.appendChild(copia);
+      const terminar = () => {
+        copia.remove();
+        el.classList.remove("cifra-contando");
+        el.style.position = posicionPrevia;
+      };
       const ms = Math.min(900, 420 + Math.log10(fin + 1) * 160);
       const inicio = performance.now();
       const paso = (ahora: number) => {
         const p = Math.min(1, (ahora - inicio) / ms);
         const suave = 1 - Math.pow(1 - p, 3);
-        el.textContent = p >= 1 ? final : Math.round(fin * suave).toLocaleString("es-AR");
-        if (p < 1) enCurso.add(requestAnimationFrame(paso));
+        if (p >= 1 || !el.isConnected) return terminar();
+        copia.textContent = Math.round(fin * suave).toLocaleString("es-AR");
+        enCurso.add(requestAnimationFrame(paso));
       };
-      el.textContent = "0";
       enCurso.add(requestAnimationFrame(paso));
     };
 

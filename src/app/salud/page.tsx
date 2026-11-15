@@ -1,4 +1,4 @@
-import { leerFallas } from "@/lib/salud/fallas";
+import { leerFallas, type Falla } from "@/lib/salud/fallas";
 import { itemsDelPerfil } from "@/lib/salud/por-perfil";
 import { perfilActivo } from "@/lib/perfil-activo";
 import Link from "next/link";
@@ -27,15 +27,27 @@ const ESTILO: Record<ItemSalud["estado"], { caja: string; punto: string; texto: 
 export default async function SaludPage(props: { searchParams: Promise<{ perfil?: string }> }) {
   const searchParams = await props.searchParams;
   const slug: SlugPerfil = await perfilActivo(searchParams.perfil);
+  // 15/11: los datos se empiezan a pedir acá y se esperan adentro del marco, así la marca y el
+  // menú del marco se leen a la vez que la salud (antes el marco esperaba a que terminara todo).
   // 12/11: las líneas de Wasender también son salud del sistema (antes no aparecían).
-  const [base, wasender, fallas] = await Promise.all([leerSalud(), leerSaludWasender().catch(() => []), leerFallas(slug).catch(() => [])]);
+  const datos = Promise.all([leerSalud(), leerSaludWasender().catch(() => []), leerFallas(slug).catch(() => [])]);
+  // Si el marco falla antes de esperar los datos, el rechazo no queda sin atender (el contenido lo vuelve a ver).
+  datos.catch(() => {});
+  return (
+    <MarcoPerfil slug={slug} sinSalud>
+      <SaludContenido slug={slug} datos={datos} />
+    </MarcoPerfil>
+  );
+}
+
+async function SaludContenido({ slug, datos }: { slug: SlugPerfil; datos: Promise<[ItemSalud[], ItemSalud[], Falla[]]> }) {
+  const [base, wasender, fallas] = await datos;
   // 13/11 · cada rubro separado: en cada perfil, lo de todo el sistema y lo propio. Lo de otro perfil se ve en ese perfil.
   const items = itemsDelPerfil([...base, ...wasender], slug);
   const r = resumenSalud(items);
   const rojos = items.filter((i) => i.estado === "rojo");
   const amarillos = items.filter((i) => i.estado === "amarillo");
   return (
-    <MarcoPerfil slug={slug} sinSalud>
       <div className="mx-auto max-w-5xl space-y-6">
         <div>
           <h1 className="text-2xl font-semibold text-slate-900">Salud del sistema</h1>
@@ -123,6 +135,5 @@ export default async function SaludPage(props: { searchParams: Promise<{ perfil?
           ))}
         </ul>
       </div>
-    </MarcoPerfil>
   );
 }

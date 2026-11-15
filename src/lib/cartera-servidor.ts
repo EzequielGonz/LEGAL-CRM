@@ -177,7 +177,8 @@ export async function resumenCifras(rubroId: string, areas: string[], ahora = ne
     const { count, error } = await q;
     return error ? null : count ?? 0;
   };
-  const [{ data: base }, respuestas, captados, citas, derivados] = await Promise.all([
+  // 15/11: las campañas se piden en la misma tanda (antes, recién al terminar las cifras de la semana).
+  const [{ data: base }, respuestas, captados, citas, derivados, { data: camps }] = await Promise.all([
     // 20/10: la última base con contactos nuevos (un archivo repetido queda con 0 y no cuenta).
     s.from("imported_bases").select("id, name, file_name, created_at, created_rows, total_rows").in("area", areas).is("archived_at", null).gt("created_rows", 0).order("created_at", { ascending: false }).limit(1).maybeSingle(),
     // 24/10: personas que escribieron (no mensajes).
@@ -185,17 +186,10 @@ export async function resumenCifras(rubroId: string, areas: string[], ahora = ne
     cuenta(s.from("opportunities").select("id", { count: "exact", head: true }).eq("rubro_id", rubroId).eq("capture_state", "captado").gte("captured_at", desde)),
     cuenta(s.from("appointments").select("id", { count: "exact", head: true }).in("area", areas).gte("created_at", desde).neq("status", "cancelada")),
     cuenta(s.from("opportunities").select("id", { count: "exact", head: true }).eq("rubro_id", rubroId).eq("derivation_state", "derivado").gte("derived_at", desde)),
+    // Campaña enviando (o la última campaña, si es más nueva que la última base).
+    s.from("campaigns").select("id, name, status, started_at, created_at").in("area", areas).is("archived_at", null).not("started_at", "is", null).order("started_at", { ascending: false }).limit(10),
   ]);
   let ultimaBase: ResumenCifras["ultimaBase"] = null;
-  // Campaña enviando (o la última campaña, si es más nueva que la última base).
-  const { data: camps } = await s
-    .from("campaigns")
-    .select("id, name, status, started_at, created_at")
-    .in("area", areas)
-    .is("archived_at", null)
-    .not("started_at", "is", null)
-    .order("started_at", { ascending: false })
-    .limit(10);
   const lista = (camps ?? []) as { id: string; name: string; status: string; started_at: string; created_at: string }[];
   const camp = lista.find((c) => c.status === "en_curso") ?? lista[0] ?? null;
   const usarCampana = !!camp && (camp.status === "en_curso" || !base || new Date(camp.started_at) >= new Date((base as any).created_at));

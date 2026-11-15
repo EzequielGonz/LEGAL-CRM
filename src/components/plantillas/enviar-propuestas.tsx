@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { pedirConfirmacion } from "@/components/ui/dialogo-confirmar";
 
 interface LineaView {
   id: string;
@@ -48,9 +49,11 @@ export function EnviarPropuestas({ lines }: { lines: LineaView[] }) {
         setMsg({ ok: true, text: `No hay plantillas nuevas para enviar (${existentes} ya existen en Meta).` });
         return;
       }
-      const ok = window.confirm(
-        `Se enviarán ${nuevas.length} plantilla(s) a Meta para su revisión (${existentes} ya existen y se omiten).\n\nNo se envía ningún mensaje a personas. ¿Confirmás?`
-      );
+      const ok = await pedirConfirmacion({
+        titulo: "¿Enviar las plantillas a Meta?",
+        texto: `Se enviarán ${nuevas.length} plantilla(s) a Meta para su revisión (${existentes} ya existen y se omiten).\n\nNo se envía ningún mensaje a personas.`,
+        confirmar: "Enviar a revisión",
+      });
       if (!ok) {
         setMsg({ ok: true, text: "Envío cancelado. No se envió nada a Meta." });
         return;

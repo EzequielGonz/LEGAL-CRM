@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { pedirConfirmacion } from "@/components/ui/dialogo-confirmar";
 
 export interface CampoAccion {
   nombre: string;
@@ -54,7 +55,7 @@ export function AccionConPin({
       className="space-y-2 text-sm"
       onSubmit={async (e) => {
         e.preventDefault();
-        if (confirmacion && !window.confirm(confirmacion)) return;
+        if (confirmacion && !(await pedirConfirmacion({ titulo: confirmacion, confirmar: "Confirmar", peligro: variante === "peligro" }))) return;
         setBusy(true);
         setMsg(null);
         try {

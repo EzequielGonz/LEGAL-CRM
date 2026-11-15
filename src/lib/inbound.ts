@@ -1,4 +1,6 @@
 import { reclamoEnMensaje } from "@/lib/atencion/reclamos";
+import { atenderCrisis } from "@/lib/atencion/crisis";
+import { esCrisis, esEnojoConNosotros, TEXTO_DISCULPA_AMENAZA, TEXTO_DISCULPA_ENOJO } from "@/lib/agentes/crisis-y-enojo";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { findOrCreateContact, findOrCreateConversation } from "@/lib/contacts";
 import { runAgentTurn } from "@/lib/ai-agent/agent";
@@ -309,6 +311,21 @@ async function afterInboundSaved({
     console.error("[oportunidad] No se pudo leer la oportunidad:", err);
   }
 
+  // 15/11 (decisión de la responsable): crisis. Si la persona habla de quitarse
+  // la vida o de hacerse daño, recibe las líneas de ayuda aunque esté detenida o
+  // ya captada, el bot deja de venderle y aparece el cartel de urgencia del panel.
+  if (aiReadable && esCrisis(body)) {
+    await atenderCrisis({
+      contact,
+      conversationId: conversation.id,
+      opportunityId,
+      rubroId: (contact as any).rubro_id ?? AREA_TO_RUBRO_ID[area] ?? null,
+      messageId: insertedId ?? null,
+    });
+    result.respuesta = { responder: false, motivo: "crisis" } as any;
+    return result;
+  }
+
   // 24/10 (decisión de la responsable): un contacto detenido que vuelve a
   // escribir SÍ recibe respuesta del agente (por si dice algo relevante); la
   // detención sigue frenando campañas, seguimientos y recontactos. Solo con
@@ -366,6 +383,10 @@ async function afterInboundSaved({
   //    persona y el bot no contesta. El enojo y el «no me escriban» no entran acá.
   const reclamo = reclamoEnMensaje(body, { captado });
   if (reclamo && opportunityId) {
+    // 15/11 (decisión de la responsable): ante una amenaza o denuncia, disculpa
+    // breve, se corta y se avisa (la incidencia ya avisa a los dispositivos).
+    // La queja de un cliente captado no se corta: la atiende una persona.
+    if (reclamo.tipo === "amenaza_legal" && !block) await disculpaYCorte({ contact, conversation, texto: TEXTO_DISCULPA_AMENAZA, nota: `Amenaza o denuncia: ${reclamo.senal.que}. Disculpa breve y corte (regla 15/11).` });
     try {
       await solicitarAtencion({ opportunityId, conversationId: conversation.id, motivo: reclamo.tipo, actor: "sistema", nota: reclamo.senal.que });
     } catch (err) {
@@ -389,6 +410,14 @@ async function afterInboundSaved({
       console.error("[oportunidad] No se pudo pedir atención humana para el captado:", err);
     }
     result.respuesta = { responder: false, motivo: "captado_mensaje_posterior" };
+    return result;
+  }
+
+  // 3 bis) Enojo con nosotros (15/11, decisión de la responsable): disculpa breve
+  //    y se corta. Si ya estaba detenido, no se repite la disculpa: silencio.
+  if (aiReadable && esEnojoConNosotros(body)) {
+    if (!block) await disculpaYCorte({ contact, conversation, texto: TEXTO_DISCULPA_ENOJO, nota: "Enojo con el contacto: disculpa breve y corte (regla 15/11)." });
+    result.respuesta = { responder: false, motivo: "detenido" };
     return result;
   }
 
@@ -483,6 +512,26 @@ async function atenderPedidoDeDatos({
     console.error("[datos] No se pudo registrar la detención:", err);
   }
   // Con la detención vigente no se le envían campañas, seguimientos ni recontactos; si vuelve a escribir, el agente lo atiende.
+}
+
+/**
+ * Disculpa breve y corte (15/11): la disculpa sale antes de detener (con la
+ * detención vigente ya no podría salir) y solo si la IA puede responder en ese chat.
+ */
+async function disculpaYCorte({ contact, conversation, texto, nota }: { contact: any; conversation: any; texto: string; nota: string }) {
+  const pause = await getAutomationPause();
+  if (conversation.ai_enabled && !pause.aiRepliesPaused) {
+    try {
+      await sendOutboundMessage({ conversationId: conversation.id, senderType: "agente_ia", body: texto, origin: "respuesta_entrante" });
+    } catch (err) {
+      if (!(err instanceof AutomaticSendBlockedError)) console.error("[enojo] No se pudo enviar la disculpa:", err);
+    }
+  }
+  try {
+    await registrarDetencion({ contactId: contact.id, motivo: "enojo", actor: "ia", nota, motivoAtencion: "enojo" });
+  } catch (err) {
+    console.error("[enojo] No se pudo registrar la detención:", err);
+  }
 }
 
 /**

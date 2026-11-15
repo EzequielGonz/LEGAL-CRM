@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
 /**
@@ -24,6 +24,21 @@ export function ArchiveButton({
   const [confirming, setConfirming] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // 15/11: al pedir confirmación el foco pasa a «Sí, archivar»; al cancelar vuelve a «Archivar».
+  const confirmarRef = useRef<HTMLButtonElement | null>(null);
+  const archivarRef = useRef<HTMLButtonElement | null>(null);
+  const devolverFoco = useRef(false);
+  useEffect(() => {
+    if (confirming) confirmarRef.current?.focus();
+    else if (devolverFoco.current) {
+      devolverFoco.current = false;
+      archivarRef.current?.focus();
+    }
+  }, [confirming]);
+  const cancelarConfirmacion = () => {
+    devolverFoco.current = true;
+    setConfirming(false);
+  };
 
   async function run(e: React.MouseEvent) {
     e.preventDefault();
@@ -55,10 +70,14 @@ export function ArchiveButton({
   if (archived) {
     return (
       <span className="flex flex-col items-end gap-1">
-        <button onClick={run} disabled={busy} className={base} title={`Recuperar ${kind}`}>
+        <button type="button" onClick={run} disabled={busy} className={base} title={`Recuperar ${kind}`}>
           {busy ? "Recuperando..." : "Recuperar"}
         </button>
-        {error && <span className="text-xs text-red-600">{error}</span>}
+        {error && (
+          <span role="alert" className="text-xs text-red-700">
+            {error}
+          </span>
+        )}
       </span>
     );
   }
@@ -66,6 +85,8 @@ export function ArchiveButton({
   if (!confirming) {
     return (
       <button
+        ref={archivarRef}
+        type="button"
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -81,10 +102,18 @@ export function ArchiveButton({
 
   return (
     <span
+      role="group"
+      aria-label={`Confirmar archivo de «${name}»`}
       className="flex max-w-xs flex-col items-end gap-1 rounded-lg border border-slate-200 bg-slate-50 p-2 text-right"
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();
+      }}
+      onKeyDown={(e) => {
+        if (e.key === "Escape") {
+          e.stopPropagation();
+          cancelarConfirmacion();
+        }
       }}
     >
       <span className="text-xs leading-snug text-slate-600">
@@ -92,21 +121,26 @@ export function ArchiveButton({
         {kind === "campaña" ? "; si está en curso queda pausada y al recuperarla sigue pausada." : "; se puede recuperar cuando quieras."}
       </span>
       <span className="flex gap-2">
-        <button onClick={run} disabled={busy} className="btn-gold px-3 py-1 text-xs">
+        <button ref={confirmarRef} type="button" onClick={run} disabled={busy} className="btn-gold px-3 py-1 text-xs">
           {busy ? "Archivando..." : "Sí, archivar"}
         </button>
         <button
+          type="button"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            setConfirming(false);
+            cancelarConfirmacion();
           }}
-          className="text-xs text-slate-500 hover:underline"
+          className="px-2 py-1 text-xs text-slate-600 hover:underline"
         >
           Cancelar
         </button>
       </span>
-      {error && <span className="text-xs text-red-600">{error}</span>}
+      {error && (
+        <span role="alert" className="text-xs text-red-700">
+          {error}
+        </span>
+      )}
     </span>
   );
 }

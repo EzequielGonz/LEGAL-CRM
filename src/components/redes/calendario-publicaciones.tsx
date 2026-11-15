@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { pedirConfirmacion } from "@/components/ui/dialogo-confirmar";
 
 export interface PiezaCalendario {
   id: string;
@@ -52,7 +53,7 @@ export function CalendarioPublicaciones({ piezas: inicial }: { piezas: PiezaCale
   }, [piezas]);
 
   async function cancelar(id: string) {
-    if (!window.confirm("¿Cancelar esta publicación? No se publica y queda en el historial.")) return;
+    if (!(await pedirConfirmacion({ titulo: "¿Cancelar esta publicación?", texto: "No se publica y queda en el historial.", confirmar: "Cancelar la publicación", cancelar: "Volver", peligro: true }))) return;
     setOcupada(id);
     const res = await fetch(`/api/redes/piezas/${id}`, { method: "DELETE" });
     setOcupada(null);

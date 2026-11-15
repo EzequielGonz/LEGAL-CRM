@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { createRoot } from "react-dom/client";
 import clsx from "clsx";
 import { useDialogo } from "@/components/ui/use-dialogo";
 
@@ -177,4 +178,27 @@ export function useConfirmacion() {
 
   const dialogo = pendiente ? <DialogoConfirmar opciones={pendiente} alResolver={resolver} /> : null;
   return { pedir, dialogo };
+}
+
+/**
+ * Reemplazo directo de `window.confirm` (15/11) para los lugares que no
+ * pueden montar `{dialogo}`: abre `DialogoConfirmar` en un contenedor propio
+ * y devuelve `true` si la persona confirma. El foco vuelve solo al control
+ * que lo abrió.
+ */
+export function pedirConfirmacion(opciones: OpcionesConfirmacion): Promise<boolean> {
+  return new Promise((resolver) => {
+    const host = document.createElement("div");
+    document.body.appendChild(host);
+    const raiz = createRoot(host);
+    const terminar = (r: ResultadoConfirmacion) => {
+      resolver(r !== null);
+      // Se desmonta fuera del evento que lo cerró.
+      window.setTimeout(() => {
+        raiz.unmount();
+        host.remove();
+      }, 0);
+    };
+    raiz.render(<DialogoConfirmar opciones={opciones} alResolver={terminar} />);
+  });
 }

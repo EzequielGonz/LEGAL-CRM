@@ -47,7 +47,14 @@ export const MAX_TEXTO = 900;
 const DETECTORES: { motivo: MotivoRetencion; re: RegExp[] }[] = [
   {
     motivo: "precio_o_importe",
-    re: [/\$\s?\d/, /\b(?:ars|usd|u\$s|pesos|dólares|dolares)\b\s*\d/i, /\d[\d.,]*\s?(?:pesos|dólares|dolares|usd|ars)\b/i, /\b\d{1,3}\s?%/, /\b(?:precio|cuesta|sale|vale|cobramos|honorarios?)\s+(?:es|son|de|desde|unos?|aprox\w*)?\s*\$?\s?\d/i],
+    re: [
+      /\$\s?\d/, /\b(?:ars|usd|u\$s|pesos|dólares|dolares)\b\s*\d/i, /\d[\d.,]*\s?(?:pesos|dólares|dolares|usd|ars)\b/i, /\b\d{1,3}\s?%/, /\b(?:precio|cuesta|sale|vale|cobramos|honorarios?)\s+(?:es|son|de|desde|unos?|aprox\w*)?\s*\$?\s?\d/i,
+      // 15/11: formas que se escapaban («40 lucas», «40k», «cuarenta mil», «rondan los 30»).
+      /\b\d+[\d.,]*\s?(?:lucas|luquitas|palos|mangos|k)\b/i,
+      /\b(?:diez|veinte|treinta|cuarenta|cincuenta|sesenta|setenta|ochenta|noventa|cien|ciento|doscientos|trescientos|cuatrocientos|quinientos|seiscientos|setecientos|ochocientos|novecientos)\s+(?:\w+\s+)?mil\b/i,
+      /\b(?:un|dos|tres|cuatro|cinco|medio)\s+(?:mill[oó]n|millones|palo|palos)\b/i,
+      /\b(?:rondan?|ronda en|alrededor de|aproximadamente|aprox\.?|arranca(?:n)? en|arranca(?:n)? desde)\s+(?:los\s+|unos\s+)?\$?\s?\d[\d.,]*\s*(?:mil|lucas|k|pesos|usd|d[oó]lares)?\b(?!\s*(?:hs|horas|d[ií]as|semanas|meses|a[nñ]os|minutos))/i,
+    ],
   },
   {
     motivo: "cuotas_o_financiacion",
@@ -55,7 +62,7 @@ const DETECTORES: { motivo: MotivoRetencion; re: RegExp[] }[] = [
   },
   {
     motivo: "plazo_o_resultado_prometido",
-    re: [/\bte\s+(?:garantiz|asegur)\w*/i, /\bgarantizad[oa]s?\b/i, /\b(?:vas a|van a)\s+(?:cobrar|ganar|recibir)\b/i, /\ben\s+\d+\s+(?:d[ií]as|horas|semanas|meses)\s+(?:lo\s+)?(?:resolvemos|cobr[aá]s|ten[eé]s|est[aá]\s+listo)/i, /\bseguro\s+que\s+(?:gan|cobr)/i, /\bseguro\s+(?:gan[aá]s|cobr[aá]s|lo\s+gan)/i, /\bgan[aá]s\s+seguro\b/i, /\b(?:sin\s+)?riesgo\s+de\s+perder\b/i],
+    re: [/\bte\s+(?:garantiz|asegur)\w*/i, /\bgarantizad[oa]s?\b/i, /\b(?:vas a|van a)\s+(?:cobrar|ganar|recibir)\b/i, /\ben\s+\d+\s*(?:d[ií]as|horas|hs|semanas|meses)\s+(?:lo\s+)?(?:resolvemos|cobr[aá]s|ten[eé]s|est[aá]\s+listo)/i, /\b(?:muchas|altas|buenas|grandes)\s+(?:chances|posibilidades|probabilidades)\b/i, /\b(?:la\s+art|el\s+seguro|la\s+aseguradora|la\s+prepaga|la\s+obra\s+social)\s+te\s+(?:tiene|va)\s+(?:que|a)\s+(?:pagar|cubrir|indemnizar)\b/i, /\bseguro\s+que\s+(?:te\s+)?(?:pagan|cubren|cobr)/i,/\bseguro\s+que\s+(?:gan|cobr)/i, /\bseguro\s+(?:gan[aá]s|cobr[aá]s|lo\s+gan)/i, /\bgan[aá]s\s+seguro\b/i, /\b(?:sin\s+)?riesgo\s+de\s+perder\b/i],
   },
   {
     motivo: "urgencia_inventada",

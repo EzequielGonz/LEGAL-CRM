@@ -47,7 +47,12 @@ export async function leerSalud(ahora = new Date()): Promise<ItemSalud[]> {
     }
   };
 
-  const [latido, pausa, cuarentena, entrante, agentes, turnos, errores, avisos, presupuestos, ultimoError] = await Promise.all([
+  // 15/11: lo que no depende de nada (perfiles listos y calidad de las líneas) se pide a la vez
+  // que el resto, en lugar de esperar a que termine la primera tanda (eran tres esperas seguidas).
+  const listosP = Promise.all(PERFILES.map((p) => seguro(() => agentReadiness(p.area as any), { ready: false, missing: ["Perfil"] })));
+  const calidadP = seguro(() => leerEstadoCalidad(), { at: null, lineas: {} } as Awaited<ReturnType<typeof leerEstadoCalidad>>);
+
+  const [[latido, pausa, cuarentena, entrante, agentes, turnos, errores, avisos, presupuestos, ultimoError], listos, calidad] = await Promise.all([Promise.all([
     seguro(async () => ((await s.from("system_settings").select("value").eq("key", CLAVE_LATIDO).maybeSingle()).data as any)?.value ?? null, null),
     getAutomationPause(),
     seguro(async () => {
@@ -88,24 +93,21 @@ export async function leerSalud(ahora = new Date()): Promise<ItemSalud[]> {
         at: d.created_at,
       };
     }, null),
-  ]);
+  ]), listosP, calidadP]);
 
-  const perfiles = await Promise.all(
-    PERFILES.map(async (p) => {
-      const r = await seguro(() => agentReadiness(p.area as any), { ready: false, missing: ["Perfil"] });
-      return {
-        slug: p.slug,
-        nombre: p.nombre,
-        whatsapp: tieneWhatsapp(p.area),
-        agenteActivo: agentes.some((a) => (a.area === p.area || (p.slug === "juridico" && a.area === "penal")) && a.active),
-        agenteListo: r.ready,
-        faltante: r.missing,
-      };
-    })
-  );
+  const perfiles = PERFILES.map((p, i) => {
+    const r = listos[i];
+    return {
+      slug: p.slug,
+      nombre: p.nombre,
+      whatsapp: tieneWhatsapp(p.area),
+      agenteActivo: agentes.some((a) => (a.area === p.area || (p.slug === "juridico" && a.area === "penal")) && a.active),
+      agenteListo: r.ready,
+      faltante: r.missing,
+    };
+  });
 
-  // 24/10: calidad de las líneas (lo último que consultó el latido).
-  const calidad = await seguro(() => leerEstadoCalidad(), { at: null, lineas: {} } as Awaited<ReturnType<typeof leerEstadoCalidad>>);
+  // 24/10: calidad de las líneas (lo último que consultó el latido; se pidió arriba, en paralelo).
   const SLUG_POR_RUBRO: Record<string, string> = Object.fromEntries(Object.entries(RUBRO_IDS).map(([slug, id]) => [id, slug]));
   const calidadLineas = Object.values(calidad.lineas).map((l) => {
     const slug = SLUG_POR_RUBRO[l.rubroId] ?? l.rubroId;

@@ -41,6 +41,32 @@ async function cifras(rubroId: string, baseId: string | null): Promise<Cifras> {
   return { total, sinContactar, sinRespuesta, respondieron, captados };
 }
 
+/**
+ * 15/11: las cifras de todas las bases (y de «sin base») en una sola consulta
+ * (`cifras_prospectos_por_base`, migración 0619). Antes eran cinco conteos por
+ * base: con 12 bases, 65 consultas. Mismas condiciones que `cifras`. Si la
+ * función todavía no está aplicada, devuelve null y se usa `cifras` por base.
+ */
+async function cifrasDeTodas(rubroId: string, baseIds: string[]): Promise<{ porBase: Map<string, Cifras>; sinBase: Cifras } | null> {
+  try {
+    const { data, error } = await (createAdminClient().rpc as any)("cifras_prospectos_por_base", { p_rubro: rubroId, p_bases: baseIds });
+    if (error || !Array.isArray(data)) return null;
+    const cero: Cifras = { total: 0, sinContactar: 0, sinRespuesta: 0, respondieron: 0, captados: 0 };
+    const porBase = new Map<string, Cifras>();
+    let sinBase: Cifras = cero;
+    for (const f of data as any[]) {
+      const c: Cifras = { total: Number(f.total ?? 0), sinContactar: Number(f.sin_contactar ?? 0), sinRespuesta: Number(f.sin_respuesta ?? 0), respondieron: Number(f.respondieron ?? 0), captados: Number(f.captados ?? 0) };
+      if (f.base_id) porBase.set(f.base_id, c);
+      else sinBase = c;
+    }
+    // Una base sin oportunidades no viene en el resultado: sus cifras son cero, como al contarlas una por una.
+    for (const id of baseIds) if (!porBase.has(id)) porBase.set(id, cero);
+    return { porBase, sinBase };
+  } catch {
+    return null;
+  }
+}
+
 async function primeros(rubroId: string, baseId: string | null) {
   let q: any = createAdminClient()
     .from("opportunities")
@@ -76,14 +102,24 @@ export default async function ProspectosPorBasePage(props: { searchParams: Promi
   if (!rubroId || !esSlugPerfil(perfil)) notFound();
   const slug: SlugPerfil = perfil;
   const areas = AREAS_DE_PERFIL[slug];
-  const prefijo = slug === "juridico" ? "" : `/panel/${slug}`;
-  const aqui = `/prospectos-por-base?perfil=${slug}`;
-  const s = createAdminClient();
-
   const qSeguro = textoBusquedaSeguro(searchParams.q?.trim());
-  const [{ data: bases }, sinBase, encontrados] = await Promise.all([
+  // 15/11: los datos se empiezan a pedir acá y se esperan adentro del marco (la marca y el menú se
+  // leen a la vez que los prospectos; antes el marco esperaba a que terminara todo).
+  const datos = cargarProspectos(rubroId, areas, qSeguro);
+  datos.catch(() => {});
+  return (
+    <MarcoPerfil slug={slug}>
+      <ProspectosContenido slug={slug} q={searchParams.q} datos={datos} />
+    </MarcoPerfil>
+  );
+}
+
+type DatosProspectos = Awaited<ReturnType<typeof cargarProspectos>>;
+
+async function cargarProspectos(rubroId: string, areas: string[], qSeguro: string) {
+  const s = createAdminClient();
+  const [{ data: bases }, encontrados, filasSinBaseTodas] = await Promise.all([
     s.from("imported_bases").select("id, name, file_name, source_label, created_at, total_rows, created_rows").in("area", areas).is("archived_at", null).order("created_at", { ascending: false }).limit(MAX_BASES),
-    cifras(rubroId, null),
     qSeguro
       ? s
           .from("opportunities")
@@ -93,11 +129,25 @@ export default async function ProspectosPorBasePage(props: { searchParams: Promi
           .limit(30)
           .then((r: any) => (r.data ?? []) as any[])
       : Promise.resolve(null),
+    // Se pide a la vez que lo demás; solo se muestra si hay contactos sin base (como antes).
+    primeros(rubroId, null),
   ]);
-  const grupos = await Promise.all(
-    ((bases ?? []) as any[]).map(async (b) => ({ base: b, cifras: await cifras(rubroId, b.id), filas: await primeros(rubroId, b.id) }))
-  );
-  const filasSinBase = (sinBase.total ?? 0) > 0 ? await primeros(rubroId, null) : [];
+  const lista = (bases ?? []) as any[];
+  // Cifras (una consulta para todas) y primeros contactos de cada base, todo a la vez.
+  const [todas, filasPorBase] = await Promise.all([cifrasDeTodas(rubroId, lista.map((b) => b.id)), Promise.all(lista.map((b) => primeros(rubroId, b.id)))]);
+  const [cifrasPorBase, sinBase] = todas
+    ? [lista.map((b) => todas.porBase.get(b.id)!), todas.sinBase]
+    : await Promise.all([Promise.all(lista.map((b) => cifras(rubroId, b.id))), cifras(rubroId, null)]);
+  const grupos = lista.map((b, i) => ({ base: b, cifras: cifrasPorBase[i], filas: filasPorBase[i] }));
+  const filasSinBase = (sinBase.total ?? 0) > 0 ? filasSinBaseTodas : [];
+  return { grupos, sinBase, filasSinBase, encontrados };
+}
+
+async function ProspectosContenido({ slug, q, datos }: { slug: SlugPerfil; q: string | undefined; datos: Promise<DatosProspectos> }) {
+  const { grupos, sinBase, filasSinBase, encontrados } = await datos;
+  const prefijo = slug === "juridico" ? "" : `/panel/${slug}`;
+  const aqui = `/prospectos-por-base?perfil=${slug}`;
+  const searchParams = { q };
 
   const Lista = ({ filas }: { filas: any[] }) => (
     <ul className="divide-y divide-slate-100">
@@ -123,7 +173,6 @@ export default async function ProspectosPorBasePage(props: { searchParams: Promi
   );
 
   return (
-    <MarcoPerfil slug={slug}>
       <div className="mx-auto max-w-5xl space-y-6">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
@@ -231,6 +280,5 @@ export default async function ProspectosPorBasePage(props: { searchParams: Promi
           ) : null}
         </div>
       </div>
-    </MarcoPerfil>
   );
 }

@@ -5,6 +5,7 @@ import Link from "next/link";
 import type { SlugPerfil } from "@/lib/marca";
 import { Icono } from "@/components/ui/icono-seccion";
 import { nivelDeAccion } from "@/lib/asistente/permisos";
+import { useDialogo } from "@/components/ui/use-dialogo";
 
 /**
  * Asistente del panel (18/10): un panel lateral donde se pide algo con
@@ -42,7 +43,7 @@ function VistaPiezas({ piezas }: { piezas: any[] }) {
       <ul className="mt-2 max-h-64 space-y-2 overflow-y-auto pr-1">
         {unicas.map((x, i) => (
           <li key={i} className="rounded-md border border-slate-200 bg-white p-2">
-            <p className="text-[11px] font-semibold text-slate-500">
+            <p className="text-xs font-semibold text-slate-500">
               {FORMATO[x.formato] ?? x.formato} · {fechaCorta(x.fecha)}
             </p>
             <p className="mt-0.5 font-semibold text-slate-900">{x.titular}</p>
@@ -181,14 +182,18 @@ export function TarjetaPropuesta({ p, alCambiar }: { p: Propuesta; alCambiar: (p
           Seguir
         </button>
       )}
-      {p.estado === "descartada" && <p className="mt-2 text-xs text-slate-500">Descartada: no se hizo nada.</p>}
-      {(p.estado === "ejecutada" || p.estado === "error") && hecho && <p className={`mt-2 text-xs font-medium ${p.estado === "error" ? "text-red-700" : "text-emerald-700"}`}>{hecho}</p>}
+      {p.estado === "descartada" && <p role="status" className="mt-2 text-xs text-slate-500">Descartada: no se hizo nada.</p>}
+      {(p.estado === "ejecutada" || p.estado === "error") && hecho && <p role={p.estado === "error" ? "alert" : "status"} className={`mt-2 text-xs font-medium ${p.estado === "error" ? "text-red-700" : "text-emerald-700"}`}>{hecho}</p>}
       {p.estado === "ejecutada" && (p.tipo === "cambio_agente" || p.tipo === "personalizar_menu") && !p.resultado?.deshecho && (
         <button type="button" disabled={ocupado} onClick={deshacer} className="mt-2 text-xs font-medium text-slate-700 underline">
           Deshacer el cambio
         </button>
       )}
-      {error && <p className="mt-2 text-xs text-red-700">{error}</p>}
+      {error && (
+        <p role="alert" className="mt-2 text-xs text-red-700">
+          {error}
+        </p>
+      )}
     </div>
   );
 }
@@ -202,6 +207,8 @@ export function AsistentePanel({ slug }: { slug: SlugPerfil }) {
   const archivo = useRef<HTMLInputElement>(null);
   const lista = useRef<HTMLDivElement>(null);
   const entrada = useRef<HTMLTextAreaElement>(null);
+  // 15/11: diálogo modal (trampa de foco, fondo inerte, Escape y foco de vuelta al botón que lo abrió).
+  const dialogoRef = useDialogo<HTMLElement>(abierto, () => setAbierto(false));
 
   useEffect(() => {
     const abrir = (e: Event) => {
@@ -210,14 +217,10 @@ export function AsistentePanel({ slug }: { slug: SlugPerfil }) {
       if (t) setTexto(t);
       window.setTimeout(() => entrada.current?.focus(), 50);
     };
-    const tecla = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setAbierto(false);
-    };
+    // Escape lo maneja useDialogo: si hay una confirmación abierta encima, cierra solo esa.
     window.addEventListener(EVENTO, abrir);
-    window.addEventListener("keydown", tecla);
     return () => {
       window.removeEventListener(EVENTO, abrir);
-      window.removeEventListener("keydown", tecla);
     };
   }, []);
 
@@ -281,10 +284,14 @@ export function AsistentePanel({ slug }: { slug: SlugPerfil }) {
   if (!abierto) return null;
   return (
     <>
-      <div className="fixed inset-0 z-40 bg-slate-950/20 lg:hidden" aria-hidden="true" onClick={() => setAbierto(false)} />
+      <div data-no-inerte="" className="fixed inset-0 z-40 bg-slate-950/20 lg:hidden" aria-hidden="true" onClick={() => setAbierto(false)} />
       <aside
+        ref={dialogoRef}
         role="dialog"
+        aria-modal="true"
         aria-label="Asistente del panel"
+        tabIndex={-1}
+        data-asistente=""
         className="fixed inset-y-0 right-0 z-50 flex w-full max-w-md flex-col border-l border-slate-200 bg-white shadow-2xl animate-fade-in"
       >
         <header className="flex items-center justify-between gap-3 border-b border-slate-100 px-4 py-3">
@@ -299,7 +306,7 @@ export function AsistentePanel({ slug }: { slug: SlugPerfil }) {
           </div>
           <div className="flex items-center gap-1">
             {mensajes.length > 0 && (
-              <button type="button" onClick={() => setMensajes([])} className="rounded-lg px-2.5 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-100">
+              <button type="button" onClick={() => setMensajes([])} className="tactil rounded-lg px-2.5 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-100">
                 Nueva charla
               </button>
             )}
@@ -309,7 +316,7 @@ export function AsistentePanel({ slug }: { slug: SlugPerfil }) {
           </div>
         </header>
 
-        <div ref={lista} className="flex-1 space-y-4 overflow-y-auto bg-slate-50 px-4 py-4">
+        <div ref={lista} role="log" aria-live="polite" aria-label="Conversación con el asistente" tabIndex={0} className="flex-1 space-y-4 overflow-y-auto bg-slate-50 px-4 py-4">
           {mensajes.length === 0 && (
             <div>
               <p className="text-sm text-slate-700">Preguntame lo que quieras, como a cualquier IA, y también puedo operar el panel: armar campañas con bases, líneas y plantillas, programar publicaciones, ajustar bots y agentes, buscar captados o mirar una imagen que me adjuntes. Antes de cambiar algo, siempre te pido que confirmes; lo que puede enviar mensajes pide una confirmación reforzada.</p>
@@ -341,7 +348,11 @@ export function AsistentePanel({ slug }: { slug: SlugPerfil }) {
               </div>
             </div>
           ))}
-          {pensando && <p className="text-sm text-slate-500">Pensando…</p>}
+          {pensando && (
+            <p role="status" className="text-sm text-slate-500">
+              Pensando…
+            </p>
+          )}
         </div>
 
         <form
@@ -357,8 +368,11 @@ export function AsistentePanel({ slug }: { slug: SlugPerfil }) {
                 <div key={k} className="relative">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={im.vista} alt="Imagen adjunta" className="h-14 w-14 rounded-lg object-cover" />
-                  <button type="button" onClick={() => setImagenes((x) => x.filter((_, j) => j !== k))} className="absolute -right-1.5 -top-1.5 grid h-5 w-5 place-items-center rounded-full bg-slate-900 text-[11px] text-white" aria-label="Quitar imagen">
-                    ×
+                  {/* 15/11: el círculo se ve igual, pero el área para tocar es de 44 px. */}
+                  <button type="button" onClick={() => setImagenes((x) => x.filter((_, j) => j !== k))} className="tactil absolute -right-[1.0625rem] -top-[1.0625rem] grid place-items-center rounded-full" aria-label="Quitar imagen">
+                    <span aria-hidden="true" className="grid h-5 w-5 place-items-center rounded-full bg-slate-900 text-xs text-white">
+                      ×
+                    </span>
                   </button>
                 </div>
               ))}

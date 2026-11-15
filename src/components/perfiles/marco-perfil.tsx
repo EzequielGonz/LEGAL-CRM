@@ -36,6 +36,10 @@ export async function MarcoPerfil({ slug, children, sinSalud = false }: { slug: 
   return (
     <NivelProvider>
       <div data-tema={slug} style={estilo} className="marco-panel min-h-screen lg:flex">
+        {/* 15/11: primero de todo, antes de la barra del celular, para que funcione también ahí. */}
+        <a href="#contenido" className="skip-link">
+          Saltar al contenido
+        </a>
         <Suspense fallback={<div className="hidden w-[16rem] shrink-0 border-r border-slate-200 bg-white lg:block" aria-hidden="true" />}>
           <MenuPerfil slug={slug} nombre={marca.nombre} logo={marca.logo} menu={menu} />
         </Suspense>

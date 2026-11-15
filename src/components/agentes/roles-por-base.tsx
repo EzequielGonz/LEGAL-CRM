@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { abrirAsistente } from "@/components/asistente/asistente-panel";
+import { pedirConfirmacion } from "@/components/ui/dialogo-confirmar";
 
 interface Rol {
   id: string;
@@ -162,8 +163,8 @@ export function RolesPorBase({ perfil }: { perfil: string }) {
                         type="button"
                         className="btn-suave text-xs"
                         disabled={busy}
-                        onClick={() => {
-                          if (confirm(`¿Archivar el rol «${r.nombre}»? Las bases que lo usan quedan solo con la base general.`)) enviar({ accion: "archivar", id: r.id }, "Rol archivado.");
+                        onClick={async () => {
+                          if (await pedirConfirmacion({ titulo: `¿Archivar el rol «${r.nombre}»?`, texto: "Las bases que lo usan quedan solo con la base general.", confirmar: "Archivar", peligro: true })) enviar({ accion: "archivar", id: r.id }, "Rol archivado.");
                         }}
                       >
                         Archivar

@@ -12,6 +12,7 @@ import { Icono } from "@/components/ui/icono-seccion";
 import { LogoPerfil } from "@/components/ui/logo-perfil";
 import { abrirAsistente } from "@/components/asistente/asistente-panel";
 import { SelectorModo } from "@/components/ui/selector-modo";
+import { useDialogo } from "@/components/ui/use-dialogo";
 
 /**
  * Menú de los cuatro perfiles (renovado 18/10; 24/10: grupos «Trabajo» y
@@ -52,6 +53,19 @@ export function MenuPerfil({ slug, nombre, logo, menu = null }: { slug: SlugPerf
   const logoUrl = logo?.trim() || marca.logo;
 
   useEffect(() => setAbierto(false), [pathname]);
+
+  // 15/11: debajo de lg el menú abierto es un diálogo (foco al primer enlace, Escape
+  // cierra, el resto queda inerte y el foco vuelve al botón «Menú»). Si la pantalla
+  // pasa a lg con el menú abierto, se cierra: ahí el menú es la barra lateral fija.
+  const menuRef = useDialogo<HTMLElement>(abierto, () => setAbierto(false), { enfocarPrimero: true });
+  useEffect(() => {
+    if (!abierto) return;
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const alCambiar = () => mq.matches && setAbierto(false);
+    alCambiar();
+    mq.addEventListener("change", alCambiar);
+    return () => mq.removeEventListener("change", alCambiar);
+  }, [abierto]);
 
   // 13/11: la opción activa es una píldora que se desliza. El menú se vuelve a montar al
   // cambiar de sección, así que la posición anterior se recuerda en la pestaña y la píldora
@@ -116,7 +130,7 @@ export function MenuPerfil({ slug, nombre, logo, menu = null }: { slug: SlugPerf
   return (
     <>
       {/* Barra superior en teléfono y tablet */}
-      <div className="barra-movil sticky top-0 z-30 flex items-center justify-between gap-2 px-3 py-2.5 sm:px-4 lg:hidden">
+      <div data-no-inerte="" className="barra-movil sticky top-0 z-30 flex items-center justify-between gap-2 px-3 py-2.5 sm:px-4 lg:hidden">
         <div className="flex min-w-0 items-center gap-2.5">
           <LogoPerfil slug={slug} src={logoUrl} tamano="sm" />
           <p className="truncate text-sm font-semibold text-slate-950">{titulo}</p>
@@ -137,7 +151,7 @@ export function MenuPerfil({ slug, nombre, logo, menu = null }: { slug: SlugPerf
         </div>
       </div>
 
-      {abierto && <div className="menu-velo lg:hidden" aria-hidden="true" onClick={() => setAbierto(false)} />}
+      {abierto && <div data-no-inerte="" className="menu-velo lg:hidden" aria-hidden="true" onClick={() => setAbierto(false)} />}
 
       {/* 13/11: barra inferior en el celular con las secciones de trabajo; la activa muestra su nombre. */}
       <nav aria-label="Secciones principales" className="barra-inferior lg:hidden">
@@ -172,7 +186,12 @@ export function MenuPerfil({ slug, nombre, logo, menu = null }: { slug: SlugPerf
       </nav>
 
       <aside
+        ref={menuRef}
         id="menu-perfil"
+        role={abierto ? "dialog" : undefined}
+        aria-modal={abierto ? true : undefined}
+        aria-label={abierto ? "Menú" : undefined}
+        tabIndex={abierto ? -1 : undefined}
         data-plegado={plegado ? "1" : "0"}
         className={clsx(
           "menu-estudio z-20 flex h-screen w-[16rem] shrink-0 flex-col",
@@ -181,9 +200,6 @@ export function MenuPerfil({ slug, nombre, logo, menu = null }: { slug: SlugPerf
           abierto ? "visible translate-x-0" : "invisible -translate-x-full"
         )}
       >
-        <a href="#contenido" className="skip-link">
-          Saltar al contenido
-        </a>
         <Link href="/perfiles" className="menu-marca mx-3 mt-4 flex items-center gap-3 rounded-xl px-2 py-2 hover:bg-slate-50" title="Cambiar de perfil">
           <LogoPerfil slug={slug} src={logoUrl} tamano="sm" />
           <span className="menu-texto min-w-0">
@@ -209,7 +225,7 @@ export function MenuPerfil({ slug, nombre, logo, menu = null }: { slug: SlugPerf
           <span ref={pildoraRef} aria-hidden="true" className="menu-pildora" />
           {(["trabajo", "configurar"] as const).map((g) => (
             <div key={g} className={g === "configurar" ? "mt-5" : undefined}>
-              <p className="menu-grupo px-3 pb-1.5 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-slate-500">{g === "trabajo" ? "Trabajo" : "Configurar"}</p>
+              <p className="menu-grupo px-3 pb-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">{g === "trabajo" ? "Trabajo" : "Configurar"}</p>
               <ul className="space-y-0.5">
                 {secciones
                   .filter((s) => s.grupo === g && (!s.oculta || activa?.seccion.clave === s.clave))
@@ -255,10 +271,10 @@ export function MenuPerfil({ slug, nombre, logo, menu = null }: { slug: SlugPerf
 
         <div className="menu-pie menu-texto border-t border-slate-100 px-3 py-2">
           <SelectorModo />
-          <Link href="/perfiles" className="block rounded-lg px-3 py-1.5 text-xs font-medium">
+          <Link href="/perfiles" className="block min-h-[2.75rem] content-center rounded-lg px-3 py-1.5 text-xs font-medium lg:min-h-0">
             Cambiar de perfil
           </Link>
-          <LogoutButton className="block w-full rounded-lg px-3 py-1.5 text-left text-xs font-medium" />
+          <LogoutButton className="block min-h-[2.75rem] w-full rounded-lg px-3 py-1.5 text-left text-xs font-medium lg:min-h-0" />
         </div>
       </aside>
     </>

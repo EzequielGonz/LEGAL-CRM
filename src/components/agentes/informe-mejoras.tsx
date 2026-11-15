@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { abrirAsistente } from "@/components/asistente/asistente-panel";
 import { pedidoParaAsistente } from "@/lib/agentes/informe-mejoras-texto";
+import { pedirConfirmacion } from "@/components/ui/dialogo-confirmar";
 
 type Destino = "conocimiento" | "rol";
 
@@ -254,9 +255,9 @@ function TarjetaPropuesta({
   async function aplicar(destino: Destino) {
     const confirmar =
       destino === "conocimiento"
-        ? "Se suma como ficha nueva al bot de este perfil y empieza a usarse en las próximas respuestas. No cambia nada de lo que ya tiene. ¿Seguimos?"
-        : "Se crea un rol nuevo, sin asignar a ninguna base ni campaña. ¿Seguimos?";
-    if (!window.confirm(confirmar)) return;
+        ? "Se suma como ficha nueva al bot de este perfil y empieza a usarse en las próximas respuestas. No cambia nada de lo que ya tiene."
+        : "Se crea un rol nuevo, sin asignar a ninguna base ni campaña.";
+    if (!(await pedirConfirmacion({ titulo: "¿Seguimos?", texto: confirmar, confirmar: destino === "conocimiento" ? "Sumar al bot" : "Crear el rol" }))) return;
     setBusy(destino);
     setMsg(null);
     try {

@@ -25,7 +25,7 @@ const n = (v: number | null) => (v === null ? "—" : v.toLocaleString("es-AR"))
 /**
  * Seguimiento en vivo de los cuatro rubros (24/10), en la esquina de la
  * pantalla de perfiles: uno abajo del otro, con «Hoy» o «Base completa».
- * Se actualiza solo cada 30 segundos. Solo lectura.
+ * Se actualiza solo cada 30 segundos con la pestaña visible. Solo lectura.
  */
 export function EnVivoRubros({ nombres }: { nombres: Record<string, string> }) {
   const [rango, setRango] = useState<Rango>("hoy");
@@ -57,9 +57,24 @@ export function EnVivoRubros({ nombres }: { nombres: Record<string, string> }) {
   }, []);
 
   useEffect(() => {
+    // 15/11: con la pestaña oculta no consulta; al volver, actualiza enseguida
+    // si pasó el intervalo (así las cifras no quedan viejas).
+    let ultimo = Date.now();
     leer(rango);
-    const t = setInterval(() => leer(rango), CADA_MS);
-    return () => clearInterval(t);
+    const tick = () => {
+      if (document.visibilityState !== "visible") return;
+      ultimo = Date.now();
+      leer(rango);
+    };
+    const alVolver = () => {
+      if (document.visibilityState === "visible" && Date.now() - ultimo >= CADA_MS) tick();
+    };
+    const t = setInterval(tick, CADA_MS);
+    document.addEventListener("visibilitychange", alVolver);
+    return () => {
+      clearInterval(t);
+      document.removeEventListener("visibilitychange", alVolver);
+    };
   }, [rango, leer]);
 
   function elegir(r: Rango) {

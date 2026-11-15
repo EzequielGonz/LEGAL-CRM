@@ -131,10 +131,28 @@ export async function resumenPersonas(rubroId: string, areas: string[], ahora = 
 
 /**
  * Personas distintas que escribieron desde una fecha (en lugar de contar
- * mensajes). Cuenta contactos, no conversaciones, y lee de a 1000 filas
- * (el tope de Supabase) para no quedarse corta cuando hay muchos mensajes.
+ * mensajes). Cuenta contactos, no conversaciones.
+ *
+ * 15/11: cuenta en la base con `personas_que_escribieron` (migración 0619),
+ * una sola consulta en lugar de traer los mensajes de a 1000 en serie. Si la
+ * función todavía no está aplicada (o falla), usa la lectura anterior.
  */
 export async function personasQueEscribieron(areas: string[], desde: string): Promise<number | null> {
+  try {
+    const s = createAdminClient();
+    const { data, error } = await (s.rpc as any)("personas_que_escribieron", { p_areas: areas, p_desde: desde });
+    if (!error && data !== null && data !== undefined && Number.isFinite(Number(data))) return Number(data);
+  } catch {
+    /* sin la función: sigue con la lectura anterior */
+  }
+  return personasQueEscribieronPorLotes(areas, desde);
+}
+
+/**
+ * Lectura anterior (respaldo hasta aplicar la 0619): lee de a 1000 filas
+ * (el tope de Supabase) para no quedarse corta cuando hay muchos mensajes.
+ */
+async function personasQueEscribieronPorLotes(areas: string[], desde: string): Promise<number | null> {
   try {
     const s = createAdminClient();
     const personas = new Set<string>();

@@ -40,7 +40,7 @@ import { asignacionActiva } from "@/lib/agentes/servicio";
 import { identificadorModelo } from "@/lib/agentes/modelo";
 import { registrarTurno } from "@/lib/experimento/servicio";
 import { instruccionesDeRol } from "@/lib/agentes/roles";
-import { buildSystemPrompt, criterioDelRubro } from "./prompt";
+import { buildSystemPrompt, criterioDelRubro, REGLAS_ESTRICTAS } from "./prompt";
 import { GUIA_CAPTACION_Y_CIERRE } from "@/lib/agentes/guia-cierre";
 import { modoDelContacto } from "@/lib/agentes/entrante";
 import { historialConPlantillas } from "@/lib/agentes/historial-servidor";
@@ -312,7 +312,10 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
         ultimoMensaje: ultimo,
         primerTurno: isFirstReplyToCampaign,
       });
-      systemWithBrief = marketingBrief ? `${ctx.systemInstruction}\n\n${marketingBrief}` : ctx.systemInstruction;
+      // 15/11: la biblioteca reemplaza el armado del prompt, pero las reglas estrictas
+      // y las de rechazos y origen del contacto (criterio del rubro) siguen valiendo.
+      const conReglas = [ctx.systemInstruction, REGLAS_ESTRICTAS, criterio].filter(Boolean).join("\n\n");
+      systemWithBrief = marketingBrief ? `${conReglas}\n\n${marketingBrief}` : conReglas;
     }
   } catch (err) {
     console.error("[agente] No se pudo leer la asignación de la biblioteca; se usa la configuración actual:", err);

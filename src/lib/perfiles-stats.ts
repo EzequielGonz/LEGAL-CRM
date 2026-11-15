@@ -41,20 +41,27 @@ const AREAS: Record<string, string[]> = {
   marketing: ["marketing"],
 };
 
-export async function loadPerfiles(): Promise<PerfilStats[]> {
-  const supabase = createAdminClient();
-  const { data: rubros } = await supabase
+/** Rubros activos en el orden de la pantalla (15/11: aparte, para empezar otras lecturas sin esperar las cifras). */
+export async function leerRubrosActivos(): Promise<RubroRow[]> {
+  const { data } = await createAdminClient()
     .from("rubros")
     .select("id, slug, name, emoji, description")
     .eq("active", true)
     .order("sort_order", { ascending: true });
+  return (data ?? []) as RubroRow[];
+}
+
+/** Con `rubrosLeidos` no vuelve a leer los rubros (la pantalla de perfiles ya los tiene). */
+export async function loadPerfiles(rubrosLeidos?: RubroRow[]): Promise<PerfilStats[]> {
+  const supabase = createAdminClient();
+  const rubros = rubrosLeidos ?? (await leerRubrosActivos());
   const desde = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
   // 20/10: «piden una persona» cuenta solo pedidos de la última semana, sin
   // perdidos ni detenidos: si pasó una semana sin responder, ya no es pendiente.
   const semana = new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString();
 
   return Promise.all(
-    ((rubros ?? []) as RubroRow[]).map(async (r) => {
+    rubros.map(async (r) => {
       const areas = AREAS[r.slug] ?? [r.slug];
       const [metrics, { data: ultimos }, recibidos, { data: camp }, programadas, piden] = await Promise.all([
         getProfileMetrics(r.id),
