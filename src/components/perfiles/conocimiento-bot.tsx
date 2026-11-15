@@ -287,7 +287,7 @@ function TarjetaRubro({
         className="mt-3 flex w-full items-center justify-between rounded-lg border border-slate-300 bg-white px-3 py-2 text-left text-sm font-medium text-slate-800 hover:bg-slate-100"
       >
         <span>{abierto ? "Ocultar comparativa" : "Ver comparativa"}</span>
-        <span aria-hidden="true" className={`transition-transform ${abierto ? "rotate-180" : ""}`}>▾</span>
+        <span aria-hidden="true" className={`transition-transform motion-reduce:transition-none ${abierto ? "rotate-180" : ""}`}>▾</span>
       </button>
 
       {abierto && (

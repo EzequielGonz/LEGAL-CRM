@@ -6,6 +6,7 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { RUBRO_IDS } from "@/lib/rubros";
 import { limpiarCacheConocimiento } from "./servicio";
+import { limpiarCacheLaboratorio } from "@/lib/laboratorio/en-vivo";
 import { sumar, tasas, veredicto, type FilaEstadistica } from "./estadisticas";
 import type { RubroConocimiento } from "./seleccion";
 
@@ -61,6 +62,8 @@ export async function cambiarAsignacion(rubro: RubroConocimiento, input: { versi
   if (error) throw error;
   await s.from("ops_change_log" as any).insert({ actor, action: "conocimiento_version", target: rubro, before: antes ?? null, after: despues, note: "Cambio de versión del conocimiento del bot desde Perfiles." });
   limpiarCacheConocimiento();
+  // 15/11: el laboratorio también lee la versión que rige (ajustes de las versiones v3+).
+  limpiarCacheLaboratorio();
   return despues;
 }
 

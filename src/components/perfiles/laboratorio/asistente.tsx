@@ -62,7 +62,7 @@ export function PestanaAsistente({ sel, nombres, resumen }: PropsPestana) {
         </p>
         <div className="mt-3 flex flex-wrap gap-2">
           <button type="button" className={BTN_PRINCIPAL} onClick={() => abrir()}>
-            Abrir el asistente con contexto de bots
+            Abrir el asistente con el estado de los bots
           </button>
         </div>
         <p className={`${AYUDA} mt-3`}>Pedidos rápidos:</p>

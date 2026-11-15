@@ -61,6 +61,8 @@ export async function probarBotReal(input: { area: Area; rubroId: string | null;
   extras?: string | null;
   /** 15/11 (laboratorio): rol aplicado por tipo de consulta o perfil; en vivo entra solo si no hay rol de campaña ni de base. */
   rolLaboratorio?: string | null;
+  /** 15/11 (laboratorio): tiempo máximo por llamada a Gemini en milisegundos (las simulaciones tienen un presupuesto total). */
+  timeoutMs?: number | null;
 }): Promise<{
   turnos: TurnoPrueba[];
   version: number;
@@ -112,7 +114,11 @@ export async function probarBotReal(input: { area: Area; rubroId: string | null;
 
   let systemActual = "";
   const pedir = async (cs: Content[]) => {
-    const r = await gemini().models.generateContent({ model: modelo, contents: cs, config: { systemInstruction: systemActual, tools: [{ functionDeclarations: tools as any }] } });
+    const r = await gemini().models.generateContent({
+      model: modelo,
+      contents: cs,
+      config: { systemInstruction: systemActual, tools: [{ functionDeclarations: tools as any }], ...(input.timeoutMs ? { abortSignal: AbortSignal.timeout(input.timeoutMs) } : {}) },
+    });
     const u: any = (r as any).usageMetadata ?? {};
     tokens.entrada += u.promptTokenCount ?? 0;
     tokens.salida += u.candidatesTokenCount ?? 0;

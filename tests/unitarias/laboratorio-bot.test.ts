@@ -10,6 +10,11 @@ import {
   bloqueDeVersion,
   componerInstrucciones,
   datosSuficientes,
+  esModeloNoEncontrado,
+  estadoTrasError,
+  modeloPermitido,
+  referenciaComun,
+  varianteRegistrable,
   diferencias,
   estadoDesdeFilas,
   estadoVersion,
@@ -64,7 +69,7 @@ function version3(extra: Partial<ConfigVersion> = {}): ConfigVersion {
   return { version: 3, nombre: "v3 · Más breve", base_version: 2, rubros: ["juridico"], modelo: null, tono: "Más breve y cálido.", reglas: "", roles: [], archived_at: null, ...extra };
 }
 
-const ctxBase = { rubro: "juridico" as const, area: "civil", modo: "campana" as const, campaignId: CAMP, conversationId: CONV, conversacionCreadaAt: "2026-11-15T10:00:00Z", ahora: AHORA };
+const ctxBase = { rubro: "juridico" as const, area: "civil", modo: "campana" as const, campaignId: CAMP, conversationId: CONV, envioCampanaAt: "2026-11-15T10:00:00Z", ahora: AHORA };
 
 // ---------------------------------------------------------------------------
 // Sin nada del laboratorio, el pedido al modelo es idéntico al de hoy
@@ -90,9 +95,12 @@ test("la versión elegida sin A/B es la misma de hoy (asignación del perfil, re
   const plan = planDelTurno(ESTADO_VACIO, ctxBase);
   const argumentos = { conversationId: CONV, ...(plan.forzarVersion != null ? { forzarVersion: plan.forzarVersion } : {}) };
   assert.deepEqual(argumentos, { conversationId: CONV });
-  for (const asig of [null, { version: 2, comparar_con: null, porcentaje: 100 }, { version: 2, comparar_con: 1, porcentaje: 50 }]) {
-    assert.equal(versionParaConversacion(asig, CONV), versionParaConversacion(asig, CONV));
-  }
+  // Valores de hoy: sin fila rige v2; con v2 sola, v2; con v1 sola, v1; con reparto 50/50, depende solo del id (estable).
+  assert.equal(versionParaConversacion(null, CONV), 2);
+  assert.equal(versionParaConversacion({ version: 2, comparar_con: null, porcentaje: 100 }, CONV), 2);
+  assert.equal(versionParaConversacion({ version: 1, comparar_con: null, porcentaje: 100 }, CONV), 1);
+  const repartida = new Set(Array.from({ length: 50 }, (_, i) => versionParaConversacion({ version: 2, comparar_con: 1, porcentaje: 50 }, `c-${i}`)));
+  assert.deepEqual([...repartida].sort(), [1, 2]);
 });
 
 test("el modelo sin A/B es el de siempre (GEMINI_MODEL o el valor por defecto) y el pedido no gana claves", () => {
@@ -185,7 +193,7 @@ test("A/B: solo charlas nuevas de ESA campaña y mientras está vigente; al venc
   const p = prueba();
   assert.equal(varianteAB(p, { ...ctxBase, campaignId: "otra" }), null);
   assert.equal(varianteAB(p, { ...ctxBase, campaignId: null }), null);
-  assert.equal(varianteAB(p, { ...ctxBase, conversacionCreadaAt: "2026-11-13T23:59:59Z" }), null, "charla anterior al inicio");
+  assert.equal(varianteAB(p, { ...ctxBase, envioCampanaAt: "2026-11-13T23:59:59Z" }), null, "envío de la campaña anterior al inicio");
   assert.equal(varianteAB(p, { ...ctxBase, ahora: new Date("2026-11-21T00:00:00Z") }), null, "vencida");
   assert.equal(varianteAB(prueba({ cortada_at: "2026-11-15T12:00:00Z" }), ctxBase), null, "cortada a mano");
   assert.equal(pruebaVigente(p, AHORA), true);
@@ -333,12 +341,12 @@ test("modelos: solo identificadores de Gemini; el del servidor siempre primero",
 });
 
 test("proveedor externo: solo el nombre de la variable, nunca la clave", () => {
-  const ok = validarProveedor({ nombre: "Otro", endpoint: "https://api.ejemplo.test/v1", variable_clave: "OTRO_API_KEY" });
+  const ok = validarProveedor({ nombre: "Otro", endpoint: "https://api.ejemplo.test/v1", variable_clave: "LAB_PROVEEDOR_OTRO_API_KEY" });
   assert.ok(ok.ok);
-  assert.equal(validarProveedor({ nombre: "Otro", endpoint: "http://api.ejemplo.test", variable_clave: "OTRO_API_KEY" }).ok, false);
-  assert.equal(validarProveedor({ nombre: "Otro", endpoint: "https://api.ejemplo.test/?key=abc", variable_clave: "OTRO_API_KEY" }).ok, false);
+  assert.equal(validarProveedor({ nombre: "Otro", endpoint: "http://api.ejemplo.test", variable_clave: "LAB_PROVEEDOR_OTRO_API_KEY" }).ok, false);
+  assert.equal(validarProveedor({ nombre: "Otro", endpoint: "https://api.ejemplo.test/?key=abc", variable_clave: "LAB_PROVEEDOR_OTRO_API_KEY" }).ok, false);
   assert.equal(validarProveedor({ nombre: "Otro", endpoint: "https://api.ejemplo.test", variable_clave: "sk-abcdef1234567890abcdef1234567890" }).ok, false);
-  assert.equal(validarProveedor({ nombre: "Otro", endpoint: "https://api.ejemplo.test", variable_clave: "OTRO_API_KEY", notas: "clave abcd1234efgh5678ijkl9012mnop3456" }).ok, false);
+  assert.equal(validarProveedor({ nombre: "Otro", endpoint: "https://api.ejemplo.test", variable_clave: "LAB_PROVEEDOR_OTRO_API_KEY", notas: "clave abcd1234efgh5678ijkl9012mnop3456" }).ok, false);
   assert.equal(pareceSecreto("una nota normal"), false);
 });
 
@@ -401,4 +409,64 @@ test("migraciones 0630 y 0631: repetibles, RLS, sin anon/authenticated, sin borr
   assert.match(t0631, /create or replace function public\.laboratorio_crear_version/);
   assert.match(t0631, /revoke all on function public\.laboratorio_estadisticas_ab\(uuid\) from public, anon, authenticated/);
   assert.ok(RUBRO_IDS.juridico);
+});
+
+// ---------------------------------------------------------------------------
+// Revisión cruzada (15/11)
+// ---------------------------------------------------------------------------
+
+test("modelo: solo uno de la lista disponible; «no encontrado» se reconoce para volver al de siempre", () => {
+  assert.equal(modeloPermitido(null, []), true);
+  assert.equal(modeloPermitido("gemini-a", ["gemini-a"]), true);
+  assert.equal(modeloPermitido("gemini-inventado", ["gemini-a"]), false);
+  assert.equal(esModeloNoEncontrado({ status: 404, message: "x" }), true);
+  assert.equal(esModeloNoEncontrado(new Error("models/gemini-x is not found for API version v1beta")), true);
+  assert.equal(esModeloNoEncontrado(new Error('{"error":{"code":404,"status":"NOT_FOUND"}}')), true);
+  assert.equal(esModeloNoEncontrado(new Error("deadline exceeded")), false);
+  assert.equal(esModeloNoEncontrado(null), false);
+});
+
+test("proveedor: la variable tiene que empezar con LAB_PROVEEDOR_", () => {
+  assert.equal(validarProveedor({ nombre: "Otro", endpoint: "https://api.ejemplo.test", variable_clave: "GEMINI_API_KEY" }).ok, false);
+  assert.equal(validarProveedor({ nombre: "Otro", endpoint: "https://api.ejemplo.test", variable_clave: "LAB_PROVEEDOR_OTRO_KEY" }).ok, true);
+});
+
+test("tipo de consulta: el área (civil/penal) gana sobre el modo, sin importar el orden de la lista", () => {
+  for (const lista of [[rolEntrante, rolPenal, rolPerfil], [rolPerfil, rolPenal, rolEntrante]]) {
+    assert.equal(rolDeLaboratorio(lista, { rubro: "juridico", area: "penal", modo: "entrante" })?.rol.nombre, "Penal");
+    assert.equal(rolDeLaboratorio(lista, { rubro: "juridico", area: "civil", modo: "entrante" })?.rol.nombre, "Entrante");
+  }
+});
+
+test("error al leer el laboratorio: se mantiene el último estado bueno; sin estado previo, el vacío", () => {
+  const bueno: EstadoLaboratorio = { ...ESTADO_VACIO, pruebas: [prueba()] };
+  assert.equal(estadoTrasError(bueno), bueno);
+  assert.equal(estadoTrasError(null), ESTADO_VACIO);
+});
+
+test("sin perfil reconocido no se aplica nada; si la versión efectiva no es la de la prueba, no se registra ni se ajusta", () => {
+  const estado: EstadoLaboratorio = { ...ESTADO_VACIO, pruebas: [prueba({ porcentaje: 90, modelo: "gemini-z" })], aplicaciones: [rolPerfil] };
+  assert.equal(planDelTurno(estado, { ...ctxBase, rubro: null }), PLAN_VACIO);
+  let conv = "";
+  for (let i = 0; i < 100 && !conv; i++) if (varianteAB(estado.pruebas[0], { ...ctxBase, conversationId: `y-${i}` }) === "prueba") conv = `y-${i}`;
+  const plan = planDelTurno(estado, { ...ctxBase, conversationId: conv });
+  assert.equal(varianteRegistrable(plan, 3), true);
+  assert.equal(varianteRegistrable(plan, 1), false, "el conocimiento falló y respondió v1");
+  assert.deepEqual(ajustesDeVersion(estado, plan, 1), AJUSTES_VACIOS);
+});
+
+test("comparativa de varios perfiles: referencia común solo si rige la misma versión", () => {
+  assert.equal(referenciaComun(["juridico", "marketing"], [{ rubro: "juridico", version: 2 }]), 2);
+  assert.equal(referenciaComun(["juridico", "marketing"], [{ rubro: "juridico", version: 3 }, { rubro: "marketing", version: 2 }]), null);
+});
+
+test("migración 0632: funciones atómicas con ops_change_log, sin permisos públicos ni borrados", () => {
+  const sql = readFileSync(join(__dirname, "../../supabase/migrations/0632_laboratorio_bot_aplicaciones_atomicas.sql"), "utf8").replace(/--.*$/gm, "");
+  for (const f of ["laboratorio_aplicar_version", "laboratorio_aplicar_rol", "laboratorio_revertir", "laboratorio_crear_ab", "laboratorio_cortar_ab"]) {
+    assert.match(sql, new RegExp(`create or replace function public\\.${f}`));
+    assert.match(sql, new RegExp(`revoke all on function public\\.${f}\\([^)]*\\) from public, anon, authenticated`));
+  }
+  assert.doesNotMatch(sql, /\bdelete\s+from\b|\bdrop\s+|\btruncate\b/i);
+  assert.ok((sql.match(/insert into ops_change_log/g) ?? []).length >= 5);
+  assert.match(sql, /pg_advisory_xact_lock\(hashtext\('bot_lab_ab:'/);
 });

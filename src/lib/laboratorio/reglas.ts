@@ -8,15 +8,19 @@
  * si alguien la aplica a mano (todo el perfil, un rol puntual o una prueba
  * A/B en una campaña), y cada aplicación se puede deshacer.
  *
- * Precedencia (de mayor a menor) dentro de una charla real:
- *   1. Prueba A/B de la campaña (solo charlas nuevas de esa campaña; decide
- *      versión y modelo de la variante «prueba»).
- *   2. Rol de la campaña.
- *   3. Rol de la base.
- *   4. Rol aplicado a un tipo de consulta (laboratorio).
- *   5. Rol aplicado a todo el perfil (laboratorio).
- * Los roles 2 y 3 los resuelve el bot como siempre (src/lib/agentes/roles.ts);
- * los 4 y 5 solo entran si la charla no tiene rol de campaña ni de base.
+ * Precedencia dentro de una charla real:
+ *   - La prueba A/B de la campaña decide VERSIÓN y MODELO (solo para charlas
+ *     de esa campaña cuyo envío es posterior al inicio de la prueba).
+ *   - Los roles no dependen del A/B: rol de la campaña > rol de la base >
+ *     rol por tipo de consulta del laboratorio > rol de todo el perfil del
+ *     laboratorio. Los dos primeros los resuelve el bot como siempre
+ *     (src/lib/agentes/roles.ts); los del laboratorio entran solo si la charla
+ *     no tiene rol de campaña ni de base.
+ *   - Dentro del tipo de consulta, el área (civil, penal) gana sobre el modo
+ *     (viene de campaña / escribió por su cuenta); a igual tipo, el más viejo.
+ *   - Si la versión en prueba trae roles copiados y la campaña tiene su rol,
+ *     los dos se suman y el rol de la campaña va último (como hoy), así que
+ *     ante un choque manda el de la campaña.
  *
  * Sin nada del laboratorio aplicado, el pedido al modelo es idéntico al de
  * hoy (mismo texto de instrucciones, misma versión de conocimiento, mismo
@@ -78,6 +82,26 @@ export function listaDeModelos(input: { deLaApi: string[] | null; configurables:
   return { modelos, origen };
 }
 
+/**
+ * Las variables de los proveedores preparados empiezan con este prefijo: así
+ * el panel solo puede preguntar por variables propias del laboratorio y no
+ * sirve para averiguar qué otras variables existen en el servidor.
+ */
+export const PREFIJO_VARIABLE_PROVEEDOR = "LAB_PROVEEDOR_";
+
+/** ¿El modelo está entre los disponibles para la clave del servidor? (un nombre inexistente dejaría sin respuesta al perfil). Pura. */
+export function modeloPermitido(modelo: string | null, disponibles: string[]): boolean {
+  return !modelo || (modeloValido(modelo) && disponibles.includes(modelo));
+}
+
+/** ¿El error de Gemini es «ese modelo no existe»? (404 / NOT_FOUND). Pura. */
+export function esModeloNoEncontrado(err: unknown): boolean {
+  const e = err as { status?: unknown; code?: unknown; message?: unknown } | null;
+  if (!e) return false;
+  if (e.status === 404 || e.code === 404) return true;
+  return /\bNOT_FOUND\b|\b404\b|model[^.]{0,80}not found|is not found for api version/i.test(String(e.message ?? ""));
+}
+
 export interface PedidoProveedor {
   nombre: unknown;
   endpoint: unknown;
@@ -103,7 +127,9 @@ export function validarProveedor(p: PedidoProveedor): { ok: true; proveedor: { n
   }
   if (!url || url.protocol !== "https:" || endpoint.length > 300) return { ok: false, error: "La dirección tiene que empezar con https:// (máximo 300 caracteres)." };
   if (url.username || url.password || url.search) return { ok: false, error: "La dirección no puede llevar usuario, contraseña ni parámetros: la clave va en una variable de entorno." };
-  if (!/^[A-Z][A-Z0-9_]{2,63}$/.test(variable)) return { ok: false, error: "Escribí solo el NOMBRE de la variable de entorno (mayúsculas, números y guion bajo, por ejemplo OTRO_PROVEEDOR_API_KEY). Nunca la clave." };
+  if (!new RegExp(`^${PREFIJO_VARIABLE_PROVEEDOR}[A-Z0-9_]{2,50}$`).test(variable)) {
+    return { ok: false, error: `Escribí solo el nombre de la variable de entorno: tiene que empezar con ${PREFIJO_VARIABLE_PROVEEDOR} (por ejemplo ${PREFIJO_VARIABLE_PROVEEDOR}OTRO_API_KEY), con mayúsculas, números y guion bajo. Nunca la clave.` };
+  }
   if (pareceSecreto(notas)) return { ok: false, error: "Las notas parecen tener una clave. No la pegues acá: va en la variable de entorno del servidor." };
   return { ok: true, proveedor: { nombre, endpoint, variable_clave: variable, notas } };
 }
@@ -335,16 +361,18 @@ export function hashEstable(s: string): number {
 
 /**
  * Variante de una charla dentro de una prueba A/B. Determinística: la misma
- * charla cae siempre en la misma variante. Solo entran charlas NUEVAS (creadas
- * desde el inicio de la prueba) de la campaña de la prueba. Pura.
+ * charla cae siempre en la misma variante. Solo entran charlas de la campaña
+ * de la prueba cuyo envío fue desde el inicio de la prueba. Al vencer o
+ * cortarse, desde la respuesta siguiente atiende la versión activa. Pura.
  */
 export function varianteAB(
   p: PruebaAB,
-  ctx: { campaignId: string | null; conversationId: string; conversacionCreadaAt: string | null; ahora: Date }
+  ctx: { campaignId: string | null; conversationId: string; envioCampanaAt: string | null; ahora: Date }
 ): "prueba" | "control" | null {
   if (!ctx.campaignId || ctx.campaignId !== p.campaign_id) return null;
   if (!pruebaVigente(p, ctx.ahora)) return null;
-  if (!ctx.conversacionCreadaAt || Date.parse(ctx.conversacionCreadaAt) < Date.parse(p.inicio)) return null;
+  // Solo cuenta si el envío de ESA campaña a esta persona es posterior al inicio de la prueba.
+  if (!ctx.envioCampanaAt || Date.parse(ctx.envioCampanaAt) < Date.parse(p.inicio)) return null;
   return hashEstable(`${p.id}:${ctx.conversationId}`) % 100 < p.porcentaje ? "prueba" : "control";
 }
 
@@ -367,9 +395,15 @@ export interface AplicacionRol {
 /** Rol del laboratorio para una charla: tipo de consulta antes que perfil. Pura. */
 export function rolDeLaboratorio(aplicaciones: AplicacionRol[], ctx: { rubro: Rubro | null; area: string; modo: "campana" | "entrante" }): AplicacionRol | null {
   if (!ctx.rubro) return null;
+  // Orden explícito: área (civil, penal) → modo (campaña, entrante) → todo el perfil.
+  // A igual tipo, la primera de la lista (en-vivo.ts las lee ordenadas por aplicada_at).
   const del = aplicaciones.filter((a) => a.rubro === ctx.rubro);
-  const porTipo = del.find((a) => a.tipo === "rol_tipo_consulta" && (a.tipo_consulta === ctx.modo || a.tipo_consulta === ctx.area));
-  return porTipo ?? del.find((a) => a.tipo === "rol_perfil") ?? null;
+  return (
+    del.find((a) => a.tipo === "rol_tipo_consulta" && a.tipo_consulta === ctx.area) ??
+    del.find((a) => a.tipo === "rol_tipo_consulta" && a.tipo_consulta === ctx.modo) ??
+    del.find((a) => a.tipo === "rol_perfil") ??
+    null
+  );
 }
 
 /** Bloque del rol aplicado desde el laboratorio. Pura. */
@@ -434,11 +468,13 @@ export const PLAN_VACIO: PlanTurno = { forzarVersion: null, prueba: null, rol: n
 /** Qué cambia el laboratorio para esta respuesta (antes de elegir el conocimiento). Pura. */
 export function planDelTurno(
   estado: EstadoLaboratorio,
-  ctx: { rubro: Rubro | null; area: string; modo: "campana" | "entrante"; campaignId: string | null; conversationId: string; conversacionCreadaAt: string | null; ahora: Date }
+  ctx: { rubro: Rubro | null; area: string; modo: "campana" | "entrante"; campaignId: string | null; conversationId: string; envioCampanaAt: string | null; ahora: Date }
 ): PlanTurno {
+  // Sin perfil reconocido, el laboratorio no aplica nada.
+  if (!ctx.rubro) return PLAN_VACIO;
   let prueba: PlanTurno["prueba"] = null;
   for (const p of estado.pruebas) {
-    if (ctx.rubro && p.rubro !== ctx.rubro) continue;
+    if (p.rubro !== ctx.rubro) continue;
     const v = varianteAB(p, ctx);
     if (v) {
       prueba = { id: p.id, variante: v, version: p.version, modelo: p.modelo };
@@ -464,12 +500,25 @@ export const AJUSTES_VACIOS: AjustesTurno = { modelo: null, extras: "" };
  * nunca suman nada. Pura.
  */
 export function ajustesDeVersion(estado: EstadoLaboratorio, plan: PlanTurno, versionEfectiva: number): AjustesTurno {
+  // Si la variante «prueba» no pudo usar su versión (falló la lectura del conocimiento), no se aplica nada de la prueba.
+  if (plan.prueba?.variante === "prueba" && versionEfectiva !== plan.prueba.version) return AJUSTES_VACIOS;
   const cfg = versionEfectiva >= 3 ? estado.versiones.find((v) => v.version === versionEfectiva && !v.archived_at) ?? null : null;
   const modeloPrueba = plan.prueba?.variante === "prueba" ? plan.prueba.modelo : null;
   const modelo = modeloPrueba ?? cfg?.modelo ?? null;
   const extras = cfg ? bloqueDeVersion(cfg) : "";
   if (!modelo && !extras) return AJUSTES_VACIOS;
   return { modelo, extras };
+}
+
+/** ¿Se registra la variante? Solo si la respuesta efectivamente usó lo que pedía la prueba. Pura. */
+export function varianteRegistrable(plan: PlanTurno, versionEfectiva: number): boolean {
+  if (!plan.prueba) return false;
+  return plan.prueba.variante === "control" || versionEfectiva === plan.prueba.version;
+}
+
+/** Ante un error al leer el laboratorio: se mantiene el último estado bueno; solo sin estado previo, el vacío. Pura. */
+export function estadoTrasError(anterior: EstadoLaboratorio | null): EstadoLaboratorio {
+  return anterior ?? ESTADO_VACIO;
 }
 
 /**
@@ -498,6 +547,16 @@ export function pedidoConModelo<T extends object>(req: T, modelo: string | null)
 
 /** Mínimo de conversaciones por versión o variante para sacar conclusiones. */
 export const MINIMO_POR_VARIANTE = 30;
+
+/**
+ * Versión de referencia para comparar varios perfiles sumados: la que rige en
+ * todos (sin fila, rige v2). Si rigen versiones distintas, no hay referencia
+ * común (null) y no se dan veredictos. Pura.
+ */
+export function referenciaComun(rubros: Rubro[], asignaciones: { rubro: string; version: number }[]): number | null {
+  const vs = new Set(rubros.map((r) => Number(asignaciones.find((a) => a.rubro === r)?.version ?? 2)));
+  return vs.size === 1 ? Array.from(vs)[0] : null;
+}
 
 export function datosSuficientes(conversaciones: number[]): boolean {
   return conversaciones.length > 0 && conversaciones.every((n) => n >= MINIMO_POR_VARIANTE);

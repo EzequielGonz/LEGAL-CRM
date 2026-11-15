@@ -28,8 +28,8 @@ const FILAS: [string, (t: Cifras) => string][] = [
   ["Pasaron a una persona", (t) => `${t.tasa_escalado} %`],
   ["Bajas o detenciones", (t) => `${t.tasa_detencion} %`],
   ["Respuestas por conversación", (t) => String(t.turnos_por_conversacion)],
-  ["Respuestas retenidas por el control", (t) => String(t.retenidos)],
-  ["Tamaño del pedido al modelo (tokens)", (t) => (t.tokens_promedio == null ? "—" : Math.round(t.tokens_promedio).toLocaleString("es-AR"))],
+  ["Respuestas frenadas por el control de calidad", (t) => String(t.retenidos)],
+  ["Uso de IA por pedido (promedio)", (t) => (t.tokens_promedio == null ? "—" : Math.round(t.tokens_promedio).toLocaleString("es-AR"))],
 ];
 
 const TONO: Record<string, string> = {
@@ -120,6 +120,11 @@ export function PestanaComparativas({ sel, nombres }: PropsPestana) {
               <div className="mt-2">
                 <Tabla titulo="Comparación por versión" columnas={datos.versiones.map((v: any) => ({ clave: `v${v.version}`, nombre: `v${v.version}${v.version === datos.referencia ? " (rige)" : ""}`, cifras: v, suficiente: v.suficiente }))} />
               </div>
+              {datos.referencia == null && (
+                <p className="mt-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800">
+                  Sin referencia común: en estos perfiles rigen versiones distintas. Para ver qué versión anda mejor, elegí un perfil arriba.
+                </p>
+              )}
               <ul className="mt-2 space-y-2">
                 {datos.versiones
                   .filter((v: any) => v.veredicto)
@@ -136,7 +141,7 @@ export function PestanaComparativas({ sel, nombres }: PropsPestana) {
 
       {datos && (
         <section aria-labelledby="lab-cmp-ab">
-          <h4 id="lab-cmp-ab" className={SUBTITULO}>Pruebas A/B</h4>
+          <h4 id="lab-cmp-ab" className={SUBTITULO}>Pruebas con dos versiones (A/B)</h4>
           {datos.ab.length === 0 ? (
             <p className="mt-1 text-sm text-slate-700">No hubo pruebas A/B en el período.</p>
           ) : (
@@ -156,7 +161,7 @@ export function PestanaComparativas({ sel, nombres }: PropsPestana) {
                       columnas={["control", "prueba"]
                         .map((k) => p.variantes.find((x: any) => x.variante === k))
                         .filter(Boolean)
-                        .map((x: any) => ({ clave: x.variante, nombre: x.variante === "prueba" ? `En prueba (v${p.version})` : `Activa (v${p.control_version ?? "—"})`, cifras: x, suficiente: x.conversaciones >= 30 }))}
+                        .map((x: any) => ({ clave: x.variante, nombre: x.variante === "prueba" ? `En prueba (v${p.version}${p.modelo ? ` · ${p.modelo}` : ""})` : `Activa (v${p.control_version ?? "—"})`, cifras: x, suficiente: !!x.suficiente }))}
                     />
                   )}
                   <p className={`rounded-lg border px-3 py-2 text-sm ${p.suficientes && p.veredicto ? TONO[p.veredicto.tono] : TONO.datos}`}>

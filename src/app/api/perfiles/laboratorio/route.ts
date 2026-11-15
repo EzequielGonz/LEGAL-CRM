@@ -82,7 +82,7 @@ export async function GET(request: Request) {
     if (vista === "simulaciones") return NextResponse.json({ simulaciones: await listarSimulaciones() }, sinCache);
     if (vista === "simulacion") {
       const id = url.searchParams.get("id");
-      if (!id) return NextResponse.json({ error: "Falta la simulación." }, { status: 400 });
+      if (!id || !/^[0-9a-f-]{36}$/i.test(id)) return NextResponse.json({ error: "Falta la simulación o no es válida." }, { status: 400 });
       return NextResponse.json({ simulacion: await leerSimulacion(id) }, sinCache);
     }
     return NextResponse.json({ error: "Vista no válida." }, { status: 400 });
@@ -91,63 +91,78 @@ export async function GET(request: Request) {
   }
 }
 
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const esUuid = (v: unknown): v is string => typeof v === "string" && UUID.test(v);
+const uuidONulo = (v: unknown): string | null => (esUuid(v) ? v : null);
+
 export async function POST(request: Request) {
   const auth = await requireSession(request);
   if (!auth.ok) return auth.response;
   const body = await request.json().catch(() => null);
-  const accion = typeof body?.accion === "string" ? body.accion : "";
-  const actor = "panel";
+  if (!body || typeof body !== "object" || Array.isArray(body)) return NextResponse.json({ error: "Pedido no válido." }, { status: 400 });
+  const accion = typeof body.accion === "string" ? body.accion : "";
+  // Quién hizo el cambio: la sesión (id corto, no es un dato personal); si no hay, «panel».
+  const actor = auth.session?.sid ? `panel:${String(auth.session.sid).slice(0, 8)}` : "panel";
   const texto = (v: unknown) => (typeof v === "string" ? v : "");
+  const faltaId = (que: string) => NextResponse.json({ error: `Falta ${que} o no es válido.` }, { status: 400 });
   try {
     switch (accion) {
       case "crear_version":
         return NextResponse.json(await crearVersion(body, actor));
       case "modelo_version":
-        return NextResponse.json((await cambiarModeloVersion(Number(body?.version), texto(body?.modelo) || null, actor), { ok: true }));
+        await cambiarModeloVersion(Number(body.version), texto(body.modelo) || null, actor);
+        return NextResponse.json({ ok: true });
       case "archivar_version":
-        return NextResponse.json((await archivarVersion(Number(body?.version), texto(body?.nota), actor), { ok: true }));
+        await archivarVersion(Number(body.version), texto(body.nota), actor);
+        return NextResponse.json({ ok: true });
       case "aplicar_version": {
-        if (!esRubro(body?.perfil)) return NextResponse.json({ error: "Perfil no válido" }, { status: 400 });
-        if (body?.confirmado !== true) return NextResponse.json({ error: "Falta confirmar el cambio." }, { status: 400 });
-        return NextResponse.json(await aplicarVersionAPerfil(body.perfil, Number(body?.version), actor));
+        if (!esRubro(body.perfil)) return NextResponse.json({ error: "Perfil no válido" }, { status: 400 });
+        if (body.confirmado !== true) return NextResponse.json({ error: "Falta confirmar el cambio." }, { status: 400 });
+        return NextResponse.json(await aplicarVersionAPerfil(body.perfil, Number(body.version), actor));
       }
       case "aplicar_rol": {
-        if (!esRubro(body?.perfil)) return NextResponse.json({ error: "Perfil no válido" }, { status: 400 });
-        if (body?.confirmado !== true) return NextResponse.json({ error: "Falta confirmar el cambio." }, { status: 400 });
-        const tipo = body?.tipo;
+        if (!esRubro(body.perfil)) return NextResponse.json({ error: "Perfil no válido" }, { status: 400 });
+        if (body.confirmado !== true) return NextResponse.json({ error: "Falta confirmar el cambio." }, { status: 400 });
+        const tipo = body.tipo;
         if (!["rol_perfil", "rol_tipo_consulta", "rol_base", "rol_campana"].includes(tipo)) return NextResponse.json({ error: "Destino no válido." }, { status: 400 });
+        if (body.rol_id && !esUuid(body.rol_id)) return faltaId("el rol");
         return NextResponse.json(
-          await aplicarRol({ tipo, rubro: body.perfil, rolId: texto(body?.rol_id) || null, tipoConsulta: body?.tipo_consulta, baseId: texto(body?.base_id) || null, campaignId: texto(body?.campaign_id) || null }, actor)
+          await aplicarRol({ tipo, rubro: body.perfil, rolId: uuidONulo(body.rol_id), tipoConsulta: body.tipo_consulta, baseId: uuidONulo(body.base_id), campaignId: uuidONulo(body.campaign_id) }, actor)
         );
       }
       case "volver_atras":
-        if (!texto(body?.id)) return NextResponse.json({ error: "Falta la aplicación." }, { status: 400 });
-        return NextResponse.json(await revertirAplicacion(body.id, texto(body?.nota), actor));
+        if (!esUuid(body.id)) return faltaId("la aplicación");
+        if (body.confirmado !== true) return NextResponse.json({ error: "Falta confirmar la vuelta atrás." }, { status: 400 });
+        return NextResponse.json(await revertirAplicacion(body.id, texto(body.nota), actor));
       case "rol_nuevo":
-        if (!esRubro(body?.perfil)) return NextResponse.json({ error: "Perfil no válido" }, { status: 400 });
+        if (!esRubro(body.perfil)) return NextResponse.json({ error: "Perfil no válido" }, { status: 400 });
         return NextResponse.json({ rol: await crearRol(body.perfil, body, actor) });
       case "rol_copia_editada":
-        if (!texto(body?.rol_id)) return NextResponse.json({ error: "Falta el rol." }, { status: 400 });
+        if (!esUuid(body.rol_id)) return faltaId("el rol");
         return NextResponse.json({ rol: await editarRolComoCopia(body.rol_id, body, actor) });
       case "copiar_rol":
-        if (!esRubro(body?.destino)) return NextResponse.json({ error: "Perfil de destino no válido" }, { status: 400 });
-        return NextResponse.json({ rol: await copiarRol({ rolId: texto(body?.rol_id) || null, generalId: texto(body?.general_id) || null }, body.destino, actor) });
+        if (!esRubro(body.destino)) return NextResponse.json({ error: "Perfil de destino no válido" }, { status: 400 });
+        if (!esUuid(body.rol_id) && !esUuid(body.general_id)) return faltaId("el rol");
+        return NextResponse.json({ rol: await copiarRol({ rolId: uuidONulo(body.rol_id), generalId: uuidONulo(body.general_id) }, body.destino, actor) });
       case "rol_general":
         return NextResponse.json({ rol: await crearRolGeneral(body, actor) });
       case "proveedor":
         return NextResponse.json(await crearProveedor(body, actor));
       case "archivar_proveedor":
-        return NextResponse.json((await archivarProveedor(texto(body?.id), actor), { ok: true }));
+        if (!esUuid(body.id)) return faltaId("el proveedor");
+        await archivarProveedor(body.id, actor);
+        return NextResponse.json({ ok: true });
       case "crear_ab": {
-        if (!esRubro(body?.perfil)) return NextResponse.json({ error: "Perfil no válido" }, { status: 400 });
-        if (body?.confirmado !== true) return NextResponse.json({ error: "Falta confirmar la prueba." }, { status: 400 });
-        return NextResponse.json(await crearPruebaAB({ rubro: body.perfil, campaignId: body?.campaign_id, version: body?.version, modelo: body?.modelo, porcentaje: body?.porcentaje, dias: body?.dias }, actor));
+        if (!esRubro(body.perfil)) return NextResponse.json({ error: "Perfil no válido" }, { status: 400 });
+        if (body.confirmado !== true) return NextResponse.json({ error: "Falta confirmar la prueba." }, { status: 400 });
+        if (!esUuid(body.campaign_id)) return faltaId("la campaña");
+        return NextResponse.json(await crearPruebaAB({ rubro: body.perfil, campaignId: body.campaign_id, version: body.version, modelo: body.modelo, porcentaje: body.porcentaje, dias: body.dias }, actor));
       }
       case "cortar_ab":
-        if (!texto(body?.id)) return NextResponse.json({ error: "Falta la prueba." }, { status: 400 });
-        return NextResponse.json(await cortarPruebaAB(body.id, texto(body?.nota), actor));
+        if (!esUuid(body.id)) return faltaId("la prueba");
+        return NextResponse.json(await cortarPruebaAB(body.id, texto(body.nota), actor));
       case "simular": {
-        const { id, completar } = await prepararSimulacion(body ?? {}, actor);
+        const { id, completar } = await prepararSimulacion(body, actor);
         after(completar);
         return NextResponse.json({ ok: true, id }, { status: 202 });
       }

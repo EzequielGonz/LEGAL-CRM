@@ -16,7 +16,7 @@ Decisión de la responsable (15/11, por el coordinador): se autoriza crear versi
 
 ## Precedencia en una charla real
 
-Prueba A/B de la campaña (versión y modelo) > rol de la campaña > rol de la base > rol por tipo de consulta (laboratorio) > rol de todo el perfil (laboratorio). Sin nada del laboratorio aplicado, el pedido al modelo es idéntico al de hoy (prueba unitaria). La capa fija (crisis, enojo, amenaza, precios, contestadores, tope por persona, validador y cierre) rige igual en las versiones de prueba: actúa antes y después del modelo y no depende de la versión.
+La prueba A/B de la campaña decide versión y modelo (solo charlas de esa campaña cuyo envío es posterior al inicio de la prueba). Los roles no dependen del A/B: rol de la campaña > rol de la base > rol por tipo de consulta (área civil/penal antes que modo) > rol de todo el perfil. Si la versión en prueba trae roles copiados y la campaña tiene su rol, se suman y el de la campaña va último: ante un choque, manda. Al vencer o cortar una prueba, desde la respuesta siguiente atiende la versión activa. Si el modelo elegido no existe para Gemini, esa respuesta sale con el modelo de siempre y queda registrado. Sin nada del laboratorio aplicado, el pedido al modelo es idéntico al de hoy (prueba unitaria). La capa fija (crisis, enojo, amenaza, precios, contestadores, tope por persona, validador y cierre) rige igual en las versiones de prueba: actúa antes y después del modelo y no depende de la versión.
 
 ## Archivos
 

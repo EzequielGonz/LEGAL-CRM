@@ -46,7 +46,8 @@ create table if not exists public.bot_lab_proveedores (
   id uuid primary key default gen_random_uuid(),
   nombre text not null check (char_length(nombre) between 2 and 60),
   endpoint text not null check (endpoint ~ '^https://' and char_length(endpoint) <= 300),
-  variable_clave text not null check (variable_clave ~ '^[A-Z][A-Z0-9_]{2,63}$'),
+  -- Solo el nombre, con el prefijo del laboratorio (así no sirve para averiguar otras variables del servidor).
+  variable_clave text not null check (variable_clave ~ '^LAB_PROVEEDOR_[A-Z0-9_]{2,50}$'),
   notas text not null default '' check (char_length(notas) <= 500),
   creado_at timestamptz not null default now(),
   creado_por text not null default 'panel',

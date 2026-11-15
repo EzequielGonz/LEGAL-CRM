@@ -36,6 +36,7 @@ export function LaboratorioBot({ nombres, id }: { nombres: Record<string, string
   const [biblioteca, setBiblioteca] = useState<Biblioteca | null>(null);
   const [modelos, setModelos] = useState<{ modelos: string[]; origen: "api" | "configuracion"; delServidor: string } | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [actualizado, setActualizado] = useState<string | null>(null);
   const base = useId();
   const refs = useRef<(HTMLButtonElement | null)[]>([]);
 
@@ -63,6 +64,7 @@ export function LaboratorioBot({ nombres, id }: { nombres: Record<string, string
       setResumen(r);
       setBiblioteca(b);
       setError(null);
+      setActualizado(new Date().toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" }));
     } catch (e) {
       setError((e as Error).message);
     }
@@ -111,19 +113,22 @@ export function LaboratorioBot({ nombres, id }: { nombres: Record<string, string
           <button type="button" className={BTN} onClick={recargar}>
             Actualizar
           </button>
+          <p role="status" className="min-h-11 py-3 text-xs text-slate-600">
+            {actualizado ? `Actualizado a las ${actualizado}` : ""}
+          </p>
         </div>
       </div>
 
       {resumen?.experimentoGlobal && (
         <p className="mt-3 rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900">
-          Hay una comparación A/B/C general en curso («{resumen.experimentoGlobal.nombre}»). Mientras dure, no se arman pruebas A/B por campaña desde acá para no mezclar resultados.
+          Hay una comparación A/B/C general en curso («{resumen.experimentoGlobal.nombre}»). Mientras dure, desde acá no se aplican versiones ni se arman pruebas con dos versiones (A/B), para no mezclar resultados.
         </p>
       )}
       <div className="mt-3">
         <Mensajes ok={null} error={error} />
       </div>
 
-      <div role="tablist" aria-label="Secciones del laboratorio" className="mt-4 flex gap-1 overflow-x-auto border-b border-slate-200 pb-px">
+      <div role="tablist" aria-label="Secciones del laboratorio" className="mt-4 flex flex-wrap gap-1 border-b border-slate-200 pb-px">
         {PESTANAS.map((p, i) => {
           const activa = pestana === p.id;
           return (
@@ -140,7 +145,7 @@ export function LaboratorioBot({ nombres, id }: { nombres: Record<string, string
               tabIndex={activa ? 0 : -1}
               onClick={() => setPestana(p.id)}
               onKeyDown={(e) => teclado(e, i)}
-              className={`min-h-11 shrink-0 whitespace-nowrap rounded-t-lg border-b-2 px-3 text-sm font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900 ${
+              className={`min-h-11 rounded-t-lg border-b-2 px-3 text-sm font-medium ${
                 activa ? "border-slate-900 text-slate-900" : "border-transparent text-slate-600 hover:text-slate-900"
               }`}
             >
@@ -151,7 +156,7 @@ export function LaboratorioBot({ nombres, id }: { nombres: Record<string, string
       </div>
 
       {PESTANAS.map((p) => (
-        <div key={p.id} role="tabpanel" id={`${base}-panel-${p.id}`} aria-labelledby={`${base}-tab-${p.id}`} hidden={pestana !== p.id} tabIndex={0} className="pt-4 focus-visible:outline-none">
+        <div key={p.id} role="tabpanel" id={`${base}-panel-${p.id}`} aria-labelledby={`${base}-tab-${p.id}`} hidden={pestana !== p.id} tabIndex={0} className="pt-4">
           {pestana === p.id && !resumen && !error && <p className="text-sm text-slate-600" role="status">Cargando el laboratorio…</p>}
           {pestana === p.id && resumen && (
             <>

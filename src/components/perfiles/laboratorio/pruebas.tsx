@@ -72,7 +72,7 @@ function Simuladas({ sel, nombres, resumen, modelos }: PropsPestana) {
     <section aria-labelledby="lab-simuladas">
       <h4 id="lab-simuladas" className={SUBTITULO}>Pruebas simuladas</h4>
       <p className="mt-1 text-sm text-slate-700">
-        Corre casos inventados con el mismo camino que «Probar el bot real»: mismas reglas, misma capa fija de seguridad y mismo control. No le escribe a nadie, no agenda y no cambia estados. Usa la IA, así que tarda uno o dos minutos.
+        Corre casos inventados con el mismo camino que «Probar el bot real»: mismas reglas, mismos controles de seguridad fijos y mismo control de calidad. No le escribe a nadie, no agenda y no cambia estados. Usa la IA: tarda uno o dos minutos.
       </p>
       <form onSubmit={correr} className="mt-3 space-y-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
         <p className="text-sm text-slate-800">Perfiles: {perfiles.map((r) => nombres[r] ?? r).join(", ")} (se eligen arriba).</p>
@@ -106,7 +106,9 @@ function Simuladas({ sel, nombres, resumen, modelos }: PropsPestana) {
         <label className="block">
           <span className={ETIQUETA}>Casos propios (opcional)</span>
           <textarea className={AREA} rows={4} value={propios} onChange={(e) => setPropios(e.target.value)} placeholder={"Un mensaje por línea.\nDejá una línea en blanco entre un caso y otro."} />
-          <span className={AYUDA}>Sin datos de personas reales: nada de nombres, teléfonos ni correos. Si lo dejás vacío, se usa la batería del perfil: casos propios del rubro más crisis, enojo, contestador, pedido de ignorar instrucciones y pedido de precio. Con varios perfiles a la vez va una batería corta (casos del rubro y pedido de precio). Máximo 16 charlas por corrida.</span>
+          <span className={AYUDA}>Sin datos de personas reales: nada de nombres, teléfonos ni correos.</span>
+          <span className={`${AYUDA} block`}>Si lo dejás vacío, se usan los casos de prueba del perfil: los del rubro más crisis, enojo, contestador, pedido de ignorar instrucciones y pedido de precio.</span>
+          <span className={`${AYUDA} block`}>Con varios perfiles a la vez van menos casos (los del rubro y el pedido de precio). Máximo 16 charlas por corrida.</span>
         </label>
         <Mensajes ok={null} error={error} />
         <button type="submit" className={BTN_PRINCIPAL} disabled={ocupado || !opciones.length}>
@@ -115,15 +117,18 @@ function Simuladas({ sel, nombres, resumen, modelos }: PropsPestana) {
       </form>
 
       {sim && (
-        <div className="mt-4" aria-live="polite">
+        <div className="mt-4">
           {sim.estado === "procesando" && <p role="status" className="text-sm text-slate-700">Corriendo los casos… ({fecha(sim.creada_at)})</p>}
           {sim.estado === "error" && <p role="alert" className="text-sm text-amber-900">{sim.error ?? "No se pudo completar la simulación."}</p>}
           {sim.estado === "listo" && (
             <>
-              <p className="text-sm font-medium text-slate-900">
-                {sim.resultado.resumen.ok} de {sim.resultado.resumen.total} casos sin alertas · tokens {sim.resultado.tokens.entrada.toLocaleString("es-AR")} de entrada y {sim.resultado.tokens.salida.toLocaleString("es-AR")} de salida.
+              <p role="status" className="text-sm font-medium text-slate-900">
+                {sim.resultado.resumen.ok} de {sim.resultado.resumen.total} casos sin alertas.
               </p>
-              <p className={AYUDA}>La revisión automática es prudente (precio, capa fija, contestador, respuestas retenidas): leé las charlas antes de decidir.</p>
+              <p className={AYUDA}>
+                Uso de IA: {(sim.resultado.tokens.entrada + sim.resultado.tokens.salida).toLocaleString("es-AR")} unidades (lo que se envió y lo que respondió el modelo).
+              </p>
+              <p className={AYUDA}>La revisión automática es prudente (precio, promesas, controles de seguridad fijos, contestador, respuestas frenadas por el control de calidad): leé las charlas antes de decidir.</p>
               <ul className="mt-2 space-y-2">
                 {resultados.map((r, i) => (
                   <li key={i} className={TARJETA}>
@@ -192,9 +197,9 @@ function PruebasAB({ sel, nombres, resumen, biblioteca, modelos, recargar }: Pro
     accion(async () => {
       const nombreCamp = camps.find((c) => c.id === campana)?.nombre ?? "la campaña";
       const texto = [
-        `En «${nombreCamp}», el ${porcentaje} % de las charlas NUEVAS las atiende v${version}${modelo ? ` con ${modelo}` : ""}; el resto sigue con v${activa}, como hoy. Cada charla queda siempre con la misma versión.`,
-        `Dura ${dias} día(s) y se corta sola: al vencer, todas vuelven a la versión activa. Podés cortarla antes con un clic.`,
-        "La capa fija de seguridad (crisis, enojo, amenazas, precios, contestadores, tope por persona, control y cierre) rige igual en las dos variantes.",
+        `En «${nombreCamp}», el ${porcentaje} % de las charlas nuevas las atiende v${version}${modelo ? ` con ${modelo}` : ""}; el resto sigue con v${activa}, como hoy. Cada charla queda siempre con la misma versión.`,
+        `Dura ${dias} ${dias === 1 ? "día" : "días"} y se corta sola: al vencer, desde la respuesta siguiente todas vuelven a la versión activa. Podés cortarla antes con un clic.`,
+        "Los controles de seguridad fijos (crisis, enojo, amenazas, precios, contestadores, tope por persona, control de calidad y cierre) rigen igual en las dos versiones.",
         AVISO_EN_VIVO,
       ].join("\n\n");
       if (!(await pedirConfirmacion({ titulo: "¿Empezar la prueba A/B?", texto, confirmar: "Empezar la prueba" }))) return "";
@@ -205,9 +210,12 @@ function PruebasAB({ sel, nombres, resumen, biblioteca, modelos, recargar }: Pro
 
   return (
     <section aria-labelledby="lab-ab">
-      <h4 id="lab-ab" className={SUBTITULO}>Prueba A/B en una campaña</h4>
+      <h4 id="lab-ab" className={SUBTITULO}>Prueba con dos versiones (A/B) en una campaña</h4>
       <p className="mt-1 text-sm text-slate-700">
-        Una versión en prueba atiende un porcentaje de las charlas nuevas de UNA campaña durante unos días. Fuera de esa campaña no cambia nada. Cuentan solo las charlas que empiezan desde que arranca la prueba (envíos nuevos de la campaña); las que ya estaban en curso siguen como hoy. Al vencer se corta sola y todo vuelve a la versión activa.
+        Una prueba con dos versiones (A/B): la versión en prueba atiende un porcentaje de las charlas nuevas de <strong>una sola</strong> campaña durante unos días. Fuera de esa campaña no cambia nada.
+      </p>
+      <p className={AYUDA}>
+        Cuentan solo las personas a las que la campaña les escribió desde que arranca la prueba; las charlas que ya estaban en curso siguen como hoy. Al vencer se corta sola y todo vuelve a la versión activa.
       </p>
       <Mensajes ok={ok} error={error} />
 
@@ -290,10 +298,15 @@ function PruebasAB({ sel, nombres, resumen, biblioteca, modelos, recargar }: Pro
             <input className={CAMPO} type="number" min={1} max={30} value={dias} onChange={(e) => setDias(Number(e.target.value))} />
           </label>
           <div className="sm:col-span-2">
-            <button type="submit" className={BTN_PRINCIPAL} disabled={ocupado || !campana || (version === activa && !modelo)}>
+            <button type="submit" className={BTN_PRINCIPAL} disabled={ocupado || !campana || (version === activa && !modelo)} aria-describedby={!campana || (version === activa && !modelo) ? "lab-ab-falta" : undefined}>
               Revisar y empezar
             </button>
-            {version === activa && !modelo && <p className={AYUDA}>Elegí otra versión u otro modelo: la prueba tiene que cambiar algo.</p>}
+            {(!campana || (version === activa && !modelo)) && (
+              <p id="lab-ab-falta" className={AYUDA}>
+                {!campana ? "Elegí la campaña. " : ""}
+                {version === activa && !modelo ? "Elegí otra versión u otro modelo: la prueba tiene que cambiar algo." : ""}
+              </p>
+            )}
           </div>
         </form>
       )}

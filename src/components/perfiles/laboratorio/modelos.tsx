@@ -45,8 +45,8 @@ export function PestanaModelos({ sel, nombres, resumen, modelos, recargar }: Pro
         <p className={AYUDA}>
           {modelos
             ? modelos.origen === "api"
-              ? `Lista leída de Gemini para la clave del servidor (${modelos.modelos.length} modelos que generan texto).`
-              : "Gemini no devolvió la lista: se muestra la lista configurable (variable LABORATORIO_MODELOS) y el modelo de hoy."
+              ? `Lista leída de Gemini para la clave del servidor (${modelos.modelos.length} ${modelos.modelos.length === 1 ? "modelo que genera" : "modelos que generan"} texto).`
+              : "Gemini no devolvió la lista: se muestra la lista cargada en la configuración del servidor y el modelo de hoy."
             : "Cargando la lista de modelos…"}
         </p>
       </section>
@@ -63,7 +63,7 @@ export function PestanaModelos({ sel, nombres, resumen, modelos, recargar }: Pro
               return (
                 <li key={v.version} className={TARJETA}>
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <p className="font-semibold text-slate-900">{v.nombre}</p>
+                    <h5 className="font-semibold text-slate-900">{v.nombre}</h5>
                     <Insignia estado={v.estado} />
                   </div>
                   <label className="mt-2 block">
@@ -105,8 +105,9 @@ export function PestanaModelos({ sel, nombres, resumen, modelos, recargar }: Pro
         )}
       </section>
 
-      <section aria-labelledby="lab-proveedores">
-        <h4 id="lab-proveedores" className={SUBTITULO}>Otros proveedores (para más adelante)</h4>
+      <details>
+        <summary className="min-h-11 cursor-pointer py-2 text-base font-semibold text-slate-900">Avanzado: otros proveedores</summary>
+      <section aria-label="Otros proveedores (para más adelante)">
         <p className="mt-1 text-sm text-slate-700">
           Se deja anotado el nombre, la dirección y el <strong>nombre</strong> de la variable de entorno donde estaría la clave. La clave nunca se escribe acá ni se guarda en la base. No hay conexión implementada: figuran como «preparado, sin conectar».
         </p>
@@ -162,8 +163,8 @@ export function PestanaModelos({ sel, nombres, resumen, modelos, recargar }: Pro
           </label>
           <label className="block">
             <span className={ETIQUETA}>Nombre de la variable de entorno</span>
-            <input className={CAMPO} value={prov.variable_clave} maxLength={64} onChange={(e) => setProv({ ...prov, variable_clave: e.target.value.toUpperCase() })} required placeholder="OTRO_PROVEEDOR_API_KEY" autoComplete="off" />
-            <span className={AYUDA}>Solo el nombre. La clave se carga en el servidor, nunca acá.</span>
+            <input className={CAMPO} value={prov.variable_clave} maxLength={64} onChange={(e) => setProv({ ...prov, variable_clave: e.target.value.toUpperCase() })} required placeholder="LAB_PROVEEDOR_OTRO_API_KEY" autoComplete="off" />
+            <span className={AYUDA}>Solo el nombre, empezando con LAB_PROVEEDOR_. La clave se carga en el servidor, nunca acá.</span>
           </label>
           <label className="block">
             <span className={ETIQUETA}>Notas (opcional)</span>
@@ -176,6 +177,7 @@ export function PestanaModelos({ sel, nombres, resumen, modelos, recargar }: Pro
           </div>
         </form>
       </section>
+      </details>
     </div>
   );
 }

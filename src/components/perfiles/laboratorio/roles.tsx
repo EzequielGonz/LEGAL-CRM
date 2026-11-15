@@ -75,7 +75,7 @@ export function PestanaRoles({ sel, nombres, resumen, biblioteca, recargar }: Pr
           </label>
         </div>
         <p className={AYUDA}>
-          Un rol se suma al guion del bot. Orden de lo que manda: prueba A/B de la campaña, rol de la campaña, rol de la base, rol por tipo de consulta y, por último, rol de todo el perfil.
+          Un rol se suma al guion del bot. Si hay más de uno posible, manda el de la campaña; si no hay, el de la base; después el del tipo de consulta y, por último, el de todo el perfil. Una prueba con dos versiones (A/B) cambia la versión y el modelo, no el rol.
         </p>
         {!biblioteca && <p className="mt-2 text-sm text-slate-700" role="status">Cargando roles…</p>}
         {biblioteca && roles.length === 0 && generales.length === 0 && <p className="mt-2 text-sm text-slate-700">{q ? "Ningún rol coincide con la búsqueda." : "Todavía no hay roles. Creá uno abajo."}</p>}
@@ -83,7 +83,7 @@ export function PestanaRoles({ sel, nombres, resumen, biblioteca, recargar }: Pr
           {roles.map((r) => (
             <li key={r.id} className={TARJETA}>
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <p className="font-semibold text-slate-900">{r.nombre}</p>
+                <h5 className="font-semibold text-slate-900">{r.nombre}</h5>
                 <span className="rounded-full border border-slate-300 bg-white px-2.5 py-0.5 text-xs font-semibold text-slate-800">{nombres[r.rubro!] ?? r.rubro}</span>
               </div>
               {r.objetivo && <p className="mt-1 text-sm text-slate-800">Objetivo: {r.objetivo}</p>}
@@ -91,14 +91,15 @@ export function PestanaRoles({ sel, nombres, resumen, biblioteca, recargar }: Pr
                 <summary className="min-h-11 cursor-pointer py-2 font-medium text-slate-800">Ver instrucciones</summary>
                 <p className="whitespace-pre-wrap text-slate-800">{r.instrucciones}</p>
               </details>
-              <p className={AYUDA}>{r.usos ? `En uso en ${r.usos} lugar(es).` : "Sin usar."}</p>
+              <p className={AYUDA}>{r.usos ? `En uso en ${r.usos} ${r.usos === 1 ? "lugar" : "lugares"}.` : "Sin usar."}</p>
               <div className="mt-2 flex flex-wrap gap-2">
                 {(["aplicar", "copiar", "editar"] as const).map((m) => (
-                  <button key={m} type="button" className={BTN} aria-expanded={abierto?.id === r.id && abierto.modo === m} onClick={() => setAbierto(abierto?.id === r.id && abierto.modo === m ? null : { id: r.id, modo: m })}>
+                  <button key={m} type="button" className={BTN} aria-expanded={abierto?.id === r.id && abierto.modo === m} aria-controls={abierto?.id === r.id && abierto.modo === m ? `lab-rol-${r.id}` : undefined} onClick={() => setAbierto(abierto?.id === r.id && abierto.modo === m ? null : { id: r.id, modo: m })}>
                     {m === "aplicar" ? "Aplicar…" : m === "copiar" ? "Copiar a otro perfil…" : "Editar como copia…"}
                   </button>
                 ))}
               </div>
+              <div id={`lab-rol-${r.id}`}>
               {abierto?.id === r.id && abierto.modo === "aplicar" && <AplicarRol rol={r} biblioteca={biblioteca!} nombres={nombres} ocupado={ocupado} accion={accion} />}
               {abierto?.id === r.id && abierto.modo === "copiar" && <CopiarRol origen={{ rol_id: r.id }} excluir={r.rubro} nombres={nombres} ocupado={ocupado} accion={accion} />}
               {abierto?.id === r.id && abierto.modo === "editar" && (
@@ -115,20 +116,21 @@ export function PestanaRoles({ sel, nombres, resumen, biblioteca, recargar }: Pr
                   }
                 />
               )}
+              </div>
             </li>
           ))}
           {generales.map((g) => (
             <li key={g.id} className={TARJETA}>
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <p className="font-semibold text-slate-900">{g.nombre}</p>
+                <h5 className="font-semibold text-slate-900">{g.nombre}</h5>
                 <span className="rounded-full border border-slate-300 bg-white px-2.5 py-0.5 text-xs font-semibold text-slate-800">General</span>
               </div>
               {g.objetivo && <p className="mt-1 text-sm text-slate-800">Objetivo: {g.objetivo}</p>}
               <p className={AYUDA}>Para usarlo en un perfil, copialo: queda como rol de ese perfil, listo para aplicar.</p>
-              <button type="button" className={`${BTN} mt-2`} aria-expanded={abierto?.id === g.id} onClick={() => setAbierto(abierto?.id === g.id ? null : { id: g.id, modo: "copiar" })}>
+              <button type="button" className={`${BTN} mt-2`} aria-expanded={abierto?.id === g.id} aria-controls={abierto?.id === g.id ? `lab-rol-${g.id}` : undefined} onClick={() => setAbierto(abierto?.id === g.id ? null : { id: g.id, modo: "copiar" })}>
                 Copiar a un perfil…
               </button>
-              {abierto?.id === g.id && <CopiarRol origen={{ general_id: g.id }} excluir={null} nombres={nombres} ocupado={ocupado} accion={accion} />}
+              <div id={`lab-rol-${g.id}`}>{abierto?.id === g.id && <CopiarRol origen={{ general_id: g.id }} excluir={null} nombres={nombres} ocupado={ocupado} accion={accion} />}</div>
             </li>
           ))}
         </ul>
@@ -158,7 +160,7 @@ function Aplicados({ aplicados, nombres, describir, ocupado, accion }: { aplicad
               onClick={() =>
                 accion(async () => {
                   if (!(await pedirConfirmacion({ titulo: "¿Volver a lo anterior?", texto: `${describir(a)}.\n\n${AVISO_EN_VIVO}`, confirmar: "Volver a lo anterior" }))) return "";
-                  const r = await pedir<any>({ accion: "volver_atras", id: a.id });
+                  const r = await pedir<any>({ accion: "volver_atras", id: a.id, confirmado: true });
                   return `Listo: volvió lo anterior. ${r.aviso}`;
                 })
               }
@@ -202,7 +204,7 @@ function AplicarRol({ rol, biblioteca, nombres, ocupado, accion }: { rol: Rol; b
   return (
     <div className="mt-3 space-y-3 rounded-lg border border-slate-200 bg-white p-3">
       <fieldset>
-        <legend className={ETIQUETA}>¿Dónde?</legend>
+        <legend className={ETIQUETA}>¿Dónde se aplica?</legend>
         <div className="grid gap-1 sm:grid-cols-2">
           {DESTINOS.map((d) => (
             <label key={d.id} className="flex min-h-11 cursor-pointer items-center gap-2 text-sm text-slate-800">
@@ -253,7 +255,7 @@ function AplicarRol({ rol, biblioteca, nombres, ocupado, accion }: { rol: Rol; b
         </label>
       )}
       <button type="button" className={BTN_PRINCIPAL} disabled={ocupado || !listo} onClick={aplicar}>
-        Aplicar con confirmación
+        Revisar y aplicar
       </button>
     </div>
   );
@@ -285,7 +287,7 @@ function CopiarRol({ origen, excluir, nombres, ocupado, accion }: { origen: { ro
           })
         }
       >
-        Copiar
+        Copiar rol
       </button>
     </div>
   );

@@ -66,7 +66,7 @@ export function PestanaVersiones({ sel, nombres, resumen, biblioteca, modelos, r
     await accion(async () => {
       const si = await pedirConfirmacion({ titulo: "¿Volver a lo anterior?", texto: `${texto}\n\nVuelve la versión que regía antes de esta aplicación. ${AVISO_EN_VIVO}`, confirmar: "Volver a lo anterior" });
       if (!si) return "";
-      const r = await pedir<any>({ accion: "volver_atras", id });
+      const r = await pedir<any>({ accion: "volver_atras", id, confirmado: true });
       return `Listo: volvió lo anterior. ${r.aviso}`;
     });
   }
@@ -120,7 +120,7 @@ export function PestanaVersiones({ sel, nombres, resumen, biblioteca, modelos, r
           {visibles.map((v) => (
             <li key={v.version} className={TARJETA}>
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <p className="font-semibold text-slate-900">{v.nombre}</p>
+                <h5 className="font-semibold text-slate-900">{v.nombre}</h5>
                 <Insignia estado={v.estado} />
               </div>
               <dl className="mt-2 grid grid-cols-[auto,1fr] gap-x-3 gap-y-1 text-sm text-slate-800">
@@ -154,7 +154,7 @@ export function PestanaVersiones({ sel, nombres, resumen, biblioteca, modelos, r
                 <div className="mt-3 flex flex-wrap gap-2">
                   {sel !== "todos" && v.rubros.includes(sel) && rige(sel)?.version !== v.version && (
                     <button type="button" className={BTN_PRINCIPAL} disabled={ocupado} onClick={() => aplicar(v.version, sel)}>
-                      Aplicar a {nombres[sel] ?? sel}
+                      Revisar y aplicar a {nombres[sel] ?? sel}
                     </button>
                   )}
                   {v.estado === "borrador" && (
@@ -295,7 +295,7 @@ function NuevaVersion({ sel, nombres, resumen, biblioteca, modelos, recargar, al
           <label className="block">
             <span className={ETIQUETA}>Reglas propias (opcional)</span>
             <textarea className={AREA} rows={3} value={reglas} onChange={(e) => setReglas(e.target.value)} maxLength={4000} />
-            <span className={AYUDA}>Se suman al guion. Las reglas fijas del sistema (crisis, enojo, amenazas, precios, contestadores, tope por persona, control y cierre) siguen mandando.</span>
+            <span className={AYUDA}>Se suman al guion. Los controles de seguridad fijos (crisis, enojo, amenazas, precios, contestadores, tope por persona, control de calidad y cierre) siguen mandando.</span>
           </label>
           {rolesPosibles.length > 0 && (
             <fieldset>
@@ -360,8 +360,15 @@ function NuevaVersion({ sel, nombres, resumen, biblioteca, modelos, recargar, al
             <textarea className={AREA} rows={2} value={descripcion} onChange={(e) => setDescripcion(e.target.value)} maxLength={900} />
           </label>
           <Mensajes ok={null} error={error} />
+          {(!nombre.trim() || !rubros.length) && (
+            <p id={`${id}-falta`} className={AYUDA}>
+              Para crearla falta {!nombre.trim() ? "el nombre" : ""}
+              {!nombre.trim() && !rubros.length ? " y " : ""}
+              {!rubros.length ? "elegir al menos un perfil" : ""}.
+            </p>
+          )}
           <div className="flex flex-wrap gap-2">
-            <button type="submit" className={BTN_PRINCIPAL} disabled={ocupado || !nombre.trim() || !rubros.length}>
+            <button type="submit" className={BTN_PRINCIPAL} disabled={ocupado || !nombre.trim() || !rubros.length} aria-describedby={!nombre.trim() || !rubros.length ? `${id}-falta` : undefined}>
               {ocupado ? "Creando…" : "Crear como borrador"}
             </button>
             <button type="button" className={BTN} onClick={() => setAbierto(false)}>

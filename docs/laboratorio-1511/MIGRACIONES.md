@@ -14,7 +14,16 @@ Siete tablas NUEVAS (`bot_lab_versiones`, `bot_lab_proveedores`, `bot_lab_roles_
 
 Probado en un Postgres 16 local descartable con tablas mínimas equivalentes: las dos se aplican dos veces seguidas sin error; la función crea v3 y v4 y copia lo que corresponde; las cifras A/B salen por variante; `anon` no puede leer ni ejecutar. No se probó contra la base real (solo se leyó su esquema).
 
+## 0632_laboratorio_bot_aplicaciones_atomicas.sql (revisión cruzada)
+
+Funciones de una sola transacción, cada una con su línea en `ops_change_log`: `laboratorio_aplicar_version`, `laboratorio_aplicar_rol`, `laboratorio_revertir`, `laboratorio_crear_ab` (candado por campaña: nunca dos pruebas vigentes) y `laboratorio_cortar_ab`. Validan perfil, áreas, roles archivados y cambios hechos después. Al volver atrás una versión aplicada cuando no había fila previa en `bot_knowledge_assignment`, queda v2 sola (la versión que regía por defecto, mismo efecto); no se borra la fila. No vuelve a una versión archivada. Sin permisos para public, anon ni authenticated. No se probó en Postgres local (sí 0630 y 0631).
+
+Además, en 0630 (todavía sin aplicar) la variable de un proveedor tiene que empezar con `LAB_PROVEEDOR_`.
+
 ## Orden y compatibilidad
+
+0. Aplicar 0630, 0631 y 0632 en ese orden. Sin la 0632, aplicar, volver atrás y las pruebas A/B dan error en pantalla (el bot en vivo no se ve afectado).
+
 
 1. Publicar el código antes o después da lo mismo: sin las tablas, el bot en vivo registra un aviso una vez por minuto y responde como siempre (estado vacío del laboratorio); la pantalla del laboratorio muestra un error genérico.
 2. Aplicar 0630 y después 0631.

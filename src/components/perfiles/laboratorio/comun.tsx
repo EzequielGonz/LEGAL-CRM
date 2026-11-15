@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+
 /**
  * Laboratorio del bot (15/11): tipos, estilos y ayudas compartidas por las
  * pestañas. Colores del tema claro (bg-white, text-slate-*): el modo oscuro
@@ -82,12 +84,13 @@ export const TIPOS_CONSULTA: { id: string; label: string; soloJuridico?: boolean
   { id: "penal", label: "Consultas penales", soloJuridico: true },
 ];
 
-const FOCO = "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900";
-export const BTN = `inline-flex min-h-11 items-center justify-center gap-1 rounded-lg border border-slate-300 bg-white px-3 text-sm font-medium text-slate-800 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50 ${FOCO}`;
-export const BTN_PRINCIPAL = `inline-flex min-h-11 items-center justify-center gap-1 rounded-lg bg-slate-900 px-4 text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50 ${FOCO}`;
-export const BTN_PELIGRO = `inline-flex min-h-11 items-center justify-center gap-1 rounded-lg border border-red-300 bg-white px-3 text-sm font-medium text-red-800 hover:bg-red-50 disabled:opacity-50 ${FOCO}`;
-export const CAMPO = `min-h-11 w-full rounded-lg border border-slate-400 bg-white px-3 text-sm text-slate-900 ${FOCO}`;
-export const AREA = `w-full rounded-lg border border-slate-400 bg-white p-3 text-sm text-slate-900 ${FOCO}`;
+// Foco: el global del panel (globals.css, :focus-visible), sin reemplazos locales.
+export const BTN = "inline-flex min-h-11 items-center justify-center gap-1 rounded-lg border border-slate-300 bg-white px-3 text-sm font-medium text-slate-800 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50";
+/** Acción principal: la convención de botón principal del panel (btn-gold), con 44 px de alto. */
+export const BTN_PRINCIPAL = "btn-gold min-h-11";
+export const BTN_PELIGRO = "inline-flex min-h-11 items-center justify-center gap-1 rounded-lg border border-red-300 bg-white px-3 text-sm font-medium text-red-800 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50";
+export const CAMPO = "min-h-11 w-full rounded-lg border border-slate-400 bg-white px-3 text-sm text-slate-900";
+export const AREA = "w-full rounded-lg border border-slate-400 bg-white p-3 text-sm text-slate-900";
 export const ETIQUETA = "mb-1 block text-sm font-medium text-slate-800";
 export const AYUDA = "mt-1 text-xs text-slate-600";
 export const TARJETA = "rounded-xl border border-slate-200 bg-slate-50 p-4";
@@ -112,10 +115,25 @@ export function Aviso({ tono = "info", children }: { tono?: "info" | "alerta" | 
 
 /** Mensajes de resultado de una acción (éxito o error), anunciados al lector de pantalla. */
 export function Mensajes({ ok, error }: { ok: string | null; error: string | null }) {
+  // El botón que se tocó puede desaparecer (aplicar, archivar, volver atrás…): el foco va al mensaje.
+  const okRef = useRef<HTMLParagraphElement>(null);
+  const errorRef = useRef<HTMLParagraphElement>(null);
+  useEffect(() => {
+    if (error) errorRef.current?.focus();
+    else if (ok) okRef.current?.focus();
+  }, [ok, error]);
   return (
-    <div aria-live="polite" className="space-y-2 empty:hidden">
-      {ok && <p role="status" className="rounded-lg border border-emerald-300 bg-emerald-50 px-3 py-2 text-sm text-emerald-900">{ok}</p>}
-      {error && <p role="alert" className="rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900">{error}</p>}
+    <div className="space-y-2 empty:hidden">
+      {ok && (
+        <p ref={okRef} tabIndex={-1} role="status" className="rounded-lg border border-emerald-300 bg-emerald-50 px-3 py-2 text-sm text-emerald-900">
+          {ok}
+        </p>
+      )}
+      {error && (
+        <p ref={errorRef} tabIndex={-1} role="alert" className="rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+          {error}
+        </p>
+      )}
     </div>
   );
 }

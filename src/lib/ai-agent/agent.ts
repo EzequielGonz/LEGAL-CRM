@@ -52,7 +52,7 @@ import { motivoParaNoResponder, TEXTO_SIN_RESPUESTA } from "@/lib/agentes/automa
 import { bloqueFichaNegocio, leerFichaNegocio } from "@/lib/agentes/ficha-negocio";
 import { conocimientoParaTurno, rubroDeConocimiento } from "@/lib/conocimiento/servicio";
 import { estadoLaboratorio, registrarVariante } from "@/lib/laboratorio/en-vivo";
-import { ajustesDeVersion, bloqueRolLaboratorio, componerInstrucciones, pedidoConModelo, planDelTurno } from "@/lib/laboratorio/reglas";
+import { ajustesDeVersion, bloqueRolLaboratorio, componerInstrucciones, esModeloNoEncontrado, pedidoConModelo, planDelTurno, varianteRegistrable } from "@/lib/laboratorio/reglas";
 import { NOTA_AUDIO_PARA_AGENTE, cuerpoParaAgente, hayAudioSinContestar } from "@/lib/audios/reglas";
 
 const MAX_TOOL_ITERATIONS = 6;
@@ -250,7 +250,7 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
   // la plantilla), esta es su primera respuesta.
   const { data: latestCampaignContact } = await supabase
     .from("campaign_contacts")
-    .select("campaign_id, campaigns(name, agent_role_id)")
+    .select("campaign_id, sent_at, campaigns(name, agent_role_id)")
     .eq("contact_id", contact.id)
     .order("sent_at", { ascending: false, nullsFirst: false })
     .limit(1)
@@ -351,7 +351,7 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
     modo,
     campaignId: (latestCampaignContact as any)?.campaign_id ?? null,
     conversationId,
-    conversacionCreadaAt: (conversation as any).created_at ?? null,
+    envioCampanaAt: (latestCampaignContact as any)?.sent_at ?? null,
     ahora: new Date(),
   });
   const conocimiento = await conocimientoParaTurno({
@@ -362,7 +362,7 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
     ...(planLab.forzarVersion != null ? { forzarVersion: planLab.forzarVersion } : {}),
   });
   const ajustesLab = ajustesDeVersion(estadoLab, planLab, conocimiento.version);
-  if (planLab.prueba) {
+  if (planLab.prueba && varianteRegistrable(planLab, conocimiento.version)) {
     await registrarVariante({ pruebaId: planLab.prueba.id, conversationId, variante: planLab.prueba.variante, version: conocimiento.version, modelo: ajustesLab.modelo });
   }
   // Rol de la base (21/10): si la base del contacto tiene un rol cargado, se suma.
@@ -377,7 +377,9 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
     rolLaboratorio: planLab.rol ? bloqueRolLaboratorio(planLab.rol) : "",
   });
   // Modelo de la variante o de la versión del laboratorio; sin eso, el de siempre.
-  const modeloDelTurno = ajustesLab.modelo ?? modeloPedido;
+  // Si Gemini no conoce ese modelo, se reintenta una vez con el de siempre (ver llamarModelo).
+  let modeloLab: string | null = ajustesLab.modelo;
+  let avisoModeloLab: string | null = null;
   // 24/10: contacto detenido que vuelve a escribir: el agente lo atiende, sin ofrecer ni insistir.
   if (bloqueo) {
     systemWithBrief = `${systemWithBrief}\n\nContacto detenido (regla del sistema): esta persona ya pidió no recibir mensajes o cerró la gestión (${bloqueo.label}). Ahora volvió a escribir: respondé con respeto a lo que dice. Si trae una consulta o algo relevante, atendela como siempre; si no, contestá breve y quedá a disposición. No le ofrezcas servicios por tu cuenta, no insistas y no repitas la disculpa si ya la diste.`;
@@ -399,7 +401,16 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
   const t0 = Date.now();
   const uso = { llamadas: 0, entrada: 0, salida: 0, razonamiento: 0, modeloRespuesta: null as string | null, herramientas: [] as string[] };
   const llamarModelo: ModeloAgente = async (req) => {
-    const r = await modelo(pedidoConModelo(req, ajustesLab.modelo));
+    let r: Awaited<ReturnType<ModeloAgente>>;
+    try {
+      r = await modelo(pedidoConModelo(req, modeloLab));
+    } catch (err) {
+      if (!modeloLab || !esModeloNoEncontrado(err)) throw err;
+      avisoModeloLab = `Laboratorio: el modelo ${modeloLab} no está disponible; respondió el modelo de siempre (${modeloPedido}).`;
+      console.error(`[agente] ${avisoModeloLab}`);
+      modeloLab = null;
+      r = await modelo(req);
+    }
     uso.llamadas++;
     uso.entrada += r.tokensEntrada ?? 0;
     uso.salida += r.tokensSalida ?? 0;
@@ -416,7 +427,7 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
       conversationId,
       rubroId: contact.rubro_id ?? null,
       proveedor: "gemini_api",
-      modeloPedido: modeloDelTurno,
+      modeloPedido: modeloLab ?? modeloPedido,
       modeloRespuesta: uso.modeloRespuesta,
       llamadas: uso.llamadas,
       tokensEntrada: uso.entrada,
@@ -428,6 +439,7 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
       knowledgeVersion: conocimiento.version,
       knowledgeItems: conocimiento.claves,
       ...extra,
+      ...(avisoModeloLab && !extra.error ? { error: avisoModeloLab } : {}),
     });
   // Contexto de las herramientas. Si la IA deriva a una persona, la
   // herramienta deja acá el permiso de un solo uso para el acuse final.

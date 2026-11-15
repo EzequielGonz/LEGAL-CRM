@@ -8,7 +8,7 @@
  * responde exactamente como hoy.
  */
 import { createAdminClient } from "@/lib/supabase/admin";
-import { ESTADO_VACIO, estadoDesdeFilas, type EstadoLaboratorio } from "./reglas";
+import { estadoDesdeFilas, estadoTrasError, type EstadoLaboratorio } from "./reglas";
 
 const TTL_MS = 60_000;
 let cache: { at: number; estado: EstadoLaboratorio } | null = null;
@@ -32,7 +32,10 @@ export async function estadoLaboratorio(): Promise<EstadoLaboratorio> {
         .from("bot_lab_aplicaciones" as any)
         .select("tipo, rubro, tipo_consulta, agent_roles(nombre, objetivo, tono, instrucciones, archived_at)")
         .in("tipo", ["rol_perfil", "rol_tipo_consulta"])
-        .is("revertida_at", null),
+        .is("revertida_at", null)
+        // A igual tipo de consulta, manda la aplicación más vieja (desempate estable).
+        .order("aplicada_at")
+        .order("id"),
     ]);
     for (const r of [pruebas, versiones, nombres, aplicaciones]) if (r.error) throw r.error;
     const estado = estadoDesdeFilas({ pruebas: pruebas.data as any[], versiones: versiones.data as any[], nombres: nombres.data as any[], aplicaciones: aplicaciones.data as any[] });
@@ -40,9 +43,12 @@ export async function estadoLaboratorio(): Promise<EstadoLaboratorio> {
     return estado;
   } catch (err) {
     console.error("[laboratorio] No se pudo leer el laboratorio; el bot responde como siempre:", (err as Error)?.message ?? err);
-    // Se guarda el estado vacío para no reintentar en cada respuesta durante el minuto.
-    cache = { at: Date.now(), estado: ESTADO_VACIO };
-    return ESTADO_VACIO;
+    // Revisión 15/11: un error pasajero no saca charlas de su variante ni deja una
+    // versión aplicada sin sus ajustes: se mantiene el último estado bueno (aunque
+    // esté vencido) y se reintenta en un minuto. Solo sin estado previo, el vacío.
+    const estado = estadoTrasError(cache?.estado ?? null);
+    cache = { at: Date.now(), estado };
+    return estado;
   }
 }
 
