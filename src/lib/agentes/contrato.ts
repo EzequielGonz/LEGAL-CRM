@@ -53,7 +53,15 @@ const DETECTORES: { motivo: MotivoRetencion; re: RegExp[] }[] = [
       /\b\d+[\d.,]*\s?(?:lucas|luquitas|palos|mangos|k)\b/i,
       /\b(?:diez|veinte|treinta|cuarenta|cincuenta|sesenta|setenta|ochenta|noventa|cien|ciento|doscientos|trescientos|cuatrocientos|quinientos|seiscientos|setecientos|ochocientos|novecientos)\s+(?:\w+\s+)?mil\b/i,
       /\b(?:un|dos|tres|cuatro|cinco|medio)\s+(?:mill[oó]n|millones|palo|palos)\b/i,
-      /\b(?:rondan?|ronda en|alrededor de|aproximadamente|aprox\.?|arranca(?:n)? en|arranca(?:n)? desde)\s+(?:los\s+|unos\s+)?\$?\s?\d[\d.,]*\s*(?:mil|lucas|k|pesos|usd|d[oó]lares)?\b(?!\s*(?:hs|horas|d[ií]as|semanas|meses|a[nñ]os|minutos))/i,
+      // Revisión 15/11: el sufijo de moneda es obligatorio («aproximadamente 50 casos» o «alrededor de las 16:30» no son precios).
+      /\b(?:rondan?|ronda en|alrededor de|aproximadamente|aprox\.?|arranca(?:n)? en|arranca(?:n)? desde)\s+(?:los\s+|unos\s+)?\$?\s?\d[\d.,]*\s*(?:mil|lucas|k|pesos|usd|d[oó]lares)\b/i,
+      /\b\d[\d.,]*\s?mil\b/i,
+      /\b\d[\d.,]*\s?(?:millones|mill[oó]n)\b/i,
+      /\b(?:un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|quince|veinte|treinta|cuarenta|cincuenta|sesenta|setenta|ochenta|noventa|cien|ciento|doscientos|trescientos|quinientos|mil)\b(?:\s+y\s+\w+)?\s+(?:mil|lucas?|luquitas|pesos|d[oó]lares|usd)\b/i,
+      /\b(?:diez|veinte|treinta|cuarenta|cincuenta|sesenta|setenta|ochenta|noventa)\s+y\s+\w+\s+mil\b/i,
+      /\b(?:dos|tres|cuatro|cinco|seis|siete|ocho|nueve)\s+mil(?:\s+\w+)?\b/i,
+      /\bpor\s+ciento\b/i,
+      /\b\d{1,3}(?:\.\d{3})+(?:,\d+)?\b/,
     ],
   },
   {

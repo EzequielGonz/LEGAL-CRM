@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { setBaseArchived } from "@/lib/archive";
 import { requireSession } from "@/lib/acceso/autorizacion";
+import { mensajeVisible } from "@/lib/error-publico";
 
 /**
  * Las bases ya no se eliminan (pregunta 20): un DELETE la archiva. Se
@@ -15,6 +16,6 @@ export async function DELETE(request: Request, props: { params: Promise<{ id: st
     await setBaseArchived(params.id, true, "Archivada desde el panel");
     return NextResponse.json({ ok: true, archivada: true });
   } catch (err: any) {
-    return NextResponse.json({ error: String(err?.message ?? err) }, { status: 400 });
+    return NextResponse.json({ error: mensajeVisible(err, "bases/[id]") }, { status: 400 });
   }
 }

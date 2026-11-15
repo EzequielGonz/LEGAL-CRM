@@ -225,3 +225,32 @@ export function sessionCookieOptions() {
     maxAge: SESSION_MAX_AGE_SECONDS,
   };
 }
+
+/**
+ * Revisión 15/11: «dispositivo conocido». Se emite al ingresar bien con el PIN
+ * y dura 90 días. Solo sirve para que la pausa general de intentos (ataques
+ * desde muchas redes) no deje afuera a quien ya entró desde ese dispositivo:
+ * igual hay que poner el PIN y vale el tope de 5 intentos por origen.
+ */
+export const DEVICE_COOKIE = "crm_dispositivo";
+export const DEVICE_MAX_AGE_SECONDS = 90 * 24 * 60 * 60;
+
+export async function firmarDispositivo(): Promise<string> {
+  const id = randomId(12);
+  return `${id}.${await hmacBase64Url("dispositivo", id)}`;
+}
+
+export async function dispositivoConocido(valor: string | undefined | null): Promise<boolean> {
+  if (!valor) return false;
+  const [id, firma] = valor.split(".");
+  if (!id || !firma) return false;
+  try {
+    return (await hmacBase64Url("dispositivo", id)) === firma;
+  } catch {
+    return false;
+  }
+}
+
+export function deviceCookieOptions() {
+  return { ...sessionCookieOptions(), maxAge: DEVICE_MAX_AGE_SECONDS };
+}

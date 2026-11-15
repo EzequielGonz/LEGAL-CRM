@@ -16,16 +16,24 @@ export function topeAlcanzado(automaticosSinRespuesta: number): boolean {
 }
 
 /**
- * Cuenta los automáticos sin respuesta de la persona. Si no se puede leer,
- * devuelve null (quien llama decide: no se frena por una falla de lectura,
- * porque cada camino ya tiene sus propios límites).
+ * Cuenta los automáticos sin respuesta de la persona (todas sus fichas con el
+ * mismo teléfono). Si no se puede leer, devuelve null y quien llama frena.
  */
 export async function automaticosSinRespuesta(contactId: string, supabase: any = createAdminClient()): Promise<number | null> {
-  const { data: convs, error } = await supabase.from("conversations").select("id").eq("contact_id", contactId);
+  // Revisión 15/11: «por persona» es por teléfono (hay un contacto por perfil con el mismo número).
+  const { data: yo, error: e0 } = await supabase.from("contacts").select("phone").eq("id", contactId).maybeSingle();
+  if (e0) return null;
+  let contactos = [contactId];
+  if (yo?.phone) {
+    const { data: mismos, error: e1 } = await supabase.from("contacts").select("id").eq("phone", yo.phone).limit(20);
+    if (e1) return null;
+    contactos = Array.from(new Set([contactId, ...((mismos ?? []) as { id: string }[]).map((c) => c.id)]));
+  }
+  const { data: convs, error } = await supabase.from("conversations").select("id").in("contact_id", contactos);
   if (error) return null;
   const ids = ((convs ?? []) as { id: string }[]).map((c) => c.id);
   if (!ids.length) return 0;
-  const { data: ultimo } = await supabase
+  const { data: ultimo, error: ultimoError } = await supabase
     .from("messages")
     .select("created_at")
     .in("conversation_id", ids)
@@ -40,16 +48,17 @@ export async function automaticosSinRespuesta(contactId: string, supabase: any =
     .eq("direction", "saliente")
     .neq("sender_type", "admin")
     .in("origin", ORIGENES_CON_TOPE as unknown as string[]);
+  if (ultimoError) return null;
   if (ultimo?.created_at) q = q.gt("created_at", ultimo.created_at);
   const { count, error: e2 } = await q;
   if (e2) return null;
   return count ?? 0;
 }
 
-/** ¿Hay que frenar este envío automático por el tope? */
+/** ¿Hay que frenar este envío automático por el tope? Revisión 15/11: si no se puede leer, se frena (se prefiere no escribir). */
 export async function frenaPorTope(contactId: string, supabase?: any): Promise<boolean> {
   const n = await automaticosSinRespuesta(contactId, supabase);
-  return n !== null && topeAlcanzado(n);
+  return n === null || topeAlcanzado(n);
 }
 
 export const TEXTO_TOPE = `Ya recibió ${TOPE_SIN_RESPUESTA} mensajes automáticos sin contestar: no se le escribe más hasta que responda.`;

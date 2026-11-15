@@ -13,7 +13,7 @@ import { VISTAS_CARTERA, cuandoCorto } from "@/lib/cartera";
 import { AREAS_DE_PERFIL, contarGrupo } from "@/lib/cartera-servidor";
 import { getCampaignFunnelCounts } from "@/lib/campaigns";
 import { TableroHoy } from "@/components/inicio/tablero-hoy";
-import { captadoEsperaDeMas } from "@/lib/hoy/colas";
+import { captadoEsperaDeMas, ESPERA_CAPTADO_HORAS } from "@/lib/hoy/colas";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Hoy" };
@@ -133,14 +133,29 @@ async function CuerpoHoy({ slug, rubroId, searchParams }: { slug: SlugPerfil; ru
     ...((activas ?? []) as any[]).map((c, i) => ({ texto: `enviados de «${c.name}»`, n: embudos[i]?.enviados ?? null, de: embudos[i]?.total ?? null, href: `${baseCampanas}/${c.id}` })),
   ];
 
-  // 15/11: captados que esperan el llamado hace más de 24 horas (sin cita).
-  const esperanDeMas = ((captados.filas ?? []) as any[]).filter((o) => !citaDe(o.contact_id) && captadoEsperaDeMas(o.captured_at ?? o.updated_at ?? null)).length;
+  // 15/11: captados que esperan el llamado hace más de 24 horas y no tienen cita.
+  // Revisión: se cuentan todos (no solo los de la primera página de la lista).
+  const hace24 = new Date(Date.now() - ESPERA_CAPTADO_HORAS * 3_600_000).toISOString();
+  const { data: viejos } = await s
+    .from("opportunities")
+    .select("contact_id")
+    .eq("rubro_id", rubroId as string)
+    .eq("capture_state", "captado")
+    .eq("derivation_state", "no_derivado")
+    .lt("captured_at", hace24)
+    .limit(500);
+  const idsViejos = ((viejos ?? []) as any[]).map((o) => o.contact_id).filter(Boolean);
+  const { data: conCita } = idsViejos.length
+    ? await s.from("appointments").select("contact_id, status").in("contact_id", idsViejos).gte("starts_at", new Date().toISOString())
+    : { data: [] as any[] };
+  const tienenCita = new Set(((conCita ?? []) as any[]).filter((c) => !/cancel/.test(String(c.status ?? ""))).map((c) => c.contact_id));
+  const esperanDeMas = idsViejos.filter((id) => !tienenCita.has(id)).length;
 
   return (
     <>
       {esperanDeMas > 0 && (
         <p role="status" className="rounded-xl border border-amber-300 bg-amber-50 p-3 text-sm font-medium text-amber-900">
-          {esperanDeMas === 1 ? "Una persona captada espera" : `${esperanDeMas} personas captadas esperan`} el llamado hace más de 24 horas. Están marcadas «Más de 24 h» en la lista de abajo.
+          {esperanDeMas === 1 ? "Una persona captada espera" : `${esperanDeMas} personas captadas esperan`} el llamado hace más de 24 horas. En la lista de abajo aparecen con «Más de 24 h».
         </p>
       )}
       <TableroHoy

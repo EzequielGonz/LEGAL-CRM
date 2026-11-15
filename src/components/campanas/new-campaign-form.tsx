@@ -66,7 +66,8 @@ export function NewCampaignForm({
   }
   function cambiarLimite(v: number | "") {
     setDailyLimit(v);
-    if (apagaEntrenamiento(v === "" ? null : v)) setEntrenamiento(false);
+    // Mientras se borra para escribir otro número no se apaga: solo un límite mayor que el del entrenamiento.
+    if (v !== "" && apagaEntrenamiento(v)) setEntrenamiento(false);
   }
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -96,7 +97,8 @@ export function NewCampaignForm({
         batch_size: batchSize,
         batch_pause_seconds: batchPauseSeconds,
         daily_send_limit: dailyLimit === "" ? null : dailyLimit,
-        entrenamiento,
+        // Sin límite (vacío) es ir por más volumen: el entrenamiento no aplica.
+        entrenamiento: entrenamiento && dailyLimit !== "" && !apagaEntrenamiento(dailyLimit),
         line_id: porWasender ? null : lineId || null,
         ...(porWasender ? { proveedor: "wasender", wasender_line_id: waLinea || null, wasender_plantilla_id: waPlantilla === "rotar" ? null : waPlantilla || null, wasender_rotar_inicio: waPlantilla === "rotar" } : {}),
         base_id: baseId || undefined,

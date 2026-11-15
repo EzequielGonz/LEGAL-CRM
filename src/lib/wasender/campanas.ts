@@ -409,10 +409,13 @@ export async function frenoDeLinea(lineaId: string, ahora: Date, supabase: Db = 
   });
   if (porEntrega || opts.sinFrenoPorRespuesta) return porEntrega;
   // 15/11: freno por respuesta (menos del 1 % con 100 envíos o más en 7 días).
+  // Revisión 15/11: solo envíos de hace más de 24 h (los últimos todavía no tuvieron tiempo de contestar),
+  // y cuenta como respuesta cualquiera que haya contestado aunque después cambie de estado.
   const desde = new Date(ahora.getTime() - FRENO_RESPUESTA.dias * 86_400_000).toISOString();
+  const maduros = new Date(ahora.getTime() - 86_400_000).toISOString();
   const [{ count: enviados }, { count: respondieron }] = await Promise.all([
-    supabase.from("campaign_contacts").select("id", { count: "exact", head: true }).in("campaign_id", ids).in("status", ENVIADOS).gte("sent_at", desde),
-    supabase.from("campaign_contacts").select("id", { count: "exact", head: true }).in("campaign_id", ids).eq("status", "respondio").gte("sent_at", desde),
+    supabase.from("campaign_contacts").select("id", { count: "exact", head: true }).in("campaign_id", ids).in("status", ENVIADOS).gte("sent_at", desde).lte("sent_at", maduros),
+    (supabase.from("campaign_contacts") as any).select("id", { count: "exact", head: true }).in("campaign_id", ids).not("responded_at", "is", null).gte("sent_at", desde).lte("sent_at", maduros),
   ]);
   return motivoDeFrenoPorRespuesta({ enviados: enviados ?? 0, respondieron: respondieron ?? 0 });
 }

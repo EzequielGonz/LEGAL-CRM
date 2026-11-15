@@ -24,6 +24,7 @@ import { clasificarFallaWasender, notaFallaWasender } from "@/lib/wasender/campa
 import { prepararEnvioWasender, textoDePlantilla } from "@/lib/seguimiento/wasender";
 import { consultarCriterio } from "@/lib/seguimiento/criterio-servidor";
 import { motivoNoInsistir } from "@/lib/seguimiento/criterio";
+import { frenaPorTope, TEXTO_TOPE } from "@/lib/contacto/tope";
 
 /**
  * Etapa 2 · Bloque 2.3 — Motor del seguimiento general (cuatro perfiles).
@@ -549,6 +550,8 @@ async function processTaskWasender(
 
   const frenada = await pasarCompuerta(supabase, task, token);
   if (frenada) return frenada;
+  // Revisión 15/11: tope único de 3 automáticos sin respuesta por persona.
+  if (await frenaPorTope(task.contact_id, supabase)) return noInsistir(supabase, task, TEXTO_TOPE);
 
   const atSend = clock();
   const third = decideAtExecution(timing, atSend, fresh.calendar);
@@ -696,6 +699,8 @@ async function processTask(supabase: Db, task: any, now: Date, calendar: Contact
   // Compuerta en la base inmediatamente antes de enviar.
   const frenada = await pasarCompuerta(supabase, task, token);
   if (frenada) return frenada;
+  // Revisión 15/11: tope único de 3 automáticos sin respuesta por persona.
+  if (await frenaPorTope(task.contact_id, supabase)) return noInsistir(supabase, task, TEXTO_TOPE);
 
   // Última comprobación de hora, calendario y plazo, justo antes de llamar a Meta.
   const atSend = clock();

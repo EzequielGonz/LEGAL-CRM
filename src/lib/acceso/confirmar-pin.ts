@@ -1,19 +1,10 @@
-import {
-  deviceSummary,
-  ensurePinState,
-  isValidPinFormat,
-  lockedUntil,
-  logAccessEvent,
-  originHash,
-  registerFailure,
-  verifyPin,
-  type AccessEventKind,
-} from "@/lib/acceso/pin";
+import { comprobarPinConTope, deviceSummary, logAccessEvent, type AccessEventKind } from "@/lib/acceso/pin";
 
 /**
  * Confirmación con el PIN para acciones que pueden hacer salir mensajes
- * (activar el seguimiento automático, levantar la pausa general…). Respeta
- * el bloqueo de 15 minutos por origen después de 5 intentos fallidos.
+ * (activar el seguimiento automático, levantar la pausa general…). Revisión
+ * 15/11: el intento se reserva antes de comprobar el código (5 por origen en
+ * 15 minutos); como hay sesión, no la frena la pausa general.
  */
 export async function confirmPin(
   request: Request,
@@ -21,16 +12,9 @@ export async function confirmPin(
   eventKind: AccessEventKind,
   detail: Record<string, unknown> = {}
 ): Promise<{ ok: true } | { ok: false; status: number; error: string }> {
-  const origin = await originHash(request);
-  if (await lockedUntil(origin)) {
-    return { ok: false, status: 429, error: "Demasiados intentos fallidos. Esperá 15 minutos." };
-  }
-  const value = typeof pin === "string" ? pin.trim() : "";
-  const state = await ensurePinState();
-  if (!state.pinHash || !(isValidPinFormat(value) && (await verifyPin(value, state.pinHash)))) {
-    const until = await registerFailure(origin);
-    return { ok: false, status: until ? 429 : 401, error: "PIN incorrecto." };
-  }
+  const r = await comprobarPinConTope(request, pin, { confiable: true });
+  if (!r.ok) return { ok: false, status: r.status, error: r.status === 429 ? "Demasiados intentos fallidos. Esperá 15 minutos." : r.error };
+  const origin = r.origin;
   await logAccessEvent(eventKind, { origin, device: deviceSummary(request), detail });
   return { ok: true };
 }

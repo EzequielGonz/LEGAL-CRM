@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { setBaseArchived } from "@/lib/archive";
 import { requireSession } from "@/lib/acceso/autorizacion";
+import { mensajeVisible } from "@/lib/error-publico";
 
 export const dynamic = "force-dynamic";
 
@@ -17,6 +18,6 @@ export async function POST(request: Request, props: { params: Promise<{ id: stri
     await setBaseArchived(params.id, body.accion === "archivar", typeof body?.nota === "string" ? body.nota.trim() || null : null);
     return NextResponse.json({ ok: true });
   } catch (err: any) {
-    return NextResponse.json({ error: String(err?.message ?? err) }, { status: 400 });
+    return NextResponse.json({ error: mensajeVisible(err, "bases/[id]/archivo") }, { status: 400 });
   }
 }

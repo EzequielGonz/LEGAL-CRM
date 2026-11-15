@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { requireSession } from "@/lib/acceso/autorizacion";
 import { urlSubidaSaliente } from "@/lib/adjuntos/salientes";
+import { mensajeVisible } from "@/lib/error-publico";
 
 export const dynamic = "force-dynamic";
 
@@ -14,6 +15,6 @@ export async function POST(request: Request, props: { params: Promise<{ id: stri
   try {
     return NextResponse.json(await urlSubidaSaliente(params.id, String(nombre ?? "")));
   } catch (err: any) {
-    return NextResponse.json({ error: String(err?.message ?? err) }, { status: 400 });
+    return NextResponse.json({ error: mensajeVisible(err, "conversations/[id]/subida") }, { status: 400 });
   }
 }

@@ -358,6 +358,15 @@ async function afterInboundSaved({
   const pedidoDatos = aiReadable && !block ? pideOrigenOBajaDeDatos(body) : null;
   if (pedidoDatos) {
     await atenderPedidoDeDatos({ contact, conversation, pedido: pedidoDatos });
+    // Revisión 15/11: si además amenaza o denuncia («borren mis datos o los denuncio»), se avisa igual.
+    const amenaza = reclamoEnMensaje(body, { captado });
+    if (amenaza?.tipo === "amenaza_legal") {
+      try {
+        await solicitarAtencion({ opportunityId, contactId: contact.id, conversationId: conversation.id, motivo: "amenaza_legal", actor: "sistema", nota: amenaza.senal.que, chatYaPausado: true });
+      } catch (err) {
+        console.error("[oportunidad] No se pudo registrar la amenaza:", err);
+      }
+    }
     result.respuesta = { responder: false, motivo: "detenido" };
     return result;
   }
@@ -382,13 +391,14 @@ async function afterInboundSaved({
   //    la queja de un cliente captado, abre una incidencia del perfil, pasa a una
   //    persona y el bot no contesta. El enojo y el «no me escriban» no entran acá.
   const reclamo = reclamoEnMensaje(body, { captado });
-  if (reclamo && opportunityId) {
+  // Revisión 15/11: sin oportunidad igual se atiende (solicitarAtencion la busca o la crea por el contacto).
+  if (reclamo) {
     // 15/11 (decisión de la responsable): ante una amenaza o denuncia, disculpa
     // breve, se corta y se avisa (la incidencia ya avisa a los dispositivos).
     // La queja de un cliente captado no se corta: la atiende una persona.
     if (reclamo.tipo === "amenaza_legal" && !block) await disculpaYCorte({ contact, conversation, texto: TEXTO_DISCULPA_AMENAZA, nota: `Amenaza o denuncia: ${reclamo.senal.que}. Disculpa breve y corte (regla 15/11).` });
     try {
-      await solicitarAtencion({ opportunityId, conversationId: conversation.id, motivo: reclamo.tipo, actor: "sistema", nota: reclamo.senal.que });
+      await solicitarAtencion({ opportunityId, contactId: contact.id, conversationId: conversation.id, motivo: reclamo.tipo, actor: "sistema", nota: reclamo.senal.que });
     } catch (err) {
       console.error("[oportunidad] No se pudo registrar el reclamo:", err);
     }
@@ -520,7 +530,15 @@ async function atenderPedidoDeDatos({
  */
 async function disculpaYCorte({ contact, conversation, texto, nota }: { contact: any; conversation: any; texto: string; nota: string }) {
   const pause = await getAutomationPause();
-  if (conversation.ai_enabled && !pause.aiRepliesPaused) {
+  // Revisión 15/11: con el agente del área apagado no sale ninguna respuesta automática (solo se detiene).
+  let agenteActivo = false;
+  try {
+    const { data: ag } = await createAdminClient().from("ai_agents").select("active").eq("area", conversation.area).maybeSingle();
+    agenteActivo = !!(ag as any)?.active && (await agentReadiness(conversation.area)).ready;
+  } catch {
+    agenteActivo = false;
+  }
+  if (conversation.ai_enabled && !pause.aiRepliesPaused && agenteActivo) {
     try {
       await sendOutboundMessage({ conversationId: conversation.id, senderType: "agente_ia", body: texto, origin: "respuesta_entrante" });
     } catch (err) {

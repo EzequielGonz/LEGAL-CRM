@@ -19,14 +19,21 @@ function normalizar(t: unknown): string {
 }
 
 // «Me quiero morir de risa / de vergüenza / con los precios» no es una crisis.
-const NO_LITERAL = "(?! de (?:risa|verguenza|amor|calor|frio|hambre|sueno|ganas|aburrimiento|envidia|la risa))(?! con (?:los|las|el|la|este|esta|esos|esas) )";
+const NO_LITERAL = "(?! de (?:(?:la |tanta |una )?(?:risa|verguenza|amor|calor|frio|hambre|sueno|ganas|aburrimiento|envidia|bronca|pena|emocion|alegria|felicidad|tristeza)))(?! con (?:los|las|el|la|este|esta|esos|esas) )";
 
 const SENALES_CRISIS: RegExp[] = [
   /\bsuicid\w*/,
   /\bme (?:voy a|quiero) (?:quitar|sacar) la vida\b/,
-  /\b(?:matarme|quitarme la vida|sacarme la vida|terminar con mi vida|acabar con mi vida|terminar con mi existencia)\b/,
-  new RegExp(`\\bme (?:voy a|quiero|quisiera|kiero) (?:matar|morir|desaparecer para siempre)\\b${NO_LITERAL}`),
-  /\bno (?:quiero|tengo ganas de|aguanto) (?:vivir|seguir viviendo|seguir con vida|estar vivo|estar viva)\b/,
+  new RegExp(`\\bmatarme\\b${NO_LITERAL}`),
+  /\b(?:quitarme la vida|sacarme la vida|terminar con mi vida|acabar con mi vida|terminar con mi existencia)\b/,
+  new RegExp(`\\bme (?:voy a|quiero|quisiera|kiero) (?:matar|morir|desaparecer para siempre|desaparecer)\\b${NO_LITERAL}`),
+  new RegExp(`\\b(?:quiero|quisiera) morirme\\b${NO_LITERAL}`),
+  new RegExp(`(?:^|[.!?,] *)me mato\\b${NO_LITERAL}(?! (?:trabajando|estudiando|laburando|corriendo))`),
+  /\bojala (?:me muera|no despertar|no despierte)\b/,
+  /\bno vale la pena (?:vivir|seguir viviendo|seguir con vida)\b/,
+  /\bme voy a tirar (?:de|del|abajo de|bajo) (?:un|una|el|la) (?:puente|edificio|balcon|ventana|tren|subte|colectivo)\b/,
+  // Revisión 15/11: «no quiero vivir en esa zona» o «seguir viviendo con mi ex» no son crisis.
+  /\bno (?:quiero|tengo ganas de|aguanto) (?:vivir|seguir viviendo|seguir con vida|estar vivo|estar viva)\b(?! (?:en|con|aca|ahi|alli|asi|cerca|lejos|juntos|solo|sola|de|del|al|por) )(?! (?:en|con|aca|ahi|alli|asi)$)/,
   /\bpienso en (?:morir|matarme|morirme|quitarme|suicid\w*)\b/,
   /\b(?:cortarme las venas|lastimarme a proposito|autolesion\w*|hacerme dano a proposito)\b/,
   /\b(?:ya )?no le encuentro sentido a (?:la|mi) vida\b/,
@@ -56,13 +63,19 @@ export const TEXTO_CRISIS = [
 ].join("\n");
 
 const ENOJO: RegExp[] = [
-  /\b(?:dejen|deja|deje|dejate|dejense) de (?:joder|molestar|escribir|escribirme|mandar|mandarme|romper|hinchar|llenarme)\b/,
-  /\bno (?:me )?(?:jodan|molesten|rompan|hinchen|jodas|molestes)\b/,
+  /\b(?:dejen|deja|deje|dejate|dejense) de (?:joder|molestar|escribir|escribirme|mandar|mandarme|romper|hinchar|llenarme)\b(?! (?:a|al|a la|a los|a mi|a mis) )/,
+  // Revisión 15/11: «no me molestes ahora, escribime mañana» no es enojo (pide otro momento).
+  /\bno (?:me )?(?:jodan|molesten|rompan|hinchen|jodas|molestes)\b(?!.*\b(?:ahora|hoy|despues|manana|mas tarde|escribime|escribanme|llamame|llamenme)\b)/,
+  /\bdejame de (?:joder|molestar|romper|hinchar)\b/,
   /\bbasta de (?:mensajes|escribir|escribirme|molestar|joder|mandar)\b/,
   /\bustedes son (?:unos |unas )?(?:pesad|forr|pelotud|bolud|chant|estafador|chorr|ladron|idiota|imbecil|mentiros)\w*/,
   /^(?:son|sos) (?:unos |unas |un |una )?(?:pesad|forr|pelotud|bolud|chant|estafador|chorr|ladron|idiota|imbecil|mentiros)\w*/,
   /\bme (?:tienen|tenes) (?:re )?(?:podrid|hart|cansad|las bolas llenas)\w*/,
-  /\b(?:hdp|hijos? de (?:re)?puta|la concha de (?:tu|su|la) madre|andate a la mierda|vayanse a la mierda|metanse (?:el|los) )/,
+  // Revisión 15/11: el insulto cuenta si es el mensaje entero o va contra «ustedes» (no «mi jefe es un hdp»).
+  /^(?:(?:son|sos|que|unos|manga de)\s+)?(?:unos?\s+)?(?:hdp|hijos? de (?:re)?puta|la concha de (?:tu|su|la) madre|andate a la mierda|vayanse a la mierda)[\s.!]*$/,
+  /\b(?:ustedes|vos|son|sos)\b[^.!?]{0,20}\b(?:hdp|hijos? de (?:re)?puta)\b/,
+  /\b(?:andate|vayanse|vallanse) a la mierda\b/,
+  /\bmetanse (?:el|los) /,
   /\b(?:que|son re|son muy) pesad(?:o|a|os|as)\b(?! (?:el|la|los|las) )/,
   /\bdejen de mandarme (?:spam|mensajes)\b|\besto es spam\b|\bson spam\b/,
 ];

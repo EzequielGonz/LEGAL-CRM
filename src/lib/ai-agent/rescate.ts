@@ -8,6 +8,7 @@
  */
 import { createAdminClient } from "@/lib/supabase/admin";
 import { runAgentTurn } from "@/lib/ai-agent/agent";
+import { MARCA_FALLA_MODELO } from "@/lib/ai-agent/reintento";
 import { getAutomationPause } from "@/lib/automation-pause";
 import { contactBlockReason } from "@/lib/detention";
 import { ensureOpportunity } from "@/lib/opportunities";
@@ -79,8 +80,9 @@ export async function rescatarConversacion(conversationId: string, ahora: Date, 
   const { count } = await (s.from("agent_turn_logs" as any) as any)
     .select("id", { count: "exact", head: true })
     .eq("conversation_id", conversationId)
-    // 15/11: un turno que falló (la IA no respondió) no cuenta: se reintenta una vez.
-    .neq("resultado", "error")
+    // 15/11: un turno en el que falló la IA no cuenta: se reintenta una vez. Una falla de
+    // envío sí cuenta (el mensaje pudo haber salido: no se repite).
+    .or(`resultado.neq.error,error.not.like.${MARCA_FALLA_MODELO}*`)
     .gte("created_at", u.created_at);
   if (count) return null;
   const { data: conv } = await s.from("conversations").select("*, contacts(*)").eq("id", conversationId).maybeSingle();

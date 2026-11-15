@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { requireSession } from "@/lib/acceso/autorizacion";
 import { avanzarExtraccion, cancelarExtraccion, crearExtraccion, ExtraccionError, leerExtraccion, leerLimites, listarExtracciones, usadosHoy } from "@/lib/marketing/extraer";
 import { requisitosEjecutarBase } from "@/lib/marketing/ejecutar-base";
+import { mensajeVisible } from "@/lib/error-publico";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -44,6 +45,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ extraccion: await leerExtraccion(ext.id), paso });
   } catch (err: any) {
     const status = err instanceof ExtraccionError ? err.status : 500;
-    return NextResponse.json({ error: String(err?.message ?? err) }, { status });
+    return NextResponse.json({ error: mensajeVisible(err, "marketing/extraer") }, { status });
   }
 }

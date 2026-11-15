@@ -223,7 +223,8 @@ function respuestaSimulada(area: Area, nombre: string, args: Record<string, unkn
       return { ok: false, captado: false, simulado: true, motivo: llave.motivo, nota: "Su último mensaje no es una aceptación. No captes: seguí la charla." };
     }
   }
-  if (CIERRAN.has(nombre)) {
+  // Revisión 15/11: «captar» con solo_precio no cierra (en vivo pasa a una persona sin cierre).
+  if (CIERRAN.has(nombre) && !(nombre === "captar" && args.solo_precio === true)) {
     const completa =
       nombre === "finalizar_consulta" ? args.resultado === "completado" : nombre === "registrar_resultado_marketing" ? args.resultado === "aprobado" : true;
     if (completa) {

@@ -4,6 +4,7 @@ import { confirmPin } from "@/lib/acceso/confirmar-pin";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { urlSubidaSaliente } from "@/lib/adjuntos/salientes";
 import { aprobarPresupuesto, cargarYEnviarPresupuesto, crearPresupuestoManual, PresupuestoError, reprogramarPresupuesto, urlSubidaPresupuesto } from "@/lib/marketing/presupuestos";
+import { mensajeVisible } from "@/lib/error-publico";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -29,7 +30,7 @@ export async function POST(request: Request) {
       const r = await crearPresupuestoManual({ conversationId, detalle: String(body?.detalle ?? "").slice(0, 2000) });
       return NextResponse.json({ ...r, detalle: r.nuevo ? "Presupuesto creado: cargá el archivo y elegí cuándo enviarlo." : "Ese contacto ya tiene un presupuesto abierto: está en la lista." });
     } catch (err: any) {
-      return NextResponse.json({ error: String(err?.message ?? err) }, { status: err instanceof PresupuestoError ? err.status : 500 });
+      return NextResponse.json({ error: mensajeVisible(err, "marketing/presupuestos") }, { status: err instanceof PresupuestoError ? err.status : 500 });
     }
   }
   const budgetId = typeof body?.budgetId === "string" ? body.budgetId : "";
@@ -77,6 +78,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Acción desconocida." }, { status: 400 });
   } catch (err: any) {
     const status = err instanceof PresupuestoError ? err.status : 500;
-    return NextResponse.json({ error: String(err?.message ?? err) }, { status });
+    return NextResponse.json({ error: mensajeVisible(err, "marketing/presupuestos") }, { status });
   }
 }

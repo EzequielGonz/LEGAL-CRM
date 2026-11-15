@@ -33,7 +33,13 @@ export async function POST(request: Request) {
   const origin = await originHash(request);
   const device = deviceSummary(request);
 
-  const intento = await tryAttempt(origin);
+  // Revisión 15/11: hay sesión abierta: la pausa general no frena el cambio de PIN.
+  let intento: Awaited<ReturnType<typeof tryAttempt>>;
+  try {
+    intento = await tryAttempt(origin, true);
+  } catch {
+    return NextResponse.json({ error: "No se pudo comprobar el acceso. Probá de nuevo en un momento." }, { status: 503 });
+  }
   const locked = intento ? (intento.permitido ? null : intento.hasta) : await lockedUntil(origin);
   if (locked) {
     return NextResponse.json(
@@ -55,7 +61,7 @@ export async function POST(request: Request) {
   }
 
   // El actual ya se comprobó: el intento no cuenta como fallo.
-  if (intento) await attemptOk(origin);
+  if (intento) await attemptOk(origin, true);
   if (!isValidNewPinFormat(nuevo)) {
     return NextResponse.json({ error: "El PIN nuevo tiene que tener exactamente 8 números." }, { status: 400 });
   }

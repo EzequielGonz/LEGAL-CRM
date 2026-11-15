@@ -441,7 +441,8 @@ async function tickLocked(
 
   // 15/11: tope único de 3 automáticos sin respuesta por persona (todas sus campañas y seguimientos).
   if (await frenaPorTope(claim.contact_id, supabase)) {
-    await finishClaim(supabase, claim.id, token, "opt_out", { error: `Tope por persona: ${TEXTO_TOPE}` });
+    // No es una baja: queda como «no enviado» con el motivo (no cuenta en las bajas de la campaña).
+    await finishClaim(supabase, claim.id, token, "fallo", { error: `Tope por persona: ${TEXTO_TOPE}` });
     return { campaignId, action: "failed_send", detail: TEXTO_TOPE };
   }
 
@@ -715,11 +716,10 @@ export async function launchCampaign(campaignId: string): Promise<TickResult> {
   await assertOutboundAllowed();
   const supabase = createAdminClient();
 
-  const { data: campaign, error: campaignError } = await supabase
-    .from("campaigns")
-    .select("started_at, archived_at, pause_reason")
+  const { data: campaign, error: campaignError } = (await (supabase.from("campaigns") as any)
+    .select("started_at, archived_at, pause_reason, entrenamiento_desde")
     .eq("id", campaignId)
-    .single();
+    .single()) as { data: { started_at: string | null; archived_at: string | null; pause_reason: string | null; entrenamiento_desde: string | null } | null; error: any };
 
   if (campaignError || !campaign) throw new Error("Campaña no encontrada");
   // 15/11: reanudar una campaña frenada por respuesta es decisión propia: ese freno no la vuelve a parar en 7 días.
@@ -751,6 +751,8 @@ export async function launchCampaign(campaignId: string): Promise<TickResult> {
       pause_reason: null,
       paused_at: null,
       ...(salteaFrenoRespuesta ? { freno_respuesta_ignorado_at: new Date().toISOString() } : {}),
+      // Revisión 15/11: la semana de entrenamiento se cuenta desde el primer lanzamiento, no desde que se creó.
+      ...(!(campaign as any).started_at && (campaign as any).entrenamiento_desde ? { entrenamiento_desde: new Date().toISOString() } : {}),
     } as any)
     .eq("id", campaignId);
 

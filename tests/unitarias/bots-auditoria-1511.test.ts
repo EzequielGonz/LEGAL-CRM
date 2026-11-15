@@ -123,3 +123,28 @@ test("agendar: solo un horario libre y futuro de los que dio la agenda", () => {
   assert.equal(horarioOfrecido("2026-11-15T13:00:00Z", slots, ahora), null);
   assert.equal(horarioOfrecido("mañana a las 10", slots, ahora), null);
 });
+
+import { agruparIp } from "../../src/lib/acceso/pin";
+import { esFallaTransitoria } from "../../src/lib/ai-agent/reintento";
+import { mensajeVisible, TEXTO_ERROR_GENERICO } from "../../src/lib/error-publico";
+
+test("revisión: casos que encontraron los revisores", () => {
+  for (const t of ["quiero morirme", "me mato", "ojalá me muera", "no vale la pena vivir", "me voy a tirar de un puente"]) assert.ok(esCrisis(t), t);
+  for (const t of ["no quiero vivir en esa zona", "no quiero seguir viviendo con mi ex", "matarme de risa", "me quiero morir de la verguenza", "me mato trabajando"]) assert.ok(!esCrisis(t), t);
+  for (const t of ["mi jefe es un hdp", "no me molestes ahora, estoy trabajando, escribime mañana", "dejá de molestar a mi hijo"]) assert.ok(!esEnojoConNosotros(t), t);
+  for (const t of ["dejame de joder", "andate a la mierda", "son unos hijos de puta"]) assert.ok(esEnojoConNosotros(t), t);
+  for (const t of ["Sí, me interesa, pero no tengo tiempo hoy", "si, dale. no hace falta que sea hoy"]) assert.deepEqual(aceptacionReal(t), { ok: true }, t);
+  for (const t of ["¿qué necesito para el reclamo?", "¿puedo pagar en 12 cuotas?"]) assert.equal((aceptacionReal(t) as any).motivo, "pregunta_sin_aceptacion", t);
+  for (const t of ["30 mil pesos", "cuarenta y cinco mil", "veinte lucas", "son 30.000", "el treinta por ciento", "cien dólares"]) assert.ok(!validarTextoSalida(t).ok, t);
+  for (const t of ["aproximadamente 50 casos por mes", "alrededor de 16:30", "Rondan los 15 abogados"]) assert.ok(validarTextoSalida(t).ok, t);
+});
+
+test("revisión: origen por /64, fallas pasajeras y errores visibles", () => {
+  assert.equal(agruparIp("2001:db8:1:2:3:4:5:6"), "2001:db8:1:2::/64");
+  assert.equal(agruparIp("2001:db8:1:2::9"), "2001:db8:1:2::/64");
+  assert.equal(agruparIp("190.1.2.3"), "190.1.2.3");
+  assert.ok(esFallaTransitoria({ status: 503 }) && esFallaTransitoria({ status: 429 }) && esFallaTransitoria(new Error("fetch failed")));
+  assert.ok(!esFallaTransitoria({ status: 400, message: "invalid argument" }));
+  assert.equal(mensajeVisible(new Error("Contacto detenido: pidió no ser contactado."), "t"), "Contacto detenido: pidió no ser contactado.");
+  assert.equal(mensajeVisible({ code: "23505", message: "duplicate key value violates unique constraint" }, "t"), TEXTO_ERROR_GENERICO);
+});

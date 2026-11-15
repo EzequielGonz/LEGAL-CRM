@@ -9,6 +9,7 @@ import {
   originHash,
   registerFailure,
   verifyPin,
+  comprobarPinConTope,
 } from "@/lib/acceso/pin";
 import { getAutomationPause } from "@/lib/automation-pause";
 import { requireSession } from "@/lib/acceso/autorizacion";
@@ -31,14 +32,13 @@ export async function POST(request: Request) {
   const origin = await originHash(request);
   const device = deviceSummary(request);
 
-  if (await lockedUntil(origin)) {
-    return NextResponse.json({ error: "Demasiados intentos fallidos. Esperá 15 minutos." }, { status: 429 });
+  // Revisión 15/11: intento reservado antes de comprobar el código (hay sesión: no la frena la pausa general).
+  const chequeo = await comprobarPinConTope(request, pin, { confiable: true });
+  if (!chequeo.ok) {
+    if (chequeo.hasta && chequeo.status === 429) await logAccessEvent("bloqueo_origen", { origin, device, detail: { hasta: chequeo.hasta.toISOString() } });
+    return NextResponse.json({ error: chequeo.status === 429 ? "Demasiados intentos fallidos. Esperá 15 minutos." : chequeo.error }, { status: chequeo.status });
   }
   const state = await ensurePinState();
-  if (!state.pinHash || !(isValidPinFormat(pin) && (await verifyPin(pin, state.pinHash)))) {
-    const until = await registerFailure(origin);
-    return NextResponse.json({ error: "PIN incorrecto." }, { status: until ? 429 : 401 });
-  }
 
   const before = await getAutomationPause();
   const after = {

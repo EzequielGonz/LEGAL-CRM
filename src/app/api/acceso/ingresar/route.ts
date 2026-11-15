@@ -13,7 +13,9 @@ import {
   tryAttempt,
   verifyPin,
 } from "@/lib/acceso/pin";
-import { SESSION_COOKIE, randomId, sessionCookieOptions, signSession } from "@/lib/acceso/session";
+import { DEVICE_COOKIE, SESSION_COOKIE, deviceCookieOptions, dispositivoConocido, firmarDispositivo, randomId, sessionCookieOptions, signSession } from "@/lib/acceso/session";
+import { cookies } from "next/headers";
+import { ReservaNoDisponible } from "@/lib/acceso/pin";
 
 export const dynamic = "force-dynamic";
 
@@ -55,7 +57,15 @@ export async function POST(request: Request) {
   }
 
   // 15/11: reserva atómica del intento. Sin la función en la base, la lectura anterior.
-  const intento = await tryAttempt(origin);
+  // Revisión 15/11: un dispositivo que ya ingresó bien no queda frenado por la pausa general.
+  const confiable = await dispositivoConocido((await cookies()).get(DEVICE_COOKIE)?.value);
+  let intento: Awaited<ReturnType<typeof tryAttempt>>;
+  try {
+    intento = await tryAttempt(origin, confiable);
+  } catch (err) {
+    if (err instanceof ReservaNoDisponible) return NextResponse.json({ error: err.message }, { status: 503 });
+    throw err;
+  }
   const locked = intento ? (intento.permitido ? null : intento.hasta) : await lockedUntil(origin);
   if (locked) {
     await logAccessEvent("intento_bloqueado", { origin, device, detail: intento?.general ? { general: true } : {} });
@@ -83,7 +93,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "PIN incorrecto." }, { status: 401 });
   }
 
-  if (intento) await attemptOk(origin);
+  if (intento) await attemptOk(origin, confiable);
   else await clearFailures(origin);
   const sid = randomId();
   const token = await signSession({ v: state.sessionVersion, iat: Math.floor(Date.now() / 1000), ini: Math.floor(Date.now() / 1000), sid, ...(pin.length === 6 ? { c6: true } : {}) });
@@ -91,5 +101,6 @@ export async function POST(request: Request) {
 
   const response = NextResponse.json({ ok: true, next: safeNextPath(body?.next) });
   response.cookies.set(SESSION_COOKIE, token, sessionCookieOptions());
+  if (!confiable) response.cookies.set(DEVICE_COOKIE, await firmarDispositivo(), deviceCookieOptions());
   return response;
 }

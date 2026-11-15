@@ -42,7 +42,7 @@ import { registrarTurno } from "@/lib/experimento/servicio";
 import { instruccionesDeRol } from "@/lib/agentes/roles";
 import { buildSystemPrompt, criterioDelRubro, REGLAS_ESTRICTAS } from "./prompt";
 import { GUIA_CAPTACION_Y_CIERRE } from "@/lib/agentes/guia-cierre";
-import { conTiempoYReintento } from "@/lib/ai-agent/reintento";
+import { conTiempoYReintento, esFallaTransitoria, MARCA_FALLA_MODELO } from "@/lib/ai-agent/reintento";
 import { aceptacionReal } from "@/lib/agentes/aceptacion";
 import { marcaDeTiempo } from "@/lib/agentes/tiempo-historial";
 import { modoDelContacto } from "@/lib/agentes/entrante";
@@ -82,12 +82,14 @@ export type ModeloAgente = (req: {
 
 const modeloGemini: ModeloAgente = async ({ contents, systemInstruction, tools, modelo }) => {
   // 15/11: tiempo máximo de 20 s y un reintento (ver ./reintento).
-  const response = await conTiempoYReintento(() =>
-    gemini().models.generateContent({
-      model: modelo || identificadorModelo(),
-      contents,
-      config: { systemInstruction, tools: [{ functionDeclarations: tools as any }] },
-    })
+  const response = await conTiempoYReintento(
+    () =>
+      gemini().models.generateContent({
+        model: modelo || identificadorModelo(),
+        contents,
+        config: { systemInstruction, tools: [{ functionDeclarations: tools as any }] },
+      }),
+    { debeReintentar: esFallaTransitoria }
   );
   const u: any = (response as any).usageMetadata ?? {};
   return {
@@ -113,13 +115,16 @@ export function usarModeloAgente(modelo: ModeloAgente | null) {
 function buildHistory(rows: { direction: string; body: string | null; created_at?: string | null }[]): Content[] {
   const history: Content[] = [];
   let anterior: string | null = null;
+  let huboEntrante = false;
 
   for (const row of rows) {
     if (!row.body) continue;
     const role: "user" | "model" = row.direction === "entrante" ? "user" : "model";
     // 15/11: si la persona vuelve a escribir después de más de un día, el bot lo ve.
-    const marca = role === "user" ? marcaDeTiempo(anterior, row.created_at ?? null) : null;
+    // Revisión: solo si la persona ya había escrito antes (la primera respuesta a una campaña vieja no se marca).
+    const marca = role === "user" && huboEntrante ? marcaDeTiempo(anterior, row.created_at ?? null) : null;
     if (row.created_at) anterior = row.created_at;
+    if (role === "user") huboEntrante = true;
     const body: string = marca ? `${marca}\n${row.body}` : row.body;
     const last = history[history.length - 1];
     const lastPart = last?.parts?.length === 1 ? last.parts[0] : undefined;
@@ -486,7 +491,9 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
   }
   } catch (err: any) {
     // Falla del modelo: se registra y se deja para atención humana.
-    const detalle = String(err?.message ?? err).slice(0, 400);
+    // Revisión 15/11: la marca «falla_modelo» separa la falla de la IA (se puede reintentar)
+    // de la falla de un envío (podría haber salido: no se reintenta).
+    const detalle = `${MARCA_FALLA_MODELO} ${String(err?.message ?? err)}`.slice(0, 400);
     await registrar("error", { error: detalle });
     // 15/11: si el mismo mensaje ya tuvo un turno con error (el rescate lo
     // reintentó), el chat pasa a una persona: no queda nadie sin respuesta.
@@ -724,6 +731,20 @@ async function executeTool(
         startsAt: libre.starts_at,
         endsAt: libre.ends_at,
       });
+      // Revisión 15/11: si otro chat tomó el mismo horario al mismo tiempo, la cita más nueva se cancela
+      // (queda con motivo, no se borra) y se ofrece otro horario.
+      const { data: choques } = await (supabase.from("appointments") as any)
+        .select("id, created_at, kind, status")
+        .eq("area", ctx.area)
+        .neq("status", "cancelada")
+        .lt("starts_at", libre.ends_at)
+        .gt("ends_at", libre.starts_at)
+        .neq("id", appointment.id);
+      const otraPrimero = ((choques ?? []) as any[]).some((c) => c.kind !== "ia" && Date.parse(c.created_at) <= Date.parse((appointment as any).created_at ?? new Date().toISOString()));
+      if (otraPrimero) {
+        await (supabase.from("appointments") as any).update({ status: "cancelada" }).eq("id", appointment.id);
+        return { output: { ok: false, error: "Ese horario se acaba de ocupar. Usá consultar_disponibilidad y ofrecé otros dos." } };
+      }
 
       await supabase
         .from("conversations")
@@ -1138,6 +1159,7 @@ async function derivarSiFallaDeNuevo(input: { conversationId: string; contactId:
       .select("id", { count: "exact", head: true })
       .eq("conversation_id", input.conversationId)
       .eq("resultado", "error")
+      .like("error", `${MARCA_FALLA_MODELO}%`)
       .gte("created_at", input.desde);
     if ((count ?? 0) < 2) return;
     await solicitarAtencion({

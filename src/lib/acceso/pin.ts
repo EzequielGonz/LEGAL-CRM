@@ -82,9 +82,52 @@ export async function verifyPin(pin: string, stored: string): Promise<boolean> {
 // Origen (para la pausa de 15 minutos tras 5 fallos). Se guarda con hash.
 // ---------------------------------------------------------------------
 export function clientIp(request: Request): string {
-  const fwd = request.headers.get("x-forwarded-for");
-  if (fwd) return fwd.split(",")[0].trim();
-  return request.headers.get("x-real-ip")?.trim() || "desconocido";
+  // Revisión 15/11: primero los encabezados que escribe Vercel (el cliente no los puede elegir).
+  const ip =
+    request.headers.get("x-vercel-forwarded-for")?.split(",")[0].trim() ||
+    request.headers.get("x-real-ip")?.trim() ||
+    request.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
+    "desconocido";
+  return agruparIp(ip);
+}
+
+/** IPv6: se agrupa por /64 (cada casa o red tiene miles de direcciones). Pura. */
+export function agruparIp(ip: string): string {
+  if (!ip.includes(":")) return ip;
+  const partes = ip.split("%")[0].toLowerCase().split(":");
+  const i = partes.indexOf("");
+  const llenas = i === -1 ? partes : [...partes.slice(0, i), ...Array(8 - partes.filter(Boolean).length).fill("0"), ...partes.slice(i + 1).filter(Boolean)];
+  return `${llenas.slice(0, 4).map((p) => p || "0").join(":")}::/64`;
+}
+
+/**
+ * Revisión 15/11: un intento con el PIN, con el tope atómico. `confiable`: hay
+ * sesión abierta o el dispositivo ya ingresó bien (no lo frena la pausa general).
+ */
+export async function comprobarPinConTope(
+  request: Request,
+  pin: unknown,
+  { confiable }: { confiable: boolean }
+): Promise<{ ok: true; origin: string } | { ok: false; status: number; error: string; origin: string; hasta: Date | null; general: boolean }> {
+  const origin = await originHash(request);
+  let intento: Awaited<ReturnType<typeof tryAttempt>>;
+  try {
+    intento = await tryAttempt(origin, confiable);
+  } catch {
+    return { ok: false, status: 503, error: "No se pudo comprobar el acceso. Probá de nuevo en un momento.", origin, hasta: null, general: false };
+  }
+  const locked = intento ? (intento.permitido ? null : intento.hasta) : await lockedUntil(origin);
+  if (locked) return { ok: false, status: 429, error: "Demasiados intentos. Esperá 15 minutos.", origin, hasta: locked, general: !!intento?.general };
+  const value = typeof pin === "string" ? pin.trim() : "";
+  const state = await ensurePinState();
+  const ok = !!state.pinHash && isValidPinFormat(value) && (await verifyPin(value, state.pinHash));
+  if (!ok) {
+    const until = intento ? intento.hasta : await registerFailure(origin);
+    return { ok: false, status: until ? 429 : 401, error: "PIN incorrecto.", origin, hasta: until, general: !!intento?.general };
+  }
+  if (intento) await attemptOk(origin, confiable);
+  else await clearFailures(origin);
+  return { ok: true, origin };
 }
 
 export async function originHash(request: Request): Promise<string> {
@@ -108,11 +151,13 @@ export function deviceSummary(request: Request): string {
 
 export async function lockedUntil(origin: string): Promise<Date | null> {
   const supabase = createAdminClient();
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("access_origin_limits")
     .select("locked_until")
     .eq("origin_hash", origin)
     .maybeSingle();
+  // Revisión 15/11: si no se puede leer, se trata como en pausa (no se prueba el código a ciegas).
+  if (error) return new Date(Date.now() + 60_000);
   const until = data?.locked_until ? new Date(data.locked_until) : null;
   return until && until.getTime() > Date.now() ? until : null;
 }
@@ -133,21 +178,34 @@ export async function registerFailure(origin: string): Promise<Date | null> {
  * origen y general). `null` = la función todavía no existe en la base: quien
  * llama sigue con la lectura anterior.
  */
-export async function tryAttempt(origin: string): Promise<{ permitido: boolean; hasta: Date | null; general: boolean } | null> {
+export class ReservaNoDisponible extends Error {
+  constructor() {
+    super("No se pudo comprobar el límite de intentos. Probá de nuevo en un momento.");
+    this.name = "ReservaNoDisponible";
+  }
+}
+
+/** Revisión 15/11: si falta la función, lectura anterior; ante cualquier otro error, se cierra (no se prueba el código). */
+function faltaLaFuncion(error: any): boolean {
+  return error?.code === "PGRST202" || error?.code === "42883";
+}
+
+export async function tryAttempt(origin: string, confiable = false): Promise<{ permitido: boolean; hasta: Date | null; general: boolean } | null> {
   const supabase = createAdminClient();
-  const { data, error } = await (supabase as any).rpc("access_try_attempt", { p_origin: origin });
+  const { data, error } = await (supabase as any).rpc("access_try_attempt", { p_origin: origin, p_confiable: confiable });
   if (error || !data) {
-    if (error) console.error("[acceso] Reserva de intento:", error.message);
-    return null;
+    if (error && faltaLaFuncion(error)) return null;
+    console.error("[acceso] Reserva de intento:", error?.message ?? "sin respuesta");
+    throw new ReservaNoDisponible();
   }
   const d = data as { permitido: boolean; hasta: string | null; general: boolean };
   return { permitido: !!d.permitido, hasta: d.hasta ? new Date(d.hasta) : null, general: !!d.general };
 }
 
 /** 15/11: ingreso correcto: el origen vuelve a cero y el contador general baja uno. */
-export async function attemptOk(origin: string): Promise<void> {
+export async function attemptOk(origin: string, confiable = false): Promise<void> {
   const supabase = createAdminClient();
-  const { error } = await (supabase as any).rpc("access_attempt_ok", { p_origin: origin });
+  const { error } = await (supabase as any).rpc("access_attempt_ok", { p_origin: origin, p_confiable: confiable });
   if (error) await clearFailures(origin);
 }
 
@@ -244,6 +302,8 @@ export async function ensurePinState(): Promise<PinState> {
         );
         if (upErr) throw new Error(`No se pudo aplicar la recuperación del PIN: ${upErr.message}`);
         await logAccessEvent("recuperacion_pin", { detail: { origen: "configuracion_privada" } });
+        // Revisión 15/11: la recuperación también levanta las pausas de intentos (la general incluida).
+        await supabase.from("access_origin_limits").update({ failures: 0, locked_until: null, updated_at: now }).neq("origin_hash", "");
         return {
           configured: true,
           pinHash: pin_hash,

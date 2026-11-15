@@ -4,7 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { requireSession } from "@/lib/acceso/autorizacion";
 import { enlaceFirmado, tipoAdjunto } from "@/lib/adjuntos/salientes";
 import { COLUMNAS_HILO } from "@/lib/chat-mensajes";
-import { respuestaErrorInterno } from "@/lib/error-publico";
+import { mensajeVisible, respuestaErrorInterno } from "@/lib/error-publico";
 
 /**
  * 15/11: en cada consulta periódica (con ?after) los audios pasados a texto se
@@ -87,7 +87,7 @@ export async function POST(request: Request, props: { params: Promise<{ id: stri
     try {
       media = { kind, link: await enlaceFirmado(adjunto.path), path: adjunto.path, filename: typeof adjunto.nombre === "string" ? adjunto.nombre.slice(0, 200) : undefined };
     } catch (err: any) {
-      return NextResponse.json({ error: String(err?.message ?? err) }, { status: 400 });
+      return NextResponse.json({ error: mensajeVisible(err, "conversations/[id]/messages") }, { status: 400 });
     }
   }
 
@@ -103,7 +103,7 @@ export async function POST(request: Request, props: { params: Promise<{ id: stri
       media,
     });
   } catch (err: any) {
-    return respuestaErrorInterno(err, "conversations/[id]/messages", 502);
+    return NextResponse.json({ error: mensajeVisible(err, "conversations/[id]/messages") }, { status: 502 });
   }
 
   return NextResponse.json({ ok: true });

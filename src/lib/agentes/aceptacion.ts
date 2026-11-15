@@ -12,27 +12,31 @@ function normalizar(t: string): string {
     .trim();
 }
 
-const NEGATIVO = [
+/** Rechazo siempre (salvo que pida el contacto con sus palabras). */
+const RECHAZO_DURO = [
   /\bno (me|nos) interesa\b/,
   /\bno,? gracias\b/,
+  /^no[.!]*$/,
+  /\bno estoy interesad[oa]\b/,
+];
+/** Rechazo suave: no cuenta si el mensaje arranca con un «sí» claro («sí, me interesa, pero hoy no tengo tiempo»). */
+const RECHAZO_SUAVE = [
   /\bahora no\b/,
   /\bno por ahora\b/,
   /\bmas adelante\b/,
   /\bno (quiero|necesito|hace falta)\b/,
-  /\bno estoy interesad[oa]\b/,
   /\bno (tengo|me da el) tiempo\b/,
-  /^no[.!]*$/,
   /\bdespues (te|les) (aviso|escribo)\b/,
   /\blo (voy a pensar|pienso|pensamos|vamos a pensar)\b|\blo tengo que pensar\b|\bdejame pensarlo\b/,
 ];
+const SI_AL_EMPEZAR = /^(si+|dale|ok|okey|oka|de una|me interesa|perfecto|listo|bueno|claro|obvio|genial|joya)\b/;
 
-const POSITIVO = [
-  /\b(si|sii+|dale|ok|okey|oka|bueno|listo|perfecto|genial|joya|claro|obvio|de una|de acuerdo|va|vamos)\b/,
+/** En una pregunta, solo cuenta como aceptación un «sí» o un pedido de contacto u horario (no un número suelto). */
+const ACEPTA_EN_PREGUNTA = [
+  /\b(si|sii+|dale|ok|okey|bueno|listo|perfecto|claro|de acuerdo)\b/,
   /\bme (interesa|sirve|parece bien|viene bien)\b/,
-  /\b(quiero|quisiera|necesito)\b/,
   /\b(llam[ae]me|llamenme|llamar|llamen|llamada|contactar|contactenme|escribanme|hablar|hablemos)\b/,
-  /\b(manana|tarde|noche|hoy|lunes|martes|miercoles|jueves|viernes|sabado|domingo|a la (manana|tarde)|despues de las|antes de las|\d{1,2}\s?(hs|h|horas)?)\b/,
-  /\bpor favor\b/,
+  /\b(manana|tarde|a la (manana|tarde)|despues de las|antes de las|lunes|martes|miercoles|jueves|viernes|sabado)\b/,
   /\bagend/,
   /\b(cuando|a que hora) (me|pueden|podes|puede)\b/,
 ];
@@ -45,8 +49,10 @@ export type Aceptacion = { ok: true } | { ok: false; motivo: "rechazo" | "pregun
 export function aceptacionReal(ultimoEntrante: string | null | undefined): Aceptacion {
   const t = normalizar(ultimoEntrante ?? "");
   if (!t) return { ok: false, motivo: "vacio" };
-  if (NEGATIVO.some((r) => r.test(t)) && !PIDE_CONTACTO.test(t)) return { ok: false, motivo: "rechazo" };
+  const pide = PIDE_CONTACTO.test(t);
+  if (!pide && RECHAZO_DURO.some((r) => r.test(t))) return { ok: false, motivo: "rechazo" };
+  if (!pide && !SI_AL_EMPEZAR.test(t) && RECHAZO_SUAVE.some((r) => r.test(t))) return { ok: false, motivo: "rechazo" };
   const pregunta = t.includes("?");
-  if (pregunta && !POSITIVO.some((r) => r.test(t))) return { ok: false, motivo: "pregunta_sin_aceptacion" };
+  if (pregunta && !ACEPTA_EN_PREGUNTA.some((r) => r.test(t))) return { ok: false, motivo: "pregunta_sin_aceptacion" };
   return { ok: true };
 }

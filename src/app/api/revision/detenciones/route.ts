@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { DETENTION_MOTIVES, createDetention, type DetentionMotive } from "@/lib/detention";
 import { requireSession } from "@/lib/acceso/autorizacion";
+import { mensajeVisible } from "@/lib/error-publico";
 
 export const dynamic = "force-dynamic";
 
@@ -44,6 +45,6 @@ export async function POST(request: Request) {
     }
     return NextResponse.json({ ok: true, id });
   } catch (err: any) {
-    return NextResponse.json({ error: String(err?.message ?? err) }, { status: 400 });
+    return NextResponse.json({ error: mensajeVisible(err, "revision/detenciones") }, { status: 400 });
   }
 }
