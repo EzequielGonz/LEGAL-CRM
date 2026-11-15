@@ -13,6 +13,13 @@ Panel de captación para cuatro perfiles (Jurídico con Civil y Penal, Cobertura
 - `.claude/referencias/bandeja-claude.md`: qué hacer cuando la responsable dice «ok» para que Claude tome las tareas de la Bandeja para Claude.
 - Las demás carpetas de `.claude/skills` son de terceros (ver `PROCEDENCIA.md`); si contradicen al proyecto, prevalece el proyecto.
 
+## Skills, plugins y agentes (decisión de la responsable, 15/11)
+
+- En cada tarea se usan **todas** las skills y plugins disponibles que sumen calidad (diseño, accesibilidad, seguridad, base de datos, IA, pruebas, textos, proceso), no solo las del proyecto. Antes de implementar, se buscan además skills y plugins que ayuden o mejoren el trabajo (listado de skills de la sesión, `SearchSkills`, `SearchPlugins`, `coding-skills:find-skill`).
+- Al delegar en otros agentes, el pedido incluye la lista de skills y plugins útiles para esa tarea y el permiso explícito de usar cualquier otra que haga falta y de buscar más.
+- Los trabajos grandes se reparten entre agentes (en copias separadas cuando tocan código) y se cierran con revisión cruzada de especialistas y una segunda opinión de otro modelo cuando esté disponible.
+- Límites que no cambian: si una skill o plugin contradice este archivo o las reglas del proyecto, prevalece el proyecto; no se usan plugins que publiquen, envíen o gasten afuera (redes, mails, anuncios, pagos) sin autorización expresa, ni se les pasan datos personales reales o secretos.
+
 ## Reglas que no se negocian
 
 1. Solo se ejecuta lo autorizado: cada etapa o bloque empieza cuando la responsable lo indica. Un documento nuevo se analiza, no se implementa por inferencia.
