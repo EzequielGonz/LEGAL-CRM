@@ -34,6 +34,7 @@ import { clasificarAtencion, type MotivoAtencion } from "@/lib/captacion/reglas"
 import { crearCitaIa } from "@/lib/citas";
 import { contactBlockReason, type DetentionMotive } from "@/lib/detention";
 import { instruccionReparacion, validarTextoSalida } from "@/lib/agentes/contrato";
+import { cierreDeReserva, esCierreValido, instruccionCierre, pedidoDeCierre } from "@/lib/agentes/cierre-captacion";
 import { armarContexto, armarResumen } from "@/lib/agentes/contexto";
 import { asignacionActiva } from "@/lib/agentes/servicio";
 import { identificadorModelo } from "@/lib/agentes/modelo";
@@ -382,7 +383,7 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
     });
   // Contexto de las herramientas. Si la IA deriva a una persona, la
   // herramienta deja acá el permiso de un solo uso para el acuse final.
-  const toolCtx: ToolContext = { area, contact, conversationId, finalAckToken: null, opportunityId, pendingDetention: null, postergo: esPostergaFirme(ultimaRespuesta) };
+  const toolCtx: ToolContext = { area, contact, conversationId, cierre: false, finalAckToken: null, opportunityId, pendingDetention: null, postergo: esPostergaFirme(ultimaRespuesta) };
   // Horario de atención (18/10, todos los perfiles): fuera de la franja de asesores igual se capta.
   systemWithBrief = `${systemWithBrief}\n\n${bloqueHorarioAtencion(new Date())}`;
 
@@ -428,6 +429,21 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
     if (escalated && i === MAX_TOOL_ITERATIONS - 1) break;
   }
 
+  // 15/11: después de captar, la respuesta es la última del bot (el chat pasa a
+  // una persona). Tiene que agradecer y cerrar sin preguntas; si no, se pide una
+  // corrección y, si tampoco sirve, sale el cierre fijo del rubro.
+  if (toolCtx.cierre && !esCierreValido(finalText)) {
+    try {
+      messages.push({ role: "user", parts: [{ text: pedidoDeCierre(area) }] });
+      const r3 = await llamarModelo({ contents: messages, systemInstruction: systemWithBrief, tools });
+      const t3 = (r3.parts ?? []).filter((p) => typeof p.text === "string").map((p) => p.text).join("\n").trim();
+      finalText = esCierreValido(t3) && validarTextoSalida(t3).ok ? t3 : cierreDeReserva(area, contact.full_name);
+    } catch (err) {
+      console.error("[agente] No se pudo pedir el cierre:", err);
+      finalText = cierreDeReserva(area, contact.full_name);
+    }
+  }
+
   // Etapa 3 (R07): validación determinista del texto antes de enviar. Si no
   // pasa, se pide UNA reparación; si vuelve a fallar, se retiene y va a una persona.
   if (finalText) {
@@ -438,12 +454,15 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
         const r2 = await llamarModelo({ contents: messages, systemInstruction: systemWithBrief, tools });
         const t2 = (r2.parts ?? []).filter((p) => typeof p.text === "string").map((p) => p.text).join("\n").trim();
         const v2 = validarTextoSalida(t2);
-        if (v2.ok && t2) finalText = t2;
+        if (v2.ok && t2 && (!toolCtx.cierre || esCierreValido(t2))) finalText = t2;
         else v = v2;
       } catch (err) {
         console.error("[agente] No se pudo reparar la respuesta:", err);
       }
-      if (!validarTextoSalida(finalText).ok) {
+      if (!validarTextoSalida(finalText).ok && toolCtx.cierre) {
+        // El cierre después de captar no se retiene: sale el del rubro.
+        finalText = cierreDeReserva(area, contact.full_name);
+      } else if (!validarTextoSalida(finalText).ok) {
         console.warn(`[agente] Respuesta retenida en ${conversationId}: ${v.motivos.join(", ")}`);
         await atencionDelAgente(toolCtx, "consulta_fuera_alcance", `Respuesta retenida por el validador: ${v.motivos.join(", ")}`);
         finalText = "";
@@ -533,6 +552,8 @@ interface ToolContext {
   area: Area;
   contact: any;
   conversationId: string;
+  /** 15/11: en esta respuesta se captó; el texto tiene que ser el cierre */
+  cierre: boolean;
   /** permiso de un solo uso para el acuse final tras derivar a una persona */
   finalAckToken: string | null;
   opportunityId: string | null;
@@ -686,7 +707,7 @@ async function executeTool(
         console.error("No se pudo notificar al administrador:", err);
       }
 
-      return { output: { ok: true, appointment_id: appointment.id } };
+      return { output: { ok: true, appointment_id: appointment.id, instruccion: "Confirmale con calidez el día y la hora que quedaron agendados y agradecé. No hagas otra pregunta sobre el horario." } };
     }
 
     case "escalar_a_humano": {
@@ -776,7 +797,8 @@ async function executeTool(
           console.error("No se pudo notificar al administrador del caso calificado:", err);
         }
 
-        return { output: { ok: true }, escalated: true };
+        ctx.cierre = true;
+        return { output: { ok: true, instruccion: instruccionCierre(ctx.area) }, escalated: true };
       }
 
       if (resultado === "caso_resuelto" || resultado === "no_interesado") {
@@ -832,11 +854,12 @@ async function executeTool(
         } catch (err) {
           console.error("No se pudo avisar al equipo del cierre de Marketing:", err);
         }
+        ctx.cierre = true;
         return {
           output: {
             ok: true,
             instruccion:
-              "Avisale al prospecto, con calidez, que queda aprobado y que lo derivás al equipo técnico para empezar a trabajar en el proyecto. Despedite breve.",
+              "Avisale al prospecto, con calidez, que queda aprobado y que lo derivás al equipo técnico para empezar a trabajar en el proyecto. Agradecé y despedite breve, sin preguntas: es tu última respuesta.",
           },
           escalated: true,
         };
@@ -916,8 +939,9 @@ async function executeTool(
       } catch (err) {
         console.error("[agente] No se pudo avisar el cierre:", err);
       }
+      ctx.cierre = true;
       return {
-        output: { ok: true, instruccion: "Agradecé, confirmale que queda aprobado y que el equipo lo contacta para arrancar. Despedite breve." },
+        output: { ok: true, instruccion: "Agradecé, confirmale que queda aprobado y que el equipo lo contacta para arrancar. Despedite breve, sin preguntas: es tu última respuesta." },
         escalated: true,
       };
     }
@@ -1009,12 +1033,13 @@ async function executeTool(
       }
       // Después de captar se detiene la gestión comercial: lo que siga lo atiende una persona.
       await pauseWithFinalAck(ctx, "requiere_atencion_humana");
+      ctx.cierre = true;
       return {
         output: {
           ok: true,
           captado: true,
           advertencias: r.evaluacion.advertencias,
-          instruccion: "Confirmale con calidez que una persona del equipo lo va a contactar. No prometas resultados, plazos ni precios.",
+          instruccion: instruccionCierre(ctx.area),
         },
         escalated: true,
       };

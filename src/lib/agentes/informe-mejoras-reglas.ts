@@ -144,6 +144,8 @@ export const RESUELTO_EN_EL_SISTEMA: { desde: string; que: string }[] = [
   { desde: "13/11", que: "Las reacciones con emoji (👍, ❤️) ya no reciben el pedido de «escribilo en texto»." },
   { desde: "14/11", que: "Stickers y mensajes no compatibles ya no reciben el pedido de «escribilo en texto»." },
   { desde: "14/11", que: "El bot reconoce más contestadores automáticos de negocios (saludos de «gracias por comunicarte», horarios, menús de opciones, bajas de ofertas) y no les contesta." },
+  { desde: "14/11", que: "La confirmación después de captar ya no se pierde cuando el bot usa dos herramientas de cierre en la misma respuesta." },
+  { desde: "15/11", que: "Después de captar, el bot siempre se despide con un cierre propio del rubro (agradece y confirma quién se va a comunicar), sin hacer más preguntas." },
 ];
 
 /** Pedido a la IA. Pura. */

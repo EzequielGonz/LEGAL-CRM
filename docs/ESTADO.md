@@ -89,6 +89,12 @@ Se actualiza al cierre de cada vuelta de trabajo. Sin datos personales, claves n
 - **Segunda vuelta:** rotación al azar por defecto en Wasender; envíos repartidos en todo el día; el límite diario de una campaña de Wasender frena el día y no la campaña; informe de mejoras del bot con Gemini en Bot IA (migraciones 0617 y 0618); asistente con reglas para generar plantillas. La confirmación después de captar ya no se pierde (publicado con autorización). `docs/mejoras-1411/SEGUNDA-VUELTA.md`.
 - Detalle: `docs/mejoras-1411/ENTREGA.md`, `INFORME.md`, `MIGRACIONES.md`.
 
+## Qué quedó hecho el 15/11
+
+- **Cierre al captar (todos los rubros):** al captar, el bot agradece, confirma quién se va a comunicar y se despide, sin preguntas; si el modelo no lo hace, sale el cierre fijo del rubro. `docs/mejoras-1411/CIERRE-AL-CAPTAR-1511.md`.
+- **Propuestas aplicadas:** Jurídico «turno médico pendiente» y «oferta baja de la aseguradora»; Autos «primera respuesta con interés» (adaptada: con Wasender no hay botones). Registros 294 a 296.
+- **Decisión:** con Wasender el primer mensaje no lleva botones (eran una limitación de Meta). Las fichas nuevas no dependen de un botón.
+
 ## Aprendizajes de esta vuelta
 
 - Publicar primero a `main` y después subir la rama: si se suben las dos seguidas, Vercel construye primero la vista previa y producción espera en la cola.
