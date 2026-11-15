@@ -160,10 +160,10 @@ export function SelectorPerfilesPC({
                       Captados <span className="font-normal normal-case tracking-normal">({n(p.agendados)} en total)</span>
                     </p>
                     {p.casos.length > 0 ? (
-                      <ul className="mt-2 space-y-1">
+                      <ul className="mt-2 space-y-0.5">
                         {p.casos.slice(0, 3).map((x) => (
                           <li key={x.id}>
-                            <Link href={ficha(x.id)} className="block truncate text-sm text-slate-800 hover:text-slate-950 hover:underline">
+                            <Link href={ficha(x.id)} className="block min-h-[24px] truncate py-0.5 text-sm text-slate-800 hover:text-slate-950 hover:underline">
                               {x.full_name || "Sin nombre"}
                             </Link>
                           </li>

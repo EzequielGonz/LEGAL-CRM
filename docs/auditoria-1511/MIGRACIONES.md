@@ -10,5 +10,6 @@ Todas se aplicaron el 15/11 después de comprobar el historial real de la base (
 | 0622_campanas_entrenamiento | Columnas `entrenamiento_desde`, `resultado_semana`, `resultado_semana_at` y `resultado_semana_nota` en campañas. | `drop column` de las cuatro. |
 | 0624_intentos_dispositivo_conocido | Revisión de seguridad: la pausa general de intentos no frena a un dispositivo que ya ingresó bien ni a quien tiene la sesión abierta (evita que alguien deje afuera a la responsable). Reemplaza las funciones de la 0621. Probado en una transacción que se deshizo. | Aplicar de nuevo la 0621. |
 | 0623_freno_respuesta_a_mano | Columna `freno_respuesta_ignorado_at` en campañas. | `drop column`. |
+| 0625_permiso_mensaje_crisis | `grant_crisis_ack`: permiso de un solo uso para que las líneas de ayuda salgan aunque una persona haya tomado el chat. Deja el chat en atención humana. Probado en una transacción que se deshizo. Registro en `ops_change_log` 314. | `drop function public.grant_crisis_ack(uuid)`. |
 
 Cambio de datos (no es migración): tres plantillas de inicio de Marketing (anuncios, turnos y reseñas) cambiaron una pregunta sin referente por una con contexto en 56 variantes. Antes y después en `ops_change_log` 297 a 302.

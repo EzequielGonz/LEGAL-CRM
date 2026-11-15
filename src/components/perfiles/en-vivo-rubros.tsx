@@ -116,7 +116,7 @@ export function EnVivoRubros({ nombres }: { nombres: Record<string, string> }) {
       </div>
 
       {abierto && (
-        <div className="mt-3 max-h-[75vh] space-y-2 overflow-y-auto pr-0.5">
+        <div role="region" aria-label="Actividad en vivo de cada perfil" tabIndex={0} className="mt-3 max-h-[75vh] space-y-2 overflow-y-auto pr-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600">
           {error && <p className="rounded-lg border border-amber-200 bg-amber-50 px-2 py-1.5 text-xs text-amber-800">{error}</p>}
           {!rubros && !error && <p className="px-1 py-2 text-xs text-slate-500">Cargando…</p>}
           {rubros?.map((c) => {

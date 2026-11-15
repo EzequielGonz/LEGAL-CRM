@@ -40,6 +40,8 @@
 - El bot real con la IA (Gemini) no se volvió a correr después de los cambios. La capa fija, la llave de aceptación y el validador sí están probados.
 - Accesibilidad: se revisó con lectores automáticos del código. La revisión visual en el celular, en claro y en oscuro, se hace en el recorrido de producción.
 
-## Para decidir (la responsable)
+## Decidido después de publicar (15/11)
 
-- **Crisis con la pausa general encendida:** hoy, con la pausa general de respuestas activa, el mensaje con las líneas de ayuda no sale. Igual se abre el cartel de urgencia y llega el aviso al teléfono («No se pudo mandar el mensaje de ayuda. Abrí el panel ya»). Si querés que las líneas de ayuda salgan aunque esté la pausa, hay que autorizarlo: sería la única excepción a la pausa.
+- **No hay pausa general.** Comprobado en la base: la pausa general está apagada desde el 16/10, los 5 bots están activos, el seguimiento está encendido en los 4 perfiles y la tarea de campañas está activa. Los bots responden siempre los mensajes entrantes; el seguimiento y lo programado siguen normal. Lo único que no arranca solo son las campañas con bases o publicidades: salen cuando se lanzan.
+- **Crisis:** las líneas de ayuda salen siempre, también si una persona del equipo ya había tomado el chat (0625, probado en una transacción que se deshizo: el permiso sirve una sola vez).
+- **Accesibilidad:** los dos detalles que quedaban (zonas con desplazamiento que no se podían recorrer con el teclado y enlaces chicos en «Perfiles») quedaron corregidos.

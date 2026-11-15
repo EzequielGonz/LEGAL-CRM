@@ -16,7 +16,7 @@ Panel de captación para cuatro perfiles (Jurídico con Civil y Penal, Cobertura
 ## Reglas que no se negocian
 
 1. Solo se ejecuta lo autorizado: cada etapa o bloque empieza cuando la responsable lo indica. Un documento nuevo se analiza, no se implementa por inferencia.
-2. Nada se activa solo: se conservan la pausa general, los agentes apagados, la tarea de campañas inactiva, las campañas pausadas y el seguimiento apagado. Publicar código no habilita envíos.
+2. Nada se activa solo ni se apaga solo: publicar código no cambia lo que está encendido. Hoy (15/11) no hay pausa general: los bots responden siempre los entrantes y el seguimiento y lo programado siguen normal. Las campañas con bases o publicidades solo salen cuando la responsable las lanza. Antes de informar qué está encendido, se comprueba en la base.
 3. Sin contacto real con prospectos, sin envíos de prueba a personas, sin campañas, sin trabajos pagos y sin publicar en producción ni en canales externos sin autorización expresa o una política habilitada por la responsable.
 4. Nada se borra: se archiva con motivo. Una migración se aplica después de comprobar la versión y el historial real de la base, y solo con la actualización necesaria y verificada: ni repetir a ciegas lo ya aplicado ni descartar controles existentes.
 5. Ningún secreto en el chat, el código, los registros ni los informes. No se descifran variables de entorno. No se piden tokens ni claves pegados en el chat.

@@ -202,7 +202,7 @@ export function ConversationThread({
         </div>
 
         {/* 15/11 (accesibilidad): los mensajes nuevos se anuncian a los lectores de pantalla. */}
-        <div role="log" aria-live="polite" aria-label="Mensajes" className="flex-1 space-y-3 overflow-y-auto bg-slate-50 p-3 sm:p-5">
+        <div role="log" aria-live="polite" aria-label="Mensajes" tabIndex={0} className="flex-1 space-y-3 overflow-y-auto bg-slate-50 p-3 sm:p-5">
           {visibles.map((m) => (
             <div
               key={m.id}

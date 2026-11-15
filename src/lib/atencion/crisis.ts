@@ -12,8 +12,8 @@ export const INCIDENCIA_CRISIS = "crisis";
 /**
  * Protocolo de crisis (15/11, decisión de la responsable). La persona habla de
  * quitarse la vida o de hacerse daño:
- * 1. Se le mandan las líneas de ayuda (texto fijo). Si la pausa general o un
- *    chat tomado por una persona frenan el envío, igual sigue el resto.
+ * 1. Se le mandan las líneas de ayuda (texto fijo), aunque una persona ya
+ *    haya tomado el chat. Si el envío falla igual, sigue el resto.
  * 2. El bot deja de responder en ese chat: lo sigue una persona.
  * 3. Se abre (o se reabre) una incidencia «crisis», que muestra el cartel de
  *    urgencia en el panel, y se avisa a los dispositivos sin datos de la persona.
@@ -28,7 +28,18 @@ export async function atenderCrisis(input: {
   const supabase = createAdminClient();
   let enviado = false;
   try {
-    await sendOutboundMessage({ conversationId: input.conversationId, senderType: "agente_ia", body: TEXTO_CRISIS, origin: "respuesta_entrante" });
+    // 15/11 (responsable): las líneas de ayuda salen siempre, también si una
+    // persona ya había tomado el chat. El permiso de un solo uso deja el chat
+    // en atención humana y habilita solo este mensaje.
+    const { data: permiso, error: errPermiso } = await supabase.rpc("grant_crisis_ack", { p_conversation: input.conversationId });
+    if (errPermiso) console.error("[crisis] No se pudo otorgar el permiso del mensaje de ayuda:", errPermiso.message);
+    await sendOutboundMessage({
+      conversationId: input.conversationId,
+      senderType: "agente_ia",
+      body: TEXTO_CRISIS,
+      origin: "respuesta_entrante",
+      finalAckToken: typeof permiso === "string" ? permiso : null,
+    });
     enviado = true;
   } catch (err) {
     if (!(err instanceof AutomaticSendBlockedError)) console.error("[crisis] No se pudo enviar el mensaje de ayuda:", err);
