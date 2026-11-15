@@ -39,6 +39,8 @@ export const TIPOS_ACCION = [
   // 13/11: cualquier operación del panel (catálogo en src/lib/asistente/catalogo.ts) y el menú del perfil.
   "operacion_panel",
   "personalizar_menu",
+  // 15/11: asistente general: importar una planilla, crear la campaña de Wasender y, si se pidió, lanzarla.
+  "plan_campanas",
 ] as const;
 export type TipoAccion = (typeof TIPOS_ACCION)[number];
 
@@ -52,6 +54,9 @@ export function nivelDeAccion(tipo: string, payload: Record<string, unknown> = {
   if (tipo === "operacion_panel") return payload.nivel === "cambio" || payload.nivel === "contacto" ? payload.nivel : "pin";
   // Lanzar una campaña o responder un chat le escriben a personas reales.
   if (tipo === "lanzar_campana" || tipo === "responder_chat") return "contacto";
+  // Plan de campañas (asistente general): si incluye lanzar, confirmación reforzada (sin código,
+  // decisión de la responsable del 15/11); si solo importa y crea en borrador, un clic.
+  if (tipo === "plan_campanas") return payload.lanzar === true ? "contacto" : "cambio";
   // Activar un agente ya exigía PIN en el panel; apagar o pausar, no.
   if (tipo === "asignar_agente") return payload.estado === "activa" ? "pin" : "cambio";
   return "cambio";

@@ -94,6 +94,16 @@ export async function parseSpreadsheetFileDetailed(file: File): Promise<ParsedSp
   };
 }
 
+/**
+ * 15/11 (asistente general): todas las hojas del archivo, cada una como
+ * filas con la misma lectura que la importación. Un CSV es una sola hoja.
+ */
+export async function leerTodasLasHojas(file: File): Promise<{ nombre: string | null; filas: Record<string, unknown>[] }[]> {
+  if (file.name.toLowerCase().endsWith(".csv")) return [{ nombre: null, filas: await parseSpreadsheetFile(file) }];
+  const { hojas } = await leerExcel(file);
+  return hojas.map((h) => ({ nombre: h.nombre, filas: h.filas }));
+}
+
 export async function parseSpreadsheetFile(file: File): Promise<Record<string, unknown>[]> {
   const isCsv = file.name.toLowerCase().endsWith(".csv");
 

@@ -37,6 +37,10 @@ const INFRAESTRUCTURA = new Set([
   "asistente",
   "asistente/acciones/[id]",
   "asistente/acciones/[id]/deshacer",
+  // 15/11: asistente general (su charla, la subida de planillas y los cambios al boceto).
+  "asistente/acciones/[id]/plan",
+  "asistente/general",
+  "asistente/general/archivos",
   "bases",
   "bases/upload-url",
   "campaigns/import",

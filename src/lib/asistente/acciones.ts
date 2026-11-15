@@ -15,6 +15,7 @@ import { AREAS_DE_PERFIL } from "@/lib/cartera-servidor";
 import { slugDeRubro } from "@/lib/rubros";
 import { TIPOS_CHATS, ejecutarAccionChat } from "@/lib/asistente/chats";
 import { ejecutarOperacionPanel, type LlamadaInterna } from "@/lib/asistente/panel-operaciones";
+import { avanzarPlanCampanas } from "@/lib/asistente/general-servidor";
 import { aplicarPersonalizacionMenu, deshacerPersonalizacionMenu, leerMenuDirecto, restablecerMenu } from "@/lib/personalizacion/servidor";
 
 export class AccionNoDisponible extends Error {}
@@ -67,12 +68,16 @@ export async function confirmarAccion(id: string, http?: LlamadaInterna): Promis
     // Un calendario a medio programar sigue desde donde quedó.
     const { data: enCurso } = await s.from("asistente_acciones" as any).select("*").eq("id", id).eq("estado", "ejecutando").eq("tipo", "publicaciones").maybeSingle();
     a = enCurso;
+    if (!a) a = await retomarPlanCampanas(id);
     if (!a) throw new AccionNoDisponible("Esta propuesta ya se confirmó, se descartó o no existe.");
   }
   try {
     let resultado: unknown;
     if (a.tipo === "publicaciones") {
       return await avanzarPublicaciones(a);
+    } else if (a.tipo === "plan_campanas") {
+      // 15/11 · asistente general: un paso por pedido, con lo hecho anotado (nunca tira error).
+      return await avanzarPlanCampanas(a, http);
     } else if (a.tipo === "cambio_agente") {
       const { agente_id, area, anterior, nuevo, pedido } = a.payload ?? {};
       const { data: ag } = await s.from("ai_agents").select("*").eq("id", agente_id).maybeSingle();
@@ -165,6 +170,26 @@ export async function confirmarAccion(id: string, http?: LlamadaInterna): Promis
     await s.from("asistente_acciones" as any).update({ estado: "error", resultado }).eq("id", id);
     return { estado: "error", resultado };
   }
+}
+
+/**
+ * Plan de campañas (asistente general): sigue uno a medio hacer, o reintenta
+ * uno que falló desde el paso que falló (lo hecho no se repite). El paso de
+ * «error» a «ejecutando» es atómico: dos pedidos a la vez lo toman una vez.
+ */
+async function retomarPlanCampanas(id: string): Promise<any> {
+  const s = createAdminClient();
+  const { data: reintento } = await s
+    .from("asistente_acciones" as any)
+    .update({ estado: "ejecutando", decidida_at: new Date().toISOString() })
+    .eq("id", id)
+    .eq("estado", "error")
+    .eq("tipo", "plan_campanas")
+    .select("*")
+    .maybeSingle();
+  if (reintento) return reintento;
+  const { data: enCurso } = await s.from("asistente_acciones" as any).select("*").eq("id", id).eq("estado", "ejecutando").eq("tipo", "plan_campanas").maybeSingle();
+  return enCurso ?? null;
 }
 
 export async function descartarAccion(id: string): Promise<boolean> {
