@@ -42,6 +42,9 @@ import { registrarTurno } from "@/lib/experimento/servicio";
 import { instruccionesDeRol } from "@/lib/agentes/roles";
 import { buildSystemPrompt, criterioDelRubro, REGLAS_ESTRICTAS } from "./prompt";
 import { GUIA_CAPTACION_Y_CIERRE } from "@/lib/agentes/guia-cierre";
+import { conTiempoYReintento } from "@/lib/ai-agent/reintento";
+import { aceptacionReal } from "@/lib/agentes/aceptacion";
+import { marcaDeTiempo } from "@/lib/agentes/tiempo-historial";
 import { modoDelContacto } from "@/lib/agentes/entrante";
 import { historialConPlantillas } from "@/lib/agentes/historial-servidor";
 import { esPostergaFirme, instruccionUltimaRespuesta } from "@/lib/agentes/plantillas-en-historial";
@@ -78,11 +81,14 @@ export type ModeloAgente = (req: {
 }) => Promise<{ parts: Part[]; tokensEntrada?: number; tokensSalida?: number; tokensRazonamiento?: number; modeloRespuesta?: string | null }>;
 
 const modeloGemini: ModeloAgente = async ({ contents, systemInstruction, tools, modelo }) => {
-  const response = await gemini().models.generateContent({
-    model: modelo || identificadorModelo(),
-    contents,
-    config: { systemInstruction, tools: [{ functionDeclarations: tools as any }] },
-  });
+  // 15/11: tiempo máximo de 20 s y un reintento (ver ./reintento).
+  const response = await conTiempoYReintento(() =>
+    gemini().models.generateContent({
+      model: modelo || identificadorModelo(),
+      contents,
+      config: { systemInstruction, tools: [{ functionDeclarations: tools as any }] },
+    })
+  );
   const u: any = (response as any).usageMetadata ?? {};
   return {
     parts: response.candidates?.[0]?.content?.parts ?? [],
@@ -104,18 +110,23 @@ export function usarModeloAgente(modelo: ModeloAgente | null) {
 /** Convierte el historial de `messages` al formato de contenidos de Gemini
  *  (`role: "user" | "model"`, cada uno con `parts`), fusionando mensajes
  *  consecutivos del mismo rol. */
-function buildHistory(rows: { direction: string; body: string | null }[]): Content[] {
+function buildHistory(rows: { direction: string; body: string | null; created_at?: string | null }[]): Content[] {
   const history: Content[] = [];
+  let anterior: string | null = null;
 
   for (const row of rows) {
     if (!row.body) continue;
     const role: "user" | "model" = row.direction === "entrante" ? "user" : "model";
+    // 15/11: si la persona vuelve a escribir después de más de un día, el bot lo ve.
+    const marca = role === "user" ? marcaDeTiempo(anterior, row.created_at ?? null) : null;
+    if (row.created_at) anterior = row.created_at;
+    const body: string = marca ? `${marca}\n${row.body}` : row.body;
     const last = history[history.length - 1];
     const lastPart = last?.parts?.length === 1 ? last.parts[0] : undefined;
     if (last && last.role === role && lastPart && typeof lastPart.text === "string") {
-      lastPart.text += `\n${row.body}`;
+      lastPart.text += `\n${body}`;
     } else {
-      history.push({ role, parts: [{ text: row.body }] });
+      history.push({ role, parts: [{ text: body }] });
     }
   }
 
@@ -386,7 +397,7 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
     });
   // Contexto de las herramientas. Si la IA deriva a una persona, la
   // herramienta deja acá el permiso de un solo uso para el acuse final.
-  const toolCtx: ToolContext = { area, contact, conversationId, cierre: false, finalAckToken: null, opportunityId, pendingDetention: null, postergo: esPostergaFirme(ultimaRespuesta) };
+  const toolCtx: ToolContext = { area, contact, conversationId, cierre: false, finalAckToken: null, opportunityId, pendingDetention: null, postergo: esPostergaFirme(ultimaRespuesta), ultimoEntrante: [...ordenados].reverse().find((m: any) => m.direction === "entrante")?.body ?? null };
   // Horario de atención (18/10, todos los perfiles): fuera de la franja de asesores igual se capta.
   systemWithBrief = `${systemWithBrief}\n\n${bloqueHorarioAtencion(new Date())}`;
 
@@ -477,6 +488,9 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
     // Falla del modelo: se registra y se deja para atención humana.
     const detalle = String(err?.message ?? err).slice(0, 400);
     await registrar("error", { error: detalle });
+    // 15/11: si el mismo mensaje ya tuvo un turno con error (el rescate lo
+    // reintentó), el chat pasa a una persona: no queda nadie sin respuesta.
+    await derivarSiFallaDeNuevo({ conversationId, contactId: contact.id, opportunityId, desde: ultimoEntranteVisto });
     throw err;
   }
 
@@ -564,6 +578,8 @@ interface ToolContext {
   pendingDetention: { motivo: DetentionMotive; menor: boolean; nota: string; motivoAtencion: string } | null;
   /** 24/10: respondió «ahora no» a la plantilla: no se detiene ni se califica */
   postergo?: boolean;
+  /** 15/11: texto del último mensaje de la persona (segunda llave antes de captar) */
+  ultimoEntrante?: string | null;
 }
 
 const NOTA_AHORA_NO =
@@ -1025,6 +1041,21 @@ async function executeTool(
         await atencionDelAgente(ctx, "precio_fuera_alcance", String(input.evidencia ?? "Consultó solo el precio"));
         return { output: { ok: true, captado: false, instruccion: INSTRUCCION_RESPUESTA.aviso_de_persona }, escalated: true };
       }
+      // 15/11: segunda llave: un rechazo o una pregunta sin ningún «sí» no capta.
+      const llave = aceptacionReal(ctx.ultimoEntrante);
+      if (!llave.ok && llave.motivo !== "vacio") {
+        return {
+          output: {
+            ok: false,
+            captado: false,
+            motivo: llave.motivo,
+            nota:
+              llave.motivo === "rechazo"
+                ? "Su último mensaje no es una aceptación. No captes: seguí la regla de rechazos."
+                : "Su último mensaje es una pregunta sin aceptación. Respondela y volvé a proponer el siguiente paso.",
+          },
+        };
+      }
       const r = await registrarCaptacion({
         opportunityId: ctx.opportunityId,
         actor: "ia",
@@ -1085,5 +1116,29 @@ async function executeTool(
 
     default:
       return { output: { error: `Herramienta desconocida: ${name}` } };
+  }
+}
+
+/** 15/11: segunda falla del modelo para el mismo mensaje → atención humana. */
+async function derivarSiFallaDeNuevo(input: { conversationId: string; contactId: string; opportunityId: string | null; desde: string | null }) {
+  if (!input.desde) return;
+  try {
+    const supabase = createAdminClient();
+    const { count } = await (supabase.from("agent_turn_logs" as any) as any)
+      .select("id", { count: "exact", head: true })
+      .eq("conversation_id", input.conversationId)
+      .eq("resultado", "error")
+      .gte("created_at", input.desde);
+    if ((count ?? 0) < 2) return;
+    await solicitarAtencion({
+      opportunityId: input.opportunityId,
+      contactId: input.contactId,
+      conversationId: input.conversationId,
+      motivo: "consulta_fuera_alcance",
+      actor: "sistema",
+      nota: "El bot no pudo responder: la IA falló dos veces con el mismo mensaje",
+    });
+  } catch (e) {
+    console.error("[agente] No se pudo derivar tras la falla del modelo:", e);
   }
 }

@@ -12,6 +12,15 @@ import { bloqueHorarioAtencion } from "@/lib/horario-atencion";
 import { toolsForArea } from "./tools";
 import { bloqueFichaNegocio, leerFichaNegocio } from "@/lib/agentes/ficha-negocio";
 import { conocimientoParaTurno } from "@/lib/conocimiento/servicio";
+import { esCrisis, esEnojoConNosotros, TEXTO_CRISIS, TEXTO_DISCULPA_AMENAZA, TEXTO_DISCULPA_ENOJO } from "@/lib/agentes/crisis-y-enojo";
+import { esRespuestaAutomatica } from "@/lib/agentes/automaticos";
+import { reclamoEnMensaje } from "@/lib/atencion/reclamos";
+import { cierreDeReserva, esCierreValido, instruccionCierre, pedidoDeCierre } from "@/lib/agentes/cierre-captacion";
+import { aceptacionReal } from "@/lib/agentes/aceptacion";
+import { instruccionReparacion, validarTextoSalida } from "@/lib/agentes/contrato";
+
+/** 15/11: herramientas que, si salen bien, dejan la respuesta como cierre (igual que en vivo). */
+const CIERRAN = new Set(["captar", "finalizar_consulta", "registrar_resultado_marketing", "presupuesto_aprobado"]);
 
 /**
  * «Probar el bot real» (24/10). Arma el prompt con las MISMAS piezas que
@@ -22,6 +31,10 @@ import { conocimientoParaTurno } from "@/lib/conocimiento/servicio";
  *
  * Las herramientas no se ejecutan: se contestan como simuladas, así que no
  * escribe a nadie, no agenda y no cambia estados.
+ *
+ * 15/11: también corre la capa fija del bot en vivo antes del modelo (crisis,
+ * enojo, amenaza y contestadores) y, después, la llave de aceptación al captar,
+ * el cierre del rubro y el validador con su única reparación.
  *
  * El prompt sale de ./prompt, el mismo módulo que usa agent.ts: lo que
  * cambie ahí se prueba igual acá.
@@ -89,6 +102,22 @@ export async function probarBotReal(input: { area: Area; rubroId: string | null;
   const tokens = { entrada: 0, salida: 0 };
   let modeloRespuesta: string | null = null;
 
+  let systemActual = "";
+  const pedir = async (cs: Content[]) => {
+    const r = await gemini().models.generateContent({ model: modelo, contents: cs, config: { systemInstruction: systemActual, tools: [{ functionDeclarations: tools as any }] } });
+    const u: any = (r as any).usageMetadata ?? {};
+    tokens.entrada += u.promptTokenCount ?? 0;
+    tokens.salida += u.candidatesTokenCount ?? 0;
+    modeloRespuesta = (r as any).modelVersion ?? modeloRespuesta;
+    const parts: Part[] = r.candidates?.[0]?.content?.parts ?? [];
+    const texto = parts
+      .filter((p) => typeof p.text === "string")
+      .map((p) => p.text)
+      .join("\n")
+      .trim();
+    return { parts, texto };
+  };
+
   const lista = input.mensajes.slice(0, 8);
   for (let idx = 0; idx < lista.length; idx++) {
     const m = lista[idx];
@@ -99,22 +128,36 @@ export async function probarBotReal(input: { area: Area; rubroId: string | null;
     versionUsada = con.version;
     const system = `${antes}${con.texto ? `\n\n${con.texto}` : ""}${despues}`;
     const systemTurno = instr ? `${system}\n\nRespuesta a la plantilla (regla del sistema, manda sobre el guion):\n${instr}` : system;
+    systemActual = systemTurno;
     contents.push({ role: "user", parts: [{ text: esBoton ? bloqueBoton(m) : m }] });
     turnos.push({ rol: "persona", texto: m, herramientas: [] });
+    // 15/11: capa fija, en el mismo orden que el bot en vivo (inbound.ts).
+    if (!esBoton) {
+      if (esCrisis(m)) {
+        turnos.push({ rol: "bot", texto: TEXTO_CRISIS, herramientas: ["sistema: crisis (líneas de ayuda, cartel urgente y chat a una persona)"] });
+        break;
+      }
+      const reclamo = reclamoEnMensaje(m, { captado: false });
+      if (reclamo?.tipo === "amenaza_legal") {
+        turnos.push({ rol: "bot", texto: TEXTO_DISCULPA_AMENAZA, herramientas: ["sistema: amenaza (disculpa, se detiene y avisa)"] });
+        break;
+      }
+      if (esEnojoConNosotros(m)) {
+        turnos.push({ rol: "bot", texto: TEXTO_DISCULPA_ENOJO, herramientas: ["sistema: enojo (disculpa y se detiene)"] });
+        break;
+      }
+      if (esRespuestaAutomatica(m)) {
+        contents.pop();
+        turnos.push({ rol: "bot", texto: "(no responde: es un contestador automático)", herramientas: ["sistema: contestador"] });
+        continue;
+      }
+    }
     const usadas: string[] = [];
     let texto = "";
+    let cierre = false;
     for (let i = 0; i < 4; i++) {
-      const r = await gemini().models.generateContent({ model: modelo, contents, config: { systemInstruction: systemTurno, tools: [{ functionDeclarations: tools as any }] } });
-      const u: any = (r as any).usageMetadata ?? {};
-      tokens.entrada += u.promptTokenCount ?? 0;
-      tokens.salida += u.candidatesTokenCount ?? 0;
-      modeloRespuesta = (r as any).modelVersion ?? modeloRespuesta;
-      const parts: Part[] = r.candidates?.[0]?.content?.parts ?? [];
-      texto = parts
-        .filter((p) => typeof p.text === "string")
-        .map((p) => p.text)
-        .join("\n")
-        .trim();
+      const { parts, texto: t } = await pedir(contents);
+      texto = t;
       const llamadas = parts.filter((p) => !!p.functionCall);
       if (!llamadas.length) {
         contents.push({ role: "model", parts: [{ text: texto || "…" }] });
@@ -130,16 +173,63 @@ export async function probarBotReal(input: { area: Area; rubroId: string | null;
             functionResponse: {
               ...(p.functionCall!.id ? { id: p.functionCall!.id } : {}),
               name: nombre,
-              response:
-                nombre === "consultar_disponibilidad"
-                  ? { simulado: true, horarios: ["mañana 10:00", "mañana 16:30", "pasado mañana 11:00"] }
-                  : { ok: true, simulado: true, nota: "Prueba: la herramienta no se ejecutó. Seguí la charla como si hubiera salido bien." },
+              response: respuestaSimulada(input.area, nombre, p.functionCall!.args ?? {}, m, () => (cierre = true)),
             },
           };
         }),
       });
     }
+    // 15/11: después de captar, cierre del rubro sin preguntas (igual que en vivo).
+    const base = contents.length;
+    if (cierre && !esCierreValido(texto)) {
+      contents.push({ role: "user", parts: [{ text: pedidoDeCierre(input.area) }] });
+      const r3 = await pedir(contents);
+      texto = esCierreValido(r3.texto) && validarTextoSalida(r3.texto).ok ? r3.texto : cierreDeReserva(input.area, null);
+      usadas.push("sistema: cierre del rubro");
+    }
+    // Validador con una sola reparación; si vuelve a fallar, en vivo se retiene y va a una persona.
+    if (texto) {
+      const v = validarTextoSalida(texto);
+      if (!v.ok) {
+        contents.push({ role: "user", parts: [{ text: instruccionReparacion(v) }] });
+        const r2 = await pedir(contents);
+        if (validarTextoSalida(r2.texto).ok && r2.texto && (!cierre || esCierreValido(r2.texto))) {
+          texto = r2.texto;
+          usadas.push("sistema: reparada por el validador");
+        } else if (cierre) {
+          texto = cierreDeReserva(input.area, null);
+        } else {
+          texto = `(retenida por el validador: ${v.motivos.join(", ")}; en vivo pasa a una persona)`;
+        }
+      }
+    }
+    // Los pedidos de corrección no quedan en la charla: queda solo el texto final.
+    contents.splice(base);
+    const ultimoModelo = contents[contents.length - 1];
+    if (ultimoModelo?.role === "model" && ultimoModelo.parts?.length === 1 && typeof ultimoModelo.parts[0].text === "string") ultimoModelo.parts[0].text = texto || "…";
+    else contents.push({ role: "model", parts: [{ text: texto || "…" }] });
     turnos.push({ rol: "bot", texto: texto || "(sin texto)", herramientas: usadas, conocimiento: con.titulos });
+    if (cierre) break;
   }
   return { turnos, version: versionUsada, rol: rol || null, modelo: modeloRespuesta ?? modelo, tokens };
+}
+
+/** 15/11: respuesta simulada de una herramienta, con la llave de aceptación y la instrucción de cierre reales. */
+function respuestaSimulada(area: Area, nombre: string, args: Record<string, unknown>, ultimo: string, marcarCierre: () => void): Record<string, unknown> {
+  if (nombre === "consultar_disponibilidad") return { simulado: true, horarios: ["mañana 10:00", "mañana 16:30", "pasado mañana 11:00"] };
+  if (nombre === "captar" && args.solo_precio !== true) {
+    const llave = aceptacionReal(ultimo);
+    if (!llave.ok && llave.motivo !== "vacio") {
+      return { ok: false, captado: false, simulado: true, motivo: llave.motivo, nota: "Su último mensaje no es una aceptación. No captes: seguí la charla." };
+    }
+  }
+  if (CIERRAN.has(nombre)) {
+    const completa =
+      nombre === "finalizar_consulta" ? args.resultado === "completado" : nombre === "registrar_resultado_marketing" ? args.resultado === "aprobado" : true;
+    if (completa) {
+      marcarCierre();
+      return { ok: true, simulado: true, instruccion: instruccionCierre(area) };
+    }
+  }
+  return { ok: true, simulado: true, nota: "Prueba: la herramienta no se ejecutó. Seguí la charla como si hubiera salido bien." };
 }

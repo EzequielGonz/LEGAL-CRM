@@ -11,6 +11,7 @@ import { AsistentePanel } from "@/components/asistente/asistente-panel";
 import { leerMenuPersonal } from "@/lib/personalizacion/servidor";
 import { EfectosVidrio } from "@/components/ui/efectos-vidrio";
 import { RUBRO_IDS } from "@/lib/rubros";
+import { CartelCrisis } from "@/components/perfiles/cartel-crisis";
 
 /**
  * Marco común de los paneles (renovado 18/10): paleta del perfil
@@ -48,6 +49,10 @@ export async function MarcoPerfil({ slug, children, sinSalud = false }: { slug: 
             <EncabezadoPanel slug={slug} nombre={marca.nombre} menu={menu} />
           </Suspense>
           <div className="lienzo-contenido con-barra-inferior">
+            {/* 15/11: persona en crisis sin resolver: va antes que todo. */}
+            <Suspense fallback={null}>
+              <CartelCrisis slug={slug} />
+            </Suspense>
             {!sinSalud && (
               <Suspense fallback={null}>
                 <BarraSalud slug={slug} />

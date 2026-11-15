@@ -75,10 +75,12 @@ export async function rescatarConversacion(conversationId: string, ahora: Date, 
   const edadMin = u ? (ahora.getTime() - Date.parse(u.created_at)) / 60_000 : -1;
   const enFranja = edadMin >= (opts.minMin ?? RESCATE.minMin) && edadMin <= (opts.maxMin ?? RESCATE.maxMin);
   if (!u || u.direction !== "entrante" || !TIPOS_LEGIBLES.includes(u.message_type ?? "text") || !enFranja) return null;
-  // 2) Ningún turno del bot registrado después (respondido, retenido, bloqueado o con error ya se ve en el panel).
+  // 2) Ningún turno del bot registrado después (respondido, retenido o bloqueado ya se ve en el panel).
   const { count } = await (s.from("agent_turn_logs" as any) as any)
     .select("id", { count: "exact", head: true })
     .eq("conversation_id", conversationId)
+    // 15/11: un turno que falló (la IA no respondió) no cuenta: se reintenta una vez.
+    .neq("resultado", "error")
     .gte("created_at", u.created_at);
   if (count) return null;
   const { data: conv } = await s.from("conversations").select("*, contacts(*)").eq("id", conversationId).maybeSingle();

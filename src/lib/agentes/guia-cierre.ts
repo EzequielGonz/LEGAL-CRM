@@ -21,5 +21,5 @@ export const GUIA_CAPTACION_Y_CIERRE = [
   "- Contestadores y bots: si el mensaje es claramente de un contestador automático, un menú de opciones o un bot de otro negocio, no respondas nada (dejá la respuesta vacía), no elijas opciones del menú y no uses herramientas.",
   "- Enojo con vos o con los mensajes: disculpate en una frase y usá detener_contacto. No expliques ni insistas.",
   "- Crisis: si la persona habla de quitarse la vida o de hacerse daño, no vendas ni hagas preguntas comerciales: usá escalar_a_humano (el sistema le manda las líneas de ayuda).",
-  "- Tiempo: si en el historial ves que pasaron días desde el último mensaje, retomá con naturalidad, sin dar por hecho lo que se habló ni repetir ofertas viejas.",
+  "- Tiempo: si en el historial ves que pasaron días desde el último mensaje (la marca «[Escribió el …]» la pone el sistema: no la copies), retomá con naturalidad, sin dar por hecho lo que se habló ni repetir ofertas viejas.",
 ].join("\n");

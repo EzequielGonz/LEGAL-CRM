@@ -14,6 +14,10 @@ export const INCIDENCE_LABEL: Record<string, string> = {
   motivo_no_confirmado: "Motivo no confirmado",
   mensaje_posterior_migracion: "Mensaje recibido durante la migración",
   otro: "Otra",
+  amenaza_legal: "Amenaza o denuncia",
+  queja_cliente_captado: "Queja de un cliente captado",
+  // 15/11: la persona habló de quitarse la vida o de hacerse daño (cartel urgente).
+  crisis: "Persona en crisis (urgente)",
 };
 
 export const QUARANTINE_REASON_LABEL: Record<string, string> = {

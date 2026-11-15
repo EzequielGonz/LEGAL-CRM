@@ -528,7 +528,7 @@ async function disculpaYCorte({ contact, conversation, texto, nota }: { contact:
     }
   }
   try {
-    await registrarDetencion({ contactId: contact.id, motivo: "enojo", actor: "ia", nota, motivoAtencion: "enojo" });
+    await registrarDetencion({ contactId: contact.id, motivo: "enojo", actor: "ia", nota, motivoAtencion: "enojo_por_contacto" });
   } catch (err) {
     console.error("[enojo] No se pudo registrar la detención:", err);
   }

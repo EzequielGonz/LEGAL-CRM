@@ -743,7 +743,7 @@ const PERFILES = {
         preguntas: [
           "¿Le piden reseñas a sus clientes?",
           "¿Quién responde las reseñas del negocio?",
-          "¿Les interesa mejorar eso?",
+          "¿Les interesa sumar más reseñas?",
           "¿Saben cuántas reseñas tienen hoy?",
         ],
       },
@@ -775,7 +775,7 @@ const PERFILES = {
         preguntas: [
           "¿Trabajan con turnos o reservas?",
           "¿Cómo los organizan hoy?",
-          "¿Les interesa automatizarlo?",
+          "¿Les interesa automatizar los turnos?",
           "¿Les lleva mucho tiempo coordinar?",
         ],
       },
@@ -791,7 +791,7 @@ const PERFILES = {
         preguntas: [
           "¿Hacen publicidad en redes o en Google?",
           "¿Saben cuántas consultas les traen los anuncios?",
-          "¿Les interesa revisarlo?",
+          "¿Les interesa que revisemos juntos sus anuncios?",
           "¿Quién arma hoy los anuncios?",
         ],
       },
