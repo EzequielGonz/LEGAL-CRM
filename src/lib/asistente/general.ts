@@ -149,6 +149,23 @@ export function enmascararCelda(v: unknown, tipo: "telefono" | "nombre" | "otro"
   return t.replace(/\d[\d\s().-]{6,}\d/g, (m) => enmascararTelefono(m)).slice(0, 60);
 }
 
+const FECHA = /^\d{4}-\d{2}-\d{2}(T[\d:.]+Z?)?$/;
+
+/**
+ * Una celda de ejemplo que no es ni teléfono ni nombre. Va en claro solo si es
+ * una fecha o una categoría: un valor corto, sin números largos, que se repite
+ * en la columna y en una columna con pocos valores distintos. Todo lo demás
+ * (domicilios, observaciones, apellidos, documentos) se oculta. Pura.
+ */
+export function celdaDeEjemplo(valor: unknown, repeticiones: number, distintosEnColumna: number, filas: number): string {
+  const t = String(valor ?? "").trim();
+  if (!t) return "";
+  if (FECHA.test(t)) return t.slice(0, 10);
+  const categorica = repeticiones >= 2 && distintosEnColumna <= Math.max(12, Math.ceil(filas * 0.2));
+  if (categorica && t.length <= 40 && !/\d{5,}/.test(t.replace(/[\s().-]/g, "")) && !/@/.test(t)) return t;
+  return "•••";
+}
+
 export interface HojaLeida {
   nombre: string;
   filas: number;
@@ -196,10 +213,26 @@ export function resumirHoja(
     const c = checkRow(f, i + 1, det);
     if (c.phone) telefonos.add(c.phone);
   });
+  // Cuántas veces aparece cada valor en su columna: en claro solo van las categorías (valores
+  // cortos que se repiten, como rubro, ciudad o tipo de consulta) y las fechas.
+  const columnasEjemplo = columnas.slice(0, 15);
+  const conteos = new Map<string, Map<string, number>>();
+  for (const col of columnasEjemplo) {
+    if (col === det.phone || col === det.name) continue;
+    const m = new Map<string, number>();
+    for (const f of filas) {
+      const t = String(f[col] ?? "").trim().toLowerCase();
+      if (t) m.set(t, (m.get(t) ?? 0) + 1);
+    }
+    conteos.set(col, m);
+  }
   const ejemplos = filas.slice(0, MAX_EJEMPLOS).map((f) => {
     const o: Record<string, string> = {};
-    for (const col of columnas.slice(0, 15)) {
-      o[col.slice(0, 40)] = enmascararCelda(f[col], col === det.phone ? "telefono" : col === det.name ? "nombre" : "otro");
+    for (const col of columnasEjemplo) {
+      const tipo = col === det.phone ? "telefono" : col === det.name ? "nombre" : "otro";
+      const m = conteos.get(col);
+      const valor = String(f[col] ?? "").trim();
+      o[col.slice(0, 40)] = tipo === "otro" ? celdaDeEjemplo(valor, m?.get(valor.toLowerCase()) ?? 0, m?.size ?? 0, filas.length) : enmascararCelda(valor, tipo);
     }
     return o;
   });
@@ -282,7 +315,10 @@ export function sanearResumenes(v: unknown): ResumenArchivo[] {
       ejemplos: (Array.isArray(r.ejemplos) ? r.ejemplos : []).slice(0, MAX_EJEMPLOS).map((f: any) => {
         const o: Record<string, string> = {};
         for (const [k, val] of Object.entries(f && typeof f === "object" ? f : {}).slice(0, 15)) {
-          o[texto(k, 40)] = enmascararCelda(val, k === tel ? "telefono" : k === nom ? "nombre" : "otro");
+          const tipo = k === tel ? "telefono" : k === nom ? "nombre" : "otro";
+          const limpio = enmascararCelda(val, tipo);
+          // Del navegador solo se aceptan en claro valores cortos (categorías y fechas).
+          o[texto(k, 40)] = tipo === "otro" && limpio.length > 40 ? "•••" : limpio;
         }
         return o;
       }),
@@ -462,6 +498,40 @@ export function diasEnPalabras(runDays: number[] | null): string {
   return runDays.map((d) => DIAS_SEMANA[d]).join(", ");
 }
 
+/** Fuente con la que se guarda la base importada por una propuesta (así se reconoce como propia). */
+export function fuenteDePropuesta(propuestaId: string): string {
+  return `${ROTULO_ORIGEN} (propuesta ${propuestaId.slice(0, 8)})`;
+}
+
+/**
+ * ¿Se puede usar una base que ya existe con la misma huella, en lugar de
+ * importarla de nuevo? Solo si la creó ESTA propuesta en un intento que se
+ * cortó y quedó completa. Si no, se avisa y ese perfil no sigue. Pura.
+ */
+export function puedeAdoptarBase(
+  b: { source_label: string | null; created_at: string; import_summary: unknown; filas_guardadas: number },
+  propuesta: { id: string; created_at: string },
+  filasEsperadas: number
+): { ok: true } | { ok: false; motivo: "ajena" | "incompleta" } {
+  const propia = b.source_label === fuenteDePropuesta(propuesta.id) && Date.parse(b.created_at) >= Date.parse(propuesta.created_at);
+  if (!propia) return { ok: false, motivo: "ajena" };
+  const marcada = !!(b.import_summary && typeof b.import_summary === "object" && (b.import_summary as any).incompleta);
+  if (marcada || b.filas_guardadas < filasEsperadas) return { ok: false, motivo: "incompleta" };
+  return { ok: true };
+}
+
+/** Minutos que puede pasar un plan a medio hacer antes de que el lanzamiento pida confirmar de nuevo. */
+export const VENCE_LANZAMIENTO_MIN = 30;
+
+/**
+ * Un plan que quedó a medias (se cerró la sesión o la pestaña) y se retoma
+ * mucho después no lanza con la confirmación vieja: pide confirmar de nuevo. Pura.
+ */
+export function lanzamientoVencido(decididaAt: string | null | undefined, ahora = Date.now()): boolean {
+  const t = Date.parse(String(decididaAt ?? ""));
+  return !Number.isFinite(t) || ahora - t > VENCE_LANZAMIENTO_MIN * 60_000;
+}
+
 /** Pasos que faltan de un plan confirmado (importar cada parte, crear, sumar las otras partes, lanzar). Pura. */
 export function pasosPendientes(
   p: { partes: number; lanzar: boolean },
@@ -497,6 +567,8 @@ export interface PayloadPlan {
   archivo_nombre: string;
   nombre_base: string;
   partes: number;
+  /** Huella de todas las filas al armar la propuesta: al importar se comprueba que sean las mismas. */
+  huella?: string;
   mapping: { phone: string | null; name: string | null; dni: string | null };
   channel_id: string;
   campana: AjustesCampana;

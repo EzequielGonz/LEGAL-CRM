@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { Icono } from "@/components/ui/icono-seccion";
@@ -99,6 +99,26 @@ export function PanelAsistenteGeneral({ abierto, alCerrar, alTenerCharla }: { ab
   useEffect(() => {
     if (abierto) window.setTimeout(() => entrada.current?.focus(), 50);
   }, [abierto]);
+  // Planes de campañas que quedaron sin confirmar, a medio hacer o con un paso que falló
+  // (por ejemplo, si se cerró la pestaña o la sesión a mitad): se pueden retomar acá.
+  const [pendientes, setPendientes] = useState<Propuesta[]>([]);
+  useEffect(() => {
+    if (!abierto) return;
+    let vigente = true;
+    fetch("/api/asistente/general/planes")
+      .then((r) => (r.ok ? r.json() : { planes: [] }))
+      .then((d) => {
+        if (!vigente) return;
+        // Solo los que no están ya en esta charla.
+        setPendientes(((d?.planes ?? []) as Propuesta[]).filter((p) => !mensajesRef.current.some((m) => (m.propuestas ?? []).some((x) => x.id === p.id))));
+      })
+      .catch(() => undefined);
+    return () => {
+      vigente = false;
+    };
+  }, [abierto]);
+  const mensajesRef = useRef<Mensaje[]>([]);
+  mensajesRef.current = mensajes;
   useEffect(() => {
     alTenerCharla(mensajes.length > 0);
   }, [mensajes.length, alTenerCharla]);
@@ -199,8 +219,8 @@ export function PanelAsistenteGeneral({ abierto, alCerrar, alTenerCharla }: { ab
 
   const leyendo = planillas.some((p) => p.estado === "leyendo" || p.estado === "subiendo");
 
-  const enviar = useCallback(
-    async (contenido: string) => {
+  async function enviar(contenido: string) {
+    {
       const limpio = contenido.trim();
       if ((!limpio && adjuntos.length === 0) || pensando || leyendo) return;
       const enviados = adjuntos;
@@ -227,10 +247,8 @@ export function PanelAsistenteGeneral({ abierto, alCerrar, alTenerCharla }: { ab
       } finally {
         setPensando(false);
       }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [mensajes, pensando, adjuntos, planillas, leyendo]
-  );
+    }
+  }
 
   const actualizarPropuesta = (i: number, p: Propuesta) =>
     setMensajes((ms) => ms.map((m, k) => (k === i ? { ...m, propuestas: (m.propuestas ?? []).map((x) => (x.id === p.id ? p : x)) } : m)));
@@ -258,9 +276,9 @@ export function PanelAsistenteGeneral({ abierto, alCerrar, alTenerCharla }: { ab
                   <Icono nombre="asistente" className="h-5 w-5" />
                 </span>
                 <div className="min-w-0">
-                  <p id="asistente-general-dialogo" className="text-sm font-semibold text-slate-950">
+                  <h2 id="asistente-general-dialogo" className="text-sm font-semibold text-slate-950">
                     Asistente general
-                  </p>
+                  </h2>
                   <p className="truncate text-xs text-slate-600">Los cuatro perfiles · nada cambia sin tu confirmación</p>
                 </div>
               </div>
@@ -286,14 +304,26 @@ export function PanelAsistenteGeneral({ abierto, alCerrar, alTenerCharla }: { ab
             </header>
 
             <div ref={lista} role="log" aria-live="polite" aria-label="Conversación con el asistente general" tabIndex={0} className="flex-1 space-y-4 overflow-y-auto bg-slate-50 px-4 py-4">
+              {pendientes.length > 0 && (
+                <div className="rounded-xl border border-amber-300 bg-amber-50 p-3">
+                  <p className="text-sm font-semibold text-amber-950">Quedaron campañas por revisar o a medio hacer</p>
+                  <p className="mt-0.5 text-sm text-amber-900">Las armaste antes con el asistente general. Revisalas: podés confirmarlas, seguir donde quedaron o descartarlas.</p>
+                  <BocetoCampanas propuestas={pendientes} alCambiar={(np) => setPendientes((ps) => ps.map((x) => (x.id === np.id ? np : x)))} />
+                </div>
+              )}
               {mensajes.length === 0 && (
                 <div>
                   <p className="text-sm text-slate-700">
-                    Preguntame lo que quieras, como a cualquier IA, y también puedo operar los cuatro perfiles. Adjuntá planillas (Excel o CSV), por ejemplo una por perfil: te digo a qué perfil va cada una, cuántas personas hay para contactar y te armo un boceto de campaña por perfil para que lo revises. Yo solo veo un resumen de cada planilla, con los teléfonos ocultos.
+                    Preguntame lo que quieras y pedime cosas de los cuatro perfiles. Podés adjuntar planillas (Excel o CSV), por ejemplo una por perfil. Te digo a qué perfil va cada una y cuántas personas hay para contactar. Después te armo un boceto de campaña por perfil para que lo revises. De cada planilla veo solo un resumen, con los teléfonos ocultos.
                   </p>
                   <div className="mt-4 flex flex-col gap-2">
                     {SUGERENCIAS.map((s) => (
-                      <button key={s} type="button" onClick={() => (s.startsWith("Te adjunto") ? (setTexto(s), archivo.current?.click()) : enviar(s))} className="min-h-[44px] rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-left text-sm text-slate-800 shadow-sm hover:border-slate-300">
+                      <button key={s} type="button" onClick={() => {
+                          if (s.startsWith("Te adjunto")) {
+                            setTexto(s);
+                            archivo.current?.click();
+                          } else void enviar(s);
+                        }} className="min-h-[44px] rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-left text-sm text-slate-800 shadow-sm hover:border-slate-300">
                         {s}
                       </button>
                     ))}
@@ -332,7 +362,7 @@ export function PanelAsistenteGeneral({ abierto, alCerrar, alTenerCharla }: { ab
             </div>
 
             <form
-              className="border-t border-slate-100 p-3"
+              className="border-t border-slate-100 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]"
               onSubmit={(e) => {
                 e.preventDefault();
                 enviar(texto);

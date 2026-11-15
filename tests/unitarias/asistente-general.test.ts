@@ -10,6 +10,10 @@ import {
   enmascararCelda,
   enmascararNombre,
   enmascararTelefono,
+  celdaDeEjemplo,
+  fuenteDePropuesta,
+  puedeAdoptarBase,
+  lanzamientoVencido,
   nombreParte,
   normalizarLimite,
   partirFilas,
@@ -28,6 +32,7 @@ import { DECLARACIONES } from "@/lib/asistente/herramientas";
 import { DECLARACIONES_DEL_GENERAL } from "@/lib/asistente/motor";
 import { nivelDeAccion, TIPOS_ACCION } from "@/lib/asistente/permisos";
 import { ENTRENAMIENTO } from "@/lib/campanas/entrenamiento";
+import { VENCE_PASO_MS, leerArchivo, rutaArchivo } from "@/lib/asistente/general-servidor";
 
 // Datos ficticios: teléfonos de prueba y nombres inventados.
 const FILAS = [
@@ -91,6 +96,37 @@ test("asistente general: el resumen de una planilla no lleva datos personales", 
   // Sin columna de teléfono reconocible: se informa (no se puede importar).
   const sin = resumirHoja("lista.csv", null, [], [{ Empresa: "X", Rubro: "Y" }]);
   assert.equal(sin.resumen.columna_telefono, null);
+});
+
+test("asistente general: en los ejemplos solo van en claro categorías que se repiten y fechas", () => {
+  const filas = [
+    { Celular: "11 5555-0301", Apellido: "Inventado", Domicilio: "Calle Falsa 123", Observaciones: "Prefiere que lo llamen de tarde", Ciudad: "Rosario", Alta: "2026-11-01" },
+    { Celular: "11 5555-0302", Apellido: "Ejemplar", Domicilio: "Av. Siempreviva 742", Observaciones: "Tiene dos autos", Ciudad: "Rosario", Alta: "2026-11-02" },
+    { Celular: "11 5555-0303", Apellido: "Prueba", Domicilio: "Pasaje Ficticio 9", Observaciones: "Escribir el lunes", Ciudad: "Córdoba", Alta: "2026-11-03" },
+  ];
+  const { resumen } = resumirHoja("contactos.csv", null, [], filas);
+  const visto = JSON.stringify(resumen.ejemplos);
+  for (const dato of ["Calle Falsa", "Siempreviva", "Prefiere", "dos autos", "Inventado", "Ejemplar", "5555-0301"]) assert.ok(!visto.includes(dato), `«${dato}» no debe llegar al modelo`);
+  assert.equal(resumen.ejemplos[0].Ciudad, "Rosario", "una categoría que se repite va en claro");
+  assert.equal(resumen.ejemplos[2].Ciudad, "•••", "un valor que aparece una sola vez se oculta");
+  assert.equal(resumen.ejemplos[0].Alta, "2026-11-01", "las fechas van en claro");
+  assert.equal(celdaDeEjemplo("Choque", 5, 3, 100), "Choque");
+  assert.equal(celdaDeEjemplo("Texto largo único de una observación", 1, 90, 100), "•••");
+  assert.equal(celdaDeEjemplo("30111222", 2, 3, 100), "•••", "un número largo nunca va en claro");
+  // El servidor tampoco deja pasar textos largos que mande el navegador.
+  const [r] = sanearResumenes([{ id: "11111111-2222-4333-8444-555555555555", ejemplos: [{ Observaciones: "Un texto libre muy largo con datos de la persona y su domicilio" }] }]);
+  assert.equal(r.ejemplos[0].Observaciones, "•••");
+});
+
+test("asistente general: una base existente se adopta solo si es de esta propuesta y está completa", () => {
+  const propuesta = { id: "aaaaaaaa-1111-4222-8333-444444444444", created_at: "2026-11-15T12:00:00Z" };
+  const propia = { source_label: fuenteDePropuesta(propuesta.id), created_at: "2026-11-15T12:05:00Z", import_summary: null, filas_guardadas: 100 };
+  assert.deepEqual(puedeAdoptarBase(propia, propuesta, 100), { ok: true });
+  assert.deepEqual(puedeAdoptarBase({ ...propia, filas_guardadas: 40 }, propuesta, 100), { ok: false, motivo: "incompleta" }, "cortada a mitad: no se adopta");
+  assert.deepEqual(puedeAdoptarBase({ ...propia, import_summary: { incompleta: true } }, propuesta, 100), { ok: false, motivo: "incompleta" });
+  assert.deepEqual(puedeAdoptarBase({ ...propia, source_label: "Otra carga" }, propuesta, 100), { ok: false, motivo: "ajena" }, "de otra carga: no se adopta");
+  assert.deepEqual(puedeAdoptarBase({ ...propia, created_at: "2026-11-15T11:00:00Z" }, propuesta, 100), { ok: false, motivo: "ajena" });
+  assert.ok(VENCE_PASO_MS > 60_000, "un paso tomado no vence antes de que termine la ruta (60 s)");
 });
 
 test("asistente general: repetidos entre planillas", () => {
@@ -234,4 +270,24 @@ test("asistente general: la migración permite cada tipo de propuesta", () => {
   const sql = readFileSync("supabase/migrations/0626_asistente_general.sql", "utf8");
   for (const t of TIPOS_ACCION) assert.ok(sql.includes(`'${t}'`), `falta ${t} en la migración`);
   assert.ok(!/\b(drop table|delete from|truncate)\b/i.test(sql), "la migración no borra");
+});
+
+test("asistente general: un plan retomado mucho después no lanza con la confirmación vieja", () => {
+  const ahora = Date.parse("2026-11-15T15:00:00Z");
+  assert.equal(lanzamientoVencido("2026-11-15T14:45:00Z", ahora), false);
+  assert.equal(lanzamientoVencido("2026-11-15T14:00:00Z", ahora), true);
+  assert.equal(lanzamientoVencido(null, ahora), true, "sin fecha, se vuelve a pedir");
+});
+
+test("asistente general: las filas guardadas solo se leen por su identificador, dentro de su carpeta", async () => {
+  assert.equal(rutaArchivo("11111111-2222-4333-8444-555555555555"), "asistente-general/11111111-2222-4333-8444-555555555555/filas.json");
+  await assert.rejects(() => leerArchivo("../bases/otra.json"), /no es válida/);
+  await assert.rejects(() => leerArchivo("asistente-general/x/filas.json"), /no es válida/);
+});
+
+test("asistente general: no escucha el evento del asistente de perfil ni lo monta (convive con el Laboratorio)", () => {
+  for (const f of ["src/components/asistente/asistente-general.tsx", "src/components/asistente/panel-asistente-general.tsx", "src/components/asistente/boceto-campanas.tsx"]) {
+    const codigo = readFileSync(f, "utf8");
+    assert.ok(!/crm:asistente|abrirAsistente|<AsistentePanel\b/.test(codigo), `${f} no debe abrir ni escuchar el asistente de perfil`);
+  }
 });

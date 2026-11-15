@@ -38,6 +38,10 @@ import {
   cuerpoCampanaWasender,
   diasDeEnvio,
   esIdArchivo,
+  fuenteDePropuesta,
+  lanzamientoVencido,
+  puedeAdoptarBase,
+  VENCE_LANZAMIENTO_MIN,
   nombreParte,
   normalizarLimite,
   partirFilas,
@@ -64,17 +68,43 @@ export interface CtxGeneral {
   archivos: Set<string>;
   guardar: (slug: SlugPerfil, tipo: string, titulo: string, resumen: string, payload: unknown) => Promise<{ id: string }>;
   resumenPerfil: (slug: SlugPerfil) => Promise<Record<string, unknown>>;
+  /** Planillas ya descargadas en este pedido (cada una se baja una sola vez). */
+  filas?: Map<string, Promise<ArchivoGuardado>>;
+  /** Cuándo empezó el pedido (para cortar a tiempo con un mensaje claro). */
+  inicio?: number;
+}
+
+/** Tiempo del pedido a partir del cual no se arma otra campaña (la ruta corta a los 60 s). */
+export const PRESUPUESTO_PEDIDO_MS = 35_000;
+
+/** Lee las filas una sola vez por pedido, aunque varias herramientas usen la misma planilla. */
+function leerConCache(ctx: CtxGeneral, id: string): Promise<ArchivoGuardado> {
+  if (!ctx.filas) ctx.filas = new Map();
+  let p = ctx.filas.get(id);
+  if (!p) {
+    p = leerArchivo(id);
+    ctx.filas.set(id, p);
+    p.catch(() => ctx.filas?.delete(id));
+  }
+  return p;
 }
 
 // ---------------------------------------------------------------------------
 // Filas guardadas
 // ---------------------------------------------------------------------------
 
-/** Prepara la subida de las filas de una planilla (URL firmada de un solo uso). */
+/**
+ * Prepara la subida de las filas de una planilla (URL firmada de un solo uso).
+ * El navegador no elige la ruta: la arma el servidor con un identificador
+ * nuevo, dentro de «asistente-general/». Sin reemplazo (upsert apagado): la
+ * URL solo sirve para crear ese objeto, no para pisar ni leer otros, y lo
+ * subido no se puede cambiar después (además se compara su huella al importar).
+ */
 export async function prepararSubidaArchivo(): Promise<{ id: string; path: string; token: string }> {
   const id = crypto.randomUUID();
-  const { data, error } = await createAdminClient().storage.from(DEPOSITO).createSignedUploadUrl(rutaArchivo(id));
+  const { data, error } = await createAdminClient().storage.from(DEPOSITO).createSignedUploadUrl(rutaArchivo(id), { upsert: false });
   if (error || !data) throw new Error(error?.message ?? "No se pudo preparar la subida.");
+  if (data.path !== rutaArchivo(id)) throw new Error("La subida no quedó en la carpeta esperada.");
   return { id, path: data.path, token: data.token };
 }
 
@@ -171,6 +201,8 @@ export interface AnalisisArchivo {
   ya_contactados: number;
   elegibles: number;
   repetido: { base: string; fecha: string } | null;
+  /** Huella de todas las filas (para comprobar al importar que no cambiaron). */
+  huella: string;
 }
 
 /**
@@ -179,8 +211,8 @@ export interface AnalisisArchivo {
  * área) y el mismo criterio de destinatarios (sin detenidos ni ya
  * contactados). Solo lectura.
  */
-export async function analizarArchivo(id: string, area: string): Promise<AnalisisArchivo> {
-  const a = await leerArchivo(id);
+export async function analizarArchivo(id: string, area: string, leer: (id: string) => Promise<ArchivoGuardado> = leerArchivo): Promise<AnalisisArchivo> {
+  const a = await leer(id);
   const s = createAdminClient();
   const columnas = headersOf(a.filas);
   const det = detectColumns(columnas);
@@ -232,6 +264,7 @@ export async function analizarArchivo(id: string, area: string): Promise<Analisi
     ya_contactados: plan?.contactados_anteriormente ?? 0,
     elegibles: nuevos + (plan?.elegibles.length ?? 0),
     repetido,
+    huella: rowsFingerprint(a.filas),
   };
 }
 
@@ -269,7 +302,7 @@ export async function ejecutarHerramientaGeneral(nombre: string, args: Record<st
       if ("error" in r) return { error: r.error };
       const id = archivoDeLaCharla(ctx, args.archivo_id);
       if (typeof id !== "string") return id;
-      const an = await analizarArchivo(id, areaDePerfil(r.perfil, args.area));
+      const an = await analizarArchivo(id, areaDePerfil(r.perfil, args.area), (x) => leerConCache(ctx, x));
       if (!an.columna_telefono) return { ...sinMapping(an), error: "No se reconoce ninguna columna de teléfono: esta planilla no se puede importar. Pedile a la responsable que la revise (una columna «Teléfono» o «Celular»)." };
       return { perfil: NOMBRE_PERFIL[r.perfil], ...sinMapping(an), nota: an.repetido ? `Ya se cargó como «${an.repetido.base}» el ${an.repetido.fecha}: no se vuelve a importar.` : undefined };
     }
@@ -281,7 +314,7 @@ export async function ejecutarHerramientaGeneral(nombre: string, args: Record<st
 }
 
 function sinMapping(a: AnalisisArchivo) {
-  const { mapping: _m, ...resto } = a;
+  const { mapping: _m, huella: _h, ...resto } = a;
   return resto;
 }
 
@@ -289,7 +322,14 @@ async function proponerPlan(args: Record<string, unknown>, ctx: CtxGeneral): Pro
   const lista = Array.isArray(args.campanas) ? (args.campanas as Record<string, unknown>[]).slice(0, 12) : [];
   if (!lista.length) return { error: "Falta al menos una campaña (perfil, planilla, nombre y línea)." };
   const resultados: Record<string, unknown>[] = [];
+  const inicio = ctx.inicio ?? Date.now();
+  // En serie (no en paralelo): cada planilla puede pesar varios MB. Si no alcanza el tiempo
+  // del pedido, las que faltan se dicen con claridad para pedirlas en otro mensaje.
   for (const c of lista) {
+    if (Date.now() - inicio > PRESUPUESTO_PEDIDO_MS) {
+      resultados.push({ perfil: String(c?.perfil ?? ""), error: "No alcanzó el tiempo de este pedido para armar esta campaña: pedila en otro mensaje (lo ya propuesto queda)." });
+      continue;
+    }
     try {
       resultados.push(await proponerUna(c ?? {}, ctx));
     } catch (err) {
@@ -308,7 +348,7 @@ async function proponerUna(c: Record<string, unknown>, ctx: CtxGeneral): Promise
   const nombre = String(c.nombre ?? "").trim().slice(0, 120);
   if (nombre.length < 3) return { perfil, error: "Falta el nombre de la campaña." };
   const area = areaDePerfil(perfil, c.area);
-  const [an, lineas, inicio, canal] = await Promise.all([analizarArchivo(id, area), lineasWasender(RUBRO_IDS[perfil]), ejemplosDeInicio(perfil), canalDelArea(area)]);
+  const [an, lineas, inicio, canal] = await Promise.all([analizarArchivo(id, area, (x) => leerConCache(ctx, x)), lineasWasender(RUBRO_IDS[perfil]), ejemplosDeInicio(perfil), canalDelArea(area)]);
   if (!an.columna_telefono) return { perfil, error: `«${an.archivo}» no tiene una columna de teléfono reconocible: no se importa.` };
   if (!canal) return { perfil, error: `El perfil no tiene un canal de WhatsApp para el área ${area}.` };
   if (!lineas.length) return { perfil, error: "Este perfil no tiene líneas de Wasender: hay que conectar una antes de crear la campaña." };
@@ -322,6 +362,7 @@ async function proponerUna(c: Record<string, unknown>, ctx: CtxGeneral): Promise
     perfil,
     area,
     archivo_id: id,
+    huella: an.huella,
     archivo_nombre: an.hoja ? `${an.archivo} › ${an.hoja}` : an.archivo,
     nombre_base: nombreBase,
     partes: an.partes,
@@ -358,6 +399,23 @@ async function proponerUna(c: Record<string, unknown>, ctx: CtxGeneral): Promise
     plantillas_de_inicio: inicio.rotacion.plantillas,
     aviso: inicio.rotacion.plantillas === 0 ? "El perfil no tiene plantillas de inicio usables: la campaña se crea pero no se podrá lanzar hasta sumarlas." : undefined,
   };
+}
+
+/**
+ * Planes de campañas de los últimos 7 días que quedaron sin confirmar, a
+ * medio hacer o con un paso que falló, para retomarlos si se cerró la
+ * pestaña o la sesión a mitad. Solo lectura.
+ */
+export async function planesParaRetomar(): Promise<{ id: string; tipo: string; titulo: string; resumen: string; estado: string; detalle: unknown; resultado: unknown }[]> {
+  const desde = new Date(Date.now() - 7 * 86_400_000).toISOString();
+  const { data } = await (createAdminClient().from("asistente_acciones" as any) as any)
+    .select("id, tipo, titulo, resumen, estado, payload, resultado")
+    .eq("tipo", "plan_campanas")
+    .in("estado", ["propuesta", "ejecutando", "error"])
+    .gte("created_at", desde)
+    .order("created_at", { ascending: false })
+    .limit(24);
+  return ((data ?? []) as any[]).map((a) => ({ id: a.id, tipo: a.tipo, titulo: a.titulo, resumen: a.resumen, estado: a.estado, detalle: a.payload, resultado: a.resultado }));
 }
 
 // ---------------------------------------------------------------------------
@@ -407,11 +465,21 @@ interface ResultadoPlan {
   ocupado?: boolean;
 }
 
-/** Si otro pedido está haciendo un paso, se espera (vence a los 75 s por si se cortó). */
-const VENCE_PASO_MS = 75_000;
+/**
+ * Si otro pedido está haciendo un paso, se espera. Vence a los 120 s por si se
+ * cortó: más que el tiempo máximo de la ruta (60 s), así nunca se toma un
+ * paso que todavía está corriendo.
+ */
+export const VENCE_PASO_MS = 120_000;
 
 async function guardarResultado(s: Db, id: string, resultado: ResultadoPlan, estado?: string) {
   await s.from("asistente_acciones" as any).update({ resultado, ...(estado ? { estado } : {}) }).eq("id", id);
+}
+
+/** Error de una llamada al panel, en palabras (la sesión vencida se explica aparte). */
+function errorDelPanel(res: Response, json: any, alternativa?: string): Error {
+  if (res.status === 401 || res.status === 403) return new Error("La sesión venció o se cerró: ingresá de nuevo y tocá «Reintentar lo que falló» (lo hecho no se repite).");
+  return new Error(String(alternativa ?? json?.error ?? `El panel respondió ${res.status}.`).slice(0, 280));
 }
 
 async function respuestaHttp(res: Response): Promise<any> {
@@ -453,6 +521,10 @@ export async function avanzarPlanCampanas(a: any, http?: LlamadaInterna): Promis
 
   const paso = pendientesAntes[0];
   try {
+    // Retomado mucho después (sesión o pestaña cerrada a mitad): no se lanza con la confirmación vieja.
+    if (paso === "lanzar" && lanzamientoVencido(a.decidida_at)) {
+      throw new Error(`Quedó a medio hacer más de ${VENCE_LANZAMIENTO_MIN} minutos: para lanzarla, marcá de nuevo la confirmación y tocá «Reintentar lo que falló».`);
+    }
     await hacerPaso(paso, a, p, pasos, http);
     const quedan = pasosPendientes({ partes: p.partes, lanzar: p.lanzar }, pasos);
     const listo: ResultadoPlan = { version: v + 1, en_paso: false, pasos, total, hechos: total - quedan.length };
@@ -475,14 +547,15 @@ async function hacerPaso(paso: string, a: any, p: PayloadPlan, pasos: PasosPlan,
   if (tipo === "importar") {
     const archivo = await leerArchivo(p.archivo_id);
     const partes = partirFilas(archivo.filas);
-    if (partes.length !== p.partes) throw new Error("La planilla guardada cambió desde que se armó la propuesta. Pedí el plan de nuevo.");
+    // Se importa exactamente lo que se analizó al armar la propuesta.
+    if (partes.length !== p.partes || (p.huella && rowsFingerprint(archivo.filas) !== p.huella)) throw new Error("La planilla guardada cambió desde que se armó la propuesta. Pedí el plan de nuevo.");
     let base: { id: string; nombre: string; creados: number; total: number };
     const nombre = nombreParte(p.nombre_base, i, p.partes);
     try {
       const r = await importBase({
         area: p.area as Area,
         name: nombre,
-        sourceLabel: ROTULO_ORIGEN,
+        sourceLabel: fuenteDePropuesta(a.id),
         fileName: p.archivo_nombre,
         rows: partes[i],
         importedBy: null,
@@ -493,9 +566,22 @@ async function hacerPaso(paso: string, a: any, p: PayloadPlan, pasos: PasosPlan,
       base = { id: r.base_id, nombre, creados: r.creados, total: r.total };
     } catch (err) {
       if (!(err instanceof RepeatedImportError)) throw err;
-      // La importamos nosotros en un intento anterior que se cortó: se usa esa (no se duplica).
-      if (Date.parse(err.previous.created_at) >= Date.parse(a.created_at)) base = { id: err.previous.id, nombre: err.previous.name, creados: 0, total: partes[i].length };
-      else throw new Error(`Esta planilla ya estaba cargada como «${err.previous.name}»: no se vuelve a importar.`);
+      // Ya existe una base con estas mismas filas. Se usa solo si la creó ESTA propuesta en un
+      // intento que se cortó y quedó completa; si no, se avisa y este perfil no sigue.
+      const [{ data: previa }, { count }] = await Promise.all([
+        (s.from("imported_bases") as any).select("source_label, created_at, import_summary").eq("id", err.previous.id).maybeSingle(),
+        s.from("imported_base_rows").select("id", { count: "exact", head: true }).eq("base_id", err.previous.id),
+      ]);
+      const adoptar = puedeAdoptarBase(
+        { source_label: previa?.source_label ?? null, created_at: previa?.created_at ?? err.previous.created_at, import_summary: previa?.import_summary ?? null, filas_guardadas: count ?? 0 },
+        { id: a.id, created_at: a.created_at },
+        partes[i].length
+      );
+      if (!adoptar.ok && adoptar.motivo === "ajena") throw new Error(`Esta planilla ya estaba cargada como «${err.previous.name}»: no se vuelve a importar.`);
+      if (!adoptar.ok) {
+        throw new Error(`Un intento anterior dejó la base «${err.previous.name}» cargada a medias (${count ?? 0} de ${partes[i].length} filas). Archivala desde Bases y tocá «Reintentar lo que falló»: se vuelve a importar entera.`);
+      }
+      base = { id: err.previous.id, nombre: err.previous.name, creados: 0, total: partes[i].length };
     }
     pasos.bases = [...(pasos.bases ?? [])];
     pasos.bases[i] = base;
@@ -538,7 +624,7 @@ async function hacerPaso(paso: string, a: any, p: PayloadPlan, pasos: PasosPlan,
       };
       await rotularCampana(s, json.campaign.id, a);
     }
-    if (!res.ok || res.status === 207) throw new Error(String(json?.warning ?? json?.error ?? `El panel respondió ${res.status}.`).slice(0, 280));
+    if (!res.ok || res.status === 207) throw errorDelPanel(res, json, res.status === 207 ? json?.warning : undefined);
     return;
   }
   if (tipo === "agregar") {
@@ -554,7 +640,7 @@ async function hacerPaso(paso: string, a: any, p: PayloadPlan, pasos: PasosPlan,
       signal: AbortSignal.timeout(50_000),
     });
     const json = await respuestaHttp(res);
-    if (!res.ok) throw new Error(String(json?.error ?? `El panel respondió ${res.status}.`).slice(0, 280));
+    if (!res.ok) throw errorDelPanel(res, json);
     pasos.agregadas = [...(pasos.agregadas ?? [])];
     pasos.agregadas[i] = { agregados: Number(json?.agregados ?? 0) };
     return;

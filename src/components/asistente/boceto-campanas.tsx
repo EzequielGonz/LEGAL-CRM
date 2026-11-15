@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useMemo, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
 import type { Propuesta } from "@/components/asistente/asistente-panel";
 import { DIAS_SEMANA, NOMBRE_PERFIL, diasEnPalabras, lineaDelPlan, type PayloadPlan } from "@/lib/asistente/general";
@@ -51,27 +51,32 @@ export function BocetoCampanas({ propuestas, alCambiar }: { propuestas: Propuest
   const [avance, setAvance] = useState<string | null>(null);
   const idTotales = useId();
 
+  // Cambios del boceto que todavía se están guardando: confirmar los espera (un cambio hecho
+  // justo antes de tocar Confirmar no se pierde ni llega tarde).
+  const enVuelo = useRef(new Set<Promise<void>>());
+  // Última versión de cada propuesta (lo que devolvió el último guardado), para no pisarla al confirmar.
+  const ultimas = useRef(new Map<string, Propuesta>());
+  ultimas.current = new Map(propuestas.map((x) => [x.id, x]));
   const incluidas = pendientes.filter((p) => !excluidas.includes(p.id));
-  const totales = useMemo(() => {
-    const ds = incluidas.map((p) => p.detalle as PayloadPlan);
-    return {
-      campanas: ds.length,
-      personas: ds.reduce((a, d) => a + (d?.boceto?.elegibles ?? 0), 0),
-      lineas: new Set(ds.map((d) => d?.campana?.wasender_line_id)).size,
-      lanzan: ds.filter((d) => d?.lanzar).length,
-    };
-  }, [incluidas]);
+  const ds = incluidas.map((p) => p.detalle as PayloadPlan);
+  const totales = {
+    campanas: ds.length,
+    personas: ds.reduce((a, d) => a + (d?.boceto?.elegibles ?? 0), 0),
+    lineas: new Set(ds.map((d) => d?.campana?.wasender_line_id)).size,
+    lanzan: ds.filter((d) => d?.lanzar).length,
+  };
   const reintentables = propuestas.filter((p) => p.estado === "error");
   const algunaLanza = totales.lanzan > 0 || reintentables.some((p) => (p.detalle as PayloadPlan)?.lanzar);
 
   /** Confirma (o sigue, o reintenta) una propuesta hasta que termina o falla. */
   async function ejecutarUna(p: Propuesta) {
-    let actual = p;
+    let actual = ultimas.current.get(p.id) ?? p;
     for (let vuelta = 0; vuelta < 60; vuelta++) {
       const res = await fetch(`/api/asistente/acciones/${p.id}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ confirmar_envio: (actual.detalle as PayloadPlan)?.lanzar ? entendido : undefined }),
+        // El servidor decide si hace falta con la propuesta guardada; si falta, avisa y no hace nada.
+        body: JSON.stringify({ confirmar_envio: entendido }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
@@ -88,9 +93,10 @@ export function BocetoCampanas({ propuestas, alCambiar }: { propuestas: Propuest
   }
 
   async function confirmar(lista: Propuesta[]) {
-    if (ocupado || guardando.length) return;
+    if (ocupado) return;
     setOcupado(true);
     try {
+      await Promise.all([...enVuelo.current]);
       // Una por una: si una falla, las demás siguen.
       for (const [i, p] of lista.entries()) {
         setAvance(`Preparando ${i + 1} de ${lista.length}: ${NOMBRE_PERFIL[(p.detalle as PayloadPlan)?.perfil] ?? p.titulo}…`);
@@ -103,7 +109,13 @@ export function BocetoCampanas({ propuestas, alCambiar }: { propuestas: Propuest
     }
   }
 
-  async function guardar(p: Propuesta, ajustes: Record<string, unknown>) {
+  function guardar(p: Propuesta, ajustes: Record<string, unknown>) {
+    const tarea = guardarYa(p, ajustes);
+    enVuelo.current.add(tarea);
+    void tarea.finally(() => enVuelo.current.delete(tarea));
+  }
+
+  async function guardarYa(p: Propuesta, ajustes: Record<string, unknown>) {
     setGuardando((g) => [...g, p.id]);
     try {
       const res = await fetch(`/api/asistente/acciones/${p.id}/plan`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ajustes }) });
@@ -401,6 +413,13 @@ function TarjetaPlan({
         <p role={resultado.tono === "error" ? "alert" : "status"} className={`mt-2 text-sm font-medium ${resultado.tono === "error" ? "text-red-700" : resultado.tono === "ok" ? "text-emerald-700" : "text-slate-700"}`}>
           {resultado.texto}
         </p>
+      )}
+      {p.estado === "ejecutando" && !ocupado && (
+        <div className="mt-2">
+          <button type="button" className="btn-gold-sm" onClick={alReintentar}>
+            Seguir donde quedó
+          </button>
+        </div>
       )}
       {p.estado === "error" && (
         <div className="mt-2 flex flex-wrap items-center gap-2">

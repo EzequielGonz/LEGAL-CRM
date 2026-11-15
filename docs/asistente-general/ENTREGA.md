@@ -12,6 +12,24 @@ Estado: **especificado e implementado en la rama; probado con pruebas unitarias,
 - **Confirmación**: nivel «contacto» si lanza (casilla reforzada, sin código) y «cambio» si solo importa y crea. Se ejecuta de a un paso por pedido (importar cada parte → crear → sumar las otras partes → lanzar), con lo hecho anotado: si un paso falla, lo hecho no se deshace y «Reintentar lo que falló» sigue desde ahí (vuelve a pedir la casilla si lanza). Si un perfil falla, los demás siguen.
 - **Campañas idénticas a las de la pantalla**: se crean llamando a `/api/campaigns` con la sesión de quien confirma y el mismo cuerpo que el formulario con Wasender y «rotar entre las plantillas de inicio» (`cuerpoCampanaWasender`); las partes extra se suman con `/api/campaigns/[id]/agregar-base`; se lanza con `launchCampaign` (la misma función que la ruta de lanzamiento). Importar usa `importBase` con la columna detectada, siempre como base nueva y con la fuente «Creada desde el asistente general». La campaña queda rotulada en `campaigns.creada_desde` (si la migración está aplicada) y en `ops_change_log`.
 
+## Segunda pasada (revisión con skills, 15/11)
+
+- **Retomar lo que quedó a medias**: al abrir el asistente general aparecen los planes de la última semana sin confirmar, a medio hacer o con un paso que falló (`GET /api/asistente/general/planes`), con «Seguir donde quedó» o «Reintentar lo que falló».
+- **Lanzar con una confirmación vieja, no**: si un plan quedó a medias más de 30 minutos, el paso de lanzar pide marcar la confirmación de nuevo.
+- **Sesión vencida a mitad**: el paso queda en error con «ingresá de nuevo y tocá Reintentar»; lo hecho no se repite.
+- **Importación cortada**: si un intento anterior dejó una base a medias, no se adopta; se pide archivarla desde Bases y reintentar.
+- **Planilla intacta**: la propuesta guarda la huella de todas las filas y se comprueba al importar. La URL firmada solo crea su propio objeto (sin reemplazo); la ruta la arma el servidor.
+- **Boceto**: confirmar espera los cambios que se están guardando y usa la última versión guardada; la casilla «Incluir» y los errores quedan fuera de la parte plegable; foco visible en los días.
+- **Laboratorio**: el asistente general no escucha el evento `crm:asistente` ni monta el asistente de perfil (prueba).
+
+## Correcciones de la segunda opinión (15/11)
+
+1. **Base cortada o ajena**: la base se guarda con la fuente «Creada desde el asistente general (propuesta xxxxxxxx)». Si al reintentar ya existe una base con las mismas filas, se usa solo si es de esa propuesta y está completa (`puedeAdoptarBase`); si no, se avisa y ese perfil no sigue.
+2. **Paso tomado**: vence a los 120 s (la ruta corta a los 60 s), así nunca se toma un paso que todavía corre.
+3. **Ejemplos al modelo**: en claro solo categorías cortas que se repiten (rubro, ciudad, tipo de consulta) y fechas; domicilios, observaciones, apellidos, documentos y números largos van ocultos. El servidor además oculta todo texto de más de 40 caracteres.
+4. **Costo y tiempo**: cada planilla se descarga una sola vez por pedido; las campañas del plan se arman en serie y, pasados 35 s, las que faltan se informan para pedirlas en otro mensaje.
+5. **JSON de filas en el depósito**: quedan sin vencimiento (ver riesgos del informe).
+
 ## Qué no cambia
 
 Bots, seguimiento, campañas existentes, asistente de cada perfil, detenciones (por rubro, como hoy) y lo que pide código (encender un bot, gastar, controles generales). Nada se activa solo; crear no envía nada.
