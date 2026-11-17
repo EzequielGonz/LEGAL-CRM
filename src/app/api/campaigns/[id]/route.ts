@@ -43,8 +43,23 @@ export async function PATCH(request: Request, props: { params: Promise<{ id: str
   if (!campaign) return NextResponse.json({ error: "Campaña no encontrada" }, { status: 404 });
 
   const update: Record<string, unknown> = {};
-  // 10/11: campañas por Wasender. El método se elige al crearla; acá se cambian su línea y su plantilla.
-  if ((campaign as any).proveedor === "wasender") {
+  // 17/11: el método de envío (Meta o Wasender) se puede cambiar con la campaña sin enviar.
+  // Se conserva lo elegido en el otro método, así volver atrás no pierde la línea ni la plantilla.
+  let proveedor: "meta" | "wasender" = (campaign as any).proveedor === "wasender" ? "wasender" : "meta";
+  if (body?.proveedor !== undefined) {
+    if (body.proveedor !== "meta" && body.proveedor !== "wasender") {
+      return NextResponse.json({ error: "El método de envío tiene que ser Meta o Wasender." }, { status: 400 });
+    }
+    if (body.proveedor !== proveedor) {
+      if (campaign.status === "en_curso") {
+        return NextResponse.json({ error: "Pausá la campaña para cambiar el método de envío." }, { status: 409 });
+      }
+      proveedor = body.proveedor;
+      update.proveedor = proveedor;
+    }
+  }
+  // 10/11: campañas por Wasender: su línea y su plantilla propias.
+  if (proveedor === "wasender") {
     const cambiaLinea = body?.wasender_line_id !== undefined;
     const cambiaRotar = typeof body?.wasender_rotar_inicio === "boolean";
     const cambiaPlantilla = body?.wasender_plantilla_id !== undefined || cambiaRotar;
@@ -59,7 +74,7 @@ export async function PATCH(request: Request, props: { params: Promise<{ id: str
     if (cambiaPlantilla) update.wasender_plantilla_id = plantillaId;
     if (cambiaRotar) update.wasender_rotar_inicio = body.wasender_rotar_inicio;
   }
-  if (body?.line_id !== undefined && (campaign as any).proveedor !== "wasender") {
+  if (body?.line_id !== undefined && proveedor !== "wasender") {
     if (body.line_id === null || body.line_id === "") update.line_id = null;
     else {
       const { data: line } = await supabase.from("profile_lines").select("id, rubro_id, active").eq("id", body.line_id).maybeSingle();
@@ -75,7 +90,7 @@ export async function PATCH(request: Request, props: { params: Promise<{ id: str
       : [];
     update.run_days = days.length > 0 && days.length < 6 ? days : null;
   }
-  if (body?.template_id !== undefined && (campaign as any).proveedor !== "wasender") {
+  if (body?.template_id !== undefined && proveedor !== "wasender") {
     if (campaign.status === "en_curso") {
       return NextResponse.json({ error: "Pausá la campaña para cambiar la plantilla." }, { status: 409 });
     }
@@ -127,6 +142,7 @@ export async function PATCH(request: Request, props: { params: Promise<{ id: str
     action: "configurar_campana",
     target: `campaigns:${params.id}`,
     before: {
+      proveedor: (campaign as any).proveedor ?? "meta",
       line_id: campaign.line_id,
       run_days: campaign.run_days,
       template_id: campaign.template_id,

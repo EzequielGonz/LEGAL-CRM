@@ -26,7 +26,10 @@ export function CampaignSetup({
   running,
   dailyLimit = null,
   wasender = null,
+  proveedor = wasender ? "wasender" : "meta",
 }: {
+  /** 17/11: método de envío actual; se puede cambiar mientras la campaña no esté en curso. */
+  proveedor?: "meta" | "wasender";
   /** 10/11: campaña por Wasender: línea y plantilla propias en lugar de las de Meta. */
   wasender?: {
     lineas: { id: string; label: string }[];
@@ -57,18 +60,21 @@ export function CampaignSetup({
   const [limite, setLimite] = useState(dailyLimit ? String(dailyLimit) : "");
   const [waLinea, setWaLinea] = useState(wasender?.lineaId ?? "");
   const [waPlantilla, setWaPlantilla] = useState(wasender?.rotar || !wasender?.plantillaId ? "rotar" : wasender.plantillaId);
+  const [metodo, setMetodo] = useState<"meta" | "wasender">(proveedor);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [busy, setBusy] = useState(false);
+  const porWa = metodo === "wasender" ? wasender : null;
 
   async function save() {
     setBusy(true);
     setMsg(null);
     try {
-      const payload: Record<string, unknown> = wasender
+      const payload: Record<string, unknown> = porWa
         ? { wasender_line_id: waLinea || null, run_days: days, daily_send_limit: limite.trim() === "" ? null : Number(limite) }
         : { line_id: line || null, run_days: days, daily_send_limit: limite.trim() === "" ? null : Number(limite) };
-      if (wasender) {
-        const antes = wasender.rotar || !wasender.plantillaId ? "rotar" : wasender.plantillaId;
+      if (metodo !== proveedor) payload.proveedor = metodo;
+      if (porWa) {
+        const antes = porWa.rotar || !porWa.plantillaId ? "rotar" : porWa.plantillaId;
         if (!running && waPlantilla !== antes) {
           payload.wasender_rotar_inicio = waPlantilla === "rotar";
           payload.wasender_plantilla_id = waPlantilla === "rotar" ? null : waPlantilla || null;
@@ -95,7 +101,24 @@ export function CampaignSetup({
         </p>
       )}
       <div className="flex flex-wrap items-end gap-4">
-        {wasender ? (
+        {wasender && (
+          <label className="text-xs font-medium text-slate-600">
+            Método de envío
+            <select
+              value={metodo}
+              disabled={running}
+              onChange={(e) => setMetodo(e.target.value === "wasender" ? "wasender" : "meta")}
+              className="mt-1 block w-56 rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold disabled:opacity-60"
+            >
+              <option value="meta">Meta (API oficial)</option>
+              <option value="wasender">Wasender (QR)</option>
+            </select>
+            <span className="mt-1 block font-normal text-slate-400">
+              {running ? "Pausá la campaña para cambiarlo." : metodo !== proveedor ? "Se aplica al guardar. Los destinatarios no cambian." : "Los destinatarios no cambian al pasar de uno a otro."}
+            </span>
+          </label>
+        )}
+        {porWa ? (
           <label className="text-xs font-medium text-slate-600">
             Línea que envía (Wasender)
             <select
@@ -104,7 +127,7 @@ export function CampaignSetup({
               className="mt-1 block w-64 rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
             >
               <option value="">Sin asignar</option>
-              {wasender.lineas.map((l) => (
+              {porWa.lineas.map((l) => (
                 <option key={l.id} value={l.id}>
                   {l.label}
                 </option>
@@ -155,11 +178,11 @@ export function CampaignSetup({
           </p>
         </div>
         <div className="w-72 text-xs font-medium text-slate-600">
-          {wasender ? "Plantilla (Wasender)" : "Plantilla (catálogo de la línea)"}
+          {porWa ? "Plantilla (Wasender)" : "Plantilla (catálogo de la línea)"}
           <div className="mt-1 font-normal">
             {running ? (
               <p className="text-slate-500">Pausá la campaña para cambiar la plantilla.</p>
-            ) : wasender ? (
+            ) : porWa ? (
               <select
                 value={waPlantilla}
                 onChange={(e) => setWaPlantilla(e.target.value)}
@@ -167,9 +190,9 @@ export function CampaignSetup({
                 className="block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
               >
                 <option value="rotar">
-                  Al azar entre las {wasender.rotacion?.plantillas ?? 0} plantillas de inicio ({wasender.rotacion?.textos ?? 0} textos)
+                  Al azar entre las {porWa.rotacion?.plantillas ?? 0} plantillas de inicio ({porWa.rotacion?.textos ?? 0} textos)
                 </option>
-                {wasender.plantillas.map((p) => (
+                {porWa.plantillas.map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.label}
                   </option>
@@ -206,7 +229,7 @@ export function CampaignSetup({
         </button>
         {msg && <span className={`text-xs ${msg.ok ? "text-green-600" : "text-red-600"}`}>{msg.text}</span>}
       </div>
-      {!wasender && lines.length === 0 && (
+      {!porWa && lines.length === 0 && (
         <p className="mt-2 text-xs text-amber-700">Este perfil no tiene líneas habilitadas para campañas: se registran en Configuración → Perfil, nombres y líneas.</p>
       )}
     </div>

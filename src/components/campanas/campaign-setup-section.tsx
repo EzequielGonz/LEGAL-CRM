@@ -24,9 +24,12 @@ export async function CampaignSetupSection({ campaignId }: { campaignId: string 
     .eq("use_for_campaigns", true)
     .order("created_at");
   // 10/11: campaña por Wasender → su línea y su plantilla propias.
+  // 17/11: se cargan los dos métodos (Meta y Wasender) para poder cambiar de uno a otro sin recrear la campaña.
   const porWasender = campaign.proveedor === "wasender";
-  const wa = porWasender && rubroId ? await opcionesWasender(rubroId).catch(() => ({ lineas: [], plantillas: [], rotacion: { plantillas: 0, textos: 0 } })) : null;
-  const estados = porWasender ? {} as Record<string, any> : await consultarEstadosLineas((lines ?? []).map((l: any) => l.credential_key));
+  const [wa, estados] = await Promise.all([
+    rubroId ? opcionesWasender(rubroId).catch(() => ({ lineas: [], plantillas: [], rotacion: { plantillas: 0, textos: 0 } })) : Promise.resolve(null),
+    consultarEstadosLineas((lines ?? []).map((l: any) => l.credential_key)).catch(() => ({}) as Record<string, any>),
+  ]);
   return (
     <div className="space-y-4">
     <CampaignSetup
@@ -38,6 +41,7 @@ export async function CampaignSetupSection({ campaignId }: { campaignId: string 
       legacyTemplateName={campaign.template_id ? null : campaign.message_template_name ?? null}
       running={campaign.status === "en_curso"}
       dailyLimit={(campaign as any).daily_send_limit ?? null}
+      proveedor={porWasender ? "wasender" : "meta"}
       wasender={wa ? { ...wa, lineaId: campaign.wasender_line_id ?? null, plantillaId: campaign.wasender_plantilla_id ?? null, rotar: (campaign as any).wasender_rotar_inicio === true } : null}
       lines={(lines ?? []).map((l: any) => ({
         id: l.id,
