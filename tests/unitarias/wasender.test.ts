@@ -540,14 +540,19 @@ test("wasender: una plantilla de Meta se copia con variables con nombre y los bo
   assert.equal(usoDesdeMeta(null, "autos_reagendar"), "seguimiento");
 });
 
-test("wasender: vive en «Líneas y plantillas», primero que lo de Meta, y cada ruta marca su pestaña", () => {
+test("17/11: Meta y Wasender en secciones separadas del menú, y cada ruta marca su pestaña", () => {
   const s = seccionesDePerfil("marketing");
-  // 12/11: una sola sección para las líneas y las plantillas; ya no hay una sección «Wasender» aparte.
-  assert.equal(s.find((x) => x.clave === "wasender"), undefined);
-  const l = s.find((x) => x.clave === "linea")!;
-  assert.deepEqual(l.tabs.filter((t) => !t.oculto).map((t) => t.label), ["Líneas de Wasender", "Plantillas de Wasender", "Plantillas de Meta", "Perfil de WhatsApp y redes"]);
+  const meta = s.find((x) => x.clave === "linea")!;
+  const wa = s.find((x) => x.clave === "wasender")!;
+  assert.equal(meta.label, "WhatsApp oficial (Meta)");
+  assert.equal(wa.label, "WhatsApp por QR (Wasender)");
+  assert.deepEqual(meta.tabs.filter((t) => !t.oculto).map((t) => t.label), ["Líneas de Meta", "Plantillas de Meta", "Perfil de WhatsApp y redes"]);
+  assert.deepEqual(wa.tabs.map((t) => t.label), ["Líneas de Wasender", "Plantillas de Wasender"]);
+  assert.ok(!meta.tabs.some((t) => /wasender/i.test(t.label)), "Meta no muestra nada de Wasender");
+  assert.ok(!wa.tabs.some((t) => /meta/i.test(t.label)), "Wasender no muestra nada de Meta");
   assert.equal(seccionActiva(s, "/wasender/plantillas", "perfil=marketing")?.tab.label, "Plantillas de Wasender");
   assert.equal(seccionActiva(s, "/wasender", "perfil=marketing")?.tab.label, "Líneas de Wasender");
+  assert.equal(seccionActiva(s, "/meta/lineas", "perfil=marketing")?.tab.label, "Líneas de Meta");
   assert.equal(seccionActiva(s, "/redes/accesos", "perfil=marketing")?.tab.label, "Accesos");
 });
 

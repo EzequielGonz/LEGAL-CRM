@@ -40,6 +40,11 @@ export default async function SaludPage(props: { searchParams: Promise<{ perfil?
   );
 }
 
+/** 17/11: los controles de Wasender van en su propio bloque, separados de Meta. */
+function esDeWasender(i: ItemSalud): boolean {
+  return i.clave.startsWith("wasender_");
+}
+
 async function SaludContenido({ slug, datos }: { slug: SlugPerfil; datos: Promise<[ItemSalud[], ItemSalud[], Falla[]]> }) {
   const [base, wasender, fallas] = await datos;
   // 13/11 · cada rubro separado: en cada perfil, lo de todo el sistema y lo propio. Lo de otro perfil se ve en ese perfil.
@@ -93,7 +98,9 @@ async function SaludContenido({ slug, datos }: { slug: SlugPerfil; datos: Promis
                 const l = lecturaSimple(i);
                 return (
                   <li key={i.clave} className={`rounded-xl border border-slate-200 border-l-4 bg-white p-4 ${ESTILO[i.estado].borde}`}>
-                    <p className="text-xs font-medium text-slate-600">{ESTILO[i.estado].texto}</p>
+                    <p className="text-xs font-medium text-slate-600">
+                      {ESTILO[i.estado].texto} · {esDeWasender(i) ? "WhatsApp por QR (Wasender)" : "Sistema y WhatsApp oficial (Meta)"}
+                    </p>
                     <p className="mt-1 text-base text-slate-900 [overflow-wrap:anywhere]">{l.que}</p>
                     <div className="mt-2 flex flex-wrap items-center gap-3">
                       {l.accion && l.href ? (
@@ -114,9 +121,16 @@ async function SaludContenido({ slug, datos }: { slug: SlugPerfil; datos: Promis
           {r.verde > 0 ? <p className="text-sm text-slate-700">{r.verde} control(es) en orden. El detalle completo está en Avanzado.</p> : null}
         </section>
 
-        {/* Avanzado: el tablero completo. */}
-        <ul className="solo-avanzado grid gap-3 md:grid-cols-2">
-          {items.map((i) => (
+        {/* Avanzado: el tablero completo. 17/11: Meta y Wasender en bloques separados. */}
+        {([
+          ["Sistema y WhatsApp oficial (Meta)", items.filter((x) => !esDeWasender(x))],
+          ["WhatsApp por QR (Wasender)", items.filter(esDeWasender)],
+        ] as const).map(([tituloBloque, lista]) =>
+          lista.length === 0 ? null : (
+          <section key={tituloBloque} aria-label={tituloBloque} className="solo-avanzado space-y-3">
+            <h2 className="text-lg font-semibold text-slate-950">{tituloBloque}</h2>
+            <ul className="grid gap-3 md:grid-cols-2">
+              {lista.map((i) => (
             <li key={i.clave} id={`salud-${i.clave}`} tabIndex={-1} className={`rounded-xl border p-4 ${ESTILO[i.estado].caja}`}>
               <p className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-slate-700">
                 <span aria-hidden="true" className={`h-2.5 w-2.5 rounded-full ${ESTILO[i.estado].punto}`} /> {ESTILO[i.estado].texto}
@@ -133,7 +147,10 @@ async function SaludContenido({ slug, datos }: { slug: SlugPerfil; datos: Promis
                 ))}
             </li>
           ))}
-        </ul>
+            </ul>
+          </section>
+          )
+        )}
       </div>
   );
 }

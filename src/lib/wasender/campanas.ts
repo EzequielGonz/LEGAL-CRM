@@ -233,7 +233,7 @@ export async function preparacionWasender(
     );
   if (rotar && !rotacion.length) {
     const i = missing.indexOf("Plantilla de Wasender de la campaña");
-    const texto = "Plantillas de inicio: el perfil no tiene ninguna activa y con textos suficientes (Líneas y plantillas → Plantillas de Wasender)";
+    const texto = "Plantillas de inicio: el perfil no tiene ninguna activa y con textos suficientes (WhatsApp por QR (Wasender) → Plantillas de Wasender)";
     if (i >= 0) missing[i] = texto;
     else missing.push(texto);
   }

@@ -48,7 +48,7 @@ export async function ConfiguracionPerfil({ slug }: { slug: Exclude<SlugPerfil, 
         <SeccionAjustes id="marca-perfil" titulo="Marca del perfil" alcance="perfil" nivel="simple" palabras="logo colores nombre identidad">
           <BriefMarca perfil={slug} soloMarca />
         </SeccionAjustes>
-        <SeccionAjustes id="perfil" titulo="Perfil, nombres y líneas" alcance="perfil" palabras="nombre foto líneas whatsapp">
+        <SeccionAjustes id="perfil" titulo="Perfil, nombres y líneas de Meta" alcance="perfil" palabras="nombre foto líneas whatsapp meta">
           <ProfileSettingsSection slug={slug} />
         </SeccionAjustes>
       </GrupoAjustes>

@@ -158,6 +158,30 @@ export function NewCampaignForm({
       <p className="text-sm text-slate-700">
         Crear una campaña solo la prepara: no envía nada. Los mensajes salen recién cuando la lanzás y lo confirmás.
       </p>
+      {/* 17/11: el método va primero y separa todo lo que sigue: con Meta solo se ven líneas y plantillas de Meta; con Wasender, solo las de Wasender. */}
+      {wasender && (
+        <fieldset>
+          <legend className="mb-1 block text-sm font-medium text-slate-700">¿Por dónde sale?</legend>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {([
+              ["meta", "WhatsApp oficial (Meta)", "Líneas y plantillas aprobadas por Meta."],
+              ["wasender", "WhatsApp por QR (Wasender)", "Líneas conectadas por QR y sus plantillas propias."],
+            ] as const).map(([valor, titulo, ayuda]) => (
+              <label
+                key={valor}
+                className={`flex cursor-pointer gap-2 rounded-lg border px-3 py-2 text-sm ${metodo === valor ? "border-gold-400 bg-slate-50" : "border-slate-300"}`}
+              >
+                <input type="radio" name="campana-metodo" value={valor} checked={metodo === valor} onChange={() => setMetodo(valor)} className="mt-1" />
+                <span>
+                  <span className="block font-semibold text-slate-900">{titulo}</span>
+                  <span className="block text-xs text-slate-600">{ayuda}</span>
+                </span>
+              </label>
+            ))}
+          </div>
+          <p className="mt-1 text-xs text-slate-600">Se puede cambiar después desde la campaña, mientras no esté en curso.</p>
+        </fieldset>
+      )}
       {bases.length > 0 && (
         <div>
           <label htmlFor="campana-base" className="mb-1 block text-sm font-medium text-slate-700">Base</label>
@@ -212,25 +236,10 @@ export function NewCampaignForm({
           ))}
         </select>
       </div>
-      {wasender && (
-        <div>
-          <label htmlFor="campana-metodo" className="mb-1 block text-sm font-medium text-slate-700">Método de envío</label>
-          <select
-            id="campana-metodo"
-            value={metodo}
-            onChange={(e) => setMetodo(e.target.value === "wasender" ? "wasender" : "meta")}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
-          >
-            <option value="meta">Meta (API oficial de WhatsApp)</option>
-            <option value="wasender">Wasender (líneas conectadas por QR)</option>
-          </select>
-          <p className="mt-1 text-xs text-slate-600">El ritmo, los días, el horario y los destinatarios funcionan igual con los dos métodos.</p>
-        </div>
-      )}
       {porWasender && wasender ? (
         <>
           <div>
-            <label htmlFor="campana-wa-linea" className="mb-1 block text-sm font-medium text-slate-700">Línea que envía</label>
+            <label htmlFor="campana-wa-linea" className="mb-1 block text-sm font-medium text-slate-700">Línea de Wasender que envía</label>
             <select
               id="campana-wa-linea"
               value={waLinea}
@@ -271,7 +280,7 @@ export function NewCampaignForm({
       ) : (
       <>
       <div>
-        <label htmlFor="campana-linea" className="mb-1 block text-sm font-medium text-slate-700">Línea que envía</label>
+        <label htmlFor="campana-linea" className="mb-1 block text-sm font-medium text-slate-700">Línea de Meta que envía</label>
         <select
           id="campana-linea"
           value={lineId}

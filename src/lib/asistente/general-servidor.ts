@@ -294,7 +294,7 @@ export async function ejecutarHerramientaGeneral(nombre: string, args: Record<st
         plantillas_de_inicio: inicio.rotacion,
         ejemplos: inicio.ejemplos,
         ritmo: ritmoEnPalabras(),
-        nota: lineas.length ? "Solo una línea conectada puede lanzar; desconectada, la campaña queda en borrador." : "Este perfil no tiene líneas de Wasender: hay que conectar una en Líneas y plantillas antes de crear la campaña.",
+        nota: lineas.length ? "Solo una línea conectada puede lanzar; desconectada, la campaña queda en borrador." : "Este perfil no tiene líneas de Wasender: hay que conectar una en WhatsApp por QR (Wasender) antes de crear la campaña.",
       };
     }
     case "analizar_archivo": {

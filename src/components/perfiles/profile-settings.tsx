@@ -34,7 +34,10 @@ export function ProfileSettings({
   lines,
   detected,
   missing,
+  soloLineas = false,
 }: {
+  /** 17/11: en «WhatsApp oficial (Meta) › Líneas» se muestran solo las líneas, sin los nombres del perfil. */
+  soloLineas?: boolean;
   profile: {
     id: string;
     name: string;
@@ -124,6 +127,8 @@ export function ProfileSettings({
         <p className="rounded-lg bg-green-50 p-3 text-xs text-green-800">El perfil tiene lo necesario para contactar (las campañas además necesitan su línea y su plantilla).</p>
       )}
 
+      {!soloLineas && (
+      <>
       <div className="grid gap-3 sm:grid-cols-3">
         <label className={etiqueta}>
           Nombre del perfil (uso interno)
@@ -147,10 +152,12 @@ export function ProfileSettings({
       {profile.whatsapp_phone && (
         <p className="text-xs text-slate-400">Teléfono que figuraba antes en este perfil (dato anterior, sin uso automático): {profile.whatsapp_phone}</p>
       )}
+      </>
+      )}
 
       <div>
         <div className="mb-2 flex items-center justify-between gap-3">
-          <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-500">Líneas de WhatsApp</h3>
+          <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-500">Líneas de WhatsApp oficial (Meta)</h3>
           <button type="button" onClick={() => router.refresh()} className="btn-suave-sm">
             Volver a comprobar con Meta
           </button>

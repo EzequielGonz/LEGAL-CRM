@@ -66,7 +66,10 @@ export function ConversationThread({
   contact,
   initialMessages,
   ficha,
+  entroPor = null,
 }: {
+  /** 17/11: por dónde entró el chat: «WhatsApp oficial (Meta) · CIVIL» o «WhatsApp por QR (Wasender) · …». */
+  entroPor?: string | null;
   conversationId: string;
   aiEnabled: boolean;
   contact: ThreadContact;
@@ -193,6 +196,7 @@ export function ConversationThread({
               {contact.full_name ?? "Sin nombre"}
             </p>
             <p className="text-xs text-slate-600 [overflow-wrap:anywhere]">{contact.phone ?? contact.email ?? "—"}</p>
+            {entroPor ? <p className="text-xs font-medium text-slate-700 [overflow-wrap:anywhere]">Entró por {entroPor}</p> : null}
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <AreaBadge area={contact.area} />

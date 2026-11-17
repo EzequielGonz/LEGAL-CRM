@@ -1,3 +1,4 @@
+import { entroPor } from "@/lib/inbox/entro-por";
 import { Suspense } from "react";
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
@@ -20,13 +21,14 @@ export default async function ConversationPage(
 
   // 15/11: conversación y mensajes a la vez (antes, uno después del otro). Del contacto, solo lo que se
   // usa; de los mensajes, los últimos 300 con las columnas que dibuja el hilo.
-  const [{ data: conversation }, messages] = await Promise.all([
+  const [{ data: conversation }, messages, via] = await Promise.all([
     supabase
       .from("conversations")
       .select("id, ai_enabled, contacts(id, full_name, phone, email, area, status, source, qualification_data)")
       .eq("id", params.id)
       .single(),
     ultimosMensajes(supabase, params.id),
+    entroPor(params.id),
   ]);
 
   if (!conversation) notFound();
@@ -53,6 +55,7 @@ export default async function ConversationPage(
       )}
     <ConversationThread
       conversationId={conversation.id}
+      entroPor={via}
       aiEnabled={conversation.ai_enabled}
       contact={{
         id: contact.id,

@@ -55,9 +55,11 @@ export async function CampanasListView({
   rubroId: string;
   basePath: string;
   perfilNombre: string;
-  searchParams: { archivadas?: string };
+  searchParams: { archivadas?: string; metodo?: string };
 }) {
   const verArchivadas = searchParams?.archivadas === "1";
+  // 17/11: Meta y Wasender separados también en la lista.
+  const metodo: "todas" | "meta" | "wasender" = searchParams?.metodo === "meta" || searchParams?.metodo === "wasender" ? searchParams.metodo : "todas";
   const supabase = createClient();
   const [{ data: campaigns, error }, { data: channels }, { data: campaignLines }, { data: basesCargadas }, { data: rolesPerfil }] = await Promise.all([
     supabase
@@ -140,8 +142,34 @@ export async function CampanasListView({
         </div>
       ) : null}
 
+      {(campaigns ?? []).length > 0 ? (
+        <nav aria-label="Método de envío" className="flex flex-wrap gap-2">
+          {([
+            ["todas", "Todas", (campaigns ?? []).length],
+            ["meta", "WhatsApp oficial (Meta)", (campaigns ?? []).filter((c: any) => c.proveedor !== "wasender").length],
+            ["wasender", "WhatsApp por QR (Wasender)", (campaigns ?? []).filter((c: any) => c.proveedor === "wasender").length],
+          ] as const).map(([valor, texto, n]) => {
+            const q = new URLSearchParams();
+            if (verArchivadas) q.set("archivadas", "1");
+            if (valor !== "todas") q.set("metodo", valor);
+            const qs = q.toString();
+            return (
+              <Link
+                key={valor}
+                prefetch={false}
+                href={`${basePath}${qs ? `?${qs}` : ""}`}
+                aria-current={metodo === valor ? "page" : undefined}
+                className={`inline-flex min-h-[40px] items-center rounded-full border px-3 py-1.5 text-sm ${metodo === valor ? "border-gold-400 bg-slate-900 font-semibold text-gold-100" : "border-slate-300 text-slate-700 hover:border-slate-400"}`}
+              >
+                {texto} <span className="ml-1.5 tabular-nums opacity-80">{n}</span>
+              </Link>
+            );
+          })}
+        </nav>
+      ) : null}
+
       <ul className="space-y-3" aria-label="Campañas">
-        {(campaigns ?? []).map((c: any) => {
+        {(campaigns ?? []).filter((c: any) => metodo === "todas" || (metodo === "wasender") === (c.proveedor === "wasender")).map((c: any) => {
           const f = funnels.get(c.id);
           const m = metricas.get(c.id);
           return (
@@ -153,7 +181,10 @@ export async function CampanasListView({
                       {c.name}
                     </Link>
                   </h3>
-                  <span className="shrink-0 rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-800">{CAMPAIGN_STATUS_LABEL[c.status] ?? c.status}</span>
+                  <span className="flex shrink-0 gap-1.5">
+                    <span className="rounded-full border border-slate-300 px-2.5 py-0.5 text-xs font-medium text-slate-700">{c.proveedor === "wasender" ? "Wasender" : "Meta"}</span>
+                    <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-800">{CAMPAIGN_STATUS_LABEL[c.status] ?? c.status}</span>
+                  </span>
                 </div>
                 <p className={`text-sm ${c.status === "pausada" && c.pause_reason ? "font-medium text-amber-800" : "text-slate-700"}`}>{queHace(c, m ? m.pendientes + (m.a_revisar ?? 0) : null)}</p>
                 <p className="mt-1 text-sm text-slate-700">

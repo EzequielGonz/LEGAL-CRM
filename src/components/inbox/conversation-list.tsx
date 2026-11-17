@@ -15,6 +15,8 @@ export interface ConversationListItem {
   contact_name: string | null;
   phone: string | null;
   channel_type: string;
+  /** 17/11: por dónde entró un chat de WhatsApp. */
+  via?: "meta" | "wasender";
   last_message_preview: string | null;
   last_from_contact: boolean;
   attention_state: string | null;
@@ -215,7 +217,9 @@ export function ConversationList({ perfil = "juridico" }: { perfil?: string }) {
             onChange={(e) => setFilter("canal", e.target.value)}
           >
             <option value="">Todos los canales</option>
-            <option value="whatsapp">WhatsApp</option>
+            <option value="whatsapp">WhatsApp (todos)</option>
+            <option value="whatsapp_meta">WhatsApp oficial (Meta)</option>
+            <option value="whatsapp_wasender">WhatsApp por QR (Wasender)</option>
             <option value="instagram">Instagram</option>
             <option value="facebook">Facebook</option>
             <option value="landing">Landing</option>
@@ -260,6 +264,9 @@ export function ConversationList({ perfil = "juridico" }: { perfil?: string }) {
               </span>
               <span className="mt-1 flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-xs">
                 <AreaBadge area={item.area as any} />
+                {item.channel_type === "whatsapp" ? (
+                  <span className="rounded-full border border-slate-300 px-2 py-0.5 text-slate-700">{item.via === "wasender" ? "Wasender" : "Meta"}</span>
+                ) : null}
                 {item.last_from_contact && !item.detained ? <span className="rounded-full bg-gold-500/20 px-2 py-0.5 font-semibold text-gold-900">Te escribió</span> : null}
                 {item.attention_state && ATTENTION_LABEL[item.attention_state] && (
                   <span className="font-medium text-amber-800">

@@ -237,7 +237,7 @@ export const DECLARACIONES = [
           items: {
             type: "object",
             properties: {
-              seccion: { type: "string", description: "Sección del menú (por su nombre: Hoy, Chats, Contactos, Campañas, Bot IA, Líneas y plantillas, Redes, Ajustes)" },
+              seccion: { type: "string", description: "Sección del menú (por su nombre: Hoy, Chats, Contactos, Campañas, Bot IA, WhatsApp oficial (Meta), WhatsApp por QR (Wasender), Redes, Ajustes)" },
               nombre: { type: "string", description: "Nombre nuevo de la sección (vacío = volver al original)" },
               oculta: { type: "boolean", description: "true para ocultarla, false para volver a mostrarla" },
               posicion: { type: "integer", description: "Lugar dentro de su grupo, empezando en 1" },

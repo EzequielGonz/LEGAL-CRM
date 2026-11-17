@@ -11,7 +11,7 @@ const etiquetas = (s: { label: string }[]) => s.map((x) => x.label);
 test("sin nada guardado, el menú es el de fábrica", () => {
   assert.deepEqual(seccionesDePerfil("marketing", null), fabrica);
   assert.deepEqual(aplicarMenuPersonal(fabrica, {}), fabrica);
-  assert.deepEqual(etiquetas(fabrica), ["Hoy", "Chats", "Contactos", "Campañas", "Bot IA", "Líneas y plantillas", "Redes", "Ajustes"]);
+  assert.deepEqual(etiquetas(fabrica), ["Hoy", "Chats", "Contactos", "Campañas", "Bot IA", "WhatsApp oficial (Meta)", "WhatsApp por QR (Wasender)", "Redes", "Ajustes"]);
 });
 
 test("renombrar, ocultar y mover una sección", () => {
@@ -24,7 +24,7 @@ test("renombrar, ocultar y mover una sección", () => {
   assert.equal(menu.find((s) => s.clave === "contactos")?.href, fabrica.find((s) => s.clave === "contactos")?.href, "cambia el nombre, no a dónde lleva");
   assert.equal(f.descripcion.length, 3);
   // Mover no saca a «Configurar» de su lugar.
-  assert.deepEqual(etiquetas(menu).slice(4), ["Bot IA", "Líneas y plantillas", "Redes", "Ajustes"]);
+  assert.deepEqual(etiquetas(menu).slice(4), ["Bot IA", "WhatsApp oficial (Meta)", "WhatsApp por QR (Wasender)", "Redes", "Ajustes"]);
 });
 
 test("se puede seguir nombrando a una sección por su nombre nuevo, y volver al original", () => {

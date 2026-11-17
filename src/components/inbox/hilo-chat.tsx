@@ -1,3 +1,4 @@
+import { entroPor } from "@/lib/inbox/entro-por";
 import { Suspense } from "react";
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
@@ -22,9 +23,10 @@ export async function HiloChat({ id, slug, searchParams }: { id: string; slug: s
   const supabase = createClient();
   // 15/11: conversación y mensajes a la vez (antes, uno después del otro). Del contacto, solo lo que se
   // usa; de los mensajes, los últimos 300 con las columnas que dibuja el hilo (src/lib/chat-mensajes.ts).
-  const [{ data: conversation }, messages] = await Promise.all([
+  const [{ data: conversation }, messages, via] = await Promise.all([
     supabase.from("conversations").select("id, ai_enabled, contacts(id, full_name, phone, email, area, status, source, qualification_data)").eq("id", id).single(),
     ultimosMensajes(supabase, id),
+    entroPor(id),
   ]);
   if (!conversation) notFound();
   const contact = conversation.contacts as any;
@@ -49,6 +51,7 @@ export async function HiloChat({ id, slug, searchParams }: { id: string; slug: s
       )}
       <ConversationThread
         conversationId={conversation.id}
+        entroPor={via}
         aiEnabled={conversation.ai_enabled}
         contact={{
           id: contact.id,

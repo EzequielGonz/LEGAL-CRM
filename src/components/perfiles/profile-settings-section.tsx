@@ -16,7 +16,7 @@ import type { Area } from "@/lib/supabase/database.types";
  * marca, nombre de presentación del agente, líneas y qué falta para
  * contactar. Se usa en la Configuración de cada perfil.
  */
-export async function ProfileSettingsSection({ slug }: { slug: string }) {
+export async function ProfileSettingsSection({ slug, soloLineas = false }: { slug: string; soloLineas?: boolean }) {
   const supabase = createClient();
   const { data: profile } = await supabase
     .from("rubros")
@@ -60,6 +60,7 @@ export async function ProfileSettingsSection({ slug }: { slug: string }) {
       lines={lines as any}
       detected={detected}
       missing={missing}
+      soloLineas={soloLineas}
     />
   );
 }

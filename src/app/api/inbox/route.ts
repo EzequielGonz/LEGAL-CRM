@@ -25,7 +25,10 @@ export async function GET(request: Request) {
   const sp = new URL(request.url).searchParams;
   const page = Math.max(1, Number(sp.get("pagina")) || 1);
   const area = sp.get("area");
-  const canal = sp.get("canal");
+  // 17/11: «WhatsApp» se separa en oficial (Meta) y por QR (Wasender).
+  const canalPedido = sp.get("canal");
+  const via = canalPedido === "whatsapp_meta" ? "meta" : canalPedido === "whatsapp_wasender" ? "wasender" : null;
+  const canal = via ? "whatsapp" : canalPedido;
   const atencion = sp.get("atencion");
   const q = textoBusquedaSeguro(sp.get("q"));
   // 21/10: cada perfil ve solo sus chats (antes se mezclaban en Jurídico).
@@ -63,7 +66,7 @@ export async function GET(request: Request) {
   const sinTotal = sp.get("sin_total") === "1";
   let query = supabase
     .from("conversations")
-    .select(`id, area, status, last_message_at, ai_enabled, contact_id, ${contactsSel}, ${channelsSel}, ${oppSel}`, sinTotal ? undefined : { count: "exact" })
+    .select(`id, area, status, last_message_at, ai_enabled, contact_id, wasender_line_id, ${contactsSel}, ${channelsSel}, ${oppSel}`, sinTotal ? undefined : { count: "exact" })
     .order("last_message_at", { ascending: false, nullsFirst: false })
     .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
   query = area && areasPerfil.includes(area) ? query.eq("area", area) : query.in("area", areasPerfil);
@@ -71,6 +74,8 @@ export async function GET(request: Request) {
   if (respuesta === "respondieron") query = query.eq("opportunities.contact_state", "respondio");
   else if (respuesta === "sin_respuesta") query = query.neq("opportunities.contact_state", "respondio");
   if (canal) query = query.eq("channels.type", canal);
+  if (via === "wasender") query = query.not("wasender_line_id", "is", null);
+  else if (via === "meta") query = query.is("wasender_line_id", null);
   if (atencion === "detenidos") {
     // Vista secundaria (Etapa 3): conversaciones de contactos con detención vigente.
     const { data: det } = await supabase.from("contact_detentions").select("contact_id").eq("status", "vigente").not("contact_id", "is", null).limit(2000);
@@ -137,6 +142,7 @@ export async function GET(request: Request) {
         id: r.id,
         area: r.area,
         status: r.status,
+        via: (r as any).wasender_line_id ? "wasender" : "meta",
         last_message_at: r.last_message_at,
         ai_enabled: r.ai_enabled,
         contact_name: r.contacts?.full_name ?? null,

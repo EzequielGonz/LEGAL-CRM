@@ -139,14 +139,16 @@ function seccionesDeFabrica(slug: SlugPerfil): SeccionMenu[] {
   ];
 
   // 24/10: la línea de WhatsApp (calidad, plantillas y perfil) tiene sección propia.
-  // 12/11: la sección ya no es solo de Meta. Primero las líneas y plantillas de Wasender
-  // (lo que se usa hoy); las de Meta quedan al lado, sin cambios.
+  // 17/11: Meta y Wasender en secciones separadas, para que no se mezclen.
   const linea: ItemMenu[] = [
-    { href: comun(slug, "wasender"), label: "Líneas de Wasender", match: "/wasender" },
-    { href: comun(slug, "wasender/plantillas"), label: "Plantillas de Wasender", match: "/wasender/plantillas" },
+    { href: comun(slug, "meta/lineas"), label: "Líneas de Meta", match: "/meta/lineas" },
     { href: comun(slug, "redes/plantillas"), label: "Plantillas de Meta", match: "/redes/plantillas" },
     { href: comun(slug, "redes/perfiles"), label: "Perfil de WhatsApp y redes", match: "/redes/perfiles" },
     { href: comun(slug, "redes/whatsapp"), label: "Perfil de WhatsApp", match: "/redes/whatsapp", oculto: true },
+  ];
+  const wasender: ItemMenu[] = [
+    { href: comun(slug, "wasender"), label: "Líneas de Wasender", match: "/wasender" },
+    { href: comun(slug, "wasender/plantillas"), label: "Plantillas de Wasender", match: "/wasender/plantillas" },
   ];
 
   // 24/10: el bot tiene sección propia (antes estaba dentro de Configuración).
@@ -160,7 +162,8 @@ function seccionesDeFabrica(slug: SlugPerfil): SeccionMenu[] {
     seccion("contactos", "Contactos", "prospectos", contactos),
     seccion("captacion", "Campañas", "campanas", captacion),
     seccion("bot", "Bot IA", "agentes", bot, "configurar"),
-    seccion("linea", "Líneas y plantillas", "wasender", linea, "configurar"),
+    seccion("linea", "WhatsApp oficial (Meta)", "redes", linea, "configurar"),
+    seccion("wasender", "WhatsApp por QR (Wasender)", "wasender", wasender, "configurar"),
     seccion("redes", "Redes", "redes", redes, "configurar"),
     seccion("configuracion", "Ajustes", "configuracion", configuracion, "configurar"),
   ];

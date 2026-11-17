@@ -4,7 +4,7 @@ import { RUBRO_IDS } from "@/lib/rubros";
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Campañas" };
 
-export default async function CampanasPage(props: { searchParams: Promise<{ archivadas?: string }> }) {
+export default async function CampanasPage(props: { searchParams: Promise<{ archivadas?: string; metodo?: string }> }) {
   const searchParams = await props.searchParams;
   return (
     <CampanasListView
