@@ -180,7 +180,13 @@ export async function CampaignDetailView({
           />
         </div>
         <div className="flex flex-wrap items-start gap-2">
-          <CampaignControls campaignId={campaign.id} campaignName={campaign.name} status={campaign.status} />
+          {/* 17/11: la clave cambia con el método, la línea o la plantilla: así «qué falta» se vuelve a consultar al guardar. */}
+          <CampaignControls
+            key={[(campaign as any).proveedor, campaign.line_id, campaign.template_id, (campaign as any).wasender_line_id, (campaign as any).wasender_plantilla_id, (campaign as any).wasender_rotar_inicio, campaign.status].join("|")}
+            campaignId={campaign.id}
+            campaignName={campaign.name}
+            status={campaign.status}
+          />
           <span className="solo-avanzado">
           <DeleteCampaignButton
             campaignId={campaign.id}
