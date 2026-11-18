@@ -94,31 +94,35 @@ async function CuerpoHoy({ slug, rubroId, searchParams }: { slug: SlugPerfil; ru
   // 13/11 (pedido de la responsable): en Hoy queda solo lo que lleva a una acción.
   // Las cifras de la semana, la última base y los indicadores sueltos se ven en Resultados.
   const claves = ["captado_sin_derivar", "derivado_sin_resultado", "dejaron_de_responder"] as const;
-  const [conteos, captados, agendaron, hablando] = await Promise.all([
+  // 18/11 (velocidad): antes eran cinco tandas de consultas, una detrás de la otra. Ahora son dos.
+  const hace24 = new Date(Date.now() - ESPERA_CAPTADO_HORAS * 3_600_000).toISOString();
+  const [conteos, captados, agendaron, hablando, { data: activas }, { data: viejos }] = await Promise.all([
     Promise.all(claves.map(async (c) => [c, await contarIndicador(rubroId as string, indicadorPorClave(c)!)] as const)),
     listarIndicador(rubroId, indicadorPorClave("captado_sin_derivar")!, { orden: "reciente" }),
     contarGrupo(rubroId, areas, grupo("agendaron")).catch(() => null),
     contarGrupo(rubroId, areas, grupo("hablando")).catch(() => null),
+    // Campañas que están enviando ahora, con su avance. Solo lectura.
+    s.from("campaigns").select("id, name, status").in("area", areas).is("archived_at", null).eq("status", "en_curso").order("created_at", { ascending: false }).limit(3),
+    // 15/11: captados que esperan el llamado hace más de 24 horas y no tienen cita.
+    // Revisión: se cuentan todos (no solo los de la primera página de la lista).
+    s.from("opportunities").select("contact_id").eq("rubro_id", rubroId as string).eq("capture_state", "captado").eq("derivation_state", "no_derivado").lt("captured_at", hace24).limit(500),
   ]);
-  // Campañas que están enviando ahora, con su avance. Solo lectura.
-  const { data: activas } = await s
-    .from("campaigns")
-    .select("id, name, status")
-    .in("area", areas)
-    .is("archived_at", null)
-    .eq("status", "en_curso")
-    .order("created_at", { ascending: false })
-    .limit(3);
-  const embudos = await Promise.all(((activas ?? []) as any[]).map((c) => getCampaignFunnelCounts(s, c.id).catch(() => null)));
   const baseCampanas = slug === "juridico" ? "/campanas" : `/panel/${slug}/campanas`;
   const cuenta = Object.fromEntries(conteos.map(([c, r]) => [c, r])) as Record<(typeof claves)[number], { count: number | null; error: string | null }>;
   const errores = conteos.filter(([, r]) => r.error).length;
 
-  // Citas próximas de los captados que se muestran.
+  // Citas próximas de los captados que se muestran, y citas de los que esperan de más.
   const ids = (captados.filas ?? []).map((f: any) => f.contact_id).filter(Boolean);
-  const { data: citas } = ids.length
-    ? await s.from("appointments").select("contact_id, starts_at, status, kind").in("contact_id", ids).gte("starts_at", new Date().toISOString()).order("starts_at", { ascending: true })
-    : { data: [] as any[] };
+  const idsViejos = ((viejos ?? []) as any[]).map((o) => o.contact_id).filter(Boolean);
+  const [embudos, { data: citas }, { data: conCita }] = await Promise.all([
+    Promise.all(((activas ?? []) as any[]).map((c) => getCampaignFunnelCounts(s, c.id).catch(() => null))),
+    ids.length
+      ? s.from("appointments").select("contact_id, starts_at, status, kind").in("contact_id", ids).gte("starts_at", new Date().toISOString()).order("starts_at", { ascending: true })
+      : Promise.resolve({ data: [] as any[] }),
+    idsViejos.length
+      ? s.from("appointments").select("contact_id, status").in("contact_id", idsViejos).gte("starts_at", new Date().toISOString())
+      : Promise.resolve({ data: [] as any[] }),
+  ]);
   const citaDe = (id: string) => ((citas ?? []) as any[]).find((c) => c.contact_id === id && !/cancel/.test(String(c.status ?? "")));
 
   // Lo que pide algo tuyo (solo se muestra si hay alguien)…
@@ -133,21 +137,6 @@ async function CuerpoHoy({ slug, rubroId, searchParams }: { slug: SlugPerfil; ru
     ...((activas ?? []) as any[]).map((c, i) => ({ texto: `enviados de «${c.name}»`, n: embudos[i]?.enviados ?? null, de: embudos[i]?.total ?? null, href: `${baseCampanas}/${c.id}` })),
   ];
 
-  // 15/11: captados que esperan el llamado hace más de 24 horas y no tienen cita.
-  // Revisión: se cuentan todos (no solo los de la primera página de la lista).
-  const hace24 = new Date(Date.now() - ESPERA_CAPTADO_HORAS * 3_600_000).toISOString();
-  const { data: viejos } = await s
-    .from("opportunities")
-    .select("contact_id")
-    .eq("rubro_id", rubroId as string)
-    .eq("capture_state", "captado")
-    .eq("derivation_state", "no_derivado")
-    .lt("captured_at", hace24)
-    .limit(500);
-  const idsViejos = ((viejos ?? []) as any[]).map((o) => o.contact_id).filter(Boolean);
-  const { data: conCita } = idsViejos.length
-    ? await s.from("appointments").select("contact_id, status").in("contact_id", idsViejos).gte("starts_at", new Date().toISOString())
-    : { data: [] as any[] };
   const tienenCita = new Set(((conCita ?? []) as any[]).filter((c) => !/cancel/.test(String(c.status ?? ""))).map((c) => c.contact_id));
   const esperanDeMas = idsViejos.filter((id) => !tienenCita.has(id)).length;
 

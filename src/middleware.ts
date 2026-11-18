@@ -48,15 +48,17 @@ export async function middleware(request: NextRequest) {
     // 13/11 · cada rubro separado. Una pantalla de la raíz (panel de Jurídico)
     // pedida desde otro perfil se resuelve dentro de ese perfil: un enlace
     // suelto ya no cambia de perfil sin avisar. El perfil de origen sale de la
-    // página desde la que se navega y, si esa no lo dice, del último usado.
+    // página desde la que se navega; si esa no lo dice, no se redirige.
     const esPagina = !pathname.startsWith("/api/") && request.method === "GET";
     const perfilParam = request.nextUrl.searchParams.get("perfil");
     if (esPagina && esRutaRaizJuridico(pathname) && perfilParam !== "juridico") {
-      const recordado = request.cookies.get(COOKIE_PERFIL)?.value;
       // Solo cuenta si se llega navegando desde el propio panel: una dirección escrita a mano o un marcador se respetan.
       const referente = request.headers.get("referer");
       const desdeElPanel = !!referente && referente.startsWith(`${request.nextUrl.origin}/`);
-      const origen = desdeElPanel ? perfilDeReferente(referente, request.nextUrl.origin) ?? (esSlugPerfil(recordado) ? recordado : null) : null;
+      // 18/11: ya no se usa «el último perfil usado» como respaldo. Desde la portada de Perfiles, una ficha,
+      // un chat o el Asistente (páginas que no dicen de qué perfil son) un botón a una pantalla de Jurídico
+      // terminaba en otro perfil. Solo se redirige si la página de origen dice su perfil.
+      const origen = desdeElPanel ? perfilDeReferente(referente, request.nextUrl.origin) : null;
       const destino = equivalenteEnPerfil(pathname, search, esSlugPerfil(perfilParam) ? perfilParam : origen);
       if (destino) return NextResponse.redirect(new URL(destino, request.url));
     }

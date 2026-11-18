@@ -4,6 +4,8 @@ import { NewCampaignForm } from "@/components/campanas/new-campaign-form";
 import { DeleteCampaignButton } from "@/components/campanas/delete-campaign-button";
 import { ArchivedToggle } from "@/components/ui/archived-toggle";
 import { ResumenSeccion } from "@/components/nivel/resumen-seccion";
+import { unstable_cache } from "next/cache";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { getCampaignFunnelCounts } from "@/lib/campaigns";
 import { getCampaignMetrics } from "@/lib/campaign-metrics";
 import { CAMPAIGN_STATUS_LABEL } from "@/lib/campaign-status";
@@ -42,6 +44,9 @@ const QUE_HACE: Record<string, string> = {
  * las archivadas. Lanzar o reanudar se hace en el detalle y siempre pide
  * confirmación aparte.
  */
+/** 18/11: embudo de cada campaña guardado 20 segundos (como sus cifras). La lista ya viene filtrada por perfil. */
+const embudoEnMemoria = unstable_cache((campaignId: string) => getCampaignFunnelCounts(createAdminClient(), campaignId), ["campaign-funnel"], { revalidate: 20 });
+
 export async function CampanasListView({
   areas,
   channelArea,
@@ -81,12 +86,16 @@ export async function CampanasListView({
     supabase.from("agent_roles" as any).select("id, nombre").eq("rubro_id", rubroId).is("archived_at", null).order("updated_at", { ascending: false }),
   ]);
   // 10/11: líneas y plantillas de Wasender (tablas sin permisos públicos: se leen en el servidor).
-  const wasender = await opcionesWasender(rubroId).catch(() => null);
-  const funnels = new Map(
-    await Promise.all((campaigns ?? []).map(async (c: any) => [c.id, await getCampaignFunnelCounts(supabase, c.id)] as const))
-  );
+  // 18/11 (velocidad): Wasender, embudo y cifras se piden a la vez, y el embudo se guarda 20 s por campaña
+  // (antes eran unas 7 consultas por campaña en cada carga, una tanda después de la otra).
   // 24/10: las cifras de envío salen del mismo cálculo que el detalle y el Inicio.
-  const metricas = new Map(await Promise.all((campaigns ?? []).map(async (c: any) => [c.id, await getCampaignMetrics(c.id).catch(() => null)] as const)));
+  const [wasender, listaEmbudos, listaMetricas] = await Promise.all([
+    opcionesWasender(rubroId).catch(() => null),
+    Promise.all((campaigns ?? []).map(async (c: any) => [c.id, await embudoEnMemoria(c.id).catch(() => null)] as const)),
+    Promise.all((campaigns ?? []).map(async (c: any) => [c.id, await getCampaignMetrics(c.id).catch(() => null)] as const)),
+  ]);
+  const funnels = new Map(listaEmbudos);
+  const metricas = new Map(listaMetricas);
   const cuenta = (estado: string) => (campaigns ?? []).filter((c: any) => c.status === estado).length;
   const enCurso = cuenta("en_curso");
 
