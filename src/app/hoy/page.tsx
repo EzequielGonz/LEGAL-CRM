@@ -10,8 +10,9 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { CircuitosMarketing } from "@/components/marketing/circuitos-marketing";
 import { BotonAsistente } from "@/components/asistente/boton-asistente";
 import { VISTAS_CARTERA, cuandoCorto } from "@/lib/cartera";
-import { AREAS_DE_PERFIL, contarGrupo } from "@/lib/cartera-servidor";
+import { AREAS_DE_PERFIL, contarGrupo, resumenCifras } from "@/lib/cartera-servidor";
 import { getCampaignFunnelCounts } from "@/lib/campaigns";
+import { VistaPreviaResultados } from "@/components/inicio/vista-previa-resultados";
 import { TableroHoy } from "@/components/inicio/tablero-hoy";
 import { captadoEsperaDeMas, ESPERA_CAPTADO_HORAS } from "@/lib/hoy/colas";
 
@@ -51,7 +52,7 @@ export default async function InicioPerfilPage(
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <h1 className="text-3xl font-semibold text-slate-950">{saludo()}</h1>
-            <p className="mt-1 text-sm text-slate-600">{fechaHoy()} · personas, no mensajes</p>
+            <p className="mt-1 text-sm text-slate-600">{fechaHoy()}</p>
           </div>
           <BotonAsistente variante="suave" texto="Resumen de hoy">
             Pedile algo
@@ -96,16 +97,17 @@ async function CuerpoHoy({ slug, rubroId, searchParams }: { slug: SlugPerfil; ru
   const claves = ["captado_sin_derivar", "derivado_sin_resultado", "dejaron_de_responder"] as const;
   // 18/11 (velocidad): antes eran cinco tandas de consultas, una detrás de la otra. Ahora son dos.
   const hace24 = new Date(Date.now() - ESPERA_CAPTADO_HORAS * 3_600_000).toISOString();
-  const [conteos, captados, agendaron, hablando, { data: activas }, { data: viejos }] = await Promise.all([
+  const [conteos, captados, hablando, { data: activas }, { data: viejos }, resumen] = await Promise.all([
     Promise.all(claves.map(async (c) => [c, await contarIndicador(rubroId as string, indicadorPorClave(c)!)] as const)),
     listarIndicador(rubroId, indicadorPorClave("captado_sin_derivar")!, { orden: "reciente" }),
-    contarGrupo(rubroId, areas, grupo("agendaron")).catch(() => null),
     contarGrupo(rubroId, areas, grupo("hablando")).catch(() => null),
     // Campañas que están enviando ahora, con su avance. Solo lectura.
     s.from("campaigns").select("id, name, status").in("area", areas).is("archived_at", null).eq("status", "en_curso").order("created_at", { ascending: false }).limit(3),
     // 15/11: captados que esperan el llamado hace más de 24 horas y no tienen cita.
     // Revisión: se cuentan todos (no solo los de la primera página de la lista).
-    s.from("opportunities").select("contact_id").eq("rubro_id", rubroId as string).eq("capture_state", "captado").eq("derivation_state", "no_derivado").lt("captured_at", hace24).limit(500),
+    s.from("opportunities").select("contact_id").eq("rubro_id", rubroId as string).eq("capture_state", "captado").eq("derivation_state", "no_derivado").lt("captured_at", hace24).is("archived_at", null).limit(500),
+    // 19/11: vista previa gráfica de Resultados.
+    resumenCifras(rubroId, areas).catch(() => null),
   ]);
   const baseCampanas = slug === "juridico" ? "/campanas" : `/panel/${slug}/campanas`;
   const cuenta = Object.fromEntries(conteos.map(([c, r]) => [c, r])) as Record<(typeof claves)[number], { count: number | null; error: string | null }>;
@@ -125,12 +127,7 @@ async function CuerpoHoy({ slug, rubroId, searchParams }: { slug: SlugPerfil; ru
   ]);
   const citaDe = (id: string) => ((citas ?? []) as any[]).find((c) => c.contact_id === id && !/cancel/.test(String(c.status ?? "")));
 
-  // Lo que pide algo tuyo (solo se muestra si hay alguien)…
-  const tareas = [
-    { titulo: "Citas próximas", n: agendaron, detalle: "Mirá quién viene y a qué hora", href: `/conversaciones?perfil=${slug}&grupo=agendaron` },
-    { titulo: "Derivados sin resultado", n: cuenta.derivado_sin_resultado.count, detalle: "Anotá cómo terminó cada uno", href: enlaceIndicador(slug, "derivado_sin_resultado", aqui) },
-  ];
-  // …y lo que el bot lleva adelante solo: se informa en una línea, cada dato abre su lista.
+  // Lo que el bot lleva adelante solo: se informa en una línea, cada dato abre su lista.
   const delBot = [
     { texto: "en charla con el bot", n: hablando, href: `/conversaciones?perfil=${slug}&grupo=hablando` },
     { texto: "en seguimiento", n: cuenta.dejaron_de_responder.count, href: enlaceIndicador(slug, "dejaron_de_responder", aqui) },
@@ -154,12 +151,12 @@ async function CuerpoHoy({ slug, rubroId, searchParams }: { slug: SlugPerfil; ru
         grupo={searchParams.grupo}
         filtroCola={searchParams.cola}
         verTodo={searchParams.todo === "1"}
-        enMarcha={tareas}
         delBot={delBot}
         captados={(captados.filas ?? []).map((o: any) => {
           const cita = citaDe(o.contact_id);
           const tarde = !cita && captadoEsperaDeMas(o.captured_at ?? o.updated_at ?? null);
           return {
+            oportunidadId: o.id ?? null,
             contactId: o.contact_id ?? null,
             conversationId: o.conversation_id ?? null,
             nombre: o.contacts?.full_name ?? null,
@@ -178,13 +175,7 @@ async function CuerpoHoy({ slug, rubroId, searchParams }: { slug: SlugPerfil; ru
 
       {slug === "marketing" ? <CircuitosMarketing /> : null}
 
-      <p className="text-sm text-slate-600">
-        Los números de la semana y del mes, con de dónde vino cada persona, están en{" "}
-        <Link prefetch={false} href={`/resultados?perfil=${slug}`} className="font-medium text-slate-900 underline underline-offset-2">
-          Resultados
-        </Link>
-        .
-      </p>
+      <VistaPreviaResultados slug={slug} semana={resumen?.semana ?? null} />
     </>
   );
 }

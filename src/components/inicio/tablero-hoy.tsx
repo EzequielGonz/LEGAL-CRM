@@ -1,14 +1,13 @@
-import { indicadorPorClave, listarIndicador } from "@/lib/indicadores";
+import { enlaceIndicador, indicadorPorClave, listarIndicador } from "@/lib/indicadores";
 import Link from "next/link";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { GRUPOS_PERSONAS, motivoLegible, resumenPersonas, type GrupoPersonas } from "@/lib/estadisticas-personas";
 import { consultarEstadosLineas } from "@/lib/whatsapp/estado-linea";
-import { getProfileMetrics } from "@/lib/metrics";
-import { puntajeBot } from "@/lib/agentes/puntaje";
 import { cuandoCorto, enlaceConversacion, iniciales } from "@/lib/cartera";
 import { conVolver } from "@/lib/navegacion";
 import type { SlugPerfil } from "@/lib/marca";
 import { colasDeHoy, unificarCola, type EntradaCola, type ItemCola } from "@/lib/hoy/colas";
+import { BotonArchivar } from "@/components/archivo/boton-archivar";
 import { CerrarDescartes } from "@/components/inicio/cerrar-descartes";
 
 /**
@@ -37,16 +36,18 @@ function FilaTrabajo({ f, slug, aqui, modo }: { f: ItemCola; slug: SlugPerfil; a
           {f.detalle ? `${f.at ? " · " : ""}${f.detalle}` : ""}
         </p>
       </div>
-      <div className="flex w-full shrink-0 gap-2 pl-12 sm:w-auto sm:pl-0 [&>a]:flex-1 [&>a]:justify-center sm:[&>a]:flex-none">
+      <div className="flex w-full shrink-0 gap-2 pl-12 sm:w-auto sm:pl-0 [&>a]:flex-1 [&>a]:justify-center sm:[&>a]:flex-none [&>button]:flex-1 sm:[&>button]:flex-none">
         {modo === "atender" ? (
           <>
             {chat && <Link prefetch={false} href={chat} className="btn-gold-sm">Responder</Link>}
             {ficha && <Link prefetch={false} href={ficha} className="btn-suave-sm">Ficha</Link>}
+            {f.oportunidadId && <BotonArchivar oportunidadId={f.oportunidadId} nombre={f.nombre} />}
           </>
         ) : (
           <>
             {ficha && <Link prefetch={false} href={ficha} className="btn-gold-sm">Derivar</Link>}
             {chat && <Link prefetch={false} href={chat} className="btn-suave-sm">{escribio ? "Responder" : "Chat"}</Link>}
+            {f.oportunidadId && <BotonArchivar oportunidadId={f.oportunidadId} nombre={f.nombre} />}
           </>
         )}
       </div>
@@ -97,9 +98,8 @@ export async function TableroHoy({
   const s = createAdminClient();
   const aqui = `/hoy?perfil=${slug}`;
   const baseCampanas = slug === "juridico" ? "/campanas" : `/panel/${slug}/campanas`;
-  const baseAgentes = slug === "juridico" ? "/agentes" : `/panel/${slug}/agentes`;
 
-  const [reales, posibles, colas, { data: lineasWa }, personas, { data: lineas }, metricas, { data: camps }] = await Promise.all([
+  const [reales, posibles, colas, { data: lineasWa }, personas, { data: lineas }, { data: camps }] = await Promise.all([
     // 13/11: «Oportunidades reales» (ordenadas por interés) y «Posible captación a revisar», con la misma definición que en Chats.
     listarIndicador(rubroId, indicadorPorClave("piden_persona")!).catch(() => ({ filas: [] as any[] })),
     listarIndicador(rubroId, indicadorPorClave("posible_captacion")!).catch(() => ({ filas: [] as any[] })),
@@ -107,7 +107,6 @@ export async function TableroHoy({
     (s.from("wasender_lineas" as any) as any).select("id, nombre, estado, habilitada").eq("rubro_id", rubroId).is("archivada_at", null),
     resumenPersonas(rubroId, areas),
     s.from("profile_lines").select("label, credential_key, active").eq("rubro_id", rubroId).eq("active", true),
-    getProfileMetrics(rubroId).catch(() => null),
     s
       .from("campaigns")
       .select("id, name, status, pause_reason, proveedor, wasender_line_id" as any)
@@ -144,8 +143,6 @@ export async function TableroHoy({
     ? { tono: "verde", texto: `Campaña enviando · ${camp.name}`, href: `${baseCampanas}/${camp.id}` }
     : { tono: "amarillo", texto: `Campaña pausada · ${camp.pause_reason ? String(camp.pause_reason).slice(0, 60) : camp.name}`, href: `${baseCampanas}/${camp.id}` };
 
-  const p = puntajeBot(metricas as any);
-  const chipBot = { tono: p.puntaje === null ? "gris" : p.puntaje >= 60 ? "verde" : p.puntaje >= 35 ? "amarillo" : "rojo", texto: p.puntaje === null ? "Bot · todavía sin puntaje" : `Bot · ${p.puntaje} de 100 en captación y trato`, href: baseAgentes };
   const baseWasender = `/wasender?perfil=${slug}`;
   const chipsWasender = lineasWasender.map((l) => ({
     tono: l.estado === "connected" ? (l.habilitada ? "verde" : "amarillo") : "rojo",
@@ -162,12 +159,12 @@ export async function TableroHoy({
   // descartes (ya tiene abogado, lo resolvió, no le interesa) no se muestran como trabajo.
   const descartadas = new Set(colas.descartes.map((d) => d.conversationId));
   const cola = unificarCola({
-    esperan: colas.esperan.map((f) => ({ contactId: f.contactId, conversationId: f.conversationId, nombre: f.nombre, detalle: f.texto ? `«${f.texto}»` : null, at: f.desde })),
+    esperan: colas.esperan.map((f) => ({ oportunidadId: f.oportunidadId, contactId: f.contactId, conversationId: f.conversationId, nombre: f.nombre, detalle: f.texto ? `«${f.texto}»` : null, at: f.desde })),
     porCerrar: [
-      ...((posibles.filas ?? []) as any[]).map((o) => ({ contactId: o.contact_id ?? null, conversationId: o.conversation_id ?? null, nombre: o.contacts?.full_name ?? null, detalle: o.posible_captacion_reason ?? "El bot no está seguro de que haya concretado la llamada", etiqueta: "Posible captación a revisar", at: o.last_inbound_at ?? o.updated_at ?? null })),
+      ...((posibles.filas ?? []) as any[]).map((o) => ({ oportunidadId: o.id ?? null, contactId: o.contact_id ?? null, conversationId: o.conversation_id ?? null, nombre: o.contacts?.full_name ?? null, detalle: o.posible_captacion_reason ?? "El bot no está seguro de que haya concretado la llamada", etiqueta: "Posible captación a revisar", at: o.last_inbound_at ?? o.updated_at ?? null })),
       ...((reales.filas ?? []) as any[])
         .filter((o) => !(o.conversation_id && descartadas.has(o.conversation_id)))
-        .map((o) => ({ contactId: o.contact_id ?? null, conversationId: o.conversation_id ?? null, nombre: o.contacts?.full_name ?? null, detalle: o.interest_reason ?? motivoLegible(o.attention_reason), etiqueta: "Oportunidad real", at: o.last_inbound_at ?? o.updated_at ?? null })),
+        .map((o) => ({ oportunidadId: o.id ?? null, contactId: o.contact_id ?? null, conversationId: o.conversation_id ?? null, nombre: o.contacts?.full_name ?? null, detalle: o.interest_reason ?? motivoLegible(o.attention_reason), etiqueta: "Oportunidad real", at: o.last_inbound_at ?? o.updated_at ?? null })),
     ],
     captados,
   });
@@ -177,12 +174,6 @@ export async function TableroHoy({
   const porMotivo = new Map<string, number>();
   for (const d of colas.descartes) porMotivo.set(d.descarte.etiqueta, (porMotivo.get(d.descarte.etiqueta) ?? 0) + 1);
   const resumenDescartes = [...porMotivo.entries()].map(([t, n]) => `${n} ${t.toLowerCase()}`).join(", ");
-  // 13/11: fuera de las dos listas, solo lo que pide una acción y tiene a alguien.
-  const trabados = personas.conteos.bot_trabado ?? 0;
-  const tareas: (EnMarcha & { activo?: boolean })[] = [
-    ...(trabados > 0 ? [{ titulo: "El bot se trabó", n: trabados, detalle: "No supo qué responder: contestales vos", href: `${aqui}&grupo=bot_trabado#hoy-lista`, activo: elegido === "bot_trabado" }] : []),
-    ...enMarcha.filter((m) => (m.n ?? 0) > 0),
-  ];
   const bot = delBot.filter((d) => d.n !== null && d.n !== undefined && (d.n > 0 || d.de != null));
 
   return (
@@ -193,7 +184,6 @@ export async function TableroHoy({
       <ul className="flex flex-wrap gap-2" aria-label="Estado de la línea, la campaña y el bot">
         <Chip tono={chipLinea.tono} texto={chipLinea.texto} />
         <Chip tono={chipCampana.tono} texto={chipCampana.texto} href={chipCampana.href} />
-        <Chip tono={chipBot.tono} texto={chipBot.texto} href={chipBot.href} />
         {chipsWasender.map((c) => (
           <Chip key={c.texto} tono={c.tono} texto={c.texto} href={c.href} />
         ))}
@@ -242,7 +232,7 @@ export async function TableroHoy({
           )}
           {!verTodo && paraDerivar.length > VISIBLES_EN_COLA && (
             <p className="border-t border-slate-100 px-5 py-3 text-sm">
-              <Link prefetch={false} href={`${aqui}&todo=1#hoy-cola`} className="font-medium text-slate-800 underline underline-offset-2">Ver los {paraDerivar.length}</Link>
+              <Link prefetch={false} href={enlaceIndicador(slug, "captado_sin_derivar", aqui)} className="font-medium text-slate-800 underline underline-offset-2">Ver los {paraDerivar.length}</Link>
             </p>
           )}
         </div>
@@ -258,24 +248,6 @@ export async function TableroHoy({
             ({resumenDescartes}). No {colas.descartes.length === 1 ? "aparece" : "aparecen"} arriba.
           </p>
           <CerrarDescartes perfil={slug} cantidad={colas.descartes.length} />
-        </div>
-      )}
-
-      {/* 2) También hoy: solo lo que pide algo tuyo y tiene a alguien. Sin nadie, no se muestra. */}
-      {tareas.length > 0 && (
-        <div>
-          <p className="mb-2 text-sm font-semibold text-slate-950">También hoy</p>
-          <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
-            {tareas.map((t) => (
-              <li key={t.titulo}>
-                <Link prefetch={false} href={t.href} aria-current={t.activo ? "true" : undefined} className={`kpi-hoy flex h-full flex-col rounded-2xl border p-4 ${t.activo ? "kpi-activo" : ""}`}>
-                  <span className="text-[13px] font-medium text-slate-600">{t.titulo}</span>
-                  <span className="cifra-premium mt-1.5 text-3xl font-semibold tabular-nums text-slate-950">{(t.n ?? 0).toLocaleString("es-AR")}</span>
-                  <span className="mt-1 text-[13px] text-slate-500">{t.detalle}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
         </div>
       )}
 

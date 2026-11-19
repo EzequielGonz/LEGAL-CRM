@@ -74,11 +74,11 @@ export async function colasDeHoy(rubroId: string, areas: string[]): Promise<Cola
   // y el filtro de chats usaba otra cuenta: no coincidían.
   const ind = indicadorPorClave("te_escribio")!;
   const [{ data: opps0 }, { count: captados, error: errorCaptados }] = await Promise.all([
-    (aplicarCondiciones((s.from("opportunities") as any).select("conversation_id, contact_id, last_inbound_at").eq("rubro_id", rubroId), ind.conds) as any)
+    (aplicarCondiciones((s.from("opportunities") as any).select("conversation_id, contact_id, last_inbound_at").eq("rubro_id", rubroId).is("archived_at", null), ind.conds) as any)
       .not("conversation_id", "is", null)
       .order("last_inbound_at", { ascending: false })
       .limit(150),
-    s.from("opportunities").select("id", { count: "exact", head: true }).eq("rubro_id", rubroId).eq("capture_state", "captado").eq("derivation_state", "no_derivado"),
+    s.from("opportunities").select("id", { count: "exact", head: true }).eq("rubro_id", rubroId).eq("capture_state", "captado").eq("derivation_state", "no_derivado").is("archived_at", null),
   ]);
   const candidatos = ((opps0 ?? []) as any[]).map((o) => ({ id: o.conversation_id as string, contact_id: (o.contact_id as string | null) ?? null, last_message_at: (o.last_inbound_at as string | null) ?? null }));
   // Si el bot atiende el chat, se le dan diez minutos para contestar antes de mostrarlo como pendiente.
@@ -128,6 +128,7 @@ export interface ItemCola {
   contactId: string | null;
   conversationId: string | null;
   nombre: string | null;
+  oportunidadId?: string | null;
   /** Lo primero que hay que hacer. */
   accion: "responder" | "derivar";
   /** Además de responder, está captado y falta derivarlo. */
@@ -141,6 +142,7 @@ export interface EntradaCola {
   contactId: string | null;
   conversationId: string | null;
   nombre: string | null;
+  oportunidadId?: string | null;
   detalle?: string | null;
   etiqueta?: string | null;
   at: string | null;
@@ -155,13 +157,14 @@ export function unificarCola(d: { esperan: EntradaCola[]; porCerrar: EntradaCola
     if (!clave) return;
     const previo = porClave.get(clave);
     if (!previo) {
-      porClave.set(clave, { clave, contactId: e.contactId, conversationId: e.conversationId, nombre: e.nombre, accion, tambienDerivar: false, detalle: e.detalle ?? null, etiqueta: e.etiqueta ?? null, at: e.at });
+      porClave.set(clave, { clave, contactId: e.contactId, conversationId: e.conversationId, nombre: e.nombre, oportunidadId: e.oportunidadId ?? null, accion, tambienDerivar: false, detalle: e.detalle ?? null, etiqueta: e.etiqueta ?? null, at: e.at });
       return;
     }
     // Ya estaba: se completa lo que falte, sin duplicar la fila.
     if (accion === "derivar") previo.tambienDerivar = previo.accion === "responder";
     previo.conversationId ??= e.conversationId;
     previo.nombre ??= e.nombre;
+    previo.oportunidadId ??= e.oportunidadId ?? null;
     previo.detalle ??= e.detalle ?? null;
     previo.etiqueta ??= e.etiqueta ?? null;
   };

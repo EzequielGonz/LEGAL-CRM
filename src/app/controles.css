@@ -205,9 +205,9 @@ main#contenido p {
 }
 
 /* Inbox a lo ancho del área de trabajo: compensa el margen del lienzo en cada ancho. */
-.marco-inbox { margin: -1.25rem -1rem 0; }
-@media (min-width: 640px) { .marco-inbox { margin: -1.5rem -1.5rem 0; } }
-@media (min-width: 1024px) { .marco-inbox { margin: -1.75rem -2.25rem 0; } }
+.marco-inbox { margin: 0.75rem -1rem 0; border-top: 1px solid rgb(226 232 240); }
+@media (min-width: 640px) { .marco-inbox { margin: 0.75rem -1.5rem 0; } }
+@media (min-width: 1024px) { .marco-inbox { margin: 0.75rem -2.25rem 0; } }
 
 /* Fuentes de next/font (layout.tsx) para las utilidades font-sans y font-serif */
 .font-sans { font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }

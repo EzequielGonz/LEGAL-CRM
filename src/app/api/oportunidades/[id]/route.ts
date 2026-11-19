@@ -4,6 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { setOpportunityState } from "@/lib/opportunities";
 import { requireSession } from "@/lib/acceso/autorizacion";
 import { CaptacionError, registrarCaptacion, registrarResultadoPosterior, registrarZona, solicitarAtencion } from "@/lib/captacion";
+import { archivarOportunidad, desarchivarOportunidad } from "@/lib/archivo/archivo";
 import { respuestaErrorInterno } from "@/lib/error-publico";
 
 export const dynamic = "force-dynamic";
@@ -29,6 +30,7 @@ export const maxDuration = 60;
  *  - "atencion_motivo": { motivo, nota? } → clasificación 12.2 (pausa el chat
  *     y detiene cuando corresponde)
  *  - "zona": { zona: "amba" | "fuera" | "sin_confirmar" }
+ *  - "archivar": { motivo? } / "desarchivar": sale de las listas de trabajo; no se borra nada
  *  - "no_es_captacion": { nota? } → quita la marca «Posible captación a revisar»
  */
 export async function POST(request: Request, props: { params: Promise<{ id: string }> }) {
@@ -198,6 +200,17 @@ export async function POST(request: Request, props: { params: Promise<{ id: stri
       case "zona": {
         const zona = await registrarZona({ opportunityId: opp.id, zona: body?.zona, actor: "operador" });
         return NextResponse.json({ ok: true, zona });
+      }
+      case "archivar": {
+        const motivo = typeof body?.motivo === "string" && body.motivo.trim() ? body.motivo.trim().slice(0, 300) : "Archivado desde el panel";
+        const hecho = await archivarOportunidad(opp.id, "operador", motivo);
+        if (!hecho) return NextResponse.json({ ok: true, sin_cambios: true });
+        break;
+      }
+      case "desarchivar": {
+        const hecho = await desarchivarOportunidad(opp.id, "operador");
+        if (!hecho) return NextResponse.json({ ok: true, sin_cambios: true });
+        break;
       }
       default:
         return NextResponse.json({ error: "Acción inválida" }, { status: 400 });

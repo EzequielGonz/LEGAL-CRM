@@ -8,7 +8,7 @@ covers: [estado, memoria, seguimiento, wasender, plantillas, bot, despliegue, pe
 
 Se actualiza al cierre de cada vuelta de trabajo. Sin datos personales, claves ni códigos de acceso. Ante una contradicción, mandan `CLAUDE.md` y `.claude/referencias/reglas-comunes.md`.
 
-Última actualización: 14/11/2026.
+Última actualización: 19/11/2026.
 
 ## Qué está encendido hoy
 
@@ -46,6 +46,12 @@ Se actualiza al cierre de cada vuelta de trabajo. Sin datos personales, claves n
 - **15/11 (Asistente general y Laboratorio del bot):** en Perfiles hay un «Asistente general» para los cuatro perfiles (planillas Excel/CSV, boceto por perfil, importar, crear y lanzar con la confirmación reforzada de siempre, sin código) y un «Laboratorio del bot» junto a «Conocimiento del bot». La responsable autorizó crear versiones nuevas (v3…) y elegir otros modelos de Gemini, roles por perfil o generales y pruebas A/B en campañas. Regla: nada de lo activo cambia salvo acción manual en el laboratorio; los bots de base siguen con v2 y el modelo principal. Detalle en `docs/asistente-general/` y `docs/laboratorio-1511/`. Migraciones 0626 y 0630 a 0632 aplicadas.
 - **15/11 (simplificación pedida por la responsable):** el Asistente general pasa a su propia pantalla `/asistente` (resumen de la semana de todo el panel con gráficos por perfil, accesos directos y chat grande). El Laboratorio queda en una sola pantalla sin pestañas: chat, cómo viene cada versión (barras), versiones, el bot de hoy (instrucciones editables a mano con confirmación, historial y «Volver a la anterior»), cambiar algo, probar antes de usar, rol puntual y otros proveedores con enlace. Migración 0633 aplicada (registro 317): solo amplía los tipos de propuesta. Pendiente de decidir: si vuelven los botones de «cambiar el modelo de una versión» y «archivar versión» (hoy solo por el asistente o creando una versión nueva).
 - Producción se publica directo a `main` desde la rama de trabajo del chat (antes `mejoras-1211`; el 13/11 a la noche, `claude/relaxed-cerf-5oncz1`) después de typecheck, lint, pruebas y build, y se recorre como usuaria antes de informar.
+
+## Rediseño del panel jurídico (19/11, en curso)
+
+- Implementado en la rama `claude/pensive-galileo-d6ephy`, **sin publicar ni aplicar en la base**: Perfiles sin «En vivo»; Hoy sin «personas, no mensajes», sin chip del bot, sin «También hoy», con botón Archivar, «Ver los N» a la lista de captados y vista previa de Resultados; Activos sin el renglón «Sin nadie por ahora» (Contactos queda igual) y con Archivar en «Para cerrar»; Descartados con grupo «Archivados»; marco de «Todos los chats» unificado.
+- Archivo de prospectos: migración `0634_archivo_de_prospectos.sql` (columnas `archived_at/archived_by/archive_reason` y desarchivado al escribir). **Pendiente de aplicar.** El archivo automático a los 30 días corre en el latido pero queda **apagado** hasta que se escriba `system_settings.archivo_automatico` con `{"desde": ...}`.
+- Pendiente de la responsable: aclarar qué significa «ordenar los casos: derivados – no derivados – perdidos», y su ok para el rediseño visual.
 
 ## Dónde está cada cosa
 

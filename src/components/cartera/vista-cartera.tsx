@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requirePageSession } from "@/lib/acceso/pagina";
 import { MarcoPerfil } from "@/components/perfiles/marco-perfil";
+import { BotonArchivar } from "@/components/archivo/boton-archivar";
 import { Icono } from "@/components/ui/icono-seccion";
 import { contarIndicador, indicadorPorClave, rubroIdDe, enlaceIndicador } from "@/lib/indicadores";
 import { colasDeHoy } from "@/lib/hoy/colas";
@@ -22,7 +23,7 @@ const PUNTO: Record<Tono, string> = {
   info: "bg-slate-400",
 };
 
-function Ficha({ f, slug, aqui, accion }: { f: FichaCartera; slug: SlugPerfil; aqui: string; accion: "derivar" | "chat" | "ficha" }) {
+function Ficha({ f, slug, aqui, accion, archivable = false }: { f: FichaCartera; slug: SlugPerfil; aqui: string; accion: "derivar" | "chat" | "ficha"; archivable?: boolean }) {
   const ficha = f.contactId ? conVolver(`/ficha/${f.contactId}`, aqui) : null;
   const chat = f.conversationId ? conVolver(enlaceConversacion(slug, f.conversationId), aqui) : null;
   const chatPrincipal = accion === "chat" && !!chat;
@@ -75,6 +76,7 @@ function Ficha({ f, slug, aqui, accion }: { f: FichaCartera; slug: SlugPerfil; a
             Chat
           </Link>
         ) : null}
+        {archivable ? <BotonArchivar oportunidadId={f.id} nombre={f.nombre} className="btn-suave-sm justify-center" /> : null}
       </div>
     </li>
   );
@@ -226,7 +228,7 @@ async function CuerpoCartera({ vista, slug, rubroId, searchParams }: { vista: Vi
                 );
               })}
             </ul>
-            {vacios.length > 0 ? (
+            {vacios.length > 0 && vista === "contactos" ? (
               <p className="mt-3 text-[13px] text-slate-600">
                 Sin nadie por ahora:{" "}
                 {vacios.map((x, i) => (
@@ -300,7 +302,7 @@ async function CuerpoCartera({ vista, slug, rubroId, searchParams }: { vista: Vi
             ) : (
               <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
                 {fichas.map((f) => (
-                  <Ficha key={f.id} f={f} slug={slug} aqui={aqui} accion={g.accion} />
+                  <Ficha key={f.id} f={f} slug={slug} aqui={aqui} accion={g.accion} archivable={g.clave === "captados" && vista === "conversaciones"} />
                 ))}
               </ul>
             )}

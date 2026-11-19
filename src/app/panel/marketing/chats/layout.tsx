@@ -11,7 +11,7 @@ export const metadata = { title: "Chats" };
  */
 export default function ChatsLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="marco-inbox flex !mt-0 h-[calc(100vh-17rem)] min-h-[26rem]">
+    <div className="marco-inbox flex h-[calc(100vh-17rem)] min-h-[26rem]">
       <h1 className="sr-only">Chats</h1>
       <Suspense fallback={null}>
         <ConversationList perfil="marketing" />

@@ -78,6 +78,7 @@ export const INDICADORES: Indicador[] = [
   { clave: "repesca", label: "En repesca", grupo: "seguimiento", definicion: "Terminaron el seguimiento sin avanzar: para volver a intentar a mano", conds: [{ col: "capture_state", op: "neq", value: "captado" }, { col: "_or", op: "or", value: "followup_exhausted_at.not.is.null,repesca_base_id.not.is.null" }] },
   { clave: "perdido_comercial", label: "Perdidos", grupo: "captacion", definicion: "Perdidos por motivo comercial (sin contar quejas ni pedidos de no contacto)", conds: [eq("capture_state", "perdido"), sinDetencion] },
   { clave: "dejaron_de_responder", label: "En seguimiento", grupo: "seguimiento", definicion: "No escriben hace más de 3 días y el sistema todavía lo está intentando: sale un mensaje más y, si en 24 horas no contestan, pasan a Caídos", orden: "silencio", conds: [eq("contact_state", "respondio"), { col: "capture_state", op: "in", value: ["en_conversacion", "en_seguimiento"] }, sinDetencion, eq("ultima_palabra", "nosotros"), { col: "followup_state", op: "in", value: ["ninguno", "activo"] }, { col: "attention_state", op: "neq", value: "requiere_humano" }, { col: "last_inbound_at", op: "antes_de_horas", value: 72 }] },
+  { clave: "archivados", label: "Archivados", grupo: "seguimiento", definicion: "Descartados que se archivaron (a mano o por pasar más de un mes). No se borra nada: si la persona vuelve a escribir, vuelve sola", orden: "reciente", conds: [{ col: "archived_at", op: "not_null" }] },
   { clave: "revision_pendiente", label: "Revisión pendiente", grupo: "revision", definicion: "Marcadas para revisar por una persona", conds: [eq("review_required", true)], metrica: (m) => m.revision_pendiente },
   // Fuente acreditada (2.8): la primera comprobable; «no informada» si no hubo referencia.
   ...FUENTES.map(
@@ -132,8 +133,13 @@ function base(rubroId: string, sel: string, opts?: { count?: "exact"; head?: boo
   return q;
 }
 
+/** Quien está archivado solo aparece en «Archivados» (19/11). */
+function sinArchivados(q: any, ind: Indicador) {
+  return ind.conds.some((c) => c.col === "archived_at") ? q : q.is("archived_at", null);
+}
+
 export async function contarIndicador(rubroId: string, ind: Indicador, periodo?: Periodo): Promise<{ count: number | null; error: string | null }> {
-  const { count, error } = await aplicarCondiciones(base(rubroId, "id", { count: "exact", head: true }, periodo), ind.conds);
+  const { count, error } = await aplicarCondiciones(sinArchivados(base(rubroId, "id", { count: "exact", head: true }, periodo), ind), ind.conds);
   return { count: error ? null : count ?? 0, error: error ? String(error.message ?? error) : null };
 }
 
@@ -158,7 +164,7 @@ export async function listarIndicador(
   const from = (pagina - 1) * TAMANO_PAGINA;
   const sel =
     "id, contact_id, conversation_id, area, contact_state, capture_state, derivation_state, attention_state, attention_reason, followup_state, followup_reason, followup_next_at, capture_reason, interest_score, interest_reason, last_inbound_at, last_outbound_at, ultima_palabra, posible_captacion, posible_captacion_reason, location_zone, capture_warnings, post_derivation_state, first_source, captured_at, updated_at, created_at, contacts(full_name, phone)";
-  const { data, count, error } = await aplicarCondiciones(base(rubroId, sel, { count: "exact" }, opts.periodo), ind.conds)
+  const { data, count, error } = await aplicarCondiciones(sinArchivados(base(rubroId, sel, { count: "exact" }, opts.periodo), ind), ind.conds)
     .order(orden.col, { ascending: orden.asc, nullsFirst: false })
     .order("updated_at", { ascending: false })
     .order("id", { ascending: true })

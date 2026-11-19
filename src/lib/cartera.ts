@@ -71,6 +71,8 @@ export const VISTAS_CARTERA: Record<VistaCartera, { titulo: string; bajada: stri
       { clave: "caidos", titulo: "Caídos", detalle: "Dejaron de contestar. Ya recibieron el último mensaje o pasó demasiado tiempo. Si alguno vuelve a escribir, vuelve solo a la conversación.", tono: "info", accion: "ficha", fuente: op("seguimiento_caido") },
       { clave: "perdidos", titulo: "Perdidos", detalle: "Dijeron que no, con su motivo. Revisá el motivo antes de reintentar.", tono: "info", accion: "ficha", fuente: op("perdido_comercial") },
       { clave: "no_contactar", titulo: "No quieren que les escriban", detalle: "Bajas, quejas y números equivocados. El bot ya no les escribe.", tono: "info", accion: "ficha", fuente: op("detencion_reciente") },
+      // 19/11: pasado un mes, los descartados se archivan solos (o a mano desde Hoy y Activos).
+      { clave: "archivados", titulo: "Archivados", detalle: "Descartados con más de un mes y personas que archivaste. No se borra nada; si alguien vuelve a escribir, vuelve solo a la conversación.", tono: "info", accion: "ficha", fuente: op("archivados") },
     ],
   },
 };

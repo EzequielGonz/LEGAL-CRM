@@ -15,6 +15,7 @@ import { registrarLatido } from "@/lib/salud";
 import { procesarRecontactos } from "@/lib/recontacto/motor";
 import { procesarSegundosIntentos } from "@/lib/seguimiento/segundo-intento-motor";
 import { cerrarDescartesAutomaticos } from "@/lib/hoy/descartes-motor";
+import { archivarDescartadosViejos } from "@/lib/archivo/archivo";
 import { cerrarCaidos } from "@/lib/seguimiento/caidos-motor";
 import { sincronizarCatalogosSiToca } from "@/lib/plantillas/auto-asignar";
 import { rescatarTurnosPerdidos } from "@/lib/ai-agent/rescate";
@@ -141,6 +142,19 @@ export async function POST(request: Request) {
     }
 
     marca("caidos");
+
+    // 2 bis e) Archivo (19/11): descartados con más de un mes sin novedades pasan a Archivados.
+    //    Cada hora, apagado hasta que la responsable lo habilite (system_settings.archivo_automatico).
+    let archivo: unknown = null;
+    if (new Date().getUTCMinutes() === 20 && Date.now() - inicio < 25_000) {
+      try {
+        archivo = await archivarDescartadosViejos();
+      } catch (err: any) {
+        archivo = { error: String(err?.message ?? err) };
+      }
+    }
+
+    marca("archivo");
 
     // 2 ter) Turnos perdidos (24/10): un mensaje de texto que quedó sin
     //    respuesta y sin turno del bot registrado se reintenta una vez, con la
@@ -292,7 +306,7 @@ export async function POST(request: Request) {
 
     // Tablero de salud: deja la hora del último latido y cuánto tardó cada etapa.
     await registrarLatido(true, { ms: Date.now() - inicio, etapas });
-    return NextResponse.json({ ok: true, results, plantillas, seguimiento, recontacto, segundoIntento, descartes, rescate, calidad, marketing, servidor, extraccion, avisos, formularios, presupuestos, catalogo, fallas });
+    return NextResponse.json({ ok: true, results, plantillas, seguimiento, recontacto, segundoIntento, descartes, archivo, rescate, calidad, marketing, servidor, extraccion, avisos, formularios, presupuestos, catalogo, fallas });
   } catch (err: any) {
     await registrarLatido(false, { error: String(err?.message ?? err).slice(0, 200), ms: Date.now() - inicio, etapas });
     await avisarLatidoFallido();

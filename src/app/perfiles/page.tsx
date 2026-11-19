@@ -3,7 +3,6 @@ import { EfectosVidrio } from "@/components/ui/efectos-vidrio";
 import { LogoutButton } from "@/components/acceso/logout-button";
 import { type MarcaTarjeta } from "@/components/perfiles/perfil-selector";
 import { SelectorPerfilesPC } from "@/components/perfiles/selector-pc";
-import { EnVivoRubros } from "@/components/perfiles/en-vivo-rubros";
 import { ConocimientoBot } from "@/components/perfiles/conocimiento-bot";
 import { AsistenteGeneral } from "@/components/asistente/asistente-general";
 import { SalaLampara } from "@/components/ui/lampara-dibujo";
@@ -37,15 +36,13 @@ export default async function PerfilesPage() {
   const nombres = Object.fromEntries(rubros.map((p) => [p.slug, tarjetas[p.slug as SlugPerfil]?.nombre ?? p.name]));
 
   return (
-    <div className="escena-oscura sala-perfil flex min-h-screen items-start justify-center px-4 py-12 sm:px-6 min-[1024px]:max-[1823px]:pr-[21.5rem]">
+    <div className="escena-oscura sala-perfil flex min-h-screen items-start justify-center px-4 py-12 sm:px-6">
       <SalaLampara />
       {/* 13/11: las tarjetas se inclinan con el cursor, como las cifras del panel. */}
       <EfectosVidrio />
       <main id="perfiles" className="escena-capa relative w-full max-w-6xl">
         {/* 15/11: las tarjetas se actualizan solas (cada 20 s y al volver a la pestaña) desde el selector;
             antes además se recargaba toda la página cada 30 s, lo que duplicaba las mismas lecturas. */}
-        {/* 24/10: seguimiento en vivo de los cuatro rubros (esquina superior en la computadora). */}
-        <EnVivoRubros nombres={nombres} />
         <div className="mb-10 text-center">
           <MarcaPanel className="sello-grande mx-auto mb-5" />
           <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">¿Con qué perfil trabajás?</h1>

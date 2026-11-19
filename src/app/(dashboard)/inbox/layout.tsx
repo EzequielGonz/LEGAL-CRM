@@ -7,7 +7,7 @@ export const metadata = { title: "Inbox" };
 // búsqueda y páginas; así se mantiene al día sin recargar la página.
 export default function InboxLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="marco-inbox flex h-[calc(100vh-4rem)]">
+    <div className="marco-inbox flex h-[calc(100vh-17rem)] min-h-[26rem]">
       <h1 className="sr-only">Todos los chats</h1>
       <ConversationList />
       <div className="min-w-0 flex-1">{children}</div>
