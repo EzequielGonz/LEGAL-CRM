@@ -44,7 +44,7 @@ function tallerSVG(K) { return D.interior({w: 1500, pared: '#c9d3da', piso: '#5d
 function calleSVG(K) { return D.barrio({w: 1700, piso: 1460, hora: K.noche ? 'noche' : 'tarde'}) + `<rect x="1180" y="980" width="420" height="80" rx="10" fill="${NAVY}"/>${T_(1390, 1035, 34, 'AV. CORRIENTES', {ls: 3})}`; }
 const LUG = {conce: {svg: conceSVG, fondo: '#dfe7f1', pos: {juli: [320, 1580], mati: [170, 1560], leo: [1420, 1570], tano: [1420, 1560]}, auto: [980, 1540, 1.5, '#1f6fc2'], luz: 'background:linear-gradient(180deg,rgba(255,255,255,.18),transparent 40%),radial-gradient(circle at 70% 70%,rgba(32,124,207,.18),transparent 50%)'},
   cocina: {svg: cocinaSVG, fondo: '#f2e6d3', pos: {juli: [560, 1490], mati: [1000, 1480], leo: [1000, 1480], tano: [1000, 1480]}, mesa: true, luz: 'background:linear-gradient(110deg,transparent 40%,rgba(255,240,210,.45)),linear-gradient(180deg,transparent 60%,rgba(0,10,40,.2))'},
-  taller: {svg: tallerSVG, fondo: '#c9d3da', pos: {mati: [560, 1480], tano: [1040, 1480], juli: [1040, 1480], leo: [1040, 1480]}, luz: 'background:linear-gradient(100deg,rgba(234,244,255,.35),transparent 50%),linear-gradient(180deg,transparent 60%,rgba(0,10,40,.25))'},
+  taller: {svg: tallerSVG, fondo: '#c9d3da', pos: {mati: [560, 1480], tano: [900, 1480], juli: [1040, 1480], leo: [1040, 1480]}, luz: 'background:linear-gradient(100deg,rgba(234,244,255,.35),transparent 50%),linear-gradient(180deg,transparent 60%,rgba(0,10,40,.25))'},
   calle: {svg: calleSVG, fondo: '#bfd2e4', pos: {mati: [520, 1530], juli: [380, 1540], leo: [1300, 1530], tano: [1300, 1530]}, auto: [1060, 1600, 1.45, '#1f6fc2'], luz: 'background:linear-gradient(120deg,rgba(255,220,170,.35),transparent 55%)'}};
 
 // ---------------- OBJETOS (primer plano de los 3 puntos) ----------------
@@ -77,14 +77,14 @@ const OBJ = {
         this.lapiz.setAttribute('transform', `translate(${590 - 280 + k * 560 + Math.sin(t * 40) * 6},${1080 + y + 10}) rotate(${25 + Math.sin(t * 30) * 4})`); }}; },
   chasis(K) { const g = id('ch'); const svg = `<rect x="-400" y="-400" width="1880" height="2720" fill="#05070f"/><defs><linearGradient id="${g}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2f80d1"/><stop offset="1" stop-color="#0b2a55"/></linearGradient>
       <radialGradient id="${g}h" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fffbe6" stop-opacity=".95"/><stop offset=".6" stop-color="#fff3c4" stop-opacity=".35"/><stop offset="1" stop-color="#fff3c4" stop-opacity="0"/></radialGradient></defs>
-    <rect x="-200" y="300" width="1480" height="900" rx="80" fill="url(#${g})"/><rect x="-200" y="300" width="1480" height="60" fill="#fff" opacity=".12"/><rect x="-200" y="1000" width="1480" height="200" fill="#0a1a33"/>
-    <g transform="translate(540,760)"><rect x="-330" y="-110" width="660" height="220" rx="22" fill="#c9d0d8"/><rect x="-310" y="-90" width="620" height="180" rx="14" fill="#e7ebef"/>${T_(0, -30, 40, 'N.º DE CHASIS', {c: '#3a4352', ls: 4})}
+    <rect x="-200" y="300" width="1480" height="520" rx="80" fill="url(#${g})"/><rect x="-200" y="300" width="1480" height="60" fill="#fff" opacity=".12"/><rect x="-200" y="700" width="1480" height="120" fill="#0a1a33"/>
+    <g transform="translate(540,560)"><rect x="-330" y="-110" width="660" height="220" rx="22" fill="#c9d0d8"/><rect x="-310" y="-90" width="620" height="180" rx="14" fill="#e7ebef"/>${T_(0, -30, 40, 'N.º DE CHASIS', {c: '#3a4352', ls: 4})}
       ${[...Array(11)].map((_, i) => `<rect x="${-260 + i * 48}" y="10" width="34" height="56" rx="4" fill="#3a4352"/>`).join('')}${[[-300, -80], [300, -80], [-300, 80], [300, 80]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="10" fill="#8a929b"/>`).join('')}</g>
     <g class="hz" style="mix-blend-mode:screen"><circle class="spot" r="320" fill="url(#${g}h)"/></g>
-    <g transform="translate(900,1230) rotate(-28) scale(.7)"><rect x="-110" y="-230" width="220" height="460" rx="36" fill="#16181d"/><circle cx="-50" cy="-170" r="22" fill="#fffbe6"/></g>
-    ${K.items.map((f, i) => etiqueta(540, 1480 + i * 130, f, 820)).join('')}`;
+    <g transform="translate(960,1500) rotate(-28) scale(.7)"><rect x="-110" y="-230" width="220" height="460" rx="36" fill="#16181d"/><circle cx="-50" cy="-170" r="22" fill="#fffbe6"/></g>
+    ${K.items.map((f, i) => etiqueta(540, 880 + i * 125, f, 820)).join('')}`;
     return {svg, init(el) { this.spot = el.querySelector('.spot'); this.tags = [...el.querySelectorAll('.tag')]; },
-      upd(t, n, ts) { const x = 540 + Math.sin(t * 1.6) * 260, y = 760 + Math.cos(t * 2.3) * 60; this.spot.setAttribute('cx', x); this.spot.setAttribute('cy', y); tagsVer(this.tags, n, t, ts); }}; },
+      upd(t, n, ts) { const x = 540 + Math.sin(t * 1.6) * 260, y = 560 + Math.cos(t * 2.3) * 60; this.spot.setAttribute('cx', x); this.spot.setAttribute('cy', y); tagsVer(this.tags, n, t, ts); }}; },
   carpeta(K) { const it = K.items; const svg = fondoMarca() + `<g transform="translate(540,1080)"><path d="M-420,-380 L-150,-380 L-110,-430 L420,-430 L420,420 L-420,420 Z" fill="#d9a441"/>
       ${it.map((f, i) => `<g class="hoja"><rect x="-360" y="-500" width="720" height="560" rx="10" fill="#fbfaf6"/><rect x="-360" y="-500" width="720" height="90" rx="10" fill="${[AZUL, NAVY, '#0E4EB2'][i]}"/>${T_(0, -440, 42, ['PAPEL 1', 'PAPEL 2', 'PAPEL 3'][i], {ls: 4})}
         ${T_(0, -300, 50, f, {f: 'Plus Jakarta Sans', w: 800, c: TINTA})}${[...Array(4)].map((_, j) => `<rect x="-280" y="${-220 + j * 56}" width="${380 + hash(i * 5 + j) * 180}" height="14" rx="7" fill="#cdd6e2"/>`).join('')}</g>`).join('')}
@@ -94,10 +94,10 @@ const OBJ = {
         h.setAttribute('transform', `translate(${(i - 1) * 40 * k},${lerp(200, -330 + i * 150, k)}) rotate(${(i - 1) * 4 * k}) scale(${lerp(.8, .74 + i * .02, k)})`); }); }}; },
   fichas(K) { const ficha = (txt, c) => `<circle r="230" fill="#000" opacity=".3" transform="translate(14,20)"/><circle r="230" fill="${c}"/><circle r="200" fill="none" stroke="#fff" stroke-width="10" stroke-dasharray="30 18" opacity=".7"/><circle r="150" fill="#fff" opacity=".12"/>${T_(0, 18, txt.length > 7 ? 54 : 64, txt)}`;
     const svg = `<rect x="-400" y="-400" width="1880" height="2720" fill="#0d5a3c"/>${[...Array(40)].map((_, i) => `<circle cx="${hash(i) * 1080}" cy="${hash(i + 50) * 1920}" r="${2 + hash(i + 9) * 3}" fill="#fff" opacity=".05"/>`).join('')}
-      <g class="f1" transform="translate(300,620)">${ficha('SORTEO', AZUL)}</g><g class="f2" transform="translate(780,700)">${ficha('LICITACIÓN', NAVY)}</g>
-      <g class="vs">${T_(540, 690, 70, 'o', {f: 'Plus Jakarta Sans', w: 800})}</g>${K.items.map((f, i) => etiqueta(540, 1480 + i * 130, f, 860)).join('')}`;
+      <g class="f1" transform="translate(300,560)">${ficha('SORTEO', AZUL)}</g><g class="f2" transform="translate(780,700)">${ficha('LICITACIÓN', NAVY)}</g>
+      <g class="vs">${T_(540, 600, 70, 'o', {f: 'Plus Jakarta Sans', w: 800})}</g>${K.items.map((f, i) => etiqueta(540, 880 + i * 125, f, 860)).join('')}`;
     return {svg, init(el) { this.f = [el.querySelector('.f1'), el.querySelector('.f2')]; this.tags = [...el.querySelectorAll('.tag')]; },
-      upd(t, n, ts) { this.f[0].setAttribute('transform', `translate(300,${620 + Math.sin(t * 2) * 12}) rotate(${Math.sin(t * 1.3) * 8})`); this.f[1].setAttribute('transform', `translate(780,${700 + Math.cos(t * 2) * 12}) rotate(${Math.cos(t * 1.1) * 8})`); tagsVer(this.tags, n, t, ts); }}; },
+      upd(t, n, ts) { this.f[0].setAttribute('transform', `translate(300,${540 + Math.sin(t * 2) * 12}) rotate(${Math.sin(t * 1.3) * 8}) scale(.82)`); this.f[1].setAttribute('transform', `translate(780,${600 + Math.cos(t * 2) * 12}) rotate(${Math.cos(t * 1.1) * 8}) scale(.82)`); tagsVer(this.tags, n, t, ts); }}; },
   calculadora(K) { const svg = `<rect x="-400" y="-400" width="1880" height="2720" fill="#b98a5e"/>${[...Array(18)].map((_, i) => `<rect x="-400" y="${i * 140 - 300}" width="1880" height="4" fill="#8f6744" opacity=".5"/>`).join('')}
     <g transform="translate(540,1000) rotate(3)"><rect x="-330" y="-560" width="660" height="1120" rx="60" fill="#000" opacity=".3" transform="translate(20,26)"/><rect x="-330" y="-560" width="660" height="1120" rx="60" fill="#22262e"/>
       <rect x="-280" y="-500" width="560" height="220" rx="20" fill="#bcd9c4"/><g class="disp"></g>
@@ -109,26 +109,26 @@ const OBJ = {
         const pr = ts.some(x => t >= x && t < x + .2); this.eq.setAttribute('fill', pr ? '#8CC8FF' : AZUL); }}; },
   llave(K) { const svg = fondoMarca() + `<g class="key"><circle cy="-330" r="70" fill="none" stroke="#dfe5ee" stroke-width="16"/><rect x="-150" y="-300" width="300" height="440" rx="120" fill="#0b0d12"/><rect x="-140" y="-290" width="280" height="200" rx="110" fill="#fff" opacity=".06"/>
       <image href="autos.png" x="-70" y="-250" width="140" height="188"/>${[0, 1, 2].map(i => `<circle cx="0" cy="${-20 + i * 70}" r="26" fill="#1e2128"/>`).join('')}<rect x="-30" y="140" width="60" height="420" rx="8" fill="#cfd6e0"/>${[0, 1, 2, 3].map(i => `<rect x="${i % 2 ? 10 : -50}" y="${200 + i * 80}" width="40" height="40" fill="#cfd6e0"/>`).join('')}</g>
-      ${K.items.map((f, i) => etiqueta(540, 1480 + i * 130, f, 820)).join('')}`;
+      ${K.items.map((f, i) => etiqueta(540, 880 + i * 125, f, 820)).join('')}`;
     return {svg, init(el) { this.k = el.querySelector('.key'); this.tags = [...el.querySelectorAll('.tag')]; },
-      upd(t, n, ts) { this.k.setAttribute('transform', `translate(540,${800 + Math.sin(t * 2) * 14}) rotate(${Math.sin(t * 1.4) * 12}) scale(${Math.cos(t * 1.7) * .25 + .75},.75)`); tagsVer(this.tags, n, t, ts); }}; },
+      upd(t, n, ts) { this.k.setAttribute('transform', `translate(540,${600 + Math.sin(t * 2) * 14}) rotate(${Math.sin(t * 1.4) * 12}) scale(${(Math.cos(t * 1.7) * .25 + .75) * .55},.55)`); tagsVer(this.tags, n, t, ts); }}; },
   celular(K) { const cm = PP.celularMano({piel: PERS.juli.piel, funda: '#c45a3b', manga: PERS.juli.campera});
     const scr = `<rect x="190" y="250" width="700" height="1460" fill="#f4f7fb"/><rect x="190" y="250" width="700" height="220" fill="${NAVY}"/><image href="autos.png" x="230" y="320" width="70" height="94"/>${T_(330, 390, 42, K.titulo || 'Mi lista', {a: 'start'})}
       ${K.items.map((f, i) => `<g class="it"><rect x="230" y="${560 + i * 220}" width="620" height="180" rx="26" fill="#fff" stroke="#d7e2ef" stroke-width="4"/><circle cx="310" cy="${650 + i * 220}" r="40" fill="${AZUL}"/><path d="M290,${650 + i * 220} l14,14 l26,-28" stroke="#fff" stroke-width="10" fill="none" stroke-linecap="round"/>
       <foreignObject x="370" y="${590 + i * 220}" width="460" height="130"><div xmlns="http://www.w3.org/1999/xhtml" style="font:800 40px 'Plus Jakarta Sans';color:${TINTA};line-height:1.1;display:flex;align-items:center;height:130px">${f}</div></foreignObject></g>`).join('')}`;
     const svg = fondoMarca() + `<g transform="translate(70,40) scale(.88)">${cm.svg.replace('<g class="pantalla"></g>', `<g class="pantalla">${scr}</g>`)}</g>`;
     return {svg, init(el) { this.it = [...el.querySelectorAll('.it')]; }, upd(t, n, ts) { this.it.forEach((g, i) => { const k = i < n ? easeOut(win(t, ts[i], ts[i] + .3)) : 0; g.style.opacity = k; g.setAttribute('transform', `translate(${(1 - k) * 120},0)`); }); }}; },
-  calendario(K) { const svg = fondoMarca() + `<g class="c1">${D.calendario({x: 320, y: 720, s: 1.6, dia: K.cal ? K.cal[0] : 'DIC', mes: 'ESTE AÑO', acento: AZUL})}</g><g class="c2">${D.calendario({x: 760, y: 760, s: 1.6, dia: K.cal ? K.cal[1] : 'ENE', mes: 'AÑO QUE VIENE', acento: NAVY})}</g>
-      ${K.items.map((f, i) => etiqueta(540, 1480 + i * 130, f, 860)).join('')}`;
+  calendario(K) { const svg = fondoMarca() + `<g class="c1">${D.calendario({x: 320, y: 560, s: 1.25, dia: K.cal ? K.cal[0] : 'DIC', mes: 'ESTE AÑO', acento: AZUL})}</g><g class="c2">${D.calendario({x: 760, y: 590, s: 1.25, dia: K.cal ? K.cal[1] : 'ENE', mes: 'AÑO QUE VIENE', acento: NAVY})}</g>
+      ${K.items.map((f, i) => etiqueta(540, 880 + i * 125, f, 860)).join('')}`;
     return {svg, init(el) { this.c = [el.querySelector('.c1'), el.querySelector('.c2')]; this.tags = [...el.querySelectorAll('.tag')]; },
-      upd(t, n, ts) { this.c[0].setAttribute('transform', `rotate(${Math.sin(t * 1.5) * 4},320,720)`); this.c[1].setAttribute('transform', `rotate(${Math.cos(t * 1.3) * 4},760,760)`); tagsVer(this.tags, n, t, ts); }}; },
+      upd(t, n, ts) { this.c[0].setAttribute('transform', `rotate(${Math.sin(t * 1.5) * 4},320,560)`); this.c[1].setAttribute('transform', `rotate(${Math.cos(t * 1.3) * 4},760,590)`); tagsVer(this.tags, n, t, ts); }}; },
   poliza(K) { const svg = fondoMarca() + `<g class="esc" transform="translate(540,720)"><path d="M0,-330 L260,-230 L240,90 Q200,260 0,360 Q-200,260 -240,90 L-260,-230 Z" fill="#f7f6f1"/><path d="M0,-280 L210,-196 L194,80 Q160,220 0,300 Q-160,220 -194,80 L-210,-196 Z" fill="${AZUL}"/>
-      <image href="autos.png" x="-70" y="-150" width="140" height="188"/>${T_(0, 170, 46, 'PÓLIZA')}</g>${K.items.map((f, i) => etiqueta(540, 1480 + i * 130, f, 860)).join('')}`;
-    return {svg, init(el) { this.e = el.querySelector('.esc'); this.tags = [...el.querySelectorAll('.tag')]; }, upd(t, n, ts) { this.e.setAttribute('transform', `translate(540,${720 + Math.sin(t * 2) * 10}) scale(${1 + Math.max(0, Math.sin(t * 5)) * .02})`); tagsVer(this.tags, n, t, ts); }}; },
-  balanza(K) { const svg = fondoMarca() + `<g transform="translate(540,760)"><rect x="-14" y="-200" width="28" height="560" fill="#cfd6e0"/><path d="M-160,360 L160,360 L120,320 L-120,320 Z" fill="#cfd6e0"/><circle cy="-210" r="30" fill="${AZUL}"/>
+      <image href="autos.png" x="-70" y="-150" width="140" height="188"/>${T_(0, 170, 46, 'PÓLIZA')}</g>${K.items.map((f, i) => etiqueta(540, 880 + i * 125, f, 860)).join('')}`;
+    return {svg, init(el) { this.e = el.querySelector('.esc'); this.tags = [...el.querySelectorAll('.tag')]; }, upd(t, n, ts) { this.e.setAttribute('transform', `translate(540,${560 + Math.sin(t * 2) * 10}) scale(${.68 + Math.max(0, Math.sin(t * 5)) * .015})`); tagsVer(this.tags, n, t, ts); }}; },
+  balanza(K) { const svg = fondoMarca() + `<g transform="translate(540,560) scale(.82)"><rect x="-14" y="-200" width="28" height="560" fill="#cfd6e0"/><path d="M-160,360 L160,360 L120,320 L-120,320 Z" fill="#cfd6e0"/><circle cy="-210" r="30" fill="${AZUL}"/>
       <g class="brazo"><rect x="-400" y="-224" width="800" height="24" rx="12" fill="#e9edf2"/><g class="pl"><path d="M-400,-200 L-470,0 M-400,-200 L-330,0" stroke="#e9edf2" stroke-width="6"/><path d="M-500,0 L-300,0 Q-300,60 -400,60 Q-500,60 -500,0 Z" fill="#f7f6f1"/>${T_(-400, 130, 44, K.izq || 'ANTICIPO')}</g>
       <g class="pr"><path d="M400,-200 L330,0 M400,-200 L470,0" stroke="#e9edf2" stroke-width="6"/><path d="M300,0 L500,0 Q500,60 400,60 Q300,60 300,0 Z" fill="#f7f6f1"/>${T_(400, 130, 44, K.der || 'CUOTA', {c: ACC})}</g></g></g>
-      ${K.items.map((f, i) => etiqueta(540, 1480 + i * 130, f, 860)).join('')}`;
+      ${K.items.map((f, i) => etiqueta(540, 880 + i * 125, f, 860)).join('')}`;
     return {svg, init(el) { this.b = el.querySelector('.brazo'); this.tags = [...el.querySelectorAll('.tag')]; },
       upd(t, n, ts) { const a = n >= 3 ? lerp(-8, 10, easeOut(win(t, ts[2], ts[2] + .8))) : Math.sin(t * 2.4) * 8; this.b.setAttribute('transform', `rotate(${a})`);
         this.b.querySelectorAll('.pl,.pr').forEach((p, i) => { const x = i ? 400 : -400; p.setAttribute('transform', `rotate(${-a},${x},-212)`); }); tagsVer(this.tags, n, t, ts); }}; },
@@ -141,7 +141,7 @@ const IRR = {
     const sh = []; const C = 6, Rr = 9; for (let i = 0; i < C; i++) for (let j = 0; j < Rr; j++) { const x0 = 90 + i * 150, y0 = 380 + j * 140, cx = x0 + 75, cy = y0 + 70;
       sh.push([`${x0},${y0} ${x0 + 150},${y0} ${x0},${y0 + 140}`, cx - 25, cy - 25], [`${x0 + 150},${y0} ${x0 + 150},${y0 + 140} ${x0},${y0 + 140}`, cx + 25, cy + 25]); }
     const e = O.esc({nombre: 'irr-vidrio', fondo: TINTA, capas: [{f: .3, prof: .3, svg: fondoMarca()},
-      {f: .8, prof: .8, svg: `<g class="resp" opacity="0"><rect x="120" y="760" width="840" height="300" rx="40" fill="${AZUL}"/>${T_(540, 945, resp.length > 13 ? 76 : 96, resp)}<image href="autos.png" x="490" y="560" width="100" height="134"/></g>`},
+      {f: .8, prof: .8, svg: `<g class="resp" opacity="0"><rect x="120" y="760" width="840" height="300" rx="40" fill="${AZUL}"/>${T_(540, 945, resp.length > 16 ? 58 : resp.length > 13 ? 74 : 96, resp)}<image href="autos.png" x="490" y="560" width="100" height="134"/></g>`},
       {f: 1, prof: 1, svg: `<g class="panel"><rect x="90" y="380" width="900" height="630" fill="#e9f3fb" opacity=".93"/><rect x="90" y="1010" width="900" height="630" fill="#cfe4f7" opacity=".93"/><rect x="90" y="1004" width="900" height="12" fill="${NAVY}"/>
         ${T_(540, 640, a.length > 16 ? 64 : 78, a, {c: NAVY})}${T_(540, 1520, b.length > 16 ? 64 : 78, b, {c: AZUL})}</g><g class="grietas"></g><g class="sh">${sh.map(([p]) => `<polygon points="${p}" fill="#dcecf9" opacity=".9" stroke="#fff" stroke-width="3"/>`).join('')}</g>`}]});
     const panel = e.capas[2].svg.querySelector('.panel'), gr = e.capas[2].svg.querySelector('.grietas'), shG = [...e.capas[2].svg.querySelectorAll('.sh polygon')], respG = e.capas[1].svg.querySelector('.resp');
@@ -231,7 +231,7 @@ export async function armarKit(V, K) {
   const cab = q => { const [x, y] = pos(q); return [x + 30, y - 470]; };
   const boca = q => () => eL.aPantalla(eL.capas[1], P[q].cabeza[0], P[q].cabeza[1] - 60);
   const habl = t => { const f = fr.find(f => f.q !== 'nar' && t >= f.t - .1 && t <= f.fin + .3); return f ? f.q : quien; };
-  const tomaLugar = (t0, {z = 1.6, foco = null, est = {}, dx = 0, dz = .1, tr} = {}) => { const q = foco || quien; const [cx, cy] = cab(q); const xs = z < 1.7 ? cx + (C.dx0 ?? 110) : cx;
+  const tomaLugar = (t0, {z = 1.6, foco = null, est = {}, dx = 0, dz = .1, tr} = {}) => { const q = foco || quien; const [cx, cy] = cab(q); const sp = pjs.map(p => pos(p)[0]); const xs = z >= 1.7 ? cx : (pjs.length > 1 && Math.max(...sp) - Math.min(...sp) < 650) ? (Math.max(...sp) + Math.min(...sp)) / 2 + 30 : cx + (C.dx0 ?? 110);
     return {t0, esc: eL, tr, cam: k => ({X: lerp(xs + dx - 40, xs + dx + 40, k), Y: z < 1.7 ? cy + 160 : cy + 90, z: lerp(z, z + dz, ease(k)), foco: 1, ap: z > 2 ? 6 : 4}), act: t => escena(t, est), boca: () => boca(habl(t0 + .01))() }; };
   // objeto de la marca
   const ob = OBJ[C.obj || 'ticket'](C); const eO = O.esc({nombre: 'obj', fondo: TINTA, capas: [{f: 1, prof: 1, svg: ob.svg}]}); ob.init(eO.capas[0].svg);
@@ -259,7 +259,7 @@ export async function armarKit(V, K) {
   T.push(ir.toma(giro.t - .5, tc));
   if (finIrr < fObj.t - .4) T.push(tomaLugar(finIrr, {z: 2.2, foco: quien, est: {[quien]: 'preocupa'}, dx: 60}));
   T.push(tomaObj(fObj.t - .1, k => ({x: 540, y: lerp(1050, 900, ease(k)), z: lerp(1.0, 1.06, k), foco: 1})));
-  const camI = [k => ({x: lerp(600, 520, k), y: lerp(980, 1060, k), z: 1.22, r: -2, foco: 1}), k => ({x: lerp(470, 560, k), y: 1000, z: lerp(1.12, 1.2, ease(k)), r: 1.5, foco: 1}), k => ({x: 540, y: lerp(1080, 1000, k), z: lerp(1.3, 1.18, ease(k)), foco: 1})];
+  const camI = [k => ({x: lerp(570, 530, k), y: lerp(900, 960, k), z: 1.16, r: -2, foco: 1}), k => ({x: lerp(510, 560, k), y: 940, z: lerp(1.08, 1.16, ease(k)), r: 1.5, foco: 1}), k => ({x: 540, y: lerp(1000, 930, k), z: lerp(1.2, 1.12, ease(k)), foco: 1})];
   ts.forEach((x, i) => T.push(tomaObj(x - .1, camI[i])));
   const al = F('alivio'); const fin3 = FI(3).fin + .5;
   if (al && al.t - fin3 > 1.2) T.push(tomaLugar(fin3, {z: 1.6, est: {[quien]: 'feliz'}}));
