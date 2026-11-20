@@ -236,3 +236,27 @@ Las 81 historias destacadas del 20/11 (1:28–1:50) se publicaron todas (verific
 2. VITA versión B («Plata rápida. ¿La agarrás?») como TRIAL_REEL, 5 días o más después de la A o como prueba para no seguidores.
 3. Mejorar Autos (palabras destacadas en azul con poco contraste) y sumar planos irreales a Coberturas, Autos y Kocos.
 4. Excel del cronograma por rubro y día para la responsable.
+
+## 15. Checkpoint al 20/11 03:25 (pausa por límite de uso) · RETOMAR A LAS 05:55
+
+- **Por qué se frenó:** se agotó el límite de uso de 5 horas (se renueva 08:50 UTC = 05:50 Buenos Aires). Los 3 agentes de fondo se cortaron. La responsable pidió pausar y retomar a las 05:55.
+- **Calendario x2 (20–29/11):** TERMINADO y validado (0 errores, 22 avisos aceptables). `docs/redes/calendario-2011-2911-x2/` (calendario.csv, CALENDARIO.md, generar_x2.py, datos_x2.py, validar_x2.py). Cambios: aumento de prepagas → «¿Pagás por cosas que no usás?» (26/11 09:00 y 09:30, idea_id `plan-uso`); ACARA → «¿Contado, prendario o plan?» (28/11 08:30); Black Friday Autos 27/11 sin números; todo «aprobado por la responsable (20/11)». 34 historias tienen solo el título del tema: escribirles el texto final al producir.
+- **Decisión extra:** las piezas de Coberturas sobre la actualización de la cuota («antes de pagar, compará») están aprobadas mientras no tengan números ni porcentajes.
+- **Programado del cronograma nuevo (Metricool):**
+  | Marca | Pieza | Hora 20/11 | id |
+  |---|---|---|---|
+  | VITA | Carrusel guía «Antes de firmar» | 11:20 | 435155423 |
+  | VITA | Reel «Antes de firmar» A | 13:50 | 435155397 |
+  | VITA | TRIAL_REEL «Plata rápida» (versión B, solo IG) | 16:30 | 435171038 |
+  | Coberturas | Reel «La carta» | 13:50 | 435157529 |
+  | Autos | Reel «El ticket del 0 km» | 13:50 | 435160321 |
+  | Kocos | Reel «El celular que no para» | 13:50 | 435161701 |
+  Nada más del cronograma nuevo está programado todavía (verificado en VITA 20–21/11; las otras marcas tenían solo el reel de las 13:50 al momento de la pausa).
+- **Trabajo a medias de los agentes (ya en la rama):** `historias-prototipo/historia/irreal.js` (planos irreales reutilizables para las 4 marcas, en curso), cambios en `historias/{autos,cob,mkt,vita,comun}.js`, `historia_voz.py`, `sonido.py`; `docs/redes/calendario-2011-2911-x2/estaticos/contenido.py` (textos de historias y carruseles, en curso). Revisar que el motor siga funcionando (render de prueba de un cuadro por marca) antes de producir en serie.
+- **Archivos alojados en las landings (main, /redes/2011/):** vita-firmar-a.mp4, vita-firmar-portada.jpg, vita-firmar-guia-1..7.jpg, r-vita-b-trial.mp4/.jpg (VITA); cob-carta-a.mp4/portada (Coberturas); autos-ticket-a.mp4/portada (Autos); mkt-celular-a.mp4/portada (Kocos).
+- **Al retomar (en este orden):**
+  1. Levantar `python3 -m http.server 8799` en historias-prototipo (el equipo se reinició una vez y se cae).
+  2. Reactivar a los agentes de reels y de historias y carruseles (o lanzar nuevos con las mismas instrucciones si no se pueden reanudar), con prioridad en lo que sale primero: reels de hoy 19:00 y 20:50 si todavía hay margen, y todo el 21/11.
+  3. Antes de programar cada día y marca: getScheduledPosts para no duplicar.
+  4. Commit y push frecuentes en LEGAL-CRM (rama claude/happy-wozniak-ajfi1z) y en las landings (main, solo archivos estáticos).
+  5. Al final, pasar a la responsable el conteo programado por rubro y día y el Excel del cronograma.
