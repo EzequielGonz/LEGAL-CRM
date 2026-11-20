@@ -1,0 +1,322 @@
+{
+ "id": "cob",
+ "total": 21.279,
+ "palabra": "COMPARAR",
+ "frases": [
+  {
+   "t": 0.18,
+   "fin": 1.25,
+   "show": "¿Otra vez *aumentó?*",
+   "item": null,
+   "cta": 0,
+   "hook": 1,
+   "sello": 0,
+   "words": [
+    {
+     "w": "¿Otra",
+     "t": 0.139,
+     "h": false
+    },
+    {
+     "w": "vez",
+     "t": 0.474,
+     "h": false
+    },
+    {
+     "w": "aumentó?",
+     "t": 0.648,
+     "h": true
+    }
+   ]
+  },
+  {
+   "t": 1.574,
+   "fin": 3.139,
+   "show": "Llegó el aviso de *tu prepaga:*",
+   "item": null,
+   "cta": 0,
+   "hook": 0,
+   "sello": 0,
+   "words": [
+    {
+     "w": "Llegó",
+     "t": 1.532,
+     "h": false
+    },
+    {
+     "w": "el",
+     "t": 1.827,
+     "h": false
+    },
+    {
+     "w": "aviso",
+     "t": 1.926,
+     "h": false
+    },
+    {
+     "w": "de",
+     "t": 2.305,
+     "h": false
+    },
+    {
+     "w": "tu",
+     "t": 2.428,
+     "h": true
+    },
+    {
+     "w": "prepaga:",
+     "t": 2.534,
+     "h": true
+    }
+   ]
+  },
+  {
+   "t": 3.242,
+   "fin": 5.036,
+   "show": "«Tu cuota se *actualiza* este mes.»",
+   "item": null,
+   "cta": 0,
+   "hook": 0,
+   "sello": 0,
+   "words": [
+    {
+     "w": "«Tu",
+     "t": 3.154,
+     "h": false
+    },
+    {
+     "w": "cuota",
+     "t": 3.378,
+     "h": false
+    },
+    {
+     "w": "se",
+     "t": 3.674,
+     "h": false
+    },
+    {
+     "w": "actualiza",
+     "t": 3.755,
+     "h": true
+    },
+    {
+     "w": "este",
+     "t": 4.233,
+     "h": false
+    },
+    {
+     "w": "mes.»",
+     "t": 4.456,
+     "h": false
+    }
+   ]
+  },
+  {
+   "t": 5.504,
+   "fin": 6.372,
+   "show": "Antes de pagar,",
+   "item": null,
+   "cta": 0,
+   "hook": 0,
+   "sello": 0,
+   "words": [
+    {
+     "w": "Antes",
+     "t": 5.45,
+     "h": false
+    },
+    {
+     "w": "de",
+     "t": 5.759,
+     "h": false
+    },
+    {
+     "w": "pagar,",
+     "t": 5.889,
+     "h": false
+    }
+   ]
+  },
+  {
+   "t": 6.446,
+   "fin": 7.032,
+   "show": "*compará.*",
+   "item": null,
+   "cta": 0,
+   "hook": 0,
+   "sello": 0,
+   "words": [
+    {
+     "w": "compará.",
+     "t": 6.382,
+     "h": true
+    }
+   ]
+  },
+  {
+   "t": 7.528,
+   "fin": 8.648,
+   "show": "Mirá *tres cosas:*",
+   "item": null,
+   "cta": 0,
+   "hook": 0,
+   "sello": 0,
+   "words": [
+    {
+     "w": "Mirá",
+     "t": 7.488,
+     "h": false
+    },
+    {
+     "w": "tres",
+     "t": 7.787,
+     "h": true
+    },
+    {
+     "w": "cosas:",
+     "t": 8.01,
+     "h": true
+    }
+   ]
+  },
+  {
+   "t": 9.19,
+   "fin": 10.969,
+   "show": "Qué plan *tenés hoy.*",
+   "item": 1,
+   "cta": 0,
+   "hook": 0,
+   "sello": 0,
+   "words": [
+    {
+     "w": "Qué",
+     "t": 9.121,
+     "h": false
+    },
+    {
+     "w": "plan",
+     "t": 9.907,
+     "h": false
+    },
+    {
+     "w": "tenés",
+     "t": 10.171,
+     "h": true
+    },
+    {
+     "w": "hoy.",
+     "t": 10.547,
+     "h": true
+    }
+   ]
+  },
+  {
+   "t": 11.339,
+   "fin": 12.957,
+   "show": "Qué usás *de verdad.*",
+   "item": 2,
+   "cta": 0,
+   "hook": 0,
+   "sello": 0,
+   "words": [
+    {
+     "w": "Qué",
+     "t": 11.297,
+     "h": false
+    },
+    {
+     "w": "usás",
+     "t": 11.999,
+     "h": false
+    },
+    {
+     "w": "de",
+     "t": 12.23,
+     "h": true
+    },
+    {
+     "w": "verdad.",
+     "t": 12.417,
+     "h": true
+    }
+   ]
+  },
+  {
+   "t": 13.316,
+   "fin": 16.135,
+   "show": "Qué opciones hay para *tu edad y tu zona.*",
+   "item": 3,
+   "cta": 0,
+   "hook": 0,
+   "sello": 0,
+   "words": [
+    {
+     "w": "Qué",
+     "t": 13.225,
+     "h": false
+    },
+    {
+     "w": "opciones",
+     "t": 13.883,
+     "h": false
+    },
+    {
+     "w": "hay",
+     "t": 14.352,
+     "h": false
+    },
+    {
+     "w": "para",
+     "t": 14.604,
+     "h": false
+    },
+    {
+     "w": "tu",
+     "t": 14.853,
+     "h": true
+    },
+    {
+     "w": "edad",
+     "t": 15.002,
+     "h": true
+    },
+    {
+     "w": "y",
+     "t": 15.262,
+     "h": true
+    },
+    {
+     "w": "tu",
+     "t": 15.408,
+     "h": true
+    },
+    {
+     "w": "zona.",
+     "t": 15.585,
+     "h": true
+    }
+   ]
+  },
+  {
+   "t": 16.876,
+   "fin": 19.507,
+   "show": "Comentá *COMPARAR*",
+   "item": null,
+   "cta": 1,
+   "hook": 0,
+   "sello": 0,
+   "words": [
+    {
+     "w": "Comentá",
+     "t": 16.806,
+     "h": false
+    },
+    {
+     "w": "COMPARAR",
+     "t": 18.259,
+     "h": true
+    }
+   ]
+  }
+ ]
+}

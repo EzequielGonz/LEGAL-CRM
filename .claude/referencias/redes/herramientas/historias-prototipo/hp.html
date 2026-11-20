@@ -1,0 +1,12 @@
+<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;width:1080px;height:1920px;background:#dfe6ef}</style></head><body>
+<svg id="s" width="1080" height="1920" viewBox="0 0 1080 1920"></svg>
+<script type="module">
+import {personaje, caminar} from './historia/personaje.js';
+const s = document.getElementById('s');
+const a = personaje(s, {peinado: 'corto', remera: '#2f5d8a', pantalon: '#2d3340', barba: true});
+const b = personaje(s, {peinado: 'largo', piel: '#e2b08e', pelo: '#5a3220', remera: '#c8553d', pantalon: '#36465f', mujer: true});
+const c = personaje(s, {peinado: 'rulos', piel: '#a8724f', pelo: '#1a120d', campera: '#e9e3d4', remera: '#2a6d5c', pantalon: '#1f2733', manga: 'larga'});
+a.pose({x: 220, y: 900, s: 1.2, boca: .5}); b.pose({x: 560, y: 900, s: 1.2, ...caminar(.3)}); c.pose({x: 860, y: 900, s: 1.2, flip: -1, hR: -70, cR: -100, sonrisa: .8});
+const d = personaje(s, {peinado: 'colita', remera: '#FC6E20', pantalon: '#222'}); d.pose({x: 400, y: 1700, s: 1.2, sentado: 1, hR: -40, cR: -60});
+window.ready = 1;
+</script></body></html>

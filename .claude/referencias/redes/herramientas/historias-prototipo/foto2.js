@@ -1,0 +1,3 @@
+const {chromium}=require('playwright');const fs=require('fs');(async()=>{const [id,out,list]=process.argv.slice(2);fs.mkdirSync(out,{recursive:true});const b=await chromium.launch();const p=await b.newPage({viewport:{width:1080,height:1920}});
+p.on('pageerror',e=>console.log('ERR',e.message));p.on('console',m=>console.log('PAGE',m.text()));await p.goto(`http://127.0.0.1:8799/historia.html?r=${id}`);await p.waitForFunction('window.ready',null,{timeout:60000});
+for(const t of list.split(',').map(Number)){const t0=Date.now();await p.evaluate(t=>window.render(t),t);await p.screenshot({path:`${out}/${id}-${t.toFixed(2)}.jpg`,type:'jpeg',quality:88});console.log(t,Date.now()-t0,'ms')}await b.close()})();
