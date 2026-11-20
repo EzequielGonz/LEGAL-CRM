@@ -1,0 +1,3 @@
+// Autos · «Te enamoraste de un híbrido» (B de hibrido): showroom, Mati y Juli; abre en primera persona; giro: el auto sube en el elevador de taller.
+import {kit} from './autos-kit.js';
+export const armar = V => kit(V, {hook: 'Te enamoraste de un híbrido:<br><em>preguntá esto antes</em>', lugar: 'showroom', habla: 'mati', autoColor: '#2e9e6a', pjs: [{id: 'mati', x: 600, flip: 1}, {id: 'juli', x: 800, flip: -1}], mano: '', objeto: 'carpeta', titulo: 'PREGUNTÁ ANTES', labels: ['¿Común o enchufable?', 'Garantía de batería', '¿Dónde el service?'], doc: 'Híbrido: preguntas', gobj: 'carpeta', giro: 'elevador', ap: 'pov', grade: 'menta'});

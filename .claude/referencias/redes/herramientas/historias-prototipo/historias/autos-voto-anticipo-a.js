@@ -1,0 +1,3 @@
+// Autos · «Anticipo o cuota: ¿cuál elegís?»: cocina de Villa Crespo, Juli y Mati con la calculadora; giro: el haz de la linterna lee un cartel de autopista.
+import {kit} from './autos-kit.js';
+export const armar = V => kit(V, {hook: 'Anticipo o cuota:<br><em>¿cuál elegís?</em>', lugar: 'cocina', habla: 'juli', noche: true, pjs: [{id: 'juli', x: 640, flip: 1}, {id: 'mati', x: 900, flip: -1}], mano: 'calculadora', objeto: 'calculadora', titulo: '¿CUÁL?', labels: ['Tus ahorros', 'Cuota tranquila', 'Un colchón'], doc: 'Anticipo o cuota', gobj: 'sobre', giro: 'haz', giroCfg: {signo1: 'ANTICIPO O CUOTA', signo2: 'LA QUE PUEDAS', signo3: 'SOSTENER'}});

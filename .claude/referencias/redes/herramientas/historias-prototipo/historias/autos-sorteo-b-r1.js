@@ -1,0 +1,3 @@
+// Autos · remake de «autos-sorteo-b»: «Te lo damos en la cuota 2: desconfiá». Mati en su taller de aire acondicionado; giro: la pantalla partida se rompe.
+import {kit} from './autos-kit.js';
+export const armar = V => kit(V, {hook: '«Te lo damos en la cuota 2»:<br><em>desconfiá</em>', lugar: 'taller', habla: 'mati', pjs: [{id: 'mati', x: 640, flip: 1}], mano: 'celu', objeto: 'celular', titulo: 'Plan de ahorro', labels: ['Sorteo o licitación', 'Nada asegurado', 'Todo por escrito'], doc: 'Plan de ahorro', gobj: 'ficha', giro: 'vidrio', giroCfg: {vs: ['CUOTA 2', '¿SEGURO?'], resp: 'NADIE TE LO|PUEDE ASEGURAR'}, cam: 'empuje', grade: 'noche'});

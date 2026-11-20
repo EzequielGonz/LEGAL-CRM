@@ -1,0 +1,3 @@
+// Autos · «0 km: el precio de lista no es el final»: showroom, Juli, Mati y Leo con el ticket; giro: la pantalla partida se rompe.
+import {kit} from './autos-kit.js';
+export const armar = V => kit(V, {hook: '0 km: el precio de lista<br><em>no es el final</em>', lugar: 'showroom', habla: 'juli', pjs: [{id: 'mati', x: 470, flip: 1}, {id: 'juli', x: 620, flip: 1}, {id: 'leo', x: 880, flip: -1}], mano: '', objeto: 'ticket', titulo: 'PRESUPUESTO', labels: ['Flete', 'Formularios y patente', 'Sellos'], doc: 'Precio de lista', gobj: 'llave', giro: 'vidrio', giroCfg: {vs: ['LISTA', 'FINAL'], resp: 'PEDÍ LLAVE|EN MANO'}});
