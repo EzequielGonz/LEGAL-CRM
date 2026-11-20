@@ -40,9 +40,9 @@ Para aprobar. Nada de esto está publicado ni programado.
 4. Paso 1.
 5. Paso 2.
 6. Paso 3, con la escena del reel.
+7. Resumen para guardar y «Comentá FIRMA».
 
 La lámina 3 usa el plano de la caída del reel. Todas las láminas llevan el logo con «VITA Abogados».
-7. Resumen para guardar y «Comentá FIRMA».
 
 **Qué cambia respecto del estilo anterior:**
 
