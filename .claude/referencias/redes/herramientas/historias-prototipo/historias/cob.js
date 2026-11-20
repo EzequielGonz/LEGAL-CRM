@@ -8,8 +8,7 @@ import {poser, sobre, luz, celuMano, laptop} from './comun.js';
 const VERDE = '#003D3B', MENTA = '#DAF1DE', SALVIA = '#8EB69B', BOSQUE = '#235347';
 const CARO = {peinado: 'colita', piel: '#e0ad8a', pelo: '#4a2a1a', remera: '#f2efe8', campera: '#7aa38a', manga: 'larga', pantalon: '#33405a', zapato: '#e8e2d8'};
 export async function armar(V) {
-  const O = obra(V, {logo: 'coberturas.png', ctaSub: 'y te respondemos', hookHTML: '¿Otra vez<br><em>aumentó?</em>', hookHasta: 1.4,
-    notas: [{desde: 0, hasta: 18.2, txt: 'Situación ilustrativa'}, {desde: 18.4, txt: 'Situación ilustrativa · Voz generada con IA'}]});
+  const O = obra(V, {nombre: 'Compara Tu Obra Social', logo: 'coberturas.png', ctaSub: 'y te respondemos', hookHTML: '¿Otra vez<br><em>aumentó?</em>', hookHasta: 1.4, notas: []});
   document.documentElement.style.cssText += `--f1:Manrope;--f2:Manrope;--acc:#7fe0a8;--hs:140px;--hw:800;--em:normal;--kwCol:${VERDE};--logoH:130px;--velo:rgba(0,61,59,.92);--ctaTop:600px;--hookTop:1150px;--kws:116px`;
   const F = n => V.frases.find(f => f.marca === n); const FI = i => V.frases.find(f => f.item === i); const cta = V.frases.find(f => f.cta); const pC = poser(V, 'caro');
   const mapa = `<rect x="-138" y="-188" width="276" height="166" fill="#e6efe9"/>${[...Array(8)].map((_, i) => `<path d="M${-138 + i * 40},-188 l20,166" stroke="#fff" stroke-width="6"/>`).join('')}<path d="M-138,-120 L138,-90 M-138,-60 L138,-40" stroke="#fff" stroke-width="8"/>

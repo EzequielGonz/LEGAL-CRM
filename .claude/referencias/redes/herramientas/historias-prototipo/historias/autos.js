@@ -10,8 +10,7 @@ const JULI = {peinado: 'largo', piel: '#d9a37e', pelo: '#2a1a12', remera: '#e9e3
 const MATI = {peinado: 'rulos', piel: '#b98058', pelo: '#1d140e', remera: '#1f2a3a', pantalon: '#4a4f58', zapato: '#222'};
 const VEND = {peinado: 'rapado', piel: '#e0b394', pelo: '#3a2a1e', remera: '#ffffff', campera: NAVY, manga: 'larga', pantalon: '#1c2233'};
 export async function armar(V) {
-  const O = obra(V, {logo: 'autos.png', ctaSub: 'y te respondemos', hookHTML: '¿Precio de lista<br><em>= precio final?</em>', hookHasta: 1.6,
-    notas: [{desde: 0, hasta: 16.4, txt: 'Situación ilustrativa · montos ocultos a propósito'}, {desde: 16.6, txt: 'Situación ilustrativa · Voz generada con IA'}]});
+  const O = obra(V, {nombre: 'Automotores Kocos', logo: 'autos.png', ctaSub: 'y te respondemos', hookHTML: '¿Precio de lista<br><em>= precio final?</em>', hookHasta: 1.6, notas: []});
   document.documentElement.style.cssText += `--f1:Archivo;--f2:'Plus Jakarta Sans';--fs:Archivo;--tt:uppercase;--acc:#4E9BE4;--hs:112px;--hw:900;--em:normal;--kwCol:#fff;--logoH:150px;--velo:rgba(0,5,33,.9);--ctaTop:600px;--hookTop:1150px;--ss:78px`;
   const F = n => V.frases.find(f => f.marca === n); const FI = i => V.frases.find(f => f.item === i); const cta = V.frases.find(f => f.cta); const pJ = poser(V, 'juli'); const pM = poser(V, 'mati'); const pV = poser(V, 'vend');
   // 1 · concesionario: vidriera, auto en exhibición y el cartel del precio de lista

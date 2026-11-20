@@ -6,3 +6,4 @@ voz/h/*.mp3
 voz/h/*.f32
 voz/*-voz.wav
 node_modules/
+piper/*.onnx

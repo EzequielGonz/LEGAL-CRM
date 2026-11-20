@@ -49,7 +49,7 @@ R = {
  'mkt': dict(palabra='ORDEN', serie='El celular que no para', nar='nar_f', frases=[
    dict(q='laura', say='¡No doy más con el celular!', show='¡No doy más con el celular!', p=.25, marca='pings'),
    dict(q='nar', say='Cuarenta y siete chats sin responder.', show='*47* chats sin responder.', p=.25),
-   dict(q='nar', say='Y cada uno que espera, se enfría.', show='Y cada uno que espera, *se enfría.*', p=.4, marca='frio'),
+   dict(q='nar', say='Y cada uno que espera, se enfría.', show='Y cada uno que espera *se enfría.*', p=.4, marca='frio'),
    dict(q='nar', say='Tu WhatsApp no es un CRM.', show='Tu WhatsApp *no es un CRM.*', p=.2),
    dict(q='nar', say='Pero lo podés ordenar hoy.', show='Pero lo podés *ordenar hoy.*', p=.4, marca='giro'),
    dict(q='nar', say='Tres arreglos.', show='*Tres arreglos:*', p=.25),
@@ -63,5 +63,5 @@ R = {
 # Variante B de VITA: mismo guion y palabra; cambia el gancho, la primera frase y la apertura (adelanto de la caída).
 import copy as _copy
 R['vita-b'] = _copy.deepcopy(R['vita'])
-R['vita-b']['frases'][0] = dict(q='nico', say='¿Firmo ya, o espero?', show='¿Firmo ya, o espero?', p=.35, marca='notif')
-R['vita-b']['frases'][1] = dict(q='nar', say='El seguro del otro te llama y te ofrece plata rápido, hoy.', show='El seguro del otro te ofrece *plata rápido, hoy.*', p=.35)
+R['vita-b']['frases'][0] = dict(q='nico', say='¿Firmo ya o espero?', show='¿Firmo ya o espero?', p=.35, marca='notif')
+R['vita-b']['frases'][1] = dict(q='nar', say='El seguro del otro te llama y te ofrece plata rápida, hoy.', show='El seguro del otro te ofrece *plata rápida, hoy.*', p=.35)

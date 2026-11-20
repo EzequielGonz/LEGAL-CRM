@@ -8,7 +8,7 @@ import {poser, sobre, luz} from './comun.js';
 const NAR = '#FC6E20', TINTA = '#1B1B1B', CREMA = '#FFE7D0';
 const LAURA = {peinado: 'rulos', piel: '#c88e6a', pelo: '#3a1f14', remera: '#1b1b1b', campera: '#FC6E20', manga: 'larga', pantalon: '#2b2b2f', zapato: '#111'};
 const nombres = ['Sofi', 'Martín', 'Cliente', 'Lu', 'Rocío', 'Diego', 'Vale', 'Nahuel', 'Cami', 'Pau', 'Gonza', 'Flor'];
-const msgs = ['¿Tenés talle M?', '¿Precio?', '¿Hacen envíos?', 'Hola!! sigue disponible?', '¿Aceptan transferencia?', '¿Cuánto sale el negro?', '¿Hasta qué hora abren?', 'Hola', '¿Hay en azul?', '¿Me lo reservás?'];
+const msgs = ['¿Tenés talle M?', '¿Precio?', '¿Hacen envíos?', '¡Hola! ¿Sigue disponible?', '¿Aceptan transferencia?', '¿Cuánto sale el negro?', '¿Hasta qué hora abren?', 'Hola', '¿Hay en azul?', '¿Me lo reservás?'];
 function chats(n, {frio = 0, orden = 0, t = 0}) { let s = `<rect x="190" y="250" width="700" height="1460" fill="#111215"/><rect x="190" y="250" width="700" height="170" fill="#1d1e22"/>
   <text x="230" y="380" font-family="Outfit" font-weight="800" font-size="52" fill="#fff">Chats</text>`;
   if (!orden) s += `<rect x="640" y="335" width="${n >= 10 ? 210 : 190}" height="60" rx="30" fill="#e5484d"/><text x="${n >= 10 ? 745 : 735}" y="377" font-family="Outfit" font-weight="800" font-size="34" fill="#fff" text-anchor="middle">${n} sin leer</text>`;
@@ -19,13 +19,12 @@ function chats(n, {frio = 0, orden = 0, t = 0}) { let s = `<rect x="190" y="250"
       <text x="330" y="${y + 104}" font-family="Outfit" font-weight="500" font-size="28" fill="#aab">${msgs[(i * 3 + n) % msgs.length]}</text>`;
     if (orden >= 1) { const [et, col] = etapas[i % 3]; s += `<rect x="${640}" y="${y + 24}" width="${et.length * 17 + 30}" height="40" rx="20" fill="${col}"/><text x="${655}" y="${y + 52}" font-family="Outfit" font-weight="700" font-size="24" fill="#fff">${et}</text>`; }
     else s += `<circle cx="835" cy="${y + 90}" r="20" fill="${NAR}"/><text x="835" y="${y + 99}" font-family="Outfit" font-weight="800" font-size="24" fill="#fff" text-anchor="middle">${1 + (i * 7 + n) % 4}</text>`; }
-  if (orden >= 2) s += `<rect x="215" y="1540" width="650" height="140" rx="26" fill="#1d1e22"/>${['Hola, ¡gracias por escribir!', 'Talles y precios', 'Envíos'].map((q, i) => `<rect x="${230 + i * 0}" y="${1556}" width="0" height="0"/>`).join('')}
+  if (orden >= 2) s += `<rect x="215" y="1540" width="650" height="140" rx="26" fill="#1d1e22"/>${['¡Hola, gracias por escribir!', 'Talles y precios', 'Envíos'].map((q, i) => `<rect x="${230 + i * 0}" y="${1556}" width="0" height="0"/>`).join('')}
     <text x="240" y="1600" font-family="Outfit" font-weight="700" font-size="26" fill="#aab">Respuestas rápidas</text>${['Talles', 'Precios', 'Envíos'].map((q, i) => `<rect x="${240 + i * 205}" y="1615" width="190" height="50" rx="25" fill="${NAR}"/><text x="${335 + i * 205}" y="1649" font-family="Outfit" font-weight="700" font-size="26" fill="#fff" text-anchor="middle">${q}</text>`).join('')}`;
   if (orden >= 3) s += `<rect x="240" y="${1250}" width="600" height="110" rx="24" fill="#fff"/><text x="275" y="1300" font-family="Outfit" font-weight="800" font-size="30" fill="${TINTA}">Seguimiento agendado</text><text x="275" y="1340" font-family="Outfit" font-weight="500" font-size="26" fill="#555">Mañana 10:00 · Sofi · Presupuesto</text>`;
   return s; }
 export async function armar(V) {
-  const O = obra(V, {logo: 'marketing.png', ctaSub: 'y te mostramos cómo', hookHTML: '<em>47</em> chats<br>sin responder', hookHasta: 1.6,
-    notas: [{desde: 0, hasta: 21.4, txt: 'Situación ilustrativa'}, {desde: 21.6, txt: 'Situación ilustrativa · Voz generada con IA'}]});
+  const O = obra(V, {nombre: 'Kocos Marketing', logo: 'marketing.png', ctaSub: 'y te mostramos cómo', hookHTML: '<em>47</em> chats<br>sin responder', hookHasta: 1.6, notas: []});
   document.documentElement.style.cssText += `--f1:Outfit;--f2:Manrope;--acc:${NAR};--hs:130px;--hw:800;--em:normal;--kwCol:#fff;--logoH:90px;--velo:rgba(27,27,27,.92);--ctaTop:640px;--hookTop:1150px`;
   const F = n => V.frases.find(f => f.marca === n); const FI = i => V.frases.find(f => f.item === i); const cta = V.frases.find(f => f.cta); const pL = poser(V, 'laura');
   // 1 · el local de ropa, al atardecer

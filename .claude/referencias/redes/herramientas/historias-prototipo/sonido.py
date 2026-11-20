@@ -63,5 +63,11 @@ def vita(rid='vita'):
            (t4, lambda: viento(ate - t4), .9), (ate, sello_golpe, 1.0), (ate, B.S_boom, .7)]
     mezclar(rid, amb, fx, 'vita', quiebres=[(golpe - .1, golpe + .7)])
 
+def generico(rid, amb_kind, estilo):
+    V = json.load(open(f'voz/{rid}-h.json')); fr = V['frases']; T = V['total']
+    fx = [(0.0, choque, .7), (.12, vibra, .8)] + [(f['t'] - .08, lambda: B.S_whoosh(.32, 400, 7000), .35) for f in fr[1:]]
+    fx += [(f['t'], B.S_chime, .55) for f in fr if f.get('item')] + [(fr[-1]['t'] - .3, B.S_chime, .7)]
+    mezclar(rid, [(0, T, amb_kind)], fx, estilo)
+
 if __name__ == '__main__':
-    r = sys.argv[1]; {'vita': vita, 'vita-b': lambda: vita('vita-b')}[r]()
+    r = sys.argv[1]; {'vita': vita, 'vita-b': lambda: vita('vita-b'), 'cob': lambda: generico('cob', 'oficina', 'cob'), 'autos': lambda: generico('autos', 'ciudad_dia', 'autos'), 'mkt': lambda: generico('mkt', 'local', 'mkt')}[r]()
