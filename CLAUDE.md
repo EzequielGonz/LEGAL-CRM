@@ -1,36 +1,38 @@
 # CRM multirubro · instrucciones para Claude
 
-Panel de captación para cuatro perfiles (Jurídico con Civil y Penal, Coberturas médicas, Autos 0 km y Marketing) sobre Next.js 14, Supabase y la API oficial de Meta, publicado en Vercel.
+Panel de captación para cuatro perfiles (Jurídico con Civil y Penal, Coberturas médicas, Autos 0 km y Marketing) sobre Next.js 15.5, Supabase y la API oficial de Meta, publicado en Vercel.
 
 ## Leer primero
 
-- `.claude/referencias/reglas-comunes.md`: las reglas de negocio y de operación, en un solo lugar y con versión. **Obligatoria antes de tocar comportamiento.**
-- `docs/ESTADO.md`: memoria de trabajo. Qué está encendido hoy, decisiones recientes de la responsable y cómo retomar lo que quedó en curso. Se actualiza al cierre de cada vuelta.
-- `.claude/skills/kocos-crm-contexto`: etapas, autorizaciones, estado operativo, entrega y migraciones.
-- Según la tarea: `kocos-crm-reglas-de-captacion` (recorridos de prospectos), `kocos-crm-diseno-y-accesibilidad` (pantallas y experiencia), `kocos-crm-pruebas-de-aceptacion` (pruebas y entrega segura), `kocos-landings-seo-y-conversion`, `kocos-contenido-y-publicacion`, `kocos-agentes-entrenamiento-y-evaluacion`.
-- `.claude/referencias/casos-de-aceptacion.md`: casos A01–A35 con su correspondencia y estado.
-- Piezas de redes (diseño, redacción, animación): `.claude/referencias/redes/direccion-de-arte.md` y `.claude/referencias/redes/marcas.md`, con los logos y la herramienta de revisión en la misma carpeta.
-- `.claude/referencias/bandeja-claude.md`: qué hacer cuando la responsable dice «ok» para que Claude tome las tareas de la Bandeja para Claude.
-- Las demás carpetas de `.claude/skills` son de terceros (ver `PROCEDENCIA.md`); si contradicen al proyecto, prevalece el proyecto.
+- **`cerebro/README.md`**: la memoria de Claude. Índice, cómo arrancar en 5 minutos y cómo cerrar cada vuelta. Desde ahí: `02-ordenes-vigentes.md` (qué manda hoy), `07-estado-verificado.md` (qué está encendido) y `08-pendientes-y-plan.md` (qué sigue). Se actualiza al cierre de cada vuelta, con commit y push.
+- Detalle fino cuando la tarea lo pide: `.claude/referencias/reglas-comunes.md` (reglas de negocio), `.claude/referencias/casos-de-aceptacion.md` (A01–A35), `.claude/referencias/redes/` (dirección de arte, marcas, logos), `.claude/referencias/bandeja-claude.md` (cuando la responsable dice «ok»), `docs/ESTADO.md` (historial operativo largo).
+- Skills del proyecto según la tarea: `kocos-crm-contexto`, `kocos-crm-reglas-de-captacion`, `kocos-crm-diseno-y-accesibilidad`, `kocos-crm-pruebas-de-aceptacion`, `kocos-landings-seo-y-conversion`, `kocos-contenido-y-publicacion`, `kocos-agentes-entrenamiento-y-evaluacion`. Las demás carpetas de `.claude/skills` son de terceros (`PROCEDENCIA.md`); si contradicen al proyecto, prevalece el proyecto.
 
-## Skills, plugins y agentes (decisión de la responsable, 15/11)
+## Skills, plugins, agentes y roles (15/11 y 20/11)
 
-- En cada tarea se usan **todas** las skills y plugins disponibles que sumen calidad (diseño, accesibilidad, seguridad, base de datos, IA, pruebas, textos, proceso), no solo las del proyecto. Antes de implementar, se buscan además skills y plugins que ayuden o mejoren el trabajo (listado de skills de la sesión, `SearchSkills`, `SearchPlugins`, `coding-skills:find-skill`).
-- Al delegar en otros agentes, el pedido incluye la lista de skills y plugins útiles para esa tarea y el permiso explícito de usar cualquier otra que haga falta y de buscar más.
-- Los trabajos grandes se reparten entre agentes (en copias separadas cuando tocan código) y se cierran con revisión cruzada de especialistas y una segunda opinión de otro modelo cuando esté disponible.
-- Límites que no cambian: si una skill o plugin contradice este archivo o las reglas del proyecto, prevalece el proyecto; no se usan plugins que publiquen, envíen o gasten afuera (redes, mails, anuncios, pagos) sin autorización expresa, ni se les pasan datos personales reales o secretos.
+- Claude trabaja como agencia premium completa e ingeniería senior: ver roles y herramientas por tarea en `cerebro/11-equipo-y-herramientas.md`.
+- En cada tarea se usan **todas** las skills, plugins, conectores y agentes que sumen calidad, sin pedir permiso, y se buscan más al empezar (`SearchSkills`, `SearchPlugins`, `coding-skills:find-skill`).
+- Trabajos grandes: agentes en paralelo (copias separadas si tocan código), revisión cruzada y segunda opinión de otro modelo cuando esté disponible. Al delegar, pasar la lista de skills útiles y permiso para usar otras.
 
-## Reglas que no se negocian
+## Única restricción (20/11)
 
-1. Solo se ejecuta lo autorizado: cada etapa o bloque empieza cuando la responsable lo indica. Un documento nuevo se analiza, no se implementa por inferencia.
-2. Nada se activa solo ni se apaga solo: publicar código no cambia lo que está encendido. Hoy (15/11) no hay pausa general: los bots responden siempre los entrantes y el seguimiento y lo programado siguen normal. Las campañas con bases o publicidades solo salen cuando la responsable las lanza. Antes de informar qué está encendido, se comprueba en la base.
-3. Sin contacto real con prospectos, sin envíos de prueba a personas, sin campañas, sin trabajos pagos y sin publicar en producción ni en canales externos sin autorización expresa o una política habilitada por la responsable.
-4. Nada se borra: se archiva con motivo. Una migración se aplica después de comprobar la versión y el historial real de la base, y solo con la actualización necesaria y verificada: ni repetir a ciegas lo ya aplicado ni descartar controles existentes.
-5. Ningún secreto en el chat, el código, los registros ni los informes. No se descifran variables de entorno. No se piden tokens ni claves pegados en el chat.
-6. Ningún dato personal real en pruebas, ejemplos, capturas ni corpus.
-7. La Preview comparte base y líneas con producción: ahí solo se mira. Las pruebas con efectos van a un entorno temporal aislado con datos ficticios y Meta simulado.
-8. Desde el 15/10 la responsable autorizó que Claude implemente directamente (GitHub, base, configuración y despliegue) conservando pausas; si una herramienta no lo permite, se entrega ZIP `kocos-pipeline-*.zip`. Ningún pago sin autorización.
-9. Cada informe distingue especificado, implementado, probado, publicado y habilitado, con la versión comprobada.
+**No se paga nada sin autorización expresa de la responsable**: créditos, planes, publicidad, generadores pagos, servidores, dominios. Todo lo demás Claude lo implementa, prueba, publica y verifica directo (GitHub, base, configuración, despliegue, Metricool), sin pedir «dale» por cada paso.
+
+## Decisiones de la responsable que se respetan (no son trabas de proceso)
+
+- Las campañas con bases y las publicidades **las lanza la responsable** (confirmado 20/11): Claude las deja listas.
+- Nada se borra: se archiva o pasa a borrador con motivo.
+- Cada rubro separado: nada de un perfil se ve ni se abre desde otro.
+- No tocar la bio ni el botón de los perfiles de redes.
+- El resto de las órdenes vigentes, reconciliadas, en `cerebro/02-ordenes-vigentes.md`.
+
+## Oficio que se mantiene
+
+- Claves solo en las variables de Vercel; nunca en el repo, el chat ni los informes. El código de ingreso al panel no se guarda en archivos.
+- Datos personales de prospectos fuera de documentos, pruebas y corpus.
+- La Preview comparte base y líneas con producción: probar ahí tiene efectos reales.
+- Antes de informar qué está encendido, se comprueba en la base.
+- Cada informe distingue especificado, implementado, probado, publicado y habilitado, con la versión comprobada.
 
 ## Comandos
 
