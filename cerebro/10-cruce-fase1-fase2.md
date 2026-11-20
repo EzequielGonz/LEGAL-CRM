@@ -18,7 +18,7 @@ Criterio: manda la orden más nueva de la responsable; para hechos, manda lo com
 | 7 | Search Console | Las 4 verificadas; IDs GA4 existen | Ninguna verificada | **Fase 1 tenía razón**: las 4 tienen registro DNS `google-site-verification` (comprobado 20/11 06:00). GA4 sin etiqueta en el código (ambas coinciden) |
 | 8 | Lighthouse | 76–89, LCP 3,0–4,8 s (09/11) | 97–100, LCP 1,9–2,4 s | Fase 2 es posterior (mejoras de velocidad). Re-medir para confirmar |
 | 9 | Código de ingreso | 8 números (el de 6 sigue) | 6 dígitos; se decidió pasar a 8 | Hoy funciona el de 6. El cambio a 8 está pendiente |
-| 10 | Vista de teléfono | Orden 24/10: no debe existir vista separada | Existe `/telefono/[perfil]` | Contradicción real orden ↔ código: ver recorrido del panel y decidir (`09-decisiones-abiertas.md`) |
+| 10 | Vista de teléfono | Orden 24/10: no debe existir vista separada | Existe `/telefono/[perfil]` | **Resuelto por el recorrido**: `/telefono/*` redirige a `/perfiles`; cumple la orden del 24/10 |
 | 11 | Fecha de inicio | 07/10 | 07/09 | **07/09** (repos de VITA del 07/09; Fase 1 tiene un error de tipeo) |
 | 12 | WhatsApp de Marketing | 11 7250-2391 | No figura («Marketing sin teléfono» en schema) | Número de Fase 1 vigente; falta cargarlo en el schema de la web |
 | 13 | Windsor.ai | Conectado (1 de 8 cuentas) | Descartado | Descartado para métricas (plan gratis no alcanza) |
@@ -28,6 +28,18 @@ Criterio: manda la orden más nueva de la responsable; para hechos, manda lo com
 | 17 | Destacadas | Hay que armarlas en la app antes del 21/11 1:30 | Tarea para Cowork | **Hecho**: la responsable las armó a mano en los 4 rubros (20/11) |
 | 18 | Uso de Meta vs Wasender | 14/11 solo Wasender; 17/11 se puede elegir | Elegible por campaña | Elegible por campaña (17/11) |
 | 19 | Cierre de carrusel | «botón en el perfil» | «Comentá PALABRA» | Fase 2 |
+
+## Contradicciones dentro del repo (documentos viejos que siguen «vigentes»)
+
+| Documento | Dice | Lo vigente |
+| --- | --- | --- |
+| skill `kocos-crm-contexto`, `reglas-comunes` §9, `CONTEXTO_ACTUAL_CRM.md` (cuerpo del 19/10) | Pausa general, agentes y seguimiento apagados; entrega por ZIP; Claude no escribe en GitHub; redes en pausa | Sin pausa (15/11), seguimiento encendido (12/11), Claude implementa y publica directo (15/10), redes en marcha |
+| `reglas-comunes` §2 | PIN de 6 dígitos | 6 en uso; decidido pasar a 8 (15/11) |
+| `docs/ESTADO.md` (14–15/11) | «Solo Wasender, Meta al margen»; rama `mejoras-1211`/`relaxed-cerf` = main | Meta y Wasender separados y elegibles por campaña (17/11); esas ramas quedaron atrás |
+| `bandeja-claude.md` | Leer primero `CONTEXTO_ACTUAL_CRM.md`; remite a `claude/PUNTO_DE_CONTROL.md` (no existe) | Leer primero `cerebro/README.md` |
+| `CLAUDE.md` / `reglas-comunes` §9 | Migraciones numeradas por etapa | En la práctica por bloque (05xx, 06xx); próximo libre 0635 |
+
+Resolución: estos documentos llevan un aviso arriba que remite al cerebro (pendiente 5c), sin borrar su contenido.
 
 ## Solo en Fase 1 (sumado al cerebro)
 

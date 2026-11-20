@@ -22,7 +22,7 @@ actualizado: 20/11/2026 06:10
 | 4 | Precios en la web de Marketing ($299k/499k/699k) vs bot sin precios | Mantener como excepción · quitar | Mantener «desde» en la web y que el bot derive a una persona |
 | 5 | Archivo automático a los 30 días (rama del 19/11) | Encender · dejar manual | Encender (pidió «Archivar» y que los descartados >1 mes pasen solos) |
 | 6 | «Ordenar los casos: derivados, no derivados, perdidos» | Tabla «Captados y casos» · listas de Etapas y Descartados | Preguntar con captura cuando se publique la rama del 19/11 |
-| 7 | Vista `/telefono/[perfil]` vs orden 24/10 «sin vista separada» | Mantener · redirigir al panel adaptable | Según el recorrido del panel: si el panel normal anda bien en celular, redirigir |
+| 7 | ~~Vista `/telefono/[perfil]`~~ | — | Resuelto: ya redirige a `/perfiles` |
 | 8 | Botones del Laboratorio «cambiar modelo de una versión» y «archivar versión» | Vuelven · no | Vuelven, con confirmación |
 | 9 | Las 6 líneas de WhatsApp (todas implican pago) | Pasarela propia Evolution/WAHA USD 5–10/mes · celular en la nube · mixta | Pasarela propia en un servidor chico (reemplaza a Wasender, sin costo por mensaje) + Meta en 1–2 líneas para que el prospecto escriba primero. **Requiere autorizar el pago** |
 | 10 | Causa del 26 % de fallas en Jurídico | Revisar base y plantilla · seguir igual | Revisar: «no entregado para mantener la salud del ecosistema» es Meta frenando por rechazo. Probar Wasender o plantilla nueva antes de seguir quemando la línea CIVIL |

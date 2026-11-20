@@ -33,6 +33,10 @@ Si esta foto tiene más de 24 h, volver a comprobar antes de afirmar algo (consu
 | MARKETING | Sí | Sin dato |
 | PENAL | No | — |
 
+**Según el panel (consulta en vivo a Meta, 20/11 06:00):** CIVIL conectada, calidad alta · PENAL «faltan variables» · Coberturas conectada, alta · AGENCIA 0KM conectada, **calidad baja** · **MARKETING «Sin acceso al número»: envíos y respuestas automáticas deshabilitados** → explica que Marketing no reciba nada desde el 06/11. Hay que revisar el token o el permiso del número en Meta Business. Salud de Marketing dice «4 en orden» y no lo avisa (bug).
+
+Puntaje del bot en captación y trato (Salud): Jurídico 35/100, Coberturas 32, Autos 46, Marketing 40.
+
 Wasender: las 3 `logged_out`, `habilitada=false`, modo de prueba encendido. «Asesoria Vita» archivada; «Asesoria Vita - 2» (estado del 13/11); «LINEA - KOCOS MARKETING» (16/11). Hay que escanear el QR (la responsable).
 
 ## Campañas
@@ -61,7 +65,7 @@ Wasender: las 3 `logged_out`, `habilitada=false`, modo de prueba encendido. «As
 ## Alertas abiertas
 
 1. **26 % de fallas en inicios de campaña de Jurídico** (143 de 541 en 7 días): 76 «Message undeliverable», 54 «no entregado para mantener la salud del ecosistema» (señal de Meta de que la base o la plantilla generan rechazo), 1 de facturación.
-2. **Autos y Marketing sin entrantes hace 25 y 14 días** con línea activa: probar un WhatsApp entrante a cada número.
+2. **Autos y Marketing sin entrantes hace 25 y 14 días.** Marketing: la línea de Meta figura «Sin acceso al número» (token o permiso). Autos: conectada con calidad baja; probar un WhatsApp entrante.
 3. **10 seguimientos en `conflicto`** (9 Jurídico, 1 Coberturas) desde el 16/11 — bug de las 72 h. 14 programados de Jurídico entre 20/11 08:19 y 21/11 20:58.
 4. **6 avisos de captación `sin_destinatario`** (último 19/11 17:26): faltan destinatarios de avisos por perfil.
 5. **1 incidencia abierta de amenaza legal** (18/11) para revisar en Incidencias de Jurídico.

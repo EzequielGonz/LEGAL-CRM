@@ -13,7 +13,19 @@ Detalle normativo fino (horarios, detención, fases, evidencia): `.claude/refere
 - Producción: **legal-crm-nine.vercel.app** (Vercel, funciones en gru1). Base Supabase São Paulo.
 - **Código general** de ingreso (6 dígitos hoy; se decidió pasar a 8 el 15/11). Sin cuentas personales ni permisos por rubro. Sesión: vence a 7 días sin uso y 30 en total; intentos limitados; cierre manual y revocación de todas las sesiones.
 - Primera pantalla: **Perfiles** (una tarjeta por marca). Cada perfil es un panel propio; el encabezado dice siempre dónde estás; cada perfil toma el tema de su marca (`data-tema`).
-- Hay rutas `/telefono/[perfil]` con barra inferior (contradice la orden del 24/10 de no tener vista separada: ver `10-cruce-fase1-fase2.md`).
+- `/telefono` y `/telefono/[perfil]` **redirigen a `/perfiles`** (`next.config.mjs`); en el celular se usa el mismo panel con barra inferior. Cumple la orden del 24/10. El código viejo de esas pantallas sigue en el repo.
+
+## Mapa real de rutas (recorrido del 20/11)
+
+- `/` e `/inicio` → `/perfiles` (tarjetas por perfil + panel «En vivo», que el 19/11 se pidió quitar: sale con la rama pendiente).
+- **Jurídico usa rutas viejas fijas**: `/campanas`, `/agentes`, `/configuracion`, `/estadisticas`, `/agenda`, `/seguimiento`, `/bases`. Los otros tres: `/panel/{coberturas_medicas|agencia_0km|marketing}/…`.
+- Compartidas con `?perfil=`: `/hoy`, `/conversaciones`, `/contactos`, `/meta/lineas`, `/wasender`, `/redes/accesos`, `/resultados`, `/salud`, `/incidencias`, `/bandeja`; detalle de chat `/inbox/[id]`.
+- Menú (igual en los 4): Hoy, Chats, Contactos, Campañas · Bot IA, WhatsApp oficial (Meta), WhatsApp por QR (Wasender), Redes, Ajustes · Bandeja para Claude · Pedile algo (`/asistente`).
+- Agenda, Seguimiento e Incidencias no están en el menú: son pestañas (Contactos: Etapas, Citas, Seguimiento, Por base · Chats: Activos, Todos, Descartados, Incidencias · Hoy: Resumen, Resultados, Historial, Salud).
+- **No hay pantalla «Laboratorio» propia**: la prueba del bot está dentro de Bot IA («Probar el bot real»).
+- Marketing tiene además pantallas sin enlace en el menú: captación, extraer, presupuestos, prospectos, consultas directas.
+- Redirecciones viejas: `/revision` → Incidencias, `/comparacion-agentes` → `/agentes`, `casos-cerrados` → Chats.
+- Velocidad: 0,3–1,6 s a la vista, 2–3 s completa. Más lentas: `/oportunidades` (4,9 s), `/perfiles` (4,5 s), `/limpieza` (3,8 s). Sin errores de consola ni desbordes a 1440 y 390.
 
 ## Entidades y estados
 

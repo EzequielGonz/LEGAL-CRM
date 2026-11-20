@@ -1,3 +1,5 @@
+> **Aviso 20/11/2026:** lo vigente está en `cerebro/` (empezar por `cerebro/README.md`; órdenes en `cerebro/02-ordenes-vigentes.md`). Si este documento dice pausa general, agentes o seguimiento apagados, entrega por ZIP, que Claude no escribe en GitHub, «solo Wasender» o que se lea primero `CONTEXTO_ACTUAL_CRM.md`, eso quedó reemplazado. Única restricción vigente: no pagar sin autorización. Se conserva el texto como historia.
+
 # Reglas comunes del CRM multirubro
 
 Versión 1.1 · 25/10/2026 (1.0 · 13/10/2026). Referencia única para todas las skills `kocos-*`: cada skill apunta acá en vez de repetir las reglas. Fuentes: ESTRUCTURA GENERAL CRM 1.2, RUBROS Y FASES 1.1, ENTRENAMIENTO GENERAL DE AGENTES IA 0.6, el documento único con su Registro de decisiones y el parche integral 2.0 del 13/10/2026. Una decisión explícita más reciente de la responsable actualiza solo el punto que modifica; un ejemplo comercial nunca cambia una regla. Si algo de acá contradice el documento único, prevalece el documento único y se consulta.

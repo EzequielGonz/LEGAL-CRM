@@ -1,3 +1,5 @@
+> **Aviso 20/11/2026:** lo vigente está en `cerebro/` (empezar por `cerebro/README.md`; órdenes en `cerebro/02-ordenes-vigentes.md`). Si este documento dice pausa general, agentes o seguimiento apagados, entrega por ZIP, que Claude no escribe en GitHub, «solo Wasender» o que se lea primero `CONTEXTO_ACTUAL_CRM.md`, eso quedó reemplazado. Única restricción vigente: no pagar sin autorización. Se conserva el texto como historia.
+
 # CONTEXTO ACTUAL · CRM multirubro
 
 Actualizado: 19/10/2026 (Bandeja para Claude en PR #29, Preview lista y migración 0502 aplicada; antes: reorganización 2, perfiles en PC, estado real de las líneas, asistente ampliado, chat de campañas y afinado de diseño publicados: PR #20, #21, #22, #24, #26 y #27). Sin secretos ni datos de prospectos.
