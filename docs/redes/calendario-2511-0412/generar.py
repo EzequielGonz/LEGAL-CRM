@@ -29,7 +29,7 @@ SERIE_DE = {
     ('vita', 'nunca-arreglo'): 'V1', ('vita', 'sin-seguro'): 'V1',
     ('vita', 'art-rechazo'): 'V2', ('vita', 'alta-dolor'): 'V2', ('vita', 'alta-comision'): 'V2', ('vita', 'firma'): 'V2',
     ('autos', 'retiro-chasis'): 'A2', ('autos', 'retiro-kit'): 'A2', ('autos', 'seguro'): 'A2',
-    ('autos', 'documentacion'): 'A2', ('autos', 'garantia'): 'A2',
+    ('autos', 'documentacion'): 'A2', ('autos', 'garantia'): 'A2', ('autos', 'ruta'): 'A2',
 }
 
 # id: (serie, tema, idea, gancho A, gancho B, palabra, revisión, pregunta de encuesta, dato o paso)
@@ -297,6 +297,9 @@ idea(a, 'documentacion', 'A1', 'documentacion', 'Los papeles que te llevás con 
 idea(a, 'gastos-fijos', 'A1', 'gastos-fijos', 'El 0 km también tiene gastos fijos: seguro, patente, cochera',
      '0 km: los gastos que vienen después', '', 'CUOTA', PE,
      '¿Sumaste los gastos fijos a la cuota? Sí / No', 'Gastos fijos del auto (texto a revisar por el equipo).')
+idea(a, 'ruta', 'A2', 'ruta', 'Primer viaje largo con tu 0 km: qué revisar antes de salir',
+     '0 km: tu primer viaje a la ruta', '', 'RETIRO', PE,
+     '¿Te vas de vacaciones en auto? Sí / No', 'Controles antes de un viaje largo (texto a revisar por el equipo).')
 idea(a, 'patentamientos', 'A2', 'patentamientos', '0 km: así se vendió noviembre (ACARA)',
      '0 km: los más patentados de noviembre', '', '0KM', PD,
      '¿Adivinás cuál fue el más patentado? Sí / No', 'Ranking de ACARA de noviembre (solo cuando esté publicado).')
@@ -420,7 +423,7 @@ ORDEN = {
   ['lista/B', 'retiro-chasis/B', 'voto-anticipo/B', 'aguinaldo-anticipo/A'],
   ['adjudicacion/A', 'prendario/A', 'garantia/A', 'hibrido/A'],
   ['COND:patentamientos/A>contado-plan/A', 'dic-ene/B', 'documentacion/A', 'gastos-fijos/A'],
-  ['primer-0km/B', 'sorteo/B', 'seguro/B', 'ACT:contado-plan/A'],
+  ['primer-0km/B', 'sorteo/B', 'seguro/B', 'ACT:ruta/A'],
  ],
  'mkt': [
   ['bf-200/A', 'consulta-2103/A', 'precio/A'],
