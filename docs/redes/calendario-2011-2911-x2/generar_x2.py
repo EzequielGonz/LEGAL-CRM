@@ -52,7 +52,7 @@ ORDEN['autos'][8][0] = 'contado-plan/A'
 G.ORDEN = ORDEN
 G.DIAS = DIAS
 G.COND_EXTRA = {
- ('cob', 'fallo-corte', 'A'): 'Sale solo con revisión profesional del alcance del fallo antes del 20/11 a las 13:30 (24 h antes); si no, va «Tu obra social la podés elegir» (recibo-elegir A) y el 26/11 a las 20:30 pasa a lugar de actualidad.',
+ ('cob', 'fallo-corte', 'A'): 'Sale solo con revisión profesional del alcance del fallo antes del 20/11 a las 13:50 (24 h antes de salir); si no, va «Tu obra social la podés elegir» (recibo-elegir A) y el 26/11 a las 20:30 pasa a lugar de actualidad.',
  ('autos', 'blackfriday', 'A'): 'Black Friday (27/11): sale con el visto bueno del equipo antes del 25/11; si no, el lugar queda en borrador con motivo (nada lo reemplaza solo).',
 }
 COND_CARR = {('autos', 'blackfriday'): G.COND_EXTRA[('autos', 'blackfriday', 'A')]}
@@ -210,9 +210,14 @@ class Rueda:
         v = self.l[self.i % len(self.l)]; self.i += 1
         return v
 
-def giro_para(m, fam, usados, rueda):
+NOMBRES = ['Nico', 'Sole', 'Lucía', 'Gabriel', 'Vero', 'Elsa', 'Juli', 'Mati', 'Leo', 'Romina', 'Tomi']
+
+def giro_para(m, fam, usados, rueda, personaje):
+    # el giro solo nombra personajes que están en la escena
     for _ in range(len(GIROS[m])):
         g = rueda()
+        if any(n in g and n not in personaje for n in NOMBRES):
+            continue
         if g not in usados[fam]:
             usados[fam].add(g)
             return g
@@ -236,7 +241,7 @@ def generar_marca(m):
         pers, lugar, conf = mini_historia_base(m, f['idea_id'])
         if f['version'] == 'B':
             conf = ruedas['ap']() + conf
-        f.update(personaje=pers, lugar_ba=lugar, conflicto_seg1=conf, giro_irreal=giro_para(m, f['idea_id'], giros_usados, ruedas['giro']))
+        f.update(personaje=pers, lugar_ba=lugar, conflicto_seg1=conf, giro_irreal=giro_para(m, f['idea_id'], giros_usados, ruedas['giro'], pers))
         filas.append(f)
     # Reels nuevos
     nuevos_por_dia = collections.defaultdict(list)
@@ -270,7 +275,7 @@ def generar_marca(m):
                 fila = nueva_fila(m, fecha, h, 'reel', iid, 'B', gancho, f'Comentá «{I["kw"]}» y te respondemos · {NOTA}',
                                   I['idea'], G.SERIES[I['serie']], I['tema'], I['kw'], ref, iid, cambios,
                                   dict(personaje=pers, lugar_ba=lugar, conflicto_seg1=conf,
-                                       giro_irreal=giro_para(m, iid, giros_usados, ruedas['giro'])))
+                                       giro_irreal=giro_para(m, iid, giros_usados, ruedas['giro'], pers)))
                 datos = dict(fam=iid, gancho=gancho, preg=preg, dato=I['dato'], kw=I['kw'], idea=I['idea'], serie=fila['serie'],
                              tema=I['tema'], iid=iid, version='B', ref=ref, pers=pers, lugar=lugar)
             else:
@@ -288,7 +293,7 @@ def generar_marca(m):
                 fila = nueva_fila(m, fecha, h, 'reel', iid, 'R', gancho, f'Comentá «{I["kw"]}» y te respondemos · {NOTA}',
                                   idea, serie, it['tema'], I['kw'], ref, vieja, cambios,
                                   dict(personaje=pers, lugar_ba=lugar, conflicto_seg1=conf,
-                                       giro_irreal=giro_para(m, vieja, giros_usados, ruedas['giro'])))
+                                       giro_irreal=giro_para(m, vieja, giros_usados, ruedas['giro'], pers)))
                 datos = dict(fam=vieja, gancho=gancho, preg=preg, dato=I['dato'], kw=I['kw'], idea=idea, serie=serie,
                              tema=it['tema'], iid=iid, version='R', ref=ref, pers=pers, lugar=lugar)
             filas.append(fila)
