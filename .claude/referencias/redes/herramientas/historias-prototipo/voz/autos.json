@@ -1,0 +1,317 @@
+{
+ "id": "autos",
+ "total": 20.051,
+ "palabra": "LLAVE",
+ "frases": [
+  {
+   "t": 0.18,
+   "fin": 1.483,
+   "show": "¿Viste el *precio de lista?*",
+   "item": null,
+   "cta": 0,
+   "hook": 1,
+   "sello": 0,
+   "words": [
+    {
+     "w": "¿Viste",
+     "t": 0.097,
+     "h": false
+    },
+    {
+     "w": "el",
+     "t": 0.529,
+     "h": false
+    },
+    {
+     "w": "precio",
+     "t": 0.671,
+     "h": true
+    },
+    {
+     "w": "de",
+     "t": 0.937,
+     "h": true
+    },
+    {
+     "w": "lista?",
+     "t": 1.029,
+     "h": true
+    }
+   ]
+  },
+  {
+   "t": 1.657,
+   "fin": 2.808,
+   "show": "*No es* el precio final.",
+   "item": null,
+   "cta": 0,
+   "hook": 0,
+   "sello": 0,
+   "words": [
+    {
+     "w": "No",
+     "t": 1.561,
+     "h": true
+    },
+    {
+     "w": "es",
+     "t": 1.788,
+     "h": true
+    },
+    {
+     "w": "el",
+     "t": 1.946,
+     "h": false
+    },
+    {
+     "w": "precio",
+     "t": 2.091,
+     "h": false
+    },
+    {
+     "w": "final.",
+     "t": 2.335,
+     "h": false
+    }
+   ]
+  },
+  {
+   "t": 3.27,
+   "fin": 4.718,
+   "show": "En general, *se suman:*",
+   "item": null,
+   "cta": 0,
+   "hook": 0,
+   "sello": 0,
+   "words": [
+    {
+     "w": "En",
+     "t": 3.234,
+     "h": false
+    },
+    {
+     "w": "general,",
+     "t": 3.343,
+     "h": false
+    },
+    {
+     "w": "se",
+     "t": 4.051,
+     "h": true
+    },
+    {
+     "w": "suman:",
+     "t": 4.229,
+     "h": true
+    }
+   ]
+  },
+  {
+   "t": 5.195,
+   "fin": 5.679,
+   "show": "Flete",
+   "item": 1,
+   "cta": 0,
+   "hook": 0,
+   "sello": 0,
+   "words": [
+    {
+     "w": "Flete",
+     "t": 5.153,
+     "h": false
+    }
+   ]
+  },
+  {
+   "t": 6.085,
+   "fin": 7.641,
+   "show": "Formularios y *patentamiento*",
+   "item": 2,
+   "cta": 0,
+   "hook": 0,
+   "sello": 0,
+   "words": [
+    {
+     "w": "Formularios",
+     "t": 6.02,
+     "h": false
+    },
+    {
+     "w": "y",
+     "t": 6.706,
+     "h": false
+    },
+    {
+     "w": "patentamiento",
+     "t": 6.802,
+     "h": true
+    }
+   ]
+  },
+  {
+   "t": 8.091,
+   "fin": 8.661,
+   "show": "Sellos",
+   "item": 3,
+   "cta": 0,
+   "hook": 0,
+   "sello": 0,
+   "words": [
+    {
+     "w": "Sellos",
+     "t": 8.057,
+     "h": false
+    }
+   ]
+  },
+  {
+   "t": 9.109,
+   "fin": 9.692,
+   "show": "y *seguro.*",
+   "item": 4,
+   "cta": 0,
+   "hook": 0,
+   "sello": 0,
+   "words": [
+    {
+     "w": "y",
+     "t": 9.07,
+     "h": false
+    },
+    {
+     "w": "seguro.",
+     "t": 9.135,
+     "h": true
+    }
+   ]
+  },
+  {
+   "t": 10.264,
+   "fin": 11.944,
+   "show": "Pedí siempre el precio *llave en mano:*",
+   "item": null,
+   "cta": 0,
+   "hook": 0,
+   "sello": 0,
+   "words": [
+    {
+     "w": "Pedí",
+     "t": 10.175,
+     "h": false
+    },
+    {
+     "w": "siempre",
+     "t": 10.455,
+     "h": false
+    },
+    {
+     "w": "el",
+     "t": 10.785,
+     "h": false
+    },
+    {
+     "w": "precio",
+     "t": 10.923,
+     "h": false
+    },
+    {
+     "w": "llave",
+     "t": 11.207,
+     "h": true
+    },
+    {
+     "w": "en",
+     "t": 11.431,
+     "h": true
+    },
+    {
+     "w": "mano:",
+     "t": 11.529,
+     "h": true
+    }
+   ]
+  },
+  {
+   "t": 12.166,
+   "fin": 14.346,
+   "show": "todo lo que pagás *hasta que te llevás el auto.*",
+   "item": null,
+   "cta": 0,
+   "hook": 0,
+   "sello": 0,
+   "words": [
+    {
+     "w": "todo",
+     "t": 12.067,
+     "h": false
+    },
+    {
+     "w": "lo",
+     "t": 12.319,
+     "h": false
+    },
+    {
+     "w": "que",
+     "t": 12.44,
+     "h": false
+    },
+    {
+     "w": "pagás",
+     "t": 12.585,
+     "h": false
+    },
+    {
+     "w": "hasta",
+     "t": 12.972,
+     "h": true
+    },
+    {
+     "w": "que",
+     "t": 13.267,
+     "h": true
+    },
+    {
+     "w": "te",
+     "t": 13.397,
+     "h": true
+    },
+    {
+     "w": "llevás",
+     "t": 13.482,
+     "h": true
+    },
+    {
+     "w": "el",
+     "t": 13.793,
+     "h": true
+    },
+    {
+     "w": "auto.",
+     "t": 13.892,
+     "h": true
+    }
+   ]
+  },
+  {
+   "t": 15.125,
+   "fin": 17.426,
+   "show": "Comentá *LLAVE*",
+   "item": null,
+   "cta": 1,
+   "hook": 0,
+   "sello": 0,
+   "words": [
+    {
+     "w": "Comentá",
+     "t": 15.051,
+     "h": false
+    },
+    {
+     "w": "LLAVE",
+     "t": 16.553,
+     "h": true
+    }
+   ]
+  }
+ ]
+}

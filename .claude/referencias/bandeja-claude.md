@@ -1,3 +1,5 @@
+> **Aviso 20/11/2026:** lo vigente está en `cerebro/` (empezar por `cerebro/README.md`; órdenes en `cerebro/02-ordenes-vigentes.md`). Si este documento dice pausa general, agentes o seguimiento apagados, entrega por ZIP, que Claude no escribe en GitHub, «solo Wasender» o que se lea primero `CONTEXTO_ACTUAL_CRM.md`, eso quedó reemplazado. Única restricción vigente: no pagar sin autorización. Se conserva el texto como historia.
+
 # Bandeja para Claude · cómo la trabaja Claude
 
 Versión 1.0 · 19/10/2026. Complementa `reglas-comunes.md`; no cambia ninguna regla.

@@ -1,0 +1,291 @@
+{
+ "id": "mkt",
+ "total": 22.938,
+ "palabra": "ORDEN",
+ "frases": [
+  {
+   "t": 0.18,
+   "fin": 2.073,
+   "show": "*47* chats sin responder.",
+   "item": null,
+   "cta": 0,
+   "hook": 1,
+   "sello": 0,
+   "words": [
+    {
+     "w": "47",
+     "t": 0.088,
+     "h": true
+    },
+    {
+     "w": "chats",
+     "t": 0.326,
+     "h": false
+    },
+    {
+     "w": "sin",
+     "t": 0.784,
+     "h": false
+    },
+    {
+     "w": "responder.",
+     "t": 1.074,
+     "h": false
+    }
+   ]
+  },
+  {
+   "t": 2.435,
+   "fin": 4.578,
+   "show": "Y cada uno que espera, *se enfría.*",
+   "item": null,
+   "cta": 0,
+   "hook": 0,
+   "sello": 0,
+   "words": [
+    {
+     "w": "Y",
+     "t": 2.363,
+     "h": false
+    },
+    {
+     "w": "cada",
+     "t": 2.526,
+     "h": false
+    },
+    {
+     "w": "uno",
+     "t": 2.797,
+     "h": false
+    },
+    {
+     "w": "que",
+     "t": 3.017,
+     "h": false
+    },
+    {
+     "w": "espera,",
+     "t": 3.085,
+     "h": false
+    },
+    {
+     "w": "se",
+     "t": 3.783,
+     "h": true
+    },
+    {
+     "w": "enfría.",
+     "t": 3.934,
+     "h": true
+    }
+   ]
+  },
+  {
+   "t": 5.022,
+   "fin": 7.017,
+   "show": "Tu WhatsApp *no es un CRM.*",
+   "item": null,
+   "cta": 0,
+   "hook": 0,
+   "sello": 0,
+   "words": [
+    {
+     "w": "Tu",
+     "t": 4.952,
+     "h": false
+    },
+    {
+     "w": "WhatsApp",
+     "t": 5.114,
+     "h": false
+    },
+    {
+     "w": "no",
+     "t": 5.644,
+     "h": true
+    },
+    {
+     "w": "es",
+     "t": 5.818,
+     "h": true
+    },
+    {
+     "w": "un",
+     "t": 5.972,
+     "h": true
+    },
+    {
+     "w": "CRM.",
+     "t": 6.096,
+     "h": true
+    }
+   ]
+  },
+  {
+   "t": 7.216,
+   "fin": 8.596,
+   "show": "Pero lo podés *ordenar hoy.*",
+   "item": null,
+   "cta": 0,
+   "hook": 0,
+   "sello": 0,
+   "words": [
+    {
+     "w": "Pero",
+     "t": 7.126,
+     "h": false
+    },
+    {
+     "w": "lo",
+     "t": 7.346,
+     "h": false
+    },
+    {
+     "w": "podés",
+     "t": 7.495,
+     "h": false
+    },
+    {
+     "w": "ordenar",
+     "t": 7.795,
+     "h": true
+    },
+    {
+     "w": "hoy.",
+     "t": 8.21,
+     "h": true
+    }
+   ]
+  },
+  {
+   "t": 9.072,
+   "fin": 10.087,
+   "show": "*Tres arreglos:*",
+   "item": null,
+   "cta": 0,
+   "hook": 0,
+   "sello": 0,
+   "words": [
+    {
+     "w": "Tres",
+     "t": 9.0,
+     "h": true
+    },
+    {
+     "w": "arreglos:",
+     "t": 9.301,
+     "h": true
+    }
+   ]
+  },
+  {
+   "t": 10.589,
+   "fin": 12.974,
+   "show": "Etiquetá cada chat *por etapa.*",
+   "item": 1,
+   "cta": 0,
+   "hook": 0,
+   "sello": 0,
+   "words": [
+    {
+     "w": "Etiquetá",
+     "t": 10.524,
+     "h": false
+    },
+    {
+     "w": "cada",
+     "t": 11.574,
+     "h": false
+    },
+    {
+     "w": "chat",
+     "t": 11.868,
+     "h": false
+    },
+    {
+     "w": "por",
+     "t": 12.176,
+     "h": true
+    },
+    {
+     "w": "etapa.",
+     "t": 12.367,
+     "h": true
+    }
+   ]
+  },
+  {
+   "t": 13.347,
+   "fin": 15.532,
+   "show": "Armá *respuestas rápidas.*",
+   "item": 2,
+   "cta": 0,
+   "hook": 0,
+   "sello": 0,
+   "words": [
+    {
+     "w": "Armá",
+     "t": 13.308,
+     "h": false
+    },
+    {
+     "w": "respuestas",
+     "t": 14.03,
+     "h": true
+    },
+    {
+     "w": "rápidas.",
+     "t": 14.7,
+     "h": true
+    }
+   ]
+  },
+  {
+   "t": 15.889,
+   "fin": 17.966,
+   "show": "Agendá cada *seguimiento.*",
+   "item": 3,
+   "cta": 0,
+   "hook": 0,
+   "sello": 0,
+   "words": [
+    {
+     "w": "Agendá",
+     "t": 15.813,
+     "h": false
+    },
+    {
+     "w": "cada",
+     "t": 16.655,
+     "h": false
+    },
+    {
+     "w": "seguimiento.",
+     "t": 17.005,
+     "h": true
+    }
+   ]
+  },
+  {
+   "t": 18.726,
+   "fin": 21.121,
+   "show": "Comentá *ORDEN*",
+   "item": null,
+   "cta": 1,
+   "hook": 0,
+   "sello": 0,
+   "words": [
+    {
+     "w": "Comentá",
+     "t": 18.65,
+     "h": false
+    },
+    {
+     "w": "ORDEN",
+     "t": 20.229,
+     "h": true
+    }
+   ]
+  }
+ ]
+}

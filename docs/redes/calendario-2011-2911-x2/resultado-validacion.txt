@@ -1,0 +1,33 @@
+Validación de calendario.csv (x2, 20/11 al 29/11/2026)
+- Filas: 632 · reels: 272 · historias: 320 · carruseles: 40 · en IG y FB por separado: 1264
+- Del calendario base: 316 · variantes nuevas: 226 · remakes: 90
+- Autos: 68 reels (A 24 · B 21 · R 23), 43 ideas distintas, tema más repetido: 6 reels
+- Coberturas: 68 reels (A 22 · B 20 · R 26), 42 ideas distintas, tema más repetido: 6 reels
+- Kocos Marketing: 68 reels (A 24 · B 23 · R 21), 43 ideas distintas, tema más repetido: 6 reels
+- VITA: 68 reels (A 24 · B 24 · R 20), 43 ideas distintas, tema más repetido: 6 reels
+- Revisión: aprobado por la responsable (20/11): 632
+- Lugares de actualidad (única condición que queda): 4
+- Horarios corridos +20 min por el grupo de control (20 al 24/11): 140
+AVISO Autos historia: encuesta «usado-valor»: el calendario base repite el mismo texto a 5 días (versiones A y B del reel del día)
+AVISO Coberturas historia: encuesta «mono-aporte»: el calendario base repite el mismo texto a 5 días (versiones A y B del reel del día)
+AVISO Kocos Marketing historia: encuesta «bf-200»: el calendario base repite el mismo texto a 5 días (versiones A y B del reel del día)
+AVISO VITA historia: encuesta «trayecto-casa»: el calendario base repite el mismo texto a 5 días (versiones A y B del reel del día)
+AVISO Autos historia: dato o mito «voto-0km»: el calendario base repite el mismo texto a 5 días (versiones A y B del reel del día)
+AVISO Coberturas historia: dato o mito «aumento-comparar»: el calendario base repite el mismo texto a 5 días (versiones A y B del reel del día)
+AVISO VITA historia: dato o mito «culpa-mito»: el calendario base repite el mismo texto a 5 días (versiones A y B del reel del día)
+AVISO Autos historia: respondé con PALABRA «plan-cuota»: el calendario base repite el mismo texto a 5 días (versiones A y B del reel del día)
+AVISO Coberturas historia: respondé con PALABRA «recibo-3»: el calendario base repite el mismo texto a 5 días (versiones A y B del reel del día)
+AVISO VITA historia: respondé con PALABRA «choque-24h»: el calendario base repite el mismo texto a 5 días (versiones A y B del reel del día)
+AVISO Autos historia: encuesta «lista»: el calendario base repite el mismo texto a 5 días (versiones A y B del reel del día)
+AVISO Autos historia: dato o mito «retiro-chasis»: el calendario base repite el mismo texto a 5 días (versiones A y B del reel del día)
+AVISO Coberturas historia: encuesta «familia»: el calendario base repite el mismo texto a 5 días (versiones A y B del reel del día)
+AVISO Coberturas historia: dato o mito «cartilla-guardia»: el calendario base repite el mismo texto a 5 días (versiones A y B del reel del día)
+AVISO Coberturas historia: encuesta «baja-27»: el calendario base repite el mismo texto a 5 días (versiones A y B del reel del día)
+AVISO VITA historia: encuesta «despido»: el calendario base repite el mismo texto a 5 días (versiones A y B del reel del día)
+AVISO Coberturas historia: dato o mito «carencias»: el calendario base repite el mismo texto a 5 días (versiones A y B del reel del día)
+AVISO Coberturas historia: respondé con PALABRA «opcion-anual»: el calendario base repite el mismo texto a 5 días (versiones A y B del reel del día)
+AVISO Autos historia: encuesta «primer-0km»: el calendario base repite el mismo texto a 5 días (versiones A y B del reel del día)
+AVISO Coberturas historia: encuesta «preex»: el calendario base repite el mismo texto a 5 días (versiones A y B del reel del día)
+AVISO Autos historia: dato o mito «sorteo»: el calendario base repite el mismo texto a 5 días (versiones A y B del reel del día)
+AVISO Coberturas historia: dato o mito «65»: el calendario base repite el mismo texto a 5 días (versiones A y B del reel del día)
+Resultado: OK, 0 errores

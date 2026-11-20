@@ -4,6 +4,8 @@ scope: root
 covers: [estado, memoria, seguimiento, wasender, plantillas, bot, despliegue, pendientes, decisiones]
 ---
 
+> **Aviso 20/11/2026:** lo vigente está en `cerebro/` (empezar por `cerebro/README.md`; órdenes en `cerebro/02-ordenes-vigentes.md`). Si este documento dice pausa general, agentes o seguimiento apagados, entrega por ZIP, que Claude no escribe en GitHub, «solo Wasender» o que se lea primero `CONTEXTO_ACTUAL_CRM.md`, eso quedó reemplazado. Única restricción vigente: no pagar sin autorización. Se conserva el texto como historia.
+
 # Estado del proyecto · memoria de trabajo
 
 Se actualiza al cierre de cada vuelta de trabajo. Sin datos personales, claves ni códigos de acceso. Ante una contradicción, mandan `CLAUDE.md` y `.claude/referencias/reglas-comunes.md`.

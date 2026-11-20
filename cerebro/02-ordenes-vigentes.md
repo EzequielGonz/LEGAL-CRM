@@ -1,0 +1,166 @@
+---
+description: Órdenes vigentes de la responsable, reconciliadas entre Fase 1 (Cowork) y Fase 2 (Code). Manda la más nueva; se anota qué reemplazó.
+actualizado: 20/11/2026 06:00
+---
+
+# Órdenes vigentes
+
+## La única restricción
+
+**No se paga nada sin autorización expresa de la responsable**: créditos, planes, publicidad, generadores pagos (Veo, Kling, Runway, ElevenLabs, vidIQ con créditos), servidores, celulares en la nube, dominios. Presupuesto ya autorizado: Gemini para los bots, USD 30 por mes (20/10). Recomendación vigente: dejar desactivado el pase automático a créditos pagos de Claude o con tope bajo.
+
+Todo lo demás son **decisiones de negocio** de la responsable (abajo), no trabas de proceso. Claude implementa, prueba, publica y verifica sin pedir «dale» por cada paso.
+
+## Lo que Claude sigue cuidando por oficio (no son trabas)
+
+- Las claves viven solo en las variables de Vercel. No se escriben en el repo, el chat ni los informes. El código de ingreso al panel no se guarda en archivos.
+- Los datos personales de prospectos no se copian a documentos, pruebas, capturas publicadas ni corpus.
+- La Preview de Vercel usa la misma base y las mismas líneas que producción: probar ahí tiene efectos reales.
+- Antes de afirmar que algo está encendido, se comprueba en la base.
+
+## Forma de trabajo
+
+| Fecha | Orden |
+| --- | --- |
+| 15/10 | Acceso total a todo el proyecto. Claude implementa directo (GitHub, base, configuración, despliegue) sin pedir «dale» por cada acción |
+| 19/10 | Nada de ZIP ni paquetes para el programador: se implementa, se prueba (typecheck, lint, pruebas, build), se publica en main y se recorre como usuaria antes de informar |
+| 14/11 | Se trabaja con el modelo principal; otro modelo solo para tareas secundarias muy simples |
+| 15/11, 20/11 | Usar todas las skills, plugins, conectores y agentes que sumen, sin pedir permiso salvo pagos; buscar más al empezar cada tarea; repartir trabajos grandes entre agentes en paralelo (copias separadas si tocan código), cerrar con revisión cruzada y segunda opinión de otro modelo; al delegar, pasar la lista de skills útiles y permiso de usar otras |
+| 20/11 | Rol de Claude: agencia premium completa (director creativo, diseñador, motion designer, estratega y community manager, performance, SEO y landings, investigador de tendencias) + ingeniería senior del CRM. «Hacer todo», de punta a punta |
+| 20/11 | Velocidad: «sin releer todo, sigamos derecho» desde el último traspaso (para eso existe este cerebro) |
+| 20/11 | Mantener cerebro, memoria y contexto al día al cerrar cada vuelta |
+| 15/11 | Los textos internos del panel («Wasender», «v1/v2», «JSON») no se cambian |
+| 13/11 | Tarea automática que revise sola la Bandeja para Claude: «por ahora no». La responsable dice «ok» y Claude toma las tareas (`.claude/referencias/bandeja-claude.md`) |
+
+## Comunicación con ella
+
+- Español rioplatense con voseo, simple, sin jerga técnica («no entiendo lo que decís»).
+- **Respuestas cortas**, listas cortas y tablas. Avisar en pocas palabras qué se está haciendo.
+- Instrucciones para ella: **un solo prompt** claro. Si hay archivo, **Word (.docx)**.
+- Lo que tenga que hacer Cowork o Claude in Chrome (su escritorio, con sus perfiles abiertos): **prompt listo para pegar**. Nunca decir que no se puede pasar a Cowork.
+- Cada informe distingue **especificado, implementado, probado, publicado, habilitado**, con la versión comprobada.
+- Commit y push sin que lo pida, con checkpoint después de cada tanda.
+
+## Lo que no quiere (correcciones que ya hizo)
+
+| Claude hizo o propuso | Ella quería |
+| --- | --- |
+| Reels con objetos y tipografía animada | Personajes animados, guion, una ciudad, una historia real, calidad |
+| Bajar a 1 reel por día (auditoría de Chrome del 20/11) | «No bajamos ningún ritmo, pegamos o pegamos» |
+| Reels con persona real o cara a cámara (auditoría 20/11) | Animados, sin caras |
+| Preguntar si borrar lo publicado o programado | Nada se borra: archivar o pasar a borrador con motivo |
+| Un boceto por rubro | Un boceto de un solo perfil (VITA) |
+| Cambiar la bio y cargar el botón de WhatsApp | «el botón y la bio, dejalos así como ya están tranqui» |
+| Programar las destacadas para el día siguiente | «publicalas ahora mismo» |
+| Guías largas con varios archivos | Un solo prompt; archivos en Word |
+| Decir que no podía pasarle una tarea a Cowork | Prompt listo para pegar |
+| Carteles en pantalla («Situación ilustrativa», «Voz generada con IA») | Sin carteles: van en el texto de la publicación |
+| Selector Simple/Avanzado en el panel | Lo avanzado en desplegables |
+
+## Negocio general
+
+| Fecha | Orden |
+| --- | --- |
+| 13/11 | **Cada rubro separado**: nada de un perfil se ve ni se abre desde otro. Lo común se muestra dentro de cada perfil, rotulado. Sin perfil en la dirección vale el último usado, nunca Jurídico por defecto |
+| 13/11 | **Nada se borra**: se archiva o pasa a borrador, con motivo y forma de revertir |
+| 13/11, 17/11 | Lo hecho con Meta no se pisa ni se rehace. Desde el 17/11 Meta y Wasender van totalmente separados en los 4 perfiles |
+| 16/10 | Asesor que se presenta en los 4 perfiles: Leonardo Gonzalez |
+| 20/10 | Presupuesto Gemini: USD 30/mes |
+
+## Campañas y envíos
+
+| Fecha | Orden |
+| --- | --- |
+| 15/11 · **confirmada 20/11** | **Las campañas con bases y las publicidades las lanza la responsable.** Claude las deja completas y listas («qué falta para lanzar» en cero); ella aprieta lanzar. Publicar código no lanza nada |
+| 14/11 → 17/11 | Cada campaña elige método: Meta o Wasender (el 14/11 se había decidido solo Wasender; el 17/11 se habilitó elegir y cambiar el método en una campaña pausada) |
+| 14/11 | Wasender: lunes a sábado, sin días de descanso, sin patrón fijo (hora de arranque, cantidad, tandas, pausas y texto cambian cada día). 12 plantillas por perfil (~680 variantes c/u); las 40 viejas archivadas |
+| 15/11 | Botón de entrenamiento de línea: 20 por día durante 7 días, sin quitar la elección manual |
+| 15/11 | Con Wasender el primer mensaje no lleva botones |
+| 15/11 | Tope: nunca más de 3 automáticos sin respuesta a la misma persona |
+| 15/11 | Freno: campaña con ≥100 envíos y <1 % de respuesta se frena (se puede saltear a mano) |
+| 14/11 | Aviso de captación a destinatarios: pendiente hasta que ella lo pida |
+| Marketing | Presupuesto tipo factura, 10 % de descuento de bienvenida al final, video de propuesta <1 min |
+
+## Bots y conversaciones
+
+| Fecha | Orden |
+| --- | --- |
+| 15/11 | **No hay pausa general**: los bots responden siempre los entrantes; seguimiento y lo programado siguen normal |
+| 16/10, 18/10 | Atención 24 h en todos los rubros. Asesores lunes a sábado 8–21 h; fuera de esa franja la IA atiende, intenta captar y agenda la llamada |
+| 15/11 | **El bot nunca da precios** (ni números, rangos ni cuotas). Puede explicar de qué depende un valor (25/10) |
+| 24/10 | El bot no promete día ni hora del contacto; quién atiende lo asigna la responsable a mano |
+| 24/10 | Marketing: el cierre lo hace una persona; el bot nunca pasa datos de pago. Solo pregunta precio → pasa a una persona y no es captado |
+| 24/10 | Coberturas no recomienda una prestadora: compara y deriva siempre a un vendedor |
+| 25/10 | «Ya tengo abogado»: una sola pregunta por segunda opinión, sin cuestionar a su abogado; si dice que no, se detiene |
+| 24/10, 15/11 | «¿De dónde sacaron mi número?»: disculpa y «no tenemos el registro»; queda «pidió no ser contactado» |
+| 15/11 | Enojo: disculpa breve y cortar. Amenaza o denuncia contra nosotros: además, avisar |
+| 15/11 | Crisis: líneas de ayuda (911, 144, 137) siempre, aunque una persona haya tomado el chat, y cartel urgente en el panel |
+| 24/10 | Detención sin apagar al agente: si no quiere que le escriban, disculpa; se frenan campañas y seguimientos; si vuelve a escribir, se lo atiende sin ofrecer ni insistir (salvo menores) |
+| 13/11 | Audios: se transcriben y el bot los contesta (llave por perfil, encendida en los 4). Si no se pudo, pide que lo escriba como mucho una vez cada 30 min |
+| 15/11 | Al captar: agradece, confirma quién se va a comunicar y se despide, sin preguntas |
+| 14/11 → 15/11 | Mejorar el bot = sumar fichas a la v2. Desde el 15/11 el Laboratorio permite versiones nuevas (v3…), otros modelos de Gemini, roles y A/B; nada activo cambia sin acción manual; los bots de base siguen con v2 y el modelo principal |
+| 25/10 | Fase 3 (biblioteca de agentes, entrenamiento pago, comparaciones) cerrada y descartada. El conocimiento por versiones sigue |
+| 20/11 | Palabras clave de redes en el rol de los bots: se suman al final, sin pisar nada |
+
+## Seguimiento, caídos e incidencias
+
+| Fecha | Orden |
+| --- | --- |
+| 12/11, 13/11 | Seguimiento automático encendido en los 4 perfiles (perfil nuevo nace encendido). Antes de los contactos 2 y 3 el bot relee y decide si insistir |
+| 13/11 | Caídos: «que pasen 3 días y otro mensaje, si no responde en 24 hs, a caídos». Lo viejo (>96 h sin el mensaje) cae directo |
+| 12/11, 13/11 | Segundo intento por Wasender a quien nunca respondió: uno solo, 5 a 7 días después, otro texto (no sale pasados 10 días) |
+| 13/11 | Incidencia = solo amenaza legal/denuncia contra nosotros o queja de un captado. Enojo, insultos, «no me escriban», «ya tengo abogado», número equivocado → Perdidos o No contactar solos |
+| 13/11 | Perdido no espera a una persona; el chat vuelve al bot |
+| 13/11 | «Oportunidades reales» (antes «Piden una persona»): solo interés real, por puntaje |
+| 13/11 | «Quedaron sin respuesta»: si lo último concretó una llamada → captado; si no, queda; ante la duda → «Posible captación a revisar». No se les escribe solos |
+| 13/11 | Fallas del sistema en lugar propio, separadas de incidencias de personas |
+| 19/11 (sin publicar) | Botón Archivar en Hoy y Activos; descartados de más de un mes → Archivados; si vuelve a escribir, vuelve solo |
+
+## Panel y diseño
+
+| Fecha | Orden |
+| --- | --- |
+| 13/11 | Diseño «bien llamativo»: vidrio, 3D, tarjetas que se inclinan, fondos animados, cifras que cuentan, gráficos con relieve. Referencia: Instagram code.xr y su Topmate («Glassy Dashboard/Sidebar/Navigation Tabs»). **Modo oscuro por defecto** |
+| 24/10 | Mismo menú y rutas en los 4 perfiles; lo técnico en desplegables. Sin vista de teléfono separada: el panel se adapta al celular (ver contradicción en `10-cruce-fase1-fase2.md`) |
+| 18/10 | Conversaciones y Contactos muestran solo oportunidades reales; la base fría vive en «Por base» |
+| 19/11 | Hoy: sin «personas, no mensajes», sin chip del bot, sin «También hoy»; vista previa con 4 barras de la semana y «Ver todos los resultados». Cada bloque responde «a quién le escribo ahora» |
+| 19/11 | Perfiles: sin el cuadro «En vivo». Contactos: dejarlo como está |
+| 13/11 | Asistente del panel con permiso para todo, siempre propone y confirma; lanzar campañas con confirmación reforzada; activar agentes con el código de acceso |
+| 15/11 | Asistente general en su pantalla /asistente |
+| 15/11 | Código de ingreso de 8 números (el de 6 sigue hasta cambiarlo; al 20/11 se sigue usando el de 6) |
+| Siempre | Gestionar desde el panel los perfiles de WhatsApp, Instagram y Facebook de cada rubro. Publicidad configurada en el panel para activar después (activarla = gasto) |
+| 20/10 | El contenido de Instagram y Facebook lo publica Claude vía Metricool, no el panel |
+
+## Redes y contenido (las más recientes mandan)
+
+| Fecha | Orden | Reemplaza |
+| --- | --- | --- |
+| 20/11 | **Cronograma doble del 20/11 al 29/11** («que empiece ya») | El calendario 25/11–04/12 y la orden del 18/11 de no programar después del 24/11 |
+| 20/11 | **Sin freno**: «No bajamos ningún ritmo, pegamos o pegamos». «Subí aún más el volumen»: hasta 4 historias extra por día y marca (10:30, 14:30, 17:00, 22:30) + 1 TRIAL_REEL por día y marca (solo IG; versión nueva de un reel publicado hace ≥5 días) | Subida por etapas con freno; propuesta de 1 reel/día |
+| 20/11 | Grupo de control 20–24/11: lo programado antes «dejá que se suba igual», aunque diga «el botón está en el perfil» | — |
+| 20/11 | Mini historias animadas con personajes, guion, Buenos Aires e historia creíble. **Sin caras reales ni personas grabadas** | Auditoría: reels con persona |
+| 20/11 | **Sin carteles en pantalla.** Aclaraciones en el texto de la publicación; voz sintética lleva además la marca de contenido con IA | — |
+| 20/11 | Logo y nombre de la marca en todas las piezas | — |
+| 20/11 | Calidad premium y viral: planos rápidos e irreales, caídas, golpes de cámara, escalas imposibles, «dopamina a cada rato», sonido y pausas de cine. Referencia de ritmo: julianeaborna (recursos, no copia) | — |
+| 20/11 | 4K cuando se pueda (2160×3840); en serie 1080×1920 a 30 fps | — |
+| 20/11 | Versiones B y R con cambios reales (gancho, escena, voz, música u orden), no trucos anti-duplicado | — |
+| 20/11 | Ortografía revisada en cada pieza antes de programar | — |
+| 20/11 | Cierre: «Comentá PALABRA» o «Respondé esta historia con PALABRA». **Nunca «el botón está en el perfil»** (no existe) | «Escribinos PALABRA por WhatsApp · botón en el perfil» |
+| 20/11 | **No tocar la bio ni el botón** de los perfiles | Auditoría: cargar el botón y reescribir bios |
+| 20/11 | Sin publicidad paga por ahora («esperemos que pegue algún reel») | — |
+| 20/11 | Sin generadores pagos: todo con código y herramientas gratis | — |
+| 20/11 | Lo que se mejora en un rubro va al motor compartido y después a los otros tres | — |
+| 20/11 | Las 44 de Kocos del 25 al 29/11 (estilo viejo) pasan a borrador | Reprogramarlas 25–29/11 (18/11) |
+| 20/11 | Feed y estética del kit de perfil: aprobados | — |
+| 20/11 | Temas: ACARA no → «¿Contado, prendario o plan?»; aumento de prepagas no → «¿Pagás por cosas que no usás?»; Black Friday Autos 27/11 sí, sin números reales; cuota de Coberturas «antes de pagar, compará» aprobada sin números; todo lo demás aprobado (VITA laboral y penal, «Lo que dijo la Corte») | — |
+| 20/11 | TikTok y YouTube: abrir dentro de los 10 días | — |
+| 20/11 | Destacadas: publicadas y armadas a mano por la responsable en los 4 rubros | — |
+
+## Landings, SEO y Google
+
+| Fecha | Orden |
+| --- | --- |
+| 07/09, 17/09 | Aparecer primeros en Google con el nombre de cada marca y sus búsquedas |
+| 20/11 | Medición de punta a punta: UTM, referencia en WhatsApp y formulario, GA4, píxel de Meta, Search Console y Bing |
+| 20/11 | Perfil de Empresa de Google para VITA y Autos si atienden en persona; canales de YouTube para Shorts |
+| Siempre | Un llamado a la acción predeterminado por rubro y canal para identificar el origen de cada lead (lo define Claude) |

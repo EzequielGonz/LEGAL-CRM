@@ -1,0 +1,31 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="fonts/fuentes.css"><style>
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000}
+#escena,#ui{position:absolute;inset:0;width:1080px;height:1920px}
+#ui{pointer-events:none;color:var(--txt);font-family:var(--f2)}
+#hook{position:absolute;left:80px;width:860px;top:var(--hookTop,300px);text-align:center;font-family:var(--f1);font-weight:var(--hw,800);font-size:var(--hs,128px);line-height:1.02;letter-spacing:var(--ls,-.01em);color:var(--hookCol,#fff);text-shadow:0 8px 40px rgba(0,0,0,var(--shadow,.45));transform-origin:50% 0}
+#hook em{font-style:var(--em,italic);color:var(--acc)}
+#sub{position:absolute;left:80px;width:860px;top:var(--subTop,1180px);text-align:center;font-family:var(--fs,var(--f2));font-weight:var(--sw,800);font-size:var(--ss,86px);line-height:1.08;letter-spacing:-.01em;color:var(--subCol,#fff);text-shadow:0 6px 32px rgba(0,0,0,var(--shadow,.5)),0 2px 6px rgba(0,0,0,var(--shadow,.5))}
+#sub .w{display:inline-block;transform-origin:50% 80%}
+#sub .h{color:var(--acc)}
+#num{position:absolute;left:80px;width:860px;top:var(--numTop,860px);text-align:center;font-family:var(--fn,var(--f1));font-weight:800;font-size:280px;line-height:1;color:var(--acc);opacity:0;text-shadow:0 10px 60px rgba(0,0,0,.35);transform-origin:50% 60%}
+#cta{position:absolute;left:80px;width:860px;top:var(--ctaTop,620px);text-align:center;opacity:0}
+#cta img{height:var(--logoH,150px);display:block;margin:0 auto 34px}
+#cta .c1{font-family:var(--f2);font-weight:700;font-size:64px;color:var(--ctaCol,#fff)}
+#cta .kw{display:inline-block;margin:18px 0 22px;padding:10px 46px 18px;border-radius:28px;background:var(--acc);color:var(--kwCol,#000);font-family:var(--f1);font-weight:800;font-size:142px;letter-spacing:.01em;box-shadow:0 20px 80px rgba(0,0,0,.35)}
+#cta .c2{font-family:var(--f2);font-weight:600;font-size:46px;color:var(--ctaCol,#fff);opacity:.9}
+#nota{position:absolute;left:80px;width:860px;top:1440px;text-align:center;font-family:var(--f2);font-weight:500;font-size:30px;line-height:1.35;color:var(--notaCol,rgba(255,255,255,.75))}
+</style>
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script>
+</head><body><div id="escena"></div><div id="ui"></div>
+<script type="module">
+const q = new URLSearchParams(location.search); const id = q.get('r');
+if (q.get('noblur')) window.__noblur = 1;
+const V = await (await fetch(`voz/${id}.json`)).json();
+const mod = await import(`./escenas/${id}.js`);
+await document.fonts.ready; for (const f of ['800 40px Manrope', '700 40px "Playfair Display"', 'italic 700 40px "Playfair Display"', '800 40px Archivo', '700 40px "Plus Jakarta Sans"', '800 40px Outfit']) await document.fonts.load(f);
+const {M, ui} = await mod.armar(V, {fps: +(q.get('fps') || 60)});
+window.TOTAL = V.total; const fps = +(q.get('fps') || 60);
+window.render = t => { const S = M.frame(t, fps); ui.update(t); return S; };
+window.render(0); window.ready = true;
+</script></body></html>

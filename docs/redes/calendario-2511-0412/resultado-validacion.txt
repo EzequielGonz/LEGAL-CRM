@@ -1,0 +1,9 @@
+Validación de calendario.csv
+- Filas: 316 · reels: 136 · historias: 160 · carruseles: 20
+- Autos: 34 reels, 24 ideas distintas, 10 versiones B, tema más repetido: 3 veces
+- Coberturas: 34 reels, 23 ideas distintas, 11 versiones B, tema más repetido: 3 veces
+- Kocos Marketing: 34 reels, 24 ideas distintas, 10 versiones B, tema más repetido: 3 veces
+- VITA: 34 reels, 24 ideas distintas, 10 versiones B, tema más repetido: 3 veces
+- Revisión: aprobado (texto del 10/11): 220 · condicionado: dato oficial publicado: 4 · pendiente: revisión del equipo: 37 · pendiente: revisión profesional: 55
+- Condicionados o de actualidad: 8
+Resultado: OK, sin errores

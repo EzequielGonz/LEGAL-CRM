@@ -1,0 +1,56 @@
+[
+  {
+    "id": "lamina-1",
+    "avisos": [
+      "Textos que se pisan: text «Propuesta de» y text «acuerdo»"
+    ]
+  },
+  {
+    "id": "lamina-2",
+    "avisos": [
+      "Elemento fuera de la pieza: i «»"
+    ]
+  },
+  {
+    "id": "lamina-3",
+    "avisos": [
+      "Texto sobre imagen: span «VITA Abogados» y img «»",
+      "Texto sobre imagen: .t «Lo que firmás puede cerrar t» y img «»",
+      "Texto sobre imagen: em «cerrar tu reclamo.» y img «»",
+      "Texto sobre imagen: .p «Si después aparece una lesió» y img «»",
+      "Elemento fuera de la pieza: i «»"
+    ]
+  },
+  {
+    "id": "lamina-4",
+    "avisos": [
+      "Elemento fuera de la pieza: i «»"
+    ]
+  },
+  {
+    "id": "lamina-5",
+    "avisos": [
+      "Elemento fuera de la pieza: i «»"
+    ]
+  },
+  {
+    "id": "lamina-6",
+    "avisos": [
+      "Elemento fuera de la pieza: i «»"
+    ]
+  },
+  {
+    "id": "lamina-7",
+    "avisos": [
+      "Elemento fuera de la pieza: i «»"
+    ]
+  },
+  {
+    "id": "portada-reel",
+    "avisos": [
+      "Texto sobre imagen: span «VITA Abogados» y img «»",
+      "Texto sobre imagen: .t «¿Firmáso no?» y img «»",
+      "Texto sobre imagen: em «o no?» y img «»"
+    ]
+  }
+]

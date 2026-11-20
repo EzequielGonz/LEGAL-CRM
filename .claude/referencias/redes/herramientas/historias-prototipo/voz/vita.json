@@ -1,0 +1,397 @@
+{
+ "id": "vita",
+ "total": 26.967,
+ "palabra": "FIRMA",
+ "frases": [
+  {
+   "t": 0.18,
+   "fin": 1.416,
+   "show": "¿Firmás o no?",
+   "item": null,
+   "cta": 0,
+   "hook": 1,
+   "sello": 0,
+   "words": [
+    {
+     "w": "¿Firmás",
+     "t": 0.132,
+     "h": false
+    },
+    {
+     "w": "o",
+     "t": 0.934,
+     "h": false
+    },
+    {
+     "w": "no?",
+     "t": 1.064,
+     "h": false
+    }
+   ]
+  },
+  {
+   "t": 1.774,
+   "fin": 4.918,
+   "show": "Te chocaron y el seguro del otro te ofrece un *acuerdo rápido.*",
+   "item": null,
+   "cta": 0,
+   "hook": 0,
+   "sello": 0,
+   "words": [
+    {
+     "w": "Te",
+     "t": 1.692,
+     "h": false
+    },
+    {
+     "w": "chocaron",
+     "t": 1.837,
+     "h": false
+    },
+    {
+     "w": "y",
+     "t": 2.427,
+     "h": false
+    },
+    {
+     "w": "el",
+     "t": 2.527,
+     "h": false
+    },
+    {
+     "w": "seguro",
+     "t": 2.638,
+     "h": false
+    },
+    {
+     "w": "del",
+     "t": 3.007,
+     "h": false
+    },
+    {
+     "w": "otro",
+     "t": 3.158,
+     "h": false
+    },
+    {
+     "w": "te",
+     "t": 3.426,
+     "h": false
+    },
+    {
+     "w": "ofrece",
+     "t": 3.506,
+     "h": false
+    },
+    {
+     "w": "un",
+     "t": 3.86,
+     "h": false
+    },
+    {
+     "w": "acuerdo",
+     "t": 3.972,
+     "h": true
+    },
+    {
+     "w": "rápido.",
+     "t": 4.356,
+     "h": true
+    }
+   ]
+  },
+  {
+   "t": 5.341,
+   "fin": 5.856,
+   "show": "*Esperá.*",
+   "item": null,
+   "cta": 0,
+   "hook": 0,
+   "sello": 1,
+   "words": [
+    {
+     "w": "Esperá.",
+     "t": 5.289,
+     "h": true
+    }
+   ]
+  },
+  {
+   "t": 6.422,
+   "fin": 8.342,
+   "show": "Lo que firmás puede *cerrar tu reclamo.*",
+   "item": null,
+   "cta": 0,
+   "hook": 0,
+   "sello": 0,
+   "words": [
+    {
+     "w": "Lo",
+     "t": 6.324,
+     "h": false
+    },
+    {
+     "w": "que",
+     "t": 6.539,
+     "h": false
+    },
+    {
+     "w": "firmás",
+     "t": 6.638,
+     "h": false
+    },
+    {
+     "w": "puede",
+     "t": 7.084,
+     "h": false
+    },
+    {
+     "w": "cerrar",
+     "t": 7.298,
+     "h": true
+    },
+    {
+     "w": "tu",
+     "t": 7.669,
+     "h": true
+    },
+    {
+     "w": "reclamo.",
+     "t": 7.79,
+     "h": true
+    }
+   ]
+  },
+  {
+   "t": 8.626,
+   "fin": 12.068,
+   "show": "Si después aparece una lesión, quizás *ya no puedas pedir más.*",
+   "item": null,
+   "cta": 0,
+   "hook": 0,
+   "sello": 0,
+   "words": [
+    {
+     "w": "Si",
+     "t": 8.525,
+     "h": false
+    },
+    {
+     "w": "después",
+     "t": 8.742,
+     "h": false
+    },
+    {
+     "w": "aparece",
+     "t": 9.108,
+     "h": false
+    },
+    {
+     "w": "una",
+     "t": 9.494,
+     "h": false
+    },
+    {
+     "w": "lesión,",
+     "t": 9.646,
+     "h": false
+    },
+    {
+     "w": "quizás",
+     "t": 10.435,
+     "h": false
+    },
+    {
+     "w": "ya",
+     "t": 10.715,
+     "h": true
+    },
+    {
+     "w": "no",
+     "t": 10.891,
+     "h": true
+    },
+    {
+     "w": "puedas",
+     "t": 11.04,
+     "h": true
+    },
+    {
+     "w": "pedir",
+     "t": 11.333,
+     "h": true
+    },
+    {
+     "w": "más.",
+     "t": 11.587,
+     "h": true
+    }
+   ]
+  },
+  {
+   "t": 12.556,
+   "fin": 14.336,
+   "show": "Antes de firmar, *tres cosas:*",
+   "item": null,
+   "cta": 0,
+   "hook": 0,
+   "sello": 0,
+   "words": [
+    {
+     "w": "Antes",
+     "t": 12.517,
+     "h": false
+    },
+    {
+     "w": "de",
+     "t": 12.812,
+     "h": false
+    },
+    {
+     "w": "firmar,",
+     "t": 12.912,
+     "h": false
+    },
+    {
+     "w": "tres",
+     "t": 13.515,
+     "h": true
+    },
+    {
+     "w": "cosas:",
+     "t": 13.74,
+     "h": true
+    }
+   ]
+  },
+  {
+   "t": 14.878,
+   "fin": 16.959,
+   "show": "Pedí la propuesta *por escrito.*",
+   "item": 1,
+   "cta": 0,
+   "hook": 0,
+   "sello": 0,
+   "words": [
+    {
+     "w": "Pedí",
+     "t": 14.786,
+     "h": false
+    },
+    {
+     "w": "la",
+     "t": 15.497,
+     "h": false
+    },
+    {
+     "w": "propuesta",
+     "t": 15.659,
+     "h": false
+    },
+    {
+     "w": "por",
+     "t": 16.195,
+     "h": true
+    },
+    {
+     "w": "escrito.",
+     "t": 16.366,
+     "h": true
+    }
+   ]
+  },
+  {
+   "t": 17.337,
+   "fin": 19.273,
+   "show": "No firmes *el mismo día.*",
+   "item": 2,
+   "cta": 0,
+   "hook": 0,
+   "sello": 0,
+   "words": [
+    {
+     "w": "No",
+     "t": 17.297,
+     "h": false
+    },
+    {
+     "w": "firmes",
+     "t": 17.858,
+     "h": false
+    },
+    {
+     "w": "el",
+     "t": 18.384,
+     "h": true
+    },
+    {
+     "w": "mismo",
+     "t": 18.56,
+     "h": true
+    },
+    {
+     "w": "día.",
+     "t": 18.837,
+     "h": true
+    }
+   ]
+  },
+  {
+   "t": 19.63,
+   "fin": 21.871,
+   "show": "Consultá antes *con un abogado.*",
+   "item": 3,
+   "cta": 0,
+   "hook": 0,
+   "sello": 0,
+   "words": [
+    {
+     "w": "Consultá",
+     "t": 19.542,
+     "h": false
+    },
+    {
+     "w": "antes",
+     "t": 20.487,
+     "h": false
+    },
+    {
+     "w": "con",
+     "t": 20.866,
+     "h": true
+    },
+    {
+     "w": "un",
+     "t": 21.089,
+     "h": true
+    },
+    {
+     "w": "abogado.",
+     "t": 21.206,
+     "h": true
+    }
+   ]
+  },
+  {
+   "t": 22.648,
+   "fin": 25.14,
+   "show": "Comentá *FIRMA*",
+   "item": null,
+   "cta": 1,
+   "hook": 0,
+   "sello": 0,
+   "words": [
+    {
+     "w": "Comentá",
+     "t": 22.573,
+     "h": false
+    },
+    {
+     "w": "FIRMA",
+     "t": 24.232,
+     "h": true
+    }
+   ]
+  }
+ ]
+}
