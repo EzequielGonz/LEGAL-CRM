@@ -189,7 +189,7 @@ body{{background:#777;display:flex;flex-wrap:wrap;gap:40px;padding:40px;width:12
 .osc .q{{text-decoration-color:{t["acc_osc"]}}} .cla .q{{text-decoration-color:{t["acc_cla"]}}}
 .v{{font-family:{t["tf"]};font-weight:{t["tw"]};font-size:132px;line-height:1;{"font-style:italic;" if marca=="VITA" else ""}text-transform:{t["tcase"]}}}
 .osc .v{{color:{t["acc_osc"]}}} .cla .v{{color:{t["acc_cla"]}}}
-.stk{{flex:none;height:300px}} .stk.c{{height:80px}}
+.stk{{flex:none;height:300px}} .stk.c{{height:80px}} .stk.d{{height:30px}}
 .cta{{font-weight:600;font-size:46px;line-height:1.4}}
 .cta small{{display:block;font-weight:500;font-size:36px;opacity:.82;margin-top:10px}}
 .pill{{display:inline-block;border-radius:999px;padding:6px 30px 10px;font-weight:800;letter-spacing:.02em;white-space:nowrap}}
@@ -282,6 +282,17 @@ def h_encuesta(marca, f, pal, pregunta=None, opciones=None):
     return cuerpo, [q, plano(f['p']), f'Respondé esta historia: «{a}» o «{b}».', f'Con «{pal}» te contamos más.']
 
 
+def h_ab(marca, f, pal):
+    # Encuesta «¿Cuál responde mejor? A / B» (Kocos): dos respuestas ilustrativas al «¿precio?».
+    a_txt = '«Precio por privado.»'
+    b_txt = '«Te paso el precio y qué incluye. ¿Te lo reservo para hoy?»'
+    cards = (f'<div class="li"><div class="it"><div><div class="lbl">Respuesta A</div><b>{esc(a_txt)}</b></div></div>'
+             f'<div class="it"><div><div class="lbl">Respuesta B</div><b>{esc(b_txt)}</b></div></div></div>')
+    cuerpo = (f'<div class="t m">Te preguntan «¿precio?». <em>¿Cuál responde mejor?</em></div>{cards}'
+              f'<div class="stk c"></div><div class="cta">Respondé esta historia: «A» o «B».<small>Con «{esc(pal)}» te contamos más.</small></div>')
+    return cuerpo, ['Te preguntan «¿precio?». ¿Cuál responde mejor?', f'Respuesta A: {a_txt}', f'Respuesta B: {b_txt}', 'Respondé esta historia: «A» o «B».', f'Con «{pal}» te contamos más.']
+
+
 def h_responde(marca, f, pal, titulo=None):
     titulo = enfatizar(titulo or f['t'])
     cuerpo = (f'<div class="rule"></div><div class="t{tam(titulo)}">{fmt(titulo)}</div><div class="p">{fmt(plano(f["p"]))}</div>'
@@ -303,7 +314,7 @@ def h_detras(marca, f, pal, reel, row):
     pasos = [('La escena', lugar[0].upper() + lugar[1:] + '.'), ('El giro', giro[0].upper() + giro[1:] + '.'), ('Lo que te llevás', plano(f['p']))]
     items = ''.join(f'<div class="it"><div><div class="lbl">{esc(a)}</div><b style="font-weight:600;font-size:36px;margin-top:6px">{fmt(b)}</b></div></div>' for a, b in pasos)
     cuerpo = (f'<div class="t s">Así armamos <em>el giro</em> del reel</div><div class="rn">«{esc(reel)}»</div><div class="li">{items}</div>'
-              f'<div class="stk c"></div><div class="cta">Respondé con {palabra_pill(pal)} y te respondemos.</div>')
+              f'<div class="stk d"></div><div class="cta">Respondé con {palabra_pill(pal)} y te respondemos.</div>')
     return cuerpo, ['Así armamos el giro del reel', f'«{reel}»'] + [f'{a}: {b}' for a, b in pasos] + [f'Respondé con «{pal}» y te respondemos.']
 
 
@@ -439,10 +450,13 @@ def armar(fecha, marcas=None):
                     q, ops = None, None
                 if marca == 'Coberturas' and q and re.search(r'\d', q):
                     q, ops = None, None
-                cuerpo, txt = h_encuesta(marca, f, pal, q, ops)
+                if q and 'Cuál responde mejor' in q:
+                    cuerpo, txt = h_ab(marca, f, pal)
+                else:
+                    cuerpo, txt = h_encuesta(marca, f, pal, q, ops)
             elif fmt_ == 'historia: respondé con PALABRA':
                 titulo = parse_tema(r['idea'])
-                if marca == 'Coberturas' and titulo and '%' in titulo:
+                if marca == 'Coberturas' and titulo and re.search(r'%|\(|meses', titulo):
                     titulo = f['t']
                 elif marca == 'Coberturas' and titulo and re.search(r'aument', titulo, re.I):
                     titulo = 'Antes de pagar, compará: *qué plan tenés y qué usás.*'
