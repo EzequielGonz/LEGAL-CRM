@@ -68,14 +68,24 @@ def main():
             continue
         for r in csv.DictReader(io.StringIO(man)):
             rid = (r.get('id') or '').strip(); m = t.split('-')[0]
-            if not rid or (t, rid) in reg or r.get('estado', '').strip() not in ('renderizado', 'alojado'):
+            est = r.get('estado', '').strip()
+            if rid and (t, rid) in reg and est == 'programado' and r.get('metricool_id'):
+                reg[(t, rid)].update(estado='programado', metricool_id=r['metricool_id'], fecha=r.get('fecha', ''), hora=r.get('hora', ''))
+            if not rid or (t, rid) in reg or est not in ('renderizado', 'producido', 'alojado'):
                 continue
             landing, sitio, blog = MARCAS[m]
             dst = os.path.join(HOME, landing, 'apps/web/public/redes/2011')
             os.makedirs(dst, exist_ok=True)
             try:
                 for ext in ('mp4', 'jpg'):
-                    data = sh('git', 'show', f'{b}:docs/redes/produccion-2011/entregas/{t}/{rid}.{ext}', binario=True)
+                    data = None
+                    for carpeta in ('entregas', 'salidas', 'salida'):
+                        try:
+                            data = sh('git', 'show', f'{b}:docs/redes/produccion-2011/{carpeta}/{t}/{rid}.{ext}', binario=True); break
+                        except RuntimeError:
+                            pass
+                    if data is None:
+                        raise RuntimeError(f'no está {rid}.{ext}')
                     open(os.path.join(dst, f'{rid}.{ext}'), 'wb').write(data)
             except RuntimeError as e:
                 print(f'FALTA {t} {rid}: {e}'); continue
