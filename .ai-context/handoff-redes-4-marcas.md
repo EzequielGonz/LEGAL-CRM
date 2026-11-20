@@ -260,3 +260,4 @@ Las 81 historias destacadas del 20/11 (1:28–1:50) se publicaron todas (verific
   3. Antes de programar cada día y marca: getScheduledPosts para no duplicar.
   4. Commit y push frecuentes en LEGAL-CRM (rama claude/happy-wozniak-ajfi1z) y en las landings (main, solo archivos estáticos).
   5. Al final, pasar a la responsable el conteo programado por rubro y día y el Excel del cronograma.
+- **Corrección pendiente:** en `estaticos/contenido.py` el agente reemplazó el tema de Coberturas «fallo-corte» por «reintegros», pero la responsable SÍ aprobó «Lo que dijo la Corte». Volver a poner «fallo-corte» (texto del calendario, sin inventar datos). «aumento» → «revisar-plan» está bien.
