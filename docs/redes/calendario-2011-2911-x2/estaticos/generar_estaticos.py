@@ -23,6 +23,7 @@ SLUG = {'VITA': 'vita', 'Coberturas': 'cob', 'Autos': 'autos', 'Kocos Marketing'
 NOMBRE = {'VITA': 'VITA Abogados', 'Coberturas': 'Compara tu Obra Social', 'Autos': 'Automotores Kocos', 'Kocos Marketing': 'Kocos Marketing'}
 SITIO = {'VITA': 'estudiojuridicovita.com', 'Coberturas': 'comparatuobrasocial.com', 'Autos': 'autoskocos.com', 'Kocos Marketing': 'kocosmkt.com'}
 LOGO = {'VITA': 'vita.png', 'Coberturas': 'coberturas.png', 'Autos': 'autos.png', 'Kocos Marketing': 'marketing.png'}
+ACENTOS = {'LIQUIDACION': 'LIQUIDACIÓN'}
 EXTRA_HORAS = ['10:30', '14:30', '17:00', '22:30']
 EXTRA_TIPO = {'10:30': 'mito', '14:30': 'encuesta', '17:00': 'checklist', '22:30': 'responde'}
 # Temas que no van como historia extra (tienen fecha propia en el calendario).
@@ -175,7 +176,7 @@ body{{background:#777;display:flex;flex-wrap:wrap;gap:40px;padding:40px;width:12
 .cr .marca img{{height:{int((t["logo_h"] if marca != 'VITA' else 116)*0.62)}px}}
 .marca span{{font-family:{t["tf"]};font-weight:{t["tw"]};font-size:40px;letter-spacing:{t["tls"]};{"text-transform:uppercase;" if marca=="Autos" else ""}white-space:nowrap}}
 .cr .marca span{{font-size:30px}}
-.main{{position:absolute;left:80px;right:80px;top:470px;bottom:330px;display:flex;flex-direction:column;justify-content:center;gap:40px}}
+.main{{position:absolute;left:80px;right:80px;top:420px;bottom:320px;display:flex;flex-direction:column;justify-content:center;gap:40px}}
 .cr .main{{top:170px;bottom:80px;left:72px;right:72px;gap:34px}}
 .t{{font-family:{t["tf"]};font-weight:{t["tw"]};font-size:92px;line-height:1.08;letter-spacing:{t["tls"]};text-transform:{t["tcase"]};text-wrap:balance}}
 .t.m{{font-size:80px}} .t.s{{font-size:70px}}
@@ -188,24 +189,24 @@ body{{background:#777;display:flex;flex-wrap:wrap;gap:40px;padding:40px;width:12
 .osc .q{{text-decoration-color:{t["acc_osc"]}}} .cla .q{{text-decoration-color:{t["acc_cla"]}}}
 .v{{font-family:{t["tf"]};font-weight:{t["tw"]};font-size:132px;line-height:1;{"font-style:italic;" if marca=="VITA" else ""}text-transform:{t["tcase"]}}}
 .osc .v{{color:{t["acc_osc"]}}} .cla .v{{color:{t["acc_cla"]}}}
-.stk{{flex:none;height:300px}} .stk.c{{height:190px}}
+.stk{{flex:none;height:300px}} .stk.c{{height:80px}}
 .cta{{font-weight:600;font-size:46px;line-height:1.4}}
 .cta small{{display:block;font-weight:500;font-size:36px;opacity:.82;margin-top:10px}}
 .pill{{display:inline-block;border-radius:999px;padding:6px 30px 10px;font-weight:800;letter-spacing:.02em;white-space:nowrap}}
 .osc .pill{{background:{t["pill_osc"]};color:{t["pill_txt_osc"]}}} .cla .pill{{background:{t["pill_cla"]};color:{t["pill_txt_cla"]}}}
-.pill.xl{{font-size:84px;padding:10px 46px 16px;margin-top:14px}}
-.li{{display:flex;flex-direction:column;gap:22px}}
-.it{{display:flex;gap:30px;align-items:flex-start;padding:28px 34px;border-radius:28px}}
+.pill.xl{{font-size:84px;padding:10px 46px 16px;margin-top:14px;align-self:flex-start}}
+.li{{display:flex;flex-direction:column;gap:18px}}
+.it{{display:flex;gap:28px;align-items:flex-start;padding:24px 30px;border-radius:26px}}
 .osc .it{{background:{t["card_osc"]};border:2px solid {t["borde_osc"]}}} .cla .it{{background:{t["card_cla"]};border:2px solid {t["borde_cla"]}}}
 .ck{{width:58px;height:58px;flex:none;border-radius:16px;display:flex;align-items:center;justify-content:center;margin-top:4px}}
 .osc .ck{{background:{t["pill_osc"]}}} .cla .ck{{background:{t["pill_cla"]}}}
 .ck svg{{width:36px;height:36px}}
 .osc .ck svg{{stroke:{t["pill_txt_osc"]}}} .cla .ck svg{{stroke:{t["pill_txt_cla"]}}}
-.it b{{display:block;font-weight:700;font-size:44px;line-height:1.25}}
-.it span{{display:block;font-weight:500;font-size:36px;line-height:1.35;margin-top:6px;opacity:.86}}
+.it b{{display:block;font-weight:700;font-size:42px;line-height:1.22}}
+.it span{{display:block;font-weight:500;font-size:34px;line-height:1.32;margin-top:6px;opacity:.86}}
 .lbl{{font-weight:700;font-size:34px;letter-spacing:.01em}}
 .osc .lbl{{color:{t["acc_osc"]}}} .cla .lbl{{color:{t["acc_cla"]}}}
-.rn{{font-family:{t["tf"]};font-size:52px;line-height:1.2;{"font-style:italic;" if marca=="VITA" else ""}font-weight:{t["tw"]};{"text-transform:uppercase;" if marca=="Autos" else ""}}}
+.rn{{font-family:{t["tf"]};font-size:44px;line-height:1.2;{"font-style:italic;" if marca=="VITA" else ""}font-weight:{t["tw"]};{"text-transform:uppercase;" if marca=="Autos" else ""}}}
 /* Carrusel */
 .ic{{width:230px;height:230px;flex:none}} .ic svg{{width:100%;height:100%}}
 .osc .ic svg{{stroke:{t["acc_osc"]}}} .cla .ic svg{{stroke:{t["acc_cla"]}}}
@@ -260,12 +261,21 @@ def h_mito(marca, f, pal):
     return cuerpo, texto
 
 
+def sin_sabias(q):
+    m = re.match(r'¿Sabías que (.+)\?$', q)
+    if not m:
+        return q
+    x = m.group(1)
+    return '¿Lo sabías? ' + x[0].upper() + x[1:] + '.'
+
+
 def h_encuesta(marca, f, pal, pregunta=None, opciones=None):
     q, a, b = f['enc']
     if pregunta:
         q = pregunta
         if opciones:
             a, b = opciones
+    q = sin_sabias(q)
     cuerpo = (f'<div class="rule"></div><div class="t{tam(q, 40, 60)}">{fmt(q)}</div><div class="p">{fmt(plano(f["p"]))}</div>'
               f'<div class="stk"></div><div class="cta">Respondé esta historia: «{esc(a)}» o «{esc(b)}».'
               f'<small>Con {esc("«" + pal + "»")} te contamos más.</small></div>')
@@ -281,7 +291,8 @@ def h_responde(marca, f, pal, titulo=None):
 
 def h_checklist(marca, f, pal):
     items = ''.join(f'<div class="it"><div class="ck">{CHECK}</div><div><b>{fmt(a)}</b><span>{fmt(b)}</span></div></div>' for a, b in f['pts'])
-    cuerpo = (f'<div class="t{tam(f["t"], 34, 52)}">{fmt(f["t"])}</div><div class="li">{items}</div>'
+    chico = ' s' if len(f['pts']) > 3 or len(plano(f['t'])) > 40 else ' m'
+    cuerpo = (f'<div class="t{chico}">{fmt(f["t"])}</div><div class="li">{items}</div>'
               f'<div class="stk c"></div><div class="cta">Respondé con {palabra_pill(pal)} y te respondemos.</div>')
     return cuerpo, [plano(f['t'])] + [f'{a} {b}' for a, b in f['pts']] + [f'Respondé con «{pal}» y te respondemos.']
 
@@ -290,8 +301,8 @@ def h_detras(marca, f, pal, reel, row):
     lugar = row['lugar_ba'].strip().rstrip('.')
     giro = row['giro_irreal'].strip().rstrip('.')
     pasos = [('La escena', lugar[0].upper() + lugar[1:] + '.'), ('El giro', giro[0].upper() + giro[1:] + '.'), ('Lo que te llevás', plano(f['p']))]
-    items = ''.join(f'<div class="it"><div><div class="lbl">{esc(a)}</div><b style="font-weight:600;font-size:40px;margin-top:8px">{fmt(b)}</b></div></div>' for a, b in pasos)
-    cuerpo = (f'<div class="t m">Así armamos <em>el giro</em> del reel</div><div class="rn">«{esc(reel)}»</div><div class="li">{items}</div>'
+    items = ''.join(f'<div class="it"><div><div class="lbl">{esc(a)}</div><b style="font-weight:600;font-size:36px;margin-top:6px">{fmt(b)}</b></div></div>' for a, b in pasos)
+    cuerpo = (f'<div class="t s">Así armamos <em>el giro</em> del reel</div><div class="rn">«{esc(reel)}»</div><div class="li">{items}</div>'
               f'<div class="stk c"></div><div class="cta">Respondé con {palabra_pill(pal)} y te respondemos.</div>')
     return cuerpo, ['Así armamos el giro del reel', f'«{reel}»'] + [f'{a}: {b}' for a, b in pasos] + [f'Respondé con «{pal}» y te respondemos.']
 
@@ -399,7 +410,7 @@ def armar(fecha, marcas=None):
         for r in mrows:
             tema, f = ficha(marca, r['tema'])
             temas_dia.add(tema)
-            pal = r['palabra']
+            pal = ACENTOS.get(r['palabra'], r['palabra'])
             hora = r['hora'].replace(':', '')
             fmt_ = r['formato']
             if fmt_ == 'carrusel guía':
@@ -425,6 +436,8 @@ def armar(fecha, marcas=None):
                 if tema != r['tema'] and not (tema == 'documentacion'):
                     q, ops = None, None
                 if r['tema'] == 'diciembre-enero':
+                    q, ops = None, None
+                if marca == 'Coberturas' and q and re.search(r'\d', q):
                     q, ops = None, None
                 cuerpo, txt = h_encuesta(marca, f, pal, q, ops)
             elif fmt_ == 'historia: respondé con PALABRA':

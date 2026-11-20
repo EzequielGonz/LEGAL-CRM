@@ -72,7 +72,7 @@ C['VITA'] = {
         ('Revisá cada renglón.', 'Días trabajados, vacaciones y aguinaldo proporcional.'),
         ('Si algo no cierra, consultá.', 'Antes de firmar conforme.')],
    mito=('Si firmo el recibo, ya no puedo revisar nada.', 'Igual conviene que alguien revise tu liquidación. Consultá antes de firmar conforme.'),
-   enc=('¿Entendiste cada renglón de tu liquidación?', 'Sí', 'No'), pal='LIQUIDACION'),
+   enc=('¿Entendiste cada renglón de tu liquidación?', 'Sí', 'No'), pal='LIQUIDACIÓN'),
  'alta': dict(t='Te dieron el alta *y todavía te duele.*', p='Podés no estar de acuerdo con el alta.',
    pts=[('Pedí el alta por escrito.', 'Con la fecha y el diagnóstico.'),
         ('Seguí con tus estudios.', 'Guardá cada informe médico.'),
