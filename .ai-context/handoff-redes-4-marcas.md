@@ -261,3 +261,34 @@ Las 81 historias destacadas del 20/11 (1:28–1:50) se publicaron todas (verific
   4. Commit y push frecuentes en LEGAL-CRM (rama claude/happy-wozniak-ajfi1z) y en las landings (main, solo archivos estáticos).
   5. Al final, pasar a la responsable el conteo programado por rubro y día y el Excel del cronograma.
 - **Corrección pendiente:** en `estaticos/contenido.py` el agente reemplazó el tema de Coberturas «fallo-corte» por «reintegros», pero la responsable SÍ aprobó «Lo que dijo la Corte». Volver a poner «fallo-corte» (texto del calendario, sin inventar datos). «aumento» → «revisar-plan» está bien.
+
+## 16. Para retomar después de compactar (20/11 03:30)
+- **Herramientas de revisión** (copiadas a `historias-prototipo/revision/`):
+  - `cuadros.js <id> <dir> <t1,t2,…> [escala]` saca cuadros sueltos del reel. Hoja de contactos: `ffmpeg -pattern_type glob -i "dir/*.jpg" -vf "scale=300:-1,tile=6x2" hoja.png`.
+  - `stills.js <dir> nombre=t …` saca imágenes limpias, sin `#ui`, para carruseles y portadas.
+  - `render2.sh` y `render3.sh` son ejemplos de cola de render.
+  - Revisión del video final: `ffmpeg -i x.mp4 -vf "fps=1,scale=170:-1,tile=12x3" hoja.png` y loudness con `-af ebur128` (objetivo −14 LUFS).
+- **Flujo por pieza:**
+  1. guion en `historia_guion.py` y voz con `historia_voz.py <id>`;
+  2. sonido con `sonido.py <id>`;
+  3. render con `render_h.sh <id> 30 1 4`;
+  4. revisión de cuadros y ortografía;
+  5. copia a la landing en `main`, en `/redes/2011/`;
+  6. esperar respuesta 200 de la URL;
+  7. `getScheduledPosts` y `createScheduledPost`.
+- **Formato en Metricool:**
+  - Reels: `instagramData {type: REEL, showReelOnFeed: true, isAiGenerated: true}`, `facebookData {type: REEL}` y `videoThumbnailUrl` con la portada. La hora se pasa con timezone `America/Argentina/Buenos_Aires`; Metricool la muestra en Europe/Madrid, 4 horas más.
+  - Reels de prueba: `TRIAL_REEL`, solo Instagram.
+- **Texto de cada reel:** gancho, 3 puntos, «Comentá «PALABRA» y te respondemos.» y al final «Situación ilustrativa. Voz generada con IA.». En VITA va además «Información general: no reemplaza una consulta.».
+- **Hashtags:**
+  - VITA: #accidentedetransito #seguros #abogados #buenosaires #CABA
+  - Coberturas: #prepagas #obrasocial #monotributo #saludargentina #buenosaires
+  - Autos: #0km #autonuevo #concesionaria #buenosaires #autos
+  - Kocos: #pymes #emprendedores #ventas #marketingdigital #buenosaires
+- **Correcciones de ortografía ya hechas:** «plata rápida» (no «rápido»); «¿Firmo ya o espero?» sin coma; «¡Hola! ¿Sigue disponible?» y «¡Hola, gracias por escribir!» en Kocos; sin coma en «cada uno que espera se enfría».
+- **Lecciones:**
+  - Con el fondo claro, la pastilla de marca y los subtítulos necesitan fondo o contorno oscuro (ya en el motor: `paint-order` con contorno de 14 px).
+  - Ocultar `#nota` cuando está vacío.
+  - Los números de la lista van arriba (`--numTop` 400 px).
+  - El calendario no puede quedar cortado en el borde.
+  - Los globos de diálogo van debajo de la pastilla de marca (y mínimo 345).
