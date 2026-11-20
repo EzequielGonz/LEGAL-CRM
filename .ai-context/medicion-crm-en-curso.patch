@@ -1,0 +1,599 @@
+diff --git a/src/app/api/landing/route.ts b/src/app/api/landing/route.ts
+index 852b579..4efeab8 100644
+--- a/src/app/api/landing/route.ts
++++ b/src/app/api/landing/route.ts
+@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
+ import { findOrCreateContact, findOrCreateConversation } from "@/lib/contacts";
+ import { createAdminClient } from "@/lib/supabase/admin";
+ import { originHash } from "@/lib/acceso/pin";
+-import { normalizarLead, origenPermitido } from "@/lib/landing-lead";
++import { detalleFormulario, normalizarLead, origenPermitido } from "@/lib/landing-lead";
+ import { ensureOpportunity } from "@/lib/opportunities";
+ import { normalizePhoneAR } from "@/lib/phone";
+ 
+@@ -88,11 +88,14 @@ export async function POST(request: Request) {
+       area,
+     });
+ 
++    // 20/11: la referencia y las etiquetas de la visita quedan en el mensaje (sin datos personales).
++    const origenVisita = lead.origen || lead.utm ? { ...(lead.origen ? { origen: lead.origen } : {}), ...(lead.utm ? { utm: lead.utm } : {}) } : {};
+     await supabase.from("messages").insert({
+       conversation_id: conversation.id,
+       sender_type: "prospecto",
+       direction: "entrante",
+       body: consulta,
++      metadata: { via: "formulario_landing", ...origenVisita },
+     });
+ 
+     await supabase
+@@ -105,7 +108,7 @@ export async function POST(request: Request) {
+       const opp = await ensureOpportunity({ contactId: contact.id, conversationId: conversation.id });
+       await supabase
+         .from("opportunities")
+-        .update({ first_source: "landing", first_source_detail: [pagina ? `formulario ${pagina}` : "formulario", lead.llegada ? `llegó desde ${lead.llegada}` : null].filter(Boolean).join(" · "), first_source_at: new Date().toISOString() })
++        .update({ first_source: "landing", first_source_detail: detalleFormulario(lead), first_source_at: new Date().toISOString() })
+         .eq("id", opp.id)
+         .is("first_source", null);
+     } catch (err) {
+diff --git a/src/lib/fuente.ts b/src/lib/fuente.ts
+index 2fbfff9..7b9bc83 100644
+--- a/src/lib/fuente.ts
++++ b/src/lib/fuente.ts
+@@ -1,5 +1,7 @@
++import { type OrigenRedes, detalleOrigen, detectarPalabraClave, leerReferencia } from "@/lib/origen-redes";
++
+ /**
+- * Etapa 2 · Bloque 2.8 — Fuente de un mensaje entrante (pura, sin dependencias).
++ * Etapa 2 · Bloque 2.8 — Fuente de un mensaje entrante (pura).
+  *
+  * Solo se acredita lo que el mensaje permite comprobar:
+  *  - Referencia de Meta de un anuncio («clic a WhatsApp», anuncio de
+@@ -9,7 +11,13 @@
+  *  - Mensaje directo por Instagram o Facebook → esa red.
+  *  - Texto identificador de un mensaje prearmado (configurado por perfil)
+  *    → la fuente configurada (por ejemplo, la landing).
++ *  - Referencia «(ref: IG-ART-0112)» de la landing o del enlace de la bio,
++ *    una historia o un texto (20/11) → la red si es Instagram o Facebook,
++ *    «landing» si la visita vino de la web o un buscador; las demás redes
++ *    quedan «no_informada» con el detalle (la columna no las admite todavía).
++ *    El origen completo va en `origen` (se guarda en el mensaje).
+  *  - Contacto que vino de una base importada → «base_importada».
++ *  - Palabra clave de una serie de redes como único texto → mismo criterio.
+  *  - Sin referencia → «no_informada». Nunca se supone pago u orgánico.
+  */
+ 
+@@ -26,7 +34,7 @@ export const FUENTE_LABEL: Record<Fuente, string> = {
+ };
+ 
+ /** Redes desde las que puede llegar una visita a la landing. */
+-export const NOMBRE_RED: Record<string, string> = { instagram: "Instagram", facebook: "Facebook", google: "Google", tiktok: "TikTok" };
++export const NOMBRE_RED: Record<string, string> = { instagram: "Instagram", facebook: "Facebook", google: "Google", tiktok: "TikTok", youtube: "YouTube", threads: "Threads" };
+ 
+ /** Red de llegada informada por el formulario de la landing (lo demás se ignora). */
+ export function redDeLlegada(v: unknown): string | null {
+@@ -70,6 +78,26 @@ function host(url: unknown): string {
+   }
+ }
+ 
++export interface ResultadoFuente {
++  fuente: Fuente;
++  detalle: string | null;
++  /** Solo cuando hay referencia o palabra clave de redes. */
++  origen?: OrigenRedes;
++}
++
++/** Fuente que admite la columna para un origen de redes o de la landing. */
++export function fuenteDeOrigen(o: OrigenRedes): Fuente {
++  if (o.red === "instagram" || o.red === "facebook") return o.red;
++  if (o.canal === "landing") return "landing";
++  return "no_informada";
++}
++
++function conOrigen(o: OrigenRedes, canalMensaje?: Fuente): ResultadoFuente {
++  // Un mensaje directo de Instagram o Facebook con palabra clave: la red es la del canal.
++  const origen = !o.red && canalMensaje && (canalMensaje === "instagram" || canalMensaje === "facebook") ? { ...o, red: canalMensaje } : o;
++  return { fuente: canalMensaje ?? fuenteDeOrigen(origen), detalle: detalleOrigen(origen), origen };
++}
++
+ export function detectarFuente(input: {
+   channelType: string;
+   metadata?: Record<string, unknown> | null;
+@@ -77,7 +105,9 @@ export function detectarFuente(input: {
+   identificadores?: IdentificadorFuente[];
+   /** Origen del contacto (por ejemplo, base_de_datos si vino de una base). */
+   contactSource?: string | null;
+-}): { fuente: Fuente; detalle: string | null } {
++  /** Palabras clave de redes del perfil (`palabrasClaveDe`). */
++  palabrasClave?: string[];
++}): ResultadoFuente {
+   const ref = (input.metadata?.referral ?? null) as Record<string, any> | null;
+   if (ref && typeof ref === "object") {
+     const tipo = String(ref.source_type ?? ref.source ?? ref.type ?? "").toLowerCase();
+@@ -90,8 +120,16 @@ export function detectarFuente(input: {
+     if (h.endsWith("instagram.com")) return { fuente: "instagram", detalle: "publicación de Instagram" };
+     if (h.endsWith("facebook.com") || h.endsWith("fb.com") || h.endsWith("fb.me")) return { fuente: "facebook", detalle: "publicación de Facebook" };
+   }
+-  if (input.channelType === "instagram") return { fuente: "instagram", detalle: "mensaje directo" };
+-  if (input.channelType === "facebook") return { fuente: "facebook", detalle: "mensaje directo" };
++  // 20/11: la referencia del enlace (landing, bio, historia o texto) es la evidencia más precisa.
++  const conRef = leerReferencia(input.body);
++  if (conRef) return conOrigen(conRef);
++  const canal: Fuente | undefined = input.channelType === "instagram" ? "instagram" : input.channelType === "facebook" ? "facebook" : undefined;
++  const esBase = input.contactSource === "base_de_datos";
++  const palabra = esBase ? null : detectarPalabraClave(input.body, input.palabrasClave ?? []);
++  if (palabra) {
++    return conOrigen({ canal: "redes", red: null, campana: null, pieza: null, ref: null, palabraClave: palabra, evidencia: "palabra_clave" }, canal);
++  }
++  if (canal) return { fuente: canal, detalle: "mensaje directo" };
+   const body = input.body ? normalizarTexto(input.body) : "";
+   if (body) {
+     for (const id of input.identificadores ?? []) {
+diff --git a/src/lib/inbound.ts b/src/lib/inbound.ts
+index 238a433..cf401c4 100644
+--- a/src/lib/inbound.ts
++++ b/src/lib/inbound.ts
+@@ -18,6 +18,7 @@ import { pideOrigenOBajaDeDatos, TEXTO_DISCULPA_DATOS } from "@/lib/agentes/auto
+ import { agentReadiness } from "@/lib/profiles";
+ import { AREA_TO_RUBRO_ID } from "@/lib/rubros";
+ import { TEXTO_PEDIDO_TEXTO, correspondePedidoTexto, detectarFuente, identificadoresValidos } from "@/lib/fuente";
++import { palabrasClaveDe } from "@/lib/origen-redes";
+ import { AutomaticSendBlockedError, sendOutboundMessage } from "@/lib/messaging";
+ import { audioDeAdjunto, transcribirEntrante, type AudioCrudo } from "@/lib/audios/transcribir";
+ 
+@@ -300,12 +301,22 @@ async function afterInboundSaved({
+         body,
+         identificadores: identificadoresValidos((rubroCfg as any)?.source_identifiers),
+         contactSource: (contact as any).source ?? null,
++        palabrasClave: palabrasClaveDe(area, (rubroCfg as any)?.source_identifiers),
+       });
+-      await supabase
++      const { data: acreditada } = await supabase
+         .from("opportunities")
+         .update({ first_source: f.fuente, first_source_detail: f.detalle, first_source_at: new Date().toISOString() })
+         .eq("id", opp.id)
+-        .is("first_source", null);
++        .is("first_source", null)
++        .select("id");
++      // 20/11: el origen de redes (red, campaña, pieza) queda en el mensaje que lo trajo,
++      // para el informe de consultas por pieza. Solo si esta entrega acreditó la fuente.
++      if (f.origen && insertedId && (acreditada ?? []).length > 0) {
++        await supabase
++          .from("messages")
++          .update({ metadata: { ...(metadata ?? {}), origen: f.origen } })
++          .eq("id", insertedId);
++      }
+     }
+   } catch (err) {
+     console.error("[oportunidad] No se pudo leer la oportunidad:", err);
+diff --git a/src/lib/landing-lead.ts b/src/lib/landing-lead.ts
+index 69e95e6..819f2e0 100644
+--- a/src/lib/landing-lead.ts
++++ b/src/lib/landing-lead.ts
+@@ -1,4 +1,5 @@
+ import { redDeLlegada } from "@/lib/fuente";
++import { type OrigenRedes, leerReferencia, nombreRed } from "@/lib/origen-redes";
+ /**
+  * Formularios de las cuatro landings → CRM (16/10).
+  *
+@@ -43,6 +44,32 @@ export interface LeadNormalizado {
+   pagina: string | null;
+   /** Red desde la que llegó la visita (Instagram, Facebook, Google, TikTok). */
+   llegada?: string | null;
++  /** 20/11: referencia de la visita (IG-ART-0112) y etiquetas utm_* saneadas. */
++  origen?: OrigenRedes | null;
++  utm?: Record<string, string> | null;
++}
++
++const CAMPOS_UTM = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"] as const;
++
++/** Etiquetas utm_* del formulario: solo letras, números, guiones, puntos y espacios; 100 caracteres. */
++export function utmDelFormulario(body: Record<string, unknown>): Record<string, string> | null {
++  const fuente = (body.atribucion && typeof body.atribucion === "object" ? body.atribucion : body) as Record<string, unknown>;
++  const out: Record<string, string> = {};
++  for (const k of CAMPOS_UTM) {
++    const v = typeof fuente[k] === "string" ? (fuente[k] as string).replace(/[^\p{L}\p{N} ._-]/gu, "").trim().slice(0, 100) : "";
++    if (v) out[k] = v;
++  }
++  // fbclid: solo se registra que vino de un clic en Meta; el identificador no se guarda.
++  if (typeof fuente.fbclid === "string" && fuente.fbclid.trim()) out.fbclid = "presente";
++  return Object.keys(out).length ? out : null;
++}
++
++/** Origen del formulario: la referencia que armó la landing («IG-ART-0112»), validada. */
++export function origenDelFormulario(body: Record<string, unknown>): OrigenRedes | null {
++  const fuente = (body.atribucion && typeof body.atribucion === "object" ? body.atribucion : body) as Record<string, unknown>;
++  const ref = typeof fuente.ref === "string" ? fuente.ref.trim().slice(0, 40) : "";
++  if (!ref) return null;
++  return leerReferencia(`(ref: ${ref.replace(/^\(?\s*ref\s*:\s*/i, "").replace(/\)$/, "")})`);
+ }
+ 
+ function txt(v: unknown, max: number): string {
+@@ -90,5 +117,31 @@ export function normalizarLead(body: Record<string, unknown> | null, perfilParam
+   const area: Area =
+     perfil === "juridico" ? (/penal/i.test(`${tipo} ${descripcion}`) ? "penal" : "civil") : (perfil as Area);
+   const consulta = [tipo ? `Tipo: ${tipo}` : null, descripcion || null].filter(Boolean).join("\n");
+-  return { area, nombre, telefono, email: txt(body.email, 200) || null, consulta, pagina, llegada: redDeLlegada(body.llegada) };
++  return {
++    area,
++    nombre,
++    telefono,
++    email: txt(body.email, 200) || null,
++    consulta,
++    pagina,
++    llegada: redDeLlegada(body.llegada),
++    origen: origenDelFormulario(body),
++    utm: utmDelFormulario(body),
++  };
++}
++
++/** Detalle de la fuente del formulario: página, red de llegada y referencia (sin datos personales). */
++export function detalleFormulario(lead: Pick<LeadNormalizado, "pagina" | "llegada" | "origen" | "utm">): string {
++  const red = lead.origen ? nombreRed(lead.origen.red) : lead.llegada ?? null;
++  return [
++    lead.pagina ? `formulario ${lead.pagina}` : "formulario",
++    lead.origen ? (lead.origen.canal === "redes" ? "desde redes" : null) : null,
++    red ? `llegó desde ${red}` : null,
++    lead.origen?.campana ? `campaña ${lead.origen.campana}` : null,
++    lead.origen?.pieza ? `pieza ${lead.origen.pieza}` : null,
++    lead.origen?.ref ? `ref ${lead.origen.ref}` : null,
++  ]
++    .filter(Boolean)
++    .join(" · ")
++    .slice(0, 300);
+ }
+diff --git a/src/lib/origen-redes.ts b/src/lib/origen-redes.ts
+new file mode 100644
+index 0000000..5f9e7a4
+--- /dev/null
++++ b/src/lib/origen-redes.ts
+@@ -0,0 +1,165 @@
++/**
++ * Origen de una consulta que vino de redes o de una landing (20/11, medición
++ * de punta a punta). Puro, sin dependencias: lo usa `detectarFuente`.
++ *
++ * Dos evidencias, y solo esas:
++ *  1. La referencia «(ref: RED-CAMPAÑA-PIEZA)» al final del mensaje. La pone la
++ *     landing (a partir de las etiquetas utm_* de la visita) o el enlace a
++ *     WhatsApp de la bio, de una historia o de un texto. Formato documentado en
++ *     docs/redes/MEDICION-2026-11-20.md:
++ *       - RED: código de 1 a 4 letras (IG, FB, TT, YT, TH, MT, GO, BI, WEB…).
++ *       - CAMPAÑA y PIEZA: letras y números en mayúscula, hasta 12 cada una.
++ *         Las que faltan al final se omiten; una campaña ausente con pieza
++ *         presente se escribe «X».
++ *  2. Una palabra clave de redes («Escribí ART», «Respondé con FIRMA») cuando
++ *     el mensaje es solo esa palabra, con o sin saludo. «La ART no me paga» no
++ *     cuenta: es una consulta, no un llamado de una pieza.
++ *
++ * Nada se supone: sin referencia ni palabra clave, no hay origen de redes.
++ */
++
++export type CanalOrigen = "redes" | "landing";
++
++export interface OrigenRedes {
++  canal: CanalOrigen;
++  /** Red en minúscula (instagram, facebook, tiktok…), o null si no se sabe. */
++  red: string | null;
++  campana: string | null;
++  pieza: string | null;
++  /** Referencia tal como vino, normalizada (IG-ART-0112), o null. */
++  ref: string | null;
++  palabraClave: string | null;
++  evidencia: "referencia" | "palabra_clave";
++}
++
++/** Códigos de red de la referencia. Lo que no está acá se conserva en minúscula. */
++export const REDES_POR_CODIGO: Record<string, { red: string; nombre: string; canal: CanalOrigen }> = {
++  IG: { red: "instagram", nombre: "Instagram", canal: "redes" },
++  FB: { red: "facebook", nombre: "Facebook", canal: "redes" },
++  TT: { red: "tiktok", nombre: "TikTok", canal: "redes" },
++  YT: { red: "youtube", nombre: "YouTube", canal: "redes" },
++  TH: { red: "threads", nombre: "Threads", canal: "redes" },
++  MT: { red: "meta", nombre: "Meta (Facebook o Instagram)", canal: "redes" },
++  WA: { red: "whatsapp", nombre: "Estados de WhatsApp", canal: "redes" },
++  X: { red: "x", nombre: "X", canal: "redes" },
++  LI: { red: "linkedin", nombre: "LinkedIn", canal: "redes" },
++  GO: { red: "google", nombre: "Google", canal: "landing" },
++  BI: { red: "bing", nombre: "Bing", canal: "landing" },
++  WEB: { red: "web", nombre: "la web", canal: "landing" },
++  EM: { red: "email", nombre: "correo", canal: "landing" },
++};
++
++/** «(ref: IG-ART-0112)» en cualquier parte del texto; se toma la última. */
++const REF_RE = /\(\s*ref\s*:\s*([a-z0-9]{1,4})(?:-([a-z0-9]{1,12}))?(?:-([a-z0-9]{1,12}))?\s*\)/gi;
++
++export function leerReferencia(texto: string | null | undefined): OrigenRedes | null {
++  if (!texto || typeof texto !== "string") return null;
++  let ultima: RegExpExecArray | null = null;
++  for (const m of texto.slice(0, 5000).matchAll(REF_RE)) ultima = m as RegExpExecArray;
++  if (!ultima) return null;
++  const codigo = ultima[1].toUpperCase();
++  const campana = ultima[2] ? ultima[2].toUpperCase() : null;
++  const pieza = ultima[3] ? ultima[3].toUpperCase() : null;
++  const conocida = REDES_POR_CODIGO[codigo];
++  return {
++    canal: conocida?.canal ?? "redes",
++    red: conocida?.red ?? codigo.toLowerCase(),
++    campana: campana === "X" ? null : campana,
++    pieza,
++    ref: [codigo, campana, pieza].filter(Boolean).join("-"),
++    palabraClave: null,
++    evidencia: "referencia",
++  };
++}
++
++/** Normaliza un código: sin tildes, solo letras y números, en mayúscula. */
++export function normalizarCodigo(v: unknown, max: number): string {
++  if (typeof v !== "string") return "";
++  return v
++    .normalize("NFD")
++    .replace(/[̀-ͯ]/g, "")
++    .toUpperCase()
++    .replace(/[^A-Z0-9]/g, "")
++    .slice(0, max);
++}
++
++/** Arma la referencia (el inverso de `leerReferencia`). Devuelve null sin red. */
++export function armarReferencia(input: { red: string; campana?: string | null; pieza?: string | null }): string | null {
++  const red = normalizarCodigo(input.red, 4);
++  if (!red) return null;
++  const campana = normalizarCodigo(input.campana ?? "", 12);
++  const pieza = normalizarCodigo(input.pieza ?? "", 12);
++  if (pieza) return `${red}-${campana || "X"}-${pieza}`;
++  if (campana) return `${red}-${campana}`;
++  return red;
++}
++
++/**
++ * Palabras clave de las series de redes (`.claude/referencias/redes/series-y-volumen.md`)
++ * más las que ya llegaron (ALTA). Se suman otras por perfil desde
++ * `rubros.source_identifiers` con `{ "texto": "PALABRA", "fuente": "palabra_clave" }`.
++ */
++export const PALABRAS_CLAVE_REDES: Record<string, string[]> = {
++  civil: ["FIRMA", "SEGURO", "TRAYECTO", "ART", "ALTA"],
++  penal: ["FIRMA", "SEGURO", "TRAYECTO", "ART", "ALTA"],
++  coberturas_medicas: ["APORTES", "COMPARAR", "PLAN"],
++  agencia_0km: ["LLAVE", "PLAN", "0KM"],
++  marketing: ["CRM", "BIO", "ORDEN"],
++};
++
++/** Palabras clave del perfil: las de la serie más las configuradas (válidas). */
++export function palabrasClaveDe(area: string | null | undefined, configuradas?: unknown): string[] {
++  const base = (area && PALABRAS_CLAVE_REDES[area]) || [];
++  const extra = Array.isArray(configuradas)
++    ? configuradas
++        .filter((x) => x && typeof x === "object" && (x as any).fuente === "palabra_clave")
++        .map((x) => normalizarCodigo((x as any).texto, 20))
++        .filter((p) => p.length >= 2)
++    : [];
++  return [...new Set([...base, ...extra])];
++}
++
++/** Saludos y muletillas que pueden rodear a la palabra clave. */
++const RELLENO = new Set(
++  "hola holaa buenas buenos buen dia dias tardes noches que tal como estas estan info informacion quiero quisiera me interesa interesado interesada por favor porfa gracias palabra clave mas sobre de del el la los las mi una un te les escribo escribi mando aca envio".split(" ")
++);
++
++/**
++ * Devuelve la palabra clave si el mensaje es solo esa palabra (con saludo o
++ * muletillas alrededor). Tope de 80 caracteres: un mensaje largo es una consulta.
++ */
++export function detectarPalabraClave(texto: string | null | undefined, palabras: string[]): string | null {
++  if (!texto || typeof texto !== "string" || texto.length > 80 || palabras.length === 0) return null;
++  const tokens = texto
++    .normalize("NFD")
++    .replace(/[̀-ͯ]/g, "")
++    .toLowerCase()
++    .replace(/[^a-z0-9ñ]+/g, " ")
++    .trim()
++    .split(" ")
++    .filter((t) => t && !RELLENO.has(t));
++  if (tokens.length !== 1) return null;
++  const candidata = tokens[0].toUpperCase();
++  return palabras.find((p) => normalizarCodigo(p, 20) === candidata) ?? null;
++}
++
++/** Nombre legible de la red para el detalle de la fuente. */
++export function nombreRed(red: string | null): string | null {
++  if (!red) return null;
++  const hit = Object.values(REDES_POR_CODIGO).find((r) => r.red === red);
++  return hit?.nombre ?? red;
++}
++
++/** Detalle de una línea para `first_source_detail` (sin datos personales). */
++export function detalleOrigen(o: OrigenRedes): string {
++  return [
++    o.canal,
++    nombreRed(o.red),
++    o.campana ? `campaña ${o.campana}` : null,
++    o.pieza ? `pieza ${o.pieza}` : null,
++    o.palabraClave ? `palabra clave ${o.palabraClave}` : null,
++    o.ref ? `ref ${o.ref}` : null,
++  ]
++    .filter(Boolean)
++    .join(" · ");
++}
+diff --git a/src/lib/redes/ctas.ts b/src/lib/redes/ctas.ts
+index 3bf5606..c049b7a 100644
+--- a/src/lib/redes/ctas.ts
++++ b/src/lib/redes/ctas.ts
+@@ -5,6 +5,7 @@
+  * identificadores del perfil) y lo guarda como fuente del contacto. Puro.
+  */
+ import type { Fuente } from "@/lib/fuente";
++import { armarReferencia } from "@/lib/origen-redes";
+ 
+ export type RedOrigen = "instagram" | "facebook" | "landing";
+ 
+@@ -15,9 +16,21 @@ export function identificadorOrigen(red: RedOrigen): string {
+   return `los vi en ${NOMBRE[red].toLowerCase()}`;
+ }
+ 
+-/** Mensaje prearmado completo. */
++/**
++ * Referencia de los enlaces del panel (20/11): el de Instagram va en la bio y
++ * el de Facebook en los textos. La auditoría mostró que los perfiles no tienen
++ * botón de WhatsApp, así que esta referencia es el camino principal de medición.
++ */
++export const REF_ENLACE_PANEL: Record<RedOrigen, string | null> = {
++  instagram: armarReferencia({ red: "IG", campana: "PERFIL", pieza: "BIO" }),
++  facebook: armarReferencia({ red: "FB", campana: "PERFIL", pieza: "TEXTO" }),
++  landing: null,
++};
++
++/** Mensaje prearmado completo, con la referencia al final cuando corresponde. */
+ export function mensajePrearmado(red: RedOrigen): string {
+-  return `Hola, ${identificadorOrigen(red)} y quiero hacer una consulta.`;
++  const ref = REF_ENLACE_PANEL[red];
++  return `Hola, ${identificadorOrigen(red)} y quiero hacer una consulta.${ref ? ` (ref: ${ref})` : ""}`;
+ }
+ 
+ /** Solo dígitos, con el 549 de la Argentina para celulares. */
+diff --git a/tests/unitarias/origen-redes.test.ts b/tests/unitarias/origen-redes.test.ts
+new file mode 100644
+index 0000000..517d6cd
+--- /dev/null
++++ b/tests/unitarias/origen-redes.test.ts
+@@ -0,0 +1,143 @@
++import { test } from "node:test";
++import assert from "node:assert/strict";
++import { armarReferencia, detalleOrigen, detectarPalabraClave, leerReferencia, palabrasClaveDe } from "@/lib/origen-redes";
++import { detectarFuente } from "@/lib/fuente";
++import { detalleFormulario, normalizarLead, origenDelFormulario, utmDelFormulario } from "@/lib/landing-lead";
++import { enlaceWhatsAppOrigen, mensajePrearmado } from "@/lib/redes/ctas";
++
++// Datos ficticios: ningún nombre ni teléfono real.
++
++test("referencia: se lee red, campaña y pieza del final del mensaje", () => {
++  const o = leerReferencia("Hola, vi la guía de ART en su web. (ref: IG-ART-0112)");
++  assert.deepEqual(o, { canal: "redes", red: "instagram", campana: "ART", pieza: "0112", ref: "IG-ART-0112", palabraClave: null, evidencia: "referencia" });
++});
++
++test("referencia: minúsculas, espacios y segmentos que faltan", () => {
++  assert.equal(leerReferencia("hola (Ref:  fb-perfil )")?.campana, "PERFIL");
++  assert.equal(leerReferencia("hola (ref: TT)")?.red, "tiktok");
++  const sinCampana = leerReferencia("(ref: YT-X-R0115)");
++  assert.equal(sinCampana?.campana, null);
++  assert.equal(sinCampana?.pieza, "R0115");
++  assert.equal(leerReferencia("(ref: GO)")?.canal, "landing");
++  assert.equal(leerReferencia("(ref: WEB)")?.red, "web");
++  // Red desconocida: se conserva el código, sin inventar un nombre.
++  assert.equal(leerReferencia("(ref: NEWS-DIC)")?.red, "news");
++});
++
++test("referencia: sin formato válido no hay origen", () => {
++  assert.equal(leerReferencia("Me pasaron la referencia de un amigo"), null);
++  assert.equal(leerReferencia("(ref: )"), null);
++  assert.equal(leerReferencia("(ref: IG-<script>)"), null);
++  assert.equal(leerReferencia("(ref: IG-ESTOESDEMASIADOLARGO)"), null);
++  assert.equal(leerReferencia(null), null);
++});
++
++test("referencia: si hay dos, vale la última (la que agregó la landing)", () => {
++  assert.equal(leerReferencia("(ref: IG-PERFIL-BIO) y después (ref: FB-ART-0112)")?.ref, "FB-ART-0112");
++});
++
++test("armar y leer son inversos", () => {
++  for (const caso of [
++    { red: "ig", campana: "art", pieza: "0112" },
++    { red: "FB", campana: "Black-Friday", pieza: null },
++    { red: "TT", campana: null, pieza: "r01" },
++    { red: "WEB", campana: null, pieza: null },
++  ]) {
++    const ref = armarReferencia(caso)!;
++    const o = leerReferencia(`(ref: ${ref})`)!;
++    assert.equal(o.ref, ref);
++    assert.equal(armarReferencia({ red: ref.split("-")[0], campana: o.campana, pieza: o.pieza }), ref);
++  }
++  assert.equal(armarReferencia({ red: "IG", campana: "Black-Friday" }), "IG-BLACKFRIDAY");
++  assert.equal(armarReferencia({ red: "" }), null);
++});
++
++test("palabra clave: solo cuando el mensaje es la palabra, con saludo o sin él", () => {
++  const p = palabrasClaveDe("civil");
++  assert.equal(detectarPalabraClave("ART", p), "ART");
++  assert.equal(detectarPalabraClave("Hola! art 🙂", p), "ART");
++  assert.equal(detectarPalabraClave("Buenas tardes, quiero info sobre FIRMA", p), "FIRMA");
++  assert.equal(detectarPalabraClave("La ART no me quiere pagar", p), null);
++  assert.equal(detectarPalabraClave("Hola", p), null);
++  assert.equal(detectarPalabraClave("ART", palabrasClaveDe("marketing")), null);
++  assert.equal(detectarPalabraClave(`ART ${"x".repeat(90)}`, p), null);
++});
++
++test("palabras clave configuradas en el perfil se suman a las de la serie", () => {
++  const ids = [{ texto: "aguinaldo", fuente: "palabra_clave" }, { texto: "otra cosa larga", fuente: "landing" }, { texto: "<", fuente: "palabra_clave" }];
++  const p = palabrasClaveDe("coberturas_medicas", ids);
++  assert.ok(p.includes("AGUINALDO") && p.includes("APORTES"));
++  assert.equal(p.length, 4);
++});
++
++test("detectarFuente: la referencia acredita Instagram con el origen completo", () => {
++  const f = detectarFuente({ channelType: "whatsapp", body: "Hola, quiero hacer una consulta. (ref: IG-ART-0112)" });
++  assert.equal(f.fuente, "instagram");
++  assert.equal(f.detalle, "redes · Instagram · campaña ART · pieza 0112 · ref IG-ART-0112");
++  assert.equal(f.origen?.pieza, "0112");
++});
++
++test("detectarFuente: redes que la columna no admite quedan no informadas, con el detalle", () => {
++  const f = detectarFuente({ channelType: "whatsapp", body: "Hola (ref: TT-LLAVE-R03)" });
++  assert.equal(f.fuente, "no_informada");
++  assert.equal(f.origen?.red, "tiktok");
++  assert.match(f.detalle ?? "", /^redes · TikTok/);
++});
++
++test("detectarFuente: visita orgánica a la landing", () => {
++  const f = detectarFuente({ channelType: "whatsapp", body: "Hola, vi «Plan de ahorro» en su web. (ref: GO)" });
++  assert.equal(f.fuente, "landing");
++  assert.equal(f.origen?.canal, "landing");
++});
++
++test("detectarFuente: palabra clave por WhatsApp y por mensaje directo de Instagram", () => {
++  const wa = detectarFuente({ channelType: "whatsapp", body: "FIRMA", palabrasClave: palabrasClaveDe("civil") });
++  assert.equal(wa.fuente, "no_informada");
++  assert.equal(wa.detalle, "redes · palabra clave FIRMA");
++  const ig = detectarFuente({ channelType: "instagram", body: "Hola FIRMA", palabrasClave: palabrasClaveDe("civil") });
++  assert.equal(ig.fuente, "instagram");
++  assert.equal(ig.origen?.red, "instagram");
++});
++
++test("detectarFuente: un contacto de base que responde una palabra no se acredita a redes", () => {
++  const f = detectarFuente({ channelType: "whatsapp", body: "PLAN", palabrasClave: palabrasClaveDe("agencia_0km"), contactSource: "base_de_datos" });
++  assert.deepEqual(f, { fuente: "base_importada", detalle: null });
++});
++
++test("detectarFuente: el anuncio de Meta sigue teniendo prioridad sobre la referencia", () => {
++  const f = detectarFuente({ channelType: "whatsapp", body: "(ref: IG-ART)", metadata: { referral: { source_type: "ad", source_id: "123" } } });
++  assert.equal(f.fuente, "anuncio");
++  assert.equal(f.origen, undefined);
++});
++
++test("enlaces del panel: la bio de Instagram y los textos de Facebook llevan su referencia", () => {
++  assert.equal(mensajePrearmado("instagram"), "Hola, los vi en instagram y quiero hacer una consulta. (ref: IG-PERFIL-BIO)");
++  assert.equal(mensajePrearmado("landing"), "Hola, los vi en la web y quiero hacer una consulta.");
++  const fb = decodeURIComponent(enlaceWhatsAppOrigen("1100000000", "facebook")!.split("text=")[1]);
++  assert.equal(detectarFuente({ channelType: "whatsapp", body: fb }).origen?.ref, "FB-PERFIL-TEXTO");
++});
++
++test("formulario: referencia y etiquetas saneadas, sin guardar el fbclid", () => {
++  const body = {
++    nombre: "Persona",
++    apellido: "Ficticia",
++    telefono: "1100000000",
++    tipo: "Accidente laboral",
++    descripcion: "Texto de prueba",
++    origen: "/accidentes-laborales",
++    llegada: "instagram",
++    atribucion: { ref: "IG-ART-0112", utm_source: "instagram", utm_medium: "historia", utm_campaign: "art<script>", utm_content: "0112", fbclid: "IwAR-ficticio" },
++  };
++  const lead = normalizarLead(body, "juridico");
++  assert.ok(!("error" in lead));
++  assert.equal(lead.origen?.ref, "IG-ART-0112");
++  assert.deepEqual(lead.utm, { utm_source: "instagram", utm_medium: "historia", utm_campaign: "artscript", utm_content: "0112", fbclid: "presente" });
++  assert.equal(detalleFormulario(lead), "formulario /accidentes-laborales · desde redes · llegó desde Instagram · campaña ART · pieza 0112 · ref IG-ART-0112");
++  assert.equal(origenDelFormulario({ ref: "(ref: FB-PERFIL)" })?.red, "facebook");
++  assert.equal(origenDelFormulario({ ref: "cualquier cosa" }), null);
++  assert.equal(utmDelFormulario({}), null);
++});
++
++test("detalle del origen sin datos de más", () => {
++  assert.equal(detalleOrigen({ canal: "landing", red: "web", campana: null, pieza: null, ref: "WEB", palabraClave: null, evidencia: "referencia" }), "landing · la web · ref WEB");
++});
