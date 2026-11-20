@@ -57,7 +57,7 @@ T = {
               tf='Manrope', tw=800, tcase='none', tls='-0.02em', em_it=False, bf='Manrope', marker=True,
               card_osc='rgba(255,255,255,.08)', borde_osc='rgba(142,182,155,.45)', card_cla='#FFFFFF', borde_cla='rgba(35,83,71,.18)', logo_h=110, alt='osc'),
  'Autos': dict(osc='radial-gradient(110% 70% at 50% 18%, #011F65 0%, #020C47 45%, #000521 100%)', cla='#FFFFFF', txt_osc='#FFFFFF', sub_osc='rgba(255,255,255,.88)', txt_cla='#000521', sub_cla='#33405E',
-              acc_osc='#6FB4F5', acc_cla='#0E4EB2', linea='#207CCF', pill_osc='#207CCF', pill_txt_osc='#FFFFFF', pill_cla='#0E4EB2', pill_txt_cla='#FFFFFF',
+              acc_osc='#8CC6FF', acc_cla='#0E4EB2', linea='#4A9BE8', pill_osc='#1565C0', pill_txt_osc='#FFFFFF', pill_cla='#0E4EB2', pill_txt_cla='#FFFFFF',
               tf='Archivo', tw=800, tcase='uppercase', tls='-0.01em', em_it=False, bf='"Plus Jakarta Sans"',
               card_osc='rgba(32,124,207,.14)', borde_osc='rgba(111,180,245,.45)', card_cla='#EEF4FC', borde_cla='rgba(14,78,178,.20)', logo_h=150, alt='cla'),
  'Kocos Marketing': dict(osc='#1B1B1B', cla='#FFE7D0', txt_osc='#FFE7D0', sub_osc='rgba(255,231,208,.86)', txt_cla='#1B1B1B', sub_cla='#5D493D',

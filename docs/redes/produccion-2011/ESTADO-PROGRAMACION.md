@@ -28,7 +28,7 @@ Leyenda: «previo» = ya estaba programado antes de esta vuelta; **nuevo** = pro
 | 24/11 | Coberturas | 0 | 12 | 1 | 13 |
 | 24/11 | Autos | 0 | 12 | 1 | 13 |
 | 24/11 | Kocos Marketing | 0 | 12 | 1 | 13 |
-| 25/11 al 29/11 | las 4 | 0 | 0 | 0 | 0 (no hay piezas alojadas para esas fechas) |
+| 25/11 al 29/11 | las 4 | ver sección «25 al 29/11» | | | |
 
 ## Detalle con ids de Metricool
 
@@ -316,6 +316,19 @@ Leyenda: «previo» = ya estaba programado antes de esta vuelta; **nuevo** = pro
 | Kocos Marketing | 21:30 | historia | 436051386 | **nuevo** |
 | Kocos Marketing | 22:30 | historia | 436051413 | **nuevo** |
 
+## Cronograma nuevo del 25 al 29/11 (historias y carruseles)
+
+Producidos con `estaticos/generar_estaticos.py` (azul de Autos con más contraste: destacado #8CC6FF sobre fondo oscuro, píldora #1565C0), revisados en hoja de contactos, alojados en `apps/web/public/redes/2011/` de cada landing (main), con URL en 200 antes de programar y sin duplicados según getScheduledPosts. Historias STORY IG+FB sin texto; carrusel 11:00 POST IG+FB.
+
+| Día | Marca | Historias | Carrusel | ids (primero–último) |
+|---|---|---|---|---|
+| 25/11 | VITA | 12 | 436224643 | 436224643–436225258 |
+| 25/11 | Coberturas | 12 | 436224692 | 436224692–436225644 |
+| 25/11 | Autos | 12 | 436224748 | 436224748–436226021 |
+| 25/11 | Kocos Marketing | 12 | 436224801 | 436224801–436226355 |
+
+Detalle completo (pieza, hora e id) en `registro.csv`, tramo `estaticos-2529`.
+
 ## Reels B/A alojados y programados en esta vuelta
 
 | Marca | Archivo | Fecha y hora | id | Fila del calendario |
@@ -335,4 +348,3 @@ Horarios fijados por el coordinador (pedido de la responsable: publicar desde ho
 - Kocos, historias del 23/11 a las 15:30, 17:00 y 20:00: «Metricool couldn't process the media» al primer intento; 21:30: 502 de Metricool (se comprobó que no quedó creada). Se reintentaron y quedaron programadas.
 - Historias del 20/11 a las 08:00, 09:50 y 10:30 (4 marcas) y `c-vita-2011-*` dan 404; esos horarios ya pasaron y el carrusel de VITA del 20/11 ya salió con otra tanda (id 435155423), así que no falta nada.
 - Kocos tiene borradores del grupo anterior (solo Instagram, `draft: true`) del 25 y 26/11 en los horarios del grupo de control; no son del cronograma nuevo y no se tocaron. Del 27 al 29/11 se revisaron las franjas libres y no hay nada.
-- Del 25 al 29/11 no hay historias, carruseles ni reels del cronograma nuevo programados: falta producir y alojar esas piezas.
