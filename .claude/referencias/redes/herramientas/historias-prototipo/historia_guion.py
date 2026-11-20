@@ -59,3 +59,9 @@ R = {
    dict(q='laura', say='Ahora sí, a vender.', show='Ahora sí, a vender.', p=.3, marca='alivio'),
    dict(q='nar', say='Comentá «orden», y te mostramos cómo.', show='Comentá *ORDEN*', p=.2, cta=1, r=-3)]),
 }
+
+# Variante B de VITA: mismo guion y palabra; cambia el gancho, la primera frase y la apertura (adelanto de la caída).
+import copy as _copy
+R['vita-b'] = _copy.deepcopy(R['vita'])
+R['vita-b']['frases'][0] = dict(q='nico', say='¿Firmo ya, o espero?', show='¿Firmo ya, o espero?', p=.35, marca='notif')
+R['vita-b']['frases'][1] = dict(q='nar', say='El seguro del otro te llama y te ofrece plata rápido, hoy.', show='El seguro del otro te ofrece *plata rápido, hoy.*', p=.35)

@@ -26,8 +26,10 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000}
 #cta .nm{font-family:var(--f1);font-weight:600;font-size:56px;color:#fff;margin:-14px 0 40px}
 #lineas{position:absolute;inset:-300px;opacity:0;background:repeating-conic-gradient(from 0deg at 50% 50%,transparent 0deg 2.1deg,rgba(255,250,235,.7) 2.25deg 2.55deg,transparent 2.7deg 5.3deg);-webkit-mask-image:radial-gradient(circle at 50% 50%,transparent 26%,#000 62%);mask-image:radial-gradient(circle at 50% 50%,transparent 26%,#000 62%);mix-blend-mode:screen;pointer-events:none}
 #onda{position:absolute;left:540px;top:1060px;width:420px;height:420px;border-radius:50%;border:10px solid rgba(255,236,190,.85);box-shadow:0 0 60px rgba(255,220,150,.6),inset 0 0 40px rgba(255,220,150,.4);opacity:0;transform:translate(-50%,-50%)}
+#grade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(0,70,110,.16),rgba(0,0,0,0) 45%,rgba(255,150,70,.10));mix-blend-mode:soft-light}
+#cta .kw{background-color:var(--acc);background-repeat:no-repeat}
 #flash{position:absolute;inset:0;background:var(--flashCol,#fff3d6);opacity:0;mix-blend-mode:screen}
-</style></head><body><div id="stage"></div><div id="fx"></div><div id="ui"></div>
+</style></head><body><div id="stage"></div><div id="grade"></div><div id="fx"></div><div id="ui"></div>
 <script type="module">
 const q = new URLSearchParams(location.search); const id = q.get('r');
 const V = await (await fetch(`voz/${id}-h.json`)).json();

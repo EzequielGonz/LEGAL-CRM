@@ -76,6 +76,9 @@ You are continuing work from a previous chat. That chat is gone; this file is th
 | Logo y nombre de la marca en todos los reels, posteos e historias | Pedido de la responsable, 20/11 |
 | Reels con planos rápidos e irreales que enganchen: caídas, golpes de cámara, escalas imposibles, efectos de impacto; personajes con mucha más definición | Pedido de la responsable, 20/11 (referencia de ritmo: videos de julianeaborna; se toman recursos, no se copia) |
 | Las 81 historias de destacadas del 20/11 se publicaron todas | Verificado en Metricool el 20/11 a la 1:53 |
+| Sin carteles en pantalla («Situación ilustrativa», «no reemplaza una consulta», «Voz generada con IA»): las aclaraciones van en el texto de la publicación y la marca de IA en Metricool | Pedido de la responsable, 20/11 («que no aparezca ningún cartel de carácter ilustrativo») |
+| Volumen x2 del 25/11 al 04/12 con variantes (A/B/R) de las mismas historias, separadas por 5 días o más | Pedido de la responsable, 20/11 |
+| Todo lo que se mejora en el boceto de VITA va al motor compartido: el boceto es de un solo rubro y quedan otros 3 | Recordatorio de la responsable, 20/11 |
 
 ## 7. Changed / rejected
 - Cierre «el botón está en el perfil» → «Comentá PALABRA» (el botón no existe)

@@ -4,13 +4,15 @@ import {lerp, ease, easeOut, easeIn, win, wob, clamp, backOut, hash} from '../hi
 import {personaje, caminar, parpadeo, respirar} from '../historia/personaje.js';
 import * as D from '../historia/decor.js';
 import * as PP from '../historia/primerplano.js';
+import {realce} from '../historia/realce.js';
 const ORO = '#D4AF37', NAVY = '#112250';
 const NICO = {peinado: 'corto', piel: '#c58c66', pelo: '#2a1c12', barba: true, remera: '#2f5d8a', campera: '#3d4a3a', manga: 'larga', pantalon: '#2b3140', zapato: '#1a1a1f'};
 
 export async function armar(V) {
-  const O = obra(V, {logo: 'vita.png', nombre: 'VITA Abogados', ctaSub: 'y te respondemos', hookHTML: '¿Firmás<br><em>o no?</em>', hookHasta: 1.15,
-    notas: [{desde: 0, hasta: 26.6, txt: 'Situación ilustrativa'}, {desde: 26.8, txt: 'Información general: no reemplaza una consulta.<br>Situación ilustrativa · Voz generada con IA'}]});
-  document.documentElement.style.cssText += `--f1:'Playfair Display';--f2:Manrope;--acc:${ORO};--hs:150px;--hw:700;--kwCol:#0E1218;--logoH:175px;--hookTop:380px;--numTop:400px;--subTop:1220px;--velo:rgba(10,16,34,.9);--ctaTop:560px`;
+  const VB = V.id === 'vita-b';
+  const O = obra(V, {logo: 'vita.png', nombre: 'VITA Abogados', ctaSub: 'y te respondemos', hookHTML: VB ? 'Plata rápida.<br><em>¿La agarrás?</em>' : '¿Firmás<br><em>o no?</em>', hookHasta: VB ? 1.0 : 1.15,
+    notas: []});
+  document.documentElement.style.cssText += `--f1:'Playfair Display';--f2:Manrope;--acc:${ORO};--hs:${VB ? 118 : 150}px;--hw:700;--kwCol:#0E1218;--logoH:175px;--hookTop:380px;--numTop:400px;--subTop:1220px;--velo:rgba(10,16,34,.9);--ctaTop:560px`;
   const F = n => V.frases.find(f => f.marca === n); const FI = i => V.frases.find(f => f.item === i);
   const fN = V.frases[0], fAl = F('alivio'), cta = V.frases.find(f => f.cta);
 
@@ -79,6 +81,18 @@ export async function armar(V) {
   rayas.innerHTML = [...Array(46)].map((_, i) => `<rect class="r" x="${hash(i + 11) * 1300 - 110}" y="0" width="${2 + hash(i + 5) * 5}" height="${200 + hash(i + 2) * 700}" rx="3" fill="${i % 5 ? '#e9e2cf' : ORO}" opacity="${.12 + hash(i + 8) * .35}"/>`).join('');
   hojas.innerHTML = [...Array(9)].map((_, i) => `<g class="h"><rect x="-90" y="-120" width="180" height="240" rx="6" fill="#f6f1e2"/>${[0, 1, 2, 3, 4, 5].map(j => `<rect x="-64" y="${-90 + j * 32}" width="${100 + hash(i * 7 + j) * 30}" height="8" rx="4" fill="#cfc8b4"/>`).join('')}</g>`).join('');
   const nico9 = personaje(rot.querySelector('.act'), NICO);
+
+  const {bokeh, sumarCapa, haz, hzDef, conPolvo, motasRender} = realce();
+  sumarCapa(e1, {f: 1.7, prof: 1.7, w: 1600, svg: bokeh(9, 3, ['#ffb35a', '#ffd9a0', '#ff6a3d', '#9fc4ff'], 1600)});
+  sumarCapa(e5, {f: 1.7, prof: 1.7, w: 1500, svg: bokeh(6, 9, ['#ffcf8a', '#ffe7c2'])});
+  sumarCapa(e5, {f: .6, prof: .6, w: 1500, blend: 'screen', svg: hzDef('#ffd9a0') + haz(1150, 1180, Math.PI * .02, 600, 200)});
+  conPolvo(e5, 1050, 1250, 260, 260, '#ffe2b0');
+  sumarCapa(e7, {f: .6, prof: .6, w: 1500, blend: 'screen', svg: hzDef('#ffe0a8') + haz(1170, 380, Math.PI * .18, 1500, 300) + haz(1040, 380, Math.PI * .2, 1500, 300)});
+  conPolvo(e7, 760, 900, 420, 360, '#fff0cc');
+  sumarCapa(e3, {f: .6, prof: .6, w: 1500, blend: 'screen', svg: hzDef('#fff6e0') + haz(1120, 380, Math.PI * .22, 1500, 300)});
+  conPolvo(e3, 760, 900, 420, 300, '#ffffff');
+  sumarCapa(e8, {f: 1.8, prof: 1.8, svg: bokeh(7, 21, ['#D4AF37', '#ffe9b0', '#8fb0ff'])});
+  O.motas = motasRender;
   const luz = (e, css) => { e.luz.style.cssText = css; };
   luz(e1, 'background:radial-gradient(circle at 30% 40%,rgba(255,196,120,.42),transparent 45%),linear-gradient(180deg,rgba(30,30,80,.1),rgba(0,0,10,.35));mix-blend-mode:soft-light');
   luz(e3, 'background:linear-gradient(100deg,rgba(255,255,255,.0) 40%,rgba(255,244,220,.35)),linear-gradient(180deg,transparent 60%,rgba(0,0,0,.25))');
@@ -134,6 +148,9 @@ export async function armar(V) {
   const hablaEn = (esc, pj) => () => { const [x, y] = esc.aPantalla(esc.capas[esc.capas.length - (esc === e1 ? 2 : 1)], pj.cabeza[0], pj.cabeza[1] - 70); return [x, y]; };
   O.tomas[0].boca = hablaEn(e1, nico1); O.tomas[O.tomas.length - 3].boca = hablaEn(e7, nico7);
   const golpes = [F('sello').t - .75, F('dolor').t - .05]; O.flash = t => Math.max(...golpes.map(g => t >= g ? .4 * Math.exp(-(t - g) * 10) : 0), Math.max(0, .5 * Math.exp(-(t - golpe) * 9)) * (t >= golpe ? 1 : 0), t >= .02 ? .55 * Math.exp(-(t - .02) * 8) : 0);
+  if (VB) { // variante B: adelanto de la caída en el primer segundo y paleta más cálida
+    const ini = O.tomas[0]; const ff = O.tomas.find(x => x.esc === e9); O.tomas.unshift(Object.assign({}, ff, {t0: 0, tr: 'zoom', lineas: .5})); ini.t0 = .85;
+    document.getElementById('grade').style.background = 'linear-gradient(180deg,rgba(255,120,40,.16),rgba(0,0,0,0) 50%,rgba(120,40,160,.12))'; }
   O.impactos = [.02, F('sello').t - .75, golpe, F('dolor').t - .05];
   return O;
 }

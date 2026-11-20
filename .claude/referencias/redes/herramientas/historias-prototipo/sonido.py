@@ -47,8 +47,8 @@ def mezclar(rid, amb, fx, estilo, quiebres=()):
     run(['-i', d + '-sfx.wav', '-i', d + '-mus.wav', '-i', d + '-amb.wav', '-filter_complex', '[0:a][1:a][2:a]amix=inputs=3:normalize=0,loudnorm=I=-14:TP=-1.5:LRA=9[o]', '-map', '[o]', '-ar', '48000', d + '-mix-sinvoz.wav'])
     print(rid, 'audio listo', T)
 
-def vita():
-    V = json.load(open('voz/vita-h.json')); F = lambda m: next(f for f in V['frases'] if f.get('marca') == m); FI = lambda i: next(f for f in V['frases'] if f.get('item') == i)
+def vita(rid='vita'):
+    V = json.load(open(f'voz/{rid}-h.json')); F = lambda m: next(f for f in V['frases'] if f.get('marca') == m); FI = lambda i: next(f for f in V['frases'] if f.get('item') == i)
     fr = V['frases']; T = V['total']; T1 = fr[1]['t']; golpe = F('sello')['t'] + .12
     cortes = [T1 - .04, T1 + 1.95, F('lapicera')['t'] - .1, F('sello')['t'] - .45, fr[4]['t'] - .05, F('dolor')['t'] - .05, F('dolor')['t'] + 2.1, fr[6]['t'] - .05, FI(1)['t'] - .1, FI(2)['t'] - .1, FI(3)['t'] - .1, F('alivio')['t'] - .1, T - .4]
     amb = [(0, T1, 'ciudad'), (T1, T1 + 1.95, 'ciudad'), (T1 + 1.95, F('lapicera')['t'], 'oficina'), (F('lapicera')['t'], fr[4]['t'], 'oficina'), (fr[4]['t'], F('dolor')['t'], 'oficina'),
@@ -61,7 +61,7 @@ def vita():
         n = int(d * SR); x = bp(rng.standard_normal(n), 300, 5000) * np.linspace(.2, 1, n) ** 1.5 * .5; x[-int(.05 * SR):] *= np.linspace(1, 0, int(.05 * SR)); return x
     fx += [(caeL - .55, lambda: B.S_whoosh(.55, 120, 3000), 1.0), (caeL, choque, 1.0), (t4 - .1, lambda: B.S_riser(.5) if hasattr(B, 'S_riser') else viento(.5), .6),
            (t4, lambda: viento(ate - t4), .9), (ate, sello_golpe, 1.0), (ate, B.S_boom, .7)]
-    mezclar('vita', amb, fx, 'vita', quiebres=[(golpe - .1, golpe + .7)])
+    mezclar(rid, amb, fx, 'vita', quiebres=[(golpe - .1, golpe + .7)])
 
 if __name__ == '__main__':
-    {'vita': vita}[sys.argv[1]]()
+    r = sys.argv[1]; {'vita': vita, 'vita-b': lambda: vita('vita-b')}[r]()

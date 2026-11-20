@@ -92,4 +92,4 @@ async def main(ids):
         json.dump(dict(id=rid, total=round(total, 3), palabra=g['palabra'], frases=frases), open(f'voz/{rid}.json', 'w'), ensure_ascii=False, indent=1)
         print(rid, 'total', round(total, 2), 's', len(words), 'palabras')
 
-asyncio.run(main(sys.argv[1:] or list(R)))
+if __name__ == "__main__": asyncio.run(main(sys.argv[1:] or list(R)))

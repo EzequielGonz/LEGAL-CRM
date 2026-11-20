@@ -57,7 +57,7 @@ export function globo(el, f, t, [x, y], {lado = 1} = {}) {
   const k = win(t, f.t - .15, f.t + .15), o = 1 - win(t, f.fin + .25, f.fin + .5);
   el.innerHTML = f.words.map(w => `<span style="opacity:${t >= w.t - .04 ? 1 : .0}">${w.w}</span>`).join(' ') + '<i></i>';
   el.style.opacity = o; const W = el.offsetWidth, H = el.offsetHeight;
-  const bx = clamp(x - (lado > 0 ? 120 : W - 120), 70, 1080 - 150 - W), by = clamp(y - H - 70, 250, 1500);
+  const bx = clamp(x - (lado > 0 ? 120 : W - 120), 70, 1080 - 150 - W), by = clamp(y - H - 70, 345, 1500);
   el.style.left = `${bx}px`; el.style.top = `${by}px`; el.style.transform = `scale(${.6 + .4 * backOut(k, 2)})`; el.style.transformOrigin = `${clamp(x - bx, 40, W - 40)}px ${H + 30}px`;
   const tail = el.querySelector('i'); tail.style.left = `${clamp(x - bx - 18, 30, W - 70)}px`;
 }
