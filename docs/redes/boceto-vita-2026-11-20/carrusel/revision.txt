@@ -3,8 +3,12 @@ lamina-1: 1 aviso(s)
 lamina-2: 2 aviso(s)
    - Texto sobre imagen: .tag «Situación ilustrativa» y img «»
    - Elemento fuera de la pieza: i «»
-lamina-3: 2 aviso(s)
-   - Texto sobre imagen: .p «Si después aparece una lesió» y svg «ESPERÁ»
+lamina-3: 6 aviso(s)
+   - Texto sobre imagen: span «VITA Abogados» y img «»
+   - Texto sobre imagen: .t «Lo que firmás puede cerrar t» y img «»
+   - Texto sobre imagen: em «cerrar tu reclamo.» y img «»
+   - Texto sobre imagen: .p «Si después aparece una lesió» y img «»
+   - Texto sobre imagen: .tag «Situación ilustrativa» y img «»
    - Elemento fuera de la pieza: i «»
 lamina-4: 1 aviso(s)
    - Elemento fuera de la pieza: i «»
@@ -15,6 +19,7 @@ lamina-6: 2 aviso(s)
    - Elemento fuera de la pieza: i «»
 lamina-7: 1 aviso(s)
    - Elemento fuera de la pieza: i «»
-portada-reel: 2 aviso(s)
+portada-reel: 3 aviso(s)
+   - Texto sobre imagen: span «VITA Abogados» y img «»
    - Texto sobre imagen: .t «¿Firmáso no?» y img «»
    - Texto sobre imagen: em «o no?» y img «»

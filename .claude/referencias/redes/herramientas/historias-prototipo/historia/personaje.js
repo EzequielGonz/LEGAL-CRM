@@ -17,7 +17,7 @@ export function personaje(capaSvg, o) {
     <ellipse class="sombra" rx="78" ry="13" fill="#000" opacity=".32" filter="url(#${G}f)"/>
     <g class="cuerpo">
       <path class="pieA" fill="${sh(P.zapato, -.1)}"/><path class="pA" stroke="${sh(P.pantalon, -.28)}" stroke-width="35" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-      <path class="bA" stroke="${sh(sup, -.3)}" stroke-width="27" stroke-linecap="round" fill="none"/><path class="aA" stroke="${P.manga === 'larga' || P.campera ? sh(sup, -.3) : sh(P.piel, -.22)}" stroke-width="22" stroke-linecap="round" fill="none"/><circle class="mA" r="12.5" fill="${sh(P.piel, -.2)}"/>
+      <path class="bA" stroke="${sh(sup, -.3)}" stroke-width="27" stroke-linecap="round" fill="none"/><path class="aA" stroke="${P.manga === 'larga' || P.campera ? sh(sup, -.3) : sh(P.piel, -.22)}" stroke-width="22" stroke-linecap="round" fill="none"/><circle class="mA" r="12.5" fill="${sh(P.piel, -.2)}" stroke="${sh(P.piel, -.45)}" stroke-width="2"/>
       <g class="propA"></g>
       <path class="cadera" fill="url(#${G}p)"/>
       <path class="pieB" fill="${P.zapato}"/><path class="pB" stroke="url(#${G}p)" stroke-width="36" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
@@ -26,21 +26,29 @@ export function personaje(capaSvg, o) {
       <g class="cabeza">
         ${P.peinado === 'largo' || P.peinado === 'colita' ? `<path class="peloAtras" fill="${sh(P.pelo, -.1)}"/>` : ''}
         <ellipse class="oreja" rx="9" ry="13" fill="${sh(P.piel, -.08)}"/>
-        <ellipse class="cara" rx="44" ry="51" fill="url(#${G}c)"/>
+        <ellipse class="cara" rx="44" ry="51" fill="url(#${G}c)"/><path class="sombraCara" fill="${sh(P.piel, -.22)}" opacity=".45" d="M-44,0 C-44,30 -26,50 0,51 C-22,44 -34,26 -36,2 Z"/><path class="sombraPelo" fill="${sh(P.piel, -.28)}" opacity=".35"/>
         ${P.barba ? `<path class="barba" fill="${P.pelo}" opacity=".85"/>` : ''}
         <path class="nariz" fill="${sh(P.piel, -.1)}"/>
-        <path class="pelo" fill="${P.pelo}"/><path class="brillo" fill="${sh(P.pelo, .25)}" opacity=".35"/>
-        <ellipse class="ojo" rx="5.2" ry="6.4" fill="${P.ojos}"/><circle class="luzOjo" r="1.6" fill="#fff" opacity=".85"/>
+        <path class="pelo" fill="${P.pelo}"/><path class="brillo" fill="${sh(P.pelo, .25)}" opacity=".35"/><g class="mechones" stroke="${sh(P.pelo, .18)}" stroke-width="2" stroke-linecap="round" fill="none" opacity=".55"><path d="M-30,-40 q14,-12 32,-14"/><path d="M-20,-48 q18,-8 38,-6"/><path d="M-36,-26 q8,-12 20,-18"/><path d="M6,-54 q16,2 28,12"/></g>
+        <ellipse class="ojoB" rx="8.2" ry="9.4" fill="#fbf6ee" stroke="${sh(P.piel, -.35)}" stroke-width="1.2"/><ellipse class="ojo" rx="5.2" ry="6.4" fill="${P.ojos}"/><circle class="pupila" r="2.6" fill="#050302"/><circle class="luzOjo" r="1.6" fill="#fff" opacity=".85"/><path class="parpadoP" fill="${sh(P.piel, -.06)}"/><path class="pestana" stroke="${sh(P.pelo, -.3)}" stroke-width="2.6" stroke-linecap="round" fill="none"/>
         <path class="ceja" stroke="${sh(P.pelo, -.1)}" stroke-width="5" stroke-linecap="round" fill="none"/>
-        <path class="bocaP" fill="#5a2320"/><path class="mejilla" fill="#e88" opacity=".14"/>
+        <path class="bocaP" fill="#5a2320"/><path class="labio" stroke="${sh(P.piel, -.32)}" stroke-width="1.8" stroke-linecap="round" fill="none"/><path class="orejaIn" stroke="${sh(P.piel, -.3)}" stroke-width="2" fill="none" d="M-10,-2 q-5,6 0,12"/><path class="mejilla" fill="#e88" opacity=".14"/>
       </g>
       <g class="propB"></g>
-      <path class="bB" stroke="url(#${G}s)" stroke-width="28" stroke-linecap="round" fill="none"/><path class="aB" stroke="${P.manga === 'larga' || P.campera ? sup : P.piel}" stroke-width="23" stroke-linecap="round" fill="none"/><circle class="mB" r="13" fill="${P.piel}"/>
+      <path class="bB" stroke="url(#${G}s)" stroke-width="28" stroke-linecap="round" fill="none"/><path class="aB" stroke="${P.manga === 'larga' || P.campera ? sup : P.piel}" stroke-width="23" stroke-linecap="round" fill="none"/><circle class="mB" r="13" fill="${P.piel}" stroke="${sh(P.piel, -.38)}" stroke-width="2"/>
       <g class="propMano"></g>
     </g>`;
   const q = s => g.querySelector('.' + s);
+  // definición: contorno fino en las formas y doble trazo oscuro detrás de brazos y piernas
+  for (const c of ['cara', 'torso', 'cadera', 'pelo', 'oreja', 'nariz', 'cuello', 'pieA', 'pieB', 'barba', 'peloAtras', 'interior']) { const el = q(c); if (!el) continue;
+    el.setAttribute('stroke', 'rgba(18,12,10,.55)'); el.setAttribute('stroke-width', c === 'cara' || c === 'torso' ? 3.2 : 2.6); el.setAttribute('stroke-linejoin', 'round'); el.setAttribute('paint-order', 'stroke'); }
+  const ORL = [];
+  for (const c of ['pA', 'pB', 'bA', 'aA', 'bB', 'aB']) { const el = q(c); const o = el.cloneNode(); o.setAttribute('class', c + 'o'); o.setAttribute('stroke', 'rgba(18,12,10,.6)');
+    o.setAttribute('stroke-width', +el.getAttribute('stroke-width') + 4.5); el.parentNode.insertBefore(o, el); ORL.push([el, o]); }
+  // luz de borde (rim light) del lado de la luz sobre el torso
+  const rim = document.createElementNS(NS, 'path'); rim.setAttribute('fill', 'none'); rim.setAttribute('stroke', 'rgba(255,236,200,.35)'); rim.setAttribute('stroke-width', 3); rim.setAttribute('stroke-linecap', 'round'); q('torso').after(rim);
   const E = {sombra: q('sombra'), cuerpo: q('cuerpo'), pieA: q('pieA'), pA: q('pA'), bA: q('bA'), aA: q('aA'), mA: q('mA'), cadera: q('cadera'), pieB: q('pieB'), pB: q('pB'), torso: q('torso'), interior: q('interior'), cuello: q('cuello'),
-    cabeza: q('cabeza'), peloAtras: q('peloAtras'), oreja: q('oreja'), cara: q('cara'), barba: q('barba'), nariz: q('nariz'), pelo: q('pelo'), brillo: q('brillo'), ojo: q('ojo'), luzOjo: q('luzOjo'), ceja: q('ceja'), bocaP: q('bocaP'), mejilla: q('mejilla'),
+    cabeza: q('cabeza'), ojoB: q('ojoB'), pupila: q('pupila'), parpadoP: q('parpadoP'), pestana: q('pestana'), labio: q('labio'), sombraPelo: q('sombraPelo'), peloAtras: q('peloAtras'), oreja: q('oreja'), cara: q('cara'), barba: q('barba'), nariz: q('nariz'), pelo: q('pelo'), brillo: q('brillo'), ojo: q('ojo'), luzOjo: q('luzOjo'), ceja: q('ceja'), bocaP: q('bocaP'), mejilla: q('mejilla'),
     bB: q('bB'), aB: q('aB'), mB: q('mB'), propMano: q('propMano'), propB: q('propB')};
   const A = P.alto;
   const api = {g, E, P, mano: [0, 0], cabezaPos: [0, 0],
@@ -96,6 +104,15 @@ export function personaje(capaSvg, o) {
       E.brillo.setAttribute('d', 'M-20,-50 C-4,-60 18,-60 30,-50 C14,-54 -4,-52 -20,-50 Z');
       if (E.peloAtras) E.peloAtras.setAttribute('d', pe === 'largo' ? 'M-46,-10 C-60,30 -50,70 -30,84 C-20,60 -16,30 -14,6 Z' : 'M-44,-20 C-70,-20 -78,10 -62,30 C-56,10 -48,-2 -40,-6 Z');
       if (E.barba) E.barba.setAttribute('d', 'M-6,24 C6,48 34,50 44,26 C40,34 30,38 22,36 C14,36 4,32 -6,24 Z');
+      for (const [el, o] of ORL) o.setAttribute('d', el.getAttribute('d'));
+      rim.setAttribute('d', `M${T(40, -tl + 14)} Q${T(48, -tl * .55)} ${T(40, -16)}`.replace(/(-?\d+\.?\d*),(-?\d+\.?\d*)/g, (m, a, b) => `${(+a).toFixed(1)},${(+b).toFixed(1)}`));
+      const bl = 1 - clamp(p.parpado);
+      E.ojoB.setAttribute('cx', 22 + m * .5); E.ojoB.setAttribute('cy', -6); E.ojoB.setAttribute('ry', 9.4 * bl + .3);
+      E.pupila.setAttribute('cx', 22.6 + m); E.pupila.setAttribute('cy', -5.6); E.pupila.setAttribute('r', 2.6 * (bl > .3 ? 1 : 0));
+      const ly = -15.4 + 18 * clamp(p.parpado) * .5; E.parpadoP.setAttribute('d', `M13,-16 Q22,${-20 - cj * .2} 31,-16 L31,${ly} Q22,${ly - 3} 13,${ly} Z`);
+      E.pestana.setAttribute('d', `M13.5,${ly + .2} Q22,${ly - 4} 31,${ly - .6}`);
+      E.labio.setAttribute('d', `M24,${28 + sm * .4 + bo * 8} q6,3 12,0`);
+      E.sombraPelo.setAttribute('d', pe === 'rapado' ? '' : 'M-26,-30 C-8,-36 22,-38 44,-24 C30,-28 8,-28 -12,-24 Z');
       // sombra en el piso
       const fy = Math.max(legL[1][1], legR[1][1]) + 8; E.sombra.setAttribute('cx', (legL[1][0] + legR[1][0]) / 2 + 10); E.sombra.setAttribute('cy', p.sentado ? 0 : fy);
       api.cabeza = [p.x + hc[0] * p.s * p.flip, p.y + hc[1] * p.s]; api.mano = [p.x + wB[0] * p.s * p.flip, p.y + wB[1] * p.s];

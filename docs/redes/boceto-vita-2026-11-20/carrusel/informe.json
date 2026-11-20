@@ -15,7 +15,11 @@
   {
     "id": "lamina-3",
     "avisos": [
-      "Texto sobre imagen: .p «Si después aparece una lesió» y svg «ESPERÁ»",
+      "Texto sobre imagen: span «VITA Abogados» y img «»",
+      "Texto sobre imagen: .t «Lo que firmás puede cerrar t» y img «»",
+      "Texto sobre imagen: em «cerrar tu reclamo.» y img «»",
+      "Texto sobre imagen: .p «Si después aparece una lesió» y img «»",
+      "Texto sobre imagen: .tag «Situación ilustrativa» y img «»",
       "Elemento fuera de la pieza: i «»"
     ]
   },
@@ -47,6 +51,7 @@
   {
     "id": "portada-reel",
     "avisos": [
+      "Texto sobre imagen: span «VITA Abogados» y img «»",
       "Texto sobre imagen: .t «¿Firmáso no?» y img «»",
       "Texto sobre imagen: em «o no?» y img «»"
     ]

@@ -9,7 +9,8 @@ body{background:#666;display:flex;flex-wrap:wrap;gap:40px;padding:40px;width:120
 .osc{background:radial-gradient(120% 80% at 50% 22%,#18306a 0%,#112250 45%,#0b1020 100%);color:#F5F4F0}
 .cla{background:#F5F4F0;color:#25282B}
 .cla:before{content:'';position:absolute;inset:0;background:radial-gradient(90% 60% at 80% 0%,rgba(193,174,122,.16),transparent 60%)}
-.lg{position:absolute;left:96px;top:84px;height:92px}
+.marca{position:absolute;left:96px;top:84px;display:flex;align-items:center;gap:18px;font-family:'Playfair Display';font-weight:600;font-size:38px}
+.marca img{height:84px}.osc .marca{color:#F5F4F0}.cla .marca{color:#112250}
 .t{font-family:'Playfair Display';font-weight:500;line-height:1.06;letter-spacing:-.01em;text-wrap:balance}
 .osc em{color:#D4AF37;font-style:italic}.cla em{color:#3B507D;font-style:italic}
 .p{font-weight:500;font-size:44px;line-height:1.36;text-wrap:pretty}
@@ -35,7 +36,7 @@ body{background:#666;display:flex;flex-wrap:wrap;gap:40px;padding:40px;width:120
 
 <!-- 1 · PORTADA -->
 <div class="ab osc" id="lamina-1" data-formato="carrusel">
-  <img class="lg" src="../vita.png">
+  <div class="marca"><img src="../vita.png"><span>VITA Abogados</span></div>
   <svg data-sangrado style="position:absolute;right:-110px;top:170px" width="560" height="760" viewBox="0 0 560 760">
     <g transform="rotate(8 280 380)">
       <rect x="70" y="40" width="420" height="600" rx="10" fill="#F6F3EA"/><rect x="70" y="40" width="420" height="600" rx="10" fill="url(#pg)"/>
@@ -59,7 +60,7 @@ body{background:#666;display:flex;flex-wrap:wrap;gap:40px;padding:40px;width:120
 
 <!-- 2 · LA SITUACIÓN (escena del reel) -->
 <div class="ab cla" id="lamina-2" data-formato="carrusel">
-  <img class="lg" src="../vita.png">
+  <div class="marca"><img src="../vita.png"><span>VITA Abogados</span></div>
   <div class="foto" style="left:96px;right:96px;top:230px;height:500px"><img src="stills/esquina.jpg" style="object-position:50% 52%"><span class="tag">Situación ilustrativa</span></div>
   <div style="position:absolute;left:96px;right:96px;top:790px;display:flex;flex-direction:column;gap:24px">
     <div class="t" style="font-size:80px">Te chocaron y el seguro del otro te ofrece <em>un acuerdo rápido.</em></div>
@@ -68,21 +69,22 @@ body{background:#666;display:flex;flex-wrap:wrap;gap:40px;padding:40px;width:120
   <div class="hilo"><i style="right:auto;left:-12px"></i></div>
 </div>
 
-<!-- 3 · EL RIESGO -->
+<!-- 3 · EL RIESGO (plano de la caída del reel) -->
 <div class="ab osc" id="lamina-3" data-formato="carrusel">
-  <img class="lg" src="../vita.png">
-  <div style="position:absolute;left:96px;right:96px;top:300px;display:flex;flex-direction:column;gap:44px">
-    <div class="t" style="font-size:104px">Lo que firmás puede <em>cerrar tu reclamo.</em></div>
-    <div class="rule"></div>
-    <div class="p" style="width:640px">Si después aparece una lesión, quizás ya no puedas pedir más.</div>
+  <div class="foto" data-sangrado style="inset:0;border-radius:0;box-shadow:none"><img src="stills/caida.jpg" style="object-position:50% 30%"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,16,32,.97) 0%,rgba(11,16,32,.85) 34%,rgba(11,16,32,0) 52%,rgba(11,16,32,0) 80%,rgba(11,16,32,.6) 100%)"></div>
+  <div class="marca"><img src="../vita.png"><span>VITA Abogados</span></div>
+  <div style="position:absolute;left:96px;right:96px;top:230px;display:flex;flex-direction:column;gap:30px">
+    <div class="t" style="font-size:96px">Lo que firmás puede <em>cerrar tu reclamo.</em></div>
+    <div class="p" style="width:700px">Si después aparece una lesión, quizás ya no puedas pedir más.</div>
   </div>
-  <svg data-sangrado style="position:absolute;right:70px;top:820px" width="420" height="230" viewBox="0 0 420 230"><g transform="translate(210 115) rotate(-9)"><rect x="-190" y="-80" width="380" height="160" rx="22" fill="none" stroke="#D4AF37" stroke-width="10"/><rect x="-174" y="-64" width="348" height="128" rx="14" fill="none" stroke="#D4AF37" stroke-width="3"/><text x="0" y="32" text-anchor="middle" font-family="Manrope" font-weight="800" font-size="92" letter-spacing="7" fill="#D4AF37">ESPERÁ</text></g></svg>
+  <span class="tag" style="left:96px;bottom:150px">Situación ilustrativa</span>
   <div class="hilo"><i style="right:auto;left:-12px"></i></div>
 </div>
 
 <!-- 4 · PASO 1 -->
 <div class="ab cla" id="lamina-4" data-formato="carrusel">
-  <img class="lg" src="../vita.png">
+  <div class="marca"><img src="../vita.png"><span>VITA Abogados</span></div>
   <div style="position:absolute;left:96px;right:96px;top:260px;display:flex;gap:40px;align-items:flex-end"><div class="n">1</div>
     <svg width="300" height="330" viewBox="0 0 300 330" style="margin-left:auto"><g transform="rotate(6 150 165)"><rect x="40" y="20" width="220" height="290" rx="8" fill="#fff" stroke="#d9d6cc" stroke-width="2"/><g fill="#c9cacd"><rect x="70" y="60" width="160" height="10" rx="5"/><rect x="70" y="86" width="140" height="10" rx="5"/><rect x="70" y="112" width="150" height="10" rx="5"/><rect x="70" y="150" width="160" height="10" rx="5"/><rect x="70" y="176" width="120" height="10" rx="5"/></g><path d="M70 250 l22 22 l46 -50" stroke="#3B507D" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g></svg></div>
   <div style="position:absolute;left:96px;right:96px;top:650px;display:flex;flex-direction:column;gap:32px">
@@ -94,7 +96,7 @@ body{background:#666;display:flex;flex-wrap:wrap;gap:40px;padding:40px;width:120
 
 <!-- 5 · PASO 2 -->
 <div class="ab osc" id="lamina-5" data-formato="carrusel">
-  <img class="lg" src="../vita.png">
+  <div class="marca"><img src="../vita.png"><span>VITA Abogados</span></div>
   <div style="position:absolute;left:96px;right:96px;top:260px;display:flex;gap:40px;align-items:flex-end"><div class="n">2</div>
     <svg width="300" height="330" viewBox="0 0 300 330" style="margin-left:auto"><rect x="30" y="40" width="240" height="260" rx="22" fill="#F6F3EA"/><rect x="30" y="40" width="240" height="70" rx="22" fill="#D4AF37"/><rect x="30" y="88" width="240" height="22" fill="#D4AF37"/><circle cx="90" cy="40" r="12" fill="#0b1020"/><circle cx="210" cy="40" r="12" fill="#0b1020"/><text x="150" y="232" text-anchor="middle" font-family="Playfair Display" font-weight="700" font-size="46" fill="#112250">MAÑANA</text><path d="M60 158 h70" stroke="#c9cacd" stroke-width="10" stroke-linecap="round"/></svg></div>
   <div style="position:absolute;left:96px;right:96px;top:650px;display:flex;flex-direction:column;gap:32px">
@@ -106,7 +108,7 @@ body{background:#666;display:flex;flex-wrap:wrap;gap:40px;padding:40px;width:120
 
 <!-- 6 · PASO 3 (escena del reel: oficina de VITA) -->
 <div class="ab cla" id="lamina-6" data-formato="carrusel">
-  <img class="lg" src="../vita.png">
+  <div class="marca"><img src="../vita.png"><span>VITA Abogados</span></div>
   <div class="foto" style="left:96px;width:520px;top:230px;height:640px"><img src="stills/estudio.jpg" style="object-position:42% 50%"><span class="tag">Situación ilustrativa</span></div>
   <div class="n" style="position:absolute;left:680px;top:330px">3</div>
   <div style="position:absolute;left:96px;right:96px;top:920px;display:flex;flex-direction:column;gap:26px">
@@ -118,7 +120,7 @@ body{background:#666;display:flex;flex-wrap:wrap;gap:40px;padding:40px;width:120
 
 <!-- 7 · CIERRE: resumen para guardar + palabra clave -->
 <div class="ab osc" id="lamina-7" data-formato="carrusel">
-  <img class="lg" src="../vita.png">
+  <div class="marca"><img src="../vita.png"><span>VITA Abogados</span></div>
   <div style="position:absolute;left:96px;right:96px;top:250px;display:flex;flex-direction:column;gap:30px">
     <div class="t" style="font-size:76px">Antes de firmar, <em>chequeá:</em></div>
     <div class="check"><b><svg width="30" height="24" viewBox="0 0 30 24"><path d="M3 12 l8 8 l16 -17" stroke="#D4AF37" stroke-width="5" fill="none" stroke-linecap="round"/></svg></b>Tengo la propuesta por escrito.</div>
@@ -136,10 +138,10 @@ body{background:#666;display:flex;flex-wrap:wrap;gap:40px;padding:40px;width:120
 
 <!-- PORTADA DEL REEL (1080×1920; título dentro del recorte 3:4 de la grilla) -->
 <div class="ab osc" id="portada-reel" data-formato="reel" style="height:1920px">
-  <div class="foto" data-sangrado style="left:0;right:0;top:0;height:1920px;border-radius:0;box-shadow:none"><img src="stills/papel.jpg" style="object-position:50% 50%;filter:blur(10px) brightness(.5) saturate(.9);transform:scale(1.08)"></div>
-  <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,16,32,.55),rgba(17,34,80,.35) 40%,rgba(11,16,32,.85))"></div>
-  <img src="../vita.png" style="position:absolute;left:50%;transform:translateX(-50%);top:300px;height:140px">
-  <div style="position:absolute;left:110px;right:140px;top:560px;height:800px;display:flex;align-items:center;justify-content:center;text-align:center"><div class="t" style="font-size:150px">¿Firmás<br><em>o no?</em></div></div>
-  <div style="position:absolute;left:50%;transform:translateX(-50%);top:1420px;width:140px;height:5px;border-radius:3px;background:#C1AE7A"></div>
+  <div class="foto" data-sangrado style="left:0;right:0;top:0;height:1920px;border-radius:0;box-shadow:none"><img src="stills/gigante.jpg" style="object-position:50% 50%;filter:brightness(.62)"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,12,26,.98) 0%,rgba(8,12,26,.96) 42%,rgba(8,12,26,.1) 58%,rgba(8,12,26,.15) 80%,rgba(8,12,26,.85) 100%)"></div>
+  <div style="position:absolute;left:0;right:0;top:290px;display:flex;flex-direction:column;align-items:center;gap:14px"><img src="../vita.png" style="height:140px"><span style="font:600 50px 'Playfair Display';color:#F5F4F0">VITA Abogados</span></div>
+  <div style="position:absolute;left:110px;right:140px;top:470px;height:420px;display:flex;align-items:center;justify-content:center;text-align:center"><div class="t" style="font-size:150px">¿Firmás<br><em>o no?</em></div></div>
+  <div style="position:absolute;left:50%;transform:translateX(-50%);top:1560px;width:140px;height:5px;border-radius:3px;background:#C1AE7A"></div>
 </div>
 </body></html>

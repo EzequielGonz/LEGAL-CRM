@@ -56,6 +56,11 @@ def vita():
     fx = [(0.0, choque, .9), (.12, vibra, .9), (.75, vibra, .7), (.2, B.S_ding, .5), (golpe, sello_golpe, 1.0), (golpe - .5, lambda: B.S_whoosh(.5, 200, 6000), .9), (F('lapicera')['t'] + .1, lapicera, 1),
           (FI(2)['t'] + .5, B.S_paper, .9), (FI(3)['t'] - .1, colectivo_pasa, .9), (FI(3)['t'] - .1, lambda: pasos(2.9), .8), (V['frases'][-1]['t'] - .3, B.S_chime, .7)]
     fx += [(c - .06, lambda: B.S_whoosh(.32, 400, 7000), .35) for c in cortes] + [(FI(i)['t'], B.S_chime, .55) for i in (1, 2, 3)]
+    caeL = F('sello')['t'] - .75; t4 = fr[4]['t'] - .05; ate = F('dolor')['t'] - .05
+    def viento(d):
+        n = int(d * SR); x = bp(rng.standard_normal(n), 300, 5000) * np.linspace(.2, 1, n) ** 1.5 * .5; x[-int(.05 * SR):] *= np.linspace(1, 0, int(.05 * SR)); return x
+    fx += [(caeL - .55, lambda: B.S_whoosh(.55, 120, 3000), 1.0), (caeL, choque, 1.0), (t4 - .1, lambda: B.S_riser(.5) if hasattr(B, 'S_riser') else viento(.5), .6),
+           (t4, lambda: viento(ate - t4), .9), (ate, sello_golpe, 1.0), (ate, B.S_boom, .7)]
     mezclar('vita', amb, fx, 'vita', quiebres=[(golpe - .1, golpe + .7)])
 
 if __name__ == '__main__':

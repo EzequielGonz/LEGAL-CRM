@@ -72,6 +72,10 @@ You are continuing work from a previous chat. That chat is gone; this file is th
 | 12 palabras clave sumadas al final del rol de los bots, sin pisar | «suma todo palabras clave… sin pisar nada» |
 | TikTok, YouTube y accesos de medición: pendientes, dentro de los 10 días | Decisión de la responsable |
 | Programar todo el calendario recién cuando se apruebe el boceto | Decisión de la responsable |
+| Piezas en 4K Ultra HD (2160×3840 en reels) siempre que se pueda | Pedido de la responsable, 20/11 |
+| Logo y nombre de la marca en todos los reels, posteos e historias | Pedido de la responsable, 20/11 |
+| Reels con planos rápidos e irreales que enganchen: caídas, golpes de cámara, escalas imposibles, efectos de impacto; personajes con mucha más definición | Pedido de la responsable, 20/11 (referencia de ritmo: videos de julianeaborna; se toman recursos, no se copia) |
+| Las 81 historias de destacadas del 20/11 se publicaron todas | Verificado en Metricool el 20/11 a la 1:53 |
 
 ## 7. Changed / rejected
 - Cierre «el botón está en el perfil» → «Comentá PALABRA» (el botón no existe)
