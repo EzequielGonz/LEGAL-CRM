@@ -152,11 +152,11 @@ You are continuing work from a previous chat. That chat is gone; this file is th
 | Perfiles de Google | final, sin cargar | `docs/redes/google/` | faltan datos de la responsable |
 | Palabras clave de los bots | aplicado en producción | `docs/redes/palabras-clave-bot-2026-11-20.md` | con copia previa y registro de cambios |
 | 44 de Kocos | en borrador | `docs/redes/kocos-44-borrador-2026-11-20.json` | para revertir: draft=false |
-| Boceto de reels de VITA (reel + carrusel) | en curso | agente de la sesión anterior; prototipos en el scratchpad | se cortó por el límite de uso; no hay entrega |
+| Boceto de reels de VITA (reel + carrusel) | en curso, detenido acá | código en `.claude/referencias/redes/herramientas/historias-prototipo/` (sin node_modules ni renders) | seguir desde ese código en el chat nuevo: estaba ajustando el encuadre, la luz y las poses de VITA |
 | Medición (UTM, ref en WhatsApp, robots, sitemap, GA4/píxel preparados) | en curso | ramas `claude/happy-wozniak-ajfi1z` de las 4 landings + worktree del CRM | VITA probada; faltan 3; sin merge a main |
 | Pull request | abierto | [EzequielGonz/LEGAL-CRM#77](https://github.com/EzequielGonz/LEGAL-CRM/pull/77) | solo documentos |
 | Tarea programada «Informe de resultados» | programada | trig_018N1mFkkgyxyFcaZuaAkkYG, 20/11 10:00 BA, otra sesión | escribe en la rama claude/gracious-volta-rv2f3x |
-| Recordatorio de la sesión anterior | programado | trig_01SYXFTCiE17Aur9Jsbbp8g4, 20/11 08:55Z | dispara en la sesión vieja; si se trabaja en el chat nuevo, borrarlo |
+| Recordatorio de la sesión anterior | borrado | — | el trabajo sigue solo en el chat nuevo |
 
 ## 11. Next steps
 1. **Next action:** producir el boceto de VITA: 1 reel de mini historia (personaje de barrio en Buenos Aires, serie «Antes de firmar» o «El minuto después», cierre «Comentá PALABRA», 1080×1920) y el rediseño de 1 carrusel de 5 a 7 láminas con la estética aprobada. Mandárselo a la responsable.
