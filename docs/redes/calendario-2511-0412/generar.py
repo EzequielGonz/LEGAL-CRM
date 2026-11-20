@@ -564,7 +564,7 @@ def historias(marca, reels_marca):
         out.append(fila(dia, '18:30', marca, REDES_HIST, f'historia: {tipo18}', i3, 'única', txt18,
                         'Sticker de enlace a la landing con UTM', idea_txt=txt18))
         out.append(fila(dia, '21:30', marca, REDES_HIST, 'historia: respondé con PALABRA', i3, 'única',
-                        f'¿Te pasó? Respondé esta historia con «{d3["kw"]}»', f'Respondé con «{d3["kw"]}»',
+                        f'{d3["idea"]}. ¿Te pasó? Respondé esta historia con «{d3["kw"]}»', f'Respondé con «{d3["kw"]}»',
                         idea_txt=f'Respondé con «{d3["kw"]}» (tema: {d3["idea"]})'))
     return out
 
