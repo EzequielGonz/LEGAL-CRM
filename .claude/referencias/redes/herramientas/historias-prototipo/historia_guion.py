@@ -65,3 +65,10 @@ import copy as _copy
 R['vita-b'] = _copy.deepcopy(R['vita'])
 R['vita-b']['frases'][0] = dict(q='nico', say='¿Firmo ya o espero?', show='¿Firmo ya o espero?', p=.35, marca='notif')
 R['vita-b']['frases'][1] = dict(q='nar', say='El seguro del otro te llama y te ofrece plata rápida, hoy.', show='El seguro del otro te ofrece *plata rápida, hoy.*', p=.35)
+
+# Guiones del cronograma x2 (20–29/11): un archivo por sesión o tanda en guiones/*.py, cada uno con su dict R
+# (y VOCES opcional). Así varias sesiones en paralelo no editan este archivo y no hay conflictos al integrar.
+import glob as _glob, importlib.util as _ilu, os as _os
+for _p in sorted(_glob.glob(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), 'guiones', '*.py'))):
+    _s = _ilu.spec_from_file_location('guion_' + _os.path.basename(_p)[:-3].replace('-', '_'), _p); _m = _ilu.module_from_spec(_s); _s.loader.exec_module(_m)
+    R.update(getattr(_m, 'R', {})); VOCES.update(getattr(_m, 'VOCES', {}))
