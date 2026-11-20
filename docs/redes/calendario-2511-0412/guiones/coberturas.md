@@ -72,7 +72,7 @@ Ficha:
 | 15–22 | Las tarjetas vuelven a su lugar y el video empieza de nuevo | Comentá **«CAMBIO»** | «Comentá cambio y lo vemos con vos.» | Vibración |
 
 ## 26/11 13:30 · Lo que dijo la Corte · Fallo del 20/11 (A) · CORTE · 25 s · **PENDIENTE DE REVISIÓN PROFESIONAL**
-Antes de producirlo, una profesional tiene que confirmar el alcance del fallo: a quién aplica, desde cuándo y si es firme. **Respaldo** si no hay revisión antes del 25/11 a las 13:30: el reel «¿Pagás por cosas que no usás?» (plan-uso B), con su gancho B.
+Antes de producirlo, una profesional tiene que confirmar el alcance del fallo: a quién aplica, desde cuándo y si es firme. **Respaldo** si no hay revisión antes del 25/11 a las 13:30: «Tu obra social la podés elegir» (recibo-elegir A), y el 01/12 a las 20:30 pasa a ser un lugar de actualidad.
 
 | s | Visual | Texto | Locución | Sonido |
 | --- | --- | --- | --- | --- |

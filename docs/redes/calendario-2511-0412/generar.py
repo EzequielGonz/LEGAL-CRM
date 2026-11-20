@@ -519,6 +519,10 @@ def fila(fecha, hora, marca, redes, formato, iid, version, gancho, cierre, condi
                 gancho=gancho, palabra=d['kw'], cierre=cierre, referencia=ref(marca, iid),
                 revision=revision or d['rev'], version=version, condicion=condicion)
 
+COND_EXTRA = {
+ ('cob', 'fallo-corte', 'A'): 'Sale solo con revisión profesional del alcance del fallo antes del 25/11 a las 13:30; si no, va «Tu obra social la podés elegir» (recibo-elegir A) y el 01/12 a las 20:30 pasa a lugar de actualidad.',
+ ('autos', 'blackfriday', 'A'): 'Sale con el visto bueno del equipo antes del 26/11; si no, se adelanta «Cómo se adjudica un plan» (adjudicacion A, aprobado) y el 02/12 a las 08:30 pasa a lugar de actualidad.',
+}
 REDES_REEL = 'IG + FB (TikTok y YouTube Shorts: condicional, cuando existan las cuentas)'
 REDES_HIST = 'IG + FB'
 
@@ -538,6 +542,8 @@ def reels(marca):
                 cond = f'Solo con el dato oficial publicado; si no está 24 h antes, va «{I[(marca, r_iid)]["idea"]}» ({r_ver}).'
             else:
                 iid, ver = item.split('/')
+            if (marca, iid, ver) in COND_EXTRA:
+                cond = COND_EXTRA[(marca, iid, ver)]
             d = I[(marca, iid)]
             if ver == 'X':  # respaldo: idea ya usada en A, versión B si pasaron 5 días
                 ver = 'B'
