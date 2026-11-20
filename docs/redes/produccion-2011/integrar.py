@@ -79,7 +79,7 @@ def main():
             try:
                 for ext in ('mp4', 'jpg'):
                     data = None
-                    for carpeta in ('entregas', 'salidas', 'salida'):
+                    for carpeta in ('entregas', 'salidas', 'salida', 'media'):
                         try:
                             data = sh('git', 'show', f'{b}:docs/redes/produccion-2011/{carpeta}/{t}/{rid}.{ext}', binario=True); break
                         except RuntimeError:
