@@ -1,0 +1,3 @@
+// Autos · remake de «autos-plan-b»: «si sube el modelo, sube la cuota». Mati en su taller; abre por el final; escala imposible; giro: Mati entra al tablero como a una ciudad.
+import {kit} from './autos-kit.js';
+export const armar = V => kit(V, {hook: 'Plan de ahorro:<br><em>si sube el modelo, sube la cuota</em>', lugar: 'taller', habla: 'mati', pjs: [{id: 'mati', x: 640, flip: 1}], mano: 'celu', objeto: 'celular', titulo: 'Cuota del plan', labels: ['Valor del modelo', 'Sube el modelo', 'Cada concepto'], doc: 'Cuota del plan', gobj: 'calculadora', giro: 'tablero', ap: 'final', cam: 'empuje', grade: 'noche'});

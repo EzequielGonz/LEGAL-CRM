@@ -1,0 +1,3 @@
+// Autos · «Anda bien: igual no saltees el primer service» (B de garantia): Mati en Av. Corrientes; abre con la llave que gira; giro: el haz de la linterna lee un cartel de autopista; luz cálida.
+import {kit} from './autos-kit.js';
+export const armar = V => kit(V, {hook: '«Anda bien»: igual<br><em>no saltees el primer service</em>', lugar: 'vereda', calle: 'AV. CORRIENTES', autoColor: '#1f6fc2', habla: 'mati', pjs: [{id: 'mati', x: 680, flip: 1}], mano: 'llave', manoAlivio: 'celu', objeto: 'celular', titulo: 'Service del 0 km', labels: ['Cuándo te toca', 'Dónde hacerlo', 'El comprobante'], doc: 'Libreta de garantía', gobj: 'llave', giro: 'haz', giroCfg: {signo1: 'PRIMER SERVICE', signo2: 'NO LO', signo3: 'SALTEES'}, ap: 'llave', grade: 'calido'});

@@ -153,7 +153,7 @@ export function giro(O, tipo, C, pjDef) {
       {f: 1, prof: 1, w: 1600, svg: `<defs><linearGradient id="hzK" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#fff9dc" stop-opacity=".85"/><stop offset="1" stop-color="#fff9dc" stop-opacity=".05"/></linearGradient></defs>
         <polygon class="beam" points="520,1420 1500,360 1500,1060" fill="url(#hzK)"/><g class="sign" opacity="0"><rect x="880" y="520" width="640" height="440" rx="24" fill="#16723f" stroke="#fff" stroke-width="10"/><text x="1200" y="640" text-anchor="middle" font-family="${F1}" font-weight="900" font-size="58" fill="#fff">${C.signo1 || 'N.º DE CHASIS'}</text><path d="M930,680 L1470,680" stroke="#fff" stroke-width="4"/><text x="1200" y="790" text-anchor="middle" font-family="${F1}" font-weight="800" font-size="46" fill="#fff">${C.signo2 || '¿COINCIDE CON'}</text><text x="1200" y="870" text-anchor="middle" font-family="${F1}" font-weight="800" font-size="46" fill="#fff">${C.signo3 || 'LOS PAPELES?'}</text></g><g class="act"></g>`}], '#070a14');
     const ch = pjEn(e); const sg = e.capas[1].svg.querySelector('.sign'), beam = e.capas[1].svg.querySelector('.beam');
-    return {esc: e, toma: t0 => ({t0, esc: e, tr: 'zoom', cam: (k, t) => ({X: lerp(700, 1050, ease(k)), Y: lerp(1250, 900, ease(k)), z: lerp(1.2, 1.15, k), r: lerp(4, -2, k), foco: 1}), act: (t, k) => {
+    return {esc: e, toma: t0 => ({t0, esc: e, tr: 'zoom', cam: (k, t) => ({X: lerp(760, 1180, ease(k)), Y: lerp(1250, 950, ease(k)), z: lerp(1.15, 1.0, k), r: lerp(4, -2, k), foco: 1}), act: (t, k) => {
       sg.setAttribute('opacity', clamp(k * 3 - .3)); beam.setAttribute('opacity', .6 + .4 * Math.abs(Math.sin(t * 13)) * (k < .2 ? 1 : .2));
       ch.pose({x: 420, y: 1600, s: 1.05, flip: 1, parpado: parpadeo(t, 4), hR: 130, cR: 10, hL: 20, cL: 30, ceja: 1, sonrisa: k > .5 ? .6 : -.2, mira: .7, cab: -16}); ch.E.propMano.innerHTML = MANO.celu; }})};
   }
@@ -185,7 +185,7 @@ export function giro(O, tipo, C, pjDef) {
     const e = mk([{f: .3, prof: .3, w: 1600, h: 1920, svg: D.cielo({w: 1600, top: '#2a5fae', mid: '#a9c9ec', bot: '#ffd9b0'})},
       {f: 1, prof: 1, w: 1080, h: 3800, svg: `<rect x="80" y="0" width="920" height="3800" fill="#d9a98a"/>${[...Array(16)].map((_, j) => [0, 1].map(i => `<rect x="${140 + i * 560}" y="${120 + j * 230}" width="240" height="150" rx="8" fill="#7f94a8" opacity=".8"/><rect x="${126 + i * 560}" y="${270 + j * 230}" width="268" height="12" fill="#a8775b"/>`).join('')).join('')}
         <rect x="430" y="0" width="220" height="3800" fill="#9fb3c8" opacity=".35"/><rect x="438" y="0" width="6" height="3800" fill="#555"/><rect x="636" y="0" width="6" height="3800" fill="#555"/>
-        <g class="cab"><rect x="400" y="-200" width="280" height="300" rx="16" fill="#cfe6ff" opacity=".55" stroke="#fff" stroke-width="8"/><rect x="420" y="-100" width="240" height="120" rx="10" fill="${AZUL}"/><text x="540" y="-22" text-anchor="middle" font-family="${F1}" font-weight="900" font-size="64" fill="#fff">CUOTA</text><path d="M540,-180 l40,50 l-80,0 z" fill="${NAVY}"/></g>`}], '#2a5fae');
+        <g class="cab"><rect x="400" y="-200" width="280" height="300" rx="16" fill="#cfe6ff" opacity=".55" stroke="#fff" stroke-width="8"/><rect x="420" y="-100" width="240" height="120" rx="10" fill="${AZUL}"/><text x="540" y="-22" text-anchor="middle" font-family="${F1}" font-weight="900" font-size="${(C.ascTxt || 'CUOTA').length > 6 ? 50 : 64}" fill="#fff">${C.ascTxt || 'CUOTA'}</text><path d="M540,-180 l40,50 l-80,0 z" fill="${NAVY}"/></g>`}], '#2a5fae');
     const cab = e.capas[1].svg.querySelector('.cab');
     return {esc: e, toma: t0 => ({t0, esc: e, tr: 'v', cam: (k, t) => { const y = lerp(3500, 700, ease(k)); return {X: 540, Y: y, z: 1.15, r: Math.sin(t * 2) * 1.5, foco: 1}; }, act: (t, k) => { cab.setAttribute('transform', `translate(0,${lerp(3500, 700, ease(k)) + 60})`); }})};
   }
@@ -224,7 +224,7 @@ export async function kit(V, P0) {
   const habla = pjs.find(p => p.id === C.habla) || pjs[0];
   const Y0 = L.mesa ? 1600 : (C.lugar === 'vereda' || C.lugar === 'noche' ? 1540 : 1585);
   const grupo = (t, modo) => pjs.forEach((p, i) => { const tense = modo === 'conflicto', feliz = modo === 'alivio'; const base = {x: p.x, y: p.y || Y0, s: p.s || 1, flip: p.flip || 1, mira: .4 * (p.flip || 1)};
-    const ex = tense ? (p === habla ? {hR: 60, cR: 50, hL: 30, cL: 40, ceja: .9, sonrisa: -.4, mira: .6} : {hR: 15, cR: 20, ceja: .4, sonrisa: -.1}) : feliz ? (p === habla || i === 0 ? {hR: 150, cR: 30, hL: 140, cL: 20, sonrisa: 1, ceja: .5} : {hR: 40, cR: 40, sonrisa: 1}) : {hR: 20, cR: 30, sonrisa: .2};
+    const ex = tense ? (p === habla ? {hR: 60, cR: 50, hL: 30, cL: 40, ceja: .9, sonrisa: -.4, mira: .6} : {hR: 15, cR: 20, ceja: .4, sonrisa: -.1}) : feliz ? (p.id === (F('alivio') || {}).q || (!pjs.some(x => x.id === (F('alivio') || {}).q) && p === habla) ? {hR: 150, cR: 30, hL: 140, cL: 20, sonrisa: 1, ceja: .5} : {hR: 40, cR: 40, sonrisa: 1}) : {hR: 20, cR: 30, sonrisa: .2};
     p.pose(p.pj, t, Object.assign(base, ex, (p.extra || {})[modo] || {})); });
   const manoPj = (p, s) => { if (p) p.pj.E.propMano.innerHTML = s || ''; };
   const cx = habla.x + 40, camC = C.camC || {};
@@ -242,7 +242,7 @@ export async function kit(V, P0) {
   const key = e3.capas[1].svg.querySelector('.key');
   const tomaLlave = {esc: e3, cam: k => ({x: 540, y: 960, z: lerp(1.25, 1.0, easeOut(k)), foco: 1}), act: (t, k) => key.setAttribute('transform', `translate(540,920) rotate(${lerp(-90, 0, easeOut(k))}) scale(1.05)`)};
   const T = V.frases; const f1 = T[1], f2 = T[2];
-  const tomaLugar = (t0, cam, modo, mano) => ({t0, esc: e1, cam, act: t => { grupo(t, modo); manoPj(habla, mano); }, boca: sobre(e1, 1, habla.pj)});
+  const tomaLugar = (t0, cam, modo, mano) => ({t0, esc: e1, cam, act: t => { grupo(t, modo); manoPj(habla, mano); }, boca: fh => { const p = pjs.find(x => x.id === fh.q) || habla; return e1.aPantalla(e1.capas[1], p.pj.cabeza[0], p.pj.cabeza[1] - 70); }});
   const tomaObj = (t0, cam, tr) => ({t0, esc: e2, tr, cam, act: t => { tick(t); obG.setAttribute('transform', `translate(540,960) scale(${1 + .015 * Math.sin(t * 2)}) translate(-540,-960)`); }});
   const tomas = [];
   tomas.push(tomaLugar(0, k => ({X: cx + (camC.x0 || 0), Y: lerp(1230, 1210, k), z: lerp(1.9, 2.05, ease(k)), foco: 1, ap: 4}), 'conflicto', C.mano));

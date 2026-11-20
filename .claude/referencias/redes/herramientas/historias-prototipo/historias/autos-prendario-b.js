@@ -1,0 +1,3 @@
+// Autos · «Crédito prendario» (B de prendario): showroom, Juli y Leo; abre en el primer plano; cuenta regresiva; giro: la ficha gigante rueda por Av. Corrientes; paleta clara.
+import {kit} from './autos-kit.js';
+export const armar = V => kit(V, {hook: 'Crédito prendario:<br><em>rápido y sin vueltas</em>', lugar: 'showroom', habla: 'juli', pjs: [{id: 'juli', x: 600, flip: 1}, {id: 'leo', x: 860, flip: -1}], mano: '', manoAlivio: 'llave', objeto: 'poliza', titulo: 'PRENDARIO', labels: ['Costo total', 'Auto en garantía', 'Te prestan'], doc: 'Crédito prendario', gobj: 'llave', giro: 'moneda', ap: 'objeto', grade: 'menta'});

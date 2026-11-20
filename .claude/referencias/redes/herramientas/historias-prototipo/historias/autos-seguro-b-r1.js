@@ -1,0 +1,3 @@
+// Autos · remake de «autos-seguro-b»: «el día del retiro, la póliza en la mano». Showroom, Juli busca la póliza y Leo tiene la llave; órbita inversa; giro: la póliza sube en un ascensor de vidrio.
+import {kit} from './autos-kit.js';
+export const armar = V => kit(V, {hook: 'El día del retiro:<br><em>la póliza en la mano</em>', lugar: 'showroom', habla: 'juli', pjs: [{id: 'juli', x: 600, flip: 1}, {id: 'leo', x: 860, flip: -1}], mano: '', manoAlivio: 'poliza', objeto: 'poliza', titulo: 'PÓLIZA', labels: ['Antes del retiro', 'Según tu uso', 'Siempre a mano'], doc: 'Póliza del 0 km', gobj: 'poliza', giro: 'ascensor', giroCfg: {ascTxt: 'PÓLIZA'}, cam: 'lateral', grade: 'calido'});
