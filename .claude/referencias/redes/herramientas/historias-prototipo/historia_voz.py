@@ -73,7 +73,7 @@ async def main(ids):
         pk = np.abs(voz).max(); voz = voz / pk * min(pk, .85)
         voz.astype(np.float32).tofile('voz/h/tmp.f32')
         subprocess.run(['ffmpeg', '-y', '-v', 'error', '-f', 'f32le', '-ar', str(SR), '-ac', '1', '-i', 'voz/h/tmp.f32', f'voz/{rid}-h-voz.wav'], check=True)
-        json.dump(dict(id=rid, total=round(total, 3), palabra=g['palabra'], serie=g['serie'], frases=frases), open(f'voz/{rid}-h.json', 'w'), ensure_ascii=False)
+        json.dump(dict(id=rid, total=round(total, 3), palabra=g['palabra'], serie=g['serie'], cfg=g.get('cfg', {}), frases=frases), open(f'voz/{rid}-h.json', 'w'), ensure_ascii=False)
         print(rid, round(total, 2), 's', [(f['q'], f['t']) for f in frases])
 
 asyncio.run(main(sys.argv[1:] or list(R)))

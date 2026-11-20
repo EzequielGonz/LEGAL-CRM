@@ -5,14 +5,15 @@ import {personaje, caminar, parpadeo, respirar} from '../historia/personaje.js';
 import * as D from '../historia/decor.js';
 import * as PP from '../historia/primerplano.js';
 import {realce} from '../historia/realce.js';
+import {PJS, ganchoCss, variar} from './comun.js';
 const ORO = '#D4AF37', NAVY = '#112250';
 const NICO = {peinado: 'corto', piel: '#c58c66', pelo: '#2a1c12', barba: true, remera: '#2f5d8a', campera: '#3d4a3a', manga: 'larga', pantalon: '#2b3140', zapato: '#1a1a1f'};
 
 export async function armar(V) {
-  const VB = V.id === 'vita-b';
-  const O = obra(V, {logo: 'vita.png', nombre: 'VITA Abogados', ctaSub: 'y te respondemos', hookHTML: VB ? 'Plata rápida.<br><em>¿La agarrás?</em>' : '¿Firmás<br><em>o no?</em>', hookHasta: VB ? 1.0 : 1.15,
+  const C = V.cfg || {}; const VB = V.id === 'vita-b'; const NICO = PJS[C.pj || 'nico'];
+  const O = obra(V, {logo: 'vita.png', nombre: 'VITA Abogados', ctaSub: 'y te respondemos', hookHTML: C.hook || (VB ? 'Plata rápida.<br><em>¿La agarrás?</em>' : '¿Firmás<br><em>o no?</em>'), hookHasta: VB ? 1.0 : 1.15,
     notas: []});
-  document.documentElement.style.cssText += `--f1:'Playfair Display';--f2:Manrope;--acc:${ORO};--hs:${VB ? 118 : 150}px;--hw:700;--kwCol:#0E1218;--logoH:175px;--hookTop:380px;--numTop:400px;--subTop:1220px;--velo:rgba(10,16,34,.9);--ctaTop:560px`;
+  document.documentElement.style.cssText += `--f1:'Playfair Display';--f2:Manrope;--acc:${ORO};--hs:${VB ? 118 : 150}px;--hw:700;--kwCol:#0E1218;--logoH:175px;--hookTop:380px;${C.hook ? ganchoCss(C.hook) : ''};--numTop:400px;--subTop:1220px;--velo:rgba(10,16,34,.9);--ctaTop:560px`;
   const F = n => V.frases.find(f => f.marca === n); const FI = i => V.frases.find(f => f.item === i);
   const fN = V.frases[0], fAl = F('alivio'), cta = V.frases.find(f => f.cta);
 
@@ -27,7 +28,7 @@ export async function armar(V) {
   // 2 · celular en primer plano con la notificación (remitente genérico)
   const cm = PP.celularMano({piel: NICO.piel, manga: NICO.campera});
   const e2 = O.esc({nombre: 'celu', fondo: '#0b1020', capas: [{f: .3, prof: .3, svg: `<rect width="1080" height="1920" fill="#0b1020"/>${D.skyline({w: 1080, base: 1900, color: '#141b33', ventanas: .25})}`}, {f: 1, prof: 1, svg: cm.svg}]});
-  e2.capas[1].svg.querySelector('.pantalla').innerHTML = PP.notificacion({app: 'Aseguradora · Siniestros', titulo: 'Te ofrecemos un acuerdo', texto: 'Necesitamos tu firma hoy para cerrar el reclamo.', color: '#5b6b8c'});
+  e2.capas[1].svg.querySelector('.pantalla').innerHTML = PP.notificacion(Object.assign({app: 'Aseguradora · Siniestros', titulo: 'Te ofrecemos un acuerdo', texto: 'Necesitamos tu firma hoy para cerrar el reclamo.', color: '#5b6b8c'}, C.notif || {}));
   // 3 · oficina de la aseguradora
   const e3 = O.esc({nombre: 'oficina', fondo: '#cfd5dc', capas: [
     {f: .6, prof: .6, w: 1500, svg: D.interior({w: 1500, pared: '#c9d0d8', piso: '#6d7280', ventana: [900, 380, 440, 600], vista: 'dia', zocalo: '#e4e7ea', luz: '#fff6e6'}) + D.planta({x: 180, y: 1410, s: 1.3})},
@@ -35,12 +36,12 @@ export async function armar(V) {
   const agente = personaje(e3.capas[1].svg.querySelector('.tras'), {peinado: 'rapado', piel: '#d6a988', pelo: '#3a2b20', remera: '#e9e6e0', campera: '#2c3446', manga: 'larga', pantalon: '#22252c'});
   const nico3 = personaje(e3.capas[1].svg.querySelector('.del'), NICO);
   // 4 · el papel, la lapicera y el sello dorado
-  const e4 = O.esc({nombre: 'papel', fondo: '#0f1a3a', capas: [{f: 1, prof: 1, svg: PP.papelEscritorio({}) + `<g class="lap"><rect x="-8" y="-260" width="16" height="250" rx="8" fill="#0b0d12"/><rect x="-9" y="-150" width="18" height="10" fill="${ORO}"/><path d="M-7,-12 L7,-12 L0,22 Z" fill="${ORO}"/><rect x="5" y="-250" width="4" height="80" fill="${ORO}"/></g>
+  const e4 = O.esc({nombre: 'papel', fondo: '#0f1a3a', capas: [{f: 1, prof: 1, svg: PP.papelEscritorio({titulo: C.doc || 'Propuesta de acuerdo', remite: C.remite || 'Aseguradora · Siniestros', firma: C.firma || 'Firma del reclamante'}) + `<g class="lap"><rect x="-8" y="-260" width="16" height="250" rx="8" fill="#0b0d12"/><rect x="-9" y="-150" width="18" height="10" fill="${ORO}"/><path d="M-7,-12 L7,-12 L0,22 Z" fill="${ORO}"/><rect x="5" y="-250" width="4" height="80" fill="${ORO}"/></g>
       <g class="sello">${PP.selloSVG({oro: ORO})}</g><g class="sombraSello"><ellipse rx="170" ry="40" fill="#000" opacity=".35"/></g>`}]});
-  const marca = e4.capas[0].svg.querySelector('.marca'); marca.innerHTML = PP.marcaSello({txt: 'ESPERÁ', oro: ORO, x: 520, y: 1210, r: -9, s: .95});
+  const marca = e4.capas[0].svg.querySelector('.marca'); marca.innerHTML = PP.marcaSello({txt: C.sello || 'ESPERÁ', oro: ORO, x: 520, y: 1210, r: -9, s: .95});
   // 5 · el living de Nico, de noche
   const e5 = O.esc({nombre: 'living', fondo: '#2b2a35', capas: [
-    {f: .6, prof: .6, w: 1500, svg: D.interior({w: 1500, pared: '#55506a', piso: '#5b4636', ventana: [150, 360, 420, 560], vista: 'noche', zocalo: '#6a6580', luz: '#9fb4ff'}) + D.calendario({x: 930, y: 760, s: 1.1, dia: 'HOY', acento: ORO}) + D.lampara({x: 1150, y: 1420})},
+    {f: .6, prof: .6, w: 1500, svg: D.interior({w: 1500, pared: '#55506a', piso: '#5b4636', ventana: [150, 360, 420, 560], vista: 'noche', zocalo: '#6a6580', luz: '#9fb4ff'}) + D.calendario({x: 930, y: 760, s: 1.1, dia: (C.cal || ['HOY'])[0], acento: ORO}) + D.lampara({x: 1150, y: 1420})},
     {f: 1, prof: 1, w: 1500, svg: D.sofa({x: 640, y: 1430, c: '#7a5a48'}) + '<g class="act"></g>' + D.mesa({x: 1060, y: 1230, w: 260, c: '#5a3f2c', patas: 190})}]});
   const nico5 = personaje(e5.capas[1].svg.querySelector('.act'), NICO); const cal = e5.capas[0].svg.querySelector('.dia');
   // 6 · Av. 9 de Julio con el Obelisco y un colectivo
@@ -64,7 +65,7 @@ export async function armar(V) {
     o += `<polygon points="${L[0]},${VY} ${L[1]},${VY} 1900,1920 -820,1920" fill="url(#pp1)"/>`;
     for (let i = 1; i < 26; i++) { const z = i / 26, y = VY + (1920 - VY) * Math.pow(z, 1.9); const xl = L[0] + (-820 - L[0]) * (y - VY) / (1920 - VY) + 60 * (y - VY) / 300, xr = L[1] + (1900 - L[1]) * (y - VY) / (1920 - VY) - 60 * (y - VY) / 300;
       const w = (xr - xl) * (.55 + .4 * hash(i)); o += `<rect x="${xl + (xr - xl) * .08}" y="${y}" width="${w * .9}" height="${Math.max(2, 22 * Math.pow(z, 1.9))}" rx="4" fill="#c9c4b4" opacity=".75"/>`; }
-    o += `<text x="540" y="${VY + 70}" text-anchor="middle" font-family="Playfair Display" font-weight="700" font-size="44" fill="#6e6650" opacity=".8">Propuesta de acuerdo</text>`;
+    o += `<text x="540" y="${VY + 70}" text-anchor="middle" font-family="Playfair Display" font-weight="700" font-size="44" fill="#6e6650" opacity=".8">${C.doc || 'Propuesta de acuerdo'}</text>`;
     return o; })();
   const e8 = O.esc({nombre: 'gigante', fondo: '#0b1020', capas: [
     {f: .1, prof: .1, svg: `<defs><radialGradient id="cg" cx=".5" cy=".38" r=".7"><stop offset="0" stop-color="#2a3d7a"/><stop offset=".6" stop-color="#121c3d"/><stop offset="1" stop-color="#070b18"/></radialGradient></defs><rect width="1080" height="1920" fill="url(#cg)"/>` +
@@ -137,7 +138,7 @@ export async function armar(V) {
     {t0: T[6] - .05, esc: e5, cam: k => ({X: lerp(700, 760, k), Y: 1150, z: 1.6, foco: 1, ap: 4}), act: t => { cal.parentNode.style.visibility = 'visible'; pN(nico5, t, {x: 640, y: 1430, s: 1.0, sentado: 1, hR: 60, cR: 70, hL: 50, cL: 60, cab: 10, mira: .6, ceja: .3});
       nico5.E.propMano.innerHTML = `<rect x="-10" y="-60" width="70" height="92" fill="#f6f3ea" transform="rotate(20)"/>`; }},
     {t0: FI(1).t - .1, esc: e4, cam: k => ({x: lerp(500, 580, k), y: lerp(980, 1010, k), z: 1.6, r: -2, foco: 1}), act: t => { marca.style.opacity = .28; e4.capas[0].svg.querySelector('.sello').setAttribute('transform', 'translate(-999,-999)'); e4.capas[0].svg.querySelector('.sombraSello').setAttribute('transform', 'translate(-999,-999)'); e4.capas[0].d.style.translate = '0 0'; }},
-    {t0: FI(2).t - .1, esc: e5, cam: k => ({X: 935, Y: 560, z: lerp(2.4, 2.5, ease(k)), foco: .6, ap: 5}), act: t => { cal.parentNode.style.visibility = 'visible'; const k = win(t, FI(2).t + .5, FI(2).t + .9); cal.textContent = k < .5 ? 'HOY' : 'MAÑANA'; cal.setAttribute('font-size', k < .5 ? 96 : 44); cal.parentNode.setAttribute('transform', `translate(930,760) scale(1.1,${1.1 * Math.abs(Math.cos(k * Math.PI))})`); nico5.pose({x: -999, y: 0}); }},
+    {t0: FI(2).t - .1, esc: e5, cam: k => ({X: 935, Y: 560, z: lerp(2.4, 2.5, ease(k)), foco: .6, ap: 5}), act: t => { cal.parentNode.style.visibility = 'visible'; const k = win(t, FI(2).t + .5, FI(2).t + .9); const cc = C.cal || ['HOY', 'MAÑANA']; cal.textContent = k < .5 ? cc[0] : cc[1]; cal.setAttribute('font-size', (k < .5 ? cc[0] : cc[1]).length <= 4 ? 96 : (k < .5 ? cc[0] : cc[1]).length <= 7 ? 60 : 44); cal.parentNode.setAttribute('transform', `translate(930,760) scale(1.1,${1.1 * Math.abs(Math.cos(k * Math.PI))})`); nico5.pose({x: -999, y: 0}); }},
     {t0: FI(3).t - .1, esc: e6, cam: k => ({X: lerp(980, 1250, k), Y: 1010, z: 1.35, foco: 1, ap: 4}), act: t => { const k = win(t, FI(3).t - .1, fAl.t); const w = D ? caminar(t, 1) : {};
       nico6.pose(Object.assign({x: lerp(820, 1290, k), y: 1450 + w.dy, s: .95, flip: 1, parpado: ojo(t), mira: .3}, w)); bus.setAttribute('transform', `translate(${lerp(1900, -700, win(t, FI(3).t - .1, FI(3).t + 3))},0)`); }},
     {t0: fAl.t - .1, esc: e7, cam: k => ({X: lerp(600, 640, k), Y: lerp(1080, 1060, k), z: lerp(1.8, 1.92, ease(k)), foco: 1, ap: 5}), act: t => pN(nico7, t, {x: 560, y: 1440, s: 1.05, flip: 1, hR: 20, cR: 30, hL: 10, cL: 20, cab: 4, sonrisa: 1, ceja: .4, mira: .2})},
@@ -146,8 +147,11 @@ export async function armar(V) {
   ];
   // posición del globo: arriba de la cabeza del personaje que habla, en coordenadas de pantalla
   const hablaEn = (esc, pj) => () => { const [x, y] = esc.aPantalla(esc.capas[esc.capas.length - (esc === e1 ? 2 : 1)], pj.cabeza[0], pj.cabeza[1] - 70); return [x, y]; };
-  O.tomas[0].boca = hablaEn(e1, nico1); O.tomas[O.tomas.length - 3].boca = hablaEn(e7, nico7);
+  if (C.esc0 === 'oficina') { const o3 = O.tomas[2]; O.tomas[0] = Object.assign({}, o3, {t0: 0, cam: (k, t) => { const sk = t < .6 ? Math.exp(-t * 7) : 0; return {X: lerp(520, 470, k) + Math.sin(t * 63) * 14 * sk, Y: 1120 + Math.cos(t * 51) * 10 * sk, z: lerp(1.9, 2.05, ease(k)) + .06 * sk, r: Math.sin(t * 40) * 1.6 * sk, foco: 1, ap: 5}; }});
+    O.tomas[O.tomas.length - 1] = Object.assign({}, O.tomas[O.tomas.length - 2], {t0: V.total - .4}); O.tomas[0].boca = () => e3.aPantalla(e3.capas[1], nico3.cabeza[0], nico3.cabeza[1] - 70); }
+  else O.tomas[0].boca = hablaEn(e1, nico1); O.tomas[O.tomas.length - 3].boca = hablaEn(e7, nico7);
   const golpes = [F('sello').t - .75, F('dolor').t - .05]; O.flash = t => Math.max(...golpes.map(g => t >= g ? .4 * Math.exp(-(t - g) * 10) : 0), Math.max(0, .5 * Math.exp(-(t - golpe) * 9)) * (t >= golpe ? 1 : 0), t >= .02 ? .55 * Math.exp(-(t - .02) * 8) : 0);
+  if (C.ap || C.grade || C.cam) { const ab = C.ap === 'caida' ? O.tomas.find(x => x.esc === e9) : C.ap === 'gigante' ? O.tomas.find(x => x.esc === e8) : C.ap === 'celu' ? O.tomas.find(x => x.esc === e2) : C.ap === 'sello' ? O.tomas.find(x => x.esc === e4) : null; variar(O, C, ab); }
   if (VB) { // variante B: adelanto de la caída en el primer segundo y paleta más cálida
     const ini = O.tomas[0]; const ff = O.tomas.find(x => x.esc === e9); O.tomas.unshift(Object.assign({}, ff, {t0: 0, tr: 'zoom', lineas: .5})); ini.t0 = .85;
     document.getElementById('grade').style.background = 'linear-gradient(180deg,rgba(255,120,40,.16),rgba(0,0,0,0) 50%,rgba(120,40,160,.12))'; }

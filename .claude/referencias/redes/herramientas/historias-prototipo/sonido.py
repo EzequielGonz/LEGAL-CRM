@@ -67,7 +67,20 @@ def generico(rid, amb_kind, estilo):
     V = json.load(open(f'voz/{rid}-h.json')); fr = V['frases']; T = V['total']
     fx = [(0.0, choque, .7), (.12, vibra, .8)] + [(f['t'] - .08, lambda: B.S_whoosh(.32, 400, 7000), .35) for f in fr[1:]]
     fx += [(f['t'], B.S_chime, .55) for f in fr if f.get('item')] + [(fr[-1]['t'] - .3, B.S_chime, .7)]
-    mezclar(rid, [(0, T, amb_kind)], fx, estilo)
+    # golpes de los planos irreales (objeto gigante que cae) y viento de la caída libre
+    gi = {'cob': (fr[3]['t'] + .02, fr[4]['t'] - .1, next(f['t'] for f in fr if f.get('item') == 1) - .1), 'autos': (fr[2]['t'] - .05, None, None),
+          'mkt': (fr[4]['t'] + .02, fr[5]['t'] - .1, next(f['t'] for f in fr if f.get('item') == 1) - .1)}.get(rid.split('-')[0])
+    q = []
+    if gi and rid not in ('cob', 'autos', 'mkt'):
+        g, c0, c1 = gi; fx += [(g - .55, lambda: B.S_whoosh(.55, 120, 3000), 1.0), (g, choque, 1.0), (g, sello_golpe, .6)]; q.append((g - .12, g + .5))
+        if c0 is not None:
+            def viento(d):
+                n = int(d * SR); x = bp(rng.standard_normal(n), 300, 5000) * np.linspace(.2, 1, n) ** 1.5 * .5; x[-int(.05 * SR):] *= np.linspace(1, 0, int(.05 * SR)); return x
+            fx += [(c0, lambda: viento(max(.3, c1 - c0)), .9), (c1, B.S_boom, .7)]
+    mezclar(rid, [(0, T, amb_kind)], fx, estilo, quiebres=q)
 
 if __name__ == '__main__':
-    r = sys.argv[1]; {'vita': vita, 'vita-b': lambda: vita('vita-b'), 'cob': lambda: generico('cob', 'oficina', 'cob'), 'autos': lambda: generico('autos', 'ciudad_dia', 'autos'), 'mkt': lambda: generico('mkt', 'local', 'mkt')}[r]()
+    r = sys.argv[1]
+    if r not in ('vita', 'vita-b', 'cob', 'autos', 'mkt'):  # reels del cronograma x2: según la marca
+        m = r.split('-')[0]; {'vita': lambda: vita(r), 'cob': lambda: generico(r, 'oficina', 'cob'), 'autos': lambda: generico(r, 'ciudad_dia', 'autos'), 'mkt': lambda: generico(r, 'local', 'mkt')}[m](); sys.exit(0)
+    {'vita': vita, 'vita-b': lambda: vita('vita-b'), 'cob': lambda: generico('cob', 'oficina', 'cob'), 'autos': lambda: generico('autos', 'ciudad_dia', 'autos'), 'mkt': lambda: generico('mkt', 'local', 'mkt')}[r]()

@@ -4,26 +4,28 @@ import {lerp, ease, easeOut, win, wob, clamp, backOut} from '../historia/base.js
 import {personaje} from '../historia/personaje.js';
 import * as D from '../historia/decor.js';
 import * as PP from '../historia/primerplano.js';
-import {poser, sobre, luz, celuMano, laptop} from './comun.js';
+import {poser, sobre, luz, celuMano, laptop, PJS, ganchoCss, variar} from './comun.js';
+import {gigante, caida} from '../historia/irreal.js';
 const VERDE = '#003D3B', MENTA = '#DAF1DE', SALVIA = '#8EB69B', BOSQUE = '#235347';
 const CARO = {peinado: 'colita', piel: '#e0ad8a', pelo: '#4a2a1a', remera: '#f2efe8', campera: '#7aa38a', manga: 'larga', pantalon: '#33405a', zapato: '#e8e2d8'};
 export async function armar(V) {
-  const O = obra(V, {nombre: 'Compara Tu Obra Social', logo: 'coberturas.png', ctaSub: 'y te respondemos', hookHTML: '¿Otra vez<br><em>aumentó?</em>', hookHasta: 1.4, notas: []});
-  document.documentElement.style.cssText += `--f1:Manrope;--f2:Manrope;--acc:#7fe0a8;--hs:140px;--hw:800;--em:normal;--kwCol:${VERDE};--logoH:130px;--velo:rgba(0,61,59,.92);--ctaTop:600px;--hookTop:1150px;--kws:116px`;
-  const F = n => V.frases.find(f => f.marca === n); const FI = i => V.frases.find(f => f.item === i); const cta = V.frases.find(f => f.cta); const pC = poser(V, 'caro');
+  const C = V.cfg || {}; const CARO = PJS[C.pj || 'caro']; const QUIEN = C.q || 'caro';
+  const O = obra(V, {nombre: 'Compara Tu Obra Social', logo: 'coberturas.png', ctaSub: 'y te respondemos', hookHTML: C.hook || '¿Otra vez<br><em>aumentó?</em>', hookHasta: 1.4, notas: []});
+  document.documentElement.style.cssText += `--f1:Manrope;--f2:Manrope;--acc:#7fe0a8;--hs:140px;--hw:800;--em:normal;--kwCol:${VERDE};--logoH:130px;--velo:rgba(0,61,59,.92);--ctaTop:600px;--hookTop:1150px;--kws:116px;${C.hook ? ganchoCss(C.hook) : ''}`;
+  const F = n => V.frases.find(f => f.marca === n); const FI = i => V.frases.find(f => f.item === i); const cta = V.frases.find(f => f.cta); const pC = poser(V, QUIEN);
   const mapa = `<rect x="-138" y="-188" width="276" height="166" fill="#e6efe9"/>${[...Array(8)].map((_, i) => `<path d="M${-138 + i * 40},-188 l20,166" stroke="#fff" stroke-width="6"/>`).join('')}<path d="M-138,-120 L138,-90 M-138,-60 L138,-40" stroke="#fff" stroke-width="8"/>
     ${[[-70, -120], [10, -80], [70, -140]].map(([a, b]) => `<path d="M${a},${b} c-10,-16 -10,-30 0,-30 c10,0 10,14 0,30 z" fill="${BOSQUE}"/><circle cx="${a}" cy="${b - 20}" r="5" fill="#fff"/>`).join('')}<circle cx="0" cy="-100" r="10" fill="#e8574a" stroke="#fff" stroke-width="3"/>`;
   // 1 · el PH de Caro, de día: escritorio con la compu y plantas
   const e1 = O.esc({nombre: 'ph', fondo: '#e7efe6', capas: [
-    {f: .6, prof: .6, w: 1500, svg: D.interior({w: 1500, pared: '#e3ece2', piso: '#b98c63', ventana: [880, 330, 460, 640], vista: 'dia', zocalo: '#f3f6f1', luz: '#fff2cf'}) + D.planta({x: 1300, y: 1410, s: 1.6}) + D.calendario({x: 400, y: 640, s: 1.0, dia: '2 turnos', mes: 'NOVIEMBRE', acento: BOSQUE})},
+    {f: .6, prof: .6, w: 1500, svg: D.interior({w: 1500, pared: '#e3ece2', piso: '#b98c63', ventana: [880, 330, 460, 640], vista: 'dia', zocalo: '#f3f6f1', luz: '#fff2cf'}) + D.planta({x: 1300, y: 1410, s: 1.6}) + D.calendario({x: 400, y: 640, s: 1.0, dia: C.cal || '2 turnos', mes: 'NOVIEMBRE', acento: BOSQUE})},
     {f: 1, prof: 1, w: 1500, svg: '<g class="act"></g>' + D.mesa({x: 800, y: 1150, w: 640, c: '#d8c3a5', patas: 270}) + laptop({x: 860, y: 1150, s: 1.1}) + `<g class="tel"><rect x="610" y="1132" width="80" height="18" rx="6" fill="#111"/></g>` + D.planta({x: 520, y: 1150, s: .6})}]});
   const caro = personaje(e1.capas[1].svg.querySelector('.act'), CARO); const lpant = e1.capas[1].svg.querySelector('.lpant'); const tel = e1.capas[1].svg.querySelector('.tel');
   // 2 · notificación en el celular (prepaga genérica)
   const cm = PP.celularMano({piel: CARO.piel, manga: CARO.campera});
   const e2 = O.esc({nombre: 'celu', fondo: MENTA, capas: [{f: .3, prof: .3, svg: `<rect width="1080" height="1920" fill="${MENTA}"/>`}, {f: 1, prof: 1, svg: cm.svg}]});
-  e2.capas[1].svg.querySelector('.pantalla').innerHTML = PP.notificacion({hora: '10:12', app: 'Tu prepaga', titulo: 'Aviso importante', texto: 'Tu cuota se actualiza este mes. Mirá la carta adjunta.', color: BOSQUE, fondo: ['#2a5a50', '#9cc7b0']});
+  e2.capas[1].svg.querySelector('.pantalla').innerHTML = PP.notificacion(Object.assign({hora: '10:12', app: 'Tu prepaga', titulo: 'Aviso importante', texto: 'Tu cuota se actualiza este mes. Mirá la carta adjunta.', color: BOSQUE, fondo: ['#2a5a50', '#9cc7b0']}, C.notif || {}));
   // 3 · la carta y la lupa menta (objeto de la marca)
-  const ca = PP.carta({fondo: MENTA, acento: BOSQUE});
+  const ca = PP.carta(Object.assign({fondo: MENTA, acento: BOSQUE}, C.carta || {}));
   const e3 = O.esc({nombre: 'carta', fondo: MENTA, capas: [{f: 1, prof: 1, svg: ca.svg}]});
   const lupa = e3.capas[0].svg.querySelector('.lupa'), zoom = e3.capas[0].svg.querySelector('.zoom');
   luz(e1, 'background:linear-gradient(110deg,transparent 45%,rgba(255,246,214,.45)),linear-gradient(180deg,transparent 60%,rgba(0,40,30,.18))');
@@ -50,5 +52,14 @@ export async function armar(V) {
     {t0: V.total - .4, esc: e1, cam: k => ({X: 700, Y: 1080, z: 1.75, foco: 1, ap: 5}), act: t => { lpant.innerHTML = ''; pC(caro, t, {x: 560, y: 1430, s: 1.0, sentado: 1, hR: 40, cR: 60, hL: 30, cL: 55, mira: .4}); caro.E.propMano.innerHTML = ''; }},
   ];
   O.tomas[0].boca = sobre(e1, 1, caro); O.tomas[7].boca = sobre(e1, 1, caro);
+  // planos irreales: Caro diminuta sobre la carta gigante (cae la lupa en la palabra clave) y caída entre hojas antes de los 3 puntos
+  const G = gigante(O, {pj: CARO, doc: C.doc || 'Letra chica', papel: ['#8fb7a2', '#DAF1DE', '#f4fbf5'], renglon: '#a9c9b6', tinta: BOSQUE, cielo: ['#1f6b5c', '#0b3b33', '#04201c'], acento: SALVIA, objeto: C.obj || 'lupa'});
+  const K = caida(O, {pj: CARO, fondo: ['#1f6b5c', '#03201c'], hoja: '#f4fbf5', renglon: '#a9c9b6', raya: MENTA, acento: '#7fe0a8'});
+  const f2 = V.frases[2], f3 = V.frases[3], f4 = V.frases[4];
+  O.tomas.splice(O.tomas.findIndex(x => x.t0 > f2.t - .1), 0, G.toma(f2.t - .1, f3.t + .02));
+  O.tomas.splice(O.tomas.findIndex(x => x.t0 > f4.t - .1), 0, K.toma(f4.t - .1));
+  O.tomas.sort((a, b) => a.t0 - b.t0);
+  O.impactos = [.02, f3.t + .02]; O.flash = t => Math.max(t >= .02 ? .5 * Math.exp(-(t - .02) * 8) : 0, t >= f3.t + .02 ? .45 * Math.exp(-(t - f3.t - .02) * 10) : 0);
+  if (C.ap || C.grade || C.cam) variar(O, C, C.ap === 'caida' ? K.toma(0) : C.ap === 'gigante' ? G.toma(0, .55) : C.ap === 'celu' ? O.tomas.find(x => x.esc === e2) : null);
   return O;
 }
