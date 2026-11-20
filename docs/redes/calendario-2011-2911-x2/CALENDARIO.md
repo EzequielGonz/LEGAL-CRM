@@ -13,7 +13,7 @@
 | --- | --- |
 | `calendario.csv` | 632 filas. Tiene las columnas del base más estas: <ul><li>`variante_de`: pieza madre.</li><li>`cambios`: qué cambia.</li><li>`personaje`, `lugar_ba`, `conflicto_seg1` y `giro_irreal`: la mini historia.</li></ul> En historias y carruseles, `conflicto_seg1` trae la idea en una línea y `giro_irreal`, el recurso visual. |
 | `generar_x2.py` y `datos_x2.py` | `generar_x2.py` arma el calendario reutilizando `generar.py` e `historias.py` del base, que solo se leen. `datos_x2.py` tiene los ganchos, los remakes, los personajes, los lugares y los giros. |
-| `validar_x2.py` y `resultado-validacion.txt` | Validador y su última salida: **0 errores**. |
+| `validar_x2.py` y `resultado-validacion.txt` | Validador y su última salida: **0 errores**. Controla:<ul><li>los totales por formato, marca y día;</li><li>los horarios, incluido el corrimiento por el grupo de control;</li><li>los 5 días entre piezas de la misma idea y los más de 5 días de cada remake;</li><li>el tope de 6 por tema;</li><li>los textos prohibidos, los cierres y las columnas;</li><li>que todo esté aprobado y que no queden patentamientos ni aumento de prepagas;</li><li>que las 316 piezas del base sigan en su día.</li></ul> |
 
 Para correrlo: `python3 generar_x2.py && python3 validar_x2.py`.
 
@@ -54,7 +54,7 @@ Del 20 al 24/11 se corren 20 minutos:
 | --- | --- |
 | Gancho escrito de nuevo: los primeros 3 segundos | Idea y mensaje |
 | Portada | Palabra clave |
-| Orden de escenas | Afirmaciones: las aprobadas o las pendientes de revisión |
+| Orden de escenas | Afirmaciones: las mismas de la pieza madre, aprobadas por la responsable el 20/11 |
 | Apertura o giro irreal (los dos en las B nuevas) | Personaje y serie |
 | Uno de estos: primer plano, música, cámara o paleta (dentro de la marca) | Cierre: «Comentá PALABRA» o «Respondé esta historia con PALABRA» |
 
@@ -69,39 +69,23 @@ Del 20 al 24/11 se corren 20 minutos:
 
 **Aviso:** Instagram reduce la distribución del contenido repetido o poco original. Por eso cada variante cambia los primeros 3 segundos, la portada y el orden, y la palabra clave sirve para medir qué versión trae consultas.
 
-## Agenda y condiciones (ajustadas al corrimiento)
+## Agenda y decisiones de la responsable (20/11)
 
-| Fecha | Marca | Pieza | Condición |
+**Todo quedó aprobado.** Eso incluye lo laboral y lo penal de VITA y «Lo que dijo la Corte» de Coberturas. Las 632 filas tienen `revision` = «aprobado por la responsable (20/11)», sin borradores ni condiciones de aprobación. En los textos se sacaron las marcas «(texto a revisar)».
+
+| Fecha | Marca | Pieza | Qué se decidió |
 | --- | --- | --- | --- |
-| 21/11 13:50 | Coberturas | Lo que dijo la Corte | Revisión profesional **antes del 20/11 a las 13:50**, o sea hoy. Si no llega, va «Tu obra social la podés elegir» y la pieza pasa al lugar de actualidad del 26/11 a las 20:30 |
-| 26/11 09:00 | Coberturas | Aumento de prepagas de diciembre | Porcentaje oficial publicado 24 h antes; si no, va «¿Pagás por cosas que no usás?» |
-| 27/11 09:00 y 11:00 | Autos | Black Friday (reel y carrusel) | Pasa al día de Black Friday, con visto bueno del equipo antes del 25/11. Si no hay visto bueno, el lugar queda en borrador con motivo |
+| 21/11 13:50 | Coberturas | Lo que dijo la Corte | Aprobada, sale sin condición |
+| 26/11 09:00 | Coberturas | Aumento de prepagas de diciembre | **No se hace.** En el mismo horario va «¿Pagás por cosas que no usás?» (plan-uso, versión B), y su encuesta de las 09:30 cambia igual |
+| 27/11 09:00 y 11:00 | Autos | Black Friday (reel y carrusel) | **Sí se hace**, el día de Black Friday y sin números reales: precio llave en mano y oferta por escrito |
 | 27/11 12:00 | Kocos | Remake «Hoy es Black Friday: 200 chats…» | Fijado al día de Black Friday |
-| 28 y 29/11, 17:00 y 20:30 | Las 4 | Lugares de actualidad | Igual que en el base |
+| 28/11 08:30 | Autos | Patentamientos de ACARA | **No se hace.** En el mismo horario va «¿Contado, prendario o plan?» |
+| 28 y 29/11, 17:00 y 20:30 | Las 4 | Lugares de actualidad | Única condición que queda, igual que en el base: si hay una noticia del rubro con fuente en las 48 h previas, va esa; si no, la pieza prevista |
 
-- **Patentamientos de ACARA:** el ranking de noviembre sale en diciembre, fuera del período. Va el respaldo aprobado «¿Contado, prendario o plan?».
 - **Cyber Monday (30/11):** queda fuera del período. Las piezas de Kocos que lo nombran salen antes, como anticipo.
 - **TikTok y YouTube Shorts:** siguen condicionados a que existan las cuentas.
 
-## Revisión antes de producir
-
-**Estado de las 632 piezas:**
-
-| Estado | Piezas |
-| --- | --- |
-| Aprobado (texto del 10/11) | 220 |
-| Pendiente: revisión profesional (todo lo nuevo de VITA y Coberturas) | 213 |
-| Pendiente: revisión del equipo (todo lo nuevo de Autos y Kocos) | 197 |
-| Condicionado a un dato oficial | 2 |
-
-- Sin revisión, la pieza nueva no sale: su lugar pasa a borrador con motivo y el día queda con el volumen base.
-- Las piezas nuevas del 20 al 22/11 son 7 u 8 por marca y por día, y necesitan la revisión ya.
-
-## Freno
-
-- **Cuándo se mide:** los informes del 23/11 y del 26/11 se comparan con el promedio del 20 al 22/11. Son las fechas del pedido (28/11 y 01/12 contra el 25 al 27/11) corridas 5 días.
-- **Cuándo se frena:** si la retención o el alcance promedio por reel cae más de un 30 %, se vuelve al volumen base.
-- **Cómo se frena:** los reels extra (B y R) y sus historias pasan a borrador con motivo y forma de revertir. Nada se borra.
+**Textos que hay que desarrollar en la producción:** algunas historias del base traían solo el título del tema, con la marca «texto a revisar». Ahora quedan como tema sin la marca, por ejemplo «Lo que pocos saben: Aportes sobre el aguinaldo». Antes de animarlas, se escriben con los datos aprobados del tema.
 
 ## Ideas por marca (los 5 mejores conceptos)
 
@@ -124,7 +108,7 @@ Del 20 al 24/11 se corren 20 minutos:
 2. **0KM.** Juli quiere un 0 km y Mati, un usado. La pantalla partida se rompe como un vidrio.
 3. **USADO.** «El gris» sube como en un elevador de taller y la carpeta del service hace la diferencia.
 4. **SORTEO.** Le prometen a Mati el auto «en la cuota 2» y un bombo de sorteo gigante rueda por la cuadra.
-5. **Black Friday (27/11).** Tres preguntas antes de entusiasmarte. Está condicionado al visto bueno del equipo.
+5. **LLAVE · Black Friday (27/11).** Tres preguntas antes de entusiasmarte, sin números reales: precio llave en mano y oferta por escrito.
 
 **Kocos Marketing**
 1. **ORDEN.** Hoy es Black Friday: el celular naranja vibra tan fuerte que la torta queda suspendida en el aire.
@@ -144,6 +128,11 @@ Del 20 al 24/11 se corren 20 minutos:
   - Coberturas: carencias (de «cambio»), plan a medida (de «aumento») y opción de cambio (de «recibo»);
   - Autos: primer 0 km (de «anticipo»).
 - **Variantes antes que su madre.** Algunas variantes B salen antes que su pieza madre, siempre a 5 días o más. Pasa cuando la madre está entre el 25 y el 29/11. Por ejemplo, «aguinaldo-anticipo» sale el 20/11 y su madre, el 26/11.
-- **Lo laboral y lo penal se adelanta.** Algunas variantes de despido, aguinaldo y penal salen antes del primer despido y el primer penal del base, que ahora son el 23/11 y el 24/11.
+- **Lo laboral y lo penal se adelanta.** Algunas variantes de despido, aguinaldo y penal salen antes del primer despido y el primer penal del base, que ahora son el 23/11 y el 24/11. Ya están aprobadas.
 - **No se conoce el contenido del grupo de control.** El cronograma no comprueba la regla de los 5 días contra lo programado del 20 al 24/11. Antes de programar, hay que mirarlo en Metricool con `getScheduledPosts`.
-- **Producción.** Son 136 reels más que en el base. Los del 20 y 21/11 no se llegan a producir a tiempo con el motor propio. Lo que no esté listo y revisado queda en borrador, y nada sale solo.
+- **Producción.** Son 136 reels más que en el base. Los del 20 y 21/11 son los más ajustados para el motor propio.
+- **Fechas, horas e `idea_id` congelados.** Otros agentes ya producen y programan desde `calendario.csv`. Después de las decisiones del 20/11 solo cambiaron:
+  - los textos;
+  - la revisión;
+  - las condiciones que se levantaron;
+  - las 2 filas del aumento de prepagas: el reel y su encuesta, en los mismos horarios.

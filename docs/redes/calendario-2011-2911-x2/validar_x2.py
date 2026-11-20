@@ -8,6 +8,13 @@ BASE_CSV = os.path.join(os.path.dirname(AQUI), 'calendario-2511-0412', 'calendar
 REND = os.path.join(os.path.dirname(AQUI), 'analisis-2026-11-20', 'rendimiento-reels-10-19nov.csv')
 filas = list(csv.DictReader(open(os.path.join(AQUI, 'calendario.csv'), encoding='utf-8')))
 base = list(csv.DictReader(open(BASE_CSV, encoding='utf-8')))
+
+def limpiar(t):
+    # el 20/11 se aprobó todo: los textos ya no llevan «(texto a revisar)» ni «; a revisar»
+    t = re.sub(r'\s*\((?:texto )?a revisar[^)]*\)', '', t)
+    return re.sub(r';\s*(?:alcance )?a revisar(?: por el equipo)?(?=\))', '', t)
+for b in base:
+    b['gancho'], b['idea'] = limpiar(b['gancho']), limpiar(b['idea'])
 errores, avisos = [], []
 D = date.fromisoformat
 
@@ -164,6 +171,8 @@ for f in filas:
         errores.append(f'{f["fecha"]} {f["hora"]} {f["marca"]}: «{f["idea_id"]}» no se hace (decisión del 20/11)')
     if f['condicion'] and not f['condicion'].startswith('Lugar de actualidad'):
         errores.append(f'{f["fecha"]} {f["hora"]} {f["marca"]}: queda una condición que la responsable ya levantó')
+    if re.search(r'\(texto a revisar|\(a revisar|; (alcance )?a revisar', f['gancho'] + f['idea']):
+        errores.append(f'{f["fecha"]} {f["hora"]} {f["marca"]}: queda una marca «a revisar» en el texto')
     if re.search(r'borrador', f['condicion'] + f['cambios'], re.I):
         errores.append(f'{f["fecha"]} {f["hora"]} {f["marca"]}: menciona un borrador')
 

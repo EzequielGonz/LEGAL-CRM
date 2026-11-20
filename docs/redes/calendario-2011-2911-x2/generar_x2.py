@@ -395,6 +395,11 @@ def idea_carrusel(pers, lugar, obj, kw):
     return dict(conflicto_seg1=f'Idea: portada con {p} en {l}; una lámina por paso y la última con «{kw}»',
                 giro_irreal=f'Portada con escala imposible: {obj} gigante y {p} en miniatura')
 
+def limpiar(t):
+    """Todo quedó aprobado el 20/11: se sacan las marcas «(texto a revisar)» y «; a revisar» de los textos."""
+    t = re.sub(r'\s*\((?:texto )?a revisar[^)]*\)', '', t)
+    return re.sub(r';\s*(?:alcance )?a revisar(?: por el equipo)?(?=\))', '', t)
+
 def decisiones_20_11(filas):
     """Decisiones de la responsable del 20/11, aplicadas sin mover fechas, horas ni las demás filas."""
     I = G.I[('cob', 'plan-uso')]
@@ -420,6 +425,8 @@ def decisiones_20_11(filas):
                                  'que no se hace (decisión de la responsable, 20/11) · ' + notas,
                          **idea_historia(f['formato'], pers, lugar, OBJETO['cob'], I['kw'], I['gb']))
     for f in filas:
+        for c in ('gancho', 'idea', 'conflicto_seg1', 'giro_irreal'):
+            f[c] = limpiar(f[c])
         f['revision'] = APROBADO
         if not f['condicion'].startswith('Lugar de actualidad'):
             f['condicion'] = ''
