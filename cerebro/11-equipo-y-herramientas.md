@@ -27,6 +27,10 @@ Regla de la responsable (15/11 y 20/11): usar **todo** lo disponible que sume ca
 | Investigador de tendencias | Referencias, formatos que pegan | anthropic-skills:deep-research, social-media-skills:viral-reverse-engineering, trend-jacking, vidIQ (solo funciones sin créditos) |
 | Abogado de contenido (VITA) | Chequear normas citadas, límites del Colegio | MCP JurisprudenciaARG (normas e Infoleg; nunca citar de memoria) |
 
+### Cómo se suma un rol nuevo
+
+Cuando aparece una tarea que ningún rol de la tabla cubre (por ejemplo, contabilidad, legales de contratos, video 3D), se agrega una fila con el rol, de qué se ocupa y sus skills/plugins de cabecera, después de buscarlos con `SearchSkills` / `SearchPlugins`. Se anota en la bitácora.
+
 ## Agentes especializados útiles
 
 general-purpose (paralelo), Explore (búsquedas amplias), Plan, agent-protocols:code-reviewer / security-auditor / test-engineer / accessibility-specialist, backend-design:incident-investigator, claude-security:claude-security, fairmind-design:* (accesibilidad), agentic-council:* (segundas opiniones por especialidad), web-vitals-auditor:perf-forensics, searchfit-seo:seo-auditor.

@@ -11,13 +11,14 @@ actualizado: 20/11/2026 06:10
 - Campañas → **las lanza ella siempre**; Claude las deja listas.
 - Dónde vive el cerebro → carpeta `cerebro/` en LEGAL-CRM.
 - Search Console → verificadas por DNS (comprobado por Claude).
+- Nombre de la agencia → Kocos Marketing. Autos → Automotores Kocos o Autos Kocos, nunca «Agencia Kocos».
+- Integrar a main el cerebro y las ramas de documentos → sí.
+- Qué sigue → por ahora entender todo el panel y el negocio; ella da las instrucciones después.
 
 ## Abiertas (con recomendación)
 
 | # | Tema | Opciones | Recomendación |
 | --- | --- | --- | --- |
-| 1 | Nombre de la agencia de marketing | Kocos Marketing · ORVIAN | Kocos Marketing (ya está en web, CRM, Metricool y redes; cambiar cuesta posicionamiento) |
-| 2 | Nombre de la agencia de autos | Automotores Kocos · Agencia Kocos · Autos Kocos | Automotores Kocos en todos lados (evita choque con «Agencia Kocos» de Marketing en IG) |
 | 3 | Grafía de Coberturas | Compara Tu Obra Social · Compara tu Obra Social | «Compara Tu Obra Social» (así está en redes y en la frase fija del WhatsApp) |
 | 4 | Precios en la web de Marketing ($299k/499k/699k) vs bot sin precios | Mantener como excepción · quitar | Mantener «desde» en la web y que el bot derive a una persona |
 | 5 | Archivo automático a los 30 días (rama del 19/11) | Encender · dejar manual | Encender (pidió «Archivar» y que los descartados >1 mes pasen solos) |
@@ -32,7 +33,6 @@ actualizado: 20/11/2026 06:10
 | 14 | Modo del panel | Oscuro por defecto · claro de vidrio | Oscuro (vigente) |
 | 15 | Bio A o B por marca | — | Más adelante (no se tocan por ahora) |
 | 16 | Pauta paga (clic a WhatsApp, 7 días gratis de mensajes) | Esperar · probar | Esperar a que pegue un reel (orden vigente); es pago |
-| 17 | Integrar el cerebro a `main` | Sí · quedarse en la rama | Sí: así toda sesión nueva lo lee sin buscar ramas |
 
 ## Datos que tiene que pasar la responsable
 
