@@ -85,7 +85,7 @@ Recorrido buscado: contenido en redes o búsqueda en Google → perfil o landing
 
 ### Automotores Kocos — perfil `agencia_0km`
 
-- **Nombres:** «Automotores Kocos» en CRM, redes y para la responsable; la landing dice «Agencia Kocos»; Facebook «Autos Kocos». Sin unificar.
+- **Nombres (decidido 20/11):** «Automotores Kocos» o «Autos Kocos», equivalentes. **Nunca «Agencia Kocos»** (es como figura Marketing en Instagram). La landing todavía dice «Agencia Kocos»: corregir.
 - **Servicios:** agencia multimarca de 0 km en CABA y AMBA: contado, crédito prendario, plan de ahorro, usado como parte de pago, con asesoramiento.
 - **Público:** quien compra su primer 0 km o cambia el auto y quiere entender costos, trámites y opciones sin que lo apuren.
 - **Tono:** directo, enérgico, con humor del mundo del auto; transparente sobre costos y trámites.
@@ -103,7 +103,7 @@ Recorrido buscado: contenido en redes o búsqueda en Google → perfil o landing
 
 ### Kocos Marketing — perfil `marketing`
 
-- **Nombres:** «Kocos Marketing» en web y CRM; Instagram «Agencia Kocos». En otros chats aparece **ORVIAN** como posible nombre de la agencia (decisión abierta).
+- **Nombre (decidido 20/11):** **Kocos Marketing** (ORVIAN descartado). Instagram figura «Agencia Kocos».
 - **Servicios:** páginas web, tiendas online, automatizaciones con IA, CRM y WhatsApp, sistemas a medida, gestión de redes; webs con reserva directa sin comisión para hoteles.
 - **Público:** dueños de pymes y comercios que venden por WhatsApp y redes y pierden consultas por responder tarde. Prioridad alto poder adquisitivo. Alcance nacional.
 - **Tono:** picante, concreto, orientado a negocio; antes y después, ejemplos del día a día.

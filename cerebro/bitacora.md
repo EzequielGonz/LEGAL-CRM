@@ -4,6 +4,12 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 
 # Bitácora
 
+## 20/11/2026 · 09:00–09:30 · Aprendizaje continuo y preguntas
+
+- **Órdenes nuevas:** releer y entender el negocio en cada sesión, aprender y actualizar el cerebro en el momento, sumar roles/skills/plugins solos. Nombres: Kocos Marketing (sin ORVIAN); autos «Automotores Kocos» o «Autos Kocos», nunca «Agencia Kocos». Pasar a main el cerebro y las ramas de documentos. Por ahora, entender; las instrucciones vienen después.
+- **Hecho:** hook de arranque (`.claude/settings.json` + `.claude/hooks/cerebro-al-arrancar.sh`) que carga el cerebro solo; protocolo de aprendizaje continuo en `README.md`; 51 preguntas en `12-preguntas-para-entender.md` y en Word.
+- **Aprendido:** un build puede fallar por la descarga de fuentes de Google en el entorno (`next/font`); reintentar antes de culpar al cambio.
+
 ## 20/11/2026 · 05:45–06:30 · Armado del cerebro
 
 - **Pedido:** cruzar el contexto de Fase 1 (Cowork) y Fase 2 (Code), armar memoria/cerebro, preguntar lo necesario, recorrer el panel, conectar repos y ramas, quitar restricciones salvo pagos.

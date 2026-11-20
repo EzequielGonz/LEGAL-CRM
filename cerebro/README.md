@@ -7,9 +7,16 @@ actualizado: 20/11/2026 06:00 (Buenos Aires)
 
 Esta carpeta es la memoria de trabajo de Claude. Reemplaza tener que releer los 12 chats, los 2 documentos de contexto (Fase 1 Cowork y Fase 2 Code) y los ~80 documentos sueltos del repo. Si algo de acá choca con una orden nueva de la responsable, manda la orden nueva y se corrige el archivo que corresponda.
 
-## Cómo arrancar una sesión (5 minutos, sin releer todo)
+## Aprendizaje continuo (orden de la responsable, 20/11)
 
-1. Leer este índice y `02-ordenes-vigentes.md` (qué manda hoy).
+- **Al arrancar** cada sesión se relee y se entiende a fondo el negocio y sus expectativas: el hook `.claude/hooks/cerebro-al-arrancar.sh` vuelca solo lo esencial al contexto, y después se leen completos `01-negocio-y-marcas.md` y `02-ordenes-vigentes.md`.
+- **Mientras se trabaja**, todo lo nuevo (una orden, una corrección, un dato del negocio, algo que se descubre en la base o el código) se anota en el archivo del cerebro que corresponde **en el momento**, no al final.
+- **Al cerrar**, además del ritual de cierre: revisar si apareció un tipo de tarea que ningún rol cubre y sumar el rol con sus skills en `11-equipo-y-herramientas.md`; buscar skills y plugins nuevos (`SearchSkills`, `SearchPlugins`, `coding-skills:find-skill`) y anotarlos.
+- Las preguntas pendientes para entender mejor viven en `12-preguntas-para-entender.md`; cada respuesta se pasa al archivo que corresponde y se tacha.
+
+## Cómo arrancar una sesión
+
+1. Leer este índice, `01-negocio-y-marcas.md` y `02-ordenes-vigentes.md` completos (qué es el negocio y qué manda hoy).
 2. Leer `07-estado-verificado.md` (qué está encendido; si tiene más de 24 h, volver a comprobar en la base con las consultas que trae).
 3. Leer `08-pendientes-y-plan.md` y tomar lo primero que corresponda, o lo que pida la responsable.
 4. Según la tarea, abrir solo el archivo temático (tabla de abajo) y las fuentes que ese archivo señala.
@@ -38,6 +45,7 @@ Esta carpeta es la memoria de trabajo de Claude. Reemplaza tener que releer los 
 | `09-decisiones-abiertas.md` | Preguntas para la responsable, con la recomendación de Claude |
 | `10-cruce-fase1-fase2.md` | Contradicciones entre los dos documentos de contexto y cómo se resolvió cada una |
 | `11-equipo-y-herramientas.md` | Roles (agencia + ingeniería), skills y plugins por tipo de tarea, agentes, conectores y su estado |
+| `12-preguntas-para-entender.md` | Preguntas abiertas a la responsable para entender el negocio a fondo |
 | `bitacora.md` | Diario de sesiones y aprendizajes (lo más nuevo arriba) |
 
 ## Fuentes de verdad (en orden)

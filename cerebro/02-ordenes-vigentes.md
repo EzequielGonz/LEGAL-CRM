@@ -28,7 +28,7 @@ Todo lo demás son **decisiones de negocio** de la responsable (abajo), no traba
 | 15/11, 20/11 | Usar todas las skills, plugins, conectores y agentes que sumen, sin pedir permiso salvo pagos; buscar más al empezar cada tarea; repartir trabajos grandes entre agentes en paralelo (copias separadas si tocan código), cerrar con revisión cruzada y segunda opinión de otro modelo; al delegar, pasar la lista de skills útiles y permiso de usar otras |
 | 20/11 | Rol de Claude: agencia premium completa (director creativo, diseñador, motion designer, estratega y community manager, performance, SEO y landings, investigador de tendencias) + ingeniería senior del CRM. «Hacer todo», de punta a punta |
 | 20/11 | Velocidad: «sin releer todo, sigamos derecho» desde el último traspaso (para eso existe este cerebro) |
-| 20/11 | Mantener cerebro, memoria y contexto al día al cerrar cada vuelta |
+| 20/11 | **Aprendizaje continuo**: releer y entender a fondo el negocio y sus expectativas en cada sesión; actualizar el cerebro en el momento en que se aprende algo; sumar solo roles, skills y plugins que sirvan (protocolo en `README.md`) |
 | 15/11 | Los textos internos del panel («Wasender», «v1/v2», «JSON») no se cambian |
 | 13/11 | Tarea automática que revise sola la Bandeja para Claude: «por ahora no». La responsable dice «ok» y Claude toma las tareas (`.claude/referencias/bandeja-claude.md`) |
 
@@ -66,6 +66,9 @@ Todo lo demás son **decisiones de negocio** de la responsable (abajo), no traba
 | 13/11, 17/11 | Lo hecho con Meta no se pisa ni se rehace. Desde el 17/11 Meta y Wasender van totalmente separados en los 4 perfiles |
 | 16/10 | Asesor que se presenta en los 4 perfiles: Leonardo Gonzalez |
 | 20/10 | Presupuesto Gemini: USD 30/mes |
+| 20/11 | **Nombre de la agencia de marketing: Kocos Marketing** (ORVIAN descartado) |
+| 20/11 | **Autos: «Automotores Kocos» o «Autos Kocos» valen igual; nunca «Agencia Kocos»** (para no chocar con Marketing, que figura así en Instagram). La web de autos tiene que dejar de decir «Agencia Kocos» |
+| 20/11 | Integrar a `main` el cerebro y las ramas que son solo documentos o herramientas de redes |
 
 ## Campañas y envíos
 
