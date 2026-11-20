@@ -44,7 +44,7 @@ export async function armar(V) {
   const agente = personaje(e3.capas[1].svg.querySelector('.tras'), {peinado: 'rapado', piel: '#d6a988', pelo: '#3a2b20', remera: '#e9e6e0', campera: '#2c3446', manga: 'larga', pantalon: '#22252c'});
   const nico3 = personaje(e3.capas[1].svg.querySelector('.del'), NICO);
   // 4 · el papel, la lapicera y el sello dorado
-  const e4 = O.esc({nombre: 'papel', fondo: '#0f1a3a', capas: [{f: 1, prof: 1, svg: PP.papelEscritorio({titulo: C.doc || 'Propuesta de acuerdo', remite: C.remite || 'Aseguradora · Siniestros', firma: C.firma || 'Firma del reclamante'}) + `<g class="lap"><rect x="-8" y="-260" width="16" height="250" rx="8" fill="#0b0d12"/><rect x="-9" y="-150" width="18" height="10" fill="${ORO}"/><path d="M-7,-12 L7,-12 L0,22 Z" fill="${ORO}"/><rect x="5" y="-250" width="4" height="80" fill="${ORO}"/></g>
+  const e4 = O.esc({nombre: 'papel', fondo: '#0f1a3a', capas: [{f: 1, prof: 1, svg: PP.papelEscritorio({titulo: C.doc || 'Propuesta de acuerdo', remite: C.remite || 'Para: tu trabajo', firma: C.firma || 'Firma del trabajador'}) + `<g class="lap"><rect x="-8" y="-260" width="16" height="250" rx="8" fill="#0b0d12"/><rect x="-9" y="-150" width="18" height="10" fill="${ORO}"/><path d="M-7,-12 L7,-12 L0,22 Z" fill="${ORO}"/><rect x="5" y="-250" width="4" height="80" fill="${ORO}"/></g>
       <g class="sello">${PP.selloSVG({oro: ORO})}</g><g class="sombraSello"><ellipse rx="170" ry="40" fill="#000" opacity=".35"/></g>`}]});
   const marca = e4.capas[0].svg.querySelector('.marca'); marca.innerHTML = PP.marcaSello({txt: C.sello || 'ESPERÁ', oro: ORO, x: 520, y: 1210, r: -9, s: .95});
   // 5 · el living de Nico, de noche
