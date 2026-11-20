@@ -30,8 +30,8 @@ def load(w):
 
 def proc(y, rng, room=.06):
     fl = 'highpass=f=85,equalizer=f=230:t=q:w=1.2:g=-2.5,equalizer=f=3200:t=q:w=1.4:g=2,equalizer=f=9000:t=h:w=1:g=1.5,deesser=i=0.35,acompressor=threshold=-22dB:ratio=2.5:attack=8:release=120:makeup=2'
-    y.astype(np.float32).tofile('voz/h/tmp.f32')
-    y = np.frombuffer(subprocess.run(['ffmpeg', '-v', 'error', '-f', 'f32le', '-ar', str(SR), '-ac', '1', '-i', 'voz/h/tmp.f32', '-af', fl, '-f', 'f32le', '-'], capture_output=True, check=True).stdout, np.float32).astype(np.float64)
+    y.astype(np.float32).tofile(f'voz/h/tmp-{os.getpid()}.f32')
+    y = np.frombuffer(subprocess.run(['ffmpeg', '-v', 'error', '-f', 'f32le', '-ar', str(SR), '-ac', '1', '-i', f'voz/h/tmp-{os.getpid()}.f32', '-af', fl, '-f', 'f32le', '-'], capture_output=True, check=True).stdout, np.float32).astype(np.float64)
     n = int(.3 * SR); ir = rng.standard_normal(n) * np.exp(-np.arange(n) / SR / .06); ir /= np.sqrt((ir ** 2).sum())
     N = 1 << int(np.ceil(np.log2(len(y) + n))); y = y + np.fft.irfft(np.fft.rfft(y, N) * np.fft.rfft(ir, N), N)[:len(y)] * room
     return y
@@ -71,8 +71,8 @@ async def main(ids):
             act = y[np.abs(y) > 1e-3]; lvl = -17 if who.startswith('nar') else -18.5
             y *= 10 ** (lvl / 20) / (np.sqrt((act ** 2).mean()) + 1e-9); voz += y
         pk = np.abs(voz).max(); voz = voz / pk * min(pk, .85)
-        voz.astype(np.float32).tofile('voz/h/tmp.f32')
-        subprocess.run(['ffmpeg', '-y', '-v', 'error', '-f', 'f32le', '-ar', str(SR), '-ac', '1', '-i', 'voz/h/tmp.f32', f'voz/{rid}-h-voz.wav'], check=True)
+        voz.astype(np.float32).tofile(f'voz/h/tmp-{os.getpid()}.f32')
+        subprocess.run(['ffmpeg', '-y', '-v', 'error', '-f', 'f32le', '-ar', str(SR), '-ac', '1', '-i', f'voz/h/tmp-{os.getpid()}.f32', f'voz/{rid}-h-voz.wav'], check=True)
         json.dump(dict(id=rid, total=round(total, 3), palabra=g['palabra'], serie=g['serie'], cfg=g.get('cfg', {}), frases=frases), open(f'voz/{rid}-h.json', 'w'), ensure_ascii=False)
         print(rid, round(total, 2), 's', [(f['q'], f['t']) for f in frases])
 

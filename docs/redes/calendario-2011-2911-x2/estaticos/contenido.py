@@ -1,14 +1,17 @@
 # Textos finales de historias y carruseles del cronograma x2 (20/11 al 29/11/2026).
 # Una ficha por tema y marca. Información general, sin precios, resultados ni promesas.
 # Reemplazos pedidos por la responsable (20/11): sin aumento de prepagas ni patentamientos.
-#   Coberturas «aumento» y «fallo-corte» -> «revisar-plan» y «reintegros»; Autos «diciembre-enero» -> «documentacion».
+#   Coberturas «aumento» -> «revisar-plan» (antes de pagar, compará; sin números ni porcentajes);
+#   Autos «diciembre-enero» -> «documentacion».
+#   Coberturas «fallo-corte» («Lo que dijo la Corte») SE MANTIENE: lo aprobó la responsable el 20/11.
+#   Usa solo el dato del calendario, con su fuente, y afirmaciones generales y prudentes.
+# En Coberturas no van números ni porcentajes de cuotas, aumentos ni aportes; en Autos, sin precios.
 #
 # Campos: t título (con *énfasis*), p apoyo, pts [(punto, explicación)], mito (frase falsa, verdad),
 # enc (pregunta, opción A, opción B), num (cifra, rótulo) opcional, pal palabra clave.
 
 REEMPLAZOS = {
     ('Coberturas', 'aumento'): 'revisar-plan',
-    ('Coberturas', 'fallo-corte'): 'reintegros',
     ('Autos', 'diciembre-enero'): 'documentacion',
 }
 
@@ -146,12 +149,12 @@ C['Coberturas'] = {
         ('Qué opciones hay para tu zona.', 'Con tu edad y tu grupo familiar.')],
    mito=('Si estoy hace años en el mismo plan, ya está bien.', 'Lo que necesitás cambia. Revisarlo una vez al año ordena todo.'),
    enc=('¿Revisaste tu plan este año?', 'Sí', 'No'), pal='COMPARAR'),
- 'aportes': dict(t='Este *3 %* sale de tu sueldo todos los meses.', p='Si trabajás en relación de dependencia, va a tu obra social. Y la podés elegir.',
+ 'aportes': dict(t='Este aporte sale de tu sueldo *todos los meses.*', p='Si trabajás en relación de dependencia, una parte de tu sueldo va a tu obra social. Y la podés elegir.',
    pts=[('Buscalo en tu recibo.', 'Figura como aporte de obra social.'),
         ('Mirá a dónde va.', 'El nombre de la obra social aparece en el recibo.'),
         ('Elegí con la cartilla.', 'Cerca de tu casa, qué cubre y tu familia.')],
    mito=('La obra social te la asigna la empresa y no se cambia.', 'La podés elegir. El cambio se pide una vez al año.'),
-   enc=('¿Sabés a qué obra social van tus aportes?', 'Sí', 'No'), num=('3 %', 'de tu sueldo va a tu obra social'), pal='APORTES'),
+   enc=('¿Sabés a qué obra social van tus aportes?', 'Sí', 'No'), pal='APORTES'),
  'aguinaldo': dict(t='Recibo del aguinaldo: *¿qué es ese descuento?*', p='El aguinaldo lleva los mismos descuentos de aportes que tu sueldo, incluido el de obra social.',
    pts=[('Buscá el renglón de obra social.', 'Aparece como en cualquier recibo.'),
         ('Compará con tu sueldo.', 'Los conceptos se repiten.'),
@@ -212,6 +215,13 @@ C['Coberturas'] = {
         ('Mirá tus opciones.', 'Compará con tu zona, tu edad y tu familia.')],
    mito=('Si mi prepaga se da de baja, me quedo sin nada.', 'Hay opciones. Lo importante es pedir información y moverse a tiempo.'),
    enc=('¿Sabés en qué registro está tu prepaga?', 'Sí', 'No'), pal='BAJA'),
+ 'fallo-corte': dict(t='Lo que dijo *la Corte.*', p='Una noticia sobre las prepagas que conviene leer con calma.',
+   dato=('La Nación informó que el 20/11 la Corte declaró inconstitucional la liberación de precios de las prepagas.', 'Fuente: La Nación (20/11).'),
+   pts=[('Leé la noticia completa.', 'En un medio confiable, no en una captura suelta.'),
+        ('No decidas por un titular.', 'Qué cambia para vos depende de tu plan y de tu situación.'),
+        ('Guardá tus papeles.', 'Credencial, facturas y comunicaciones de tu cobertura.')],
+   mito=('Un fallo cambia mi plan de un día para el otro.', 'Cada situación se analiza en particular. Informate antes de decidir.'),
+   enc=('¿Leíste lo que dijo la Corte sobre las prepagas?', 'Sí', 'No'), pal='CORTE'),
  'reintegros': dict(t='Ese ticket de la consulta: *¿pediste el reintegro?*', p='Si tu plan tiene reintegros, los tickets guardados valen.',
    pts=[('Guardá la factura.', 'A tu nombre y con la prestación.'),
         ('Preguntá el plazo.', 'Cada plan fija cuándo presentarla.'),
