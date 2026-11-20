@@ -127,6 +127,7 @@ export async function armar(V) {
   const pant = PANT[C.pantalla || 'chats']; const scr = (n, o) => pant(n, o, C);
   const O = obra(V, {nombre: 'Kocos Marketing', logo: 'marketing.png', ctaSub: C.ctaSub || 'y te respondemos', hookHTML: C.hook, hookHasta: C.hookHasta || 1.6, notas: []});
   document.documentElement.style.cssText += `--f1:Outfit;--f2:Manrope;--acc:${NAR};--hs:130px;--hw:800;--em:normal;--kwCol:#fff;--logoH:90px;--velo:rgba(27,27,27,.92);--ctaTop:640px;--hookTop:1150px;${ganchoCss(C.hook)}`;
+  const st = document.createElement('style'); st.textContent = '#hook{text-shadow:0 0 6px rgba(0,0,0,.9),0 6px 30px rgba(0,0,0,.95),0 0 60px rgba(0,0,0,.7)}'; document.head.appendChild(st);
   const F = n => V.frases.find(f => f.marca === n); const FI = i => V.frases.find(f => f.item === i); const cta = V.frases.find(f => f.cta); const pL = poser(V, QUIEN);
   const mueble = C.lugar === 'vereda' ? `<rect x="560" y="1300" width="0" height="0"/>` : `<rect x="540" y="1130" width="700" height="300" rx="14" fill="${C.lugar === 'cocina' ? '#e9dccb' : '#4a3a30'}"/><rect x="540" y="1130" width="700" height="26" rx="8" fill="${C.lugar === 'cocina' ? '#cbb8a4' : '#6a5444'}"/>` +
     (C.lugar === 'cocina' || C.lugar === 'mostrador' ? `<g transform="translate(1080,1100)"><rect x="-90" y="-20" width="180" height="20" rx="8" fill="#ddd"/><rect x="-80" y="-110" width="160" height="90" rx="16" fill="#fbe3cf"/><rect x="-80" y="-110" width="160" height="26" rx="12" fill="${NAR}"/></g>` : '');
@@ -163,6 +164,9 @@ export async function armar(V) {
   const f3 = V.frases[3], f4 = V.frases[4], f5 = V.frases[5];
   O.tomas.push(G.toma(f3.t - .05, f4.t + .02), K.toma(f5.t - .1)); O.tomas.sort((a, b) => a.t0 - b.t0);
   O.impactos = [.02, f4.t + .02]; O.flash = t => Math.max(t >= .02 ? .5 * Math.exp(-(t - .02) * 8) : 0, t >= f4.t + .02 ? .45 * Math.exp(-(t - f4.t - .02) * 10) : 0);
-  if (C.ap || C.grade || C.cam) variar(O, C, C.ap === 'caida' ? K.toma(0) : C.ap === 'gigante' ? G.toma(0, .55) : C.ap === 'celu' ? O.tomas.find(x => x.esc === e2) : null);
+  // apertura en el celular: toma propia (no copia de una toma ya envuelta por variar, que con cámara en mano se desborda)
+  const abreCelu = {esc: e2, cam: (k, t) => { const g = Math.exp(-t * 5); return {x: 540 + Math.sin(t * 61) * 22 * g, y: lerp(560, 760, ease(k)), z: lerp(1.9, 1.35, ease(k)), r: Math.sin(t * 47) * 3 * g, foco: 1}; },
+    act: t => { P.innerHTML = scr(N0, {}); contador(t, 1); }};
+  if (C.ap || C.grade || C.cam) variar(O, C, C.ap === 'caida' ? K.toma(0) : C.ap === 'gigante' ? G.toma(0, .55) : C.ap === 'celu' ? abreCelu : null);
   return O;
 }

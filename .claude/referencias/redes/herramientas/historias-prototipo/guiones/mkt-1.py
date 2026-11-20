@@ -38,3 +38,37 @@ R['mkt-catalogo-b'] = _reel('API', 'Antes / después',
     dict(hook='Basta de <em>fotos sueltas:</em><br>tu catálogo en WhatsApp', pantalla='catalogo', lugar='cocina', contador='Sin responder', n0=12, n1=30,
          cards=['Foto y precio', 'Descripción corta', 'Link en cada chat'], ap='celu', cam='empuje', grade='noche',
          irreal=dict(objeto='pin', doc='Almagro', cielo=['#3a2a6a', '#1a1238', '#08060f'], fondo=['#2a1a4a', '#08060f'])))
+
+# 20/11 19:20 · web-movil B · WEB · vereda de Medrano · abre en el contador y se aleja · cámara en mano · libreta gigante
+R['mkt-web-movil-b'] = _reel('WEB', 'Antes / después',
+    ('¿Dónde está el botón para pedir?', '¿Dónde está el botón para pedir?'),
+    ('Tu cliente abre tu web en el celular, y no encuentra cómo pedir.', 'Abre tu web en el celular y *no encuentra cómo pedir.*'),
+    ('Achica, agranda, busca… y se va.', 'Achica, agranda, busca… *y se va.*'),
+    ('Casi todos te miran desde el celular.', 'Casi todos te miran *desde el celular.*'),
+    ('Tu web tiene que estar pensada para eso.', 'Tu web, *pensada para el celular.*'),
+    ('Revisala en tres pasos.', 'Revisala en *tres pasos:*'),
+    [('el botón de pedir, arriba y a la vista.', 'Botón de pedir *arriba y a la vista.*'),
+     ('letra grande, sin achicar la pantalla.', 'Letra grande, *sin achicar.*'),
+     ('un toque y llega a tu WhatsApp.', 'Un toque y *llega a tu WhatsApp.*')],
+    ('¡Ahora sí piden!', '¡Ahora sí piden!'),
+    dict(hook='Abrí tu web en el celular: <em>¿encontrás cómo pedir?</em>', pantalla='web', lugar='vereda', hora='tarde', contador='Sin responder', n0=3, n1=12,
+         cards=['Botón arriba', 'Letra grande', 'Directo a WhatsApp'], ap='celu', cam='mano', grade='calido',
+         irreal=dict(objeto='libreta', doc='Medrano', cielo=['#7a4a2a', '#3a2216', '#140c08'], fondo=['#1c2450', '#06081a'], raya='#ffe9a8')))
+
+# 20/11 20:50 · precio A · RESPUESTAS · mostrador de Dulce Almagro · celular gigante frente a Romina diminuta
+R['mkt-precio-a'] = _reel('RESPUESTAS', 'El celular que no para',
+    ('¿Precio? ¿Y le pongo «por privado»?', '¿Precio? ¿Le pongo «por privado»?'),
+    ('Te escriben «¿precio?», seco, sin saludo.', 'Te escriben *«¿precio?»*, seco.'),
+    ('Contestás «por privado»… y la consulta se enfría.', '«Por privado»… y la consulta *se enfría.*'),
+    ('El que pregunta el precio ya está interesado.', 'El que pregunta el precio *ya está interesado.*'),
+    ('Respondé con información.', 'Respondé *con información.*'),
+    ('Tu respuesta, en tres partes.', 'Tu respuesta, en *tres partes:*'),
+    [('el precio y qué incluye.', 'El precio *y qué incluye.*'),
+     ('una pregunta para entender qué busca.', 'Una pregunta para *entender qué busca.*'),
+     ('un siguiente paso concreto.', 'Un *siguiente paso* concreto.')],
+    ('¡Listo, me reservaron dos!', '¡Listo, me reservaron dos!'),
+    dict(hook='Te preguntan <em>«¿precio?»</em><br>¿Qué respondés?', pantalla='chats', lugar='mostrador', contador='Consultas frías', n0=18, n1=34,
+         msgs=['¿Precio?', 'precio', '¿Cuánto sale?', '¿Precio la chocotorta?', '¿$?', 'Hola, ¿precio?', '¿Valor?', '¿Precio x docena?'],
+         etapas=[['Precio enviado', '#FC6E20'], ['Preguntó', '#4E9BE4'], ['Reservó', '#2ecc71']],
+         cards=['Precio y qué incluye', 'Una pregunta', 'Siguiente paso'], grade='oro',
+         irreal=dict(objeto='celu', doc='¿Precio?', cielo=['#5a3a1c', '#2a1a12', '#120c08'])))
