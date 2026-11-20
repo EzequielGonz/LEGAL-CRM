@@ -2,12 +2,12 @@
 
 Decisión de la responsable (20/11): **la bio y el botón de WhatsApp quedan como están**. Solo se suman las destacadas.
 
-**Cuándo correrla:** el 21/11 desde las 9:00. Para ese momento ya están publicadas como historias, desde Metricool, todas las piezas de cada destacada: el 21/11 de 7:00 a 8:45, en orden. El registro, con la hora de cada una, está en `historias-programadas-2026-11-21.json`, en esta misma carpeta.
+**Cuándo correrla:** desde la 1:55 del 20/11 (hora de Buenos Aires). Las 81 historias salen desde Metricool de 1:28 a 1:50, en orden y de a una por minuto por marca: VITA 21, Coberturas 21, Autos 20 y Kocos 19. Cada destacada empieza con su portada (un ícono en un círculo) y sigue con sus historias.
 
 ## Pedido para pegar en Cowork
 
 ```text
-Usá mi Chrome, donde ya están abiertos los perfiles de Instagram de las 4 marcas: @estudiojuridicovita, @comparatuobrasocial, @autoskocos y @kocosmkt. Tarea: armar las destacadas con las historias que se publicaron hoy entre las 7:00 y las 8:45.
+Usá mi Chrome, donde ya están abiertos los perfiles de Instagram de las 4 marcas: @estudiojuridicovita, @comparatuobrasocial, @autoskocos y @kocosmkt. Tarea: armar las destacadas con las historias que se publicaron hoy entre la 1:28 y la 1:50.
 No cambies la bio, el enlace, el botón de contacto ni ninguna otra configuración. No publiques, no comentes ni mandes mensajes.
 
 Para cada cuenta, en instagram.com, con la sesión de esa cuenta:
@@ -17,7 +17,7 @@ Para cada cuenta, en instagram.com, con la sesión de esa cuenta:
    - @comparatuobrasocial: Empezá acá · Comparar · Aportes · El proceso · Mitos · Contacto
    - @autoskocos: Empezá acá · Cómo pagar · Tu usado · Precio final · El retiro · Contacto
    - @kocosmkt: Empezá acá · Servicios · El proceso · Antes/después · Arreglos · Contacto
-   La primera historia de cada grupo es su portada (un ícono en un círculo). Las historias van saliendo en ese orden, de 2 en 2 minutos.
+   La primera historia de cada grupo es su portada (un ícono en un círculo). Las historias salieron en ese orden, de a una por minuto.
 3) Como portada de cada destacada, elegí su primera historia y centrá el ícono en el círculo.
 4) Si instagram.com no deja crear destacadas o elegir la portada, pará y avisame: lo hacemos desde la app del teléfono.
 5) Al final, por cuenta: qué destacadas quedaron, cuántas historias tiene cada una y cualquier problema.
