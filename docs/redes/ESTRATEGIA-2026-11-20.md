@@ -122,7 +122,7 @@ Son metas de trabajo para comparar semana a semana, no promesas. Se revisan el 0
 | Semana | Qué se hace |
 | --- | --- |
 | **20 al 23/11** | Diagnóstico listo. Prototipos del estilo nuevo, kit de perfil, análisis de videos y código de medición en curso. La responsable revisa los perfiles en Chrome o en el teléfono y decide sobre el presupuesto de video. |
-| **24 al 30/11** | Perfiles nuevos (bio, destacadas, Facebook). Medición publicada. Desde el 25/11, 3 reels por día del estilo nuevo por marca. Reels de Black Friday en Autos y Kocos el 27/11. Se abren TikTok y YouTube y se conectan a Metricool. |
+| **24 al 30/11** | **Botón de WhatsApp en las 4 marcas** (Facebook e Instagram). Perfiles nuevos (bio, destacadas, Facebook). Medición publicada. Desde el 25/11, 3 reels por día del estilo nuevo por marca. Reels de Black Friday en Autos y Kocos el 27/11. Se abren TikTok y YouTube y se conectan a Metricool. |
 | **01 al 07/12** | Primer informe con medición completa. Más volumen si mejoró la retención. Primeras páginas de temporada. Coberturas: el aumento de diciembre cuando salga el dato oficial. |
 | **08 al 14/12** | Aguinaldo. Reciclado y variantes de lo que funcionó. Revisión de las series. |
 | **15 al 21/12** | Fin de año. Informe mensual y decisión sobre publicidad paga si algún reel despegó. |
@@ -133,7 +133,30 @@ Son metas de trabajo para comparar semana a semana, no promesas. Se revisan el 0
 - **Las 44 de Kocos en Instagram del 25 al 29/11:** son repeticiones del estilo anterior a 10 por día. Recomendación: pasarlas a borrador, que se puede deshacer, y ocupar esos horarios con el estilo nuevo. Se hace solo si la responsable lo confirma.
 - **Lo publicado:** no se borra. Ver el punto 6.
 
-## 12. Decisiones pendientes de la responsable
+## 12. Lo que confirmó la auditoría en Chrome (20/11)
+
+La responsable hizo una auditoría con Claude in Chrome, usando Business Suite y Metricool, entre el 20/10 y el 19/11. Está en el documento de Claude Docs «Auditoría de redes · 4 marcas». Lo que suma a esta estrategia:
+
+| Hallazgo | Cómo se aplica |
+| --- | --- |
+| **El botón de WhatsApp no existe** en Facebook ni en la vista web de Instagram. Falta confirmarlo en la app del teléfono. Todos los textos remitían a ese botón. | **Primera acción de la semana del 24/11:** cargar el botón de WhatsApp en las 4 páginas de Facebook (desde Business Suite o con Claude in Chrome) y las opciones de contacto de WhatsApp en Instagram (desde la app). Mientras tanto, ningún texto nuevo dice «el botón está en el perfil»: los cierres llevan «Comentá PALABRA» o «Respondé esta historia con PALABRA», y la bio lleva el enlace a WhatsApp con etiquetas. |
+| En 30 días, **más de 750 piezas y ningún mensaje ni conversación** en las bandejas de Business Suite. | Confirma el diagnóstico: el recorrido estaba cortado. La meta de consultas del punto 2 se mide desde el día en que exista el botón. |
+| En VITA, **el mismo tema salió hasta 8 veces en 10 días**. | Confirma la regla del punto 4: ninguna repetición sin otro gancho, otra portada y otro orden, y versiones A y B separadas por 5 días o más. El validador del calendario lo controla. |
+| **Las 4 cuentas están sin restricciones.** @kocosmkt tiene **2 contenidos eliminados en octubre**. | Antes de programar Kocos, revisar en Instagram, en Estado de la cuenta, qué se eliminó y por qué, para no repetir el motivo. Kocos arranca con el volumen más bajo de la etapa hasta tener 7 días sin observaciones. |
+| La auditoría recomendaba 1 reel por día y reels con una persona real. | **No se adopta.** La responsable decidió el 20/11 apostar a reels animados de alta calidad, sin caras, y a más volumen. Se mantiene la subida por etapas del punto 4: si la retención no mejora en el informe del 01/12, se baja el volumen en lugar de subirlo. |
+| Windsor tiene las cuentas conectadas pero no lee datos: el plan gratuito permite 1 cuenta y hay 8. | Para medir se sigue usando Metricool, que ya tiene las 4 marcas. Windsor queda sin uso salvo que la responsable decida pagar un plan. |
+| Landing, SEO, Analytics y Search Console quedaron pendientes en la auditoría. | Siguen pendientes hasta tener el acceso a la otra cuenta: punto 7 y decisión 3. |
+
+## 13. Decisiones de la responsable
+
+**Tomadas el 20/11:**
+- No hay publicidad paga por ahora.
+- Reels animados sin caras, con el motor propio llevado al máximo. Las herramientas pagas, más adelante.
+- Las 44 de Kocos pasan a borrador, como se recomendó.
+- VITA suma laboral y penal.
+- TikTok, YouTube y los accesos para medir quedan pendientes, y se resuelven dentro de los 10 días.
+
+**Pendientes:**
 
 1. Presupuesto mensual para generar video realista y voz natural. Sin presupuesto, se sigue con el motor propio.
 2. Las 44 de Kocos: ¿pasan a borrador?

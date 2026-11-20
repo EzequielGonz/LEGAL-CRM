@@ -94,7 +94,7 @@ Fuentes: Metricool (estado y métricas de las 4 marcas), base del CRM (consultas
   - Los patentamientos de noviembre.
 - **Lo jurídico y lo de coberturas** sigue necesitando revisión profesional o la aprobación expresa de la responsable.
 
-**C. Las 44 de Kocos del 25 al 29/11.** Son repeticiones a 10 por día en la cuenta con menos alcance. Recomendación: no publicarlas así. Conviene dejarlas como borrador o cambiarlas por el plan B. Lo decide la responsable.
+**C. Las 44 de Kocos del 25 al 29/11.** Decidido el 20/11: pasan a borrador (se puede deshacer) y sus horarios los ocupa el estilo nuevo.
 
 **D. Audiencia inicial.** Con 0 seguidores, lo orgánico tarda. Una promoción chica en Facebook o Instagram de las 2 o 3 piezas que mejor rindieron, con destino a WhatsApp, aceleraría la medición. Es un gasto: queda solo como sugerencia.
 
@@ -114,3 +114,13 @@ Fuentes: Metricool (estado y métricas de las 4 marcas), base del CRM (consultas
 - Bio, botón, destacadas, estado de cuenta y bandeja de mensajes en Instagram y Facebook. Pedido listo para Claude en Chrome, en el chat del 20/11.
 - Tráfico real de las landings y búsquedas en Google: hace falta la medición o el acceso a la cuenta de Vercel donde están alojadas y a Search Console.
 - Métricas de los reels de vidIQ y de cuentas de competencia: piden créditos.
+
+## 8. Confirmado por la auditoría en Chrome (20/11)
+
+La auditoría de la responsable en Business Suite y Metricool confirma:
+- No existe el botón de WhatsApp en Facebook ni en la vista web de Instagram. Falta confirmarlo en la app del teléfono.
+- Más de 750 piezas publicadas en 30 días, con 0 mensajes y 0 conversaciones.
+- Visualizaciones de 1 a 3 segundos.
+- Las cuentas no tienen restricciones. @kocosmkt tiene 2 contenidos eliminados en octubre.
+
+Cómo se aplica en la estrategia: `ESTRATEGIA-2026-11-20.md`, punto 12.
