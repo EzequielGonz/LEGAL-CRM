@@ -40,7 +40,7 @@ def horas_reel(n):
 
 AP, PJ, PE = G.AP, G.PJ, G.PE
 NOTA = 'sin cartel en pantalla: «Situación ilustrativa» va solo en el texto de la publicación'
-REV_NUEVA = {'vita': PJ, 'cob': PJ, 'autos': PE, 'mkt': PE}
+REV_NUEVA = {'vita': PJ, 'cob': PJ, 'autos': PE, 'mkt': PE}  # se reemplaza al final por APROBADO
 COLS = G.COLS + ['variante_de', 'cambios', 'personaje', 'lugar_ba', 'conflicto_seg1', 'giro_irreal']
 
 # ---------------- Ajustes de agenda por el corrimiento de 5 días ----------------
@@ -51,14 +51,13 @@ ORDEN['autos'][2][0], ORDEN['autos'][7][0] = 'adjudicacion/A', 'blackfriday/A'
 ORDEN['autos'][8][0] = 'contado-plan/A'
 G.ORDEN = ORDEN
 G.DIAS = DIAS
-G.COND_EXTRA = {
- ('cob', 'fallo-corte', 'A'): 'Sale solo con revisión profesional del alcance del fallo antes del 20/11 a las 13:50 (24 h antes de salir); si no, va «Tu obra social la podés elegir» (recibo-elegir A) y el 26/11 a las 20:30 pasa a lugar de actualidad.',
- ('autos', 'blackfriday', 'A'): 'Black Friday (27/11): sale con el visto bueno del equipo antes del 25/11; si no, el lugar queda en borrador con motivo (nada lo reemplaza solo).',
-}
-COND_CARR = {('autos', 'blackfriday'): G.COND_EXTRA[('autos', 'blackfriday', 'A')]}
+# Decisión de la responsable (20/11): la Corte y Black Friday están aprobados, sin condición.
+G.COND_EXTRA = {}
+COND_CARR = {}
+APROBADO = 'aprobado por la responsable (20/11)'
 CAMBIO_BASE = {('autos', 'reel', 'adjudicacion'): 'pasa del 02/12 (día 7) al 22/11 (día 2) para que Black Friday caiga el 27/11',
                ('autos', 'reel', 'blackfriday'): 'pasa al 27/11, día de Black Friday',
-               ('autos', 'reel', 'contado-plan'): 'va el respaldo aprobado: el ranking de ACARA de noviembre sale después del 29/11',
+               ('autos', 'reel', 'contado-plan'): 'reemplaza a los patentamientos de ACARA, que no se hacen (decisión de la responsable, 20/11)',
                ('autos', 'carrusel guía', 'blackfriday'): 'pasa al 27/11, día de Black Friday'}
 
 # ---------------- Piezas viejas del 10 al 19/11 (madres de los remakes) ----------------
@@ -396,10 +395,41 @@ def idea_carrusel(pers, lugar, obj, kw):
     return dict(conflicto_seg1=f'Idea: portada con {p} en {l}; una lámina por paso y la última con «{kw}»',
                 giro_irreal=f'Portada con escala imposible: {obj} gigante y {p} en miniatura')
 
+def decisiones_20_11(filas):
+    """Decisiones de la responsable del 20/11, aplicadas sin mover fechas, horas ni las demás filas."""
+    I = G.I[('cob', 'plan-uso')]
+    pers, lugar, conf = mini_historia_base('cob', 'plan-uso')
+    giros_plan = {f['giro_irreal'] for f in filas if f['idea_id'] == 'plan-uso' and f['formato'] == 'reel'}
+    for f in filas:
+        if f['idea_id'] == 'aumento-dic':  # el aumento de prepagas no se hace: va «¿Pagás por cosas que no usás?»
+            notas = f['cambios'].split(' · ', 1)[1]
+            comun = dict(serie=G.SERIES[I['serie']], tema=I['tema'], idea_id='plan-uso', palabra=I['kw'], condicion='',
+                         referencia=G.ref('cob', 'plan-uso') + ' · reemplaza al aumento de prepagas de diciembre',
+                         personaje=pers, lugar_ba=lugar)
+            if f['formato'] == 'reel':
+                f.update(comun, idea=I['idea'], gancho=I['gb'], version='B', variante_de='plan-uso',
+                         cierre=f'Comentá «{I["kw"]}» y te respondemos · {NOTA}',
+                         cambios='calendario base: versión B de «¿Pagás por cosas que no usás?» (era el respaldo), en lugar del aumento '
+                                 'de prepagas, que no se hace (decisión de la responsable, 20/11) · ' + notas,
+                         conflicto_seg1=APERTURAS['cob'][1] + conf,
+                         giro_irreal=next(g for g in GIROS['cob'] if g not in giros_plan))
+            else:
+                f.update(comun, idea='Encuesta: ' + I['preg'], gancho=I['preg'], variante_de='',
+                         cierre=f'Respondé esta historia con «{I["kw"]}» · Sticker de encuesta; al día siguiente, historia con el resultado · {NOTA}',
+                         cambios='calendario base: encuesta de «¿Pagás por cosas que no usás?» en lugar del aumento de prepagas, '
+                                 'que no se hace (decisión de la responsable, 20/11) · ' + notas,
+                         **idea_historia(f['formato'], pers, lugar, OBJETO['cob'], I['kw'], I['gb']))
+    for f in filas:
+        f['revision'] = APROBADO
+        if not f['condicion'].startswith('Lugar de actualidad'):
+            f['condicion'] = ''
+    return filas
+
 def main():
     filas = []
     for m in G.MARCAS:
         filas += generar_marca(m)
+    filas = decisiones_20_11(filas)
     filas.sort(key=lambda f: (f['fecha'], f['hora'], f['marca'], f['formato']))
     with open(os.path.join(AQUI, 'calendario.csv'), 'w', newline='', encoding='utf-8') as fh:
         w = csv.DictWriter(fh, fieldnames=COLS)

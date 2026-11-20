@@ -20,7 +20,6 @@ MARCAS = ['Autos', 'Coberturas', 'Kocos Marketing', 'VITA']
 CONTROL = {'08:30', '11:00', '13:30', '17:00', '20:30', '10:00', '19:00', '12:30', '09:30', '18:30'}
 TOPE_TEMA = 6
 NOTA = '«Situación ilustrativa» va solo en el texto de la publicación'
-PJ, PE = 'pendiente: revisión profesional', 'pendiente: revisión del equipo'
 
 def mas20(h):
     t = int(h[:2]) * 60 + int(h[3:]) + 20
@@ -156,12 +155,17 @@ for f in filas:
     if NOTA not in f['cierre']:
         errores.append(f'{f["fecha"]} {f["hora"]} {f["marca"]}: falta aclarar que «Situación ilustrativa» va solo en el texto')
 
-# 7. Revisión de lo nuevo
+# 7. Revisión: la responsable aprobó todo el 20/11; patentamientos y aumento de prepagas no se hacen
+APROBADO = 'aprobado por la responsable (20/11)'
 for f in filas:
-    if origen(f) != 'base':
-        esperada = PJ if f['marca'] in ('VITA', 'Coberturas') else PE
-        if f['revision'] != esperada:
-            errores.append(f'{f["fecha"]} {f["hora"]} {f["marca"]}: pieza nueva con revisión «{f["revision"]}» (va «{esperada}»)')
+    if f['revision'] != APROBADO:
+        errores.append(f'{f["fecha"]} {f["hora"]} {f["marca"]}: revisión «{f["revision"]}» (va «{APROBADO}»)')
+    if f['idea_id'] in ('patentamientos', 'aumento-dic'):
+        errores.append(f'{f["fecha"]} {f["hora"]} {f["marca"]}: «{f["idea_id"]}» no se hace (decisión del 20/11)')
+    if f['condicion'] and not f['condicion'].startswith('Lugar de actualidad'):
+        errores.append(f'{f["fecha"]} {f["hora"]} {f["marca"]}: queda una condición que la responsable ya levantó')
+    if re.search(r'borrador', f['condicion'] + f['cambios'], re.I):
+        errores.append(f'{f["fecha"]} {f["hora"]} {f["marca"]}: menciona un borrador')
 
 # 8. Las 316 piezas del calendario base siguen, con su contenido y en su día (corrido 5 días)
 idx_base = {d: i for i, d in enumerate(sorted({b['fecha'] for b in base}))}
@@ -176,8 +180,8 @@ for f in filas:
 faltan = 0
 for b in base:
     clave = (b['marca'], b['formato'], b['idea_id'], b['gancho'], b['version'])
-    if b['idea_id'] == 'patentamientos':
-        continue  # va el respaldo «contado-plan»: el ranking de ACARA de noviembre sale después del 29/11
+    if b['idea_id'] in ('patentamientos', 'aumento-dic'):
+        continue  # no se hacen (decisión de la responsable, 20/11): van «contado-plan» y «plan-uso» en el mismo horario
     lst = nuevas_base.get(clave)
     if not lst:
         faltan += 1
@@ -187,7 +191,7 @@ for b in base:
     n_esp = EXC.get((b['marca'], tipo(b), b['idea_id']), idx_base[b['fecha']])
     if idx_nuevo[f['fecha']] != n_esp:
         errores.append(f'pieza base {clave} en el día {idx_nuevo[f["fecha"]]}, se esperaba {n_esp}')
-    for c in ('palabra', 'revision', 'serie', 'tema', 'idea'):
+    for c in ('palabra', 'serie', 'tema', 'idea'):
         if f[c] != b[c]:
             errores.append(f'pieza base {clave}: cambió «{c}»')
 n_base = sum(1 for f in filas if origen(f) == 'base')
@@ -208,7 +212,7 @@ for m in MARCAS:
           f'tema más repetido: {tmax} reels')
 rev = collections.Counter(f['revision'] for f in filas)
 print('- Revisión: ' + ' · '.join(f'{k}: {v}' for k, v in sorted(rev.items())))
-print(f'- Condicionadas: {sum(1 for f in filas if f["condicion"])}')
+print(f'- Lugares de actualidad (única condición que queda): {sum(1 for f in filas if f["condicion"])}')
 print(f'- Horarios corridos +20 min por el grupo de control (20 al 24/11): {sum(1 for f in filas if "grupo de control" in f["cambios"])}')
 for a in avisos:
     print('AVISO', a)
