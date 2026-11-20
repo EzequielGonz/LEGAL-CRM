@@ -1,0 +1,2204 @@
+{
+ "nota": "Copia previa de las 44 publicaciones de Kocos Marketing (brandId 7242607) solo para Instagram del 25 al 29/11/2026, antes de pasarlas a borrador el 20/11/2026 por decisión de la responsable. Se omiten los datos de quién las creó. Para revertir: updateScheduledPost con el id vigente (getScheduledPosts; el id cambia con cada actualización, el uuid no) y el mismo contenido con draft=false.",
+ "estado_previo": "providers instagram PENDING, draft=false",
+ "publicaciones": [
+  {
+   "id": 432451687,
+   "uuid": "-2977615656294333043",
+   "fecha": "2026-11-25T08:30",
+   "tipo": "REEL",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-25T08:30:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "Te preguntan el precio. ¿Qué respondés?\n\nCuando te preguntan el precio, respondé con información y un siguiente paso concreto, no con un «por privado».\n\nEscribinos «RESPUESTAS» por WhatsApp: el botón está en el perfil.\n\nSituación ilustrativa.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-18176625783040130491.mp4"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "REEL",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    },
+    "videoCoverMilliseconds": 1819
+   }
+  },
+  {
+   "id": 432451701,
+   "uuid": "5244314774849079413",
+   "fecha": "2026-11-25T09:30",
+   "tipo": "STORY",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-25T09:30:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-16382933646158524574.jpeg"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "STORY",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    }
+   }
+  },
+  {
+   "id": 432451715,
+   "uuid": "-7121223775478200831",
+   "fecha": "2026-11-25T10:00",
+   "tipo": "POST",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-25T10:00:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "Te buscan en Google y no aparecés.\n\nPerfil de empresa con horarios, fotos reales del local y WhatsApp y web enlazados: así te encuentran cuando te buscan.\n\nEscribinos «GOOGLE» por WhatsApp: el botón está en el perfil.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-8993867365020448714.jpeg"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "POST",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    }
+   }
+  },
+  {
+   "id": 432451737,
+   "uuid": "-7150971420630564163",
+   "fecha": "2026-11-25T11:00",
+   "tipo": "REEL",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-25T11:00:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "«Lo pienso» no es un no.\n\n«Lo pienso» no es un no: hacé seguimiento a las 24 horas, a los 3 días y a la semana, con algo nuevo.\n\nEscribinos «SEGUIR» por WhatsApp: el botón está en el perfil.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-5178319710847509840.mp4"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "REEL",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    },
+    "videoCoverMilliseconds": 1819
+   }
+  },
+  {
+   "id": 432451798,
+   "uuid": "6202820119451749712",
+   "fecha": "2026-11-25T12:30",
+   "tipo": "POST",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-25T12:30:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "47 chats sin responder.\n\nEtiquetá cada chat por etapa, armá respuestas rápidas y agendá cada seguimiento. Tu WhatsApp, ordenado desde hoy.\n\nEscribinos «ORDEN» por WhatsApp: el botón está en el perfil.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-16568712811506367249.jpeg",
+     "https://static.metricool.com/planner/202611/7242607-file-8000390328542531962.jpeg",
+     "https://static.metricool.com/planner/202611/7242607-file-9392450245459006881.jpeg",
+     "https://static.metricool.com/planner/202611/7242607-file-14010082889980530434.jpeg"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null,
+     null,
+     null,
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "POST",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    }
+   }
+  },
+  {
+   "id": 432451825,
+   "uuid": "-7170494641308286619",
+   "fecha": "2026-11-25T13:30",
+   "tipo": "REEL",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-25T13:30:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "Tu web tarda en cargar. Y se van.\n\nSi tu web tarda 3 segundos en vez de 1, aumenta un 32 % la probabilidad de que la gente se vaya (Think with Google, 2017).\n\nEscribinos «WEB» por WhatsApp: el botón está en el perfil.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-16980762050762584137.mp4"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "REEL",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    },
+    "videoCoverMilliseconds": 1819
+   }
+  },
+  {
+   "id": 432451852,
+   "uuid": "-2067126465834956151",
+   "fecha": "2026-11-25T17:00",
+   "tipo": "REEL",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-25T17:00:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "Tu negocio duerme. Tus clientes, no.\n\nMensaje de ausencia con horarios, respuestas a las preguntas de siempre y turnos o pedidos que no esperan a mañana.\n\nEscribinos «AUTO» por WhatsApp: el botón está en el perfil.\n\nSituación ilustrativa.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-8253172765614970786.mp4"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "REEL",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    },
+    "videoCoverMilliseconds": 1819
+   }
+  },
+  {
+   "id": 432451870,
+   "uuid": "2784102652086732358",
+   "fecha": "2026-11-25T18:30",
+   "tipo": "STORY",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-25T18:30:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-13180013558647797361.jpeg"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "STORY",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    }
+   }
+  },
+  {
+   "id": 432451893,
+   "uuid": "814391381216542796",
+   "fecha": "2026-11-25T19:00",
+   "tipo": "POST",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-25T19:00:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "Llegó una consulta a las 21:03.\n\nUna consulta que llega a la noche y se responde al otro día muchas veces ya compró en otro lado. Responder rápido cambia el resultado.\n\nEscribinos «CRM» por WhatsApp: el botón está en el perfil.\n\nSituación ilustrativa.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-1580566706009490498.jpeg"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "POST",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    }
+   }
+  },
+  {
+   "id": 432451911,
+   "uuid": "5758878955004513447",
+   "fecha": "2026-11-25T20:30",
+   "tipo": "REEL",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-25T20:30:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "Tu bio tiene 3 segundos.\n\nUna bio que vende dice qué hacés, para quién y dónde, y cómo te contactan. Todo en 3 segundos.\n\nEscribinos «BIO» por WhatsApp: el botón está en el perfil.\n\nSituación ilustrativa.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-4174382990945714925.mp4"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "REEL",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    },
+    "videoCoverMilliseconds": 1819
+   }
+  },
+  {
+   "id": 432451932,
+   "uuid": "8961966642486133508",
+   "fecha": "2026-11-26T08:30",
+   "tipo": "REEL",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-26T08:30:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "47 chats sin responder.\n\nEtiquetá cada chat por etapa, armá respuestas rápidas y agendá cada seguimiento. Tu WhatsApp, ordenado desde hoy.\n\nEscribinos «ORDEN» por WhatsApp: el botón está en el perfil.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-4059353089566853349.mp4"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "REEL",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    },
+    "videoCoverMilliseconds": 2200
+   }
+  },
+  {
+   "id": 432451943,
+   "uuid": "-6774098080698252557",
+   "fecha": "2026-11-26T09:30",
+   "tipo": "STORY",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-26T09:30:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-10181569280439408458.jpeg"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "STORY",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    }
+   }
+  },
+  {
+   "id": 432451959,
+   "uuid": "-3388526340460229175",
+   "fecha": "2026-11-26T10:00",
+   "tipo": "POST",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-26T10:00:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "Son las 23:41 y te escribieron.\n\nMensaje de ausencia con horarios, respuestas a las preguntas de siempre y turnos o pedidos que no esperan a mañana.\n\nEscribinos «AUTO» por WhatsApp: el botón está en el perfil.\n\nSituación ilustrativa.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-13026256517584437803.jpeg"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "POST",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    }
+   }
+  },
+  {
+   "id": 432451991,
+   "uuid": "6614072962425441573",
+   "fecha": "2026-11-26T11:00",
+   "tipo": "REEL",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-26T11:00:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "Llegó una consulta a las 21:03.\n\nUna consulta que llega a la noche y se responde al otro día muchas veces ya compró en otro lado. Responder rápido cambia el resultado.\n\nEscribinos «CRM» por WhatsApp: el botón está en el perfil.\n\nSituación ilustrativa.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-18127821871460921356.mp4"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "REEL",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    },
+    "videoCoverMilliseconds": 1819
+   }
+  },
+  {
+   "id": 432452023,
+   "uuid": "-8843842363405284387",
+   "fecha": "2026-11-26T12:30",
+   "tipo": "POST",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-26T12:30:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "Tu bio tiene 3 segundos.\n\nUna bio que vende dice qué hacés, para quién y dónde, y cómo te contactan. Todo en 3 segundos.\n\nEscribinos «BIO» por WhatsApp: el botón está en el perfil.\n\nSituación ilustrativa.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-16860855389219337056.jpeg",
+     "https://static.metricool.com/planner/202611/7242607-file-14294541738714963128.jpeg",
+     "https://static.metricool.com/planner/202611/7242607-file-5169628935837220095.jpeg",
+     "https://static.metricool.com/planner/202611/7242607-file-6186027264178707700.jpeg"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null,
+     null,
+     null,
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "POST",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    }
+   }
+  },
+  {
+   "id": 432452043,
+   "uuid": "5276778711059547079",
+   "fecha": "2026-11-26T13:30",
+   "tipo": "REEL",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-26T13:30:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "«Te paso por privado» enfría la consulta.\n\nCuando te preguntan el precio, respondé con información y un siguiente paso concreto, no con un «por privado».\n\nEscribinos «RESPUESTAS» por WhatsApp: el botón está en el perfil.\n\nSituación ilustrativa.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-17915818511403098857.mp4"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "REEL",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    },
+    "videoCoverMilliseconds": 1819
+   }
+  },
+  {
+   "id": 432452121,
+   "uuid": "-2035069575188560676",
+   "fecha": "2026-11-26T17:00",
+   "tipo": "REEL",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-26T17:00:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "Dijo «lo pienso». ¿Y vos qué hiciste?\n\n«Lo pienso» no es un no: hacé seguimiento a las 24 horas, a los 3 días y a la semana, con algo nuevo.\n\nEscribinos «SEGUIR» por WhatsApp: el botón está en el perfil.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-13877738453611326092.mp4"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "REEL",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    },
+    "videoCoverMilliseconds": 1819
+   }
+  },
+  {
+   "id": 432452135,
+   "uuid": "2341891602159714979",
+   "fecha": "2026-11-26T18:30",
+   "tipo": "STORY",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-26T18:30:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-3524516736917810213.jpeg"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "STORY",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    }
+   }
+  },
+  {
+   "id": 432452159,
+   "uuid": "5768338519114271712",
+   "fecha": "2026-11-26T19:00",
+   "tipo": "POST",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-26T19:00:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "Tu local no aparece en Google Maps.\n\nPerfil de empresa con horarios, fotos reales del local y WhatsApp y web enlazados: así te encuentran cuando te buscan.\n\nEscribinos «GOOGLE» por WhatsApp: el botón está en el perfil.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-10948891107080006131.jpeg"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "POST",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    }
+   }
+  },
+  {
+   "id": 432452180,
+   "uuid": "-5792758757979698307",
+   "fecha": "2026-11-26T20:30",
+   "tipo": "REEL",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-26T20:30:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "Cada segundo de carga te cuesta visitas.\n\nSi tu web tarda 3 segundos en vez de 1, aumenta un 32 % la probabilidad de que la gente se vaya (Think with Google, 2017).\n\nEscribinos «WEB» por WhatsApp: el botón está en el perfil.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-14830507740340465971.mp4"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "REEL",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    },
+    "videoCoverMilliseconds": 1819
+   }
+  },
+  {
+   "id": 432452194,
+   "uuid": "-6996682752222346795",
+   "fecha": "2026-11-27T08:30",
+   "tipo": "REEL",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-27T08:30:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "Son las 23:41 y te escribieron.\n\nMensaje de ausencia con horarios, respuestas a las preguntas de siempre y turnos o pedidos que no esperan a mañana.\n\nEscribinos «AUTO» por WhatsApp: el botón está en el perfil.\n\nSituación ilustrativa.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-1948234957994315991.mp4"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "REEL",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    },
+    "videoCoverMilliseconds": 1819
+   }
+  },
+  {
+   "id": 432452215,
+   "uuid": "4300662462463755248",
+   "fecha": "2026-11-27T09:30",
+   "tipo": "STORY",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-27T09:30:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-18393738244755411927.jpeg"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "STORY",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    }
+   }
+  },
+  {
+   "id": 432452240,
+   "uuid": "8541595557039787975",
+   "fecha": "2026-11-27T10:00",
+   "tipo": "POST",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-27T10:00:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "Dijo «lo pienso». ¿Y vos qué hiciste?\n\n«Lo pienso» no es un no: hacé seguimiento a las 24 horas, a los 3 días y a la semana, con algo nuevo.\n\nEscribinos «SEGUIR» por WhatsApp: el botón está en el perfil.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-13721500933362796423.jpeg"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "POST",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    }
+   }
+  },
+  {
+   "id": 432452274,
+   "uuid": "-8771595400797404514",
+   "fecha": "2026-11-27T11:00",
+   "tipo": "REEL",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-27T11:00:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "Tu bio no dice qué hacés.\n\nUna bio que vende dice qué hacés, para quién y dónde, y cómo te contactan. Todo en 3 segundos.\n\nEscribinos «BIO» por WhatsApp: el botón está en el perfil.\n\nSituación ilustrativa.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-16451824115912361711.mp4"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "REEL",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    },
+    "videoCoverMilliseconds": 1770
+   }
+  },
+  {
+   "id": 432452307,
+   "uuid": "4276565989106470118",
+   "fecha": "2026-11-27T12:30",
+   "tipo": "POST",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-27T12:30:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "«Te paso por privado» enfría la consulta.\n\nCuando te preguntan el precio, respondé con información y un siguiente paso concreto, no con un «por privado».\n\nEscribinos «RESPUESTAS» por WhatsApp: el botón está en el perfil.\n\nSituación ilustrativa.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-17875864476957539378.jpeg",
+     "https://static.metricool.com/planner/202611/7242607-file-13782030005153977853.jpeg",
+     "https://static.metricool.com/planner/202611/7242607-file-16036868736540744933.jpeg"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null,
+     null,
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "POST",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    }
+   }
+  },
+  {
+   "id": 432452353,
+   "uuid": "3505620282031819340",
+   "fecha": "2026-11-27T13:30",
+   "tipo": "REEL",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-27T13:30:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "Tu WhatsApp está explotado.\n\nEtiquetá cada chat por etapa, armá respuestas rápidas y agendá cada seguimiento. Tu WhatsApp, ordenado desde hoy.\n\nEscribinos «ORDEN» por WhatsApp: el botón está en el perfil.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-3897803692568058200.mp4"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "REEL",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    },
+    "videoCoverMilliseconds": 1819
+   }
+  },
+  {
+   "id": 432452373,
+   "uuid": "32625328110847673",
+   "fecha": "2026-11-27T17:00",
+   "tipo": "REEL",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-27T17:00:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "Respondiste al otro día. Ya había comprado.\n\nUna consulta que llega a la noche y se responde al otro día muchas veces ya compró en otro lado. Responder rápido cambia el resultado.\n\nEscribinos «CRM» por WhatsApp: el botón está en el perfil.\n\nSituación ilustrativa.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-10882575378572569095.mp4"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "REEL",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    },
+    "videoCoverMilliseconds": 1819
+   }
+  },
+  {
+   "id": 432452397,
+   "uuid": "5161191968708970353",
+   "fecha": "2026-11-27T18:30",
+   "tipo": "STORY",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-27T18:30:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-14905633852650132811.jpeg"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "STORY",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    }
+   }
+  },
+  {
+   "id": 432452435,
+   "uuid": "2393343165555231442",
+   "fecha": "2026-11-27T19:00",
+   "tipo": "POST",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-27T19:00:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "Cada segundo de carga te cuesta visitas.\n\nSi tu web tarda 3 segundos en vez de 1, aumenta un 32 % la probabilidad de que la gente se vaya (Think with Google, 2017).\n\nEscribinos «WEB» por WhatsApp: el botón está en el perfil.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-7118354958163924936.jpeg"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "POST",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    }
+   }
+  },
+  {
+   "id": 432452480,
+   "uuid": "8634800161756759793",
+   "fecha": "2026-11-27T20:30",
+   "tipo": "REEL",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-27T20:30:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "Tu local no aparece en Google Maps.\n\nPerfil de empresa con horarios, fotos reales del local y WhatsApp y web enlazados: así te encuentran cuando te buscan.\n\nEscribinos «GOOGLE» por WhatsApp: el botón está en el perfil.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-15268285333678617780.mp4"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "REEL",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    },
+    "videoCoverMilliseconds": 1819
+   }
+  },
+  {
+   "id": 432452510,
+   "uuid": "6178203839880185967",
+   "fecha": "2026-11-28T08:30",
+   "tipo": "REEL",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-28T08:30:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "WhatsApp, Business o API: ¿cuál te conviene?\n\nWhatsApp Business alcanza si atendés vos: perfil de empresa, catálogo, respuestas rápidas y mensaje de ausencia. La API sirve cuando atienden varias personas, con CRM y automatizaciones, y tiene costo según los mensajes.\n\nEscribinos «API» por WhatsApp: el botón está en el perfil.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-5555093545715159458.mp4"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "REEL",
+     "showReelOnFeed": true,
+     "isAiGenerated": true,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    },
+    "videoCoverMilliseconds": 1819
+   }
+  },
+  {
+   "id": 432452530,
+   "uuid": "-5115554769628740323",
+   "fecha": "2026-11-28T09:30",
+   "tipo": "STORY",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-28T09:30:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-2740076322885470390.jpeg"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "STORY",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    }
+   }
+  },
+  {
+   "id": 432452559,
+   "uuid": "-7347166073934888576",
+   "fecha": "2026-11-28T10:00",
+   "tipo": "POST",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-28T10:00:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "Tu web tarda en cargar. Y se van.\n\nSi tu web tarda 3 segundos en vez de 1, aumenta un 32 % la probabilidad de que la gente se vaya (Think with Google, 2017).\n\nEscribinos «WEB» por WhatsApp: el botón está en el perfil.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-2080675778170760774.jpeg"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "POST",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    }
+   }
+  },
+  {
+   "id": 432452591,
+   "uuid": "-6744337337418691063",
+   "fecha": "2026-11-28T11:00",
+   "tipo": "REEL",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-28T11:00:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "Tu bio tiene 3 segundos.\n\nUna bio que vende dice qué hacés, para quién y dónde, y cómo te contactan. Todo en 3 segundos.\n\nEscribinos «BIO» por WhatsApp: el botón está en el perfil.\n\nSituación ilustrativa.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-15585216395266912570.mp4"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "REEL",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    },
+    "videoCoverMilliseconds": 1819
+   }
+  },
+  {
+   "id": 432452620,
+   "uuid": "455513467185285735",
+   "fecha": "2026-11-28T12:30",
+   "tipo": "POST",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-28T12:30:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "Tu local no aparece en Google Maps.\n\nPerfil de empresa con horarios, fotos reales del local y WhatsApp y web enlazados: así te encuentran cuando te buscan.\n\nEscribinos «GOOGLE» por WhatsApp: el botón está en el perfil.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-4412267010506274815.jpeg",
+     "https://static.metricool.com/planner/202611/7242607-file-4317860810994113830.jpeg",
+     "https://static.metricool.com/planner/202611/7242607-file-16769002988282254388.jpeg"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null,
+     null,
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "POST",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    }
+   }
+  },
+  {
+   "id": 432452644,
+   "uuid": "3214882723432251756",
+   "fecha": "2026-11-28T13:30",
+   "tipo": "REEL",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-28T13:30:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "47 chats sin responder.\n\nEtiquetá cada chat por etapa, armá respuestas rápidas y agendá cada seguimiento. Tu WhatsApp, ordenado desde hoy.\n\nEscribinos «ORDEN» por WhatsApp: el botón está en el perfil.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-6752606169614609513.mp4"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "REEL",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    },
+    "videoCoverMilliseconds": 2200
+   }
+  },
+  {
+   "id": 432452670,
+   "uuid": "-4259773573195808571",
+   "fecha": "2026-11-28T17:00",
+   "tipo": "REEL",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-28T17:00:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "Llegó una consulta a las 21:03.\n\nUna consulta que llega a la noche y se responde al otro día muchas veces ya compró en otro lado. Responder rápido cambia el resultado.\n\nEscribinos «CRM» por WhatsApp: el botón está en el perfil.\n\nSituación ilustrativa.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-15020760564522581589.mp4"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "REEL",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    },
+    "videoCoverMilliseconds": 1819
+   }
+  },
+  {
+   "id": 432452682,
+   "uuid": "-6930311447258775173",
+   "fecha": "2026-11-28T18:30",
+   "tipo": "STORY",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-28T18:30:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-14725088061151097744.jpeg"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "STORY",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    }
+   }
+  },
+  {
+   "id": 432452704,
+   "uuid": "2832487484362540146",
+   "fecha": "2026-11-28T19:00",
+   "tipo": "POST",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-28T19:00:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "«Lo pienso» no es un no.\n\n«Lo pienso» no es un no: hacé seguimiento a las 24 horas, a los 3 días y a la semana, con algo nuevo.\n\nEscribinos «SEGUIR» por WhatsApp: el botón está en el perfil.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-963102240932990820.jpeg"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "POST",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    }
+   }
+  },
+  {
+   "id": 432452723,
+   "uuid": "-775196472084509675",
+   "fecha": "2026-11-28T20:30",
+   "tipo": "REEL",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-28T20:30:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "Tu negocio duerme. Tus clientes, no.\n\nMensaje de ausencia con horarios, respuestas a las preguntas de siempre y turnos o pedidos que no esperan a mañana.\n\nEscribinos «AUTO» por WhatsApp: el botón está en el perfil.\n\nSituación ilustrativa.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-9362014391064946424.mp4"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "REEL",
+     "showReelOnFeed": true,
+     "isAiGenerated": true,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    },
+    "videoCoverMilliseconds": 1819
+   }
+  },
+  {
+   "id": 432451607,
+   "uuid": "-8703115673391512593",
+   "fecha": "2026-11-29T17:00",
+   "tipo": "REEL",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-29T17:00:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "47 chats sin responder.\n\nEtiquetá cada chat por etapa, armá respuestas rápidas y agendá cada seguimiento. Tu WhatsApp, ordenado desde hoy.\n\nEscribinos «ORDEN» por WhatsApp: el botón está en el perfil.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-11145751314195502930.mp4"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "REEL",
+     "showReelOnFeed": true,
+     "isAiGenerated": true,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    },
+    "videoCoverMilliseconds": 2200
+   }
+  },
+  {
+   "id": 432451618,
+   "uuid": "4551952761466802144",
+   "fecha": "2026-11-29T18:30",
+   "tipo": "STORY",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-29T18:30:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-4819296229634368690.jpeg"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "STORY",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    }
+   }
+  },
+  {
+   "id": 432451632,
+   "uuid": "-7909783281473796991",
+   "fecha": "2026-11-29T19:00",
+   "tipo": "POST",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-29T19:00:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "Tu web tarda en cargar. Y se van.\n\nSi tu web tarda 3 segundos en vez de 1, aumenta un 32 % la probabilidad de que la gente se vaya (Think with Google, 2017).\n\nEscribinos «WEB» por WhatsApp: el botón está en el perfil.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-11115095906602194346.jpeg"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "POST",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    }
+   }
+  },
+  {
+   "id": 432451653,
+   "uuid": "1581664007930070891",
+   "fecha": "2026-11-29T20:30",
+   "tipo": "REEL",
+   "estado_previo": "PENDING",
+   "draft_previo": false,
+   "api": {
+    "publicationDate": {
+     "dateTime": "2026-11-29T20:30:00",
+     "timezone": "America/Argentina/Buenos_Aires"
+    },
+    "text": "Te buscan en Google y no aparecés.\n\nPerfil de empresa con horarios, fotos reales del local y WhatsApp y web enlazados: así te encuentran cuando te buscan.\n\nEscribinos «GOOGLE» por WhatsApp: el botón está en el perfil.\n\n#marketingdigital #whatsappbusiness #pymes #emprendedores",
+    "firstCommentText": "",
+    "providers": [
+     {
+      "network": "instagram",
+      "status": "PENDING",
+      "detailedStatus": "Pending"
+     }
+    ],
+    "media": [
+     "https://static.metricool.com/planner/202611/7242607-file-5743383805916805102.mp4"
+    ],
+    "autoPublish": true,
+    "saveExternalMediaFiles": false,
+    "mediaAltText": [
+     null
+    ],
+    "shortener": false,
+    "draft": false,
+    "imageVariants": false,
+    "twitterData": {
+     "type": "POST"
+    },
+    "instagramData": {
+     "autoPublish": true,
+     "type": "REEL",
+     "showReelOnFeed": true,
+     "isAiGenerated": false,
+     "isPaidPartnership": false
+    },
+    "hasNotReadNotes": false,
+    "descendants": [],
+    "smartLinkData": {
+     "ids": []
+    },
+    "videoCoverMilliseconds": 1819
+   }
+  }
+ ]
+}
