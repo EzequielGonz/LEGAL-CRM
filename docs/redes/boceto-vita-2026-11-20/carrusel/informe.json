@@ -1,0 +1,54 @@
+[
+  {
+    "id": "lamina-1",
+    "avisos": [
+      "Textos que se pisan: text «Propuesta de» y text «acuerdo»"
+    ]
+  },
+  {
+    "id": "lamina-2",
+    "avisos": [
+      "Texto sobre imagen: .tag «Situación ilustrativa» y img «»",
+      "Elemento fuera de la pieza: i «»"
+    ]
+  },
+  {
+    "id": "lamina-3",
+    "avisos": [
+      "Texto sobre imagen: .p «Si después aparece una lesió» y svg «ESPERÁ»",
+      "Elemento fuera de la pieza: i «»"
+    ]
+  },
+  {
+    "id": "lamina-4",
+    "avisos": [
+      "Elemento fuera de la pieza: i «»"
+    ]
+  },
+  {
+    "id": "lamina-5",
+    "avisos": [
+      "Elemento fuera de la pieza: i «»"
+    ]
+  },
+  {
+    "id": "lamina-6",
+    "avisos": [
+      "Texto sobre imagen: .tag «Situación ilustrativa» y img «»",
+      "Elemento fuera de la pieza: i «»"
+    ]
+  },
+  {
+    "id": "lamina-7",
+    "avisos": [
+      "Elemento fuera de la pieza: i «»"
+    ]
+  },
+  {
+    "id": "portada-reel",
+    "avisos": [
+      "Texto sobre imagen: .t «¿Firmáso no?» y img «»",
+      "Texto sobre imagen: em «o no?» y img «»"
+    ]
+  }
+]

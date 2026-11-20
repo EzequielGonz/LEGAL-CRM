@@ -1,0 +1,20 @@
+lamina-1: 1 aviso(s)
+   - Textos que se pisan: text «Propuesta de» y text «acuerdo»
+lamina-2: 2 aviso(s)
+   - Texto sobre imagen: .tag «Situación ilustrativa» y img «»
+   - Elemento fuera de la pieza: i «»
+lamina-3: 2 aviso(s)
+   - Texto sobre imagen: .p «Si después aparece una lesió» y svg «ESPERÁ»
+   - Elemento fuera de la pieza: i «»
+lamina-4: 1 aviso(s)
+   - Elemento fuera de la pieza: i «»
+lamina-5: 1 aviso(s)
+   - Elemento fuera de la pieza: i «»
+lamina-6: 2 aviso(s)
+   - Texto sobre imagen: .tag «Situación ilustrativa» y img «»
+   - Elemento fuera de la pieza: i «»
+lamina-7: 1 aviso(s)
+   - Elemento fuera de la pieza: i «»
+portada-reel: 2 aviso(s)
+   - Texto sobre imagen: .t «¿Firmáso no?» y img «»
+   - Texto sobre imagen: em «o no?» y img «»

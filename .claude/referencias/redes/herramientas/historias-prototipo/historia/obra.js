@@ -18,11 +18,11 @@ export function obra(V, B) {
       const hk = $('#hook'); const ko = win(t, hEnd, hEnd + .3); hk.style.opacity = 1 - ko; hk.style.transform = `translateY(${-50 * easeOut(ko)}px)`;
       subs($('#sub'), V.frases, t, {maxChars: B.maxChars || 17}); if (cta && t > cta.t - .1) $('#sub').innerHTML = '';
       const hab = V.frases.filter(f => f.q !== 'nar'); const fh = hab.find(f => t >= f.t - .15 && t <= f.fin + .5);
-      globo($('#globo'), fh, t, fh && s.boca ? s.boca(fh) : [540, 700], {});
+      globo($('#globo'), s.boca ? fh : null, t, fh && s.boca ? s.boca(fh) : [540, 700], {});
       const it = V.frases.filter(f => f.item).find(f => t >= f.t - .08 && t < f.fin + .4); const nm = $('#num');
       if (it) { const kk = win(t, it.t - .08, it.t + .25); nm.textContent = it.item; nm.style.opacity = 1; nm.style.transform = `scale(${.6 + .4 * backOut(kk, 2.2)})`; } else nm.style.opacity = 0;
       const cc = $('#cta'), velo = $('#velo');
-      if (cta && t >= cta.t - .3) { const kk = win(t, cta.t - .3, cta.t + .35); const lk = win(t, V.total - .45, V.total - .1); cc.style.opacity = easeOut(kk) * (1 - lk); velo.style.opacity = .82 * easeOut(kk) * (1 - lk);
+      if (cta && t >= cta.t - .3) { const kk = win(t, cta.t - .3, cta.t + .35); const lk = win(t, V.total - .45, V.total - .1); cc.style.opacity = easeOut(kk) * (1 - lk); velo.style.opacity = .93 * easeOut(kk) * (1 - lk);
         cc.style.transform = `translateY(${(1 - expoOut(kk)) * 40}px)`; const kw = cc.querySelector('.kw'); const w1 = cta.words[1] ? cta.words[1].t : cta.t + .6; const k2 = win(t, w1 - .05, w1 + .3); kw.style.transform = `scale(${.7 + .3 * backOut(k2, 2.5)})`; kw.style.opacity = k2 > 0 ? 1 : 0; }
       else { cc.style.opacity = 0; velo.style.opacity = 0; }
       $('#nota').innerHTML = (B.notas || []).filter(x => t >= (x.desde ?? 0) && t < (x.hasta ?? 1e9)).map(x => x.txt).join('<br>');

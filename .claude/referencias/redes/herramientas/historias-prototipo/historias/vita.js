@@ -8,9 +8,9 @@ const ORO = '#D4AF37', NAVY = '#112250';
 const NICO = {peinado: 'corto', piel: '#c58c66', pelo: '#2a1c12', barba: true, remera: '#2f5d8a', campera: '#3d4a3a', manga: 'larga', pantalon: '#2b3140', zapato: '#1a1a1f'};
 
 export async function armar(V) {
-  const O = obra(V, {logo: 'vita.png', ctaSub: 'y te respondemos', hookHTML: '¿Firmás<br><em>o no?</em>', hookHasta: 1.45,
+  const O = obra(V, {logo: 'vita.png', ctaSub: 'y te respondemos', hookHTML: '¿Firmás<br><em>o no?</em>', hookHasta: 1.15,
     notas: [{desde: 0, hasta: 26.6, txt: 'Situación ilustrativa'}, {desde: 26.8, txt: 'Información general: no reemplaza una consulta.<br>Situación ilustrativa · Voz generada con IA'}]});
-  document.documentElement.style.cssText += `--f1:'Playfair Display';--f2:Manrope;--acc:${ORO};--hs:150px;--hw:700;--kwCol:#0E1218;--logoH:175px;--hookTop:1150px;--velo:rgba(10,16,34,.9);--ctaTop:560px`;
+  document.documentElement.style.cssText += `--f1:'Playfair Display';--f2:Manrope;--acc:${ORO};--hs:150px;--hw:700;--kwCol:#0E1218;--logoH:175px;--hookTop:330px;--numTop:340px;--subTop:1220px;--velo:rgba(10,16,34,.9);--ctaTop:560px`;
   const F = n => V.frases.find(f => f.marca === n); const FI = i => V.frases.find(f => f.item === i);
   const fN = V.frases[0], fAl = F('alivio'), cta = V.frases.find(f => f.cta);
 
@@ -29,7 +29,7 @@ export async function armar(V) {
   // 3 · oficina de la aseguradora
   const e3 = O.esc({nombre: 'oficina', fondo: '#cfd5dc', capas: [
     {f: .6, prof: .6, w: 1500, svg: D.interior({w: 1500, pared: '#c9d0d8', piso: '#6d7280', ventana: [900, 380, 440, 600], vista: 'dia', zocalo: '#e4e7ea', luz: '#fff6e6'}) + D.planta({x: 180, y: 1410, s: 1.3})},
-    {f: 1, prof: 1, w: 1500, svg: '<g class="tras"></g>' + D.mesa({x: 640, y: 1130, w: 760, c: '#3b3f48', patas: 280}) + `<g class="papelMesa"><rect x="520" y="1112" width="190" height="20" fill="#f6f3ea" transform="skewX(-40)"/></g><g class="del"></g>`}]});
+    {f: 1, prof: 1, w: 1500, svg: '<g class="tras"></g>' + D.mesa({x: 640, y: 1235, w: 640, c: '#3b3f48', patas: 215}) + `<g class="papelMesa"><rect x="560" y="1217" width="190" height="20" fill="#f6f3ea" transform="skewX(-40)"/></g><g class="del"></g>`}]});
   const agente = personaje(e3.capas[1].svg.querySelector('.tras'), {peinado: 'rapado', piel: '#d6a988', pelo: '#3a2b20', remera: '#e9e6e0', campera: '#2c3446', manga: 'larga', pantalon: '#22252c'});
   const nico3 = personaje(e3.capas[1].svg.querySelector('.del'), NICO);
   // 4 · el papel, la lapicera y el sello dorado
@@ -38,7 +38,7 @@ export async function armar(V) {
   const marca = e4.capas[0].svg.querySelector('.marca'); marca.innerHTML = PP.marcaSello({txt: 'ESPERÁ', oro: ORO, x: 520, y: 1210, r: -9, s: .95});
   // 5 · el living de Nico, de noche
   const e5 = O.esc({nombre: 'living', fondo: '#2b2a35', capas: [
-    {f: .6, prof: .6, w: 1500, svg: D.interior({w: 1500, pared: '#55506a', piso: '#5b4636', ventana: [150, 360, 420, 560], vista: 'noche', zocalo: '#6a6580', luz: '#9fb4ff'}) + D.calendario({x: 1130, y: 760, s: 1.1, dia: 'HOY', acento: ORO}) + D.lampara({x: 1150, y: 1420})},
+    {f: .6, prof: .6, w: 1500, svg: D.interior({w: 1500, pared: '#55506a', piso: '#5b4636', ventana: [150, 360, 420, 560], vista: 'noche', zocalo: '#6a6580', luz: '#9fb4ff'}) + D.calendario({x: 1010, y: 760, s: 1.1, dia: 'HOY', acento: ORO}) + D.lampara({x: 1150, y: 1420})},
     {f: 1, prof: 1, w: 1500, svg: D.sofa({x: 640, y: 1430, c: '#7a5a48'}) + '<g class="act"></g>' + D.mesa({x: 1060, y: 1230, w: 260, c: '#5a3f2c', patas: 190})}]});
   const nico5 = personaje(e5.capas[1].svg.querySelector('.act'), NICO); const cal = e5.capas[0].svg.querySelector('.dia');
   // 6 · Av. 9 de Julio con el Obelisco y un colectivo
@@ -61,13 +61,14 @@ export async function armar(V) {
   luz(e3, 'background:linear-gradient(100deg,rgba(255,255,255,.0) 40%,rgba(255,244,220,.35)),linear-gradient(180deg,transparent 60%,rgba(0,0,0,.25))');
   luz(e5, 'background:radial-gradient(circle at 78% 42%,rgba(255,200,120,.5),transparent 40%),linear-gradient(180deg,rgba(10,10,40,.2),rgba(0,0,0,.4));mix-blend-mode:soft-light');
   luz(e7, 'background:radial-gradient(circle at 75% 30%,rgba(255,214,150,.45),transparent 50%),linear-gradient(180deg,transparent 55%,rgba(0,0,20,.35));mix-blend-mode:soft-light');
+  luz(e4, 'background:linear-gradient(180deg,transparent 52%,rgba(8,12,28,.72) 70%,rgba(8,12,28,.82))');
   luz(e6, 'background:linear-gradient(180deg,rgba(255,240,210,.18),transparent 40%,rgba(0,0,0,.2))');
   const T = V.frases.map(f => f.t); const sello = F('sello').t; const golpe = sello + .12;
   const ojo = t => parpadeo(t, 0); const bo = f => t => 0;
   const boca = (f, t) => (!f || t < f.t || t > f.fin) ? 0 : (f.boca[Math.floor((t - f.t) * 60)] || 0);
   const pN = (pj, t, extra) => { const fh = [fN, fAl].find(f => t >= f.t && t <= f.fin); pj.pose(Object.assign({parpado: ojo(t), respira: respirar(t), boca: boca(fh, t)}, extra)); };
   O.tomas = [
-    {t0: 0, esc: e1, cam: k => ({X: lerp(800, 830, k), Y: lerp(1260, 1240, k), z: lerp(1.6, 1.72, ease(k)), foco: 1, ap: 5}), boca: () => nico1.cabeza.map((v, i) => v), act: t => {
+    {t0: 0, esc: e1, cam: (k, t) => { const sk = t < .6 ? Math.exp(-t * 7) : 0; return {X: lerp(870, 860, k) + Math.sin(t * 63) * 14 * sk, Y: lerp(1040, 1010, k) + Math.cos(t * 51) * 10 * sk, z: lerp(1.42, 1.52, ease(k)) + .06 * sk, r: Math.sin(t * 40) * 1.6 * sk, foco: 1, ap: 5}; }, boca: () => nico1.cabeza.map((v, i) => v), act: t => {
       pN(nico1, t, {x: 760, y: 1580, s: 1.05, flip: 1, hR: 70, cR: 95, hL: 6, cL: 10, cab: 8 + wob(t, 2) * 2, mira: .2, ceja: .8, sonrisa: -.4});
       nico1.E.propMano.innerHTML = `<rect x="-16" y="-36" width="32" height="58" rx="6" fill="#111"/><rect x="-13" y="-33" width="26" height="50" rx="4" fill="#bcd6ff" opacity=".9"/>`; }},
     {t0: T[1] - .04, esc: e2, cam: k => ({x: 540, y: lerp(990, 950, k), z: lerp(1.0, 1.08, ease(k)), r: lerp(-2, 0, k), foco: 1, ap: 4})},
@@ -86,16 +87,16 @@ export async function armar(V) {
       e4.capas[0].svg.querySelector('.sombraSello').setAttribute('transform', `translate(540,${1260}) scale(${clamp(.3 + y / 1235 * .9, .2, 1.2)})`);
       marca.style.opacity = t >= golpe ? 1 : 0;
       const d = t - golpe; e4.capas[0].d.style.translate = d > 0 && d < .45 ? `0 ${Math.exp(-d * 10) * Math.sin(d * 60) * 14}px` : '0 0'; }},
-    {t0: T[4] - .05, esc: e3, cam: k => ({X: lerp(440, 460, k), Y: 1000, z: lerp(2.0, 2.12, ease(k)), foco: 1, ap: 5}), act: t => {
+    {t0: T[4] - .05, esc: e3, cam: k => ({X: lerp(560, 520, k), Y: lerp(1080, 1060, k), z: lerp(1.75, 1.95, ease(k)), foco: 1, ap: 5}), act: t => {
       agente.pose({x: 900, y: 1430, s: 1.0, flip: -1, sentado: 1, hR: 34, cR: 60, hL: 28, cL: 58, parpado: parpadeo(t, 3), sonrisa: .3});
       pN(nico3, t, {x: 380, y: 1430, s: 1.0, sentado: 1, hR: 10, cR: 20, hL: 30, cL: 40, cab: -6, mira: .5, ceja: -.6, sonrisa: -.2}); }},
-    {t0: F('dolor').t - .05, esc: e5, cam: k => ({X: lerp(660, 720, k), Y: 1180, z: lerp(1.5, 1.58, k), foco: 1, ap: 4}), act: t => pN(nico5, t, {x: 640, y: 1430, s: 1.0, sentado: 1, hR: 196, cR: 168, hL: 20, cL: 30, cab: -12, ceja: -.9, sonrisa: -.6})},
-    {t0: F('dolor').t + 2.1, esc: e5, cam: k => ({X: 690, Y: lerp(1000, 985, k), z: lerp(2.5, 2.65, ease(k)), foco: 1, ap: 6}), act: t => pN(nico5, t, {x: 640, y: 1430, s: 1.0, sentado: 1, hR: 198 + wob(t) * 3, cR: 170, cab: -14, ceja: -1, sonrisa: -.7, parpado: .35})},
-    {t0: T[6] - .05, esc: e5, cam: k => ({X: lerp(700, 760, k), Y: 1150, z: 1.6, foco: 1, ap: 4}), act: t => { pN(nico5, t, {x: 640, y: 1430, s: 1.0, sentado: 1, hR: 60, cR: 70, hL: 50, cL: 60, cab: 10, mira: .6, ceja: .3});
+    {t0: F('dolor').t - .05, esc: e5, cam: k => ({X: lerp(660, 720, k), Y: 1180, z: lerp(1.5, 1.58, k), foco: 1, ap: 4}), act: t => (cal.parentNode.style.visibility = 'visible') && pN(nico5, t, {x: 640, y: 1430, s: 1.0, sentado: 1, hR: 22, cR: 30, hL: 14, cL: 22, cab: -12, ceja: -.9, sonrisa: -.6})},
+    {t0: F('dolor').t + 2.1, esc: e5, cam: k => ({X: 640, Y: lerp(1110, 1095, k), z: lerp(3.0, 3.15, ease(k)), foco: 1, ap: 6}), act: t => (cal.parentNode.style.visibility = 'hidden') && pN(nico5, t, {x: 640, y: 1430, s: 1.0, sentado: 1, hR: 18 + wob(t) * 3, cR: 26, hL: 12, cL: 20, cab: -10, ceja: -1, sonrisa: -.7, parpado: .35})},
+    {t0: T[6] - .05, esc: e5, cam: k => ({X: lerp(700, 760, k), Y: 1150, z: 1.6, foco: 1, ap: 4}), act: t => { cal.parentNode.style.visibility = 'visible'; pN(nico5, t, {x: 640, y: 1430, s: 1.0, sentado: 1, hR: 60, cR: 70, hL: 50, cL: 60, cab: 10, mira: .6, ceja: .3});
       nico5.E.propMano.innerHTML = `<rect x="-10" y="-60" width="70" height="92" fill="#f6f3ea" transform="rotate(20)"/>`; }},
-    {t0: FI(1).t - .1, esc: e4, cam: k => ({x: lerp(500, 580, k), y: lerp(900, 980, k), z: 1.35, r: -2, foco: 1}), act: t => { marca.style.opacity = 1; e4.capas[0].svg.querySelector('.sello').setAttribute('transform', 'translate(-999,-999)'); e4.capas[0].svg.querySelector('.sombraSello').setAttribute('transform', 'translate(-999,-999)'); e4.capas[0].d.style.translate = '0 0'; }},
-    {t0: FI(2).t - .1, esc: e5, cam: k => ({X: 1130, Y: 800, z: lerp(2.4, 2.55, ease(k)), foco: .6, ap: 5}), act: t => { const k = win(t, FI(2).t + .5, FI(2).t + .9); cal.textContent = k < .5 ? 'HOY' : 'MAÑANA'; cal.setAttribute('font-size', k < .5 ? 96 : 44); cal.parentNode.setAttribute('transform', `translate(1130,760) scale(1.1,${1.1 * Math.abs(Math.cos(k * Math.PI))})`); nico5.pose({x: -999, y: 0}); }},
-    {t0: FI(3).t - .1, esc: e6, cam: k => ({X: lerp(980, 1250, k), Y: 1190, z: 1.35, foco: 1, ap: 4}), act: t => { const k = win(t, FI(3).t - .1, fAl.t); const w = D ? caminar(t, 1) : {};
+    {t0: FI(1).t - .1, esc: e4, cam: k => ({x: lerp(500, 580, k), y: lerp(980, 1010, k), z: 1.6, r: -2, foco: 1}), act: t => { marca.style.opacity = .28; e4.capas[0].svg.querySelector('.sello').setAttribute('transform', 'translate(-999,-999)'); e4.capas[0].svg.querySelector('.sombraSello').setAttribute('transform', 'translate(-999,-999)'); e4.capas[0].d.style.translate = '0 0'; }},
+    {t0: FI(2).t - .1, esc: e5, cam: k => ({X: 1060, Y: 610, z: lerp(2.4, 2.5, ease(k)), foco: .6, ap: 5}), act: t => { cal.parentNode.style.visibility = 'visible'; const k = win(t, FI(2).t + .5, FI(2).t + .9); cal.textContent = k < .5 ? 'HOY' : 'MAÑANA'; cal.setAttribute('font-size', k < .5 ? 96 : 44); cal.parentNode.setAttribute('transform', `translate(1010,760) scale(1.1,${1.1 * Math.abs(Math.cos(k * Math.PI))})`); nico5.pose({x: -999, y: 0}); }},
+    {t0: FI(3).t - .1, esc: e6, cam: k => ({X: lerp(980, 1250, k), Y: 1010, z: 1.35, foco: 1, ap: 4}), act: t => { const k = win(t, FI(3).t - .1, fAl.t); const w = D ? caminar(t, 1) : {};
       nico6.pose(Object.assign({x: lerp(820, 1290, k), y: 1450 + w.dy, s: .95, flip: 1, parpado: ojo(t), mira: .3}, w)); bus.setAttribute('transform', `translate(${lerp(1900, -700, win(t, FI(3).t - .1, FI(3).t + 3))},0)`); }},
     {t0: fAl.t - .1, esc: e7, cam: k => ({X: lerp(600, 640, k), Y: lerp(1080, 1060, k), z: lerp(1.8, 1.92, ease(k)), foco: 1, ap: 5}), act: t => pN(nico7, t, {x: 560, y: 1440, s: 1.05, flip: 1, hR: 20, cR: 30, hL: 10, cL: 20, cab: 4, sonrisa: 1, ceja: .4, mira: .2})},
     {t0: cta.t - .3, esc: e7, cam: k => ({X: lerp(640, 680, k), Y: 1060, z: lerp(1.92, 2.0, k), foco: 1, ap: 10}), act: t => pN(nico7, t, {x: 560, y: 1440, s: 1.05, hR: 20, cR: 30, sonrisa: 1})},
@@ -104,6 +105,6 @@ export async function armar(V) {
   // posición del globo: arriba de la cabeza del personaje que habla, en coordenadas de pantalla
   const hablaEn = (esc, pj) => () => { const [x, y] = esc.aPantalla(esc.capas[esc.capas.length - (esc === e1 ? 2 : 1)], pj.cabeza[0], pj.cabeza[1] - 70); return [x, y]; };
   O.tomas[0].boca = hablaEn(e1, nico1); O.tomas[O.tomas.length - 3].boca = hablaEn(e7, nico7);
-  O.flash = t => Math.max(0, .5 * Math.exp(-(t - golpe) * 9)) * (t >= golpe ? 1 : 0);
+  O.flash = t => Math.max(Math.max(0, .5 * Math.exp(-(t - golpe) * 9)) * (t >= golpe ? 1 : 0), t >= .02 ? .55 * Math.exp(-(t - .02) * 8) : 0);
   return O;
 }

@@ -1,0 +1,145 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><link rel="stylesheet" href="../fonts/fuentes.css"><style>
+/* VITA · carrusel guía «Antes de firmar el acuerdo del seguro» · 7 láminas 1080×1350 + portada del reel.
+   Misma estética del feed aprobado: azul noche y crema alternados, Playfair Display + Manrope, dorado como acento.
+   Novedad del rediseño: el personaje y las escenas del reel (Nico) aparecen en las láminas, un hilo dorado une las láminas
+   al deslizar y cada paso tiene su objeto ilustrado. */
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#666;display:flex;flex-wrap:wrap;gap:40px;padding:40px;width:1200px;font-family:Manrope}
+.ab{position:relative;overflow:hidden;width:1080px;height:1350px;flex:none}
+.osc{background:radial-gradient(120% 80% at 50% 22%,#18306a 0%,#112250 45%,#0b1020 100%);color:#F5F4F0}
+.cla{background:#F5F4F0;color:#25282B}
+.cla:before{content:'';position:absolute;inset:0;background:radial-gradient(90% 60% at 80% 0%,rgba(193,174,122,.16),transparent 60%)}
+.lg{position:absolute;left:96px;top:84px;height:92px}
+.t{font-family:'Playfair Display';font-weight:500;line-height:1.06;letter-spacing:-.01em;text-wrap:balance}
+.osc em{color:#D4AF37;font-style:italic}.cla em{color:#3B507D;font-style:italic}
+.p{font-weight:500;font-size:44px;line-height:1.36;text-wrap:pretty}
+.osc .p{color:rgba(245,244,240,.86)}.cla .p{color:#4A4D50}
+.f{font-weight:500;font-size:30px;line-height:1.4;opacity:.72}
+.rule{width:120px;height:4px;background:#C1AE7A;border-radius:2px}
+/* hilo dorado que cruza de una lámina a la siguiente */
+.hilo{position:absolute;left:0;right:0;bottom:118px;height:4px;background:linear-gradient(90deg,#C1AE7A,#D4AF37)}
+.hilo i{position:absolute;right:120px;top:-10px;width:24px;height:24px;border-radius:50%;background:#D4AF37;box-shadow:0 0 0 8px rgba(212,175,55,.18)}
+.paso{position:absolute;left:96px;bottom:150px;font-weight:600;font-size:32px;letter-spacing:.02em}
+.osc .paso{color:#C1AE7A}.cla .paso{color:#8a7a4e}
+.desliza{display:flex;align-items:center;gap:16px;font-weight:600;font-size:34px;color:#C1AE7A}
+.foto{position:absolute;overflow:hidden;border-radius:36px;box-shadow:0 40px 90px rgba(0,0,0,.45)}
+.foto img{display:block;width:100%;height:100%;object-fit:cover}
+.foto:after{content:'';position:absolute;inset:0;border-radius:36px;box-shadow:inset 0 0 0 2px rgba(255,255,255,.12)}
+.tag{position:absolute;left:28px;bottom:26px;padding:8px 18px;border-radius:14px;background:rgba(10,16,34,.7);color:#F5F4F0;font-weight:600;font-size:26px}
+.n{font-family:'Playfair Display';font-style:italic;font-weight:500;font-size:250px;line-height:.8;color:#D4AF37}
+.cla .n{color:#3B507D}
+.kw{display:inline-block;padding:8px 44px 18px;border-radius:28px;background:#D4AF37;color:#0E1218;font:600 116px 'Playfair Display';box-shadow:0 24px 70px rgba(212,175,55,.25)}
+.check{display:flex;gap:26px;align-items:flex-start;font-weight:600;font-size:42px;line-height:1.25;color:#F5F4F0}
+.check b{flex:none;width:58px;height:58px;border-radius:16px;border:4px solid #D4AF37;display:grid;place-items:center;margin-top:-4px}
+</style></head><body>
+
+<!-- 1 · PORTADA -->
+<div class="ab osc" id="lamina-1" data-formato="carrusel">
+  <img class="lg" src="../vita.png">
+  <svg data-sangrado style="position:absolute;right:-110px;top:170px" width="560" height="760" viewBox="0 0 560 760">
+    <g transform="rotate(8 280 380)">
+      <rect x="70" y="40" width="420" height="600" rx="10" fill="#F6F3EA"/><rect x="70" y="40" width="420" height="600" rx="10" fill="url(#pg)"/>
+      <text x="110" y="128" font-family="Playfair Display" font-weight="700" font-size="40" fill="#25282B">Propuesta de</text>
+      <text x="110" y="176" font-family="Playfair Display" font-weight="700" font-size="40" fill="#25282B">acuerdo</text>
+      <g fill="#c9cacd"><rect x="110" y="220" width="330" height="12" rx="6"/><rect x="110" y="252" width="300" height="12" rx="6"/><rect x="110" y="284" width="320" height="12" rx="6"/><rect x="110" y="316" width="250" height="12" rx="6"/><rect x="110" y="372" width="330" height="12" rx="6"/><rect x="110" y="404" width="280" height="12" rx="6"/></g>
+      <line x1="110" y1="560" x2="450" y2="560" stroke="#25282B" stroke-width="3"/><text x="110" y="596" font-family="Manrope" font-size="22" fill="#6b6d72">Firma y aclaración</text>
+      <g transform="translate(300 470) rotate(-12)"><rect x="-150" y="-62" width="300" height="124" rx="18" fill="none" stroke="#D4AF37" stroke-width="9"/><rect x="-136" y="-48" width="272" height="96" rx="11" fill="none" stroke="#D4AF37" stroke-width="3"/><text x="0" y="24" text-anchor="middle" font-family="Manrope" font-weight="800" font-size="68" letter-spacing="5" fill="#D4AF37">ESPERÁ</text></g>
+    </g>
+    <g transform="translate(250 735) rotate(-30)"><rect x="-10" y="-330" width="20" height="300" rx="10" fill="#0b0d12"/><rect x="-11" y="-190" width="22" height="12" fill="#D4AF37"/><path d="M-9,-32 L9,-32 L0,6 Z" fill="#D4AF37"/></g>
+    <defs><linearGradient id="pg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".0"/><stop offset="1" stop-color="#000" stop-opacity=".08"/></linearGradient></defs>
+  </svg>
+  <div style="position:absolute;left:96px;width:540px;top:360px;display:flex;flex-direction:column;gap:40px">
+    <div class="rule"></div>
+    <div class="t" style="font-size:104px">Antes de firmar <em>el acuerdo del seguro</em></div>
+    <div class="p">Una guía corta para leer antes de decir que sí.</div>
+  </div>
+  <div class="desliza" style="position:absolute;left:96px;top:1100px">Deslizá y guardala <svg width="60" height="24" viewBox="0 0 60 24"><path d="M2 12 H54 M42 2 L56 12 L42 22" stroke="#C1AE7A" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  <div class="hilo" style="left:96px"><i></i></div>
+</div>
+
+<!-- 2 · LA SITUACIÓN (escena del reel) -->
+<div class="ab cla" id="lamina-2" data-formato="carrusel">
+  <img class="lg" src="../vita.png">
+  <div class="foto" style="left:96px;right:96px;top:230px;height:500px"><img src="stills/esquina.jpg" style="object-position:50% 52%"><span class="tag">Situación ilustrativa</span></div>
+  <div style="position:absolute;left:96px;right:96px;top:790px;display:flex;flex-direction:column;gap:24px">
+    <div class="t" style="font-size:80px">Te chocaron y el seguro del otro te ofrece <em>un acuerdo rápido.</em></div>
+    <div class="p" style="font-size:40px">Parece una buena noticia. Antes, conviene saber qué estás aceptando.</div>
+  </div>
+  <div class="hilo"><i style="right:auto;left:-12px"></i></div>
+</div>
+
+<!-- 3 · EL RIESGO -->
+<div class="ab osc" id="lamina-3" data-formato="carrusel">
+  <img class="lg" src="../vita.png">
+  <div style="position:absolute;left:96px;right:96px;top:300px;display:flex;flex-direction:column;gap:44px">
+    <div class="t" style="font-size:104px">Lo que firmás puede <em>cerrar tu reclamo.</em></div>
+    <div class="rule"></div>
+    <div class="p" style="width:640px">Si después aparece una lesión, quizás ya no puedas pedir más.</div>
+  </div>
+  <svg data-sangrado style="position:absolute;right:70px;top:820px" width="420" height="230" viewBox="0 0 420 230"><g transform="translate(210 115) rotate(-9)"><rect x="-190" y="-80" width="380" height="160" rx="22" fill="none" stroke="#D4AF37" stroke-width="10"/><rect x="-174" y="-64" width="348" height="128" rx="14" fill="none" stroke="#D4AF37" stroke-width="3"/><text x="0" y="32" text-anchor="middle" font-family="Manrope" font-weight="800" font-size="92" letter-spacing="7" fill="#D4AF37">ESPERÁ</text></g></svg>
+  <div class="hilo"><i style="right:auto;left:-12px"></i></div>
+</div>
+
+<!-- 4 · PASO 1 -->
+<div class="ab cla" id="lamina-4" data-formato="carrusel">
+  <img class="lg" src="../vita.png">
+  <div style="position:absolute;left:96px;right:96px;top:260px;display:flex;gap:40px;align-items:flex-end"><div class="n">1</div>
+    <svg width="300" height="330" viewBox="0 0 300 330" style="margin-left:auto"><g transform="rotate(6 150 165)"><rect x="40" y="20" width="220" height="290" rx="8" fill="#fff" stroke="#d9d6cc" stroke-width="2"/><g fill="#c9cacd"><rect x="70" y="60" width="160" height="10" rx="5"/><rect x="70" y="86" width="140" height="10" rx="5"/><rect x="70" y="112" width="150" height="10" rx="5"/><rect x="70" y="150" width="160" height="10" rx="5"/><rect x="70" y="176" width="120" height="10" rx="5"/></g><path d="M70 250 l22 22 l46 -50" stroke="#3B507D" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g></svg></div>
+  <div style="position:absolute;left:96px;right:96px;top:650px;display:flex;flex-direction:column;gap:32px">
+    <div class="t" style="font-size:100px">Pedí la propuesta <em>por escrito.</em></div>
+    <div class="p">Leela con calma, sin apuro y con todos los detalles.</div>
+  </div>
+  <div class="hilo"><i style="right:auto;left:-12px"></i></div>
+</div>
+
+<!-- 5 · PASO 2 -->
+<div class="ab osc" id="lamina-5" data-formato="carrusel">
+  <img class="lg" src="../vita.png">
+  <div style="position:absolute;left:96px;right:96px;top:260px;display:flex;gap:40px;align-items:flex-end"><div class="n">2</div>
+    <svg width="300" height="330" viewBox="0 0 300 330" style="margin-left:auto"><rect x="30" y="40" width="240" height="260" rx="22" fill="#F6F3EA"/><rect x="30" y="40" width="240" height="70" rx="22" fill="#D4AF37"/><rect x="30" y="88" width="240" height="22" fill="#D4AF37"/><circle cx="90" cy="40" r="12" fill="#0b1020"/><circle cx="210" cy="40" r="12" fill="#0b1020"/><text x="150" y="232" text-anchor="middle" font-family="Playfair Display" font-weight="700" font-size="46" fill="#112250">MAÑANA</text><path d="M60 158 h70" stroke="#c9cacd" stroke-width="10" stroke-linecap="round"/></svg></div>
+  <div style="position:absolute;left:96px;right:96px;top:650px;display:flex;flex-direction:column;gap:32px">
+    <div class="t" style="font-size:100px">No firmes <em>el mismo día.</em></div>
+    <div class="p">Tomate el tiempo de leerla y de hacer tus preguntas.</div>
+  </div>
+  <div class="hilo"><i style="right:auto;left:-12px"></i></div>
+</div>
+
+<!-- 6 · PASO 3 (escena del reel: oficina de VITA) -->
+<div class="ab cla" id="lamina-6" data-formato="carrusel">
+  <img class="lg" src="../vita.png">
+  <div class="foto" style="left:96px;width:520px;top:230px;height:640px"><img src="stills/estudio.jpg" style="object-position:42% 50%"><span class="tag">Situación ilustrativa</span></div>
+  <div class="n" style="position:absolute;left:680px;top:330px">3</div>
+  <div style="position:absolute;left:96px;right:96px;top:920px;display:flex;flex-direction:column;gap:26px">
+    <div class="t" style="font-size:90px">Consultá antes <em>con un abogado.</em></div>
+    <div class="p" style="font-size:40px">Que una abogada o un abogado revise tu caso.</div>
+  </div>
+  <div class="hilo"><i style="right:auto;left:-12px"></i></div>
+</div>
+
+<!-- 7 · CIERRE: resumen para guardar + palabra clave -->
+<div class="ab osc" id="lamina-7" data-formato="carrusel">
+  <img class="lg" src="../vita.png">
+  <div style="position:absolute;left:96px;right:96px;top:250px;display:flex;flex-direction:column;gap:30px">
+    <div class="t" style="font-size:76px">Antes de firmar, <em>chequeá:</em></div>
+    <div class="check"><b><svg width="30" height="24" viewBox="0 0 30 24"><path d="M3 12 l8 8 l16 -17" stroke="#D4AF37" stroke-width="5" fill="none" stroke-linecap="round"/></svg></b>Tengo la propuesta por escrito.</div>
+    <div class="check"><b><svg width="30" height="24" viewBox="0 0 30 24"><path d="M3 12 l8 8 l16 -17" stroke="#D4AF37" stroke-width="5" fill="none" stroke-linecap="round"/></svg></b>No la firmo el mismo día.</div>
+    <div class="check"><b><svg width="30" height="24" viewBox="0 0 30 24"><path d="M3 12 l8 8 l16 -17" stroke="#D4AF37" stroke-width="5" fill="none" stroke-linecap="round"/></svg></b>La consulté con un abogado.</div>
+  </div>
+  <div style="position:absolute;left:96px;right:96px;top:810px;display:flex;flex-direction:column;align-items:flex-start;gap:14px">
+    <div class="p" style="color:#F5F4F0;font-size:46px">¿Te ofrecieron un acuerdo? Comentá</div>
+    <div class="kw">FIRMA</div>
+    <div class="p">y te respondemos.</div>
+  </div>
+  <div class="f" style="position:absolute;left:96px;right:96px;bottom:150px">Información general: no reemplaza una consulta.</div>
+  <div class="hilo" style="right:96px"><i style="right:auto;left:-12px"></i></div>
+</div>
+
+<!-- PORTADA DEL REEL (1080×1920; título dentro del recorte 3:4 de la grilla) -->
+<div class="ab osc" id="portada-reel" data-formato="reel" style="height:1920px">
+  <div class="foto" data-sangrado style="left:0;right:0;top:0;height:1920px;border-radius:0;box-shadow:none"><img src="stills/papel.jpg" style="object-position:50% 50%;filter:blur(10px) brightness(.5) saturate(.9);transform:scale(1.08)"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,16,32,.55),rgba(17,34,80,.35) 40%,rgba(11,16,32,.85))"></div>
+  <img src="../vita.png" style="position:absolute;left:50%;transform:translateX(-50%);top:300px;height:140px">
+  <div style="position:absolute;left:110px;right:140px;top:560px;height:800px;display:flex;align-items:center;justify-content:center;text-align:center"><div class="t" style="font-size:150px">¿Firmás<br><em>o no?</em></div></div>
+  <div style="position:absolute;left:50%;transform:translateX(-50%);top:1420px;width:140px;height:5px;border-radius:3px;background:#C1AE7A"></div>
+</div>
+</body></html>

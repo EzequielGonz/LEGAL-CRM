@@ -27,6 +27,7 @@ def colectivo_pasa(d=3.0):
 def pasos(d, paso=.42): x = np.zeros(int(d * SR)); [add(x, k * paso, bp(rng.standard_normal(int(.08 * SR)), 300, 3000) * B.env(int(.08 * SR), .001, .02) * .35) for k in range(int(d / paso))]; return x
 def vibra(d=.5): n = int(d * SR); t = np.arange(n) / SR; return np.sin(2 * np.pi * 160 * t) * (np.sin(2 * np.pi * 6 * t) > 0) * .18
 def sello_golpe(): x = B.S_boom() * .9; add(x, 0, B.S_thud() * .9); add(x, .01, B.S_paper() * .8); return x
+def choque(): x = B.S_boom() * 1.0; add(x, 0, B.S_thud()); add(x, .03, bp(rng.standard_normal(int(.5 * SR)), 2500, 11000) * np.exp(-np.arange(int(.5 * SR)) / SR / .12) * .35); return x
 def lapicera(): n = int(.6 * SR); return bp(rng.standard_normal(n), 2000, 9000) * np.abs(np.sin(np.linspace(0, 14, n))) * np.hanning(n) * .08
 
 def mezclar(rid, amb, fx, estilo, quiebres=()):
@@ -52,7 +53,7 @@ def vita():
     cortes = [T1 - .04, T1 + 1.95, F('lapicera')['t'] - .1, F('sello')['t'] - .45, fr[4]['t'] - .05, F('dolor')['t'] - .05, F('dolor')['t'] + 2.1, fr[6]['t'] - .05, FI(1)['t'] - .1, FI(2)['t'] - .1, FI(3)['t'] - .1, F('alivio')['t'] - .1, T - .4]
     amb = [(0, T1, 'ciudad'), (T1, T1 + 1.95, 'ciudad'), (T1 + 1.95, F('lapicera')['t'], 'oficina'), (F('lapicera')['t'], fr[4]['t'], 'oficina'), (fr[4]['t'], F('dolor')['t'], 'oficina'),
            (F('dolor')['t'], FI(1)['t'], 'living'), (FI(1)['t'], FI(3)['t'], 'living'), (FI(3)['t'], F('alivio')['t'], 'ciudad_dia'), (F('alivio')['t'], T, 'oficina')]
-    fx = [(.12, vibra, .9), (.75, vibra, .7), (.2, B.S_ding, .5), (golpe, sello_golpe, 1.0), (golpe - .5, lambda: B.S_whoosh(.5, 200, 6000), .9), (F('lapicera')['t'] + .1, lapicera, 1),
+    fx = [(0.0, choque, .9), (.12, vibra, .9), (.75, vibra, .7), (.2, B.S_ding, .5), (golpe, sello_golpe, 1.0), (golpe - .5, lambda: B.S_whoosh(.5, 200, 6000), .9), (F('lapicera')['t'] + .1, lapicera, 1),
           (FI(2)['t'] + .5, B.S_paper, .9), (FI(3)['t'] - .1, colectivo_pasa, .9), (FI(3)['t'] - .1, lambda: pasos(2.9), .8), (V['frases'][-1]['t'] - .3, B.S_chime, .7)]
     fx += [(c - .06, lambda: B.S_whoosh(.32, 400, 7000), .35) for c in cortes] + [(FI(i)['t'], B.S_chime, .55) for i in (1, 2, 3)]
     mezclar('vita', amb, fx, 'vita', quiebres=[(golpe - .1, golpe + .7)])
