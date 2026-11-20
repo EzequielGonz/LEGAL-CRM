@@ -1,6 +1,16 @@
 # CONTEXTO ACTUAL · CRM multirubro
 
-Actualizado: 19/10/2026 (Bandeja para Claude en PR #29, Preview lista y migración 0502 aplicada; antes: reorganización 2, perfiles en PC, estado real de las líneas, asistente ampliado, chat de campañas y afinado de diseño publicados: PR #20, #21, #22, #24, #26 y #27). Sin secretos ni datos de prospectos.
+Actualizado: 20/11/2026 (charlas guardadas del asistente, PR #78 publicado). Sin secretos ni datos de prospectos.
+
+## Último bloque: charlas guardadas del asistente (20/11, pedido de la Bandeja)
+
+- Qué: las charlas del asistente general (/asistente) y del Laboratorio del bot (por perfil) se guardan solas y se retoman desde «Charlas anteriores»; «Quitar» archiva (no borra).
+- Decisión de la responsable (20/11): no tocar ni alterar ninguna funcionalidad existente; el cambio es solo agregado. La simplificación del Laboratorio quedó afuera.
+- Base: migración `0634_asistente_charlas` aplicada y verificada en la base real (funciones `asistente_charla_crear` / `asistente_charla_agregar`, sin permisos públicos, sin borrados).
+- Pruebas: unitarias 9/9; prueba de la base en transacción revertida; build de Vercel (tipos y lint) correcto en Preview y en producción.
+- Publicado: PR #78 fusionado a `main` (`77325da`), despliegue de producción de Vercel en «success». Sin recorrido navegando en la sesión.
+- Pendiente: mirarlo en el panel (asistente y Laboratorio). Detalle en `docs/asistente-charlas/`.
+
 
 ## Bloque actual: Bandeja para Claude (19/10, pedido de la responsable)
 Detalle en `docs/bandeja-claude/ENTREGA.md`. Rama `bandeja-claude`, PR #29 fusionado a `main` (`4f74085`, 19/10). Ajuste posterior: tarjeta negra y movida arriba de «Pedile algo» (rama `bandeja-posicion`, PR #32). Procedimiento de Claude al recibir «ok»: `.claude/referencias/bandeja-claude.md`.
