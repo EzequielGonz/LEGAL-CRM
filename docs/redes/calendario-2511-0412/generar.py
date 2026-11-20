@@ -18,15 +18,25 @@ PD = 'condicionado: dato oficial publicado'
 MARCAS = {'vita': 'VITA', 'cob': 'Coberturas', 'autos': 'Autos', 'mkt': 'Kocos Marketing'}
 
 SERIES = {
-    'V1': 'El minuto después', 'V2': 'Sello: mito o verdad', 'V3': 'Tu trabajo, tus derechos',
-    'C1': 'Tu recibo, en 3D', 'C2': 'Leé la letra chica',
-    'A1': 'Llave en mano', 'A2': '¿Cuál elegís?',
-    'K1': '21:03', 'K2': 'Antes / después',
+    'V1': 'El minuto después', 'V2': 'Antes de firmar',
+    'C1': 'Tu recibo explicado', 'C2': 'La carta', 'C3': 'Lo que dijo la Corte',
+    'A1': 'El ticket del 0 km', 'A2': 'Revisá esto al retirar',
+    'K1': 'El celular que no para', 'K2': 'Antes / después',
+}
+# Reasignación de series según el análisis de videos (20/11)
+SERIE_DE = {
+    ('vita', 'culpa-mito'): 'V1', ('vita', 'culpa-error'): 'V1', ('vita', 'nunca-frases'): 'V1',
+    ('vita', 'nunca-arreglo'): 'V1', ('vita', 'sin-seguro'): 'V1',
+    ('vita', 'art-rechazo'): 'V2', ('vita', 'alta-dolor'): 'V2', ('vita', 'alta-comision'): 'V2', ('vita', 'firma'): 'V2',
+    ('autos', 'retiro-chasis'): 'A2', ('autos', 'retiro-kit'): 'A2', ('autos', 'seguro'): 'A2',
+    ('autos', 'documentacion'): 'A2', ('autos', 'garantia'): 'A2',
 }
 
 # id: (serie, tema, idea, gancho A, gancho B, palabra, revisión, pregunta de encuesta, dato o paso)
 I = {}
 def idea(marca, iid, serie, tema, texto, ga, gb, kw, rev, preg, dato):
+    serie = {'V3': 'V2', 'A2': 'A1'}.get(serie, serie)
+    serie = SERIE_DE.get((marca, iid), serie)
     I[(marca, iid)] = dict(serie=serie, tema=tema, idea=texto, ga=ga, gb=gb, kw=kw, rev=rev, preg=preg, dato=dato)
 
 # ---------- VITA ----------
@@ -197,6 +207,10 @@ idea(c, 'vacaciones', 'C2', 'vacaciones', 'Te vas de vacaciones: qué preguntarl
 idea(c, 'derivar', 'C1', 'derivar', 'Derivar aportes: qué significa y cuándo conviene',
      'Aportes: ¿qué es derivarlos?', '', 'APORTES', PJ,
      '¿Sabés qué es derivar aportes? Sí / No', 'Derivación de aportes (texto a revisar).')
+idea(c, 'fallo-corte', 'C3', 'fallo-corte', 'Lo que dijo la Corte el 20/11 sobre los aumentos de las prepagas',
+     'Prepagas: lo que dijo la Corte', '', 'CORTE', PJ,
+     '¿Te enteraste del fallo de la Corte sobre prepagas? Sí / No',
+     'El 20/11 la Corte declaró inconstitucional la liberación de precios de las prepagas (La Nación; alcance a revisar).')
 idea(c, 'reintegros', 'C2', 'reintegros', 'Pagaste una consulta: preguntá por el reintegro',
      'Reintegro: ¿lo pediste?', '', 'COMPARAR', PJ,
      '¿Pediste alguna vez un reintegro? Sí / No', 'Reintegros (texto a revisar).')
@@ -386,15 +400,15 @@ ORDEN = {
  ],
  'cob': [
   ['mono-aporte/A', 'aumento-comparar/A', 'recibo-3/A'],
-  ['cambio-antes/A', 'opcion-anual/A', 'plan-uso/A'],
+  ['cambio-antes/A', 'fallo-corte/A', 'plan-uso/A'],
   ['familia/A', 'cartilla-guardia/A', 'mono-revisa/A'],
-  ['baja-27/A', 'carencias/A', 'recibo-elegir/A'],
+  ['baja-27/A', 'carencias/A', 'opcion-anual/A'],
   ['preex/A', '65/A', 'cambio-tratamientos/A'],
   ['mono-aporte/B', 'aumento-comparar/B', 'recibo-3/B'],
-  ['COND:aumento-dic/A>plan-uso/B', 'aguinaldo-aportes/A', 'cambio-antes/B', 'opcion-anual/B'],
+  ['COND:aumento-dic/A>plan-uso/B', 'aguinaldo-aportes/A', 'cambio-antes/B', 'recibo-elegir/A'],
   ['familia/B', 'cartilla-guardia/B', 'vacaciones/A', 'opcion-tarda/A'],
-  ['baja-27/B', 'carencias/B', 'derivar/A', 'ACT:cartilla-zona/A'],
-  ['preex/B', '65/B', 'reintegros/A', 'cambio-tratamientos/X'],
+  ['baja-27/B', 'carencias/B', 'derivar/A', 'opcion-anual/B'],
+  ['preex/B', '65/B', 'ACT:reintegros/A', 'cartilla-zona/A'],
  ],
  'autos': [
   ['usado-valor/A', 'voto-0km/A', 'plan-cuota/A'],
@@ -484,6 +498,7 @@ REF_AGENDA = {
  'dic-ene': 'Agenda: diciembre flojo y patentamiento en enero (ACARA, iProfesional)',
  'patentamientos': 'Agenda: ranking de ACARA de noviembre', 'checklist': 'Agenda: diciembre (idea 10 de competencia)',
  'horarios-ausencia': 'Agenda: horarios de fiestas', 'vacaciones': 'Agenda: vacaciones',
+ 'fallo-corte': 'Agenda: fallo de la Corte del 20/11 (La Nación); noticia del día con más vistas del rubro',
  'opcion-anual': 'Agenda: opción de cambio (iProfesional)', 'opcion-tarda': 'Agenda: opción de cambio (iProfesional)',
 }
 
