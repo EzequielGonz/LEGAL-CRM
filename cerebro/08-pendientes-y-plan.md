@@ -20,7 +20,7 @@ Prioridad: **P0** hoy · **P1** esta semana · **P2** antes del 01/12 · **P3** 
 
 | # | Qué | Quién |
 | --- | --- | --- |
-| 4 | Integrar a `main` las ramas de documentos: cerebro (`admiring-euler`), redes (`happy-wozniak`, PR #77), contexto en Word (`festive-goldberg`) y **rescatar los 18 commits de `gracious-volta`** (herramientas de reels y registro de lo programado) | Claude (si lo aprueba) |
+| 4 | ~~Integrar a `main` las ramas de documentos: cerebro (`admiring-euler`), redes (`happy-wozniak`, PR #77), contexto en Word (`festive-goldberg`) y **rescatar los 18 commits de `gracious-volta`** (herramientas de reels y registro de lo programado)~~ **hecho 20/11 (`66c457b`)** | Claude |
 | 4b | Arreglar la prueba rota en main (`asistente-catalogo.test.ts`: sumar `asistente/charlas` al catálogo o a `FUERA_DEL_CATALOGO`) | Claude |
 | 5 | Publicar los ajustes del panel del 19/11 (rama `claude/pensive-galileo-d6ephy`): renumerar su migración de Archivar a **0635**, revisar el `drop trigger`, integrar con main, typecheck/lint/pruebas/build, aplicar migración, publicar y recorrer | Claude |
 | 5b | Integrar el aviso por correo de formularios (PR #40 `landings-conexion`, 1 conflicto) — queda apagado hasta cargar la clave de Resend | Claude |
@@ -67,3 +67,6 @@ Prioridad: **P0** hoy · **P1** esta semana · **P2** antes del 01/12 · **P3** 
 | 20/11 | Destacadas armadas en los 4 rubros (responsable) | habilitado |
 | 20/11 | Cerebro del proyecto creado (`cerebro/`), cruce Fase 1 ↔ Fase 2, estado verificado | implementado en rama `claude/admiring-euler-ctf4sg` |
 | 20/11 | Comprobado: Search Console verificada por DNS en las 4 webs | comprobado |
+| 20/11 | Integrados a `main` el cerebro, redes (`happy-wozniak`, PR #77), contexto (`festive-goldberg`) y los 18 commits de `gracious-volta`; sin cambios de código; typecheck, lint y build en verde | publicado (`66c457b`) |
+| 20/11 | Hook de arranque que carga el cerebro en cada sesión | publicado en main |
+| 20/11 | 51 preguntas para entender el negocio (`12-preguntas-para-entender.md` + Word) | entregado |
