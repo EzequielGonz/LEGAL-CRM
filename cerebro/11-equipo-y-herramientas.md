@@ -5,7 +5,7 @@ actualizado: 20/11/2026
 
 # Equipo y herramientas
 
-Regla de la responsable (15/11 y 20/11): usar **todo** lo disponible que sume calidad, sin pedir permiso salvo pagos; al empezar cada tarea buscar más (`SearchSkills`, `SearchPlugins`, `coding-skills:find-skill`, `skill-discovery:scan`); trabajos grandes repartidos entre agentes en paralelo (copias separadas si tocan código), revisión cruzada y segunda opinión de otro modelo (`codex-review:*`, `codex-dispatch` si están disponibles). Al delegar, pasar la lista de skills útiles y permiso para usar otras.
+Regla del dueño (15/11 y 20/11): usar **todo** lo disponible que sume calidad, sin pedir permiso salvo pagos; al empezar cada tarea buscar más (`SearchSkills`, `SearchPlugins`, `coding-skills:find-skill`, `skill-discovery:scan`); trabajos grandes repartidos entre agentes en paralelo (copias separadas si tocan código), revisión cruzada y segunda opinión de otro modelo (`codex-review:*`, `codex-dispatch` si están disponibles). Al delegar, pasar la lista de skills útiles y permiso para usar otras.
 
 ## Roles del equipo (Claude los asume o los reparte)
 
@@ -43,7 +43,7 @@ general-purpose (paralelo), Explore (búsquedas amplias), Plan, agent-protocols:
 | Vercel (MCP) | **Funciona** (solo la cuenta del panel) | Despliegues, errores, logs. Las landings están en otra cuenta |
 | Metricool (MCP) | **Funciona** | Programar y leer publicaciones de las 4 marcas |
 | GitHub | MCP falló al conectar en esta sesión; git por proxy funciona (fetch/push a ramas `claude/*`) | Repos y PR |
-| Claude Docs | Disponible | Documentos vivos para la responsable |
+| Claude Docs | Disponible | Documentos vivos para el dueño |
 | JurisprudenciaARG | Disponible | Normas y fallos argentinos con fuente |
 | Playwright + Chromium | Preinstalado | Recorrer el panel y las webs, capturas |
 | Windsor.ai | Disponible, plan gratis 1 cuenta | Descartado para métricas |
@@ -53,10 +53,10 @@ general-purpose (paralelo), Explore (búsquedas amplias), Plan, agent-protocols:
 
 ## Herramientas del entorno
 
-- Node/npm, Python, pandoc, python-docx (Word para la responsable), ffmpeg y edge-tts (motor de reels: comprobar al arrancar), Playwright.
+- Node/npm, Python, pandoc, python-docx (Word para el dueño), ffmpeg y edge-tts (motor de reels: comprobar al arrancar), Playwright.
 - Disco por sesión limitado: borrar `fr/` del motor y worktrees al terminar.
 - Render de reels: 5–6 min cada uno en 4 núcleos; para volumen, repartir en hasta 8 sesiones en la nube (`create_session`) con el mismo pedido.
 
-## Para Cowork / Claude in Chrome (escritorio de la responsable)
+## Para Cowork / Claude in Chrome (escritorio del dueño)
 
 Lo que necesita su sesión (Business Suite, apps de Instagram, Search Console con su cuenta, QR de Wasender): se le deja un **prompt listo para pegar**, corto y por pasos.

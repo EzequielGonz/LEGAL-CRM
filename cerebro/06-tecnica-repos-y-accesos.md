@@ -99,7 +99,7 @@ Supabase (URL, clave pública, clave de servicio) · `WHATSAPP_<LÍNEA>` por lí
 
 ## Accesos y cuentas
 
-- Google de la responsable administra Vercel de las landings, Search Console y GA4.
+- Google del dueño administra Vercel de las landings, Search Console y GA4.
 - Dominios: DonWeb. Metricool: un usuario para las 4 marcas.
-- Panel: código general que la responsable da en el chat (no se guarda en archivos).
+- Panel: código general que el dueño da en el chat (no se guarda en archivos).
 - Claude no puede entrar a la cuenta de Vercel de las landings ni a Search Console/GA4 sin que se autorice el conector o se haga por Cowork.

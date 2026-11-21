@@ -1,5 +1,5 @@
 ---
-description: Preguntas abiertas para la responsable, con la recomendación de Claude. Al responderse, pasan a 02-ordenes-vigentes.md
+description: Preguntas abiertas para el dueño, con la recomendación de Claude. Al responderse, pasan a 02-ordenes-vigentes.md
 actualizado: 20/11/2026 06:10
 ---
 
@@ -34,7 +34,7 @@ actualizado: 20/11/2026 06:10
 | 15 | Bio A o B por marca | — | Más adelante (no se tocan por ahora) |
 | 16 | Pauta paga (clic a WhatsApp, 7 días gratis de mensajes) | Esperar · probar | Esperar a que pegue un reel (orden vigente); es pago |
 
-## Datos que tiene que pasar la responsable
+## Datos que tiene que pasar el dueño
 
 - Quién revisa lo jurídico y lo de coberturas (nombre y matrícula), si se quiere mostrar en la web.
 - Si Coberturas atiende en persona. Dirección real y horarios de VITA y Autos (Perfil de Empresa).

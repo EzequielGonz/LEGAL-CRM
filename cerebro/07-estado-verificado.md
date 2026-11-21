@@ -37,7 +37,7 @@ Si esta foto tiene más de 24 h, volver a comprobar antes de afirmar algo (consu
 
 Puntaje del bot en captación y trato (Salud): Jurídico 35/100, Coberturas 32, Autos 46, Marketing 40.
 
-Wasender: las 3 `logged_out`, `habilitada=false`, modo de prueba encendido. «Asesoria Vita» archivada; «Asesoria Vita - 2» (estado del 13/11); «LINEA - KOCOS MARKETING» (16/11). Hay que escanear el QR (la responsable).
+Wasender: las 3 `logged_out`, `habilitada=false`, modo de prueba encendido. «Asesoria Vita» archivada; «Asesoria Vita - 2» (estado del 13/11); «LINEA - KOCOS MARKETING» (16/11). Hay que escanear el QR (el dueño).
 
 ## Campañas
 

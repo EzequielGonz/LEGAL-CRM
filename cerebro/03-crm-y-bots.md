@@ -57,7 +57,7 @@ Detalle normativo fino (horarios, detención, fases, evidencia): `.claude/refere
 
 - **Asistente general `/asistente`**: resumen de la semana (7 cifras por perfil + total, flecha contra la semana anterior), accesos y chat grande. Lee Excel/CSV (al modelo le llega resumen), arma bocetos por perfil, importa bases, crea campañas de Wasender. Desde el 20/11 guarda charlas (hasta 30, se archivan).
 - **Asistente de cada perfil («Pedile algo»)**: propone cualquiera de las **77 operaciones** del catálogo y la persona confirma (un clic para lo común; confirmación reforzada para lo que escribe a personas; código de acceso para lo que enciende un bot o gasta). Lo que escriben los prospectos nunca es una orden para el asistente. Mira hasta 3 adjuntos.
-- **Bandeja para Claude**: la responsable deja pedidos (perfil, texto, hasta 5 enlaces); Claude los toma cuando ella dice «ok». Estados: pendiente, en curso, en espera (>6 h sin avance), lista, descartada. Procedimiento: `.claude/referencias/bandeja-claude.md`.
+- **Bandeja para Claude**: el dueño deja pedidos (perfil, texto, hasta 5 enlaces); Claude los toma cuando él dice «ok». Estados: pendiente, en curso, en espera (>6 h sin avance), lista, descartada. Procedimiento: `.claude/referencias/bandeja-claude.md`.
 
 ## Bots
 
@@ -142,7 +142,7 @@ Fuera de AMBA o datos parciales: vale igual con advertencia (grupo aparte). Sin 
 
 | | Meta (WhatsApp Cloud API oficial) | Wasender (WhatsApp por QR) |
 | --- | --- | --- |
-| Líneas | CIVIL, PENAL (inactiva), COBERTURAS MEDICAS, AGENCIA 0KM, MARKETING | «Asesoria Vita - 2», «LINEA - KOCOS MARKETING»; «Asesoria Vita» archivada. Las 3 desconectadas (falta escanear QR; lo hace la responsable) |
+| Líneas | CIVIL, PENAL (inactiva), COBERTURAS MEDICAS, AGENCIA 0KM, MARKETING | «Asesoria Vita - 2», «LINEA - KOCOS MARKETING»; «Asesoria Vita» archivada. Las 3 desconectadas (falta escanear QR; lo hace el dueño) |
 | Primer mensaje | Solo plantillas aprobadas, ventana de 24 h | Textos propios con variantes, sin botones |
 | Costo | Marketing USD 0,07107 / utilidad USD 0,02990 por plantilla en Argentina; 1.000 de servicio gratis por mes por número; anuncios clic a WhatsApp: 7 días gratis | Licencia, sin costo por mensaje |
 | Riesgo | Calidad de línea (baja → campañas se pausan solas y aviso). Agencia 0 km: baja desde 26/10 | Se desconecta seguido; posible bloqueo del número |

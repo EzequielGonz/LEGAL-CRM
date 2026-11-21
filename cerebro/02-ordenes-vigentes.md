@@ -1,5 +1,5 @@
 ---
-description: Órdenes vigentes de la responsable, reconciliadas entre Fase 1 (Cowork) y Fase 2 (Code). Manda la más nueva; se anota qué reemplazó.
+description: Órdenes vigentes del dueño, reconciliadas entre Fase 1 (Cowork) y Fase 2 (Code). Manda la más nueva; se anota qué reemplazó.
 actualizado: 20/11/2026 06:00
 ---
 
@@ -7,9 +7,9 @@ actualizado: 20/11/2026 06:00
 
 ## La única restricción
 
-**No se paga nada sin autorización expresa de la responsable**: créditos, planes, publicidad, generadores pagos (Veo, Kling, Runway, ElevenLabs, vidIQ con créditos), servidores, celulares en la nube, dominios. Presupuesto ya autorizado: Gemini para los bots, USD 30 por mes (20/10). Recomendación vigente: dejar desactivado el pase automático a créditos pagos de Claude o con tope bajo.
+**No se paga nada sin autorización expresa del dueño**: créditos, planes, publicidad, generadores pagos (Veo, Kling, Runway, ElevenLabs, vidIQ con créditos), servidores, celulares en la nube, dominios. Presupuesto ya autorizado: Gemini para los bots, USD 30 por mes (20/10). Recomendación vigente: dejar desactivado el pase automático a créditos pagos de Claude o con tope bajo.
 
-Todo lo demás son **decisiones de negocio** de la responsable (abajo), no trabas de proceso. Claude implementa, prueba, publica y verifica sin pedir «dale» por cada paso.
+Todo lo demás son **decisiones de negocio** del dueño (abajo), no trabas de proceso. Claude implementa, prueba, publica y verifica sin pedir «dale» por cada paso.
 
 ## Lo que Claude sigue cuidando por oficio (no son trabas)
 
@@ -30,7 +30,7 @@ Todo lo demás son **decisiones de negocio** de la responsable (abajo), no traba
 | 20/11 | Velocidad: «sin releer todo, sigamos derecho» desde el último traspaso (para eso existe este cerebro) |
 | 20/11 | **Aprendizaje continuo**: releer y entender a fondo el negocio y sus expectativas en cada sesión; actualizar el cerebro en el momento en que se aprende algo; sumar solo roles, skills y plugins que sirvan (protocolo en `README.md`) |
 | 15/11 | Los textos internos del panel («Wasender», «v1/v2», «JSON») no se cambian |
-| 13/11 | Tarea automática que revise sola la Bandeja para Claude: «por ahora no». La responsable dice «ok» y Claude toma las tareas (`.claude/referencias/bandeja-claude.md`) |
+| 13/11 | Tarea automática que revise sola la Bandeja para Claude: «por ahora no». El dueño dice «ok» y Claude toma las tareas (`.claude/referencias/bandeja-claude.md`) |
 
 ## Comunicación con ella
 
@@ -74,14 +74,14 @@ Todo lo demás son **decisiones de negocio** de la responsable (abajo), no traba
 
 | Fecha | Orden |
 | --- | --- |
-| 15/11 · **confirmada 20/11** | **Las campañas con bases y las publicidades las lanza la responsable.** Claude las deja completas y listas («qué falta para lanzar» en cero); ella aprieta lanzar. Publicar código no lanza nada |
+| 15/11 · **confirmada 20/11** | **Las campañas con bases y las publicidades las lanza el dueño.** Claude las deja completas y listas («qué falta para lanzar» en cero); él aprieta lanzar. Publicar código no lanza nada |
 | 14/11 → 17/11 | Cada campaña elige método: Meta o Wasender (el 14/11 se había decidido solo Wasender; el 17/11 se habilitó elegir y cambiar el método en una campaña pausada) |
 | 14/11 | Wasender: lunes a sábado, sin días de descanso, sin patrón fijo (hora de arranque, cantidad, tandas, pausas y texto cambian cada día). 12 plantillas por perfil (~680 variantes c/u); las 40 viejas archivadas |
 | 15/11 | Botón de entrenamiento de línea: 20 por día durante 7 días, sin quitar la elección manual |
 | 15/11 | Con Wasender el primer mensaje no lleva botones |
 | 15/11 | Tope: nunca más de 3 automáticos sin respuesta a la misma persona |
 | 15/11 | Freno: campaña con ≥100 envíos y <1 % de respuesta se frena (se puede saltear a mano) |
-| 14/11 | Aviso de captación a destinatarios: pendiente hasta que ella lo pida |
+| 14/11 | Aviso de captación a destinatarios: pendiente hasta que él lo pida |
 | Marketing | Presupuesto tipo factura, 10 % de descuento de bienvenida al final, video de propuesta <1 min |
 
 ## Bots y conversaciones
@@ -91,7 +91,7 @@ Todo lo demás son **decisiones de negocio** de la responsable (abajo), no traba
 | 15/11 | **No hay pausa general**: los bots responden siempre los entrantes; seguimiento y lo programado siguen normal |
 | 16/10, 18/10 | Atención 24 h en todos los rubros. Asesores lunes a sábado 8–21 h; fuera de esa franja la IA atiende, intenta captar y agenda la llamada |
 | 15/11 | **El bot nunca da precios** (ni números, rangos ni cuotas). Puede explicar de qué depende un valor (25/10) |
-| 24/10 | El bot no promete día ni hora del contacto; quién atiende lo asigna la responsable a mano |
+| 24/10 | El bot no promete día ni hora del contacto; quién atiende lo asigna el dueño a mano |
 | 24/10 | Marketing: el cierre lo hace una persona; el bot nunca pasa datos de pago. Solo pregunta precio → pasa a una persona y no es captado |
 | 24/10 | Coberturas no recomienda una prestadora: compara y deriva siempre a un vendedor |
 | 25/10 | «Ya tengo abogado»: una sola pregunta por segunda opinión, sin cuestionar a su abogado; si dice que no, se detiene |
@@ -157,7 +157,7 @@ Todo lo demás son **decisiones de negocio** de la responsable (abajo), no traba
 | 20/11 | Feed y estética del kit de perfil: aprobados | — |
 | 20/11 | Temas: ACARA no → «¿Contado, prendario o plan?»; aumento de prepagas no → «¿Pagás por cosas que no usás?»; Black Friday Autos 27/11 sí, sin números reales; cuota de Coberturas «antes de pagar, compará» aprobada sin números; todo lo demás aprobado (VITA laboral y penal, «Lo que dijo la Corte») | — |
 | 20/11 | TikTok y YouTube: abrir dentro de los 10 días | — |
-| 20/11 | Destacadas: publicadas y armadas a mano por la responsable en los 4 rubros | — |
+| 20/11 | Destacadas: publicadas y armadas a mano por el dueño en los 4 rubros | — |
 
 ## Landings, SEO y Google
 
@@ -167,3 +167,92 @@ Todo lo demás son **decisiones de negocio** de la responsable (abajo), no traba
 | 20/11 | Medición de punta a punta: UTM, referencia en WhatsApp y formulario, GA4, píxel de Meta, Search Console y Bing |
 | 20/11 | Perfil de Empresa de Google para VITA y Autos si atienden en persona; canales de YouTube para Shorts |
 | Siempre | Un llamado a la acción predeterminado por rubro y canal para identificar el origen de cada lead (lo define Claude) |
+
+## Respuestas del dueño, 21/11 (bloque A de preguntas)
+
+- **Modelo del negocio:** son dueños del panel; captan clientes y los **derivan a mano** a profesionales de cada rubro. El éxito sigue siendo captado + derivado.
+- **«Leonardo Gonzalez» es un nombre de presentación** del bot, no una persona que atiende.
+- **Calendario:** consultas y derivaciones de lunes a lunes; **las bases no se corren todos los días** (falta confirmar qué días sí).
+- **Avisos de captado:** hoy no se avisa a nadie. Pendiente; no configurar destinatarios hasta que lo definan.
+- **Comentarios con palabra clave:** pendiente automatizarlos.
+- **Uso del panel:** PC y celular por igual, 2 personas → el celular no es secundario (los desbordes de `/agentes` y `/resultados` importan).
+
+## Respuestas del bloque B y siguientes, 21/11
+
+- **Quiénes son:** dos personas, desarrolladores y dueños del proyecto. **El que responde es hombre** (lo aclaró al responder «productora»): en los textos nuevos no usar «el dueño»; usar «el dueño» o «los dueños».
+- **Modelo en todos los rubros:** conseguir el cliente cerrado (que acepta el contacto) y derivarlo a mano por WhatsApp: VITA → abogados; Coberturas → asesores (rotan); 0 km → vendedores de concesionarias cercanas a la localidad del cliente (se vende cualquier marca o modelo); Marketing → lo hacen ellos.
+- **Siempre se apunta a la llamada** (VITA y Coberturas); presencial solo si el cliente lo pide.
+- **Bases:** lunes a sábado de 8 a 21 h. Mismo horario de atención de abogados.
+- **Prioridades:** 1 VITA (esencial) · 2 Marketing (proyectos grandes) · 3 Coberturas (grupos familiares) y 0 km.
+- **VITA:** en bases mixtas, reconocer y priorizar las lesiones más graves (fracturas, etc.).
+- **Coberturas:** el cliente que más deja es el grupo familiar.
+- **Marketing:** buscan un servicio rápido, fácil, de ticket alto, que Claude pueda producir, y que deje dólares. Los precios de la web ($299.000 / $499.000 / $699.000) siguen vigentes, en pesos.
+- **Cómo se enteran de un captado:** entrando al panel.
+- **Corrección de proceso:** el recorrido del panel del 21/11 no leyó chats ni configuración; se repite como usuario real (informe H).
+
+## Respuestas del bloque C (bases y campañas), 21/11
+
+- **Bases:** llegan todas las semanas, de todos los rubros; son la fuente principal de captación. Origen y costo no importan. Marketing usa el scraper del panel.
+- **Estrategia de crecimiento:** mejorar redes, landings y contenido orgánico; publicidad paga más adelante.
+- **Arquitectura de líneas (decisión del dueño):** 1 línea fija por rubro en la API oficial de Meta, solo para recibir y centralizar consultas (landing, redes, respuestas). Los envíos en frío, el seguimiento y el recontacto salen por **varias líneas Wasender**.
+- **Costo Meta:** cero en inicios de conversación. Migrar todos los inicios a Wasender. Meta solo para publicidad.
+- **Error de pago de Coberturas (131042):** resuelto por el dueño.
+- **Ritmo:** una campaña por rubro por semana. Volumen semanal: VITA 1.000–2.500 · 0 km 500–1.000 · Coberturas 1.000–2.000 · Marketing 5.000.
+- **Análisis del panel:** el dueño pide un recorrido exhaustivo (agentes, roles, scraper, conversaciones). En curso: informes H (chats, campañas, captados) e I (agentes, roles, Marketing, líneas).
+
+## Respuestas de los bloques D y E, 21/11
+
+- **Corrección del dueño:** el panel **ya envía por Wasender o por Meta**, con plantillas, algoritmo de envío y todo integrado. No es una tarea pendiente: lo que falta es conectar más líneas y usarlas así.
+- **Líneas:** hoy las 4 fijas de Meta. Esta semana se suman chips de Wasender: 4 VITA, 4 Marketing, 3 Coberturas, 2 0 km. Vinculación por QR o código.
+- **Marketing en Meta:** falta vincular el número (pendiente del dueño).
+- **Idea futura:** gestor propio de muchos teléfonos con proxies o IP rotativas por número, app propia y pasarela API al panel para reconectar solo.
+- **Penal se unifica con Civil.**
+- **Bots:** andan bien, se pulen a diario y generan informes. Dicen que son IA **solo si les preguntan**; tienen que sonar lo más humanos posible.
+- **Regla para mejoras de bots:** siempre como **propuesta** con su información, **sumando** a la base existente (sin borrar ni rehacer) y **con autorización** de los dueños.
+- **Rol del cerebro (dueño, 21/11):** entender absolutamente todo, estar presente en todas las sesiones y chats para contextualizar, gestionar mejor e identificar errores y mejoras. Base: panel completo + código, no solo la web.
+
+## Respuestas de los bloques F a J, 21/11
+
+- **Panel:** se usan todas las pantallas, sobre todo los captados; está bien como está. Las ventas cerradas se van a registrar de otra forma (pendiente), por ahora sin monto. El código de ingreso queda como está por ahora.
+- **Contenido — flujo de aprobación:** boceto de reel, posteo, carrusel o historia **de un solo rubro** → el dueño aprueba el diseño → se produce → se programa en Metricool.
+- **Redes:** solo publica Metricool; el dueño toca a mano bio y similares. TikTok y YouTube pendientes. Black Friday de Autos es solo contenido. Referencias de reels: las pasa después.
+- **Web y medición:** sin píxel de Meta, sin aviso de cookies, sin logos vectoriales, sin fotos reales, sin firma en artículos. Acceso a Search Console y Analytics: sí, más adelante.
+- **Plata:** proponer herramientas y deciden juntos (tope razonable). Gemini USD 30 por mes: **avisar al 80 %**.
+- **Informes:** en el panel, sección Perfiles, **diario, semanal y mensual** (pendiente de construir, con autorización).
+- **AutosMix e inmobiliaria:** fuera del proyecto. Se sacan del cerebro.
+- **Entrenamiento diario del cerebro:** tarea programada todas las noches; el dueño pidió que relea todo (código, chats viejos y nuevos, archivos) y lo sume a la memoria.
+
+## Órdenes del 21/11 (tarde)
+
+- **Ajustes del 19/11** (rama `claude/pensive-galileo-d6ephy`: Hoy más limpio, archivar prospectos, archivo automático a 30 días): **quedan pendientes**, sin publicar.
+- **Producción** (Vercel, base, Metricool): solo si el dueño lo pide o si Claude pide autorización y la recibe. Hasta nuevo aviso, el cerebro trabaja en solo lectura.
+- **Roles de Claude:** diseñador gráfico senior, programador y desarrollador senior, marketer senior e ingeniero de software senior, usando todas las herramientas disponibles.
+- **Profundidad:** leer todo a detalle (panel de punta a punta, código, cada archivo y cada respuesta) y volcarlo a la memoria.
+
+## Pedido del dueño, 21/11: el cerebro dentro del panel (pendiente, propuesta)
+
+- Sumar el cerebro al panel con el estilo de diseño del panel, una **bandeja para hablar con Claude** desde el panel y el cerebro, y que el cerebro **aprenda del panel**.
+- Base existente para construir encima: «Bandeja para Claude» (`/bandeja`, tabla `bandeja_claude`, flujo en `.claude/referencias/bandeja-claude.md`) y el asistente «Pedile algo» (`/asistente`, Gemini, charlas en `0634_asistente_charlas`).
+- Se diseña como propuesta, después de terminar el análisis; producción solo con autorización.
+- **Tareas programadas eliminadas a pedido del dueño (21/11):** entrenamiento diario y recordatorios de retomar. El entrenamiento diario queda pendiente. Se conserva el de reels del chat de Metricool.
+
+## Órdenes que faltaban, encontradas al releer todo (21/11, noche)
+
+| Fecha | Orden o decisión | Fuente |
+|---|---|---|
+| 20/11 | El cerebro se actualiza solo y suma por su cuenta roles, skills y plugins que sirvan | este chat |
+| 20/11 | Objetivo: orquestar y ordenar todo desde este chat, con el cerebro como memoria y biblioteca | este chat |
+| 21/11 | Lo de Cowork es viejo: sirve para ver hacia dónde se apunta; lo vigente está en los chats de Code | este chat |
+| 21/11 | De su lado solo pasa a privado LEGAL-CRM; lo demás se subió igual con su autorización | este chat |
+| 21/11 | «Metricool context» la maneja él a mano: se puede leer, no se le mandan mensajes ni se toca | este chat |
+| 20/11 07:23 | Dejó **activado** el pase automático a créditos pagos de Claude, con freno y checkpoint al detectarlo. Alcance y tope sin definir: **preguntar** (choca con «no se paga nada sin autorización») | Perfiles VITA (volcado) |
+| 20/11 06:00 | Textual: reversionar las piezas «así Meta no nos detecta que son publicaciones duplicadas» y subir el volumen. La regla «variantes reales» fue interpretación de Claude: **preguntar cuál rige** | Perfiles VITA (volcado) |
+| 20/11 17:15–17:20 | «Este es el chat de redes… creá los reels y publicalos tal cual como venías»; «publicalos ya a partir de hoy y usá subagentes» (de segunda mano) | Metricool context |
+| 21/11 05:43 | «Deja así»: queda el «3 %» en la historia de Coberturas del 25/11 18:30 y en su reel. Excepción a «Coberturas sin números» | Metricool context |
+| 21/11 05:53 | Creó los 4 PR de landings sin saber que no hacía falta; pasan a borrador y no se aprueban hasta probar la medición | Metricool context |
+| 19/11 | «Incidencias dejarlo tal cual», «Campañas dejarla tal como está». El rediseño visual completo espera su ok | Rediseño (volcado) |
+| 20/11 08:12 | «No toques ni alteres nada de lo que ya existe» (pedido de asistente IA); el rediseño del Laboratorio quedó afuera | Claude común |
+| 13/11 08:12 | El modelo secundario solo para tareas muy sencillas (antes estaba fechado 14/11) | Contexto del proyecto |
+| 15/11 | «¿De dónde sacaron mi número?»: se respeta como está armado; la revisión legal del origen de bases quedó abierta | Contexto del proyecto |
+
+**Respuesta pendiente que le debía (21/11):** «¿Qué publicarías o tocarías en producción?» → nada sin su ok. Propuestas: el plazo del contacto 2, separar retenidos por rubro, los arreglos de celular y programar en Metricool solo lo que él apruebe. Detalle en `15-hallazgos-21-11.md`.

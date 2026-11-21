@@ -8,7 +8,7 @@ fuentes: Contexto Fase 2 (§1, 2, 5), Contexto Fase 1 (§1, 2, 4, 5), .claude/re
 
 ## Qué es
 
-Un **call center automatizado de captación** para cuatro negocios de la responsable. Un panel propio (el CRM) recibe todas las consultas de WhatsApp (y mensajería de Instagram y Facebook); un bot de IA por rubro conversa las 24 h, califica, detecta interés real, **capta** (la persona acepta el siguiente paso, con evidencia) y lo deriva a una persona del equipo que cierra la venta. Alrededor: 4 landings (una por marca) y una operación de redes con reels animados propios programados en Metricool.
+Un **call center automatizado de captación** para cuatro negocios del dueño. Un panel propio (el CRM) recibe todas las consultas de WhatsApp (y mensajería de Instagram y Facebook); un bot de IA por rubro conversa las 24 h, califica, detecta interés real, **capta** (la persona acepta el siguiente paso, con evidencia) y lo deriva a una persona del equipo que cierra la venta. Alrededor: 4 landings (una por marca) y una operación de redes con reels animados propios programados en Metricool.
 
 Ciclo: **CAPTAR → RESPONDER → CALIFICAR → AGENDAR → CERRAR → INFORMAR**.
 
@@ -61,7 +61,7 @@ Recorrido buscado: contenido en redes o búsqueda en Google → perfil o landing
 - **Series:** «Antes de firmar», «El minuto después», «¿Firmás o no?», «Mito o verdad», «Te pasó yendo al trabajo».
 - **Palabras clave:** FIRMA, SEGURO, TRAYECTO, ART, ALTA, DAÑOS; desde 20/11 DESPIDO, LIQUIDACION, AGUINALDO, REGISTRO, REFORMA, TELEGRAMA, CERTIFICADO, PENAL.
 - **Hashtags:** #accidentedetransito #seguros #abogados #buenosaires #CABA (adaptar a laboral o penal).
-- **Límites de contenido (Colegio de Abogados):** sin prometer indemnización, resultado ni plazos; sin comparar con colegas ni ofrecer honorarios. Textos de la tanda 10/11 aprobados por la responsable sin revisión profesional.
+- **Límites de contenido (Colegio de Abogados):** sin prometer indemnización, resultado ni plazos; sin comparar con colegas ni ofrecer honorarios. Textos de la tanda 10/11 aprobados por el dueño sin revisión profesional.
 - **Asesor que se presenta en los bots (los 4 perfiles):** Leonardo Gonzalez (16/10).
 
 ### Compara Tu Obra Social — perfil `coberturas_medicas`
@@ -128,7 +128,7 @@ Recorrido buscado: contenido en redes o búsqueda en Google → perfil o landing
 - Logos listos en `.claude/referencias/redes/logos/` (PNG transparentes) y originales en `logos/originales/`.
 - Faltan logos vectoriales (SVG o PNG ≥2000 px) para 4K y ninguna marca tiene logotipo con el nombre dibujado. Los logos de las landings de VITA, Coberturas y Autos no son los originales.
 
-## Otros proyectos de la responsable (fuera del CRM)
+## Otros proyectos del dueño (fuera del CRM)
 
 | Proyecto | Estado |
 | --- | --- |

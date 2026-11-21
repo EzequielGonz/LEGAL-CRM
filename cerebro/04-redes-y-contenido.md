@@ -11,7 +11,7 @@ fuentes: Fase 2 §7–9, Fase 1 §5.3 y §11, .ai-context/handoff-redes-4-marcas
 - >750 piezas en 30 días con **0 mensajes** en Business Suite. Vista media 1,2–2,9 s; 91–97 % se va antes de 3 s en IG. 8 interacciones en 274 reels de IG; 23 «me gusta» en 296 de FB. Reels con 0 vistas en IG: 31–54 % (74 % en VITA). Seguidores nuevos 0–3 por cuenta. Formularios de las landings: 0 desde siempre. Consultas con palabra clave: 2 (VITA, «ALTA» y «ART»). En VITA el mismo tema salió hasta 8 veces en 10 días.
 - Lo que mejor funcionó: VITA IG «¿Firmás o no?» y «Lo que hacés después del choque cuenta» (106 y 105 vistas, arrancan con conflicto); Autos en FB (130 vistas por reel, 9.643 en total); Coberturas en FB a la tarde-noche.
 - Conclusión: el problema es distribución, retención y que el recorrido hasta la consulta no se mide. Todo se define en los primeros 3 s y en lo distintas que son las piezas.
-- **Respuesta vigente (20/11):** mini historias animadas por marca con personaje recurrente, conflicto en el segundo 1, cierre con palabra clave; **más** volumen, variantes reales y medición. (La auditoría de Chrome del mismo día proponía bajar volumen, cara real y botón: la responsable lo rechazó.)
+- **Respuesta vigente (20/11):** mini historias animadas por marca con personaje recurrente, conflicto en el segundo 1, cierre con palabra clave; **más** volumen, variantes reales y medición. (La auditoría de Chrome del mismo día proponía bajar volumen, cara real y botón: el dueño lo rechazó.)
 
 ## Temas que más retuvieron (punto de partida)
 
@@ -59,9 +59,9 @@ VITA: trayecto, culpa, 24 h, ART · Coberturas: monotributo, cambio de prepaga, 
 | 24/10–05/11 | 2 de feed + 5 historias por día (304) + 96 reels únicos (184 programados, con Trial Reels; en Kocos fallaron 22 por mínimo de seguidores) |
 | 06–09/11 | Hueco sin publicaciones |
 | 10–24/11 | Tanda de 600 (150 por marca), cierre «el botón está en el perfil». Textos VITA y Coberturas aprobados el 10/11 |
-| 10/11 | VITA IG «restringida»; la responsable la destrabó |
+| 10/11 | VITA IG «restringida»; el dueño la destrabó |
 | 13/11 19:00–17/11 | Kocos IG desconectado: fallaron 44 en IG (FB salió). Reconectado 18/11. Las 44 se reprogramaron 25–29/11 y el 20/11 se pasaron a borrador (copia en `docs/redes/kocos-44-borrador-2026-11-20.json`; revertir con `draft=false`) |
-| 20/11 | 81 historias para destacadas publicadas 1:28–1:50 y **armadas a mano por la responsable** en los 4 rubros. Arranca el cronograma doble |
+| 20/11 | 81 historias para destacadas publicadas 1:28–1:50 y **armadas a mano por el dueño** en los 4 rubros. Arranca el cronograma doble |
 
 ## Estructura de texto de cada reel
 
