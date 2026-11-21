@@ -86,7 +86,7 @@ const PANT = {
   form(n, {frio = 0, orden = 0}, C) { let s = fondoApp('Pedidos de fiestas', 'Formulario', true);
     if (!orden) { for (let i = 0; i < 7; i++) { const x = 260 + hash(i + 3) * 420, y = 480 + hash(i + 8) * 900; s += `<g transform="rotate(${(hash(i) - .5) * 40},${x + 110},${y + 70})"><rect x="${x}" y="${y}" width="230" height="150" fill="${frio ? fria(frio) : '#fff6b8'}"/>${[0, 1, 2].map(j => `<path d="M${x + 20},${y + 40 + j * 36} q50,-14 100,0 t90,0" stroke="#5a6" stroke-width="4" fill="none" opacity=".6"/>`).join('')}</g>`; }
       return s + `<rect x="300" y="1500" width="480" height="90" rx="45" fill="#e5484d"/>` + T(540, 1558, '¿Y el pedido de Marta?', 32, 800, '#fff', 'middle'); }
-    const f = C.cards || ['Nombre y contacto', 'Qué y para cuántos', 'Día y hora'], v = C.vals || ['Marta · 11 5555 0000', 'Torta frutillas · 12', '24/12 · 10:00 · retiro'];
+    const f = C.cards || ['Nombre y contacto', 'Qué y para cuántos', 'Día y hora'], v = C.vals || ['Marta · por mensaje', 'Torta frutillas · 12', '24/12 · 10:00 · retiro'];
     f.forEach((x, i) => { const y = 480 + i * 250; s += T(240, y, x, 32, 800, CAFE) + `<rect x="230" y="${y + 20}" width="620" height="120" rx="20" fill="#fff" stroke="${orden > i ? NAR : '#d8cbbd'}" stroke-width="5"/>` + (orden > i ? T(260, y + 96, v[i], 34, 700, TINTA) : ''); });
     return s + (orden >= 3 ? `<rect x="230" y="1300" width="620" height="120" rx="60" fill="${NAR}"/>` + T(540, 1378, 'Pedido guardado', 42, 800, '#fff', 'middle') : ''); },
   // mapa genérico dibujado: calles, manzanas y pines (sin logos de terceros)
@@ -159,11 +159,11 @@ const PRIMEROS = {
 };
 
 export async function armarKit(V, X = {}) {
-  const C = Object.assign({}, X, V.cfg || {}); const PJ = PJS[C.pj || 'romina']; const QUIEN = C.q || 'romina';
+  const C = Object.assign({}, X, V.cfg || {}); const PJ = C.pj === 'tomi' ? TOMI : PJS[C.pj || 'romina']; const QUIEN = C.q || 'romina';
   const pantalla = (n, o) => (PANT[C.pant] || PANT.chats)(n, o, C);
   const O = obra(V, {nombre: 'Kocos Marketing', logo: 'marketing.png', ctaSub: 'y te respondemos', hookHTML: C.hook, hookHasta: 1.6, notas: []});
   { const st = document.createElement('style'); st.textContent = '#num{left:50px!important;width:250px!important;top:120px!important;font-size:200px!important}'; document.head.appendChild(st); }
-  document.documentElement.style.cssText += `--f1:Outfit;--f2:Manrope;--acc:${NAR};--hs:130px;--hw:800;--em:normal;--kwCol:#fff;--logoH:90px;--velo:rgba(27,27,27,.92);--ctaTop:640px;${ganchoCss(C.hook)}`;
+  document.documentElement.style.cssText += `--f1:Outfit;--f2:Manrope;--acc:${NAR};--hs:130px;--hw:800;--em:normal;--kwCol:#fff;--logoH:90px;--velo:rgba(27,27,27,.92);--ctaTop:640px;${ganchoCss(C.hook)};--hookTop:${C.hookTop || 1150}px`;
   const F = n => V.frases.find(f => f.marca === n); const FI = i => V.frases.find(f => f.item === i); const cta = V.frases.find(f => f.cta); const pL = poser(V, QUIEN); const fr = V.frases;
   // 1 · el lugar con Romina (y Tomi si la idea lo pide)
   const L = (LUGARES[C.lugar] || LUGARES.mostrador)(C);
@@ -191,7 +191,7 @@ export async function armarKit(V, X = {}) {
     {t0: gi.t - .05, esc: e2, cam: k => ({x: 540, y: 960, z: lerp(1.12, 1.0, ease(k)), foco: 1}), act: t => { pant.innerHTML = pantalla(n0, {orden: win(t, gi.t + .3, gi.t + .6) > 0 ? 1 : 0}); cont.innerHTML = ''; }},
     {t0: FI(1).t - .1, esc: e2, cam: k => ({x: lerp(560, 580, k), y: lerp(820, 800, k), z: 1.4, foco: 1}), act: t => { pant.innerHTML = pantalla(n0, {orden: 1}); }},
     {t0: FI(2).t - .1, esc: e3, cam: k => ({x: 540, y: lerp(980, 940, k), z: lerp(1.05, 1.18, ease(k)), r: lerp(-1.5, 1, k), foco: 1, ap: 4}), act: (t, k) => {
-      const kk = backOut(win(t, FI(2).t, FI(2).t + .35), 2); const txt = (C.items || [])[1] || FI(2).show.replace(/\*/g, '');
+      if (t < FI(2).t - .3) { card.innerHTML = ''; return; } const kk = backOut(win(t, FI(2).t, FI(2).t + .35), 2); const txt = (C.items || [])[1] || FI(2).show.replace(/\*/g, '');
       card.innerHTML = `<g transform="translate(540,1460) scale(${.6 + .4 * kk}) rotate(${-2 + k * 2})"><rect x="-470" y="-130" width="940" height="260" rx="40" fill="#fff" stroke="${NAR}" stroke-width="10"/><circle cx="-370" cy="0" r="64" fill="${NAR}"/>` + T(-370, 26, 2, 72, 800, '#fff', 'middle') + T(-270, 22, txt.length > 26 ? txt.slice(0, txt.lastIndexOf(' ', 26)) : txt, 52, 800, TINTA) + (txt.length > 26 ? T(-270, 84, txt.slice(txt.lastIndexOf(' ', 26) + 1), 44, 700, CAFE) : '') + '</g>'; }},
     {t0: FI(3).t - .1, esc: e2, cam: k => ({x: 540, y: lerp(1200, 1160, k), z: 1.35, foco: 1}), act: t => { pant.innerHTML = pantalla(n0, {orden: 3}); }},
     {t0: F('alivio').t - .1, esc: e1, cam: k => ({X: lerp(680, 700, k), Y: 1000, z: lerp(2.2, 2.3, ease(k)), foco: 1, ap: 5}), act: t => { poseT(t); pL(rom, t, {x: 640, y: 1430, s: 1.0, hR: 80, cR: 90, hL: 20, cL: 30, ceja: .5, sonrisa: 1, mira: .3, cab: 4}); prop(); }},

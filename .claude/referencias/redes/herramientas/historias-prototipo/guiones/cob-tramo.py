@@ -85,3 +85,82 @@ R = {
    F('gabi_c', 'Con la lista en la mano, comparo.', 'Con la lista en la mano, comparo.', .3, marca='alivio'),
    F(N, 'Comentá «comparar», y te respondemos.', 'Comentá *COMPARAR*', .2, cta=1, r=-3)], grade='menta'),
 }
+
+# ---------- 22/11 ----------
+R.update({
+ # 22/11 08:50 · familia A · los Ferreyra en la mesa: ¿Martina y Benja al plan de Gabriel o al de Vero?
+ 'cob-familia-a': _r('FAMILIA', 'En familia', 'Familia:<br><em>¿la sumás a tu plan?</em>', 'vero', 'vero_c', [
+   F('vero_c', '¿Los chicos van a tu plan o al mío?', '¿Los chicos van a tu plan o al mío?', .35, marca='notif'),
+   F(N, 'Sumar a la familia parece fácil, hasta que mirás los dos planes.', 'Sumar a la familia parece fácil, *hasta que mirás los dos planes.*', .35, marca='carta'),
+   F(N, 'Todos juntos no siempre conviene.', 'Todos juntos *no siempre conviene.*', .08),
+   F(N, 'Depende.', '*Depende.*', .5, r=-6, marca='lupa'),
+   F(N, 'Mirá tres cosas.', 'Mirá *tres cosas:*', .25),
+   F(N, 'Uno: la edad de cada uno.', 'La edad *de cada uno.*', .3, item=1),
+   F(N, 'Dos: los aportes de cada uno, si trabajan.', 'Los aportes *de cada uno.*', .3, item=2),
+   F(N, 'Tres: qué usa cada uno de verdad: pediatra, guardia, especialistas.', 'Qué usa cada uno: *pediatra, guardia, especialistas.*', .4, item=3),
+   F('vero_c', 'Bueno, hagamos las cuentas con calma.', 'Bueno, hagamos las cuentas con calma.', .3, marca='alivio'),
+   F(N, 'Comentá «familia», y te respondemos.', 'Comentá *FAMILIA*', .2, cta=1, r=-3)]),
+ # 22/11 10:30 · opcion-tarda B · el cambio de obra social no es de un día para el otro (sin cifras); abre con el papel en cenital, paleta clara
+ 'cob-opcion-tarda-b': _r('CAMBIO', 'Antes de cambiarte', 'Cambio de obra social:<br><em>no es de un día para el otro</em>', 'lucia', 'lucia_c', [
+   F('lucia_c', 'Lo pido el viernes, y el lunes ya está, ¿no?', 'Lo pido el viernes y el lunes ya está, ¿no?', .35, marca='notif'),
+   F(N, 'Pedís la opción de cambio de obra social, y esperás la nueva enseguida.', 'Pedís el cambio de obra social y *esperás la nueva enseguida.*', .35, marca='carta'),
+   F(N, 'El cambio no es inmediato:', 'El cambio *no es inmediato:*', .08),
+   F(N, 'tarda meses.', '*tarda meses.*', .5, r=-6, marca='lupa'),
+   F(N, 'Planificalo con tres cosas.', 'Planificalo con *tres cosas:*', .25),
+   F(N, 'Uno: preguntá desde cuándo rige la nueva.', 'Preguntá *desde cuándo rige* la nueva.', .3, item=1),
+   F(N, 'Dos: mientras tanto, seguí usando la que tenés.', 'Mientras tanto, *seguí usando la que tenés.*', .3, item=2),
+   F(N, 'Tres: si estás en un tratamiento, avisá antes.', 'Si estás en un tratamiento, *avisá antes.*', .4, item=3),
+   F('lucia_c', 'Ah, entonces lo pido con tiempo.', 'Ah, entonces lo pido con tiempo.', .3, marca='alivio'),
+   F(N, 'Comentá «cambio», y te respondemos.', 'Comentá *CAMBIO*', .2, cta=1, r=-3)], ap='papel', grade='menta'),
+ # 22/11 13:50 · cartilla-guardia A · Vero, de madrugada, con Benja con fiebre: la guardia más cercana no está en su cartilla
+ 'cob-cartilla-guardia-a': _r('CARTILLA', 'Antes del precio, la cartilla', 'Cartilla:<br><em>lo descubriste en la guardia</em>', 'vero', 'vero_c', [
+   F('vero_c', '¿Cómo que no está en mi cartilla?', '¿Cómo que no está en mi cartilla?', .35, marca='notif'),
+   F(N, 'De madrugada, con tu hijo con fiebre, la guardia más cercana no te atiende por tu plan.', 'De madrugada, con fiebre, *la guardia más cercana no está en tu plan.*', .35, marca='carta'),
+   F(N, 'La cartilla se mira antes,', 'La cartilla se mira *antes,*', .08),
+   F(N, 'no en la guardia.', '*no en la guardia.*', .5, r=-6, marca='lupa'),
+   F(N, 'Hoy, buscá tres cosas.', 'Hoy, buscá *tres cosas:*', .25),
+   F(N, 'Uno: tu guardia más cercana, por dirección.', 'Tu guardia más cercana, *por dirección.*', .3, item=1),
+   F(N, 'Dos: los especialistas que usás, en tu zona.', 'Tus especialistas, *en tu zona.*', .3, item=2),
+   F(N, 'Tres: las farmacias adheridas, cerca de tu casa.', 'Farmacias adheridas, *cerca de tu casa.*', .4, item=3),
+   F('vero_c', 'Ya la tengo agendada. Nunca más a ciegas.', 'Ya la tengo agendada. Nunca más a ciegas.', .3, marca='alivio'),
+   F(N, 'Comentá «cartilla», y te respondemos.', 'Comentá *CARTILLA*', .2, cta=1, r=-3)], cam='mano', grade='frio'),
+ # 22/11 16:30 · vacaciones B · Lucía arma la valija para la costa: ¿su cobertura viaja con ella? Abre con el celular, paleta nocturna
+ 'cob-vacaciones-b': _r('CARTILLA', 'Antes de viajar', 'Antes de armar la valija,<br><em>llamá a tu cobertura</em>', 'lucia', 'lucia_c', [
+   F('lucia_c', '¿Y si me pasa algo en la costa?', '¿Y si me pasa algo en la costa?', .35, marca='notif'),
+   F(N, 'Armás la valija, y das por hecho que tu cobertura viaja con vos.', 'Armás la valija y das por hecho que *tu cobertura viaja con vos.*', .35, marca='carta'),
+   F(N, 'Antes de salir,', 'Antes de salir,', .08),
+   F(N, 'llamá.', '*llamá.*', .5, r=-6, marca='lupa'),
+   F(N, 'Preguntá tres cosas.', 'Preguntá *tres cosas:*', .25),
+   F(N, 'Uno: qué guardias tenés en tu destino.', 'Qué guardias tenés *en tu destino.*', .3, item=1),
+   F(N, 'Dos: el teléfono de emergencias: agendalo.', 'El teléfono de emergencias: *agendalo.*', .3, item=2),
+   F(N, 'Tres: la credencial a mano, digital o en papel.', 'La credencial a mano, *digital o en papel.*', .4, item=3),
+   F('lucia_c', 'Listo: valija, credencial y a la costa.', 'Listo: valija, credencial y a la costa.', .3, marca='alivio'),
+   F(N, 'Comentá «cartilla», y te respondemos.', 'Comentá *CARTILLA*', .2, cta=1, r=-3)], ap='celu', grade='noche'),
+ # 22/11 20:50 · mono-revisa A · Lucía abre tres cajones: familia, cartilla y adónde va su aporte
+ 'cob-mono-revisa-a': _r('MONO', 'Tu recibo explicado', 'Monotributo:<br><em>lo que nadie te dijo</em>', 'lucia', 'lucia_c', [
+   F('lucia_c', '¿Y esto también viene con el monotributo?', '¿Y esto también viene con el monotributo?', .35, marca='notif'),
+   F(N, 'Pagás el monotributo todos los meses, y nunca abriste lo que incluye.', 'Pagás el monotributo y *nunca abriste lo que incluye.*', .35, marca='carta'),
+   F(N, 'Una parte va a tu obra social,', 'Una parte va *a tu obra social,*', .08),
+   F(N, 'revisala.', '*revisala.*', .5, r=-6, marca='lupa'),
+   F(N, 'Abrí tres cajones.', 'Abrí *tres cajones:*', .25),
+   F(N, 'Uno: a qué obra social va tu aporte.', 'A qué obra social *va tu aporte.*', .3, item=1),
+   F(N, 'Dos: si sumaste a tu familia.', 'Si sumaste *a tu familia.*', .3, item=2),
+   F(N, 'Tres: qué cartilla tenés cerca.', 'Qué cartilla *tenés cerca.*', .4, item=3),
+   F('lucia_c', 'Tres cajones, y todo en orden.', 'Tres cajones, y todo en orden.', .3, marca='alivio'),
+   F(N, 'Comentá «mono», y te respondemos.', 'Comentá *MONO*', .2, cta=1, r=-3)], ap='caida'),
+})
+R.update({
+ # 22/11 19:20 · R-cob-65-b-1 · remake: Gabriel camina las dos cuadras con la carta de la prepaga de su mamá (vereda de Villa Urquiza), cámara en mano
+ # (la edad y la antigüedad son el dato aprobado del tema; no hay cifras de cuotas ni de aumentos)
+ 'cob-65-b-r1': _r('65', 'Tus viejos y la prepaga', '65 y muchos años<br>en la misma prepaga:<br><em>leé esto</em>', 'gabriel', 'gabi_c', [
+   F('gabi_c', 'Ma, ¿te aumentan por cumplir años?', 'Ma, ¿te aumentan por cumplir años?', .35, marca='notif'),
+   F(N, 'Tu mamá cumple sesenta y cinco, y le llega una carta de la prepaga.', 'Tu mamá cumple 65 y *le llega una carta de la prepaga.*', .35, marca='carta'),
+   F(N, 'Con más de diez años en la misma prepaga,', 'Con más de diez años en la misma prepaga,', .08),
+   F(N, 'no le pueden aumentar por edad.', '*no le pueden aumentar por edad.*', .5, r=-6, marca='lupa'),
+   F(N, 'Hacé tres cosas.', 'Hacé *tres cosas:*', .25),
+   F(N, 'Uno: revisá desde cuándo está en la prepaga.', 'Revisá *desde cuándo está* en la prepaga.', .3, item=1),
+   F(N, 'Dos: guardá credencial, facturas y alta.', 'Guardá *credencial, facturas y alta.*', .3, item=2),
+   F(N, 'Tres: si le aumentan por edad, consultá.', 'Si le aumentan por edad, *consultá.*', .4, item=3),
+   F('gabi_c', 'Ma, buscá la credencial vieja: la necesitamos.', 'Ma, buscá la credencial vieja: la necesitamos.', .3, marca='alivio'),
+   F(N, 'Comentá «sesenta y cinco», y te respondemos.', 'Comentá *65*', .2, cta=1, r=-3)], cam='mano', grade='calido'),
+})
