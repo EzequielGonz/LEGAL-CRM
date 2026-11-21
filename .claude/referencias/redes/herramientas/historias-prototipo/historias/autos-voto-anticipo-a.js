@@ -1,0 +1,3 @@
+// Autos · voto-anticipo A (21/11 20:50): Juli y Mati discuten con la calculadora en la mesa de la cocina; giro: la linterna del celular proyecta un cartel de autopista; objeto: la calculadora.
+import {armarKit} from './autos-kit.js';
+export const armar = V => armarKit(V, {lugar: 'cocina', noche: true, pjs: ['juli', 'mati'], quien: 'mati', obj: 'calculadora', disp0: '¿ANTICIPO?', disp: ['CUOTA OK', '+ IMPREVISTOS', '= ANTICIPO'], items: ['a', 'b', 'c'], irreal: 'haz', cartel: ['PRIMERO', 'LA CUOTA'], grade: 'noche', mesaProp: '<g transform="translate(760,1262)"><rect x="-50" y="-6" width="100" height="46" rx="8" fill="#22262e"/><rect x="-38" y="0" width="76" height="16" rx="3" fill="#bcd9c4"/></g>'});

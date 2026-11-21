@@ -292,3 +292,21 @@ Las 81 historias destacadas del 20/11 (1:28–1:50) se publicaron todas (verific
   - Los números de la lista van arriba (`--numTop` 400 px).
   - El calendario no puede quedar cortado en el borde.
   - Los globos de diálogo van debajo de la pastilla de marca (y mínimo 345).
+
+## 17. Producción en paralelo (20/11 05:55 en adelante)
+- **Encargo común:** `docs/redes/produccion-2011/ENCARGO-SESION.md`. Guiones por archivo en `historias-prototipo/guiones/*.py` (los carga `historia_guion.py`). Manifiestos en `docs/redes/produccion-2011/manifiestos/`.
+- **Sesiones en la nube (reels, una máquina cada una), creadas 05:58–06:00:**
+  | Tramo | Rama | Sesión |
+  |---|---|---|
+  | Autos 20–24/11 | claude/redes-autos-1 | session_01FuLgnhicuPAirHZn4vT48c |
+  | Coberturas 20–24/11 | claude/redes-cob-1 | session_01FuLgnmCT4QvBrzXiP5Q58T |
+  | Kocos 20–24/11 | claude/redes-mkt-1 | session_01FuLgnkBTFKPWVo584MMXPv |
+  | VITA 20–24/11 | claude/redes-vita-1 | session_01FuLgnjhRH4uHSa7R2jXJRk |
+  | Autos 25–29/11 | claude/redes-autos-2 | session_01FuLgnjU46up7GgBYA7kyCL |
+  | Coberturas 25–29/11 | claude/redes-cob-2 | session_01FuLgnjq3uVbavjFxLrxiuL |
+  | Kocos 25–29/11 | claude/redes-mkt-2 | session_01FuLgnkyd8hEuZTeGMuA1yf |
+  | VITA 25–29/11 | claude/redes-vita-2 | session_01FuLgnmHMjMRpcqJgTczdhR |
+- **Agentes locales en la sesión principal:** reels de hoy 08:50 (`guiones/hoy-0850.py`), reels de hoy 10:30 (`guiones/hoy-1030.py`), historias y carruseles del 20 al 29/11 (`manifiestos/estaticos.csv`).
+- **La sesión principal:** controla manifiestos y Metricool (`getScheduledPosts` por marca y día), programa lo que las sesiones dejen en `estado=alojado`, integra las ramas `claude/redes-*` en `claude/happy-wozniak-ajfi1z` y le pasa a la responsable el conteo por rubro y día.
+- **Cambio de entrega (06:05):** las sesiones en la nube no tienen permiso de `add_repo` a las landings ni Metricool. Entregan `docs/redes/produccion-2011/entregas/<tramo>/<id>.mp4|.jpg` en su rama con el manifiesto en `estado=renderizado`. La sesión principal corre `python3 docs/redes/produccion-2011/integrar.py` (copia a las landings, push a main, comprueba 200 y anota en `registro.csv` con `estado=alojado`) y después programa en Metricool las filas `alojado` y les pone `estado=programado` y `metricool_id`. Para servir archivos sin `http.server`, cob-1 agregó `servir.js` (rama claude/redes-cob-1).
+- **Retomar:** control cada 45 min (send_later) y retomada a las 10:49 pedida por la responsable (trig_01XVUzMxxSaz5RV3rij9hxCT).
