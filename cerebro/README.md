@@ -47,6 +47,7 @@ Esta carpeta es la memoria de trabajo de Claude. Reemplaza tener que releer los 
 | `10-cruce-fase1-fase2.md` | Contradicciones entre los dos documentos de contexto y cómo se resolvió cada una |
 | `11-equipo-y-herramientas.md` | Roles (agencia + ingeniería), skills y plugins por tipo de tarea, agentes, conectores y su estado |
 | `12-preguntas-para-entender.md` | Preguntas abiertas a la responsable para entender el negocio a fondo |
+| `14-estilo-del-dueno.md` | Estilo del dueño: comunicación, diseño, reels, voces, autorizaciones y errores a no repetir |
 | `bitacora.md` | Diario de sesiones y aprendizajes (lo más nuevo arriba) |
 
 ## Fuentes de verdad (en orden)
