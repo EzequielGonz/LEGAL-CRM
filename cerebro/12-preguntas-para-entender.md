@@ -44,11 +44,17 @@ Contestá las que quieras, en el orden que quieras; con una palabra alcanza en m
 ## C. Bases y campañas
 
 15. ★ ¿De dónde comprás las bases, cuánto cuestan y cada cuánto? ¿Qué antigüedad tienen?
+   - ✅ **Respuesta 21/11:** No importa dónde se compran ni cuánto cuestan. Todas las semanas hay bases nuevas: son la fuente principal de captación. Hay que mejorar redes, landings y contenido orgánico; publicidad paga más adelante.
 16. ¿Tenés bases nuevas para cargar? ¿De qué rubro?
+   - ✅ **Respuesta 21/11:** Sí, de todos los rubros. En Marketing usan un scraper (está en el panel).
 17. ★ El 26 % de los mensajes de Jurídico no se entregó esta semana (Meta frenó por rechazo). ¿Seguimos por Meta en la línea CIVIL, probamos otra plantilla o pasamos a Wasender?
+   - ✅ **Respuesta 21/11:** Arquitectura buscada: 1 línea fija por rubro con la API oficial de Meta para recibir consultas (landing, redes) y centralizar. Para envíos en frío, seguimiento y recontacto, varias líneas Wasender: más barato y con más libertad que Meta.
 18. ¿Cuánto querés gastar por mes en mensajes de Meta (cada mensaje de campaña cuesta ~USD 0,07)?
+   - ✅ **Respuesta 21/11:** Nada en inicios de conversación por Meta. Migrar todos los inicios a Wasender. Meta quedaría para publicidad.
 19. ¿Qué medio de pago tiene la cuenta de WhatsApp Business? (una campaña de Coberturas quedó pausada por error de pago)
+   - ✅ **Respuesta 21/11:** Ya se solucionó.
 20. ¿Cada cuánto querés lanzar campañas y cuántos mensajes por día por rubro?
+   - ✅ **Respuesta 21/11:** 1 vez por semana. Por semana: VITA 1.000–2.500; 0 km 500–1.000; Coberturas 1.000–2.000; Marketing 5.000.
 
 ## D. WhatsApp y líneas
 

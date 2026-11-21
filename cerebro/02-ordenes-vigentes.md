@@ -189,3 +189,13 @@ Todo lo demás son **decisiones de negocio** de la responsable (abajo), no traba
 - **Marketing:** buscan un servicio rápido, fácil, de ticket alto, que Claude pueda producir, y que deje dólares. Los precios de la web ($299.000 / $499.000 / $699.000) siguen vigentes, en pesos.
 - **Cómo se enteran de un captado:** entrando al panel.
 - **Corrección de proceso:** el recorrido del panel del 21/11 no leyó chats ni configuración; se repite como usuario real (informe H).
+
+## Respuestas del bloque C (bases y campañas), 21/11
+
+- **Bases:** llegan todas las semanas, de todos los rubros; son la fuente principal de captación. Origen y costo no importan. Marketing usa el scraper del panel.
+- **Estrategia de crecimiento:** mejorar redes, landings y contenido orgánico; publicidad paga más adelante.
+- **Arquitectura de líneas (decisión del dueño):** 1 línea fija por rubro en la API oficial de Meta, solo para recibir y centralizar consultas (landing, redes, respuestas). Los envíos en frío, el seguimiento y el recontacto salen por **varias líneas Wasender**.
+- **Costo Meta:** cero en inicios de conversación. Migrar todos los inicios a Wasender. Meta solo para publicidad.
+- **Error de pago de Coberturas (131042):** resuelto por el dueño.
+- **Ritmo:** una campaña por rubro por semana. Volumen semanal: VITA 1.000–2.500 · 0 km 500–1.000 · Coberturas 1.000–2.000 · Marketing 5.000.
+- **Análisis del panel:** el dueño pide un recorrido exhaustivo (agentes, roles, scraper, conversaciones). En curso: informes H (chats, campañas, captados) e I (agentes, roles, Marketing, líneas).
