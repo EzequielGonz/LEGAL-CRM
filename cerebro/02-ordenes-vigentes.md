@@ -221,3 +221,10 @@ Todo lo demás son **decisiones de negocio** de la responsable (abajo), no traba
 - **Informes:** en el panel, sección Perfiles, **diario, semanal y mensual** (pendiente de construir, con autorización).
 - **AutosMix e inmobiliaria:** fuera del proyecto. Se sacan del cerebro.
 - **Entrenamiento diario del cerebro:** tarea programada todas las noches; el dueño pidió que relea todo (código, chats viejos y nuevos, archivos) y lo sume a la memoria.
+
+## Órdenes del 21/11 (tarde)
+
+- **Ajustes del 19/11** (rama `claude/pensive-galileo-d6ephy`: Hoy más limpio, archivar prospectos, archivo automático a 30 días): **quedan pendientes**, sin publicar.
+- **Producción** (Vercel, base, Metricool): solo si el dueño lo pide o si Claude pide autorización y la recibe. Hasta nuevo aviso, el cerebro trabaja en solo lectura.
+- **Roles de Claude:** diseñador gráfico senior, programador y desarrollador senior, marketer senior e ingeniero de software senior, usando todas las herramientas disponibles.
+- **Profundidad:** leer todo a detalle (panel de punta a punta, código, cada archivo y cada respuesta) y volcarlo a la memoria.
