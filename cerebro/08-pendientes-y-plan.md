@@ -14,13 +14,14 @@ Prioridad: **P0** hoy · **P1** esta semana · **P2** antes del 01/12 · **P3** 
 | 1 | **Producir y programar el cronograma doble**: hoy solo hay 6 piezas nuevas; del 25/11 en adelante VITA, Coberturas y Autos no tienen nada. Producir con 24–48 h de ventaja, repartiendo render en sesiones paralelas | Claude | Pedido completo en `.ai-context/prompt-retomar-redes-2011.md`. Arreglar antes «Lo que dijo la Corte» en `contenido.py` |
 | 2 | Confirmar que «Campaña Graves 1911» arranca a las 08:00 y mirar la tasa de entrega (26 % de fallas la semana pasada) | Claude (mira) | No lanzar ni pausar: si se ve mal, avisar a la responsable |
 | 3 | Revisar la incidencia de amenaza legal abierta del 18/11 (Jurídico) | Responsable | Claude puede resumirla sin datos personales |
+| 3a | **Clave secreta de Supabase expuesta en el chat del 07/09** (la reporta el chat «Contexto completo»; sin verificar). Cambiarla en Supabase y actualizarla en las variables de Vercel | Responsable decide y cambia · Claude verifica que todo siga andando | |
 | 3b | **Línea de Meta de Marketing «Sin acceso al número»**: el bot de Marketing no recibe ni contesta. Revisar token/permiso del número en Meta Business y, si hace falta, renovar la variable en Vercel | Responsable (Meta Business) + Claude (variable y verificación) | Prompt para Cowork listo a pedido |
 
 ## P1 — esta semana
 
 | # | Qué | Quién |
 | --- | --- | --- |
-| 4 | Integrar a `main` las ramas de documentos: cerebro (`admiring-euler`), redes (`happy-wozniak`, PR #77), contexto en Word (`festive-goldberg`) y **rescatar los 18 commits de `gracious-volta`** (herramientas de reels y registro de lo programado) | Claude (si lo aprueba) |
+| 4 | ~~Integrar a `main` las ramas de documentos: cerebro (`admiring-euler`), redes (`happy-wozniak`, PR #77), contexto en Word (`festive-goldberg`) y **rescatar los 18 commits de `gracious-volta`** (herramientas de reels y registro de lo programado)~~ **hecho 20/11 (`66c457b`)** | Claude |
 | 4b | Arreglar la prueba rota en main (`asistente-catalogo.test.ts`: sumar `asistente/charlas` al catálogo o a `FUERA_DEL_CATALOGO`) | Claude |
 | 5 | Publicar los ajustes del panel del 19/11 (rama `claude/pensive-galileo-d6ephy`): renumerar su migración de Archivar a **0635**, revisar el `drop trigger`, integrar con main, typecheck/lint/pruebas/build, aplicar migración, publicar y recorrer | Claude |
 | 5b | Integrar el aviso por correo de formularios (PR #40 `landings-conexion`, 1 conflicto) — queda apagado hasta cargar la clave de Resend | Claude |
@@ -34,6 +35,7 @@ Prioridad: **P0** hoy · **P1** esta semana · **P2** antes del 01/12 · **P3** 
 | 12 | Cargar destinatarios de avisos por perfil (6 captaciones sin aviso) | Responsable decide · Claude configura |
 | 13 | Revisar el 26 % de fallas en Jurídico: base, plantilla, calidad | Claude analiza y propone |
 | 14 | Revisar 403 a robots en Coberturas y Kocos (que no bloquee a Googlebot ni a Metricool) | Claude |
+| 14b | Volcar los 19 chats de Code que faltan a `cerebro-chats` (plan en `traspaso-sesion-2026-11-21.md`) y los de Claude común; después releer todo | Claude (subagentes Haiku, con aprobación de uso) | |
 | 15 | Bugs del recorrido del panel (20/11), en orden: **(a)** Salud no revisa el acceso de las líneas de Meta (Marketing dice «4 en orden» sin acceso); **(b)** Wasender muestra «Día 7 de calentamiento: puede enviar 40» con la sesión cerrada hace días; **(c)** detalle de chat con estados contradictorios («Cerrado (ganado)» + «Requiere atención humana»), encabezado cortado al abrir y «Más opciones» tapando donde se escribe; **(d)** PENAL rotulada «PENAL · Civil» y ofrecida como «asignar» en los otros 3 perfiles (rompe «rubros separados»); **(e)** nombres internos en pantalla (`WHATSAPP_*`, motivos «ad», «domingo»); **(f)** Salud: «4 retenidos» vs «sin cuarentena», encabezado «Hoy», plurales «(s)»; **(g)** Contactos Jurídico suma 7.921 vs título 7.852; «En seguimiento 5» vs «Programados 14»; **(h)** Hoy muestra la campaña «enviando» 0/182 mientras Salud dice 17 fallidos en 24 h; **(i)** celular: aviso del PIN enorme, pestañas cortadas sin señal de deslizar, aviso de Wasender truncado, íconos sin texto; **(j)** contraste 1,91:1 en «Tareas para Claude»; **(k)** Perfiles: nombres truncados en «En vivo» (se quita con la rama del 19/11) y Autos muestra «Última base: vita · 1 cargados» (base de prueba) | Claude |
 
 ## P2 — antes del 01/12
@@ -67,3 +69,6 @@ Prioridad: **P0** hoy · **P1** esta semana · **P2** antes del 01/12 · **P3** 
 | 20/11 | Destacadas armadas en los 4 rubros (responsable) | habilitado |
 | 20/11 | Cerebro del proyecto creado (`cerebro/`), cruce Fase 1 ↔ Fase 2, estado verificado | implementado en rama `claude/admiring-euler-ctf4sg` |
 | 20/11 | Comprobado: Search Console verificada por DNS en las 4 webs | comprobado |
+| 20/11 | Integrados a `main` el cerebro, redes (`happy-wozniak`, PR #77), contexto (`festive-goldberg`) y los 18 commits de `gracious-volta`; sin cambios de código; typecheck, lint y build en verde | publicado (`66c457b`) |
+| 20/11 | Hook de arranque que carga el cerebro en cada sesión | publicado en main |
+| 20/11 | 51 preguntas para entender el negocio (`12-preguntas-para-entender.md` + Word) | entregado |

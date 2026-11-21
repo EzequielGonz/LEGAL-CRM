@@ -4,6 +4,13 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 
 # Bitácora
 
+## 21/11/2026 · Chats unificados y traspaso
+
+- **Pedido:** unificar todos los chats en una sola rama (`cerebro-chats`) y releer; cuidar el uso de créditos.
+- **Hecho:** plantilla única y prompt para pegar en cada chat; se verificó que los chats de Code cayeron por «se acabó el crédito de uso extra»; 1 chat volcado (Panel Jurídico); traspaso de sesión escrito (`traspaso-sesion-2026-11-21.md`).
+- **Aprendido:** leer transcripciones con `list_events` no reanuda el chat ni gasta su crédito; filtrar `user`+`result` evita los bloques de razonamiento, que son lo más caro. Claude común no es accesible desde Code.
+- **Quedó:** volcar 19 chats de Code, resolver Claude común, pasar a leer todo.
+
 ## 20/11/2026 · 09:00–09:30 · Aprendizaje continuo y preguntas
 
 - **Órdenes nuevas:** releer y entender el negocio en cada sesión, aprender y actualizar el cerebro en el momento, sumar roles/skills/plugins solos. Nombres: Kocos Marketing (sin ORVIAN); autos «Automotores Kocos» o «Autos Kocos», nunca «Agencia Kocos». Pasar a main el cerebro y las ramas de documentos. Por ahora, entender; las instrucciones vienen después.
