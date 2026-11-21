@@ -167,3 +167,12 @@ Todo lo demás son **decisiones de negocio** de la responsable (abajo), no traba
 | 20/11 | Medición de punta a punta: UTM, referencia en WhatsApp y formulario, GA4, píxel de Meta, Search Console y Bing |
 | 20/11 | Perfil de Empresa de Google para VITA y Autos si atienden en persona; canales de YouTube para Shorts |
 | Siempre | Un llamado a la acción predeterminado por rubro y canal para identificar el origen de cada lead (lo define Claude) |
+
+## Respuestas de la responsable, 21/11 (bloque A de preguntas)
+
+- **Modelo del negocio:** son dueños del panel; captan clientes y los **derivan a mano** a profesionales de cada rubro. El éxito sigue siendo captado + derivado.
+- **«Leonardo Gonzalez» es un nombre de presentación** del bot, no una persona que atiende.
+- **Calendario:** consultas y derivaciones de lunes a lunes; **las bases no se corren todos los días** (falta confirmar qué días sí).
+- **Avisos de captado:** hoy no se avisa a nadie. Pendiente; no configurar destinatarios hasta que lo definan.
+- **Comentarios con palabra clave:** pendiente automatizarlos.
+- **Uso del panel:** PC y celular por igual, 2 personas → el celular no es secundario (los desbordes de `/agentes` y `/resultados` importan).

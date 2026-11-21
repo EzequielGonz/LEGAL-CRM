@@ -10,10 +10,15 @@ Contestá las que quieras, en el orden que quieras; con una palabra alcanza en m
 ## A. Vos y el equipo
 
 1. ★ ¿Qué rol tenés en cada negocio (dueña de los 4, socia, administradora)? ¿Alguien más decide o aprueba?
+   - ✅ **Respuesta 21/11:** Son dueños del panel completo: captan clientes y los derivan **a mano** a distintos profesionales de cada rubro. No son dueños de los negocios finales (pendiente confirmar si en algún rubro sí).
 2. ★ ¿Quién atiende a los captados en cada rubro? (cuántas personas, nombre del rol, días y horarios). ¿Leonardo Gonzalez es una persona real que atiende o un nombre de presentación?
+   - ✅ **Respuesta 21/11:** Los captados los atienden los profesionales a los que se derivan, cuando el cliente decide. **Leonardo Gonzalez es solo un nombre de presentación**, no una persona que atiende. Se deriva y se responden consultas de lunes a lunes, pero **las bases (campañas) no se corren todos los días**.
 3. ★ ¿A quién le aviso de cada captado por rubro y por dónde (WhatsApp, mail)? Hoy hay 6 captados sin aviso.
+   - ✅ **Respuesta 21/11:** Por ahora **no se avisa a nadie** de un captado. Queda pendiente definir a quién y por dónde.
 4. ¿Quién responde a mano los comentarios con palabra clave en Instagram y Facebook? ¿Querés que lo haga un bot?
+   - ✅ **Respuesta 21/11:** Pendiente: la idea es **automatizar** la respuesta a comentarios con palabra clave.
 5. ¿Usás el panel más en la PC o en el celular? ¿Entra alguien más al panel?
+   - ✅ **Respuesta 21/11:** Usan el panel en **PC y celular** por igual. Entran **2 personas** habitualmente.
 
 ## B. Cómo gana plata cada negocio
 
@@ -87,3 +92,10 @@ Contestá las que quieras, en el orden que quieras; con una palabra alcanza en m
 49. ★ ¿Cada cuánto querés un informe (diario, lunes) y en qué formato (chat, Word, panel)?
 50. ¿Hay horarios en los que no querés que publique o toque producción?
 51. AutosMix y el boceto de la inmobiliaria: ¿los retomamos o quedan afuera?
+
+## Nuevas preguntas que salen de las respuestas (21/11)
+
+52. ¿Qué días y horarios sí se corren bases? (¿lunes a viernes, sin feriados?)
+53. ¿A qué profesionales derivan en cada rubro (cuántos por rubro) y por qué medio les pasan el captado?
+54. ¿Cómo se enteran hoy de que hay un captado, si no llega aviso? ¿Lo miran en el panel?
+55. ¿Quiénes son las 2 personas que entran al panel y qué hace cada una?
