@@ -149,3 +149,13 @@ Contestá las que quieras, en el orden que quieras; con una palabra alcanza en m
    - ✅ **Respuesta 21/11:** Entrando al panel, por ahora.
 55. ¿Quiénes son las 2 personas que entran al panel y qué hace cada una?
    - ✅ **Respuesta 21/11:** Son los dos desarrolladores y dueños del proyecto.
+
+## Lo que encontré al releer todo (21/11, noche)
+
+56. ★ El pase automático a créditos pagos de Claude (20/11): ¿sigue activado? ¿Con qué tope por mes?
+57. ★ Al versionar piezas: ¿cambios reales, o «para que Meta no detecte duplicados», como dijo el 20/11?
+58. ★ ¿Qué hace hoy «Derivar»? ¿Le llega algo al profesional?
+59. ★ Penal unificado con Civil: ¿se apaga el agente y la línea Penal, o queda como rol dentro de Civil?
+60. ★ ¿El bot sigue presentándose como «Nancy» (Jurídico y Coberturas) y «Leonardo Gonzalez» (Marketing)?
+61. ¿Vercel está en plan Hobby?
+   - ✅ **Respuesta 21/11:** No, tiene plan pago.
