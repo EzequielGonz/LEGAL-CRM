@@ -50,3 +50,10 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 - La responsable prefiere decisiones tomadas con una recomendación clara, no menús largos.
 - Salud del panel puede decir «en orden» con una línea sin acceso: para saber si una línea anda, mirar `/meta/lineas` (consulta en vivo a Meta), no solo Salud.
 - El clon de la sesión puede venir superficial (10 commits): `git fetch --unshallow` antes de comparar ramas.
+
+## 21/11 — Preguntas respondidas y análisis exhaustivo
+- El dueño respondió las 55 preguntas. Correcciones: es hombre; son dos dueños y desarrolladores; derivan a mano; Wasender y Meta ya están integrados para enviar; el recorrido anterior del panel había sido superficial.
+- Lancé un análisis exhaustivo con agentes (H, I, J, K y el estilo). J confirmó en el código el error de las 72 h, la causa de los retenidos que aparecen en todos los perfiles y las 5 consultas distintas detrás de «esperan a una persona».
+- La página del cerebro está en su versión 4, con estilo de esfera de partículas, tablero de pendientes y respuestas.
+- Las tareas programadas del cerebro se eliminaron a pedido del dueño. La propuesta del cerebro como software con API quedó anotada sin aplicar.
+- Aprendizaje: leer el código antes de afirmar que algo falta; recorrer el panel como usuario, leyendo chats y configuración.
