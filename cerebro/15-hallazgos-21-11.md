@@ -98,7 +98,7 @@ Informes completos, sin datos personales: `biblioteca/analisis-2026-11-21/`. Tod
 4. Penal unificado con Civil: ¿se apaga el agente y la línea PENAL, o queda como rol dentro de Civil?
 5. ¿El bot sigue presentándose como «Nancy» y «Leonardo Gonzalez»?
 6. ¿Qué servicio de ticket alto vendemos primero en Marketing? (puedo proponer 3)
-7. Plan de Vercel: ¿es Hobby? Hobby no admite uso comercial y limita a 60 s.
+7. ~~Plan de Vercel~~ **Respondido 21/11: tiene plan pago.**
 8. ¿Las 8 subsesiones de reels y «Perfiles redes VITA» eran el mismo chat que «Metricool context»?
 </content>
 </invoke>
