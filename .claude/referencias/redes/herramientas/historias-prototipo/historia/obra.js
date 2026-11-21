@@ -3,7 +3,7 @@ import {escena, grano, subs, globo, win, easeOut, backOut, expoOut, clamp} from 
 export function obra(V, B) {
   const stage = document.getElementById('stage'); const ui = document.getElementById('ui');
   ui.innerHTML = `<div id="lineas"></div><div id="onda"></div><div id="hook">${B.hookHTML}</div><div id="num"></div><div id="sub"></div><div id="globo" class="globo"></div>
-    <div id="velo"></div><div id="marca">${B.nombre ? `<img src="${B.logo}"><span>${B.nombre}</span>` : ''}</div><div id="cta"><img src="${B.logo}">${B.nombre ? `<div class="nm">${B.nombre}</div>` : ''}<div class="c1">Comentá</div><div class="kw">${V.palabra}</div><div class="c2">${B.ctaSub}</div></div><div id="nota"></div><div id="flash"></div>`;
+    <div id="velo"></div><div id="marca">${B.nombre ? `<img src="${B.logo}"><span>${B.nombre}</span>` : ''}</div><div id="cta"><img src="${B.logo}">${B.nombre ? `<div class="nm">${B.nombre}</div>` : ''}<div class="c1">Comentá</div><div class="kw"${V.palabra.length > 9 ? ` style="--kws:${Math.floor(1150 / V.palabra.length)}px"` : ''}>${V.palabra}</div><div class="c2">${B.ctaSub}</div></div><div id="nota"></div><div id="flash"></div>`;
   const $ = s => ui.querySelector(s); const grain = grano(document.getElementById('fx'));
   const O = {stage, escenas: {}, tomas: [], V, B, palabrasH: V.frases.filter(f => !f.cta).flatMap(f => f.words.filter(w => w.h).map(w => w.t)),
     esc(def) { const e = escena(stage, def); O.escenas[def.nombre] = e; e.el.style.display = 'none'; return e; },

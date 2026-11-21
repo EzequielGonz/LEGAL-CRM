@@ -106,7 +106,7 @@ R.update({
    (N, 'Dos: las vacaciones que no tomaste.', 'Las vacaciones *que no tomaste.*'),
    (N, 'Tres: el aguinaldo proporcional.', 'El aguinaldo *proporcional.*'),
    ('sole', 'Faltan las vacaciones. Lo consulto.', 'Faltan las vacaciones. Lo consulto.'),
-   (N, 'Comentá «liquidación», y te respondemos.', 'Comentá *LIQUIDACION*')]),
+   (N, 'Comentá «liquidación», y te respondemos.', 'Comentá *LIQUIDACIÓN*')]),
  'vita-firmas-b-r1': _v('FIRMA', 'Antes de firmar', D(hook='Acuerdo del seguro:<br>leé esto <em>antes<br>de la lapicera</em>', doc='Propuesta de acuerdo', remite='Aseguradora · Siniestros', firma='Firma del reclamante', sello='LEÉ', cal=['HOY', 'MAÑANA'],
      notif=D(hora='19:05', app='Aseguradora · Siniestros', titulo='Firmá hoy y cobrás', texto='La propuesta vence hoy. Necesitamos tu firma.', color='#5b6b8c'), pj='sole', ap='gigante', cam='lateral', grade='noche'), [
    ('sole', '¿Qué firmo, me preguntás? Un acuerdo.', '¿Qué firmo, me preguntás? Un acuerdo.'),
