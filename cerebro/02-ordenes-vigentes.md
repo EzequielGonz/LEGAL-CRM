@@ -199,3 +199,14 @@ Todo lo demás son **decisiones de negocio** de la responsable (abajo), no traba
 - **Error de pago de Coberturas (131042):** resuelto por el dueño.
 - **Ritmo:** una campaña por rubro por semana. Volumen semanal: VITA 1.000–2.500 · 0 km 500–1.000 · Coberturas 1.000–2.000 · Marketing 5.000.
 - **Análisis del panel:** el dueño pide un recorrido exhaustivo (agentes, roles, scraper, conversaciones). En curso: informes H (chats, campañas, captados) e I (agentes, roles, Marketing, líneas).
+
+## Respuestas de los bloques D y E, 21/11
+
+- **Corrección del dueño:** el panel **ya envía por Wasender o por Meta**, con plantillas, algoritmo de envío y todo integrado. No es una tarea pendiente: lo que falta es conectar más líneas y usarlas así.
+- **Líneas:** hoy las 4 fijas de Meta. Esta semana se suman chips de Wasender: 4 VITA, 4 Marketing, 3 Coberturas, 2 0 km. Vinculación por QR o código.
+- **Marketing en Meta:** falta vincular el número (pendiente del dueño).
+- **Idea futura:** gestor propio de muchos teléfonos con proxies o IP rotativas por número, app propia y pasarela API al panel para reconectar solo.
+- **Penal se unifica con Civil.**
+- **Bots:** andan bien, se pulen a diario y generan informes. Dicen que son IA **solo si les preguntan**; tienen que sonar lo más humanos posible.
+- **Regla para mejoras de bots:** siempre como **propuesta** con su información, **sumando** a la base existente (sin borrar ni rehacer) y **con autorización** de los dueños.
+- **Rol del cerebro (dueño, 21/11):** entender absolutamente todo, estar presente en todas las sesiones y chats para contextualizar, gestionar mejor e identificar errores y mejoras. Base: panel completo + código, no solo la web.

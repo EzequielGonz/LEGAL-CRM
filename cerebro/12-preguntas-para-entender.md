@@ -59,17 +59,26 @@ Contestá las que quieras, en el orden que quieras; con una palabra alcanza en m
 ## D. WhatsApp y líneas
 
 21. ★ La línea de Meta de Marketing figura «sin acceso al número» (por eso no entra nada desde el 06/11). ¿Cambiaste algo en Meta Business cerca de esa fecha (número, verificación, permisos)?
+   - ✅ **Respuesta 21/11:** Falta vincular el número de Marketing en Meta. Pendiente del dueño.
 22. ¿Cuántos chips o números tenés y de qué rubro es cada uno?
+   - ✅ **Respuesta 21/11:** Hoy: las 4 líneas fijas de Meta (una por rubro). Esta semana se suman chips para Wasender: 4 en VITA, 4 en Marketing, 3 en Coberturas y 2 en 0 km.
 23. ★ Para las 6 líneas sin 6 teléfonos: ¿autorizás USD 5–10 por mes para una pasarela propia, o preferís otra opción?
+   - ✅ **Respuesta 21/11:** Ya usan Wasender y tienen teléfonos. Idea a futuro: un gestor propio de varios teléfonos con proxies o IP rotativas (cada WhatsApp con su IP), vinculado a una app propia, con una pasarela API al panel para reconectar números automáticamente.
 24. Wasender: ¿cuándo podés escanear los QR y con qué teléfono?
+   - ✅ **Respuesta 21/11:** Se puede vincular por QR o por código. Tienen varios teléfonos. Ver la respuesta 23.
 25. Penal: ¿tiene que tener número propio o queda dentro de Civil?
+   - ✅ **Respuesta 21/11:** Penal se unifica con Civil. Las reglas de los bots ya cubren ambos.
 
 ## E. Bots
 
 26. ★ ¿Qué no te gusta hoy de cómo hablan los bots? ¿Algún chat que te haya molestado?
+   - ✅ **Respuesta 21/11:** Los bots andan bien; los pulen todos los días y se generan informes. Hay que revisar el panel y el código a fondo.
 27. ¿El bot dice que es una IA de entrada o solo si le preguntan?
+   - ✅ **Respuesta 21/11:** Solo si le preguntan. La idea es que sea lo más humano posible.
 28. En Salud el bot saca 32 a 46 sobre 100 en captación y trato. ¿Priorizo mejorarlo?
+   - ✅ **Respuesta 21/11:** Toda mejora va como propuesta, con la información de la mejora, sumando a la base existente sin borrar ni cambiar todo, y siempre con su autorización.
 29. ¿Qué preguntas responden siempre los asesores que el bot debería saber?
+   - ✅ **Respuesta 21/11:** Los bots ya saben hacer todo; hay cosas para mejorar e implementar, pero la base ya está.
 
 ## F. Panel
 
