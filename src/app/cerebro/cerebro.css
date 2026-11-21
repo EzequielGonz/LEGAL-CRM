@@ -62,8 +62,8 @@
 .c-ok { color: var(--green); } .c-warn { color: var(--amber); } .c-bad { color: var(--red); } .c-idk { color: var(--cyan); }
 
 /* Cifras */
-.cz-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
-.cz-stat { background: var(--card); padding: 18px; display: grid; gap: 4px; }
+.cz-stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); background: var(--card); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+.cz-stat { background: var(--card); padding: 18px; display: grid; gap: 4px; align-content: start; box-shadow: inset -1px 0 0 var(--line), inset 0 -1px 0 var(--line); }
 .cz-stat b { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
 .cz-stat span { font-size: 0.8rem; color: var(--muted); }
 .cz-stat i { font-style: normal; font: 500 0.7rem/1 var(--cz-mono), monospace; }
