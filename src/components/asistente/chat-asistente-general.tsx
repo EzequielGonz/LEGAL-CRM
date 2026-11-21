@@ -6,6 +6,7 @@ import { Icono } from "@/components/ui/icono-seccion";
 import { TarjetaPropuesta, type Propuesta } from "@/components/asistente/asistente-panel";
 import { BocetoCampanas } from "@/components/asistente/boceto-campanas";
 import { MAX_ARCHIVOS, MAX_FILAS_ARCHIVO, repetidosEntreArchivos, resumirHoja, type ResumenArchivo } from "@/lib/asistente/general";
+import { CharlasAnteriores, type CharlaResumen } from "@/components/asistente/charlas-anteriores";
 
 /**
  * Chat del asistente general (15/11). Desde el pedido de la responsable
@@ -136,6 +137,133 @@ export function ChatAsistenteGeneral({
   }, [contexto]);
   const mensajesRef = useRef<Mensaje[]>([]);
   mensajesRef.current = mensajes;
+
+  // 20/11: charlas guardadas (pedido de la Bandeja). Cada charla se guarda sola
+  // después de cada respuesta y se puede retomar desde «Charlas anteriores».
+  // Solo se suma esto: lo demás del chat funciona igual.
+  const perfilCharla = contexto?.perfil ?? null;
+  const consultaPerfil = perfilCharla ? `?perfil=${encodeURIComponent(perfilCharla)}` : "";
+  const [charlaId, setCharlaId] = useState<string | null>(null);
+  const charlaIdRef = useRef<string | null>(null);
+  // Cambia al empezar o abrir otra charla: un guardado viejo no escribe en la nueva.
+  const generacion = useRef(0);
+  const colaGuardado = useRef<Promise<void>>(Promise.resolve());
+  const [charlas, setCharlas] = useState<CharlaResumen[]>([]);
+  const [cargandoCharlas, setCargandoCharlas] = useState(true);
+  const [errorCharlas, setErrorCharlas] = useState<string | null>(null);
+  const [verCharlas, setVerCharlas] = useState(false);
+  const [abriendoCharla, setAbriendoCharla] = useState<string | null>(null);
+  const [avisoGuardado, setAvisoGuardado] = useState<string | null>(null);
+  const botonCharlas = useRef<HTMLButtonElement>(null);
+
+  function cambiarCharla(id: string | null) {
+    generacion.current += 1;
+    charlaIdRef.current = id;
+    setCharlaId(id);
+    setAvisoGuardado(null);
+  }
+
+  async function cargarCharlas() {
+    setCargandoCharlas(true);
+    try {
+      const r = await fetch(`/api/asistente/charlas${consultaPerfil}`);
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d?.error);
+      setCharlas((d?.charlas ?? []) as CharlaResumen[]);
+      setErrorCharlas(null);
+    } catch {
+      setErrorCharlas("No se pudieron traer las charlas anteriores.");
+    } finally {
+      setCargandoCharlas(false);
+    }
+  }
+
+  // Lista al abrir y al cambiar de perfil en el Laboratorio (si cambia el perfil, charla nueva: no se mezclan).
+  const perfilAnterior = useRef(perfilCharla);
+  useEffect(() => {
+    if (perfilAnterior.current !== perfilCharla) {
+      perfilAnterior.current = perfilCharla;
+      cambiarCharla(null);
+      setMensajes([]);
+      setVerCharlas(false);
+    }
+    void cargarCharlas();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [perfilCharla]);
+
+  /** Guarda en la charla actual (o crea una) los mensajes nuevos. Nunca frena el chat. */
+  function guardarEnCharla(nuevos: Mensaje[]) {
+    const gen = generacion.current;
+    const perfilEnvio = perfilCharla;
+    const cuerpo = nuevos.filter((m) => !m.error).map((m) => ({ rol: m.rol, texto: m.texto, propuestas: m.propuestas ?? [], enlaces: m.enlaces ?? [] }));
+    if (!cuerpo.length) return;
+    colaGuardado.current = colaGuardado.current.then(async () => {
+      if (gen !== generacion.current) return;
+      const id = charlaIdRef.current;
+      try {
+        const r = await fetch(id ? `/api/asistente/charlas/${id}` : "/api/asistente/charlas", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...(perfilEnvio ? { perfil: perfilEnvio } : {}), mensajes: cuerpo }),
+        });
+        const d = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error(d?.error);
+        if (gen !== generacion.current) return;
+        if (!id && d?.id) {
+          charlaIdRef.current = d.id;
+          setCharlaId(d.id);
+          void cargarCharlas();
+        }
+        setAvisoGuardado(null);
+      } catch {
+        if (gen === generacion.current) setAvisoGuardado("No se pudo guardar esta charla. Podés seguir igual.");
+      }
+    });
+  }
+
+  async function abrirCharla(id: string) {
+    if (id === charlaIdRef.current && mensajes.length > 0) {
+      setVerCharlas(false);
+      return;
+    }
+    setAbriendoCharla(id);
+    try {
+      const r = await fetch(`/api/asistente/charlas/${id}${consultaPerfil}`);
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d?.error ?? "No se pudo abrir la charla.");
+      cambiarCharla(id);
+      setMensajes(((d?.mensajes ?? []) as Mensaje[]).map((m) => ({ rol: m.rol, texto: m.texto, propuestas: m.propuestas ?? [], enlaces: m.enlaces ?? [] })));
+      setPlanillas([]);
+      setAdjuntos([]);
+      telefonos.current.clear();
+      setVerCharlas(false);
+      window.setTimeout(() => entrada.current?.focus(), 0);
+    } catch (e) {
+      setErrorCharlas((e as Error).message || "No se pudo abrir la charla.");
+    } finally {
+      setAbriendoCharla(null);
+    }
+  }
+
+  async function quitarCharla(id: string) {
+    const r = await fetch(`/api/asistente/charlas/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...(perfilCharla ? { perfil: perfilCharla } : {}), archivar: true }),
+    }).catch(() => null);
+    if (!r?.ok) {
+      setErrorCharlas("No se pudo quitar la charla de la lista.");
+      return;
+    }
+    setCharlas((cs) => cs.filter((c) => c.id !== id));
+    // Si era la abierta, lo que sigas escribiendo se guarda como charla nueva.
+    if (id === charlaIdRef.current) cambiarCharla(null);
+  }
+
+  function cerrarCharlas() {
+    setVerCharlas(false);
+    window.setTimeout(() => botonCharlas.current?.focus(), 0);
+  }
   useEffect(() => {
     lista.current?.scrollTo({ top: lista.current.scrollHeight, behavior: "smooth" });
   }, [mensajes, pensando]);
@@ -256,7 +384,9 @@ export function ChatAsistenteGeneral({
         });
         const data = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(data?.error ?? "No pude responder.");
-        setMensajes((m) => [...m, { rol: "asistente", texto: data.texto, propuestas: data.propuestas ?? [], enlaces: data.enlaces ?? [] }]);
+        const respuesta: Mensaje = { rol: "asistente", texto: data.texto, propuestas: data.propuestas ?? [], enlaces: data.enlaces ?? [] };
+        setMensajes((m) => [...m, respuesta]);
+        guardarEnCharla([historial[historial.length - 1], respuesta]);
       } catch (e) {
         setMensajes((m) => [...m, { rol: "asistente", texto: (e as Error).message, error: true }]);
       } finally {
@@ -309,6 +439,22 @@ export function ChatAsistenteGeneral({
                   <p className="truncate text-xs text-slate-600">{bajada}</p>
                 </div>
               </div>
+              <div className="flex shrink-0 items-center gap-1">
+              {(charlas.length > 0 || charlaId) && (
+                <button
+                  ref={botonCharlas}
+                  type="button"
+                  onClick={() => {
+                    if (verCharlas) return cerrarCharlas();
+                    setVerCharlas(true);
+                    void cargarCharlas();
+                  }}
+                  aria-expanded={verCharlas}
+                  className="tactil rounded-lg px-2.5 text-sm font-medium text-slate-700 hover:bg-slate-100"
+                >
+                  {verCharlas ? "Volver a la charla" : "Charlas anteriores"}
+                </button>
+              )}
               {(mensajes.length > 0 || planillas.length > 0) && (
                 <button
                   type="button"
@@ -317,15 +463,23 @@ export function ChatAsistenteGeneral({
                     setPlanillas([]);
                     setAdjuntos([]);
                     telefonos.current.clear();
+                    cambiarCharla(null);
+                    setVerCharlas(false);
                   }}
                   className="tactil rounded-lg px-2.5 text-sm font-medium text-slate-700 hover:bg-slate-100"
                 >
                   Nueva charla
                 </button>
               )}
+              </div>
             </header>
 
-            <div ref={lista} role="log" aria-live="polite" aria-label={`Conversación con el ${titulo.toLowerCase()}`} tabIndex={0} className="flex-1 space-y-4 overflow-y-auto bg-slate-50 px-4 py-4">
+            {verCharlas && (
+              <div className="flex-1 overflow-y-auto bg-slate-50 px-4 py-4">
+                <CharlasAnteriores modo="completa" charlas={charlas} actual={charlaId} cargando={cargandoCharlas} error={errorCharlas} abriendo={abriendoCharla} alAbrir={abrirCharla} alQuitar={quitarCharla} alVolver={cerrarCharlas} />
+              </div>
+            )}
+            <div ref={lista} role="log" aria-live="polite" aria-label={`Conversación con el ${titulo.toLowerCase()}`} tabIndex={0} hidden={verCharlas} className="flex-1 space-y-4 overflow-y-auto bg-slate-50 px-4 py-4">
               {pendientes.length > 0 && (
                 <div className="rounded-xl border border-amber-300 bg-amber-50 p-3">
                   <p className="text-sm font-semibold text-amber-950">Quedaron campañas por revisar o a medio hacer</p>
@@ -338,6 +492,9 @@ export function ChatAsistenteGeneral({
                   {vacio ??
                     "Escribime lo que necesites de los cuatro perfiles. Podés adjuntar planillas (Excel o CSV), por ejemplo una por perfil: te digo a qué perfil va cada una, cuántas personas hay para contactar y te armo un boceto de campaña para revisar. De cada planilla veo solo un resumen, con los teléfonos ocultos."}
                 </p>
+              )}
+              {mensajes.length === 0 && (
+                <CharlasAnteriores modo="recientes" charlas={charlas} actual={charlaId} cargando={cargandoCharlas} error={errorCharlas} abriendo={abriendoCharla} alAbrir={abrirCharla} alVerTodas={() => setVerCharlas(true)} />
               )}
               {mensajes.map((m, i) => {
                 const planes = (m.propuestas ?? []).filter((p) => p.tipo === "plan_campanas");
@@ -428,6 +585,11 @@ export function ChatAsistenteGeneral({
               {aviso && (
                 <p role="alert" className="mb-2 text-sm text-red-700">
                   {aviso}
+                </p>
+              )}
+              {avisoGuardado && (
+                <p role="status" className="mb-2 text-xs text-slate-600">
+                  {avisoGuardado}
                 </p>
               )}
               <p role="status" aria-live="polite" className="sr-only">
