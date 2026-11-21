@@ -44,7 +44,7 @@ Fuente de verdad para retomar después de compactar la sesión. Repo `EzequielGo
 - Patentamientos: no. Va «¿Contado, prendario o plan?».
 - Aumento de prepagas: no. Va «plan-uso».
 - Black Friday de Autos (27/11): sí, sin números.
-- Coberturas va sin números ni porcentajes.
+- Coberturas va sin números ni porcentajes. Excepción aprobada (21/11): el «3 %» del aporte legal en la historia del 25/11 a las 18:30 y su reel («Este 3 % sale de tu sueldo…») queda así.
 - «Lo que dijo la Corte» está aprobado.
 - Sin carteles en pantalla. «Situación ilustrativa», «Voz generada con IA» e «Información general: no reemplaza una consulta» (este último solo en VITA) van en el texto de la publicación. `isAiGenerated: true`.
 - Logo y nombre de la marca en todas las piezas.
