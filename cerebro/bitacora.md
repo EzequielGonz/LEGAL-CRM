@@ -5,6 +5,13 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 # Bitácora
 
 
+
+## 21/11 (noche) — Cerebro dentro del panel
+
+- **Pedido:** «hacé una página aparte como la del panel, vinculala, que lea todo, con bandeja, asistente y laboratorio; terminalo y publicalo».
+- **Hecho:** `/cerebro` en el marco del panel; acceso arriba de todo en Perfiles y en el menú lateral. Lee cifras de la semana y salud en vivo, muestra los pedidos a Claude, «Hablale a Claude» crea tareas en la bandeja con la foto de la semana, y suma el asistente general y el laboratorio de bots. Contenido en `src/lib/cerebro/contenido.ts` (actualizarlo en cada vuelta junto con `15-hallazgos`). Entrega en `docs/cerebro-panel/ENTREGA.md`.
+- **Ojo:** al cambiar alertas, pendientes o preguntas del cerebro, actualizar también `src/lib/cerebro/contenido.ts`.
+
 ## 21/11 (noche) — Relectura completa y cruce de informes
 
 - **Pedido:** «¿leíste todo el contexto de este chat y de las sesiones de CRM COMPLETO?».
