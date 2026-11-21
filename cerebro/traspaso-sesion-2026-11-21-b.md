@@ -52,3 +52,13 @@ Tarea programada de respaldo: «Retomar análisis del cerebro tras el límite»,
 ## Pendientes de la responsable
 
 Pasar el repo a privado; cambiar el código del panel; rotar la clave de Supabase reportada (chat 07/09) y revocar el token de GitHub pegado en Cowork (15/10); desactivar o no la tarea de reels; contestar las 51 preguntas.
+
+## Avance a las ~08:40 UTC
+
+Terminados: **D** (estado real), **E** (historia de Cowork), **G** (Supabase y Vercel). Siguen: A, B, C, F.
+
+Hallazgos clave de los terminados (sin verificar por mí todavía):
+- **ALERTA (G):** el cron `campaigns-tick` de pg_cron guarda el Bearer de `CRON_SECRET` en texto plano en `cron.job`, y quedó visible en el registro de la sesión del subagente. Recomendar rotar `CRON_SECRET` y pasarlo a Vault.
+- (G) 101 tablas con RLS y 0 políticas; anon/authenticated sin permisos; todo pasa por la service role. 0 Edge Functions; bucket `marca` público. Vercel: un solo proyecto (`legal-crm`), las landings no están en este equipo. `META_APP_SECRET` y `META_APP_SECRETS` duplicadas. `cron.job_run_details` ocupa 40 de 136 MB sin purga.
+- (D) Sin cambios desde el 20/11 en migraciones (77, última 0634) ni configuración. Graves 1911 terminó 182/182. Jurídico: 27,8 % de salientes fallidos en 7 días. Solo CIVIL recibe mensajes (Marketing último 06/11, Autos 26/10, Coberturas 13/11). 30 avisos de captación sin destinatario. Conflictos de seguimiento 10 → 13. Metricool: VITA, Coberturas y Autos tienen 13 piezas por día del 25 al 29/11 (historias y carrusel, 0 reels).
+- (E) Historia desde el 11/10: ORVIAN → Kocos Marketing (20/10), detención sin apagar agente (24/10), Fase 3 descartada (25/10). Quedaron sin cerrar: línea de Kocos Marketing en Meta, plantillas `*_sb_*`, Alumar y PDF en chats, landings en Horizons, GA4 y sitemaps.
