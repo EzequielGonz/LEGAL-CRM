@@ -83,39 +83,61 @@ Contestá las que quieras, en el orden que quieras; con una palabra alcanza en m
 ## F. Panel
 
 30. ★ ¿Qué pantalla usás todos los días y cuál nunca?
+   - ✅ **Respuesta 21/11:** Se usan todas; sobre todo ver los clientes captados. Lo técnico se usa menos, pero siempre hace falta.
 31. ¿Qué te falta ver para decidir (ventas cerradas, plata, comparación entre rubros)?
+   - ✅ **Respuesta 21/11:** Nada: así como está, está perfecto.
 32. ¿Registrás en el panel las ventas cerradas? ¿Querés cargar el monto?
+   - ✅ **Respuesta 21/11:** Sí, la idea es registrarlas de otra manera (pendiente). Por ahora sin monto.
 33. Código de 8 números: ¿lo cambiamos ya? (lo elegís vos y no lo guardo en archivos)
+   - ✅ **Respuesta 21/11:** Por ahora queda el código actual (no se guarda en archivos).
 34. Archivo automático a los 30 días: ¿lo encendemos cuando publique los ajustes del 19/11?
+   - ✅ **Respuesta 21/11:** Preguntó qué son los ajustes del 19/11 y qué archivo automático. Se le explica en el chat (rama pensive-galileo, sin publicar).
 35. «Ordenar los casos: derivados, no derivados, perdidos»: ¿qué querías ver exactamente?
+   - ✅ **Respuesta 21/11:** Así como está ahora está bien.
 
 ## G. Redes
 
 36. ¿Hay reels o cuentas que te encanten como referencia, además de julianeaborna?
+   - ✅ **Respuesta 21/11:** Pendiente: va a pasar referencias más adelante.
 37. ★ ¿Querés aprobar cada pieza antes de que se programe, o programo directo y te muestro después?
+   - ✅ **Respuesta 21/11:** Flujo: boceto de reel, posteo, carrusel o historia de un solo rubro → aprueba el diseño → se produce → se programa en Metricool.
 38. TikTok y YouTube: ¿ya tenés las cuentas o las abro con Cowork? ¿Con qué cuenta de Google?
+   - ✅ **Respuesta 21/11:** Pendiente: todavía no abrió TikTok ni YouTube.
 39. ¿Quién más administra las páginas de Facebook e Instagram? ¿Alguien más publica?
+   - ✅ **Respuesta 21/11:** Nadie más: solo publica Metricool. El dueño edita a mano bio y similares.
 40. Black Friday de Autos (27/11): ¿hay alguna promoción real o es solo contenido?
+   - ✅ **Respuesta 21/11:** Solo contenido, sin promoción real.
 
 ## H. Web, Google y medición
 
 41. ★ ¿Me das acceso a Search Console y Google Analytics (agregando un usuario o por Cowork)?
+   - ✅ **Respuesta 21/11:** Sí, pero pendiente por ahora.
 42. ¿Tenés un píxel de Meta creado?
+   - ✅ **Respuesta 21/11:** No tiene píxel de Meta.
 43. ¿Querés aviso de cookies en las webs?
+   - ✅ **Respuesta 21/11:** No quiere aviso de cookies.
 44. ¿Tenés los logos en vector (archivo del diseñador)?
+   - ✅ **Respuesta 21/11:** No tiene logos en vector.
 45. ¿Hay fotos reales de oficina, equipo o entregas de autos?
+   - ✅ **Respuesta 21/11:** No hay fotos reales por ahora.
 46. ¿Quién firma los artículos jurídicos y de coberturas (nombre y matrícula), si se quiere mostrar?
+   - ✅ **Respuesta 21/11:** No se muestra quién firma.
 
 ## I. Plata y límites
 
 47. ★ Aunque hoy sea cero, ¿cuál sería el tope mensual para herramientas si algo vale la pena (para saber qué proponerte)?
+   - ✅ **Respuesta 21/11:** Proponer y deciden juntos, con un tope razonable (no USD 1.000).
 48. ¿Gemini sigue con USD 30 por mes? ¿Querés que te avise al llegar al 80 %?
+   - ✅ **Respuesta 21/11:** Gemini sigue con USD 30 por mes. Avisar al llegar al 80 %.
 
 ## J. Forma de trabajo y otros proyectos
 
 49. ★ ¿Cada cuánto querés un informe (diario, lunes) y en qué formato (chat, Word, panel)?
+   - ✅ **Respuesta 21/11:** Informe en el panel, en la sección Perfiles: diario, semanal y mensual.
 50. ¿Hay horarios en los que no querés que publique o toque producción?
+   - ✅ **Respuesta 21/11:** Preguntó qué se publicaría o tocaría en producción. Se le explica en el chat.
 51. AutosMix y el boceto de la inmobiliaria: ¿los retomamos o quedan afuera?
+   - ✅ **Respuesta 21/11:** Afuera: no tienen nada que ver con este proyecto.
 
 ## Nuevas preguntas que salen de las respuestas (21/11)
 

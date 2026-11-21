@@ -210,3 +210,14 @@ Todo lo demás son **decisiones de negocio** de la responsable (abajo), no traba
 - **Bots:** andan bien, se pulen a diario y generan informes. Dicen que son IA **solo si les preguntan**; tienen que sonar lo más humanos posible.
 - **Regla para mejoras de bots:** siempre como **propuesta** con su información, **sumando** a la base existente (sin borrar ni rehacer) y **con autorización** de los dueños.
 - **Rol del cerebro (dueño, 21/11):** entender absolutamente todo, estar presente en todas las sesiones y chats para contextualizar, gestionar mejor e identificar errores y mejoras. Base: panel completo + código, no solo la web.
+
+## Respuestas de los bloques F a J, 21/11
+
+- **Panel:** se usan todas las pantallas, sobre todo los captados; está bien como está. Las ventas cerradas se van a registrar de otra forma (pendiente), por ahora sin monto. El código de ingreso queda como está por ahora.
+- **Contenido — flujo de aprobación:** boceto de reel, posteo, carrusel o historia **de un solo rubro** → el dueño aprueba el diseño → se produce → se programa en Metricool.
+- **Redes:** solo publica Metricool; el dueño toca a mano bio y similares. TikTok y YouTube pendientes. Black Friday de Autos es solo contenido. Referencias de reels: las pasa después.
+- **Web y medición:** sin píxel de Meta, sin aviso de cookies, sin logos vectoriales, sin fotos reales, sin firma en artículos. Acceso a Search Console y Analytics: sí, más adelante.
+- **Plata:** proponer herramientas y deciden juntos (tope razonable). Gemini USD 30 por mes: **avisar al 80 %**.
+- **Informes:** en el panel, sección Perfiles, **diario, semanal y mensual** (pendiente de construir, con autorización).
+- **AutosMix e inmobiliaria:** fuera del proyecto. Se sacan del cerebro.
+- **Entrenamiento diario del cerebro:** tarea programada todas las noches; el dueño pidió que relea todo (código, chats viejos y nuevos, archivos) y lo sume a la memoria.
