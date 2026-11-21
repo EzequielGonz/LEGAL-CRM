@@ -238,3 +238,18 @@ export function pedidoDesdeCerebro(texto: string, foto: string | null): string {
   const base = `Desde el cerebro: ${texto.trim()}`;
   return foto ? `${base}\n\n${foto}` : base;
 }
+
+/** Frases del hero: lo que el cerebro sabe, con las cifras vivas de la semana. */
+export function frasesDelCerebro(perfiles: PerfilSemana[] | null, alertasAltas: number, preguntas: number): [string, string, string][] {
+  const suma = (k: keyof CifrasPerfilSemana) => (perfiles ?? []).reduce((s, p) => s + (n(p.cifras[k].actual) ?? 0), 0);
+  const frases: [string, string, string][] = [["Esto es lo que sé de sus", "4 negocios", "."]];
+  if (perfiles) {
+    frases.push(["Esta semana salieron", `${fmt(suma("enviados"))} mensajes`, " en los 4 perfiles."]);
+    frases.push(["Respondieron", `${fmt(suma("respondieron"))} personas`, " y capté lo que dijeron."]);
+    frases.push(["Hay", `${fmt(suma("captados"))} captados`, " esta semana para derivar."]);
+  }
+  frases.push(["Encontré", `${alertasAltas} alertas altas`, " que conviene mirar hoy."]);
+  frases.push(["Me quedan", `${preguntas} preguntas`, " que solo ustedes saben."]);
+  frases.push(["Cada mejora es", "una propuesta", ": nada cambia sin su OK."]);
+  return frases;
+}

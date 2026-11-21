@@ -1,48 +1,29 @@
 import Link from "next/link";
-import { ALERTAS, PREGUNTAS_ABIERTAS, conteoAlertas } from "@/lib/cerebro/contenido";
 
 /**
- * Acceso al Cerebro del negocio arriba de todo en la selección de perfiles
- * (21/11, pedido de los dueños).
+ * Acceso al Cerebro del negocio en Inicio (21/11): una píldora chica, con
+ * un punto que late, que abre el cerebro en una pestaña nueva.
  */
 export function EntradaCerebro() {
-  const c = conteoAlertas(ALERTAS);
   return (
-    <section
-      aria-labelledby="entrada-cerebro-titulo"
-      className="mb-8 flex flex-col gap-4 rounded-2xl border border-slate-800 bg-slate-950/80 p-4 text-white shadow-sm backdrop-blur sm:flex-row sm:items-center sm:justify-between sm:p-5"
-    >
-      <div className="flex items-start gap-3">
-        <span aria-hidden="true" className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-gold-500/20 text-gold-300">
-          <IconoCerebro />
+    <div className="mb-6 flex justify-center">
+      <Link
+        href="/cerebro"
+        prefetch={false}
+        target="_blank"
+        rel="noopener"
+        className="group inline-flex min-h-[40px] items-center gap-2.5 rounded-full border border-white/15 bg-white/5 px-4 text-sm font-medium text-white/90 backdrop-blur transition hover:border-[#ff4f9a]/70 hover:bg-[#ff4f9a]/10 hover:text-white motion-safe:hover:-translate-y-px"
+      >
+        <span aria-hidden="true" className="relative grid h-2.5 w-2.5 place-items-center">
+          <span className="absolute inset-0 rounded-full bg-[#ff4f9a] opacity-70 motion-safe:animate-ping" />
+          <span className="relative h-2.5 w-2.5 rounded-full bg-[#ff4f9a] shadow-[0_0_10px_#ff4f9a]" />
         </span>
-        <div>
-          <h2 id="entrada-cerebro-titulo" className="text-lg font-semibold">
-            Cerebro del negocio
-          </h2>
-          <p className="mt-0.5 max-w-2xl text-sm text-slate-300">
-            Lo que Claude entiende del panel, lo que ve esta semana, {c.alta} alertas altas y {PREGUNTAS_ABIERTAS.length} preguntas para ustedes. Desde ahí le pueden escribir.
-          </p>
-        </div>
-      </div>
-      <Link href="/cerebro" prefetch={false} className="btn-gold min-h-[44px] shrink-0">
-        Abrir el cerebro
+        Cerebro del negocio
+        <span aria-hidden="true" className="text-white/50 transition group-hover:translate-x-0.5 group-hover:text-white">
+          ↗
+        </span>
+        <span className="sr-only">(se abre en una pestaña nueva)</span>
       </Link>
-    </section>
-  );
-}
-
-export function IconoCerebro({ className = "h-6 w-6" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} fill="none" aria-hidden="true" focusable="false">
-      <path
-        d="M9 4.5a3 3 0 0 0-3 3v.2A3 3 0 0 0 4.5 13a3 3 0 0 0 1.8 4.6A3 3 0 0 0 9 19.5a2.5 2.5 0 0 0 3-.6V5.4a2.6 2.6 0 0 0-3-.9ZM15 4.5a3 3 0 0 1 3 3v.2A3 3 0 0 1 19.5 13a3 3 0 0 1-1.8 4.6 3 3 0 0 1-2.7 1.9 2.5 2.5 0 0 1-3-.6"
-        stroke="currentColor"
-        strokeWidth={1.6}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path d="M8.5 10.5c1 0 1.8.6 2 1.5M15.5 10.5c-1 0-1.8.6-2 1.5M8 15h1.5M16 15h-1.5" stroke="currentColor" strokeWidth={1.4} strokeLinecap="round" />
-    </svg>
+    </div>
   );
 }

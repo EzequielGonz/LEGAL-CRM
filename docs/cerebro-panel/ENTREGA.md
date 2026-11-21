@@ -4,13 +4,13 @@ Pedido de los dueños: el cerebro de Claude como pantalla del panel, con el mism
 
 ## Qué incluye
 
-- **`/cerebro`** dentro del marco del panel (mismo menú, tema por perfil, tipografía y barra de salud). Secciones:
+- **`/cerebro`** es una pantalla aparte, con la escena del cerebro que armó Claude: esfera de puntos animada, frases que se revelan palabra por palabra con las cifras vivas, número que cuenta los contactos y tipografía Inter Tight + JetBrains Mono. Se abre desde Inicio (Perfiles) en una pestaña nueva. Secciones:
   - **Lo que veo hoy en el panel**: lecturas que el cerebro saca solo de las cifras vivas de la semana (perfil sin enviar, captados sin derivar, chats que piden una persona, caída de respuestas), más la salud del sistema en vivo, los últimos pedidos a Claude y el resumen de la semana del asistente.
   - Alertas, preguntas abiertas para los dueños.
   - **Hablale a Claude**: pedido a la Bandeja para Claude (misma tabla y validaciones), con la foto de la semana adjunta (solo cifras).
   - **Asistente del panel** (el mismo «Pedile algo» general) y **Laboratorio de bots** (el mismo de Perfiles).
   - Lo que entiende del negocio, pendientes, propuestas y lo que corrigió.
-- Acceso **arriba de todo en Perfiles** y una tarjeta en el menú lateral, arriba de la Bandeja.
+- Acceso **solo en Inicio**: una píldora chica con un punto que late, arriba de todo en Perfiles. Sin tarjeta en el menú de cada perfil.
 - Contenido en `src/lib/cerebro/contenido.ts` (texto, sin datos de personas ni claves), con pruebas en `tests/unitarias/cerebro-contenido.test.ts`.
 - `asistente/charlas` y `asistente/charlas/[id]` quedan registradas fuera del catálogo del asistente (la prueba del catálogo fallaba desde el 20/11).
 

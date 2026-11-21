@@ -1,19 +1,20 @@
-import { Suspense, cache } from "react";
+import { cache } from "react";
 import Link from "next/link";
+import { Inter_Tight, JetBrains_Mono } from "next/font/google";
+import "./cerebro.css";
 import { requirePageSession } from "@/lib/acceso/pagina";
-import { ResumenSemana } from "@/components/asistente/resumen-semana";
+import { HeroCerebro } from "@/components/cerebro/escena-cerebro";
+import { TableroPendientes } from "@/components/cerebro/tablero-pendientes";
 import { HablarConClaude } from "@/components/cerebro/hablar-con-claude";
 import { ChatAsistenteGeneral, type AccesoAsistente } from "@/components/asistente/chat-asistente-general";
 import { ConocimientoBot } from "@/components/perfiles/conocimiento-bot";
+import { resumenSemana } from "@/lib/asistente/semana";
+import { CIFRAS_SEMANA, totalSemana, variacion } from "@/lib/asistente/semana-reglas";
 import { leerRubrosActivos } from "@/lib/perfiles-stats";
-import { MarcoPerfil } from "@/components/perfiles/marco-perfil";
-import { perfilActivo } from "@/lib/perfil-activo";
-import type { SlugPerfil } from "@/lib/marca";
 import { leerSalud } from "@/lib/salud";
 import { lecturaSimple } from "@/lib/salud/reglas";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { filaATarea, perfilDeRubroId, ETIQUETA_ESTADO, type TareaBandeja } from "@/lib/bandeja-claude";
-import { resumenSemana } from "@/lib/asistente/semana";
 import {
   ACTUALIZADO,
   ALERTAS,
@@ -27,6 +28,7 @@ import {
   RESUMEN,
   conteoAlertas,
   fotoParaClaude,
+  frasesDelCerebro,
   lecturasDelPanel,
   type Gravedad,
   type PerfilSemana,
@@ -35,22 +37,27 @@ import {
 export const metadata = { title: "Cerebro del negocio" };
 export const dynamic = "force-dynamic";
 
+const fuente = Inter_Tight({ subsets: ["latin"], weight: ["300", "400", "500", "600", "800"], display: "swap", variable: "--cz-f" });
+const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500", "700"], display: "swap", variable: "--cz-mono" });
+
 /**
- * Cerebro del negocio (21/11, pedido de los dueños): la memoria de Claude
- * dentro del panel. Arriba lee las cifras vivas de la semana y saca sus
- * propias lecturas; abajo, lo que entiende, alertas, lo que corrigió,
- * propuestas, pendientes y preguntas abiertas. La bandeja manda pedidos a
- * Claude con la foto de la semana. Solo lectura: no cambia nada del panel.
+ * Cerebro del negocio (21/11, pedido de los dueños): pantalla aparte, con la
+ * escena de la página del cerebro que armó Claude (esfera, frases, recuadro).
+ * Se abre desde Inicio en una pestaña nueva. Lee el panel en vivo (cifras de
+ * la semana, salud, pedidos a Claude), suma el asistente general y el
+ * laboratorio de bots, y manda pedidos a la Bandeja para Claude. Solo lee:
+ * el único botón que escribe es «Mandar a Claude».
  */
-const TONO: Record<Gravedad, { chip: string; borde: string; texto: string }> = {
-  alta: { chip: "border-red-300 bg-red-50 text-red-800", borde: "border-l-red-500", texto: "Alta" },
-  media: { chip: "border-amber-300 bg-amber-50 text-amber-900", borde: "border-l-amber-500", texto: "Media" },
-  info: { chip: "border-sky-300 bg-sky-50 text-sky-900", borde: "border-l-sky-500", texto: "Para tener en cuenta" },
+const SEV: Record<Gravedad, { color: string; chip: string; texto: string }> = {
+  alta: { color: "var(--red)", chip: "c-bad", texto: "Alta" },
+  media: { color: "var(--amber)", chip: "c-warn", texto: "Media" },
+  info: { color: "var(--cyan)", chip: "c-idk", texto: "Para tener en cuenta" },
 };
+const COLOR_MARCA: Record<string, string> = { juridico: "var(--vita)", marketing: "var(--mkt)", coberturas_medicas: "var(--cob)", agencia_0km: "var(--auto)" };
 
 const ACCESOS: AccesoAsistente[] = [
   { titulo: "¿Cómo vienen los 4 perfiles?", descripcion: "Un resumen corto de cada perfil.", accion: "enviar", texto: "¿Cómo vienen los cuatro perfiles? Resumilo corto, perfil por perfil." },
-  { titulo: "Buscar captados sin derivar", descripcion: "Quién dejó sus datos y falta pasar.", accion: "enviar", texto: "¿Qué captados falta derivar en los cuatro perfiles?" },
+  { titulo: "Captados sin derivar", descripcion: "Quién dejó sus datos y falta pasar.", accion: "enviar", texto: "¿Qué captados falta derivar en los cuatro perfiles?" },
   { titulo: "Chats que piden una persona", descripcion: "Los que esperan a alguien del equipo.", accion: "enviar", texto: "Mostrame los chats que piden una persona en los cuatro perfiles." },
   { titulo: "Mejorar un bot", descripcion: "Contame qué cambiar y armo una versión para probar.", accion: "enviar", texto: "Quiero mejorar el bot de un perfil. Preguntame cuál y qué querés cambiar." },
 ];
@@ -61,286 +68,361 @@ const SECCIONES = [
   ["preguntas", "Preguntas"],
   ["hablar", "Hablale a Claude"],
   ["asistente", "Asistente"],
-  ["laboratorio", "Laboratorio de bots"],
+  ["laboratorio", "Laboratorio"],
   ["entiendo", "Lo que entiendo"],
   ["pendientes", "Pendientes"],
   ["propuestas", "Propuestas"],
   ["corregi", "Lo que corregí"],
 ] as const;
 
-export default async function CerebroPage(props: { searchParams: Promise<{ perfil?: string }> }) {
-  const sesion = await requirePageSession();
-  if (!sesion.ok) return sesion.fallback;
-  const searchParams = await props.searchParams;
-  const slug: SlugPerfil = await perfilActivo(searchParams.perfil);
-  const conteo = conteoAlertas(ALERTAS);
-
-  return (
-    <MarcoPerfil slug={slug}>
-      <div id="cerebro" className="mx-auto flex max-w-6xl flex-col gap-8">
-        <header className="flex flex-wrap items-start justify-between gap-3">
-          <div className="max-w-3xl">
-            <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Memoria de Claude · actualizada el {ACTUALIZADO}</p>
-            <h1 className="mt-1 text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">Cerebro del negocio</h1>
-            <p className="mt-2 text-sm text-slate-600">{RESUMEN}</p>
-            <p className="mt-2 text-sm text-slate-600">
-              {conteo.alta} alertas altas · {conteo.media} medias · {PREGUNTAS_ABIERTAS.length} preguntas para ustedes. Nada de esta pantalla cambia el panel.
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <Link href={`/bandeja?perfil=${slug}`} prefetch={false} className="btn-suave min-h-[44px]">
-              Bandeja para Claude
-            </Link>
-            <Link href="/perfiles" prefetch={false} className="btn-suave min-h-[44px]">
-              Todos los perfiles
-            </Link>
-          </div>
-        </header>
-
-        <nav aria-label="Secciones del cerebro" className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
-          <ul className="flex gap-2 whitespace-nowrap text-sm">
-            {SECCIONES.map(([id, nombre]) => (
-              <li key={id}>
-                <a href={`#${id}`} className="inline-flex min-h-[40px] items-center rounded-full border border-slate-300 bg-white px-3 font-medium text-slate-700 hover:bg-slate-100">
-                  {nombre}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        <div id="veo" className="scroll-mt-4">
-          <Suspense fallback={<p role="status" className="text-sm text-slate-600">Leyendo el panel…</p>}>
-            <LoQueVeo />
-          </Suspense>
-        </div>
-
-        <section id="alertas" aria-labelledby="alertas-titulo" className="scroll-mt-4">
-          <h2 id="alertas-titulo" className="mb-3 text-lg font-semibold text-slate-900">
-            Alertas
-          </h2>
-          <ul className="grid gap-3 md:grid-cols-2">
-            {ALERTAS.map((a) => (
-              <li key={a.titulo} className={`rounded-xl border border-l-4 border-slate-200 bg-white p-4 ${TONO[a.gravedad].borde}`}>
-                <span className={`inline-flex rounded-full border px-2 py-0.5 text-xs font-medium ${TONO[a.gravedad].chip}`}>{TONO[a.gravedad].texto}</span>
-                <p className="mt-2 font-medium text-slate-900">{a.titulo}</p>
-                <p className="mt-1 text-sm text-slate-600">{a.detalle}</p>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section id="preguntas" aria-labelledby="preguntas-titulo" className="scroll-mt-4 rounded-2xl border border-gold-500/40 bg-white p-4 shadow-sm sm:p-5">
-          <h2 id="preguntas-titulo" className="text-lg font-semibold text-slate-900">
-            Preguntas para ustedes
-          </h2>
-          <p className="mt-1 text-sm text-slate-600">Lo que no puedo saber mirando el panel. Respondan cuando quieran, por la bandeja o en el chat.</p>
-          <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm text-slate-800">
-            {PREGUNTAS_ABIERTAS.map((q) => (
-              <li key={q}>{q}</li>
-            ))}
-          </ol>
-        </section>
-
-        <div id="hablar" className="scroll-mt-4">
-          <Suspense fallback={null}>
-            <HablarConClaudeConFoto />
-          </Suspense>
-        </div>
-
-        <section id="asistente" aria-labelledby="asistente-titulo" className="scroll-mt-4">
-          <h2 id="asistente-titulo" className="mb-1 text-lg font-semibold text-slate-900">
-            Asistente del panel
-          </h2>
-          <p className="mb-3 text-sm text-slate-600">
-            Para preguntas rápidas sobre los cuatro perfiles, al instante. Lo que proponga queda para confirmar.{" "}
-            <Link href="/asistente" prefetch={false} className="font-medium text-slate-800 underline">
-              Abrir en pantalla completa
-            </Link>
-          </p>
-          <ChatAsistenteGeneral accesos={ACCESOS} alto="h-[min(60vh,36rem)]" />
-        </section>
-
-        <section id="laboratorio" aria-labelledby="laboratorio-titulo" className="scroll-mt-4">
-          <h2 id="laboratorio-titulo" className="mb-1 text-lg font-semibold text-slate-900">
-            Laboratorio de bots
-          </h2>
-          <p className="mb-3 text-sm text-slate-600">Qué versión del conocimiento rige en cada perfil, cómo rinde contra la anterior y el laboratorio para probar cambios. Ningún botón envía mensajes.</p>
-          <Suspense fallback={<p role="status" className="text-sm text-slate-600">Cargando los bots…</p>}>
-            <Laboratorio />
-          </Suspense>
-        </section>
-
-        <section id="entiendo" aria-labelledby="entiendo-titulo" className="scroll-mt-4">
-          <h2 id="entiendo-titulo" className="mb-3 text-lg font-semibold text-slate-900">
-            Lo que entiendo del negocio
-          </h2>
-          <ul className="grid gap-3 sm:grid-cols-2">
-            {ENTIENDO.map((e) => (
-              <li key={e} className="rounded-xl border border-slate-200 bg-white p-4 text-sm text-slate-700">
-                {e}
-              </li>
-            ))}
-          </ul>
-          <ul className="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-            {MARCAS_CEREBRO.map((m) => (
-              <li key={m.rubro} className="rounded-xl border border-slate-200 bg-white p-4">
-                <p className="text-xs font-medium text-slate-500">Prioridad {m.prioridad}</p>
-                <p className="mt-1 font-semibold text-slate-900">{m.nombre}</p>
-                <p className="mt-1 text-sm text-slate-600">Deriva a {m.derivaA}.</p>
-                <p className="mt-1 text-sm text-slate-600">{m.queVale}</p>
-                <p className="mt-2 text-xs text-slate-500">Meta semanal: {m.semanal}</p>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section id="pendientes" aria-labelledby="pendientes-titulo" className="scroll-mt-4">
-          <h2 id="pendientes-titulo" className="mb-3 text-lg font-semibold text-slate-900">
-            Pendientes
-          </h2>
-          <div className="grid gap-3 lg:grid-cols-3">
-            {PENDIENTES.map((c) => (
-              <div key={c.clave} className="rounded-2xl border border-slate-200 bg-white p-4">
-                <div className="flex items-baseline justify-between gap-2">
-                  <h3 className="font-semibold text-slate-900">{c.titulo}</h3>
-                  <span className="text-xs text-slate-500">{c.items.length}</span>
-                </div>
-                <p className="text-xs text-slate-500">{c.ayuda}</p>
-                <ul className="mt-3 space-y-2">
-                  {c.items.map((p) => (
-                    <li key={p.texto} className="rounded-lg border border-slate-100 bg-slate-50 p-3 text-sm text-slate-800">
-                      <p>{p.texto}</p>
-                      <p className="mt-1 flex flex-wrap gap-1.5 text-xs">
-                        <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-slate-600">{ETIQUETA_RUBRO[p.rubro]}</span>
-                        {p.urgente && <span className="rounded-full border border-amber-300 bg-amber-50 px-2 py-0.5 font-medium text-amber-900">Urgente</span>}
-                      </p>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section id="propuestas" aria-labelledby="propuestas-titulo" className="scroll-mt-4">
-          <h2 id="propuestas-titulo" className="mb-1 text-lg font-semibold text-slate-900">
-            Propuestas de mejora
-          </h2>
-          <p className="mb-3 text-sm text-slate-600">Ninguna está aplicada. Cada una necesita su OK.</p>
-          <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white">
-            <table className="w-full min-w-[32rem] text-left text-sm">
-              <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
-                <tr>
-                  <th className="px-4 py-2 font-medium">Qué</th>
-                  <th className="px-4 py-2 font-medium">Por qué</th>
-                  <th className="px-4 py-2 font-medium">Tamaño</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {PROPUESTAS.map((p) => (
-                  <tr key={p.titulo}>
-                    <td className="px-4 py-2 font-medium text-slate-900">{p.titulo}</td>
-                    <td className="px-4 py-2 text-slate-600">{p.porque}</td>
-                    <td className="px-4 py-2 text-slate-600">{p.tamano}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        <section id="corregi" aria-labelledby="corregi-titulo" className="scroll-mt-4">
-          <h2 id="corregi-titulo" className="mb-3 text-lg font-semibold text-slate-900">
-            Lo que tenía mal y corregí
-          </h2>
-          <ul className="grid gap-3 md:grid-cols-2">
-            {CORRECCIONES.map((c) => (
-              <li key={c.decia} className="rounded-xl border border-slate-200 bg-white p-4 text-sm">
-                <p className="text-slate-500 line-through">{c.decia}</p>
-                <p className="mt-1 text-slate-900">{c.real}</p>
-              </li>
-            ))}
-          </ul>
-        </section>
-      </div>
-    </MarcoPerfil>
-  );
-}
-
 /** Una sola lectura de la semana por pedido, compartida por los bloques. */
 const leerSemana = cache(async (): Promise<{ desde: string; perfiles: PerfilSemana[] } | null> => resumenSemana().catch(() => null));
 
-/** Cifras vivas de la semana y las lecturas que el cerebro saca de ellas. */
-async function LoQueVeo() {
-  const datos = await leerSemana();
-  const lecturas = datos ? lecturasDelPanel(datos.perfiles) : null;
+async function contarContactos(): Promise<number | null> {
+  try {
+    const { count, error } = await createAdminClient().from("contacts").select("id", { count: "exact", head: true });
+    if (error) throw error;
+    return count ?? null;
+  } catch {
+    return null;
+  }
+}
+
+export default async function CerebroPage() {
+  const sesion = await requirePageSession();
+  if (!sesion.ok) return sesion.fallback;
+  const conteo = conteoAlertas(ALERTAS);
+  const [semana, contactos, salud, pedidos, rubros] = await Promise.all([
+    leerSemana(),
+    contarContactos(),
+    leerSalud().catch(() => null),
+    leerPedidos(),
+    leerRubrosActivos().catch(() => []),
+  ]);
+  const frases = frasesDelCerebro(semana?.perfiles ?? null, conteo.alta, PREGUNTAS_ABIERTAS.length);
+  const lecturas = semana ? lecturasDelPanel(semana.perfiles) : null;
+  const total = semana ? totalSemana(semana.perfiles.map((p) => p.cifras)) : null;
+  const problemas = (salud ?? []).filter((i) => i.estado !== "verde");
+  const nombres = Object.fromEntries(rubros.map((r) => [r.slug, r.name]));
+
   return (
-    <div className="flex flex-col gap-4">
-      <section aria-labelledby="veo-titulo" className="rounded-2xl border border-slate-900 bg-slate-950 p-4 text-white shadow-sm sm:p-5">
-        <h2 id="veo-titulo" className="text-lg font-semibold">
-          Lo que veo hoy en el panel
-        </h2>
-        {lecturas ? (
-          <ul className="mt-3 space-y-1.5 text-sm text-slate-200">
-            {lecturas.map((l) => (
-              <li key={l} className="flex gap-2">
-                <span aria-hidden="true" className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gold-500" />
-                <span>{l}</span>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="mt-2 text-sm text-slate-300">No pude leer las cifras ahora. Probá recargar en un rato.</p>
-        )}
-      </section>
-      <div className="grid gap-4 lg:grid-cols-2">
-        <SaludViva />
-        <PedidosACLaude />
+    <div className={`cz ${fuente.variable} ${mono.variable}`} style={{ ["--cz-f" as string]: fuente.style.fontFamily, ["--cz-mono" as string]: mono.style.fontFamily }}>
+      <div style={{ position: "relative" }}>
+        <nav className="cz-top" aria-label="Volver">
+          <Link href="/perfiles" prefetch={false}>
+            ← Perfiles
+          </Link>
+          <Link href="/bandeja" prefetch={false}>
+            Bandeja para Claude
+          </Link>
+        </nav>
+        <HeroCerebro frases={frases} numero={contactos} bajada="contactos que el cerebro conoce" fecha={ACTUALIZADO} />
       </div>
-      <ResumenSemana />
+
+      <nav className="cz-idx" aria-label="Secciones">
+        <ul className="cz-in">
+          {SECCIONES.map(([id, nombre]) => (
+            <li key={id}>
+              <a href={`#${id}`}>{nombre}</a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <main>
+        <section id="veo">
+          <div className="cz-in">
+            <div className="cz-head">
+              <p className="cz-k">01 · En vivo</p>
+              <h2>
+                Lo que veo <b>hoy</b> en el panel.
+              </h2>
+              <p className="cz-lead">{RESUMEN}</p>
+            </div>
+            {total && (
+              <div className="cz-stats">
+                {CIFRAS_SEMANA.map((c) => {
+                  const v = variacion(total[c.clave].actual, total[c.clave].anterior);
+                  return (
+                    <div key={c.clave} className="cz-stat">
+                      <b>{total[c.clave].actual == null ? "—" : total[c.clave].actual!.toLocaleString("es-AR")}</b>
+                      <span>{c.titulo}</span>
+                      {v.flecha !== "sin_dato" && (
+                        <i className={v.flecha} aria-label={v.largo}>
+                          {v.flecha === "sube" ? "▲" : v.flecha === "baja" ? "▼" : "="} {v.texto}
+                        </i>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+            <div className="cz-grid2">
+              <div className="cz-card">
+                <header>
+                  <h3>Lo que leo en las cifras</h3>
+                </header>
+                {lecturas ? (
+                  <ul className="cz-list cz-veo">
+                    {lecturas.map((l) => (
+                      <li key={l}>{l}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="cz-muted">No pude leer las cifras ahora.</p>
+                )}
+              </div>
+              <div className="cz-card">
+                <header>
+                  <h3>Salud del sistema</h3>
+                  <Link href="/salud" prefetch={false}>
+                    Ver todo
+                  </Link>
+                </header>
+                {!salud ? (
+                  <p className="cz-muted">No pude leer la salud ahora.</p>
+                ) : problemas.length === 0 ? (
+                  <p className="cz-muted">Todo en orden ({salud.length} controles).</p>
+                ) : (
+                  <ul className="cz-list">
+                    {problemas.slice(0, 6).map((i) => (
+                      <li key={i.clave} style={{ ["--sev" as string]: i.estado === "rojo" ? "var(--red)" : "var(--amber)" }}>
+                        {lecturaSimple(i).que}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+              <div className="cz-card">
+                <header>
+                  <h3>Pedidos a Claude</h3>
+                  <Link href="/bandeja" prefetch={false}>
+                    Abrir la bandeja
+                  </Link>
+                </header>
+                {!pedidos ? (
+                  <p className="cz-muted">No pude leer la bandeja ahora.</p>
+                ) : pedidos.length === 0 ? (
+                  <p className="cz-muted">Todavía no hay pedidos.</p>
+                ) : (
+                  <ul className="cz-list">
+                    {pedidos.map((x) => (
+                      <li key={x.id} style={{ ["--sev" as string]: "var(--box)" }}>
+                        {x.pedido.replace(/^Desde el cerebro:\s*/, "").split("\n")[0].slice(0, 140)}
+                        <small>
+                          {ETIQUETA_ESTADO[x.estado]} · {ETIQUETA_RUBRO[perfilDeRubroId(x.rubro_id) ?? "todos"]}
+                        </small>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="alertas">
+          <div className="cz-in">
+            <div className="cz-head">
+              <p className="cz-k">02 · Lo urgente</p>
+              <h2>
+                Alertas <b>para ustedes</b>.
+              </h2>
+              <p className="cz-lead">No toqué ninguna.</p>
+            </div>
+            <div className="cz-facts">
+              {ALERTAS.map((a) => (
+                <div key={a.titulo} className="cz-alert" style={{ ["--sev" as string]: SEV[a.gravedad].color }}>
+                  <span className={`cz-chip ${SEV[a.gravedad].chip}`}>{SEV[a.gravedad].texto}</span>
+                  <p>
+                    {a.titulo}
+                    <small>{a.detalle}</small>
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="preguntas">
+          <div className="cz-in">
+            <div className="cz-head">
+              <p className="cz-k">03 · Lo que me falta</p>
+              <h2>
+                Preguntas <b>para ustedes</b>.
+              </h2>
+              <p className="cz-lead">Lo que no puedo saber mirando el panel. Respondan por la bandeja o en el chat.</p>
+            </div>
+            <ol className="cz-qs">
+              {PREGUNTAS_ABIERTAS.map((q) => (
+                <li key={q}>{q}</li>
+              ))}
+            </ol>
+          </div>
+        </section>
+
+        <section id="hablar">
+          <div className="cz-in">
+            <div className="cz-head">
+              <p className="cz-k">04 · Conexión</p>
+              <h2>
+                Hablale a <b>Claude</b>.
+              </h2>
+              <p className="cz-lead">Va a la Bandeja para Claude con el contexto del cerebro y, si quieren, la foto de la semana. Lo toma cuando abran un chat del proyecto y digan «ok».</p>
+            </div>
+            <HablarConClaude foto={semana ? fotoParaClaude(semana.perfiles, semana.desde) : null} />
+          </div>
+        </section>
+
+        <section id="asistente">
+          <div className="cz-in">
+            <div className="cz-head">
+              <p className="cz-k">05 · Al instante</p>
+              <h2>
+                Asistente <b>del panel</b>.
+              </h2>
+              <p className="cz-lead">Para preguntas rápidas sobre los cuatro perfiles. Lo que proponga queda para confirmar.</p>
+            </div>
+            <div className="cz-ventana">
+              <div className="barra">
+                <i />
+                <i />
+                <i />
+                <span>Pedile algo</span>
+              </div>
+              <div className="cuerpo">
+                <ChatAsistenteGeneral accesos={ACCESOS} alto="h-[min(60vh,34rem)]" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="laboratorio">
+          <div className="cz-in">
+            <div className="cz-head">
+              <p className="cz-k">06 · Bots</p>
+              <h2>
+                Laboratorio <b>de bots</b>.
+              </h2>
+              <p className="cz-lead">Qué versión del conocimiento rige en cada perfil, cómo rinde contra la anterior y el laboratorio para probar cambios. Ningún botón envía mensajes.</p>
+            </div>
+            <div className="cz-ventana">
+              <div className="barra">
+                <i />
+                <i />
+                <i />
+                <span>Conocimiento y laboratorio</span>
+              </div>
+              <div className="cuerpo">
+                <ConocimientoBot nombres={nombres} />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="entiendo">
+          <div className="cz-in">
+            <div className="cz-head">
+              <p className="cz-k">07 · El negocio</p>
+              <h2>
+                Lo que <b>entiendo</b>.
+              </h2>
+            </div>
+            <div className="cz-entiendo">
+              {ENTIENDO.map((e) => (
+                <p key={e}>{e}</p>
+              ))}
+            </div>
+            <div className="cz-brands">
+              {MARCAS_CEREBRO.map((m) => (
+                <div key={m.rubro} className="cz-brand" style={{ ["--b" as string]: COLOR_MARCA[m.rubro] }}>
+                  <span className="meta">PRIORIDAD {m.prioridad} · {m.semanal.toUpperCase()} POR SEMANA</span>
+                  <h3>{m.nombre}</h3>
+                  <p>Deriva a {m.derivaA}.</p>
+                  <p>{m.queVale}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="pendientes">
+          <div className="cz-in">
+            <div className="cz-head">
+              <p className="cz-k">08 · Lo que sigue</p>
+              <h2>
+                Pendientes, <b>ordenados</b>.
+              </h2>
+              <p className="cz-lead">Lo de Claude se hace como propuesta y con su autorización.</p>
+            </div>
+            <TableroPendientes columnas={PENDIENTES} />
+          </div>
+        </section>
+
+        <section id="propuestas">
+          <div className="cz-in">
+            <div className="cz-head">
+              <p className="cz-k">09 · Mejoras</p>
+              <h2>
+                Propuestas <b>sin aplicar</b>.
+              </h2>
+              <p className="cz-lead">Ninguna está hecha. Cada una necesita su OK.</p>
+            </div>
+            <div className="cz-tbl">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Qué</th>
+                    <th>Por qué</th>
+                    <th>Tamaño</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {PROPUESTAS.map((p) => (
+                    <tr key={p.titulo}>
+                      <td>{p.titulo}</td>
+                      <td>{p.porque}</td>
+                      <td>{p.tamano}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section id="corregi">
+          <div className="cz-in">
+            <div className="cz-head">
+              <p className="cz-k">10 · Memoria</p>
+              <h2>
+                Lo que tenía mal y <b>corregí</b>.
+              </h2>
+            </div>
+            <div className="cz-corr">
+              {CORRECCIONES.map((c) => (
+                <div key={c.decia}>
+                  <s>{c.decia}</s>
+                  <p>{c.real}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer className="cz-foot">
+        <div className="cz-in">
+          <p>Memoria de Claude, sin claves, sin el código del panel y sin datos de prospectos. Las cifras de arriba se leen en vivo.</p>
+          <p className="thanks">El secreto no fue la IA. Fue darle memoria y método.</p>
+        </div>
+      </footer>
     </div>
   );
 }
 
-/** Salud del sistema en vivo: lo que hoy frena o conviene mirar. */
-async function SaludViva() {
-  const items = await leerSalud().catch(() => null);
-  const problemas = (items ?? []).filter((i) => i.estado !== "verde");
-  const ok = (items ?? []).length - problemas.length;
-  return (
-    <section aria-labelledby="salud-titulo" className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
-      <div className="flex items-baseline justify-between gap-2">
-        <h2 id="salud-titulo" className="text-lg font-semibold text-slate-900">
-          Salud del sistema
-        </h2>
-        <Link href="/salud" prefetch={false} className="text-sm font-medium text-slate-700 underline">
-          Ver todo
-        </Link>
-      </div>
-      {!items ? (
-        <p className="mt-2 text-sm text-slate-600">No pude leer la salud ahora.</p>
-      ) : (
-        <>
-          <p className="mt-1 text-sm text-slate-600">
-            {problemas.length ? `${problemas.length} para mirar · ${ok} en orden.` : `Todo en orden (${ok} controles).`}
-          </p>
-          <ul className="mt-3 space-y-2">
-            {problemas.slice(0, 6).map((i) => (
-              <li key={i.clave} className={`rounded-lg border border-l-4 p-3 text-sm ${i.estado === "rojo" ? "border-slate-200 border-l-red-500" : "border-slate-200 border-l-amber-500"}`}>
-                {lecturaSimple(i).que}
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
-    </section>
-  );
-}
-
-/** Lo último que se le pidió a Claude, con su estado. */
-async function PedidosACLaude() {
-  let tareas: TareaBandeja[] | null = null;
+/** Lo último que se le pidió a Claude. */
+async function leerPedidos(): Promise<TareaBandeja[] | null> {
   try {
     const { data, error } = await createAdminClient()
       .from("bandeja_claude" as any)
@@ -348,49 +430,8 @@ async function PedidosACLaude() {
       .order("created_at", { ascending: false })
       .limit(5);
     if (error) throw error;
-    tareas = (data ?? []).map(filaATarea).filter((x): x is TareaBandeja => x !== null);
+    return (data ?? []).map(filaATarea).filter((x): x is TareaBandeja => x !== null);
   } catch {
-    tareas = null;
+    return null;
   }
-  return (
-    <section aria-labelledby="pedidos-titulo" className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
-      <div className="flex items-baseline justify-between gap-2">
-        <h2 id="pedidos-titulo" className="text-lg font-semibold text-slate-900">
-          Pedidos a Claude
-        </h2>
-        <Link href="/bandeja" prefetch={false} className="text-sm font-medium text-slate-700 underline">
-          Abrir la bandeja
-        </Link>
-      </div>
-      {!tareas ? (
-        <p className="mt-2 text-sm text-slate-600">No pude leer la bandeja ahora.</p>
-      ) : tareas.length === 0 ? (
-        <p className="mt-2 text-sm text-slate-600">Todavía no hay pedidos. Escribile desde «Hablale a Claude».</p>
-      ) : (
-        <ul className="mt-3 space-y-2">
-          {tareas.map((x) => (
-            <li key={x.id} className="rounded-lg border border-slate-200 p-3 text-sm">
-              <p className="flex flex-wrap gap-2 text-xs">
-                <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 font-medium text-slate-700">{ETIQUETA_ESTADO[x.estado]}</span>
-                <span className="text-slate-500">{ETIQUETA_RUBRO[perfilDeRubroId(x.rubro_id) ?? "todos"]}</span>
-              </p>
-              <p className="mt-1 line-clamp-2 text-slate-800">{x.pedido.replace(/^Desde el cerebro:\s*/, "").split("\n")[0]}</p>
-            </li>
-          ))}
-        </ul>
-      )}
-    </section>
-  );
-}
-
-async function HablarConClaudeConFoto() {
-  const datos = await leerSemana();
-  return <HablarConClaude foto={datos ? fotoParaClaude(datos.perfiles, datos.desde) : null} />;
-}
-
-/** Conocimiento y laboratorio de los bots, el mismo de la pantalla de perfiles. */
-async function Laboratorio() {
-  const rubros = await leerRubrosActivos().catch(() => []);
-  const nombres = Object.fromEntries(rubros.map((r) => [r.slug, r.name]));
-  return <ConocimientoBot nombres={nombres} />;
 }
