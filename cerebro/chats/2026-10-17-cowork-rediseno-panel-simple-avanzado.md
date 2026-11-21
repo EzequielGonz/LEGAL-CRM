@@ -5,7 +5,7 @@
 - **Título del chat:** Rediseño integral del panel (selector Simple/Avanzado, bloques 1 a 5). Proyecto «crm» en Cowork. Origen: `cerebro/chats/cowork/cowork-e-chat4.md` (transcripción redactada, con resumen de compactación en el anexo A y cronología en el anexo B).
 - **Fecha de inicio:** (no confirmado). La transcripción conservada empieza el 2026-10-17 20:33 UTC, justo tras una compactación; lo anterior (16–17/10/2026) solo existe como resumen. El proyecto venía de sesiones previas.
 - **Fecha de fin:** 2026-11-21 07:26 UTC (último registro; pedido de cierre del 21/11).
-- **Origen:** Cowork (navegador), proyecto «crm», repo `EzequielGonz/LEGAL-CRM`. Id de sesión de la transcripción: `aaed1adc-1125-5a3b-b879-37b5b5a6cc16`. Modelos: Opus 5.5, Fable 5.1, Haiku 5.5 y Sonnet 5.5 (cambios hechos por la responsable con `/model`).
+- **Origen:** Cowork (navegador), proyecto «crm», repo `EzequielGonz/LEGAL-CRM`. Id de sesión de la transcripción: `aaed1adc-1125-5a3b-b879-37b5b5a6cc16`. Modelos: Opus 5.5, Fable 5.1, Haiku 5.5 y Sonnet 5.5 (cambios hechos por el dueño con `/model`).
 - **Perfiles o marcas que toca:** Jurídico (Estudio Jurídico Integral Vita, Civil y Penal), Coberturas médicas, Autos 0 km y Marketing (agencia ORVIAN, ver CONTRADICE). El rediseño es común a los cuatro perfiles.
 - **Proyecto Vercel:** `prj_liUp46HbkMc0lPlhX1hX5CVLwsYt` (legal-crm, `legal-crm-nine.vercel.app`).
 - **Alcance:** 202 mensajes y herramientas (resultados resumidos a 300 caracteres). Sin razonamientos internos. Secretos, correos y teléfonos redactados.
@@ -14,9 +14,9 @@
 
 Terminar el rediseño del panel del CRM multirubro con un selector global Simple/Avanzado, sin cambiar datos, reglas ni estado operativo. Bloques: (1) navegación, (2) marca fuente única, Inicio, Contenido y Configuración, (3) resumen Simple en todas las secciones, (4) sistema visual y movimiento (Inter, sin 3D, CSS consolidado), (5) verificación integral (cuatro perfiles, 320–1440 px, zoom, teclado, movimiento reducido).
 
-Orden final de la responsable: subir todos los bloques, implementarlos, y dejar revisiones y verificaciones para el final.
+Orden final del dueño: subir todos los bloques, implementarlos, y dejar revisiones y verificaciones para el final.
 
-## 3. Órdenes y decisiones de la responsable (textuales)
+## 3. Órdenes y decisiones del dueño (textuales)
 
 ### 3.1 Antes de la compactación del 17/10 (sin fecha exacta; sesión del 16–17/10)
 
@@ -62,7 +62,7 @@ Orden final de la responsable: subir todos los bloques, implementarlos, y dejar 
 - No pasar nada a `main` todavía: se carga en `rediseno-b4`. Pasa a `main` solo con autorización expresa, después de verificar.
 - El ZIP `kocos-pipeline-rediseno-b4.zip` se carga a GitHub y lo aplica el pipeline.
 
-## 4. Correcciones que hizo la responsable
+## 4. Correcciones que hizo el dueño
 
 - Corrigió los estados de avance del rediseño: la directiva de retomada pedía distinguir implementado, desplegado, comprobado, revisado y probado. Un despliegue READY solo acredita el despliegue.
 - Pidió separar `rubros.brand_name` (identidad del agente) de `brand_briefs.nombre_publico` (marca del panel). Quedó separado y probado 11/11.
@@ -85,7 +85,7 @@ Estados: especificado · implementado · probado · publicado · habilitado. «P
 | Pruebas de navegador del bloque 4 (B1, B2-3, B3, B4, marca-agente) | sí | scripts listos (`pruebas-b4.mjs`) | **no corridas** | — | — |
 | Medición de caché (con/sin `no-store`) | sí | scripts listos | **sin resultado confiable** (1 consulta por carga, probable falta de sesión) | — | — |
 | Bloque 5 verificación integral | sí | **no iniciado** | no | — | — |
-| Revisión visual de la Preview de `rediseno-b4` | sí | pendiente de la responsable o el programador | no | — | — |
+| Revisión visual de la Preview de `rediseno-b4` | sí | pendiente del dueño o el programador | no | — | — |
 | Entrega ZIP `kocos-pipeline-rediseno-b4.zip` | sí | enviada por chat; aplicada por el pipeline en la rama | verificación: `rediseno-b4` = `8fe7a8b` tras borrar 9 archivos (diferencia vacía) | no | no |
 | `CONTEXTO_ACTUAL_CRM.md` y `PUNTO_DE_CONTROL.md` (proyecto) | sí | actualizados el 17/10 | — | — | — |
 | `docs/rediseno/PLAN.md` del repo | sí | **no actualizado** | — | — | — |
@@ -124,7 +124,7 @@ Notas:
 **Despliegues:**
 - Producción: `dpl_HqzDKxM7ViGxxd6WkSCDqKUukN7P` READY = `176e067` (sin cambios).
 - Preview previa de B1: `dpl_D4Yw3szy3eq6JEf9bNoC6pEAEGNr` (solo acredita despliegue).
-- Preview de `rediseno-b4`: la responsable confirmó que se genera (sin id registrado).
+- Preview de `rediseno-b4`: el dueño confirmó que se genera (sin id registrado).
 
 **Sandboxes de Vercel (solo pruebas, datos inventados):**
 - `sbx_8EokZgtOqLrHEpHecRmCVo69HnnG` (detenido), snapshot `snap_wOOSK4E1H2xCjNh7RhprRLb9I7Lj` (expirado). Nombre `rediseno-arnes-b1`.
@@ -152,7 +152,7 @@ Notas:
 - Pruebas de navegador del bloque 4 (B1, B2-3, B3, B4, marca-agente). Hay que reconstruir el arnés (PostgreSQL, PostgREST, Playwright, datos inventados) en un sandbox. Los scripts están en el scratchpad y pueden perderse; el snapshot anterior expiró.
 - Medición de caché con sesión efectiva, con y sin `no-store`.
 - Bloque 5: verificación integral (cuatro perfiles, escritorio y teléfono, 320–1440 px, zoom, teclado, movimiento reducido). No iniciado.
-- Revisión visual de la Preview de `rediseno-b4` (PC y teléfono, Simple y Avanzado) por la responsable o el programador.
+- Revisión visual de la Preview de `rediseno-b4` (PC y teléfono, Simple y Avanzado) por el dueño o el programador.
 - Actualizar `docs/rediseno/PLAN.md` en el repo.
 - Integrar a `main`: solo con autorización expresa, después de verificar. No se hizo.
 - Bloqueo de escritura por `git push`: 403 del proxy. Error exacto: «remote: access denied by the git proxy: EzequielGonz/LEGAL-CRM is not in this session's authorized repository set, so the proxy will not inject a credential for it. To fix, add the repository to the session's sources.» La lectura (`ls-remote`, `fetch`) sí funciona. El conector de GitHub sí escribió el 17/10.
@@ -164,7 +164,7 @@ Notas:
 
 - **Qué funcionó:**
   - Usar el conector de GitHub cuando `git push` no tenía permiso. Verificar después con `git fetch` y `git diff` (diferencia vacía).
-  - Separar en la guía lo que hace el asistente de lo que hace la responsable.
+  - Separar en la guía lo que hace el asistente de lo que hace el dueño.
   - Puntos de control al cambiar de modelo.
 - **Qué no funcionó:**
   - `git push` directo: 403 del proxy de Git (no autorizado por fuentes de la sesión).
@@ -208,10 +208,10 @@ Qué quedó encendido o apagado: nada. Producción sin cambios; Preview de `redi
 
 ## 12. CONTRADICE
 
-- **Nombre de la agencia.** La memoria de la responsable (anterior al 20/10) dice «ORVIAN, no Kocos». Un perfil del proyecto (20/10) dice «Kocos Marketing (no ORVIAN)». Este cierre usa ORVIAN porque así lo escribió la responsable en el pedido del 21/11. Confirmar cuál es el nombre vigente.
+- **Nombre de la agencia.** La memoria del dueño (anterior al 20/10) dice «ORVIAN, no Kocos». Un perfil del proyecto (20/10) dice «Kocos Marketing (no ORVIAN)». Este cierre usa ORVIAN porque así lo escribió el dueño en el pedido del 21/11. Confirmar cuál es el nombre vigente.
 - **GitHub, reglas.** El pedido del 21/11 dice «No escribas en GitHub, no hagas commits ni pushes, y no crees ramas sin mi “dale” explícito». El `CLAUDE.md` vigente (20/11) dice: «Todo lo demás Claude lo implementa, prueba, publica y verifica directo (GitHub, base, configuración, despliegue, Metricool), sin pedir «dale» por cada paso.» Única restricción de ese documento: pagos.
-- **GitHub, resultado.** El pedido del 21/11 dice «Hasta ahora no pude escribir en GitHub (403)». Es cierto para `git push`, pero el conector de GitHub escribió con éxito el 17/10 (9 commits de borrado en `rediseno-b4`, con «1 si 2 si 3 si» de la responsable).
-- **PR a `main`.** El chat dice «PR de `rediseno-b4` a `main`: solo con autorización expresa, después de verificar». El `CLAUDE.md` del 20/11 dice que Claude publica directo; el mismo documento dice que la Preview comparte base con producción y que las campañas las lanza la responsable. Hace falta decidir qué rige para publicar.
+- **GitHub, resultado.** El pedido del 21/11 dice «Hasta ahora no pude escribir en GitHub (403)». Es cierto para `git push`, pero el conector de GitHub escribió con éxito el 17/10 (9 commits de borrado en `rediseno-b4`, con «1 si 2 si 3 si» del dueño).
+- **PR a `main`.** El chat dice «PR de `rediseno-b4` a `main`: solo con autorización expresa, después de verificar». El `CLAUDE.md` del 20/11 dice que Claude publica directo; el mismo documento dice que la Preview comparte base con producción y que las campañas las lanza el dueño. Hace falta decidir qué rige para publicar.
 - **Borrados.** `CLAUDE.md` dice «Nada se borra: se archiva o pasa a borrador con motivo.» El chat borró 9 archivos de código (CSS viejo, `efectos-3d.tsx`, auxiliares) en `rediseno-b4`. La regla habla de datos; igual conviene dejar constancia.
 - **Versión de Next.js.** El chat dice «Next.js 14 App Router». El `CLAUDE.md` del 20/11 dice Next.js 15.5.
 - **Migraciones.** `CLAUDE.md` dice «numeradas por etapa (`01xx`, `02xx`)». El chat usa `0400`. Y el chat 1 usa `0199`–`0203`.
@@ -222,7 +222,7 @@ Qué quedó encendido o apagado: nada. Producción sin cambios; Preview de `redi
 - **Producción `main`.** Según el chat, producción sigue en `176e067` (17/10). Hoy `main` está en `66c457b` (21/11): algo entró en el medio, no confirmado.
 - **Estado del rediseño.** La directiva de retomada pedía «implementado, desplegado, comprobado, revisado y probado». El resumen de B1 dice «probado 48/48 en sesión previa»; sin evidencia adjunta en este chat.
 - **Fase 3 / Etapa 3.** El chat 1 dice «Etapa 3 agents, not started». Este chat dice «Fase 3 pausada». Mismo tema, dos nombres.
-- **Mensajes con sentido doble de la responsable** (20:51 UTC): «Bueno podes seguir con todo el resto y yo cargo manualmente eso? decime donde lo cargo. no sigas aun». Se respetó el «no sigas aún» y se construyó solo el ZIP; luego (21:08) pidió «retoma con lo que sigue».
+- **Mensajes con sentido doble del dueño** (20:51 UTC): «Bueno podes seguir con todo el resto y yo cargo manualmente eso? decime donde lo cargo. no sigas aun». Se respetó el «no sigas aún» y se construyó solo el ZIP; luego (21:08) pidió «retoma con lo que sigue».
 
 **Secretos y datos (no copiados):**
 - Ningún valor de variables de entorno, PIN, clave o token figura en este documento. Solo nombres (sección 6).

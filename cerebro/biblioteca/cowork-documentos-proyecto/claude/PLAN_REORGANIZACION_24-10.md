@@ -1,6 +1,6 @@
 # Plan de reorganización · versión final para aprobar (24/10/2026)
 
-Junta lo acordado con la responsable más el tercer chequeo del panel en Chrome. Detalle: DIAGNOSTICO_PANEL_24-10.md y CAPTACION_ANALISIS_24-10.md.
+Junta lo acordado con el dueño más el tercer chequeo del panel en Chrome. Detalle: DIAGNOSTICO_PANEL_24-10.md y CAPTACION_ANALISIS_24-10.md.
 
 ## 1. Captación (aprobado)
 - Plantillas nuevas, sin decir «consultaste» (las bases se compran; Marketing no se toca):

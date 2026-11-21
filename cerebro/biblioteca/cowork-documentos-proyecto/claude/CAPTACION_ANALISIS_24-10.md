@@ -34,7 +34,7 @@ Muestra: primeras respuestas de los últimos 14 días, clasificadas por palabras
   - Ante «ahora no» pregunta cuándo le queda mejor y lo agenda.
   - Ante «¿de dónde salió mi número?» da una respuesta clara y única.
   - Si insisten, se disculpa y no vuelve a escribir.
-- Estadísticas separadas, simples (pedido de la responsable):
+- Estadísticas separadas, simples (pedido del dueño):
   - (1) Por cerrar: tiene interés y una duda que el bot no sabe responder → intervención humana.
   - (2) Pidió hablar con una persona (solo interesados).
   - (3) Bot trabado.

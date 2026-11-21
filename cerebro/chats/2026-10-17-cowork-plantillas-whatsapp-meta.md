@@ -13,11 +13,11 @@
 
 Terminar y publicar el rediseño del panel, cargar las credenciales de WhatsApp de los cuatro rubros y dejar las 33 plantillas propuestas (9 Civil, 8 de 0 km, 8 de Coberturas y 8 de Marketing) enviadas a revisión de Meta mediante un botón del panel. Sin enviar mensajes a personas y sin iniciar campañas.
 
-## 3. Órdenes y decisiones de la responsable
+## 3. Órdenes y decisiones del dueño
 
 - 17/10 (traspaso, sin hora): «RETOMEMOS EL CHAT CRM MULTIRUBRO STATUS. TERMINA TODO ESTO / LO QUE TENGO QUE HACER YO: 1 YA LO MIRE 2 SI AUTORIZO 3 SI DALE AUTORIZO, TERMINALO POR FAVOR».
 - 17/10 (parte reconstruida): «SALTA TODO ESO IMPLEMENTA TODOS LOS CAMBIOS Y SOLAMENTE HACE UNA REVISION VISUAL FINAL Y LISTO. TERMINALO RAPIDO E IMPLEMENTA TODO».
-- 17/10: «TERMINA EL BLOQUE 5 TAMBIEN E IMPLEMENTALO FINALIZA TODO MENOS LAS MEDICIONES REVISIONES Y TODO ESO. TERMINA TODO E IMPLEMENTA». El archivo aclara que el bloque 5 quedó cerrado sin ejecutar «por decisión de la responsable», pero el motivo no figura (ver sección 10).
+- 17/10: «TERMINA EL BLOQUE 5 TAMBIEN E IMPLEMENTALO FINALIZA TODO MENOS LAS MEDICIONES REVISIONES Y TODO ESO. TERMINA TODO E IMPLEMENTA». El archivo aclara que el bloque 5 quedó cerrado sin ejecutar «por decisión del dueño», pero el motivo no figura (ver sección 10).
 - 17/10: sobre la prueba de navegador comentada antes, decidió omitirla. Después dijo: «La prueba real no hace falta, ya que confirmamos correctamente que funcionan».
 - 17/10: «1. AGENCIA DE MARKETING KOCOS - WEBHOOKS YA APLICADOS 2. AUTOMOTORES KOCOS - WEBHOOKS YA APLICADOS 3. TU OBRA SOCIAL - WEBHOOKS YA APLICADOS ¿Que faltaria agregar a vercel en cuanto a credenciales?».
 - 17/10: «Excelente. Entonces, ahora mismo el panel estaria funcionando correctamente en lo que seria el contestado con IA y whatsapp (CONFIRMAME ESTO) Despues, necesito que arranquemos con el armado de plantillas para cada rubro. Eso lo haces vos automaticamente?».
@@ -29,7 +29,7 @@ Terminar y publicar el rediseño del panel, cargar las credenciales de WhatsApp 
 - 21/11 07:29 UTC: «y». Respuesta ambigua; no está claro a qué se refiere (ver sección 10).
 - 21/11 (pedido de cierre): generar este archivo, sin escribir en GitHub, sin commits, pushes ni ramas sin un «dale» explícito.
 
-## 4. Correcciones de la responsable
+## 4. Correcciones del dueño
 
 - El identificador que dio primero para Civil era el del número de teléfono y no el de la cuenta de WhatsApp Business; lo corrigió con un segundo mensaje.
 - Aclaró que lo cargado en el panel es Civil y que Penal se agrega más adelante.
@@ -40,17 +40,17 @@ Terminar y publicar el rediseño del panel, cargar las credenciales de WhatsApp 
 
 Escala: especificado / implementado / probado / publicado / habilitado.
 
-- **Rediseño, bloques 1 a 4:** implementado (PR #17, `991c871`, según el archivo «commit en main»). Preview revisada por la responsable. Despliegue de producción sin verificar. Pruebas de navegador del bloque 4 omitidas.
+- **Rediseño, bloques 1 a 4:** implementado (PR #17, `991c871`, según el archivo «commit en main»). Preview revisada por el dueño. Despliegue de producción sin verificar. Pruebas de navegador del bloque 4 omitidas.
 - **Bloque 5 (verificación integral):** no implementado; cerrado sin ejecutar.
-- **Botón «Enviar desde <línea>» (PR #18, `fb6688f`):** implementado. Preview de Vercel con éxito. Producción sin verificar. La responsable lo usó.
-- **Credenciales de WhatsApp de cuatro rubros en Vercel:** cargadas por la responsable (solo nombres de variables en la sección 11). Redeploy hecho por la responsable. La variable de WABA de Civil estaba vacía y se completó. La responsable confirma que funcionan.
-- **Webhooks de Meta:** aplicados por la responsable en Agencia Kocos, Automotores Kocos y Tu Obra Social. Confirmados por la responsable. Eventos sin firma van a cuarentena.
-- **Línea 0 km en `profile_lines`:** registrada por la responsable desde el panel, con «Agente» y «Campañas» tildados. Visto en captura.
-- **Líneas de Coberturas y Marketing:** asignadas por la responsable (informado). Sin captura.
+- **Botón «Enviar desde <línea>» (PR #18, `fb6688f`):** implementado. Preview de Vercel con éxito. Producción sin verificar. El dueño lo usó.
+- **Credenciales de WhatsApp de cuatro rubros en Vercel:** cargadas por el dueño (solo nombres de variables en la sección 11). Redeploy hecho por el dueño. La variable de WABA de Civil estaba vacía y se completó. El dueño confirma que funcionan.
+- **Webhooks de Meta:** aplicados por el dueño en Agencia Kocos, Automotores Kocos y Tu Obra Social. Confirmados por el dueño. Eventos sin firma van a cuarentena.
+- **Línea 0 km en `profile_lines`:** registrada por el dueño desde el panel, con «Agente» y «Campañas» tildados. Visto en captura.
+- **Líneas de Coberturas y Marketing:** asignadas por el dueño (informado). Sin captura.
 - **Envío a revisión de Civil (9):** hecho. Verificado solo con capturas anteriores; el estado de aprobación no se leyó.
 - **Envío de 0 km (8):** hecho. El panel mostró «8 enviadas a revisión». No se leyó después.
-- **Envío de Marketing:** el primer intento dio «No se pudo enviar.» sin detalle. La responsable informó 9 plantillas en la cuenta (se supone 8 propuestas más una de fábrica, sin verificar). Causa del error no confirmada; probablemente un corte por tiempo.
-- **Envío de Coberturas (8):** informado por la responsable. Sin captura ni verificación.
+- **Envío de Marketing:** el primer intento dio «No se pudo enviar.» sin detalle. El dueño informó 9 plantillas en la cuenta (se supone 8 propuestas más una de fábrica, sin verificar). Causa del error no confirmada; probablemente un corte por tiempo.
+- **Envío de Coberturas (8):** informado por el dueño. Sin captura ni verificación.
 - **Aprobación por Meta de las plantillas:** **no comprobada**. Depende de la revisión de Meta y no hubo lectura posterior.
 
 Nada del chat figura como publicado en producción, habilitado o probado funcionalmente sin evidencia. Las campañas siguen pausadas y no se enviaron mensajes a personas.
@@ -68,7 +68,7 @@ Nada del chat figura como publicado en producción, habilitado o probado funcion
 
 ## 7. Datos del negocio
 
-- Cuatro rubros con línea propia: Civil (cuenta cargada), Penal (pendiente, diferido), 0 km (línea registrada) y Coberturas y Marketing (asignadas por la responsable).
+- Cuatro rubros con línea propia: Civil (cuenta cargada), Penal (pendiente, diferido), 0 km (línea registrada) y Coberturas y Marketing (asignadas por el dueño).
 - Cantidades de plantillas por rubro: Civil 9, 0 km 8, Coberturas 8, Marketing 8 propuestas (9 en la cuenta).
 - Agencia: el archivo la llama ORVIAN; ver sección 12.
 
@@ -80,7 +80,7 @@ Nada del chat figura como publicado en producción, habilitado o probado funcion
 4. Verificar el despliegue de producción de `fb6688f`. El permiso de listado de despliegues fue bloqueado.
 5. Causa del error «No se pudo enviar.» de Marketing: no confirmada. Mejorar el mensaje de error o evaluar `maxDuration`.
 6. Decidir si «Campañas» queda tildado en las líneas nuevas mientras se espera la aprobación.
-7. Penal: línea y cuenta diferidas por decisión de la responsable.
+7. Penal: línea y cuenta diferidas por decisión del dueño.
 8. Plantillas `mkt_apertura_propuesta` y `mkt_presupuesto_listo`, `META_APP_SECRET` y otros pendientes del proyecto (ver el resumen de contexto).
 9. Candidato C (`GCP_*`, corpus y ajuste, con tope de USD 30) y experimento A/B/C sin iniciar.
 10. Deuda conocida: pruebas de navegador del bloque 4, medición de caché y bloque 5.
@@ -94,7 +94,7 @@ Nada del chat figura como publicado en producción, habilitado o probado funcion
 
 ## 10. Preguntas abiertas
 
-- ¿Qué quiso decir la responsable con «y» del 21/11 07:29 UTC?
+- ¿Qué quiso decir el dueño con «y» del 21/11 07:29 UTC?
 - ¿Por qué se cerró el bloque 5 sin ejecutar, si la orden decía «TERMINA EL BLOQUE 5 TAMBIEN E IMPLEMENTALO»? El archivo no tiene el motivo.
 - ¿Qué pasó con las 9 plantillas de Marketing frente a las 8 propuestas?
 - ¿Se mantiene «Campañas» tildado en las líneas nuevas?
@@ -106,16 +106,16 @@ Nada del chat figura como publicado en producción, habilitado o probado funcion
 - **Migraciones:** hasta `0400_rediseno_logo_panel` (aditiva, ya aplicada antes del chat). Ninguna nueva en este chat. Consulta de solo lectura a `profile_lines`: al 17/10 solo existía la línea de Civil.
 - **Despliegues:** Preview del PR #18 con éxito. Producción de `fb6688f` sin verificar.
 - **Variables de Vercel (solo nombres):** `WHATSAPP_<ÁREA>_PHONE_NUMBER_ID`, `WHATSAPP_<ÁREA>_ACCESS_TOKEN` y `WHATSAPP_<ÁREA>_WABA_ID` para CIVIL, PENAL (incompleta), AGENCIA_0KM, COBERTURAS_MEDICAS y MARKETING; `META_APP_SECRET` y `META_APP_SECRETS`; `WHATSAPP_VERIFY_TOKEN`. Pendientes opcionales: `GCP_*`, variables de VAPID, `SESSION_SECRET` y `LANDING_*`. Los valores no se leyeron ni se reproducen.
-- **Configuración fuera del código:** webhooks de Meta aplicados por la responsable. Redeploy de Vercel hecho por la responsable. No hay cambios en Supabase, Metricool ni Google en este chat.
+- **Configuración fuera del código:** webhooks de Meta aplicados por el dueño. Redeploy de Vercel hecho por el dueño. No hay cambios en Supabase, Metricool ni Google en este chat.
 - **Qué quedó encendido o apagado por este chat:** nada se encendió para envíos. Las campañas siguen pausadas. Las plantillas están enviadas a revisión de Meta según los paneles de Civil y 0 km, y sin verificar en Marketing y Coberturas.
 - **Escrituras en GitHub:** ninguna en el cierre del 21/11.
 
 ## 12. CONTRADICE
 
 - **CONTRADICE:** el resumen previo daba por probable que el botón «Enviar desde» apareciera con solo cargar las variables. En la práctica hacía falta registrar cada línea en `profile_lines` antes de que aparecieran los botones.
-- **CONTRADICE:** se indicó dejar «Campañas» sin tildar en las líneas nuevas. La línea de 0 km quedó con «Agente» y «Campañas» tildados por decisión de la responsable. La pausa general sigue siendo lo que impide los envíos.
+- **CONTRADICE:** se indicó dejar «Campañas» sin tildar en las líneas nuevas. La línea de 0 km quedó con «Agente» y «Campañas» tildados por decisión del dueño. La pausa general sigue siendo lo que impide los envíos.
 - **CONTRADICE:** el pedido del 21/11 afirma que hasta ahora no se pudo escribir en GitHub (403). Según el resumen, solo falló el `git push` directo, y la escritura por el conector de GitHub funcionó (PR #17 y #18). No se volvió a comprobar en este cierre.
 - **CONTRADICE:** Marketing muestra 9 plantillas frente a 8 propuestas. Se supone una de fábrica, sin comprobar.
-- **CONTRADICE:** el archivo nombra la agencia como ORVIAN, pero la corrección de la responsable del 20/10 fue «ORVIAN NO, KOCOS MARKETING ES» (ver el chat de landings). Usar Kocos Marketing.
+- **CONTRADICE:** el archivo nombra la agencia como ORVIAN, pero la corrección del dueño del 20/10 fue «ORVIAN NO, KOCOS MARKETING ES» (ver el chat de landings). Usar Kocos Marketing.
 - **CONTRADICE:** el archivo dice «Panel en Next.js 14». `CLAUDE.md` del repo dice Next.js 15.5. Verificar cuál es la versión real.
 - **CONTRADICE:** las migraciones de este chat están numeradas `04xx` (0400). `CLAUDE.md` pide numeración por etapa (`01xx`, `02xx`). Revisar la convención.

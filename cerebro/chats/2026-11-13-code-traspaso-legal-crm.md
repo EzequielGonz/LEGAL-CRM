@@ -14,7 +14,7 @@
 
 ## 2. Objetivo
 
-Lo que pidió la responsable, del 13 al 15/11:
+Lo que pidió el dueño, del 13 al 15/11:
 
 - Que el bot de los cuatro perfiles conteste mejor y no pierda gente. Incluye la confirmación al captar, las crisis, el enojo, los contestadores y el tope de mensajes por contacto.
 - Que el envío de campañas por Wasender sea humano: ritmo variable, plantillas al azar, sin patrón repetido, y arranque con 20 por día en modo entrenamiento.
@@ -25,9 +25,9 @@ Lo que pidió la responsable, del 13 al 15/11:
 
 Para qué: no está dicho en una frase. Se infiere que es que la captación sea segura y que el panel sea usable (inferido de las órdenes).
 
-## 3. Órdenes y decisiones de la responsable (textuales, con fecha)
+## 3. Órdenes y decisiones del dueño (textuales, con fecha)
 
-Hora en UTC, como en el registro. La responsable escribió en todo momento en el chat de Code.
+Hora en UTC, como en el registro. El dueño escribió en todo momento en el chat de Code.
 
 **13/11/2026**
 
@@ -93,7 +93,7 @@ Hora en UTC, como en el registro. La responsable escribió en todo momento en el
 - 15/11 07:26 («Una confirmación como la que hay») reemplaza la recomendación del asistente de pedir código de 8 números para lanzar desde el asistente.
 - 15/11 06:59 («No hay ninguna pausa general») reemplaza la lectura del asistente de que la pausa general seguía activa (ver sección 12).
 
-## 4. Correcciones de la responsable
+## 4. Correcciones del dueño
 
 - **14/11 07:17:** el asistente pidió datos del bot que ya estaban cargados en las instrucciones de los agentes. Quería que se revisara antes de preguntar: «no lo viste?»
 - **14/11 06:11:** el asistente había propuesto un día de descanso por semana. Lo rechazó: «dias de descanso no pondría».
@@ -101,7 +101,7 @@ Hora en UTC, como en el registro. La responsable escribió en todo momento en el
 - **15/11 04:46:** la respuesta al captar tenía que ser propia de cada rubro. Ya no van los botones del inicio de mensaje, por una limitación de Meta.
 - **15/11 07:49 y 07:52:** el prompt a los subagentes solo listaba dos skills. Quería que usaran todas las skills y plugins útiles, y que se revisara lo ya hecho sin ellas.
 - **15/11 08:40 a 08:44:** el laboratorio estaba demasiado técnico, con funciones que no servían y un menú lateral confuso. Quería una sección sencilla y funcional, con gráficos simples, y que el asistente general mostrara el resumen semanal con gráficos.
-- **15/11 06:59:** el asistente había informado que la pausa general seguía activa («Siguen igual la pausa general, los agentes apagados y las campañas pausadas»). La responsable dijo que no hay pausa general.
+- **15/11 06:59:** el asistente había informado que la pausa general seguía activa («Siguen igual la pausa general, los agentes apagados y las campañas pausadas»). El dueño dijo que no hay pausa general.
 
 ## 5. Qué se hizo, con estado
 
@@ -111,11 +111,11 @@ Estados: especificado / implementado / probado / publicado / habilitado. Se usan
 
 | Tarea | Estado | Notas |
 |---|---|---|
-| Traspaso a un chat nuevo: `docs/mejoras-1311/handoff-legal-crm.md` | publicado | El archivo quedó en la raíz primero; la responsable lo pasó a esa carpeta. No tiene el código de acceso. |
+| Traspaso a un chat nuevo: `docs/mejoras-1311/handoff-legal-crm.md` | publicado | El archivo quedó en la raíz primero; el dueño lo pasó a esa carpeta. No tiene el código de acceso. |
 | Next.js 15.5.29 + React 19, con codemod de APIs async | implementado, probado, publicado | 456 pruebas pasaban ese día. Avisos de dependencias: 0. |
 | Embudo de Resultados: «Conversaron», «Oportunidades reales», «Ventas» (migración 0612) | publicado | Jurídico, semana del 13/11: 22 respondieron, 12 conversaron, 3 oportunidades, 3 captados, 0 ventas. |
 | Gráfico «Día por día» en Resultados (migración 0614) | publicado | |
-| Diseño: menú plegable a íconos, barra inferior en celular, portada con profundidad, «En vivo» no tapa tarjetas, modo oscuro por defecto | publicado | Modo oscuro pedido por la responsable. |
+| Diseño: menú plegable a íconos, barra inferior en celular, portada con profundidad, «En vivo» no tapa tarjetas, modo oscuro por defecto | publicado | Modo oscuro pedido por el dueño. |
 | Rutas con riesgo (migración 0613): la agenda se reemplaza sin borrar, «vaciar la cola» y quitar un teléfono de avisos ya no borran, 5 rutas devuelven 404 o 400 en vez de «ok» silencioso | publicado | Sin probar con datos reales: guardar horarios, quitar teléfono de avisos. |
 | Salud: tiempos del latido por etapa; avisos de fallas cada 10 minutos (uno por tipo, perfil y día) | publicado | **Habilitado: no.** Había 0 dispositivos con avisos activos. |
 | Audios | probado en parte | Dos audios reales de prueba (13 s y 71 s) se transcribieron bien. Ningún audio entrante llegó después de encender la función; no se vio al bot responder un audio real. |
@@ -135,7 +135,7 @@ Estados: especificado / implementado / probado / publicado / habilitado. Se usan
 | Informe con fechas y lista de correcciones ya hechas (`RESUELTO_EN_EL_SISTEMA`) | publicado (697af84, 14/11) | Antes marcaba problemas ya resueltos. |
 | Informe pasa a segundo plano (`after`) | publicado | Antes había un timeout de 120 s en `/api/agentes/informes`. |
 | Bot v2: 12 fichas nuevas (`fuente = 'mejora 14/11'`), contestadores nuevos, sin «escribilo» ante stickers | publicado (27feeaa) | Sin borrar ni editar lo que ya había. |
-| Fichas con datos del negocio | publicado | El asistente ajustó 4 fichas nuevas para que digan lo que la responsable ya había dado (marcas, usado como parte de pago en Autos, guía de packs en Marketing). Las de la responsable no se tocaron. |
+| Fichas con datos del negocio | publicado | El asistente ajustó 4 fichas nuevas para que digan lo que el dueño ya había dado (marcas, usado como parte de pago en Autos, guía de packs en Marketing). Las del dueño no se tocaron. |
 | Velocidad: sin precarga automática en listas, marca y menú en paralelo, `profile_metrics` en una pasada (migración 0616) | publicado (5d68500) | Sin cambios estéticos ni funcionales. |
 | Confirmación al captar: se perdía cuando el bot usaba captar y después finalizar_consulta en la misma respuesta (4 casos en Jurídico en 14 días) | implementado (c51c5a2), publicado tras «publica todo» (70a0c74 en main, 14/11 08:36) | Habilitado en producción. No se vio todavía en una charla real. |
 | Motor de Wasender: campañas sin plantilla fija rotan solas («Al azar» por defecto) | publicado | |
@@ -145,7 +145,7 @@ Estados: especificado / implementado / probado / publicado / habilitado. Se usan
 | Tarea | Estado | Notas |
 |---|---|---|
 | Bloque 1, bots: Gemini con tiempo de 20 s y un reintento; `captar` solo con aceptación real; marcas de tiempo en el historial (más de 24 h); crisis y enojo; contrato de precios; rescate con turnos de error | implementado, probado en pruebas unitarias, publicado (75e4158) | Quedó parte pendiente en el resumen del 15/11 (ver sección 8). |
-| Bloque 2, seguridad: intentos de PIN atómicos (0621), dispositivo conocido de 90 días (0624), sesión de 7 días sin uso y 30 en total, PIN de 8 dígitos, mensajes de error públicos sin datos de base (unas 45 rutas), tope de 3 contactos sin respuesta (`TOPE_SIN_RESPUESTA = 3`) | publicado | El código de ingreso de la responsable quedó escrito en el chat varias veces; hay que cambiarlo. |
+| Bloque 2, seguridad: intentos de PIN atómicos (0621), dispositivo conocido de 90 días (0624), sesión de 7 días sin uso y 30 en total, PIN de 8 dígitos, mensajes de error públicos sin datos de base (unas 45 rutas), tope de 3 contactos sin respuesta (`TOPE_SIN_RESPUESTA = 3`) | publicado | El código de ingreso del dueño quedó escrito en el chat varias veces; hay que cambiarlo. |
 | Bloque 3, accesibilidad y diseño: cartel de crisis en el panel, estados de error, etiquetas, contraste | publicado | Según el reporte, los problemas de accesibilidad bajaron de unos 240 a 19 en computadora y de 19 a 8 en celular (axe). |
 | Bloque 3, velocidad: refactor de consultas, carga diferida del chat, conteo del total de chats una vez por minuto | publicado | |
 | Bloque 4, negocio: entrenamiento de campañas (20 por día durante 7 días; botón «Modo entrenamiento» encendido por defecto al crear campañas nuevas; un límite manual de más de 20 lo apaga) (0622); freno por respuesta: con 100 envíos o más y menos de 1 % de respuesta en 7 días, la línea frena, y se puede ignorar a mano (0623); alerta push cuando se desconecta una línea (`src/lib/wasender/entrada.ts`); tope por contacto | publicado | Habilitado solo el valor por defecto al crear campañas nuevas. No lanzó ninguna campaña. |
@@ -153,7 +153,7 @@ Estados: especificado / implementado / probado / publicado / habilitado. Se usan
 | Revisión de todas las pantallas en producción | probado | 166 de computadora y 55 de celular, sin errores del servidor. Un aviso aislado de hidratación en «Prospectos por base» de Marketing no se repitió en 8 recargas. |
 | Un subagente del bloque 3 llegó al límite de gasto (429) a las 05:45 UTC; se guardó como WIP (e80d77d, solo en la rama) y después se completó | implementado | |
 | Asistente general en su propia página, con resumen semanal, gráficos simples y botones de acción rápida; laboratorio en una sola pantalla con selector de perfil, chat embebido y comparación de versiones con gráficos | implementado en la rama (6ecd995 y afe29e3, 15/11 08:53 y 08:54). Tests: 574 pasan, typecheck y build OK (08:55). | **Publicado a main: no consta.** Migración 0633: no consta si se aplicó. Este era el estado al final del trabajo de código. |
-| Otros proveedores de IA con enlace | no implementado | Pedido del 15/11 08:44; la responsable dijo que por ahora solo Gemini (07:32). |
+| Otros proveedores de IA con enlace | no implementado | Pedido del 15/11 08:44; el dueño dijo que por ahora solo Gemini (07:32). |
 | Aplicar las tres propuestas recomendadas del informe (Jurídico: consulta de turno médico pendiente y oferta baja de la aseguradora; Autos: «Sí, quiero ver») | no consta | Pedido del 15/11 04:45. |
 | Cambio de respuesta al captar y al agendar (no cortar sin saludar ni agradecer) | no consta | Pedido del 15/11 04:45 y 04:46. |
 | Archivar unas 30 variantes malas de Marketing y corregir el generador de plantillas (`docs/mejoras-1411/plantillas-frias.mjs`) | no consta | Estaba en pendientes del resumen del 15/11 05:45. |
@@ -194,7 +194,7 @@ Estados: especificado / implementado / probado / publicado / habilitado. Se usan
 
 - «ART - TEST WASENDER»: 1.147 contactos pendientes; su línea está archivada. Hay que asignarle una línea conectada antes de reanudarla. No se reanudó.
 - Campañas de Jurídico en «Al azar» (677 textos). La campaña pausada de Jurídico que tenía plantilla fija pasó a «Al azar». No se lanzó ni reanudó nada.
-- Campañas, publicaciones y plantillas: no se lanzó nada que la responsable no haya pedido. Ningún envío real (no había líneas conectadas en el registro).
+- Campañas, publicaciones y plantillas: no se lanzó nada que el dueño no haya pedido. Ningún envío real (no había líneas conectadas en el registro).
 
 **Fuera de código**
 
@@ -205,28 +205,28 @@ Estados: especificado / implementado / probado / publicado / habilitado. Se usan
 ## 7. Datos del negocio que aparecieron
 
 - Jurídico, semana del 13/11: 22 respondieron, 12 conversaron, 3 oportunidades, 3 captados, 0 ventas.
-- Líneas de Wasender: una por perfil, con calentamiento de 20, después 40 y después 60 por día. Coberturas y Autos no tenían línea cargada el 14/11. La responsable debía conectar las líneas el 15/11 (no consta).
+- Líneas de Wasender: una por perfil, con calentamiento de 20, después 40 y después 60 por día. Coberturas y Autos no tenían línea cargada el 14/11. El dueño debía conectar las líneas el 15/11 (no consta).
 - Envíos: arrancan el lunes 16/11, porque el domingo no envía. Lunes a sábado, sin días de descanso.
-- Datos que la responsable pidió para las fichas del bot (ya estaban cargados en las instrucciones de los agentes; los valores no quedaron consignados en el registro): marcas, formas de pago y requisitos de Autos, incluido el usado como parte de pago; si la primera revisión de Jurídico no tiene costo; zonas de Coberturas; qué incluye la propuesta inicial de Marketing, incluida la guía de packs.
+- Datos que el dueño pidió para las fichas del bot (ya estaban cargados en las instrucciones de los agentes; los valores no quedaron consignados en el registro): marcas, formas de pago y requisitos de Autos, incluido el usado como parte de pago; si la primera revisión de Jurídico no tiene costo; zonas de Coberturas; qué incluye la propuesta inicial de Marketing, incluida la guía de packs.
 - Regla de negocio que aparece en los resúmenes: el bot no da precios; los pone el equipo.
 - Nada de roles del equipo ni proveedores nuevos (salvo que se quiere sumar otros modelos de IA por enlace).
 
 ## 8. Pendiente, a medias o bloqueado
 
-- **Pausa general:** hay que verificar en la base si existe. El asistente la dio por activa y la responsable dijo que no existe (ver sección 12).
+- **Pausa general:** hay que verificar en la base si existe. El asistente la dio por activa y el dueño dijo que no existe (ver sección 12).
 - **Asistente y laboratorio simples (6ecd995, afe29e3):** están en la rama, con tests y build OK. No consta que se hayan publicado a main ni que se haya aplicado la migración 0633.
 - **Tres propuestas del informe y cambio de respuesta al captar y al agendar:** pedidos el 15/11. No consta que se hayan aplicado.
 - **Ver al bot responder un audio entrante real:** pendiente hasta que llegue uno.
-- **Avisos de fallas:** cero dispositivos con avisos activos. La responsable tiene que activarlos en al menos uno (Ajustes › Avisos).
-- **Código de ingreso:** sigue sin cambiar según el registro. Lo escribió en el chat varias veces y la responsable tiene que cambiarlo; el nuevo debe tener 8 dígitos.
+- **Avisos de fallas:** cero dispositivos con avisos activos. El dueño tiene que activarlos en al menos uno (Ajustes › Avisos).
+- **Código de ingreso:** sigue sin cambiar según el registro. Lo escribió en el chat varias veces y el dueño tiene que cambiarlo; el nuevo debe tener 8 dígitos.
 - **Líneas:** asignar una línea conectada a «ART - TEST WASENDER»; conectar las líneas de Coberturas y Autos.
-- **Otros proveedores de IA:** no hecho. Por ahora solo Gemini. Falta que la responsable diga qué proveedor agregar.
-- **Facebook y WhatsApp en Redes:** no se editan. Si el campo queda vacío al guardar, pisa lo que hay en Meta. La responsable tiene que decidir.
+- **Otros proveedores de IA:** no hecho. Por ahora solo Gemini. Falta que el dueño diga qué proveedor agregar.
+- **Facebook y WhatsApp en Redes:** no se editan. Si el campo queda vacío al guardar, pisa lo que hay en Meta. El dueño tiene que decidir.
 - **Variantes malas de Marketing:** archivar unas 30 y corregir el generador. No consta.
 - **Pendientes del bloque 1 del 15/11:** tiempo de espera de Gemini con atención humana si falla; `rescate.ts` con turnos de error; debounce de ráfagas; alinear `probar-real.ts` con el bot en vivo; banner de crisis urgente. No consta que estén terminados.
 - **Sin probar con datos reales:** guardar horarios de agenda, quitar un teléfono de avisos, la llegada de un aviso de falla, dos latidos a la vez.
 - **Pruebas de integración:** no corridas (Docker).
-- **Crisis y líneas de ayuda:** la pregunta sobre si salen con la pausa general activa queda sin respuesta explícita. La responsable dijo que no hay pausa general, así que habría que verificar que las líneas salgan.
+- **Crisis y líneas de ayuda:** la pregunta sobre si salen con la pausa general activa queda sin respuesta explícita. El dueño dijo que no hay pausa general, así que habría que verificar que las líneas salgan.
 
 ## 9. Aprendizajes
 
@@ -245,7 +245,7 @@ Estados: especificado / implementado / probado / publicado / habilitado. Se usan
 ## 10. Preguntas abiertas
 
 1. ¿Se publica la rama con el asistente y el laboratorio simples (6ecd995) a `main`? ¿Se aplica la migración 0633?
-2. ¿La responsable activa los avisos de fallas en al menos un dispositivo?
+2. ¿El dueño activa los avisos de fallas en al menos un dispositivo?
 3. ¿Se aplican las tres propuestas recomendadas del informe y el cambio de respuesta al captar y al agendar?
 4. ¿Qué proveedor de IA se agrega por enlace, además de Gemini? ¿Qué URL o forma de conexión?
 5. ¿Se editan Facebook y WhatsApp desde Redes? Hoy no se tocan por la regla de Meta.
@@ -260,7 +260,7 @@ Estados: especificado / implementado / probado / publicado / habilitado. Se usan
 - `main`: producción. Recibió los cambios publicados del chat (13/11, 14/11, 15/11).
 - `claude/relaxed-cerf-5oncz1`: rama de trabajo del chat (todo el trabajo de 13 al 15/11). Su última punta en el registro es 6ecd995 (15/11 08:54 UTC). Contiene commits no publicados, por ejemplo la migración 0633. **Acción:** confirmar qué está integrado en main y decidir si se integra o se archiva lo que falta.
 - `publicar-informe`: rama auxiliar del 14/11 para publicar el informe a main. Se puede archivar.
-- `mejoras-1211`: rama anterior; la responsable pidió no seguir en ella. No se describe en el registro.
+- `mejoras-1211`: rama anterior; el dueño pidió no seguir en ella. No se describe en el registro.
 - `cerebro-chats`: rama de este volcado, sin cambios fuera de `cerebro/chats/`.
 - Worktrees de subagentes en `.claude/worktrees/` (por ejemplo, `agent-a7b1…`). Son temporales.
 
@@ -304,7 +304,7 @@ Estados: especificado / implementado / probado / publicado / habilitado. Se usan
 - Vercel: ninguno. La variable del código de acceso (nombre `PANEL_PIN`) se usó solo en comandos.
 - Supabase: solo migraciones y datos (ver arriba).
 - Meta, Metricool, Google y redes: sin cambios.
-- Wasender: no se conectó ninguna línea en el registro; la responsable tenía que hacerlo el 15/11 (no consta).
+- Wasender: no se conectó ninguna línea en el registro; el dueño tenía que hacerlo el 15/11 (no consta).
 
 **Qué quedó encendido o apagado por este chat:**
 
@@ -314,13 +314,13 @@ Estados: especificado / implementado / probado / publicado / habilitado. Se usan
 
 ## 12. CONTRADICE
 
-- **Pausa general.** El asistente informó el 15/11 06:56 UTC: «Siguen igual la pausa general, los agentes apagados y las campañas pausadas». La responsable respondió el 15/11 06:59: «No hay ninguna pausa general, saca eso, los bots andan». **Hay que verificar en la base** qué está encendido antes de dar por cierto cualquiera de los dos.
+- **Pausa general.** El asistente informó el 15/11 06:56 UTC: «Siguen igual la pausa general, los agentes apagados y las campañas pausadas». El dueño respondió el 15/11 06:59: «No hay ninguna pausa general, saca eso, los bots andan». **Hay que verificar en la base** qué está encendido antes de dar por cierto cualquiera de los dos.
 - **Stack.** El prompt del 15/11 07:49 a los subagentes dice «Next.js 14», pero el proyecto está en Next.js 15.5 desde el 13/11. El prompt o el contexto de agentes tienen que actualizarse. El `CLAUDE.md` del repo ya dice 15.5.
 - **Modelos en commits.** El resumen del 15/11 fija «sin IDs de modelo en commits ni en código», pero los commits del chat llevan la línea `Co-Authored-By` con el nombre del modelo (por ejemplo, `70a0c74`). Hay que decidir cuál regla vale.
-- **Uso extra y costo.** El `CLAUDE.md` dice «No se paga nada sin autorización expresa de la responsable». Los metadatos muestran uso extra («isUsingOverage») y un costo acumulado de unos USD 238. **No consta una autorización expresa para ese uso extra.**
+- **Uso extra y costo.** El `CLAUDE.md` dice «No se paga nada sin autorización expresa del dueño». Los metadatos muestran uso extra («isUsingOverage») y un costo acumulado de unos USD 238. **No consta una autorización expresa para ese uso extra.**
 - **Código de ingreso.** El `CLAUDE.md` dice que el código de ingreso no va en el chat ni en archivos. Quedó escrito en el chat el 13/11, el 14/11 y el 15/11, y en el registro no consta que se haya cambiado. Hay que cambiarlo.
-- **Verificaciones.** El 15/11 05:03 la responsable pidió un análisis «totalmente exhaustivo»; el 15/11 08:23 pidió verificaciones «rápidas, no tan exhaustivas». Se toma la segunda para las verificaciones de rutina (ver sección 3).
-- **Propuestas del informe.** El 14/11 08:48 el reporte dice «Propuestas de los informes: no aplicadas». El 15/11 04:45 la responsable pidió «aplica las tres propuestas recomendadas». No consta que se hayan aplicado.
-- **Confirmación de lanzamiento.** El asistente recomendó código de 8 dígitos para lanzar desde el asistente general (15/11 07:26). La responsable eligió «Una confirmación como la que hay». Prevalece la decisión de la responsable.
-- **Respuesta al captar.** El 15/11 04:46 la responsable pidió que la respuesta al captar fuera por rubro. No consta que esté hecha.
+- **Verificaciones.** El 15/11 05:03 el dueño pidió un análisis «totalmente exhaustivo»; el 15/11 08:23 pidió verificaciones «rápidas, no tan exhaustivas». Se toma la segunda para las verificaciones de rutina (ver sección 3).
+- **Propuestas del informe.** El 14/11 08:48 el reporte dice «Propuestas de los informes: no aplicadas». El 15/11 04:45 el dueño pidió «aplica las tres propuestas recomendadas». No consta que se hayan aplicado.
+- **Confirmación de lanzamiento.** El asistente recomendó código de 8 dígitos para lanzar desde el asistente general (15/11 07:26). El dueño eligió «Una confirmación como la que hay». Prevalece la decisión del dueño.
+- **Respuesta al captar.** El 15/11 04:46 el dueño pidió que la respuesta al captar fuera por rubro. No consta que esté hecha.
 - **Pendientes de la sesión contra el registro.** El resumen del 15/11 05:45 dice que los bloques 1 y 3 quedaron a medias (WIP e80d77d). El reporte del 15/11 06:56 dice que los cuatro bloques están publicados (75e4158). Se toma el reporte posterior como el estado publicado.

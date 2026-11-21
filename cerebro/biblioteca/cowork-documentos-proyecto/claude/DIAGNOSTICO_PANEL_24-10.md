@@ -1,6 +1,6 @@
 # Diagnóstico del panel · 24/10/2026 (recorrido completo)
 
-Recorrido en vivo por Chrome con la sesión de la responsable. Pasé por los 4 perfiles, sus pestañas, grupos desplegables, «Más opciones», la ficha, el chat, campañas, bases, redes, configuración, agentes, la bandeja, el teléfono y el asistente. Solo se abrieron formularios, sin guardar ni enviar. Rutas revisadas: ~45 de las 80 del código; el resto son variantes por perfil o detalles con id.
+Recorrido en vivo por Chrome con la sesión del dueño. Pasé por los 4 perfiles, sus pestañas, grupos desplegables, «Más opciones», la ficha, el chat, campañas, bases, redes, configuración, agentes, la bandeja, el teléfono y el asistente. Solo se abrieron formularios, sin guardar ni enviar. Rutas revisadas: ~45 de las 80 del código; el resto son variantes por perfil o detalles con id.
 
 ## A. Lo vital que está escondido
 1. Atención humana:

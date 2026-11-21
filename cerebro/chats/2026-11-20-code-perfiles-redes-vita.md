@@ -11,17 +11,17 @@
   - Compara Tu Obra Social: rubro Coberturas médicas (`cob`).
   - Automotores Kocos: rubro Autos 0 km (`autos`).
   - Kocos Marketing: rubro Marketing (`mkt`).
-- **Repo y rama:** EzequielGonz/LEGAL-CRM, rama `claude/happy-wozniak-ajfi1z`. La rama ya existía; la pidió la responsable al empezar.
+- **Repo y rama:** EzequielGonz/LEGAL-CRM, rama `claude/happy-wozniak-ajfi1z`. La rama ya existía; la pidió el dueño al empezar.
 
 ## 2. Objetivo
 
-En el primer paso, la responsable pidió un boceto de un solo perfil (VITA) para revisar: un reel de mini historia animada hecho en código y sin costo (20 a 40 s, 1080×1920, voz rioplatense, marca de IA si es sintética, cierre «Comentá PALABRA») y el rediseño de un carrusel guía de 5 a 7 láminas con portada.
+En el primer paso, el dueño pidió un boceto de un solo perfil (VITA) para revisar: un reel de mini historia animada hecho en código y sin costo (20 a 40 s, 1080×1920, voz rioplatense, marca de IA si es sintética, cierre «Comentá PALABRA») y el rediseño de un carrusel guía de 5 a 7 láminas con portada.
 
 En el segundo paso, cuando dijera «aprobado»: reescribir los guiones del calendario, producir reels, historias y carruseles del 25/11 al 04/12 para las cuatro marcas, alojarlos en `/redes/` de cada landing, programarlos en Metricool en el horario del calendario y terminar la medición de landings y CRM.
 
 Después subió el alcance: pidió un cronograma de 10 días que duplicara el actual, con más volumen de publicaciones, ideas para las cuatro marcas, arranque inmediato desde el 20/11, y publicar y programar todo. Para qué: presencia premium en redes con volumen, para las cuatro marcas.
 
-## 3. Órdenes y decisiones de la responsable (textuales, UTC)
+## 3. Órdenes y decisiones del dueño (textuales, UTC)
 
 **Pedido inicial, 20/11 04:30**
 
@@ -64,10 +64,10 @@ Después subió el alcance: pidió un cronograma de 10 días que duplicara el ac
 
 **Reemplazos**
 
-- «reemplaza a» la propuesta del chat de frenar el ritmo: si el 25/11 la retención o el alcance caían más de 30 %, los reels extra pasaban a borrador. La responsable contestó con «no bajamos ningun ritmo, pegamos o pegamos» (06:06).
+- «reemplaza a» la propuesta del chat de frenar el ritmo: si el 25/11 la retención o el alcance caían más de 30 %, los reels extra pasaban a borrador. El dueño contestó con «no bajamos ningun ritmo, pegamos o pegamos» (06:06).
 - «reemplaza a» la lista del chat de piezas en borrador (lo jurídico nuevo, el fallo de la Corte, Black Friday de Autos, aumento de prepagas, patentamientos). Su respuesta fue: patentamientos y aumento de prepagas «nada»; Black Friday de Autos «mandale» sin números reales; «el resto todooo subi y publica todo».
 
-**Reglas que el chat tomó del repo y de la responsable (no son órdenes nuevas de este chat)**
+**Reglas que el chat tomó del repo y del dueño (no son órdenes nuevas de este chat)**
 
 - Usar todas las skills, plugins y conectores sin pedir permiso, salvo para pagar. Sin publicidad paga («aun no programes publicidad paga»).
 - La bio y el botón de los perfiles de redes quedan como están («el boton y la bio, dejalos asi como ya estan»). Nunca «el botón está en el perfil» en piezas nuevas.
@@ -79,7 +79,7 @@ Después subió el alcance: pidió un cronograma de 10 días que duplicara el ac
 - Las landings reciben solo archivos estáticos en `main`.
 - Ningún pago ni generador pago (Veo, Kling, Runway, ElevenLabs) sin autorización.
 
-## 4. Correcciones de la responsable
+## 4. Correcciones del dueño
 
 - **Calidad del boceto de VITA (04:47 a 05:33):** quería más definición, 4K, personajes más definidos, planos rápidos e irreales, efectos «wow», sin carteles de carácter ilustrativo y más realismo. Pidió nivel «premium» y «dopamina a cada rato».
 - **Identidad:** logo o nombre del rubro en reels y posteos (04:48).
@@ -100,7 +100,7 @@ Estados: especificado / implementado / probado / publicado / habilitado. «Progr
 | Motor de reels 2.5D v3 en las cuatro marcas | implementado | 7790364. Planos irreales y realce en curso (1649500) |
 | Voces (edge-tts es-AR y Piper es_AR) y sonido | implementado | `historia_voz.py`, `sonido.py`, `voz.py`. Piper: modelo `.onnx` descargado a mano |
 | Ortografía y tipografías de Autos y Kocos | implementado | 7790364 y 370cfcf. La revisión por pieza quedó como regla, no verificada en cada una |
-| Calendario x2, 20 al 29/11: 632 filas (68 reels, 80 historias y 10 carruseles por marca) | implementado; probado con validador (0 errores, 22 avisos) | `docs/redes/calendario-2011-2911-x2/`, commit 9d79568. Figura como «aprobado por la responsable (20/11)» en todas las filas (ver sección 12) |
+| Calendario x2, 20 al 29/11: 632 filas (68 reels, 80 historias y 10 carruseles por marca) | implementado; probado con validador (0 errores, 22 avisos) | `docs/redes/calendario-2011-2911-x2/`, commit 9d79568. Figura como «aprobado por el dueño (20/11)» en todas las filas (ver sección 12) |
 | Programación en Metricool del 20/11 | programado (habilitado) | 10 reels en total (2 o 3 por marca; 4 son nuevos), 9 historias y 1 carrusel por marca. Detalle en sección 6.2 |
 | Programación del 21/11 | programado (habilitado) | 12 historias y 1 carrusel por marca; 1 reel de Kocos Marketing |
 | Programación 22 al 24/11 | programado (parcial, no confirmado) | El informe lista 12 historias y 1 carrusel por marca y 2 o 13 piezas nuevas por día; la columna de reels está en 0, posiblemente por el alcance de la consulta |
@@ -197,7 +197,7 @@ Estado al cierre de los disparadores: no confirmado.
 - **Versiones del contenido:** A (original), B (otro gancho, otra escena o giro, al menos 5 días después), R (remake de un tema que funcionó del 10 al 19/11). Tope: 6 reels por tema y marca.
 - **Cuentas Metricool y landings:** las cuatro marcas con sus landings. Las cuentas de TikTok y YouTube Shorts figuran como condicionales.
 - **Proveedores y herramientas:** Metricool (programación), edge-tts (voces de Microsoft), Piper (voz local), Playwright y Chromium, ffmpeg. Sin pagos.
-- **Equipo:** la responsable es dueña de las cuatro marcas y decisora; no es técnica. No se registran otros roles.
+- **Equipo:** los dueños son dos (desarrolladores y dueños de las cuatro marcas). No se registran otros roles.
 
 ## 8. Pendiente, a medias o bloqueado
 
@@ -206,7 +206,7 @@ Estado al cierre de los disparadores: no confirmado.
 - **Textos finales de 34 historias:** quedaron solo con el título del tema (por ejemplo, «Lo que pocos saben: Aportes sobre el aguinaldo»). Hay que escribir el texto en la producción.
 - **Historias sin texto:** el informe del 20/11 dice que las historias salen sin texto. Eso choca con las 34 historias que no tienen texto final (no confirmado cuál es la regla).
 - **Verificación de 81 historias de destacadas del 20/11 (1:28 a 1:50):** pedida al comienzo, no aparece el resultado en el registro (no confirmado).
-- **Entrega en Word y prompt único:** la responsable pidió un resumen en un solo prompt y los archivos en Word (.docx). No aparece en el registro (no confirmado).
+- **Entrega en Word y prompt único:** el dueño pidió un resumen en un solo prompt y los archivos en Word (.docx). No aparece en el registro (no confirmado).
 - **Carrusel a tamaño de teléfono por `SendUserFile`:** no confirmado.
 - **Reels de prueba:** un TRIAL_REEL por día y marca, solo Instagram. Kocos Marketing no califica por el mínimo de seguidores (ver sección 12).
 - **Piezas condicionadas:** solo los cuatro reels de «lugar de actualidad» quedaron con condición.
@@ -226,26 +226,26 @@ Estado al cierre de los disparadores: no confirmado.
 - **Pastilla vacía de `#nota`:** se oculta cuando no tiene texto.
 - **Subtítulos sobre papel claro:** se agregó contorno oscuro y degradado.
 - **Renders:** unos 5 minutos por reel a 1080p y 30 cps con 4 núcleos; unos 35 minutos con desenfoque de movimiento. Varias corridas de render cortaron con código de salida 144.
-- **Lección del chat:** las variantes deben tener cambios reales (gancho, escena, giro, voz o música), no trucos para esquivar la detección de duplicados. El chat lo recomendó; la responsable pidió otra cosa (ver sección 12).
+- **Lección del chat:** las variantes deben tener cambios reales (gancho, escena, giro, voz o música), no trucos para esquivar la detección de duplicados. El chat lo recomendó; el dueño pidió otra cosa (ver sección 12).
 
 ## 10. Preguntas abiertas
 
-1. **Patentamientos (ACARA):** la responsable dijo «nada, no lo hagas». ¿Se programó la pieza «Contado, prendario o plan» del 28/11 (Autos)? El CSV la incluye.
+1. **Patentamientos (ACARA):** el dueño dijo «nada, no lo hagas». ¿Se programó la pieza «Contado, prendario o plan» del 28/11 (Autos)? El CSV la incluye.
 2. **Aumento de prepagas:** ¿«nada» significa no hacer ninguna pieza sobre el aumento, o no hacer el de número oficial? El CSV tiene varias piezas de aumento sin números, y una de «¿Pagás por cosas que no usás?» el 26/11.
 3. **Black Friday de Kocos Marketing:** la orden «sin números reales» se dio para Autos. El calendario tiene piezas de Kocos con «200 mensajes» y «200 chats». ¿Son cifras reales?
 4. **Reels de prueba:** ¿un TRIAL_REEL por marca, si Kocos no califica?
-5. **Volumen:** ¿la responsable quiere seguir con el volumen completo aunque no alcance la producción?
+5. **Volumen:** ¿el dueño quiere seguir con el volumen completo aunque no alcance la producción?
 6. **Entrega en Word:** ¿hace falta el resumen en .docx y el prompt único?
 
 ## 11. Ramas y cambios
 
 **Rama principal del chat: `claude/happy-wozniak-ajfi1z`**
 
-- Existía antes del chat; la pidió la responsable.
+- Existía antes del chat; la pidió el dueño.
 - **Punta actual:** `1911d71`, 21/11/2026 05:44 UTC, «Redes: avance de producción de reels», de otra sesión (`session_01FuLgnj5dyMXat2HmKarMfG`).
 - **Integrada a main:** no. La punta no es ancestro de `origin/main`. Hay un merge de la rama (`9c6d2a5`, 20/11 06:05 UTC) que sí aparece en la historia de main; el alcance no está confirmado.
 - **PR:** #77, abierta, con el título «docs: análisis de redes, estrategia y calendario 25/11–04/12». No verificado quién la abrió.
-- **Qué hacer:** con el ok de la responsable, integrar a main por la PR #77 (abierta) o por un PR nuevo, después de revisar el calendario y los puntos de la sección 12.
+- **Qué hacer:** con el ok del dueño, integrar a main por la PR #77 (abierta) o por un PR nuevo, después de revisar el calendario y los puntos de la sección 12.
 
 **Ramas de sesiones hijas**
 
@@ -275,8 +275,8 @@ Estado al cierre de los disparadores: no confirmado.
 
 ## 12. CONTRADICE
 
-1. **Patentamientos y prepagas: orden contra calendario.** La orden del 20/11 06:06 dice «patentamientos nada, no lo hagas» y «el aumento de prepagas nada». El informe del subagente de calendario (06:14) y el CSV (632 filas) siguen con piezas de ACARA («Contado, prendario o plan», 28/11) y de prepagas (aumento y «¿Pagás por cosas que no usás?», 26/11). Mismo problema con las 632 filas, que figuran como «aprobado por la responsable (20/11)». No confirmado si se programaron.
-2. **Duplicados: orden contra recomendación.** La responsable pidió reversiones para que «meta no nos detecta que son publicaciones duplicadas». El chat dejó escrito que solo se hacen variantes reales. El cerebro (`cerebro/02-ordenes-vigentes.md`, línea 149) registra «no trucos anti-duplicado». Hay que definir cuál regla rige.
+1. **Patentamientos y prepagas: orden contra calendario.** La orden del 20/11 06:06 dice «patentamientos nada, no lo hagas» y «el aumento de prepagas nada». El informe del subagente de calendario (06:14) y el CSV (632 filas) siguen con piezas de ACARA («Contado, prendario o plan», 28/11) y de prepagas (aumento y «¿Pagás por cosas que no usás?», 26/11). Mismo problema con las 632 filas, que figuran como «aprobado por el dueño (20/11)». No confirmado si se programaron.
+2. **Duplicados: orden contra recomendación.** El dueño pidió reversiones para que «meta no nos detecta que son publicaciones duplicadas». El chat dejó escrito que solo se hacen variantes reales. El cerebro (`cerebro/02-ordenes-vigentes.md`, línea 149) registra «no trucos anti-duplicado». Hay que definir cuál regla rige.
 3. **Freno de retención: reemplazado.** El freno propuesto (a 30 % de caída, las piezas extra van a borrador) quedó anulado por «no bajamos ningún ritmo». Lo que vale es la orden del 06:06.
 4. **Reels de prueba: contradicción de alcance.** El resumen del chat pide un TRIAL_REEL por día y marca. El cerebro (`cerebro/04-redes-y-contenido.md`, línea 38) dice que Kocos no califica por mínimo de seguidores. El chat también advierte que los reels de prueba dependen del mínimo.
 5. **Cifras de Black Friday de Kocos.** La orden dice «sin números reales» para Autos. El calendario incluye piezas de Kocos con «200 mensajes sin responder» y «200 chats», sin confirmar que sean reales.

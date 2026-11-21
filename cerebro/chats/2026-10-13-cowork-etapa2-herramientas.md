@@ -5,17 +5,17 @@
 - **Título del chat:** Etapa 2 (rubros y fases), herramientas, bloque 1.12 y entrega consolidada. Origen: `cerebro/chats/cowork/cowork-a-etapa2-herramientas-1013.md` (transcripción redactada, con resúmenes de compactación).
 - **Fecha de inicio:** 2026-10-13 04:17 UTC (primera transcripción; viene de una sesión anterior compactada).
 - **Fecha de fin:** 2026-11-21 07:16 UTC (último registro: pedido de historial completo).
-- **Origen:** Cowork (Claude Code en Cowork, proyecto CRM). Modelos usados: Fable 5.1 (esfuerzo alto), Opus 5.5, Haiku 5.5 (cambios hechos por la responsable con `/model`).
+- **Origen:** Cowork (Claude Code en Cowork, proyecto CRM). Modelos usados: Fable 5.1 (esfuerzo alto), Opus 5.5, Haiku 5.5 (cambios hechos por el dueño con `/model`).
 - **Id de sesión:** `21eae99c-728a-51a2-8d84-1efd5dbf7574` (la que aparece en los resúmenes de compactación de la transcripción).
-- **Marcas o perfiles:** Estudio Jurídico Integral Vita (Jurídico con Civil y Penal) como cliente; Coberturas médicas, Autos 0 km y Marketing; agencia de la responsable: ORVIAN (ver CONTRADICE sobre «Kocos»).
+- **Marcas o perfiles:** Estudio Jurídico Integral Vita (Jurídico con Civil y Penal) como cliente; Coberturas médicas, Autos 0 km y Marketing; agencia del dueño: ORVIAN (ver CONTRADICE sobre «Kocos»).
 - **Repo y despliegue:** GitHub `EzequielGonz/LEGAL-CRM`; Vercel proyecto `prj_liUp46HbkMc0lPlhX1hX5CVLwsYt` (legal-crm); Supabase proyecto `enhgkeqiqcuwafsedaza`.
 - **Estado al cierre de la transcripción:** sin cierre técnico. La Etapa 2 consolidada no quedó verificada con dependencias reales ni entregada como ZIP único al programador.
 
 ## 2. Objetivo
 
-Ordenar las entregas recibidas (parche 2.0 del 13/10, Etapa 2 verificada, herramientas-1), integrarlas en un único código vigente sobre el repo, cerrar el bloque de seguridad 1.12 y dejar una guía de 5 pasos con SQL en orden. La responsable pidió que todo lo del parche 2.0, salvo el entrenamiento, quedara integrado en esta etapa, y que lo pesado se hiciera primero y la seguridad (0202) al final.
+Ordenar las entregas recibidas (parche 2.0 del 13/10, Etapa 2 verificada, herramientas-1), integrarlas en un único código vigente sobre el repo, cerrar el bloque de seguridad 1.12 y dejar una guía de 5 pasos con SQL en orden. El dueño pidió que todo lo del parche 2.0, salvo el entrenamiento, quedara integrado en esta etapa, y que lo pesado se hiciera primero y la seguridad (0202) al final.
 
-## 3. Órdenes y decisiones de la responsable
+## 3. Órdenes y decisiones del dueño
 
 Las órdenes del mensaje grande del 13/10 (04:17 UTC) llegan citadas en el resumen de compactación; el texto de cada una es el que aparece en ese resumen.
 
@@ -26,12 +26,12 @@ Las órdenes del mensaje grande del 13/10 (04:17 UTC) llegan citadas en el resum
 - **2026-10-13 (mismo mensaje):** «No reapliques migraciones ni descartes controles existentes por inferencia.» Regla de migraciones: revisar versión e historial, aplicar solo la actualización necesaria verificada.
 - **2026-10-13 (mismo mensaje):** «No incorpores el complemento Vercel.»
 - **2026-10-13 (mismo mensaje):** «No declares el sistema inhackeable, posiciones SEO garantizadas, modelo reentrenado ni producción actualizada sin evidencia» y «No declares instalado un plugin por haber escrito instrucciones.»
-- **2026-10-13 (mismo mensaje):** «No me pidas que pegue contraseñas, tokens privados o claves de servicio en el chat.» Y sobre el PIN: no repetirlo, no guardarlo, no cargarlo en Vercel ni en la base; lo carga la responsable.
+- **2026-10-13 (mismo mensaje):** «No me pidas que pegue contraseñas, tokens privados o claves de servicio en el chat.» Y sobre el PIN: no repetirlo, no guardarlo, no cargarlo en Vercel ni en la base; lo carga el dueño.
 - **2026-10-13 (mismo mensaje):** «No vuelvas a preguntarme qué tipo de entorno prefiero si podés reutilizar ese método» (sandbox aislado con datos inventados, base separada, sin variables de producción, Meta simulado).
 - **2026-10-13 (autorización del bloque 1.12):** «Te autorizo a desarrollar y probar este bloque en la copia de trabajo y en un entorno aislado.» Alcance: sesión y autorización verificadas en el servidor, sin borrar sesiones ni cambiar la política de permanencia; endpoints públicos sin tocar; revisar advisories de dependencias sin declarar 1.11 cerrado.
 - **2026-10-13 (sobre el orden):** «todo lo que te pase ya tiene que integrarse en esta etapa, los parches y las actualizaciones menos el entrenamiento, ya tiene que estar hecho aca». Reemplaza a la idea previa de presentar las mejoras «por bloques después de la seguridad».
 - **2026-10-13 06:43 UTC:** «nadie va a ver eso, dejalo para el final. hace todo primero y esto lo mas largo de la puerta cerrada dejalo para lo ultimo, te cambio el modelo para todo lo primero y despues cuando estes por terminar la etapa 2 con esto ya al final pausa todo y avisame asi cambio el modelo para bajar el consumo» (la seguridad 0202 y el cierre quedan para el final).
-- **2026-10-13 06:56 UTC:** «ok hace los bloques 1 y 2 super completos con fable 5 esfuerzo alto y cuando los termines avisame y pasamos a opus 5.5 extra. y terminamos el cierre con opus 5.5 medio. esta bien?» Respuesta de la responsable 06:58: «ok dale. hagamos 1 y 2 ya puse fable 5 esfuerzo alto.»
+- **2026-10-13 06:56 UTC:** «ok hace los bloques 1 y 2 super completos con fable 5 esfuerzo alto y cuando los termines avisame y pasamos a opus 5.5 extra. y terminamos el cierre con opus 5.5 medio. esta bien?» Respuesta del dueño 06:58: «ok dale. hagamos 1 y 2 ya puse fable 5 esfuerzo alto.»
 - **2026-10-13 07:05 UTC:** «no entonces / frena».
 - **2026-10-13 07:07 UTC:** «dame el zip. abro otra conversacion y q le digo mandame un texto corto voy con opus medio?»
 - **2026-10-13 07:14 UTC:** «bueno decile que arranque con lo ultimo que ibamos a hacer todo en un prompt, que no frene, lo haga de corrido con el mismo modelo que lo pongo».
@@ -42,15 +42,15 @@ Las órdenes del mensaje grande del 13/10 (04:17 UTC) llegan citadas en el resum
 - **2026-11-21 07:07 UTC:** «Necesito que vuelques TODO el contexto de este chat a la memoria central del proyecto. Usá todas las skills, plugins y conectores que tengas. No resumas de más: prefiero que sobre a que falte.»
 - **2026-11-21 07:11–07:16 UTC:** «hacelo bien, con todo el contexto a fondo, como te conecto el repo?»; «ok hace una rama nueva y decime cual es»; «dale»; «en vez de una rama si me das un zip?»; «el historial completo necesito, de todo este chat».
 
-## 4. Correcciones que hizo la responsable
+## 4. Correcciones que hizo el dueño
 
-- **Alcance del parche 2.0:** el asistente había dicho que el rediseño y las mejoras iban por bloques después de la seguridad. La responsable lo corrigió: todo entra en esta etapa, salvo el entrenamiento (06:38–06:39 UTC).
+- **Alcance del parche 2.0:** el asistente había dicho que el rediseño y las mejoras iban por bloques después de la seguridad. El dueño lo corrigió: todo entra en esta etapa, salvo el entrenamiento (06:38–06:39 UTC).
 - **Orden:** la seguridad (0202) y el cierre pasan al final, no antes (06:43 UTC).
-- **Estimación de tiempo:** el asistente dio 9 h hasta el aviso de cierre; la responsable dijo «pero no tenes que rehacer todo de 0… 9 horas sigue siendo muchisimo» y el asistente bajó a 4–6 h estimadas sin medición confiable.
-- **Capturas:** el asistente iba a mandar capturas del bloque 2; la responsable: «mandarme capturas no hace falta en el bloque 2» (06:50 UTC).
-- **Estado de la Etapa 2:** el asistente escribió que la Etapa 2 estaba «implementada y probada». Lo corrigió el propio asistente con la responsable: 2.1, 2.2 y 2.4 a 2.9 son especificados, no implementados.
+- **Estimación de tiempo:** el asistente dio 9 h hasta el aviso de cierre; el dueño dijo «pero no tenes que rehacer todo de 0… 9 horas sigue siendo muchisimo» y el asistente bajó a 4–6 h estimadas sin medición confiable.
+- **Capturas:** el asistente iba a mandar capturas del bloque 2; el dueño: «mandarme capturas no hace falta en el bloque 2» (06:50 UTC).
+- **Estado de la Etapa 2:** el asistente escribió que la Etapa 2 estaba «implementada y probada». Lo corrigió el propio asistente con el dueño: 2.1, 2.2 y 2.4 a 2.9 son especificados, no implementados.
 - **Presentación de la entrega:** el asistente afirmó que la entrega verificada del 12/10 estaba probada con dependencias reales. Según el resumen final, eso aplica solo a la entrega del 12/10, que quedó superada por el consolidado; no al consolidado.
-- **GitHub:** el asistente rechazó «control total» y propuso acceso a un solo repo con «dale»; la responsable aceptó esa regla (15/10).
+- **GitHub:** el asistente rechazó «control total» y propuso acceso a un solo repo con «dale»; el dueño aceptó esa regla (15/10).
 
 ## 5. Qué se hizo (paso a paso, con estado)
 
@@ -63,8 +63,8 @@ Estados: E = especificado · I = implementado · P = probado · Pub = publicado 
 5. **Migración 0202** (`supabase/migrations/0202_etapa1_funciones_sin_acceso_publico.sql`). Revoca EXECUTE de PUBLIC, anon y authenticated en funciones públicas y fija `search_path` en `is_admin()` y `set_updated_at()`. **I** sí (archivo) · **P** en copia tipo producción (`crm_0202`, copiada de `crm_secuencia`): funciones ejecutables por anon de 45 a 0, idempotente, los triggers siguen disparando · **Pub** no · **H** no (no aplicada a la base real).
 6. **Bloque 1.11 (dependencias).** Advisories: `next` 14.2.35 (crítico), `postcss` dentro de next, `source-map-js`, `xlsx` 0.18.5 (sin fix en npm). Se propuso probar Next 15.5.x y SheetJS 0.20.3 en el sandbox. **E** sí · **I** no · **P** no · **Pub** no · **H** no. **No cerrado.**
 7. **Verificación con dependencias reales (sandbox Vercel).** Sandbox `sbx_V8ayJetxeIpSHjvSGpTGF0c2dud4` (repo en `/vercel/LEGAL-CRM`, fb5cdc3). Se subieron las partes del paquete en base64. Hubo dos caídas (HTTP 410 `sandbox_stopped`) y se recreó como `verificacion-consolidada-1310c` desde snapshot. Descarga de PostgREST 12.2.3 (asset `postgrest-v12.2.3-linux-static-x64.tar.xz`). **Estado final: no terminada.** Faltaba subir y verificar hashes de las partes 03 a 07, reconstruir el paquete, tipado, lint, build, pruebas y `npm audit`. **P** no. **Pub** no.
-8. **Copia de trabajo (13/10, 07:08 UTC).** `kocos-copia-de-trabajo-1310.zip` con 854 archivos (huella SHA-256 que empieza en `f0708fc8`) y `CONTEXTO_ACTUAL_CRM.md`, enviados a la responsable para continuar en otra tarea. No es entrega para el programador. **I** sí · **Pub** no.
-9. **Bloque 1 «reglas de base» (13/10, 07:05 UTC).** Se empezó: dos archivos nuevos de reglas puras (origen de la tarea y política de horario; captación por rubro, resultado posterior a derivación y clasificación de atención humana). Sin migración, sin cambios en código existente, sin pruebas. La responsable frenó. **I** parcial · **P** no · **Pub** no. La migración prevista era `0203`.
+8. **Copia de trabajo (13/10, 07:08 UTC).** `kocos-copia-de-trabajo-1310.zip` con 854 archivos (huella SHA-256 que empieza en `f0708fc8`) y `CONTEXTO_ACTUAL_CRM.md`, enviados al dueño para continuar en otra tarea. No es entrega para el programador. **I** sí · **Pub** no.
+9. **Bloque 1 «reglas de base» (13/10, 07:05 UTC).** Se empezó: dos archivos nuevos de reglas puras (origen de la tarea y política de horario; captación por rubro, resultado posterior a derivación y clasificación de atención humana). Sin migración, sin cambios en código existente, sin pruebas. El dueño frenó. **I** parcial · **P** no · **Pub** no. La migración prevista era `0203`.
 10. **Bloques 2 a 5 y cierre.** Especificados según el plan de 13/10 (rediseño del panel, operación diaria, biblioteca de agentes apagada, SEO y contenido sin conectar, cierre con verificación y SQL en orden). Estimado por el asistente: 12–18 h en total, con cierre en Opus 5.5 esfuerzo medio. **E** sí · **I** no.
 11. **Documentación de contexto.** `CLAUDE.md` reescrito (9 reglas no negociables, convención de requireSession, cinco estados). `CONTEXTO_ACTUAL_CRM.md` y `CONTEXTO_COMPLETO_CRM.md` (14 secciones, en `.md` y PDF). Documento de Claude Docs `b5fb8ad6-926b-4bd2-8675-298c2730d216` (plan) y `ab17bffa-8e18-4342-b6af-b5d5f8ff804b` (análisis, con 14 hallazgos). **I** sí · **Pub** no.
 12. **Paquete para GitHub (14/10).** `kocos-pipeline-trabajo-1410.zip` con 855 archivos (huella SHA-256 que empieza en `5562866c`). El asistente recomendó no integrarlo a `main`: solo como resguardo en una rama aparte, sin PR ni migraciones. **I** sí (ZIP) · **P** no · **Pub** no · **H** no.
@@ -102,7 +102,7 @@ Estados: E = especificado · I = implementado · P = probado · Pub = publicado 
 **Documentos de Claude Docs:** plan `b5fb8ad6-926b-4bd2-8675-298c2730d216`; análisis `ab17bffa-8e18-4342-b6af-b5d5f8ff804b`; en 11-21 el documento de respaldo se llama «2026-10-13-cowork-crm-multirubro» (enlace en el chat, no abierto).
 
 **Configuración fuera del código:**
-- Variables de Vercel mencionadas por nombre: `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT`, `SESSION_SECRET`, `GEMINI_MODEL`, `GEMINI_API_KEY`, `CRON_SECRET`, `ACCESS_PIN` (la responsable la carga). Faltaban en Coberturas, Autos, VAPID, SESSION_SECRET y GEMINI en Preview (según 14/10).
+- Variables de Vercel mencionadas por nombre: `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT`, `SESSION_SECRET`, `GEMINI_MODEL`, `GEMINI_API_KEY`, `CRON_SECRET`, `ACCESS_PIN` (el dueño la carga). Faltaban en Coberturas, Autos, VAPID, SESSION_SECRET y GEMINI en Preview (según 14/10).
 - Ninguna variable se cambió desde este chat. No se leyeron valores.
 
 **Qué quedó encendido o apagado por este chat:** nada. Pausa general activa, agentes apagados, tarea programada inactiva, campañas `pausada`, seguimiento apagado (verificado en base el 13/10).
@@ -145,7 +145,7 @@ Estados: E = especificado · I = implementado · P = probado · Pub = publicado 
 - ¿Cuál es la rama de producción de Vercel? (se asume `main`).
 - ¿Qué entró a `main` entre `fb5cdc3` (13/10) y `66c457b` (21/11)? (no confirmado).
 - ¿Quién creó la rama `trabajo-1410` (`e3eb799`)? (no confirmado).
-- ¿El inventario de landings, el acceso a Search Console y la configuración de Meta (plantillas, líneas) están listos? La responsable debía responder el inventario de landings.
+- ¿El inventario de landings, el acceso a Search Console y la configuración de Meta (plantillas, líneas) están listos? El dueño debía responder el inventario de landings.
 - ¿`GEMINI_MODEL` en producción vale lo que el proyecto espera? (el chat dice «gemini-3.6-flash» en código y «gemini-2.5-flash» en `env.example`: no confirmado).
 - ¿El flujo «Aplicar pipeline Kocos» se corre automáticamente al subir un ZIP? (el chat no lo verificó).
 
@@ -176,11 +176,11 @@ Estados: E = especificado · I = implementado · P = probado · Pub = publicado 
 
 ## 12. CONTRADICE
 
-- **Reglas de GitHub.** El chat (13/10 y 14/10) dice «en este proyecto no escribo en GitHub, todo va por ZIP». El 15/10 la responsable cambió a «acceso total… siempre preguntandome… dale». El `CLAUDE.md` vigente (20/11) dice «Todo lo demás Claude lo implementa, prueba, publica y verifica directo (GitHub, base, configuración, despliegue, Metricool), sin pedir «dale» por cada paso». Única restricción de ese documento: pagos. Son tres reglas distintas; prevalece la del 20/11 si la responsable no dice lo contrario.
+- **Reglas de GitHub.** El chat (13/10 y 14/10) dice «en este proyecto no escribo en GitHub, todo va por ZIP». El 15/10 el dueño cambió a «acceso total… siempre preguntandome… dale». El `CLAUDE.md` vigente (20/11) dice «Todo lo demás Claude lo implementa, prueba, publica y verifica directo (GitHub, base, configuración, despliegue, Metricool), sin pedir «dale» por cada paso». Única restricción de ese documento: pagos. Son tres reglas distintas; prevalece la del 20/11 si el dueño no dice lo contrario.
 - **Publicación.** El chat (13/10) dice que «un programador revisa, integra y publica tus entregas». El `CLAUDE.md` del 20/11 dice que Claude publica directo. Para la entrega de Etapa 2 hace falta confirmar quién integra a `main`.
 - **Versión de Next.js.** El chat dice Next 14.2.35 (con advisory crítico y trial de 15.5 en curso). El `CLAUDE.md` del 20/11 dice Next 15.5. No se sabe si el 1.11 se hizo.
 - **Migraciones.** `CLAUDE.md` del 20/11 dice «Migraciones en `supabase/migrations/`, numeradas por etapa (`01xx`, `02xx`)». El chat usa 0199–0203 (etapa 2 y 1.12), y el chat del rediseño usa `0400`.
-- **Nombre de agencia.** El chat dice ORVIAN. La memoria de la responsable (según el chat de rediseño) dice «ORVIAN, no Kocos», pero una versión posterior del perfil dice «Kocos Marketing (no ORVIAN)». Las skills se llaman `kocos-*` y el pipeline se llama «Kocos» en el chat.
+- **Nombre de agencia.** El chat dice ORVIAN. La memoria del dueño (según el chat de rediseño) dice «ORVIAN, no Kocos», pero una versión posterior del perfil dice «Kocos Marketing (no ORVIAN)». Las skills se llaman `kocos-*` y el pipeline se llama «Kocos» en el chat.
 - **Estado de la Etapa 2.** El chat dijo «implementada y probada» (13/10 06:30) y luego «2.1, 2.2, 2.4 a 2.9 son especificados, no implementados». Se toma la versión corregida.
 - **Entrega verificada.** El chat dice que la entrega del 12/10 fue «verificada con dependencias reales». El consolidado no: solo pruebas en entorno local.
 - **Seguridad de la sesión.** Un resumen posterior del chat (14/10 o después) indica que `session.ts` usa `SUPABASE_SERVICE_ROLE_KEY` como respaldo si falta `SESSION_SECRET`. La regla vigente dice que las claves solo van en variables de Vercel y no deben usarse como fallback de firma: revisar.

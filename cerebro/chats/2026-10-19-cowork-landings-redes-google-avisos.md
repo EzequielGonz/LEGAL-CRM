@@ -98,7 +98,7 @@ Errores de acceso registrados: `gh repo clone` y la API REST de `gh` dieron 403.
 6. Analytics: pegar cada ID en su landing y marcar `clic_whatsapp` y `formulario_enviado` como eventos clave.
 7. Search Console: enviar los cuatro sitemaps (existen) y pedir indexación de las home.
 8. Actualizar `CONTEXTO_ACTUAL_CRM.md` al cerrar el bloque. No se hizo.
-9. Cuando la responsable confirme el número de WhatsApp de Kocos Marketing, verificarlo en Meta. La línea figuraba «Pendiente» en el contexto del 19/10.
+9. Cuando el dueño confirme el número de WhatsApp de Kocos Marketing, verificarlo en Meta. La línea figuraba «Pendiente» en el contexto del 19/10.
 
 Bloqueos: acceso a las landings (Hostinger Horizons) y a Metricool con las marcas y redes pedidas; pruebas de CORS y de la protección de Vercel sobre el dominio del panel (el proxy lo bloqueó); no hay clon local del repositorio.
 
@@ -124,6 +124,6 @@ Preguntas abiertas:
 - **CONTRADICE:** el WhatsApp de Kocos Marketing que mostraba la landing no coincidía con el de la línea cargada en el CRM. La persona eligió el del CRM.
 - **CONTRADICE:** el identificador de Facebook de Kocos Marketing enviado por la persona no coincide con el que tiene conectado Metricool. La persona afirma que es la misma cuenta; sin verificar.
 - **CONTRADICE:** `CONTEXTO_ACTUAL_CRM.md` dice «Landings (Hostinger Horizons, dominio en DonWeb)». Los cuatro dominios usan nameservers de Vercel (DonWeb figura como registrador).
-- **CONTRADICE:** el contexto del proyecto dice que redes, landings, calendario y Google Cloud siguen en pausa hasta que la responsable confirme. El 20/10 la persona avanzó con dominios verificados, redes, correos de destino y IDs de Analytics, y dijo «ya está» sobre Metricool, pero la cuenta no lo reflejaba.
+- **CONTRADICE:** el contexto del proyecto dice que redes, landings, calendario y Google Cloud siguen en pausa hasta que el dueño confirme. El 20/10 la persona avanzó con dominios verificados, redes, correos de destino y IDs de Analytics, y dijo «ya está» sobre Metricool, pero la cuenta no lo reflejaba.
 - **CONTRADICE:** `CLAUDE.md` pide documentar cada entrega en `docs/etapaN/` (ENTREGA, INFORME, MIGRACIONES). Aquí las guías solo existen en el proyecto y en las salidas, no en el repositorio.
-- **ATENCIÓN (no es contradicción directa, pero choca con `CLAUDE.md`):** `CLAUDE.md` dice no tocar la bio ni el botón de los perfiles de redes. El chat propone que la persona pegue en la biografía de Instagram el enlace con origen. Confirmar que lo haga la responsable y no la sesión.
+- **ATENCIÓN (no es contradicción directa, pero choca con `CLAUDE.md`):** `CLAUDE.md` dice no tocar la bio ni el botón de los perfiles de redes. El chat propone que la persona pegue en la biografía de Instagram el enlace con origen. Confirmar que lo haga el dueño y no la sesión.

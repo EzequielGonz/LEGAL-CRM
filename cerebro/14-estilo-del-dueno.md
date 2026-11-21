@@ -11,7 +11,7 @@ Para que cualquier sesión futura de Claude trabaje como a él le gusta. Si algo
 ## Quién es
 
 - Son **dos dueños, desarrolladores**, que entran al panel desde PC y celular. **El que escribe en los chats es hombre** (lo aclaró el 21/11 al responder «productora»; ver `02-ordenes-vigentes.md`, bloque B).
-- Regla práctica: **nunca en femenino** y nunca «la responsable», «la usuaria» ni «productora». Usá «el dueño» o «los dueños», o hablale directo con voseo. Los documentos viejos del cerebro y de `cerebro/chats/` siguen diciendo «la responsable»: es un error heredado, no un dato. No los copies.
+- Regla práctica: **nunca en femenino** y nunca «el dueño», «la usuaria» ni «productora». Usá «el dueño» o «los dueños», o hablale directo con voseo. Los documentos viejos del cerebro y de `cerebro/chats/` siguen diciendo «el dueño»: es un error heredado, no un dato. No los copies.
 - Del otro dueño no está confirmado el género: si dudás de quién habla o decide, «los dueños».
 - Entienden código, pero **piden explicaciones simples**. Quieren decidir ellos lo de negocio (campañas, plata, publicidad) y que Claude haga el resto de punta a punta.
 
@@ -178,7 +178,7 @@ Reglas de voz comunes:
 - Correcciones puntuales ya registradas: «plata rápida» (no «rápido»); «¿Firmo ya o espero?» sin coma; «¡Hola! ¿Sigue disponible?»; «¡Hola, gracias por escribir!» (`04`).
 - Asesor que se presenta en los bots de los 4 perfiles: Leonardo Gonzalez. **Es un nombre de presentación, no una persona que atiende** (`02`).
 - Los bots dicen que son IA **solo si les preguntan** y tienen que sonar lo más humanos posible; **nunca dan precios**; Coberturas nunca recomienda una prepaga puntual (`02`).
-- Textos nuevos que lo nombran a él: «el dueño» o «los dueños» (nunca «la responsable»).
+- Textos nuevos que lo nombran a él: «el dueño» o «los dueños» (nunca «la responsable» ni en femenino: es hombre).
 
 ---
 
@@ -222,7 +222,7 @@ Para no repetirlos. Cada uno con su fuente.
 
 | Error | Qué pasó / qué dijo él | Fuente |
 | --- | --- | --- |
-| **Tratarlo en femenino** | Los chats, los volcados y el cerebro hablaban de «la responsable», «la usuaria», «productora». Lo corrigió al contestar «productora» y aclaró que quien responde es hombre | `02` (bloque B, 21/11); `12` |
+| **Tratarlo en femenino** | Los chats, los volcados y el cerebro hablaban de «el dueño», «la usuaria», «productora». Lo corrigió al contestar «productora» y aclaró que quien responde es hombre | `02` (bloque B, 21/11); `12` |
 | **Recorrer el panel por encima** | El recorrido del 20/11 «no leyó chats ni configuración» y se repite «como usuario real». El 21/11 pidió un análisis «exhaustivo (agentes, roles, scraper, conversaciones)» y leer «cada archivo y cada respuesta». Antes ya había pedido: «usa el panel como si fueses dueño, revisá todo y buscá algo a mejorar» (14/11 07:17) | `02` (21/11 bloques B y C, tarde); `C-traspaso` |
 | **Decir que faltaba integrar Wasender cuando ya estaba** | El panel **ya envía por Wasender o por Meta**, con plantillas y algoritmo de envío: «No es una tarea pendiente; lo que falta es conectar más líneas». Claude también había dicho el 17/11 que «el CRM usa solo Meta», y el repo tiene `src/lib/wasender`. Antes de proponer algo nuevo, revisar el repo | `02` (bloque D y E); `13` (contradicciones) |
 | **Proponer bajar el ritmo o pasar piezas a borrador** | «no entiendo nada, ¿qué queda en borrador? ¿Por qué frenarías?» → «no no bajamos ningún ritmo, pegamos o pegamos» | C-redes, 20/11 06:02 y 06:06 |

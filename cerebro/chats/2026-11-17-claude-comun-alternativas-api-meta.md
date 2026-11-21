@@ -9,9 +9,9 @@
 
 ## 2. Objetivo
 
-Conectar 6 líneas de WhatsApp al CRM sin Meta y sin 6 celulares físicos, porque la API de Meta cobra cada envío de campaña. La responsable quiere que las líneas queden «como están ahora» en el CRM, con el entrenamiento (20 contactos por día, plantillas distintas, tiempos al azar), los agentes que responden y el panel. Pregunta de fondo: si se puede reemplazar Wasender.
+Conectar 6 líneas de WhatsApp al CRM sin Meta y sin 6 celulares físicos, porque la API de Meta cobra cada envío de campaña. El dueño quiere que las líneas queden «como están ahora» en el CRM, con el entrenamiento (20 contactos por día, plantillas distintas, tiempos al azar), los agentes que responden y el panel. Pregunta de fondo: si se puede reemplazar Wasender.
 
-## 3. Órdenes y decisiones de la responsable
+## 3. Órdenes y decisiones del dueño
 
 - **17/11 04:34:** «no tengo tantos telefonos para gestionar y conectar 6 lineas, la api de meta cobra demasiado el envio de mensajes, que otra forma aparte de la api de meta hay para gestionar y controlar 6 whatsapp, solo conectarlos al crm como estan ahora».
 - **17/11 04:49 y 04:51:** pidió evaluar «https://www.duoplus.net» y «bluestacks».
@@ -25,24 +25,24 @@ Conectar 6 líneas de WhatsApp al CRM sin Meta y sin 6 celulares físicos, porqu
 - **17/11 08:13:** «me exige que lo detecte automatico no me da opcion».
 - **17/11 08:20:** «no se comprueba la verificacion».
 
-## 4. Correcciones que hizo la responsable
+## 4. Correcciones que hizo el dueño
 
-- **Celular físico.** Claude propuso Android usados y celular con dos chips (05:46 y 05:51). La responsable lo rechazó: «la del telefono fijo no es opcion» (05:53). La opción quedó descartada.
-- **Chip.** Claude escribió que el chip solo hace falta para verificar. La responsable aclaró que el cambio de chip lo hace en el celular físico, no en BlueStacks (05:51).
-- **Método de instalación.** Claude sugirió instalar WhatsApp como APK. La responsable: «no me anda con el whatsapp apk, se queda conectando» (05:46 y 06:17). Claude le pidió cambiar de versión de BlueStacks, de Desktop 16 (Android 16 Beta) a BlueStacks 5 Pie 64-bit (06:18 a 06:22).
-- **WhatsApp Business.** Claude dijo que no hacía falta instalar otro WhatsApp (06:02). La responsable confirmó que ya lo tenía.
-- **Entrenamiento y bloqueo.** Claude sostuvo que, si los envíos son a quien no escribió, habrá cortes con cualquier herramienta no oficial (05:55). La responsable afirmó que el algoritmo de 20 contactos evita el bloqueo (05:51). Desacuerdo no resuelto en el chat.
-- **Claude afirmó que el CRM envía solo por Meta** (05:56). La responsable dijo que Wasender es lo que usan para enviar (05:46). Ver sección 12.
+- **Celular físico.** Claude propuso Android usados y celular con dos chips (05:46 y 05:51). El dueño lo rechazó: «la del telefono fijo no es opcion» (05:53). La opción quedó descartada.
+- **Chip.** Claude escribió que el chip solo hace falta para verificar. El dueño aclaró que el cambio de chip lo hace en el celular físico, no en BlueStacks (05:51).
+- **Método de instalación.** Claude sugirió instalar WhatsApp como APK. El dueño: «no me anda con el whatsapp apk, se queda conectando» (05:46 y 06:17). Claude le pidió cambiar de versión de BlueStacks, de Desktop 16 (Android 16 Beta) a BlueStacks 5 Pie 64-bit (06:18 a 06:22).
+- **WhatsApp Business.** Claude dijo que no hacía falta instalar otro WhatsApp (06:02). El dueño confirmó que ya lo tenía.
+- **Entrenamiento y bloqueo.** Claude sostuvo que, si los envíos son a quien no escribió, habrá cortes con cualquier herramienta no oficial (05:55). El dueño afirmó que el algoritmo de 20 contactos evita el bloqueo (05:51). Desacuerdo no resuelto en el chat.
+- **Claude afirmó que el CRM envía solo por Meta** (05:56). El dueño dijo que Wasender es lo que usan para enviar (05:46). Ver sección 12.
 
 ## 5. Qué se hizo, con estado
 
 1. **Comparación de vías** (API de Meta, pasarela por QR, DuoPlus, BlueStacks, celular físico, Android Studio, celular en la nube). **Especificado** solo en el chat.
 2. **Costos citados** (Meta, DuoPlus, pasarelas). **No confirmado:** Claude los cita sin fuente en el chat, o los atribuye a reseñas.
-3. **BlueStacks.** Primero se instaló BlueStacks Desktop 16 (Android 16 Beta), que Claude pidió reemplazar. Después, BlueStacks 5 Pie 64-bit con perfil de celular Samsung S21 Ultra, Android 9, sin root, en vertical. **Implementado** en el equipo de la responsable según el chat (07:48). WhatsApp Business instalado; a qué versión y por qué vía (APK o Play) no quedó claro.
+3. **BlueStacks.** Primero se instaló BlueStacks Desktop 16 (Android 16 Beta), que Claude pidió reemplazar. Después, BlueStacks 5 Pie 64-bit con perfil de celular Samsung S21 Ultra, Android 9, sin root, en vertical. **Implementado** en el equipo del dueño según el chat (07:48). WhatsApp Business instalado; a qué versión y por qué vía (APK o Play) no quedó claro.
 4. **Verificación del número en BlueStacks.** **Probado y fallido**. WhatsApp mostró «Esperando para detectar automáticamente el SMS» sin opción de escribir el código a mano. Después, «no se comprueba la verificación» (08:20). Ningún número quedó verificado.
 5. **Certificación de Google Play.** Claude dio el identificador GSF del equipo para registrarlo en google.com/android/uncertified (07:57). **No confirmado** si se registró. No consta que Play Protect haya dado «El dispositivo está certificado».
 6. **Pasarela.** **Especificada** en el chat: Evolution API o WAHA en un servidor propio, con la línea por Meta o por pasarela, entrada nueva en el CRM y avisos de estado. Claude propuso armar un documento técnico «Líneas por pasarela» y preguntó si lo quería. No hay respuesta registrada ni documento generado.
-7. **Wasender.** Sigue en uso para enviar (dicho por la responsable). Nada cambió.
+7. **Wasender.** Sigue en uso para enviar (dicho por el dueño). Nada cambió.
 8. **CRM.** **No se cambió nada** («No cambié nada en el CRM», 04:35; «No toco el CRM hasta que lo autorices», 04:51 y 05:58).
 9. **Plan propuesto y no ejecutado:** no reintentar el número con error (24 a 48 h); mañana probar DuoPlus o GeeLark con un número; si verifica, sumar las 6 líneas y conectar la pasarela.
 
@@ -63,16 +63,16 @@ Conectar 6 líneas de WhatsApp al CRM sin Meta y sin 6 celulares físicos, porqu
 
 ## 7. Datos del negocio
 
-- Son 6 líneas de WhatsApp. Hay un solo celular físico, de la responsable, y las cuentas se cierran al cambiar chips.
+- Son 6 líneas de WhatsApp. Hay un solo celular físico, del dueño, y las cuentas se cierran al cambiar chips.
 - Hoy el envío de mensajes usa Wasender («lo que estamos usando para el envio de mensaje»).
-- El CRM tiene entrenamiento, agentes que responden, seguimiento y panel (dicho por la responsable, 05:56).
+- El CRM tiene entrenamiento, agentes que responden, seguimiento y panel (dicho por el dueño, 05:56).
 - El estudio jurídico tiene datos de clientes en sus chats, lo que hace riesgosa una nube de terceros (criterio de Claude).
 
 ## 8. Pendiente, a medias o bloqueado
 
 - **Verificar un número en BlueStacks.** Bloqueado: WhatsApp exige detección automática del SMS y no ofrece otra opción. Claude sugirió esperar 24 a 48 h antes de volver a intentar.
 - **Certificación de Google Play.** No confirmada. Puede tardar hasta un día (según Claude).
-- **Decidir el costo.** Pagar DuoPlus o GeeLark (USD 2 por equipo por mes más uso) o un servidor de pasarela (USD 5 a 10 por mes). Requiere autorización expresa de la responsable (`CLAUDE.md`: no se paga nada sin autorización).
+- **Decidir el costo.** Pagar DuoPlus o GeeLark (USD 2 por equipo por mes más uso) o un servidor de pasarela (USD 5 a 10 por mes). Requiere autorización expresa del dueño (`CLAUDE.md`: no se paga nada sin autorización).
 - **Documento técnico «Líneas por pasarela».** No hecho. Incluiría: selector Meta o Pasarela por línea, envío y recepción por la pasarela, plantillas de texto libre en líneas por pasarela, estado de cada línea y pruebas.
 - **Desarrollo en el CRM.** No empezado. Tendría que hacerlo el programador.
 - **Destino de Wasender.** Sin decidir.
@@ -88,7 +88,7 @@ Conectar 6 líneas de WhatsApp al CRM sin Meta y sin 6 celulares físicos, porqu
 
 ## 10. Preguntas abiertas
 
-- ¿Autoriza la responsable un servicio pago (DuoPlus, GeeLark o servidor de pasarela)?
+- ¿Autoriza el dueño un servicio pago (DuoPlus, GeeLark o servidor de pasarela)?
 - ¿Se mantiene Wasender o se da de baja cuando haya pasarela?
 - ¿Qué pasa con las 2 líneas que no se nombraron?
 - ¿Se armó el documento técnico de la pasarela? Claude lo ofreció y no hay respuesta.
@@ -113,6 +113,6 @@ Conectar 6 líneas de WhatsApp al CRM sin Meta y sin 6 celulares físicos, porqu
   - `cerebro/03-crm-y-bots.md`: menú «WhatsApp por QR (Wasender)», canal de entrada «Meta/Wasender» en Chats y método «Meta/Wasender» en Campañas.
   - La propia responsable dice que usan Wasender para enviar.
   - Conclusión: la afirmación del chat es incorrecta o está desactualizada. Esto cambia la premisa de «pasarela como reemplazo directo» (sección 4 del chat). Hay que revisar antes de diseñar la conexión.
-- **Android usado como opción.** Claude lo recomendó (05:46 y 05:51) y la responsable lo rechazó (05:53). `cerebro/03` lo marca como descartado. Coincide con la decisión final; no es contradicción de hechos, pero se publicó como recomendación.
+- **Android usado como opción.** Claude lo recomendó (05:46 y 05:51) y el dueño lo rechazó (05:53). `cerebro/03` lo marca como descartado. Coincide con la decisión final; no es contradicción de hechos, pero se publicó como recomendación.
 - **Cifras de Meta y DuoPlus.** Claude las cita sin fuente. `cerebro/03` coincide en el costo de DuoPlus y GeeLark («~USD 2/equipo/mes»). Las cifras de Meta no están verificadas.
 - **«Ya deja de ser por bloqueo»** (responsable) frente a «los cortes van a seguir» (Claude). Desacuerdo abierto, no resuelto en el chat ni en `cerebro/03`.

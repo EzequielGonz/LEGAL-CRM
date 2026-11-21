@@ -12,7 +12,7 @@ Actualizado: 01/11/2026 (PR #52 a #74; pendientes nuevos del 01/11 abajo). Sin s
 - SQL: `apply_migration` para DDL. Todo cambio de datos se registra en `ops_change_log`.
 - Landings: el conector de GitHub no tiene permiso de escritura en sus 4 repos.
 
-## FASE 3 · CERRADA (25/10, decisión de la responsable)
+## FASE 3 · CERRADA (25/10, decisión del dueño)
 - La Fase 3 (biblioteca de agentes, simulador, evaluación, trabajos de ajuste, comparaciones, auditorías, tareas del servidor) **no existe más**: no está pausada, está descartada. No retomarla, no proponerla ni preparar nada de ella.
 - Nunca se aplicó en la base ni se publicó. Los archivos de `docs/etapa3` y la migración `0300` que figuren en el repositorio o en los documentos del proyecto son material histórico sin vigencia; no aplicar `0300`.
 - El conocimiento del bot por versiones (v1/v2) NO es parte de la Fase 3 y sigue vigente.
@@ -59,7 +59,7 @@ Actualizado: 01/11/2026 (PR #52 a #74; pendientes nuevos del 01/11 abajo). Sin s
 - Conocimiento (25/10): por versiones, se suma por debajo de reglas, ficha y rol. Precios: explicar de qué depende y que la cuota no muestra el costo total, sin números, rangos ni cuotas.
 - Detención (24/10): disculpa y queda a disposición; el agente sigue atendiendo si la persona vuelve a escribir (salvo menor).
 - Origen de los datos o baja: disculpa automática, sin explicar el origen, y detención.
-- El bot no promete día ni hora; la persona que sigue la gestión la asigna la responsable.
+- El bot no promete día ni hora; la persona que sigue la gestión la asigna el dueño.
 - Audios: se pide que escriban. Contestadores automáticos: no se les responde.
 - Marketing: cierre de la venta por una persona; el bot nunca pasa datos de pago.
 - Rechazos: «Ahora no» → mensaje corto; «No, gracias»/«Ya compré»/«Ya lo resolví» → insiste una vez y detiene; «No me escriban más», enojo o número equivocado → disculpa y detiene.

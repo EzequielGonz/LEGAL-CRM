@@ -1,21 +1,21 @@
 ---
-description: Cruce de los chats volcados (Claude común, Cowork y Code) contra el cerebro. Qué aprendimos, qué se contradice, qué hay que confirmar con la responsable. Fuente: cerebro/chats/.
+description: Cruce de los chats volcados (Claude común, Cowork y Code) contra el cerebro. Qué aprendimos, qué se contradice, qué hay que confirmar con el dueño. Fuente: cerebro/chats/.
 actualizado: 21/11/2026
 ---
 
 # Lo aprendido de los chats (21/11/2026)
 
-Los resúmenes los escribieron subagentes de menor costo y **no están revisados línea por línea**: cada dato que importa se confirma en la base, en git o con la responsable antes de usarlo. Las transcripciones crudas están en `cerebro/chats/claude-comun/` y `cerebro/chats/cowork/`.
+Los resúmenes los escribieron subagentes de menor costo y **no están revisados línea por línea**: cada dato que importa se confirma en la base, en git o con el dueño antes de usarlo. Las transcripciones crudas están en `cerebro/chats/claude-comun/` y `cerebro/chats/cowork/`.
 
 ## Qué se volcó
 
 | Origen | Cantidad | Archivos |
 | --- | --- | --- |
 | Claude común (exportación de datos) | 8 de 31 (el resto es de otros temas y no se copió) | `chats/*-claude-comun-*.md` |
-| Cowork (historiales que pasó la responsable) | 5 | `chats/*-cowork-*.md` |
-| Code, carpeta «CRM COMPLETO» | 6 de 7 (Metricool context lo maneja ella a mano) | `chats/*-code-*.md` |
+| Cowork (historiales que pasó el dueño) | 5 | `chats/*-cowork-*.md` |
+| Code, carpeta «CRM COMPLETO» | 6 de 7 (Metricool context lo maneja él a mano) | `chats/*-code-*.md` |
 
-Los 16 chats de Code fuera de esa carpeta (8 de Redes, Mercado Pago, Andreani, inmobiliaria, etc.) **no se leen**, por orden de la responsable.
+Los 16 chats de Code fuera de esa carpeta (8 de Redes, Mercado Pago, Andreani, inmobiliaria, etc.) **no se leen**, por orden del dueño.
 
 ## Contradicciones y cómo se resuelven
 
@@ -32,10 +32,10 @@ Los 16 chats de Code fuera de esa carpeta (8 de Redes, Mercado Pago, Andreani, i
 
 ## Hallazgos que hay que actuar
 
-1. **Clave de Supabase expuesta (chat del 07/09, reportada por «Contexto completo»)**: sin verificar. La responsable decide y rota; después se actualiza Vercel.
+1. **Clave de Supabase expuesta (chat del 07/09, reportada por «Contexto completo»)**: sin verificar. El dueño decide y rota; después se actualiza Vercel.
 2. **Código de ingreso al panel**: escrito varias veces en chats (no se copió a ningún archivo). Cambiarlo (pendiente 23).
 3. **Token de GitHub pegado en un chat de Cowork (15/10)**: revocarlo si no se hizo.
-4. **Tarea programada «Retomar reels tras el límite»** (hoy 07:23 BA): despierta al chat «Metricool context» para seguir los reels 21–29/11. Es la dueña de la producción; no se lanzan sesiones paralelas.
+4. **Tarea programada «Retomar reels tras el límite»** (hoy 07:23 BA): despierta al chat «Metricool context» para seguir los reels 21–29/11. Es el dueño de la producción; no se lanzan sesiones paralelas.
 5. **Registro de lo programado** (`docs/redes/produccion-2011/registro.csv`, rama de redes): tiene 392 piezas; el cronograma pide 632. La copia del registro está atrasada; el control real es `getScheduledPosts` por día y marca.
 6. **Chat de Marketing sin acceso a Meta**: la migración Meta→Wasender dejó pendiente reincorporar el número y separar las líneas (chat «Contexto del proyecto», 17/11).
 7. **Wasender no vincula por código de 8 caracteres** (dicho por Claude, sin verificar): ver al reconectar el QR.
@@ -47,4 +47,4 @@ Los 16 chats de Code fuera de esa carpeta (8 de Redes, Mercado Pago, Andreani, i
 
 - Leer chats de Code con `list_events` filtrando `user` y `result` funciona, pero un chat largo (7.499 eventos) tarda casi 30 minutos: pedirlo de a uno y con tope.
 - Un resumen escrito por un modelo chico puede afirmar de más: cada resumen marca lo no confirmado, y lo importante se verifica antes de usarlo.
-- La exportación de datos de claude.ai no se puede bajar desde la nube (Cloudflare): la responsable sube los zips.
+- La exportación de datos de claude.ai no se puede bajar desde la nube (Cloudflare): el dueño sube los zips.

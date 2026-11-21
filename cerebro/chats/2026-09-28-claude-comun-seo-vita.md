@@ -14,11 +14,11 @@
 
 ## 2. Objetivo
 
-Armar, para cuatro sitios de la responsable, una capa de SEO completa: silos, artículos o guías, calculadoras, metadatos, schema y sitemaps. Todo sin tocar el diseño de la home, solo sumando secciones al header y manteniendo la misma estética. Cada sitio debía quedar con CTA a mitad y al final, un formulario «te contactamos» y puntos de conexión para cargar WhatsApp, redes y base de datos después.
+Armar, para cuatro sitios del dueño, una capa de SEO completa: silos, artículos o guías, calculadoras, metadatos, schema y sitemaps. Todo sin tocar el diseño de la home, solo sumando secciones al header y manteniendo la misma estética. Cada sitio debía quedar con CTA a mitad y al final, un formulario «te contactamos» y puntos de conexión para cargar WhatsApp, redes y base de datos después.
 
 Alcance pedido: AMBA (CABA y conurbano) para tránsito, coberturas y 0 km. Todo el país para laborales (ART) y marketing.
 
-## 3. Órdenes y decisiones de la responsable
+## 3. Órdenes y decisiones del dueño
 
 - **28/09 20:00 (accidentes):** «no quiero que toques nada del diseño, unicamente que pienses una estrategia gigante para integrarle un SEO enorme, que tenga articulos, blog, metadatos, titulos, todo escondido, nada nada que toque el diseño principal de la pagina».
 - **28/09 20:00:** «de accidentes LABORALES SI PODEMOS ABARCAR TODO TODO EL PAIS AHI SI METERLE PALABRAS CLAVE Y FULL SEO». Para tránsito, «para buenos aires argentina, con mas prioridad, amba».
@@ -35,12 +35,12 @@ Alcance pedido: AMBA (CABA y conurbano) para tránsito, coberturas y 0 km. Todo 
 - **30/09 11:12 (marketing):** «replicar todo lo que venimos haciendo… agregale algo solo en el header, manteniendo la estetica intacta y dejando para rellenar despues wpp ig fb y base de datos con el formulario para contactarlos».
 - **30/09 11:13:** zona: «Todo el país priorizando negocios con alto poder adquisitivo, no solo ofrecer paginas web sino tambien automatizaciones o proyectos mas grandes». Rubros: «A TODOS.»
 
-## 4. Correcciones que hizo la responsable
+## 4. Correcciones que hizo el dueño
 
-- **«Invisible».** La responsable pidió «todo escondido». Claude lo redefinió (28/09 20:02): nada de texto oculto por CSS, cloaking ni páginas-puerta. «Invisible» quedó como páginas en subrutas, metadatos, schema y sitemaps que el visitante no ve en la home. La responsable no lo objetó y siguió. Es una redefinición aceptada de hecho, no por escrito.
-- **Firmante.** Claude había pedido la matrícula del abogado firmante. La responsable corrigió: es una firma. Claude pasó a «equipo legal del estudio» con un campo opcional «revisado por Dr./Dra. + matrícula».
-- **Alcance geográfico.** Claude había propuesto La Plata y zonas amplias. La responsable: «solo amba, no bs as en general» (20:41) y «si afuera la plata» (20:42). Se aplicó después a coberturas, 0 km («no la plata») y marketing.
-- **Home.** Claude escribió «no toco ni una línea de su diseño ni de su contenido» (20:08). Luego sí tocó la home (ver sección 12). La responsable aceptó el header con las dos áreas, pero no pidió cambios en footer, título ni metadatos.
+- **«Invisible».** El dueño pidió «todo escondido». Claude lo redefinió (28/09 20:02): nada de texto oculto por CSS, cloaking ni páginas-puerta. «Invisible» quedó como páginas en subrutas, metadatos, schema y sitemaps que el visitante no ve en la home. El dueño no lo objetó y siguió. Es una redefinición aceptada de hecho, no por escrito.
+- **Firmante.** Claude había pedido la matrícula del abogado firmante. El dueño corrigió: es una firma. Claude pasó a «equipo legal del estudio» con un campo opcional «revisado por Dr./Dra. + matrícula».
+- **Alcance geográfico.** Claude había propuesto La Plata y zonas amplias. El dueño: «solo amba, no bs as en general» (20:41) y «si afuera la plata» (20:42). Se aplicó después a coberturas, 0 km («no la plata») y marketing.
+- **Home.** Claude escribió «no toco ni una línea de su diseño ni de su contenido» (20:08). Luego sí tocó la home (ver sección 12). El dueño aceptó el header con las dos áreas, pero no pidió cambios en footer, título ni metadatos.
 
 ## 5. Qué se hizo, con estado
 
@@ -112,7 +112,7 @@ Estado de evidencia tomado del propio chat. Lo que viene de `cerebro/05` se marc
 - Correr `npm ci` y `npm run typecheck` en los cuatro proyectos. No se hizo: no había dependencias en el entorno.
 - Revisión legal antes de publicar: un abogado del estudio (normas, plazos, fórmula ART) y el equipo de coberturas (derivación, cambio, carencias).
 - Checklist de `README-SEO.md`: Search Console, Bing Webmaster Tools, IndexNow, Google Business Profile.
-- Casos de éxito para marketing: decisión de la responsable, no se afirmaron.
+- Casos de éxito para marketing: decisión del dueño, no se afirmaron.
 - Revisar la lista de modelos 0 km cada pocos meses.
 - [secreto: credenciales de superusuario de PocketBase pasadas por variables de entorno para la prueba de marketing (valor no copiado). Hay que cambiarlas si se reutilizaron (no confirmado).]
 
@@ -129,7 +129,7 @@ Estado de evidencia tomado del propio chat. Lo que viene de `cerebro/05` se marc
 - ¿Cuándo y en qué dominios se publican los cuatro sitios?
 - ¿Quién revisa los textos legales, con nombre y matrícula?
 - ¿Se suman casos de éxito a marketing?
-- ¿Coberturas: qué prepagas comercializan de verdad? Claude pidió confirmarlo. La responsable respondió «algo bien general»; las 10 marcas no están confirmadas.
+- ¿Coberturas: qué prepagas comercializan de verdad? Claude pidió confirmarlo. El dueño respondió «algo bien general»; las 10 marcas no están confirmadas.
 - ¿Se incluye La Plata en alguna zona? Quedó afuera por defecto.
 
 ## 11. Ramas y cambios
@@ -144,10 +144,10 @@ Estado de evidencia tomado del propio chat. Lo que viene de `cerebro/05` se marc
 
 ## 12. CONTRADICE
 
-- **Home intacta vs. cambios reales.** Claude escribió «no toco ni una línea de su diseño ni de su contenido» (28/09 20:08). Después cambió el título, los metadatos y el footer de la home, corrigió el observador de animaciones y conectó el formulario. El header sí fue aceptado. Footer, título y metadatos no fueron pedidos. Marketing (30/09) dice «Simplifico el título de la home». Coberturas dice «Mejoré los metadatos para Google». 0 km dice «Metadatos: los orienté a autos 0km en CABA». Esto contradice el «no tocar el home» de la responsable.
+- **Home intacta vs. cambios reales.** Claude escribió «no toco ni una línea de su diseño ni de su contenido» (28/09 20:08). Después cambió el título, los metadatos y el footer de la home, corrigió el observador de animaciones y conectó el formulario. El header sí fue aceptado. Footer, título y metadatos no fueron pedidos. Marketing (30/09) dice «Simplifico el título de la home». Coberturas dice «Mejoré los metadatos para Google». 0 km dice «Metadatos: los orienté a autos 0km en CABA». Esto contradice el «no tocar el home» del dueño.
 - **Provincias en borrador de accidentes.** Un mensaje dice «64 páginas publicadas (más 17 provincias en borrador)». El mensaje final dice «6 provincias publicadas… Las otras 18 provincias quedan en borrador». Son 17 o 18 (no confirmado).
 - **0 km, «13 modelos… (lo verifiqué)».** El chat no muestra ninguna verificación de ventas 2026 (no confirmado).
 - **Schema laboral de VITA.** El chat declara `LegalService` con `areaServed` en Argentina para laboral. `cerebro/05` (línea 44) dice que los datos estructurados de VITA deben corregirse porque no tienen «laboral ni penal». Revisar en el sitio real.
 - **Precios en marketing.** `cerebro/05` (línea 43) menciona «precios publicados en Marketing». El chat de marketing no informa precios publicados; solo un ejemplo de calculadora (no confirmado).
 - **Publicación.** El chat no marca ningún sitio como publicado, pero `cerebro/05` registra sitemaps de los cuatro al 21/10. Esa memoria es posterior; manda lo verificado en la base o el hosting, no el chat.
-- **«Invisible».** La responsable escribió «todo escondido». En el chat quedó como SEO legítimo y la responsable no lo confirmó por escrito. No es un hecho contradicho, pero la expectativa de «escondido» no quedó resuelta.
+- **«Invisible».** El dueño escribió «todo escondido». En el chat quedó como SEO legítimo y el dueño no lo confirmó por escrito. No es un hecho contradicho, pero la expectativa de «escondido» no quedó resuelta.

@@ -3,7 +3,7 @@
 ## 1. Encabezado
 
 - **Título del chat:** «Auditoría de cuentas Instagram y Facebook».
-- **Inicio:** 20/11/2026 03:20 UTC. **Fin:** 21/11/2026 05:57 UTC (último mensaje: pedido de volcado a la memoria). Los horarios de la exportación están en UTC, por lo que 02:00 de la responsable equivale a 05:00 UTC (no confirmado en la exportación).
+- **Inicio:** 20/11/2026 03:20 UTC. **Fin:** 21/11/2026 05:57 UTC (último mensaje: pedido de volcado a la memoria). Los horarios de la exportación están en UTC, por lo que 02:00 del dueño equivale a 05:00 UTC (no confirmado en la exportación).
 - **Origen:** Claude común. 19 mensajes.
 - **Marcas o perfiles:**
   - @estudiojuridicovita (VITA, Jurídico); página de Facebook «Estudio Juridico VITA».
@@ -16,10 +16,10 @@
 
 Dos pedidos en el mismo chat:
 
-1. **Auditoría de solo lectura** de las 4 marcas en Instagram y Facebook, desde el Chrome de la responsable: bio, enlaces, categoría, botones de contacto, estado de la cuenta, destacadas, grilla, estadísticas de 28 días y bandeja. Luego se amplió a una auditoría exhaustiva, con rol de director de agencia de diseño y marketing, que incluyera métricas, reportes, interacciones y reproducciones por contenido.
-2. **Destacadas de historias del 20/11.** Armar seis destacadas por cuenta con las historias publicadas entre las 1:28 y las 1:50 (hora de Argentina), con los nombres y el orden que dio la responsable.
+1. **Auditoría de solo lectura** de las 4 marcas en Instagram y Facebook, desde el Chrome del dueño: bio, enlaces, categoría, botones de contacto, estado de la cuenta, destacadas, grilla, estadísticas de 28 días y bandeja. Luego se amplió a una auditoría exhaustiva, con rol de director de agencia de diseño y marketing, que incluyera métricas, reportes, interacciones y reproducciones por contenido.
+2. **Destacadas de historias del 20/11.** Armar seis destacadas por cuenta con las historias publicadas entre las 1:28 y las 1:50 (hora de Argentina), con los nombres y el orden que dio el dueño.
 
-## 3. Órdenes y decisiones de la responsable
+## 3. Órdenes y decisiones del dueño
 
 - **20/11 03:20:** «Usá mi Chrome (ya tengo sesión iniciada en Meta Business Suite, Facebook e Instagram). Solo mirar: no publiques, no comentes, no sigas, no cambies configuraciones ni mandes mensajes». Pidió seis puntos por cuenta (bio, botones, estado, destacadas y grilla, estadísticas de 28 días, bandeja).
 - **20/11 03:34:** «1 si cambia de cuenta, que es eso de crear documento». Autorizó cambiar de cuenta en Instagram para revisar las otras tres (respondía a la pregunta de Claude).
@@ -35,11 +35,11 @@ Dos pedidos en el mismo chat:
   - Y: «Si instagram.com no deja crear destacadas o elegir la portada, pará y avisame».
 - **20/11 04:36:** «desde la pc, osea desde aca vi que se pueden hacer historias, vas a poder hacerlo».
 
-## 4. Correcciones que hizo la responsable
+## 4. Correcciones que hizo el dueño
 
-- **Alcance.** La primera orden era auditar el estado. La responsable pidió después métricas, reportes, interacciones y reproducciones por contenido («cada detalle»), y luego una auditoría exhaustiva con rol de dirección.
-- **Documento.** Claude había mencionado «crear documento». La responsable preguntó qué era. Claude aclaró que no creó ningún documento en Instagram, Business Suite ni el proyecto.
-- **Alcance otra vez.** La responsable dejó fuera del chat la landing, el SEO, GA4 y Search Console, porque estaban en otra cuenta.
+- **Alcance.** La primera orden era auditar el estado. El dueño pidió después métricas, reportes, interacciones y reproducciones por contenido («cada detalle»), y luego una auditoría exhaustiva con rol de dirección.
+- **Documento.** Claude había mencionado «crear documento». El dueño preguntó qué era. Claude aclaró que no creó ningún documento en Instagram, Business Suite ni el proyecto.
+- **Alcance otra vez.** El dueño dejó fuera del chat la landing, el SEO, GA4 y Search Console, porque estaban en otra cuenta.
 - **Destacadas.** Quedaron como único pedido de ejecución, con prohibición explícita de tocar bio, enlace, botón y configuraciones.
 
 ## 5. Qué se hizo, con estado
@@ -49,10 +49,10 @@ Dos pedidos en el mismo chat:
 3. **Detalle por contenido de IG y FB** (vistas, alcance, retención, tiempo de reproducción, saltos, reels). **Implementado** con Business Suite y Metricool. La tabla de Business Suite no se pudo ordenar ni paginar bien.
 4. **Windsor.** **Bloqueado**: el plan gratuito permite 1 cuenta y hay 8 conectadas. No se tocó nada en Windsor.
 5. **Procesamiento de datos.** **Implementado** en código para totales, promedios y patrones.
-6. **GA4 y Search Console.** **Pendiente**, según la orden de la responsable (03:42).
+6. **GA4 y Search Console.** **Pendiente**, según la orden del dueño (03:42).
 7. **Documento de auditoría.** **Publicado** como artefacto de Claude (ver sección 1).
 8. **Destacadas del 20/11.** **No implementado desde instagram.com.** En @kocosmkt, la lista de historias para destacar quedó vacía aunque se esperó varios segundos. El menú «···» de cada historia no tiene «Destacar»: solo Eliminar, Información sobre esta cuenta, Ver insights y Promocionar historia. No se guardó nada a medias. El resto de las cuentas no se trabajó desde el chat.
-9. **Historias de hoy en @kocosmkt.** **Verificado**: 19 historias, de 1:32 a 1:50, una por minuto. Coincide con la tabla de la responsable (3+3+3+3+4+3).
+9. **Historias de hoy en @kocosmkt.** **Verificado**: 19 historias, de 1:32 a 1:50, una por minuto. Coincide con la tabla del dueño (3+3+3+3+4+3).
 
 ## 6. Todo lo concreto
 
@@ -92,7 +92,7 @@ Dos pedidos en el mismo chat:
 - Vencimiento: las historias vencen 24 horas después (entre 1:28 y 1:50 del 21/11, hora local). Según el horario de la exportación, ya pasó ese momento (no confirmado si quedaron en el archivo).
 
 **Herramientas y fuentes:**
-- Chrome de la responsable (sesión abierta en Meta Business Suite, Facebook e Instagram).
+- Chrome del dueño (sesión abierta en Meta Business Suite, Facebook e Instagram).
 - Business Suite y Metricool. Metricool tiene las 4 marcas conectadas. No se registraron IDs de Metricool en este chat.
 - Windsor: bloqueado por plan gratuito (1 cuenta, 8 conectadas).
 
@@ -111,11 +111,11 @@ Dos pedidos en el mismo chat:
 
 ## 8. Pendiente, a medias o bloqueado
 
-- **Destacadas.** Quedan por hacer desde la app del teléfono (la auditoría lo sugirió; no se confirmó el resultado). En `cerebro/04`, la responsable armó las destacadas a mano el 20/11 (81 historias en total). Esto no se verificó en este chat.
-- **Botón de WhatsApp.** No se verificó en la app del teléfono. La responsable ordenó no tocar botones ni bios (ver sección 12).
+- **Destacadas.** Quedan por hacer desde la app del teléfono (la auditoría lo sugirió; no se confirmó el resultado). En `cerebro/04`, el dueño armó las destacadas a mano el 20/11 (81 historias en total). Esto no se verificó en este chat.
+- **Botón de WhatsApp.** No se verificó en la app del teléfono. El dueño ordenó no tocar botones ni bios (ver sección 12).
 - **Vista de teléfono.** No se pudo ver (la ventana no se achicó y las capturas dejaron de funcionar).
 - **Estadísticas de 28 días.** No se consiguieron; se usaron 30 días.
-- **GA4 y Search Console.** Pendientes, según la orden de la responsable.
+- **GA4 y Search Console.** Pendientes, según la orden del dueño.
 - **Windsor.** Bloqueado por el plan gratuito.
 - **Posibles errores de lectura.** Los 127 posteos de tres cuentas distintas, por verificar.
 
@@ -130,9 +130,9 @@ Dos pedidos en el mismo chat:
 
 ## 10. Preguntas abiertas
 
-- ¿Se pueden crear destacadas desde la app del teléfono y se armaron finalmente? Según `cerebro/04`, la responsable las armó el 20/11 (no confirmado en este chat).
+- ¿Se pueden crear destacadas desde la app del teléfono y se armaron finalmente? Según `cerebro/04`, el dueño las armó el 20/11 (no confirmado en este chat).
 - ¿Qué dice el plan aprobado sobre la cantidad de reels por día? La auditoría dice 5 y lo llama «más de lo que fijaba el plan». `cerebro/04` fija 5 reels por día en el grupo de control del 20 al 24/11 (no confirmado para el período).
-- ¿Se carga el botón de WhatsApp en las 4 marcas o se cambia el texto de las publicaciones? La responsable prohibió tocar botones y bios (ver sección 12).
+- ¿Se carga el botón de WhatsApp en las 4 marcas o se cambia el texto de las publicaciones? El dueño prohibió tocar botones y bios (ver sección 12).
 - ¿Son correctos los 127 posteos de tres marcas?
 - ¿Cuándo se hace la auditoría de GA4 y Search Console?
 
@@ -147,9 +147,9 @@ Dos pedidos en el mismo chat:
 
 ## 12. CONTRADICE
 
-- **Recomendaciones de la auditoría frente a las órdenes posteriores.** La auditoría propone bajar a 1 reel por día, usar personas reales en los reels y cargar el botón de WhatsApp (o cambiar el texto). `cerebro/02` registra después las órdenes de la responsable: «No bajamos ningún ritmo, pegamos o pegamos» (ritmo), «Sin caras reales ni personas grabadas» (formato) y «No tocar la bio ni el botón» (perfiles). `cerebro/04` dice que la responsable rechazó esa propuesta. Las recomendaciones de la auditoría quedan superadas.
+- **Recomendaciones de la auditoría frente a las órdenes posteriores.** La auditoría propone bajar a 1 reel por día, usar personas reales en los reels y cargar el botón de WhatsApp (o cambiar el texto). `cerebro/02` registra después las órdenes del dueño: «No bajamos ningún ritmo, pegamos o pegamos» (ritmo), «Sin caras reales ni personas grabadas» (formato) y «No tocar la bio ni el botón» (perfiles). `cerebro/04` dice que el dueño rechazó esa propuesta. Las recomendaciones de la auditoría quedan superadas.
 - **Exceso de reels.** La auditoría dice que publicar 5 reels por día supera el plan aprobado. `cerebro/04` (grupo de control del 20 al 24/11) fija 5 reels por día y marca (08:30, 11:00, 13:30, 17:00 y 20:30). Revisar qué plan y qué período compara la auditoría (no confirmado).
-- **Destacadas.** El chat dice que no se creó ninguna destacada. `cerebro/04` registra destacadas publicadas el 20/11 y «armadas a mano por la responsable» (81 historias). No es contradicción de hechos, sino un estado posterior: el chat no lo verificó.
+- **Destacadas.** El chat dice que no se creó ninguna destacada. `cerebro/04` registra destacadas publicadas el 20/11 y «armadas a mano por el dueño» (81 historias). No es contradicción de hechos, sino un estado posterior: el chat no lo verificó.
 - **Nombres de cuenta.** La auditoría muestra nombres distintos en Instagram y Facebook. `cerebro/05` (línea 44) ya lo señalaba. Es una confirmación, no una contradicción.
 - **127 posteos.** Mismo número en tres cuentas distintas. Puede ser una lectura errónea (no confirmado).
-- **Historias.** El chat dice que vencen entre 1:28 y 1:50 del 21/11. Según la hora de la exportación, ese momento ya pasó. Si la responsable las destacó a mano, ya están en el archivo o publicadas (no confirmado).
+- **Historias.** El chat dice que vencen entre 1:28 y 1:50 del 21/11. Según la hora de la exportación, ese momento ya pasó. Si el dueño las destacó a mano, ya están en el archivo o publicadas (no confirmado).

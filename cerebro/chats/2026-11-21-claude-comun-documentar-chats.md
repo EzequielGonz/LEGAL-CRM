@@ -14,7 +14,7 @@ Estados usados: especificado / implementado / probado / publicado / habilitado. 
 
 Leer todos los chats del proyecto, del más viejo al más nuevo, y crear un documento en Claude Docs por chat, titulado `AAAA-MM-DD-claude-<tema-corto>`, con 12 secciones. Después, dar la lista de títulos.
 
-## 3. Órdenes y decisiones de la responsable (textuales)
+## 3. Órdenes y decisiones del dueño (textuales)
 
 - **2026-11-21 06:10:** «Usá la búsqueda de chats anteriores para leer TODOS los chats de este proyecto, uno por uno, del más viejo al más nuevo. No resumas de más: prefiero que sobre a que falte.»
 - **2026-11-21 06:10:** «frena todos los chats del proyecto, que no se ejecute nada mas.»
@@ -56,9 +56,9 @@ Leer todos los chats del proyecto, del más viejo al más nuevo, y crear un docu
 
 ## 8. Pendiente, a medias o bloqueado
 
-- **Tarea programada «Retomar reels tras el límite»:** sigue activa. La responsable tiene que desactivarla o borrarla en sus tareas programadas de claude.ai (el chat no pudo pausarla por permisos).
-- **Chats del proyecto:** según el chat, Claude no puede detener las otras conversaciones. La responsable tiene que abrir cada una y frenarla.
-- **Lectura de 27 sesiones:** no se pudo, por el tipo de sesión (no confirmado). Solo la responsable puede abrirlas.
+- **Tarea programada «Retomar reels tras el límite»:** sigue activa. El dueño tiene que desactivarla o borrarla en sus tareas programadas de claude.ai (el chat no pudo pausarla por permisos).
+- **Chats del proyecto:** según el chat, Claude no puede detener las otras conversaciones. El dueño tiene que abrir cada una y frenarla.
+- **Lectura de 27 sesiones:** no se pudo, por el tipo de sesión (no confirmado). Solo el dueño puede abrirlas.
 - **Exportación de conversaciones:** falta el `conversations.json` de «Configuración > Privacidad > Exportar datos». El ZIP de memoria no sirve.
 - **Documentos:** ninguno creado.
 

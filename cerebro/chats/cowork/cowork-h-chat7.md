@@ -15,7 +15,7 @@
 
 ## 2. Objetivo
 
-Pedido inicial de la responsable (20/10, 02:02 UTC): que Claude le pida la vinculación de landings, redes y Google Cloud; que, cuando ella diga que está hecho, deje programado 1 post diario más historias destacadas en Instagram, con estrategia y calendario de 1 mes por rubro (generado y subido); y que en las landings arme cada CTA, revise los detalles pendientes, agregue las redes y haga dos cambios puntuales: el nombre de la marca en Jurídico (no aparece en ningún lado) y el CTA de WhatsApp de Coberturas (casi invisible).
+Pedido inicial del dueño (20/10, 02:02 UTC): que Claude le pida la vinculación de landings, redes y Google Cloud; que, cuando él diga que está hecho, deje programado 1 post diario más historias destacadas en Instagram, con estrategia y calendario de 1 mes por rubro (generado y subido); y que en las landings arme cada CTA, revise los detalles pendientes, agregue las redes y haga dos cambios puntuales: el nombre de la marca en Jurídico (no aparece en ningún lado) y el CTA de WhatsApp de Coberturas (casi invisible).
 
 Se amplió el 20/10 (19:42 UTC) con 7 puntos: formularios por correo a una casilla por rubro, redes en las landings, nombre «Estudio Jurídico Vita» en varias partes, CTA «Consultar por WhatsApp» en Kocos Marketing y en Tu Obra Social, mensajes prearmados coherentes para identificar de dónde llegó cada lead, y mejora del header y las animaciones de Coberturas.
 
@@ -39,7 +39,7 @@ Se amplió el 20/10 (19:42 UTC) con 7 puntos: formularios por correo a una casil
 Decisiones relevantes que se desprenden de lo anterior:
 
 - Marca de Jurídico: «Estudio Jurídico Vita» como nombre principal; «Vita Abogados» solo como apoyo.
-- WhatsApp de Kocos Marketing: pasa al número de la línea del CRM (el de la landing, con otra característica, queda descartado). Para los otros tres rubros se usan los números de las líneas del CRM, con prefijo internacional (a confirmar por la responsable; ella respondió «Si son los de el CRM»).
+- WhatsApp de Kocos Marketing: pasa al número de la línea del CRM (el de la landing, con otra característica, queda descartado). Para los otros tres rubros se usan los números de las líneas del CRM, con prefijo internacional (a confirmar por el dueño; él respondió «Si son los de el CRM»).
 - Correo de los formularios por Resend con dominio propio, con la clave solo en Vercel.
 - El aviso de costo «estará disponible próximamente» de Coberturas se deja como está.
 - La explicación sobre los IDs de Google Analytics se dio por texto; la persona los pegó el 20/10 21:50.
@@ -50,7 +50,7 @@ Decisiones relevantes que se desprenden de lo anterior:
 |---|---|
 | [número redactado]:03 | «ORVIAN NO, KOCOS MARKETING ES». La sesión había escrito «ORVIAN» para su agencia tomando el nombre de la memoria. Se corrigió en la memoria del Project (`profile.md` y `areas/seo-kocos-marketing.md`) y se pidió disculpas en el chat. La copia de la memoria de la cuenta (fuera del Project) no es editable desde esta sesión y seguía diciendo ORVIAN en el listado de memoria |
 | [número redactado]:03 | «En metricool no tenemos acceso a la API». Corrige el plan: se dejó de pedir `METRICOOL_USER_TOKEN` y `METRICOOL_USER_ID` y se pasó a programar directo desde Cowork con la conexión a Metricool de la sesión |
-| [número redactado]:42 | «vos ya las tenes» (las redes): la sesión no las tenía (ver Contradicciones). La responsable las envió a las 20:07 |
+| [número redactado]:42 | «vos ya las tenes» (las redes): la sesión no las tenía (ver Contradicciones). El dueño las envió a las 20:07 |
 | [número redactado]:17 | Descartó cambiar el aviso «estará disponible próximamente»: «Dejalo asi como esta». También aclaró que el Facebook de Kocos Marketing «literalmente es la misma cuenta» |
 
 ## 5. Estado de cada bloque o tarea
@@ -89,7 +89,7 @@ Criterio: «Especificado» es que hay texto/diseño escrito; «Implementado» es
 
 **Lecturas realizadas (sin cambios):** documentos del proyecto, archivos del repositorio por conector, base de datos del CRM (2 consultas `SELECT` sobre la tabla `channels`: columnas y líneas por rubro; esos números se redactan en este documento), Vercel (equipos, dominios, proyectos, ficha del proyecto `legal-crm`), Metricool (marcas, dos veces) y lectura de los 4 sitios con un agente web-fetch.
 
-**Migraciones:** ninguna. **Despliegues:** ninguno. **Cambios de configuración:** ninguno aplicado. Variables mencionadas (solo nombres): `RESEND_API_KEY` y `LANDING_EMAIL_FROM` (a crear en Vercel, no creadas); `LANDING_ORIGINS` y `LANDING_WHATSAPP_TEMPLATE` (ya usadas por el código); `METRICOOL_USER_TOKEN` y `METRICOOL_USER_ID` (declaradas innecesarias); `FACEBOOK_<CLAVE>_PAGE_ID`, `FACEBOOK_<CLAVE>_PAGE_ACCESS_TOKEN` e `INSTAGRAM_<CLAVE>_BUSINESS_ID` (pendientes de la responsable, del contexto anterior).
+**Migraciones:** ninguna. **Despliegues:** ninguno. **Cambios de configuración:** ninguno aplicado. Variables mencionadas (solo nombres): `RESEND_API_KEY` y `LANDING_EMAIL_FROM` (a crear en Vercel, no creadas); `LANDING_ORIGINS` y `LANDING_WHATSAPP_TEMPLATE` (ya usadas por el código); `METRICOOL_USER_TOKEN` y `METRICOOL_USER_ID` (declaradas innecesarias); `FACEBOOK_<CLAVE>_PAGE_ID`, `FACEBOOK_<CLAVE>_PAGE_ACCESS_TOKEN` e `INSTAGRAM_<CLAVE>_BUSINESS_ID` (pendientes del dueño, del contexto anterior).
 
 **Errores exactos de acceso a GitHub y a la red en esta sesión:**
 
@@ -113,7 +113,7 @@ En este cierre no se escribió en GitHub ni se probó el acceso, por la instrucc
 6. Analytics: pegar el código de cada ID en su landing y marcar `clic_whatsapp` y `formulario_enviado` como eventos clave.
 7. Search Console: enviar los 4 sitemaps (existen) y pedir indexación de las home.
 8. Actualizar `CONTEXTO_ACTUAL_CRM.md` al cerrar el bloque (no se hizo).
-9. Cuando la responsable confirme el número de WhatsApp de Kocos Marketing, verificarlo en Meta (la línea figuraba «Pendiente» en el contexto del 19/10).
+9. Cuando el dueño confirme el número de WhatsApp de Kocos Marketing, verificarlo en Meta (la línea figuraba «Pendiente» en el contexto del 19/10).
 
 **Bloqueos:** acceso a las landings (Hostinger Horizons) y a Metricool con las marcas y redes pedidas; pruebas desde la sesión de CORS y de la protección de Vercel sobre el dominio del panel (el proxy lo bloqueó); no hay clon local del repositorio.
 
@@ -133,7 +133,7 @@ En este cierre no se escribió en GitHub ni se probó el acceso, por la instrucc
 - CONTRADICE: el WhatsApp de Kocos Marketing que mostraba la landing (característica 223) no coincidía con el de la línea cargada en el CRM; la persona eligió el del CRM.
 - CONTRADICE: el identificador de Facebook de Kocos Marketing enviado por la persona no coincide con el que tiene conectado Metricool (la persona afirma que es la misma cuenta; sin verificar).
 - CONTRADICE: `CONTEXTO_ACTUAL_CRM.md` dice «Landings (Hostinger Horizons, dominio en DonWeb)»; los 4 dominios usan los nameservers de Vercel (DonWeb figura como registrador), así que el registro TXT de verificación se carga en Vercel DNS y no en la zona de DonWeb.
-- CONTRADICE: el contexto del proyecto dice que redes, landings, calendario y Google Cloud siguen en pausa hasta que la responsable confirme que terminó de vincular; el 20/10 la persona avanzó con dominios verificados, redes, correos de destino y IDs de Analytics, y dijo «ya esta» sobre Metricool, pero la cuenta consultada no lo reflejaba.
+- CONTRADICE: el contexto del proyecto dice que redes, landings, calendario y Google Cloud siguen en pausa hasta que el dueño confirme que terminó de vincular; el 20/10 la persona avanzó con dominios verificados, redes, correos de destino y IDs de Analytics, y dijo «ya esta» sobre Metricool, pero la cuenta consultada no lo reflejaba.
 - CONTRADICE: la guía `LANDINGS_CONEXION_ENTREGA.md` y el mensaje del primer commit sugieren que los documentos están en el repositorio; solo están en el Project y en las salidas.
 
 ---
@@ -168,7 +168,7 @@ Projects {"method": "project_read", "path": "claude/PUNTO_DE_CONTROL.md"}
 Projects {"method": "project_read", "path": "claude/PROXIMO_BANDEJA_CLAUDE.md"}
 
 #### [número redactado]T02:02:21.241Z | RESULTADO
-{"method":"project_read","path":"claude/PUNTO_DE_CONTROL.md","content":"# Punto de control · 17/10/2026 (plantillas enviadas a revisión)\n\n- Rediseño cerrado: `main` incluye bloques 1–4 (PR #17, `991c871`). Bloque 5 y pruebas de navegador omitidos por decisión de la responsable.\n- Credenciales de …
+{"method":"project_read","path":"claude/PUNTO_DE_CONTROL.md","content":"# Punto de control · 17/10/2026 (plantillas enviadas a revisión)\n\n- Rediseño cerrado: `main` incluye bloques 1–4 (PR #17, `991c871`). Bloque 5 y pruebas de navegador omitidos por decisión del dueño.\n- Credenciales de …
 
 #### [número redactado]T02:02:21.371Z | HERRAMIENTA
 mcp__memory__memory_read {"path": ["/areas/seo-estudio-accidentes.md", "/areas/seo-prepagas-obras-sociales.md", "/areas/seo-agencia-0km.md", "/areas/seo-kocos-marketing.md"]}
@@ -795,10 +795,10 @@ https://www.instagram.com/comparatuobrasocial/
 https://www.facebook.com/profile.php?id=[número redactado]
 
 #### [número redactado]T20:07:31.538Z | HERRAMIENTA
-Bash {"command": "cd /home/claude/entrega && python3 - <<'EOF'\np='LANDINGS_PROMPTS.md'\ns=open(p).read()\nold_start=s.index(\"- Redes: **[FALTA]**\")\nold_end=s.index(\"\\n\",old_start)\nnew=\"\"\"- Redes (enviadas por la responsable el 20/10):\n\n| Marca | Instagram | Facebook |\n|---|---|---|\n| Estud…
+Bash {"command": "cd /home/claude/entrega && python3 - <<'EOF'\np='LANDINGS_PROMPTS.md'\ns=open(p).read()\nold_start=s.index(\"- Redes: **[FALTA]**\")\nold_end=s.index(\"\\n\",old_start)\nnew=\"\"\"- Redes (enviadas por el dueño el 20/10):\n\n| Marca | Instagram | Facebook |\n|---|---|---|\n| Estud…
 
 #### [número redactado]T20:07:33.002Z | RESULTADO
-2 3:Fecha: 20/10/2026. Cada bloque se pega en el editor de Horizons de esa landing, de a uno. Los datos salen de las respuestas de la responsable y del CRM; lo que falta está marcado **[FALTA]** y no se publica hasta completarlo. 134:5) Formulario «Quiero recibir asesoramiento»: quitar el aviso de c…
+2 3:Fecha: 20/10/2026. Cada bloque se pega en el editor de Horizons de esa landing, de a uno. Los datos salen de las respuestas del dueño y del CRM; lo que falta está marcado **[FALTA]** y no se publica hasta completarlo. 134:5) Formulario «Quiero recibir asesoramiento»: quitar el aviso de c…
 
 #### [número redactado]T20:07:36.333Z | HERRAMIENTA
 Bash {"command": "python3 - <<'EOF'\np='LANDINGS_CONEXION_ENTREGA.md'\ns=open(p).read()\na=\"5. **Redes**: faltan los enlaces de Instagram y Facebook de las marcas.\"\nassert a in s\ns=s.replace(a,\"5. **Redes**: recibidas el 20/10 (Instagram y Facebook de las 4 marcas, ya incluidos en `LANDINGS_PROMPTS.…

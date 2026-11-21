@@ -9,9 +9,9 @@
 
 ## 2. Objetivo
 
-La responsable pidió un contexto completo del proyecto, «a último detalle», en Word, organizado por temas y con sus órdenes vigentes reconciliadas para que una no pise a otra. Después amplió el pedido: separar contenido, visuales, expectativas, redes, objetivos y funcionalidades, leer todos los chats y sumar la lista de repositorios conectados. Para qué: tener una memoria única para retomar el proyecto sin releer los chats.
+El dueño pidió un contexto completo del proyecto, «a último detalle», en Word, organizado por temas y con sus órdenes vigentes reconciliadas para que una no pise a otra. Después amplió el pedido: separar contenido, visuales, expectativas, redes, objetivos y funcionalidades, leer todos los chats y sumar la lista de repositorios conectados. Para qué: tener una memoria única para retomar el proyecto sin releer los chats.
 
-## 3. Órdenes y decisiones de la responsable (textuales, con fecha)
+## 3. Órdenes y decisiones del dueño (textuales, con fecha)
 
 - 20/11/2026 08:20 UTC: «necesito que me hagas un contexto completo de todo el proyecto, quitando ordenes y restricciones, unicamente restriccion de no pagar, sumando ordenes que di (mas actualizadas) siempre no pisandose una con otra, todo el contexto completo del proyecto a ultimo detalle, en un word si puede ser. organizandolo tambien.»
 - 20/11/2026 08:21 UTC: «y justamente, hace el contexto completo sin tener en cuenta esas mismas restricciones y usa todas las herramientas, plugins, skills, conectores, agentes, todo lo que tengas a disposicion para hacer lo mejor de lo mejor»
@@ -29,7 +29,7 @@ Decisiones que se pueden leer del chat (no son órdenes textuales):
 
 Reemplazos: la orden de 08:21 («sin tener en cuenta esas mismas restricciones») no dice con claridad si también deja sin efecto la restricción de no pagar. Ver sección 10.
 
-## 4. Correcciones de la responsable
+## 4. Correcciones del dueño
 
 - 08:21 UTC: pidió rehacer el contexto sin tener en cuenta las restricciones, después de la versión inicial que las conservaba. El resultado final sí conservó «no pagar».
 - 08:26 UTC: «Inténtalo de nuevo» tras el corte de uso.
@@ -68,7 +68,7 @@ Pedido de volcado del 21/11 (este archivo): la primera ejecución se bloqueó co
 - Líneas de Wasender desconectadas el 20/11.
 - Límite de uso de 5 horas de la cuenta: se agotó el 20/11 a las 08:29 UTC y se renovó a las 08:50 UTC.
 - Costo acumulado de la sesión según el campo de resultados: ~US$30 (20/11, 08:37 UTC) y ~US$34 (21/11, 05:57 UTC). Son datos del campo de costo, no facturación verificada.
-- Otros proyectos de la responsable mencionados en el Word: AutosMix y el boceto de una inmobiliaria (según el resultado).
+- Otros proyectos del dueño mencionados en el Word: AutosMix y el boceto de una inmobiliaria (según el resultado).
 
 ## 8. Pendiente, a medias o bloqueado
 

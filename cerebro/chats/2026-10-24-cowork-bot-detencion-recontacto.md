@@ -15,7 +15,7 @@
 
 Mejorar el CRM multirubro y sus bots de captación por WhatsApp, aplicando cambios directamente («arregla todo y aplicalo directamente»), respetando las autorizaciones vigentes (sin campañas, envíos ni gastos sin autorización expresa; Fase 3 pausada). Bloques: (1) derivación a humano, audios, pedidos de origen o baja, calidad de líneas y marca del bot de Marketing (resuelto antes de la compactación, según resumen; PR #69 y #70); (2) regla de respeto al interés de la persona, sin apagar al agente (PR #71); (3) recontacto automático a quien no responde, dentro de la ventana de 24 h de Meta; (4) hora del chat del panel en formato de 24 h; (5) cierre del chat.
 
-## 3. Órdenes y decisiones de la responsable
+## 3. Órdenes y decisiones del dueño
 
 Los cuatro primeros mensajes son anteriores a la compactación. Se reproducen tal como los cita el resumen (con sus puntos suspensivos). Fecha: 24/10/2026; hora no verificable.
 
@@ -30,7 +30,7 @@ Los cuatro primeros mensajes son anteriores a la compactación. Se reproducen ta
 
 Decisiones de negocio vigentes (reglas aprobadas, según los mensajes anteriores):
 
-- Al cerrar y avisar que lo llamará un asesor, la responsable carga manualmente quién le habla. El bot no promete horario.
+- Al cerrar y avisar que lo llamará un asesor, el dueño carga manualmente quién le habla. El bot no promete horario.
 - Audios: el bot pide que le escriban.
 - Pedido de origen o de baja de datos: mensaje automático de disculpas, sin explicar el origen (lo maneja Marketing; los datos salen de Meta), y se detiene el contacto por iniciativa de la empresa.
 - Línea de cualquier rubro con calidad baja en Meta: pausar campañas y dar aviso.
@@ -39,7 +39,7 @@ Decisiones de negocio vigentes (reglas aprobadas, según los mensajes anteriores
 - Si la persona no quiere que le hablen más: se disculpa, queda a disposición y el agente no se apaga. Si dice algo relevante, se lo atiende. Rige para los chats con ventana de Meta abierta y en todos los rubros.
 - Permanentes: nunca lanzar campañas ni contactar prospectos sin autorización expresa; sin pagos sin autorización; secretos solo en Vercel; sin datos personales reales en pruebas; nada se borra, se archiva.
 
-## 4. Correcciones de la responsable
+## 4. Correcciones del dueño
 
 1. «Habíamos dicho que si no respondía, se le volvía a enviar mensaje… eso tampoco se está respetando» (24/10, previo). El recontacto no funcionaba. Causa: el motor revisaba siempre los chats más viejos y nunca llegaba a los recientes. Se corrigió en `src/lib/recontacto/motor.ts` (PR #71).
 2. Captura del chat con la hora «02:14» donde correspondía 14:14 (formato de 12 h). Se pasó a 24 h, zona Buenos Aires, en `conversation-thread.tsx` (PR #71).
@@ -136,7 +136,7 @@ Bloqueos:
 - El entorno local se recicló: ya no están el repositorio clonado ni la rama del punto de retorno (solo el parche).
 - La pestaña de Chrome usada para consultar la API del panel ya no existe.
 
-Preguntas abiertas para la responsable:
+Preguntas abiertas para el dueño:
 
 1. Nombre de presentación del bot por rubro: «Nancy» o «Leonardo Gonzalez».
 2. Tres a cinco conversaciones de ejemplo por rubro para completar las fichas.

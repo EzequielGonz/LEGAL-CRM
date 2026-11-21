@@ -13,7 +13,7 @@
 
 Mejorar el CRM multirubro y sus landings, con entregas por ramas, PR y despliegue en Vercel. Puntos centrales: corregir los estados de línea de WhatsApp, mostrar campañas activas en Inicio, pasar a Perdido a quien se da de baja, rehacer las métricas de Oportunidades y Captación, y cerrar el circuito de Kocos Marketing (extracción de base, apertura, análisis IA y venta consultiva en el mismo chat). También que el asistente del panel entienda el CRM y pueda cambiar el límite diario de una campaña.
 
-## 3. Órdenes y decisiones de la responsable
+## 3. Órdenes y decisiones del dueño
 
 Órdenes anteriores al 19/10 19:47: sin transcripción, solo del resumen de compactación (sin fecha exacta):
 
@@ -23,7 +23,7 @@ Mejorar el CRM multirubro y sus landings, con entregas por ramas, PR y despliegu
 - Nunca lanzar campañas ni contactar prospectos sin autorización expresa. Ningún pago sin autorización. Claves solo en Vercel.
 - No descifrar variables de entorno. No borrar: archivar con motivo. Aplicar migraciones solo después de revisar la base real.
 - La Preview comparte base con producción («solo se mira»). La Fase 3 queda pausada hasta indicación expresa.
-- El PIN de acceso compartido en el chat debe rotarse (acción de la responsable).
+- El PIN de acceso compartido en el chat debe rotarse (acción del dueño).
 
 Tramo visible:
 
@@ -33,11 +33,11 @@ Tramo visible:
 - 19/10 19:47 (resumen): «Si, exactamente, que sea asi el circuito de kocos, primero extraemos la base, la cargamos, y los que vayan diciendo que si, el analisis se hace automatico y a su vez una venta consultiva todo en el mismo chat del cliente, que no sea manual el analisis, justamente por eso piden presupuesto porque les damos una propuesta en base a un analisis IA. explicale el contexto de todo al asistente personal, no entiende muchas cosas.»
 - 19/10 19:47 (resumen): «NO PUEDO MODIFICAR EL LIMITE DE ENVIO MAXIMO DE MENSAJES POR DIA EN UNA CAMPAÑA EN CURSO, NI EN BORRADOR NI NADA, HACE QUE SE PUEDA EDITAR EL LIMITE MAXIMO DE ENVIO DE MENSAJES AUNQUE ESTE EN CURSO Y QUE EL ASISTENTE TAMBIEN PUEDA HACERLO».
 - 19/10 20:12: «LISTO YA QUEDO. por que la linea de kocos marketing no se aprueba?».
-- 19/10 20:15: la responsable indicó el número de Kocos Marketing y dijo que figura pendiente en Meta aunque hicieron todo para la aprobación hace varios días.
+- 19/10 20:15: el dueño indicó el número de Kocos Marketing y dijo que figura pendiente en Meta aunque hicieron todo para la aprobación hace varios días.
 - 19/10 20:15: cambio de modelo a `claude-haiku-5-5` con el comando del sistema.
 - 21/11 07:31: cierre completo con entrega de archivo, sin preguntas salvo dato imprescindible, sin escrituras en GitHub, commits, pushes ni ramas sin «dale» explícito, y con secretos y datos de prospectos redactados.
 
-## 4. Correcciones de la responsable
+## 4. Correcciones del dueño
 
 - El panel no permitía editar el límite diario en campañas en curso, en borrador ni en ningún estado. Lo corrigió con la orden del 19/10 19:47.
 - El análisis IA del circuito de Kocos debía ser automático al decir que sí, no manual.
@@ -62,7 +62,7 @@ Escala: especificado / implementado / probado / publicado / habilitado.
 - **Documento `CONTEXTO_ACTUAL_CRM.md` con #33 a #37:** **pendiente**. El asistente anunció que lo haría después de #37, pero no hay evidencia.
 - **Diagnóstico de la línea de Kocos Marketing:** diagnosticada, **no resuelta** (ver sección 7).
 - **Revisión del webhook («no entran mensajes hace 19 días»):** ofrecida, **no hecha**.
-- **Rotación del PIN de acceso:** acción de la responsable. Pendiente.
+- **Rotación del PIN de acceso:** acción del dueño. Pendiente.
 
 ## 6. Archivos, rutas, repos, PR, commits, migraciones y despliegues
 
@@ -89,7 +89,7 @@ Despliegues: producción de #36 y #37 en READY.
 ## 7. Datos del negocio y estado de líneas
 
 - Línea de Kocos Marketing: Meta devuelve estado PENDING para ese número. Causa más probable: el número no está registrado en la API de WhatsApp Cloud (falta el paso de registro con PIN de 6 dígitos). Otras posibles: nombre visible en revisión, falta de método de pago o de verificación del negocio, o un identificador de número que no corresponde a Kocos.
-- Falta confirmar qué muestra la pantalla API Setup de Meta para ese número, y si el identificador coincide con `WHATSAPP_MARKETING_PHONE_NUMBER_ID`. Esa comprobación la hace alguien con acceso a Vercel. Registrar el número en Meta solo lo hace la responsable o con su autorización expresa.
+- Falta confirmar qué muestra la pantalla API Setup de Meta para ese número, y si el identificador coincide con `WHATSAPP_MARKETING_PHONE_NUMBER_ID`. Esa comprobación la hace alguien con acceso a Vercel. Registrar el número en Meta solo lo hace el dueño o con su autorización expresa.
 - Estado de Civil: «Conectada» (única línea leída).
 
 ## 8. Pendientes, bloqueos y preguntas abiertas
@@ -104,7 +104,7 @@ Despliegues: producción de #36 y #37 en READY.
 Preguntas abiertas:
 
 - ¿Qué hacer con el diagnóstico de la línea de Kocos Marketing, si la pantalla API Setup de Meta confirma el registro pendiente?
-- ¿Se confirma el registro del número en Meta? Solo lo decide la responsable.
+- ¿Se confirma el registro del número en Meta? Solo lo decide el dueño.
 
 ## 9. Aprendizajes
 
@@ -114,7 +114,7 @@ Preguntas abiertas:
 
 ## 10. Navegador del panel
 
-- El resumen decía que la responsable había reconectado Opera. En la consulta de las 20:12 la herramienta respondió «Browser not connected». Tomar la última como vigente.
+- El resumen decía que el dueño había reconectado Opera. En la consulta de las 20:12 la herramienta respondió «Browser not connected». Tomar la última como vigente.
 
 ## 11. Ramas y cambios (explícito)
 
@@ -132,7 +132,7 @@ Qué quedó encendido o apagado por este chat: el límite diario es editable en 
 
 ## 12. CONTRADICE
 
-- **CONTRADICE:** el archivo nombra la agencia como ORVIAN en el encabezado y en el pedido de cierre. La corrección de la responsable del 20/10 fue «ORVIAN NO, KOCOS MARKETING ES». Usar Kocos Marketing.
+- **CONTRADICE:** el archivo nombra la agencia como ORVIAN en el encabezado y en el pedido de cierre. La corrección del dueño del 20/10 fue «ORVIAN NO, KOCOS MARKETING ES». Usar Kocos Marketing.
 - **CONTRADICE:** el resumen de compactación da por reconectado Opera. La herramienta respondió «Browser not connected» a las 20:12. Vale la última.
 - **CONTRADICE:** las atribuciones de los commits decían «Claude Opus 5.5», pero la sesión estaba configurada como `claude-haiku-5-5` (cambio del 19/10 20:15). La atribución no coincide con el modelo configurado.
 - **CONTRADICE:** el resumen da por verificado que la línea de Civil aparece «Conectada». Del resto de líneas (Penal, Coberturas) no se pudo leer el estado; no se puede afirmar.

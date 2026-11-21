@@ -10,7 +10,7 @@
 
 ## 2. Objetivo
 
-La responsable pidió **simplificar y ordenar el panel jurídico** (https://legal-crm-nine.vercel.app/perfiles): sacar elementos innecesarios, arreglar un enlace roto, sumar un botón para **archivar prospectos** desde Hoy y Para cerrar, crear una sección de **archivados** con archivado automático al mes en Descartados, arreglar márgenes de «Todos los chats» y dar una vista previa gráfica de Resultados en Hoy. Después de aplicar esas correcciones, pidió que entrara a su Chrome a buscar más errores de diseño, que los comentara en el chat y que ella diera el ok para empezar el **rediseño**. Para qué: que el panel sea más rápido y eficiente de operar.
+El dueño pidió **simplificar y ordenar el panel jurídico** (https://legal-crm-nine.vercel.app/perfiles): sacar elementos innecesarios, arreglar un enlace roto, sumar un botón para **archivar prospectos** desde Hoy y Para cerrar, crear una sección de **archivados** con archivado automático al mes en Descartados, arreglar márgenes de «Todos los chats» y dar una vista previa gráfica de Resultados en Hoy. Después de aplicar esas correcciones, pidió que entrara a su Chrome a buscar más errores de diseño, que los comentara en el chat y que él diera el ok para empezar el **rediseño**. Para qué: que el panel sea más rápido y eficiente de operar.
 
 ## 3. Órdenes y decisiones (textuales)
 
@@ -36,7 +36,7 @@ Mensaje del 19/11/2026 (todo en un mismo mensaje):
 
 No hubo órdenes que reemplacen a otras anteriores dentro de este chat. Las instrucciones del proyecto (CLAUDE.md, fechadas hasta el 15/11) siguen vigentes; ver sección 12.
 
-## 4. Correcciones de la responsable
+## 4. Correcciones del dueño
 
 - No hubo correcciones posteriores a mi trabajo en este chat. Lo que no le gustaba está en las órdenes de la sección 3 (cada «sacarlo»/«no funciona»). No dio feedback sobre mi entrega antes del pedido de volcado.
 
@@ -60,7 +60,7 @@ Estados: especificado / implementado / probado / publicado / habilitado. Versió
 | Archivo: desarchivado automático si la persona vuelve a escribir | Implementado en SQL (disparador de la migración 0634); **no aplicado** |
 | «Todos los chats»: márgenes/relleno | Implementado por análisis de código (no se pudo ver la pantalla): el margen negativo superior pisaba las pestañas y el alto no descontaba pestañas/barras; se unificó el marco en los cuatro perfiles. **No confirmado que sea todo lo que ella veía** |
 | Incidencias, Contactos, Campañas | Sin tocar (como se pidió) |
-| Verificación de diseño en el Chrome de la responsable | **No hecha**: no se pudo acceder al navegador (ver sección 8) |
+| Verificación de diseño en el Chrome del dueño | **No hecha**: no se pudo acceder al navegador (ver sección 8) |
 | «Ordenar los casos: derivados – no derivados – perdidos» | **No hecho** (ambiguo; se preguntó) |
 
 Verificaciones corridas: `npm ci`, `npm run typecheck` (ok), `npm run lint` (sin avisos), pruebas unitarias nuevas `tests/unitarias/archivo.test.ts` junto con otras de colas (16 pasan, 0 fallan). **No se corrió** `npm run build`, las pruebas de integración (`tests/integracion/correr.sh`), `npm audit` ni se recorrió el panel como usuaria.
@@ -83,13 +83,13 @@ Rutas y archivos (repo `EzequielGonz/LEGAL-CRM`):
 
 ## 7. Datos del negocio que aparecieron
 
-- Ejemplo de cifra mostrada por la responsable: **13 captados para derivar** (jurídico) y bot «35 de 100» el 19/11 (jueves 19 de noviembre, «Buenas tardes»).
+- Ejemplo de cifra mostrada por el dueño: **13 captados para derivar** (jurídico) y bot «35 de 100» el 19/11 (jueves 19 de noviembre, «Buenas tardes»).
 - Contexto de CLAUDE.md y `docs/ESTADO.md` (ya existente, no nuevo de este chat): cuatro perfiles (Jurídico con Civil y Penal, Coberturas médicas, Autos 0 km, Marketing); stack Next.js 14, Supabase, API oficial de Meta, Vercel; seguimiento automático encendido; caídos automáticos; descartes automáticos a las 6 horas; sin pausa general. Todo eso se leyó y no se cambió.
 - Sin precios, roles del equipo ni proveedores nuevos.
 
 ## 8. Pendiente, a medias o bloqueado
 
-- **Bloqueado:** revisión de diseño en el Chrome de la responsable. El conector de navegador (Opera MCP) respondió «Browser not connected»; no hay máquina adjunta. Hay que reconectarlo o recibir capturas.
+- **Bloqueado:** revisión de diseño en el Chrome del dueño. El conector de navegador (Opera MCP) respondió «Browser not connected»; no hay máquina adjunta. Hay que reconectarlo o recibir capturas.
 - **Pendiente de decisión:** qué significa «ORDENAR LOS CASOS; DERIVADOS - NO DERIVADOS - PERDIDOS - ETC» (¿la tabla oculta «Captados y casos», o los grupos de Etapas/Descartados? Contactos debía quedar igual).
 - **Pendiente de ok:** aplicar la migración 0634, publicar a `main`/producción, y encender el archivo automático (la primera pasada archivaría de una vez todos los descartados viejos existentes).
 - **Pendiente:** lista de errores de diseño del resto del panel y ok para el rediseño visual.
@@ -106,7 +106,7 @@ Rutas y archivos (repo `EzequielGonz/LEGAL-CRM`):
 - Causa probable de los problemas de «Todos los chats»: `.marco-inbox` usaba márgenes negativos pensados para otro relleno, el layout de Jurídico no anulaba el margen superior (los otros tres sí con `!mt-0`) y el alto de Jurídico (`100vh-4rem`) no descontaba pestañas ni barras.
 - El «Ver los 13» actual solo ponía `?todo=1` en la misma pantalla (mostraba todas ahí mismo), no llevaba a la lista.
 - `next lint` y `tsc` corren bien en el contenedor tras `npm ci` (10 s). No hizo falta `build`.
-- Error no resuelto: sin acceso al navegador de la responsable, la revisión visual quedó sin hacer. El conector de navegador debe estar habilitado («Allow AI connection») y con sesión.
+- Error no resuelto: sin acceso al navegador del dueño, la revisión visual quedó sin hacer. El conector de navegador debe estar habilitado («Allow AI connection») y con sesión.
 
 ## 10. Preguntas abiertas
 
@@ -121,7 +121,7 @@ Rutas y archivos (repo `EzequielGonz/LEGAL-CRM`):
 
 **Ramas usadas (repo `EzequielGonz/LEGAL-CRM`):**
 
-- `claude/pensive-galileo-d6ephy`: rama de trabajo asignada a esta sesión. Salió de la punta de trabajo anterior (el commit padre `d4e7a58` «Botones que cambiaban de perfil y velocidad de Hoy y Campañas»; no confirmé desde qué rama exacta se creó). Contiene todo el trabajo de este chat en un commit. **No está integrada a main** (main está en `66c457b`). **Sin PR** (no se pidió crear). Acción sugerida: revisar y, con el ok de la responsable, integrar a `main` (publicación directa según ESTADO) o abrir un PR; antes aplicar 0634.
+- `claude/pensive-galileo-d6ephy`: rama de trabajo asignada a esta sesión. Salió de la punta de trabajo anterior (el commit padre `d4e7a58` «Botones que cambiaban de perfil y velocidad de Hoy y Campañas»; no confirmé desde qué rama exacta se creó). Contiene todo el trabajo de este chat en un commit. **No está integrada a main** (main está en `66c457b`). **Sin PR** (no se pidió crear). Acción sugerida: revisar y, con el ok del dueño, integrar a `main` (publicación directa según ESTADO) o abrir un PR; antes aplicar 0634.
 - `cerebro-chats`: creada en este paso desde `main` (`66c457b`) para esta memoria; contiene solo este archivo en `cerebro/chats/`. Sin PR. Acción: dejar como archivo de memoria (no integrar a main salvo que se decida).
 
 Otros repos de la lista de acceso (`estudio-juridico-vita-final`, `coberturas-sociales-landing`, `agencia-kocos-mkt`, `0km-kocos-agencia`): **no se usaron**.
@@ -152,9 +152,9 @@ Otros repos de la lista de acceso (`estudio-juridico-vita-final`, `coberturas-so
 ## 12. CONTRADICE:
 
 - CONTRADICE: ninguna instrucción previa fue contradicha de forma directa. Puntos a vigilar:
-  - La orden de sacar «También hoy» elimina accesos que `docs/ESTADO.md`/Hoy del 13/11 definían («en Hoy queda solo lo que lleva a una acción»): Citas próximas, Derivados sin resultado, El bot se trabó. La orden de la responsable (19/11) prevalece, pero esos accesos dejaron de estar visibles en Hoy.
-  - La responsable pidió el 13/11 que los números de semana estuvieran solo en Resultados; ahora Hoy muestra una vista previa con cifras de la semana (pedido expreso del 19/11).
-  - La regla «Nada se borra, se archiva con motivo» se cumple; la regla «Nada se activa solo» se respetó dejando el archivo automático apagado aunque la responsable pidió «directamente archivarlo» (queda a su ok).
+  - La orden de sacar «También hoy» elimina accesos que `docs/ESTADO.md`/Hoy del 13/11 definían («en Hoy queda solo lo que lleva a una acción»): Citas próximas, Derivados sin resultado, El bot se trabó. La orden del dueño (19/11) prevalece, pero esos accesos dejaron de estar visibles en Hoy.
+  - El dueño pidió el 13/11 que los números de semana estuvieran solo en Resultados; ahora Hoy muestra una vista previa con cifras de la semana (pedido expreso del 19/11).
+  - La regla «Nada se borra, se archiva con motivo» se cumple; la regla «Nada se activa solo» se respetó dejando el archivo automático apagado aunque el dueño pidió «directamente archivarlo» (queda a su ok).
   - Texto que decía en `docs/ESTADO.md` «Última actualización: 14/11/2026» se actualizó a 19/11/2026.
 
 ---

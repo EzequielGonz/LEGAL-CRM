@@ -12,7 +12,7 @@ Prioridad: **P0** hoy · **P1** esta semana · **P2** antes del 01/12 · **P3** 
 | # | Qué | Quién | Nota |
 | --- | --- | --- | --- |
 | 1 | **Producir y programar el cronograma doble**: hoy solo hay 6 piezas nuevas; del 25/11 en adelante VITA, Coberturas y Autos no tienen nada. Producir con 24–48 h de ventaja, repartiendo render en sesiones paralelas | Claude | Pedido completo en `.ai-context/prompt-retomar-redes-2011.md`. Arreglar antes «Lo que dijo la Corte» en `contenido.py` |
-| 2 | Confirmar que «Campaña Graves 1911» arranca a las 08:00 y mirar la tasa de entrega (26 % de fallas la semana pasada) | Claude (mira) | No lanzar ni pausar: si se ve mal, avisar a la responsable |
+| 2 | Confirmar que «Campaña Graves 1911» arranca a las 08:00 y mirar la tasa de entrega (26 % de fallas la semana pasada) | Claude (mira) | No lanzar ni pausar: si se ve mal, avisar al dueño |
 | 3 | Revisar la incidencia de amenaza legal abierta del 18/11 (Jurídico) | Responsable | Claude puede resumirla sin datos personales |
 | 3a | **Clave secreta de Supabase expuesta en el chat del 07/09** (la reporta el chat «Contexto completo»; sin verificar). Cambiarla en Supabase y actualizarla en las variables de Vercel | Responsable decide y cambia · Claude verifica que todo siga andando | |
 | 3b | **Línea de Meta de Marketing «Sin acceso al número»**: el bot de Marketing no recibe ni contesta. Revisar token/permiso del número en Meta Business y, si hace falta, renovar la variable en Vercel | Responsable (Meta Business) + Claude (variable y verificación) | Prompt para Cowork listo a pedido |

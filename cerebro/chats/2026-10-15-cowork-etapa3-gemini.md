@@ -23,7 +23,7 @@ Objetivos del último tramo:
 3. Verificar si Claude puede escribir en GitHub, con prueba real y sin simular resultados.
 4. Generar el archivo de cierre de este chat.
 
-## 3. Órdenes y decisiones de la responsable
+## 3. Órdenes y decisiones del dueño
 
 - **Reglas permanentes** (sin fecha exacta; del resumen de compactación, 15/10/2026): «mantené la pausa general, los agentes apagados, la tarea programada inactiva, las campañas pausadas y el seguimiento apagado. Nada de envíos, publicaciones, contacto con prospectos ni gastos. La Fase 3 y el entrenamiento quedan pausados. No escribas en GitHub. Solo frená si encontrás una contradicción que cambie el alcance o tenga efectos externos.» Además: no escribir tokens, contraseñas ni PIN en el chat.
 - **Etapa 2 (cierre):** pedido de cierre con revisión propia, seguido de «frená», «ya esta segui normal» y «retomá» (sin fecha exacta).
@@ -38,7 +38,7 @@ Objetivos del último tramo:
 - **Confirmación de permiso (15/10/2026, 17:44 UTC):** «Ya esta agregado el permiso de la app de claude de github para read-write de el repositorio legal-crm. Tendrias que tener acceso».
 - **Cierre (21/11/2026, 07:18 UTC):** pidió este archivo. Reglas: «no escribir en GitHub, no hacer commits ni pushes, no crear ramas sin "dale" explícito». Si la escritura sigue bloqueada, decir el error exacto y seguir con la entrega en archivo.
 
-## 4. Correcciones que hizo la responsable
+## 4. Correcciones que hizo el dueño
 
 1. Corrigió la interpretación del pedido de acceso: al principio se entendió como acceso parcial; después aclaró que quiere control completo desde este chat (código, landings, SEO, redes, agentes de IA, Google, plantillas de Meta, Business Suite, anuncios y publicaciones), no un análisis de lo que puede hacer.
 2. Corrigió el nombre de la agencia en la identidad de la empresa (según el encabezado de ese pedido, ORVIAN). Ver sección 12.
@@ -58,7 +58,7 @@ Criterio: **especificado** = escrito; **implementado** = código en copia de tra
 | Conexión a Supabase y Vercel (solo lectura) | Sí | No aplica | Conexión confirmada por herramientas; sin cambios aplicados | No | No | Supabase: proyecto `legal-crm`, plan gratuito, sin ramas ni respaldos (según el resumen). |
 | Meta y Google | Sí | No | No | No | No | No conectados según el resumen. |
 | Metricool | Sí | Parcial | No | No | No | Una marca, con página de Facebook y sin Instagram. |
-| Pausa general, agentes apagados, tarea programada inactiva, campañas pausadas, seguimiento apagado | Sí | Mantenido por instrucción | No verificado en este cierre | No | No | Estado declarado por la responsable; no cambió en este tramo. |
+| Pausa general, agentes apagados, tarea programada inactiva, campañas pausadas, seguimiento apagado | Sí | Mantenido por instrucción | No verificado en este cierre | No | No | Estado declarado por el dueño; no cambió en este tramo. |
 
 ## 6. Todo lo concreto: archivos, rutas y entregables
 
@@ -89,13 +89,13 @@ Criterio: **especificado** = escrito; **implementado** = código en copia de tra
 
 ## 8. Pendiente, a medias o bloqueado
 
-1. **Escritura en GitHub bloqueada.** El repositorio no figura entre las fuentes autorizadas de la sesión. Hace falta agregar `EzequielGonz/LEGAL-CRM` a las fuentes de la sesión con permiso de contenidos (lectura y escritura), o iniciar una sesión nueva con ese repo desde el inicio. Lo hace la responsable; no se pegan tokens en el chat.
+1. **Escritura en GitHub bloqueada.** El repositorio no figura entre las fuentes autorizadas de la sesión. Hace falta agregar `EzequielGonz/LEGAL-CRM` a las fuentes de la sesión con permiso de contenidos (lectura y escritura), o iniciar una sesión nueva con ese repo desde el inicio. Lo hace el dueño; no se pegan tokens en el chat.
 2. **Regla de trabajo sobre GitHub sin confirmar.** La propuesta (libre para ramas de prueba; «dale» por acción para producción, migraciones reales, envíos, publicaciones y gastos) no fue confirmada.
 3. **Rama local `prueba-escritura-claude`** (commit `c3f8285`): decidir si se conserva o se borra. No está en GitHub.
-4. **Conexiones que hace la responsable:** (1) GitHub con escritura en el repo del CRM y en los de las landings; (2) dónde están las landings; (3) Meta; (4) Metricool (opcional); (5) Google; (6) variables de entorno en Vercel, cargadas por ella y nunca en el chat; (7) decidir si Supabase pasa a plan pago (implica gasto: requiere autorización previa); (8) confirmar la regla de trabajo. Después de cada una dice «listo» y se verifica.
+4. **Conexiones que hace el dueño:** (1) GitHub con escritura en el repo del CRM y en los de las landings; (2) dónde están las landings; (3) Meta; (4) Metricool (opcional); (5) Google; (6) variables de entorno en Vercel, cargadas por él y nunca en el chat; (7) decidir si Supabase pasa a plan pago (implica gasto: requiere autorización previa); (8) confirmar la regla de trabajo. Después de cada una dice «listo» y se verifica.
 5. **Verificación pendiente:** compilación con dependencias reales en Preview; llamada real a Gemini 3.8 Flash (la clave de Vercel no se usa en Preview); cuentas y logos de redes; variables de Vertex y autorización para ajuste de modelos (implica gasto); carga del corpus; comparación ciega.
 6. **Documentación:** mantener `CONTEXTO_ACTUAL_CRM.md` y el resto de los documentos al cerrar cada bloque.
-7. **Fase 3 y entrenamiento:** pausados hasta indicación expresa de la responsable.
+7. **Fase 3 y entrenamiento:** pausados hasta indicación expresa del dueño.
 
 ## 9. Aprendizajes
 
@@ -108,7 +108,7 @@ Criterio: **especificado** = escrito; **implementado** = código en copia de tra
 
 - Fecha de inicio real del chat.
 - Nombre oficial de la agencia (ver sección 12).
-- Si la responsable quiere que la rama local `prueba-escritura-claude` se conserve o se borre.
+- Si el dueño quiere que la rama local `prueba-escritura-claude` se conserve o se borre.
 - Si Supabase pasa a plan pago y si se autoriza el gasto de Vertex o Google Cloud.
 - Si la regla de trabajo sobre GitHub (punto 8 de la propuesta) queda confirmada.
 
@@ -118,11 +118,11 @@ Criterio: **especificado** = escrito; **implementado** = código en copia de tra
 
 - `main`: `fb5cdc3`. Es producción. No se tocó.
 - `etapa1-correcciones`: `23669fd`. Existe en remoto, no la creó este chat.
-- `trabajo-1410`: `e3eb799`. Existe en remoto; **no la creó este chat** y puede ser del programador. No sobrescribir. Qué hacer: revisar con la responsable antes de integrar o archivar.
+- `trabajo-1410`: `e3eb799`. Existe en remoto; **no la creó este chat** y puede ser del programador. No sobrescribir. Qué hacer: revisar con el dueño antes de integrar o archivar.
 
 **Local, sin subir:**
 
-- Rama `prueba-escritura-claude` en `$S/repo`, salida de `fb5cdc3`. Commit `c3f8285` (15/10/2026, aprox. 17:39 UTC): agrega `claude-write-test.txt`. Para qué: prueba de escritura. Qué tiene: un archivo de prueba. No está integrada a `main` ni tiene PR. Qué hacer: borrar o conservar sin subir, según decida la responsable.
+- Rama `prueba-escritura-claude` en `$S/repo`, salida de `fb5cdc3`. Commit `c3f8285` (15/10/2026, aprox. 17:39 UTC): agrega `claude-write-test.txt`. Para qué: prueba de escritura. Qué tiene: un archivo de prueba. No está integrada a `main` ni tiene PR. Qué hacer: borrar o conservar sin subir, según decida el dueño.
 - Pedido de rama de prueba que no se creó en GitHub: ninguna (el push dio 403).
 
 **Commits nuevos en remoto:** ninguno de este chat.
@@ -146,7 +146,7 @@ Criterio: **especificado** = escrito; **implementado** = código en copia de tra
 
 ## 12. CONTRADICE
 
-1. **Acceso a GitHub.** El 15/10/2026 a las 17:44 UTC la responsable afirmó que el permiso de la app de Claude en GitHub estaba agregado como lectura y escritura del repo. La sesión respondió: «EzequielGonz/LEGAL-CRM is not in this session's authorized repository set». Lo declarado y la evidencia no coinciden. El permiso de la app no alcanza por sí solo; el repo también debe agregarse a las fuentes de la sesión. No se resolvió en el chat.
+1. **Acceso a GitHub.** El 15/10/2026 a las 17:44 UTC el dueño afirmó que el permiso de la app de Claude en GitHub estaba agregado como lectura y escritura del repo. La sesión respondió: «EzequielGonz/LEGAL-CRM is not in this session's authorized repository set». Lo declarado y la evidencia no coinciden. El permiso de la app no alcanza por sí solo; el repo también debe agregarse a las fuentes de la sesión. No se resolvió en el chat.
 2. **Escritura en GitHub.** La instrucción permanente «No escribas en GitHub» y la de 21/11 («sin "dale" explícito») chocan con el pedido de control total desde el chat del 15/10 y con el texto de `CLAUDE.md` del repo, que dice que Claude verifica GitHub «sin pedir "dale" por cada paso» (decisión del 20/11). La regla vigente no está definida.
 3. **Regla 8 de `CLAUDE.md`.** El chat dice que la regla 8 («Claude no escribe en GitHub») sigue vigente en el repo. En el `CLAUDE.md` que tiene este repo local no encuentro esa regla (no confirmado; puede ser de otra versión o rama).
 4. **Nombre de la agencia.** El resumen y el pedido de cierre dicen «ORVIAN» (el resumen también dice «ORVIAN/Kocos»). Otros documentos del proyecto usan «Kocos Marketing» como nombre de la agencia en la landing. Falta definir el nombre oficial antes de publicar material.

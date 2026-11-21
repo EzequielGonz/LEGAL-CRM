@@ -74,4 +74,4 @@ Plan: (1) activar sitemap + indexación de home y 5–10 claves, Bing e IndexNow
 
 - **Perfil de Empresa:** elegible VITA y Autos si atienden en persona; Coberturas sin confirmar; Kocos no (100 % a distancia). El kit trae categorías, descripción, servicios, área, enlaces con UTM (`utm_source=google&utm_medium=organic&utm_campaign=gbp-<marca>`), 4 publicaciones, plan de reseñas y fotos que faltan. Google quitó Preguntas y respuestas en diciembre de 2025.
 - **YouTube Shorts:** nombre, identificador, descripción, banner 2560×1440 y foto 800×800 por marca. No se comprobó si los identificadores están libres.
-- Cuenta de Google que administra Vercel de las landings, Search Console y GA4: la de la responsable (ver accesos en `06-tecnica-repos-y-accesos.md`).
+- Cuenta de Google que administra Vercel de las landings, Search Console y GA4: la del dueño (ver accesos en `06-tecnica-repos-y-accesos.md`).

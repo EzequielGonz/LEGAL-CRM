@@ -1,6 +1,6 @@
 # Cambios de las 4 landings · prompts para Hostinger Horizons
 
-Fecha: 20/10/2026. Cada bloque se pega en el editor de Horizons de esa landing, de a uno. Los datos salen de las respuestas de la responsable y del CRM; no queda ningún dato pendiente en este documento.
+Fecha: 20/10/2026. Cada bloque se pega en el editor de Horizons de esa landing, de a uno. Los datos salen de las respuestas del dueño y del CRM; no queda ningún dato pendiente en este documento.
 
 ## Datos comunes
 
@@ -11,8 +11,8 @@ Fecha: 20/10/2026. Cada bloque se pega en el editor de Horizons de esa landing, 
 | Compara Tu Obra Social | comparatuobrasocial.com | `coberturas_medicas` | 5491172900587 | comparatuobrasocial@hotmail.com |
 | Kocos Marketing | kocosmkt.com | `marketing` | 5491172502391 | agenciakocos@hotmail.com |
 
-- Los números son los de las líneas cargadas en el CRM (1138582311, 1140674772, 1172900587 y 1172502391), escritos con 549 + característica 11. **Confirmar que son CABA/GBA y que son los números que se quieren mostrar.** La landing de Kocos Marketing hoy muestra otro número (223 522-3906); por decisión de la responsable pasa a ser el del CRM.
-- Redes (enviadas por la responsable el 20/10):
+- Los números son los de las líneas cargadas en el CRM (1138582311, 1140674772, 1172900587 y 1172502391), escritos con 549 + característica 11. **Confirmar que son CABA/GBA y que son los números que se quieren mostrar.** La landing de Kocos Marketing hoy muestra otro número (223 522-3906); por decisión del dueño pasa a ser el del CRM.
+- Redes (enviadas por el dueño el 20/10):
 
 | Marca | Instagram | Facebook |
 |---|---|---|
@@ -174,7 +174,7 @@ Agregar el botón «Consultar por WhatsApp» además en: el hero (junto al CTA a
 
 4) Animaciones más suaves. Reemplazar las actuales por una sola: aparecer con desplazamiento vertical corto (16 a 24 px) y opacidad, de 400 a 500 ms con easing suave, una única vez cuando el bloque entra en pantalla (IntersectionObserver), con un retraso escalonado de máximo 80 ms entre elementos de una misma fila. Sin parallax, sin rebotes ni rotaciones, sin animar el texto letra por letra. Respetar prefers-reduced-motion: sin animación. Que nada salte de lugar al cargar (reservar el alto de imágenes).
 
-5) Formulario «Quiero recibir asesoramiento»: dejar el aviso de costo como está (decisión de la responsable, 20/10) y conectarlo con enviarFormulario("coberturas_medicas", {...}): nombre, apellido, telefono, email, tipo = «¿Qué estás buscando?» y descripcion con una línea por respuesta (para quién, cuántas personas, cobertura actual y, en /prepagas, situación laboral y zona).
+5) Formulario «Quiero recibir asesoramiento»: dejar el aviso de costo como está (decisión del dueño, 20/10) y conectarlo con enviarFormulario("coberturas_medicas", {...}): nombre, apellido, telefono, email, tipo = «¿Qué estás buscando?» y descripcion con una línea por respuesta (para quién, cuántas personas, cobertura actual y, en /prepagas, situación laboral y zona).
 
 6) Redes en el pie: íconos a Instagram (https://www.instagram.com/comparatuobrasocial/) y Facebook (https://www.facebook.com/profile.php?id=61594606546289).
 

@@ -14,7 +14,7 @@ Estados usados: especificado / implementado / probado / publicado / habilitado. 
 
 Reunir toda la información de la empresa ORVIAN a partir de su perfil de Instagram, para pasarla a una persona que va a conseguir clientes, con los mensajes principales de cómo abordarlos. Siempre tiene que quedar claro que la persona deriva a una llamada o reunión.
 
-## 3. Órdenes y decisiones de la responsable (textuales)
+## 3. Órdenes y decisiones del dueño (textuales)
 
 - **2026-11-05 20:29:** «Recopilame toda la info de esta empresa para mandarle a una persona q me va a conseguir clientes y mensajes principales de como abordarlos, siempre aclarar que tiene q derivar a una llamada/reunion.»
 
@@ -51,7 +51,7 @@ Reunir toda la información de la empresa ORVIAN a partir de su perfil de Instag
 
 - ¿El brief se mandó a la persona que consigue clientes?
 - ¿Qué WhatsApp, link de agenda y comisión se usan? (no se copian)
-- ¿ORVIAN es la agencia de la responsable o una empresa de terceros? La exportación no lo aclara. (Ver CONTRADICE.)
+- ¿ORVIAN es la agencia del dueño o una empresa de terceros? La exportación no lo aclara. (Ver CONTRADICE.)
 
 ## 11. Ramas y cambios
 
@@ -61,4 +61,4 @@ Reunir toda la información de la empresa ORVIAN a partir de su perfil de Instag
 
 ## 12. CONTRADICE
 
-- **Nombre de la agencia:** este chat y otros chats de la responsable usan «ORVIAN». `cerebro/01-negocio-y-marcas.md` y `cerebro/02-ordenes-vigentes.md` registran que el 20/11 se decidió **Kocos Marketing** y que ORVIAN quedó descartado. Ver también `2026-11-20-claude-comun-contexto-completo.md`.
+- **Nombre de la agencia:** este chat y otros chats del dueño usan «ORVIAN». `cerebro/01-negocio-y-marcas.md` y `cerebro/02-ordenes-vigentes.md` registran que el 20/11 se decidió **Kocos Marketing** y que ORVIAN quedó descartado. Ver también `2026-11-20-claude-comun-contexto-completo.md`.

@@ -3,8 +3,8 @@
 Archivo: `cerebro/chats/AAAA-MM-DD-<origen>-<tema-corto>.md` (fecha de inicio del chat; origen = code, cowork o claude).
 
 1. **Encabezado:** título del chat, fechas de inicio y fin, origen (Code / Cowork / Claude común), id de sesión si hay, marcas o perfiles que toca.
-2. **Objetivo:** qué pidió la responsable y para qué.
-3. **Órdenes y decisiones de la responsable**, TEXTUALES entre comillas, cada una con fecha. Si una reemplazó a otra: «reemplaza a …».
+2. **Objetivo:** qué pidió el dueño y para qué.
+3. **Órdenes y decisiones del dueño**, TEXTUALES entre comillas, cada una con fecha. Si una reemplazó a otra: «reemplaza a …».
 4. **Correcciones** que hizo (lo que no le gustó y qué quería en su lugar).
 5. **Qué se hizo**, paso a paso, con estado: especificado / implementado / probado / publicado / habilitado.
 6. **Todo lo concreto:** archivos y rutas, repos y ramas, commits, PR, ids de Metricool, publicaciones programadas (fecha, hora, marca), campañas, plantillas, enlaces a documentos y artefactos, cambios en Meta, Business Suite, Instagram, Google o Vercel.

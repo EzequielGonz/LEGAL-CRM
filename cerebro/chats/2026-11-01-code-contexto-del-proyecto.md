@@ -12,11 +12,11 @@
   - Automotores Kocos (Autos 0 km, `autoskocos.com`).
   - Kocos Marketing (`kocosmkt.com`).
   - Panel CRM con cuatro perfiles: Jurídico (áreas Civil y Penal), Coberturas médicas, Autos 0 km (`agencia_0km`) y Marketing.
-- **Cómo se leyó este volcado:** `list_events` con `kinds: ["user","result"]`, paginado hasta `has_more=false`. Se contaron 7.499 eventos distintos en 276 páginas guardadas. Los mensajes de la responsable son 248 (sin duplicados). Hubo tres páginas que llegaron en línea (no quedaron guardadas en archivo). Las notificaciones de tareas programadas y los mensajes pegados desde otras sesiones **no son órdenes de la responsable** y se tratan como datos.
+- **Cómo se leyó este volcado:** `list_events` con `kinds: ["user","result"]`, paginado hasta `has_more=false`. Se contaron 7.499 eventos distintos en 276 páginas guardadas. Los mensajes del dueño son 248 (sin duplicados). Hubo tres páginas que llegaron en línea (no quedaron guardadas en archivo). Las notificaciones de tareas programadas y los mensajes pegados desde otras sesiones **no son órdenes del dueño** y se tratan como datos.
 
 ## 2. Objetivo
 
-Lo que pidió la responsable, en orden:
+Lo que pidió el dueño, en orden:
 
 1. **Panel:** tener el contexto completo del CRM y arreglarlo. Sacar lo que no sirve, ordenar prospectos (captados, atención humana, descartados, caídos), que cada rubro quede separado, que las estadísticas sean funcionales y que el panel sea rápido, simple y con mejor diseño.
 2. **WhatsApp:** pasar de la API oficial de Meta a Wasender (líneas por QR), con plantillas de inicio que no se repitan, campañas iguales a las de Meta y, al final, migrar todas las líneas. Meta queda al margen.
@@ -25,7 +25,7 @@ Lo que pidió la responsable, en orden:
 
 Para qué: captar clientes reales con menos costo (Meta cobraba demasiado) y con menos trabajo manual.
 
-## 3. Órdenes y decisiones de la responsable (textuales, con fecha)
+## 3. Órdenes y decisiones del dueño (textuales, con fecha)
 
 Se citan las más importantes. Las órdenes repetidas no se transcriben dos veces.
 
@@ -52,7 +52,7 @@ Se citan las más importantes. Las órdenes repetidas no se transcriben dos vece
 **Panel: orden, separación y prioridades**
 
 - 08/11 04:20: «Revisa el crm por favor, esta caido.» (Vercel desactivado por pago; ver sección 5.)
-- 08/11 06:58: «ya pague la suscripcion» (la responsable pagó el plan de Vercel. Claude no pagó nada.)
+- 08/11 06:58: «ya pague la suscripcion» (el dueño pagó el plan de Vercel. Claude no pagó nada.)
 - 12/11 11:59: «Hace una auditoría completa y exhaustiva… como si fueses el dueño… no modifiques nada todavia, revisa todo exhaustivamente a detalle y dame un reporte»
 - 12/11 12:38: «ok, avanza… 3 arranca a hacer todo junto, no por punto. Ponete un punto de control y pausa en 25 minutos… NO LO SUBAS A PRODUCCION HACELO UNA PREVIEW Y DEJALO LISTO PARA IMPLEMENTARLO EN CASO DE APROBACION»
 - 12/11 13:01: «revisa y arregla la organizacion completa de los chats y contactos y hoy, todas esas secciones estan demasiado desorganizadas.»
@@ -120,13 +120,13 @@ Se citan las más importantes. Las órdenes repetidas no se transcriben dos vece
 
 - 21/11 05:53 a 05:55 (repetido cinco veces): «Necesito que vuelques TODO el contexto de este chat a la memoria central del proyecto…» (con las reglas de destino `cerebro/chats/` en la rama `cerebro-chats`). Este archivo responde a ese pedido.
 
-**Reglas de la responsable que aparecen en el chat**
+**Reglas del dueño que aparecen en el chat**
 
 - 12/11 (contraseña del panel): el código de ingreso se usa solo para entrar. No se escribe en archivos, commits, informes ni chat. Ver sección 9 y CONTRADICE.
 - 15/11 (regla general): «Eso, si esta como regla general en algun lado, que siempre se incluyan todas las skills y plugins disponibles…» Claude debía cambiarlo en CLAUDE.md si estaba escrito. El chat no confirma que se haya hecho.
 - Regla de «Nada se activa solo» y «nada se borra, se archiva» (CLAUDE.md y mensajes de 12/11 y 13/11).
 
-## 4. Correcciones de la responsable
+## 4. Correcciones del dueño
 
 - 08/11 07:34: «No hay nada programado.» (Claude había dicho que sí).
 - 08/11 07:46: se quitaron los números de página (01/05), las etiquetas chicas sobre los títulos y la línea decorativa. El CTA de historias no era funcional («no te lleva a nada»).
@@ -138,7 +138,7 @@ Se citan las más importantes. Las órdenes repetidas no se transcriben dos vece
 - 13/11 08:36: las incidencias y detenciones mezclaban enojos y pedidos de «no contactar» con reclamos reales; las oportunidades reales estaban mezcladas con las que no servían.
 - 15/11 08:40 y 08:44: el laboratorio del bot era «demasiado complicado», «no tanta seccion ni detalle, no se ni como usarlo». Pidió gráficos simples y todo a la vista.
 - 20/11 05:33: «el concepto me gusta… pero hay que pulir muchisimo mas los detalles, el realismo… que no aparezca ningun cartel de caracter ilustrativo.»
-- 20/11 06:00 y 06:06: sobre las piezas en borrador, la responsable cambió la decisión de Claude: Black Friday se publica (sin números reales), prepagas y patentamientos no.
+- 20/11 06:00 y 06:06: sobre las piezas en borrador, el dueño cambió la decisión de Claude: Black Friday se publica (sin números reales), prepagas y patentamientos no.
 
 ## 5. Qué se hizo (estado)
 
@@ -146,8 +146,8 @@ Estados: **especificado / implementado / probado / publicado / habilitado**. Lo 
 
 **5.1 Infraestructura y Vercel**
 
-- 08/11 04:20 UTC: Vercel devolvía `DEPLOYMENT_DISABLED` (plan Hobby, pago pendiente). La responsable pagó la suscripción (06:58) y Claude desbloqueó el proyecto. Hacia 06:59 el panel respondía `/login` 200 y `/landing` 200. **Publicado y verificado en el chat.** En la consulta del 08/11 el plan era Hobby (retiene 1 hora de logs); no verificado al 21/11.
-- 09/11 08:43: la responsable hizo «deploy to production» desde Vercel a mano, porque la automatización no tenía acceso (usó el navegador Opera). **Publicado (confirmado por la responsable).**
+- 08/11 04:20 UTC: Vercel devolvía `DEPLOYMENT_DISABLED` (plan Hobby, pago pendiente). El dueño pagó la suscripción (06:58) y Claude desbloqueó el proyecto. Hacia 06:59 el panel respondía `/login` 200 y `/landing` 200. **Publicado y verificado en el chat.** En la consulta del 08/11 el plan era Hobby (retiene 1 hora de logs); no verificado al 21/11.
+- 09/11 08:43: el dueño hizo «deploy to production» desde Vercel a mano, porque la automatización no tenía acceso (usó el navegador Opera). **Publicado (confirmado por el dueño).**
 - 10/11: la Preview pedía login y Wasender no podía enviar. Se pidió activar «Protection Bypass for Automation» en Vercel (Deployment Protection). **Estado no confirmado en el chat.**
 - 10/11: variables de Vercel mencionadas: `WASENDER_PAT` (token de Wasender, cargado en Vercel) y `WASENDER_CLAVE_CIFRADO` (clave para cifrar las claves de las líneas). El chat dice que estaban integradas en Vercel. **No se copian valores.** Ver sección 9.
 
@@ -155,31 +155,31 @@ Estados: **especificado / implementado / probado / publicado / habilitado**. Lo 
 
 - 08/11 (08:00–09:16 UTC): cambios de imágenes propias, correcciones y refuerzo de SEO. Commits pusheados directo a `main` según la salida de git: `estudio-juridico-vita-final` 4532df6, `coberturas-sociales-landing` caac286, `0km-kocos-agencia` 6b4b1de3, `agencia-kocos-mkt` 9dccbde4. Después, correcciones de dominio canónico con `www`: a4c3175, a02bf20, 8e64fee7, d6b53b4a y dd0afa27 (en `agencia-kocos-mkt`). **Publicado (en `main`), según la salida de git del chat.** Las ramas `claude/gracious-volta-rv2f3x` tienen solo el enlace de creación de PR, **sin PR abierto** (no confirmado).
 - Verificación de canónicos y sitemap: 4/4 dominios respondieron logo=200, og=200, llms=200 e indexnow=200 (08/11 09:03). En la verificación de canónicos con `www` quedaron 3 de 4 (kocosmkt.com sin `www` en ese momento; no confirmado si después se corrigió). Dato a tener en cuenta: el dominio sin `www` redirige 308 a `www`.
-- 09/11 08:52 y 09/11 11:52: la responsable pidió rediseñar las landings con más efecto «wow» (animación, 3D). **Estado: no confirmado como cerrado.** La auditoría y el rediseño se pidieron en varias corridas.
+- 09/11 08:52 y 09/11 11:52: el dueño pidió rediseñar las landings con más efecto «wow» (animación, 3D). **Estado: no confirmado como cerrado.** La auditoría y el rediseño se pidieron en varias corridas.
 
 **5.3 Redes: producción de piezas**
 
-- 08/11–09/11: se produjeron piezas en 4K generadas con código (HTML y SVG, renderizadas con Playwright a deviceScaleFactor 2 → 2160×3840 vertical y 2160×2700 feed). Estado en el chat: **40 PNG en 4K y 4 MP4 de reels (uno por marca) generados y revisados** en el entorno de la sesión. Entregado a la responsable como zip `redes-4k-{vita,cob,okm,mkt}.zip` (enviado con SendUserFile). **Implementado; probado en el entorno; publicado solo a través de Metricool (ver 5.4).**
+- 08/11–09/11: se produjeron piezas en 4K generadas con código (HTML y SVG, renderizadas con Playwright a deviceScaleFactor 2 → 2160×3840 vertical y 2160×2700 feed). Estado en el chat: **40 PNG en 4K y 4 MP4 de reels (uno por marca) generados y revisados** en el entorno de la sesión. Entregado al dueño como zip `redes-4k-{vita,cob,okm,mkt}.zip` (enviado con SendUserFile). **Implementado; probado en el entorno; publicado solo a través de Metricool (ver 5.4).**
 - Métricas de partida que Claude midió con Metricool (no verificado por mí): alcance y seguidores casi cero; los reels rendían de 3 a 20 veces más que los posts. Objetivos de alcance IG al tercer mes: VITA 6.000; Coberturas 3.500; Autos 0 km 3.000; Marketing 3.500.
 - Volumen propuesto el 08/11 (aprobado de palabra): 6 reels, 3 carruseles, 2 posts y 4 historias por día, de lunes a sábado, por marca.
 - 20/11: plan de cronograma de 10 días para las cuatro marcas (del 20/11 al 29/11): 632 piezas (272 reels, 320 historias, 40 carruseles), que salen en Instagram y Facebook, es decir 1.264 publicaciones. Versión A (pieza original), versión B (otro gancho, +5 días), versión R (remake de los temas que mejor retuvieron del 10 al 19/11), tope de 6 reels por tema y marca, y freno si la retención o el alcance cae más de 30 % el 25/11. Horarios en la tabla del 20/11 06:02 UTC.
-- 20/11 06:06: Claude había propuesto dejar en borrador varias piezas. La responsable decidió publicar Black Friday de Autos (sin números reales) y no publicar aumento de prepagas ni patentamientos. **Decisión tomada; el estado de cada pieza en Metricool no consta en el chat.**
+- 20/11 06:06: Claude había propuesto dejar en borrador varias piezas. El dueño decidió publicar Black Friday de Autos (sin números reales) y no publicar aumento de prepagas ni patentamientos. **Decisión tomada; el estado de cada pieza en Metricool no consta en el chat.**
 
 **5.4 Redes: programación en Metricool**
 
 - IDs de marca: Mkt `7242607`, Vita `7549864`, Cob `7549939`, 0km `7552104`.
-- 09/11: la responsable pidió programar las publicaciones «que empiecen hoy mismo, 9/11»; para VITA, desde el 10/11.
+- 09/11: el dueño pidió programar las publicaciones «que empiecen hoy mismo, 9/11»; para VITA, desde el 10/11.
 - 10/11: Instagram de VITA devolvía «The Instagram account is restricted» (dato reportado en un informe programado, no confirmado).
-- 18/11: algunas publicaciones del Instagram de Kocos Marketing no subieron. La responsable pidió reintentar o reprogramar. La responsable dijo «ya volvi a conectarlo en metricool» el 18/11 07:00. **Reintento: no confirmado.**
+- 18/11: algunas publicaciones del Instagram de Kocos Marketing no subieron. El dueño pidió reintentar o reprogramar. El dueño dijo «ya volvi a conectarlo en metricool» el 18/11 07:00. **Reintento: no confirmado.**
 - 20/11: la programación del cronograma nuevo (del 20/11 en adelante) se pidió; la tabla de horarios está en el chat, pero **el chat no confirma que se haya cargado en Metricool.** Hay un pedido de «cuántos reels programaste?» (20/11 05:52) sin respuesta visible.
 - Orden del 20/11 04:30: programar en Metricool en el horario del calendario (America/Argentina/Buenos_Aires), con `getScheduledPosts` antes de cargar, para no duplicar. Cumplimiento no confirmado.
 
 **5.5 WhatsApp: migración a Wasender**
 
 - 03/11: análisis inicial pedido (sin implementar).
-- 10/11 (inicio): se implementó en Preview el envío por Wasender con el mismo algoritmo de campañas de Meta (decisión de la responsable). Una línea conectada en Preview (10/11 14:47). **Implementado; probado en Preview.** Advertencia de la responsable: la Preview comparte base y líneas con producción, así que probar ahí tiene efecto real (10/11 13:34).
+- 10/11 (inicio): se implementó en Preview el envío por Wasender con el mismo algoritmo de campañas de Meta (decisión del dueño). Una línea conectada en Preview (10/11 14:47). **Implementado; probado en Preview.** Advertencia del dueño: la Preview comparte base y líneas con producción, así que probar ahí tiene efecto real (10/11 13:34).
 - 10/11 18:06: pedido de pasar todo a producción. **Estado: no confirmado en el chat.**
-- 12/11 12:38 y 20:49: la responsable aprobó el plan de auditoría de 6 puntos y dijo que se subiera a producción. **Autorizado.**
+- 12/11 12:38 y 20:49: el dueño aprobó el plan de auditoría de 6 puntos y dijo que se subiera a producción. **Autorizado.**
 - 13/11 08:51 (corrida nocturna): Claude informó **publicado y comprobado en producción**: rubros separados, Caídos (motor encendido), oportunidades reales, incidencias, fallas del sistema separadas, limpieza con deshacer (con «Ver los movidos en la limpieza»), portada de perfiles que se actualiza cada 30 segundos, campañas sin cortes por tiempo. Cifras de limpieza (antes → después): figuran esperando a una persona 94 → 18 (de esos, 7 oportunidades reales); dejaron de responder y seguían a la vista 347 → 0; incidencias abiertas 55 → 0; caídos: 265 personas pasaron a Caídos. **Según el informe de Claude; no verificado por mí.**
 - 13/11 (pendiente informado): Wasender no ofrece vincular con un código de 8 caracteres desde un programa; solo QR y un método con extensión de navegador. **No implementado; abierto.** Claude preguntó dónde estaba la opción del código en el panel de Wasender.
 - 15/11 04:41 UTC: Claude publicó la **corrección del bot** (cuando alguien acepta una llamada, recibe la confirmación). Antes de publicar pasaron 486 pruebas, lint y build. **Publicado.** Claude aclaró que la corrección todavía no se vio en una charla real.
@@ -187,15 +187,15 @@ Estados: **especificado / implementado / probado / publicado / habilitado**. Lo 
 - 15/11: tope por contacto de **3** mensajes sin respuesta, sumando todos los caminos. **Aprobado.**
 - 15/11 (decisiones sobre crisis y datos): líneas de ayuda y cartel de urgencia en el panel (aprobado); el bot no da precios (aprobado); ante denuncia o amenaza, disculpa breve, corte y aviso (aprobado). **Implementación no confirmada.**
 - 15/11 (laboratorio del bot): pedido de rehacerlo simple, con gráficos, para probar bots generales y campañas (A/B), y que las pruebas no alteren los bots predeterminados. **Pedido; estado no confirmado.** Prueba A/B aprobada en campañas.
-- 17/11: la responsable reportó que al reanudar una campaña faltaba la línea de Wasender; que solo aparecían las líneas de Wasender sin las de Meta; y que las líneas de Meta se habían eliminado por error. **Pedido de reparar (eliminaste el numero principal… volve a agregarlo). Estado: abierto en el chat.** «Hay que separar» Wasender de Meta (17/11 08:59).
+- 17/11: el dueño reportó que al reanudar una campaña faltaba la línea de Wasender; que solo aparecían las líneas de Wasender sin las de Meta; y que las líneas de Meta se habían eliminado por error. **Pedido de reparar (eliminaste el numero principal… volve a agregarlo). Estado: abierto en el chat.** «Hay que separar» Wasender de Meta (17/11 08:59).
 - Número de plan de Wasender: **6 líneas** (10/11 13:34).
 
 **5.6 Bot y seguimiento automático**
 
 - 12/11–13/11: la ruta de seguimiento quedó automática. Regla que informó Claude: a los 3 días sale un mensaje más; si pasan 24 horas sin respuesta, la persona pasa sola a Caídos. «Para recuperar» ya no existe: los Caídos están en Descartados. **Publicado (según Claude, 13/11).**
-- 14/11 (revisión de la primera tanda real, informe de solo lectura generado el 15/11 12:00 UTC por una tarea programada): vencieron 2 seguimientos del Jurídico el 14/11 a la noche; en los dos el bot decidió no insistir y la persona pasó a Caídos. Hay 11 seguimientos programados para el 16/11 (10 de Jurídico y 1 de Coberturas), de los cuales **5 son de personas que ya están en Perdidos**. Hay 3 seguimientos cancelados porque la persona fue captada antes. Claude propuso cancelar las 5 y que pasar a Perdidos o captar cierre el seguimiento siempre. **Propuesta sin respuesta de la responsable en el chat.**
+- 14/11 (revisión de la primera tanda real, informe de solo lectura generado el 15/11 12:00 UTC por una tarea programada): vencieron 2 seguimientos del Jurídico el 14/11 a la noche; en los dos el bot decidió no insistir y la persona pasó a Caídos. Hay 11 seguimientos programados para el 16/11 (10 de Jurídico y 1 de Coberturas), de los cuales **5 son de personas que ya están en Perdidos**. Hay 3 seguimientos cancelados porque la persona fue captada antes. Claude propuso cancelar las 5 y que pasar a Perdidos o captar cierre el seguimiento siempre. **Propuesta sin respuesta del dueño en el chat.**
 - 13/11: Claude informó el reconocimiento de las 67 conversaciones «quedaron sin respuesta»: ninguna había concretado una llamada (las que sí concretaron pasaron a Captados). En Marketing, 61 eran contestadores automáticos de otros negocios y pasaron a Perdidos.
-- 13/11: el bot v2 se mejoró sin borrar lo existente (orden de la responsable). **Implementado según Claude; no verificado por mí.**
+- 13/11: el bot v2 se mejoró sin borrar lo existente (orden del dueño). **Implementado según Claude; no verificado por mí.**
 - 14/11–15/11: plantillas de inicio por rubro con variables y ritmo al azar (orden de 14/11). **Implementado según Claude; el chat no confirma el detalle.**
 - 15/11: laboratorio del bot y asistente general con gráficos simples (órdenes 15/11). **Estado: pedido; sin confirmación de cierre en el chat.**
 
@@ -213,8 +213,8 @@ Estados: **especificado / implementado / probado / publicado / habilitado**. Lo 
 
 **5.9 Otras partes del chat**
 
-- 09/11 09:06: la responsable pidió vincular las palabras clave de redes con el conocimiento del bot, sin tocar lo existente (09/11 09:12). **Implementado según Claude; no verificado.**
-- 14/11–15/11: reporte de bots: Gemini relee conversaciones y propone mejoras; se puede aplicar manual o con el asistente (orden 14/11). **Estado: pedido; el informe de 15/11 existe en Bot IA.** Claude no aplicó ninguna propuesta sin autorización; la responsable dijo que aplicara tres: consulta de turno médico, oferta baja de aseguradora y «Sí, quiero ver» en Autos (propuesta de Claude en 15/11 04:45; la responsable pidió aplicarlas).
+- 09/11 09:06: el dueño pidió vincular las palabras clave de redes con el conocimiento del bot, sin tocar lo existente (09/11 09:12). **Implementado según Claude; no verificado.**
+- 14/11–15/11: reporte de bots: Gemini relee conversaciones y propone mejoras; se puede aplicar manual o con el asistente (orden 14/11). **Estado: pedido; el informe de 15/11 existe en Bot IA.** Claude no aplicó ninguna propuesta sin autorización; el dueño dijo que aplicara tres: consulta de turno médico, oferta baja de aseguradora y «Sí, quiero ver» en Autos (propuesta de Claude en 15/11 04:45; el dueño pidió aplicarlas).
 - 16/11 (planificado): envíos de Wasender arrancan el lunes 16/11 (según Claude, 15/11 04:41).
 
 ## 6. Todo lo concreto (archivos, ramas, commits, Metricool, plantillas)
@@ -223,8 +223,8 @@ Estados: **especificado / implementado / probado / publicado / habilitado**. Lo 
 
 - `EzequielGonz/LEGAL-CRM`: panel. Rama de trabajo del chat `cerebro-chats` (esta memoria; creada desde `main` para este volcado).
 - Ramas mencionadas en el chat:
-  - `claude/gracious-volta-rv2f3x`: rama de trabajo de Wasender y de las landings (indicada por la responsable el 08/11 y el 10/11). Sin PR abierto (no confirmado). **Qué hacer:** revisar y decidir si se integra o se archiva.
-  - `claude/happy-wozniak-ajfi1z`: rama indicada por la responsable el 20/11 04:30 para el trabajo de redes del 20/11 en adelante. **Estado: no confirmado.**
+  - `claude/gracious-volta-rv2f3x`: rama de trabajo de Wasender y de las landings (indicada por el dueño el 08/11 y el 10/11). Sin PR abierto (no confirmado). **Qué hacer:** revisar y decidir si se integra o se archiva.
+  - `claude/happy-wozniak-ajfi1z`: rama indicada por el dueño el 20/11 04:30 para el trabajo de redes del 20/11 en adelante. **Estado: no confirmado.**
   - `cerebro-chats`: rama de la memoria. No integrar a `main` salvo decisión.
 - Repos de landings (no son LEGAL-CRM): `estudio-juridico-vita-final`, `coberturas-sociales-landing`, `0km-kocos-agencia`, `agencia-kocos-mkt`. Ver 5.2.
 
@@ -284,10 +284,10 @@ Estados: **especificado / implementado / probado / publicado / habilitado**. Lo 
 
 **Cambios de configuración fuera del código**
 
-- Vercel: plan pagado (08/11, por la responsable). Variables mencionadas solo por nombre: `WASENDER_PAT`, `WASENDER_CLAVE_CIFRADO`, `SITE_URL` (en landings; se le dio prioridad a `www`). Deployment Protection / Protection Bypass for Automation (10/11, no confirmado).
-- Metricool: permisos actualizados por la responsable (09/11 11:25) y cuenta de Instagram de Kocos Marketing reconectada (18/11).
+- Vercel: plan pagado (08/11, por el dueño). Variables mencionadas solo por nombre: `WASENDER_PAT`, `WASENDER_CLAVE_CIFRADO`, `SITE_URL` (en landings; se le dio prioridad a `www`). Deployment Protection / Protection Bypass for Automation (10/11, no confirmado).
+- Metricool: permisos actualizados por el dueño (09/11 11:25) y cuenta de Instagram de Kocos Marketing reconectada (18/11).
 - Wasender: plan de 6 líneas. Líneas por QR.
-- Meta: sin cambios nuevos desde el 14/11; la responsable pidió no tocar nada de Meta, pero el 17/11 pidió reincorporar el número principal para cargar campañas con números existentes. **Estado: pendiente.**
+- Meta: sin cambios nuevos desde el 14/11; el dueño pidió no tocar nada de Meta, pero el 17/11 pidió reincorporar el número principal para cargar campañas con números existentes. **Estado: pendiente.**
 
 **Qué quedó encendido o apagado por este chat**
 
@@ -305,24 +305,24 @@ Estados: **especificado / implementado / probado / publicado / habilitado**. Lo 
 - Objetivos de alcance IG al tercer mes: VITA 6.000; Coberturas 3.500; Autos 0 km 3.000; Marketing 3.500.
 - Reglas de contenido: no inventar precios ni resultados; no testimonios; Coberturas no recomienda una prepaga; Autos sin afirmaciones de stock ni financiamiento; Jurídico respeta las normas del Colegio de Abogados (según el informe de contenido del 08/11, citado en el chat).
 - Precios de packs de Marketing: el bot no los da (15/11).
-- Datos que la responsable pidió cargar en las fichas de los bots, **no provistos en el chat**: Autos (marcas, formas de pago, requisitos); Jurídico (si la primera revisión es gratis); Coberturas (zonas); Marketing (qué incluye la propuesta inicial).
+- Datos que el dueño pidió cargar en las fichas de los bots, **no provistos en el chat**: Autos (marcas, formas de pago, requisitos); Jurídico (si la primera revisión es gratis); Coberturas (zonas); Marketing (qué incluye la propuesta inicial).
 - Números de WhatsApp de las marcas aparecen en el chat (líneas de negocio). **No se copian acá.**
 - Proveedores y servicios: Vercel (Hobby), Supabase, Metricool, Wasender (líneas por QR), Gemini (único proveedor de IA por ahora; se pueden agregar otros con un enlace), Playwright (render de piezas), GSAP (animación).
 
 ## 8. Pendiente, a medias o bloqueado
 
-1. **WhatsApp:** Wasender no tiene vinculación por código de 8 caracteres (solo QR y extensión de navegador) según Claude; la responsable pidió vincular con código (13/11). **Bloqueado hasta que la responsable muestre dónde está la opción** (captura o panel de Wasender).
-2. **Numeros de Meta:** la responsable pidió (17/11) reincorporar el número principal de Meta para cargar campañas con los números que ya existían, y separar Wasender de Meta. **Abierto.**
+1. **WhatsApp:** Wasender no tiene vinculación por código de 8 caracteres (solo QR y extensión de navegador) según Claude; el dueño pidió vincular con código (13/11). **Bloqueado hasta que el dueño muestre dónde está la opción** (captura o panel de Wasender).
+2. **Numeros de Meta:** el dueño pidió (17/11) reincorporar el número principal de Meta para cargar campañas con los números que ya existían, y separar Wasender de Meta. **Abierto.**
 3. **Reanudar campañas:** error «falta cargar la línea de Wasender» (17/11). **Abierto.** La campaña «ART - TEST WASENDER» tiene una línea archivada; hay que asignarle una línea conectada antes de reanudarla (15/11).
 4. **Coberturas y Autos sin línea de Wasender cargada** (15/11). **Abierto.**
 5. **Seguimiento:** la propuesta de cancelar las 5 tareas de personas que ya están en Perdidos antes del 16/11 a las 8:05 (15/11). **Sin respuesta en el chat.**
 6. **Seguridad:** cuatro avisos de dependencias de Next/React sin resolver (13/11). **Pendiente.**
-7. **Vercel:** plan Hobby (1 hora de logs); el log de errores del 20/11 muestra límite de uso de 5 horas alcanzado (13:02 UTC y 05:57 UTC del 21/11). **Pendiente de decisión** de plan (cualquier pago necesita autorización expresa de la responsable según CLAUDE.md).
+7. **Vercel:** plan Hobby (1 hora de logs); el log de errores del 20/11 muestra límite de uso de 5 horas alcanzado (13:02 UTC y 05:57 UTC del 21/11). **Pendiente de decisión** de plan (cualquier pago necesita autorización expresa del dueño según CLAUDE.md).
 8. **Panel:** diseño llamativo (no empezado al 13/11); asistente con permiso para todo (programado; estado no confirmado); laboratorio del bot simple (pedido 15/11; estado no confirmado); estadísticas con embudo y origen (pedido 13/11).
-9. **Redes:** cronograma nuevo del 20/11 al 29/11: programación en Metricool **no confirmada** en el chat. Piezas en borrador: lo jurídico nuevo (laboral y penal) y el fallo de la Corte de Coberturas (hasta revisión profesional o aprobación de la responsable); el aumento de prepagas (no se publica); el de patentamientos (no se publica); Black Friday de Autos (se publica, sin números reales).
+9. **Redes:** cronograma nuevo del 20/11 al 29/11: programación en Metricool **no confirmada** en el chat. Piezas en borrador: lo jurídico nuevo (laboral y penal) y el fallo de la Corte de Coberturas (hasta revisión profesional o aprobación del dueño); el aumento de prepagas (no se publica); el de patentamientos (no se publica); Black Friday de Autos (se publica, sin números reales).
 10. **Publicaciones de Kocos Marketing** que no subieron el 18/11: reintento **no confirmado**.
 11. **Landings:** rediseño con más efecto «wow» (09/11) y revisión visual en un celular real (pendiente desde 01/11). **No confirmado como cerrado.**
-12. **Rotación de secretos:** la responsable pidió (01/11) rotar los secretos pegados en el chat. **No confirmado.** Ver sección 9.
+12. **Rotación de secretos:** el dueño pidió (01/11) rotar los secretos pegados en el chat. **No confirmado.** Ver sección 9.
 13. **Documentación:** `docs/etapaN/` (ENTREGA, INFORME, MIGRACIONES) para cada entrega de código del chat (regla de CLAUDE.md). **No consta que se haya creado.**
 14. **Redes (informe 10–19/11):** el informe `docs/redes/INFORME-RESULTADOS-2026-11-20.md` pedía commit y push a `claude/gracious-volta-rv2f3x`. **Resultado no confirmado.**
 15. **Pedido de repos al Word (20/11 08:35):** la lista de repos se pidió para un documento Word. **No confirmado si se entregó.**
@@ -332,17 +332,17 @@ Estados: **especificado / implementado / probado / publicado / habilitado**. Lo 
 Lo que funcionó, lo que no y cómo se resolvió (según el chat):
 
 - **Vercel desactivado por pago (08/11):** el panel no respondía. La causa fue `DEPLOYMENT_DISABLED` del plan Hobby con pago pendiente. Se resolvió pagando y desbloqueando el proyecto.
-- **Vercel no permitía desplegar sin navegador (09/11):** hubo que usar Opera (navegador conectado) y que la responsable hiciera «deploy to production» a mano.
+- **Vercel no permitía desplegar sin navegador (09/11):** hubo que usar Opera (navegador conectado) y que el dueño hiciera «deploy to production» a mano.
 - **Preview y producción comparten base y líneas:** probar en Preview tiene efecto real. El bot puede volver a escribir a las 2 horas si no se toma el chat (10/11). Regla: al terminar una prueba, «Tomar el chat».
 - **Vercel Hobby retiene 1 hora de logs:** las consultas de logs de más de 1 hora fallan con `bad_request` (08/11).
 - **Canónicos y `www`:** el dominio sin `www` redirige 308 a `www`. Se corrigió para que los sitemaps y canónicos apunten a `www` (08/11).
 - **Metricool:** algunas publicaciones de Instagram fallan por restricciones de cuenta o por conexión caída; hay que reconectar la cuenta en Metricool y reintentar (18/11).
-- **Claude y la compactación de sesión:** la responsable pidió puntos de control y tareas programadas para retomar; varias veces hubo que reiniciar la tarea. Los errores de «límite de uso» (5 horas) se vieron el 20/11 y el 21/11 (`usage_limit_reached`).
+- **Claude y la compactación de sesión:** el dueño pidió puntos de control y tareas programadas para retomar; varias veces hubo que reiniciar la tarea. Los errores de «límite de uso» (5 horas) se vieron el 20/11 y el 21/11 (`usage_limit_reached`).
 - **Seguimiento automático real (14/11):** dos personas pasaron a Caídos por decisión del bot; el resto no salió aún. Se detectó que cinco tareas programadas eran de personas en Perdidos (propuesta: cancelar y cerrar el seguimiento al pasar a Perdidos o captar).
-- **Estadísticas:** la responsable no encontró útiles las métricas básicas (13/11). Se pidió un embudo y el origen de cada cliente.
-- **Riesgo de plataforma:** la responsable pidió reversionar piezas para que Meta no las detecte como duplicadas (20/11 06:00). Esto va en contra de las reglas de originalidad de Instagram que Claude citó el 08/11. **No evaluado en el chat; riesgo a revisar.**
-- **Código de ingreso del panel:** la responsable lo pegó en el chat varias veces (12/11 a 20/11). Claude lo usó solo como variable de entorno y no lo guardó en archivos (según Claude). Pero queda escrito en el historial del chat: **[secreto: código de ingreso del panel — hay que cambiarlo]**. La responsable dijo que lo cambiaría. Claude también lo advirtió el 15/11 («Código de acceso: cambialo, que quedó escrito en el chat»).
-- **Secretos pegados:** el 01/11 la responsable pidió rotar los secretos pegados en el chat. El chat anterior también menciona un PIN de ingreso del 19/10 para rotar. **[secreto: PIN de ingreso del 19/10 — no confirmado si se rotó]**.
+- **Estadísticas:** el dueño no encontró útiles las métricas básicas (13/11). Se pidió un embudo y el origen de cada cliente.
+- **Riesgo de plataforma:** el dueño pidió reversionar piezas para que Meta no las detecte como duplicadas (20/11 06:00). Esto va en contra de las reglas de originalidad de Instagram que Claude citó el 08/11. **No evaluado en el chat; riesgo a revisar.**
+- **Código de ingreso del panel:** el dueño lo pegó en el chat varias veces (12/11 a 20/11). Claude lo usó solo como variable de entorno y no lo guardó en archivos (según Claude). Pero queda escrito en el historial del chat: **[secreto: código de ingreso del panel — hay que cambiarlo]**. El dueño dijo que lo cambiaría. Claude también lo advirtió el 15/11 («Código de acceso: cambialo, que quedó escrito en el chat»).
+- **Secretos pegados:** el 01/11 el dueño pidió rotar los secretos pegados en el chat. El chat anterior también menciona un PIN de ingreso del 19/10 para rotar. **[secreto: PIN de ingreso del 19/10 — no confirmado si se rotó]**.
 - **Clave de servicio de Supabase:** en el chat se menciona la clave de servicio solo como nombre y regla (no aparece el valor). **No se encontró una clave de Supabase expuesta en el texto del chat**, según la revisión de patrones (`service_role`, prefijos de claves y variables `SUPABASE_SERVICE_*`). Igual conviene confirmar que no quedó copiada en ningún registro.
 - **Token de Wasender:** se cargó en Vercel (`WASENDER_PAT`); no aparece el valor en el chat (verificado). Clave de cifrado: igual (`WASENDER_CLAVE_CIFRADO`).
 
@@ -352,13 +352,13 @@ Lo que funcionó, lo que no y cómo se resolvió (según el chat):
 2. ¿Se reincorpora el número de Meta para campañas con números existentes, y se separa de Wasender? (17/11.)
 3. ¿Se cancelan las 5 tareas de seguimiento de personas en Perdidos antes del 16/11 a las 8:05? (15/11.)
 4. ¿Se enciende el envío de 20 por día por línea ya, o se espera la revisión de una semana? (15/11.)
-5. ¿Qué respuesta del bot aplica la responsable en el caso de «¿de dónde sacaron mi número?» (decisión tomada: pedir disculpas y decir que no hay registro; registrar el origen de cada base y que lo revise un abogado de datos personales)? (15/11.) El chat dice «Aca se respeta como esta armado hoy», lo que deja la revisión legal abierta.
+5. ¿Qué respuesta del bot aplica el dueño en el caso de «¿de dónde sacaron mi número?» (decisión tomada: pedir disculpas y decir que no hay registro; registrar el origen de cada base y que lo revise un abogado de datos personales)? (15/11.) El chat dice «Aca se respeta como esta armado hoy», lo que deja la revisión legal abierta.
 6. ¿Qué pasó con las 4 publicaciones fallidas del Instagram de Kocos Marketing (18/11) y con las historias de destacadas del 20/11?
 7. ¿Se confirma la programación completa del cronograma 20/11–29/11 en Metricool (cuántos reels y publicaciones cargados)? (20/11 05:52.)
 8. ¿Plan de Vercel: se mantiene Hobby o se pasa a Pro? (límite de uso alcanzado el 20/11.)
 9. ¿Se publica la revisión de las cuatro dependencias de Next y React (13/11)?
 10. Datos para las fichas de los bots (Autos, Jurídico, Coberturas, Marketing) (14/11). Ver sección 7.
-11. ¿Se paga el crédito automático si se acaba el límite, o se frena? (20/11 07:23: la responsable lo dejó activado con «frena» si se detecta; regla de CLAUDE.md: no pagar sin autorización expresa.)
+11. ¿Se paga el crédito automático si se acaba el límite, o se frena? (20/11 07:23: el dueño lo dejó activado con «frena» si se detecta; regla de CLAUDE.md: no pagar sin autorización expresa.)
 12. ¿Las piezas de Black Friday de Autos y las reversiones se hacen sin números reales? Confirmado el 20/11 06:06 («black friday mandale, pero sin numeros reales»).
 
 ## 11. RAMAS Y CAMBIOS
@@ -368,7 +368,7 @@ Lo que funcionó, lo que no y cómo se resolvió (según el chat):
 - `cerebro-chats` (LEGAL-CRM): creada para esta memoria desde `main`. Contiene `cerebro/chats/` con este archivo y los de otros chats. **No integrar a `main` salvo decisión.** Sin PR.
 - `claude/gracious-volta-rv2f3x` (LEGAL-CRM): rama de trabajo de Wasender y de las landings. **Sin PR abierto (no confirmado).** Qué hacer: revisar lo que contiene y decidir si se integra a `main`.
 - `claude/happy-wozniak-ajfi1z` (LEGAL-CRM): indicada el 20/11 para el trabajo de redes del 20/11 en adelante. **Estado: no confirmado.** Qué hacer: integrar o archivar tras revisión.
-- Landings (`estudio-juridico-vita-final`, `coberturas-sociales-landing`, `0km-kocos-agencia`, `agencia-kocos-mkt`): cambios publicados en `main` el 08/11. La rama `claude/gracious-volta-rv2f3x` de cada repo quedó con el enlace de creación de PR; **no hay PR**. Qué hacer: archivar la rama, o abrir PR si la responsable lo pide.
+- Landings (`estudio-juridico-vita-final`, `coberturas-sociales-landing`, `0km-kocos-agencia`, `agencia-kocos-mkt`): cambios publicados en `main` el 08/11. La rama `claude/gracious-volta-rv2f3x` de cada repo quedó con el enlace de creación de PR; **no hay PR**. Qué hacer: archivar la rama, o abrir PR si el dueño lo pide.
 
 **Commits**
 
@@ -394,7 +394,7 @@ Lo que funcionó, lo que no y cómo se resolvió (según el chat):
 
 **Cambios de configuración fuera del código**
 
-- Vercel: pago de la suscripción (08/11, por la responsable). Variables por nombre: `WASENDER_PAT`, `WASENDER_CLAVE_CIFRADO`, `SITE_URL`. Deployment Protection (10/11, no confirmado).
+- Vercel: pago de la suscripción (08/11, por el dueño). Variables por nombre: `WASENDER_PAT`, `WASENDER_CLAVE_CIFRADO`, `SITE_URL`. Deployment Protection (10/11, no confirmado).
 - Metricool: permisos actualizados (09/11). Cuenta de Instagram de Kocos Marketing reconectada (18/11).
 - Supabase: migraciones 0620 y 0633 (ver arriba). Sin cambios de clave.
 - Meta: sin cambios nuevos desde el 14/11. Número principal de Meta eliminado por error y pedido de reincorporar (17/11).
@@ -404,11 +404,11 @@ Lo que funcionó, lo que no y cómo se resolvió (según el chat):
 ## 12. CONTRADICE:
 
 - **CONTRADICE: Next.js versión.** El chat (resumen del 08/11) dice «Next.js 14», pero CLAUDE.md dice «Next.js 15.5» y el commit del 13/11 dice «Next 15.5 y React 19». La versión vigente es 15.5. Conviene corregir el resumen viejo.
-- **CONTRADICE: «Nada se activa solo» vs. automatización pedida.** CLAUDE.md dice que nada se activa solo y que publicar código no habilita envíos. La responsable pidió expresamente que el seguimiento quedara «prendido» (13/11) y que el crédito automático se activara con freno (20/11). El mandato de la responsable prevalece, pero hay que dejarlo escrito y revisable.
-- **CONTRADICE: pago automático vs. «no se paga nada sin autorización expresa».** CLAUDE.md (20/11) dice que no se paga nada sin autorización expresa. El 20/11 la responsable dejó activado el paso a créditos automáticos «cuando detectes eso, frena». Es una autorización condicional; conviene confirmar el alcance.
-- **CONTRADICE: código de acceso.** CLAUDE.md dice que el código de ingreso no se guarda en archivos ni se pide en el chat. La responsable lo pegó en el chat repetidamente (12/11 a 20/11). Claude no lo guardó en archivos; el texto quedó en el chat. Hay que cambiarlo.
-- **CONTRADICE: piezas en borrador.** Claude propuso dejar en borrador Black Friday de Autos, aumento de prepagas, patentamientos y piezas jurídicas. La responsable decidió publicar Black Friday sin números reales, no publicar prepagas ni patentamientos (20/11 06:06). La decisión de la responsable reemplaza la propuesta de Claude.
-- **CONTRADICE: Wasender y código de vinculación.** La responsable pidió (13/11 12:25) vincular las líneas de Wasender también con «la función del código». Claude informó que la documentación de Wasender no ofrece vincular por código de 8 caracteres. Hasta que se confirme, esta orden no se puede cumplir.
-- **CONTRADICE: «No hay nada programado» (08/11).** Claude había dicho que sí había piezas programadas; la responsable lo corrigió.
+- **CONTRADICE: «Nada se activa solo» vs. automatización pedida.** CLAUDE.md dice que nada se activa solo y que publicar código no habilita envíos. El dueño pidió expresamente que el seguimiento quedara «prendido» (13/11) y que el crédito automático se activara con freno (20/11). El mandato del dueño prevalece, pero hay que dejarlo escrito y revisable.
+- **CONTRADICE: pago automático vs. «no se paga nada sin autorización expresa».** CLAUDE.md (20/11) dice que no se paga nada sin autorización expresa. El 20/11 el dueño dejó activado el paso a créditos automáticos «cuando detectes eso, frena». Es una autorización condicional; conviene confirmar el alcance.
+- **CONTRADICE: código de acceso.** CLAUDE.md dice que el código de ingreso no se guarda en archivos ni se pide en el chat. El dueño lo pegó en el chat repetidamente (12/11 a 20/11). Claude no lo guardó en archivos; el texto quedó en el chat. Hay que cambiarlo.
+- **CONTRADICE: piezas en borrador.** Claude propuso dejar en borrador Black Friday de Autos, aumento de prepagas, patentamientos y piezas jurídicas. El dueño decidió publicar Black Friday sin números reales, no publicar prepagas ni patentamientos (20/11 06:06). La decisión del dueño reemplaza la propuesta de Claude.
+- **CONTRADICE: Wasender y código de vinculación.** El dueño pidió (13/11 12:25) vincular las líneas de Wasender también con «la función del código». Claude informó que la documentación de Wasender no ofrece vincular por código de 8 caracteres. Hasta que se confirme, esta orden no se puede cumplir.
+- **CONTRADICE: «No hay nada programado» (08/11).** Claude había dicho que sí había piezas programadas; el dueño lo corrigió.
 - **CONTRADICE: reversión de piezas para evadir detección de duplicados (20/11).** La orden es subir reversiones «para que Meta no nos detecte» como duplicadas. Va contra las reglas de originalidad de Instagram que citó Claude el 08/11. No se evaluó en el chat.
-- **CONTRADICE: versión de la cuenta de Metricool.** Claude informó el 10/11 que la cuenta de Instagram de VITA estaba restringida; la responsable dijo el 09/11 que el estado de VITA estaba destrabado. Las dos cosas pueden ser ciertas en fechas distintas, pero no hay confirmación del estado actual.
+- **CONTRADICE: versión de la cuenta de Metricool.** Claude informó el 10/11 que la cuenta de Instagram de VITA estaba restringida; el dueño dijo el 09/11 que el estado de VITA estaba destrabado. Las dos cosas pueden ser ciertas en fechas distintas, pero no hay confirmación del estado actual.

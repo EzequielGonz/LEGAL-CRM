@@ -14,7 +14,7 @@ Estados usados: especificado / implementado / probado / publicado / habilitado. 
 
 Pidió un contexto completo de todo el proyecto en un Word, organizado por secciones (contenido, visuales, expectativas, redes, objetivos, funcionalidades), con sus órdenes más recientes ganando sobre las viejas y sin pisarse entre sí. Quería leer todos los chats y que se listen todos los repos conectados.
 
-## 3. Órdenes y decisiones de la responsable (textuales)
+## 3. Órdenes y decisiones del dueño (textuales)
 
 - **2026-11-20 08:16:** «necesito que me hagas un contexto completo de todo el proyecto, quitando ordenes y restricciones, unicamente restriccion de no pagar, sumando ordenes que di (mas actualizadas) siempre no pisandose una con otra, todo el contexto completo del proyecto a ultimo detalle, en un word si puede ser. organizandolo tambien.»
 - **2026-11-20 08:24:** «y justamente, hace el contexto completo sin tener en cuenta esas mismas restricciones y usa todas las herramientas, plugins, skills, conectores, agentes, todo lo que tengas a disposicion para hacer lo mejor de lo mejor»
@@ -59,7 +59,7 @@ Pidió un contexto completo de todo el proyecto en un Word, organizado por secci
 - **Chats viejos de Cowork:** no legibles desde esta sesión. Por eso el Word se armó con documentos y notas.
 - **Agentes:** se cortaron por límite de uso; no hubo resultado de agentes.
 - **Decisiones abiertas (sección 17 del Word):** nombre de la agencia y nombre de la marca de autos.
-- **Word:** no consta que esté guardado en el repo ni que la responsable lo haya revisado.
+- **Word:** no consta que esté guardado en el repo ni que el dueño lo haya revisado.
 - **Volcado del 21/11 05:56:** el resultado no aparece en la exportación (ver sección 11).
 
 ## 9. Aprendizajes
@@ -73,7 +73,7 @@ Pidió un contexto completo de todo el proyecto en un Word, organizado por secci
 - ¿El nombre de la agencia es Kocos Marketing u ORVIAN? (El repo dice Kocos Marketing; ver CONTRADICE.)
 - ¿Cuál es el nombre oficial de la marca de autos?
 - ¿El Word se guarda en el repo o queda solo en el chat? (no consta)
-- ¿Quién lanzó la campaña de Civil que figura «en curso»? (no consta; `CLAUDE.md` dice que las campañas con bases las lanza la responsable)
+- ¿Quién lanzó la campaña de Civil que figura «en curso»? (no consta; `CLAUDE.md` dice que las campañas con bases las lanza el dueño)
 
 ## 11. Ramas y cambios
 
@@ -87,4 +87,4 @@ Pidió un contexto completo de todo el proyecto en un Word, organizado por secci
 - **Nombre de la agencia:** el Word lo deja como decisión abierta («ORVIAN» en otros chats, «Kocos Marketing» en este proyecto). Pero `cerebro/01-negocio-y-marcas.md` y `cerebro/02-ordenes-vigentes.md` registran que el 20/11 se decidió **Kocos Marketing** y que ORVIAN quedó descartado.
 - **Nombre de la marca de autos:** el chat dice que conviven «Agencia Kocos» y «Autos Kocos». `cerebro/bitacora.md` registra como orden: «Automotores Kocos» o «Autos Kocos», nunca «Agencia Kocos».
 - **Restricciones:** `CLAUDE.md` dice que la única restricción (20/11) es no pagar nada sin autorización. La orden de 08:24 pide hacer el contexto «sin tener en cuenta esas mismas restricciones». Claude mantuvo la de no pagar. Hay que aclarar cuál vale.
-- **Campaña en curso:** el chat la describe como en curso; `cerebro/07-estado-verificado.md` la registra como creada y arrancada el 19/11 21:44, sin envíos al 20/11. `CLAUDE.md` dice que las campañas con bases las lanza la responsable, y el chat no dice quién la lanzó.
+- **Campaña en curso:** el chat la describe como en curso; `cerebro/07-estado-verificado.md` la registra como creada y arrancada el 19/11 21:44, sin envíos al 20/11. `CLAUDE.md` dice que las campañas con bases las lanza el dueño, y el chat no dice quién la lanzó.

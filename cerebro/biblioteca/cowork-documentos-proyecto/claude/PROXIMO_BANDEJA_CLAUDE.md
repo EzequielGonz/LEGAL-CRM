@@ -12,4 +12,4 @@ Bloque arrancado y entregado el 19/10. Estado y evidencia en `CONTEXTO_ACTUAL_CR
 - Revisión visual del menú y la pantalla.
 
 ## Pausas vigentes
-Redes, landings, calendario de 1 mes por rubro y Google Cloud siguen pausados hasta que la responsable confirme que terminó de vincular. Fase 3 pausada.
+Redes, landings, calendario de 1 mes por rubro y Google Cloud siguen pausados hasta que el dueño confirme que terminó de vincular. Fase 3 pausada.

@@ -4,7 +4,7 @@ Sesión KOCOS CALL `session_01FuLgnkKbeaUf3pukEpthUr`. Rama de trabajo `cerebro-
 
 ## Órdenes vigentes del dueño (resumen; detalle en 02-ordenes-vigentes.md)
 
-- El dueño es **hombre**; son **dos dueños y desarrolladores**. No usar «la responsable» en textos nuevos.
+- El dueño es **hombre**; son **dos dueños y desarrolladores**. No usar «el dueño» en textos nuevos.
 - **Solo lectura** sobre panel, código, base, Vercel y Metricool. Producción solo si el dueño lo pide o si autoriza un pedido de Claude. No pagar nada sin autorización.
 - **Los ajustes del 19/11** (rama `pensive-galileo`) quedan **pendientes**.
 - El **cerebro dentro del panel** es solo una **propuesta**: software aparte con API (ver 08-pendientes-y-plan.md, al final). No se aplica.

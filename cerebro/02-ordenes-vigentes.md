@@ -1,5 +1,5 @@
 ---
-description: Órdenes vigentes de la responsable, reconciliadas entre Fase 1 (Cowork) y Fase 2 (Code). Manda la más nueva; se anota qué reemplazó.
+description: Órdenes vigentes del dueño, reconciliadas entre Fase 1 (Cowork) y Fase 2 (Code). Manda la más nueva; se anota qué reemplazó.
 actualizado: 20/11/2026 06:00
 ---
 
@@ -7,9 +7,9 @@ actualizado: 20/11/2026 06:00
 
 ## La única restricción
 
-**No se paga nada sin autorización expresa de la responsable**: créditos, planes, publicidad, generadores pagos (Veo, Kling, Runway, ElevenLabs, vidIQ con créditos), servidores, celulares en la nube, dominios. Presupuesto ya autorizado: Gemini para los bots, USD 30 por mes (20/10). Recomendación vigente: dejar desactivado el pase automático a créditos pagos de Claude o con tope bajo.
+**No se paga nada sin autorización expresa del dueño**: créditos, planes, publicidad, generadores pagos (Veo, Kling, Runway, ElevenLabs, vidIQ con créditos), servidores, celulares en la nube, dominios. Presupuesto ya autorizado: Gemini para los bots, USD 30 por mes (20/10). Recomendación vigente: dejar desactivado el pase automático a créditos pagos de Claude o con tope bajo.
 
-Todo lo demás son **decisiones de negocio** de la responsable (abajo), no trabas de proceso. Claude implementa, prueba, publica y verifica sin pedir «dale» por cada paso.
+Todo lo demás son **decisiones de negocio** del dueño (abajo), no trabas de proceso. Claude implementa, prueba, publica y verifica sin pedir «dale» por cada paso.
 
 ## Lo que Claude sigue cuidando por oficio (no son trabas)
 
@@ -30,7 +30,7 @@ Todo lo demás son **decisiones de negocio** de la responsable (abajo), no traba
 | 20/11 | Velocidad: «sin releer todo, sigamos derecho» desde el último traspaso (para eso existe este cerebro) |
 | 20/11 | **Aprendizaje continuo**: releer y entender a fondo el negocio y sus expectativas en cada sesión; actualizar el cerebro en el momento en que se aprende algo; sumar solo roles, skills y plugins que sirvan (protocolo en `README.md`) |
 | 15/11 | Los textos internos del panel («Wasender», «v1/v2», «JSON») no se cambian |
-| 13/11 | Tarea automática que revise sola la Bandeja para Claude: «por ahora no». La responsable dice «ok» y Claude toma las tareas (`.claude/referencias/bandeja-claude.md`) |
+| 13/11 | Tarea automática que revise sola la Bandeja para Claude: «por ahora no». El dueño dice «ok» y Claude toma las tareas (`.claude/referencias/bandeja-claude.md`) |
 
 ## Comunicación con ella
 
@@ -74,14 +74,14 @@ Todo lo demás son **decisiones de negocio** de la responsable (abajo), no traba
 
 | Fecha | Orden |
 | --- | --- |
-| 15/11 · **confirmada 20/11** | **Las campañas con bases y las publicidades las lanza la responsable.** Claude las deja completas y listas («qué falta para lanzar» en cero); ella aprieta lanzar. Publicar código no lanza nada |
+| 15/11 · **confirmada 20/11** | **Las campañas con bases y las publicidades las lanza el dueño.** Claude las deja completas y listas («qué falta para lanzar» en cero); él aprieta lanzar. Publicar código no lanza nada |
 | 14/11 → 17/11 | Cada campaña elige método: Meta o Wasender (el 14/11 se había decidido solo Wasender; el 17/11 se habilitó elegir y cambiar el método en una campaña pausada) |
 | 14/11 | Wasender: lunes a sábado, sin días de descanso, sin patrón fijo (hora de arranque, cantidad, tandas, pausas y texto cambian cada día). 12 plantillas por perfil (~680 variantes c/u); las 40 viejas archivadas |
 | 15/11 | Botón de entrenamiento de línea: 20 por día durante 7 días, sin quitar la elección manual |
 | 15/11 | Con Wasender el primer mensaje no lleva botones |
 | 15/11 | Tope: nunca más de 3 automáticos sin respuesta a la misma persona |
 | 15/11 | Freno: campaña con ≥100 envíos y <1 % de respuesta se frena (se puede saltear a mano) |
-| 14/11 | Aviso de captación a destinatarios: pendiente hasta que ella lo pida |
+| 14/11 | Aviso de captación a destinatarios: pendiente hasta que él lo pida |
 | Marketing | Presupuesto tipo factura, 10 % de descuento de bienvenida al final, video de propuesta <1 min |
 
 ## Bots y conversaciones
@@ -91,7 +91,7 @@ Todo lo demás son **decisiones de negocio** de la responsable (abajo), no traba
 | 15/11 | **No hay pausa general**: los bots responden siempre los entrantes; seguimiento y lo programado siguen normal |
 | 16/10, 18/10 | Atención 24 h en todos los rubros. Asesores lunes a sábado 8–21 h; fuera de esa franja la IA atiende, intenta captar y agenda la llamada |
 | 15/11 | **El bot nunca da precios** (ni números, rangos ni cuotas). Puede explicar de qué depende un valor (25/10) |
-| 24/10 | El bot no promete día ni hora del contacto; quién atiende lo asigna la responsable a mano |
+| 24/10 | El bot no promete día ni hora del contacto; quién atiende lo asigna el dueño a mano |
 | 24/10 | Marketing: el cierre lo hace una persona; el bot nunca pasa datos de pago. Solo pregunta precio → pasa a una persona y no es captado |
 | 24/10 | Coberturas no recomienda una prestadora: compara y deriva siempre a un vendedor |
 | 25/10 | «Ya tengo abogado»: una sola pregunta por segunda opinión, sin cuestionar a su abogado; si dice que no, se detiene |
@@ -157,7 +157,7 @@ Todo lo demás son **decisiones de negocio** de la responsable (abajo), no traba
 | 20/11 | Feed y estética del kit de perfil: aprobados | — |
 | 20/11 | Temas: ACARA no → «¿Contado, prendario o plan?»; aumento de prepagas no → «¿Pagás por cosas que no usás?»; Black Friday Autos 27/11 sí, sin números reales; cuota de Coberturas «antes de pagar, compará» aprobada sin números; todo lo demás aprobado (VITA laboral y penal, «Lo que dijo la Corte») | — |
 | 20/11 | TikTok y YouTube: abrir dentro de los 10 días | — |
-| 20/11 | Destacadas: publicadas y armadas a mano por la responsable en los 4 rubros | — |
+| 20/11 | Destacadas: publicadas y armadas a mano por el dueño en los 4 rubros | — |
 
 ## Landings, SEO y Google
 
@@ -168,7 +168,7 @@ Todo lo demás son **decisiones de negocio** de la responsable (abajo), no traba
 | 20/11 | Perfil de Empresa de Google para VITA y Autos si atienden en persona; canales de YouTube para Shorts |
 | Siempre | Un llamado a la acción predeterminado por rubro y canal para identificar el origen de cada lead (lo define Claude) |
 
-## Respuestas de la responsable, 21/11 (bloque A de preguntas)
+## Respuestas del dueño, 21/11 (bloque A de preguntas)
 
 - **Modelo del negocio:** son dueños del panel; captan clientes y los **derivan a mano** a profesionales de cada rubro. El éxito sigue siendo captado + derivado.
 - **«Leonardo Gonzalez» es un nombre de presentación** del bot, no una persona que atiende.
@@ -179,7 +179,7 @@ Todo lo demás son **decisiones de negocio** de la responsable (abajo), no traba
 
 ## Respuestas del bloque B y siguientes, 21/11
 
-- **Quiénes son:** dos personas, desarrolladores y dueños del proyecto. **El que responde es hombre** (lo aclaró al responder «productora»): en los textos nuevos no usar «la responsable»; usar «el dueño» o «los dueños».
+- **Quiénes son:** dos personas, desarrolladores y dueños del proyecto. **El que responde es hombre** (lo aclaró al responder «productora»): en los textos nuevos no usar «el dueño»; usar «el dueño» o «los dueños».
 - **Modelo en todos los rubros:** conseguir el cliente cerrado (que acepta el contacto) y derivarlo a mano por WhatsApp: VITA → abogados; Coberturas → asesores (rotan); 0 km → vendedores de concesionarias cercanas a la localidad del cliente (se vende cualquier marca o modelo); Marketing → lo hacen ellos.
 - **Siempre se apunta a la llamada** (VITA y Coberturas); presencial solo si el cliente lo pide.
 - **Bases:** lunes a sábado de 8 a 21 h. Mismo horario de atención de abogados.

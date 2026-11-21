@@ -14,7 +14,7 @@ Estados usados: especificado / implementado / probado / publicado / habilitado. 
 
 Resolver el pedido de la Bandeja «Asistente IA (panel general), perfil Estudio Jurídico»: que las charlas con el asistente queden guardadas. Al abrirlo debe mostrar las charlas anteriores, dejar elegir una y seguirla donde quedó, o empezar una nueva.
 
-## 3. Órdenes y decisiones de la responsable (textuales)
+## 3. Órdenes y decisiones del dueño (textuales)
 
 - **2026-11-20 08:05 (repetido 08:07):** «el laboratorio que tambien lo guarde, y el diseño del laboratorio y todas las funciones y todo que sea mas sencillo, no tan complicado porfa, termina y publica todo»
   - Esta orden fue **reemplazada** por la siguiente en lo que toca al rediseño del Laboratorio.
@@ -30,7 +30,7 @@ Resolver el pedido de la Bandeja «Asistente IA (panel general), perfil Estudio 
 
 ## 4. Correcciones que hizo
 
-- **Rediseño del Laboratorio:** Claude había propuesto un plan y freno antes de tocar lo existente. La responsable contestó que no se altere nada de lo que ya existe, y que se haga solo el historial. Queda descartado el rediseño y la simplificación de funciones del Laboratorio.
+- **Rediseño del Laboratorio:** Claude había propuesto un plan y freno antes de tocar lo existente. El dueño contestó que no se altere nada de lo que ya existe, y que se haga solo el historial. Queda descartado el rediseño y la simplificación de funciones del Laboratorio.
 - **Reglas viejas:** pidió olvidar las reglas viejas. Claude dijo que mantenía las de cuidado (ver CONTRADICE).
 
 ## 5. Qué se hizo, con estado
@@ -61,14 +61,14 @@ Resolver el pedido de la Bandeja «Asistente IA (panel general), perfil Estudio 
 
 ## 8. Pendiente, a medias o bloqueado
 
-- **Mirar producción:** la responsable tiene que comprobar el asistente en el panel de producción.
-- **Rediseño y simplificación del Laboratorio:** no se hizo. Según el chat, sería otra tarea, si la responsable la pide.
+- **Mirar producción:** el dueño tiene que comprobar el asistente en el panel de producción.
+- **Rediseño y simplificación del Laboratorio:** no se hizo. Según el chat, sería otra tarea, si el dueño la pide.
 - **Skill propuesta:** no consta que se haya creado.
 - **Número de migración y hora de aplicación:** el número es 0634; la hora exacta no consta (la respuesta final es del 20/11 08:26).
 
 ## 9. Aprendizajes
 
-- Cuando un pedido mezcla «agregar» y «cambiar lo existente», conviene separarlos antes de tocar nada. Claude frenó a preguntar y la responsable aclaró.
+- Cuando un pedido mezcla «agregar» y «cambiar lo existente», conviene separarlos antes de tocar nada. Claude frenó a preguntar y el dueño aclaró.
 - Probar la base con una transacción que se deshace sola antes de aplicarla de verdad funcionó (según el chat).
 - Un ayudante se cortó por límite de uso. Claude hizo la tarea directo y lo dijo en el informe.
 
@@ -77,7 +77,7 @@ Resolver el pedido de la Bandeja «Asistente IA (panel general), perfil Estudio 
 - ¿Querés el rediseño del Laboratorio como tarea aparte?
 - ¿Revisás el asistente en producción?
 - ¿El botón se llama «Nueva charla» o «Charla nueva»? El chat usa los dos nombres.
-- ¿Qué reglas de cuidado siguen vigentes, si la responsable pidió olvidar las viejas? (ver CONTRADICE)
+- ¿Qué reglas de cuidado siguen vigentes, si el dueño pidió olvidar las viejas? (ver CONTRADICE)
 
 ## 11. Ramas y cambios
 
@@ -94,6 +94,6 @@ Resolver el pedido de la Bandeja «Asistente IA (panel general), perfil Estudio 
 
 ## 12. CONTRADICE
 
-- **Reglas de cuidado:** Claude dijo que seguía con «no hago envíos, gastos ni cambios en los bots sin que me lo pidas». `CLAUDE.md` dice que la única restricción es no pagar, y que lo demás se implementa, prueba y publica sin pedir «dale». La responsable pidió olvidar las reglas viejas.
+- **Reglas de cuidado:** Claude dijo que seguía con «no hago envíos, gastos ni cambios en los bots sin que me lo pidas». `CLAUDE.md` dice que la única restricción es no pagar, y que lo demás se implementa, prueba y publica sin pedir «dale». El dueño pidió olvidar las reglas viejas.
 - **Verificación:** el chat declara «publicado» sin haber mirado producción. `CLAUDE.md` pide comprobar en la base antes de informar qué está encendido.
 - **Migración 0634:** el chat dice que se aplicó en la base real el mismo día. No hay contradicción con el repo; la hora exacta es lo que no consta.

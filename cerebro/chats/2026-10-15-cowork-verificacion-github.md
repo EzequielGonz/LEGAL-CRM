@@ -12,20 +12,20 @@
 
 Verificar si Claude puede **leer y escribir** en `LEGAL-CRM`; explicar cómo generar un token de GitHub; y, al final, producir el archivo de cierre del chat, sin secretos ni datos personales.
 
-## 3. Órdenes y decisiones de la responsable
+## 3. Órdenes y decisiones del dueño
 
 Horas en hora Argentina (UTC-3).
 
 - **15/10/2026 15:07.** «Necesito que verifiques que puedas trabajar con el repositorio LEGAL-CRM. Quiero que testees si podes escribir y leer en el repositorio.»
 - **15/10/2026 15:08.** «Vamos a generar un nuevo token mejor. Decime como lo genero, que tipo de token y etc»
 - **15/10/2026 15:20.** «Donde pongo el token»
-- **15/10/2026 15:26.** La responsable pegó un token de GitHub en el chat. Claude lo usó solo para la prueba y recomendó revocarlo. Ver sección 12.
+- **15/10/2026 15:26.** El dueño pegó un token de GitHub en el chat. Claude lo usó solo para la prueba y recomendó revocarlo. Ver sección 12.
 - **21/11/2026 04:22.** Pidió el cierre del chat en un archivo Markdown (`historial-completo-chat.md` en la carpeta de salidas), con redacción de secretos y datos personales, verificación con grep y entrega con SendUserFile. Textual: «No escribas en GitHub, no hagas commits ni pushes, y no crees ramas sin mi "dale" explícito.» Además: no preguntar salvo dato imprescindible, y si la escritura sigue bloqueada, no simular y dar el error exacto.
 
-## 4. Correcciones de la responsable
+## 4. Correcciones del dueño
 
 - No hubo correcciones explícitas en la transcripción.
-- Observación de proceso de Claude (no de la responsable): Claude había indicado no pegar el token en el chat, y la responsable lo pegó igual. Claude lo usó solo para la prueba y recomendó revocarlo.
+- Observación de proceso de Claude (no del dueño): Claude había indicado no pegar el token en el chat, y el dueño lo pegó igual. Claude lo usó solo para la prueba y recomendó revocarlo.
 
 ## 5. Qué se hizo, con estado
 
@@ -33,7 +33,7 @@ Horas en hora Argentina (UTC-3).
 | --- | --- | --- | --- | --- | --- |
 | Lectura del repo `EzequielGonz/LEGAL-CRM` | Sí | Sí | **Sí, lectura OK** el 15/10 y de nuevo el 21/11 (herramienta de GitHub, listado de la raíz) | No aplica | Listado de la raíz devuelto en ambas fechas. |
 | Escritura en el repo (crear rama de prueba) | Sí | No | **Falló** (403) el 15/10; no se reintentó el 21/11 por la regla de no escribir | No habilitada | Sección 9. |
-| Prueba con el token pegado por la responsable | Sí | Intentada con llamadas directas a la API | **No concluyente**: el entorno bloqueó el acceso antes de llegar a GitHub, así que los permisos del token no se verificaron | No habilitado | Sección 9: respuesta del entorno y códigos HTTP 415 y 403. |
+| Prueba con el token pegado por el dueño | Sí | Intentada con llamadas directas a la API | **No concluyente**: el entorno bloqueó el acceso antes de llegar a GitHub, así que los permisos del token no se verificaron | No habilitado | Sección 9: respuesta del entorno y códigos HTTP 415 y 403. |
 | Guía para generar el token (fine-grained, solo LEGAL-CRM, Contents: lectura y escritura) | Sí | Sí (respuesta en el chat) | No aplica | No aplica | Mensajes 14 a 16 de la transcripción. |
 | Archivo de cierre `historial-completo-chat.md` | Sí | Sí, según la fuente | La fuente dice que la verificación con grep se informó en el mensaje de entrega; ese resultado no figura en el archivo | Entrega por SendUserFile declarada en la fuente; no verificada aquí | Sección 10 del archivo fuente. |
 
@@ -55,7 +55,7 @@ No hay nada publicado, desplegado ni migrado en esta sesión.
 
 - **Bloqueo:** la escritura en GitHub desde esta sesión sigue sin estar habilitada ni verificada. Requiere que el conector de GitHub tenga permiso de escritura (Contents: lectura y escritura) sobre `LEGAL-CRM`, o que el entorno habilite el acceso para ese repo.
 - **Seguridad, pendiente:** revocar el token pegado en el chat el 15/10. [secreto: token fine-grained de GitHub pegado en el chat el 15/10/2026 — hay que revocarlo]. Estado de la revocación: sin confirmar.
-- **Pendiente:** repetir la prueba de escritura (crear rama, escribir, leer, borrar) cuando la responsable dé un «dale» explícito.
+- **Pendiente:** repetir la prueba de escritura (crear rama, escribir, leer, borrar) cuando el dueño dé un «dale» explícito.
 - **Pendiente del Project:** mantener `CONTEXTO_ACTUAL_CRM.md` al cerrar un bloque. No se actualizó en esta sesión porque se pidió solo el archivo de cierre y se prohibió escribir en GitHub.
 - **Pregunta abierta:** ¿cuál es el nombre vigente de la agencia (ORVIAN o Kocos Marketing)?
 
@@ -88,7 +88,7 @@ La fuente dice que se buscó con grep en el archivo de cierre patrones de claves
 
 ## 12. CONTRADICE
 
-1. **Agencia.** El pedido de cierre (21/11/2026) dice «la agencia ORVIAN». La memoria del Project, actualizada el 20/10 y el 27/10, indica que la agencia es «Kocos Marketing (no ORVIAN)». Una versión anterior de la memoria (10/10) decía lo opuesto. Las skills del Project se llaman «kocos-...». No se resolvió; el archivo usa los dos nombres tal como los dijo la responsable.
+1. **Agencia.** El pedido de cierre (21/11/2026) dice «la agencia ORVIAN». La memoria del Project, actualizada el 20/10 y el 27/10, indica que la agencia es «Kocos Marketing (no ORVIAN)». Una versión anterior de la memoria (10/10) decía lo opuesto. Las skills del Project se llaman «kocos-...». No se resolvió; el archivo usa los dos nombres tal como los dijo el dueño.
 2. **Carpeta `docs` en el repo (contradicción interna de la fuente).** La sección 6 del archivo fuente dice que el listado del 21/11 ya no muestra `docs`. Sin embargo, el resultado de herramienta de ese mismo 21/11 (registro 33 de la transcripción) lista `docs` entre los nombres de la raíz. Hay que revisar el listado completo antes de afirmar que se borró.
 3. **Repo cambió entre fechas.** El 15/10 Claude informó que la raíz tenía `docs`; el 21/11 aparecen archivos nuevos (ver sección 6). No es un error de Claude: el repo cambió por cambios hechos fuera de esta sesión.
 4. **Token pegado.** Claude había recomendado no pegar el token en el chat, y luego lo usó. Son consistentes entre sí (se usó solo en un comando), pero el token quedó en la transcripción y hay que revocarlo.

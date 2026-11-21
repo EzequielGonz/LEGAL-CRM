@@ -11,7 +11,7 @@ Estado: propuesta con decisiones tomadas; falta el contenido completo y el «dal
 - Sistema modular existente (`agentes/modulos.ts`, `agent_modules`, `seleccionarModulos`) INACTIVO: tabla vacía, sin `agent_assignments`.
 - Objeciones en los prompts: casi nada.
 
-## Decisiones de la responsable (25/10)
+## Decisiones del dueño (25/10)
 - Precios: el bot puede explicar el concepto (la cuota sola no muestra el costo total; lo arma el asesor) sin dar números, rangos ni cuotas.
 - «Ya tengo abogado»: una sola pregunta por si busca una segunda opinión, sin cuestionar al otro abogado; si dice que no, se detiene.
 - Estructura pedida: una base general del bot (ventas + algo de cada rubro) que vale para todo el panel, encima el conocimiento del rubro y después los roles de las bases (ya existen). Visible en Perfiles, como el seguimiento en vivo.

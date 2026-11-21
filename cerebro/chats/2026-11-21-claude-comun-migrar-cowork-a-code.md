@@ -14,7 +14,7 @@ Estados usados: especificado / implementado / probado / publicado / habilitado. 
 
 Preguntó cómo pasar un proyecto completo de Cowork a Claude Code. Después, en el mismo chat, pidió el volcado del contexto a `cerebro-chats` (ver punto 3).
 
-## 3. Órdenes y decisiones de la responsable (textuales)
+## 3. Órdenes y decisiones del dueño (textuales)
 
 - **2026-11-21 05:43:** «como migro un proyecto completo de aca cowork a code?»
 - **2026-11-21 05:56:** pidió volcar todo el contexto del chat a `cerebro/chats/` en la rama `cerebro-chats`, con el formato de 12 puntos. Textual: «Escribí SOLO en esa rama: no toques main ni ninguna otra rama ni otro archivo.» y «prefiero que sobre a que falte.»

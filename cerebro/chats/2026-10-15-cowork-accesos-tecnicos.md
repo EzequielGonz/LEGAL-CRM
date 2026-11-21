@@ -13,13 +13,13 @@
 
 ## 2. Objetivo
 
-Retomar los accesos técnicos del CRM (GitHub, Vercel y Supabase) y comprobar con evidencia si Claude puede escribir en `EzequielGonz/LEGAL-CRM` sin tocar `main`. Al final, la responsable pidió cerrar el chat con un archivo de historial.
+Retomar los accesos técnicos del CRM (GitHub, Vercel y Supabase) y comprobar con evidencia si Claude puede escribir en `EzequielGonz/LEGAL-CRM` sin tocar `main`. Al final, el dueño pidió cerrar el chat con un archivo de historial.
 
-## 3. Órdenes y decisiones de la responsable
+## 3. Órdenes y decisiones del dueño
 
 Horas en UTC.
 
-- **15/10/2026 17:56.** «Retomamos los accesos del crm». Claude preguntó qué accesos y la responsable eligió «Conexiones técnicas» (GitHub, Vercel, Supabase), entre cuatro opciones.
+- **15/10/2026 17:56.** «Retomamos los accesos del crm». Claude preguntó qué accesos y el dueño eligió «Conexiones técnicas» (GitHub, Vercel, Supabase), entre cuatro opciones.
 - **15/10/2026 17:57.** «Quiero verificar que tenés acceso de escritura al repositorio EzequielGonz/LEGAL-CRM. Primero comprobá qué permisos tenés y en qué rama estás trabajando. Después, si tenés acceso de escritura, creá un archivo llamado `claude-write-test.txt` en una rama de prueba, sin modificar `main`. Confirmá si pudiste guardar el archivo y subirlo a GitHub. Si no tenés permisos, no simules la operación ni afirmes que se realizó. Mostrame el error exacto y qué permiso falta.»
 - **15/10/2026 17:58.** «Toma acceso total de todo el proyecto completo tanto codigo como redes, todo, tu unica restricción son los pagos. antes de efectuar uno pedir autorizacion que te falta?»
   - Decisión: acceso total sin «dale» por cada acción. Única restricción: pagos, con autorización previa. Claude mantuvo por su cuenta la Fase 3 pausada y el «frená» de las reglas del proyecto.
@@ -30,7 +30,7 @@ Horas en UTC.
   - Extraer la transcripción, redactar secretos y datos personales, generar el archivo con la estructura pedida, verificar con grep y entregar por SendUserFile.
   - Textual: «No escribas en GitHub, no hagas commits ni pushes, y no crees ramas sin mi "dale" explícito.»
 
-## 4. Correcciones que hizo la responsable
+## 4. Correcciones que hizo el dueño
 
 - No hubo correcciones explícitas en la sesión.
 - Cambio de regla: el 15/10 pasó de «preguntar antes de cada acción en GitHub» a «acceso total, solo pagos». El 21/11 volvió a exigir «dale» explícito para escribir en GitHub. Ver sección 12, puntos 1 y 2.
@@ -45,9 +45,9 @@ Categorías: especificado, implementado, probado, publicado, habilitado.
 | Lectura de GitHub | Probado (solo lectura) | `get_me` devolvió la cuenta `EzequielGonz`; `list_branches` devolvió 3 ramas. |
 | Lectura de Vercel | Probado (solo lectura) | `get_project` devolvió el proyecto `legal-crm`. Último deploy en READY, sin target de producción (Preview). |
 | Lectura de Supabase | Probado (solo lectura) | `get_project` devolvió el proyecto `legal-crm`, ACTIVE_HEALTHY, región sa-east-1. |
-| Permisos de la cuenta sobre el repo | Comprobado | `search_repositories` informó admin, maintain, push, triage, pull para la cuenta de la responsable. |
+| Permisos de la cuenta sobre el repo | Comprobado | `search_repositories` informó admin, maintain, push, triage, pull para la cuenta del dueño. |
 | Escritura en GitHub (rama `claude-write-test` y archivo `claude-write-test.txt`) | No realizada; bloqueada | Tres intentos el 15/10 (dos de crear rama, uno de crear archivo): los tres dieron 403. Sección 6. |
-| Nuevo intento de escritura el 21/11 | No ejecutado | La responsable prohibió escribir, commitear o crear ramas sin «dale». |
+| Nuevo intento de escritura el 21/11 | No ejecutado | El dueño prohibió escribir, commitear o crear ramas sin «dale». |
 | Etapa 1 del CRM | Publicada según el documento del proyecto (commit `fb5cdc3`) | Solo se verificó que `main` está en `fb5cdc3`. Este chat no revisó producción. |
 | Migración `0199_etapa1_cierre_rls.sql` | Sin aplicar en la base real, según el documento del 13/10 | Dato del documento del proyecto; no se reverificó en Supabase. |
 | Verificación con dependencias reales | Pendiente (bloqueada el 13/10, según el documento) | Sin cambios en esta sesión. |
@@ -93,7 +93,7 @@ Nada se declara publicado, habilitado o probado más allá de la tabla.
 
 ## 8. Pendiente, a medias o bloqueado
 
-**Bloqueo principal:** Claude no puede escribir en `LEGAL-CRM` (403). Lo que le corresponde a la responsable:
+**Bloqueo principal:** Claude no puede escribir en `LEGAL-CRM` (403). Lo que le corresponde al dueño:
 
 1. En la app «Claude» de GitHub, bajar hasta *Selected repositories*, agregar `LEGAL-CRM` si falta y guardar.
 2. Si ya estaba marcado y sigue el 403, reconectar el conector de GitHub desde los conectores de Claude, autorizando escritura sobre ese repositorio.
@@ -102,7 +102,7 @@ Nada se declara publicado, habilitado o probado más allá de la tabla.
 **Pendientes de accesos (plan de la Etapa 3):**
 
 - Redes: faltan Instagram y las páginas por rubro; decidir el nombre de la página de la agencia.
-- Search Console: no están creadas las credenciales OAuth. La responsable las carga en Vercel, nunca en el chat.
+- Search Console: no están creadas las credenciales OAuth. El dueño las carga en Vercel, nunca en el chat.
 - Google Cloud: sin proyecto ni facturación confirmados para el ajuste de modelos. Implica gasto y requiere autorización previa.
 
 **Pendientes técnicos heredados del 13/10 (documento del proyecto):**
@@ -114,12 +114,12 @@ Nada se declara publicado, habilitado o probado más allá de la tabla.
 
 **Siguientes pasos ofrecidos y no ejecutados:** revisar con lecturas el contenido de `trabajo-1410` y `etapa1-correcciones`; revisar con lecturas migraciones y asesores de seguridad en Supabase; armar un Preview para el programador, con autorización.
 
-**Token de GitHub:** este chat no usa ningún token. En el chat de verificación del mismo día (`2026-10-15-cowork-verificacion-github.md`) la responsable pegó un token de GitHub; quedó expuesto en la transcripción. [secreto: token fine-grained de GitHub pegado en el chat el 15/10 — hay que revocarlo; estado sin confirmar].
+**Token de GitHub:** este chat no usa ningún token. En el chat de verificación del mismo día (`2026-10-15-cowork-verificacion-github.md`) el dueño pegó un token de GitHub; quedó expuesto en la transcripción. [secreto: token fine-grained de GitHub pegado en el chat el 15/10 — hay que revocarlo; estado sin confirmar].
 
 ## 9. Aprendizajes
 
 - La app de GitHub con permisos de escritura no alcanza si el repo no está seleccionado en la app o si el conector de la sesión es otro. Hay que revisar ambos.
-- Cuenta y conector son identidades distintas: la cuenta de la responsable tiene permisos de push según `search_repositories`, y la integración del conector recibe 403.
+- Cuenta y conector son identidades distintas: la cuenta del dueño tiene permisos de push según `search_repositories`, y la integración del conector recibe 403.
 - Se evitó simular la escritura: el chat solo informó lo que dio 403.
 
 ## 10. Preguntas abiertas
@@ -141,10 +141,10 @@ Nada se declara publicado, habilitado o probado más allá de la tabla.
 
 ## 12. CONTRADICE
 
-1. **Regla sobre GitHub.** El 15/10 la memoria decía «Claude opera en GitHub solo con tu "dale" en cada acción». Minutos después la responsable dio «acceso total, solo pagos». Este chat tomó la segunda, que es la más reciente. El 21/11 volvió a pedir «dale» explícito para GitHub. Prevalece la más reciente y restrictiva para GitHub. Además, `CLAUDE.md` del repo (decisión del 20/11) dice que Claude verifica GitHub «sin pedir "dale" por cada paso»; choca con el 21/11.
-2. **Acceso total vs. «dale».** El «acceso total» del 15/10 choca con el pedido del 21/11. Para Vercel, Supabase y redes no hay una restricción nueva expresa. Si el «acceso total» sigue vigente ahí, es decisión de la responsable y no está confirmada en este cierre.
+1. **Regla sobre GitHub.** El 15/10 la memoria decía «Claude opera en GitHub solo con tu "dale" en cada acción». Minutos después el dueño dio «acceso total, solo pagos». Este chat tomó la segunda, que es la más reciente. El 21/11 volvió a pedir «dale» explícito para GitHub. Prevalece la más reciente y restrictiva para GitHub. Además, `CLAUDE.md` del repo (decisión del 20/11) dice que Claude verifica GitHub «sin pedir "dale" por cada paso»; choca con el 21/11.
+2. **Acceso total vs. «dale».** El «acceso total» del 15/10 choca con el pedido del 21/11. Para Vercel, Supabase y redes no hay una restricción nueva expresa. Si el «acceso total» sigue vigente ahí, es decisión del dueño y no está confirmada en este cierre.
 3. **Captura vs. 403.** La captura muestra la app «Claude» con lectura y escritura sobre código y PR, pero las llamadas de escritura dieron 403. Explicación más probable: repo no seleccionado o conector distinto. No confirmada.
-4. **Nombre de la agencia.** La memoria vigente el 15/10 y el pedido de cierre dicen ORVIAN, y un dato anterior corregía «no es Kocos». En la memoria del 21/11, el perfil del Project y el archivo de SEO dicen «Kocos Marketing (no ORVIAN)», y existe otra copia que dice «ORVIAN, antes Kocos». Hace falta que la responsable confirme el nombre vigente.
+4. **Nombre de la agencia.** La memoria vigente el 15/10 y el pedido de cierre dicen ORVIAN, y un dato anterior corregía «no es Kocos». En la memoria del 21/11, el perfil del Project y el archivo de SEO dicen «Kocos Marketing (no ORVIAN)», y existe otra copia que dice «ORVIAN, antes Kocos». Hace falta que el dueño confirme el nombre vigente.
 5. **Cuenta vs. integración.** Claude informó permisos de admin y push de la cuenta (dato de `search_repositories`) y, a la vez, el 403 de la integración. No es contradicción real: son dos identidades distintas. Se aclara para evitar lecturas erróneas.
 6. **Migraciones.** La serie `0199`–`0207` no coincide con la convención de `CLAUDE.md` (`01xx`, `02xx`). Revisar antes de aplicar.
 7. **Next.js.** La fuente menciona Next 14.2.35; `CLAUDE.md` del repo dice Next.js 15.5. No confirmado cuál es la versión real.

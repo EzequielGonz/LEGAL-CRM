@@ -14,9 +14,9 @@ Rama de trabajo: `claude/admiring-euler-ctf4sg` → [PR #80](https://github.com/
 - Estado real verificado en base, Vercel, Metricool, DNS y el panel (105 pantallas) → `07-estado-verificado.md`. Pendientes priorizados → `08-pendientes-y-plan.md`.
 - Chat «Panel Jurídico, Rediseño» (19/11) volcado a `cerebro-chats` (`cerebro/chats/2026-11-19-code-rediseno-panel-juridico.md`, commit `451605f`).
 - Plantilla única de volcado: `cerebro/chats/PLANTILLA.md` (con sección de ramas y cambios).
-- 51 preguntas para la responsable: `12-preguntas-para-entender.md` (+ Word). **Sin contestar todavía.**
+- 51 preguntas para el dueño: `12-preguntas-para-entender.md` (+ Word). **Sin contestar todavía.**
 
-## Decisiones de la responsable en esta sesión
+## Decisiones del dueño en esta sesión
 
 - Campañas: las lanza ella siempre. Kocos Marketing (sin ORVIAN). Autos: «Automotores Kocos» o «Autos Kocos», nunca «Agencia Kocos». Cerebro en `cerebro/` de LEGAL-CRM. Pasar a main cerebro y ramas de documentos (hecho). Por ahora entender todo; las instrucciones de trabajo vienen después.
 - Quiere todos los chats **unificados en una sola rama** (`cerebro-chats`), sin descargar ni subir nada a mano, y después que yo relea todo.
@@ -24,7 +24,7 @@ Rama de trabajo: `claude/admiring-euler-ctf4sg` → [PR #80](https://github.com/
 
 ## Los 22 chats de Code (ids para leerlos con `mcp__claude-code-remote__list_events`)
 
-Hechos: **Panel Jurídico** `session_01FuLgniyC2tDGbRPYKqpwJN`. Esta sesión: `session_01FuLgnkKbeaUf3pukEpthUr` (KOCOS CALL). De la responsable, a mano: **Metricool context: 4 brands** `session_01FuLgnj5dyMXat2HmKarMfG`.
+Hechos: **Panel Jurídico** `session_01FuLgniyC2tDGbRPYKqpwJN`. Esta sesión: `session_01FuLgnkKbeaUf3pukEpthUr` (KOCOS CALL). Del dueño, a mano: **Metricool context: 4 brands** `session_01FuLgnj5dyMXat2HmKarMfG`.
 
 Pendientes de volcar (19):
 
@@ -55,14 +55,14 @@ Pendientes de volcar (19):
 ## Cómo leerlos con costo bajo (plan)
 
 1. Un subagente por chat, modelo **Haiku**, de a pocos por vez. Primero 3 de prueba: Traspaso Legal CRM, Contexto del proyecto, Perfiles redes VITA.
-2. Leer con `list_events` filtrando `kinds: ["user","result"]`: los mensajes de la responsable (sus órdenes textuales) y las respuestas finales de cada turno. **No** pedir `assistant` completo: trae bloques de razonamiento enormes y encarece todo. Paginar con `before_id`.
+2. Leer con `list_events` filtrando `kinds: ["user","result"]`: los mensajes del dueño (sus órdenes textuales) y las respuestas finales de cada turno. **No** pedir `assistant` completo: trae bloques de razonamiento enormes y encarece todo. Paginar con `before_id`.
 3. Cada subagente escribe `cerebro/chats/AAAA-MM-DD-code-<tema>.md` con `PLANTILLA.md` y lo sube a `cerebro-chats` (sin claves ni datos personales).
 4. Al final: integrar `cerebro-chats`, releer todo junto, cruzar con el cerebro y actualizar archivos 01–11.
 5. Claude común: ver opciones en el chat (exportación de datos de claude.ai, que no gasta crédito, o un solo chat con modelo chico).
 
 ## Pendientes nuevos de esta vuelta
 
-- **Clave de Supabase expuesta** en el chat del 07/09 (lo informa el chat «Contexto completo»; no verificado). Cambiarla es decisión y tarea de la responsable. Después hay que actualizarla en Vercel.
+- **Clave de Supabase expuesta** en el chat del 07/09 (lo informa el chat «Contexto completo»; no verificado). Cambiarla es decisión y tarea del dueño. Después hay que actualizarla en Vercel.
 - Línea de Meta de **Marketing sin acceso al número** (no entra nada desde el 06/11).
 - Cronograma doble de redes casi sin producir (los 8 chats de Redes cayeron por crédito). Del 25/11 en adelante VITA, Coberturas y Autos no tienen nada programado.
 - Confirmar que `Campaña Graves 1911` envió desde las 08:00 del 20/11 y la tasa de fallas.
@@ -72,4 +72,4 @@ Pendientes de volcar (19):
 
 1. Leer `cerebro/README.md`, este archivo, `02-ordenes-vigentes.md` y `08-pendientes-y-plan.md`.
 2. Si pasaron más de 24 h: volver a comprobar `07-estado-verificado.md` (consultas al final del archivo).
-3. Seguir el plan de arriba. No lanzar nada que gaste uso sin que la responsable lo apruebe.
+3. Seguir el plan de arriba. No lanzar nada que gaste uso sin que el dueño lo apruebe.

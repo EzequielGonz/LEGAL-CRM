@@ -37,7 +37,7 @@ Viven en Hostinger Horizons y no están en este repositorio. Los cambios van com
 
 ## Puntos a confirmar antes de publicar
 
-1. **Números**: se usaron las líneas cargadas en el CRM con prefijo 549 + 11. Confirmar que son los que se quieren mostrar. La landing de Kocos Marketing hoy muestra 223 522-3906; por decisión de la responsable pasa a 11 7250-2391.
+1. **Números**: se usaron las líneas cargadas en el CRM con prefijo 549 + 11. Confirmar que son los que se quieren mostrar. La landing de Kocos Marketing hoy muestra 223 522-3906; por decisión del dueño pasa a 11 7250-2391.
 2. **Línea de Marketing en Meta**: la línea de Agencia Kocos figuraba «Pendiente» en Meta (ver CONTEXTO_ACTUAL_CRM.md). Un botón de WhatsApp a un número no verificado no recibe bien los mensajes: verificarlo antes de mover tráfico.
 3. **Dominio del formulario**: las landings enviarán a `https://legal-crm-nine.vercel.app/api/landing`. El proyecto tiene la protección de Vercel activa «all_except_custom_domains». Si esa URL pide ingreso de Vercel, el envío falla desde las landings. Probar con un `OPTIONS`/`POST` desde el navegador de una landing o asignar un dominio propio al panel. **No se pudo probar desde la sesión.**
 4. **Campo `llegada`**: el CRM lo lee del cuerpo del formulario; el módulo de los prompts lo envía.

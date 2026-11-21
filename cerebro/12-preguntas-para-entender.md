@@ -1,5 +1,5 @@
 ---
-description: Preguntas a la responsable para entender el negocio a fondo. Cada respuesta se vuelca al archivo del cerebro que corresponde y la pregunta se tacha.
+description: Preguntas al dueño para entender el negocio a fondo. Cada respuesta se vuelca al archivo del cerebro que corresponde y la pregunta se tacha.
 actualizado: 20/11/2026
 ---
 

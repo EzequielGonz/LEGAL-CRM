@@ -4,20 +4,20 @@ description: Traspaso de la sesión KOCOS CALL del 21/11 (segunda parte, 08:30 U
 
 # Traspaso · 21/11/2026 (segunda parte)
 
-## Qué pidió la responsable (vigente)
+## Qué pidió el dueño (vigente)
 
 - **Por ahora el cerebro solo entiende: no altera ni toca nada del panel ni del proyecto.** Releer el código completo, recorrer el panel entero, leer los 5 repos con TODAS sus ramas y PR, Supabase y Vercel completos, cruzar todo y formular preguntas para terminar de entender. Ser un «super cerebro» con biblioteca.
 - **Lo de Cowork es historia** (sesiones viejas del arranque; casi todo cambió: reglas, mejoras). Usarlo solo para ver objetivos y hacia dónde se apunta. Lo vigente está en los chats de Code, el código, la base y el panel.
 - **Única regla:** no pagar nada sin autorización. Usar skills, plugins y conectores.
-- **Código del panel:** se puede usar para entrar; no se guarda en ningún archivo. Ella lo cambia después.
-- **Chats de Code:** solo los 7 de la carpeta «CRM COMPLETO» (KOCOS CALL = esta sesión; Panel Jurídico, Traspaso Legal CRM, Perfiles redes VITA, Contexto del proyecto, Contexto completo del proyecto: volcados; Metricool context: lo maneja ella).
+- **Código del panel:** se puede usar para entrar; no se guarda en ningún archivo. Él lo cambia después.
+- **Chats de Code:** solo los 7 de la carpeta «CRM COMPLETO» (KOCOS CALL = esta sesión; Panel Jurídico, Traspaso Legal CRM, Perfiles redes VITA, Contexto del proyecto, Contexto completo del proyecto: volcados; Metricool context: lo maneja él).
 - **Reels:** los sigue el agente del chat «Metricool context» (tarea «Retomar reels tras el límite»). No lanzar producción paralela.
 - **Modelo:** Opus 5.5 esfuerzo medio, sin ultracode (o Sonnet medio para ahorrar). Nunca esfuerzo bajo para el cruce.
 - **Si se corta por límite: programar para retomar** (send_later) y seguir.
 
 ## Repo público
 
-`EzequielGonz/LEGAL-CRM` es **público** (comprobado 21/11). La responsable lo pasa a privado (Settings → General → Change repository visibility). Ella autorizó subir igual. No puedo cambiarlo yo (conector de GitHub caído, sin permiso de administrador).
+`EzequielGonz/LEGAL-CRM` es **público** (comprobado 21/11). El dueño lo pasa a privado (Settings → General → Change repository visibility). Él autorizó subir igual. No puedo cambiarlo yo (conector de GitHub caído, sin permiso de administrador).
 
 ## Análisis en curso (7 subagentes, solo lectura)
 
@@ -49,7 +49,7 @@ Tarea programada de respaldo: «Retomar análisis del cerebro tras el límite»,
 - `cerebro/biblioteca/cowork-documentos-proyecto/`: 16 documentos del Project «crm» de Cowork.
 - Copia local también en `/home/user/cerebro-privado/`.
 
-## Pendientes de la responsable
+## Pendientes del dueño
 
 Pasar el repo a privado; cambiar el código del panel; rotar la clave de Supabase reportada (chat 07/09) y revocar el token de GitHub pegado en Cowork (15/10); desactivar o no la tarea de reels; contestar las 51 preguntas.
 

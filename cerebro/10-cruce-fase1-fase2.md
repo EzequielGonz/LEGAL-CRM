@@ -5,7 +5,7 @@ actualizado: 20/11/2026 06:10
 
 # Cruce Fase 1 (Cowork) ↔ Fase 2 (Code)
 
-Criterio: manda la orden más nueva de la responsable; para hechos, manda lo comprobado en la base, el DNS o el código.
+Criterio: manda la orden más nueva del dueño; para hechos, manda lo comprobado en la base, el DNS o el código.
 
 | # | Tema | Fase 1 dice | Fase 2 dice | Resolución |
 | --- | --- | --- | --- | --- |
@@ -25,7 +25,7 @@ Criterio: manda la orden más nueva de la responsable; para hechos, manda lo com
 | 14 | Nombre de la agencia | Kocos Marketing u ORVIAN (abierto) | Kocos Marketing | Abierto: preguntar |
 | 15 | Penal | Comparte línea de Civil con roles separados | Decidido y no implementado | Igual: la línea PENAL de Meta está inactiva; falta implementar roles dentro de Civil |
 | 16 | Medición | GA4 IDs existen, falta etiqueta | Rama de medición en curso (VITA probada) | Complementarias: terminar la rama usando esos IDs |
-| 17 | Destacadas | Hay que armarlas en la app antes del 21/11 1:30 | Tarea para Cowork | **Hecho**: la responsable las armó a mano en los 4 rubros (20/11) |
+| 17 | Destacadas | Hay que armarlas en la app antes del 21/11 1:30 | Tarea para Cowork | **Hecho**: el dueño las armó a mano en los 4 rubros (20/11) |
 | 18 | Uso de Meta vs Wasender | 14/11 solo Wasender; 17/11 se puede elegir | Elegible por campaña | Elegible por campaña (17/11) |
 | 19 | Cierre de carrusel | «botón en el perfil» | «Comentá PALABRA» | Fase 2 |
 
