@@ -72,3 +72,11 @@ Prioridad: **P0** hoy · **P1** esta semana · **P2** antes del 01/12 · **P3** 
 | 20/11 | Integrados a `main` el cerebro, redes (`happy-wozniak`, PR #77), contexto (`festive-goldberg`) y los 18 commits de `gracious-volta`; sin cambios de código; typecheck, lint y build en verde | publicado (`66c457b`) |
 | 20/11 | Hook de arranque que carga el cerebro en cada sesión | publicado en main |
 | 20/11 | 51 preguntas para entender el negocio (`12-preguntas-para-entender.md` + Word) | entregado |
+
+## Propuesta 21/11 · Cerebro como software aparte conectado al panel por API (sin aplicar)
+
+Pedido del dueño: el cerebro dentro del panel, con bandeja para hablar con Claude y aprendizaje desde el panel. Presentado como propuesta; el panel no se toca.
+- Piezas: memoria propia (tablas `cerebro_*` separadas en Supabase) · API (consultar, aprender, bandeja) con clave solo en Vercel · aprendizaje diario en solo lectura sobre la base del panel · dos modos de chat: rápido (Gemini, o Claude API con costo y autorización) y profundo (bandeja tomada por una sesión de Claude Code, sin costo extra; base existente: `/bandeja` y `/asistente`) · sección «Cerebro» con el estilo del panel.
+- Etapas: 1) memoria + API cargadas con `cerebro/` · 2) aprendizaje diario · 3) chat y bandeja · 4) conexión al panel. Cada etapa con autorización.
+- Decidir: dónde se publica (proyecto aparte en Vercel o funciones de Supabase; revisar costo) y modelo del chat rápido.
+- Oportunidad: reutilizable como producto de ticket alto para Kocos Marketing.
