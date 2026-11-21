@@ -11,6 +11,7 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 - **Pedido:** «hacé una página aparte como la del panel, vinculala, que lea todo, con bandeja, asistente y laboratorio; terminalo y publicalo».
 - **Hecho:** `/cerebro` en el marco del panel; acceso arriba de todo en Perfiles y en el menú lateral. Lee cifras de la semana y salud en vivo, muestra los pedidos a Claude, «Hablale a Claude» crea tareas en la bandeja con la foto de la semana, y suma el asistente general y el laboratorio de bots. Contenido en `src/lib/cerebro/contenido.ts` (actualizarlo en cada vuelta junto con `15-hallazgos`). Entrega en `docs/cerebro-panel/ENTREGA.md`.
 - **Ojo:** al cambiar alertas, pendientes o preguntas del cerebro, actualizar también `src/lib/cerebro/contenido.ts`.
+- **Corrección del dueño (misma noche):** no lo quería dentro del marco de los perfiles ni con tarjeta en el menú. Quedó como pantalla aparte con la escena animada del cerebro (esfera, frases con cifras vivas, contador), acceso solo en Inicio con una píldora chica que late y abre pestaña nueva. Publicado en producción (`main` 94b5fdc) y revisado en computadora y celular.
 
 ## 21/11 (noche) — Relectura completa y cruce de informes
 
