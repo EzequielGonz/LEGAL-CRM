@@ -1239,6 +1239,8 @@ export function operacionPorClave(clave: string): OperacionPanel | null {
  * toda ruta del panel esté en el catálogo, en una herramienta propia o acá.
  */
 export const FUERA_DEL_CATALOGO: Record<string, string> = {
+  "asistente/charlas": "Guarda y lista las charlas del propio asistente (20/11): es su memoria, no una acción sobre el panel.",
+  "asistente/charlas/[id]": "Lee, renombra o archiva una charla guardada del asistente: es su memoria, no una acción sobre el panel.",
   "agentes/informes/[id]/aplicar": "Aplica una propuesta de un informe por su número: desde el asistente se usa «Sumar una ficha de conocimiento al bot del perfil» o proponer_rol con el texto de la propuesta.",
   "agenda/availability": "Reemplaza todos los horarios del área borrando primero los anteriores, sin deshacer si falla: hasta arreglar eso, se hace solo desde Ajustes.",
   "agentes/ajuste": "Autoriza un gasto de entrenamiento del modelo: se hace desde Bot IA, con la pantalla que muestra el costo.",

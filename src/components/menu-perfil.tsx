@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { IconoCerebro } from "@/components/cerebro/entrada-cerebro";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import clsx from "clsx";
@@ -249,6 +250,23 @@ export function MenuPerfil({ slug, nombre, logo, menu = null }: { slug: SlugPerf
             </div>
           ))}
         </nav>
+
+        <div className="px-3 pb-2">
+          <Link
+            href={`/cerebro?perfil=${slug}`}
+            prefetch={false}
+            title={plegado ? "Cerebro del negocio" : undefined}
+            className="menu-tarjeta flex w-full items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-left text-sm font-medium text-slate-800 shadow-sm hover:border-slate-300"
+          >
+            <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-gold-500/15 text-gold-700">
+              <IconoCerebro className="h-[18px] w-[18px]" />
+            </span>
+            <span className="menu-texto min-w-0">
+              <span className="block">Cerebro del negocio</span>
+              <span className="block truncate text-xs font-normal text-slate-500">Lo que Claude sabe y ve</span>
+            </span>
+          </Link>
+        </div>
 
         <EntradaBandeja slug={slug} activa={pathname === "/bandeja"} plegado={plegado} />
 
