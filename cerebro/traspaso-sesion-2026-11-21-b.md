@@ -82,3 +82,15 @@ Hallazgos clave de los terminados (sin verificar por mí todavía):
 - **Los 5 repos son públicos**, no solo LEGAL-CRM.
 
 Falta: C (recorrido del panel). Después, cruce y preguntas.
+
+## Avance: C (recorrido del panel) terminó — 21/11. Los 7 análisis están listos.
+
+`cerebro-privado/analisis/C-recorrido-panel.md` y capturas sin datos de prospectos:
+- 78 pantallas en computadora y celular: todo carga, sin errores. Los problemas son de datos y de coherencia.
+- Meta conectada solo en CIVIL, Coberturas y Autos (Autos con calidad baja). PENAL no existe (faltan variables). Marketing no tiene canal: Meta «sin acceso al número» y Wasender desconectada desde el 15/11. Wasender de Jurídico desconectada desde el 13/11. Salud no marca el error de pago 131042 de Coberturas como freno.
+- Cifras que no coinciden: «esperan a una persona» en Jurídico da 4, 5, 6 o 14; retenidos 1 contra 5. Una campaña de Jurídico pausada por calidad baja con la línea en calidad alta.
+- Mezcla entre rubros: el cuadro WHATSAPP_PENAL y los 5 retenidos de todo el sistema aparecen en los 4 perfiles; dos teléfonos figuran en Coberturas y en Marketing.
+- Textos internos a la vista (variables, `falla_modelo`, «pedido hace 728 h»). `/biblioteca-agentes` dice apagados y Bot IA activos.
+- Celular: `/agentes` y `/resultados` se desbordan; los avisos fijos ocupan un tercio; la barra inferior tapa botones.
+
+Vista web del cerebro publicada (privada): https://claude.ai/artifact/7EC3JRaX1oFAdraThQhWTv
