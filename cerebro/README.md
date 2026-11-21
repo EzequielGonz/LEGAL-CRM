@@ -37,6 +37,7 @@ Esta carpeta es la memoria de trabajo de Claude. Reemplaza tener que releer los 
 | `01-negocio-y-marcas.md` | Qué es el proyecto, para qué existe, las 4 marcas (servicios, tono, paleta, contacto, Metricool, repo), metas al 21/12 |
 | `02-ordenes-vigentes.md` | Todas las órdenes de la responsable reconciliadas (Fase 1 + Fase 2), lo que no quiere y la única restricción |
 | `03-crm-y-bots.md` | Cómo funciona el panel, secciones, estados, bots, captación por rubro, seguimiento, Meta y Wasender, automatizaciones |
+| `13-lo-aprendido-de-los-chats.md` | Qué se aprendió de los chats volcados, contradicciones resueltas y qué hay que actuar |
 | `04-redes-y-contenido.md` | Estrategia, cronograma vigente, motor de reels, dirección de arte, Metricool, series y palabras clave |
 | `05-landings-seo-google.md` | Landings, SEO, medición, Search Console, Perfil de Empresa, YouTube |
 | `06-tecnica-repos-y-accesos.md` | Pila, repos, ramas, base, comandos, cómo publicar, variables (solo nombres), conectores |

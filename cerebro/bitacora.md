@@ -4,6 +4,13 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 
 # Bitácora
 
+## 21/11/2026 · Chats volcados y cruzados
+
+- **Pedido:** leer solo los 7 chats de la carpeta «CRM COMPLETO», más lo que pase de Claude común y Cowork; lanzar los reels pendientes.
+- **Hecho:** 8 chats de Claude común (exportación de datos), 5 de Cowork y 6 de Code volcados a `cerebro-chats` con subagentes Haiku, sin claves; cruce en `13-lo-aprendido-de-los-chats.md`.
+- **Decidido:** los reels los sigue el agente del chat «Metricool context» (tarea «Retomar reels tras el límite»); no se lanzan sesiones paralelas.
+- **Quedó:** revisar a fondo los resúmenes, comprobar Metricool por día y marca, actualizar los archivos 01–11 con lo confirmado.
+
 ## 21/11/2026 · Chats unificados y traspaso
 
 - **Pedido:** unificar todos los chats en una sola rama (`cerebro-chats`) y releer; cuidar el uso de créditos.
