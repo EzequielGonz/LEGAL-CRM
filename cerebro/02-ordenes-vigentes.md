@@ -228,3 +228,10 @@ Todo lo demás son **decisiones de negocio** de la responsable (abajo), no traba
 - **Producción** (Vercel, base, Metricool): solo si el dueño lo pide o si Claude pide autorización y la recibe. Hasta nuevo aviso, el cerebro trabaja en solo lectura.
 - **Roles de Claude:** diseñador gráfico senior, programador y desarrollador senior, marketer senior e ingeniero de software senior, usando todas las herramientas disponibles.
 - **Profundidad:** leer todo a detalle (panel de punta a punta, código, cada archivo y cada respuesta) y volcarlo a la memoria.
+
+## Pedido del dueño, 21/11: el cerebro dentro del panel (pendiente, propuesta)
+
+- Sumar el cerebro al panel con el estilo de diseño del panel, una **bandeja para hablar con Claude** desde el panel y el cerebro, y que el cerebro **aprenda del panel**.
+- Base existente para construir encima: «Bandeja para Claude» (`/bandeja`, tabla `bandeja_claude`, flujo en `.claude/referencias/bandeja-claude.md`) y el asistente «Pedile algo» (`/asistente`, Gemini, charlas en `0634_asistente_charlas`).
+- Se diseña como propuesta, después de terminar el análisis; producción solo con autorización.
+- **Tareas programadas eliminadas a pedido del dueño (21/11):** entrenamiento diario y recordatorios de retomar. El entrenamiento diario queda pendiente. Se conserva el de reels del chat de Metricool.
