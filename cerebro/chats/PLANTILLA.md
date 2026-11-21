@@ -12,6 +12,7 @@ Archivo: `cerebro/chats/AAAA-MM-DD-<origen>-<tema-corto>.md` (fecha de inicio de
 8. **Pendiente, a medias o bloqueado**, y por qué.
 9. **Aprendizajes:** qué funcionó, qué no, errores y cómo se resolvieron.
 10. **Preguntas abiertas.**
-11. **CONTRADICE:** todo lo que choque con otra información conocida.
+11. **Ramas y cambios (explícito):** cada repo y rama que usó el chat: para qué se creó, qué tiene, de qué rama salió, si está integrada a main o no, si tiene PR (número y estado) y qué habría que hacer con ella (integrar, rescatar, archivar). Lista de commits con hash corto, fecha y qué cambió cada uno. Archivos tocados por carpeta. Migraciones (número, si se aplicó en la base y cuándo). Despliegues (qué se publicó, cuándo, en qué proyecto). Cambios de configuración fuera del código (variables de Vercel solo por nombre, ajustes en Supabase, Meta, Metricool, Google, redes). Qué quedó encendido o apagado por ese chat.
+12. **CONTRADICE:** todo lo que choque con otra información conocida.
 
 Reglas: sin claves, tokens, contraseñas ni códigos de acceso (poner «[secreto: <qué era> — hay que cambiarlo]» sin el valor); sin datos personales de prospectos o clientes (solo cantidades y casos sin identificar); no inventar («(no confirmado)» si hay duda). En español rioplatense.
