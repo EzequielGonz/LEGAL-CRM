@@ -63,3 +63,22 @@ Hallazgos clave de los terminados (sin verificar por mí todavía):
 - (D) Sin cambios desde el 20/11 en migraciones (77, última 0634) ni configuración. Graves 1911 terminó 182/182. Jurídico: 27,8 % de salientes fallidos en 7 días. Solo CIVIL recibe mensajes (Marketing último 06/11, Autos 26/10, Coberturas 13/11). 30 avisos de captación sin destinatario. Conflictos de seguimiento 10 → 13. Metricool: VITA, Coberturas y Autos tienen 13 piezas por día del 25 al 29/11 (historias y carrusel, 0 reels).
 - (E) Historia desde el 11/10: ORVIAN → Kocos Marketing (20/10), detención sin apagar agente (24/10), Fase 3 descartada (25/10). Quedaron sin cerrar: línea de Kocos Marketing en Meta, plantillas `*_sb_*`, Alumar y PDF en chats, landings en Horizons, GA4 y sitemaps.
 - (A, terminado) main `66c457b`: 84 archivos de migración (77 aplicadas en la base), 99 páginas, 137 rutas API, 79 operaciones del asistente. El latido corre por pg_cron (no hay crons en vercel.json) y el job no está versionado. Causa probable del seguimiento «en conflicto»: en `src/lib/contacto/reglas.ts` el objetivo por defecto (72 h) es igual al tope (72 h); sin probar. Riesgos: Graph API v21.0 fija en 5 archivos; `/wasender`, `/meta/lineas`, `/salud` y `/bandeja` sin guardia de sesión propia; separación de perfiles solo de interfaz; la pausa general falla cerrada; el turno del bot se espera dentro del webhook. Panel Conexiones mira `METRICOOL_API_TOKEN` pero el cliente usa `METRICOOL_USER_TOKEN`. Resend y Vercel Blob no están en main. Workflow `aplicar.yml` legado puede borrar archivos. Sin CI de pruebas.
+
+## Avance: B (landings) y F (ramas y PR) terminaron — 21/11
+
+**B, landings** (`cerebro-privado/analisis/B-landings.md`):
+- Ninguna de las 4 landings usa la frase fija de WhatsApp «vengo de la web de …» que espera el CRM. Probable: los WhatsApp que salen de la web no se marcan «Landing». El formulario sí llega con `perfil=…`.
+- Medición en cero: ninguna home publicada carga GA4, GTM ni píxel. El trabajo está en `claude/happy-wozniak-ajfi1z` (1 commit por repo, solo VITA probada, falta rebasar sobre main).
+- Sitemaps con `lastmod` fijo (28–30/09); `robots.txt` sin `Disallow: /redes/` (~350 archivos de reels por repo, 231–347 MB).
+- El 403 a curl ya no se reproduce: se puede cerrar ese punto de `09-decisiones-abiertas`.
+- Kocos Marketing: `node_modules`, `dist` y `build` commiteados (pack de 415 MB). Autos y Kocos versionan `apps/web/.env` (hoy solo comentarios).
+- Homes cambiaron (VITA: accidente de tránsito o laboral, dos botones de WhatsApp). Faltan páginas de despidos, aguinaldo y penal de VITA.
+
+**F, ramas y PR** (`cerebro-privado/analisis/F-ramas-y-pr.md`):
+- LEGAL-CRM: 93 ramas además de main (82 integradas, 9 con trabajo propio, 2 descartables). 80 PR: 77 fusionados, abiertos #40, #77 y #80. El #80 está invertido (main → happy-wozniak).
+- Sin integrar con valor: `happy-wozniak` (36 commits, PR #77), `cerebro-chats`, `pensive-galileo` (archivo de prospectos), 4 ramas `claude/redes-*`, `landings-conexion` (PR #40, 1 conflicto).
+- Choque de migración: `pensive-galileo` trae `0634_archivo_de_prospectos.sql` y main ya tiene `0634_asistente_charlas.sql` → renumerar a 0635 antes de integrar.
+- Cada landing tiene un PR #1 abierto de medición (14 archivos, sin conflictos, «en curso»).
+- **Los 5 repos son públicos**, no solo LEGAL-CRM.
+
+Falta: C (recorrido del panel). Después, cruce y preguntas.
