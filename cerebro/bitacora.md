@@ -4,6 +4,14 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 
 # Bitácora
 
+## 21/11/2026 · Lectura de «Metricool context», subsesiones de redes y verificación de volcados
+
+- **Pedido:** leer completo el chat de reels y Metricool de las 4 marcas, las 8 subsesiones «Redes · <marca> · reels» y comparar los volcados de 5 chats de Code con los mensajes del dueño. Solo lectura.
+- **Hecho:** 2 volcados nuevos en `cerebro/chats/` (`2026-11-20-code-metricool-context-4-brands.md` y `2026-11-20-code-redes-subsesiones-reels.md`) y el análisis de faltantes en `cerebro-privado/analisis/L-sesiones-faltantes.md`. Las 8 subsesiones se leyeron completas: se cortaron juntas por el límite de uso a los 7 minutos y entregaron 6 reels en total (el resto no).
+- **Límite:** «Metricool context» tiene unas 600 páginas de eventos (12 páginas cubrían 30 minutos); se leyeron las más nuevas y lo que la propia sesión escribió en su rama. Los 5 chats de verificación se miraron solo en su página más nueva: sin mensajes del dueño después del 21/11 05:55 UTC. La comparación completa quedó pendiente.
+- **Falta en el cerebro (ver L):** excepción del «3 %» de Coberturas («deja asi»), 4 PR de landings en borrador hasta probar la medición, órdenes del 20/11 17:15 y 17:20, estado de 392 piezas programadas (25 de 272 reels) y permisos que bloquearon a las sesiones en la nube.
+
+
 ## 21/11/2026 · Análisis completo en curso
 
 - **Pedido:** entender todo a detalle sin tocar nada: código, panel, 5 repos con ramas y PR, Supabase y Vercel; Cowork es historia; preguntas al final.
