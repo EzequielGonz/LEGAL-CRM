@@ -29,7 +29,7 @@ Para qué: captar clientes reales con menos costo (Meta cobraba demasiado) y con
 
 Se citan las más importantes. Las órdenes repetidas no se transcriben dos veces.
 
-**Octubre y 01/11/2026 (estado de partida)**
+**01/11/2026 (estado de partida)**
 
 - 01/11 22:15: «Como te paso todo eso?»
 - 01/11 22:17: «Vos tenes acceso a github y cualquier cambio que te pida lo realizas vos automaticamente. Lee todo asi ya tenes todo el contexto del proyecto para empezar a trabajar. Analizalo detalladamente»
@@ -146,7 +146,7 @@ Estados: **especificado / implementado / probado / publicado / habilitado**. Lo 
 
 **5.1 Infraestructura y Vercel**
 
-- 08/11 04:20 UTC: Vercel devolvía `DEPLOYMENT_DISABLED` (plan Hobby, pago pendiente). La responsable pagó la suscripción (06:58) y Claude desbloqueó el proyecto. Hacia 06:59 el panel respondía `/login` 200 y `/landing` 200. **Publicado y verificado en el chat.** Al 21/11 el plan sigue en Hobby (el log del chat muestra que retiene 1 hora de logs).
+- 08/11 04:20 UTC: Vercel devolvía `DEPLOYMENT_DISABLED` (plan Hobby, pago pendiente). La responsable pagó la suscripción (06:58) y Claude desbloqueó el proyecto. Hacia 06:59 el panel respondía `/login` 200 y `/landing` 200. **Publicado y verificado en el chat.** En la consulta del 08/11 el plan era Hobby (retiene 1 hora de logs); no verificado al 21/11.
 - 09/11 08:43: la responsable hizo «deploy to production» desde Vercel a mano, porque la automatización no tenía acceso (usó el navegador Opera). **Publicado (confirmado por la responsable).**
 - 10/11: la Preview pedía login y Wasender no podía enviar. Se pidió activar «Protection Bypass for Automation» en Vercel (Deployment Protection). **Estado no confirmado en el chat.**
 - 10/11: variables de Vercel mencionadas: `WASENDER_PAT` (token de Wasender, cargado en Vercel) y `WASENDER_CLAVE_CIFRADO` (clave para cifrar las claves de las líneas). El chat dice que estaban integradas en Vercel. **No se copian valores.** Ver sección 9.
@@ -154,7 +154,7 @@ Estados: **especificado / implementado / probado / publicado / habilitado**. Lo 
 **5.2 Landings y SEO (los cuatro sitios)**
 
 - 08/11 (08:00–09:16 UTC): cambios de imágenes propias, correcciones y refuerzo de SEO. Commits pusheados directo a `main` según la salida de git: `estudio-juridico-vita-final` 4532df6, `coberturas-sociales-landing` caac286, `0km-kocos-agencia` 6b4b1de3, `agencia-kocos-mkt` 9dccbde4. Después, correcciones de dominio canónico con `www`: a4c3175, a02bf20, 8e64fee7, d6b53b4a y dd0afa27 (en `agencia-kocos-mkt`). **Publicado (en `main`), según la salida de git del chat.** Las ramas `claude/gracious-volta-rv2f3x` tienen solo el enlace de creación de PR, **sin PR abierto** (no confirmado).
-- Verificación de canónicos y sitemap: 4/4 dominios respondieron logo=200, og=200, llms=200 e indexnow=200 (08/11 09:03). Los sitemaps usan `www`. Dato a tener en cuenta: el dominio sin `www` redirige 308 a `www`.
+- Verificación de canónicos y sitemap: 4/4 dominios respondieron logo=200, og=200, llms=200 e indexnow=200 (08/11 09:03). En la verificación de canónicos con `www` quedaron 3 de 4 (kocosmkt.com sin `www` en ese momento; no confirmado si después se corrigió). Dato a tener en cuenta: el dominio sin `www` redirige 308 a `www`.
 - 09/11 08:52 y 09/11 11:52: la responsable pidió rediseñar las landings con más efecto «wow» (animación, 3D). **Estado: no confirmado como cerrado.** La auditoría y el rediseño se pidieron en varias corridas.
 
 **5.3 Redes: producción de piezas**
@@ -172,13 +172,13 @@ Estados: **especificado / implementado / probado / publicado / habilitado**. Lo 
 - 10/11: Instagram de VITA devolvía «The Instagram account is restricted» (dato reportado en un informe programado, no confirmado).
 - 18/11: algunas publicaciones del Instagram de Kocos Marketing no subieron. La responsable pidió reintentar o reprogramar. La responsable dijo «ya volvi a conectarlo en metricool» el 18/11 07:00. **Reintento: no confirmado.**
 - 20/11: la programación del cronograma nuevo (del 20/11 en adelante) se pidió; la tabla de horarios está en el chat, pero **el chat no confirma que se haya cargado en Metricool.** Hay un pedido de «cuántos reels programaste?» (20/11 05:52) sin respuesta visible.
-- 20/11 (ahora de Claude): la programación se hace en horario de Buenos Aires (America/Argentina/Buenos_Aires), con `getScheduledPosts` antes de cargar, para no duplicar.
+- Orden del 20/11 04:30: programar en Metricool en el horario del calendario (America/Argentina/Buenos_Aires), con `getScheduledPosts` antes de cargar, para no duplicar. Cumplimiento no confirmado.
 
 **5.5 WhatsApp: migración a Wasender**
 
 - 03/11: análisis inicial pedido (sin implementar).
 - 10/11 (inicio): se implementó en Preview el envío por Wasender con el mismo algoritmo de campañas de Meta (decisión de la responsable). Una línea conectada en Preview (10/11 14:47). **Implementado; probado en Preview.** Advertencia de la responsable: la Preview comparte base y líneas con producción, así que probar ahí tiene efecto real (10/11 13:34).
-- 10/11 18:06: pedido de pasar todo a producción. Se hizo por tandas. **Publicado (confirmación a medias en el chat).**
+- 10/11 18:06: pedido de pasar todo a producción. **Estado: no confirmado en el chat.**
 - 12/11 12:38 y 20:49: la responsable aprobó el plan de auditoría de 6 puntos y dijo que se subiera a producción. **Autorizado.**
 - 13/11 08:51 (corrida nocturna): Claude informó **publicado y comprobado en producción**: rubros separados, Caídos (motor encendido), oportunidades reales, incidencias, fallas del sistema separadas, limpieza con deshacer (con «Ver los movidos en la limpieza»), portada de perfiles que se actualiza cada 30 segundos, campañas sin cortes por tiempo. Cifras de limpieza (antes → después): figuran esperando a una persona 94 → 18 (de esos, 7 oportunidades reales); dejaron de responder y seguían a la vista 347 → 0; incidencias abiertas 55 → 0; caídos: 265 personas pasaron a Caídos. **Según el informe de Claude; no verificado por mí.**
 - 13/11 (pendiente informado): Wasender no ofrece vincular con un código de 8 caracteres desde un programa; solo QR y un método con extensión de navegador. **No implementado; abierto.** Claude preguntó dónde estaba la opción del código en el panel de Wasender.
@@ -317,7 +317,7 @@ Estados: **especificado / implementado / probado / publicado / habilitado**. Lo 
 4. **Coberturas y Autos sin línea de Wasender cargada** (15/11). **Abierto.**
 5. **Seguimiento:** la propuesta de cancelar las 5 tareas de personas que ya están en Perdidos antes del 16/11 a las 8:05 (15/11). **Sin respuesta en el chat.**
 6. **Seguridad:** cuatro avisos de dependencias de Next/React sin resolver (13/11). **Pendiente.**
-7. **Vercel:** plan Hobby (1 hora de logs); el log de errores del 20/11 muestra límite de uso de 5 horas alcanzado (13:02 UTC y 05:57 UTC del 21/11). **Pendiente de decisión** de plan (la responsable no aprobó gastos).
+7. **Vercel:** plan Hobby (1 hora de logs); el log de errores del 20/11 muestra límite de uso de 5 horas alcanzado (13:02 UTC y 05:57 UTC del 21/11). **Pendiente de decisión** de plan (cualquier pago necesita autorización expresa de la responsable según CLAUDE.md).
 8. **Panel:** diseño llamativo (no empezado al 13/11); asistente con permiso para todo (programado; estado no confirmado); laboratorio del bot simple (pedido 15/11; estado no confirmado); estadísticas con embudo y origen (pedido 13/11).
 9. **Redes:** cronograma nuevo del 20/11 al 29/11: programación en Metricool **no confirmada** en el chat. Piezas en borrador: lo jurídico nuevo (laboral y penal) y el fallo de la Corte de Coberturas (hasta revisión profesional o aprobación de la responsable); el aumento de prepagas (no se publica); el de patentamientos (no se publica); Black Friday de Autos (se publica, sin números reales).
 10. **Publicaciones de Kocos Marketing** que no subieron el 18/11: reintento **no confirmado**.
