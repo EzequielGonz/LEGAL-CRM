@@ -4,6 +4,12 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 
 # Bitácora
 
+## 21/11/2026 · Análisis completo en curso
+
+- **Pedido:** entender todo a detalle sin tocar nada: código, panel, 5 repos con ramas y PR, Supabase y Vercel; Cowork es historia; preguntas al final.
+- **Hecho:** 7 subagentes lanzados (ver `traspaso-sesion-2026-11-21-b.md`); se cortaron por el límite de 5 h y se retomaron; repo LEGAL-CRM comprobado público.
+- **Quedó:** cruzar los 7 informes, actualizar el cerebro y armar preguntas.
+
 ## 21/11/2026 · Chats volcados y cruzados
 
 - **Pedido:** leer solo los 7 chats de la carpeta «CRM COMPLETO», más lo que pase de Claude común y Cowork; lanzar los reels pendientes.
