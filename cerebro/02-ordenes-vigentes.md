@@ -176,3 +176,16 @@ Todo lo demás son **decisiones de negocio** de la responsable (abajo), no traba
 - **Avisos de captado:** hoy no se avisa a nadie. Pendiente; no configurar destinatarios hasta que lo definan.
 - **Comentarios con palabra clave:** pendiente automatizarlos.
 - **Uso del panel:** PC y celular por igual, 2 personas → el celular no es secundario (los desbordes de `/agentes` y `/resultados` importan).
+
+## Respuestas del bloque B y siguientes, 21/11
+
+- **Quiénes son:** dos personas, desarrolladores y dueños del proyecto. **El que responde es hombre** (lo aclaró al responder «productora»): en los textos nuevos no usar «la responsable»; usar «el dueño» o «los dueños».
+- **Modelo en todos los rubros:** conseguir el cliente cerrado (que acepta el contacto) y derivarlo a mano por WhatsApp: VITA → abogados; Coberturas → asesores (rotan); 0 km → vendedores de concesionarias cercanas a la localidad del cliente (se vende cualquier marca o modelo); Marketing → lo hacen ellos.
+- **Siempre se apunta a la llamada** (VITA y Coberturas); presencial solo si el cliente lo pide.
+- **Bases:** lunes a sábado de 8 a 21 h. Mismo horario de atención de abogados.
+- **Prioridades:** 1 VITA (esencial) · 2 Marketing (proyectos grandes) · 3 Coberturas (grupos familiares) y 0 km.
+- **VITA:** en bases mixtas, reconocer y priorizar las lesiones más graves (fracturas, etc.).
+- **Coberturas:** el cliente que más deja es el grupo familiar.
+- **Marketing:** buscan un servicio rápido, fácil, de ticket alto, que Claude pueda producir, y que deje dólares. Los precios de la web ($299.000 / $499.000 / $699.000) siguen vigentes, en pesos.
+- **Cómo se enteran de un captado:** entrando al panel.
+- **Corrección de proceso:** el recorrido del panel del 21/11 no leyó chats ni configuración; se repite como usuario real (informe H).

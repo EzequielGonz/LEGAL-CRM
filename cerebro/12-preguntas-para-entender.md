@@ -23,14 +23,23 @@ Contestá las que quieras, en el orden que quieras; con una palabra alcanza en m
 ## B. Cómo gana plata cada negocio
 
 6. ★ VITA: ¿cómo cobra el estudio (porcentaje del resultado, honorarios fijos)? ¿Qué caso vale la pena y cuál no (tipo de lesión, monto, antigüedad del accidente, zona)?
+   - ✅ **Respuesta 21/11:** No importa cómo cobra; lo manejan a mano. Lo importante: en una base mixta, reconocer las lesiones más graves (fracturas, etc.) y priorizarlas.
 7. VITA: ¿quiénes son los abogados? ¿Atienden en persona? Dirección y horarios.
+   - ✅ **Respuesta 21/11:** No importa quiénes son los abogados. El cliente puede pedir presencial, pero siempre se apunta a la llamada. Horarios: los mismos del envío de campañas.
 8. ★ Coberturas: ¿sos productora o broker de qué prepagas u obras sociales? ¿Cobrás comisión por alta? ¿Qué cliente deja más (edad, ingreso, monotributo, familia)?
+   - ✅ **Respuesta 21/11:** No es productor ni broker. Consiguen el cliente cerrado y lo derivan a asesores. Los que más dejan son los grupos familiares.
 9. Coberturas: ¿hay oficina? ¿El vendedor de coberturas es una persona fija?
+   - ✅ **Respuesta 21/11:** Siempre se apunta a la llamada. El vendedor no es fijo: se rota.
 10. ★ Autos: ¿es concesionaria propia, agencia que vende autos de terceros o derivás a un concesionario? ¿Qué marcas o modelos se venden más? ¿Hay stock real?
+   - ✅ **Respuesta 21/11:** Derivan a concesionarias; buscan clientes cerrados. Se puede vender todo (cualquier marca o modelo): lo que falta es el cliente.
 11. Autos: ¿hay local con dirección y horarios?
+   - ✅ **Respuesta 21/11:** Según la localidad del cliente se ubica una concesionaria cercana.
 12. ★ Marketing: ¿qué servicio querés vender primero? ¿Cuál es el ticket promedio? ¿Siguen vigentes los precios de la web ($299.000, $499.000, $699.000)?
+   - ✅ **Respuesta 21/11:** Quieren un servicio rápido, fácil y de ticket alto, que Claude pueda hacer y que deje muchos dólares. Los precios de la web siguen vigentes, en pesos argentinos.
 13. ★ ¿Cuánto vale para vos un cliente cerrado en cada rubro (aproximado)? Con eso decido dónde poner más esfuerzo.
+   - ✅ **Respuesta 21/11:** VITA es esencial. Marketing con proyectos grandes también. Coberturas con grupos familiares sirve mucho y 0 km también sirve.
 14. ★ Hoy, ¿qué rubro es prioridad número 1? ¿Y el 2?
+   - ✅ **Respuesta 21/11:** Prioridad 1: VITA. 2: Marketing. 3: Coberturas y 0 km.
 
 ## C. Bases y campañas
 
@@ -96,6 +105,10 @@ Contestá las que quieras, en el orden que quieras; con una palabra alcanza en m
 ## Nuevas preguntas que salen de las respuestas (21/11)
 
 52. ¿Qué días y horarios sí se corren bases? (¿lunes a viernes, sin feriados?)
+   - ✅ **Respuesta 21/11:** Las bases se corren de lunes a sábado, de 8 a 21 h (se ve en el panel).
 53. ¿A qué profesionales derivan en cada rubro (cuántos por rubro) y por qué medio les pasan el captado?
+   - ✅ **Respuesta 21/11:** VITA → abogados; Coberturas → asesores; 0 km → vendedores de autos; Marketing lo hacen ellos mismos. Se les pasa a mano por WhatsApp.
 54. ¿Cómo se enteran hoy de que hay un captado, si no llega aviso? ¿Lo miran en el panel?
+   - ✅ **Respuesta 21/11:** Entrando al panel, por ahora.
 55. ¿Quiénes son las 2 personas que entran al panel y qué hace cada una?
+   - ✅ **Respuesta 21/11:** Son los dos desarrolladores y dueños del proyecto.
