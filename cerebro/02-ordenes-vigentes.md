@@ -235,3 +235,24 @@ Todo lo demás son **decisiones de negocio** del dueño (abajo), no trabas de pr
 - Base existente para construir encima: «Bandeja para Claude» (`/bandeja`, tabla `bandeja_claude`, flujo en `.claude/referencias/bandeja-claude.md`) y el asistente «Pedile algo» (`/asistente`, Gemini, charlas en `0634_asistente_charlas`).
 - Se diseña como propuesta, después de terminar el análisis; producción solo con autorización.
 - **Tareas programadas eliminadas a pedido del dueño (21/11):** entrenamiento diario y recordatorios de retomar. El entrenamiento diario queda pendiente. Se conserva el de reels del chat de Metricool.
+
+## Órdenes que faltaban, encontradas al releer todo (21/11, noche)
+
+| Fecha | Orden o decisión | Fuente |
+|---|---|---|
+| 20/11 | El cerebro se actualiza solo y suma por su cuenta roles, skills y plugins que sirvan | este chat |
+| 20/11 | Objetivo: orquestar y ordenar todo desde este chat, con el cerebro como memoria y biblioteca | este chat |
+| 21/11 | Lo de Cowork es viejo: sirve para ver hacia dónde se apunta; lo vigente está en los chats de Code | este chat |
+| 21/11 | De su lado solo pasa a privado LEGAL-CRM; lo demás se subió igual con su autorización | este chat |
+| 21/11 | «Metricool context» la maneja él a mano: se puede leer, no se le mandan mensajes ni se toca | este chat |
+| 20/11 07:23 | Dejó **activado** el pase automático a créditos pagos de Claude, con freno y checkpoint al detectarlo. Alcance y tope sin definir: **preguntar** (choca con «no se paga nada sin autorización») | Perfiles VITA (volcado) |
+| 20/11 06:00 | Textual: reversionar las piezas «así Meta no nos detecta que son publicaciones duplicadas» y subir el volumen. La regla «variantes reales» fue interpretación de Claude: **preguntar cuál rige** | Perfiles VITA (volcado) |
+| 20/11 17:15–17:20 | «Este es el chat de redes… creá los reels y publicalos tal cual como venías»; «publicalos ya a partir de hoy y usá subagentes» (de segunda mano) | Metricool context |
+| 21/11 05:43 | «Deja así»: queda el «3 %» en la historia de Coberturas del 25/11 18:30 y en su reel. Excepción a «Coberturas sin números» | Metricool context |
+| 21/11 05:53 | Creó los 4 PR de landings sin saber que no hacía falta; pasan a borrador y no se aprueban hasta probar la medición | Metricool context |
+| 19/11 | «Incidencias dejarlo tal cual», «Campañas dejarla tal como está». El rediseño visual completo espera su ok | Rediseño (volcado) |
+| 20/11 08:12 | «No toques ni alteres nada de lo que ya existe» (pedido de asistente IA); el rediseño del Laboratorio quedó afuera | Claude común |
+| 13/11 08:12 | El modelo secundario solo para tareas muy sencillas (antes estaba fechado 14/11) | Contexto del proyecto |
+| 15/11 | «¿De dónde sacaron mi número?»: se respeta como está armado; la revisión legal del origen de bases quedó abierta | Contexto del proyecto |
+
+**Respuesta pendiente que le debía (21/11):** «¿Qué publicarías o tocarías en producción?» → nada sin su ok. Propuestas: el plazo del contacto 2, separar retenidos por rubro, los arreglos de celular y programar en Metricool solo lo que él apruebe. Detalle en `15-hallazgos-21-11.md`.

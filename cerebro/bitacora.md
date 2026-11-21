@@ -4,6 +4,14 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 
 # Bitácora
 
+
+## 21/11 (noche) — Relectura completa y cruce de informes
+
+- **Pedido:** «¿leíste todo el contexto de este chat y de las sesiones de CRM COMPLETO?».
+- **Hecho:** releí los 69 mensajes del dueño de este chat desde el registro completo; trato en masculino en todo el cerebro (~400 «la responsable»); lectura de las 8 subsesiones de reels y de la cola de «Metricool context»; cruce de H, I, J, K y L en `15-hallazgos-21-11.md`; órdenes que faltaban en `02`; informes en `biblioteca/analisis-2026-11-21/`.
+- **Límite honesto:** «Metricool context» no se pudo leer entera (≈600 páginas de eventos); el resto salió de los archivos de su rama. Los 248 mensajes de «Contexto del proyecto» no se recontaron uno por uno.
+- **Aprendido:** no confiar en «leído» sin contar mensajes; los volcados de otras sesiones arrastraban el femenino.
+
 ## 21/11/2026 · Lectura de «Metricool context», subsesiones de redes y verificación de volcados
 
 - **Pedido:** leer completo el chat de reels y Metricool de las 4 marcas, las 8 subsesiones «Redes · <marca> · reels» y comparar los volcados de 5 chats de Code con los mensajes del dueño. Solo lectura.

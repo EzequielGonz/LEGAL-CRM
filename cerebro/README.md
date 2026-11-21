@@ -48,6 +48,7 @@ Esta carpeta es la memoria de trabajo de Claude. Reemplaza tener que releer los 
 | `11-equipo-y-herramientas.md` | Roles (agencia + ingeniería), skills y plugins por tipo de tarea, agentes, conectores y su estado |
 | `12-preguntas-para-entender.md` | Preguntas abiertas al dueño para entender el negocio a fondo |
 | `14-estilo-del-dueno.md` | Estilo del dueño: comunicación, diseño, reels, voces, autorizaciones y errores a no repetir |
+| `15-hallazgos-21-11.md` | Cruce del 21/11 (panel como usuario, código, relectura total, sesiones de redes): qué estaba mal, qué no sabía, riesgos como propuestas y preguntas abiertas. Informes completos en `biblioteca/analisis-2026-11-21/` |
 | `traspaso-sesion-2026-11-21-c.md` | Estado al compactar el 21/11 (agentes, próximos pasos) |
 | `bitacora.md` | Diario de sesiones y aprendizajes (lo más nuevo arriba) |
 
