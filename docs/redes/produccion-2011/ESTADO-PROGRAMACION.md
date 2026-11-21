@@ -334,6 +334,10 @@ Producidos con `estaticos/generar_estaticos.py` (azul de Autos con más contrast
 | 27/11 | Coberturas | 12 | 436397593 | 436397593–436398150 |
 | 27/11 | Autos | 12 | 436397619 | 436397619–436398446 |
 | 27/11 | Kocos Marketing | 12 | 436397650 | 436397650–436398706 |
+| 28/11 | VITA | 12 | 436398885 | 436398885–436399306 |
+| 28/11 | Coberturas | 12 | 436398925 | 436398925–436399582 |
+| 28/11 | Autos | 12 | 436398969 | 436398969–436399832 |
+| 28/11 | Kocos Marketing | 12 | 436399014 | 436399014–436400076 |
 
 Detalle completo (pieza, hora e id) en `registro.csv`, tramo `estaticos-2529`.
 
