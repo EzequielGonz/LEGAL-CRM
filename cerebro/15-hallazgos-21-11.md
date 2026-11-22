@@ -100,7 +100,3 @@ Informes completos, sin datos personales: `biblioteca/analisis-2026-11-21/`. Tod
 6. ¿Qué servicio de ticket alto vendemos primero en Marketing? (puedo proponer 3)
 7. ~~Plan de Vercel~~ **Respondido 21/11: tiene plan pago.**
 8. ¿Las 8 subsesiones de reels y «Perfiles redes VITA» eran el mismo chat que «Metricool context»?
-</content>
-</invoke>
-<invoke name="Bash">
-<parameter name="command">cd /home/user/LEGAL-CRM && mkdir -p cerebro/biblioteca/analisis-2026-11-21 && cp /home/user/cerebro-privado/analisis/{A,B,C,D,E,F,G,H,I,J,K,L}*.md cerebro/biblioteca/analisis-2026-11-21/ && cd cerebro/biblioteca/analisis-2026-11-21 && grep -nE "\+?54 ?9?[0-9]{2,4}[ -]?[0-9]{3,4}[ -]?[0-9]{4}|[0-9]{10,}|@gmail|909013|DNI [0-9]|CUIL [0-9]" *.md | cut -c1-160 | head -20; grep -n "…2391\|2391" *.md | cut -c1-120
