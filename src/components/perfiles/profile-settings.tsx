@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { InformeLinea } from "@/lib/whatsapp/estado-linea";
 import { VerificarNumero } from "@/components/perfiles/verificar-numero";
+import { nombreConexion } from "@/lib/textos/pantalla";
 
 interface LineView {
   id: string;
@@ -170,7 +171,7 @@ export function ProfileSettings({
                   {l.label} <span className="text-xs font-normal text-slate-500">· {AREA_LABEL[l.area] ?? l.area}{l.phone_display ? ` · ${l.phone_display}` : ""}</span>
                 </p>
                 <p className="text-xs text-slate-600">
-                  Variables {l.credential_key}_* ·{" "}
+                  Conexión {nombreConexion(l.credential_key)}<span className="solo-avanzado font-mono"> ({l.credential_key}_*)</span> ·{" "}
                   {l.credentials.ok ? <span className="text-slate-600">variables cargadas</span> : <span className="text-red-700">faltan variables en la configuración privada</span>}
                   {l.daily_limit ? ` · límite ${l.daily_limit}/día` : ""}
                 </p>
@@ -202,7 +203,7 @@ export function ProfileSettings({
               </div>
             </li>
           ))}
-          {lines.length === 0 && <li className="p-3 text-sm text-slate-400">Este perfil todavía no tiene líneas asignadas.</li>}
+          {lines.length === 0 && <li className="p-3 text-sm text-slate-600">Este perfil todavía no tiene líneas asignadas.</li>}
         </ul>
 
         {detected.length > 0 && (
@@ -220,7 +221,7 @@ export function ProfileSettings({
                   className="rounded-full border border-slate-300 bg-white px-3 py-1 text-xs text-slate-700 hover:border-gold-400"
                   title="Asignar a este perfil"
                 >
-                  {d.key} {d.credentials.ok ? "" : "(incompleta)"} · asignar
+                  Conexión {nombreConexion(d.key)} {d.credentials.ok ? "" : "(le faltan datos)"} · asignar<span className="solo-avanzado font-mono"> · {d.key}</span>
                 </button>
               ))}
             </div>

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { cantidad } from "@/lib/textos/pantalla";
 
 /**
  * Carga del presupuesto (16/10): sube el archivo directo al almacenamiento
@@ -95,7 +96,7 @@ export function CargarPresupuesto({ budgetId, minimo, sugerido }: { budgetId: st
       <label className="block">
         <span className="mb-1 block text-xs font-medium text-slate-700">Fotos o videos que acompañan (opcional, hasta 10)</span>
         <input type="file" multiple accept="image/jpeg,image/png,image/webp,video/mp4,video/3gpp,video/quicktime" onChange={(e) => setExtras(Array.from(e.target.files ?? []).slice(0, 10))} className="block w-full text-sm" />
-        {extras.length > 0 && <span className="mt-0.5 block text-xs text-slate-600">{extras.length} archivo(s): salen después del presupuesto.</span>}
+        {extras.length > 0 && <span className="mt-0.5 block text-xs text-slate-600">{cantidad(extras.length, "archivo")}: salen después del presupuesto.</span>}
       </label>
       <div className="grid gap-2 sm:grid-cols-3">
         <label className="block">

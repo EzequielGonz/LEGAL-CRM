@@ -11,6 +11,7 @@ import {
   VARIABLE_SOURCES,
   type TemplateAnalysis,
 } from "@/lib/plantillas/catalogo";
+import { cantidad } from "@/lib/textos/pantalla";
 
 interface LineView {
   id: string;
@@ -106,7 +107,7 @@ export function TemplatesManager({
       if (res.ok && d.ok) {
         setMsg({
           ok: true,
-          text: `Catálogo actualizado: ${d.total} plantilla(s) (${d.nuevas} nuevas, ${d.cambiaron} con cambios, ${d.ya_no_figuran} que ya no figuran). No se envió nada.`,
+          text: `Catálogo actualizado: ${cantidad(d.total, "plantilla")} (${d.nuevas} nuevas, ${d.cambiaron} con cambios, ${d.ya_no_figuran} que ya no figuran). No se envió nada.`,
         });
       } else {
         setMsg({ ok: false, text: d.error ?? (d.faltantes ? `Falta: ${d.faltantes.join(", ")}` : "No se pudo leer el catálogo.") });
@@ -142,11 +143,11 @@ export function TemplatesManager({
               <div className="flex flex-wrap items-start justify-between gap-2">
                 <div>
                   <p className="font-medium text-slate-800">
-                    {l.label} <span className="font-normal text-slate-400">· {l.credential_key}</span>
-                    {!l.active && <span className="ml-1 text-xs text-slate-400">(desactivada)</span>}
+                    {l.label} <span className="solo-avanzado font-mono text-xs font-normal text-slate-500">· {l.credential_key}</span>
+                    {!l.active && <span className="ml-1 text-xs text-slate-500">(desactivada)</span>}
                   </p>
                   <p className="text-xs text-slate-500">
-                    Cuenta de WhatsApp Business ({l.access.wabaEnv}):{" "}
+                    Cuenta de WhatsApp Business<span className="solo-avanzado font-mono"> ({l.access.wabaEnv})</span>:{" "}
                     {l.access.wabaHint ? <span className="text-green-700">cargada {l.access.wabaHint}</span> : <span className="text-amber-700">falta</span>}
                     {" · "}Token: {l.access.missing.includes(`${l.credential_key}_ACCESS_TOKEN`) ? <span className="text-amber-700">falta</span> : <span className="text-green-700">cargado</span>}
                   </p>
@@ -155,7 +156,7 @@ export function TemplatesManager({
                       Última lectura: {fmt(l.last_sync.started_at)} —{" "}
                       {l.last_sync.status === "ok" ? (
                         <>
-                          {l.last_sync.total} plantilla(s)
+                          {cantidad(l.last_sync.total, "plantilla")}
                           {l.last_sync.line_verified === true && " · la línea figura en la cuenta"}
                           {l.last_sync.line_verified === false && <span className="text-red-600"> · la línea NO figura en esa cuenta</span>}
                           {l.last_sync.line_verified === null && l.last_sync.line_check_note && ` · ${l.last_sync.line_check_note}`}
@@ -224,11 +225,11 @@ export function TemplatesManager({
                 Uso:{" "}
                 {[
                   ...t.assignments.map((a) => `asignada a «${lineLabel(a.line_id)}» · ${purposeLabel(a.purpose)}`),
-                  t.campaigns.length ? `${t.campaigns.length} campaña(s): ${t.campaigns.map((c) => c.name).join(", ")}` : null,
+                  t.campaigns.length ? `${cantidad(t.campaigns.length, "campaña")}: ${t.campaigns.map((c) => c.name).join(", ")}` : null,
                   t.legacy_campaigns.length
                     ? `escrita a mano en ${t.legacy_campaigns.map((c) => `«${c.name}»`).join(", ")} (sin elegir del catálogo)`
                     : null,
-                  t.usage.mensajes ? `${t.usage.mensajes.toLocaleString("es-AR")} envío(s) registrados con este nombre (último ${fmt(t.usage.ultimo)})` : null,
+                  t.usage.mensajes ? `${cantidad(t.usage.mensajes, "envío")} registrados con este nombre (último ${fmt(t.usage.ultimo)})` : null,
                 ]
                   .filter(Boolean)
                   .join(" · ") || "sin uso registrado"}

@@ -9,6 +9,7 @@ import { variablesAcento } from "@/lib/acento";
 import { LogoPerfil } from "@/components/ui/logo-perfil";
 import { Icono } from "@/components/ui/icono-seccion";
 import { pedirConfirmacion } from "@/components/ui/dialogo-confirmar";
+import { cantidad } from "@/lib/textos/pantalla";
 
 /** La vista previa se vuelve a pedir al servidor cada 20 s (pestaña visible) y al abrir la pantalla. */
 const POLL_MS = 20000;
@@ -319,7 +320,7 @@ export function PerfilSelector({ perfiles: initial, marcas: marcasIniciales, mod
                 <div className="mt-3 flex flex-wrap gap-1.5">
                   {p.accion.sin_derivar > 0 && <Chip tono="urgente">{p.accion.sin_derivar === 1 ? "1 captado sin derivar" : `${p.accion.sin_derivar} captados sin derivar`}</Chip>}
                   {p.accion.humano > 0 && <Chip tono="urgente">{p.accion.humano === 1 ? "1 pide una persona" : `${p.accion.humano} piden una persona`}</Chip>}
-                  {(p.recibidos24h ?? 0) > 0 && <Chip tono="info">{p.recibidos24h} mensaje(s) hoy</Chip>}
+                  {(p.recibidos24h ?? 0) > 0 && <Chip tono="info">{cantidad(p.recibidos24h, "mensaje")} hoy</Chip>}
                   {p.campana && <Chip tono={p.campana.estado === "en_curso" ? "ok" : "info"}>Campaña {ESTADO_CAMPANA[p.campana.estado] ?? p.campana.estado}</Chip>}
                   {(p.programadas ?? 0) > 0 && <Chip tono="info">{p.programadas} publicaciones programadas</Chip>}
                   {pendientes === 0 && !(p.recibidos24h ?? 0) && <Chip tono="ok">Todo al día</Chip>}

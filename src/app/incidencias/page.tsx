@@ -13,6 +13,7 @@ import { requirePageSession } from "@/lib/acceso/pagina";
 import { perfilActivo } from "@/lib/perfil-activo";
 import { RUBRO_IDS } from "@/lib/rubros";
 import type { SlugPerfil } from "@/lib/marca";
+import { cantidad } from "@/lib/textos/pantalla";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Incidencias" };
@@ -78,7 +79,7 @@ export default async function RevisionPage(
           estado={(() => {
             // 13/11: las detenciones vigentes son un registro (gente a la que no se le escribe), no trabajo pendiente.
             const total = tabs.filter((t) => t.key !== "detenciones").reduce((a, t) => a + (t.count ?? 0), 0);
-            return total ? `${total.toLocaleString("es-AR")} cosa(s) esperan una decisión` : "No hay nada esperando una decisión";
+            return total ? total === 1 ? "Una cosa espera una decisión" : `${cantidad(total, "cosa")} esperan una decisión` : "No hay nada esperando una decisión";
           })()}
           tono={tabs.some((t) => t.key !== "detenciones" && t.count) ? "atencion" : "ok"}
           puntos={tabs.map((t) => ({
@@ -199,7 +200,7 @@ async function Incidencias({
                 {g.telefono ? <span className="ml-2 font-normal tabular-nums text-slate-700">{g.telefono}</span> : null}
               </h2>
               <span className="text-sm text-slate-700">
-                <span className="tabular-nums">{g.filas.length}</span> incidencia(s)
+                <span className="tabular-nums">{cantidad(g.filas.length, "incidencia")}</span>
                 {g.conversationId ? (
                   <>
                     {" · "}

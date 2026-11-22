@@ -11,6 +11,7 @@ import { getCampaignMetrics } from "@/lib/campaign-metrics";
 import { CAMPAIGN_STATUS_LABEL } from "@/lib/campaign-status";
 import { esSlugPerfil, type SlugPerfil } from "@/lib/marca";
 import { opcionesWasender } from "@/lib/wasender/campanas";
+import { cantidad, motivoPausaLegible } from "@/lib/textos/pantalla";
 
 /** Perfil según la ruta: «/campanas» es Jurídico; «/panel/<perfil>/campanas» el resto. */
 function perfilDe(basePath: string): SlugPerfil | undefined {
@@ -24,9 +25,13 @@ function perfilDe(basePath: string): SlugPerfil | undefined {
  * terminó con destinatarios sin enviar, cuántos quedaron.
  */
 function queHace(c: { status: string; pause_reason?: string | null }, pendientes: number | null): string {
-  if (c.status === "pausada" && c.pause_reason) return `Pausada · motivo: ${c.pause_reason.replace(/\.$/, "")}. No envía nada hasta que la reanudes.`;
-  if (c.status === "finalizada" && pendientes) return `Terminada con ${pendientes.toLocaleString("es-AR")} destinatario(s) sin enviar (no se van a enviar solos).`;
+  if (c.status === "pausada" && c.pause_reason) return `${capital(motivoPausaLegible(c.pause_reason))}. No envía nada hasta que la reanudes.`;
+  if (c.status === "finalizada" && pendientes) return `Terminada con ${cantidad(pendientes, "destinatario")} sin enviar (no se van a enviar solos).`;
   return QUE_HACE[c.status] ?? "";
+}
+
+function capital(t: string): string {
+  return t.charAt(0).toUpperCase() + t.slice(1);
 }
 
 /** Qué significa cada estado, en palabras simples. */
@@ -124,12 +129,12 @@ export async function CampanasListView({
             (campaigns ?? []).length === 0
               ? "Todavía no hay campañas"
               : enCurso
-              ? `${enCurso} campaña(s) enviando ahora`
+              ? enCurso === 1 ? "Una campaña enviando ahora" : `${cantidad(enCurso, "campaña")} enviando ahora`
               : "Ninguna campaña está enviando"
           }
           detalle={
             <p>
-              {cuenta("borrador")} preparada(s) · {cuenta("pausada")} pausada(s) · {cuenta("finalizada")} terminada(s). Crear una campaña solo la
+              {cantidad(cuenta("borrador"), "preparada")} · {cantidad(cuenta("pausada"), "pausada")} · {cantidad(cuenta("finalizada"), "terminada")}. Crear una campaña solo la
               prepara: los mensajes salen recién cuando la lanzás y lo confirmás.
             </p>
           }

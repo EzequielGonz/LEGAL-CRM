@@ -170,7 +170,7 @@ export function ConversationList({ perfil = "juridico" }: { perfil?: string }) {
         <div className="rounded-lg border border-slate-200">
           <button type="button" aria-expanded={verFiltros} onClick={() => setVerFiltros((v) => !v)} className="tactil flex w-full items-center justify-between px-3 text-left text-sm font-medium text-slate-800">
             <span>{verFiltros ? "Ocultar filtros" : "Más filtros"}</span>
-            {filtrosPuestos > 0 ? <span className="rounded-full bg-gold-500/20 px-2 py-0.5 text-xs font-semibold text-gold-900">{filtrosPuestos} puesto(s)</span> : <span className="text-xs text-slate-500">base, respuesta, canal</span>}
+            {filtrosPuestos > 0 ? <span className="rounded-full bg-gold-500/20 px-2 py-0.5 text-xs font-semibold text-gold-900">{filtrosPuestos === 1 ? "1 puesto" : `${filtrosPuestos} puestos`}</span> : <span className="text-xs text-slate-500">base, respuesta, canal</span>}
           </button>
           {verFiltros ? (
           <div className="p-2 pt-0">
