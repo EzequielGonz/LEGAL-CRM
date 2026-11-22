@@ -36,17 +36,18 @@ export async function EmbudoPeriodo({ slug, rubroId, areas, periodo, ver }: { sl
       <h2 id="res-embudo-titulo" className="sr-only">
         Embudo del período
       </h2>
-      <ol className="grid grid-cols-2 gap-3 md:grid-cols-4">
+      {/* 22/11: grilla bento; en el celular angosto, una etapa por renglón para que la cifra respire. */}
+      <ol className="d-revelar grid grid-cols-1 gap-3 min-[400px]:grid-cols-2 md:grid-cols-4">
         {etapas.map((e) => {
           const v = antes ? variacion(e.valor, e.antes) : null;
           const activa = e.ver === ver;
           return (
-            <li key={e.ver} className={`kpi-hoy relative rounded-2xl border p-5 ${activa ? "kpi-activo" : ""}`}>
+            <li key={e.ver} className={`kpi-hoy relative min-w-0 rounded-2xl border p-4 sm:p-5 ${activa ? "kpi-activo" : ""}`}>
               <div className="flex min-h-10 items-start justify-between gap-3">
-                <p className="text-[13px] font-medium text-slate-600">{e.titulo}</p>
+                <p className="min-w-0 text-[13px] font-medium text-slate-600">{e.titulo}</p>
                 {e.fraccion !== null ? <AnilloAvance fraccion={e.fraccion} /> : null}
               </div>
-              <p className="cifra-premium mt-1 text-4xl font-semibold tabular-nums text-slate-950">{n(e.valor)}</p>
+              <p className="cifra-premium mt-1 text-3xl font-semibold tabular-nums text-slate-950 sm:text-4xl">{n(e.valor)}</p>
               <p className="mt-1 min-h-[2.5rem] text-[13px] text-slate-600">{e.paso ? <><span className="font-semibold text-slate-900">{e.paso}</span> {e.nota}</> : e.nota}</p>
               {v ? <p className={`mt-1 text-[13px] font-medium ${TONO[v.tono]}`}>{v.texto}</p> : null}
               <p className="mt-3">
@@ -59,7 +60,7 @@ export async function EmbudoPeriodo({ slug, rubroId, areas, periodo, ver }: { sl
           );
         })}
       </ol>
-      <p className={`relative flex flex-wrap items-baseline gap-x-2 gap-y-1 rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm ${ver === "perdidos" ? "kpi-activo" : ""}`}>
+      <p className={`d-tarjeta relative !flex-row flex-wrap items-baseline !gap-x-2 !gap-y-1 !py-3 text-sm ${ver === "perdidos" ? "kpi-activo" : ""}`}>
         <span className="font-semibold tabular-nums text-slate-950">{n(c.perdidos)}</span>
         <span className="text-slate-700">cerrados sin avanzar (perdidos)</span>
         {/* En perdidos, subir no es bueno: el color se invierte. */}
