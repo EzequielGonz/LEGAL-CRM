@@ -143,13 +143,14 @@ export function RecomendacionesAccion({ items }: { items: Recomendacion[] }) {
   const [ocupado, setOcupado] = useState(false);
   const [hechas, setHechas] = useState<string[]>([]);
   const [aviso, setAviso] = useState<{ ok: boolean; texto: string } | null>(null);
+  const [perfilGeneral, setPerfilGeneral] = useState("juridico");
   if (items.length === 0) return <p className="cz-muted">Hoy no hay nada para recomendar.</p>;
 
   async function mandar(r: Recomendacion) {
     setOcupado(true);
     setAviso(null);
     try {
-      await post("/api/oficina", { perfil: PERFIL_DE[r.rubro], pedido: pedidoDeRecomendacion(r.titulo, r.porque) });
+      await post("/api/oficina", { perfil: r.rubro === "todos" ? perfilGeneral : PERFIL_DE[r.rubro], pedido: pedidoDeRecomendacion(r.titulo, r.porque) });
       setHechas((h) => [...h, r.clave]);
       setAviso({ ok: true, texto: "Listo: quedó en la mesa de entrada de la Oficina. Arranca cuando toques «Arrancar ahora»." });
     } catch (e) {
@@ -179,7 +180,19 @@ export function RecomendacionesAccion({ items }: { items: Recomendacion[] }) {
                 <small className="cz-ok">En la Oficina</small>
               ) : pregunta === r.clave ? (
                 <span className="cz-ens-acc" role="group" aria-label="Confirmar">
-                  <span>¿La mando a la Oficina{r.rubro === "todos" ? " (queda en VITA)" : ""}?</span>
+                  {r.rubro === "todos" ? (
+                    <label className="cz-inline">
+                      ¿Para qué rubro?
+                      <select value={perfilGeneral} onChange={(e) => setPerfilGeneral(e.target.value)}>
+                        {Object.entries(NOMBRE_PERFIL).map(([slug, nombre]) => (
+                          <option key={slug} value={slug}>
+                            {nombre}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                  ) : null}
+                  <span>¿La mando a la Oficina?</span>
                   <button type="button" className="cz-btn chico" disabled={ocupado} onClick={() => mandar(r)}>
                     {ocupado ? "Mandando…" : "Sí"}
                   </button>

@@ -45,7 +45,7 @@ type Resultado =
   | { tipo: "arrancado"; nota: string };
 
 async function api<T = any>(url: string, cuerpo?: unknown): Promise<T> {
-  const r = await fetch(url, { method: cuerpo === undefined ? "POST" : "POST", cache: "no-store", headers: { "content-type": "application/json" }, body: JSON.stringify(cuerpo ?? {}) });
+  const r = await fetch(url, { method: "POST", cache: "no-store", headers: { "content-type": "application/json" }, body: JSON.stringify(cuerpo ?? {}) });
   const j = await r.json().catch(() => ({}));
   if (!r.ok) throw new Error(j?.error ?? "No se pudo completar. Probá de nuevo.");
   return j as T;

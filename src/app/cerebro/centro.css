@@ -293,3 +293,4 @@
 .cz-capas i:nth-child(3) { inset: 92px; background: rgba(21, 18, 28, 0.12); border: 0; transform: translate(calc(var(--px) * -26px), calc(var(--py) * -26px)); }
 .cz-b .cz-ens-fila { grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr)); }
 .cz-b .cz-ens-fila select { min-width: 0; width: 100%; }
+.cz-reco select, .cz-b .cz-inline select { min-height: 44px; border-radius: 12px; border: 1px solid #34304a; background: #0d0c14; color: #fff; padding: 0 10px; font: inherit; }

@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { Fragment, useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import { formatoNumero } from "@/lib/premium/anillo";
 
 /**
@@ -36,7 +36,6 @@ export function Cartel({ antes, clave, despues = "", como: Etiqueta = "h2", clas
 /** Número que cuenta desde cero al aparecer. Se dibuja ya con el valor final (igual en servidor y navegador). */
 export function Cuenta({ valor, demoraMs = 0 }: { valor: number | null; demoraMs?: number }) {
   const [v, setV] = useState(valor);
-  const ref = useRef<HTMLSpanElement>(null);
   useEffect(() => {
     if (valor == null || menosMovimiento()) {
       setV(valor);
@@ -61,7 +60,7 @@ export function Cuenta({ valor, demoraMs = 0 }: { valor: number | null; demoraMs
     };
   }, [valor, demoraMs]);
   return (
-    <span ref={ref} className="cz-cuenta">
+    <span className="cz-cuenta">
       {v == null ? "—" : formatoNumero(v)}
     </span>
   );
