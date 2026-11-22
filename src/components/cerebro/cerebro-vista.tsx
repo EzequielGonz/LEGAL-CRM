@@ -111,7 +111,7 @@ function Cifra({ color, etiqueta, numero, unidad, parte, nota, i = 0, c = 2 }: {
         {parte != null && <Circulo parte={parte} tam={64} grosor={8} color="#15121c" etiqueta={`${Math.round(parte * 100)} %`} />}
       </div>
       <span className="cz-b__uni">{unidad}</span>
-      {nota && <p className="cz-b__nota">{nota}</p>}
+      {nota && <div className="cz-b__nota">{nota}</div>}
     </B>
   );
 }
@@ -156,7 +156,21 @@ export function CerebroVista({ fuentes, semana, contactos, salud, pedidos, rubro
   const abiertas: Partial<Record<IdPantalla, ReactNode>> = {
     pendientes: (
       <div className="cz-bento">
-        <Cifra color="amarillo" etiqueta="Urgentes" numero={pendientesUrgentes} unidad={`de ${pendientesTotal} pendientes`} parte={pendientesTotal ? pendientesUrgentes / pendientesTotal : null} i={0} />
+        <Cifra
+          color="amarillo"
+          etiqueta="Urgentes"
+          numero={pendientesUrgentes}
+          unidad={`de ${pendientesTotal} pendientes`}
+          parte={pendientesTotal ? pendientesUrgentes / pendientesTotal : null}
+          nota={
+            <ul className="cz-b__lista">
+              {PENDIENTES.flatMap((c) => c.items.filter((x) => x.urgente)).slice(0, 4).map((x) => (
+                <li key={x.texto}>{x.texto}</li>
+              ))}
+            </ul>
+          }
+          i={0}
+        />
         <B c={4} i={1} className="cz-b--sinpad">
           <VidrioCirculos tonos={["#ffd23f", "#ff7eb6", "#7c6cff"]}>
             <Pildora>Preguntas para ustedes</Pildora>
@@ -304,7 +318,7 @@ export function CerebroVista({ fuentes, semana, contactos, salud, pedidos, rubro
             return (
               <Cifra
                 key={c.clave}
-                c={k === 0 ? 3 : k < 3 ? 3 : 2}
+                c={k < 2 || k > 4 ? 3 : 2}
                 color={COLORES_CIFRAS[k % COLORES_CIFRAS.length]}
                 etiqueta={c.titulo}
                 numero={total[c.clave].actual}

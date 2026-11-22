@@ -107,7 +107,10 @@ export function CentroCerebro({
   useEffect(() => {
     const d = dialogo.current;
     if (!d) return;
-    if (abierta && !d.open) d.showModal();
+    if (abierta && !d.open) {
+      d.showModal();
+      d.querySelector<HTMLButtonElement>(".cz-neu--cerrar")?.focus({ preventScroll: true });
+    }
     if (!abierta && d.open) d.close();
   }, [abierta]);
 
@@ -391,7 +394,7 @@ export function CentroCerebro({
                     <path d="m9.5 6 6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </button>
-                <button type="button" className="cz-neu cz-neu--redondo cz-neu--cerrar" aria-label="Cerrar y volver al anillo" onClick={cerrar} autoFocus>
+                <button type="button" className="cz-neu cz-neu--redondo cz-neu--cerrar" aria-label="Cerrar y volver al anillo" onClick={cerrar}>
                   <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
                     <path d="m6.5 6.5 11 11m0-11-11 11" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" />
                   </svg>
