@@ -578,3 +578,39 @@ html .lienzo-contenido .vv-cartel h1.vv-cartel__titulo { padding-bottom: 2px; }
 .vv-paralaje__escena::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgb(12 9 26 / 0.8) 0%, rgb(12 9 26 / 0.5) 50%, rgb(12 9 26 / 0.05) 100%); }
 @media (max-width: 640px) { .vv-paralaje__escena::after { background: linear-gradient(180deg, rgb(12 9 26 / 0.55), rgb(12 9 26 / 0.85) 70%); } }
 .vv-ingreso-escena .vv-paralaje__escena::after { background: radial-gradient(circle at 50% 50%, rgb(12 9 26 / 0.5), rgb(12 9 26 / 0.05) 70%); }
+
+/* Resultados: el embudo en cajas de color. */
+html .vv-celda--res { padding: 18px 14px; }
+html .vv-celda--res .pc-celda { position: relative; z-index: 2; }
+html .vv-celda--res :is(.pc-etiqueta, .pc-contexto, .pc-contexto strong, .pc-enlace) { color: var(--vv-tinta) !important; }
+html .vv-celda--res .pc-contexto { color: rgb(22 18 43 / 0.78) !important; }
+html .vv-celda--res .pc-paso { background: rgb(255 255 255 / 0.5) !important; border-color: rgb(22 18 43 / 0.12) !important; color: var(--vv-tinta) !important; box-shadow: none !important; }
+html .vv-celda--res.pc-activa { box-shadow: 0 0 0 3px #fff, 0 0 0 6px var(--vv-violeta-2), 0 20px 40px -20px rgb(0 0 0 / 0.8); }
+html .vv-celda--res .pc-enlace:focus-visible { outline-color: var(--vv-tinta) !important; }
+html .vv-celda--res .pm-anillo__centro { display: grid; }
+.vv-ingreso-escena .vv-paralaje__sol { right: 9%; top: 14%; width: 62px; }
+.vv-ingreso-escena { min-height: 170px; }
+
+/* «Más»: cada sección con su color del bento, entra escalonada y se eleva al pasar. */
+html .mas-grilla > .mas-tarjeta:nth-child(6n + 1) .mas-icono { background: var(--vv-violeta) !important; color: var(--vv-tinta) !important; }
+html .mas-grilla > .mas-tarjeta:nth-child(6n + 2) .mas-icono { background: var(--vv-rosa) !important; color: var(--vv-tinta) !important; }
+html .mas-grilla > .mas-tarjeta:nth-child(6n + 3) .mas-icono { background: var(--vv-amarillo) !important; color: var(--vv-tinta) !important; }
+html .mas-grilla > .mas-tarjeta:nth-child(6n + 4) .mas-icono { background: var(--vv-agua) !important; color: var(--vv-tinta) !important; }
+html .mas-grilla > .mas-tarjeta:nth-child(6n + 5) .mas-icono { background: var(--vv-lila) !important; color: var(--vv-tinta) !important; }
+html .mas-grilla > .mas-tarjeta:nth-child(6n + 6) .mas-icono { background: var(--vv-rosa-claro) !important; color: var(--vv-tinta) !important; }
+html .mas-icono { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.55), 0 8px 18px -10px rgb(0 0 0 / 0.8) !important; transition: transform 320ms var(--vv-resorte); }
+html .mas-tarjeta { transition: transform 280ms var(--vv-resorte), box-shadow 280ms var(--vv-suave); }
+@media (hover: hover) {
+  html .mas-tarjeta:hover { transform: translateY(-3px); }
+  html .mas-tarjeta:hover .mas-icono { transform: scale(1.12) rotate(-8deg); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  html .mas-grilla > .mas-tarjeta { animation: vv-crece 560ms var(--vv-resorte) backwards; }
+  html .mas-grilla > .mas-tarjeta:nth-child(2) { animation-delay: 40ms; }
+  html .mas-grilla > .mas-tarjeta:nth-child(3) { animation-delay: 80ms; }
+  html .mas-grilla > .mas-tarjeta:nth-child(4) { animation-delay: 120ms; }
+  html .mas-grilla > .mas-tarjeta:nth-child(5) { animation-delay: 160ms; }
+  html .mas-grilla > .mas-tarjeta:nth-child(6) { animation-delay: 200ms; }
+  html .mas-grilla > .mas-tarjeta:nth-child(n + 7) { animation-delay: 240ms; }
+}
+@media (prefers-reduced-motion: reduce) { html .mas-tarjeta, html .mas-icono { animation: none !important; transition: none !important; } }

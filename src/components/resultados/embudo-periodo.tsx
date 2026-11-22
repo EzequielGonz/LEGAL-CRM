@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Anillo, Tarjeta, VerMas } from "@/components/premium";
+import { Anillo, VerMas } from "@/components/premium";
 import type { SlugPerfil } from "@/lib/marca";
 import { cifrasDePeriodo, rangoDePeriodo, tasa, variacion, type ClavePeriodo } from "@/lib/hoy/periodos";
 import type { ClavePeriodoResultado, ClaveResultado } from "@/lib/resultados";
@@ -64,7 +64,8 @@ export function EmbudoVista({ slug, c, antes, periodo, ver }: { slug: string; c:
           const meta = a.base === null ? Math.max(1, valor) : Math.max(1, a.base ?? 0);
           return (
             <li key={e.ver} className="min-w-0">
-              <Tarjeta relieve aparecer={i} rubro={slug as SlugPerfil} className={activa ? "pc-activa" : ""}>
+              {/* Vuelta 6: cada etapa es una caja del bento de colores (entra creciendo, escalonada). */}
+              <div className={`vv-celda vv-celda--${(["violeta", "rosa", "amarillo", "agua"] as const)[i % 4]} vv-celda--res${activa ? " pc-activa" : ""}`} style={{ "--vv-i": i } as React.CSSProperties}>
                 <div className="pc-celda">
                   <span className="pc-etiqueta">{e.titulo}</span>
                   {sinDato ? (
@@ -81,7 +82,7 @@ export function EmbudoVista({ slug, c, antes, periodo, ver }: { slug: string; c:
                     <span className="sr-only"> · {e.titulo.toLowerCase()}</span>
                   </Link>
                 </div>
-              </Tarjeta>
+              </div>
             </li>
           );
         })}
