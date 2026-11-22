@@ -25,7 +25,12 @@ const POR_CLAVE: Record<ClaveCifra, (perfil: string, n: string) => string> = {
 export function pedidoDeFila(f: FilaParaHoy, perfiles: PerfilResumen[]): string {
   const clave = f.clave.slice(f.slug.length + 1) as ClaveCifra;
   const valor = perfiles.find((p) => p.slug === f.slug)?.cifras.find((c) => c.clave === clave)?.valor;
-  const texto = POR_CLAVE[clave]?.(f.perfil, valor == null ? "varios" : String(valor)) ?? `Ayudame con esto en ${f.perfil}.`;
+  return pedidoDeCifra(f.perfil, clave, valor ?? null);
+}
+
+/** Pedido a Jarvis para una cifra de un perfil (con el número exacto si se leyó). */
+export function pedidoDeCifra(perfil: string, clave: ClaveCifra, valor: number | null): string {
+  const texto = POR_CLAVE[clave]?.(perfil, valor == null ? "varios" : String(valor)) ?? `Ayudame con esto en ${perfil}.`;
   return `${texto} ${CIERRE_CONFIRMAR}`;
 }
 

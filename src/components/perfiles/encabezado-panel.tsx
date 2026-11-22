@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { seccionActiva, seccionesDePerfil } from "@/lib/menu";
+import { esPantallaMas } from "@/lib/mas-pantallas";
+import "@/app/mas-premium.css";
 import type { MenuPersonal } from "@/lib/personalizacion/menu";
 import { marcaDe, type SlugPerfil } from "@/lib/marca";
 import { Icono } from "@/components/ui/icono-seccion";
@@ -36,7 +38,7 @@ export function EncabezadoPanel({ slug, nombre, menu = null }: { slug: SlugPerfi
   }, [titulo, vista, pathname]);
 
   return (
-    <div className="encabezado-panel">
+    <div className="encabezado-panel" data-mas={esPantallaMas(activa?.seccion.grupo, activa?.seccion.clave, activa?.tab.label, pathname) ? "1" : undefined}>
       <div className="encabezado-ruta" aria-hidden="true">
         <span className="encabezado-perfil">{titulo}</span>
         {activa && <span className="encabezado-sep">/</span>}
