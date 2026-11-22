@@ -8,6 +8,9 @@ import type { ResumenCifras } from "@/lib/cartera-servidor";
 import { marcaDe, temaDe, type SlugPerfil } from "@/lib/marca";
 import { variablesAcento } from "@/lib/acento";
 import { LogoPerfil } from "@/components/ui/logo-perfil";
+import { TarjetaMesh } from "@/components/vivo/tarjeta-mesh";
+
+const TONO_MESH: Record<SlugPerfil, "dorado" | "verde" | "azul" | "naranja"> = { juridico: "dorado", coberturas_medicas: "verde", agencia_0km: "azul", marketing: "naranja" };
 import { Icono } from "@/components/ui/icono-seccion";
 import { cantidad } from "@/lib/textos/pantalla";
 import { Chip, ESTADO_CAMPANA, EditarPerfil, MenuAcciones, usePerfilesEnVivo, type MarcaTarjeta } from "@/components/perfiles/perfil-selector";
@@ -76,19 +79,26 @@ export function SelectorPerfilesPC({
           const ficha = (id: string) => (slug === "juridico" ? `/prospectos/${id}` : `/ficha/${id}`);
           return (
             <li key={p.id} data-tema={slug} data-inclinar style={{ ...estilo, animationDelay: `${i * 70}ms` }} className="perfil-pc tarjeta-perfil d-tarjeta--brillo relative isolate flex flex-col overflow-hidden rounded-3xl">
-              <span className="absolute inset-x-0 top-0 h-1 bg-gold-500" aria-hidden="true" />
-              <div className="flex flex-1 flex-col p-5 pt-6">
-                {/* Marca */}
-                <div className="flex items-start gap-4">
-                  <Link href={`/panel/${slug}`} className="perfil-pc-logo block h-16 w-16 shrink-0 overflow-hidden rounded-2xl" aria-label={`Entrar a ${m.nombre}`}>
+              {/* Vuelta 6: luz que sigue al mouse y tarjeta de marca con gradient mesh (los colores del perfil, animados). */}
+              <span className="vv-luz" aria-hidden="true" />
+              <div className="vv-perfil-banda">
+                <TarjetaMesh tono={TONO_MESH[slug]}>
+                  <Link href={`/panel/${slug}`} className="vv-perfil-logo" aria-label={`Entrar a ${m.nombre}`}>
                     <LogoPerfil slug={slug} src={m.logo} alt="" tamano="lg" className="perfil-pc-placa" />
                   </Link>
-                  <div className="min-w-0 flex-1">
-                    <Link href={`/panel/${slug}`} className="block truncate text-lg font-semibold tracking-tight text-slate-950 hover:underline">
+                  <span className="min-w-0">
+                    <Link href={`/panel/${slug}`} className="vv-mesh__marca block truncate text-white hover:underline">
                       {m.nombre}
                     </Link>
-                    <p className="truncate text-sm text-slate-500">{p.name}</p>
-                    <div className="mt-2 flex flex-wrap gap-1.5">
+                    <span className="vv-mesh__bajada block truncate">{p.name}</span>
+                  </span>
+                </TarjetaMesh>
+              </div>
+              <div className="flex flex-1 flex-col p-5 pt-4">
+                {/* Marca */}
+                <div className="flex items-start gap-4">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap gap-1.5">
                       {p.accion.sin_derivar > 0 && <Chip tono="urgente">{p.accion.sin_derivar === 1 ? "1 captado sin derivar" : `${p.accion.sin_derivar} captados sin derivar`}</Chip>}
                       {p.accion.humano > 0 && <Chip tono="urgente">{p.accion.humano === 1 ? "1 pide una persona" : `${p.accion.humano} piden una persona`}</Chip>}
                       {(p.recibidos24h ?? 0) > 0 && <Chip tono="info">{p.recibidos24h === 1 ? "1 persona escribió" : `${cantidad(p.recibidos24h, "persona")} escribieron`} en 24 h</Chip>}

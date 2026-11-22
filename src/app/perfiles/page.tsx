@@ -1,3 +1,4 @@
+import { Cartel, PildoraAmarilla } from "@/components/vivo/cartel";
 import { Suspense } from "react";
 import { EfectosVidrio } from "@/components/ui/efectos-vidrio";
 import { LogoutButton } from "@/components/acceso/logout-button";
@@ -48,8 +49,11 @@ export default async function PerfilesPage() {
         <AccesosCentrales />
         <div className="mb-10 text-center">
           <MarcaPanel className="sello-grande mx-auto mb-5" />
-          <p className="d-kicker mb-3" style={{ color: "rgb(var(--c-gold-400))" }}>Panel central · cuatro perfiles</p>
-          <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">¿Con qué perfil trabajás?</h1>
+          {/* Vuelta 6: cartel animado (palabra por palabra, «perfil» recuadrado en serif itálica) y la píldora amarilla del video. */}
+          <div className="vv-encabezado-centro">
+            <PildoraAmarilla>Panel central · cuatro perfiles</PildoraAmarilla>
+            <Cartel como="h1" tamano="xl" texto="¿Con qué [perfil] trabajás?" retrasoMs={150} />
+          </div>
           <p className="mt-2 text-sm text-slate-400">Lo pendiente de cada perfil, la semana y la última base. Elegí uno para entrar al panel.</p>
         </div>
         <Suspense fallback={<EsqueletoTarjetas cantidad={rubros.length} />}>

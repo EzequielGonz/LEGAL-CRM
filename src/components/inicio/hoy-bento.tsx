@@ -1,13 +1,18 @@
 import type { ReactNode } from "react";
 // Imports directos (no el índice): Hoy no arrastra componentes que no usa (vercel-react-best-practices, bundle-barrel-imports).
 import { Anillo } from "@/components/premium/anillo";
-import { Bento, BentoCelda } from "@/components/premium/bento";
+import { Cifra } from "@/components/premium/cifra";
+import { Cartel } from "@/components/vivo/cartel";
+import { BarrasMini, BentoColor, CeldaColor } from "@/components/vivo/bento-color";
+import { VidrioCirculos } from "@/components/vivo/vidrio-circulos";
+import { BotonNeu, IconoNeu } from "@/components/vivo/boton-neu";
+import { Paralaje } from "@/components/vivo/paralaje";
+import { formatoNumero } from "@/lib/premium/anillo";
 import { Boton } from "@/components/premium/boton";
 import { BotonJarvis } from "@/components/premium/boton-jarvis";
-import { SaludoJarvis } from "@/components/premium/saludo-jarvis";
 import { Tarjeta } from "@/components/premium/tarjeta";
 import { VerMas } from "@/components/premium/ver-mas";
-import type { SlugPerfil } from "@/lib/marca";
+import { marcaDe, type SlugPerfil } from "@/lib/marca";
 import { seccionesDePerfil } from "@/lib/menu";
 import type { FilaDecidir, Franja } from "@/lib/hoy/resumen-hoy";
 
@@ -39,111 +44,147 @@ export interface DatosHoyBento {
 
 const FILAS_VISIBLES = 3;
 
-function AnilloSemana({ titulo, contexto, valor, de, delay, rubro }: { titulo: string; contexto: string; valor: number | null; de: number | null; delay: number; rubro: SlugPerfil }) {
-  return (
-    <li>
-      {valor === null ? (
-        <span className="hy-sin-dato" role="img" aria-label={`${titulo}: sin dato`} style={{ width: 120, height: 120, display: "grid", placeItems: "center", fontSize: 36, color: "var(--d-texto-3)" }}>
-          —
-        </span>
-      ) : (
-        <Anillo valor={valor} meta={Math.max(de ?? 0, valor)} rubro={rubro} tamano="medio" nombre={titulo} unidad={`de ${contexto}`} mostrarMeta={de !== null} retrasoMs={delay} />
-      )}
-      <span className="hy-etiqueta">{titulo}</span>
-      <span className="hy-contexto">de {contexto}</span>
-    </li>
-  );
+/** «Buenas tardes» → «Buenas [tardes.]»: la última palabra del saludo va recuadrada en serif itálica. */
+function saludoCartel(saludo: string): string {
+  const ps = `${saludo}.`.split(" ");
+  if (ps.length < 2) return ps.join(" ");
+  return `${ps.slice(0, -1).join(" ")} [${ps[ps.length - 1]}]`;
+}
+
+const ICONO_ATAJO: Record<string, ReactNode> = { Contactos: IconoNeu.personas, Etapas: IconoNeu.personas, Citas: IconoNeu.calendario, Seguimiento: IconoNeu.seguimiento };
+
+/** Cifra de una caja de color: cuenta desde 0; sin dato, «—» (nunca cero). */
+function NumeroCelda({ valor, medio = false }: { valor: number | null; medio?: boolean }) {
+  return <span className={`vv-num${medio ? " vv-num--m" : ""}`}>{valor === null ? "—" : <Cifra valor={valor} tamano="xl" />}</span>;
 }
 
 export function HoyBento({ d }: { d: DatosHoyBento }) {
   const visibles = d.decidir.slice(0, FILAS_VISIBLES);
   const resto = d.decidir.slice(FILAS_VISIBLES);
   const franja = (
-    <BentoCelda columnas={12} columnasMedio={6}>
-      <section className="hy-franja" data-estado={d.franja.estado} role={d.franja.estado === "mal" ? "alert" : "status"} aria-label="Estado del sistema">
-        <span className="hy-franja__luz" aria-hidden="true" />
-        <p className="hy-franja__texto">
-          <strong>{d.franja.titulo}.</strong> {d.franja.detalle ?? ""}
-        </p>
-        {d.franja.accion && d.franja.href ? (
-          <Boton href={d.franja.href} variante={d.franja.estado === "mal" ? "primario" : "secundario"}>
-            {d.franja.accion}
-          </Boton>
-        ) : null}
-      </section>
-    </BentoCelda>
+    <section className="hy-franja" data-estado={d.franja.estado} role={d.franja.estado === "mal" ? "alert" : "status"} aria-label="Estado del sistema">
+      <span className="hy-franja__luz" aria-hidden="true" />
+      <p className="hy-franja__texto">
+        <strong>{d.franja.titulo}.</strong> {d.franja.detalle ?? ""}
+      </p>
+      {d.franja.accion && d.franja.href ? (
+        <Boton href={d.franja.href} variante={d.franja.estado === "mal" ? "primario" : "secundario"}>
+          {d.franja.accion}
+        </Boton>
+      ) : null}
+    </section>
   );
   const graveArriba = d.franja.estado === "mal";
+  const urgentes = d.decidir.filter((f) => f.urgencia === 1).length;
+  const atajos = (seccionesDePerfil(d.slug).find((x) => x.clave === "contactos")?.tabs ?? []).filter((t) => !t.oculto).slice(0, 3);
+  const s = d.semana;
   return (
-    <div className="hy-pagina">
-      <Bento>
-        {graveArriba ? franja : null}
+    <div className="hy-pagina vv-hoy">
+      {graveArriba ? franja : null}
 
-        <BentoCelda columnas={12} columnasMedio={6}>
-          <SaludoJarvis
-            className="hy-saludo"
-            saludo={`${d.saludo}.`}
-            frases={d.frases}
-            acciones={d.decidir.length > 0 ? [{ texto: d.decidir.length === 1 ? "Ver qué decidir" : `Ver ${d.decidir.length} cosas para decidir`, href: "#hoy-decidir" }] : undefined}
-          >
+      {/* Vuelta 6: cabecera parallax en capas (como «Viaja lejos» del video) con el saludo como cartel animado. */}
+      <div className="vv-hoy__fila">
+        <Paralaje className="hy-saludo">
+          <Cartel como="h2" tamano="xl" antetitulo={`Jarvis · ${marcaDe(d.slug).nombre}`} texto={saludoCartel(d.saludo)} />
+          <p className="vv-paralaje__frases">
+            <span>{d.frases[0]}</span>
+            {d.frases[1] ? <span>{d.frases[1]}</span> : null}
+          </p>
+          <div className="vv-paralaje__acciones">
+            {d.decidir.length > 0 ? (
+              <Boton href="#hoy-decidir" variante="primario">
+                {d.decidir.length === 1 ? "Ver qué decidir" : `Ver ${d.decidir.length} cosas para decidir`}
+              </Boton>
+            ) : null}
             <BotonJarvis>Hablar con Jarvis</BotonJarvis>
-          </SaludoJarvis>
-          {/* 22/11 (revisión): Contactos, Citas y Seguimiento pasaron a «Más»; como se usan a diario, quedan a un toque desde Hoy. */}
-          <nav aria-label="Atajos" className="hy-atajos">
-            {(seccionesDePerfil(d.slug).find((x) => x.clave === "contactos")?.tabs ?? [])
-              .filter((t) => !t.oculto)
-              .slice(0, 3)
-              .map((t) => (
-                <a key={t.href} href={t.href} className="hy-atajo">
-                  {t.label === "Etapas" ? "Contactos" : t.label}
-                </a>
-              ))}
+          </div>
+        </Paralaje>
+
+        <div className="vv-hoy__lado">
+          {/* Tarjeta de vidrio sobre círculos de color (dentro del componente, no en el fondo). */}
+          <VidrioCirculos etiqueta="Para decidir hoy">
+            <span className="vv-vidrio__chico">Para decidir hoy</span>
+            <span className="vv-vidrio__nota">{urgentes > 0 ? `${urgentes === 1 ? "1 urgente" : `${urgentes} urgentes`}, primero` : "Nada urgente"}</span>
+            <span className="vv-vidrio__grande">{d.decidir.length === 0 ? "Al día" : <Cifra valor={d.decidir.length} tamano="xl" />}</span>
+          </VidrioCirculos>
+          {/* Botones neumórficos: salen de la placa y se hunden al tocarlos. */}
+          <nav aria-label="Atajos" className="vv-neu-placa">
+            <BotonNeu href={`/conversaciones?perfil=${d.slug}`} icono={IconoNeu.chat}>
+              Chats
+            </BotonNeu>
+            {atajos.map((t) => {
+              const nombre = t.label === "Etapas" ? "Contactos" : t.label;
+              return (
+                <BotonNeu key={t.href} href={t.href} icono={ICONO_ATAJO[t.label] ?? IconoNeu.play}>
+                  {nombre}
+                </BotonNeu>
+              );
+            })}
           </nav>
-        </BentoCelda>
+        </div>
+      </div>
 
-        <BentoCelda columnas={4} columnasMedio={6}>
-          <Tarjeta relieve aparecer={1} como="section" className="hy-protagonista-tarjeta">
-            <div className="hy-protagonista">
-              <Anillo valor={d.porDerivar} meta={d.metaAnillo} rubro={d.slug} tamano="grande" nombre="Captados sin derivar" unidad="captados esperan" />
-              <span className="hy-etiqueta">Captados sin derivar</span>
-              <span className="hy-contexto">
-                {d.derivadosSemana === null ? "No se pudo leer cuántos se derivaron esta semana." : d.derivadosSemana === 0 ? "Todavía no derivaste ninguno esta semana." : `${d.derivadosSemana.toLocaleString("es-AR")} ya ${d.derivadosSemana === 1 ? "derivado" : "derivados"} esta semana.`}
-              </span>
-            </div>
-          </Tarjeta>
-        </BentoCelda>
+      {/* Bento de colores con las cifras reales: cada caja entra creciendo, escalonada. */}
+      <Cartel como="h2" tamano="m" antetitulo="Tu semana," texto="en [cajitas]" className="vv-seccion-titulo" retrasoMs={200} />
+      <BentoColor className="vv-bento--hoy" etiqueta="Cifras de hoy y de la semana">
+        <CeldaColor color="violeta" etiqueta="Captados sin derivar" area="vv-c-grande" orden={0} como="section">
+          <div className="vv-celda-fila">
+            <NumeroCelda valor={d.porDerivar} />
+            <Anillo valor={d.porDerivar} meta={d.metaAnillo} rubro={d.slug} tamano="medio" nombre="Captados sin derivar" unidad="captados esperan" mostrarMeta={false} />
+          </div>
+          <p className="vv-celda__texto">
+            {d.derivadosSemana === null ? "No se pudo leer cuántos se derivaron esta semana." : d.derivadosSemana === 0 ? "Todavía no derivaste ninguno esta semana." : (
+              <>
+                <strong>{formatoNumero(d.derivadosSemana)}</strong> ya {d.derivadosSemana === 1 ? "derivado" : "derivados"} esta semana.
+              </>
+            )}
+          </p>
+        </CeldaColor>
+        <CeldaColor color="rosa" etiqueta="Escribieron" area="vv-c-media" orden={1}>
+          <NumeroCelda valor={s.escribieron} medio />
+          <p className="vv-celda__texto">{s.contactados === null ? "de los contactados" : `de ${formatoNumero(s.contactados)} contactados`}</p>
+        </CeldaColor>
+        <CeldaColor color="amarillo" etiqueta="Captados" area="vv-c-alta" orden={2}>
+          <NumeroCelda valor={s.captados} medio />
+          <p className="vv-celda__texto">{s.escribieron === null ? "de los que escribieron" : `de ${formatoNumero(s.escribieron)} que escribieron`}</p>
+        </CeldaColor>
+        <CeldaColor color="agua" etiqueta="Derivados" area="vv-c-chica" orden={3}>
+          <NumeroCelda valor={s.derivados} medio />
+        </CeldaColor>
+        <CeldaColor color="lila" etiqueta="Contactados" area="vv-c-chica" orden={4}>
+          <NumeroCelda valor={s.contactados} medio />
+        </CeldaColor>
+        <CeldaColor color="rosa-claro" etiqueta="La semana, paso a paso" area="vv-c-toda" orden={5}>
+          <BarrasMini
+            etiqueta="De los contactados a los derivados, esta semana"
+            datos={[
+              { nombre: "Contactados", valor: s.contactados },
+              { nombre: "Escribieron", valor: s.escribieron },
+              { nombre: "Captados", valor: s.captados },
+              { nombre: "Derivados", valor: s.derivados, resaltar: true },
+            ]}
+          />
+        </CeldaColor>
+      </BentoColor>
 
-        <BentoCelda columnas={8} columnasMedio={6}>
-          <Tarjeta relieve aparecer={2} como="section" titulo="Esta semana" nivelTitulo={2}>
-            <ul className="hy-semana" aria-label="Resumen de la semana">
-              <AnilloSemana titulo="Escribieron" contexto="los contactados" valor={d.semana.escribieron} de={d.semana.contactados} delay={0} rubro={d.slug} />
-              <AnilloSemana titulo="Captados" contexto="los que escribieron" valor={d.semana.captados} de={d.semana.escribieron} delay={80} rubro={d.slug} />
-              <AnilloSemana titulo="Derivados" contexto="los captados" valor={d.semana.derivados} de={d.semana.captados} delay={160} rubro={d.slug} />
-            </ul>
-          </Tarjeta>
-        </BentoCelda>
+      <section id="hoy-decidir" aria-labelledby="hoy-decidir-t" className="scroll-mt-24" style={{ display: "grid" }}>
+        <Tarjeta aparecer={3} titulo={<span id="hoy-decidir-t">Para decidir</span>} nivelTitulo={2}>
+          {d.decidir.length === 0 ? (
+            <p className="hy-vacio">Todo al día. Cuando haya algo para decidir, aparece acá.</p>
+          ) : (
+            <>
+              <FilasDecidir filas={visibles} />
+              {resto.length > 0 ? (
+                <VerMas cerrado={`Ver ${resto.length === 1 ? "una más" : `${resto.length} más`}`}>
+                  <FilasDecidir filas={resto} />
+                </VerMas>
+              ) : null}
+            </>
+          )}
+        </Tarjeta>
+      </section>
 
-        <BentoCelda columnas={12} columnasMedio={6}>
-          <section id="hoy-decidir" aria-labelledby="hoy-decidir-t" className="scroll-mt-24" style={{ display: "grid" }}>
-            <Tarjeta aparecer={3} titulo={<span id="hoy-decidir-t">Para decidir</span>} nivelTitulo={2}>
-              {d.decidir.length === 0 ? (
-                <p className="hy-vacio">Todo al día. Cuando haya algo para decidir, aparece acá.</p>
-              ) : (
-                <>
-                  <FilasDecidir filas={visibles} />
-                  {resto.length > 0 ? (
-                    <VerMas cerrado={`Ver ${resto.length === 1 ? "una más" : `${resto.length} más`}`}>
-                      <FilasDecidir filas={resto} />
-                    </VerMas>
-                  ) : null}
-                </>
-              )}
-            </Tarjeta>
-          </section>
-        </BentoCelda>
-
-        {!graveArriba ? franja : null}
-      </Bento>
+      {!graveArriba ? franja : null}
 
       <section aria-label="Más detalle de hoy">
         <VerMas cerrado="Ver más: listas, líneas y campañas" abierto="Ver menos" abiertoAlInicio={d.verMasAbierto}>
@@ -176,21 +217,26 @@ function FilasDecidir({ filas }: { filas: FilaDecidir[] }) {
 /** Estado de carga: el saludo y el marco se pintan enseguida; los datos llegan apenas están. */
 export function EsqueletoHoyBento({ saludo }: { saludo: string }) {
   return (
-    <div className="hy-pagina" role="status" aria-label="Cargando el resumen de hoy">
-      <Bento>
-        <BentoCelda columnas={12} columnasMedio={6}>
-          <SaludoJarvis className="hy-saludo" saludo={`${saludo}.`} frases={["Estoy armando tu resumen de hoy.", undefined]} />
-        </BentoCelda>
-        <BentoCelda columnas={4} columnasMedio={6} filas={2}>
-          <div className="d-esqueleto !rounded-2xl" style={{ minHeight: 320 }} />
-        </BentoCelda>
-        <BentoCelda columnas={8} columnasMedio={6}>
-          <div className="d-esqueleto !rounded-2xl" style={{ minHeight: 190 }} />
-        </BentoCelda>
-        <BentoCelda columnas={8} columnasMedio={6}>
-          <div className="d-esqueleto !rounded-2xl" style={{ minHeight: 190 }} />
-        </BentoCelda>
-      </Bento>
+    <div className="hy-pagina vv-hoy" role="status" aria-label="Cargando el resumen de hoy">
+      <div className="vv-hoy__fila">
+        <Paralaje className="hy-saludo">
+          <Cartel como="p" tamano="xl" texto={saludoCartel(saludo)} />
+          <p className="vv-paralaje__frases">
+            <span>Estoy armando tu resumen de hoy.</span>
+          </p>
+        </Paralaje>
+        <div className="vv-hoy__lado">
+          <div className="d-esqueleto" style={{ minHeight: 236, borderRadius: 26 }} />
+          <div className="d-esqueleto" style={{ minHeight: 120, borderRadius: 26 }} />
+        </div>
+      </div>
+      <div className="vv-bento">
+        <div className="d-esqueleto vv-c-grande" style={{ borderRadius: 24 }} />
+        <div className="d-esqueleto vv-c-media" style={{ borderRadius: 24 }} />
+        <div className="d-esqueleto vv-c-alta" style={{ borderRadius: 24 }} />
+        <div className="d-esqueleto vv-c-chica" style={{ borderRadius: 24 }} />
+        <div className="d-esqueleto vv-c-chica" style={{ borderRadius: 24 }} />
+      </div>
     </div>
   );
 }

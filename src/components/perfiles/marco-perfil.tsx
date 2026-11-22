@@ -13,6 +13,7 @@ import { EfectosVidrio } from "@/components/ui/efectos-vidrio";
 import { RUBRO_IDS } from "@/lib/rubros";
 import { CartelCrisis } from "@/components/perfiles/cartel-crisis";
 import { AvisoCodigoAnterior } from "@/components/acceso/aviso-codigo-anterior";
+import { EntradaContenido } from "@/components/vivo/entrada";
 
 /**
  * Marco común de los paneles (renovado 18/10): paleta del perfil
@@ -66,7 +67,8 @@ export async function MarcoPerfil({ slug, children, sinSalud = false }: { slug: 
             <Suspense fallback={null}>
               <PestanasSeccion slug={slug} menu={menu} />
             </Suspense>
-            {children}
+            {/* Vuelta 6: cada pantalla entra escalonada al navegar (solo transform/opacity). */}
+            <EntradaContenido>{children}</EntradaContenido>
             <MasOpciones />
           </div>
         </main>
