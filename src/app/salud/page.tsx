@@ -61,19 +61,19 @@ async function SaludContenido({ slug, datos }: { slug: SlugPerfil; datos: Promis
         {/* 22/11: las tres cifras del tablero en una tira bento, con su luz. */}
         <Bento etiqueta="Resumen de la salud del sistema">
           <Tarjeta ancho="3" estado={r.rojo ? "mal" : "apagado"} href={r.rojo ? "#salud-simple" : undefined} etiquetaEnlace={r.rojo ? `${r.rojo} frenan la operación: ver cuáles` : undefined}>
-            <p className="flex items-center gap-2"><Luz estado={r.rojo ? "mal" : "apagado"} late={r.rojo > 0} /><Kicker>Frenan</Kicker></p>
+            <div className="flex items-center gap-2"><Luz estado={r.rojo ? "mal" : "apagado"} late={r.rojo > 0} /><Kicker>Frenan</Kicker></div>
             <Estadistica etiqueta="Frenan la operación" valor={r.rojo} />
           </Tarjeta>
           <Tarjeta ancho="3" estado={r.amarillo ? "aviso" : "apagado"} href={r.amarillo ? "#salud-simple" : undefined} etiquetaEnlace={r.amarillo ? `${r.amarillo} para revisar: ver cuáles` : undefined}>
-            <p className="flex items-center gap-2"><Luz estado={r.amarillo ? "aviso" : "apagado"} /><Kicker>Revisar</Kicker></p>
+            <div className="flex items-center gap-2"><Luz estado={r.amarillo ? "aviso" : "apagado"} /><Kicker>Revisar</Kicker></div>
             <Estadistica etiqueta="Para revisar" valor={r.amarillo} />
           </Tarjeta>
           <Tarjeta ancho="3" estado="ok">
-            <p className="flex items-center gap-2"><Luz estado="ok" /><Kicker>En orden</Kicker></p>
+            <div className="flex items-center gap-2"><Luz estado="ok" /><Kicker>En orden</Kicker></div>
             <Estadistica etiqueta="Controles en orden" valor={r.verde} />
           </Tarjeta>
           <Tarjeta ancho="3" estado={fallas.length ? "mal" : "ok"} href="#fallas" etiquetaEnlace={`${cantidad(fallas.length, "falla")} del sistema en 24 horas: ver detalle`}>
-            <p className="flex items-center gap-2"><Luz estado={fallas.length ? "mal" : "ok"} /><Kicker>Últimas 24 h</Kicker></p>
+            <div className="flex items-center gap-2"><Luz estado={fallas.length ? "mal" : "ok"} /><Kicker>Últimas 24 h</Kicker></div>
             <Estadistica etiqueta="Fallas del sistema" valor={fallas.length} />
           </Tarjeta>
         </Bento>

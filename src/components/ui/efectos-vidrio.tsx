@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { duracionCuenta, numeroDeCifra, textoDeCuenta } from "@/lib/cifras-animadas";
 
 /**
  * Movimiento del panel que no se puede hacer solo con estilos (13/11):
@@ -13,13 +14,6 @@ const CIFRAS = ".cifra-premium, [data-contar]";
 const INCLINABLES = ".kpi-hoy, [data-inclinar]";
 const GRADOS = 5;
 
-function soloNumero(texto: string): number | null {
-  const t = texto.trim();
-  if (!/^\d{1,3}(\.\d{3})*$|^\d+$/.test(t)) return null;
-  const n = Number(t.replace(/\./g, ""));
-  return Number.isFinite(n) && n > 0 && n < 10_000_000 ? n : null;
-}
-
 export function EfectosVidrio() {
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -31,34 +25,33 @@ export function EfectosVidrio() {
       vistos.add(el);
       // Solo cifras "limpias": un texto con algo más (un «—», una unidad) no se toca.
       if (el.childElementCount > 0) return;
-      const fin = soloNumero(el.textContent ?? "");
+      const fin = numeroDeCifra(el.textContent ?? "");
       if (fin === null) return;
-      // 15/11: no se reescribe el texto que maneja React. El valor real queda en su
-      // lugar (transparente mientras cuenta, así el lector de pantalla lo lee
-      // completo) y encima se anima una copia con aria-hidden que después se quita.
+      // 22/11: no se agrega ningún nodo dentro de lo que maneja React. Antes se metía un
+      // <span> adentro de la cifra; si React todavía no había hidratado ese bloque
+      // (las tarjetas que llegan por Suspense), el HTML ya no coincidía con el del
+      // servidor y saltaba el error #418. Ahora solo se tocan atributos: el valor real
+      // queda en su lugar (transparente mientras cuenta, así el lector de pantalla lo lee
+      // completo) y el número que sube se dibuja con ::after desde `data-cuenta`.
       const estilo = getComputedStyle(el);
-      const copia = document.createElement("span");
-      copia.setAttribute("aria-hidden", "true");
-      copia.className = "cifra-animada";
-      copia.style.color = estilo.color;
-      copia.style.setProperty("-webkit-text-fill-color", estilo.color);
-      copia.textContent = "0";
+      el.style.setProperty("--cifra-color", estilo.color);
+      el.setAttribute("data-cuenta", "0");
       const posicionPrevia = el.style.position;
       if (estilo.position === "static") el.style.position = "relative";
       el.classList.add("cifra-contando");
-      el.appendChild(copia);
       const terminar = () => {
-        copia.remove();
+        el.removeAttribute("data-cuenta");
+        el.style.removeProperty("--cifra-color");
         el.classList.remove("cifra-contando");
         el.style.position = posicionPrevia;
       };
-      const ms = Math.min(900, 420 + Math.log10(fin + 1) * 160);
+      const ms = duracionCuenta(fin);
       const inicio = performance.now();
       const paso = (ahora: number) => {
         const p = Math.min(1, (ahora - inicio) / ms);
         const suave = 1 - Math.pow(1 - p, 3);
         if (p >= 1 || !el.isConnected) return terminar();
-        copia.textContent = Math.round(fin * suave).toLocaleString("es-AR");
+        el.setAttribute("data-cuenta", textoDeCuenta(fin, suave));
         enCurso.add(requestAnimationFrame(paso));
       };
       enCurso.add(requestAnimationFrame(paso));
