@@ -5,6 +5,7 @@ import { GraficoPeriodo } from "@/components/resultados/grafico-periodo";
 import { EmbudoPeriodo } from "@/components/resultados/embudo-periodo";
 import { notFound } from "next/navigation";
 import { requirePageSession } from "@/lib/acceso/pagina";
+import { Clasico, VerMas } from "@/components/premium";
 import { MarcoPerfil } from "@/components/perfiles/marco-perfil";
 import { Pager, pageFromParam } from "@/components/ui/pager";
 import { esSlugPerfil, type SlugPerfil } from "@/lib/marca";
@@ -77,10 +78,11 @@ export default async function Pagina(
   const aqui = href(ver, periodo) + (pagina > 1 ? `&pagina=${pagina}` : "");
   const chat = (id: string) => conVolver(enlaceConversacion(slug, id), aqui);
   const mayor = r.origenes[0]?.cantidad ?? 0;
+  const buscoQuienes = Boolean(searchParams.ver || searchParams.pagina);
 
   return (
     <MarcoPerfil slug={slug}>
-      <div className="mx-auto max-w-5xl space-y-6">
+      <Clasico className="mx-auto max-w-5xl space-y-6">
         <div>
           <p className="text-sm text-slate-600">
             <Link prefetch={false} href={`/hoy?perfil=${slug}`} className="tactil inline-flex items-center font-medium text-slate-800 underline underline-offset-2">
@@ -121,6 +123,9 @@ export default async function Pagina(
           <GraficoPeriodo rubroId={rubroId} areas={AREAS_DE_PERFIL[slug]} periodo={periodo} />
         </Suspense>
 
+        {/* 22/11: lo secundario va detrás de «Ver más»; se abre solo si la persona pidió ver quiénes. */}
+        <VerMas cerrado="Ver más: de dónde vienen y quiénes son" abierto="Ver menos" abiertoInicial={buscoQuienes}>
+        <div className="space-y-6">
         {r.origenes.length > 0 ? (
           <section aria-labelledby="res-origen" className="d-tarjeta">
             <h2 id="res-origen" className="text-base font-semibold text-slate-950">
@@ -207,7 +212,9 @@ export default async function Pagina(
             <Pager basePath="/resultados" params={{ perfil: slug, ver, periodo }} page={pagina} pageSize={TAMANO_PAGINA_RESULTADOS} total={r.total} unit="personas" />
           ) : null}
         </section>
-      </div>
+        </div>
+        </VerMas>
+      </Clasico>
     </MarcoPerfil>
   );
 }

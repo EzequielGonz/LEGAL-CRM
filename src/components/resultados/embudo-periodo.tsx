@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { Anillo, Tarjeta, VerMas } from "@/components/premium";
+import type { SlugPerfil } from "@/lib/marca";
 import { cifrasDePeriodo, rangoDePeriodo, tasa, variacion, type ClavePeriodo } from "@/lib/hoy/periodos";
 import type { ClavePeriodoResultado, ClaveResultado } from "@/lib/resultados";
 
@@ -16,6 +18,13 @@ export async function EmbudoPeriodo({ slug, rubroId, areas, periodo, ver }: { sl
     cifrasDePeriodo(rubroId, areas, r ? r.desde : new Date("2020-01-01T00:00:00Z"), r ? r.hasta : ahora),
     r ? cifrasDePeriodo(rubroId, areas, r.antesDesde, r.antesHasta) : Promise.resolve(null),
   ]);
+  return <EmbudoVista slug={slug} c={c} antes={antes} ver={ver} periodo={periodo} />;
+}
+
+type Cifras = Awaited<ReturnType<typeof cifrasDePeriodo>>;
+
+/** La presentación del embudo, separada de la lectura de datos (así se puede ver con datos de ejemplo). */
+export function EmbudoVista({ slug, c, antes, periodo, ver }: { slug: string; c: Cifras; antes: Cifras | null; periodo: ClavePeriodoResultado; ver: ClaveResultado }) {
   const n = (v: number | null) => (v === null ? "—" : v.toLocaleString("es-AR"));
   const href = (v: string) => `/resultados?perfil=${slug}&ver=${v}&periodo=${periodo}`;
   const parte = (a: number | null, b: number | null) => (a === null || b === null || b <= 0 ? null : Math.max(0, Math.min(1, a / b)));
@@ -31,11 +40,45 @@ export async function EmbudoPeriodo({ slug, rubroId, areas, periodo, ver }: { sl
   const TONO = { sube: "text-emerald-700", baja: "text-red-700", igual: "text-slate-500", nada: "text-slate-500" } as const;
   const vPerdidos = antes ? variacion(c.perdidos, antes.perdidos) : null;
 
+  // 22/11: el embudo en 4 anillos (cada anillo se llena con lo que pasó de la etapa anterior) y, entre
+  // ellos, la conversión. El resto de las etapas y los perdidos siguen más abajo, en «Ver más».
+  const ANILLOS: { ver: ClaveResultado; base: number | null }[] = [
+    { ver: "contactados", base: null },
+    { ver: "respondieron", base: c.contactados },
+    { ver: "oportunidades", base: c.respondieron },
+    { ver: "captados", base: c.respondieron },
+  ];
   return (
-    <section id="res-embudo" aria-labelledby="res-embudo-titulo" className="scroll-mt-24 space-y-3">
+    <section id="res-embudo" aria-labelledby="res-embudo-titulo" className="scroll-mt-24 space-y-4">
       <h2 id="res-embudo-titulo" className="sr-only">
         Embudo del período
       </h2>
+      <ol className="pc-fila-anillos">
+        {ANILLOS.map((a, i) => {
+          const e = etapas.find((x) => x.ver === a.ver)!;
+          const activa = e.ver === ver;
+          const valor = e.valor ?? 0;
+          const meta = a.base === null ? Math.max(1, valor) : Math.max(1, a.base ?? 0);
+          return (
+            <li key={e.ver} className="min-w-0">
+              <Tarjeta relieve aparecer={i} rubro={slug as SlugPerfil} className={activa ? "pc-activa" : ""}>
+                <div className="pc-celda">
+                  <span className="pc-etiqueta">{e.titulo}</span>
+                  <Anillo valor={valor} meta={meta} rubro={slug as SlugPerfil} tamano="medio" nombre={e.titulo} unidad="personas" mostrarMeta={a.base !== null} retrasoMs={i * 80} />
+                  <span className="pc-paso">{e.paso ? `${e.paso}` : "Primer mensaje"}</span>
+                  <span className="pc-contexto">{e.nota}</span>
+                  <Link prefetch={false} href={href(e.ver)} aria-current={activa ? "page" : undefined} className="pc-enlace">
+                    {activa ? "Viendo quiénes" : "Ver quiénes"}
+                    <span className="sr-only"> · {e.titulo.toLowerCase()}</span>
+                  </Link>
+                </div>
+              </Tarjeta>
+            </li>
+          );
+        })}
+      </ol>
+      <VerMas cerrado="Ver más etapas" abierto="Ver menos etapas" abiertoInicial={["conversaron", "derivados", "ventas", "perdidos"].includes(ver)}>
+        <div className="space-y-3">
       {/* 22/11: grilla bento; en el celular angosto, una etapa por renglón para que la cifra respire. */}
       <ol className="d-revelar grid grid-cols-1 gap-3 min-[400px]:grid-cols-2 md:grid-cols-4">
         {etapas.map((e) => {
@@ -70,6 +113,8 @@ export async function EmbudoPeriodo({ slug, rubroId, areas, periodo, ver }: { sl
           <span className="sr-only"> · perdidos</span>
         </Link>
       </p>
+        </div>
+      </VerMas>
     </section>
   );
 }
