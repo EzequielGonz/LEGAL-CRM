@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CampaignLiveModal } from "./campaign-live-modal";
+import { motivoPausaLegible } from "@/lib/textos/pantalla";
 
 const ACTION_MESSAGE: Record<string, string> = {
   sent: "Primer mensaje enviado. El resto de los envíos van a seguir en segundo plano, solos, respetando el ritmo configurado — no hace falta dejar esta pantalla abierta.",
@@ -152,7 +153,7 @@ export function CampaignControls({
         </div>
       )}
       {prep?.pause_reason && status === "pausada" && (
-        <p className="mt-2 max-w-md text-sm text-slate-700">Motivo de la pausa: {prep.pause_reason}</p>
+        <p className="mt-2 max-w-md text-sm text-slate-700">Motivo de la pausa: {motivoPausaLegible(prep.pause_reason)}.</p>
       )}
       {prep && blocked && status !== "en_curso" && status !== "finalizada" && (
         <div id={`campana-falta-${campaignId}`} className="mt-2 max-w-md rounded-lg border border-amber-200 bg-amber-50 p-2 text-sm text-amber-950">

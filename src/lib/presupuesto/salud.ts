@@ -4,6 +4,7 @@
  */
 import type { ItemSalud } from "@/lib/salud/reglas";
 import { evaluarPresupuesto, type ConfigPresupuesto } from "./reglas";
+import { cantidad } from "@/lib/textos/pantalla";
 
 export interface ResumenParaSalud {
   config: ConfigPresupuesto;
@@ -47,7 +48,7 @@ export function itemsPresupuestoGemini(r: ResumenParaSalud | null | undefined): 
       titulo: `${p.nombre}: tope diario de IA alcanzado`,
       // 22/11: por defecto el tope diario es solo aviso (precios estimados); con `frenoDiario` corta al bot.
       detalle: frenaElDia
-        ? `Hoy lleva ${usd(p.diaUsd)} de ${usd(p.topeDiaUsd)}.${p.turnosFrenadosHoy ? ` ${p.turnosFrenadosHoy} conversación(es) pasaron a una persona.` : ""} Se destraba a la medianoche de Argentina.`
+        ? `Hoy lleva ${usd(p.diaUsd)} de ${usd(p.topeDiaUsd)}.${p.turnosFrenadosHoy ? ` ${cantidad(p.turnosFrenadosHoy, "conversación pasó", "conversaciones pasaron")} a una persona.` : ""} Se destraba a la medianoche de Argentina.`
         : `Hoy lleva ${usd(p.diaUsd)} de ${usd(p.topeDiaUsd)}. Es solo un aviso: el bot sigue respondiendo (los precios por token son estimados). El tope del mes sí frena.`,
       accion: frenaElDia ? "Mirar las conversaciones que pasaron a una persona" : "Revisar el gasto del perfil",
       href: frenaElDia ? "/inbox" : "/configuracion",

@@ -8,6 +8,8 @@
  *  - con fallas: en curso, sin ningún envío y con fallidos, o con más fallidos de 24 h que enviados;
  *  - enviando: en curso con envíos, con el avance real «N de M» y los fallidos si los hay.
  */
+import { motivoPausaLegible } from "@/lib/textos/pantalla";
+
 export type TonoCampana = "verde" | "amarillo" | "rojo" | "gris";
 
 export interface DatosCampana {
@@ -27,7 +29,11 @@ export interface DatosCampana {
 }
 
 export function estadoDeCampana(c: DatosCampana): { tono: TonoCampana; texto: string } {
-  if (c.status === "pausada") return { tono: "amarillo", texto: `Campaña pausada · ${c.pauseReason ? String(c.pauseReason).slice(0, 60) : c.nombre}` };
+  if (c.status === "pausada") {
+    // Integración 22/11: el motivo con palabras claras del rediseño («ad», «domingo» → nota a mano).
+    const m = motivoPausaLegible(c.pauseReason);
+    return { tono: "amarillo", texto: `Campaña «${c.nombre}» ${m.startsWith("pausada") ? m : `pausada · ${m}`}`.slice(0, 120) };
+  }
   if (c.status !== "en_curso") return { tono: "gris", texto: `Campaña ${c.status} · ${c.nombre}` };
   if (c.frenadaPorLinea) return { tono: "rojo", texto: "Campaña frenada · la línea de Wasender no puede enviar" };
   const avance = `${c.enviados.toLocaleString("es-AR")} de ${c.prospectos.toLocaleString("es-AR")}`;

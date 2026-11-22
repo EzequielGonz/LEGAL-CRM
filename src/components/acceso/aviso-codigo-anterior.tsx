@@ -16,14 +16,16 @@ export async function AvisoCodigoAnterior() {
     c6 = false;
   }
   if (!c6) return null;
+  // 22/11 (lista del 20/11, punto i): una sola línea; en el celular ocupaba media pantalla.
   return (
-    <div role="status" className="mb-4 rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+    <div role="status" className="aviso-codigo">
       <p>
-        <strong>Cambiá el código de ingreso.</strong> El de 6 números todavía sirve, pero los nuevos tienen 8 y son más seguros.
+        <span className="d-luz" data-estado="aviso" aria-hidden="true" />
+        <span>
+          <strong className="font-semibold">Cambiá el código de ingreso</strong> por uno de 8 números.
+        </span>
       </p>
-      <Link href="/configuracion#acceso" className="mt-1 inline-flex min-h-[44px] items-center font-semibold underline underline-offset-2">
-        Cambiar el código
-      </Link>
+      <Link href="/configuracion#acceso">Cambiar el código</Link>
     </div>
   );
 }

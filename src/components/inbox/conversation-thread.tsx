@@ -118,8 +118,26 @@ export function ConversationThread({
     };
   }, [traerNuevos]);
 
+  // 22/11 (lista del 20/11, punto c): antes `scrollIntoView` corría también la página y el
+  // encabezado del chat quedaba cortado al abrir. Ahora se baja solo dentro del chat: en la
+  // computadora, la lista de mensajes; en el celular, la columna del chat.
+  const raizRef = useRef<HTMLDivElement>(null);
+  const primeraVez = useRef(true);
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    const fin = bottomRef.current;
+    const raiz = raizRef.current;
+    if (!fin || !raiz) return;
+    let el: HTMLElement | null = fin.parentElement;
+    while (el && el !== raiz.parentElement) {
+      const oy = getComputedStyle(el).overflowY;
+      if ((oy === "auto" || oy === "scroll") && el.scrollHeight > el.clientHeight + 1) break;
+      el = el.parentElement;
+    }
+    if (!el || el === raiz.parentElement) return;
+    const quieto = primeraVez.current || window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    primeraVez.current = false;
+    const destino = el.scrollHeight;
+    el.scrollTo({ top: destino, behavior: quieto ? "auto" : "smooth" });
   }, [messages.length]);
 
   async function handleSend() {
@@ -188,9 +206,9 @@ export function ConversationThread({
   const visibles = messages.filter((m) => !m.duplicate_of);
 
   return (
-    <div className="flex h-full min-w-0 flex-col overflow-y-auto lg:flex-row lg:overflow-hidden">
+    <div ref={raizRef} className="flex h-full min-w-0 flex-col overflow-y-auto lg:flex-row lg:overflow-hidden">
       <div className="flex min-h-[70vh] min-w-0 flex-1 flex-col lg:min-h-0">
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 bg-white px-4 py-3 sm:px-5">
+        <div className="chat-cabecera flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 bg-white px-4 py-3 sm:px-5">
           <div className="min-w-0">
             <p className="text-sm font-semibold text-slate-900 [overflow-wrap:anywhere]">
               {contact.full_name ?? "Sin nombre"}
@@ -272,7 +290,7 @@ export function ConversationThread({
           <div ref={bottomRef} />
         </div>
 
-        <div className="border-t border-slate-200 bg-white p-3">
+        <div className="chat-compositor border-t border-slate-200 bg-white p-3">
           <div className="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-slate-700">
             <label className="tactil flex cursor-pointer items-center gap-2">
               <input type="checkbox" checked={aiOn} onChange={toggleAi} className="h-4 w-4" />
@@ -301,7 +319,10 @@ export function ConversationThread({
               className="min-w-0 flex-1 rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
             />
             <label className="tactil inline-flex cursor-pointer items-center rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-700 hover:bg-slate-50" title="Adjuntar foto, video o PDF">
-              📎<span className="sr-only">Adjuntar foto, video o PDF</span>
+              <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+                <path d="m20.5 11.5-8.1 8.1a5 5 0 0 1-7.1-7.1l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7l-8.5 8.5a1.7 1.7 0 0 1-2.4-2.4l7.8-7.8" />
+              </svg>
+              <span className="sr-only">Adjuntar foto, video o PDF</span>
               <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/3gpp,video/quicktime,application/pdf,.pdf" className="sr-only" onChange={(e) => setArchivo(e.target.files?.[0] ?? null)} />
             </label>
             <button onClick={handleSend} disabled={sending} className="btn-gold">

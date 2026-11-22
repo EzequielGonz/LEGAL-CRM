@@ -62,19 +62,55 @@ export function PestanasSeccion({ slug, menu = null }: { slug: SlugPerfil; menu?
   const visibles = activa ? activa.seccion.tabs.filter((t) => !t.oculto) : [];
   // 12/11: en el celular la pestaña en la que estás queda a la vista (antes podía quedar cortada).
   const riel = useRef<HTMLElement>(null);
+  const caja = useRef<HTMLDivElement>(null);
   const hrefActivo = activa?.tab.href ?? null;
   useEffect(() => {
     const actual = riel.current?.querySelector<HTMLElement>('[aria-current="page"]');
     if (actual && riel.current) riel.current.scrollLeft = Math.max(0, actual.offsetLeft - 16);
   }, [hrefActivo]);
+  // 22/11 (lista del 20/11, punto i): si hay más pestañas a un costado, el borde se desvanece y
+  // aparece una flecha que las trae (antes se cortaban sin ninguna señal de deslizar).
+  useEffect(() => {
+    const nav = riel.current;
+    const c = caja.current;
+    if (!nav || !c) return;
+    const marcar = () => {
+      const izq = nav.scrollLeft > 4;
+      const der = nav.scrollLeft + nav.clientWidth < nav.scrollWidth - 4;
+      c.toggleAttribute("data-mas-izquierda", izq);
+      c.toggleAttribute("data-mas-derecha", der);
+    };
+    marcar();
+    nav.addEventListener("scroll", marcar, { passive: true });
+    window.addEventListener("resize", marcar);
+    return () => {
+      nav.removeEventListener("scroll", marcar);
+      window.removeEventListener("resize", marcar);
+    };
+  }, [hrefActivo, visibles.length]);
+  const correr = (lado: 1 | -1) => {
+    const nav = riel.current;
+    if (!nav) return;
+    const quieto = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    nav.scrollBy({ left: lado * Math.round(nav.clientWidth * 0.7), behavior: quieto ? "auto" : "smooth" });
+  };
   if (!activa || visibles.length < 2) return null;
   return (
-    <nav ref={riel} aria-label={`Vistas de ${activa.seccion.label}`} className="pestanas-seccion">
-      {visibles.map((t) => (
-        <Link key={t.href} href={t.href} aria-current={t.href === activa.tab.href ? "page" : undefined} className="pestana">
-          {t.label}
-        </Link>
-      ))}
-    </nav>
+    <div ref={caja} className="pestanas-riel" data-sin-entrada="">
+      <nav ref={riel} aria-label={`Vistas de ${activa.seccion.label}`} className="pestanas-seccion">
+        {visibles.map((t) => (
+          <Link key={t.href} href={t.href} aria-current={t.href === activa.tab.href ? "page" : undefined} className="pestana">
+            {t.label}
+          </Link>
+        ))}
+      </nav>
+      {/* Las flechas son una ayuda para el dedo y el mouse; con teclado se recorren las pestañas con Tab. */}
+      <button type="button" className="pestanas-flecha" data-lado="izq" tabIndex={-1} aria-hidden="true" onClick={() => correr(-1)}>
+        ‹
+      </button>
+      <button type="button" className="pestanas-flecha" data-lado="der" tabIndex={-1} aria-hidden="true" onClick={() => correr(1)}>
+        ›
+      </button>
+    </div>
   );
 }

@@ -99,7 +99,7 @@ export function AgentesEtapa3({ perfil, rubroId, areas, volver }: { perfil: stri
               </p>
               <p className="text-slate-600">{a.objetivo || "Sin objetivo cargado."}</p>
               <p className="mt-1 text-xs text-slate-600">
-                {ev ? `Última evaluación: comercial mínimo ${ev.comercial_min}/16, ${ev.fallos_criticos} fallo(s) crítico(s), ${ev.casos} casos (${ev.proveedor}).` : "Sin evaluación todavía."}{" "}
+                {ev ? `Última evaluación: comercial mínimo ${ev.comercial_min}/16, ${ev.fallos_criticos === 1 ? "1 fallo crítico" : `${ev.fallos_criticos} fallos críticos`}, ${ev.casos} casos (${ev.proveedor}).` : "Sin evaluación todavía."}{" "}
                 {asg.length ? asg.map((x) => `${x.area}: ${x.estado} (v${x.version})`).join(" · ") : "Sin asignación: no responde."}
               </p>
             </li>
@@ -281,7 +281,7 @@ function Resultados({ derivados, alTerminar }: { derivados: Agente[]; alTerminar
             setBusy(false);
             if (!r.ok) return setMsg({ ok: false, text: r.data?.error ?? "No se pudo evaluar." });
             setRes(r.data);
-            setMsg({ ok: true, text: `Evaluación guardada: ${r.data.fallosCriticos} fallo(s) crítico(s), comercial mínimo ${r.data.comercialMin}/16.` });
+            setMsg({ ok: true, text: `Evaluación guardada: ${r.data.fallosCriticos === 1 ? "1 fallo crítico" : `${r.data.fallosCriticos} fallos críticos`}, comercial mínimo ${r.data.comercialMin}/16.` });
             await alTerminar();
           }}
           className="tactil rounded-lg bg-slate-900 px-4 text-sm font-medium text-white disabled:opacity-60"

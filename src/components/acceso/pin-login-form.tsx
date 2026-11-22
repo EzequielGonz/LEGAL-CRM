@@ -53,6 +53,8 @@ export function PinLoginForm({ configured, next }: { configured: boolean; next: 
     >
       <div className="mb-6 flex flex-col items-center text-center">
         <MarcaPanel className="mb-4" />
+        {/* 22/11: rótulo mono como /cerebro, arriba del título. */}
+        <p className="pin-kicker mb-2">Acceso privado · 4 perfiles</p>
         <h1 className="pin-titulo font-serif text-2xl font-semibold">Panel central</h1>
         <p className="pin-bajada mt-1.5 text-sm">Ingresá el PIN del panel para entrar.</p>
       </div>

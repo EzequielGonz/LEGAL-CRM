@@ -3,7 +3,6 @@ import { EfectosVidrio } from "@/components/ui/efectos-vidrio";
 import { LogoutButton } from "@/components/acceso/logout-button";
 import { type MarcaTarjeta } from "@/components/perfiles/perfil-selector";
 import { SelectorPerfilesPC } from "@/components/perfiles/selector-pc";
-import { EnVivoRubros } from "@/components/perfiles/en-vivo-rubros";
 import { ConocimientoBot } from "@/components/perfiles/conocimiento-bot";
 import { AsistenteGeneral } from "@/components/asistente/asistente-general";
 import { EntradaCerebro } from "@/components/cerebro/entrada-cerebro";
@@ -38,19 +37,20 @@ export default async function PerfilesPage() {
   const nombres = Object.fromEntries(rubros.map((p) => [p.slug, tarjetas[p.slug as SlugPerfil]?.nombre ?? p.name]));
 
   return (
-    <div className="escena-oscura sala-perfil flex min-h-screen items-start justify-center px-4 py-12 sm:px-6 min-[1024px]:max-[1823px]:pr-[21.5rem]">
+    <div className="escena-oscura sala-perfil flex min-h-screen items-start justify-center px-4 py-12 sm:px-6">
       <SalaLampara />
       {/* 13/11: las tarjetas se inclinan con el cursor, como las cifras del panel. */}
       <EfectosVidrio />
       <main id="perfiles" className="escena-capa relative w-full max-w-6xl">
         {/* 15/11: las tarjetas se actualizan solas (cada 20 s y al volver a la pestaña) desde el selector;
             antes además se recargaba toda la página cada 30 s, lo que duplicaba las mismas lecturas. */}
-        {/* 24/10: seguimiento en vivo de los cuatro rubros (esquina superior en la computadora). */}
-        <EnVivoRubros nombres={nombres} />
+        {/* 22/11: sin el cuadro «En vivo» (orden del 19/11: «sacarlo»). El componente sigue en
+            src/components/perfiles/en-vivo-rubros.tsx por si se quiere volver a mostrar. */}
         {/* 21/11: el cerebro del negocio, arriba de todo (pedido de los dueños). */}
         <EntradaCerebro />
         <div className="mb-10 text-center">
           <MarcaPanel className="sello-grande mx-auto mb-5" />
+          <p className="d-kicker mb-3" style={{ color: "rgb(var(--c-gold-400))" }}>Panel central · cuatro perfiles</p>
           <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">¿Con qué perfil trabajás?</h1>
           <p className="mt-2 text-sm text-slate-400">Lo pendiente de cada perfil, la semana y la última base. Elegí uno para entrar al panel.</p>
         </div>
@@ -90,12 +90,12 @@ function EsqueletoTarjetas({ cantidad }: { cantidad: number }) {
           <li key={i} className="tarjeta-perfil relative flex min-h-[22rem] flex-col gap-4 overflow-hidden rounded-3xl p-5 pt-6">
             <span className="absolute inset-x-0 top-0 h-1 bg-gold-500" />
             <div className="flex items-center gap-3">
-              <div className="h-12 w-12 rounded-2xl skeleton-shimmer" />
-              <div className="h-5 w-40 rounded skeleton-shimmer" />
+              <div className="h-12 w-12 rounded-2xl d-esqueleto" />
+              <div className="h-5 w-40 rounded d-esqueleto" />
             </div>
-            <div className="h-16 rounded-2xl skeleton-shimmer" />
-            <div className="h-24 rounded-2xl skeleton-shimmer" />
-            <div className="mt-auto h-10 rounded-xl skeleton-shimmer" />
+            <div className="h-16 rounded-2xl d-esqueleto" />
+            <div className="h-24 rounded-2xl d-esqueleto" />
+            <div className="mt-auto h-10 rounded-xl d-esqueleto" />
           </li>
         ))}
       </ul>

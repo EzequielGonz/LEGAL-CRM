@@ -322,7 +322,10 @@ function EntradaBandeja({ slug, activa, plegado = false }: { slug: SlugPerfil; a
         </span>
         <span className="menu-texto min-w-0 flex-1">
           <span className="block">Bandeja para Claude</span>
-          <span className={clsx("block truncate text-xs font-normal", espera ? "font-medium text-amber-300" : "text-slate-300")}>{detalle}</span>
+          {/* 22/11 (lista del 20/11, punto j): color propio con 4,5:1 en los dos modos (antes 1,91:1 en oscuro). */}
+          <span className={clsx("menu-tarjeta-sub block truncate text-xs font-normal", espera && "font-medium")} data-espera={espera ? "" : undefined}>
+            {detalle}
+          </span>
         </span>
       </Link>
     </div>

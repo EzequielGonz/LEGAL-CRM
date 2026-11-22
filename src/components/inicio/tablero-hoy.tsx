@@ -3,8 +3,6 @@ import Link from "next/link";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { GRUPOS_PERSONAS, motivoLegible, resumenPersonas, type GrupoPersonas } from "@/lib/estadisticas-personas";
 import { consultarEstadosLineas } from "@/lib/whatsapp/estado-linea";
-import { getProfileMetrics } from "@/lib/metrics";
-import { puntajeBot } from "@/lib/agentes/puntaje";
 import { cuandoCorto, enlaceConversacion, iniciales } from "@/lib/cartera";
 import { conVolver } from "@/lib/navegacion";
 import type { SlugPerfil } from "@/lib/marca";
@@ -15,10 +13,11 @@ import { getCampaignMetrics } from "@/lib/campaign-metrics";
 import { contarFallidos24h } from "@/lib/salud/fallas";
 import { motivosDeParo } from "@/lib/definiciones/parado";
 import { getAutomationPause } from "@/lib/automation-pause";
+import { Bento, ChipEstado, Kicker, Luz, Vacio, estadoDeTono } from "@/components/ui/diseno";
 
 /**
- * Tablero de «Hoy» (24/10, boceto v3 aprobado): estado de la línea, la
- * campaña y el bot en tres chips; las cinco cifras por personas; y la lista
+ * Tablero de «Hoy» (24/10, boceto v3 aprobado; 22/11 sin chip del bot ni «También hoy»): estado de la línea y la
+ * campaña en chips; las dos colas de trabajo; y la lista
  * del grupo elegido (por defecto, «Por cerrar»), con acceso directo al chat.
  * Solo lectura.
  */
@@ -83,7 +82,6 @@ export async function TableroHoy({
   areas,
   grupo,
   captados = [],
-  enMarcha = [],
   delBot = [],
   filtroCola,
   verTodo = false,
@@ -94,7 +92,6 @@ export async function TableroHoy({
   grupo?: string;
   /** Captados que falta derivar (los trae la página, con su cita si tienen). */
   captados?: EntradaCola[];
-  enMarcha?: EnMarcha[];
   delBot?: DatoDelBot[];
   filtroCola?: string;
   verTodo?: boolean;
@@ -102,9 +99,8 @@ export async function TableroHoy({
   const s = createAdminClient();
   const aqui = `/hoy?perfil=${slug}`;
   const baseCampanas = slug === "juridico" ? "/campanas" : `/panel/${slug}/campanas`;
-  const baseAgentes = slug === "juridico" ? "/agentes" : `/panel/${slug}/agentes`;
 
-  const [reales, posibles, colas, { data: lineasWa }, personas, { data: lineas }, metricas, { data: camps }] = await Promise.all([
+  const [reales, posibles, colas, { data: lineasWa }, personas, { data: lineas }, { data: camps }] = await Promise.all([
     // 13/11: «Oportunidades reales» (ordenadas por interés) y «Posible captación a revisar», con la misma definición que en Chats.
     listarIndicador(rubroId, indicadorPorClave("piden_persona")!).catch(() => ({ filas: [] as any[] })),
     listarIndicador(rubroId, indicadorPorClave("posible_captacion")!).catch(() => ({ filas: [] as any[] })),
@@ -112,7 +108,6 @@ export async function TableroHoy({
     (s.from("wasender_lineas" as any) as any).select("id, nombre, estado, habilitada").eq("rubro_id", rubroId).is("archivada_at", null),
     resumenPersonas(rubroId, areas),
     s.from("profile_lines").select("label, credential_key, active").eq("rubro_id", rubroId).eq("active", true),
-    getProfileMetrics(rubroId).catch(() => null),
     s
       .from("campaigns")
       .select("id, name, status, pause_reason, proveedor, wasender_line_id" as any)
@@ -171,8 +166,6 @@ export async function TableroHoy({
     agenteActivo: ((agentesDelPerfil ?? []) as any[]).some((a) => a.active),
   });
 
-  const p = puntajeBot(metricas as any);
-  const chipBot = { tono: p.puntaje === null ? "gris" : p.puntaje >= 60 ? "verde" : p.puntaje >= 35 ? "amarillo" : "rojo", texto: p.puntaje === null ? "Bot · todavía sin puntaje" : `Bot · ${p.puntaje} de 100 en captación y trato`, href: baseAgentes };
   const baseWasender = `/wasender?perfil=${slug}`;
   const chipsWasender = lineasWasender.map((l) => ({
     tono: l.estado === "connected" ? (l.habilitada ? "verde" : "amarillo") : "rojo",
@@ -204,12 +197,7 @@ export async function TableroHoy({
   const porMotivo = new Map<string, number>();
   for (const d of colas.descartes) porMotivo.set(d.descarte.etiqueta, (porMotivo.get(d.descarte.etiqueta) ?? 0) + 1);
   const resumenDescartes = [...porMotivo.entries()].map(([t, n]) => `${n} ${t.toLowerCase()}`).join(", ");
-  // 13/11: fuera de las dos listas, solo lo que pide una acción y tiene a alguien.
-  const trabados = personas.conteos.bot_trabado ?? 0;
-  const tareas: (EnMarcha & { activo?: boolean })[] = [
-    ...(trabados > 0 ? [{ titulo: "El bot se trabó", n: trabados, detalle: "No supo qué responder: contestales vos", href: `${aqui}&grupo=bot_trabado#hoy-lista`, activo: elegido === "bot_trabado" }] : []),
-    ...enMarcha.filter((m) => (m.n ?? 0) > 0),
-  ];
+  // 22/11 (orden del 19/11): sin el chip del bot ni el bloque «También hoy».
   const bot = delBot.filter((d) => d.n !== null && d.n !== undefined && (d.n > 0 || d.de != null));
 
   return (
@@ -217,10 +205,10 @@ export async function TableroHoy({
       <h2 id="hoy-tablero" className="sr-only">
         Tablero de hoy
       </h2>
-      <ul className="flex flex-wrap gap-2" aria-label="Estado de la línea, la campaña y el bot">
+      <ul className="d-revelar flex flex-wrap gap-2" aria-label="Estado de la línea y la campaña">
         <Chip tono={chipLinea.tono} texto={chipLinea.texto} />
-        <Chip tono={chipCampana.tono} texto={chipCampana.texto} href={chipCampana.href} />
-        <Chip tono={chipBot.tono} texto={chipBot.texto} href={chipBot.href} />
+        {/* 22/11: la luz late solo mientras la campaña está enviando de verdad. */}
+        <Chip tono={chipCampana.tono} texto={chipCampana.texto} href={chipCampana.href} late={camp?.status === "en_curso" && !campFrenada} />
         {chipsWasender.map((c) => (
           <Chip key={c.texto} tono={c.tono} texto={c.texto} href={c.href} />
         ))}
@@ -234,57 +222,39 @@ export async function TableroHoy({
       ) : null}
 
       {/* 1) Dos listas separadas: a quién hay que contestarle y a quién hay que derivar. Nadie se repite. */}
-      <div id="hoy-cola" className="grid scroll-mt-24 items-start gap-4 lg:grid-cols-2">
-        <div className="overflow-hidden rounded-2xl border border-amber-300 bg-white shadow-sm">
-          <div className="border-b border-amber-200 bg-amber-50 px-5 py-3.5">
-            <p className="text-base font-semibold text-slate-950">
-              Atención humana <span className="ml-1 tabular-nums">{atender.length}</span>
-            </p>
-            <p className="text-[13px] text-slate-700">Escribieron y el bot no les contesta: respondeles vos.</p>
-          </div>
-          {atender.length === 0 ? (
-            <p className="px-5 py-8 text-center text-sm text-slate-600">Nadie espera una respuesta tuya.</p>
-          ) : (
-            <ul className="divide-y divide-slate-100">
-              {(verTodo ? atender : atender.slice(0, VISIBLES_EN_COLA)).map((f) => (
-                <FilaTrabajo key={f.clave} f={f} slug={slug} aqui={aqui} modo="atender" />
-              ))}
-            </ul>
-          )}
-          {!verTodo && atender.length > VISIBLES_EN_COLA && (
-            <p className="border-t border-slate-100 px-5 py-3 text-sm">
-              <Link prefetch={false} href={`${aqui}&todo=1#hoy-cola`} className="font-medium text-slate-800 underline underline-offset-2">Ver los {atender.length}</Link>
-            </p>
-          )}
-        </div>
-
-        <div className="overflow-hidden rounded-2xl border border-emerald-300 bg-white shadow-sm">
-          <div className="border-b border-emerald-200 bg-emerald-50 px-5 py-3.5">
-            <p className="text-base font-semibold text-slate-950">
-              Captados para derivar <span className="ml-1 tabular-nums">{paraDerivar.length}</span>
-            </p>
-            <p className="text-[13px] text-slate-700">Ya aceptaron el siguiente paso: pasalos a quien los atiende.</p>
-          </div>
-          {paraDerivar.length === 0 ? (
-            <p className="px-5 py-8 text-center text-sm text-slate-600">Nadie pendiente de derivar.</p>
-          ) : (
-            <ul className="divide-y divide-slate-100">
-              {(verTodo ? paraDerivar : paraDerivar.slice(0, VISIBLES_EN_COLA)).map((f) => (
-                <FilaTrabajo key={f.clave} f={f} slug={slug} aqui={aqui} modo="captado" />
-              ))}
-            </ul>
-          )}
-          {!verTodo && paraDerivar.length > VISIBLES_EN_COLA && (
-            <p className="border-t border-slate-100 px-5 py-3 text-sm">
-              <Link prefetch={false} href={`${aqui}&todo=1#hoy-cola`} className="font-medium text-slate-800 underline underline-offset-2">Ver los {paraDerivar.length}</Link>
-            </p>
-          )}
-        </div>
-      </div>
+      <Bento className="scroll-mt-24 !items-start" revelar>
+        <ColaHoy
+          id="hoy-cola"
+          titulo="Atención humana"
+          kicker="Respondé vos"
+          bajada="Escribieron y el bot no les contesta: respondeles vos."
+          estado={atender.length ? "aviso" : "ok"}
+          filas={verTodo ? atender : atender.slice(0, VISIBLES_EN_COLA)}
+          total={atender.length}
+          vacio="Nadie espera una respuesta tuya."
+          verTodos={!verTodo && atender.length > VISIBLES_EN_COLA ? `${aqui}&todo=1#hoy-cola` : null}
+          slug={slug}
+          aqui={aqui}
+          modo="atender"
+        />
+        <ColaHoy
+          titulo="Captados para derivar"
+          kicker="Pasalos"
+          bajada="Ya aceptaron el siguiente paso: pasalos a quien los atiende."
+          estado={paraDerivar.length ? "ok" : "apagado"}
+          filas={verTodo ? paraDerivar : paraDerivar.slice(0, VISIBLES_EN_COLA)}
+          total={paraDerivar.length}
+          vacio="Nadie pendiente de derivar."
+          verTodos={!verTodo && paraDerivar.length > VISIBLES_EN_COLA ? `${aqui}&todo=1#hoy-cola` : null}
+          slug={slug}
+          aqui={aqui}
+          modo="captado"
+        />
+      </Bento>
 
       {/* Descartes: se reconocen y no se mezclan con el trabajo. */}
       {colas.descartes.length > 0 && (
-        <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-5 py-3.5">
+        <div className="d-tarjeta flex-row flex-wrap items-center justify-between gap-3">
           <p className="min-w-0 text-sm text-slate-700">
             <span className="font-semibold text-slate-950">
               {colas.descartes.length} {colas.descartes.length === 1 ? "respondió" : "respondieron"} que no {colas.descartes.length === 1 ? "sigue" : "siguen"}
@@ -295,26 +265,8 @@ export async function TableroHoy({
         </div>
       )}
 
-      {/* 2) También hoy: solo lo que pide algo tuyo y tiene a alguien. Sin nadie, no se muestra. */}
-      {tareas.length > 0 && (
-        <div>
-          <p className="mb-2 text-sm font-semibold text-slate-950">También hoy</p>
-          <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
-            {tareas.map((t) => (
-              <li key={t.titulo}>
-                <Link prefetch={false} href={t.href} aria-current={t.activo ? "true" : undefined} className={`kpi-hoy flex h-full flex-col rounded-2xl border p-4 ${t.activo ? "kpi-activo" : ""}`}>
-                  <span className="text-[13px] font-medium text-slate-600">{t.titulo}</span>
-                  <span className="cifra-premium mt-1.5 text-3xl font-semibold tabular-nums text-slate-950">{(t.n ?? 0).toLocaleString("es-AR")}</span>
-                  <span className="mt-1 text-[13px] text-slate-500">{t.detalle}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
       {elegido && (
-        <div id="hoy-lista" className="scroll-mt-24 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div id="hoy-lista" className="d-tarjeta d-tarjeta--sin-relleno scroll-mt-24">
           <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 px-5 py-3.5">
             <p className="text-sm font-semibold text-slate-950">
               {infoGrupo!.titulo} <span className="ml-1 tabular-nums text-slate-500">{personas.conteos[elegido] ?? "—"}</span>
@@ -324,7 +276,7 @@ export async function TableroHoy({
             </Link>
           </div>
           {filas.length === 0 ? (
-            <p className="px-5 py-8 text-center text-sm text-slate-600">Nada en este grupo por ahora.</p>
+            <Vacio titulo="Nada en este grupo por ahora" texto="Cuando alguien entre en este grupo, aparece acá." />
           ) : (
             <ul className="divide-y divide-slate-100">
               {filas.map((f, i) => (
@@ -360,8 +312,11 @@ export async function TableroHoy({
 
       {/* 3) Lo que el bot lleva adelante solo: una línea, cada dato abre su lista. */}
       {bot.length > 0 && (
-        <div className="rounded-2xl border border-slate-200 bg-white px-5 py-4">
-          <p className="text-sm font-semibold text-slate-950">Qué está haciendo el bot</p>
+        <div className="d-tarjeta">
+          <p className="flex items-center gap-2 text-sm font-semibold text-slate-950">
+            <Luz estado="ok" late />
+            Qué está haciendo el bot
+          </p>
           <ul className="mt-2 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-700">
             {bot.map((d) => (
               <li key={d.texto} className="min-w-0">
@@ -381,20 +336,73 @@ export async function TableroHoy({
   );
 }
 
-const TONO: Record<string, string> = {
-  verde: "bg-emerald-500",
-  amarillo: "bg-amber-400",
-  rojo: "bg-red-500",
-  gris: "bg-slate-400",
-};
-
-function Chip({ tono, texto, href }: { tono: string; texto: string; href?: string }) {
-  const cuerpo = (
-    <>
-      <span aria-hidden="true" className={`h-2 w-2 rounded-full ${TONO[tono] ?? TONO.gris}`} />
-      <span className="truncate">{texto}</span>
-    </>
+function Chip({ tono, texto, href, late = false }: { tono: string; texto: string; href?: string; late?: boolean }) {
+  return (
+    <li className="max-w-full">
+      <ChipEstado estado={estadoDeTono(tono)} texto={texto} href={href} late={late} />
+    </li>
   );
-  const clase = "chip-estado inline-flex min-h-[40px] max-w-full items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 sm:min-h-0";
-  return <li className="max-w-full">{href ? <Link prefetch={false} href={href} className={clase}>{cuerpo}</Link> : <span className={clase}>{cuerpo}</span>}</li>;
+}
+
+/** Una de las dos listas de trabajo de Hoy, en su tarjeta del bento. */
+function ColaHoy({
+  id,
+  titulo,
+  kicker,
+  bajada,
+  estado,
+  filas,
+  total,
+  vacio,
+  verTodos,
+  slug,
+  aqui,
+  modo,
+}: {
+  id?: string;
+  titulo: string;
+  kicker: string;
+  bajada: string;
+  estado: "ok" | "aviso" | "apagado";
+  filas: ItemCola[];
+  total: number;
+  vacio: string;
+  verTodos: string | null;
+  slug: SlugPerfil;
+  aqui: string;
+  modo: "atender" | "captado";
+}) {
+  return (
+    <section id={id} aria-label={titulo} className="d-tarjeta d-tarjeta--sin-relleno d-b-4 scroll-mt-24" data-estado={estado}>
+      <header>
+        <div className="min-w-0">
+          <Kicker>{kicker}</Kicker>
+          <h2 className="mt-1 flex items-center gap-2 text-lg font-semibold text-slate-950">
+            <Luz estado={estado} late={estado === "aviso"} />
+            {titulo}
+          </h2>
+          <p className="mt-0.5 text-[13px] text-slate-600">{bajada}</p>
+        </div>
+        <p className="d-stat__valor d-stat__valor--chico" data-contar="" aria-label={`${total} en la lista`}>
+          {total.toLocaleString("es-AR")}
+        </p>
+      </header>
+      {filas.length === 0 ? (
+        <Vacio titulo={vacio} texto="Cuando haya alguien, aparece acá." />
+      ) : (
+        <ul className="divide-y divide-slate-100">
+          {filas.map((f) => (
+            <FilaTrabajo key={f.clave} f={f} slug={slug} aqui={aqui} modo={modo} />
+          ))}
+        </ul>
+      )}
+      {verTodos && (
+        <p className="border-t border-slate-100 px-5 py-3 text-sm">
+          <Link prefetch={false} href={verTodos} className="tactil inline-flex items-center font-medium text-slate-800 underline underline-offset-2">
+            Ver las {total.toLocaleString("es-AR")} personas
+          </Link>
+        </p>
+      )}
+    </section>
+  );
 }

@@ -14,6 +14,7 @@ import { AREAS_DE_PERFIL, contarGrupo } from "@/lib/cartera-servidor";
 import { getCampaignFunnelCounts } from "@/lib/campaigns";
 import { TableroHoy } from "@/components/inicio/tablero-hoy";
 import { captadoEsperaDeMas, ESPERA_CAPTADO_HORAS } from "@/lib/hoy/colas";
+import { CabezaPantalla, Esqueleto } from "@/components/ui/diseno";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Hoy" };
@@ -48,15 +49,17 @@ export default async function InicioPerfilPage(
   return (
     <MarcoPerfil slug={slug}>
       <div className="mx-auto max-w-5xl space-y-6">
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-semibold text-slate-950">{saludo()}</h1>
-            <p className="mt-1 text-sm text-slate-600">{fechaHoy()} · personas, no mensajes</p>
-          </div>
-          <BotonAsistente variante="suave" texto="Resumen de hoy">
-            Pedile algo
-          </BotonAsistente>
-        </div>
+        {/* 22/11: encabezado con el estilo de /cerebro. Sin «personas, no mensajes» (orden del 19/11). */}
+        <CabezaPantalla
+          kicker={fechaHoy()}
+          titulo={saludo()}
+          bajada="A quién le escribís ahora y a quién pasás."
+          accion={
+            <BotonAsistente variante="suave" texto="Resumen de hoy">
+              Pedile algo
+            </BotonAsistente>
+          }
+        />
 
         {/* 13/11: el marco y el saludo se pintan enseguida; los datos llegan apenas están. */}
         <Suspense fallback={<EsqueletoHoy />}>
@@ -72,14 +75,14 @@ function EsqueletoHoy() {
     <div role="status" aria-label="Cargando el tablero de hoy" className="space-y-6">
       <div className="flex flex-wrap gap-2">
         {[40, 56, 44].map((w, i) => (
-          <span key={i} className="h-9 animate-pulse rounded-full bg-slate-200/70" style={{ width: `${w * 4}px` }} />
+          <Esqueleto key={i} alto="2.25rem" ancho={`${w * 4}px`} className="!rounded-full" />
         ))}
       </div>
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="h-72 animate-pulse rounded-2xl bg-slate-200/60" />
-        <div className="h-72 animate-pulse rounded-2xl bg-slate-200/60" />
+      <div className="d-bento">
+        <Esqueleto alto="18rem" className="d-b-4 !rounded-2xl" />
+        <Esqueleto alto="18rem" className="d-b-4 !rounded-2xl" />
       </div>
-      <div className="h-40 animate-pulse rounded-2xl bg-slate-200/60" />
+      <Esqueleto alto="10rem" className="!rounded-2xl" />
     </div>
   );
 }
@@ -93,13 +96,14 @@ async function CuerpoHoy({ slug, rubroId, searchParams }: { slug: SlugPerfil; ru
 
   // 13/11 (pedido de la responsable): en Hoy queda solo lo que lleva a una acción.
   // Las cifras de la semana, la última base y los indicadores sueltos se ven en Resultados.
-  const claves = ["captado_sin_derivar", "derivado_sin_resultado", "dejaron_de_responder"] as const;
+  // 22/11 (orden del 19/11): sin el bloque «También hoy»; ya no se leen «Derivados sin resultado» ni «Citas próximas» acá
+  // (siguen en Resultados y en Chats).
+  const claves = ["captado_sin_derivar", "dejaron_de_responder"] as const;
   // 18/11 (velocidad): antes eran cinco tandas de consultas, una detrás de la otra. Ahora son dos.
   const hace24 = new Date(Date.now() - ESPERA_CAPTADO_HORAS * 3_600_000).toISOString();
-  const [conteos, captados, agendaron, hablando, { data: activas }, { data: viejos }] = await Promise.all([
+  const [conteos, captados, hablando, { data: activas }, { data: viejos }] = await Promise.all([
     Promise.all(claves.map(async (c) => [c, await contarIndicador(rubroId as string, indicadorPorClave(c)!)] as const)),
     listarIndicador(rubroId, indicadorPorClave("captado_sin_derivar")!, { orden: "reciente" }),
-    contarGrupo(rubroId, areas, grupo("agendaron")).catch(() => null),
     contarGrupo(rubroId, areas, grupo("hablando")).catch(() => null),
     // Campañas que están enviando ahora, con su avance. Solo lectura.
     s.from("campaigns").select("id, name, status").in("area", areas).is("archived_at", null).eq("status", "en_curso").order("created_at", { ascending: false }).limit(3),
@@ -125,12 +129,7 @@ async function CuerpoHoy({ slug, rubroId, searchParams }: { slug: SlugPerfil; ru
   ]);
   const citaDe = (id: string) => ((citas ?? []) as any[]).find((c) => c.contact_id === id && !/cancel/.test(String(c.status ?? "")));
 
-  // Lo que pide algo tuyo (solo se muestra si hay alguien)…
-  const tareas = [
-    { titulo: "Citas próximas", n: agendaron, detalle: "Mirá quién viene y a qué hora", href: `/conversaciones?perfil=${slug}&grupo=agendaron` },
-    { titulo: "Derivados sin resultado", n: cuenta.derivado_sin_resultado.count, detalle: "Anotá cómo terminó cada uno", href: enlaceIndicador(slug, "derivado_sin_resultado", aqui) },
-  ];
-  // …y lo que el bot lleva adelante solo: se informa en una línea, cada dato abre su lista.
+  // Lo que el bot lleva adelante solo: se informa en una línea, cada dato abre su lista.
   const delBot = [
     { texto: "en charla con el bot", n: hablando, href: `/conversaciones?perfil=${slug}&grupo=hablando` },
     { texto: "en seguimiento", n: cuenta.dejaron_de_responder.count, href: enlaceIndicador(slug, "dejaron_de_responder", aqui) },
@@ -143,7 +142,7 @@ async function CuerpoHoy({ slug, rubroId, searchParams }: { slug: SlugPerfil; ru
   return (
     <>
       {esperanDeMas > 0 && (
-        <p role="status" className="rounded-xl border border-amber-300 bg-amber-50 p-3 text-sm font-medium text-amber-900">
+        <p role="status" className="d-aviso !py-2.5 font-medium">
           {esperanDeMas === 1 ? "Una persona captada espera" : `${esperanDeMas} personas captadas esperan`} el llamado hace más de 24 horas. En la lista de abajo aparecen con «Más de 24 h».
         </p>
       )}
@@ -154,7 +153,6 @@ async function CuerpoHoy({ slug, rubroId, searchParams }: { slug: SlugPerfil; ru
         grupo={searchParams.grupo}
         filtroCola={searchParams.cola}
         verTodo={searchParams.todo === "1"}
-        enMarcha={tareas}
         delBot={delBot}
         captados={(captados.filas ?? []).map((o: any) => {
           const cita = citaDe(o.contact_id);

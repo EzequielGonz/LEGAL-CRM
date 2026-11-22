@@ -146,7 +146,7 @@ test("Salud: un perfil con tope del día aparece solo en su perfil", () => {
   // Por defecto es solo aviso: no dice que pasaron a una persona.
   assert.match(propios[0].detalle, /solo un aviso/);
   const conFreno = itemsPresupuestoGemini({ ...resumen(3, [{ slug: "marketing", diaUsd: 0.5, turnosFrenadosHoy: 3 }]), config: { ...D, frenoDiario: true } });
-  assert.match(conFreno.find((i) => i.clave === "presupuesto_dia_marketing")!.detalle, /3 conversación/);
+  assert.match(conFreno.find((i) => i.clave === "presupuesto_dia_marketing")!.detalle, /3 conversaciones pasaron a una persona/);
   assert.equal(itemsDelPerfil(items, "marketing").some((i) => i.clave === "presupuesto_dia_marketing"), true);
   assert.equal(itemsDelPerfil(items, "juridico").some((i) => i.clave === "presupuesto_dia_marketing"), false);
   // El del mes es de todo el sistema: se ve en los cuatro perfiles.

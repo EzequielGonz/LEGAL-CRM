@@ -88,7 +88,7 @@ export default async function Pagina(
             </Link>{" "}
             / Resultados
           </p>
-          <h1 className="mt-1 text-2xl font-semibold text-slate-950">
+          <h1 className="mt-1 text-2xl font-semibold text-slate-950 sm:text-3xl">
             {vista.titulo} · {per.titulo.toLowerCase()}
           </h1>
           <p className="mt-1 text-sm text-slate-600">
@@ -112,7 +112,7 @@ export default async function Pagina(
         </nav>
 
         {/* 13/11: el embudo del período; cada etapa abre sus personas (reemplaza a los botones «Qué ver»). */}
-        <Suspense fallback={<div role="status" aria-label="Cargando el embudo" className="h-44 animate-pulse rounded-2xl bg-slate-200/60" />}>
+        <Suspense fallback={<div role="status" aria-label="Cargando el embudo" className="d-esqueleto h-44 !rounded-2xl" />}>
           <EmbudoPeriodo slug={slug} rubroId={rubroId} areas={AREAS_DE_PERFIL[slug]} periodo={periodo} ver={ver} />
         </Suspense>
 
@@ -122,7 +122,7 @@ export default async function Pagina(
         </Suspense>
 
         {r.origenes.length > 0 ? (
-          <section aria-labelledby="res-origen" className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <section aria-labelledby="res-origen" className="d-tarjeta">
             <h2 id="res-origen" className="text-base font-semibold text-slate-950">
               De dónde vienen
             </h2>
@@ -144,14 +144,17 @@ export default async function Pagina(
           </section>
         ) : null}
 
-        <section aria-labelledby="res-lista" className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <section aria-labelledby="res-lista" className="d-tarjeta d-tarjeta--sin-relleno">
           <h2 id="res-lista" className="sr-only">
             Personas
           </h2>
           {r.filas.length === 0 ? (
-            <div className="px-5 py-10 text-center">
-              <p className="text-base font-medium text-slate-900">{VACIO[ver]}</p>
-              <p className="mt-1 text-sm text-slate-600">
+            <div className="d-vacio">
+              <span className="d-vacio__icono" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><circle cx="11" cy="11" r="6" /><path d="m20 20-4.2-4.2" /></svg>
+              </span>
+              <p className="d-vacio__titulo">{VACIO[ver]}</p>
+              <p className="d-vacio__texto">
                 Probá con otro período:{" "}
                 <Link prefetch={false} href={href(ver, "mes")} className="font-medium underline underline-offset-2">
                   este mes

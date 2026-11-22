@@ -8,6 +8,10 @@ import { rutaDePerfil } from "@/lib/perfil-ruta";
 import type { SlugPerfil } from "@/lib/marca";
 import { itemAtrasoLatido, type HuecoRegistrado } from "./latido-atraso";
 import { itemsPresupuestoGemini, type ResumenParaSalud } from "@/lib/presupuesto/salud";
+import { cantidad } from "@/lib/textos/pantalla";
+
+/** Cifra con la que empieza un título («12 mensajes…» → 12). */
+const cifraDelTitulo = (t: string) => Number(t.split(" ")[0].replace(/\./g, "")) || 0;
 
 export type EstadoSalud = "rojo" | "amarillo" | "verde";
 
@@ -135,13 +139,13 @@ export function evaluarSalud(d: DatosSalud): ItemSalud[] {
   if (d.retenidosPorPerfil) {
     for (const [slug, r] of Object.entries(d.retenidosPorPerfil)) {
       if (r.cantidad > 0) {
-        items.push({ clave: "cuarentena", perfil: slug, estado: "rojo", titulo: `${r.cantidad} mensaje(s) entrante(s) retenido(s) sin revisar`, detalle: r.motivo ?? "Webhook rechazado.", accion: "Revisar los retenidos", href: `/incidencias?perfil=${slug}&vista=retenidos` });
+        items.push({ clave: "cuarentena", perfil: slug, estado: "rojo", titulo: `${cantidad(r.cantidad, "mensaje entrante retenido", "mensajes entrantes retenidos")} sin revisar`, detalle: r.motivo ?? "Webhook rechazado.", accion: "Revisar los retenidos", href: `/incidencias?perfil=${slug}&vista=retenidos` });
       } else if (d.secretoMeta) {
         items.push({ clave: "cuarentena", perfil: slug, estado: "verde", titulo: "Webhooks", detalle: "Sin mensajes retenidos sin revisar." });
       }
     }
   } else if (d.cuarentena24h.cantidad > 0) {
-    items.push({ clave: "cuarentena", estado: "rojo", titulo: `${d.cuarentena24h.cantidad} mensaje(s) entrante(s) en cuarentena`, detalle: d.cuarentena24h.motivo ?? "Webhook rechazado.", accion: "Revisar la cuarentena", href: "/configuracion#cuarentena" });
+    items.push({ clave: "cuarentena", estado: "rojo", titulo: `${cantidad(d.cuarentena24h.cantidad, "mensaje entrante", "mensajes entrantes")} en cuarentena`, detalle: d.cuarentena24h.motivo ?? "Webhook rechazado.", accion: "Revisar la cuarentena", href: "/configuracion#cuarentena" });
   } else if (d.secretoMeta) {
     items.push({ clave: "cuarentena", estado: "verde", titulo: "Webhooks", detalle: "Sin mensajes en cuarentena en las últimas 24 h." });
   }
@@ -195,7 +199,7 @@ export function evaluarSalud(d: DatosSalud): ItemSalud[] {
     items.push({
       clave: "errores_ia",
       estado: alto ? "rojo" : "amarillo",
-      titulo: `${d.turnos24h.errores} respuesta(s) de la IA con error en 24 h`,
+      titulo: `${cantidad(d.turnos24h.errores, "respuesta de la IA", "respuestas de la IA")} con error en 24 h`,
       detalle: `De ${d.turnos24h.total} turnos.${quien ? ` Último: ${quien}. ${explicarErrorIA(u!.error)}` : ""}`,
       accion: u?.conversacionId ? "Abrir la conversación" : "Ver las conversaciones",
       href: u?.conversacionId ? `/conversacion/${u.conversacionId}` : "/inbox",
@@ -221,7 +225,7 @@ export function evaluarSalud(d: DatosSalud): ItemSalud[] {
     }
   }
   if (d.presupuestosAtrasados > 0) {
-    items.push({ clave: "presupuestos", estado: "rojo", titulo: `${d.presupuestosAtrasados} presupuesto(s) pedido(s) hace más de 20 h`, detalle: "Se prometió en menos de 24 h.", accion: "Cargar presupuesto", href: "/panel/marketing/presupuestos" });
+    items.push({ clave: "presupuestos", estado: "rojo", titulo: `${cantidad(d.presupuestosAtrasados, "presupuesto pedido", "presupuestos pedidos")} hace más de 20 h`, detalle: "Se prometió en menos de 24 h.", accion: "Cargar presupuesto", href: "/panel/marketing/presupuestos" });
   }
   // 22/11: gasto de IA (tope del mes y tope diario por perfil).
   items.push(...itemsPresupuestoGemini(d.presupuestoGemini));
@@ -270,7 +274,7 @@ export function lecturaSimple(i: ItemSalud): LecturaSimple {
     return { que: "Los mensajes que entran por WhatsApp quedan retenidos por seguridad y nadie los responde.", quien: "tecnico", accion: null, href: null };
   }
   if (i.clave === "cuarentena" && i.estado !== "verde") {
-    return { que: `${i.titulo.split(" ")[0]} mensaje(s) que entraron quedaron retenidos por seguridad y no se respondieron.`, quien: "panel", accion: "Revisarlos", href: i.href ?? null };
+    return { que: `${cifraDelTitulo(i.titulo) === 1 ? "1 mensaje que entró quedó retenido por seguridad y no se respondió" : `${cantidad(cifraDelTitulo(i.titulo), "mensaje")} que entraron quedaron retenidos por seguridad y no se respondieron`}.`, quien: "panel", accion: "Revisarlos", href: i.href ?? null };
   }
   if (base === "whatsapp") {
     return { que: `${perfilDe(i.titulo)} no tiene una línea de WhatsApp conectada: no puede responder ni enviar por ese canal.`, quien: "tecnico", accion: null, href: null };
@@ -280,7 +284,7 @@ export function lecturaSimple(i: ItemSalud): LecturaSimple {
   }
   if (i.clave === "errores_ia") {
     const extra = i.detalle.replace(/^De \d+ turnos\.\s*/, "");
-    return { que: `La IA tuvo ${i.titulo.split(" ")[0]} error(es) al responder en las últimas 24 h.${extra ? ` ${extra}` : ""}`, quien: "panel", accion: i.href && i.href !== "/inbox" ? "Abrir la conversación" : "Ver qué pasó", href: i.href ?? null };
+    return { que: `La IA tuvo ${cantidad(cifraDelTitulo(i.titulo), "error", "errores")} al responder en las últimas 24 h.${extra ? ` ${extra}` : ""}`, quien: "panel", accion: i.href && i.href !== "/inbox" ? "Abrir la conversación" : "Ver qué pasó", href: i.href ?? null };
   }
   if (base === "avisos") {
     return { que: `${perfilDe(i.titulo)}: los mensajes que contestan por esta línea no llegan al panel, así que el agente no responde. El sistema intenta conectarla solo.`, quien: "tecnico", accion: null, href: null };

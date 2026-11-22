@@ -17,6 +17,7 @@ import { CAMPAIGN_STATUS_LABEL } from "@/lib/campaign-status";
 import { EnlaceAvanzado } from "@/components/nivel/nivel";
 import { agruparErrores, explicarError, leerErrorGuardado, lineaError } from "@/lib/envios/explicacion";
 import { EntrenamientoCampana } from "@/components/campanas/entrenamiento-campana";
+import { cantidad, motivoPausaLegible } from "@/lib/textos/pantalla";
 
 const PAGE_SIZE = 100;
 
@@ -140,11 +141,11 @@ export async function CampaignDetailView({
           </p>
           {/* 24/10: el motivo real de la pausa, arriba de todo. */}
           {campaign.status === "pausada" && (campaign as any).pause_reason ? (
-            <p className="mt-1 rounded-lg bg-amber-50 px-3 py-2 text-sm font-medium text-amber-900">Motivo de la pausa: {(campaign as any).pause_reason}</p>
+            <p className="mt-1 rounded-lg bg-amber-50 px-3 py-2 text-sm font-medium text-amber-900">Motivo de la pausa: {motivoPausaLegible((campaign as any).pause_reason)}.</p>
           ) : null}
           {campaign.status === "finalizada" && metrics && metrics.pendientes + (metrics.a_revisar ?? 0) > 0 ? (
             <p className="mt-1 rounded-lg bg-amber-50 px-3 py-2 text-sm font-medium text-amber-900">
-              Terminada con {(metrics.pendientes + (metrics.a_revisar ?? 0)).toLocaleString("es-AR")} destinatario(s) sin enviar: no se envían solos.
+              Terminada con {cantidad(metrics.pendientes + (metrics.a_revisar ?? 0), "destinatario")} sin enviar: no se envían solos.
             </p>
           ) : null}
           {/* Simple: lo que hace falta para poder enviar, en una lista corta. */}

@@ -32,7 +32,7 @@ export async function GraficoPeriodo({ rubroId, areas, periodo }: { rubroId: str
   const anchoBarra = Math.max(4, Math.min(34, ((W - margen.izq - margen.der) / serie.length) * 0.55));
 
   return (
-    <section aria-labelledby="res-grafico" className="grafico-periodo rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <section aria-labelledby="res-grafico" className="grafico-periodo d-tarjeta !block">
       <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
         <h2 id="res-grafico" className="text-base font-semibold text-slate-950">
           Día por día

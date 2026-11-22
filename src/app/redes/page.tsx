@@ -8,6 +8,7 @@ import { CalendarioPublicaciones, type PiezaCalendario } from "@/components/rede
 import { createAdminClient } from "@/lib/supabase/admin";
 import { leerConexion } from "@/lib/redes/conexion";
 import { perfilDePagina } from "@/lib/redes/perfil-pagina";
+import { cantidad } from "@/lib/textos/pantalla";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Publicaciones" };
@@ -53,7 +54,7 @@ export default async function PublicacionesPage(props: { searchParams: Promise<{
           titulo="Publicaciones"
           bajada={
             lista.length
-              ? `${programadas} programada(s)${esperan ? ` · ${esperan} esperan algo (mirá el motivo en cada una)` : ""}. Posteos con imagen, carruseles e historias.`
+              ? `${cantidad(programadas, "programada")}${esperan ? ` · ${esperan} esperan algo (mirá el motivo en cada una)` : ""}. Posteos con imagen, carruseles e historias.`
               : "Pedile al asistente un calendario: lo arma, lo revisás y con un clic queda programado."
           }
         >

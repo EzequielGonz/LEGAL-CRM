@@ -14,6 +14,7 @@ import type { GrupoNav } from "@/components/configuracion/navegacion-ajustes";
 import { getAutomationPause } from "@/lib/automation-pause";
 import { getTareasServidor } from "@/lib/tareas-servidor";
 import { listCalendarExceptions } from "@/lib/contacto/calendario";
+import { cantidad } from "@/lib/textos/pantalla";
 
 /**
  * Ajustes que valen para los cuatro perfiles (13/11 · cada rubro separado).
@@ -117,7 +118,7 @@ export function GruposAjustesGenerales({ d, hrefRetenidos }: { d: DatosAjustesGe
         <SeccionAjustes id="cuarentena" titulo="Mensajes retenidos por seguridad" alcance="general" palabras="meta webhooks firma cuarentena">
           {d.retenidos > 0 ? (
             <p className="text-sm text-amber-900">
-              Hay {d.retenidos} evento(s) de Meta retenidos sin revisar.{" "}
+              Hay {cantidad(d.retenidos, "evento")} de Meta {d.retenidos === 1 ? "retenido" : "retenidos"} sin revisar.{" "}
               <Link prefetch={false} href={hrefRetenidos} className="font-semibold underline">
                 Revisarlos
               </Link>
