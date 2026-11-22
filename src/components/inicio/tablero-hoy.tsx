@@ -13,6 +13,8 @@ import { CerrarDescartes } from "@/components/inicio/cerrar-descartes";
 import { estadoDeCampana } from "@/lib/definiciones/campanas";
 import { getCampaignMetrics } from "@/lib/campaign-metrics";
 import { contarFallidos24h } from "@/lib/salud/fallas";
+import { motivosDeParo } from "@/lib/definiciones/parado";
+import { getAutomationPause } from "@/lib/automation-pause";
 
 /**
  * Tablero de «Hoy» (24/10, boceto v3 aprobado): estado de la línea, la
@@ -155,6 +157,20 @@ export async function TableroHoy({
     : null;
   const chipCampana = !camp || !estadoCamp ? { tono: "gris", texto: "Ninguna campaña activa", href: baseCampanas } : { tono: estadoCamp.tono, texto: estadoCamp.texto, href: `${baseCampanas}/${camp.id}` };
 
+  // 22/11: por qué está parado el perfil (pausa, líneas, calidad, campañas pausadas, agente), con palabras y no con nombres internos.
+  const pausaGeneral = await getAutomationPause().catch(() => ({ aiRepliesPaused: false, outboundPaused: false }) as any);
+  const { data: agentesDelPerfil } = await s.from("ai_agents").select("area, active").in("area", areas);
+  const motivosParo = motivosDeParo({
+    pausaGeneral: { ia: !!pausaGeneral.aiRepliesPaused, envios: !!pausaGeneral.outboundPaused },
+    lineasMeta: lineasActivas.map((l) => {
+      const inf = (estados as any)[l.credential_key];
+      return { nombre: l.label, estado: inf?.estado ?? null, ok: inf ? !!inf.ok : true, etiqueta: inf?.etiqueta ?? null, calidad: inf?.calidad ?? null };
+    }),
+    lineasWasender: lineasWasender.map((l) => ({ nombre: l.nombre, estado: l.estado, habilitada: l.habilitada })),
+    campanas: lista.map((c) => ({ nombre: c.name, status: c.status, pauseReason: c.pause_reason })),
+    agenteActivo: ((agentesDelPerfil ?? []) as any[]).some((a) => a.active),
+  });
+
   const p = puntajeBot(metricas as any);
   const chipBot = { tono: p.puntaje === null ? "gris" : p.puntaje >= 60 ? "verde" : p.puntaje >= 35 ? "amarillo" : "rojo", texto: p.puntaje === null ? "Bot · todavía sin puntaje" : `Bot · ${p.puntaje} de 100 en captación y trato`, href: baseAgentes };
   const baseWasender = `/wasender?perfil=${slug}`;
@@ -209,6 +225,13 @@ export async function TableroHoy({
           <Chip key={c.texto} tono={c.tono} texto={c.texto} href={c.href} />
         ))}
       </ul>
+      {motivosParo.length > 0 ? (
+        <ul className="flex flex-col gap-2" aria-label="Por qué este perfil no está enviando o contestando">
+          {motivosParo.map((m) => (
+            <Chip key={m.texto} tono={m.tono} texto={m.texto} />
+          ))}
+        </ul>
+      ) : null}
 
       {/* 1) Dos listas separadas: a quién hay que contestarle y a quién hay que derivar. Nadie se repite. */}
       <div id="hoy-cola" className="grid scroll-mt-24 items-start gap-4 lg:grid-cols-2">
