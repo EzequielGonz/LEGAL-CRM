@@ -28,6 +28,8 @@ export async function POST(request: Request) {
     ? body.mensajes
         .filter((m: any) => (m?.rol === "usuario" || m?.rol === "asistente") && typeof m?.texto === "string" && m.texto.trim())
         .map((m: any) => ({ rol: m.rol, texto: String(m.texto).slice(0, 4000) }))
+        // 22/11: solo los últimos 20 turnos llegan al modelo (tope de costo).
+        .slice(-20)
     : [];
   if (mensajes.length === 0 || mensajes[mensajes.length - 1].rol !== "usuario") return NextResponse.json({ error: "Escribí qué necesitás." }, { status: 400 });
   if (!process.env.GEMINI_API_KEY) return NextResponse.json({ error: "Jarvis necesita la clave de Gemini configurada en el servidor." }, { status: 503 });

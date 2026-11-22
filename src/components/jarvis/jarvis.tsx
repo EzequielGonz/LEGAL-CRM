@@ -61,10 +61,21 @@ export function Jarvis({ slug, nombrePerfil }: { slug: SlugPerfil; nombrePerfil:
   const lista = useRef<HTMLDivElement>(null);
   const entrada = useRef<HTMLTextAreaElement>(null);
   const reconocedor = useRef<Reconocedor | null>(null);
+  // Foco: al abrir se guarda dónde estaba; al cerrar vuelve ahí o al orbe (WCAG 2.4.3).
+  const previo = useRef<HTMLElement | null>(null);
+  const orbe = useRef<HTMLButtonElement>(null);
+  const devolverFoco = useCallback(() => {
+    window.setTimeout(() => {
+      const p = previo.current;
+      if (p && p.isConnected && p !== document.body) p.focus();
+      else orbe.current?.focus();
+    }, 60);
+  }, []);
   const cerrar = useCallback(() => {
     setAbierto(false);
     guardarAbierto(false);
-  }, []);
+    devolverFoco();
+  }, [devolverFoco]);
   // En el celular la hoja ocupa toda la pantalla (diálogo modal); en escritorio queda al costado y el panel sigue usable.
   const dialogoRef = useDialogo<HTMLElement>(abierto && modal, cerrar);
 
@@ -95,6 +106,7 @@ export function Jarvis({ slug, nombrePerfil }: { slug: SlugPerfil; nombrePerfil:
 
   // ---- abrir: orbe, atajo y pedidos de otras partes del panel (botones «Preguntale al asistente»)
   const abrir = useCallback((pedido?: string | null) => {
+    if (document.activeElement instanceof HTMLElement) previo.current = document.activeElement;
     setAbierto(true);
     guardarAbierto(true);
     if (pedido) setTexto(pedido);
@@ -108,7 +120,10 @@ export function Jarvis({ slug, nombrePerfil }: { slug: SlugPerfil; nombrePerfil:
         e.preventDefault();
         setAbierto((a) => {
           guardarAbierto(!a);
-          if (!a) window.setTimeout(() => entrada.current?.focus(), 60);
+          if (!a) {
+            if (document.activeElement instanceof HTMLElement) previo.current = document.activeElement;
+            window.setTimeout(() => entrada.current?.focus(), 60);
+          } else devolverFoco();
           return !a;
         });
       }
@@ -119,7 +134,7 @@ export function Jarvis({ slug, nombrePerfil }: { slug: SlugPerfil; nombrePerfil:
       window.removeEventListener(EVENTO_ASISTENTE, alEvento);
       window.removeEventListener("keydown", alTeclado);
     };
-  }, [abrir]);
+  }, [abrir, devolverFoco]);
 
   // ---- parte del día: se pide solo una vez por sesión (10 min) y se muestra una vez por día
   useEffect(() => {
@@ -236,13 +251,12 @@ export function Jarvis({ slug, nombrePerfil }: { slug: SlugPerfil; nombrePerfil:
   return (
     <div>
       {!abierto && (
-        <button type="button" className="jv-orbe" onClick={() => abrir()} aria-label="Abrir Jarvis" aria-keyshortcuts="Control+J Meta+J" title="Jarvis · Ctrl J">
+        <button ref={orbe} type="button" className="jv-orbe" onClick={() => abrir()} aria-label={hayAviso ? "Abrir Jarvis, hay un parte del día para leer" : "Abrir Jarvis"} aria-keyshortcuts="Control+J Meta+J" title="Jarvis · Ctrl J">
           <span className="jv-orbe-pulso" aria-hidden="true" />
           <span className="jv-orbe-cuerpo" aria-hidden="true">
             <Icono nombre="asistente" className="jv-orbe-icono" />
           </span>
           {hayAviso && <span className="jv-orbe-aviso" aria-hidden="true" />}
-          {hayAviso && <span className="sr-only">Hay un parte del día para leer</span>}
         </button>
       )}
 
@@ -288,6 +302,7 @@ export function Jarvis({ slug, nombrePerfil }: { slug: SlugPerfil; nombrePerfil:
                   alCerrar={() => {
                     guardarParteCerrado(slug, datosParte.parte.dia);
                     setParteVisible(false);
+                    window.setTimeout(() => entrada.current?.focus(), 30);
                   }}
                   alPedir={(p) => enviar(p)}
                   alIr={alNavegar}
@@ -350,7 +365,7 @@ export function Jarvis({ slug, nombrePerfil }: { slug: SlugPerfil; nombrePerfil:
             </div>
 
             <footer className="jv-pie">
-              <div className="jv-sugerencias" aria-label="Sugerencias para esta pantalla">
+              <div className="jv-sugerencias" role="group" aria-label="Sugerencias para esta pantalla">
                 {sugerencias.map((s) => (
                   <button key={s.etiqueta} type="button" className="jv-chip" disabled={pensando} onClick={() => enviar(s.pedido)}>
                     {s.etiqueta}
@@ -383,7 +398,7 @@ export function Jarvis({ slug, nombrePerfil }: { slug: SlugPerfil; nombrePerfil:
                   className="jv-texto"
                 />
                 {vozOk && (
-                  <button type="button" className={escuchando ? "jv-boton jv-boton-redondo jv-escuchando" : "jv-boton jv-boton-redondo"} onClick={alternarVoz} aria-pressed={escuchando} aria-label={escuchando ? "Dejar de escuchar" : "Hablar en vez de escribir"}>
+                  <button type="button" className={escuchando ? "jv-boton jv-boton-redondo jv-escuchando" : "jv-boton jv-boton-redondo"} onClick={alternarVoz} aria-pressed={escuchando} aria-label="Dictar por voz">
                     <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
                       <rect x="9" y="3" width="6" height="11" rx="3" />
                       <path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3" />

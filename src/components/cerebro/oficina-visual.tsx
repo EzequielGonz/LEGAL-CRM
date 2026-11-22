@@ -258,7 +258,7 @@ export function OficinaVisual({
               </button>
             </header>
             <p className="que">{elegida.queHace}</p>
-            <div className="barra" role="progressbar" aria-label="Avance" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(elegida.progreso * 100)}>
+            <div className="barra" role="progressbar" aria-label="Avance" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(elegida.progreso * 100)} aria-valuetext={`${Math.round(elegida.progreso * 100)} %`}>
               <span style={{ width: `${Math.round(elegida.progreso * 100)}%` }} />
             </div>
             <p className="rol">{elegida.rol}.</p>

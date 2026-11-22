@@ -31,21 +31,25 @@
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
 }
 /* ------------------------------------------------------- tokens (oscuro) */
+/* En oscuro el tema invierte la escala slate (slate-50 ≈ negro, slate-950 ≈ blanco): por eso
+   la hoja usa slate-100 de fondo y slate-950 de texto. Ratios AA medidos en la revisión del 22/11. */
 html[data-modo="oscuro"] .jv-hoja,
 html[data-modo="oscuro"] .jv-orbe {
-  --jv-arco: rgb(var(--c-gold-400));
-  --jv-hoja-fondo: rgb(var(--c-slate-950) / 0.88);
-  --jv-texto: rgb(var(--c-slate-50));
-  --jv-texto-2: rgb(var(--c-slate-300));
-  --jv-texto-3: rgb(var(--c-slate-300) / 0.82);
+  --jv-arco: rgb(var(--c-gold-600));
+  --jv-hoja-fondo: rgb(var(--c-slate-100) / 0.94);
+  --jv-texto: rgb(var(--c-slate-950));
+  --jv-texto-2: rgb(var(--c-slate-800));
+  --jv-texto-3: rgb(var(--c-slate-600));
   --jv-borde: rgb(255 255 255 / 0.11);
   --jv-baldosa: rgb(255 255 255 / 0.045);
   --jv-baldosa-alta: rgb(255 255 255 / 0.08);
   --jv-relieve: inset 0 1px 0 rgb(255 255 255 / 0.09);
   --jv-sombra-baldosa: 0 1px 2px rgb(0 0 0 / 0.4), 0 10px 22px -12px rgb(0 0 0 / 0.65);
   --jv-sombra-hoja: 0 2px 6px rgb(0 0 0 / 0.4), 0 28px 56px -18px rgb(0 0 0 / 0.75);
-  --jv-foco: rgb(var(--c-gold-300));
+  --jv-foco: rgb(var(--c-gold-700));
 }
+/* Texto del botón principal siempre oscuro sobre el dorado (en oscuro slate-950 sería claro). */
+html[data-modo="oscuro"] .jv-boton-acento { color: #0b0d12; }
 
 /* ------------------------------------------------------------------ orbe */
 .jv-orbe {
@@ -91,7 +95,8 @@ html[data-modo="oscuro"] .jv-orbe {
   position: absolute;
   inset: 0;
   border-radius: 9999px;
-  box-shadow: 0 0 0 0 rgb(var(--c-gold-500) / 0.45);
+  border: 2px solid rgb(var(--c-gold-500) / 0.5);
+  opacity: 0;
 }
 .jv-orbe-aviso {
   position: absolute; top: 0.05rem; right: 0.05rem; width: 0.85rem; height: 0.85rem; border-radius: 9999px;
@@ -101,8 +106,9 @@ html[data-modo="oscuro"] .jv-orbe {
   .jv-orbe-pulso { animation: jv-respira 4.5s ease-in-out infinite; }
 }
 @keyframes jv-respira {
-  0%, 100% { box-shadow: 0 0 0 0 rgb(var(--c-gold-500) / 0.4); }
-  50% { box-shadow: 0 0 0 10px rgb(var(--c-gold-500) / 0); }
+  /* Solo transform y opacity: no repinta en cada cuadro. */
+  0%, 100% { transform: scale(1); opacity: 0.55; }
+  50% { transform: scale(1.32); opacity: 0; }
 }
 
 /* ------------------------------------------------------------------ hoja */
@@ -300,5 +306,5 @@ html[data-modo="oscuro"] .jv-estado-error { color: #fca5a5; }
 /* Sin soporte de blur: fondo sólido. */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .jv-hoja { background: rgb(var(--c-slate-50)); }
-  html[data-modo="oscuro"] .jv-hoja { background: rgb(var(--c-slate-950)); }
+  html[data-modo="oscuro"] .jv-hoja { background: rgb(var(--c-slate-100)); }
 }

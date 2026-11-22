@@ -112,3 +112,30 @@ test("corrección del dueño: la estética de Jarvis es la clásica del panel, s
   // Con «reducir movimiento» nada se anima.
   assert.match(css, /prefers-reduced-motion/);
 });
+
+test("ninguna operación del catálogo que hace salir mensajes, publica o lo habilita se ofrece desde Jarvis", async () => {
+  const { esOperacionVedada } = await import("../../src/lib/jarvis/seguridad");
+  const fuente = readFileSync(join(__dirname, "../../src/lib/asistente/catalogo.ts"), "utf8");
+  const claves = [...fuente.matchAll(/clave: "([a-z_0-9]+)"/g)].map((m) => m[1]);
+  assert.ok(claves.length > 50, "se leyó el catálogo");
+  const debenEstarVedadas = [
+    "marketing_ejecutar_base", "marketing_prospeccion_activar", "seguimiento_encender_apagar", "recontacto_encender_apagar",
+    "bot_encender_apagar", "persona_volver_a_contactar", "contenido_programar_pieza", "campana_dias_y_wasender",
+    "bot_publicar_agente", "plantillas_meta_enviar_a_revision", "redes_conexion_y_publicacion_automatica",
+  ];
+  for (const c of debenEstarVedadas) {
+    assert.ok(claves.includes(c), `${c} existe en el catálogo`);
+    assert.equal(esOperacionVedada(c), true, `${c} debe quedar fuera de Jarvis`);
+    assert.equal(esPropuestaVedada({ tipo: "operacion_panel", detalle: { clave: c } }), true, c);
+  }
+  // Toda operación cuya descripción diga que hace salir mensajes o los lanza queda vedada.
+  const bloques = fuente.split(/\n  \{\n/).slice(1);
+  for (const b of bloques) {
+    const clave = /clave: "([a-z_0-9]+)"/.exec(b)?.[1];
+    const desc = /descripcion: "([^"]*)"/.exec(b)?.[1] ?? "";
+    if (!clave) continue;
+    if (/(hace salir mensajes|y la lanza|les escribe|empieza a mandar|sale el mensaje)/i.test(desc)) assert.equal(esOperacionVedada(clave), true, `${clave}: ${desc.slice(0, 80)}`);
+  }
+  // Lo que no envía sigue disponible para Jarvis (con tarjeta).
+  for (const c of ["bot_ficha_del_negocio", "persona_zona", "campana_archivar", "contenido_guardar_borrador"]) assert.equal(esOperacionVedada(c), false, c);
+});

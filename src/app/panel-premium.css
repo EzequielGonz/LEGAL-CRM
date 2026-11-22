@@ -180,8 +180,8 @@ html:not([data-modo="oscuro"]) .pp .menu-estudio { background: rgb(255 255 255 /
 .mas-cerrar {
   display: grid;
   place-items: center;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.75rem;
+  height: 2.75rem;
   border-radius: 999px;
   border: 1px solid var(--d-linea);
   background: rgb(var(--d-tarjeta-2));
@@ -220,7 +220,7 @@ html:not([data-modo="oscuro"]) .pp .menu-estudio { background: rgb(255 255 255 /
 .mas-vistas a {
   display: inline-flex;
   align-items: center;
-  min-height: 2.5rem;
+  min-height: 2.75rem;
   padding: 0 0.6rem;
   border-radius: 0.6rem;
   font-size: 0.85rem;
@@ -367,3 +367,29 @@ html:not([data-modo="oscuro"]) .pp .menu-estudio { background: rgb(255 255 255 /
 
 /* Que el botón flotante de Jarvis no tape lo último de la pantalla. */
 .hy-pagina { padding-bottom: 4.5rem; }
+
+/* ---- 22/11 · revisión de accesibilidad y diseño ---------------------------------
+   En claro el dorado 500 da 2,3:1 sobre blanco (gráficos piden 3:1): arcos, tildes e
+   íconos activos pasan al 600/700. La pista del anillo no lleva sombra interior negra
+   en claro (queda sucia sobre tarjeta blanca), igual que en Resultados y Salud. */
+html:not([data-modo="oscuro"]) .pp,
+html:not([data-modo="oscuro"]) .cc { --pm-acento: rgb(var(--c-gold-600)); }
+html:not([data-modo="oscuro"]) .pp .pm-anillo__tilde,
+html:not([data-modo="oscuro"]) .cc .pm-anillo__tilde { color: rgb(var(--c-gold-700)); }
+html:not([data-modo="oscuro"]) .mas-icono,
+html:not([data-modo="oscuro"]) .barra-inferior-item[data-activa] svg { color: rgb(var(--c-gold-700)); }
+html:not([data-modo="oscuro"]) .pp .pm-anillo__pista,
+html:not([data-modo="oscuro"]) .pp .pm-medidor__pista,
+html:not([data-modo="oscuro"]) .cc .pm-anillo__pista { filter: none; }
+/* Atajos de Hoy: Contactos, Citas y Seguimiento a un toque (botones con relieve, sobrios). */
+.hy-atajos { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
+.hy-atajo {
+  display: inline-flex; align-items: center; min-height: 2.75rem; padding: 0 1rem; border-radius: 999px;
+  border: 1px solid var(--d-linea); background: rgb(var(--d-tarjeta-2)); color: var(--d-texto);
+  font-size: 0.875rem; font-weight: 600; text-decoration: none;
+  box-shadow: var(--pp-brillo, inset 0 1px 0 rgb(255 255 255 / 0.07)), 0 1px 2px rgb(0 0 0 / 0.12);
+  transition: transform 150ms ease, border-color 150ms ease;
+}
+.hy-atajo:hover { border-color: var(--d-linea-fuerte); transform: translateY(-1px); }
+.hy-atajo:focus-visible { outline: 2px solid rgb(var(--c-gold-600)); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .hy-atajo { transition: none; } .hy-atajo:hover { transform: none; } }

@@ -55,8 +55,11 @@ export function EmbudoVista({ slug, c, antes, periodo, ver }: { slug: string; c:
       </h2>
       <ol className="pc-fila-anillos">
         {ANILLOS.map((a, i) => {
-          const e = etapas.find((x) => x.ver === a.ver)!;
+          const e = etapas.find((x) => x.ver === a.ver);
+          if (!e) return null;
           const activa = e.ver === ver;
+          // Un dato que no se pudo leer no es cero: se muestra «—».
+          const sinDato = e.valor === null || e.valor === undefined;
           const valor = e.valor ?? 0;
           const meta = a.base === null ? Math.max(1, valor) : Math.max(1, a.base ?? 0);
           return (
@@ -64,7 +67,13 @@ export function EmbudoVista({ slug, c, antes, periodo, ver }: { slug: string; c:
               <Tarjeta relieve aparecer={i} rubro={slug as SlugPerfil} className={activa ? "pc-activa" : ""}>
                 <div className="pc-celda">
                   <span className="pc-etiqueta">{e.titulo}</span>
-                  <Anillo valor={valor} meta={meta} rubro={slug as SlugPerfil} tamano="medio" nombre={e.titulo} unidad="personas" mostrarMeta={a.base !== null} retrasoMs={i * 80} />
+                  {sinDato ? (
+                    <span role="img" aria-label={`${e.titulo}: sin dato`} style={{ width: 120, height: 120, display: "grid", placeItems: "center", fontSize: 36, color: "var(--d-texto-3)" }}>
+                      —
+                    </span>
+                  ) : (
+                    <Anillo valor={valor} meta={meta} rubro={slug as SlugPerfil} tamano="medio" nombre={e.titulo} unidad="personas" mostrarMeta={a.base !== null && a.base !== undefined} retrasoMs={i * 80} />
+                  )}
                   <span className="pc-paso">{e.paso ? `${e.paso}` : "Primer mensaje"}</span>
                   <span className="pc-contexto">{e.nota}</span>
                   <Link prefetch={false} href={href(e.ver)} aria-current={activa ? "page" : undefined} className="pc-enlace">
@@ -77,7 +86,7 @@ export function EmbudoVista({ slug, c, antes, periodo, ver }: { slug: string; c:
           );
         })}
       </ol>
-      <VerMas cerrado="Ver más etapas" abierto="Ver menos etapas" abiertoInicial={["conversaron", "derivados", "ventas", "perdidos"].includes(ver)}>
+      <VerMas cerrado="Ver más etapas" abierto="Ver menos etapas" abiertoAlInicio={["conversaron", "derivados", "ventas", "perdidos"].includes(ver)}>
         <div className="space-y-3">
       {/* 22/11: grilla bento; en el celular angosto, una etapa por renglón para que la cifra respire. */}
       <ol className="d-revelar grid grid-cols-1 gap-3 min-[400px]:grid-cols-2 md:grid-cols-4">

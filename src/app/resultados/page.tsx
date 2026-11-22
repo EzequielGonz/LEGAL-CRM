@@ -124,7 +124,7 @@ export default async function Pagina(
         </Suspense>
 
         {/* 22/11: lo secundario va detrás de «Ver más»; se abre solo si la persona pidió ver quiénes. */}
-        <VerMas cerrado="Ver más: de dónde vienen y quiénes son" abierto="Ver menos" abiertoInicial={buscoQuienes}>
+        <VerMas cerrado="Ver más: de dónde vienen y quiénes son" abierto="Ver menos" abiertoAlInicio={buscoQuienes}>
         <div className="space-y-6">
         {r.origenes.length > 0 ? (
           <section aria-labelledby="res-origen" className="d-tarjeta">

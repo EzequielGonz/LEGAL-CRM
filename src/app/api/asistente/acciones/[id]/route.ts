@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { requireSession } from "@/lib/acceso/autorizacion";
+import { esPropuestaVedada } from "@/lib/jarvis/seguridad";
 import { AccionNoDisponible, confirmarAccion, descartarAccion } from "@/lib/asistente/acciones";
 import { confirmPin } from "@/lib/acceso/confirmar-pin";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -25,6 +26,10 @@ export async function POST(request: Request, props: { params: Promise<{ id: stri
   const { data: guardada } = await createAdminClient().from("asistente_acciones" as any).select("tipo, payload, estado").eq("id", params.id).maybeSingle();
   const g: any = guardada;
   if (!g) return NextResponse.json({ error: "Esta propuesta ya se confirmó, se descartó o no existe." }, { status: 409 });
+  // 22/11: desde Jarvis nunca se lanza, publica ni se le escribe a nadie, aunque la propuesta exista en la base.
+  if (body?.desde === "jarvis" && esPropuestaVedada({ tipo: g.tipo, detalle: g.payload })) {
+    return NextResponse.json({ error: "Eso lo hacen los dueños desde su pantalla: Jarvis no lanza, no publica ni le escribe a nadie." }, { status: 403 });
+  }
   // Una propuesta ya en marcha (tandas de publicaciones, pasos de un plan) no vuelve a pedir PIN.
   // Reintentar un plan de campañas que falló vuelve a pedir la confirmación que corresponda.
   if (g.estado === "propuesta" || (g.tipo === "plan_campanas" && g.estado === "error")) {

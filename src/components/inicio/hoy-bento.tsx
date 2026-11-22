@@ -8,6 +8,7 @@ import { SaludoJarvis } from "@/components/premium/saludo-jarvis";
 import { Tarjeta } from "@/components/premium/tarjeta";
 import { VerMas } from "@/components/premium/ver-mas";
 import type { SlugPerfil } from "@/lib/marca";
+import { seccionesDePerfil } from "@/lib/menu";
 import type { FilaDecidir, Franja } from "@/lib/hoy/resumen-hoy";
 
 /**
@@ -38,7 +39,7 @@ export interface DatosHoyBento {
 
 const FILAS_VISIBLES = 3;
 
-function AnilloSemana({ titulo, contexto, valor, de, delay }: { titulo: string; contexto: string; valor: number | null; de: number | null; delay: number }) {
+function AnilloSemana({ titulo, contexto, valor, de, delay, rubro }: { titulo: string; contexto: string; valor: number | null; de: number | null; delay: number; rubro: SlugPerfil }) {
   return (
     <li>
       {valor === null ? (
@@ -46,7 +47,7 @@ function AnilloSemana({ titulo, contexto, valor, de, delay }: { titulo: string; 
           —
         </span>
       ) : (
-        <Anillo valor={valor} meta={Math.max(de ?? 0, valor)} rubro="juridico" tamano="medio" nombre={titulo} unidad={`de ${contexto}`} retrasoMs={delay} />
+        <Anillo valor={valor} meta={Math.max(de ?? 0, valor)} rubro={rubro} tamano="medio" nombre={titulo} unidad={`de ${contexto}`} mostrarMeta={de !== null} retrasoMs={delay} />
       )}
       <span className="hy-etiqueta">{titulo}</span>
       <span className="hy-contexto">de {contexto}</span>
@@ -87,12 +88,23 @@ export function HoyBento({ d }: { d: DatosHoyBento }) {
           >
             <BotonJarvis>Hablar con Jarvis</BotonJarvis>
           </SaludoJarvis>
+          {/* 22/11 (revisión): Contactos, Citas y Seguimiento pasaron a «Más»; como se usan a diario, quedan a un toque desde Hoy. */}
+          <nav aria-label="Atajos" className="hy-atajos">
+            {(seccionesDePerfil(d.slug).find((x) => x.clave === "contactos")?.tabs ?? [])
+              .filter((t) => !t.oculto)
+              .slice(0, 3)
+              .map((t) => (
+                <a key={t.href} href={t.href} className="hy-atajo">
+                  {t.label === "Etapas" ? "Contactos" : t.label}
+                </a>
+              ))}
+          </nav>
         </BentoCelda>
 
         <BentoCelda columnas={4} columnasMedio={6}>
           <Tarjeta relieve aparecer={1} como="section" className="hy-protagonista-tarjeta">
             <div className="hy-protagonista">
-              <Anillo valor={d.porDerivar} meta={d.metaAnillo} rubro="juridico" tamano="grande" nombre="Captados sin derivar" unidad="captados esperan" />
+              <Anillo valor={d.porDerivar} meta={d.metaAnillo} rubro={d.slug} tamano="grande" nombre="Captados sin derivar" unidad="captados esperan" />
               <span className="hy-etiqueta">Captados sin derivar</span>
               <span className="hy-contexto">
                 {d.derivadosSemana === null ? "No se pudo leer cuántos se derivaron esta semana." : d.derivadosSemana === 0 ? "Todavía no derivaste ninguno esta semana." : `${d.derivadosSemana.toLocaleString("es-AR")} ya ${d.derivadosSemana === 1 ? "derivado" : "derivados"} esta semana.`}
@@ -104,9 +116,9 @@ export function HoyBento({ d }: { d: DatosHoyBento }) {
         <BentoCelda columnas={8} columnasMedio={6}>
           <Tarjeta relieve aparecer={2} como="section" titulo="Esta semana" nivelTitulo={2}>
             <ul className="hy-semana" aria-label="Resumen de la semana">
-              <AnilloSemana titulo="Escribieron" contexto="los contactados" valor={d.semana.escribieron} de={d.semana.contactados} delay={0} />
-              <AnilloSemana titulo="Captados" contexto="los que escribieron" valor={d.semana.captados} de={d.semana.escribieron} delay={80} />
-              <AnilloSemana titulo="Derivados" contexto="los captados" valor={d.semana.derivados} de={d.semana.captados} delay={160} />
+              <AnilloSemana titulo="Escribieron" contexto="los contactados" valor={d.semana.escribieron} de={d.semana.contactados} delay={0} rubro={d.slug} />
+              <AnilloSemana titulo="Captados" contexto="los que escribieron" valor={d.semana.captados} de={d.semana.escribieron} delay={80} rubro={d.slug} />
+              <AnilloSemana titulo="Derivados" contexto="los captados" valor={d.semana.derivados} de={d.semana.captados} delay={160} rubro={d.slug} />
             </ul>
           </Tarjeta>
         </BentoCelda>

@@ -36,7 +36,7 @@ export function JvConfirmar({ p, alCambiar }: { p: Propuesta; alCambiar: (p: Pro
         const res = await fetch(`/api/asistente/acciones/${p.id}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ confirmar_envio: decision.extra === "reforzada" ? entendido : undefined, pin: decision.extra === "codigo" ? codigo : undefined }),
+          body: JSON.stringify({ desde: "jarvis", confirmar_envio: decision.extra === "reforzada" ? entendido : undefined, pin: decision.extra === "codigo" ? codigo : undefined }),
         });
         const data = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(data?.error ?? "No se pudo hacer.");

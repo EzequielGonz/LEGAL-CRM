@@ -8,8 +8,6 @@ export interface VerMasProps {
   abierto?: string;
   /** Empieza abierto (por ejemplo cuando el enlace pide ver todo). */
   abiertoAlInicio?: boolean;
-  /** Arranca abierto (por ejemplo, cuando la persona ya pidió ver el detalle). */
-  abiertoInicial?: boolean;
   className?: string;
 }
 
@@ -17,9 +15,9 @@ export interface VerMasProps {
  * Disclosure accesible: <details>/<summary> nativo (teclado, lector de pantalla y estado
  * expandido sin JavaScript, así que no hay nada que hidratar). Lo secundario va acá adentro.
  */
-export function VerMas({ children, cerrado = "Ver más", abierto = "Ver menos", abiertoAlInicio = false, abiertoInicial = false, className }: VerMasProps) {
+export function VerMas({ children, cerrado = "Ver más", abierto = "Ver menos", abiertoAlInicio = false, className }: VerMasProps) {
   return (
-    <details open={abiertoAlInicio || abiertoInicial || undefined} className={`pm-vermas${className ? ` ${className}` : ""}`}>
+    <details open={abiertoAlInicio || undefined} className={`pm-vermas${className ? ` ${className}` : ""}`}>
       <summary className="pm-vermas__boton">
         <span className="pm-vermas__texto pm-vermas__texto--cerrado">{cerrado}</span>
         <span className="pm-vermas__texto pm-vermas__texto--abierto">{abierto}</span>

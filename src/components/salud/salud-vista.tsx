@@ -73,11 +73,17 @@ export function SaludVista({ slug, base, wasender, fallas }: { slug: SlugPerfil;
         <div className="pc-salud">
           <Tarjeta2 rubro={slug} relieve aparecer={1} como="section">
             <div className="pc-medidor-celda">
-              <Medidor valor={enOrden} sufijo="%" rubro={slug} nombre="Servicios en orden" unidad="por ciento" etiqueta="servicios en orden" />
+              {total === 0 ? (
+                <span role="img" aria-label="Servicios en orden: sin dato" style={{ minHeight: 120, display: "grid", placeItems: "center", fontSize: 36, color: "var(--d-texto-3)" }}>
+                  —
+                </span>
+              ) : (
+                <Medidor valor={enOrden} sufijo="%" rubro={slug} nombre="Servicios en orden" unidad="por ciento" etiqueta="servicios en orden" />
+              )}
               <p className="pc-nota">{total === 0 ? "No hay controles para este perfil." : `${r.verde} de ${total} funcionan bien`}</p>
             </div>
           </Tarjeta2>
-          <Tarjeta2 rubro={slug} aparecer={2} como="section" titulo={aRevisar.length ? "Para revisar" : r.rojo ? "Lo demás está en orden" : "Todo en orden"} nivelTitulo={2}>
+          <Tarjeta2 rubro={slug} aparecer={2} como="section" titulo={aRevisar.length ? "Para revisar" : r.rojo ? "Lo demás está en orden" : total === 0 ? "Sin controles para leer" : "Todo en orden"} nivelTitulo={2}>
             {aRevisar.length > 0 ? (
               <ul className="pc-lista">
                 {aRevisar.map((i) => (

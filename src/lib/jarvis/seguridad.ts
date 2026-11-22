@@ -14,7 +14,15 @@ export const HERRAMIENTAS_VEDADAS: readonly string[] = ["proponer_lanzamiento", 
 export const TIPOS_VEDADOS: readonly string[] = ["lanzar_campana", "publicaciones", "responder_chat"];
 
 /** Claves de operación del panel que publican, lanzan o envían: no se ofrecen desde Jarvis. */
-const OPERACION_VEDADA = /(lanzar|reanudar|publicar|enviar_a_revision|publicacion_automatica|enviar)/;
+// 22/11 (revisión): también lo que hace salir mensajes o los habilita sin lanzar una campaña con ese nombre:
+// ejecutar una base de Marketing, activar la prospección, encender bots/seguimientos/recontactos, programar
+// piezas, volver a contactar a una persona y cambiar días de envío de una campaña.
+const OPERACION_VEDADA = /(lanzar|reanudar|publicar|enviar_a_revision|publicacion_automatica|enviar|ejecutar_base|prospeccion_activar|encender|programar|volver_a_contactar|dias_y_wasender)/;
+
+/** ¿Esta clave de operación del panel queda fuera de Jarvis? */
+export function esOperacionVedada(clave: string): boolean {
+  return OPERACION_VEDADA.test(clave);
+}
 
 export interface PropuestaMinima {
   tipo: string;
