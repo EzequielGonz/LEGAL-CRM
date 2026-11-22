@@ -208,15 +208,15 @@ export function BandejaClaude({
       {/* 22/11: las tres cifras de la bandeja en bento, con su luz. */}
       <Bento etiqueta="Resumen de la bandeja">
         <Tarjeta ancho="3" estado={resumen.en_espera ? "aviso" : "apagado"}>
-          <p className="flex items-center gap-2"><Luz estado={resumen.en_espera ? "aviso" : "apagado"} late={resumen.en_espera > 0} /><Kicker>Te esperan</Kicker></p>
+          <div className="flex items-center gap-2"><Luz estado={resumen.en_espera ? "aviso" : "apagado"} late={resumen.en_espera > 0} /><Kicker>Te esperan</Kicker></div>
           <Estadistica etiqueta="En espera de una respuesta tuya" valor={resumen.en_espera} chico />
         </Tarjeta>
         <Tarjeta ancho="3" estado={resumen.en_curso ? "ok" : "apagado"}>
-          <p className="flex items-center gap-2"><Luz estado={resumen.en_curso ? "ok" : "apagado"} late={resumen.en_curso > 0} /><Kicker>Trabajando</Kicker></p>
+          <div className="flex items-center gap-2"><Luz estado={resumen.en_curso ? "ok" : "apagado"} late={resumen.en_curso > 0} /><Kicker>Trabajando</Kicker></div>
           <Estadistica etiqueta="En curso" valor={resumen.en_curso} chico />
         </Tarjeta>
         <Tarjeta ancho="3" estado={resumen.pendiente ? "info" : "apagado"}>
-          <p className="flex items-center gap-2"><Luz estado={resumen.pendiente ? "info" : "apagado"} /><Kicker>En cola</Kicker></p>
+          <div className="flex items-center gap-2"><Luz estado={resumen.pendiente ? "info" : "apagado"} /><Kicker>En cola</Kicker></div>
           <Estadistica etiqueta="Pendientes" valor={resumen.pendiente} chico />
         </Tarjeta>
       </Bento>
