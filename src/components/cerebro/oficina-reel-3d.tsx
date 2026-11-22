@@ -75,7 +75,7 @@ interface Pose {
 
 function poseAerea(conPanel: boolean, apaisada: boolean): Pose {
   const corr = conPanel && apaisada ? -5.5 : 0;
-  return apaisada ? { pos: new THREE.Vector3(14 + corr, 37, 40), mira: new THREE.Vector3(corr, 0, 1.5) } : { pos: new THREE.Vector3(42, 58, 7), mira: new THREE.Vector3(0, 0, 0.5) };
+  return apaisada ? { pos: new THREE.Vector3(17 + corr, 46, 49), mira: new THREE.Vector3(corr + 1, 0, 2) } : { pos: new THREE.Vector3(42, 58, 7), mira: new THREE.Vector3(0, 0, 0.5) };
 }
 
 const FOV_AEREA = 42;

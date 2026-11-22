@@ -88,7 +88,7 @@
 .of3-agentes .fila > button { min-height: 50px; }
 
 /* --- Canal del equipo (derecha) ---------------------------------------------------------- */
-.of3 .of3-canal { position: absolute; z-index: 45; top: 74px; right: 14px; width: min(300px, 26%); max-height: calc(60% - 20px); overflow: auto; padding: 12px 14px; border-radius: 18px; background: var(--of3-vidrio); border: 1px solid var(--of3-borde); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); scrollbar-width: thin; }
+.of3 .of3-canal { position: absolute; z-index: 45; top: 74px; right: 14px; width: min(280px, 24%); max-height: calc(60% - 20px); overflow: auto; padding: 12px 14px; border-radius: 18px; background: var(--of3-vidrio); border: 1px solid var(--of3-borde); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); scrollbar-width: thin; }
 .of3-canal h3 { display: flex; justify-content: space-between; align-items: center; margin: 0 0 8px; font: 600 0.66rem/1 var(--cz-mono), monospace; letter-spacing: 0.12em; text-transform: uppercase; color: #c9c4d6; }
 .of3-canal .vivo { display: inline-flex; align-items: center; gap: 5px; color: #6fd3a3; letter-spacing: 0.04em; text-transform: none; }
 .of3-canal .vivo::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #6fd3a3; box-shadow: 0 0 8px #6fd3a3; }

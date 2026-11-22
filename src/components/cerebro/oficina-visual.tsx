@@ -84,7 +84,7 @@ export function OficinaVisual({
   const entregas = useMemo(() => entregasParaOk(tareas), [tareas]);
   const actividad = useMemo(() => actividadReciente(tareas, 6), [tareas]);
   const enMarcha = useMemo(() => tareas.filter((t) => t.estado === "en_curso"), [tareas]);
-  const canal = useMemo(() => mensajesDelEquipo(tareas, salas, 6), [tareas, salas]);
+  const canal = useMemo(() => mensajesDelEquipo(tareas, salas, 4), [tareas, salas]);
 
   const [vista, setVista] = useState<Vista3D>(sector ? { tipo: "dentro", lugar: sector, n: 0 } : { tipo: "aerea" });
   const [lugar, setLugar] = useState<Lugar | null>(sector);
