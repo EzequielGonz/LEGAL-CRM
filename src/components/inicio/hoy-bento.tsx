@@ -8,6 +8,7 @@ import { VidrioCirculos } from "@/components/vivo/vidrio-circulos";
 import { BotonNeu, IconoNeu } from "@/components/vivo/boton-neu";
 import { Paralaje } from "@/components/vivo/paralaje";
 import { formatoNumero } from "@/lib/premium/anillo";
+import { saludoCartel } from "@/lib/premium/cartel";
 import { Boton } from "@/components/premium/boton";
 import { BotonJarvis } from "@/components/premium/boton-jarvis";
 import { Tarjeta } from "@/components/premium/tarjeta";
@@ -43,13 +44,6 @@ export interface DatosHoyBento {
 }
 
 const FILAS_VISIBLES = 3;
-
-/** «Buenas tardes» → «Buenas [tardes.]»: la última palabra del saludo va recuadrada en serif itálica. */
-function saludoCartel(saludo: string): string {
-  const ps = `${saludo}.`.split(" ");
-  if (ps.length < 2) return ps.join(" ");
-  return `${ps.slice(0, -1).join(" ")} [${ps[ps.length - 1]}]`;
-}
 
 const ICONO_ATAJO: Record<string, ReactNode> = { Contactos: IconoNeu.personas, Etapas: IconoNeu.personas, Citas: IconoNeu.calendario, Seguimiento: IconoNeu.seguimiento };
 

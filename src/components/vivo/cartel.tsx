@@ -1,4 +1,7 @@
 import type { ReactNode } from "react";
+import { palabrasDeCartel } from "@/lib/premium/cartel";
+
+export { palabrasDeCartel };
 
 /**
  * Carteles animados (vuelta 6, marcados por el dueño en el video Df93dArgY10):
@@ -17,18 +20,6 @@ export interface CartelProps {
   retrasoMs?: number;
   className?: string;
   id?: string;
-}
-
-/** Parte un texto con [marcas] en palabras; cada una sabe si va resaltada. */
-export function palabrasDeCartel(texto: string): { palabra: string; marcada: boolean }[] {
-  const salida: { palabra: string; marcada: boolean }[] = [];
-  const re = /\[([^\]]+)\]|([^\s[\]]+)/g;
-  let m: RegExpExecArray | null;
-  while ((m = re.exec(texto))) {
-    if (m[1] !== undefined) salida.push({ palabra: m[1], marcada: true });
-    else salida.push({ palabra: m[2], marcada: false });
-  }
-  return salida;
 }
 
 function Palabras({ texto, desde, pasoMs }: { texto: string; desde: number; pasoMs: number }) {
