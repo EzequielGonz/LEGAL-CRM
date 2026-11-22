@@ -9,7 +9,7 @@ import { useEffect } from "react";
  * No dibuja nada. Con «reducir movimiento» del sistema no hace nada, y en
  * pantallas táctiles no hay inclinación.
  */
-const CIFRAS = ".cifra-premium";
+const CIFRAS = ".cifra-premium, [data-contar]";
 const INCLINABLES = ".kpi-hoy, [data-inclinar]";
 const GRADOS = 5;
 
