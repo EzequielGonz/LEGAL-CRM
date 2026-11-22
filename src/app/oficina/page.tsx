@@ -5,6 +5,8 @@ import { requirePageSession } from "@/lib/acceso/pagina";
 import { Oficina } from "@/components/cerebro/oficina";
 import { Clasico } from "@/components/premium";
 import { leerOficina } from "@/lib/oficina/servidor";
+import { EdificioOficina, SectorOficina } from "@/components/cerebro/oficina-sectores";
+import { esSector } from "@/lib/oficina/sectores";
 
 export const metadata = { title: "Oficina de agentes" };
 export const dynamic = "force-dynamic";
@@ -18,10 +20,13 @@ const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500", "700"],
  * dentro de `OficinaVisual`. Lo único que escribe: dejar una tarea, «Arrancar ahora» y
  * aprobar o descartar entregas, siempre con un botón.
  */
-export default async function OficinaPage() {
+export default async function OficinaPage({ searchParams }: { searchParams: Promise<{ sector?: string | string[] }> }) {
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
+  const sp = await searchParams;
+  const sector = esSector(sp.sector) && sp.sector !== "direccion" ? sp.sector : null;
   const oficina = await leerOficina();
+  const tareas = oficina?.tareas ?? [];
   return (
     <div className={`cz ${fuente.variable} ${mono.variable}`} style={{ ["--cz-f" as string]: fuente.style.fontFamily, ["--cz-mono" as string]: mono.style.fontFamily }}>
       <Clasico cerebro>
@@ -39,10 +44,11 @@ export default async function OficinaPage() {
             <h1>
               Los agentes, <b>trabajando</b>.
             </h1>
-            <p className="cz-lead">Dejá una tarea: Gemini la ordena al instante y elige por qué escritorios pasa. Con «Arrancar ahora», los agentes de Claude la trabajan área por área, Dirección revisa todo y te llega para aprobar. Nada se publica sin tu OK.</p>
+            <p className="cz-lead">Un edificio con un sector por equipo y el Cerebro al centro: recibe tus órdenes, las reparte y revisa todo antes de que te llegue. Nada se publica ni se aplica sin tu OK.</p>
           </div>
         </header>
         <main>
+          <div className="cz-in">{sector ? <SectorOficina area={sector} tareas={tareas} /> : <EdificioOficina tareas={tareas} />}</div>
           <section id="oficina">
             <div className="cz-in">
               {oficina ? <Oficina inicial={oficina.tareas} arranqueInicial={oficina.arranque} /> : <p className="cz-muted">No pude leer la oficina ahora. Probá recargar en un rato.</p>}

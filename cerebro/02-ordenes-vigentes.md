@@ -294,3 +294,8 @@ Todo lo demás son **decisiones de negocio** del dueño (abajo), no trabas de pr
 - Orden del dueño: «que Jarvis pueda hacer TODO, preguntándome antes siempre». Reemplaza la veda anterior (Jarvis no lanzaba, no publicaba ni le escribía a nadie).
 - Ahora Jarvis puede proponer lanzar o reanudar campañas, publicar, responder chats y encender bots o seguimientos. Lo que hace salir mensajes o publica nunca baja de **confirmación reforzada** (marcar que se entendió a quién, cuántos y desde qué línea) o código si el permiso lo pide. Nada se ejecuta sin el Sí del dueño. Sigue valiendo: las campañas las lanzan los dueños, ahora también confirmando desde Jarvis.
 - Código: `src/lib/jarvis/seguridad.ts` (`esPropuestaSensible`, `decisionConfirmar`), prompt v1.x regla 2, pruebas en `tests/unitarias/jarvis-seguridad.test.ts`.
+
+### 22/11 · El cerebro orquesta y la Oficina es un edificio por sectores
+- Cada escritorio es un sector con puestos por tarea específica (guionista, render, analista…); se entra a cada uno desde `/oficina`. El Cerebro está al centro y recibe, reparte y revisa (Dirección = Cerebro).
+- Mapa del código con Graphify en `cerebro/mapa-codigo/`: los agentes lo consultan antes de tocar código.
+- Propuestas pendientes de OK (líneas propias con Evolution API, Jarvis con código vía rama + vista previa): `biblioteca/propuesta-lineas-codigo-agentes-2211.md`.

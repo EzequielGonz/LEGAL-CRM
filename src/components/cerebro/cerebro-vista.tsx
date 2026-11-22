@@ -1,4 +1,6 @@
 import type { CSSProperties } from "react";
+import { EdificioOficina } from "@/components/cerebro/oficina-sectores";
+import type { TareaOficina } from "@/lib/oficina/reglas";
 import Link from "next/link";
 import { HeroCerebro } from "@/components/cerebro/escena-cerebro";
 import { TableroPendientes } from "@/components/cerebro/tablero-pendientes";
@@ -63,10 +65,12 @@ type Vista = {
   salud: Awaited<ReturnType<typeof leerSalud>> | null;
   pedidos: TareaBandeja[] | null;
   rubros: { slug: string; name: string }[];
+  /** Tareas de la Oficina: el edificio de agentes conectado al cerebro. */
+  oficina?: TareaOficina[] | null;
 };
 
 /** La presentación del cerebro, separada de la lectura de datos (así se puede ver con datos de ejemplo). */
-export function CerebroVista({ fuentes, semana, contactos, salud, pedidos, rubros }: Vista) {
+export function CerebroVista({ fuentes, semana, contactos, salud, pedidos, rubros, oficina = null }: Vista) {
   const conteo = conteoAlertas(ALERTAS);
   const frases = frasesDelCerebro(semana?.perfiles ?? null, conteo.alta, PREGUNTAS_ABIERTAS.length);
   const lecturas = semana ? lecturasDelPanel(semana.perfiles) : null;
@@ -422,12 +426,19 @@ export function CerebroVista({ fuentes, semana, contactos, salud, pedidos, rubro
                 <Link href="/asistente" prefetch={false} className="cz-pastilla sec">
                   Pedile a Jarvis <span aria-hidden="true">→</span>
                 </Link>
-                <a href="#laboratorio" className="cz-pastilla sec">
-                  Laboratorio de bots <span aria-hidden="true">↓</span>
-                </a>
+                <Link href="/laboratorio" prefetch={false} className="cz-pastilla sec">
+                  Laboratorio de bots <span aria-hidden="true">→</span>
+                </Link>
               </div>
             </div>
           </section>
+          {oficina ? (
+            <section id="agentes" aria-label="Agentes conectados al cerebro">
+              <div className="cz-in">
+                <EdificioOficina tareas={oficina} />
+              </div>
+            </section>
+          ) : null}
 
           <section id="estado" aria-labelledby="estado-titulo">
             <div className="cz-in">
