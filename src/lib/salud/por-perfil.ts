@@ -9,7 +9,7 @@ const NOMBRE: Record<string, string> = {
 };
 
 /** Avisos de todo el sistema: se ven en todos los perfiles. */
-const GLOBALES = new Set(["latido", "pausa", "secreto_meta", "cuarentena", "entrantes"]);
+const GLOBALES = new Set(["latido", "latido_atraso", "pausa", "secreto_meta", "cuarentena", "entrantes", "presupuesto_gemini"]);
 
 /**
  * Lo de la barra de salud que corresponde a un perfil (24/10): lo global y
