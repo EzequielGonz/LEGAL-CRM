@@ -16,7 +16,7 @@ Reglas de la sesión:
 
 | # | Estado | Qué | Para qué | Cómo |
 |---|---|---|---|---|
-| A1 | ⬜ | Disparo de la Oficina (token de la tarea programada) | Que «Arrancar ahora» del panel despierte a los agentes | En claude.ai/code → Tareas programadas → «Oficina · procesar tareas» → agregar disparo por API → copiar la dirección y el token. Claude los carga en Vercel como `OFICINA_DISPARO_URL` y `OFICINA_DISPARO_TOKEN` (y `OFICINA_DISPARO_BETA` si la página lo pide) |
+| A1 | ⬜ | Disparo de la Oficina (token de la tarea programada) | Que «Arrancar ahora» del panel despierte a los agentes | En claude.ai/code → Tareas programadas → «Oficina · procesar tareas» (ya creada el 22/11, sin horario): **sumarle el conector Supabase** (sin eso los agentes no leen la bandeja) y el repositorio LEGAL-CRM; después, agregar disparo por API y copiar la dirección y el token. Claude los carga en Vercel como `OFICINA_DISPARO_URL` y `OFICINA_DISPARO_TOKEN` (y `OFICINA_DISPARO_BETA` si la página lo pide) |
 | A2 | ⬜ | Google Search Console y GA4 | Escritorios de Análisis y SEO | Conector de Google (AdCopilot o el kit de Search Console) con la cuenta de Google de las landings |
 | A3 | ⬜ | Analítica de Metricool | Ciclo semanal «publicar → medir → aprender» | Ya está conectado; comprobar que devuelve métricas por marca |
 | A4 | ⬜ | GitHub (conector) | Ingeniería: ramas y PR desde los agentes | Reconectar GitHub en claude.ai (hoy falla con «encabezado mal formado») |
