@@ -59,7 +59,7 @@ Encender otro perfil: `jsonb_set` en `system_settings.recontacto_plantilla_meta`
 | `diseno/marco-hoy-2211` | Menú de 5 destinos (Hoy, Chats, Campañas, Resultados, Salud) + «Más» + Hoy en bento; mergea Jarvis | **Terminada**, commit 429df4c. Trae Jarvis mergeado y sin fondo mesh (`panel-premium.css` reasigna tokens al panel). Hoy en bento con datos reales. Alto en celular: unas 2,2 pantallas. Hay que confirmar con el dueño el denominador del anillo grande |
 | `diseno/chats-campanas-2211` | Chats y Campañas con anillos, botón «Dejar lista» | **Terminada**, commit ca5de44. Sin mesh. Falta la línea de salud en Campañas, porque no hay ese dato |
 | `diseno/resultados-salud-cerebro-2211` | Embudo en anillos, medidor de Salud y Cerebro corto (Oficina arriba, resto plegado) | **Terminada**, commit 9f208f6, ya con main mergeado. Sin mesh (`premium-clasico.css`). El cerebro bajó de 9558 a unos 2658 px, la mayor parte es la Oficina 3D. Los 3 anillos salen de `contenido.ts` |
-| `diseno/oficina-3d-repaso-2211` | Repaso de la Oficina publicada: herramientas, festejo del escritorio que termina su parte y docs | Agente trabajando |
+| `diseno/oficina-3d-repaso-2211` | Repaso de la Oficina publicada: herramientas, festejo del escritorio que termina su parte y docs | **Terminada**, commit 8bf4301: festeja el escritorio que dejó su parte, fondo sobrio, menos botones, AA y memo. Falta la revisión fairmind independiente |
 
 ## Lo que sigue (orden del dueño: «repasá que cumplan todo y si pasan, publicá»)
 
