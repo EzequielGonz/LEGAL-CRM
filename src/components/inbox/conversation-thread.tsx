@@ -6,6 +6,8 @@ import { AreaBadge, SourceBadge, StatusBadge } from "@/components/ui/badge";
 import { mergeAudios, mergePoll, type AudioUpdate, type DeliveryUpdate } from "@/lib/inbox/estados";
 import { AudioTexto } from "@/components/inbox/audio-texto";
 import { explicarError, lineaError } from "@/lib/envios/explicacion";
+import { Pastilla } from "@/components/premium/pastilla";
+import "@/app/chats-campanas.css";
 
 export interface ThreadContact {
   id: string;
@@ -206,9 +208,9 @@ export function ConversationThread({
   const visibles = messages.filter((m) => !m.duplicate_of);
 
   return (
-    <div ref={raizRef} className="flex h-full min-w-0 flex-col overflow-y-auto lg:flex-row lg:overflow-hidden">
+    <div ref={raizRef} className="cc flex h-full min-w-0 flex-col overflow-y-auto lg:flex-row lg:overflow-hidden">
       <div className="flex min-h-[70vh] min-w-0 flex-1 flex-col lg:min-h-0">
-        <div className="chat-cabecera flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 bg-white px-4 py-3 sm:px-5">
+        <div className="chat-cabecera cc-cabecera-chat flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 bg-white px-4 py-3 sm:px-5">
           <div className="min-w-0">
             <p className="text-sm font-semibold text-slate-900 [overflow-wrap:anywhere]">
               {contact.full_name ?? "Sin nombre"}
@@ -220,23 +222,24 @@ export function ConversationThread({
             <AreaBadge area={contact.area} />
             <StatusBadge status={contact.status as any} />
             <SourceBadge source={contact.source} />
+            <Pastilla estado={aiOn ? "ok" : "atencion"}>{aiOn ? "Atiende el agente IA" : "Responde una persona"}</Pastilla>
           </div>
         </div>
 
         {/* 15/11 (accesibilidad): los mensajes nuevos se anuncian a los lectores de pantalla. */}
-        <div role="log" aria-live="polite" aria-label="Mensajes" tabIndex={0} className="flex-1 space-y-3 overflow-y-auto bg-slate-50 p-3 sm:p-5">
+        <div role="log" aria-live="polite" aria-label="Mensajes" tabIndex={0} className="cc-hilo flex-1 space-y-3 overflow-y-auto bg-slate-50 p-3 sm:p-5">
           {visibles.map((m) => (
             <div
               key={m.id}
               className={`flex ${m.direction === "saliente" ? "justify-end" : "justify-start"}`}
             >
               <div
-                className={`min-w-0 max-w-[85%] animate-fade-in-up rounded-2xl px-4 py-2 text-sm [overflow-wrap:anywhere] sm:max-w-md ${
+                className={`cc-burbuja min-w-0 max-w-[85%] animate-fade-in-up rounded-2xl px-4 py-2.5 [overflow-wrap:anywhere] sm:max-w-md ${
                   m.direction === "saliente"
                     ? m.sender_type === "admin"
-                      ? "rounded-br-md bg-gold-100 text-slate-900 shadow-sm ring-1 ring-gold-300/60"
-                      : "rounded-br-md bg-slate-900 text-white shadow-sm"
-                    : "rounded-bl-md bg-white text-slate-800 shadow-sm ring-1 ring-slate-200/70"
+                      ? "cc-burbuja--admin rounded-br-md"
+                      : "cc-burbuja--ia rounded-br-md"
+                    : "cc-burbuja--ent rounded-bl-md"
                 }`}
               >
                 {m.message_type && m.message_type !== "text" && m.message_type !== "button" && (
@@ -269,9 +272,7 @@ export function ConversationThread({
                   </div>
                 )}
                 <p
-                  className={`mt-1 text-xs tabular-nums ${
-                    m.direction === "saliente" ? (m.sender_type === "admin" ? "text-slate-600" : "text-white/75") : "text-slate-500"
-                  }`}
+                  className="cc-burbuja__hora mt-1 text-xs tabular-nums"
                 >
                   {m.sender_type === "agente_ia" ? "Agente IA · " : m.sender_type === "admin" ? "Admin · " : ""}
                   {new Date(m.created_at).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", hourCycle: "h23", day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" })}
@@ -290,7 +291,7 @@ export function ConversationThread({
           <div ref={bottomRef} />
         </div>
 
-        <div className="chat-compositor border-t border-slate-200 bg-white p-3">
+        <div className="chat-compositor cc-compositor border-t border-slate-200 bg-white p-3">
           <div className="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-slate-700">
             <label className="tactil flex cursor-pointer items-center gap-2">
               <input type="checkbox" checked={aiOn} onChange={toggleAi} className="h-4 w-4" />
@@ -325,7 +326,7 @@ export function ConversationThread({
               <span className="sr-only">Adjuntar foto, video o PDF</span>
               <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/3gpp,video/quicktime,application/pdf,.pdf" className="sr-only" onChange={(e) => setArchivo(e.target.files?.[0] ?? null)} />
             </label>
-            <button onClick={handleSend} disabled={sending} className="btn-gold">
+            <button onClick={handleSend} disabled={sending} className="cc-enviar">
               {sending ? "Enviando..." : "Enviar"}
             </button>
           </div>

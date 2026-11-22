@@ -4,7 +4,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requirePageSession } from "@/lib/acceso/pagina";
 import { MarcoPerfil } from "@/components/perfiles/marco-perfil";
-import { Icono } from "@/components/ui/icono-seccion";
 import { contarIndicador, indicadorPorClave, rubroIdDe, enlaceIndicador } from "@/lib/indicadores";
 import { colasDeHoy } from "@/lib/hoy/colas";
 import { esSlugPerfil, type SlugPerfil } from "@/lib/marca";
@@ -14,6 +13,9 @@ import { AREAS_DE_PERFIL, contarDetenidos, contarVista, listarGrupo, resumenCifr
 import { getProfileMetrics } from "@/lib/metrics";
 import { nivelDeInteres } from "@/lib/atencion/interes";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { Anillo, Bento, BentoCelda, Boton, Pastilla, Tarjeta, VerMas } from "@/components/premium";
+import { esperaHace } from "@/lib/premium/espera";
+import "@/app/chats-campanas.css";
 
 const PUNTO: Record<Tono, string> = {
   caliente: "bg-gold-500",
@@ -22,15 +24,16 @@ const PUNTO: Record<Tono, string> = {
   info: "bg-slate-400",
 };
 
-function Ficha({ f, slug, aqui, accion }: { f: FichaCartera; slug: SlugPerfil; aqui: string; accion: "derivar" | "chat" | "ficha" }) {
+export function Ficha({ f, slug, aqui, accion, orden = 0, ahoraMs, esperando = false }: { f: FichaCartera; slug: SlugPerfil; aqui: string; accion: "derivar" | "chat" | "ficha"; orden?: number; ahoraMs: number; esperando?: boolean }) {
   const ficha = f.contactId ? conVolver(`/ficha/${f.contactId}`, aqui) : null;
   const chat = f.conversationId ? conVolver(enlaceConversacion(slug, f.conversationId), aqui) : null;
   const chatPrincipal = accion === "chat" && !!chat;
   const principal = chatPrincipal ? chat : ficha ?? chat;
   const nivel = nivelDeInteres(f.interes);
+  const espera = esperando ? esperaHace(f.actividad, ahoraMs) : null;
   return (
-    <li className="ficha-cartera group relative flex min-w-0 flex-col rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition focus-within:border-slate-400 hover:border-slate-300 hover:shadow-md">
-      <div className="flex items-start gap-3">
+    <li className="ficha-cartera cc-ficha group" style={{ "--cc-i": Math.min(orden, 8) } as React.CSSProperties}>
+      <div className="cc-ficha__fila">
         <span aria-hidden="true" className="avatar-ficha grid h-10 w-10 shrink-0 place-items-center rounded-full text-sm font-semibold">
           {iniciales(f.nombre)}
         </span>
@@ -47,31 +50,27 @@ function Ficha({ f, slug, aqui, accion }: { f: FichaCartera; slug: SlugPerfil; a
         </div>
         {f.area === "penal" ? <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[13px] font-medium text-slate-600">Penal</span> : null}
       </div>
-      <div className="mt-3 flex flex-wrap gap-1.5 text-[13px]">
-        <span className="rounded-full bg-slate-100 px-2.5 py-1 font-medium text-slate-700">{f.estado}</span>
-        {nivel ? (
-          <span className={nivel === "alto" ? "rounded-full bg-emerald-100 px-2.5 py-1 font-semibold text-emerald-900" : nivel === "medio" ? "rounded-full bg-amber-100 px-2.5 py-1 font-semibold text-amber-900" : "rounded-full bg-slate-100 px-2.5 py-1 font-medium text-slate-600"}>
-            Interés {nivel}
-          </span>
-        ) : null}
+      <div className="cc-ficha__espera">
+        {espera ? <Pastilla estado={espera.nivel}>Espera {espera.texto}</Pastilla> : null}
+        <Pastilla>{f.estado}</Pastilla>
+        {nivel ? <Pastilla estado={nivel === "alto" ? "ok" : nivel === "medio" ? "atencion" : "neutro"}>Interés {nivel}</Pastilla> : null}
         {f.cita ? (
-          <span className="inline-flex items-center gap-1 rounded-full bg-gold-500/10 px-2.5 py-1 font-semibold text-gold-800">
-            <Icono nombre="agenda" className="h-3.5 w-3.5" />
+          <Pastilla estado="info">
             {cuandoCorto(f.cita.inicio)}
             {f.cita.fase2 ? " · Fase 2" : f.cita.reagendada ? " · reagendada" : ""}
-          </span>
+          </Pastilla>
         ) : null}
       </div>
       {f.detalle ? <p className="mt-2 text-[13px] leading-snug text-slate-700 [overflow-wrap:anywhere]">{f.detalle}</p> : null}
       {f.actividad ? <p className="mt-2 text-[13px] text-slate-500">Escribió {cuandoCorto(f.actividad)}</p> : null}
-      <div className="relative z-10 mt-auto flex gap-2 pt-3">
+      <div className="cc-ficha__pie">
         {ficha ? (
-          <Link prefetch={false} href={ficha} className={chatPrincipal ? "btn-suave-sm flex-1 justify-center" : "btn-gold-sm flex-1 justify-center"}>
+          <Link prefetch={false} href={ficha} className={`pm-boton ${chatPrincipal ? "pm-boton--secundario" : "pm-boton--primario"}`}>
             {accion === "derivar" ? "Derivar" : "Ficha"}
           </Link>
         ) : null}
         {chat ? (
-          <Link prefetch={false} href={chat} className={chatPrincipal ? "btn-gold-sm flex-1 justify-center" : "btn-suave-sm flex-1 justify-center"}>
+          <Link prefetch={false} href={chat} className={`pm-boton ${chatPrincipal ? "pm-boton--primario" : "pm-boton--secundario"}`}>
             Chat
           </Link>
         ) : null}
@@ -122,7 +121,7 @@ async function CuerpoCartera({ vista, slug, rubroId, searchParams }: { vista: Vi
   const conteos = await contarVista(rubroId, areas, vista);
   const g = grupoElegido(vista, searchParams.grupo, conteos);
   const aqui = `${ruta}?perfil=${slug}&grupo=${g.clave}`;
-  const [{ fichas, error }, detenidos, incidencias, semana, historico, esperan, porDerivar] = await Promise.all([
+  const [{ fichas, error }, detenidos, incidencias, semana, historico, esperaInfo, porDerivar] = await Promise.all([
     listarGrupo(rubroId, areas, g),
     Promise.resolve(null as number | null),
     Promise.resolve(null as number | null),
@@ -130,7 +129,7 @@ async function CuerpoCartera({ vista, slug, rubroId, searchParams }: { vista: Vi
     vista === "conversaciones" ? resumenCifras(rubroId, areas).catch(() => null) : Promise.resolve(null),
     vista === "conversaciones" || vista === "contactos" ? getProfileMetrics(rubroId).catch(() => null) : Promise.resolve(null),
     // 12/11: en Oportunidades, cuántos esperan una respuesta (se atienden desde Hoy).
-    vista === "conversaciones" ? colasDeHoy(rubroId, areas).then((c) => c.esperan.length).catch(() => 0) : Promise.resolve(0),
+    vista === "conversaciones" ? colasDeHoy(rubroId, areas).then((c) => ({ n: c.esperan.length, masVieja: c.esperan[0]?.desde ?? null })).catch(() => ({ n: 0, masVieja: null as string | null })) : Promise.resolve({ n: 0, masVieja: null as string | null }),
     // 12/11: en Cartera, cuántos captados falta derivar (así la cartera vacía dice dónde está la gente).
     vista === "contactos" ? contarIndicador(rubroId, indicadorPorClave("captado_sin_derivar")!).then((r) => r.count ?? 0).catch(() => 0) : Promise.resolve(0),
   ]);
@@ -138,13 +137,16 @@ async function CuerpoCartera({ vista, slug, rubroId, searchParams }: { vista: Vi
   const conGente = def.grupos.filter((x) => (conteos[x.clave] ?? 0) > 0 || conteos[x.clave] === null);
   const vacios = def.grupos.filter((x) => conteos[x.clave] === 0);
   const todoVacio = conGente.length === 0;
-  const columnas = conGente.length >= 4 ? "lg:grid-cols-4" : conGente.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2";
+  const esperan = esperaInfo.n;
+  const ahoraMs = Date.now();
+  const esperaMax = esperaHace(esperaInfo.masVieja, ahoraMs);
+  const totalActivos = def.grupos.reduce((a, x) => a + (conteos[x.clave] ?? 0), 0);
   const total = conteos[g.clave];
   const cifra = (n: number | null | undefined) => (n === null || n === undefined ? "—" : n.toLocaleString("es-AR"));
   const completa = g.fuente.tipo === "oportunidades" ? enlaceIndicador(slug, g.fuente.indicador, aqui) : `${slug === "juridico" ? "" : `/panel/${slug}`}/agenda`;
 
   return (
-      <div className="mx-auto max-w-6xl space-y-6">
+      <div className="cc mx-auto max-w-6xl space-y-6">
         <div>
           <h1 className="text-2xl font-semibold text-slate-950">{def.titulo}</h1>
           <p className="mt-1 text-sm text-slate-600">{def.bajada}</p>
@@ -189,38 +191,68 @@ async function CuerpoCartera({ vista, slug, rubroId, searchParams }: { vista: Vi
           </section>
         ) : null}
 
-        {vista === "conversaciones" && esperan > 0 ? (
-          <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-amber-300 bg-amber-50 px-5 py-4">
-            <div>
-              <p className="text-base font-semibold text-slate-950">
-                {esperan} {esperan === 1 ? "persona espera" : "personas esperan"} tu respuesta
-              </p>
-              <p className="text-sm text-slate-700">Escribieron y el bot no les contesta porque el chat lo tiene una persona.</p>
-            </div>
-            <Link prefetch={false} href={`/hoy?perfil=${slug}&cola=responder#hoy-cola`} className="btn-gold-sm">
-              Responder desde Hoy
-            </Link>
-          </div>
+        {vista === "conversaciones" ? (
+          <Bento>
+            <BentoCelda columnas={6} columnasMedio={6}>
+              <Tarjeta relieve rubro={slug} aparecer={0}>
+                <div className="cc-ring">
+                  <Anillo valor={esperan} meta={Math.max(totalActivos, esperan, 1)} rubro={slug} tamano="grande" unidad="personas esperando respuesta" nombre="Esperando respuesta" />
+                  <div className="cc-ring__texto">
+                    <h2 className="cc-ring__titulo">{esperan === 0 ? "Nadie te está esperando" : esperan === 1 ? "Persona esperando respuesta" : "Personas esperando respuesta"}</h2>
+                    <p className="cc-ring__detalle">
+                      {esperan === 0
+                        ? "Todo contestado. Cuando alguien escriba y el bot no le conteste, aparece acá."
+                        : esperaMax
+                        ? `La que más espera lleva ${esperaMax.texto.replace("hace ", "")}. Escribieron y el bot no les contesta.`
+                        : "Escribieron y el bot no les contesta porque el chat lo tiene una persona."}
+                    </p>
+                    {esperan > 0 ? (
+                      <div style={{ marginTop: 12 }}>
+                        <Boton href={`/hoy?perfil=${slug}&cola=responder#hoy-cola`} variante="primario">
+                          Responder ahora
+                        </Boton>
+                      </div>
+                    ) : null}
+                  </div>
+                </div>
+              </Tarjeta>
+            </BentoCelda>
+            <BentoCelda columnas={6} columnasMedio={6}>
+              <Tarjeta relieve rubro={slug} aparecer={1}>
+                <div className="cc-ring--par">
+                  {([["captados", "Para cerrar", "personas para cerrar"], ["piden", "Con interés real", "personas con interés real"]] as const).map(([clave, rotulo, unidad], i) => {
+                    const n = conteos[clave];
+                    if (n === null || n === undefined) return null;
+                    return (
+                      <div key={clave} className="cc-ring cc-ring--col">
+                        <Anillo valor={n} meta={Math.max(totalActivos, n, 1)} rubro={slug} tamano="chico" unidad={unidad} nombre={rotulo} retrasoMs={80 * (i + 1)} />
+                        <div className="cc-ring__texto">
+                          <h2 className="cc-ring__titulo">{rotulo}</h2>
+                          <p className="cc-ring__detalle">{n === 1 ? "1 persona" : `${n.toLocaleString("es-AR")} personas`}</p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </Tarjeta>
+            </BentoCelda>
+          </Bento>
         ) : null}
 
         {todoVacio ? null : (
-          <nav aria-label={`Grupos de ${def.titulo}`}>
-            <ul className={`grid grid-cols-2 gap-3 ${columnas}`}>
+          <nav aria-label={`Grupos de ${def.titulo}`} className="cc-grupos">
+            <ul className="cc-filtros">
               {conGente.map((x) => {
                 const n = conteos[x.clave];
                 const activo = x.clave === g.clave;
                 return (
                   <li key={x.clave}>
-                    <Link prefetch={false}
-                      href={`${ruta}?perfil=${slug}&grupo=${x.clave}`}
-                      aria-current={activo ? "page" : undefined}
-                      className={`tarjeta-grupo flex h-full flex-col rounded-2xl border bg-white p-4 shadow-sm transition ${activo ? "border-transparent ring-2 ring-gold-500" : "border-slate-200 hover:border-slate-300 hover:shadow-md"}`}
-                    >
-                      <span className="flex items-center gap-2 text-[13px] font-medium text-slate-600">
-                        <span aria-hidden="true" className={`h-2 w-2 rounded-full ${PUNTO[x.tono]}`} />
+                    <Link prefetch={false} href={`${ruta}?perfil=${slug}&grupo=${x.clave}`} aria-current={activo ? "page" : undefined} className="cc-filtro">
+                      <span className="cc-filtro__rotulo">
+                        <span aria-hidden="true" className={`cc-filtro__punto cc-filtro__punto--${x.tono}`} />
                         {x.titulo}
                       </span>
-                      <span className="mt-2 text-3xl font-semibold tabular-nums text-slate-950">{n === null ? "—" : n.toLocaleString("es-AR")}</span>
+                      <span className="cc-filtro__n">{n === null ? "—" : n.toLocaleString("es-AR")}</span>
                     </Link>
                   </li>
                 );
@@ -298,9 +330,9 @@ async function CuerpoCartera({ vista, slug, rubroId, searchParams }: { vista: Vi
                 <p className="mt-1 text-sm text-slate-600">Cuando haya alguien acá, aparece su ficha con el acceso al chat.</p>
               </div>
             ) : (
-              <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
-                {fichas.map((f) => (
-                  <Ficha key={f.id} f={f} slug={slug} aqui={aqui} accion={g.accion} />
+              <ul className="cc-fichas">
+                {fichas.map((f, i) => (
+                  <Ficha key={f.id} f={f} slug={slug} aqui={aqui} accion={g.accion} orden={i} ahoraMs={ahoraMs} esperando={g.clave === "escribieron" || g.clave === "piden"} />
                 ))}
               </ul>
             )}
@@ -308,6 +340,7 @@ async function CuerpoCartera({ vista, slug, rubroId, searchParams }: { vista: Vi
         </div>
 
         {vista === "conversaciones" ? (
+          <VerMas cerrado="Ver cómo viene la semana" abierto="Ocultar la semana">
           <section aria-labelledby="conv-semana" className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
             {/* 12/11: las cifras van después del trabajo, no antes. */}
             <h2 id="conv-semana" className="text-base font-semibold text-slate-950">Esta semana</h2>
@@ -348,6 +381,7 @@ async function CuerpoCartera({ vista, slug, rubroId, searchParams }: { vista: Vi
               </dl>
             </details>
           </section>
+          </VerMas>
         ) : null}
 
       </div>

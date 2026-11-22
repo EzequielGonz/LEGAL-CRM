@@ -5,6 +5,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { AreaBadge } from "@/components/ui/badge";
 import { cuandoCorto, iniciales, previaLegible } from "@/lib/cartera";
+import { Pastilla } from "@/components/premium/pastilla";
+import { esperaHace } from "@/lib/premium/espera";
+import "@/app/chats-campanas.css";
 
 export interface ConversationListItem {
   id: string;
@@ -121,6 +124,8 @@ export function ConversationList({ perfil = "juridico" }: { perfil?: string }) {
   }
 
   const pages = Math.max(1, Math.ceil(total / pageSize));
+  // Solo se usa con la lista ya cargada (después de hidratar), así que no puede desfasar servidor y cliente.
+  const ahoraMs = Date.now();
   const keep = qs ? `?${qs}` : "";
   // 24/10: un solo chat. En los cuatro perfiles la conversación se abre al lado de la lista.
   const hrefChat = (id: string) => `${lista}/${id}${keep}`;
@@ -128,7 +133,7 @@ export function ConversationList({ perfil = "juridico" }: { perfil?: string }) {
   return (
     // Teléfono y tablet chica: lista o conversación, una a la vez (la
     // conversación tiene su «Volver»); desde 768 px, las dos lado a lado.
-    <div className={`${params?.id ? "hidden md:flex" : "flex"} h-full w-full shrink-0 flex-col border-r border-slate-200 bg-white md:w-72 xl:w-80`}>
+    <div className={`cc ${params?.id ? "hidden md:flex" : "flex"} h-full w-full shrink-0 flex-col border-r border-slate-200 bg-white md:w-72 xl:w-80`}>
       <div className="space-y-2 border-b border-slate-200 p-3">
         <form
           onSubmit={(e) => {
@@ -159,7 +164,7 @@ export function ConversationList({ perfil = "juridico" }: { perfil?: string }) {
                 type="button"
                 aria-pressed={activa}
                 onClick={() => setFilter("atencion", o.v)}
-                className={`tactil inline-flex items-center rounded-full border px-3 text-sm font-medium ${activa ? "border-slate-900 bg-slate-900 text-white" : "border-slate-300 bg-white text-slate-900 hover:bg-slate-50"}`}
+                className="pm-boton cc-chico"
               >
                 {o.t}
               </button>
@@ -243,12 +248,13 @@ export function ConversationList({ perfil = "juridico" }: { perfil?: string }) {
       </div>
 
       <div className="flex-1 overflow-y-auto">
-        {items.map((item) => (
+        {items.map((item, idx) => (
           <Link prefetch={false}
             key={item.id}
+            style={{ "--cc-i": Math.min(idx, 10) } as React.CSSProperties}
             href={hrefChat(item.id)}
             aria-current={params?.id === item.id ? "page" : undefined}
-            className={`flex gap-3 border-b border-slate-100 px-4 py-3 hover:bg-slate-50 ${params?.id === item.id ? "bg-slate-100" : ""}`}
+            className="cc-fila"
           >
             {/* 13/11: fila más clara: quién es, qué dijo último (en palabras) y cuándo. */}
             <span aria-hidden="true" className="avatar-ficha mt-0.5 grid h-10 w-10 shrink-0 place-items-center rounded-full text-xs font-semibold">
@@ -262,20 +268,20 @@ export function ConversationList({ perfil = "juridico" }: { perfil?: string }) {
               <span className={`mt-0.5 block text-sm [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2] [overflow:hidden] ${item.last_from_contact ? "font-medium text-slate-900" : "text-slate-600"}`}>
                 {previaLegible(item.last_message_preview)}
               </span>
-              <span className="mt-1 flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-xs">
-                <AreaBadge area={item.area as any} />
-                {item.channel_type === "whatsapp" ? (
-                  <span className="rounded-full border border-slate-300 px-2 py-0.5 text-slate-700">{item.via === "wasender" ? "Wasender" : "Meta"}</span>
+              <span className="cc-fila__espera text-xs">
+                {item.last_from_contact && !item.detained ? (
+                  <Pastilla estado={esperaHace(item.last_message_at, ahoraMs)?.nivel ?? "info"}>Espera {esperaHace(item.last_message_at, ahoraMs)?.texto ?? "respuesta"}</Pastilla>
                 ) : null}
-                {item.last_from_contact && !item.detained ? <span className="rounded-full bg-gold-500/20 px-2 py-0.5 font-semibold text-gold-900">Te escribió</span> : null}
-                {item.attention_state && ATTENTION_LABEL[item.attention_state] && (
-                  <span className="font-medium text-amber-800">
+                <AreaBadge area={item.area as any} />
+                {item.channel_type === "whatsapp" ? <Pastilla>{item.via === "wasender" ? "Wasender" : "Meta"}</Pastilla> : null}
+                {item.attention_state && ATTENTION_LABEL[item.attention_state] ? (
+                  <Pastilla estado="atencion">
                     {ATTENTION_LABEL[item.attention_state]}
                     {item.attention_reason ? <span className="solo-avanzado font-normal"> · {item.attention_reason}</span> : null}
-                  </span>
-                )}
-                {!item.ai_enabled && !item.attention_state && <span className="font-medium text-amber-800">La atiende una persona</span>}
-                {item.detained && <span className="font-medium text-red-700">{item.detained === "detenido" ? "Detenido" : "Retenido"}</span>}
+                  </Pastilla>
+                ) : null}
+                {!item.ai_enabled && !item.attention_state ? <Pastilla estado="atencion">La atiende una persona</Pastilla> : null}
+                {item.detained ? <Pastilla estado="error">{item.detained === "detenido" ? "Detenido" : "Retenido"}</Pastilla> : null}
               </span>
             </span>
           </Link>
