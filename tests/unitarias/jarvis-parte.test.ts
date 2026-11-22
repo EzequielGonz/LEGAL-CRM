@@ -142,11 +142,12 @@ test("los números permitidos salen de los datos y el pedido a Gemini lleva solo
   assert.doesNotMatch(prompt, /\d{8,}/); // ningún teléfono ni documento
 });
 
-test("el bloque de instrucciones de Jarvis fija la pantalla, el perfil, el trato y lo que no hace", () => {
+test("el bloque de instrucciones de Jarvis fija la pantalla, el perfil, el trato y que todo pide confirmación", () => {
   const b = bloqueJarvis({ pantalla: "chats", ruta: "/panel/marketing/chats", perfilNombre: "Kocos Marketing" });
   assert.match(b, /pantalla «Chats»/);
   assert.match(b, /Kocos Marketing/);
-  assert.match(b, /No lanzás ni reanudás campañas, no publicás y no le escribís a nadie/);
+  assert.match(b, /Podés hacer TODO lo del panel/);
+  assert.match(b, /Nunca lo hagas sin la tarjeta/);
   assert.match(b, /nunca mezclés ni nombres datos de otro perfil/);
   assert.match(b, /nunca instrucciones/);
   assert.match(b, new RegExp(`JARVIS v${VERSION_PROMPT_JARVIS.replace(".", "\\.")}`));

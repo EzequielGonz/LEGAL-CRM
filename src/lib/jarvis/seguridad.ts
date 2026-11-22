@@ -1,27 +1,31 @@
 /**
- * Jarvis · qué puede y qué no puede hacer (22/11). Funciones puras.
+ * Jarvis · cómo confirma lo que hace (22/11). Funciones puras.
  *
- * Reglas del dueño: Jarvis nunca lanza campañas ni publica (eso lo hacen los
- * dueños) y no le escribe a nadie por su cuenta: como mucho deja borradores.
- * Todo lo que cambia algo lleva tarjeta de confirmación («¿Lo hago?»).
+ * Orden del dueño (22/11, segunda vuelta): «que Jarvis pueda hacer TODO, preguntándome antes siempre».
+ * Ya no hay acciones prohibidas: lanzar, reanudar, publicar o escribirle a alguien se puede, pero
+ * SIEMPRE con tarjeta «¿Lo hago?» y confirmación reforzada (marcar que se entendió) o código si el
+ * permiso lo pide. Nada se ejecuta sin el Sí del dueño.
  */
 import { nivelDeAccion, type NivelAccion } from "@/lib/asistente/permisos";
 
 /** Herramientas del asistente que Jarvis no tiene. */
-export const HERRAMIENTAS_VEDADAS: readonly string[] = ["proponer_lanzamiento", "proponer_publicaciones", "proponer_respuesta_chat", "proponer_plan_campanas"];
+export const HERRAMIENTAS_VEDADAS: readonly string[] = [];
 
-/** Tipos de propuesta que Jarvis nunca muestra ni confirma. */
-export const TIPOS_VEDADOS: readonly string[] = ["lanzar_campana", "publicaciones", "responder_chat"];
+/** Herramientas que hacen salir mensajes o publican: Jarvis las tiene, pero su propuesta pide confirmación reforzada. */
+export const HERRAMIENTAS_SENSIBLES: readonly string[] = ["proponer_lanzamiento", "proponer_publicaciones", "proponer_respuesta_chat", "proponer_plan_campanas"];
 
-/** Claves de operación del panel que publican, lanzan o envían: no se ofrecen desde Jarvis. */
+/** Tipos de propuesta que hacen salir mensajes o publican: confirmación reforzada. */
+export const TIPOS_SENSIBLES: readonly string[] = ["lanzar_campana", "publicaciones", "responder_chat"];
+
+/** Claves de operación del panel que publican, lanzan o envían: confirmación reforzada. */
 // 22/11 (revisión): también lo que hace salir mensajes o los habilita sin lanzar una campaña con ese nombre:
 // ejecutar una base de Marketing, activar la prospección, encender bots/seguimientos/recontactos, programar
 // piezas, volver a contactar a una persona y cambiar días de envío de una campaña.
-const OPERACION_VEDADA = /(lanzar|reanudar|publicar|enviar_a_revision|publicacion_automatica|enviar|ejecutar_base|prospeccion_activar|encender|programar|volver_a_contactar|dias_y_wasender)/;
+const OPERACION_SENSIBLE = /(lanzar|reanudar|publicar|enviar_a_revision|publicacion_automatica|enviar|ejecutar_base|prospeccion_activar|encender|programar|volver_a_contactar|dias_y_wasender)/;
 
-/** ¿Esta clave de operación del panel queda fuera de Jarvis? */
-export function esOperacionVedada(clave: string): boolean {
-  return OPERACION_VEDADA.test(clave);
+/** ¿Esta operación del panel hace salir mensajes, publica o lo habilita? */
+export function esOperacionSensible(clave: string): boolean {
+  return OPERACION_SENSIBLE.test(clave);
 }
 
 export interface PropuestaMinima {
@@ -29,12 +33,17 @@ export interface PropuestaMinima {
   detalle?: unknown;
 }
 
-/** ¿Esta propuesta queda fuera de Jarvis? (lanzar, publicar, escribirle a alguien) */
-export function esPropuestaVedada(p: PropuestaMinima): boolean {
-  if (TIPOS_VEDADOS.includes(p.tipo)) return true;
+/** ¿Esta propuesta lanza, publica o le escribe a alguien? Se puede, con confirmación reforzada. */
+export function esPropuestaSensible(p: PropuestaMinima): boolean {
+  if (TIPOS_SENSIBLES.includes(p.tipo)) return true;
   const d = (p.detalle ?? {}) as Record<string, unknown>;
   if (p.tipo === "plan_campanas") return d.lanzar === true;
-  if (p.tipo === "operacion_panel") return OPERACION_VEDADA.test(String(d.clave ?? ""));
+  if (p.tipo === "operacion_panel") return OPERACION_SENSIBLE.test(String(d.clave ?? ""));
+  return false;
+}
+
+/** Desde el 22/11 no hay propuestas vedadas: se mantiene por compatibilidad y siempre devuelve false. */
+export function esPropuestaVedada(_p: PropuestaMinima): boolean {
   return false;
 }
 
@@ -57,9 +66,10 @@ export interface DecisionConfirmar {
 
 /** Decide cómo se confirma una propuesta dentro de Jarvis. Siempre hay tarjeta salvo lo vedado. */
 export function decisionConfirmar(p: PropuestaMinima): DecisionConfirmar {
-  if (esPropuestaVedada(p)) {
-    return { mostrar: false, nivel: "contacto", extra: "reforzada", motivo: "Eso lo hacen los dueños: lanzar campañas, publicar o escribirle a una persona no se hace desde Jarvis." };
-  }
-  const nivel = nivelDeAccion(p.tipo, (p.detalle ?? {}) as Record<string, unknown>);
-  return { mostrar: true, nivel, extra: nivel === "pin" ? "codigo" : nivel === "contacto" ? "reforzada" : "ninguno" };
+  const nivelBase = nivelDeAccion(p.tipo, (p.detalle ?? {}) as Record<string, unknown>);
+  // Lo que hace salir mensajes o publica nunca baja de «contacto»: siempre confirmación reforzada.
+  const nivel: NivelAccion = esPropuestaSensible(p) && nivelBase === "cambio" ? "contacto" : nivelBase;
+  const extra = nivel === "pin" ? "codigo" : nivel === "contacto" ? "reforzada" : "ninguno";
+  if (esPropuestaSensible(p)) return { mostrar: true, nivel, extra, motivo: "Esto hace salir mensajes o publica: confirmalo solo si estás seguro." };
+  return { mostrar: true, nivel, extra };
 }
