@@ -531,6 +531,15 @@ html[data-modo="oscuro"] .menu-tarjeta-sub[data-espera] { color: rgb(255 200 110
   .chat-compositor { position: sticky; bottom: 0; z-index: 3; box-shadow: 0 -10px 24px -18px rgb(0 0 0 / 0.45); }
 }
 
+/* -------------------------------------- ingreso */
+.pin-kicker {
+  font: 500 0.68rem/1.2 var(--d-f-mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgb(var(--c-gold-400));
+}
+html[data-modo="oscuro"] .pin-kicker { color: rgb(var(--c-gold-600)); }
+
 /* ================================================================
    Movimiento general: con «reducir movimiento», nada se mueve.
    ================================================================ */
