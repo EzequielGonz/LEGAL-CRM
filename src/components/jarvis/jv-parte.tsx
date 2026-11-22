@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import type { ParteDelDia } from "@/lib/jarvis/parte";
-import type { Propuesta } from "@/components/asistente/asistente-panel";
+import type { Propuesta } from "@/lib/asistente/eventos";
 import { JvAnillo } from "@/components/jarvis/jv-anillo";
 import { JvConfirmar } from "@/components/jarvis/jv-confirmar";
 

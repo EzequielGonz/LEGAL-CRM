@@ -3,7 +3,8 @@
  * (ventana privada, bloqueado) Jarvis anda igual, solo que no recuerda.
  * La charla se guarda por perfil: nunca se mezcla con la de otro rubro.
  */
-import type { Propuesta } from "@/components/asistente/asistente-panel";
+import type { Propuesta } from "@/lib/asistente/eventos";
+import { hechosValidos, type HechoJarvis } from "@/lib/jarvis/historial";
 
 export interface MensajeJarvis {
   rol: "usuario" | "jarvis";
@@ -114,6 +115,23 @@ export function leerParteCache(slug: string, ahoraMs: number): unknown | null {
 export function guardarParteCache(slug: string, datos: unknown, ahoraMs: number) {
   try {
     sesion()?.setItem(`jarvis:parte-cache:${slug}`, JSON.stringify({ t: ahoraMs, datos }));
+  } catch {
+    /* nada */
+  }
+}
+
+/** Historial de lo confirmado (por perfil, en el navegador; se filtra por día al mostrarlo). */
+export function leerHechos(slug: string): HechoJarvis[] {
+  try {
+    const crudo = local()?.getItem(`jarvis:hechos:${slug}`);
+    return crudo ? hechosValidos(JSON.parse(crudo)) : [];
+  } catch {
+    return [];
+  }
+}
+export function guardarHechos(slug: string, hechos: HechoJarvis[]) {
+  try {
+    local()?.setItem(`jarvis:hechos:${slug}`, JSON.stringify(hechos));
   } catch {
     /* nada */
   }

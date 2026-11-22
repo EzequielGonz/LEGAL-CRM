@@ -8,6 +8,7 @@ import { leerRubrosActivos } from "@/lib/perfiles-stats";
 import { leerSalud } from "@/lib/salud";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { filaATarea, type TareaBandeja } from "@/lib/bandeja-claude";
+import { leerDecisiones } from "@/lib/cerebro/decisiones-servidor";
 import type { PerfilSemana } from "@/lib/cerebro/contenido";
 
 export const metadata = { title: "Cerebro del negocio" };
@@ -48,7 +49,7 @@ export default async function CerebroPage() {
     leerPedidos(),
     leerRubrosActivos().catch(() => []),
   ]);
-  return <CerebroVista fuentes={{ clase: `${fuente.variable} ${mono.variable}`, estilo: { ["--cz-f" as string]: fuente.style.fontFamily, ["--cz-mono" as string]: mono.style.fontFamily } }} semana={semana} contactos={contactos} salud={salud} pedidos={pedidos} rubros={rubros} />;
+  return <CerebroVista fuentes={{ clase: `${fuente.variable} ${mono.variable}`, estilo: { ["--cz-f" as string]: fuente.style.fontFamily, ["--cz-mono" as string]: mono.style.fontFamily } }} semana={semana} contactos={contactos} salud={salud} pedidos={pedidos} rubros={rubros} decisiones={leerDecisiones()} />;
 }
 
 /** Lo último que se le pidió a Claude. */

@@ -179,6 +179,53 @@ export function sugerenciasDe(pantalla: PantallaId, nombrePerfil = "este perfil"
   }
 }
 
+/**
+ * Acciones rápidas (22/11): 3 o 4 pedidos de ACCIÓN por pantalla. Un toque envía el pedido a Jarvis, que
+ * vuelve con la tarjeta «¿Lo hago?»: nada cambia sin el Sí. Lo que hace salir mensajes pide confirmación
+ * reforzada (ver `seguridad.ts`). Derivar es siempre manual: Jarvis deja el paso listo, no deriva solo.
+ */
+const RESPONDER = S("Responder a los que esperan", "Revisá los chats de las personas que esperan respuesta y proponeme una respuesta para cada una");
+const DERIVAR = S("Derivar captados", "Mostrame los captados que falta derivar y dejame listo el paso para derivarlos");
+const RETOMAR = S("Retomar a los que se enfriaron", "Buscá a las personas que dejaron de responder hace varios días y proponeme retomarlas");
+const LINEAS = S("Revisar las líneas", "Revisá las líneas de WhatsApp y decime si alguna está caída y cómo la reconecto");
+const ARMAR = S("Armar campaña con la última base", "Armá una campaña en borrador con la última base cargada y proponeme el rol y la línea");
+
+export function accionesRapidasDe(pantalla: PantallaId): Sugerencia[] {
+  switch (pantalla) {
+    case "chats":
+      return [RESPONDER, S("Pasar a una persona a los que lo piden", "Proponeme pasar a una persona del equipo los chats donde pidieron hablar con alguien"), S("Dejar un borrador de respuesta", "Dejame un borrador de respuesta para el chat que más espera"), DERIVAR];
+    case "campanas":
+      return [ARMAR, S("Pausar las que casi no responden", "Proponeme pausar las campañas que envían y casi no reciben respuesta"), S("Bajar el límite diario", "Proponeme un límite diario más bajo para la campaña activa"), S("Lanzar la campaña lista", "Proponeme lanzar la campaña que está lista en borrador")];
+    case "bases":
+      return [ARMAR, S("Analizar la última base", "Analizá la última base cargada y decime qué rol del bot le conviene"), S("Asignar un rol a la base", "Proponeme un rol del bot para la última base cargada")];
+    case "contactos":
+      return [DERIVAR, RETOMAR, RESPONDER];
+    case "agenda":
+      return [S("Confirmar las citas de mañana", "Proponeme un mensaje para confirmar las citas de mañana"), S("Ver citas sin confirmar", "Mostrame las citas sin confirmar o caídas y proponeme qué hacer con cada una"), RESPONDER];
+    case "agentes":
+      return [S("Que el bot sea más breve", "Proponé que el bot responda más breve y directo"), S("Informe de mejoras del bot", "Armame un informe de mejoras del bot con las conversaciones reales"), S("Crear un rol nuevo", "Ayudame a armar un rol nuevo para el bot de este perfil y proponelo")];
+    case "redes":
+      return [S("Programar la semana", "Proponeme las publicaciones de esta semana, una por día, para que las revise"), S("Ideas de posteos", "Dejame ideas de posteos para esta semana"), S("Ver lo programado", "Decime qué publicaciones hay programadas")];
+    case "seguimiento":
+      return [RETOMAR, RESPONDER, DERIVAR];
+    case "salud":
+    case "lineas":
+      return [LINEAS, S("Explicar qué está fallando", "Explicame qué está fallando y cómo lo arreglo"), S("Dejar una tarea para Claude", "Dejá en la Bandeja una tarea para Claude con lo que está fallando")];
+    case "cerebro":
+    case "bandeja":
+      return [S("Dejar una tarea para Claude", "Quiero dejar una tarea en la Bandeja para Claude, ayudame a armarla y proponela"), S("Qué está pendiente", "Decime qué está pendiente en la Bandeja y en el cerebro"), S("Qué se decidió esta semana", "Resumime las órdenes y decisiones más nuevas del cerebro")];
+    case "estadisticas":
+    case "perfiles":
+      return [S("Resumir y decidir", "Resumime cómo viene el día y decime qué tengo que decidir"), DERIVAR, RESPONDER];
+    case "hoy":
+    case "asistente":
+    case "configuracion":
+    case "otra":
+    default:
+      return [DERIVAR, RESPONDER, LINEAS];
+  }
+}
+
 /** ¿El perfil que pide el navegador coincide con el que dice la ruta? Sin dato en la ruta, no hay conflicto. */
 export function perfilCoincideConRuta(perfil: SlugPerfil, ruta: unknown): boolean {
   const enRuta = perfilDeRuta(ruta);

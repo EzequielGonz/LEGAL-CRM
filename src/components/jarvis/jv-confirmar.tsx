@@ -2,7 +2,7 @@
 
 import { useId, useState } from "react";
 import { decisionConfirmar } from "@/lib/jarvis/seguridad";
-import { textoResultado, type Propuesta } from "@/components/asistente/asistente-panel";
+import { textoResultado, type Propuesta } from "@/lib/asistente/eventos";
 
 /**
  * Tarjeta «¿Lo hago?» de Jarvis (22/11). Todo lo que cambia algo pasa por acá:
