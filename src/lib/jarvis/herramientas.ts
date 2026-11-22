@@ -35,7 +35,7 @@ export const DECLARACIONES_JARVIS = [
   },
   {
     name: "consultar_cerebro",
-    description: "Busca en la memoria del cerebro del negocio: órdenes vigentes del dueño, reglas, estado verificado, pendientes y plan, bitácora de lo hecho, estilo del dueño, propuestas (líneas, Oficina, Jarvis) y el mapa del código. Usala antes de responder sobre reglas, decisiones, qué se hizo, qué falta o cómo funciona algo del panel. Solo lectura.",
+    description: "Busca en la memoria del cerebro del negocio: órdenes vigentes del dueño, reglas, estado verificado, pendientes y plan, bitácora de lo hecho, estilo del dueño, propuestas (líneas, Oficina, Jarvis), el mapa del código y lo que el dueño le enseñó al cerebro (notas, reglas, documentos, aprendizajes). Usala antes de responder sobre reglas, decisiones, qué se hizo, qué falta o cómo funciona algo del panel. Solo lectura.",
     parametersJsonSchema: { type: "object", properties: { pregunta: { type: "string", description: "Qué querés saber, en palabras simples" } }, required: ["pregunta"] },
   },
 ] as const;

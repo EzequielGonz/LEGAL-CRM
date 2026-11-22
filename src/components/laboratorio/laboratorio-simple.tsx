@@ -23,6 +23,7 @@ import {
   type TasasBot,
 } from "@/lib/laboratorio/vista-simple";
 import { Confirmar, type PedidoConfirmacion } from "./confirmar";
+import { HistorialCambios, PublicarAgente, Simulador } from "./laboratorio-herramientas";
 import "./laboratorio.css";
 
 /**
@@ -61,6 +62,7 @@ export function LaboratorioSimple({ nombres }: { nombres: Record<string, string>
   const [ok, setOk] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [pedido, setPedido] = useState<PedidoConfirmacion | null>(null);
+  const [cambios, setCambios] = useState(0);
   const idBase = useId();
   const mensajeRef = useRef<HTMLDivElement>(null);
 
@@ -102,7 +104,10 @@ export function LaboratorioSimple({ nombres }: { nombres: Record<string, string>
   function resultado(o: string | null, er: string | null) {
     setOk(o);
     setError(er);
-    if (o) cargar();
+    if (o) {
+      cargar();
+      setCambios((n) => n + 1);
+    }
     setTimeout(() => mensajeRef.current?.focus(), 0);
   }
 
@@ -150,7 +155,10 @@ export function LaboratorioSimple({ nombres }: { nombres: Record<string, string>
           cargando={!biblio && !errorCarga}
           pedir={setPedido}
         />
+        <Simulador key={`s-${perfil}`} perfil={perfil} nombre={nombre} roles={roles} />
         <Ficha key={`f-${perfil}`} perfil={perfil} nombre={nombre} pedir={setPedido} />
+        <PublicarAgente key={`p-${perfil}`} perfil={perfil} nombre={nombre} pedirConfirmacion={setPedido} />
+        <HistorialCambios perfil={perfil} nombre={nombre} version={cambios} />
       </div>
 
       {pedido && <Confirmar pedido={pedido} onCerrar={() => setPedido(null)} onResultado={resultado} />}

@@ -31,6 +31,9 @@ const nextConfig = {
   outputFileTracingIncludes: {
     "/api/jarvis/**": ["./cerebro/**/*.md"],
     "/api/asistente/**": ["./cerebro/**/*.md"],
+    // 22/11: «Preguntale al cerebro» y «Decisiones y órdenes» leen los .md desde la página y su ruta.
+    "/api/cerebro/**": ["./cerebro/**/*.md"],
+    "/cerebro": ["./cerebro/**/*.md"],
   },
   // 13/11 (seguridad): el panel no usa el optimizador de imágenes de Next; se apaga
   // para que su dirección (/_next/image) no quede expuesta a los fallos conocidos.

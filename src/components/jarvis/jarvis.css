@@ -367,3 +367,25 @@ html[data-modo="oscuro"] .jv-flecha-baja { color: #fcd34d; }
 @keyframes jv-barra { from { transform: scaleX(0); } to { transform: none; } }
 .jv-barra-n { font-weight: 600; font-variant-numeric: tabular-nums; color: var(--jv-texto); min-width: 2rem; text-align: right; }
 .jv-perfil-pie { margin: 0; font-size: 0.75rem; color: var(--jv-texto-3); }
+
+/* ---- 22/11 · acciones rápidas, historial de hoy y hoja que carga al abrir ---- */
+.jv-hoja-cargando { display: grid; place-items: center; }
+.jv-grupo-titulo { margin: 0 0 6px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--jv-texto-2); }
+.jv-grupo-titulo span { font-weight: 500; text-transform: none; letter-spacing: 0; color: var(--jv-texto-3); }
+.jv-acciones { margin-bottom: 8px; }
+.jv-chip-accion { display: inline-flex; align-items: center; gap: 6px; border-color: var(--jv-acento); background: var(--jv-baldosa-alta); font-weight: 600; box-shadow: var(--jv-relieve), var(--jv-sombra-baldosa); }
+.jv-chip-accion:hover:not(:disabled) { transform: translateY(-1px); }
+.jv-historial { border: 1px solid var(--jv-borde); border-radius: 14px; background: var(--jv-baldosa); box-shadow: var(--jv-relieve), var(--jv-sombra-baldosa); margin-bottom: 10px; }
+.jv-historial summary { min-height: 44px; display: flex; align-items: center; gap: 8px; padding: 0 14px; cursor: pointer; font-weight: 600; color: var(--jv-texto); }
+.jv-historial summary b { min-width: 24px; padding: 2px 8px; border-radius: 999px; background: var(--jv-acento); color: #1a1405; font-size: 0.78rem; text-align: center; }
+.jv-historial summary:focus-visible { outline: 3px solid var(--jv-foco); outline-offset: 2px; border-radius: 14px; }
+.jv-hechos { list-style: none; margin: 0; padding: 0 14px 12px; display: grid; gap: 8px; }
+.jv-hechos li { display: grid; grid-template-columns: 3.2rem 1fr; gap: 8px; font-size: 0.86rem; color: var(--jv-texto-2); }
+.jv-hechos time { font-variant-numeric: tabular-nums; color: var(--jv-texto-3); }
+.jv-hechos b { display: block; color: var(--jv-texto); font-weight: 600; }
+.jv-hechos em { font-style: normal; }
+.jv-hechos li[data-estado="error"] b::after { content: " · no se pudo"; font-weight: 500; color: var(--jv-texto-2); }
+@media (prefers-reduced-motion: no-preference) {
+  .jv-chip-accion { transition: transform 160ms var(--jv-ease), box-shadow 160ms var(--jv-ease); }
+  .jv-hechos li { animation: jv-entra 260ms var(--jv-ease) both; }
+}

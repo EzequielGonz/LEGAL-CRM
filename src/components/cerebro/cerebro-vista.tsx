@@ -7,6 +7,8 @@ import { HablarConClaude } from "@/components/cerebro/hablar-con-claude";
 import { ChatAsistenteGeneral, type AccesoAsistente } from "@/components/asistente/chat-asistente-general";
 import { ConocimientoBot } from "@/components/perfiles/conocimiento-bot";
 import { AccesosCerebro, BuscadorCerebro, EnsenarCerebro } from "@/components/cerebro/herramientas-cerebro";
+import { AprendidoCerebro, DecisionesCerebro, PreguntaCerebro } from "@/components/cerebro/cerebro-vivo";
+import type { Decision } from "@/lib/cerebro/decisiones";
 import { RecomendacionesCerebro } from "@/components/cerebro/recomendaciones-cerebro";
 import { ReglasVigentesCerebro } from "@/components/cerebro/reglas-vigentes";
 import { recomendacionesDeHoy } from "@/lib/cerebro/recomendaciones";
@@ -66,10 +68,12 @@ type Vista = {
   rubros: { slug: string; name: string }[];
   /** Tareas de la Oficina: el edificio de agentes conectado al cerebro. */
   oficina?: TareaOficina[] | null;
+  /** Decisiones y órdenes del dueño por fecha (salen de cerebro/02-ordenes-vigentes.md). */
+  decisiones?: Decision[];
 };
 
 /** La presentación del cerebro, separada de la lectura de datos (así se puede ver con datos de ejemplo). */
-export function CerebroVista({ fuentes, semana, contactos, salud, pedidos, rubros, oficina = null }: Vista) {
+export function CerebroVista({ fuentes, semana, contactos, salud, pedidos, rubros, oficina = null, decisiones = [] }: Vista) {
   const conteo = conteoAlertas(ALERTAS);
   const frases = frasesDelCerebro(semana?.perfiles ?? null, conteo.alta, PREGUNTAS_ABIERTAS.length);
   const lecturas = semana ? lecturasDelPanel(semana.perfiles) : null;
@@ -503,8 +507,31 @@ export function CerebroVista({ fuentes, semana, contactos, salud, pedidos, rubro
           <section id="herramientas" aria-labelledby="herr-titulo">
             <div className="cz-in">
               <h2 id="herr-titulo" className="cz-estado-titulo">
-                Enseñale <b>algo</b>.
+                Preguntale y enseñale <b>algo</b>.
               </h2>
+              <div className="cz-grid2">
+                <div className="cz-card">
+                  <header>
+                    <h3>Preguntale al cerebro</h3>
+                  </header>
+                  <p className="cz-muted">Busca en toda la memoria y en lo que le enseñaste. Cada respuesta dice de dónde sale.</p>
+                  <PreguntaCerebro />
+                </div>
+                <div className="cz-card">
+                  <header>
+                    <h3>Lo que sabe y lo que le enseñás</h3>
+                  </header>
+                  <p className="cz-muted">Guardá una nota, una regla o un aprendizaje. Antes de guardar te pregunta.</p>
+                  <AprendidoCerebro />
+                </div>
+              </div>
+              <div className="cz-card cz-card--reglas">
+                <header>
+                  <h3>Decisiones y órdenes</h3>
+                </header>
+                <p className="cz-muted">Lo que decidiste, de lo más nuevo a lo más viejo.</p>
+                <DecisionesCerebro decisiones={decisiones} />
+              </div>
               <div className="cz-grid2">
                 <div className="cz-card">
                   <header>
