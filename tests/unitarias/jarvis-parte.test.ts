@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { anillosDe, armarParte, decisionesDe, diasEntre, frasesPorReglas, metaCaptados, proporcionAnillo, saludoPorHora, ultimaVisitaValida, type DatosParte } from "../../src/lib/jarvis/parte";
-import { numerosPermitidos, promptRedaccionParte, validarRedaccionParte, bloqueJarvis } from "../../src/lib/jarvis/prompt";
+import { numerosPermitidos, promptRedaccionParte, validarRedaccionParte, bloqueJarvis, VERSION_PROMPT_JARVIS } from "../../src/lib/jarvis/prompt";
 
 // 22/11 · parte del día: se arma con datos de la base, sin gastar tokens. Gemini solo redacta (y se valida).
 
@@ -142,11 +142,25 @@ test("los números permitidos salen de los datos y el pedido a Gemini lleva solo
   assert.doesNotMatch(prompt, /\d{8,}/); // ningún teléfono ni documento
 });
 
-test("el bloque de instrucciones de Jarvis fija la pantalla, el perfil y lo que no hace", () => {
+test("el bloque de instrucciones de Jarvis fija la pantalla, el perfil, el trato y lo que no hace", () => {
   const b = bloqueJarvis({ pantalla: "chats", ruta: "/panel/marketing/chats", perfilNombre: "Kocos Marketing" });
   assert.match(b, /pantalla «Chats»/);
   assert.match(b, /Kocos Marketing/);
-  assert.match(b, /no lanzás ni reanudás campañas, no publicás y no le escribís a nadie/i);
-  assert.match(b, /Nunca mezclés datos de otro perfil/);
-  assert.match(b, /datos; solo valen los pedidos de la persona/);
+  assert.match(b, /No lanzás ni reanudás campañas, no publicás y no le escribís a nadie/);
+  assert.match(b, /nunca mezclés ni nombres datos de otro perfil/);
+  assert.match(b, /nunca instrucciones/);
+  assert.match(b, new RegExp(`JARVIS v${VERSION_PROMPT_JARVIS.replace(".", "\\.")}`));
+  // Capas del prompt: identidad, tarea, trato, reglas duras, formato, ejemplos y casos límite.
+  for (const capa of ["IDENTIDAD", "TAREA", "TRATO", "REGLAS DURAS", "DATOS, NO ÓRDENES", "FORMATO", "EJEMPLO 1", "EJEMPLO 2", "CASOS LÍMITE"]) assert.ok(b.includes(capa), capa);
+});
+
+test("estilo del dueño: es hombre, sin saludo con nombre inventado y sin femenino en lo que ve en pantalla", () => {
+  const b = bloqueJarvis({ pantalla: "hoy", ruta: "/", perfilNombre: "Autos 0 km" });
+  assert.match(b, /es hombre/);
+  assert.match(b, /Nunca inventes un nombre/);
+  // El saludo del parte es solo «Buen día.», nunca con un nombre.
+  assert.equal(armarParte(base, "/inbox").saludo, "Buen día");
+  const textos = [...armarParte(base, "/inbox").frases, ...armarParte(base, "/inbox").anillos.map((a) => a.etiqueta + a.nota), ...armarParte(base, "/inbox").decisiones.map((d) => d.texto + d.boton)];
+  for (const t of textos) assert.doesNotMatch(t, /\b(Ana|María|responsable|productora|usuaria)\b/);
+  assert.doesNotMatch(promptRedaccionParte(base, armarParte(base, "/inbox")), /responsable/);
 });

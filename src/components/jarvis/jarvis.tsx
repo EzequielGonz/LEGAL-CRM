@@ -61,7 +61,6 @@ export function Jarvis({ slug, nombrePerfil }: { slug: SlugPerfil; nombrePerfil:
   const lista = useRef<HTMLDivElement>(null);
   const entrada = useRef<HTMLTextAreaElement>(null);
   const reconocedor = useRef<Reconocedor | null>(null);
-  const panel = useRef<HTMLElement | null>(null);
   const cerrar = useCallback(() => {
     setAbierto(false);
     guardarAbierto(false);
@@ -238,8 +237,9 @@ export function Jarvis({ slug, nombrePerfil }: { slug: SlugPerfil; nombrePerfil:
     <div>
       {!abierto && (
         <button type="button" className="jv-orbe" onClick={() => abrir()} aria-label="Abrir Jarvis" aria-keyshortcuts="Control+J Meta+J" title="Jarvis · Ctrl J">
-          <span className="jv-orbe-esfera" aria-hidden="true">
-            <Icono nombre="asistente" />
+          <span className="jv-orbe-pulso" aria-hidden="true" />
+          <span className="jv-orbe-cuerpo" aria-hidden="true">
+            <Icono nombre="asistente" className="jv-orbe-icono" />
           </span>
           {hayAviso && <span className="jv-orbe-aviso" aria-hidden="true" />}
           {hayAviso && <span className="sr-only">Hay un parte del día para leer</span>}
@@ -250,10 +250,7 @@ export function Jarvis({ slug, nombrePerfil }: { slug: SlugPerfil; nombrePerfil:
         <>
           <div data-no-inerte="" className="jv-velo" aria-hidden="true" onClick={cerrar} />
           <aside
-            ref={(el) => {
-              dialogoRef.current = el;
-              panel.current = el;
-            }}
+            ref={dialogoRef}
             role="dialog"
             aria-modal={modal ? true : undefined}
             aria-label="Jarvis"
@@ -266,7 +263,7 @@ export function Jarvis({ slug, nombrePerfil }: { slug: SlugPerfil; nombrePerfil:
           >
             <header className="jv-cabeza">
               <span className="jv-orbe-mini" aria-hidden="true">
-                <Icono nombre="asistente" />
+                <Icono nombre="asistente" className="jv-orbe-icono-mini" />
               </span>
               <div className="jv-cabeza-texto">
                 <p className="jv-nombre">Jarvis</p>

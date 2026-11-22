@@ -6,9 +6,6 @@ import type { Propuesta } from "@/components/asistente/asistente-panel";
 import { JvAnillo } from "@/components/jarvis/jv-anillo";
 import { JvConfirmar } from "@/components/jarvis/jv-confirmar";
 
-/** Un solo color en todo el parte: el acento del perfil (sin paleta de colores sueltos). */
-const ACENTO = "rgb(var(--c-gold-500))";
-
 interface Props {
   parte: ParteDelDia;
   pendientes: Propuesta[];
@@ -21,7 +18,7 @@ interface Props {
 
 /**
  * Parte del día en bento (22/11): saludo con 2 o 3 frases, tres anillos y lo
- * que espera una decisión. Cada baldosa es de vidrio sutil con el acento del perfil.
+ * que espera una decisión. Cada baldosa es de vidrio con su propio tinte.
  */
 export function JvParte({ parte, pendientes, otrasEnAsistente, alCerrar, alPedir, alIr, alCambiarPropuesta }: Props) {
   const hayParaDecidir = parte.decisiones.length > 0 || pendientes.length > 0;
@@ -39,8 +36,8 @@ export function JvParte({ parte, pendientes, otrasEnAsistente, alCerrar, alPedir
       </div>
 
       {parte.anillos.map((a) => (
-        <div key={a.clave} className={`jv-baldosa jv-baldosa-anillo jv-tinte-${a.clave}`}>
-          <JvAnillo valor={a.valor} meta={a.meta} etiqueta={a.etiqueta} nota={a.nota} color={ACENTO} />
+        <div key={a.clave} className={`jv-baldosa jv-baldosa-anillo`}>
+          <JvAnillo valor={a.valor} meta={a.meta} etiqueta={a.etiqueta} nota={a.nota} />
           <p className="jv-anillo-etiqueta">{a.etiqueta}</p>
           <p className="jv-anillo-nota">{a.nota}</p>
         </div>

@@ -13,7 +13,7 @@ export const DECLARACIONES_JARVIS = [
   {
     name: "dejar_borrador",
     description:
-      "Deja un BORRADOR de mensaje para una persona (no se envía nada): la responsable lo ve en una tarjeta, lo copia y lo manda ella desde el chat. Usalo para «redactá una respuesta». Leé el chat antes con buscar_chat para que el texto calce.",
+      "Deja un BORRADOR de mensaje para una persona (no se envía nada): se ve en una tarjeta, se copia y se manda a mano desde el chat. Usalo para «redactame una respuesta». Leé el chat antes con buscar_chat para que el texto calce.",
     parametersJsonSchema: {
       type: "object",
       properties: {
@@ -51,7 +51,7 @@ export const GLOSARIO: readonly EntradaGlosario[] = [
   { clave: "Perdidos", palabras: ["perdido", "perdidos", "no avanzo", "no avanzó"], explicacion: "Personas que no avanzaron: dijeron que no les interesa, se enojaron, era un número equivocado o ya lo resolvieron. Pasan solas a un archivo y no se les vuelve a escribir." },
   { clave: "Tasa de respuesta", palabras: ["tasa", "respuesta", "respondieron", "porcentaje"], explicacion: "Personas que respondieron dividido las personas a las que se les envió. «Enviados» cuenta mensajes y «Respondieron» cuenta personas, por eso no se comparan uno a uno." },
   { clave: "Enviados", palabras: ["enviados", "enviado", "mensajes"], explicacion: "Cantidad de mensajes que salieron. Una persona puede recibir más de uno." },
-  { clave: "Derivado", palabras: ["derivado", "derivados", "sin derivar", "derivar"], explicacion: "Un captado que la responsable pasó a mano al profesional. Derivar es siempre manual: nunca se deriva solo." },
+  { clave: "Derivado", palabras: ["derivado", "derivados", "sin derivar", "derivar"], explicacion: "Un captado que alguien del equipo pasó a mano al profesional. Derivar es siempre manual: nunca se deriva solo." },
   { clave: "Horario de envío", palabras: ["horario", "hora", "cuando envia", "cuándo envía"], explicacion: "Lo que arranca la empresa (campañas, seguimientos) sale de lunes a sábado de 8 a 21, hora de Argentina. Las respuestas a quien escribe salen las 24 horas si el bot está habilitado." },
 ];
 
