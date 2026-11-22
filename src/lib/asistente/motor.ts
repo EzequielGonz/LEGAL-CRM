@@ -23,6 +23,11 @@ import { leerMenuPersonal } from "@/lib/personalizacion/servidor";
 import { validarPedido } from "@/lib/bandeja-claude";
 import { DECLARACIONES_GENERALES, NOMBRES_GENERALES, declaracionesConPerfil, resolverPerfil, sinPerfil, textoArchivosParaModelo, type ResumenArchivo } from "@/lib/asistente/general";
 import { ejecutarHerramientaGeneral, type CtxGeneral } from "@/lib/asistente/general-servidor";
+import { bloqueJarvis } from "@/lib/jarvis/prompt";
+import { DECLARACIONES_JARVIS, NOMBRES_JARVIS } from "@/lib/jarvis/herramientas";
+import { HERRAMIENTAS_VEDADAS, sinVedadas } from "@/lib/jarvis/seguridad";
+import { ejecutarHerramientaJarvis, registrarGastoJarvis, type BorradorJarvis, type UsoModelo } from "@/lib/jarvis/servidor";
+import type { PantallaId } from "@/lib/jarvis/pantallas";
 import { DECLARACIONES_LABORATORIO, NOMBRES_LABORATORIO, REGLAS_LABORATORIO, ejecutarHerramientaLaboratorio } from "@/lib/laboratorio/asistente";
 
 export interface MensajeAsistente {
@@ -404,7 +409,9 @@ async function bucleConHerramientas(
   contents: any[],
   systemInstruction: string,
   declaraciones: unknown[],
-  ejecutarUna: (nombre: string, args: Record<string, unknown>) => Promise<Record<string, unknown>>
+  ejecutarUna: (nombre: string, args: Record<string, unknown>) => Promise<Record<string, unknown>>,
+  /** 22/11 (Jarvis): recibe los tokens de cada vuelta para dejar el gasto registrado. */
+  alUso?: (u: { entrada: number; salida: number; razonamiento: number }) => void
 ): Promise<string> {
   let texto = "";
   for (let i = 0; i < 8; i++) {
@@ -413,6 +420,10 @@ async function bucleConHerramientas(
       contents,
       config: { systemInstruction, tools: [{ functionDeclarations: declaraciones as any }] },
     });
+    if (alUso) {
+      const u: any = (r as any).usageMetadata ?? {};
+      alUso({ entrada: u.promptTokenCount ?? 0, salida: u.candidatesTokenCount ?? 0, razonamiento: u.thoughtsTokenCount ?? 0 });
+    }
     const partes: any[] = r.candidates?.[0]?.content?.parts ?? [];
     texto = partes.filter((p) => typeof p.text === "string").map((p) => p.text).join("\n").trim();
     const llamadas = partes.filter((p) => p.functionCall);
@@ -458,6 +469,64 @@ export async function conversarConAsistente(
   const contents = armarContenidos(mensajes, imagenes, opciones.textos ?? []);
   const texto = await bucleConHerramientas(contents, sistema(slug, nombre, opciones.modo), DECLARACIONES, (n, a) => ejecutar(n, a, ctx));
   return { texto: texto || "Listo.", propuestas: ctx.propuestas, enlaces: ctx.enlaces };
+}
+
+// ---------------------------------------------------------------------------
+// Jarvis (22/11): el mismo asistente del perfil, presente en todo el panel.
+// Sin lanzar campañas, sin publicar y sin escribirle a nadie; con tres
+// herramientas más (borrador, líneas, glosario) y el gasto registrado.
+// ---------------------------------------------------------------------------
+
+export interface RespuestaJarvis extends RespuestaAsistente {
+  borradores: BorradorJarvis[];
+  /** Propuestas que se descartaron por ser de las que Jarvis no hace. */
+  descartadas: number;
+}
+
+export async function conversarConJarvis(slug: SlugPerfil, mensajes: MensajeAsistente[], imagenes: ImagenAdjunta[], opciones: { pantalla: PantallaId; ruta: string }): Promise<RespuestaJarvis> {
+  const rubroId = RUBRO_IDS[slug];
+  const ctx: Contexto = { slug, rubroId, propuestas: [], enlaces: [], vistas: new Map() };
+  const borradores: BorradorJarvis[] = [];
+  const nombre = (await briefCorto(rubroId, slug)).nombre;
+  const declaraciones = [...(DECLARACIONES as any[]).filter((d) => !HERRAMIENTAS_VEDADAS.includes(d.name)), ...(DECLARACIONES_JARVIS as unknown as any[])];
+  const sistemaJarvis = [sistema(slug, nombre), bloqueJarvis({ pantalla: opciones.pantalla, ruta: opciones.ruta, perfilNombre: nombre })].join("\n");
+  const uso: UsoModelo = { entrada: 0, salida: 0, razonamiento: 0, llamadas: 0 };
+  const usadas = new Set<string>();
+  const t0 = Date.now();
+  let texto = "";
+  try {
+    texto = await bucleConHerramientas(
+      armarContenidos(mensajes, imagenes, []),
+      sistemaJarvis,
+      declaraciones,
+      async (n, a) => {
+        usadas.add(n);
+        if (HERRAMIENTAS_VEDADAS.includes(n)) return { error: "Jarvis no tiene esa herramienta: lanzar, publicar y escribirle a una persona lo hacen los dueños." };
+        if ((NOMBRES_JARVIS as readonly string[]).includes(n)) return ejecutarHerramientaJarvis(n, a, { slug, rubroId, borradores });
+        return ejecutar(n, a, ctx);
+      },
+      (u) => {
+        uso.entrada += u.entrada;
+        uso.salida += u.salida;
+        uso.razonamiento += u.razonamiento;
+        uso.llamadas += 1;
+      }
+    );
+  } catch (err) {
+    await registrarGastoJarvis(rubroId, uso, Date.now() - t0, "error", Array.from(usadas));
+    throw err;
+  }
+  await registrarGastoJarvis(rubroId, uso, Date.now() - t0, texto ? "enviado" : "sin_texto", Array.from(usadas));
+  // Defensa extra: si una propuesta de las vedadas se coló (p. ej. por una operación del catálogo), se descarta.
+  const { visibles, vedadas } = sinVedadas(ctx.propuestas);
+  if (vedadas.length > 0) {
+    await createAdminClient()
+      .from("asistente_acciones" as any)
+      .update({ estado: "descartada", decidida_at: new Date().toISOString() })
+      .in("id", vedadas.map((v) => v.id))
+      .eq("estado", "propuesta");
+  }
+  return { texto: texto || "Listo.", propuestas: visibles, enlaces: ctx.enlaces, borradores, descartadas: vedadas.length };
 }
 
 // ---------------------------------------------------------------------------
