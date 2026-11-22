@@ -25,7 +25,9 @@ const ACCESOS: AccesoAsistente[] = [
   { titulo: "Chats que piden una persona", descripcion: "Los chats que esperan a alguien del equipo.", accion: "enviar", texto: "Mostrame los chats que piden una persona en los cuatro perfiles." },
 ];
 
-export default async function AsistentePage() {
+export default async function AsistentePage({ searchParams }: { searchParams: Promise<{ pedido?: string | string[] }> }) {
+  const sp = await searchParams;
+  const pedido = typeof sp.pedido === "string" ? sp.pedido.slice(0, 1000) : "";
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
   return (
@@ -52,6 +54,7 @@ export default async function AsistentePage() {
           </h2>
           <ChatAsistenteGeneral
             variante="jarvis"
+            pedidoInicial={pedido}
             accesos={ACCESOS}
             titulo="Jarvis"
             bajada="Tu secretario de todo el panel: propone, vos confirmás"

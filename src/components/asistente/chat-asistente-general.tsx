@@ -97,7 +97,10 @@ export function ChatAsistenteGeneral({
   alto = "h-[min(70vh,44rem)]",
   alCambiarPropuesta,
   variante = "clasica",
+  pedidoInicial = "",
 }: {
+  /** Texto precargado (por ejemplo desde «Pedile a Jarvis» en Resumen o Cerebro). No se envía solo. */
+  pedidoInicial?: string;
   accesos?: AccesoAsistente[];
   contexto?: ContextoChat | null;
   titulo?: string;
@@ -111,7 +114,7 @@ export function ChatAsistenteGeneral({
 }) {
   const jv = variante === "jarvis";
   const [mensajes, setMensajes] = useState<Mensaje[]>([]);
-  const [texto, setTexto] = useState("");
+  const [texto, setTexto] = useState(pedidoInicial);
   const [pensando, setPensando] = useState(false);
   const [adjuntos, setAdjuntos] = useState<Adjunto[]>([]);
   const [planillas, setPlanillas] = useState<Planilla[]>([]);
