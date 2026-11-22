@@ -16,7 +16,7 @@ export const CONTACT_STATE_LABEL: Record<string, string> = {
 export const CAPTURE_STATE_LABEL: Record<string, string> = {
   nuevo: "Nuevo",
   en_conversacion: "En conversación",
-  en_seguimiento: "En seguimiento",
+  en_seguimiento: "Con seguimiento enviado",
   captado: "Captado",
   perdido: "Perdido",
 };

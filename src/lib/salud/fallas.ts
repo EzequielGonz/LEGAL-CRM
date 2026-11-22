@@ -40,6 +40,14 @@ export function armarFallas(slug: SlugPerfil, c: { fallidos24h: number; seguimie
   return lista;
 }
 
+/** Mensajes salientes fallidos de un perfil en las últimas 24 horas. Una sola cuenta: la usan Salud y Hoy. */
+export async function contarFallidos24h(areas: string[], ahora: Date = new Date()): Promise<number> {
+  const s = createAdminClient();
+  const desde = new Date(ahora.getTime() - 24 * 3_600_000).toISOString();
+  const r: any = await (s.from("messages") as any).select("id, conversations!inner(area)", { count: "exact", head: true }).eq("direction", "saliente").eq("delivery_status", "fallido").gte("created_at", desde).in("conversations.area", areas);
+  return r.error ? 0 : r.count ?? 0;
+}
+
 export async function leerFallas(slug: SlugPerfil, ahora: Date = new Date()): Promise<Falla[]> {
   const s = createAdminClient();
   const rubroId = RUBRO_IDS[slug];
@@ -49,7 +57,7 @@ export async function leerFallas(slug: SlugPerfil, ahora: Date = new Date()): Pr
     return r.error ? 0 : r.count ?? 0;
   };
   const [fallidos24h, seguimientos, bot24h, archivos, retenidos, audios24h] = await Promise.all([
-    cuenta((s.from("messages") as any).select("id, conversations!inner(area)", { count: "exact", head: true }).eq("direction", "saliente").eq("delivery_status", "fallido").gte("created_at", desde).in("conversations.area", AREAS[slug])),
+    contarFallidos24h(AREAS[slug], ahora),
     cuenta((s.from("followup_tasks") as any).select("id", { count: "exact", head: true }).eq("rubro_id", rubroId).in("status", ["fallida", "a_revisar", "conflicto", "pendiente"])),
     cuenta((s.from("agent_turn_logs") as any).select("id", { count: "exact", head: true }).eq("rubro_id", rubroId).not("error", "is", null).gte("created_at", desde)),
     cuenta((s.from("message_attachments") as any).select("id", { count: "exact", head: true }).eq("rubro_id", rubroId).in("status", ["pendiente", "error"])),
