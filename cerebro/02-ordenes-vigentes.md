@@ -278,3 +278,11 @@ Todo lo demás son **decisiones de negocio** del dueño (abajo), no trabas de pr
 - **Ramas y Vercel (22/11 noche):** el dueño pidió ordenarlas. Primero inventario y propuesta (`21-orden-de-ramas-y-vercel.md`); se archiva con etiqueta y nada se borra sin su OK.
 - **Memoria en claude.ai:** el dueño la está cargando con Claude in Chrome (22/11 noche).
 - **Ramas y PR (22/11 noche):** no tocar ramas ni archivar nada por ahora. Los PR sin integrar (#77, #80 y #40) quedan para después.
+
+## Órdenes del 22/11 (cierre): rehacer el panel, simple y premium
+
+- **El rediseño anterior no alcanzó** («no tiene ningún rediseño gráfico, solo mínimos detalles… todo es básico, genérico, con botones… lo dejaste más feo y más desorganizado»). Se rehace de verdad: ultra premium, interactivo, con las referencias que pasó (videos, code.xr).
+- **Fácil y sencillo:** «demasiado extenso, demasiadas funciones, demasiado de todo que no te lleva a nada». Menos cosas por pantalla, **estadísticas circulares** (anillos), **animaciones simples**, textos sin tecnicismos. Lo que sale de la vista no se borra: va a «Más».
+- **La Oficina como el video 1** (oficina 3D con agentes trabajando en escritorios), animada; el cerebro y el panel con la misma calidad. **Jarvis tiene que existir** de verdad en el panel.
+- Usar referencias de otras páginas y CRM, y todas las skills, plugins, conectores y agentes, con los mejores modelos.
+- Después: **propuesta de gestión de teléfonos** desde la computadora, con reconexión automática de líneas caídas (o aviso y reconexión en un toque).
