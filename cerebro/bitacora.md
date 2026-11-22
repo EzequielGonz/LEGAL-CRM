@@ -157,3 +157,10 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 
 ## 22/11 · Cuarta vuelta
 - Oficina 3D por sectores, Jarvis con `consultar_cerebro`, Graphify en los 5 repos y en el entorno, propuesta de granja de teléfonos. Recorrido real: Resumen, Contactos y Citas casi sin acciones (ver `traspaso-sesion-2026-11-22-d.md`).
+
+## 22/11 · Vuelta 6 · Cerebro como centro de mando (rama `rediseno5/parte7`)
+- Pedido del dueño: «el cerebro no tiene funciones, está todo abajo, tiene que ser distinto».
+- Arriba de todo, barra para hablarle con tres modos en botones en relieve: **Preguntale** (respuesta en el lugar, con fuente de cada parte), **Enseñale** (guarda en la memoria, con confirmación) y **Ordenale** (crea el pedido en la Oficina, Gemini lo reparte por escritorios; después «Arrancar ahora» o «Mejor que lo haga Jarvis», todo con confirmación).
+- Debajo, anillo 3D de 11 pantallas de colores alrededor del núcleo (la esfera, que late cuando piensa): Pendientes, Oficina, Jarvis, Recomienda, Aprendido, Decisiones, Semana, Salud, Laboratorio, Mapa del código (Graphify) y Pedidos a Claude. Se gira arrastrando, con rueda o flechas; la de adelante se abre a pantalla completa como bento de colores y vidrio con su función operable. Celular y «menos movimiento»: bento en lista.
+- Piezas del video marcado: carteles con la palabra clave en serif itálica recuadrada, bento de colores vivos, vidrio sobre círculos de color dentro de la tarjeta, degradé de nubes por marca, capas en parallax y botones neumórficos. Fondo de la página oscuro y limpio.
+- No se perdió nada: las secciones viejas (`#alertas`, `#preguntas`, `#corregi`…) abren su pantalla nueva. Código: `src/lib/cerebro/anillo.ts` (con pruebas), `src/components/cerebro/centro-cerebro.tsx`, `barra-mando.tsx`, `pantallas-cerebro.tsx`, `bento-cerebro.tsx`, `src/app/cerebro/centro.css`.
