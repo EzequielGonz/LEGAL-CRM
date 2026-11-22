@@ -6,6 +6,12 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 
 
 
+
+## 22/11 — Pedido de supercerebro y empresa de agentes
+
+- **Pedido:** cerebro director de agentes por área, Jarvis en el panel, evaluar 5 herramientas y 8 videos, pasar pendientes y preguntas.
+- **Hecho:** propuesta en `16-propuesta-empresa-de-agentes.md`; dos agentes en segundo plano (videos y herramientas); traspaso en `traspaso-sesion-2026-11-22.md`.
+
 ## 21/11 (noche) — Cerebro dentro del panel
 
 - **Pedido:** «hacé una página aparte como la del panel, vinculala, que lea todo, con bandeja, asistente y laboratorio; terminalo y publicalo».

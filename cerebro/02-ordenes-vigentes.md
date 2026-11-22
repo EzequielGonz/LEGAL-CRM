@@ -256,3 +256,12 @@ Todo lo demás son **decisiones de negocio** del dueño (abajo), no trabas de pr
 | 15/11 | «¿De dónde sacaron mi número?»: se respeta como está armado; la revisión legal del origen de bases quedó abierta | Contexto del proyecto |
 
 **Respuesta pendiente que le debía (21/11):** «¿Qué publicarías o tocarías en producción?» → nada sin su ok. Propuestas: el plazo del contacto 2, separar retenidos por rubro, los arreglos de celular y programar en Metricool solo lo que él apruebe. Detalle en `15-hallazgos-21-11.md`.
+
+## Órdenes del 22/11
+
+| Orden | Fuente |
+|---|---|
+| El cerebro es el director ejecutivo de la gestión del panel: orquesta cambios con lo aprendido, reparte a escritorios por área y nunca pierde el enfoque en los 4 rubros | este chat |
+| Usar subagentes para gastar menos, y usar el cerebro como apoyo en cada tarea | este chat |
+| Evaluar toda herramienta, skill o video que pase el dueño: qué sirve y si se puede implementar | este chat |
+| Asistente personal tipo Jarvis dentro del panel (propuesta en `16`) | este chat |
