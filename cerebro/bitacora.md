@@ -104,4 +104,10 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 - A3 ✅: Metricool devuelve las 4 marcas y analítica por día.
 - A7 ✅: Gmail y Google Calendar conectados en claude.ai; verificado con `list_labels` y `list_calendars` (cuenta del estudio, sin leer correos).
 - A4 ✅: el conector GitHub de claude.ai responde (`get_me`). El plugin «github» aparte sigue fallando, pero no hace falta.
+- A5: PostHog responde (`project-get`), pero el proyecto es nuevo y no recibió ningún evento: hay que instalar el código en las landings.
+- A6 ✅: clave de Firecrawl por formulario seguro; prueba de scrape OK. Uso solo con OK.
+- A8 ⬜: el Vercel conectado solo tiene el proyecto `legal-crm`; las landings siguen en otra cuenta, no se ven.
+- A9 🟡: `RESEND_API_KEY` existe en Production. Falta `LANDING_EMAIL_FROM`. Siguen sin existir `OFICINA_DISPARO_*`.
+- A10 ⬜: Canva y Cloudflare siguen pidiendo autenticación; no aparecen herramientas.
+- A11: Skill Arena = `Jakeschincariol/arena-skill` (MIT, Python estándar, sin red). Instalación frenada por el sistema de permisos; pendiente.
 - A1 en curso: el dueño arma el disparo por API de la tarea «Oficina · procesar tareas».

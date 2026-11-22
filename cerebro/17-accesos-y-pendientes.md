@@ -20,11 +20,11 @@ Reglas de la sesión:
 | A2 | ✅ 22/11 | Google Search Console y GA4 | Escritorios de Análisis y SEO | Resuelto por el conector Windsor.ai: GA4 (4 propiedades) y Search Console (4 dominios: autoskocos, kocosmkt, estudiojuridicovita, comparatuobrasocial). El kit de Search Console y AdCopilot no hacen falta |
 | A3 | ✅ 22/11 | Analítica de Metricool | Ciclo semanal «publicar → medir → aprender» | Comprobado: 4 marcas (Kocos Marketing, Estudio Jurídico Vita, Compara Tu Obra Social, Automotores Kocos) y la analítica devuelve filas por día (VITA, 1–21/11) |
 | A4 | ✅ 22/11 (verificado: el conector GitHub de claude.ai responde con `get_me`; el plugin aparte sigue fallando y no hace falta) | GitHub (conector) | Ingeniería: ramas y PR desde los agentes | Reconectar GitHub en claude.ai (hoy falla con «encabezado mal formado») |
-| A5 | ⬜ | PostHog (plugin instalado) | Embudos y mapas de calor de las landings | Iniciar sesión en PostHog (plan gratis). Uso solo con OK |
-| A6 | ⬜ | Firecrawl (plugin instalado) | Leer marca y precios de la competencia | Clave de API del plan gratis por el formulario seguro (host `api.firecrawl.dev`). Uso solo con OK |
+| A5 | ✅ conexión 22/11 (proyecto «Default project» recién creado, sin eventos: falta poner el código en las landings, depende de A8) | PostHog (plugin instalado) | Embudos y mapas de calor de las landings | Iniciar sesión en PostHog (plan gratis). Uso solo con OK |
+| A6 | ✅ 22/11 (clave cargada por formulario seguro; scrape de prueba sobre example.com respondió) | Firecrawl (plugin instalado) | Leer marca y precios de la competencia | Clave de API del plan gratis por el formulario seguro (host `api.firecrawl.dev`). Uso solo con OK |
 | A7 | ✅ 22/11 (verificado: Gmail `list_labels` y Calendar `list_calendars` responden con la cuenta del estudio) | Gmail y Google Calendar | Jarvis: resumen diario y recordatorios | Conector de Google en claude.ai |
 | A8 | ⬜ | Vercel de las landings (otra cuenta) | Cargar etiquetas de GA4 y píxel | Invitar a Claude al equipo o dar acceso al proyecto |
-| A9 | ⬜ | Clave de Resend | Aviso por correo de formularios (PR #40) | Formulario seguro o variable en Vercel |
+| A9 | 🟡 22/11 (`RESEND_API_KEY` ya está en Vercel, Production; falta `LANDING_EMAIL_FROM`: el dueño elige el remitente) | Clave de Resend | Aviso por correo de formularios (PR #40) | Formulario seguro o variable en Vercel |
 | A10 | ⬜ | Canva y Cloudflare (Turnstile) | Diseño de piezas; antispam en formularios | Conectar en claude.ai si los quieren usar |
 | A11 | ⬜ | Skill Arena | Varias versiones compiten cuando hay que corregir muchas veces | No está en el catálogo: instalarla del repo después de leerlo. Uso solo con OK y tope |
 
