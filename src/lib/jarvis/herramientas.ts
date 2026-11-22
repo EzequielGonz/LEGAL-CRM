@@ -7,7 +7,7 @@
  * leen.
  */
 
-export const NOMBRES_JARVIS = ["dejar_borrador", "estado_lineas", "explicar_cifra"] as const;
+export const NOMBRES_JARVIS = ["dejar_borrador", "estado_lineas", "explicar_cifra", "consultar_cerebro"] as const;
 
 export const DECLARACIONES_JARVIS = [
   {
@@ -32,6 +32,11 @@ export const DECLARACIONES_JARVIS = [
     name: "explicar_cifra",
     description: "Explica en palabras simples qué cuenta una cifra del panel (captados, esperan a una persona, en seguimiento, perdidos, tasa de respuesta, enviados, derivados…). Para el valor actual usá además resumen_perfil.",
     parametersJsonSchema: { type: "object", properties: { cifra: { type: "string", description: "Nombre de la cifra o del número que la persona ve" } }, required: ["cifra"] },
+  },
+  {
+    name: "consultar_cerebro",
+    description: "Busca en la memoria del cerebro del negocio: órdenes vigentes del dueño, reglas, estado verificado, pendientes y plan, bitácora de lo hecho, estilo del dueño, propuestas (líneas, Oficina, Jarvis) y el mapa del código. Usala antes de responder sobre reglas, decisiones, qué se hizo, qué falta o cómo funciona algo del panel. Solo lectura.",
+    parametersJsonSchema: { type: "object", properties: { pregunta: { type: "string", description: "Qué querés saber, en palabras simples" } }, required: ["pregunta"] },
   },
 ] as const;
 

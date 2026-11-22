@@ -12,6 +12,7 @@
  * Funciones puras: se prueban sin base.
  */
 import { ESCRITORIOS, type Area, type TareaOficina } from "@/lib/oficina/reglas";
+import { GLIFOS, posicionPuesto, type EstadoVisual, type PuestoVisual } from "@/lib/oficina/escena";
 
 export type Motor = "claude" | "gemini" | "panel";
 
@@ -183,4 +184,47 @@ export function cuentaMotores(sector: Sector): Record<Motor, number> {
   const c: Record<Motor, number> = { claude: 0, gemini: 0, panel: 0 };
   for (const x of sector.puestos) c[x.motor]++;
   return c;
+}
+
+// --- Sala 3D de un sector ---------------------------------------------------
+// La escena 3D dibuja `PuestoVisual[]` en las 8 posiciones de la sala. Para un sector se reusan esas
+// posiciones: el puesto j ocupa el lugar del escritorio j (y usa su `area` solo como identificador
+// para la cámara y la selección); el nombre, la tarea y el motor son los del puesto del sector.
+
+const COLOR_MOTOR: Record<Motor, string> = { claude: "#E8A87C", gemini: "#7FA7F2", panel: "#7CC39A" };
+
+export function puestosDeSector(area: Area, tareas: TareaOficina[]): PuestoVisual[] {
+  const s = SECTORES[area];
+  const e = estadoSector(area, tareas);
+  const ocupados = puestosOcupados(s, e);
+  const propias = tareas.filter((t) => t.area === area || t.ruta.includes(area));
+  const enMarcha = propias.filter((t) => t.estado === "en_curso" || t.estado === "pendiente").map((t) => t.titulo);
+  const listas = propias.filter((t) => t.estado === "lista" && t.decision === null).map((t) => t.titulo);
+  return s.puestos.slice(0, ESCRITORIOS.length).map((p, j) => {
+    const trabajando = j < ocupados;
+    const listo = !trabajando && j === 0 && listas.length > 0;
+    const enCola = !trabajando && !listo && e.enCola > 0 && j < ocupados + e.enCola;
+    const estado: EstadoVisual = trabajando ? "trabajando" : listo ? "listo" : enCola ? "en_cola" : "libre";
+    const { x, z } = posicionPuesto(j);
+    return {
+      area: ESCRITORIOS[j].area,
+      indice: j,
+      nombre: p.nombre,
+      rol: p.tarea,
+      equipo: [`Corre con ${NOMBRE_MOTOR[p.motor]}`],
+      estado,
+      chip: trabajando ? "Trabajando" : listo ? "Listo para tu OK" : enCola ? "En cola" : "Libre",
+      progreso: trabajando ? 0.5 : listo ? 1 : 0,
+      queHace: p.tarea,
+      tarea: trabajando || listo ? (enMarcha[0] ?? listas[0] ?? null) : null,
+      listas: j === 0 ? listas : [],
+      enMarcha: trabajando ? enMarcha : [],
+      partesHechas: 0,
+      color: COLOR_MOTOR[p.motor],
+      glifos: GLIFOS[area],
+      x,
+      z,
+      ultima: null,
+    };
+  });
 }

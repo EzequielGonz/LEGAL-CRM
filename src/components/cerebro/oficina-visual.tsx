@@ -12,6 +12,7 @@
  * formularios de aprobar / pedir cambios llegan desde la Oficina.
  */
 import dynamic from "next/dynamic";
+import { puestosDeSector } from "@/lib/oficina/sectores";
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Diorama } from "@/components/cerebro/oficina-diorama";
 import {
@@ -72,12 +73,15 @@ export function OficinaVisual({
   tareas,
   renderEnMarcha,
   renderAprobar,
+  sector = null,
 }: {
   tareas: TareaOficina[];
+  /** Con un sector, la sala muestra los puestos de ese sector (guionista, render…) en vez de los 8 escritorios. */
+  sector?: Area | null;
   renderEnMarcha: (t: TareaOficina) => ReactNode;
   renderAprobar: (t: TareaOficina) => ReactNode;
 }) {
-  const puestos = useMemo(() => puestosVisuales(tareas), [tareas]);
+  const puestos = useMemo(() => (sector ? puestosDeSector(sector, tareas) : puestosVisuales(tareas)), [tareas, sector]);
   const [vista, setVista] = useState<Vista>("sala");
   const [modo, setModo] = useState<Modo>("pendiente");
   const [webgl, setWebgl] = useState(false);

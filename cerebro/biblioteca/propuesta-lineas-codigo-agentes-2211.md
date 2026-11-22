@@ -55,3 +55,43 @@ Falta para encenderlo: que «Arrancar ahora» dispare una sesión de Claude Code
 4. Migrar el resto; Wasender queda de respaldo hasta que todo ande estable.
 
 **Lo que necesito de vos**: OK para el servidor (USD 6–20/mes) y elegir el proveedor (Railway, Fly.io o un VPS).
+
+## 5. Ampliación (22/11): cómo manejar 7 teléfonos, algunos doble SIM, desde la computadora
+
+Pregunta del dueño: «¿cómo controlo 7 dispositivos, algunos dual SIM, conectando QR o recibiendo códigos? Necesito una especie de emulador».
+
+**Cómo funciona WhatsApp con varios teléfonos**
+- Cada número tiene un **teléfono principal** (donde está instalado WhatsApp con ese chip). Evolution API se conecta como **dispositivo vinculado** (igual que WhatsApp Web): el teléfono no tiene que estar prendido todo el tiempo, pero hay que abrir WhatsApp en él cada 14 días o se desvincula.
+- Un teléfono doble SIM puede tener **2 números**: uno en WhatsApp y otro en WhatsApp Business (o con «apps duplicadas» en Android). 7 teléfonos con doble SIM ≈ hasta 14 números.
+- Vincular se hace con **QR o con código de 8 dígitos**. Con código no hace falta cámara: el panel pide el código a Evolution API y lo muestra; se escribe en el teléfono (WhatsApp → Dispositivos vinculados → Vincular con número).
+
+**La «especie de emulador»: una granja de teléfonos que manejás desde el panel**
+1. **Mini PC en la oficina** (o una notebook vieja) siempre prendida, con un **hub USB con alimentación** y los 7 teléfonos enchufados y cargando.
+2. **DeviceFarmer (ex OpenSTF)**, gratis y de código abierto: muestra la **pantalla de cada teléfono en el navegador** y deja tocarla con el mouse (abrir WhatsApp, escribir el código, aceptar). Es exactamente «un emulador» pero con los teléfonos reales, así WhatsApp no los marca.
+3. **scrcpy + ADB** como respaldo para controlar cualquier teléfono desde la PC.
+4. **Reenviador de SMS** en cada teléfono (app gratuita tipo «SMS Forwarder») que manda los códigos que llegan por SMS a un webhook del panel: cuando registrás o re-registrás un número, el código aparece solo en el panel.
+5. **Evolution API** (en la misma mini PC o en un servidor) con una instancia por número: envía, recibe y avisa el estado de cada línea.
+6. **Pantalla «Teléfonos» en el panel**: los 7 equipos y sus números, batería, conectado o no, «Vincular con código», «Ver pantalla del teléfono» (abre DeviceFarmer), últimos códigos SMS, pausar y límites por línea.
+
+**Por qué no emuladores puros (Android en la nube)**: WhatsApp detecta emuladores y bloquea más rápido; además el código de registro llega por SMS al chip físico. Con teléfonos reales + control remoto se evita las dos cosas.
+
+**Qué hace cada pieza**
+| Pieza | Para qué | Costo |
+|---|---|---|
+| Mini PC + hub USB alimentado | Mantener los 7 teléfonos conectados y cargando | Compra única (requiere OK) |
+| DeviceFarmer + scrcpy | Ver y tocar cada teléfono desde el navegador | Gratis |
+| Reenviador de SMS | Códigos de verificación al panel | Gratis |
+| Evolution API | Enviar, recibir, estado y reconexión de cada número | Gratis (corre en la mini PC o en un servidor USD 6–20/mes) |
+| Pantalla «Teléfonos» del panel | Todo junto, en un lugar | Desarrollo propio |
+
+**Fases**
+1. Probar con **1 teléfono** en una PC: DeviceFarmer + Evolution API + una línea, solo consultas (no bases frías).
+2. Pantalla «Teléfonos» en el panel con estado, vincular con código y ver pantalla.
+3. Sumar los 7 teléfonos y el reenviador de SMS.
+4. Pasar campañas desde Wasender de a una línea, con ritmo humano y tope por línea.
+
+**Lo que necesito de vos**: OK para comprar la mini PC y el hub (o usar una PC que tengan), y decidir si Evolution API corre en esa PC o en un servidor.
+
+## 6. ¿Qué es «Panel» (sin inteligencia artificial) en la Oficina?
+
+Son puestos que no usan Gemini ni Claude: funciones del propio panel que corren solas con reglas fijas (programar un posteo, medir cifras, vigilar que las líneas estén conectadas, avisar errores, enviar con tu confirmación). No gastan créditos de IA y no «piensan»: hacen siempre lo mismo.

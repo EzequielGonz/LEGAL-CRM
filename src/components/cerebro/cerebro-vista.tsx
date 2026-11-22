@@ -1,5 +1,4 @@
 import type { CSSProperties } from "react";
-import { EdificioOficina } from "@/components/cerebro/oficina-sectores";
 import type { TareaOficina } from "@/lib/oficina/reglas";
 import Link from "next/link";
 import { HeroCerebro } from "@/components/cerebro/escena-cerebro";
@@ -432,13 +431,6 @@ export function CerebroVista({ fuentes, semana, contactos, salud, pedidos, rubro
               </div>
             </div>
           </section>
-          {oficina ? (
-            <section id="agentes" aria-label="Agentes conectados al cerebro">
-              <div className="cz-in">
-                <EdificioOficina tareas={oficina} />
-              </div>
-            </section>
-          ) : null}
 
           <section id="estado" aria-labelledby="estado-titulo">
             <div className="cz-in">

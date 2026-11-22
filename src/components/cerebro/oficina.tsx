@@ -54,7 +54,7 @@ function hace(iso: string | null | undefined): string {
   return h < 24 ? `hace ${h} h` : `hace ${Math.round(h / 24)} d`;
 }
 
-export function Oficina({ inicial, arranqueInicial }: { inicial: TareaOficina[]; arranqueInicial: ArranqueVista | null }) {
+export function Oficina({ inicial, arranqueInicial, sector = null }: { inicial: TareaOficina[]; arranqueInicial: ArranqueVista | null; sector?: Area | null }) {
   const [tareas, setTareas] = useState(inicial);
   const [arranque, setArranque] = useState(arranqueInicial);
   const [perfil, setPerfil] = useState<string>("juridico");
@@ -166,10 +166,10 @@ export function Oficina({ inicial, arranqueInicial }: { inicial: TareaOficina[];
         </div>
       </div>
 
-      <OficinaVisual tareas={tareas} renderEnMarcha={(t) => <TareaEnMarcha key={t.id} t={t} />} renderAprobar={(t) => <TareaParaAprobar key={t.id} t={t} alDecidir={recargar} />} />
+      <OficinaVisual sector={sector} tareas={tareas} renderEnMarcha={(t) => <TareaEnMarcha key={t.id} t={t} />} renderAprobar={(t) => <TareaParaAprobar key={t.id} t={t} alDecidir={recargar} />} />
 
       <div className="cz-grid2">
-        <form ref={formulario} onSubmit={dejarTarea} className="cz-form" aria-label="Dejar una tarea en la oficina">
+        <form id="oficina-tarea" ref={formulario} onSubmit={dejarTarea} className="cz-form" aria-label="Dejar una tarea en la oficina">
           <label>
             Perfil
             <select value={perfil} onChange={(e) => setPerfil(e.target.value)}>

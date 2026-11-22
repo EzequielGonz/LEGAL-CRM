@@ -35,3 +35,15 @@ test("estado del sector cuenta lo que trabaja, lo que espera y lo que pide OK", 
   const m = cuentaMotores(SECTORES.redes);
   assert.equal(m.claude + m.gemini + m.panel, SECTORES.redes.puestos.length);
 });
+
+test("la sala 3D de un sector usa sus puestos, en posiciones únicas y con el estado del sector", async () => {
+  const { puestosDeSector } = await import("../../src/lib/oficina/sectores");
+  const tareas = [{ id: "1", estado: "en_curso", area: "redes", ruta: ["redes", "direccion"], recorrido: [], titulo: "Reels", pedido: "", decision: null, resultado: null, updated_at: "" }] as any;
+  const ps = puestosDeSector("redes", tareas);
+  assert.equal(ps.length, SECTORES.redes.puestos.length);
+  assert.equal(new Set(ps.map((p) => p.area)).size, ps.length, "identificadores únicos para la cámara");
+  assert.equal(new Set(ps.map((p) => `${p.x},${p.z}`)).size, ps.length, "posiciones únicas");
+  assert.equal(ps[0].nombre, SECTORES.redes.puestos[0].nombre);
+  assert.equal(ps.filter((p) => p.estado === "trabajando").length, 2);
+  assert.equal(puestosDeSector("seo", []).every((p) => p.estado === "libre"), true);
+});

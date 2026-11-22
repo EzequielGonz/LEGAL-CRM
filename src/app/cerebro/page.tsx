@@ -9,7 +9,6 @@ import { leerSalud } from "@/lib/salud";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { filaATarea, type TareaBandeja } from "@/lib/bandeja-claude";
 import type { PerfilSemana } from "@/lib/cerebro/contenido";
-import { leerOficina } from "@/lib/oficina/servidor";
 
 export const metadata = { title: "Cerebro del negocio" };
 export const dynamic = "force-dynamic";
@@ -42,15 +41,14 @@ async function contarContactos(): Promise<number | null> {
 export default async function CerebroPage() {
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
-  const [semana, contactos, salud, pedidos, rubros, oficina] = await Promise.all([
+  const [semana, contactos, salud, pedidos, rubros] = await Promise.all([
     leerSemana(),
     contarContactos(),
     leerSalud().catch(() => null),
     leerPedidos(),
     leerRubrosActivos().catch(() => []),
-    leerOficina().catch(() => null),
   ]);
-  return <CerebroVista fuentes={{ clase: `${fuente.variable} ${mono.variable}`, estilo: { ["--cz-f" as string]: fuente.style.fontFamily, ["--cz-mono" as string]: mono.style.fontFamily } }} semana={semana} contactos={contactos} salud={salud} pedidos={pedidos} rubros={rubros} oficina={oficina?.tareas ?? null} />;
+  return <CerebroVista fuentes={{ clase: `${fuente.variable} ${mono.variable}`, estilo: { ["--cz-f" as string]: fuente.style.fontFamily, ["--cz-mono" as string]: mono.style.fontFamily } }} semana={semana} contactos={contactos} salud={salud} pedidos={pedidos} rubros={rubros} />;
 }
 
 /** Lo último que se le pidió a Claude. */

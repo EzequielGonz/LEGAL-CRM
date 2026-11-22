@@ -5,7 +5,7 @@ import { requirePageSession } from "@/lib/acceso/pagina";
 import { Oficina } from "@/components/cerebro/oficina";
 import { Clasico } from "@/components/premium";
 import { leerOficina } from "@/lib/oficina/servidor";
-import { EdificioOficina, SectorOficina } from "@/components/cerebro/oficina-sectores";
+import { CabeceraSector, EntradasSectores } from "@/components/cerebro/oficina-sectores";
 import { esSector } from "@/lib/oficina/sectores";
 
 export const metadata = { title: "Oficina de agentes" };
@@ -24,7 +24,7 @@ export default async function OficinaPage({ searchParams }: { searchParams: Prom
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
   const sp = await searchParams;
-  const sector = esSector(sp.sector) && sp.sector !== "direccion" ? sp.sector : null;
+  const sector = esSector(sp.sector) ? sp.sector : null;
   const oficina = await leerOficina();
   const tareas = oficina?.tareas ?? [];
   return (
@@ -44,14 +44,17 @@ export default async function OficinaPage({ searchParams }: { searchParams: Prom
             <h1>
               Los agentes, <b>trabajando</b>.
             </h1>
-            <p className="cz-lead">Un edificio con un sector por equipo y el Cerebro al centro: recibe tus órdenes, las reparte y revisa todo antes de que te llegue. Nada se publica ni se aplica sin tu OK.</p>
+            <p className="cz-lead">Cada equipo tiene su sector: entrá a uno y ves a sus agentes trabajando, cada uno en su tarea. El Cerebro recibe tus órdenes, las reparte y revisa todo antes de que te llegue. Nada se publica sin tu OK.</p>
           </div>
         </header>
         <main>
-          <div className="cz-in">{sector ? <SectorOficina area={sector} tareas={tareas} /> : <EdificioOficina tareas={tareas} />}</div>
+          <div className="cz-in">
+            <EntradasSectores actual={sector} tareas={tareas} />
+            {sector ? <CabeceraSector area={sector} /> : null}
+          </div>
           <section id="oficina">
             <div className="cz-in">
-              {oficina ? <Oficina inicial={oficina.tareas} arranqueInicial={oficina.arranque} /> : <p className="cz-muted">No pude leer la oficina ahora. Probá recargar en un rato.</p>}
+              {oficina ? <Oficina inicial={oficina.tareas} arranqueInicial={oficina.arranque} sector={sector} /> : <p className="cz-muted">No pude leer la oficina ahora. Probá recargar en un rato.</p>}
             </div>
           </section>
         </main>

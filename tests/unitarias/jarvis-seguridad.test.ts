@@ -19,8 +19,8 @@ test("Jarvis tiene todas las herramientas del asistente, incluidas las que enví
   for (const ok of ["buscar_chat", "ir_a_pantalla", "pedir_cambio_de_codigo", "resumen_perfil", "estado_lineas", "explicar_cifra", "dejar_borrador", "proponer_campana", "proponer_lanzamiento"]) assert.ok(deJarvis.includes(ok), ok);
 });
 
-test("las herramientas propias de Jarvis no cambian datos: están declaradas y son tres", () => {
-  assert.deepEqual([...NOMBRES_JARVIS], ["dejar_borrador", "estado_lineas", "explicar_cifra"]);
+test("las herramientas propias de Jarvis no cambian datos: están declaradas y son cuatro", () => {
+  assert.deepEqual([...NOMBRES_JARVIS], ["dejar_borrador", "estado_lineas", "explicar_cifra", "consultar_cerebro"]);
   assert.deepEqual((DECLARACIONES_JARVIS as any[]).map((d) => d.name), [...NOMBRES_JARVIS]);
 });
 
