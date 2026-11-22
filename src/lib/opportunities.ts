@@ -146,6 +146,25 @@ export function alPerderse(
   return { oportunidad, atencionAntes: pedia };
 }
 
+/**
+ * 22/11 (pendiente 6): al pasar a perdido o captado el seguimiento se cierra: las tareas programadas,
+ * pendientes o en conflicto se cancelan y el estado de seguimiento deja de figurar «activo». Pura.
+ */
+export function alCerrarseOportunidad(
+  field: string,
+  value: string | null,
+  actual: { followup_state?: string | null } | null
+): { oportunidad: Record<string, unknown>; cancelarTareas: boolean } {
+  if (field !== "capture_state" || (value !== "perdido" && value !== "captado")) return { oportunidad: {}, cancelarTareas: false };
+  const oportunidad: Record<string, unknown> = {};
+  if (actual?.followup_state === "activo") {
+    oportunidad.followup_state = "completado";
+    oportunidad.followup_next_at = null;
+    oportunidad.followup_reason = value === "captado" ? "Se cerró el seguimiento: la persona quedó captada." : "Se cerró el seguimiento: la oportunidad se perdió.";
+  }
+  return { oportunidad, cancelarTareas: true };
+}
+
 export async function setOpportunityState(input: {
   opportunityId: string;
   dimension: Dimension;
@@ -168,12 +187,20 @@ export async function setOpportunityState(input: {
   // 13/11: quien se pierde deja de pedir una persona (antes quedaba marcado y
   // aparecía como trabajo pendiente) y de estar «a revisar».
   const alPerder = alPerderse(input.field, input.value, current as any);
+  const alCerrar = alCerrarseOportunidad(input.field, input.value, current as any);
 
   const { error } = await supabase
     .from("opportunities")
-    .update({ [input.field]: input.value, ...alPerder.oportunidad, ...(input.extra ?? {}), updated_at: new Date().toISOString() })
+    .update({ [input.field]: input.value, ...alPerder.oportunidad, ...alCerrar.oportunidad, ...(input.extra ?? {}), updated_at: new Date().toISOString() })
     .eq("id", input.opportunityId);
   if (error) throw new Error(`No se pudo actualizar la oportunidad: ${error.message}`);
+  if (alCerrar.cancelarTareas && before !== input.value) {
+    await supabase
+      .from("followup_tasks")
+      .update({ status: "cancelada", status_reason: input.value === "captado" ? "Quedó captado: se cerró el seguimiento." : "Se perdió la oportunidad: se cerró el seguimiento." })
+      .eq("opportunity_id", input.opportunityId)
+      .in("status", ["programada", "pendiente", "conflicto"]);
+  }
   if (alPerder.atencionAntes) {
     await logOpportunityEvent({ opportunityId: input.opportunityId, actor: input.actor, dimension: "atencion", from: alPerder.atencionAntes, to: "ia", reason: "Se cerró como perdido: ya no espera a una persona" });
     const convId = (current as any)?.conversation_id as string | null;
