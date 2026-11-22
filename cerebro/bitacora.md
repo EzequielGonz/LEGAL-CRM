@@ -164,3 +164,8 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 
 ## 22/11 · Cuarta vuelta
 - Oficina 3D por sectores, Jarvis con `consultar_cerebro`, Graphify en los 5 repos y en el entorno, propuesta de granja de teléfonos. Recorrido real: Resumen, Contactos y Citas casi sin acciones (ver `traspaso-sesion-2026-11-22-d.md`).
+
+## 22/11 · Sesión de accesos (A8, A9, A10) — no se pudo hacer con navegador
+- Esta sesión no tenía Claude in Chrome ni una computadora conectada (lista de carpetas vacía): no se pudo entrar a resend.com, a la otra cuenta de Vercel ni a claude.ai → Conectores.
+- Comprobado por el conector de Vercel: un solo equipo con un solo proyecto (`legal-crm`); en Production está `RESEND_API_KEY` (Sensitive) y falta `LANDING_EMAIL_FROM`. No se cambió nada en Vercel.
+- Canva y Cloudflare siguen sin autorizar (los autoriza el dueño en claude.ai). Pendiente: conflicto del PR #40 en `src/app/api/landing/route.ts`.

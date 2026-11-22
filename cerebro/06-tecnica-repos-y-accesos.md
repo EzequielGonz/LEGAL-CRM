@@ -103,3 +103,8 @@ Supabase (URL, clave pública, clave de servicio) · `WHATSAPP_<LÍNEA>` por lí
 - Dominios: DonWeb. Metricool: un usuario para las 4 marcas.
 - Panel: código general que el dueño da en el chat (no se guarda en archivos).
 - Claude no puede entrar a la cuenta de Vercel de las landings ni a Search Console/GA4 sin que se autorice el conector o se haga por Cowork.
+
+## Comprobado el 22/11 (sesión de accesos)
+
+- Conector de Vercel de Claude: un solo equipo, proyecto `legal-crm`. Las 4 landings viven en otra cuenta, a la que Claude todavía no entra.
+- Vercel `legal-crm`, Production: `RESEND_API_KEY` cargada (Sensitive); `LANDING_EMAIL_FROM` sin cargar.
