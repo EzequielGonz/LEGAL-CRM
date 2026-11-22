@@ -32,6 +32,14 @@ export const GENERAL_HOURS = { startHour: 8, endHour: 21 } as const;
 /** Seguimiento: entre 48 y 72 horas. Desde el 13/11, 72 por defecto («que pasen 3 días y otro mensaje»); antes, 60. */
 export const FOLLOWUP_RANGE = { minHours: 48, maxHours: 72, defaultTargetHours: 72 } as const;
 
+/**
+ * Tolerancia de ejecución (22/11): el latido que manda las tareas corre cada pocos minutos y la franja
+ * elegida con objetivo 72 h cae justo en el tope. Sin tolerancia, la tarea siempre se ejecutaba pasado el
+ * tope y quedaba en «plazo vencido»: ningún contacto 2 salía. La tolerancia solo absorbe esa demora; no
+ * abre domingos ni la noche (el calendario se sigue comprobando) y no genera franjas nuevas.
+ */
+export const FOLLOWUP_EXECUTION_GRACE_HOURS = 3;
+
 /** Ventana de atención del canal (WhatsApp): 24 horas desde el último mensaje de la persona. */
 export const CHANNEL_WINDOW_HOURS = 24;
 
@@ -205,7 +213,7 @@ export type ExecutionDecision =
  *  - en su hora y dentro del calendario y del plazo: enviar;
  *  - si ya no es válida (una excepción nueva, el proceso se demoró): se busca
  *    otra franja del mismo plazo que todavía no pasó; si no hay, conflicto.
- * Nunca se amplía el plazo de 72 horas desde la referencia.
+ * El plazo de 72 horas desde la referencia solo admite la tolerancia de ejecución (arriba).
  */
 export function decideAtExecution(
   task: { base: Date; scheduledAt: Date; targetHours?: number },
@@ -214,13 +222,14 @@ export function decideAtExecution(
 ): ExecutionDecision {
   if (now.getTime() < task.scheduledAt.getTime()) return { action: "esperar", until: task.scheduledAt };
   const deadline = task.base.getTime() + FOLLOWUP_RANGE.maxHours * HOUR_MS;
+  const sendUntil = deadline + FOLLOWUP_EXECUTION_GRACE_HOURS * HOUR_MS;
   const earliest = task.base.getTime() + FOLLOWUP_RANGE.minHours * HOUR_MS;
-  if (now.getTime() <= deadline && now.getTime() >= earliest && isContactAllowed(now, calendar)) {
+  if (now.getTime() <= sendUntil && now.getTime() >= earliest && isContactAllowed(now, calendar)) {
     return { action: "enviar" };
   }
   const retry = chooseFollowupSlot(task.base, { targetHours: task.targetHours, calendar, notBefore: now });
   if (retry.ok) return { action: "reprogramar", at: retry.at, offsetHours: retry.offsetHours };
-  if (now.getTime() > deadline) {
+  if (now.getTime() > sendUntil) {
     return {
       action: "conflicto",
       conflict: "plazo_vencido",

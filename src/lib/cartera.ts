@@ -56,7 +56,7 @@ export const VISTAS_CARTERA: Record<VistaCartera, { titulo: string; bajada: stri
       { clave: "citas", titulo: "Citas próximas", detalle: "Todas las citas que vienen, incluidas las de Fase 2.", tono: "caliente", accion: "ficha", fuente: citas("proximas") },
       { clave: "reagendadas", titulo: "Citas reagendadas", detalle: "Se reprogramaron una vez: confirmá que se den.", tono: "alerta", accion: "ficha", fuente: citas("reagendadas") },
       { clave: "fase2", titulo: "Fase 2", detalle: "Revisión agendada con la IA.", tono: "info", accion: "ficha", fuente: citas("fase2") },
-      { clave: "seguimiento", titulo: "En seguimiento", detalle: "No escriben hace más de 3 días. El sistema les manda un mensaje más y, si en 24 horas no contestan, pasan a Caídos. No hay que hacer nada.", tono: "info", accion: "chat", fuente: op("dejaron_de_responder") },
+      { clave: "seguimiento", titulo: "Se les insiste (sin respuesta hace +3 días)", detalle: "No escriben hace más de 3 días. El sistema les manda un mensaje más y, si en 24 horas no contestan, pasan a Caídos. No hay que hacer nada.", tono: "info", accion: "chat", fuente: op("dejaron_de_responder") },
       { clave: "repesca", titulo: "En repesca", detalle: "Terminaron el seguimiento sin avanzar: para volver a intentar a mano.", tono: "info", accion: "ficha", fuente: op("repesca") },
     ],
   },

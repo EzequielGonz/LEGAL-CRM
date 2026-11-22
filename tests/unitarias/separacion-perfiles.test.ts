@@ -128,7 +128,7 @@ test("fallas del sistema: aparte de las incidencias, con qué hacer y dentro del
   assert.equal(f[0].titulo, "14 mensajes no salieron en las últimas 24 horas");
   assert.equal(f[1].titulo, "1 seguimiento no pudo salir");
   assert.equal(f[0].href, "/panel/agencia_0km/campanas");
-  assert.equal(f[3].alcance, "sistema");
+  assert.equal(f[3].alcance, "perfil", "22/11: los retenidos son de cada perfil");
   for (const x of f) assert.ok(x.href.includes("agencia_0km"), `el enlace queda en el perfil: ${x.href}`);
   assert.equal(armarFallas("juridico", { fallidos24h: 1, seguimientos: 0, bot24h: 0, archivos: 0, retenidos: 0 })[0].href, "/campanas");
 });

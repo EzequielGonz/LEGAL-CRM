@@ -7,6 +7,7 @@
  * avisos.
  */
 import { MARCAS, type SlugPerfil } from "@/lib/marca";
+import { RUBRO_IDS } from "@/lib/rubros";
 import { leerFallas, type Falla } from "@/lib/salud/fallas";
 
 const PERFILES: SlugPerfil[] = ["juridico", "coberturas_medicas", "agencia_0km", "marketing"];
@@ -58,7 +59,7 @@ export async function avisarFallasDelSistema(ahora: Date = new Date()): Promise<
       if (f.alcance === "sistema") yaDelSistema.add(clave);
       revisadas++;
       const t = textoDeAviso(slug, f);
-      const { results } = await sendToDevices({ ...t, tag: `falla-${f.clave}`, kind: "aviso", eventKey: clave });
+      const { results } = await sendToDevices({ ...t, tag: `falla-${f.clave}`, kind: "aviso", eventKey: clave, rubroId: f.alcance === "perfil" ? RUBRO_IDS[slug] : null });
       if (results.some((r) => r.status === "enviado")) avisadas++;
     }
   }

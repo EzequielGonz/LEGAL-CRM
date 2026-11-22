@@ -78,6 +78,8 @@ export function estadoCorto(o: {
   detenido?: boolean;
 }): { texto: string; tono: "bloqueo" | "atencion" | "ok" | "info" } {
   if (o.detenido) return { texto: "Detenido", tono: "bloqueo" };
+  // 22/11: un perdido nunca espera a una persona (puede quedar el dato viejo de antes de perderse).
+  if (o.capture_state === "perdido") return { texto: "Perdido", tono: "info" };
   if (o.attention_state === "requiere_humano") return { texto: "Espera a una persona", tono: "atencion" };
   if (o.attention_state === "humano_en_curso") return { texto: "Lo atiende una persona", tono: "info" };
   if (o.capture_state === "captado") return o.derivation_state === "derivado" ? { texto: "Derivado", tono: "ok" } : { texto: "Captado: falta derivar", tono: "atencion" };

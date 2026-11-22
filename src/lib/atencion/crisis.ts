@@ -94,6 +94,7 @@ export async function atenderCrisis(input: {
       url: slug ? `/incidencias?perfil=${slug}` : "/perfiles",
       tag: "crisis",
       kind: "aviso",
+      rubroId: input.rubroId ?? null,
       eventKey: `crisis:${input.conversationId}:${new Date().toISOString().slice(0, 13)}`,
     });
   } catch (err) {

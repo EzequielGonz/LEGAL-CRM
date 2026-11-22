@@ -1,5 +1,7 @@
 import { unstable_cache } from "next/cache";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { aplicarCondiciones } from "@/lib/indicadores";
+import { ESPERAN_A_UNA_PERSONA } from "@/lib/definiciones/cifras";
 
 /**
  * Cifras del perfil (bloque 1.5): un solo cálculo en la base
@@ -42,7 +44,16 @@ async function leerProfileMetrics(rubroId: string): Promise<ProfileMetrics | nul
     console.error("[métricas] No se pudieron calcular:", error.message);
     return null;
   }
-  return data as ProfileMetrics;
+  const m = data as ProfileMetrics;
+  // 22/11: «Esperan a una persona» tiene una sola definición (`definiciones/cifras.ts`); la función de la base
+  // cuenta todo lo que está en `requiere_humano`, incluidos perdidos y detenciones. Si falla, queda la cifra de la base.
+  try {
+    const { count, error: errEsperan } = await aplicarCondiciones(supabase.from("opportunities").select("id", { count: "exact", head: true }).eq("rubro_id", rubroId), ESPERAN_A_UNA_PERSONA);
+    if (!errEsperan && count !== null && m?.atencion) m.atencion = { ...m.atencion, requiere_humano: count };
+  } catch {
+    // se conserva la cifra de la base
+  }
+  return m;
 }
 
 /**

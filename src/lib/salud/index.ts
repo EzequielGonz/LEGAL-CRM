@@ -5,6 +5,9 @@ import { envPrefixForArea, RUBRO_IDS } from "@/lib/rubros";
 import { leerEstadoCalidad } from "@/lib/whatsapp/calidad-servidor";
 import { leerEstadoAvisos } from "@/lib/whatsapp/avisos-servidor";
 import { resumenPresupuesto } from "@/lib/presupuesto/servidor";
+import { consultarEstadosLineas } from "@/lib/whatsapp/estado-linea";
+import { resumenRetenidosDelPerfil, type RetenidoMinimo } from "@/lib/definiciones/retenidos";
+import type { SlugPerfil } from "@/lib/marca";
 import { evaluarSalud, type DatosSalud, type ItemSalud } from "./reglas";
 
 export { evaluarSalud, resumenSalud, type ItemSalud, type EstadoSalud } from "./reglas";
@@ -66,16 +69,13 @@ export async function leerSalud(ahora = new Date()): Promise<ItemSalud[]> {
   const [[latido, pausa, cuarentena, entrante, agentes, turnos, errores, avisos, presupuestos, ultimoError], listos, calidad] = await Promise.all([Promise.all([
     seguro(async () => ((await s.from("system_settings").select("value").eq("key", CLAVE_LATIDO).maybeSingle()).data as any)?.value ?? null, null),
     getAutomationPause(),
+    // 22/11: definición única de retenidos (`definiciones/retenidos.ts`): sin revisar, sin tope de horas, por perfil.
     seguro(async () => {
-      const { data, count } = await s
-        .from("webhook_quarantine")
-        .select("detail, reason", { count: "exact" })
-        .is("reviewed_at", null)
-        .gte("received_at", hace24)
-        .order("received_at", { ascending: false })
-        .limit(1);
-      return { cantidad: count ?? 0, motivo: ((data ?? [])[0] as any)?.detail ?? ((data ?? [])[0] as any)?.reason ?? null };
-    }, { cantidad: 0, motivo: null }),
+      let r: any = await (s.from("webhook_quarantine") as any).select("detail, reason, rubro_id, reviewed_at").is("reviewed_at", null).order("received_at", { ascending: false }).limit(1000);
+      // Antes de aplicar la migración 0637 no existe `rubro_id`: todo cuenta como «sin perfil» (solo Jurídico).
+      if (r.error) r = await (s.from("webhook_quarantine") as any).select("detail, reason, reviewed_at").is("reviewed_at", null).order("received_at", { ascending: false }).limit(1000);
+      return ((r.data ?? []) as any[]).map((x) => ({ rubro_id: x.rubro_id ?? null, reviewed_at: x.reviewed_at ?? null, detail: x.detail ?? null, reason: x.reason ?? null })) as RetenidoMinimo[];
+    }, [] as RetenidoMinimo[]),
     seguro(async () => ((await s.from("messages").select("created_at").eq("direction", "entrante").order("created_at", { ascending: false }).limit(1).maybeSingle()).data as any)?.created_at ?? null, null),
     seguro(async () => ((await s.from("ai_agents").select("area, active")).data ?? []) as { area: string; active: boolean }[], []),
     seguro(async () => (await s.from("agent_turn_logs" as any).select("id", { count: "exact", head: true }).gte("created_at", hace24)).count ?? 0, 0),
@@ -125,14 +125,28 @@ export async function leerSalud(ahora = new Date()): Promise<ItemSalud[]> {
     return { slug, nombre: PERFILES.find((p) => p.slug === slug)?.nombre ?? slug, linea: l.label, calidad: l.calidad, pausadas: l.pausadas ?? [] };
   });
 
+  // 22/11: acceso real de cada línea de Meta (se le pregunta a Meta; solo lectura, con memoria corta).
+  const accesoLineas = await seguro(async () => {
+    const { data: lineas } = await s.from("profile_lines").select("label, rubro_id, credential_key").eq("active", true);
+    const filas = ((lineas ?? []) as { label: string; rubro_id: string; credential_key: string }[]).filter((l) => l.credential_key);
+    const estados = await consultarEstadosLineas(filas.map((l) => l.credential_key), { memoria: true });
+    return filas.map((l) => {
+      const slug = SLUG_POR_RUBRO[l.rubro_id] ?? l.rubro_id;
+      const inf = estados[l.credential_key];
+      return { slug, nombre: PERFILES.find((p) => p.slug === slug)?.nombre ?? slug, linea: l.label, estado: inf?.estado ?? null, ok: !!inf?.ok, etiqueta: inf?.etiqueta ?? null };
+    });
+  }, [] as NonNullable<DatosSalud["accesoLineas"]>);
+
   const datos: DatosSalud = {
+    accesoLineas,
     ahora,
     ultimoLatido: (latido as any)?.at ?? null,
     latidoHueco: (latido as any)?.hueco ?? null,
     presupuestoGemini: await seguro(() => resumenPresupuesto(ahora), null),
     latidoTiempos: latido ? { ms: typeof (latido as any).ms === "number" ? (latido as any).ms : null, etapas: (latido as any).etapas ?? {} } : null,
     pausa: { ia: pausa.aiRepliesPaused, envios: pausa.outboundPaused, problema: pausa.configProblem ?? pausa.readError ?? null },
-    cuarentena24h: cuarentena,
+    cuarentena24h: { cantidad: 0, motivo: null },
+    retenidosPorPerfil: Object.fromEntries(PERFILES.map((p) => [p.slug, resumenRetenidosDelPerfil(cuarentena, p.slug as SlugPerfil)])),
     secretoMeta: Boolean(process.env.META_APP_SECRET?.trim() || process.env.META_APP_SECRETS?.trim()),
     ultimoEntrante: entrante,
     perfiles,

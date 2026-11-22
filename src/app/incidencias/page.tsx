@@ -3,6 +3,7 @@ import Link from "next/link";
 import clsx from "clsx";
 import { createClient } from "@/lib/supabase/server";
 import { INCIDENCE_LABEL, QUARANTINE_REASON_LABEL, summarizeQuarantine } from "@/lib/revision";
+import { filtroRetenidosDelPerfil, rotuloPerfilDeRetenido } from "@/lib/definiciones/retenidos";
 import { DETENTION_LABEL, type DetentionMotive } from "@/lib/detention";
 import { ReviewAction } from "@/components/revision/review-action";
 import { Pager, pageFromParam } from "@/components/ui/pager";
@@ -51,7 +52,7 @@ export default async function RevisionPage(
     await Promise.all([
       supabase.from("incidences").select("id", { count: "exact", head: true }).eq("rubro_id", rubroId).eq("status", "abierta"),
       supabase.from("contact_detentions").select("id", { count: "exact", head: true }).eq("rubro_id", rubroId).eq("status", "vigente"),
-      supabase.from("webhook_quarantine").select("id", { count: "exact", head: true }).is("reviewed_at", null),
+      conteoRetenidos(supabase, slug),
       supabase.from("message_attachments").select("id", { count: "exact", head: true }).eq("rubro_id", rubroId).in("status", ["pendiente", "error"]),
     ]);
 
@@ -353,15 +354,28 @@ async function Detenciones({ searchParams, page, slug, rubroId }: { searchParams
   );
 }
 
+/** 22/11: retenidos pendientes del perfil (definición única de `definiciones/retenidos.ts`). */
+function filtrarRetenidos<T extends { eq: (c: string, v: string) => T; or: (f: string) => T }>(query: T, slug: SlugPerfil): T {
+  const f = filtroRetenidosDelPerfil(slug);
+  return f.tipo === "eq" ? query.eq("rubro_id", f.valor) : query.or(f.valor);
+}
+
+async function conteoRetenidos(supabase: ReturnType<typeof createClient>, slug: SlugPerfil) {
+  const q: any = filtrarRetenidos((supabase.from("webhook_quarantine") as any).select("id", { count: "exact", head: true }).is("reviewed_at", null), slug);
+  const { count } = await q;
+  return { count: count ?? 0 };
+}
+
 async function Retenidos({ searchParams, page, slug }: { searchParams: { estado?: string }; page: number; slug: SlugPerfil }) {
   const supabase = createClient();
   const pendientes = searchParams.estado !== "revisados";
   let query = supabase
     .from("webhook_quarantine")
-    .select("id, received_at, source, reason, account_id, payload, detail, reviewed_at, reviewed_action, note", { count: "exact" })
+    .select("id, received_at, source, reason, account_id, payload, detail, reviewed_at, reviewed_action, note, rubro_id", { count: "exact" })
     .order("received_at", { ascending: false })
     .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
   query = pendientes ? query.is("reviewed_at", null) : query.not("reviewed_at", "is", null);
+  query = filtrarRetenidos(query as any, slug) as any;
   const { data: rows, count } = await query;
 
   return (
@@ -398,6 +412,7 @@ async function Retenidos({ searchParams, page, slug }: { searchParams: { estado?
                     {new Date(q.received_at).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", hourCycle: "h23", dateStyle: "short", timeStyle: "short" })}
                     {q.account_id ? ` · cuenta ${q.account_id}` : ""}
                     {q.detail ? ` · ${q.detail}` : ""}
+                    {` · ${rotuloPerfilDeRetenido(q.rubro_id)}`}
                     {q.reviewed_action ? ` · ${q.reviewed_action}${q.note ? `: ${q.note}` : ""}` : ""}
                   </p>
                 </div>

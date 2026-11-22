@@ -1,6 +1,8 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getProfileMetrics } from "@/lib/metrics";
 import { personasQueEscribieron } from "@/lib/estadisticas-personas";
+import { aplicarCondiciones } from "@/lib/indicadores";
+import { ESPERAN_A_UNA_PERSONA } from "@/lib/definiciones/cifras";
 
 /**
  * Vista previa de cada perfil (pantalla de perfiles y teléfono). Usa el
@@ -76,14 +78,8 @@ export async function loadPerfiles(rubrosLeidos?: RubroRow[]): Promise<PerfilSta
         personasQueEscribieron(areas, desde),
         supabase.from("campaigns").select("id, name, status").in("area", areas).is("archived_at", null).order("created_at", { ascending: false }).limit(1),
         supabase.from("content_pieces").select("id", { count: "exact", head: true }).eq("rubro_id", r.id).eq("estado", "programada"),
-        supabase
-          .from("opportunities")
-          .select("id", { count: "exact", head: true })
-          .eq("rubro_id", r.id)
-          .eq("attention_state", "requiere_humano")
-          .neq("capture_state", "perdido")
-          .or("attention_category.is.null,attention_category.neq.detencion")
-          .gte("updated_at", semana),
+        // 22/11: definición única de «Esperan a una persona» (sin ventana de fechas).
+        aplicarCondiciones(supabase.from("opportunities").select("id", { count: "exact", head: true }).eq("rubro_id", r.id), ESPERAN_A_UNA_PERSONA),
       ]);
       const c: any = (camp ?? [])[0];
       return {

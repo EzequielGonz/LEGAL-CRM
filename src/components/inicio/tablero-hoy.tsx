@@ -10,6 +10,11 @@ import { conVolver } from "@/lib/navegacion";
 import type { SlugPerfil } from "@/lib/marca";
 import { colasDeHoy, unificarCola, type EntradaCola, type ItemCola } from "@/lib/hoy/colas";
 import { CerrarDescartes } from "@/components/inicio/cerrar-descartes";
+import { estadoDeCampana } from "@/lib/definiciones/campanas";
+import { getCampaignMetrics } from "@/lib/campaign-metrics";
+import { contarFallidos24h } from "@/lib/salud/fallas";
+import { motivosDeParo } from "@/lib/definiciones/parado";
+import { getAutomationPause } from "@/lib/automation-pause";
 
 /**
  * Tablero de «Hoy» (24/10, boceto v3 aprobado): estado de la línea, la
@@ -136,13 +141,35 @@ export async function TableroHoy({
   const lineasWasender = (lineasWa ?? []) as { id: string; nombre: string; estado: string | null; habilitada: boolean }[];
   const lineaDeCamp = camp?.proveedor === "wasender" ? lineasWasender.find((l) => l.id === camp.wasender_line_id) ?? null : null;
   const campFrenada = camp?.status === "en_curso" && camp?.proveedor === "wasender" && (!lineaDeCamp || lineaDeCamp.estado !== "connected" || !lineaDeCamp.habilitada);
-  const chipCampana = !camp
-    ? { tono: "gris", texto: "Ninguna campaña activa", href: baseCampanas }
-    : campFrenada
-    ? { tono: "rojo", texto: `Campaña frenada · la línea de Wasender no puede enviar`, href: `${baseCampanas}/${camp.id}` }
-    : camp.status === "en_curso"
-    ? { tono: "verde", texto: `Campaña enviando · ${camp.name}`, href: `${baseCampanas}/${camp.id}` }
-    : { tono: "amarillo", texto: `Campaña pausada · ${camp.pause_reason ? String(camp.pause_reason).slice(0, 60) : camp.name}`, href: `${baseCampanas}/${camp.id}` };
+  // 22/11: el estado sale de la definición única (avance real y fallidos de 24 h, los mismos que ve Salud).
+  const [metricasCamp, fallidos24h] = camp ? await Promise.all([getCampaignMetrics(camp.id).catch(() => null), contarFallidos24h(areas).catch(() => 0)]) : [null, 0];
+  const estadoCamp = camp
+    ? estadoDeCampana({
+        status: camp.status,
+        pauseReason: camp.pause_reason,
+        nombre: camp.name,
+        frenadaPorLinea: campFrenada,
+        prospectos: metricasCamp?.prospectos ?? 0,
+        enviados: metricasCamp?.enviados ?? 0,
+        fallidos: metricasCamp?.fallidos ?? 0,
+        fallidos24h,
+      })
+    : null;
+  const chipCampana = !camp || !estadoCamp ? { tono: "gris", texto: "Ninguna campaña activa", href: baseCampanas } : { tono: estadoCamp.tono, texto: estadoCamp.texto, href: `${baseCampanas}/${camp.id}` };
+
+  // 22/11: por qué está parado el perfil (pausa, líneas, calidad, campañas pausadas, agente), con palabras y no con nombres internos.
+  const pausaGeneral = await getAutomationPause().catch(() => ({ aiRepliesPaused: false, outboundPaused: false }) as any);
+  const { data: agentesDelPerfil } = await s.from("ai_agents").select("area, active").in("area", areas);
+  const motivosParo = motivosDeParo({
+    pausaGeneral: { ia: !!pausaGeneral.aiRepliesPaused, envios: !!pausaGeneral.outboundPaused },
+    lineasMeta: lineasActivas.map((l) => {
+      const inf = (estados as any)[l.credential_key];
+      return { nombre: l.label, estado: inf?.estado ?? null, ok: inf ? !!inf.ok : true, etiqueta: inf?.etiqueta ?? null, calidad: inf?.calidad ?? null };
+    }),
+    lineasWasender: lineasWasender.map((l) => ({ nombre: l.nombre, estado: l.estado, habilitada: l.habilitada })),
+    campanas: lista.map((c) => ({ nombre: c.name, status: c.status, pauseReason: c.pause_reason })),
+    agenteActivo: ((agentesDelPerfil ?? []) as any[]).some((a) => a.active),
+  });
 
   const p = puntajeBot(metricas as any);
   const chipBot = { tono: p.puntaje === null ? "gris" : p.puntaje >= 60 ? "verde" : p.puntaje >= 35 ? "amarillo" : "rojo", texto: p.puntaje === null ? "Bot · todavía sin puntaje" : `Bot · ${p.puntaje} de 100 en captación y trato`, href: baseAgentes };
@@ -198,6 +225,13 @@ export async function TableroHoy({
           <Chip key={c.texto} tono={c.tono} texto={c.texto} href={c.href} />
         ))}
       </ul>
+      {motivosParo.length > 0 ? (
+        <ul className="flex flex-col gap-2" aria-label="Por qué este perfil no está enviando o contestando">
+          {motivosParo.map((m) => (
+            <Chip key={m.texto} tono={m.tono} texto={m.texto} />
+          ))}
+        </ul>
+      ) : null}
 
       {/* 1) Dos listas separadas: a quién hay que contestarle y a quién hay que derivar. Nadie se repite. */}
       <div id="hoy-cola" className="grid scroll-mt-24 items-start gap-4 lg:grid-cols-2">

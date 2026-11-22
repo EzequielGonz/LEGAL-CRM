@@ -47,6 +47,8 @@ export async function quarantineWebhook(input: {
   accountId?: string | null;
   payload: unknown;
   detail?: string | null;
+  /** 22/11: perfil (rubro) de la línea por la que llegó, si se conoce. Sin rubro solo se ve en Jurídico. */
+  rubroId?: string | null;
 }): Promise<void> {
   try {
     const supabase = createAdminClient();
@@ -56,6 +58,7 @@ export async function quarantineWebhook(input: {
       account_id: input.accountId ?? null,
       payload: input.payload ?? {},
       detail: input.detail ?? null,
+      rubro_id: input.rubroId ?? null,
     });
     if (error) throw new Error(error.message);
   } catch (err) {
