@@ -403,3 +403,40 @@
 .cz-panel .cz-head h2 { font-size: clamp(1.3rem, 2.6vw, 1.8rem); }
 .cz-card, .cz-alert, .cz-task, .cz-brand, .cz-stats { box-shadow: 0 1px 0 rgb(255 255 255 / 0.05) inset, 0 8px 18px -12px rgb(0 0 0 / 0.7); }
 @media (prefers-reduced-motion: reduce) { .cz-mas__boton, .cz-mas__boton:hover { transform: none; transition: none; } }
+
+/* ---- 22/11 · Esfera arriba como antes; la Oficina tiene su página (/oficina) ---- */
+.cz-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.cz-arriba { position: relative; }
+.cz-arriba .cz-top { position: absolute; inset: 0 0 auto; padding-block: 14px; }
+.cz-arriba .cz-hero { min-height: min(72vh, 660px); }
+.cz #atajos { padding-block: 24px 0; }
+.cz-pastillas { display: flex; flex-wrap: wrap; gap: 10px; }
+.cz-pastilla {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 20px; border-radius: 999px;
+  font-weight: 600; font-size: 0.92rem; text-decoration: none; color: #12030a; background: var(--pink); border: 1px solid var(--pink);
+  box-shadow: 0 1px 0 rgb(255 255 255 / 0.35) inset, 0 1px 2px rgb(0 0 0 / 0.5), 0 10px 18px -8px rgb(0 0 0 / 0.7);
+  transition: transform 150ms, box-shadow 150ms, border-color 150ms;
+}
+.cz-pastilla.sec { color: var(--fg); background: linear-gradient(180deg, #1d1d28, #14141c); border-color: var(--line); box-shadow: 0 1px 0 rgb(255 255 255 / 0.08) inset, 0 1px 2px rgb(0 0 0 / 0.5), 0 10px 18px -8px rgb(0 0 0 / 0.7); }
+.cz-pastilla:hover { transform: translateY(-1px); }
+.cz-pastilla.sec:hover { border-color: #3a3a4e; }
+.cz-pastilla:focus-visible, .cz-acceso:focus-visible, .cz-busca input:focus-visible { outline: 2px solid var(--box); outline-offset: 3px; }
+.cz #herramientas { padding-block: 40px 8px; }
+.cz-ens-fila { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.cz-ens-acc { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.cz-ens-conf { display: grid; gap: 10px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg2); box-shadow: inset 0 2px 6px rgb(0 0 0 / 0.5); }
+.cz-ens-conf p { font-size: 0.9rem; }
+.cz-busca { display: grid; gap: 8px; margin-top: 10px; }
+.cz-busca label { font-size: 0.86rem; color: var(--muted); }
+.cz-busca input { font: inherit; color: var(--fg); background: var(--bg2); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; min-height: 44px; }
+.cz-busca-res ul { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 6px; }
+.cz-busca-res a { display: grid; gap: 2px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg2); color: var(--fg); text-decoration: none; font-size: 0.88rem; line-height: 1.4; }
+.cz-busca-res a:hover { border-color: #3a3a4e; }
+.cz-busca-res a:focus-visible { outline: 2px solid var(--box); outline-offset: 2px; }
+.cz-busca-res small { font: 500 0.68rem/1 var(--cz-mono), monospace; letter-spacing: 0.08em; text-transform: uppercase; color: var(--pink); }
+.cz-accesos { display: grid; gap: 10px; margin-top: 14px; }
+.cz-acceso { display: grid; gap: 2px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; text-decoration: none; color: var(--fg); background: linear-gradient(180deg, #1d1d28, #14141c); box-shadow: 0 1px 0 rgb(255 255 255 / 0.06) inset, 0 8px 18px -12px rgb(0 0 0 / 0.7); transition: transform 150ms, border-color 150ms; }
+.cz-acceso span { font-size: 0.84rem; color: var(--muted); }
+.cz-acceso:hover { border-color: #3a3a4e; transform: translateY(-1px); }
+@media (max-width: 560px) { .cz-ens-fila { grid-template-columns: minmax(0, 1fr); } }
+@media (prefers-reduced-motion: reduce) { .cz-pastilla, .cz-pastilla:hover, .cz-acceso, .cz-acceso:hover { transform: none; transition: none; } }

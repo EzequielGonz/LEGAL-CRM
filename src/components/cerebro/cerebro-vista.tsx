@@ -5,10 +5,10 @@ import { TableroPendientes } from "@/components/cerebro/tablero-pendientes";
 import { HablarConClaude } from "@/components/cerebro/hablar-con-claude";
 import { ChatAsistenteGeneral, type AccesoAsistente } from "@/components/asistente/chat-asistente-general";
 import { ConocimientoBot } from "@/components/perfiles/conocimiento-bot";
-import { Oficina } from "@/components/cerebro/oficina";
+import { AccesosCerebro, BuscadorCerebro, EnsenarCerebro } from "@/components/cerebro/herramientas-cerebro";
 import { PanelesCerebro, type PanelCerebro } from "@/components/cerebro/paneles-cerebro";
 import { Anillo, Clasico, Tarjeta, VerMas } from "@/components/premium";
-import type { leerOficina } from "@/lib/oficina/servidor";
+import { formatoNumero } from "@/lib/premium/anillo";
 import { CIFRAS_SEMANA, totalSemana, variacion } from "@/lib/asistente/semana-reglas";
 import type { leerSalud } from "@/lib/salud";
 import { lecturaSimple } from "@/lib/salud/reglas";
@@ -26,6 +26,7 @@ import {
   RESUMEN,
   conteoAlertas,
   fotoParaClaude,
+  indiceBusqueda,
   frasesDelCerebro,
   lecturasDelPanel,
   type Gravedad,
@@ -33,7 +34,7 @@ import {
 } from "@/lib/cerebro/contenido";
 
 /**
- * Presentación del Cerebro del negocio (21/11 y 22/11): la oficina arriba, tres anillos de estado y
+ * Presentación del Cerebro del negocio (21/11 y 22/11): la esfera arriba (la Oficina tiene su propia página, /oficina), tres anillos de estado y
  * todas las demás secciones plegadas en «Ver más» (pestañas). Separada de la lectura de datos para
  * poder verla con datos de ejemplo. Solo lee: el único botón que escribe es «Mandar a Claude».
  */
@@ -59,11 +60,10 @@ type Vista = {
   salud: Awaited<ReturnType<typeof leerSalud>> | null;
   pedidos: TareaBandeja[] | null;
   rubros: { slug: string; name: string }[];
-  oficina: Awaited<ReturnType<typeof leerOficina>>;
 };
 
 /** La presentación del cerebro, separada de la lectura de datos (así se puede ver con datos de ejemplo). */
-export function CerebroVista({ fuentes, semana, contactos, salud, pedidos, rubros, oficina }: Vista) {
+export function CerebroVista({ fuentes, semana, contactos, salud, pedidos, rubros }: Vista) {
   const conteo = conteoAlertas(ALERTAS);
   const frases = frasesDelCerebro(semana?.perfiles ?? null, conteo.alta, PREGUNTAS_ABIERTAS.length);
   const lecturas = semana ? lecturasDelPanel(semana.perfiles) : null;
@@ -94,7 +94,7 @@ export function CerebroVista({ fuentes, semana, contactos, salud, pedidos, rubro
                   const v = variacion(total[c.clave].actual, total[c.clave].anterior);
                   return (
                     <div key={c.clave} className="cz-stat">
-                      <b>{total[c.clave].actual == null ? "—" : total[c.clave].actual!.toLocaleString("es-AR")}</b>
+                      <b>{total[c.clave].actual == null ? "—" : formatoNumero(total[c.clave].actual!)}</b>
                       <span>{c.titulo}</span>
                       {v.flecha !== "sin_dato" && (
                         <i className={v.flecha} aria-label={v.largo}>
@@ -391,55 +391,40 @@ export function CerebroVista({ fuentes, semana, contactos, salud, pedidos, rubro
         </div>
       ),
     },
-    {
-      id: "esfera",
-      titulo: "La esfera del cerebro",
-      perezoso: true,
-      contenido: <HeroCerebro frases={frases} numero={contactos} bajada="contactos que el cerebro conoce" fecha={ACTUALIZADO} />,
-    },
   ];
 
   return (
     <div className={`cz ${fuentes.clase}`} style={fuentes.estilo}>
       <Clasico cerebro>
-        <nav className="cz-top" aria-label="Volver">
-          <Link href="/perfiles" prefetch={false}>
-            ← Perfiles
-          </Link>
-          <Link href="/bandeja" prefetch={false}>
-            Bandeja para Claude
-          </Link>
-        </nav>
-
-        <header className="cz-cab">
-          <div className="cz-in">
-            <p className="cz-k">Cerebro del negocio</p>
-            <h1>
-              Qué sabe el negocio y qué está <b>haciendo Claude</b>.
-            </h1>
-            <p className="cz-lead">
-              {contactos === null ? "" : `${contactos.toLocaleString("es-AR")} contactos que el cerebro conoce · `}Actualizado el {ACTUALIZADO}.
-            </p>
-          </div>
-        </header>
+        <div className="cz-arriba">
+          <nav className="cz-top" aria-label="Volver">
+            <Link href="/perfiles" prefetch={false}>
+              ← Perfiles
+            </Link>
+            <Link href="/bandeja" prefetch={false}>
+              Bandeja para Claude
+            </Link>
+          </nav>
+          <h1 className="cz-sr">Cerebro del negocio</h1>
+          <HeroCerebro frases={frases} numero={contactos} bajada="contactos que el cerebro conoce" fecha={ACTUALIZADO} />
+        </div>
 
         <main>
-        <section id="oficina">
-          <div className="cz-in">
-            <div className="cz-head">
-              <p className="cz-k">00 · La oficina</p>
-              <h2>
-                Los agentes, <b>trabajando</b>.
-              </h2>
-              <p className="cz-lead">Dejá una tarea: Gemini la ordena al instante y elige por qué escritorios pasa. Con «Arrancar ahora», los agentes de Claude la trabajan área por área, Dirección revisa todo y te llega para aprobar. Nada se publica sin tu OK.</p>
+          <section id="atajos" aria-label="Atajos">
+            <div className="cz-in">
+              <div className="cz-pastillas">
+                <Link href="/oficina" prefetch={false} className="cz-pastilla">
+                  Ver la Oficina <span aria-hidden="true">→</span>
+                </Link>
+                <Link href="/asistente" prefetch={false} className="cz-pastilla sec">
+                  Pedile a Jarvis <span aria-hidden="true">→</span>
+                </Link>
+                <a href="#laboratorio" className="cz-pastilla sec">
+                  Laboratorio de bots <span aria-hidden="true">↓</span>
+                </a>
+              </div>
             </div>
-            {oficina ? (
-              <Oficina inicial={oficina.tareas} arranqueInicial={oficina.arranque} />
-            ) : (
-              <p className="cz-muted">No pude leer la oficina ahora. Probá recargar en un rato.</p>
-            )}
-          </div>
-        </section>
+          </section>
 
           <section id="estado" aria-labelledby="estado-titulo">
             <div className="cz-in">
@@ -497,6 +482,30 @@ export function CerebroVista({ fuentes, semana, contactos, salud, pedidos, rubro
                   .
                 </p>
               ) : null}
+            </div>
+          </section>
+
+          <section id="herramientas" aria-labelledby="herr-titulo">
+            <div className="cz-in">
+              <h2 id="herr-titulo" className="cz-estado-titulo">
+                Enseñale <b>algo</b>.
+              </h2>
+              <div className="cz-grid2">
+                <div className="cz-card">
+                  <header>
+                    <h3>Entrenar al cerebro</h3>
+                  </header>
+                  <p className="cz-muted">Una nota o una regla nueva queda como propuesta en la Bandeja. No se aplica sin tu confirmación.</p>
+                  <EnsenarCerebro />
+                </div>
+                <div className="cz-card">
+                  <header>
+                    <h3>Buscar y saltar</h3>
+                  </header>
+                  <BuscadorCerebro indice={indiceBusqueda()} />
+                  <AccesosCerebro />
+                </div>
+              </div>
             </div>
           </section>
 

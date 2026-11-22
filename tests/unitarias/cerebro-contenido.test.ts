@@ -11,6 +11,8 @@ import {
   fotoParaClaude,
   lecturasDelPanel,
   pedidoDesdeCerebro,
+  pedidoEnsenanza,
+  coincideBusqueda,
   pendientesDe,
   type PerfilSemana,
 } from "../../src/lib/cerebro/contenido";
@@ -78,4 +80,19 @@ test("la foto de la semana pasa la validación de la bandeja y entra en el pedid
   assert.equal(pareceDatoPersonal(pedido), null);
   assert.ok(pedido.length < MAX_PEDIDO);
   assert.equal(pedidoDesdeCerebro("  hola ", null), "Desde el cerebro: hola");
+});
+
+test("una enseñanza al cerebro queda como propuesta con confirmación del dueño", () => {
+  const p = pedidoEnsenanza("  Los viernes no se publica  ", "regla");
+  assert.match(p, /PROPUESTA/);
+  assert.match(p, /sin confirmación del dueño/);
+  assert.match(p, /Los viernes no se publica/);
+  assert.ok(p.length < MAX_PEDIDO);
+});
+
+test("el buscador ignora tildes y mayúsculas y pide todas las palabras", () => {
+  assert.equal(coincideBusqueda("Alertas para ustedes", "ALERTA ustedes"), true);
+  assert.equal(coincideBusqueda("Corregí la cobertura médica", "cobertura medica"), true);
+  assert.equal(coincideBusqueda("Corregí la cobertura médica", "cobertura autos"), false);
+  assert.equal(coincideBusqueda("algo", " "), false);
 });
