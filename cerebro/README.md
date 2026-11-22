@@ -49,7 +49,9 @@ Esta carpeta es la memoria de trabajo de Claude. Reemplaza tener que releer los 
 | `12-preguntas-para-entender.md` | Preguntas abiertas al dueño para entender el negocio a fondo |
 | `14-estilo-del-dueno.md` | Estilo del dueño: comunicación, diseño, reels, voces, autorizaciones y errores a no repetir |
 | `15-hallazgos-21-11.md` | Cruce del 21/11 (panel como usuario, código, relectura total, sesiones de redes): qué estaba mal, qué no sabía, riesgos como propuestas y preguntas abiertas. Informes completos en `biblioteca/analisis-2026-11-21/` |
-| `16-propuesta-empresa-de-agentes.md` | Propuesta 22/11: el cerebro como director de escritorios por área, Oficina y Jarvis en el panel, etapas. Sin aplicar |
+| `16-propuesta-empresa-de-agentes.md` | Propuesta 22/11: el cerebro como director de escritorios por área. La Oficina ya está en el panel (22/11); Jarvis e informes, por etapas |
+| `17-accesos-y-pendientes.md` | Accesos que faltan, pendientes de los dueños y preguntas: los recorre la sesión «accesos» |
+| `18-mapa-de-skills-y-plugins.md` | Qué skill, plugin y agente usa cada escritorio de la Oficina |
 | `traspaso-sesion-2026-11-22.md` | Traspaso antes de compactar del 22/11: pedidos, hecho, agentes en curso y próximos pasos |
 | `traspaso-sesion-2026-11-21-c.md` | Estado al compactar el 21/11 (agentes, próximos pasos) |
 | `bitacora.md` | Diario de sesiones y aprendizajes (lo más nuevo arriba) |

@@ -32,7 +32,7 @@ Todo lo demás son **decisiones de negocio** del dueño (abajo), no trabas de pr
 | 15/11 | Los textos internos del panel («Wasender», «v1/v2», «JSON») no se cambian |
 | 13/11 | Tarea automática que revise sola la Bandeja para Claude: «por ahora no». El dueño dice «ok» y Claude toma las tareas (`.claude/referencias/bandeja-claude.md`) |
 
-## Comunicación con ella
+## Comunicación con el dueño
 
 - Español rioplatense con voseo, simple, sin jerga técnica («no entiendo lo que decís»).
 - **Respuestas cortas**, listas cortas y tablas. Avisar en pocas palabras qué se está haciendo.

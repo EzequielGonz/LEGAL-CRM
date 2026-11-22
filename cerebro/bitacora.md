@@ -87,3 +87,13 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 - La página del cerebro está en su versión 4, con estilo de esfera de partículas, tablero de pendientes y respuestas.
 - Las tareas programadas del cerebro se eliminaron a pedido del dueño. La propuesta del cerebro como software con API quedó anotada sin aplicar.
 - Aprendizaje: leer el código antes de afirmar que algo falta; recorrer el panel como usuario, leyendo chats y configuración.
+
+## 2026-11-22 (tarde) · Oficina de agentes, sesión «accesos» y mapa de plugins
+
+- El dueño eligió: Gemini en el panel más Claude para lo complejo; los agentes trabajan solo cuando toca «Arrancar ahora»; hasta borrador.
+- Hecho: la Oficina en `/cerebro` (escritorios por área, mesa de entrada ordenada por Gemini, recorrido por sectores, «Esperando tu OK» con aprobar, pedir cambios o descartar). Migración `0636_oficina_agentes.sql` (solo suma columnas y la tabla `oficina_arranques`). 11 pruebas nuevas; 603 en total pasan.
+- Skill `oficina` (cómo procesa Claude cada vuelta) y skill `accesos` (el dueño escribe «accesos» en un chat del proyecto). Lista en `17-accesos-y-pendientes.md`.
+- Mapa de los 275 plugins por escritorio en `18-mapa-de-skills-y-plugins.md` (167 en el núcleo, 51 con aporte mínimo y 57 que no aplican).
+- Instalados por el dueño: claude-code-setup, PostHog, Firecrawl, skill-creator y Claude Code Cost. PostHog y Firecrawl se usan solo con OK. No activar la captura de sesiones de PostHog.
+- La API de Claude no está en el panel: no hay clave en Vercel. Claude trabaja con el plan de claude.ai.
+- Falta para que el botón dispare solo: el token de la tarea programada (A1 en `17`).
