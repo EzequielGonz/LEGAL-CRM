@@ -398,6 +398,9 @@ a.d-chip:hover { border-color: rgb(var(--c-gold-500) / 0.55); }
   /* Se hereda a todo lo que está adentro (spans y enlaces incluidos). */
   .lienzo-contenido :is(p, li, dd, dt, td, th, label, small, h2, h3, h4, summary, figcaption) { overflow-wrap: anywhere; }
   .lienzo-contenido :is(.grid, [class*="grid-cols"]) > * { min-width: 0; }
+  /* Una grilla sin columnas propias en el celular («grid sm:grid-cols-2») tiene una sola
+     columna automática que se estira hasta el menú desplegable más largo (/agentes: 642 px). */
+  .lienzo-contenido [class~="grid"]:not([class^="grid-cols"]):not([class*=" grid-cols"]):not([class*="grid-flow-col"]):not([class*="auto-cols"]):not([class*="grid-rows"]) { grid-template-columns: minmax(0, 1fr); }
   /* Las tablas anchas se deslizan dentro de su tarjeta, no la página. */
   .lienzo-contenido table:not(.sr-only) { display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
 }
