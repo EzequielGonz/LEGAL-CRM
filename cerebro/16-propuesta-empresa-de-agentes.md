@@ -68,3 +68,32 @@ Un **director** (el cerebro) que no trabaja con las manos: lee todo, decide qué
 - Los escritorios en la nube no pueden publicar ni lanzar campañas solos: la publicidad y las campañas las lanzan ustedes; la producción del panel, solo con su OK.
 - Cada sesión automática consume uso del plan de Claude; por eso el ritmo automático tiene un tope que definen ustedes.
 - Jarvis dentro del panel corre con Gemini (rápido y barato). Claude trabaja desde las sesiones, no dentro del panel, salvo que autoricen usar la API de Claude con costo.
+
+## 8. Agentes especializados por escritorio (de la lista instalada)
+
+Hay ~276 agentes personalizados instalados por plugins. Hasta el 22/11 se usaron casi solo agentes generales (Sonnet) para leer y analizar. Desde ahora cada escritorio delega en estos, que traen el oficio armado (el número que muestra la lista es lo que pesa cada definición en el contexto):
+
+| Escritorio | Agentes a usar |
+|---|---|
+| Dirección | `agentic-council:Steward` (sintetiza), `agentic-council:Strategist` (alcance y prioridad), `agentic-council:Skeptic` (abogado del diablo), `mind-plus-plus:specialist-judge` |
+| Análisis | `mind-plus-plus:marketing-bi-insights`, `marketing-bi-media-analytics`, `marketing-social-analyst`, `windsor-ai:marketing-analyst` (si se conecta), `agent-architecture-designer` «Detektyw danych» (EDA) |
+| Redes y contenido | `agent-architecture-designer` «Strateg Tresci Social» y «Pisarz w Twoim Glosie» + «Straznik Glosu» (voz del dueño), `mind-plus-plus:marketing-social-creator`, `marketing-creative-copywriter`, `brand-voice:content-generation`, `brand-voice:quality-assurance` |
+| Diseño y animación | `a1-gallery:design-researcher`, `agent-architecture-designer` «Architekt wnetrz aplikacji» (CSS y tokens) y «Kurator cyfrowej galerii» (referencias), `fairmind-design:fairmind-accessibility-orchestrator`, `agent-protocols:accessibility-specialist` |
+| SEO y landings | `searchfit-seo:seo-auditor`, `searchfit-seo:content-strategist`, `searchfit-seo:competitor-analyzer`, `ai-advisors:ai-visibility-auditor`, `web-vitals-auditor:perf-forensics` |
+| Bots y captación | `agent-architecture-designer` «Traktuje prompt jak kod» (prompts medidos) y «Architekt aplikacji LLM», `agentic-council:Oracle` |
+| Ingeniería | `agent-protocols:code-reviewer`, `agent-protocols:security-auditor`, `agent-protocols:test-engineer`, `backend-design:incident-thinker`, `backend-design:schema-reviewer`, `claude-security:claude-security` (revisión de seguridad completa) |
+| Asistente (Jarvis) | `mind-plus-plus:marketing-client-services-assistant` como modelo de resumen diario |
+
+No sirven para este negocio (no se usan): recetas, CV y entrevistas, Kubernetes, Salesforce, finanzas de EE. UU., payroll de Brasil, IoT, etc. Conviene desactivar esos plugins para que no ocupen contexto en cada mensaje (decisión de los dueños; se hace desde la configuración de plugins).
+
+## 9. Herramientas de los videos (veredicto 22/11, informe N)
+
+| Herramienta | Veredicto | Por qué |
+|---|---|---|
+| OmniRoute | No usar | Proxy que ve todo y guarda claves; datos de prospectos irían a proveedores gratis; rotar cuentas viola términos; necesita servidor propio |
+| Claude-Mem | No usar | Memoria local que se pierde en la nube, manda la actividad a un modelo externo, telemetría; ya tenemos `cerebro/` y 3 plugins de memoria |
+| Headroom | No usar por ahora | Proxy local (no corre en la nube), ahorro real 15–57 %, pierde detalle; ya hay 4 compresores instalados |
+| Claude Code Setup | Usar con cuidado | Oficial de Anthropic, solo lectura; sus sugerencias son ideas, no se instalan a ciegas |
+| Task Observer | Usar con cuidado (ya instalado) | Propone mejoras a skills y las aprueba una persona; no debe reescribir las `kocos-*`; sus registros no deben guardar datos de prospectos |
+
+Los 8 videos los analiza otro agente (informe M); se suman acá al terminar.
