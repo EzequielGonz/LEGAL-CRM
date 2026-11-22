@@ -99,3 +99,11 @@ Pedido del dueño: «Jarvis lo mismo, antes estaba con gráficos de estadística
 ### Pruebas
 
 - `tests/unitarias/jarvis-tablero.test.ts`: días de Argentina, camino del gráfico, proporciones, nombre corto, tarjetas, carteles, acciones nuevas, operaciones del catálogo y prompt v1.2.
+- `respuestaSinIA`: sin clave de IA (como en las vistas previas) o con el tope de gasto, «¿cómo viene la semana?» se contesta con los números del tablero y una tarjeta de barras; cualquier otro pedido explica por qué no puede pensar la respuesta. Nunca inventa.
+
+### Verificado en la vista previa de la rama `rediseno5/parte9` (22/11)
+
+- Capturas a 1440 y 390 del orbe (con contador y la etiqueta «Jarvis Ctrl J» al pasar el mouse), del modo Jarvis abierto con el bento y los gráficos con datos reales, de una respuesta de solo lectura («¿cómo viene la semana?») con su tarjeta, y de `/asistente`.
+- Teclado: Ctrl+J abre, el foco va al campo de texto, Tab no sale del diálogo, Esc cierra y el foco vuelve al orbe. Con «reducir movimiento» todo aparece quieto en su valor final. Sin desborde horizontal en 390. En consola, solo el aviso de la barra de Vercel de las vistas previas.
+- No se confirmó ninguna propuesta (la vista previa comparte base con producción).
+- No verificado: la charla con la IA de verdad (la vista previa no tiene la clave de Gemini), el dictado y la voz en un navegador con micrófono y parlantes.
