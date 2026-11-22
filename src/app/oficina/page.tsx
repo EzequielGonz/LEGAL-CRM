@@ -5,7 +5,6 @@ import { requirePageSession } from "@/lib/acceso/pagina";
 import { Oficina } from "@/components/cerebro/oficina";
 import { Clasico } from "@/components/premium";
 import { leerOficina } from "@/lib/oficina/servidor";
-import { CabeceraSector, EntradasSectores } from "@/components/cerebro/oficina-sectores";
 import { esSector } from "@/lib/oficina/sectores";
 
 export const metadata = { title: "Oficina de agentes" };
@@ -18,7 +17,7 @@ const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500", "700"],
  * Oficina de agentes (22/11): pantalla propia, con la Oficina 3D que antes vivía dentro del
  * Cerebro. Misma escena oscura y mismos datos; la escena 3D se carga perezosa (ssr:false)
  * dentro de `OficinaVisual`. Lo único que escribe: dejar una tarea, «Arrancar ahora» y
- * aprobar o descartar entregas, siempre con un botón.
+ * aprobar o descartar entregas, desde el panel lateral.
  */
 export default async function OficinaPage({ searchParams }: { searchParams: Promise<{ sector?: string | string[] }> }) {
   const sesion = await requirePageSession();
@@ -26,8 +25,7 @@ export default async function OficinaPage({ searchParams }: { searchParams: Prom
   const sp = await searchParams;
   const sector = esSector(sp.sector) ? sp.sector : null;
   const oficina = await leerOficina();
-  const tareas = oficina?.tareas ?? [];
-  return (
+    return (
     <div className={`cz ${fuente.variable} ${mono.variable}`} style={{ ["--cz-f" as string]: fuente.style.fontFamily, ["--cz-mono" as string]: mono.style.fontFamily }}>
       <Clasico cerebro>
         <nav className="cz-top" aria-label="Volver">
@@ -44,13 +42,11 @@ export default async function OficinaPage({ searchParams }: { searchParams: Prom
             <h1>
               Los agentes, <b>trabajando</b>.
             </h1>
-            <p className="cz-lead">Cada equipo tiene su sector: entrá a uno y ves a sus agentes trabajando, cada uno en su tarea. El Cerebro recibe tus órdenes, las reparte y revisa todo antes de que te llegue. Nada se publica sin tu OK.</p>
+            <p className="cz-lead">Cada sector es una sala del edificio: tocala y entrás a ver a sus agentes. Cuando trabajan, llevan sus tareas al Cerebro, en el centro, que revisa todo antes de que te llegue. Nada se publica sin tu OK.</p>
           </div>
         </header>
         <main>
           <div className="cz-in">
-            <EntradasSectores actual={sector} tareas={tareas} />
-            {sector ? <CabeceraSector area={sector} /> : null}
           </div>
           <section id="oficina">
             <div className="cz-in">

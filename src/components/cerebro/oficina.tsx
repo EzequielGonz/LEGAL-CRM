@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { MAX_PEDIDO, pareceDatoPersonal } from "@/lib/bandeja-claude";
 import { OficinaVisual } from "@/components/cerebro/oficina-visual";
+import { pedidoParaSector } from "@/lib/oficina/panel";
 import {
   ETIQUETA_ETAPA,
   NOMBRE_AREA,
@@ -82,19 +83,18 @@ export function Oficina({ inicial, arranqueInicial, sector = null }: { inicial: 
   const [montado, setMontado] = useState(false);
   useEffect(() => setMontado(true), []);
   const formulario = useRef<HTMLFormElement>(null);
-  const enCurso = tareas.filter((t) => ["entrada", "trabajando", "trabada"].includes(etapaDe(t)));
   const esperando = tareas.filter((t) => etapaDe(t) === "esperando_ok");
   const aprobadas = tareas.filter((t) => etapaDe(t) === "aprobada").slice(0, 5);
   const enEntrada = tareas.filter((t) => t.estado === "pendiente" || t.estado === "en_espera").length;
 
-  async function dejarTarea(e: React.FormEvent) {
+  async function dejarTarea(e: React.FormEvent, sala: Area | null) {
     e.preventDefault();
     setAviso(null);
     if (!texto.trim()) return setAviso({ tipo: "err", texto: "Escribí la tarea para la oficina." });
     if (pareceDatoPersonal(texto)) return setAviso({ tipo: "err", texto: "Sacá teléfonos, documentos o correos: la oficina no guarda datos personales." });
     setEnviando(true);
     try {
-      const r = await fetch("/api/oficina", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ perfil, pedido: texto }) });
+      const r = await fetch("/api/oficina", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ perfil, pedido: pedidoParaSector(sala, texto) }) });
       const d = await r.json().catch(() => ({}));
       if (!r.ok) throw new Error(d?.error || "No se pudo guardar la tarea.");
       const ruta: Area[] = d?.tarea?.ruta ?? [];
@@ -135,28 +135,70 @@ export function Oficina({ inicial, arranqueInicial, sector = null }: { inicial: 
     }
   }
 
+  const trabajando = tareas.filter((t) => t.estado === "en_curso").length;
+
+  // El formulario vive en el panel lateral del edificio; recibe la sala abierta para dirigir la tarea a ese sector.
+  function formularioDeTarea(sala: Area | null) {
+    return (
+      <form id="oficina-tarea" ref={formulario} onSubmit={(e) => dejarTarea(e, sala)} className="cz-form" aria-label="Dejar una tarea en la oficina">
+        <label>
+          Perfil
+          <select value={perfil} onChange={(e) => setPerfil(e.target.value)}>
+            {PERFILES.map((p) => (
+              <option key={p.slug} value={p.slug}>
+                {p.nombre}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          {sala && sala !== "direccion" ? `Tarea para ${NOMBRE_AREA[sala]}` : "Tarea para la oficina"}
+          <textarea
+            value={texto}
+            onChange={(e) => setTexto(e.target.value)}
+            rows={4}
+            maxLength={MAX_PEDIDO}
+            placeholder="Ej.: Analizá qué reels de VITA funcionaron este mes y armá la estrategia de la semana que viene con 5 guiones."
+          />
+        </label>
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+          <button className="cz-btn" type="submit" disabled={enviando}>
+            {enviando ? "Ordenando…" : "Dejar en la oficina"}
+          </button>
+          <small className="cz-muted">Gemini la ordena al instante; los agentes la trabajan cuando arranques.</small>
+        </div>
+        {aviso && (
+          <p className={aviso.tipo === "ok" ? "cz-ok" : "cz-err"} role="status">
+            {aviso.texto}
+          </p>
+        )}
+      </form>
+    );
+  }
+
   return (
     <div className="cz-of">
+      <OficinaVisual
+        sector={sector}
+        tareas={tareas}
+        renderEnMarcha={(t) => <TareaEnMarcha key={t.id} t={t} />}
+        renderAprobar={(t) => <TareaParaAprobar key={t.id} t={t} alDecidir={recargar} />}
+        renderFormulario={formularioDeTarea}
+      />
+
       <div className="cz-of-barra">
         <div>
-          <strong>{enEntrada}</strong> en la mesa de entrada · <strong>{tareas.filter((t) => t.estado === "en_curso").length}</strong> trabajando ·{" "}
-          <strong>{esperando.length}</strong> esperando tu OK
+          <strong>{enEntrada}</strong> en la mesa de entrada · <strong>{trabajando}</strong> trabajando · <strong>{esperando.length}</strong> esperando tu OK
           {arranque && (
             <small>
               Último arranque: {TEXTO_ARRANQUE[arranque.estado] ?? arranque.estado}
               {montado ? ` · ${hace(arranque.pedido_at)}` : ""}
             </small>
           )}
+          {aprobadas.length > 0 && <small>Aprobadas hace poco: {aprobadas.map((t) => t.titulo).join(" · ")}</small>}
         </div>
         <div className="cz-of-botones">
-          <button
-            type="button"
-            className="cz-btn sec"
-            onClick={() => {
-              formulario.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-              formulario.current?.querySelector("textarea")?.focus({ preventScroll: true });
-            }}
-          >
+          <button type="button" className="cz-btn sec" onClick={() => window.dispatchEvent(new Event("oficina:tarea"))}>
             Dejar una tarea
           </button>
           <button type="button" className="cz-btn cz-of-arrancar" onClick={arrancar} disabled={arrancando || enEntrada === 0}>
@@ -164,81 +206,6 @@ export function Oficina({ inicial, arranqueInicial, sector = null }: { inicial: 
             {arrancando ? "Arrancando…" : "Arrancar ahora"}
           </button>
         </div>
-      </div>
-
-      <OficinaVisual sector={sector} tareas={tareas} renderEnMarcha={(t) => <TareaEnMarcha key={t.id} t={t} />} renderAprobar={(t) => <TareaParaAprobar key={t.id} t={t} alDecidir={recargar} />} />
-
-      <div className="cz-grid2">
-        <form id="oficina-tarea" ref={formulario} onSubmit={dejarTarea} className="cz-form" aria-label="Dejar una tarea en la oficina">
-          <label>
-            Perfil
-            <select value={perfil} onChange={(e) => setPerfil(e.target.value)}>
-              {PERFILES.map((p) => (
-                <option key={p.slug} value={p.slug}>
-                  {p.nombre}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label>
-            Tarea para la oficina
-            <textarea
-              value={texto}
-              onChange={(e) => setTexto(e.target.value)}
-              rows={4}
-              maxLength={MAX_PEDIDO}
-              placeholder="Ej.: Analizá qué reels de VITA funcionaron este mes y armá la estrategia de la semana que viene con 5 guiones."
-            />
-          </label>
-          <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
-            <button className="cz-btn" type="submit" disabled={enviando}>
-              {enviando ? "Ordenando…" : "Dejar en la oficina"}
-            </button>
-            <small className="cz-muted">Gemini la ordena al instante; los agentes la trabajan cuando arranques.</small>
-          </div>
-          {aviso && (
-            <p className={aviso.tipo === "ok" ? "cz-ok" : "cz-err"} role="status">
-              {aviso.texto}
-            </p>
-          )}
-        </form>
-
-        <div className="cz-card">
-          <header>
-            <h3>En marcha</h3>
-            <small className="cz-muted">{enCurso.length ? `${enCurso.length} ${enCurso.length === 1 ? "tarea" : "tareas"}` : "Nada en marcha"}</small>
-          </header>
-          {enCurso.length ? (
-            <ul className="cz-of-tareas">
-              {enCurso.slice(0, 8).map((t) => (
-                <TareaEnMarcha key={t.id} t={t} />
-              ))}
-            </ul>
-          ) : (
-            <p className="cz-muted">Dejá una tarea y tocá «Arrancar ahora».</p>
-          )}
-        </div>
-      </div>
-
-      <div className="cz-card cz-of-ok">
-        <header>
-          <h3>Esperando tu OK</h3>
-          <small className="cz-muted">Nada se publica ni se aplica sin tu aprobación.</small>
-        </header>
-        {esperando.length ? (
-          <ul className="cz-of-tareas">
-            {esperando.map((t) => (
-              <TareaParaAprobar key={t.id} t={t} alDecidir={recargar} />
-            ))}
-          </ul>
-        ) : (
-          <p className="cz-muted">Cuando los agentes terminen, las entregas aparecen acá para que las revises.</p>
-        )}
-        {aprobadas.length > 0 && (
-          <p className="cz-muted" style={{ marginTop: 6 }}>
-            Aprobadas hace poco: {aprobadas.map((t) => t.titulo).join(" · ")}
-          </p>
-        )}
       </div>
     </div>
   );

@@ -1,36 +1,30 @@
 "use client";
 
 /**
- * La parte visual de la Oficina (22/11): escena 3D con los ocho escritorios,
- * tarjetas flotantes, cámara que vuela al puesto elegido y panel de vidrio
- * con las acciones. Tres capas, de la más completa a la más liviana:
- *  - escena 3D (react-three-fiber, cargada recién cuando hace falta);
- *  - diorama CSS 3D (celular, sin WebGL, movimiento reducido, o mientras carga);
- *  - lista accesible, siempre presente: es la fuente de verdad. La escena y
- *    el diorama son aria-hidden y espejan esa lista.
- * No cambia ninguna regla ni ruta: recibe las tareas ya cargadas y los
- * formularios de aprobar / pedir cambios llegan desde la Oficina.
+ * La Oficina como edificio (22/11). Pedido del dueño: «Así quiero que sea la oficina, no con botones
+ * y cosas así, que lleven todas sus tareas al agente principal, el cerebro». Casa de muñecas 3D de
+ * noche: una sala por sector y el Cerebro en el centro. Se entra a una sala con un clic (la cámara
+ * vuela); clic afuera o Esc vuelve al edificio. A la izquierda, un panel de vidrio con los agentes,
+ * lo que entregaron para tu OK, el formulario para dejar una tarea y la actividad reciente.
+ * Capas, de la más completa a la más liviana:
+ *  - escena 3D (react-three-fiber, perezosa y sin SSR);
+ *  - plano SVG (celular, sin WebGL, o mientras carga);
+ *  - lista accesible de salas y agentes: es la fuente de verdad, el canvas es aria-hidden.
+ * No cambia ninguna regla ni ruta: recibe las tareas ya cargadas.
  */
 import dynamic from "next/dynamic";
-import { puestosDeSector } from "@/lib/oficina/sectores";
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { Diorama } from "@/components/cerebro/oficina-diorama";
-import {
-  COLOR_ESTADO,
-  anuncioDeEntrega,
-  descripcionAccesible,
-  puestosVisuales,
-  vecino,
-  type EstadoVisual,
-  type PuestoVisual,
-  type Vista,
-} from "@/lib/oficina/escena";
-import { ESCRITORIOS, type Area, type TareaOficina } from "@/lib/oficina/reglas";
+import { PlanoEdificio } from "@/components/cerebro/oficina-edificio-css";
+import { anuncioDeEntrega, COLOR_ESTADO, ETIQUETA_VISUAL, type EstadoVisual, type PuestoVisual } from "@/lib/oficina/escena";
+import { SALAS_ORDEN } from "@/lib/oficina/edificio";
+import { actividadReciente, entregasParaOk, hojasParaOk, salasVisuales } from "@/lib/oficina/panel";
+import type { Area, TareaOficina } from "@/lib/oficina/reglas";
+import { NOMBRE_MOTOR, SECTORES } from "@/lib/oficina/sectores";
 
-// La escena 3D se baja solo cuando la Oficina la pide: el resto del panel no la carga.
-const Escena3D = dynamic(() => import("@/components/cerebro/oficina-3d"), { ssr: false, loading: () => null });
+const EscenaEdificio = dynamic(() => import("@/components/cerebro/oficina-edificio-3d"), { ssr: false, loading: () => null });
 
 type Modo = "pendiente" | "3d" | "liviano";
+type Seccion = "agentes" | "ok" | "tarea" | "actividad";
 
 function hayWebGL(): boolean {
   try {
@@ -41,29 +35,39 @@ function hayWebGL(): boolean {
   }
 }
 
-function IconoEstado({ estado }: { estado: EstadoVisual }) {
+function hace(iso: string): string {
+  const min = Math.round((Date.now() - Date.parse(iso)) / 60000);
+  if (!Number.isFinite(min)) return "";
+  if (min < 1) return "recién";
+  if (min < 60) return `hace ${min} min`;
+  const h = Math.round(min / 60);
+  return h < 24 ? `hace ${h} h` : `hace ${Math.round(h / 24)} d`;
+}
+
+function Icono({ estado }: { estado: EstadoVisual }) {
+  const p = { viewBox: "0 0 16 16", width: 13, height: 13, "aria-hidden": true, focusable: false } as const;
   if (estado === "listo")
     return (
-      <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">
+      <svg {...p}>
         <path d="M3 8.5l3.2 3.2L13 4.8" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     );
   if (estado === "trabajando")
     return (
-      <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">
+      <svg {...p}>
         <circle cx="8" cy="8" r="5.5" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="22 12" strokeLinecap="round" />
       </svg>
     );
   if (estado === "en_cola")
     return (
-      <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">
+      <svg {...p}>
         <circle cx="4" cy="8" r="1.6" fill="currentColor" />
         <circle cx="8" cy="8" r="1.6" fill="currentColor" />
         <circle cx="12" cy="8" r="1.6" fill="currentColor" />
       </svg>
     );
   return (
-    <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">
+    <svg {...p}>
       <path d="M3.5 8h9" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
     </svg>
   );
@@ -71,18 +75,28 @@ function IconoEstado({ estado }: { estado: EstadoVisual }) {
 
 export function OficinaVisual({
   tareas,
+  sector = null,
   renderEnMarcha,
   renderAprobar,
-  sector = null,
+  renderFormulario,
 }: {
   tareas: TareaOficina[];
-  /** Con un sector, la sala muestra los puestos de ese sector (guionista, render…) en vez de los 8 escritorios. */
+  /** Sala que se abre al cargar (viene de `?sector=`). */
   sector?: Area | null;
   renderEnMarcha: (t: TareaOficina) => ReactNode;
   renderAprobar: (t: TareaOficina) => ReactNode;
+  /** El formulario de dejar una tarea; recibe la sala actual para dirigirla a ese sector. */
+  renderFormulario: (sala: Area | null) => ReactNode;
 }) {
-  const puestos = useMemo(() => (sector ? puestosDeSector(sector, tareas) : puestosVisuales(tareas)), [tareas, sector]);
-  const [vista, setVista] = useState<Vista>("sala");
+  const salas = useMemo(() => salasVisuales(tareas), [tareas]);
+  const hojas = useMemo(() => hojasParaOk(tareas), [tareas]);
+  const entregas = useMemo(() => entregasParaOk(tareas), [tareas]);
+  const actividad = useMemo(() => actividadReciente(tareas, 6), [tareas]);
+  const enMarcha = useMemo(() => tareas.filter((t) => t.estado === "en_curso"), [tareas]);
+
+  const [sala, setSala] = useState<Area | null>(sector);
+  const [resaltada, setResaltada] = useState<Area | null>(null);
+  const [puestoSel, setPuestoSel] = useState<string | null>(null);
   const [modo, setModo] = useState<Modo>("pendiente");
   const [webgl, setWebgl] = useState(false);
   const [forzado, setForzado] = useState<"3d" | "liviano" | null>(null);
@@ -92,11 +106,13 @@ export function OficinaVisual({
   const [pausa, setPausa] = useState(false);
   const [enPantalla, setEnPantalla] = useState(true);
   const [pestanaVisible, setPestanaVisible] = useState(true);
+  const [panelAbierto, setPanelAbierto] = useState(true);
+  const [abiertas, setAbiertas] = useState<Record<Seccion, boolean>>({ agentes: true, ok: true, tarea: false, actividad: true });
+  const [montado, setMontado] = useState(false);
   const [anuncio, setAnuncio] = useState("");
   const raiz = useRef<HTMLDivElement>(null);
-  const panelRef = useRef<HTMLElement>(null);
-  const marcoRef = useRef<HTMLDivElement>(null);
-  const botones = useRef<Partial<Record<Area, HTMLButtonElement | null>>>({});
+  const volverRef = useRef<HTMLButtonElement>(null);
+  const botonesSala = useRef<Partial<Record<Area, HTMLButtonElement | null>>>({});
   const anteriores = useRef<PuestoVisual[] | null>(null);
   const ultimoAnuncio = useRef(0);
 
@@ -109,7 +125,9 @@ export function OficinaVisual({
       setReducido(rm.matches);
     };
     leer();
+    setMontado(true);
     setWebgl(hayWebGL());
+    setPanelAbierto(!mq.matches);
     mq.addEventListener("change", leer);
     rm.addEventListener("change", leer);
     return () => {
@@ -119,9 +137,13 @@ export function OficinaVisual({
   }, []);
 
   useEffect(() => {
-    const por = forzado ?? (webgl && !movil && !reducido ? "3d" : "liviano");
+    const por = forzado ?? (webgl && !movil ? "3d" : "liviano");
     setModo(por === "3d" && !webgl ? "liviano" : por);
-  }, [forzado, webgl, movil, reducido]);
+  }, [forzado, webgl, movil]);
+
+  useEffect(() => {
+    if (modo !== "3d") setListo3d(false);
+  }, [modo]);
 
   // La escena pausa cuando sale de pantalla o la pestaña queda oculta.
   useEffect(() => {
@@ -137,207 +159,262 @@ export function OficinaVisual({
     };
   }, []);
 
-  // Aviso a lectores de pantalla cuando un escritorio entrega, como mucho uno cada 10 s.
+  // Aviso a lectores de pantalla cuando un puesto entrega, como mucho uno cada 10 s.
   useEffect(() => {
-    const msg = anuncioDeEntrega(anteriores.current, puestos);
-    anteriores.current = puestos;
+    const todos = SALAS_ORDEN.flatMap((a) => salas[a].puestos);
+    const msg = anuncioDeEntrega(anteriores.current, todos);
+    anteriores.current = todos;
     if (msg && Date.now() - ultimoAnuncio.current > 10000) {
       ultimoAnuncio.current = Date.now();
       setAnuncio(msg);
     }
-  }, [puestos]);
+  }, [salas]);
 
-  const elegida = vista !== "sala" && vista !== "cenital" ? puestos.find((p) => p.area === vista) ?? null : null;
-
-  const ir = useCallback((v: Vista) => {
-    setVista(v);
+  // El botón «Dejar una tarea» de la barra abre ese tramo del panel.
+  useEffect(() => {
+    const abrir = () => {
+      setPanelAbierto(true);
+      setAbiertas((a) => ({ ...a, tarea: true }));
+      requestAnimationFrame(() => {
+        const f = raiz.current?.querySelector<HTMLTextAreaElement>("#oficina-tarea textarea");
+        f?.scrollIntoView({ block: "nearest" });
+        f?.focus({ preventScroll: true });
+      });
+    };
+    window.addEventListener("oficina:tarea", abrir);
+    return () => window.removeEventListener("oficina:tarea", abrir);
   }, []);
 
-  const mover = useCallback(
-    (delta: 1 | -1) => {
-      if (elegida) return setVista(vecino(elegida.area, delta));
-      setVista(delta === 1 ? ESCRITORIOS[0].area : ESCRITORIOS[ESCRITORIOS.length - 1].area);
+  const cambiarUrl = useCallback((a: Area | null) => {
+    try {
+      const u = new URL(window.location.href);
+      if (a) u.searchParams.set("sector", a);
+      else u.searchParams.delete("sector");
+      window.history.replaceState(window.history.state, "", u.toString());
+    } catch {
+      /* sin historial: no pasa nada */
+    }
+  }, []);
+
+  const entrar = useCallback(
+    (a: Area) => {
+      setSala(a);
+      setPuestoSel(null);
+      cambiarUrl(a);
+      requestAnimationFrame(() => volverRef.current?.focus({ preventScroll: true }));
     },
-    [elegida],
+    [cambiarUrl],
   );
 
-  const cerrar = useCallback(() => {
-    const area = elegida?.area;
-    setVista("sala");
-    if (area) requestAnimationFrame(() => botones.current[area]?.focus());
-  }, [elegida]);
+  const salir = useCallback(() => {
+    const antes = sala;
+    setSala(null);
+    setPuestoSel(null);
+    cambiarUrl(null);
+    if (antes) requestAnimationFrame(() => botonesSala.current[antes]?.focus({ preventScroll: true }));
+  }, [sala, cambiarUrl]);
 
-  // Al abrir el panel con el teclado, el foco va al panel.
-  useEffect(() => {
-    if (elegida) panelRef.current?.focus({ preventScroll: true });
-  }, [elegida?.area]); // eslint-disable-line react-hooks/exhaustive-deps
+  const alElegirSala = useCallback(
+    (a: Area | null) => {
+      if (a) entrar(a);
+      else if (sala) salir();
+    },
+    [entrar, salir, sala],
+  );
 
   function teclas(e: React.KeyboardEvent) {
     const t = e.target as HTMLElement;
     if (t.closest("textarea, input, select")) return;
-    if (e.key === "Escape" && vista !== "sala") {
+    if (e.key === "Escape" && sala) {
       e.preventDefault();
-      cerrar();
-    } else if (e.key === "ArrowRight" && elegida) {
-      e.preventDefault();
-      mover(1);
-    } else if (e.key === "ArrowLeft" && elegida) {
-      e.preventDefault();
-      mover(-1);
+      salir();
     }
   }
 
-  // Si se vuelve a la versión liviana, la próxima escena 3D arranca de cero.
-  useEffect(() => {
-    if (modo !== "3d") setListo3d(false);
-  }, [modo]);
-
   const escena3d = modo === "3d";
   const animar = !pausa && !reducido;
-  const tareaPorId = (id: string) => tareas.find((t) => t.id === id);
+  const alta = sala ? salas[sala] : null;
+  const activos = useMemo(
+    () =>
+      SALAS_ORDEN.flatMap((a) => salas[a].puestos.map((p, j) => ({ a, j, p }))).filter((x) => x.p.estado === "trabajando" || x.p.estado === "listo"),
+    [salas],
+  );
+  const totalTrabajando = activos.filter((x) => x.p.estado === "trabajando").length;
+  const [verTodos, setVerTodos] = useState(false);
+  const completa = alta ? alta.puestos.map((p, j) => ({ a: alta.area, j, p })) : activos;
+  const lista = verTodos || alta ? completa : completa.slice(0, 5);
+
+  const alternar = (s: Seccion) => setAbiertas((a) => ({ ...a, [s]: !a[s] }));
 
   return (
-    <div className={`cz-of3 ${pausa || reducido ? "quieta" : ""}`} ref={raiz} onKeyDown={teclas}>
-      <div className="cz-of3-marco" ref={marcoRef}>
-      <div className="cz-of3-escena" data-modo={modo} data-vista={vista === "sala" || vista === "cenital" ? vista : "puesto"} data-listo={listo3d ? "1" : "0"}>
-        {(!escena3d || !listo3d) && <Diorama puestos={puestos} vista={vista} conPanel={!!elegida} alElegir={ir} />}
+    <div className={`cz-ed ${pausa || reducido ? "quieta" : ""}`} ref={raiz} onKeyDown={teclas}>
+      {/* Fuente de verdad para teclado y lector de pantalla: una entrada por sala. */}
+      <ul className="cz-sr" aria-label="Salas del edificio">
+        {SALAS_ORDEN.map((a) => {
+          const v = salas[a];
+          const resumen =
+            a === "direccion"
+              ? `${hojas} ${hojas === 1 ? "entrega espera" : "entregas esperan"} tu OK`
+              : `${v.trabajando} ${v.trabajando === 1 ? "agente trabajando" : "agentes trabajando"} de ${v.puestos.length}`;
+          return (
+            <li key={a}>
+              <button
+                type="button"
+                ref={(el) => {
+                  botonesSala.current[a] = el;
+                }}
+                aria-pressed={sala === a}
+                onFocus={() => setResaltada(a)}
+                onBlur={() => setResaltada((r) => (r === a ? null : r))}
+                onClick={() => entrar(a)}
+              >
+                {v.titulo}: {resumen}. Enter para entrar, Esc para volver al edificio.
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+
+      <div className="cz-ed-escena" data-modo={modo} data-sala={sala ?? "edificio"} data-listo={listo3d ? "1" : "0"}>
+        {(!escena3d || !listo3d) && <PlanoEdificio salas={salas} sala={sala} resaltada={resaltada} puestoSel={puestoSel} hojas={hojas} animar={animar} alElegirSala={alElegirSala} />}
         {escena3d && (
-          <div className="cz-of3-canvas" aria-hidden="true" style={{ opacity: listo3d ? 1 : 0 }}>
-            <Escena3D
-              puestos={puestos}
-              vista={vista}
-              conPanel={!!elegida}
+          <div className="cz-ed-canvas" aria-hidden="true" style={{ opacity: listo3d ? 1 : 0 }}>
+            <EscenaEdificio
+              salas={salas}
+              hojas={hojas}
+              sala={sala}
+              resaltada={resaltada}
+              puestoSel={puestoSel}
+              conPanel={panelAbierto && !movil}
               animar={animar}
               activa={enPantalla && pestanaVisible}
               reducido={reducido}
-              alElegir={ir}
+              alElegirSala={alElegirSala}
+              alElegirPuesto={(a, j) => setPuestoSel(`${a}:${j}`)}
               alListo={() => setListo3d(true)}
             />
           </div>
         )}
 
-        <div className="cz-of3-controles" role="group" aria-label="Vista de la oficina">
-          <button type="button" className="cz-of3-b" aria-pressed={vista === "sala"} onClick={() => ir("sala")}>
-            Sala
+        {sala && (
+          <button ref={volverRef} type="button" className="cz-ed-volver" onClick={salir}>
+            <span aria-hidden="true">←</span> Edificio
           </button>
-          <button type="button" className="cz-of3-b" aria-pressed={vista === "cenital"} onClick={() => ir("cenital")}>
-            Ver toda la oficina
-          </button>
-          <span className="sep solo-pc" aria-hidden="true" />
-          <button type="button" className="cz-of3-b solo-pc" onClick={() => mover(-1)} aria-label="Escritorio anterior">
-            <span aria-hidden="true">‹</span> Anterior
-          </button>
-          <button type="button" className="cz-of3-b solo-pc" onClick={() => mover(1)} aria-label="Escritorio siguiente">
-            Siguiente <span aria-hidden="true">›</span>
-          </button>
-        </div>
+        )}
 
-        <details className="cz-of3-ajustes">
-          <summary>Ajustes de la vista</summary>
+        <aside className={`cz-ed-panel${panelAbierto ? " abierto" : ""}`} aria-label="Agentes, entregas y actividad">
+          <button type="button" className="cz-ed-panel-t" aria-expanded={panelAbierto} onClick={() => setPanelAbierto((v) => !v)}>
+            <span className="logo" aria-hidden="true" />
+            <span className="txt">
+              <b>{alta ? alta.titulo : "Oficina"}</b>
+              <small>
+                {totalTrabajando} {totalTrabajando === 1 ? "agente trabajando" : "agentes trabajando"}
+                {hojas > 0 ? ` · ${hojas} para tu OK` : ""}
+              </small>
+            </span>
+            <span className="flecha" aria-hidden="true">
+              {panelAbierto ? "▾" : "▸"}
+            </span>
+          </button>
+
+          {panelAbierto && (
+            <div className="cz-ed-panel-c">
+              {alta ? <p className="bajada">{alta.bajada}</p> : <p className="bajada">Tocá una sala para entrar. Los agentes llevan sus tareas al Cerebro, en el centro.</p>}
+
+              <Tramo id="ok" titulo="Para tu OK en el Cerebro" nota={String(entregas.length)} abierto={abiertas.ok} alternar={() => alternar("ok")} destaca={entregas.length > 0}>
+                {entregas.length ? (
+                  <ul className="cz-of-tareas cz-ed-tareas">{entregas.map((t) => renderAprobar(t))}</ul>
+                ) : (
+                  <p className="vacio">Cuando los agentes terminen, las entregas se apilan en el escritorio del Cerebro y aparecen acá.</p>
+                )}
+                {enMarcha.length > 0 && (
+                  <>
+                    <h4>En marcha</h4>
+                    <ul className="cz-of-tareas cz-ed-tareas">{enMarcha.slice(0, 5).map((t) => renderEnMarcha(t))}</ul>
+                  </>
+                )}
+              </Tramo>
+
+              <Tramo id="agentes" titulo={alta ? "Agentes de la sala" : "Agentes en marcha"} nota={String(completa.length)} abierto={abiertas.agentes} alternar={() => alternar("agentes")}>
+                {lista.length === 0 ? (
+                  <p className="vacio">Nadie trabajando ahora. Dejá una tarea y los agentes salen a buscarla.</p>
+                ) : (
+                  <ul className="agentes">
+                    {lista.map(({ a, j, p }) => (
+                      <FilaAgente
+                        key={`${a}:${j}`}
+                        p={p}
+                        sector={a}
+                        conSector={!alta}
+                        sel={puestoSel === `${a}:${j}`}
+                        alElegir={() => {
+                          const k = `${a}:${j}`;
+                          setPuestoSel((s) => (s === k ? null : k));
+                          if (sala !== a) entrar(a);
+                        }}
+                      />
+                    ))}
+                  </ul>
+                )}
+                {!alta && completa.length > 5 && (
+                  <button type="button" className="mas" aria-expanded={verTodos} onClick={() => setVerTodos((v) => !v)}>
+                    {verTodos ? "Ver menos" : `Ver los ${completa.length}`}
+                  </button>
+                )}
+                {!alta && <p className="libres">{SALAS_ORDEN.reduce((n, a) => n + salas[a].puestos.length, 0) - activos.length} agentes libres.</p>}
+              </Tramo>
+
+              <Tramo id="tarea" titulo={alta && alta.area !== "direccion" ? `Dejar una tarea a ${alta.titulo}` : "Dejar una tarea"} abierto={abiertas.tarea} alternar={() => alternar("tarea")}>
+                {renderFormulario(sala)}
+              </Tramo>
+
+              <Tramo id="actividad" titulo="Actividad" nota={String(actividad.length)} abierto={abiertas.actividad} alternar={() => alternar("actividad")}>
+                {actividad.length ? (
+                  <ol className="actividad">
+                    {actividad.map((x) => (
+                      <li key={x.id}>
+                        <span className="t">{x.titulo}</span>
+                        <small>
+                          {x.sector} · {x.etapa}
+                          {montado ? ` · ${hace(x.updated_at)}` : ""}
+                        </small>
+                      </li>
+                    ))}
+                  </ol>
+                ) : (
+                  <p className="vacio">Todavía no hay tareas.</p>
+                )}
+              </Tramo>
+            </div>
+          )}
+        </aside>
+
+        <p className="cz-ed-pista" aria-hidden="true">
+          {sala ? "Clic afuera o Esc para volver al edificio" : "Tocá una sala para entrar"}
+        </p>
+        <details className="cz-ed-ajustes">
+          <summary>Vista</summary>
           <div>
-            <button type="button" className="cz-of3-b" aria-pressed={pausa || reducido} onClick={() => setPausa((v) => !v)} disabled={reducido}>
+            <button type="button" aria-pressed={pausa || reducido} onClick={() => setPausa((v) => !v)} disabled={reducido}>
               {pausa || reducido ? "Animaciones en pausa" : "Pausar animaciones"}
             </button>
             {webgl && (
-              <button type="button" className="cz-of3-b" onClick={() => setForzado(escena3d ? "liviano" : "3d")}>
-                {escena3d ? "Ver versión liviana" : "Ver en 3D"}
+              <button type="button" onClick={() => setForzado(escena3d ? "liviano" : "3d")}>
+                {escena3d ? "Ver plano liviano" : "Ver en 3D"}
               </button>
             )}
           </div>
         </details>
-
-      </div>
-        {elegida && (
-          <aside ref={panelRef} tabIndex={-1} className={`cz-of3-panel e-${elegida.estado}`} aria-label={`Escritorio ${elegida.nombre}`} style={{ ["--tono" as string]: elegida.color }}>
-            <header>
-              <div>
-                <h3>{elegida.nombre}</h3>
-                <span className={`cz-of3-chip ${elegida.estado}`}>
-                  <IconoEstado estado={elegida.estado} />
-                  {elegida.chip}
-                </span>
-              </div>
-              <button type="button" className="cz-of3-b" onClick={cerrar} aria-label="Cerrar el panel del escritorio">
-                Cerrar
-              </button>
-            </header>
-            <p className="que">{elegida.queHace}</p>
-            <div className="barra" role="progressbar" aria-label="Avance" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(elegida.progreso * 100)} aria-valuetext={`${Math.round(elegida.progreso * 100)} %`}>
-              <span style={{ width: `${Math.round(elegida.progreso * 100)}%` }} />
-            </div>
-            <p className="rol">{elegida.rol}.</p>
-            <div className="equipo" aria-label="Agentes de este escritorio">
-              {elegida.equipo.map((n) => (
-                <span key={n}>{n}</span>
-              ))}
-            </div>
-            {elegida.enMarcha.length > 0 && (
-              <div role="group" aria-label="Tareas en marcha">
-                <h4>En marcha</h4>
-                <ul className="cz-of-tareas">{elegida.enMarcha.map((id) => tareaPorId(id)).filter((t): t is TareaOficina => !!t).map((t) => <ListaItem key={t.id}>{renderEnMarcha(t)}</ListaItem>)}</ul>
-              </div>
-            )}
-            {elegida.listas.length > 0 && (
-              <div role="group" aria-label="Para tu OK" className="cz-of-ok">
-                <h4>Para tu OK</h4>
-                <ul className="cz-of-tareas">{elegida.listas.map((id) => tareaPorId(id)).filter((t): t is TareaOficina => !!t).map((t) => <ListaItem key={t.id}>{renderAprobar(t)}</ListaItem>)}</ul>
-              </div>
-            )}
-            {elegida.enMarcha.length === 0 && elegida.listas.length === 0 && elegida.ultima && <p className="ultima">Lo último que dejó: «{elegida.ultima.length > 140 ? `${elegida.ultima.slice(0, 137)}…` : elegida.ultima}»</p>}
-            <footer>
-              <button type="button" className="cz-of3-b" onClick={() => mover(-1)}>
-                <span aria-hidden="true">‹</span> Anterior
-              </button>
-              <button type="button" className="cz-of3-b" onClick={() => mover(1)}>
-                Siguiente <span aria-hidden="true">›</span>
-              </button>
-            </footer>
-          </aside>
-        )}
       </div>
 
-      <p className="cz-of3-leyenda" aria-hidden="true">
+      <p className="cz-ed-leyenda" aria-hidden="true">
         <span style={{ ["--c" as string]: COLOR_ESTADO.trabajando }}>Trabajando</span>
         <span style={{ ["--c" as string]: COLOR_ESTADO.listo }}>Listo para tu OK</span>
         <span style={{ ["--c" as string]: COLOR_ESTADO.libre }}>Libre</span>
-        <small>Tocá un escritorio para verlo de cerca. Con el teclado, las flechas pasan de uno a otro y Esc vuelve a la sala.</small>
+        <span style={{ ["--c" as string]: "#E8A87C" }}>Claude</span>
+        <span style={{ ["--c" as string]: "#7FA7F2" }}>Gemini</span>
+        <span style={{ ["--c" as string]: "#7CC39A" }}>Panel</span>
       </p>
-
-      {/* La fuente de verdad: lista accesible, siempre presente. */}
-      <ul className="cz-of3-lista" aria-label="Escritorios de la oficina">
-        {puestos.map((p) => (
-          <li key={p.area}>
-            <button
-              type="button"
-              ref={(el) => {
-                botones.current[p.area] = el;
-              }}
-              className={`cz-of3-item ${p.estado} ${vista === p.area ? "activa" : ""}`}
-              style={{ ["--tono" as string]: p.color }}
-              aria-pressed={vista === p.area}
-              aria-label={descripcionAccesible(p)}
-              onClick={() => {
-                ir(vista === p.area ? "sala" : p.area);
-                // En el celular la escena queda arriba: se la trae a la vista.
-                marcoRef.current?.scrollIntoView({ block: "nearest", behavior: reducido ? "auto" : "smooth" });
-              }}
-            >
-              <span className="nombre">
-                <i className="punto" aria-hidden="true" />
-                {p.nombre}
-              </span>
-              <span className={`cz-of3-chip ${p.estado}`}>
-                <IconoEstado estado={p.estado} />
-                {p.chip}
-              </span>
-              <span className="que">{p.queHace}</span>
-              <span className="barra" aria-hidden="true">
-                <span style={{ width: `${Math.round(p.progreso * 100)}%` }} />
-              </span>
-            </button>
-          </li>
-        ))}
-      </ul>
 
       <p className="cz-sr" role="status" aria-live="polite">
         {anuncio}
@@ -346,7 +423,45 @@ export function OficinaVisual({
   );
 }
 
-function ListaItem({ children }: { children: ReactNode }) {
-  // Las tareas de la Oficina ya traen su propio <li>; acá solo se agrupan.
-  return <>{children}</>;
+function Tramo({ id, titulo, nota, abierto, alternar, destaca, children }: { id: string; titulo: string; nota?: string; abierto: boolean; alternar: () => void; destaca?: boolean; children: ReactNode }) {
+  return (
+    <div className={`cz-ed-tramo${destaca ? " destaca" : ""}`}>
+      <h3>
+        <button type="button" aria-expanded={abierto} aria-controls={`tramo-${id}`} onClick={alternar}>
+          <span>{titulo}</span>
+          {nota !== undefined && <em>{nota}</em>}
+          <i aria-hidden="true">{abierto ? "−" : "+"}</i>
+        </button>
+      </h3>
+      {abierto && <div id={`tramo-${id}`}>{children}</div>}
+    </div>
+  );
+}
+
+function FilaAgente({ p, sector, conSector, sel, alElegir }: { p: PuestoVisual; sector: Area; conSector: boolean; sel: boolean; alElegir: () => void }) {
+  const motor = p.equipo[0] ?? "";
+  return (
+    <li className={`fila e-${p.estado}${sel ? " sel" : ""}`}>
+      <button type="button" aria-expanded={sel} onClick={alElegir}>
+        <i className="punto" style={{ background: COLOR_ESTADO[p.estado] }} aria-hidden="true" />
+        <span className="n">
+          <b>{p.nombre}</b>
+          <small>{conSector ? SECTORES[sector].titulo : motor}</small>
+        </span>
+        <span className={`est ${p.estado}`}>
+          <Icono estado={p.estado} />
+          {ETIQUETA_VISUAL[p.estado]}
+        </span>
+      </button>
+      {sel && (
+        <div className="det">
+          <p>{p.rol}.</p>
+          <p className="mot">
+            {motor || `Corre con ${NOMBRE_MOTOR.panel}`}
+            {p.tarea ? <> · en «{p.tarea}»</> : null}
+          </p>
+        </div>
+      )}
+    </li>
+  );
 }
