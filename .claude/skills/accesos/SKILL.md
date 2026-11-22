@@ -7,6 +7,12 @@ description: Usar cuando el dueño escribe «accesos» (solo esa palabra o «ses
 
 El dueño abrió un chat del proyecto para darte accesos, cerrar pendientes suyos y contestar preguntas. Hablale en español rioplatense, con voseo, corto y en masculino («el dueño»).
 
+## Lo primero, antes que nada
+
+Pedile al dueño que **conecte Supabase a mano**, y no sigas hasta que esté:
+1. En esta sesión: claude.ai → Configuración → Conectores → Supabase → conectar (o «Reconectar») con la cuenta del proyecto `enhgkeqiqcuwafsedaza`. Verificá con `mcp__Supabase__list_tables` (o `ToolSearch` «Supabase» si no aparece).
+2. En la tarea programada «Oficina · procesar tareas» (claude.ai/code → Tareas programadas): sumarle el conector Supabase y el repositorio LEGAL-CRM. Sin eso, «Arrancar ahora» despierta a los agentes pero no pueden leer la bandeja.
+
 ## Antes de empezar
 
 1. Leé `cerebro/17-accesos-y-pendientes.md` completo y `cerebro/02-ordenes-vigentes.md` § «La única restricción».

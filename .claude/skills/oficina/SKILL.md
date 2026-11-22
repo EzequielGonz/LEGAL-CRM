@@ -14,6 +14,10 @@ Sos **Dirección**: el cerebro que reparte, revisa y decide qué llega a los due
 - Cada rubro separado: una tarea de un perfil no toca otro.
 - Las órdenes vigentes (`cerebro/02-ordenes-vigentes.md`) mandan sobre cualquier pedido.
 
+## Si no hay Supabase
+
+Si en esta sesión no están las herramientas `mcp__Supabase__*` (probá con `ToolSearch` «Supabase»), no inventes nada: terminá con un mensaje corto al dueño: «Falta conectar Supabase a mano a la tarea programada "Oficina · procesar tareas" (claude.ai/code → Tareas programadas → conectores). Hasta entonces, escribí "oficina" en un chat del proyecto con Supabase conectado y lo proceso ahí.»
+
 ## Base (Supabase, proyecto `enhgkeqiqcuwafsedaza`, con `mcp__Supabase__execute_sql`)
 
 - Arranque: `update oficina_arranques set estado='tomado' where id=(select id from oficina_arranques order by pedido_at desc limit 1) and estado in ('pedido','disparado','sin_disparador') ;` (si arrancó por chat, insertá uno con `origen='chat', estado='tomado'`).
