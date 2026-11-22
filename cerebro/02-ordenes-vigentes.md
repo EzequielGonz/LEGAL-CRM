@@ -286,3 +286,4 @@ Todo lo demás son **decisiones de negocio** del dueño (abajo), no trabas de pr
 - **La Oficina como el video 1** (oficina 3D con agentes trabajando en escritorios), animada; el cerebro y el panel con la misma calidad. **Jarvis tiene que existir** de verdad en el panel.
 - Usar referencias de otras páginas y CRM, y todas las skills, plugins, conectores y agentes, con los mejores modelos.
 - Después: **propuesta de gestión de teléfonos** desde la computadora, con reconexión automática de líneas caídas (o aviso y reconexión en un toque).
+- **Jarvis, secretario de todo el panel (22/11 cierre):** «tiene que ayudarme en todo el panel… como el asistente que está ahora pero mejorado nivel 1000». Se construye sobre el asistente actual (sin borrarlo): presente en cada pantalla, sabe dónde estás, da el parte del día, busca, resume, redacta borradores, lleva a la pantalla correcta y crea tareas, siempre con confirmación para lo que cambia algo. No lanza campañas ni publica.
