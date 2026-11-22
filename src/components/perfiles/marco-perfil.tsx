@@ -3,11 +3,11 @@ import { marcasResueltas } from "@/lib/marca-servidor";
 import { MenuPerfil } from "@/components/menu-perfil";
 import { BarraSalud } from "@/components/salud/barra-salud";
 import { EncabezadoPanel, PestanasSeccion } from "@/components/perfiles/encabezado-panel";
-import type { SlugPerfil } from "@/lib/marca";
+import { marcaDe, type SlugPerfil } from "@/lib/marca";
 import { variablesAcento } from "@/lib/acento";
 import { EnfocarAncla } from "@/components/ui/enfocar-ancla";
 import { MasOpciones, NivelProvider } from "@/components/nivel/nivel";
-import { AsistentePanel } from "@/components/asistente/asistente-panel";
+import { Jarvis } from "@/components/jarvis/jarvis";
 import { leerMenuPersonal } from "@/lib/personalizacion/servidor";
 import { EfectosVidrio } from "@/components/ui/efectos-vidrio";
 import { RUBRO_IDS } from "@/lib/rubros";
@@ -18,7 +18,7 @@ import { AvisoCodigoAnterior } from "@/components/acceso/aviso-codigo-anterior";
  * Marco común de los paneles (renovado 18/10): paleta del perfil
  * (`data-tema`, y el acento elegido en el lápiz si hay uno), menú de seis
  * secciones, pestañas de la sección actual, «Más opciones» al pie y el
- * asistente IA. Arriba de cada pantalla, la barra de salud (solo cuando algo
+ * asistente IA (Jarvis). Arriba de cada pantalla, la barra de salud (solo cuando algo
  * frena la operación), transmitida aparte para no demorar el contenido.
  */
 export async function MarcoPerfil({ slug, children, sinSalud = false }: { slug: SlugPerfil; children: React.ReactNode; sinSalud?: boolean }) {
@@ -71,7 +71,8 @@ export async function MarcoPerfil({ slug, children, sinSalud = false }: { slug: 
         </main>
         <EnfocarAncla />
         <EfectosVidrio />
-        <AsistentePanel slug={slug} />
+        {/* 22/11: Jarvis, el secretario del panel (orbe + hoja lateral), montado una sola vez acá. Reemplaza al panel del asistente; /asistente sigue en «Más». */}
+        <Jarvis slug={slug} nombrePerfil={marca.nombre ?? marcaDe(slug).nombre} />
       </div>
     </NivelProvider>
   );
