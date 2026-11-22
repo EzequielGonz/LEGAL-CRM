@@ -97,3 +97,9 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 - Instalados por el dueño: claude-code-setup, PostHog, Firecrawl, skill-creator y Claude Code Cost. PostHog y Firecrawl se usan solo con OK. No activar la captura de sesiones de PostHog.
 - La API de Claude no está en el panel: no hay clave en Vercel. Claude trabaja con el plan de claude.ai.
 - Falta para que el botón dispare solo: el token de la tarea programada (A1 en `17`).
+
+## 22/11 · Sesión «accesos»
+- Supabase conectado en la sesión (verificado con list_tables).
+- A2 ✅: GA4 y Search Console disponibles por Windsor.ai (4 propiedades, 4 dominios).
+- A3 ✅: Metricool devuelve las 4 marcas y analítica por día.
+- A1 en curso: el dueño arma el disparo por API de la tarea «Oficina · procesar tareas».

@@ -17,8 +17,8 @@ Reglas de la sesión:
 | # | Estado | Qué | Para qué | Cómo |
 |---|---|---|---|---|
 | A1 | ⬜ | Disparo de la Oficina (token de la tarea programada) | Que «Arrancar ahora» del panel despierte a los agentes | En claude.ai/code → Tareas programadas → «Oficina · procesar tareas» (ya creada el 22/11, sin horario): **sumarle el conector Supabase** (sin eso los agentes no leen la bandeja) y el repositorio LEGAL-CRM; después, agregar disparo por API y copiar la dirección y el token. Claude los carga en Vercel como `OFICINA_DISPARO_URL` y `OFICINA_DISPARO_TOKEN` (y `OFICINA_DISPARO_BETA` si la página lo pide) |
-| A2 | ⬜ | Google Search Console y GA4 | Escritorios de Análisis y SEO | Conector de Google (AdCopilot o el kit de Search Console) con la cuenta de Google de las landings |
-| A3 | ⬜ | Analítica de Metricool | Ciclo semanal «publicar → medir → aprender» | Ya está conectado; comprobar que devuelve métricas por marca |
+| A2 | ✅ 22/11 | Google Search Console y GA4 | Escritorios de Análisis y SEO | Resuelto por el conector Windsor.ai: GA4 (4 propiedades) y Search Console (4 dominios: autoskocos, kocosmkt, estudiojuridicovita, comparatuobrasocial). El kit de Search Console y AdCopilot no hacen falta |
+| A3 | ✅ 22/11 | Analítica de Metricool | Ciclo semanal «publicar → medir → aprender» | Comprobado: 4 marcas (Kocos Marketing, Estudio Jurídico Vita, Compara Tu Obra Social, Automotores Kocos) y la analítica devuelve filas por día (VITA, 1–21/11) |
 | A4 | ⬜ | GitHub (conector) | Ingeniería: ramas y PR desde los agentes | Reconectar GitHub en claude.ai (hoy falla con «encabezado mal formado») |
 | A5 | ⬜ | PostHog (plugin instalado) | Embudos y mapas de calor de las landings | Iniciar sesión en PostHog (plan gratis). Uso solo con OK |
 | A6 | ⬜ | Firecrawl (plugin instalado) | Leer marca y precios de la competencia | Clave de API del plan gratis por el formulario seguro (host `api.firecrawl.dev`). Uso solo con OK |
