@@ -105,6 +105,11 @@ function B({ c = 2, f = 1, color, vidrio, children, className, i = 0 }: { c?: nu
 function Cifra({ color, etiqueta, numero, unidad, parte, nota, i = 0, c = 2 }: { color: string; etiqueta: string; numero: number | null; unidad: string; parte?: number | null; nota?: ReactNode; i?: number; c?: number }) {
   return (
     <B c={c} color={color} i={i}>
+      <span className="cz-capas" aria-hidden="true">
+        <i />
+        <i />
+        <i />
+      </span>
       <span className="cz-b__et">{etiqueta}</span>
       <div className="cz-b__cifra">
         <b>{numero == null ? "—" : formatoNumero(numero)}</b>
