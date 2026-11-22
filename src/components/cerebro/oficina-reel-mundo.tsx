@@ -890,7 +890,7 @@ function Orbe({ animar }: { animar: boolean }) {
         <cylinderGeometry args={[1.25, 1.35, 0.12, 40]} />
         <meshStandardMaterial color="#26212f" roughness={0.4} metalness={0.4} />
       </mesh>
-      <mesh position={[0, 0.13, 0]}>
+      <mesh position={[0, 0.13, 0]} rotation={[Math.PI / 2, 0, 0]}>
         <torusGeometry args={[1.18, 0.025, 8, 64]} />
         <meshBasicMaterial color={new THREE.Color(1.6, 1.0, 2.6)} toneMapped={false} />
       </mesh>
