@@ -96,4 +96,17 @@ No sirven para este negocio (no se usan): recetas, CV y entrevistas, Kubernetes,
 | Claude Code Setup | Usar con cuidado | Oficial de Anthropic, solo lectura; sus sugerencias son ideas, no se instalan a ciegas |
 | Task Observer | Usar con cuidado (ya instalado) | Propone mejoras a skills y las aprueba una persona; no debe reescribir las `kocos-*`; sus registros no deben guardar datos de prospectos |
 
-Los 8 videos los analiza otro agente (informe M); se suman acá al terminar.
+### Los 8 videos de Instagram (veredicto 22/11, informe M)
+
+| Video | Qué muestra | Veredicto | Para nuestro negocio |
+|---|---|---|---|
+| 1 · Df2metRMxRX | Oficina 3D con agentes que trabajan en escritorios | Sí, la idea | La «Oficina» de `/cerebro` (§5): un escritorio por área con su estado. No nombra herramientas; es gancho de un curso |
+| 2 · Df-oqE8Tiw_ | Reels programados que aprenden de las estadísticas | Sí | Ciclo semanal publicar → medir en Metricool → guardar qué funcionó en el cerebro. Siempre con revisión de los dueños, sobre todo VITA y Compara Tu Obra Social |
+| 3 · Df-xpsTDAUY | Contenido y estadísticas (carrusel) | Pendiente | Instagram no dejó bajarlo. Si el dueño pasa capturas, se completa. Ya se sabe: estadísticas por Metricool, no por Meta directo |
+| 4 · Df_FX4uxE7t | Webs 2026 con galería 3D | No | Pesado, baja conversión y accesibilidad. Las landings captan; no se adorna lo que tiene que convertir |
+| 5 · Df_jVF6tEfn | Webs inmersivas | Solo inspiración | Para el portafolio de Kocos Marketing, no para landings de captación |
+| 6 · Dfu9iDcgnuY | 5 conectores | Playwright sí ya; Firecrawl y PostHog con su OK; Perplexity y Composio no | Playwright para probar panel y landings en navegador real (ya se usa). PostHog: embudos de las landings (plan gratis). Firecrawl: leer marca de competidores (créditos limitados). Composio pasaría credenciales por un tercero |
+| 7 · Df-EFpbRbN7 | Skill Arena: 100 subagentes compiten | Con su OK y tope | Para cuando corrigen varias veces lo mismo: varias versiones y gana la mejor. Gasta mucho; solo modo rápido. Leer el repo antes de instalar |
+| 8 · Df93dArgY10 | Vocabulario de diseño (bento, glassmorphism, neumorfismo, gradient mesh, parallax) | Sí, como glosario | Bento para el rediseño del panel y la Oficina; cuidar contraste y movimiento reducido |
+
+Lo más valioso: el ciclo de aprendizaje con Metricool (2), el tablero de agentes (1) y el glosario de diseño (8). Varios videos son embudos de cursos («comentá SETUP»); no hace falta comprar nada.

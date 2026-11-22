@@ -60,3 +60,10 @@ general-purpose (paralelo), Explore (búsquedas amplias), Plan, agent-protocols:
 ## Para Cowork / Claude in Chrome (escritorio del dueño)
 
 Lo que necesita su sesión (Business Suite, apps de Instagram, Search Console con su cuenta, QR de Wasender): se le deja un **prompt listo para pegar**, corto y por pasos.
+
+## Evaluadas el 22/11 (videos e informes N y M)
+
+- **No usar:** OmniRoute, Claude-Mem, Headroom (por ahora), Perplexity (pago), Composio (credenciales por un tercero), webs 3D para landings.
+- **Usar:** Playwright (ya se usa), Claude Code Setup (solo ideas), Task Observer (ya instalado, aprueba una persona).
+- **Con OK de los dueños:** PostHog (embudos, plan gratis), Firecrawl (créditos limitados), Skill Arena (con tope de uso).
+- Detalle y motivos: `16-propuesta-empresa-de-agentes.md` §9.
