@@ -9,6 +9,7 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 - **Pedido:** «nada tiene función, es todo decoración»; Oficina como edificio 3D del reel; Contactos con lo perdido; Resumen, Jarvis, Laboratorio y Cerebro que hagan cosas; pulido ultra premium; carga más rápida.
 - **Hecho (5 agentes en copias separadas, integrados en `integracion/rediseno-2211`):** Oficina edificio 3D con salas por sector y agentes que llevan tareas al Cerebro; Contactos con buscador, filtros, acciones por fila y en lote, CSV; Citas con calendario y crear/mover/cancelar; Resumen accionable; estética nueva en «Más»; Jarvis con acciones por pantalla; Laboratorio con simulador y comparación de roles; Cerebro con «Preguntale» y «Enseñale algo» (tabla `cerebro_conocimiento`, migración 0650 aplicada); sombras, tipografía y chat pulidos.
 - **Verificado:** typecheck, lint, 887 pruebas, build. El primer despliegue a producción falló por una caída pasajera de Google Fonts en Vercel (la Preview del mismo commit quedó READY); se republica.
+- **Recorrido en producción (`2dc44a9`):** 30 pantallas en 1440 y 390 px, todas 200, sin errores de consola ni desborde horizontal; un chat abierto con sus mensajes sin errores. Resumen bajó de 2,7 s a 0,8–1,3 s de respuesta (la comparación semanal se guarda 2 min); el resto entre 0,2 y 0,8 s.
 - **Aprendido:** los agentes no ven el panel con sesión; todo lo visual se confirma en el recorrido posterior.
 
 
