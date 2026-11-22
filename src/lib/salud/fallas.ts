@@ -8,6 +8,7 @@
  */
 import { createAdminClient } from "@/lib/supabase/admin";
 import { RUBRO_IDS } from "@/lib/rubros";
+import { filtroRetenidosDelPerfil } from "@/lib/definiciones/retenidos";
 import { rutaDePerfil } from "@/lib/perfil-ruta";
 import type { SlugPerfil } from "@/lib/marca";
 
@@ -35,7 +36,7 @@ export function armarFallas(slug: SlugPerfil, c: { fallidos24h: number; seguimie
   const audios = c.audios24h ?? 0;
   if (audios > 0) lista.push({ clave: "audios", titulo: n(audios, "1 audio no se pudo pasar a texto en las últimas 24 horas", "{n} audios no se pudieron pasar a texto en las últimas 24 horas"), cantidad: audios, accion: "Ver los chats que esperan", href: `/conversaciones?perfil=${slug}&grupo=escribieron`, alcance: "perfil" });
   if (c.archivos > 0) lista.push({ clave: "archivos", titulo: n(c.archivos, "1 archivo recibido todavía no se guardó", "{n} archivos recibidos todavía no se guardaron"), cantidad: c.archivos, accion: "Guardarlos", href: `/incidencias?perfil=${slug}&vista=adjuntos`, alcance: "perfil" });
-  if (c.retenidos > 0) lista.push({ clave: "retenidos", titulo: n(c.retenidos, "1 mensaje entrante quedó retenido por seguridad", "{n} mensajes entrantes quedaron retenidos por seguridad"), cantidad: c.retenidos, accion: "Revisarlos", href: `/incidencias?perfil=${slug}&vista=retenidos`, alcance: "sistema" });
+  if (c.retenidos > 0) lista.push({ clave: "retenidos", titulo: n(c.retenidos, "1 mensaje entrante quedó retenido por seguridad", "{n} mensajes entrantes quedaron retenidos por seguridad"), cantidad: c.retenidos, accion: "Revisarlos", href: `/incidencias?perfil=${slug}&vista=retenidos`, alcance: "perfil" });
   return lista;
 }
 
@@ -52,7 +53,13 @@ export async function leerFallas(slug: SlugPerfil, ahora: Date = new Date()): Pr
     cuenta((s.from("followup_tasks") as any).select("id", { count: "exact", head: true }).eq("rubro_id", rubroId).in("status", ["fallida", "a_revisar", "conflicto", "pendiente"])),
     cuenta((s.from("agent_turn_logs") as any).select("id", { count: "exact", head: true }).eq("rubro_id", rubroId).not("error", "is", null).gte("created_at", desde)),
     cuenta((s.from("message_attachments") as any).select("id", { count: "exact", head: true }).eq("rubro_id", rubroId).in("status", ["pendiente", "error"])),
-    cuenta((s.from("webhook_quarantine") as any).select("id", { count: "exact", head: true }).is("reviewed_at", null)),
+    // 22/11: retenidos del perfil (definición única de `definiciones/retenidos.ts`).
+    (async () => {
+      const f = filtroRetenidosDelPerfil(slug);
+      let q = (s.from("webhook_quarantine") as any).select("id", { count: "exact", head: true }).is("reviewed_at", null);
+      q = f.tipo === "eq" ? q.eq("rubro_id", f.valor) : q.or(f.valor);
+      return cuenta(q);
+    })(),
     cuenta((s.from("messages") as any).select("id, conversations!inner(area)", { count: "exact", head: true }).eq("audio_texto_estado", "error").gte("audio_texto_at", desde).in("conversations.area", AREAS[slug])),
   ]);
   return armarFallas(slug, { fallidos24h, seguimientos, bot24h, archivos, retenidos, audios24h });

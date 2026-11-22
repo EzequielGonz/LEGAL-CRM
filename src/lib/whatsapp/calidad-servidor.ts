@@ -62,7 +62,7 @@ export async function vigilarCalidadLineas(ahora = new Date()): Promise<unknown>
   if (!tocaConsultar(previo.at, ahora)) return "consultado hace menos de 10 min";
   const { data: lineas } = await s.from("profile_lines").select("id, label, rubro_id, credential_key").eq("active", true);
   const nuevo: EstadoCalidad = { at: ahora.toISOString(), lineas: {} };
-  const avisos: string[] = [];
+  const avisos: { texto: string; rubroId: string }[] = [];
   for (const l of (lineas ?? []) as { id: string; label: string; rubro_id: string; credential_key: string }[]) {
     const inf = await consultarEstadoLinea(l.credential_key, { memoria: true });
     const antes = previo.lineas[l.id];
@@ -82,19 +82,19 @@ export async function vigilarCalidadLineas(ahora = new Date()): Promise<unknown>
         pausadas: Array.from(new Set([...(antes?.pausadas ?? []), ...pausadas])),
       };
       if (nuevaBaja || pausadas.length) {
-        avisos.push(`Línea ${l.label}: calidad baja en Meta.${pausadas.length ? ` Se pausó: ${pausadas.join(", ")}.` : " No tenía campañas en curso."}`);
+        avisos.push({ texto: `Línea ${l.label}: calidad baja en Meta.${pausadas.length ? ` Se pausó: ${pausadas.join(", ")}.` : " No tenía campañas en curso."}`, rubroId: l.rubro_id });
       }
     } else {
       nuevo.lineas[l.id] = { label: l.label, rubroId: l.rubro_id, calidad: inf.calidad, desde: null, pausadas: [] };
     }
   }
   await s.from("system_settings").upsert({ key: CLAVE_CALIDAD, value: nuevo as any }, { onConflict: "key" });
-  for (const texto of avisos) {
+  for (const { texto, rubroId } of avisos) {
     try {
-      await sendToDevices({ title: "Calidad baja en una línea de WhatsApp", body: texto, url: "/salud", tag: "calidad-linea", kind: "aviso", eventKey: `calidad:${texto}:${ahora.toISOString().slice(0, 13)}` });
+      await sendToDevices({ title: "Calidad baja en una línea de WhatsApp", body: texto, url: "/salud", tag: "calidad-linea", kind: "aviso", eventKey: `calidad:${texto}:${ahora.toISOString().slice(0, 13)}`, rubroId });
     } catch (err) {
       console.error("[calidad] No se pudo enviar el aviso:", err);
     }
   }
-  return { lineas: Object.values(nuevo.lineas).map((l) => `${l.label}: ${l.calidad ?? "sin dato"}`), avisos };
+  return { lineas: Object.values(nuevo.lineas).map((l) => `${l.label}: ${l.calidad ?? "sin dato"}`), avisos: avisos.map((a) => a.texto) };
 }

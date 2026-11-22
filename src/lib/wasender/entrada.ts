@@ -438,6 +438,7 @@ export async function procesarWebhook(
               url: "/wasender",
               tag: "linea-caida",
               kind: "aviso",
+              rubroId: linea.rubro_id ?? null,
               eventKey: `linea-caida:${linea.id}:${new Date().toISOString().slice(0, 13)}`,
             });
           } catch (err) {

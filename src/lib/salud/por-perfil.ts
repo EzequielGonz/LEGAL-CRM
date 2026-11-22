@@ -19,6 +19,8 @@ const GLOBALES = new Set(["latido", "pausa", "secreto_meta", "cuarentena", "entr
 export function itemsDelPerfil(items: ItemSalud[], slug: string): ItemSalud[] {
   const nombre = NOMBRE[slug] ?? slug;
   return items.filter((i) => {
+    // 22/11: los retenidos son de cada perfil (definición única); solo el control global antiguo, sin perfil, va a todos.
+    if (i.clave === "cuarentena" && i.perfil) return i.perfil === slug;
     if (GLOBALES.has(i.clave)) return true;
     // 13/11 · cada rubro separado: un control con perfil solo se ve en su perfil.
     if (i.perfil) return i.perfil === slug;

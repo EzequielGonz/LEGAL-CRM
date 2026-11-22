@@ -67,6 +67,8 @@ export async function registrarCaptacion(input: {
   actor: Actor;
   aceptacion: boolean;
   evidencia: string;
+  /** 22/11: id del mensaje real de la persona que respalda la captación (se guarda en el evento). */
+  evidenciaMensajeId?: string | null;
   datos?: Record<string, unknown>;
   zona?: unknown;
   soloPrecio?: boolean;
@@ -116,6 +118,11 @@ export async function registrarCaptacion(input: {
   });
   if (error) throw new CaptacionError(`No se pudo registrar la captación: ${error.message}`, 500);
   const row = Array.isArray(data) ? data[0] : data;
+  if (row?.created && row?.event_id && input.evidenciaMensajeId) {
+    // Columna agregada en la migración 0637; si todavía no está aplicada, la captación igual queda registrada.
+    const { error: errId } = await (supabase.from("capture_events") as any).update({ evidence_message_id: input.evidenciaMensajeId }).eq("id", row.event_id);
+    if (errId) console.warn("[captacion] No se guardó el id del mensaje de evidencia:", errId.message);
+  }
   return { captado: true, nuevo: !!row?.created, eventId: row?.event_id ?? null, evaluacion };
 }
 

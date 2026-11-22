@@ -29,6 +29,11 @@ export interface DatosSalud {
   pausa: { ia: boolean; envios: boolean; problema?: string | null };
   /** Webhooks en cuarentena sin revisar en las últimas 24 h, con su motivo más reciente. */
   cuarentena24h: { cantidad: number; motivo: string | null };
+  /**
+   * 22/11: retenidos pendientes por perfil (definición única de `definiciones/retenidos.ts`: sin revisar,
+   * sin tope de horas, del perfil de la línea). Si viene, reemplaza al global de arriba: un control por perfil.
+   */
+  retenidosPorPerfil?: Record<string, { cantidad: number; motivo: string | null }>;
   secretoMeta: boolean;
   ultimoEntrante: string | null;
   /** Por perfil: nombre visible, credenciales de WhatsApp y agente. */
@@ -112,7 +117,15 @@ export function evaluarSalud(d: DatosSalud): ItemSalud[] {
   if (!d.secretoMeta) {
     items.push({ clave: "secreto_meta", estado: "rojo", titulo: "Falta el secreto de la app de Meta", detalle: "Sin META_APP_SECRET los mensajes entrantes quedan en cuarentena y nadie los responde.", accion: "Cargar META_APP_SECRET en Vercel (Meta → App → Configuración básica → Clave secreta)" });
   }
-  if (d.cuarentena24h.cantidad > 0) {
+  if (d.retenidosPorPerfil) {
+    for (const [slug, r] of Object.entries(d.retenidosPorPerfil)) {
+      if (r.cantidad > 0) {
+        items.push({ clave: "cuarentena", perfil: slug, estado: "rojo", titulo: `${r.cantidad} mensaje(s) entrante(s) retenido(s) sin revisar`, detalle: r.motivo ?? "Webhook rechazado.", accion: "Revisar los retenidos", href: `/incidencias?perfil=${slug}&vista=retenidos` });
+      } else if (d.secretoMeta) {
+        items.push({ clave: "cuarentena", perfil: slug, estado: "verde", titulo: "Webhooks", detalle: "Sin mensajes retenidos sin revisar." });
+      }
+    }
+  } else if (d.cuarentena24h.cantidad > 0) {
     items.push({ clave: "cuarentena", estado: "rojo", titulo: `${d.cuarentena24h.cantidad} mensaje(s) entrante(s) en cuarentena`, detalle: d.cuarentena24h.motivo ?? "Webhook rechazado.", accion: "Revisar la cuarentena", href: "/configuracion#cuarentena" });
   } else if (d.secretoMeta) {
     items.push({ clave: "cuarentena", estado: "verde", titulo: "Webhooks", detalle: "Sin mensajes en cuarentena en las últimas 24 h." });

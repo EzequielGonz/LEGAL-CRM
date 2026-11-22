@@ -1,5 +1,6 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendWebPush, vapidConfig } from "@/lib/webpush";
+import { filtrarDispositivos } from "@/lib/definiciones/avisos";
 
 /**
  * Dispositivos con avisos web y envío con historial (bloque 1.9). Con PIN
@@ -33,6 +34,8 @@ export async function registerDevice(input: {
   auth: string;
   label: string | null;
   userAgent: string | null;
+  /** 22/11: perfil del que recibe avisos este dispositivo (null = todos). */
+  rubroId?: string | null;
 }): Promise<string> {
   const supabase = createAdminClient();
   const { data, error } = await supabase
@@ -46,6 +49,7 @@ export async function registerDevice(input: {
         user_agent: input.userAgent,
         status: "activo",
         updated_at: new Date().toISOString(),
+        ...(input.rubroId ? { rubro_id: input.rubroId } : {}),
       },
       { onConflict: "endpoint" }
     )
@@ -84,13 +88,21 @@ export async function sendToDevices(input: {
   kind: "prueba" | "aviso";
   deviceId?: string | null;
   eventKey?: string | null;
+  /** 22/11: perfil al que pertenece el aviso; solo llega a los dispositivos de ese perfil (y a los sin perfil). Sin rubro: a todos. */
+  rubroId?: string | null;
 }): Promise<{ results: DeliveryResult[]; missing: string[] }> {
   const { config, missing } = vapidConfig();
   if (!config) return { results: [], missing };
   const supabase = createAdminClient();
-  let q = supabase.from("push_subscriptions").select("id, label, endpoint, p256dh, auth").eq("status", "activo");
-  if (input.deviceId) q = q.eq("id", input.deviceId);
-  const { data: devices } = await q;
+  const pedir = async (cols: string) => {
+    let q = supabase.from("push_subscriptions").select(cols).eq("status", "activo");
+    if (input.deviceId) q = q.eq("id", input.deviceId);
+    return q;
+  };
+  let { data: devices, error: errDevices } = await pedir("id, label, endpoint, p256dh, auth, rubro_id");
+  // Antes de aplicar la migración 0637 la columna no existe: se manda como siempre.
+  if (errDevices) ({ data: devices } = await pedir("id, label, endpoint, p256dh, auth"));
+  devices = (input.rubroId ? filtrarDispositivos((devices ?? []) as any[], input.rubroId) : devices) as any;
   const results: DeliveryResult[] = [];
 
   for (const d of (devices ?? []) as any[]) {
