@@ -12,6 +12,7 @@ import { CAMPAIGN_STATUS_LABEL } from "@/lib/campaign-status";
 import { esSlugPerfil, type SlugPerfil } from "@/lib/marca";
 import { opcionesWasender } from "@/lib/wasender/campanas";
 import { cantidad, motivoPausaLegible } from "@/lib/textos/pantalla";
+import { Luz } from "@/components/ui/diseno";
 
 /** Perfil según la ruta: «/campanas» es Jurídico; «/panel/<perfil>/campanas» el resto. */
 function perfilDe(basePath: string): SlugPerfil | undefined {
@@ -182,12 +183,12 @@ export async function CampanasListView({
         </nav>
       ) : null}
 
-      <ul className="space-y-3" aria-label="Campañas">
+      <ul className="d-revelar space-y-3" aria-label="Campañas">
         {(campaigns ?? []).filter((c: any) => metodo === "todas" || (metodo === "wasender") === (c.proveedor === "wasender")).map((c: any) => {
           const f = funnels.get(c.id);
           const m = metricas.get(c.id);
           return (
-            <li key={c.id} className="card-lift flex flex-wrap items-start justify-between gap-3 rounded-xl border border-slate-200 bg-white p-5 hover:border-slate-400">
+            <li key={c.id} className="card-lift d-tarjeta !flex-row flex-wrap items-start justify-between !gap-3 !p-5 hover:border-slate-400" data-estado={c.status === "en_curso" ? "ok" : c.status === "pausada" ? "aviso" : undefined}>
               <div className="min-w-0 flex-1">
                 <div className="mb-1 flex flex-wrap items-start justify-between gap-x-3 gap-y-1">
                   <h3 className="min-w-0 font-medium text-slate-900 [overflow-wrap:anywhere]">
@@ -197,7 +198,11 @@ export async function CampanasListView({
                   </h3>
                   <span className="flex shrink-0 gap-1.5">
                     <span className="rounded-full border border-slate-300 px-2.5 py-0.5 text-xs font-medium text-slate-700">{c.proveedor === "wasender" ? "Wasender" : "Meta"}</span>
-                    <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-800">{CAMPAIGN_STATUS_LABEL[c.status] ?? c.status}</span>
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-800">
+                      {/* 22/11: la luz late solo mientras la campaña envía. */}
+                      <Luz estado={c.status === "en_curso" ? "ok" : c.status === "pausada" ? "aviso" : "apagado"} late={c.status === "en_curso"} />
+                      {CAMPAIGN_STATUS_LABEL[c.status] ?? c.status}
+                    </span>
                   </span>
                 </div>
                 <p className={`text-sm ${c.status === "pausada" && c.pause_reason ? "font-medium text-amber-800" : "text-slate-700"}`}>{queHace(c, m ? m.pendientes + (m.a_revisar ?? 0) : null)}</p>
