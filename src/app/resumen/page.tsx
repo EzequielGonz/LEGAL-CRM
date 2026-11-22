@@ -6,6 +6,10 @@ import "./resumen.css";
 import { leerResumenTodo } from "@/lib/resumen/servidor";
 import { cifrasSinLeer, filasParaHoy, textoCifra, type CifraResumen, type PerfilResumen } from "@/lib/resumen/filas";
 import { requirePageSession } from "@/lib/acceso/pagina";
+import { PedirAJarvis } from "@/components/resumen/pedir-a-jarvis";
+import { resumenSemana } from "@/lib/asistente/semana";
+import { formatoNumero } from "@/lib/premium/anillo";
+import { comparacionSemanal, pedidoDeFila, pedidoPropuestas, totalPendiente, totalPropuestas } from "@/lib/resumen/pedidos";
 
 export const metadata = { title: "Resumen de todo" };
 export const dynamic = "force-dynamic";
@@ -19,7 +23,10 @@ export const dynamic = "force-dynamic";
 export default async function ResumenPage() {
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
-  const perfiles = await leerResumenTodo();
+  const [perfiles, semana] = await Promise.all([leerResumenTodo(), resumenSemana().catch(() => null)]);
+  const total = totalPendiente(perfiles);
+  const comparacion = comparacionSemanal(semana ? semana.perfiles.map((p) => p.cifras) : null);
+  const props = totalPropuestas(perfiles);
   const filas = filasParaHoy(perfiles, 5);
   const sinLeer = cifrasSinLeer(perfiles);
   return (
@@ -42,6 +49,32 @@ export default async function ResumenPage() {
           </div>
         </div>
 
+        <section aria-labelledby="rs-total" className="rs-total">
+          <h2 id="rs-total" className="rs-hoy__titulo">Los cuatro perfiles juntos</h2>
+          <div className="rs-total__cuerpo">
+            <div className="rs-total__anillo">
+              {total === null ? (
+                <span className="rs-sin rs-sin--grande" role="img" aria-label="Total pendiente: sin dato">—</span>
+              ) : (
+                <Anillo valor={total} meta={Math.max(10, total)} rubro="juridico" tamano="grande" nombre="Pendiente en los cuatro perfiles" unidad="pendientes" mostrarMeta={false} />
+              )}
+              <span className="rs-total__et">Pendiente en total</span>
+            </div>
+            <ul className="rs-sem" aria-label="Esta semana contra la anterior">
+              {comparacion.map((c) => (
+                <li key={c.clave} className="rs-sem__item">
+                  <b>{c.actual === null ? "—" : formatoNumero(c.actual)}</b>
+                  <span>{c.titulo}</span>
+                  <i className={`rs-sem__var rs-sem__var--${c.variacion.flecha}`} aria-label={c.variacion.largo}>
+                    {c.variacion.flecha === "sin_dato" ? "—" : `${c.variacion.flecha === "sube" ? "▲" : c.variacion.flecha === "baja" ? "▼" : "="} ${c.variacion.texto}`}
+                  </i>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <p className="rs-nota rs-nota--izq">Semana contra la anterior. «—» es que no hay dato para comparar.</p>
+        </section>
+
         <section aria-labelledby="rs-hoy" className="rs-hoy">
           <h2 id="rs-hoy" className="rs-hoy__titulo">Para hacer hoy</h2>
           {filas.length === 0 ? (
@@ -51,15 +84,48 @@ export default async function ResumenPage() {
           ) : (
             <ol className="rs-hoy__lista">
               {filas.map((f, i) => (
-                <li key={f.clave} style={{ ["--i" as string]: i }}>
-                  <Link href={f.href} prefetch={false} className="rs-fila">
-                    <span className="rs-fila__perfil">{f.perfil}</span>
-                    <span className="rs-fila__texto">{f.texto}</span>
-                    <span aria-hidden="true" className="rs-fila__ir">Ver →</span>
-                  </Link>
+                <li key={f.clave} style={{ ["--i" as string]: i }} className="rs-fila">
+                  <span className="rs-fila__perfil">{f.perfil}</span>
+                  <span className="rs-fila__texto">{f.texto}</span>
+                  <span className="rs-fila__acciones">
+                    <PedirAJarvis pedido={pedidoDeFila(f, perfiles)} className="rs-btn rs-btn--jarvis">
+                      Pedile a Jarvis que lo haga<span className="sr-only">: {f.texto}</span>
+                    </PedirAJarvis>
+                    <Link href={f.href} prefetch={false} className="rs-btn">
+                      Ir<span className="sr-only"> a {f.texto}</span>
+                    </Link>
+                  </span>
                 </li>
               ))}
             </ol>
+          )}
+        </section>
+
+        <section aria-labelledby="rs-prop" className="rs-hoy rs-prop">
+          <h2 id="rs-prop" className="rs-hoy__titulo">Tareas y propuestas por confirmar</h2>
+          {props.total === 0 ? (
+            <p className="rs-hoy__vacio">No hay propuestas esperando tu confirmación.</p>
+          ) : (
+            <>
+              <ul className="rs-prop__lista">
+                {props.porPerfil.map((x) => (
+                  <li key={x.slug}>
+                    <span>{x.nombre}</span>
+                    <b>{x.valor === null ? "—" : formatoNumero(x.valor)}</b>
+                  </li>
+                ))}
+              </ul>
+              <div className="rs-prop__acciones">
+                <Link href="/asistente" prefetch={false} className="rs-btn rs-btn--jarvis">
+                  Confirmarlas en el asistente
+                </Link>
+                {props.total ? (
+                  <PedirAJarvis pedido={pedidoPropuestas(props.total)} className="rs-btn">
+                    Pedile a Jarvis que las repase
+                  </PedirAJarvis>
+                ) : null}
+              </div>
+            </>
           )}
         </section>
 

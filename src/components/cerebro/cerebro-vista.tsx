@@ -6,6 +6,9 @@ import { HablarConClaude } from "@/components/cerebro/hablar-con-claude";
 import { ChatAsistenteGeneral, type AccesoAsistente } from "@/components/asistente/chat-asistente-general";
 import { ConocimientoBot } from "@/components/perfiles/conocimiento-bot";
 import { AccesosCerebro, BuscadorCerebro, EnsenarCerebro } from "@/components/cerebro/herramientas-cerebro";
+import { RecomendacionesCerebro } from "@/components/cerebro/recomendaciones-cerebro";
+import { ReglasVigentesCerebro } from "@/components/cerebro/reglas-vigentes";
+import { recomendacionesDeHoy } from "@/lib/cerebro/recomendaciones";
 import { PanelesCerebro, type PanelCerebro } from "@/components/cerebro/paneles-cerebro";
 import { Anillo, Clasico, Tarjeta, VerMas } from "@/components/premium";
 import { formatoNumero } from "@/lib/premium/anillo";
@@ -485,6 +488,15 @@ export function CerebroVista({ fuentes, semana, contactos, salud, pedidos, rubro
             </div>
           </section>
 
+          <section id="recomienda" aria-labelledby="reco-titulo">
+            <div className="cz-in">
+              <h2 id="reco-titulo" className="cz-estado-titulo">
+                Lo que el cerebro <b>recomienda hoy</b>.
+              </h2>
+              <RecomendacionesCerebro items={recomendacionesDeHoy(3)} />
+            </div>
+          </section>
+
           <section id="herramientas" aria-labelledby="herr-titulo">
             <div className="cz-in">
               <h2 id="herr-titulo" className="cz-estado-titulo">
@@ -505,6 +517,13 @@ export function CerebroVista({ fuentes, semana, contactos, salud, pedidos, rubro
                   <BuscadorCerebro indice={indiceBusqueda()} />
                   <AccesosCerebro />
                 </div>
+              </div>
+              <div className="cz-card cz-card--reglas">
+                <header>
+                  <h3>Reglas vigentes</h3>
+                </header>
+                <p className="cz-muted">Lo que rige hoy. Un cambio queda como propuesta y necesita tu confirmación.</p>
+                <ReglasVigentesCerebro />
               </div>
             </div>
           </section>
