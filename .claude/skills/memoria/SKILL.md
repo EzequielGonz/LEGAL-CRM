@@ -11,7 +11,14 @@ El dueño quiere que su cuenta de claude.ai quede con todo el conocimiento del p
 
 1. Leé `cerebro/19-perfil-y-memoria-claude-ai.md` (los tres textos) y comprobá que existe `cerebro/20-conocimiento-para-claude-ai.md`. Si `19` es más viejo que la última entrada de `cerebro/bitacora.md` o que `02-ordenes-vigentes.md`, primero actualizalo con lo nuevo (sin perder nada de lo que ya tiene).
 2. Cargá la skill `anthropic-skills:chrome-browser` y seguila. Si solo está `enable__mcp__claude-in-chrome`, llamalo. Cargá en una sola búsqueda: `tabs_context_mcp`, `tabs_create_mcp`, `navigate`, `read_page`, `find`, `form_input`, `computer`, `get_page_text`, `file_upload`, `tabs_close_mcp`.
-3. Si Claude in Chrome no está conectado: decile que abra Chrome con la extensión Claude in Chrome conectada a esta cuenta (y que, si la sesión es en la nube, la abra desde la app de escritorio o Cowork, donde la extensión se conecta) y esperá. No sigas por otro camino sin avisar.
+3. **Si esta sesión corre en la nube (claude.ai/code en el navegador o el celular), no hay Claude in Chrome**: la extensión solo se conecta en Claude Code en la compu, en la app de escritorio o en Cowork. El Chromium de la nube no tiene sus sesiones y no sirve para esto. En ese caso no busques otros caminos: hacé el **plan B** de abajo.
+
+## Plan B (sesión en la nube): prompt para Claude in Chrome
+
+1. Asegurate de que `19` y `20` estén al día y subidos a `main`.
+2. Generá `cerebro/biblioteca/prompt-memoria-claude-in-chrome.md`: un solo prompt para pegar en el panel lateral de **Claude in Chrome** (la extensión, en su Chrome, logueado en claude.ai). El prompt trae adentro los tres textos completos de `19` y le pide a la extensión: abrir claude.ai/settings, copiar lo que hay a una nota antes de cambiar, reemplazar preferencias personales, cargar la memoria (por la pantalla de Memoria o diciéndoselo a Claude en un chat nuevo), reemplazar las instrucciones del proyecto «CRM COMPLETO», subir el archivo `20` (que él descarga antes) y verificar con la pregunta de prueba.
+3. Mandale el archivo con `SendUserFile` y explicale en 4 pasos: instalar o abrir Claude in Chrome, descargar `20` (enlace de GitHub en modo raw o el archivo que le mandás), pegar el prompt en el panel lateral, aprobar los permisos de claude.ai cuando los pida.
+4. Si los campos tienen límites, el prompt indica qué recortar primero (lo menos importante, al final de cada grupo).
 
 ## Qué cambiar (siempre: leer lo que hay, guardarlo, reemplazar, verificar)
 
