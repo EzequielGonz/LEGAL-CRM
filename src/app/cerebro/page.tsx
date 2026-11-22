@@ -8,6 +8,8 @@ import { TableroPendientes } from "@/components/cerebro/tablero-pendientes";
 import { HablarConClaude } from "@/components/cerebro/hablar-con-claude";
 import { ChatAsistenteGeneral, type AccesoAsistente } from "@/components/asistente/chat-asistente-general";
 import { ConocimientoBot } from "@/components/perfiles/conocimiento-bot";
+import { Oficina } from "@/components/cerebro/oficina";
+import { leerOficina } from "@/lib/oficina/servidor";
 import { resumenSemana } from "@/lib/asistente/semana";
 import { CIFRAS_SEMANA, totalSemana, variacion } from "@/lib/asistente/semana-reglas";
 import { leerRubrosActivos } from "@/lib/perfiles-stats";
@@ -63,6 +65,7 @@ const ACCESOS: AccesoAsistente[] = [
 ];
 
 const SECCIONES = [
+  ["oficina", "Oficina"],
   ["veo", "Lo que veo"],
   ["alertas", "Alertas"],
   ["preguntas", "Preguntas"],
@@ -92,12 +95,13 @@ export default async function CerebroPage() {
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
   const conteo = conteoAlertas(ALERTAS);
-  const [semana, contactos, salud, pedidos, rubros] = await Promise.all([
+  const [semana, contactos, salud, pedidos, rubros, oficina] = await Promise.all([
     leerSemana(),
     contarContactos(),
     leerSalud().catch(() => null),
     leerPedidos(),
     leerRubrosActivos().catch(() => []),
+    leerOficina(),
   ]);
   const frases = frasesDelCerebro(semana?.perfiles ?? null, conteo.alta, PREGUNTAS_ABIERTAS.length);
   const lecturas = semana ? lecturasDelPanel(semana.perfiles) : null;
@@ -130,6 +134,23 @@ export default async function CerebroPage() {
       </nav>
 
       <main>
+        <section id="oficina">
+          <div className="cz-in">
+            <div className="cz-head">
+              <p className="cz-k">00 · La oficina</p>
+              <h2>
+                Los agentes, <b>trabajando</b>.
+              </h2>
+              <p className="cz-lead">Dejá una tarea: Gemini la ordena al instante y elige por qué escritorios pasa. Con «Arrancar ahora», los agentes de Claude la trabajan área por área, Dirección revisa todo y te llega para aprobar. Nada se publica sin tu OK.</p>
+            </div>
+            {oficina ? (
+              <Oficina inicial={oficina.tareas} arranqueInicial={oficina.arranque} />
+            ) : (
+              <p className="cz-muted">No pude leer la oficina ahora. Probá recargar en un rato.</p>
+            )}
+          </div>
+        </section>
+
         <section id="veo">
           <div className="cz-in">
             <div className="cz-head">

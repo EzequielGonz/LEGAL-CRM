@@ -6,11 +6,18 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 
 
 
+
+## 22/11 — Pedido de supercerebro y empresa de agentes
+
+- **Pedido:** cerebro director de agentes por área, Jarvis en el panel, evaluar 5 herramientas y 8 videos, pasar pendientes y preguntas.
+- **Hecho:** propuesta en `16-propuesta-empresa-de-agentes.md`; dos agentes en segundo plano (videos y herramientas); traspaso en `traspaso-sesion-2026-11-22.md`.
+
 ## 21/11 (noche) — Cerebro dentro del panel
 
 - **Pedido:** «hacé una página aparte como la del panel, vinculala, que lea todo, con bandeja, asistente y laboratorio; terminalo y publicalo».
 - **Hecho:** `/cerebro` en el marco del panel; acceso arriba de todo en Perfiles y en el menú lateral. Lee cifras de la semana y salud en vivo, muestra los pedidos a Claude, «Hablale a Claude» crea tareas en la bandeja con la foto de la semana, y suma el asistente general y el laboratorio de bots. Contenido en `src/lib/cerebro/contenido.ts` (actualizarlo en cada vuelta junto con `15-hallazgos`). Entrega en `docs/cerebro-panel/ENTREGA.md`.
 - **Ojo:** al cambiar alertas, pendientes o preguntas del cerebro, actualizar también `src/lib/cerebro/contenido.ts`.
+- **Corrección del dueño (misma noche):** no lo quería dentro del marco de los perfiles ni con tarjeta en el menú. Quedó como pantalla aparte con la escena animada del cerebro (esfera, frases con cifras vivas, contador), acceso solo en Inicio con una píldora chica que late y abre pestaña nueva. Publicado en producción (`main` 94b5fdc) y revisado en computadora y celular.
 
 ## 21/11 (noche) — Relectura completa y cruce de informes
 
@@ -80,3 +87,13 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 - La página del cerebro está en su versión 4, con estilo de esfera de partículas, tablero de pendientes y respuestas.
 - Las tareas programadas del cerebro se eliminaron a pedido del dueño. La propuesta del cerebro como software con API quedó anotada sin aplicar.
 - Aprendizaje: leer el código antes de afirmar que algo falta; recorrer el panel como usuario, leyendo chats y configuración.
+
+## 2026-11-22 (tarde) · Oficina de agentes, sesión «accesos» y mapa de plugins
+
+- El dueño eligió: Gemini en el panel más Claude para lo complejo; los agentes trabajan solo cuando toca «Arrancar ahora»; hasta borrador.
+- Hecho: la Oficina en `/cerebro` (escritorios por área, mesa de entrada ordenada por Gemini, recorrido por sectores, «Esperando tu OK» con aprobar, pedir cambios o descartar). Migración `0636_oficina_agentes.sql` (solo suma columnas y la tabla `oficina_arranques`). 11 pruebas nuevas; 603 en total pasan.
+- Skill `oficina` (cómo procesa Claude cada vuelta) y skill `accesos` (el dueño escribe «accesos» en un chat del proyecto). Lista en `17-accesos-y-pendientes.md`.
+- Mapa de los 275 plugins por escritorio en `18-mapa-de-skills-y-plugins.md` (167 en el núcleo, 51 con aporte mínimo y 57 que no aplican).
+- Instalados por el dueño: claude-code-setup, PostHog, Firecrawl, skill-creator y Claude Code Cost. PostHog y Firecrawl se usan solo con OK. No activar la captura de sesiones de PostHog.
+- La API de Claude no está en el panel: no hay clave en Vercel. Claude trabaja con el plan de claude.ai.
+- Falta para que el botón dispare solo: el token de la tarea programada (A1 en `17`).
