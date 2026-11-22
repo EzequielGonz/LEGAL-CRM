@@ -97,3 +97,10 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 - Instalados por el dueño: claude-code-setup, PostHog, Firecrawl, skill-creator y Claude Code Cost. PostHog y Firecrawl se usan solo con OK. No activar la captura de sesiones de PostHog.
 - La API de Claude no está en el panel: no hay clave en Vercel. Claude trabaja con el plan de claude.ai.
 - Falta para que el botón dispare solo: el token de la tarea programada (A1 en `17`).
+
+## 2026-11-22 (noche) · Seguridad, captación y operación
+
+- **Seguridad:** el agente de captación avisó de una «instrucción» dentro de `15-hallazgos-21-11.md`. Era un fragmento de un comando de Claude, pegado por error al final del archivo en una sesión anterior, y traía el código de acceso del panel. Además el código estaba como ejemplo en `tests/unitarias/acceso-y-webhooks.test.ts` desde el 11/10. Se sacó de `main` y `cerebro-chats` (071f646e / 052819b). Sigue en el historial y en ramas viejas: cambiar el código pasó a urgente (P7 en `17`).
+- **Lección:** antes de cada commit del cerebro, revisar que ningún archivo termine con restos de llamadas de herramientas (`</content>`, `<parameter`) y buscar el código y teléfonos con grep.
+- Terminaron los frentes de operación (tope de Gemini, tiempos del latido y job versionado) y de captación (72 h, rubros, evidencia, cifras, Hoy, Salud). Un integrador los junta y los revisa. El freno diario de Gemini queda solo como aviso, porque los precios por token no están verificados; el del mes (USD 30) sí frena.
+- Sesión «memoria» creada (skill). Un agente reescribe `19` con todo el historial y arma `20`, el conocimiento completo para el proyecto de claude.ai.
