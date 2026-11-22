@@ -1,0 +1,99 @@
+/*
+ * Secciones de «Más» con la estética premium (22/11): Bot IA, WhatsApp oficial, Wasender, Redes, Ajustes,
+ * Seguimiento, Bandeja, Descartados e Incidencias. Se activa solo en esas pantallas (el encabezado del panel
+ * marca `data-mas="1"`), sin tocar la lógica de cada una: encabezados con trazo del acento, tarjetas con
+ * sombras en capas y relieve, hover con elevación, tablas prolijas, entradas escalonadas y foco claro.
+ * Todo con los tokens del marco `.pp` (--pp-*, --d-*), así que sigue el modo claro y el oscuro.
+ * `prefers-reduced-motion`: sin animaciones ni elevación.
+ */
+main#contenido:has([data-mas="1"]) { --mas-curva: cubic-bezier(0.22, 1, 0.36, 1); }
+
+/* Títulos: tipografía prolija y un trazo del acento que se dibuja al entrar. */
+main#contenido:has([data-mas="1"]) .lienzo-contenido h1 {
+  position: relative;
+  padding-bottom: 0.65rem;
+  font-weight: 650;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  text-wrap: balance;
+  color: var(--d-texto);
+}
+main#contenido:has([data-mas="1"]) .lienzo-contenido h1::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 2.75rem;
+  height: 3px;
+  border-radius: 3px;
+  background: rgb(var(--c-gold-500));
+  box-shadow: 0 2px 8px rgb(var(--c-gold-500) / 0.45);
+  transform-origin: left;
+  animation: mas-trazo 0.6s var(--mas-curva) 0.15s backwards;
+}
+main#contenido:has([data-mas="1"]) .lienzo-contenido :is(h2, h3) { letter-spacing: -0.015em; text-wrap: balance; }
+main#contenido:has([data-mas="1"]) .lienzo-contenido p { text-wrap: pretty; }
+
+/* Tarjetas: borde fino con brillo arriba, sombras en capas y elevación al pasar. */
+main#contenido:has([data-mas="1"]) .lienzo-contenido :is([class*="rounded-xl"], [class*="rounded-2xl"], .tarjeta)[class*="border"],
+main#contenido:has([data-mas="1"]) .lienzo-contenido details[class*="rounded"] {
+  box-shadow: var(--pp-brillo), var(--pp-capas);
+  transition: box-shadow 0.25s ease, border-color 0.2s ease, transform 0.25s var(--mas-curva);
+}
+main#contenido:has([data-mas="1"]) .lienzo-contenido :is([class*="rounded-xl"], [class*="rounded-2xl"])[class*="border"]:is(:hover, :focus-within) {
+  border-color: rgb(var(--c-gold-500) / 0.45);
+  box-shadow: var(--pp-brillo), var(--pp-capas-alta);
+}
+main#contenido:has([data-mas="1"]) .lienzo-contenido :is(li, a, article)[class*="rounded-xl"][class*="border"]:hover { transform: translateY(-2px); }
+
+/* Tablas: encabezado discreto, filas con respiro y resaltado al pasar. */
+main#contenido:has([data-mas="1"]) .lienzo-contenido table { border-collapse: separate; border-spacing: 0; }
+main#contenido:has([data-mas="1"]) .lienzo-contenido thead th {
+  font-size: 0.75rem;
+  font-weight: 650;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--d-texto-2);
+  border-bottom: 1px solid var(--d-linea-fuerte);
+}
+main#contenido:has([data-mas="1"]) .lienzo-contenido tbody tr { transition: background-color 0.15s ease; }
+main#contenido:has([data-mas="1"]) .lienzo-contenido tbody tr:hover { background: rgb(var(--c-gold-500) / 0.07); }
+main#contenido:has([data-mas="1"]) .lienzo-contenido tbody td { border-bottom: 1px solid var(--d-linea); }
+
+/* Botones y campos: 44 px, relieve y estado presionado. */
+main#contenido:has([data-mas="1"]) .lienzo-contenido :is(button, a)[class*="rounded"][class*="border"]:not(.pestana),
+main#contenido:has([data-mas="1"]) .lienzo-contenido :is(.btn-gold, .btn-gold-sm, .btn-suave, .btn-suave-sm) {
+  min-height: 44px;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+main#contenido:has([data-mas="1"]) .lienzo-contenido :is(button, a)[class*="rounded"][class*="border"]:not(.pestana, :disabled):active { transform: translateY(1px); }
+main#contenido:has([data-mas="1"]) .lienzo-contenido :is(input:not([type="checkbox"], [type="radio"], [type="range"], [type="color"]), select, textarea) {
+  min-height: 44px;
+  border-radius: 0.75rem;
+  transition: border-color 0.15s ease, box-shadow 0.2s ease;
+}
+main#contenido:has([data-mas="1"]) .lienzo-contenido :is(input, select, textarea):focus-visible {
+  outline: 2px solid var(--d-acento-texto);
+  outline-offset: 2px;
+}
+main#contenido:has([data-mas="1"]) .lienzo-contenido textarea { min-height: 5.5rem; }
+
+/* Entradas escalonadas. */
+main#contenido:has([data-mas="1"]) .lienzo-contenido :is(h1, section, article, form, table, details, [class*="rounded-xl"][class*="border"], [class*="rounded-2xl"][class*="border"]):not(:is([class*="rounded-xl"], [class*="rounded-2xl"]) :is([class*="rounded-xl"], [class*="rounded-2xl"])) {
+  animation: mas-entra 0.5s var(--mas-curva) backwards;
+}
+main#contenido:has([data-mas="1"]) .lienzo-contenido > :nth-child(2),
+main#contenido:has([data-mas="1"]) .lienzo-contenido > * > :nth-child(2) { animation-delay: 60ms; }
+main#contenido:has([data-mas="1"]) .lienzo-contenido > :nth-child(3),
+main#contenido:has([data-mas="1"]) .lienzo-contenido > * > :nth-child(3) { animation-delay: 120ms; }
+main#contenido:has([data-mas="1"]) .lienzo-contenido > :nth-child(4),
+main#contenido:has([data-mas="1"]) .lienzo-contenido > * > :nth-child(4) { animation-delay: 180ms; }
+main#contenido:has([data-mas="1"]) .lienzo-contenido > :nth-child(5),
+main#contenido:has([data-mas="1"]) .lienzo-contenido > * > :nth-child(n+5) { animation-delay: 240ms; }
+
+@keyframes mas-entra { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes mas-trazo { from { transform: scaleX(0); opacity: 0; } to { transform: none; opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  main#contenido:has([data-mas="1"]) .lienzo-contenido * { animation: none !important; transition: none !important; transform: none !important; }
+}
