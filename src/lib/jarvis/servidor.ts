@@ -28,6 +28,9 @@ import { armarParte, diasEntre, type DatosParte, type ParteDelDia } from "@/lib/
 import { promptRedaccionParte, validarRedaccionParte } from "@/lib/jarvis/prompt";
 import { buscarEnGlosario } from "@/lib/jarvis/herramientas";
 import { sinVedadas } from "@/lib/jarvis/seguridad";
+import { AREAS_DE_PERFIL } from "@/lib/cartera-servidor";
+import { resumenSemanaEnMemoria } from "@/lib/asistente/semana-cache";
+import { diasDeLaSemana, type CampanaTablero, type PuntoSerie, type TableroJarvis } from "@/lib/jarvis/tablero";
 
 export interface PropuestaPendiente {
   id: string;
@@ -236,4 +239,62 @@ export async function ejecutarHerramientaJarvis(nombre: string, args: Record<str
     default:
       return { error: "Herramienta desconocida." };
   }
+}
+
+// ---------------------------------------------------------------------------
+// Tablero de Jarvis (vuelta 6): gráficos de la semana de UN perfil
+// ---------------------------------------------------------------------------
+
+const CACHE_TABLERO_MS = 2 * 60_000;
+const _cacheTablero = new Map<string, { at: number; t: TableroJarvis }>();
+const ENVIADOS = ["enviado", "entregado", "leido", "respondio"];
+
+/**
+ * Serie de 7 días (mensajes enviados y captados por día), la semana contra la anterior y hasta 3 campañas
+ * recientes con enviados y respuestas. Solo conteos (head), solo del perfil pedido. Se guarda 2 minutos.
+ * Cada dato que falla queda en null: nunca rompe el tablero.
+ */
+export async function leerTablero(slug: SlugPerfil, ahora: Date = new Date()): Promise<TableroJarvis> {
+  const guardado = _cacheTablero.get(slug);
+  if (guardado && ahora.getTime() - guardado.at < CACHE_TABLERO_MS) return guardado.t;
+  const s = createAdminClient();
+  const rubroId = RUBRO_IDS[slug];
+  const areas = AREAS_DE_PERFIL[slug] ?? [slug];
+  const dias = diasDeLaSemana(ahora.getTime());
+  const cuenta = async (q: any): Promise<number | null> => {
+    try {
+      const { count, error } = await q;
+      return error ? null : count ?? 0;
+    } catch {
+      return null;
+    }
+  };
+  const enviadosDia = (desde: string, hasta: string) =>
+    cuenta((s.from("campaign_contacts") as any).select("id, campaigns!inner(area)", { count: "exact", head: true }).in("campaigns.area", areas).in("status", ENVIADOS).gte("sent_at", desde).lt("sent_at", hasta));
+  const captadosDia = (desde: string, hasta: string) =>
+    cuenta(s.from("opportunities").select("id", { count: "exact", head: true }).eq("rubro_id", rubroId).eq("capture_state", "captado").gte("captured_at", desde).lt("captured_at", hasta));
+
+  const leerCampanas = async (): Promise<CampanaTablero[]> => {
+    const { data } = await s.from("campaigns").select("id, name").in("area", areas).is("archived_at", null).order("created_at", { ascending: false }).limit(3);
+    return Promise.all(
+      ((data ?? []) as any[]).map(async (c) => {
+        const [env, resp] = await Promise.all([
+          cuenta(s.from("campaign_contacts").select("id", { count: "exact", head: true }).eq("campaign_id", c.id).in("status", ENVIADOS)),
+          cuenta(s.from("campaign_contacts").select("id", { count: "exact", head: true }).eq("campaign_id", c.id).eq("status", "respondio")),
+        ]);
+        return { nombre: String(c.name ?? "Campaña").slice(0, 40), enviados: env ?? 0, respondieron: resp ?? 0 };
+      })
+    );
+  };
+
+  const [env, cap, semana, campanas] = await Promise.all([
+    Promise.all(dias.map((d) => enviadosDia(d.desde, d.hasta))),
+    Promise.all(dias.map((d) => captadosDia(d.desde, d.hasta))),
+    seguro(resumenSemanaEnMemoria(), null, "la semana").then((r) => r?.perfiles.find((p) => p.perfil === slug)?.cifras ?? null),
+    seguro(leerCampanas(), [] as CampanaTablero[], "las campañas"),
+  ]);
+  const serie = (valores: (number | null)[]): PuntoSerie[] => dias.map((d, i) => ({ dia: d.dia, etiqueta: d.etiqueta, valor: valores[i] }));
+  const t: TableroJarvis = { perfil: slug, enviadosPorDia: serie(env), captadosPorDia: serie(cap), semana, campanas };
+  _cacheTablero.set(slug, { at: ahora.getTime(), t });
+  return t;
 }

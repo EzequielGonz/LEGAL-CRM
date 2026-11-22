@@ -473,6 +473,39 @@ export const CATALOGO: readonly OperacionPanel[] = [
     nivel: "cambio",
     efecto: "Queda en la Bandeja para Claude como pendiente. Claude la toma cuando la responsable le dice «ok».",
   },
+  // Vuelta 6 (22/11): Jarvis puede pedirle una tarea a un sector de la Oficina y enseñarle algo al cerebro,
+  // siempre como propuesta con «¿Lo hago?». Van a las mismas rutas que usan la Oficina y el Cerebro.
+  {
+    clave: "oficina_pedir_tarea",
+    grupo: "pedidos a Claude",
+    titulo: "Pedirle una tarea a un sector de la Oficina",
+    descripcion:
+      "Deja una tarea en la mesa de entrada de la Oficina de agentes. Empezá el pedido con el sector («Para Redes: …», «Para Diseño: …», «Para Análisis: …», «Para Bots: …», «Para SEO: …», «Para Ingeniería: …»): la Oficina la ordena por áreas. Sin datos personales.",
+    metodo: "POST",
+    ruta: "oficina",
+    perfil: PERFIL,
+    campos: [{ nombre: "pedido", tipo: "texto", obligatorio: true, descripcion: "El pedido completo, empezando por el sector (hasta 4000 caracteres)" }],
+    nivel: "cambio",
+    efecto: "Queda en la mesa de entrada de la Oficina. Los agentes arrancan solo cuando el dueño toca «Arrancar ahora» y todo queda en borrador.",
+  },
+  {
+    clave: "cerebro_ensenar",
+    grupo: "pedidos a Claude",
+    titulo: "Enseñarle algo al cerebro",
+    descripcion:
+      "Guarda en el cuaderno del cerebro una nota, una regla, un documento, un enlace o un aprendizaje del dueño para que Jarvis y Claude lo tengan en cuenta. Sin teléfonos, documentos, correos ni claves (se rechazan).",
+    metodo: "POST",
+    ruta: "cerebro/conocimiento",
+    perfil: PERFIL,
+    campos: [
+      { nombre: "tipo", tipo: "texto", obligatorio: true, valores: ["nota", "regla", "documento", "enlace", "aprendizaje"], descripcion: "Qué es" },
+      { nombre: "titulo", tipo: "texto", obligatorio: true, descripcion: "Título corto (3 a 120 letras)" },
+      { nombre: "contenido", tipo: "texto", obligatorio: true, descripcion: "Lo que tiene que saber el cerebro (hasta 4000 letras)" },
+      { nombre: "fuente", tipo: "texto", descripcion: "De dónde sale (opcional; para un enlace, la dirección completa)" },
+    ],
+    nivel: "cambio",
+    efecto: "Queda guardado en el cerebro de este perfil. No cambia nada del panel; se puede archivar desde el Cerebro.",
+  },
   {
     clave: "bandeja_descartar",
     grupo: "pedidos a Claude",
@@ -1240,11 +1273,9 @@ export function operacionPorClave(clave: string): OperacionPanel | null {
  */
 export const FUERA_DEL_CATALOGO: Record<string, string> = {
   "jarvis/mensaje": "Charla con Jarvis (22/11): conversa y deja propuestas con tarjeta «¿Lo hago?»; no lanza campañas, no publica ni le escribe a nadie. Es la puerta del asistente, no una acción sobre el panel.",
-  "cerebro/conocimiento": "Cuaderno del cerebro (22/11): el dueño le enseña notas y reglas desde /cerebro con su propia confirmación; Jarvis las lee con consultar_cerebro y la propuesta a Claude va por la Bandeja.",
   "cerebro/preguntar": "Búsqueda del cerebro (22/11): solo lee la memoria y lo aprendido, sin IA.",
   "laboratorio/simular": "Simulador del bot (22/11): corre mensajes ficticios con el prompt real y herramientas simuladas; no envía nada ni cambia estados.",
   "jarvis/parte": "Parte del día de Jarvis (22/11): solo lee cifras del perfil y no cambia nada.",
-  oficina: "Lee y crea tareas de la Oficina de agentes (22/11): tiene su propia pantalla en el Cerebro; desde el asistente se usa pedir_cambio_de_codigo, que va a la misma bandeja.",
   "oficina/arrancar": "Despierta a los agentes de Claude y usa el plan de Claude: lo toca el dueño en la Oficina, no el asistente.",
   "oficina/[id]": "La aprobación de una entrega de la Oficina la da el dueño en persona, no el asistente.",
   "asistente/charlas": "Guarda y lista las charlas del propio asistente (20/11): es su memoria, no una acción sobre el panel.",

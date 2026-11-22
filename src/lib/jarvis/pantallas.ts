@@ -226,6 +226,25 @@ export function accionesRapidasDe(pantalla: PantallaId): Sugerencia[] {
   }
 }
 
+/**
+ * Vuelta 6 (22/11): funciones de Jarvis disponibles en TODAS las pantallas, además de las de la pantalla.
+ * Igual que las acciones rápidas: un toque manda el pedido y Jarvis vuelve con la tarjeta «¿Lo hago?»
+ * (o pregunta el dato que falta). Nada cambia sin el Sí.
+ */
+export const ACCIONES_SIEMPRE: readonly Sugerencia[] = [
+  S("Agendar una cita", "Quiero agendar una cita: preguntame para quién y cuándo, y dejámela como propuesta"),
+  S("Mover a alguien de etapa", "Quiero mover a una persona de etapa (captado, derivado, perdido o cerrar seguimiento): preguntame quién y a qué etapa, y proponelo"),
+  S("Pedirle una tarea a la Oficina", "Quiero pedirle una tarea a un sector de la Oficina: preguntame qué sector y qué hace falta, y dejala como propuesta"),
+  S("Enseñarle algo al cerebro", "Quiero enseñarle algo al cerebro: preguntame qué es (nota, regla o aprendizaje) y el contenido, y proponé guardarlo"),
+  S("Consultar el cerebro", "Consultá el cerebro y resumime las órdenes y decisiones más nuevas que tocan a este perfil"),
+];
+
+/** Acciones de la pantalla primero y después las de siempre, sin repetir etiquetas. */
+export function todasLasAcciones(pantalla: PantallaId): Sugerencia[] {
+  const vistas = new Set<string>();
+  return [...accionesRapidasDe(pantalla), ...ACCIONES_SIEMPRE].filter((a) => (vistas.has(a.etiqueta) ? false : (vistas.add(a.etiqueta), true)));
+}
+
 /** ¿El perfil que pide el navegador coincide con el que dice la ruta? Sin dato en la ruta, no hay conflicto. */
 export function perfilCoincideConRuta(perfil: SlugPerfil, ruta: unknown): boolean {
   const enRuta = perfilDeRuta(ruta);
