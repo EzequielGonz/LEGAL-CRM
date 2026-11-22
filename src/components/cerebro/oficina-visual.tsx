@@ -183,6 +183,11 @@ export function OficinaVisual({
     }
   }
 
+  // Si se vuelve a la versión liviana, la próxima escena 3D arranca de cero.
+  useEffect(() => {
+    if (modo !== "3d") setListo3d(false);
+  }, [modo]);
+
   const escena3d = modo === "3d";
   const animar = !pausa && !reducido;
   const tareaPorId = (id: string) => tareas.find((t) => t.id === id);
@@ -207,7 +212,7 @@ export function OficinaVisual({
           </div>
         )}
 
-        <div className="cz-of3-controles" role="toolbar" aria-label="Vista de la oficina">
+        <div className="cz-of3-controles" role="group" aria-label="Vista de la oficina">
           <button type="button" className="cz-of3-b" aria-pressed={vista === "sala"} onClick={() => ir("sala")}>
             Sala
           </button>
@@ -223,16 +228,19 @@ export function OficinaVisual({
           </button>
         </div>
 
-        <div className="cz-of3-extras">
-          <button type="button" className="cz-of3-b chico" aria-pressed={pausa} onClick={() => setPausa((v) => !v)} disabled={reducido}>
-            {pausa || reducido ? "Animaciones en pausa" : "Pausar animaciones"}
-          </button>
-          {webgl && (
-            <button type="button" className="cz-of3-b chico" onClick={() => setForzado(escena3d ? "liviano" : "3d")}>
-              {escena3d ? "Ver versión liviana" : "Ver en 3D"}
+        <details className="cz-of3-ajustes">
+          <summary>Ajustes de la vista</summary>
+          <div>
+            <button type="button" className="cz-of3-b" aria-pressed={pausa || reducido} onClick={() => setPausa((v) => !v)} disabled={reducido}>
+              {pausa || reducido ? "Animaciones en pausa" : "Pausar animaciones"}
             </button>
-          )}
-        </div>
+            {webgl && (
+              <button type="button" className="cz-of3-b" onClick={() => setForzado(escena3d ? "liviano" : "3d")}>
+                {escena3d ? "Ver versión liviana" : "Ver en 3D"}
+              </button>
+            )}
+          </div>
+        </details>
 
       </div>
         {elegida && (
@@ -245,7 +253,7 @@ export function OficinaVisual({
                   {elegida.chip}
                 </span>
               </div>
-              <button type="button" className="cz-of3-b chico" onClick={cerrar} aria-label="Cerrar el panel del escritorio">
+              <button type="button" className="cz-of3-b" onClick={cerrar} aria-label="Cerrar el panel del escritorio">
                 Cerrar
               </button>
             </header>
@@ -288,7 +296,7 @@ export function OficinaVisual({
         <span style={{ ["--c" as string]: COLOR_ESTADO.trabajando }}>Trabajando</span>
         <span style={{ ["--c" as string]: COLOR_ESTADO.listo }}>Listo para tu OK</span>
         <span style={{ ["--c" as string]: COLOR_ESTADO.libre }}>Libre</span>
-        <small>Tocá un escritorio para verlo de cerca. Con el teclado: flechas para pasar de uno a otro, Esc para volver.</small>
+        <small>Tocá un escritorio para verlo de cerca. Con el teclado, las flechas pasan de uno a otro y Esc vuelve a la sala.</small>
       </p>
 
       {/* La fuente de verdad: lista accesible, siempre presente. */}

@@ -51,7 +51,7 @@ export const GLIFOS: Record<Area, [string, string, string]> = {
   redes: ["#", "reel", "AD"],
   diseno: ["Aa", "px", "color"],
   seo: ["SEO", "↑", "www"],
-  bots: ["bot", "{ }", "..."],
+  bots: ["bot", "{ }", "ia"],
   ingenieria: ["</>", "{ }", "test"],
   asistente: ["hoy", "+1", "lista"],
 };
@@ -89,6 +89,11 @@ export interface PuestoVisual {
   listas: string[];
   /** Tareas que está trabajando o que esperan su turno. */
   enMarcha: string[];
+  /**
+   * En cuántas tareas todavía abiertas este escritorio ya dejó su parte.
+   * Cuando sube, el escritorio terminó algo y festeja (una vez).
+   */
+  partesHechas: number;
   color: string;
   glifos: [string, string, string];
   x: number;
@@ -131,6 +136,7 @@ export function puestosVisuales(tareas: TareaOficina[]): PuestoVisual[] {
     const cola = propias.filter((t) => t.estado !== "en_curso");
     const listas = tareas.filter((t) => etapaDe(t) === "esperando_ok" && escritorioQueEntrego(t) === e.area);
 
+    const partesHechas = tareas.filter((t) => etapaDe(t) !== "aprobada" && etapaDe(t) !== "cerrada" && t.recorrido.some((p) => p.area === e.area)).length;
     let estado: EstadoVisual = "libre";
     if (trabajando.length) estado = "trabajando";
     else if (listas.length) estado = "listo";
@@ -152,7 +158,9 @@ export function puestosVisuales(tareas: TareaOficina[]): PuestoVisual[] {
           ? `Terminó «${titulo}». Revisala y decidí.`
           : estado === "en_cola"
             ? `«${titulo}» espera su turno.`
-            : `Sin tareas ahora. ${e.rol}.`;
+            : partesHechas > 0
+              ? "Ya dejó su parte. Ahora sigue el próximo escritorio."
+              : `Sin tareas ahora. ${e.rol}.`;
 
     const { x, z } = posicionPuesto(indice);
     return {
@@ -168,6 +176,7 @@ export function puestosVisuales(tareas: TareaOficina[]): PuestoVisual[] {
       tarea: titulo,
       listas: listas.map((t) => t.id),
       enMarcha: [...trabajando, ...cola].map((t) => t.id),
+      partesHechas,
       color: COLOR_AREA[e.area],
       glifos: GLIFOS[e.area],
       x,
@@ -191,6 +200,17 @@ export function anuncioDeEntrega(antes: PuestoVisual[] | null, ahora: PuestoVisu
   return nuevos.length === 1
     ? `${nuevos[0].nombre} terminó y espera tu OK.`
     : `${nuevos.length} escritorios terminaron y esperan tu OK: ${nuevos.map((p) => p.nombre).join(", ")}.`;
+}
+
+/**
+ * Escritorios que terminaron su parte entre dos fotos de la oficina: los que
+ * suman una parte hecha. Son los que festejan, sin importar cuál sea (no solo
+ * Dirección). Sin foto anterior no hay festejo: al abrir la página todo está
+ * quieto.
+ */
+export function areasQueTerminaron(antes: Pick<PuestoVisual, "area" | "partesHechas">[] | null, ahora: Pick<PuestoVisual, "area" | "partesHechas">[]): Area[] {
+  if (!antes) return [];
+  return ahora.filter((p) => p.partesHechas > (antes.find((a) => a.area === p.area)?.partesHechas ?? p.partesHechas)).map((p) => p.area);
 }
 
 // --- Navegación entre puestos ------------------------------------------------------

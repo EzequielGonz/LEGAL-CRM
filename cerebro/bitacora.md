@@ -123,3 +123,5 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 - Publicados en main: el recontacto de las 72 h (con la 0640 aplicada y solo Jurídico encendido), la Oficina 3D y la regla número uno (`00-arranque-para-agentes.md`).
 - En ramas: la fundación visual, Jarvis, el menú con Hoy, Chats y Campañas, y Resultados, Salud y Cerebro. Falta integrarlas, pasar la revisión final con agentes especialistas y publicar si cumplen. Detalle en `traspaso-sesion-2026-11-22-c.md`.
 - Correcciones del dueño: «ese fondo raro no» (estética clásica más detalles); «usá TODAS las herramientas y agentes personalizados, el cerebro completo para todos».
+## 22/11 noche: repaso de la Oficina 3D
+- Festeja el escritorio que terminó su parte (no siempre Dirección). Fondo neutro del panel, sin colores raros. Detalle en `docs/oficina-3d-2211/`. Pendiente: pasar la revisión por `fairmind-design:fairmind-accessibility-orchestrator` (no estuvo disponible en la copia aislada).

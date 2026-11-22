@@ -46,7 +46,6 @@ export function Diorama({ puestos, vista, conPanel, alElegir }: { puestos: Puest
 
   return (
     <div ref={caja} className="cz-dio" data-vista={vista === "cenital" ? "cenital" : vista === "sala" ? "sala" : "puesto"} aria-hidden="true">
-      <div className="cz-dio-noche" />
       <div className="cz-dio-camara" style={{ transform: `translate(${tx * esc}px, ${ty * esc}px) scale(${zoom * esc})` }}>
         <div className="cz-dio-sala" style={{ width: DIORAMA.ancho, height: DIORAMA.alto, transform: `rotateX(${vista === "cenital" ? 18 : DIORAMA.rotX}deg) rotateZ(${vista === "cenital" ? -2 : DIORAMA.rotZ}deg)` }}>
           <div className="piso" />
@@ -54,44 +53,69 @@ export function Diorama({ puestos, vista, conPanel, alElegir }: { puestos: Puest
           {puestos.map((p) => {
             const c = centroPuestoDiorama(p.indice);
             return (
-              <div
+              <PuestoDiorama
                 key={p.area}
-                className={`cz-dio-puesto ${p.estado} ${vista === p.area ? "foco" : ""}`}
-                style={{ left: c.x, top: c.y, ["--tono" as string]: p.color, ["--rot" as string]: `${vista === "cenital" ? 2 : -DIORAMA.rotZ}deg`, ["--vuelco" as string]: `${vista === "cenital" ? -18 : -DIORAMA.rotX}deg` }}
-                onClick={() => alElegir(p.area)}
-              >
-                <i className="aro" />
-                <span className="sombra" />
-                <span className="mampara" />
-                <span className="escritorio">
-                  <b className="tapa" />
-                  <b className="frente" />
-                </span>
-                <span className="monitor">
-                  <span className="led" />
-                </span>
-                <span className="de-pie">
-                  <span className="agente">
-                    <span className="destello" />
-                    <span className="brazo i" />
-                    <span className="brazo d" />
-                    <span className="cuerpo" />
-                    <span className="cabeza">
-                      <span className="gorra" />
-                      <span className="visera" />
-                    </span>
-                  </span>
-                  <span className="etiqueta">
-                    <i className="punto" />
-                    {p.nombre}
-                  </span>
-                  {p.estado === "trabajando" && <span className="glifo">{p.glifos[p.indice % 3]}</span>}
-                </span>
-              </div>
+                p={p}
+                foco={vista === p.area}
+                alElegir={alElegir}
+                estilo={{
+                  left: c.x,
+                  top: c.y,
+                  ["--tono" as string]: p.color,
+                  ["--rot" as string]: `${vista === "cenital" ? 2 : -DIORAMA.rotZ}deg`,
+                  ["--vuelco" as string]: `${vista === "cenital" ? -18 : -DIORAMA.rotX}deg`,
+                }}
+              />
             );
           })}
         </div>
       </div>
+    </div>
+  );
+}
+
+function PuestoDiorama({ p, foco, alElegir, estilo }: { p: PuestoVisual; foco: boolean; alElegir: (a: Area) => void; estilo: React.CSSProperties }) {
+  // Festeja una sola vez cuando el escritorio termina su parte; al cargar la página no festeja.
+  const antes = useRef<number | null>(null);
+  const [festeja, setFesteja] = useState(false);
+  useEffect(() => {
+    const subio = antes.current !== null && p.partesHechas > antes.current;
+    antes.current = p.partesHechas;
+    if (!subio) return;
+    setFesteja(true);
+    const id = setTimeout(() => setFesteja(false), 1800);
+    return () => clearTimeout(id);
+  }, [p.partesHechas]);
+
+  return (
+    <div className={`cz-dio-puesto ${p.estado} ${foco ? "foco" : ""} ${festeja ? "festeja" : ""}`} style={estilo} onClick={() => alElegir(p.area)}>
+      <i className="aro" />
+      <span className="sombra" />
+      <span className="mampara" />
+      <span className="escritorio">
+        <b className="tapa" />
+        <b className="frente" />
+      </span>
+      <span className="monitor">
+        <span className="led" />
+      </span>
+      <span className="de-pie">
+        <span className="agente">
+          <span className="destello" />
+          <span className="brazo i" />
+          <span className="brazo d" />
+          <span className="cuerpo" />
+          <span className="cabeza">
+            <span className="gorra" />
+            <span className="visera" />
+          </span>
+        </span>
+        <span className="etiqueta">
+          <i className="punto" />
+          {p.nombre}
+        </span>
+        {p.estado === "trabajando" && <span className="glifo">{p.glifos[p.indice % 3]}</span>}
+      </span>
     </div>
   );
 }
