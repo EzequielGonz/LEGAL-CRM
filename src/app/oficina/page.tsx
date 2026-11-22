@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Inter_Tight, JetBrains_Mono } from "next/font/google";
 import "../cerebro/cerebro.css";
+import "./oficina.css";
 import { requirePageSession } from "@/lib/acceso/pagina";
 import { Oficina } from "@/components/cerebro/oficina";
 import { Clasico } from "@/components/premium";
@@ -26,7 +27,7 @@ export default async function OficinaPage({ searchParams }: { searchParams: Prom
   const sector = esSector(sp.sector) ? sp.sector : null;
   const oficina = await leerOficina();
     return (
-    <div className={`cz ${fuente.variable} ${mono.variable}`} style={{ ["--cz-f" as string]: fuente.style.fontFamily, ["--cz-mono" as string]: mono.style.fontFamily }}>
+    <div className={`cz of3-pagina ${fuente.variable} ${mono.variable}`} style={{ ["--cz-f" as string]: fuente.style.fontFamily, ["--cz-mono" as string]: mono.style.fontFamily }}>
       <Clasico cerebro>
         <nav className="cz-top" aria-label="Volver">
           <Link href="/cerebro" prefetch={false}>
@@ -36,20 +37,30 @@ export default async function OficinaPage({ searchParams }: { searchParams: Prom
             Bandeja para Claude
           </Link>
         </nav>
-        <header className="cz-cab">
+        <header className="cz-cab of3-cab">
           <div className="cz-in">
-            <p className="cz-k">Oficina de agentes</p>
-            <h1>
-              Los agentes, <b>trabajando</b>.
+            <p className="of3-pildora">Oficina de agentes</p>
+            <h1 className="of3-titulo">
+              {["Tus", "agentes,"].map((w, i) => (
+                <span key={w} className="pal" style={{ animationDelay: `${i * 0.08}s` }}>
+                  {w}{" "}
+                </span>
+              ))}
+              <em className="recuadro pal" style={{ animationDelay: "0.2s" }}>
+                trabajando
+              </em>
+              <span className="pal" style={{ animationDelay: "0.3s" }}>
+                {" "}en vivo.
+              </span>
             </h1>
-            <p className="cz-lead">Cada sector es una sala del edificio: tocala y entrás a ver a sus agentes. Cuando trabajan, llevan sus tareas al Cerebro, en el centro, que revisa todo antes de que te llegue. Nada se publica sin tu OK.</p>
+            <p className="cz-lead of3-lead">
+              Entrá a cada sala, caminá entre los escritorios y hablá con cada agente. Los que terminan llevan su carpeta al <q>Cerebro</q>, que revisa todo antes de que te llegue. Nada se publica sin tu OK.
+            </p>
           </div>
         </header>
         <main>
-          <div className="cz-in">
-          </div>
-          <section id="oficina">
-            <div className="cz-in">
+          <section id="oficina" className="of3-seccion">
+            <div className="of3-ancho">
               {oficina ? <Oficina inicial={oficina.tareas} arranqueInicial={oficina.arranque} sector={sector} /> : <p className="cz-muted">No pude leer la oficina ahora. Probá recargar en un rato.</p>}
             </div>
           </section>
