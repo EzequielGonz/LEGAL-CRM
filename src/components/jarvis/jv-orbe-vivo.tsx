@@ -48,6 +48,7 @@ export function OrbeVivo({ tamano, estado = "reposo", brillo = 0, className }: P
     const acento = leerRgb("--c-gold-500", [96, 165, 250]);
     const violeta: [number, number, number] = [124, 92, 255];
     const cian: [number, number, number] = [56, 225, 255];
+    const rosa: [number, number, number] = [236, 72, 153];
     const rgba = (k: [number, number, number], a: number) => `rgba(${k[0]},${k[1]},${k[2]},${a})`;
 
     let mx = 0;
@@ -121,31 +122,33 @@ export function OrbeVivo({ tamano, estado = "reposo", brillo = 0, className }: P
       ctx.closePath();
       ctx.clip();
       const fondo = ctx.createRadialGradient(cx - R * 0.3, cy - R * 0.35, R * 0.1, cx, cy, R * 1.05);
-      fondo.addColorStop(0, "rgba(40,48,96,1)");
-      fondo.addColorStop(1, "rgba(8,10,24,1)");
+      fondo.addColorStop(0, "rgba(86,64,220,1)");
+      fondo.addColorStop(0.55, "rgba(38,24,120,1)");
+      fondo.addColorStop(1, "rgba(10,8,40,1)");
       ctx.fillStyle = fondo;
       ctx.fillRect(0, 0, W, W);
 
       // Plasma: tres manchas de luz que giran adentro (solo dentro del orbe).
       ctx.globalCompositeOperation = "lighter";
       const manchas: [[number, number, number], number, number, number][] = [
-        [violeta, 0.55, 0.42, 0.9],
-        [cian, -0.75, 0.5, 0.75],
-        [acento, 1.1, 0.36, 0.8],
+        [violeta, 0.55, 0.42, 1.05],
+        [cian, -0.75, 0.5, 0.85],
+        [rosa, 0.9, 0.46, 0.8],
+        [acento, 1.1, 0.3, 0.7],
       ];
       manchas.forEach(([col, vel, dist, tam], i) => {
         const a = t * vel * (1 + energia * 1.4) + i * 2.1;
         const x = cx + Math.cos(a) * R * dist + mx * R * 0.25;
         const y = cy + Math.sin(a * 1.3) * R * dist * 0.8 + my * R * 0.25;
         const g = ctx.createRadialGradient(x, y, 0, x, y, R * tam);
-        g.addColorStop(0, rgba(col, 0.75 + luz * 0.25));
+        g.addColorStop(0, rgba(col, 0.55 + luz * 0.15));
         g.addColorStop(1, rgba(col, 0));
         ctx.fillStyle = g;
         ctx.fillRect(0, 0, W, W);
       });
       // Núcleo que late al hablar.
       const nucleo = ctx.createRadialGradient(cx, cy, 0, cx, cy, R * (0.45 + energia * 0.2 * (0.5 + 0.5 * Math.sin(t * 9))));
-      nucleo.addColorStop(0, `rgba(255,255,255,${0.18 + luz * 0.35})`);
+      nucleo.addColorStop(0, `rgba(255,255,255,${0.06 + luz * 0.18})`);
       nucleo.addColorStop(1, "rgba(255,255,255,0)");
       ctx.fillStyle = nucleo;
       ctx.fillRect(0, 0, W, W);
@@ -154,9 +157,9 @@ export function OrbeVivo({ tamano, estado = "reposo", brillo = 0, className }: P
       // Reflejo de vidrio arriba a la izquierda (sigue un poco al puntero) y borde con relieve.
       const rx = cx - R * 0.38 + mx * R * 0.2;
       const ry = cy - R * 0.45 + my * R * 0.2;
-      const reflejo = ctx.createRadialGradient(rx, ry, 0, rx, ry, R * 0.75);
-      reflejo.addColorStop(0, "rgba(255,255,255,0.55)");
-      reflejo.addColorStop(0.35, "rgba(255,255,255,0.12)");
+      const reflejo = ctx.createRadialGradient(rx, ry, 0, rx, ry, R * 0.55);
+      reflejo.addColorStop(0, "rgba(255,255,255,0.5)");
+      reflejo.addColorStop(0.3, "rgba(255,255,255,0.08)");
       reflejo.addColorStop(1, "rgba(255,255,255,0)");
       ctx.fillStyle = reflejo;
       ctx.fillRect(0, 0, W, W);

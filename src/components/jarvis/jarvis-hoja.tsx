@@ -347,7 +347,7 @@ export function JarvisHoja({ slug, nombrePerfil, ruta, pedido, datosParte, alCer
                     </div>
                   ))}
                   {pensando && (
-                    <div role="status" className="jv-pensando2" ref={ultimo}>
+                    <div className="jv-pensando2" ref={ultimo}>
                       <span className="jv-pensando-ondas" aria-hidden="true">
                         <i />
                         <i />
