@@ -23,7 +23,7 @@ async function pedir<T = any>(url: string, cuerpo?: unknown): Promise<T> {
   return j as T;
 }
 
-export function Simulador({ perfil, nombre, roles }: { perfil: SlugPerfil; nombre: string; roles: Rol[] }) {
+export function Simulador({ perfil, nombre, roles, precarga }: { perfil: SlugPerfil; nombre: string; roles: Rol[]; precarga?: { texto: string; n: number } | null }) {
   const id = useId();
   const [mensaje, setMensaje] = useState("");
   const [comparar, setComparar] = useState(false);
@@ -32,6 +32,9 @@ export function Simulador({ perfil, nombre, roles }: { perfil: SlugPerfil; nombr
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [variantes, setVariantes] = useState<Variante[] | null>(null);
+  useEffect(() => {
+    if (precarga) { setMensaje(precarga.texto); setVariantes(null); setError(null); }
+  }, [precarga]);
 
   async function simular(e: React.FormEvent) {
     e.preventDefault();

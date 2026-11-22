@@ -94,3 +94,11 @@
   .lab-pestana, .lab-boton, .lab-boton-sec, .lab-boton-peligro { transition: none; }
   .lab-pestana:hover, .lab-boton:hover, .lab-boton-sec:hover, .lab-boton-peligro:hover { transform: none; }
 }
+
+/* Tablero por perfil (22/11): cajas vv-celda de vivo.css en grilla. */
+.lab-tablero { display: grid; gap: 0.9rem; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); }
+.lab-tablero-datos { margin: 8px 0 0; display: grid; gap: 4px; }
+.lab-tablero-datos div { display: flex; justify-content: space-between; gap: 8px; font-size: 12.5px; color: rgb(29 26 40 / 0.78); }
+.lab-tablero-datos dt { font-weight: 500; }
+.lab-tablero-datos dd { margin: 0; font-weight: 700; color: var(--vv-tinta); text-align: right; }
+a.lab-boton { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; }
