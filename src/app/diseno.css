@@ -522,6 +522,10 @@ html[data-modo="oscuro"] .menu-tarjeta-sub[data-espera] { color: rgb(255 200 110
 .lienzo-contenido:has(.marco-inbox) > .mas-opciones button { min-height: 2.25rem; font-size: 0.8125rem; }
 /* El encabezado del chat queda fijo arriba del hilo mientras se lee. */
 .chat-cabecera { position: sticky; top: 0; z-index: 3; }
+/* En el celular, donde se escribe queda siempre a la vista al pie del chat. */
+@media (max-width: 1023.98px) {
+  .chat-compositor { position: sticky; bottom: 0; z-index: 3; box-shadow: 0 -10px 24px -18px rgb(0 0 0 / 0.45); }
+}
 
 /* ================================================================
    Movimiento general: con «reducir movimiento», nada se mueve.
