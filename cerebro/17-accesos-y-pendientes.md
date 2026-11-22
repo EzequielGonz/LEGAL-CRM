@@ -22,7 +22,7 @@ Reglas de la sesión:
 | A4 | ⬜ | GitHub (conector) | Ingeniería: ramas y PR desde los agentes | Reconectar GitHub en claude.ai (hoy falla con «encabezado mal formado») |
 | A5 | ⬜ | PostHog (plugin instalado) | Embudos y mapas de calor de las landings | Iniciar sesión en PostHog (plan gratis). Uso solo con OK |
 | A6 | ⬜ | Firecrawl (plugin instalado) | Leer marca y precios de la competencia | Clave de API del plan gratis por el formulario seguro (host `api.firecrawl.dev`). Uso solo con OK |
-| A7 | ⬜ | Gmail y Google Calendar | Jarvis: resumen diario y recordatorios | Conector de Google en claude.ai |
+| A7 | ✅ 22/11 (verificado: Gmail `list_labels` y Calendar `list_calendars` responden con la cuenta del estudio) | Gmail y Google Calendar | Jarvis: resumen diario y recordatorios | Conector de Google en claude.ai |
 | A8 | ⬜ | Vercel de las landings (otra cuenta) | Cargar etiquetas de GA4 y píxel | Invitar a Claude al equipo o dar acceso al proyecto |
 | A9 | ⬜ | Clave de Resend | Aviso por correo de formularios (PR #40) | Formulario seguro o variable en Vercel |
 | A10 | ⬜ | Canva y Cloudflare (Turnstile) | Diseño de piezas; antispam en formularios | Conectar en claude.ai si los quieren usar |

@@ -103,3 +103,11 @@ Supabase (URL, clave pública, clave de servicio) · `WHATSAPP_<LÍNEA>` por lí
 - Dominios: DonWeb. Metricool: un usuario para las 4 marcas.
 - Panel: código general que el dueño da en el chat (no se guarda en archivos).
 - Claude no puede entrar a la cuenta de Vercel de las landings ni a Search Console/GA4 sin que se autorice el conector o se haga por Cowork.
+
+### Conectores verificados en la sesión «accesos» (22/11)
+
+- Supabase (proyecto del panel): `list_tables` responde.
+- Windsor.ai: GA4 (4 propiedades) y Search Console (4 dominios). Reemplaza al kit de Search Console y a AdCopilot.
+- Metricool: las 4 marcas, con analítica.
+- Gmail y Google Calendar: cuenta del estudio, para Jarvis (resumen diario y recordatorios).
+- Siguen sin andar: GitHub (el plugin rechaza la autorización), PostHog y Canva (falta iniciar sesión), Firecrawl (sin clave).
