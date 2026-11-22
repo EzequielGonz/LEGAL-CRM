@@ -1256,6 +1256,7 @@ export const FUERA_DEL_CATALOGO: Record<string, string> = {
   "agentes/roles": "Guardar un rol y cargarlo a una base ya tienen herramienta propia (proponer_rol, proponer_rol_base); archivar y cargar a una campaña están en el catálogo.",
   "agentes/simulador": "Es una prueba que no cambia nada; se usa desde Bot IA.",
   "appointments/[id]/cancel": "Duplicada: cancelar una cita se hace con «cambiar el estado de una cita», que además deja historial.",
+  "appointments/[id]/mover": "Mover una cita (22/11): se hace desde Citas, con confirmación y horario; el asistente cambia el estado de una cita pero no reprograma.",
   "bases/[id]": "Duplicada: archivar una base está en el catálogo con su motivo.",
   "campaigns": "Ya tiene herramienta propia (proponer_campana).",
   "campaigns/[id]": "El borrado es en realidad archivar (está en el catálogo); la línea de Meta y el límite tienen herramienta propia.",
