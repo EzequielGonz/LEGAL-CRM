@@ -1,0 +1,96 @@
+/*
+ * Laboratorio de bots simple (22/11). Estética clásica del panel (como /perfiles): tarjeta oscura lisa,
+ * sombras en capas, relieve sutil. Sin fondos raros. Controles de 44 px. AA sobre #12151D.
+ */
+.lab {
+  --lab-fondo: #12151d;
+  --lab-fondo-2: #181c26;
+  --lab-borde: rgba(255, 255, 255, 0.1);
+  --lab-t1: #f2f3f5;
+  --lab-t2: #b8bdca;
+  --lab-acento: #8b9cff;
+  color: var(--lab-t1);
+}
+.lab-j { --lab-acento: #8b9cff; }
+.lab-c { --lab-acento: #4fd1c5; }
+.lab-a { --lab-acento: #f5b544; }
+.lab-m { --lab-acento: #f47fbf; }
+
+.lab-tarjeta {
+  background: var(--lab-fondo);
+  border: 1px solid var(--lab-borde);
+  border-radius: 1rem;
+  padding: 1.25rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 1px 2px rgba(0, 0, 0, 0.4), 0 6px 14px rgba(0, 0, 0, 0.28), 0 18px 36px rgba(0, 0, 0, 0.22);
+}
+.lab-sub {
+  background: var(--lab-fondo-2);
+  border: 1px solid var(--lab-borde);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+.lab h2, .lab h3, .lab h4 { color: var(--lab-t1); }
+.lab-t2 { color: var(--lab-t2); }
+
+.lab-pestanas { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0 0 1.25rem; padding: 0; list-style: none; }
+.lab-pestana {
+  min-height: 44px; min-width: 44px; padding: 0 1.1rem; border-radius: 9999px; cursor: pointer;
+  border: 1px solid var(--lab-borde); background: var(--lab-fondo-2); color: var(--lab-t1); font-size: 0.9rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.lab-pestana:hover { transform: translateY(-1px); border-color: var(--lab-acento); }
+.lab-pestana[aria-selected="true"] { border-color: var(--lab-acento); box-shadow: inset 0 0 0 1px var(--lab-acento), 0 4px 12px rgba(0, 0, 0, 0.4); font-weight: 600; }
+
+.lab-anillos { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: 1rem; justify-items: center; }
+.lab-anillo { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; text-align: center; }
+.lab-anillo b { font-weight: 600; }
+
+.lab-boton, .lab-boton-sec, .lab-boton-peligro {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; min-height: 44px; min-width: 44px;
+  padding: 0 1rem; border-radius: 0.75rem; font-size: 0.9rem; font-weight: 600; cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+}
+.lab-boton { background: var(--lab-acento); color: #0b0d12; border: 1px solid transparent; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 2px 4px rgba(0, 0, 0, 0.4), 0 8px 18px rgba(0, 0, 0, 0.3); }
+.lab-boton-sec { background: var(--lab-fondo-2); color: var(--lab-t1); border: 1px solid var(--lab-borde); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 2px 6px rgba(0, 0, 0, 0.3); }
+.lab-boton-peligro { background: var(--lab-fondo-2); color: #ffb4a8; border: 1px solid rgba(255, 180, 168, 0.5); }
+.lab-boton:hover, .lab-boton-sec:hover, .lab-boton-peligro:hover { transform: translateY(-1px); }
+.lab-boton:disabled, .lab-boton-sec:disabled, .lab-boton-peligro:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.lab-campo, .lab-area, .lab-select {
+  width: 100%; min-height: 44px; border-radius: 0.6rem; border: 1px solid rgba(255, 255, 255, 0.28);
+  background: #0b0d12; color: var(--lab-t1); padding: 0 0.75rem; font-size: 0.9rem;
+}
+.lab-area { padding: 0.65rem 0.75rem; min-height: 6rem; line-height: 1.5; }
+.lab-etiqueta { display: block; margin-bottom: 0.25rem; font-size: 0.875rem; font-weight: 600; color: var(--lab-t1); }
+.lab-ayuda { margin-top: 0.25rem; font-size: 0.8rem; color: var(--lab-t2); }
+.lab-form { display: grid; gap: 0.9rem; }
+.lab-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.lab-chip { min-height: 44px; padding: 0 0.9rem; border-radius: 9999px; border: 1px dashed var(--lab-acento); background: transparent; color: var(--lab-t1); cursor: pointer; font-size: 0.875rem; }
+.lab-chip:hover { background: rgba(255, 255, 255, 0.06); }
+
+.lab-rol { display: grid; gap: 0.6rem; }
+.lab-acciones { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.lab-lista { display: grid; gap: 0.75rem; margin: 0; padding: 0; list-style: none; }
+.lab-pildora { display: inline-flex; align-items: center; min-height: 24px; padding: 0 0.6rem; border-radius: 9999px; font-size: 0.75rem; border: 1px solid var(--lab-borde); color: var(--lab-t2); }
+
+.lab-msg { border-radius: 0.6rem; padding: 0.6rem 0.8rem; font-size: 0.9rem; border: 1px solid; }
+.lab-msg-ok { border-color: #6ee7b7; color: #b7f5da; background: rgba(16, 185, 129, 0.12); }
+.lab-msg-error { border-color: #fcd34d; color: #ffe9a6; background: rgba(245, 158, 11, 0.12); }
+
+.lab-velo { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; padding: 1rem; background: rgba(0, 0, 0, 0.65); }
+.lab-dialogo { width: min(32rem, 100%); max-height: 90vh; overflow: auto; background: var(--lab-fondo); border: 1px solid var(--lab-borde); border-radius: 1rem; padding: 1.25rem; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), 0 12px 28px rgba(0, 0, 0, 0.45), 0 30px 60px rgba(0, 0, 0, 0.4); animation: lab-entra 0.22s cubic-bezier(0.22, 1, 0.36, 1); }
+.lab-dialogo-fuerte { border-color: #fcd34d; }
+.lab-dialogo:focus { outline: none; }
+.lab-casilla { display: flex; align-items: flex-start; gap: 0.6rem; min-height: 44px; font-size: 0.9rem; cursor: pointer; }
+.lab-casilla input { width: 1.25rem; height: 1.25rem; margin-top: 0.15rem; flex: none; }
+
+.lab-frase { font-size: 1.05rem; line-height: 1.5; }
+.lab-entra { animation: lab-entra 0.4s cubic-bezier(0.22, 1, 0.36, 1) backwards; }
+@keyframes lab-entra { from { opacity: 0; transform: translateY(6px) scale(0.99); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .lab-entra, .lab-dialogo { animation: none; }
+  .lab-pestana, .lab-boton, .lab-boton-sec, .lab-boton-peligro { transition: none; }
+  .lab-pestana:hover, .lab-boton:hover, .lab-boton-sec:hover, .lab-boton-peligro:hover { transform: none; }
+}

@@ -2,6 +2,8 @@ import Link from "next/link";
 import { EfectosVidrio } from "@/components/ui/efectos-vidrio";
 import { SalaLampara } from "@/components/ui/lampara-dibujo";
 import { ConocimientoBot } from "@/components/perfiles/conocimiento-bot";
+import { LaboratorioSimple } from "@/components/laboratorio/laboratorio-simple";
+import { VerMas } from "@/components/premium/ver-mas";
 import "@/components/perfiles/accesos-centrales.css";
 import { leerRubrosActivos } from "@/lib/perfiles-stats";
 import { marcasResueltas } from "@/lib/marca-servidor";
@@ -11,9 +13,8 @@ export const metadata = { title: "Laboratorio de bots" };
 export const dynamic = "force-dynamic";
 
 /**
- * Laboratorio de bots (22/11): las versiones del conocimiento del bot (v1/v2) y su
- * comparación con resultados reales. Antes estaba al pie de /perfiles; se mudó acá
- * sin cambios, con el mismo marco y fondo que Perfiles.
+ * Laboratorio de bots (22/11): pantalla simple por rubro (cómo anda el bot, roles y ficha del negocio).
+ * La vista técnica de antes (versiones v1/v2, tabla y laboratorio con asistente) sigue entera detrás de «Ver más».
  */
 export default async function LaboratorioPage() {
   const sesion = await requirePageSession();
@@ -28,13 +29,18 @@ export default async function LaboratorioPage() {
         <div className="ac-cabecera">
           <div>
             <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Laboratorio de bots</h1>
-            <p className="mt-2 text-sm">Versiones del conocimiento de cada bot y cómo les fue con resultados reales.</p>
+            <p className="mt-2 text-sm">Cómo anda el bot de cada rubro, sus roles y la ficha del negocio. Todo lo que cambies te pide confirmar antes.</p>
           </div>
           <Link href="/perfiles" prefetch={false} className="ac-volver">
             <span aria-hidden="true">←</span> Volver a Perfiles
           </Link>
         </div>
-        <ConocimientoBot nombres={nombres} />
+        <LaboratorioSimple nombres={nombres} />
+        <div className="lab mt-8">
+          <VerMas cerrado="Ver el detalle técnico (versiones y tabla)" abierto="Ocultar el detalle técnico">
+            <ConocimientoBot nombres={nombres} />
+          </VerMas>
+        </div>
       </main>
     </div>
   );
