@@ -34,6 +34,11 @@ export interface DatosSalud {
    * sin tope de horas, del perfil de la línea). Si viene, reemplaza al global de arriba: un control por perfil.
    */
   retenidosPorPerfil?: Record<string, { cantidad: number; motivo: string | null }>;
+  /**
+   * 22/11: acceso REAL de cada línea de Meta (lo que informa Meta, solo lectura). Tener las credenciales cargadas
+   * no alcanza: Marketing figuraba «en orden» con una línea sin acceso al número.
+   */
+  accesoLineas?: { slug: string; nombre: string; linea: string; estado: string | null; ok: boolean; etiqueta?: string | null }[];
   secretoMeta: boolean;
   ultimoEntrante: string | null;
   /** Por perfil: nombre visible, credenciales de WhatsApp y agente. */
@@ -129,6 +134,22 @@ export function evaluarSalud(d: DatosSalud): ItemSalud[] {
     items.push({ clave: "cuarentena", estado: "rojo", titulo: `${d.cuarentena24h.cantidad} mensaje(s) entrante(s) en cuarentena`, detalle: d.cuarentena24h.motivo ?? "Webhook rechazado.", accion: "Revisar la cuarentena", href: "/configuracion#cuarentena" });
   } else if (d.secretoMeta) {
     items.push({ clave: "cuarentena", estado: "verde", titulo: "Webhooks", detalle: "Sin mensajes en cuarentena en las últimas 24 h." });
+  }
+
+  // Acceso real a cada línea de Meta (22/11)
+  const porPerfil = new Map<string, number>();
+  for (const a of d.accesoLineas ?? []) porPerfil.set(a.slug, (porPerfil.get(a.slug) ?? 0) + 1);
+  for (const a of d.accesoLineas ?? []) {
+    const clave = (porPerfil.get(a.slug) ?? 1) > 1 ? `acceso_${a.slug}_${a.linea.toLowerCase()}` : `acceso_${a.slug}`;
+    const href = rutaDePerfil(a.slug as SlugPerfil, "configuracion");
+    if (a.ok) {
+      items.push({ clave, perfil: a.slug, estado: "verde", titulo: `${a.nombre}: la línea ${a.linea} tiene acceso`, detalle: "Meta confirma el número conectado." });
+    } else if (a.estado === "no_comprobado" || a.estado === "sin_credenciales" || !a.estado) {
+      items.push({ clave, perfil: a.slug, estado: "amarillo", titulo: `${a.nombre}: no se pudo comprobar el acceso de la línea ${a.linea}`, detalle: "No se pudo comprobar con Meta si el número está conectado. No se da por «en orden».", accion: "Verificar el número", href });
+    } else {
+      const que = a.estado === "sin_acceso" ? "no tiene acceso al número en Meta" : a.estado === "token_invalido" ? "el token de acceso de Meta no sirve (vencido o revocado)" : a.etiqueta ? a.etiqueta.toLowerCase() : "Meta informa un problema con el número";
+      items.push({ clave, perfil: a.slug, estado: "rojo", titulo: `${a.nombre}: la línea ${a.linea} ${a.estado === "sin_acceso" ? "no tiene acceso al número" : "tiene un problema de conexión"}`, detalle: `${que[0].toUpperCase()}${que.slice(1)}: no recibe ni contesta mensajes hasta resolverlo.`, accion: "Verificar el número en Configuración › Líneas", href });
+    }
   }
 
   // Último mensaje entrante

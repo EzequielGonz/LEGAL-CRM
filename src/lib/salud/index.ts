@@ -4,6 +4,7 @@ import { agentReadiness } from "@/lib/profiles";
 import { envPrefixForArea, RUBRO_IDS } from "@/lib/rubros";
 import { leerEstadoCalidad } from "@/lib/whatsapp/calidad-servidor";
 import { leerEstadoAvisos } from "@/lib/whatsapp/avisos-servidor";
+import { consultarEstadosLineas } from "@/lib/whatsapp/estado-linea";
 import { resumenRetenidosDelPerfil, type RetenidoMinimo } from "@/lib/definiciones/retenidos";
 import type { SlugPerfil } from "@/lib/marca";
 import { evaluarSalud, type DatosSalud, type ItemSalud } from "./reglas";
@@ -113,7 +114,20 @@ export async function leerSalud(ahora = new Date()): Promise<ItemSalud[]> {
     return { slug, nombre: PERFILES.find((p) => p.slug === slug)?.nombre ?? slug, linea: l.label, calidad: l.calidad, pausadas: l.pausadas ?? [] };
   });
 
+  // 22/11: acceso real de cada línea de Meta (se le pregunta a Meta; solo lectura, con memoria corta).
+  const accesoLineas = await seguro(async () => {
+    const { data: lineas } = await s.from("profile_lines").select("label, rubro_id, credential_key").eq("active", true);
+    const filas = ((lineas ?? []) as { label: string; rubro_id: string; credential_key: string }[]).filter((l) => l.credential_key);
+    const estados = await consultarEstadosLineas(filas.map((l) => l.credential_key), { memoria: true });
+    return filas.map((l) => {
+      const slug = SLUG_POR_RUBRO[l.rubro_id] ?? l.rubro_id;
+      const inf = estados[l.credential_key];
+      return { slug, nombre: PERFILES.find((p) => p.slug === slug)?.nombre ?? slug, linea: l.label, estado: inf?.estado ?? null, ok: !!inf?.ok, etiqueta: inf?.etiqueta ?? null };
+    });
+  }, [] as NonNullable<DatosSalud["accesoLineas"]>);
+
   const datos: DatosSalud = {
+    accesoLineas,
     ahora,
     ultimoLatido: (latido as any)?.at ?? null,
     latidoTiempos: latido ? { ms: typeof (latido as any).ms === "number" ? (latido as any).ms : null, etapas: (latido as any).etapas ?? {} } : null,
