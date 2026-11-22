@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { registerDevice } from "@/lib/push";
-import { RUBRO_IDS } from "@/lib/rubros";
+import { rubroDePerfilPedido } from "@/lib/definiciones/avisos";
 import { vapidConfig } from "@/lib/webpush";
 import { requireSession } from "@/lib/acceso/autorizacion";
 import { respuestaErrorInterno } from "@/lib/error-publico";
@@ -34,7 +34,7 @@ export async function POST(request: Request) {
       label,
       userAgent: request.headers.get("user-agent")?.slice(0, 300) ?? null,
       // 22/11: perfil desde el que se activaron los avisos (opcional).
-      rubroId: typeof body?.perfil === "string" && body.perfil in RUBRO_IDS ? RUBRO_IDS[body.perfil as keyof typeof RUBRO_IDS] : null,
+      rubroId: rubroDePerfilPedido(body?.perfil),
     });
     return NextResponse.json({ ok: true, id });
   } catch (err: any) {

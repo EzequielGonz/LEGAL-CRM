@@ -52,19 +52,35 @@ export async function quarantineWebhook(input: {
 }): Promise<void> {
   try {
     const supabase = createAdminClient();
-    const { error } = await supabase.from("webhook_quarantine").insert({
+    const fila = {
       source: input.source,
       reason: input.reason,
       account_id: input.accountId ?? null,
       payload: input.payload ?? {},
       detail: input.detail ?? null,
       rubro_id: input.rubroId ?? null,
-    });
+    };
+    const error = await insertarRetenido(fila, async (f) => (await (supabase.from("webhook_quarantine") as any).insert(f)).error ?? null);
     if (error) throw new Error(error.message);
   } catch (err) {
     // Último recurso: que quede en los logs de Vercel con el contenido completo.
     console.error("[webhook] No se pudo guardar en retenidos:", err, JSON.stringify(input).slice(0, 20000));
   }
+}
+
+/**
+ * 22/11 (integración): guarda la fila del retenido. Si la base todavía no tiene la columna
+ * `rubro_id` (migración 0637 sin aplicar), vuelve a intentar sin ella: un mensaje retenido
+ * nunca se pierde por el orden en que se publica el código y se aplica la base.
+ */
+export async function insertarRetenido<F extends { rubro_id?: string | null }>(
+  fila: F,
+  insertar: (fila: Omit<F, "rubro_id"> | F) => Promise<{ message: string } | null>
+): Promise<{ message: string } | null> {
+  const error = await insertar(fila);
+  if (!error || !/rubro_id/i.test(error.message)) return error;
+  const { rubro_id: _sinColumna, ...sinRubro } = fila;
+  return insertar(sinRubro);
 }
 
 /** Lee el cuerpo crudo una sola vez (para la firma) y lo interpreta como JSON. */

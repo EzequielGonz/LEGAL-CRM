@@ -47,13 +47,13 @@ select vault.create_secret('<VALOR DE CRON_SECRET>', 'crm_cron_secret', 'Secreto
 ```
 (Si ya existe: `select vault.update_secret(id, '<nuevo valor>') from vault.secrets where name = 'crm_cron_secret';`.)
 
-**Aplicar:** ejecutar el archivo. Si falta pg_cron, pg_net, Vault o el secreto, **no toca el job vigente** y emite un `NOTICE` explicando qué falta. Si el job ya existe, se actualiza en el lugar (mismo `jobid`).
+**Aplicar:** ejecutar el archivo. Si falta pg_cron, pg_net, Vault o el secreto, **no toca el job vigente** y emite un `NOTICE` explicando qué falta. Si el job ya existe, se actualiza en el lugar (mismo `jobid`). Si el job vigente es de **otro usuario** de la base, no se toca (se avisa con un `NOTICE`): así no queda un segundo latido corriendo a la vez. Conviene confirmar después que hay **un solo** job `campaigns-tick` (`select count(*) from cron.job where jobname = 'campaigns-tick'` = 1).
 
 **Comprobar** (sin mostrar el secreto):
 ```sql
 select jobid, jobname, schedule, active,
        command like '%vault.decrypted_secrets%' as secreto_desde_vault,
-       command not like '%Bearer %' as sin_secreto_escrito
+       command !~ 'Bearer [^'']' as sin_secreto_escrito  -- el comando nuevo dice 'Bearer ' || (desde Vault)
   from cron.job where jobname = 'campaigns-tick';
 select status, count(*) from cron.job_run_details
  where jobid = (select jobid from cron.job where jobname = 'campaigns-tick') and start_time > now() - interval '10 minutes'

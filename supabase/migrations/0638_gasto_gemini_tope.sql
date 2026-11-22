@@ -24,7 +24,8 @@ begin
     from pg_constraint c
    where c.conrelid = 'public.agent_turn_logs'::regclass
      and c.contype = 'c'
-     and pg_get_constraintdef(c.oid) ilike '%uso%'
+     -- Solo la restricción de la columna «uso» (palabra completa; no otra que contenga «uso» por casualidad).
+     and pg_get_constraintdef(c.oid) ~* '\muso\M'
      and pg_get_constraintdef(c.oid) not ilike '%recontacto%'
    limit 1;
   if v_nombre is not null then

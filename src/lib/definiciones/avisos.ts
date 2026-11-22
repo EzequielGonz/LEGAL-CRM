@@ -6,6 +6,14 @@
  * Un dispositivo sin perfil asignado (los registrados antes de la migración 0637) sigue recibiendo todo
  * hasta que se le asigne uno: así no se pierde ningún aviso urgente.
  */
+import { RUBRO_IDS } from "@/lib/rubros";
+
+/** Rubro del perfil que manda el panel al activar los avisos (solo claves propias: no «toString»). */
+export function rubroDePerfilPedido(perfil: unknown): string | null {
+  if (typeof perfil !== "string" || !Object.prototype.hasOwnProperty.call(RUBRO_IDS, perfil)) return null;
+  return RUBRO_IDS[perfil as keyof typeof RUBRO_IDS];
+}
+
 export function dispositivoRecibeAviso(rubroDelDispositivo: string | null | undefined, rubroDelAviso: string | null | undefined): boolean {
   if (!rubroDelAviso) return true;
   if (!rubroDelDispositivo) return true;

@@ -40,6 +40,13 @@ begin
     return;
   end if;
 
+  -- Integración 22/11: cron.schedule actualiza en el lugar solo el job del MISMO usuario. Si el
+  -- job vigente es de otro usuario, se crearía un segundo latido (doble corrida por minuto): no se toca.
+  if exists (select 1 from cron.job where jobname = 'campaigns-tick' and username <> current_user) then
+    raise notice '0639: el job campaigns-tick vigente es de otro usuario; no se toca (aplicar como ese usuario).';
+    return;
+  end if;
+
   -- El secreto se resuelve en cada corrida (no queda escrito en cron.job).
   v_comando := format(
     $cmd$select net.http_post(
