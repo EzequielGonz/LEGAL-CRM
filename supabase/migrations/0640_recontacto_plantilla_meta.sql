@@ -148,6 +148,50 @@ $$;
 revoke all on function public.followup_recontacto_reservar(uuid, uuid, text, timestamptz, integer, timestamptz) from public, anon, authenticated;
 grant execute on function public.followup_recontacto_reservar(uuid, uuid, text, timestamptz, integer, timestamptz) to service_role;
 
+-- 3b) Clave de teléfono en SQL: la misma regla que `normalizePhoneAR` (src/lib/phone.ts) y `claveTelefono`:
+--     solo dígitos; sin el 54 inicial; sin el 9 si quedan más de 10 dígitos; sin el 0 inicial de larga
+--     distancia; «11 15 xxxxxxxx» (12 dígitos que empiezan con 1115) pasa a «11 xxxxxxxx»; con 9 o más
+--     dígitos queda «549» + dígitos; con menos, los dígitos tal cual (como el respaldo del código).
+create or replace function public.recontacto_clave_telefono(p_phone text)
+returns text
+language plpgsql
+immutable
+set search_path = public
+as $$
+declare
+  d text := regexp_replace(coalesce(p_phone, ''), '\D', '', 'g');
+begin
+  if d = '' then return ''; end if;
+  if left(d, 2) = '54' then d := substr(d, 3); end if;
+  if left(d, 1) = '9' and length(d) > 10 then d := substr(d, 2); end if;
+  d := regexp_replace(d, '^0', '');
+  if length(d) = 12 and left(d, 4) = '1115' then d := '11' || substr(d, 5); end if;
+  if length(d) >= 9 then return '549' || d; end if;
+  return regexp_replace(coalesce(p_phone, ''), '\D', '', 'g');
+end;
+$$;
+revoke all on function public.recontacto_clave_telefono(text) from public, anon, authenticated;
+grant execute on function public.recontacto_clave_telefono(text) to service_role;
+
+-- 3c) Relleno: los contactos 2 de Jurídico ya ENVIADOS en los últimos 30 días cuentan para la ventana
+--     (si no, la primera tanda podría recontactar a quien acaba de recibir el contacto 2). Se marcan con
+--     canal y clave de teléfono. Solo filas sin marca (repetible); no se cambia estado, fecha ni mensaje.
+--     Criterio: paso 2, estado «enviada», `sent_at` dentro de los últimos 30 días, rubro Jurídico.
+--     Incluye los que salieron por Wasender (la persona también recibió el contacto 2). Efecto lateral
+--     aceptado: suman al tope diario del perfil de hoy si salieron hoy.
+update public.followup_tasks t
+   set canal = 'plantilla_recontacto',
+       telefono_clave = public.recontacto_clave_telefono(c.phone)
+  from public.contacts c
+ where c.id = t.contact_id
+   and t.rubro_id = '11111111-1111-1111-1111-111111111111'
+   and t.step = 2
+   and t.status = 'enviada'
+   and t.sent_at >= now() - interval '30 days'
+   and t.canal is null
+   and t.telefono_clave is null
+   and c.phone is not null;
+
 -- 4) Asignación inicial: la plantilla aprobada del contacto 2 de cada línea.
 insert into public.template_assignments (rubro_id, line_id, purpose, template_id, variable_sources, active, note)
 select a.rubro_id, a.line_id, 'recontacto', a.template_id, a.variable_sources, true,

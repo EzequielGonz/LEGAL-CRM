@@ -111,7 +111,7 @@ test("revisión 2b y 2c: el reordenamiento aborta si falla una lectura y escribe
   assert.doesNotMatch(fn, /chunk\([^)]*,\s*500\)/);
   // Cada lectura de contactos y de filas de base revisa el error y corta antes de escribir.
   assert.match(fn, /from\("contacts"\)\.select\("id, qualification_data"\)\.in\("id", part\);\s*\n\s*if \(error\) throw/);
-  assert.match(fn, /from\("imported_base_rows"\)\.select\("contact_id, base_id, raw_data"\)[^;]*;\s*\n\s*if \(error\) throw/);
+  assert.match(fn, /from\("imported_base_rows"\)[\s\S]*?\.range\(from, from \+ PAGE - 1\);\s*\n\s*if \(error\) throw/);
   assert.ok(fn.indexOf("if (error) throw new Error(`No se pudieron leer los contactos") < fn.indexOf(".update({ priority: prioridad })"));
   // Sin reenvío: pendiente en la lectura y en la escritura.
   assert.match(fn, /\.eq\("status", "pendiente"\)\s*\n\s*\.order\("id"\)/);
@@ -149,7 +149,7 @@ test("revisión 3: el índice único de la 0640 es por oportunidad, no perpetuo 
 // ---------------------------------------------------------------------------
 
 test("revisión 4: el mismo teléfono con o sin el «9», con 54, con 0 o con espacios da la misma clave", () => {
-  const claves = ["+54 9 11 5555-1234", "5491155551234", "541155551234", "011 5555-1234", "1155551234", "+54 (11) 5555 1234"].map(claveTelefono);
+  const claves = ["+54 9 11 5555-1234", "5491155551234", "541155551234", "011 5555-1234", "1155551234", "+54 (11) 5555 1234", "11 15 5555 1234"].map(claveTelefono);
   assert.equal(new Set(claves).size, 1, claves.join(" | "));
   assert.equal(claves[0], "5491155551234");
   assert.notEqual(claveTelefono("1155551235"), claves[0]);
@@ -255,4 +255,84 @@ test("revisión 7c: «sin lesiones» no es leve y «rotura/ruptura» solo cuenta
   // Lo ya existente no cambia.
   assert.equal(nivelDeGravedad("Luxación de hombro"), "lesion");
   assert.equal(nivelDeGravedad("Traumatismo superficial de la cabeza"), "lesion_leve");
+});
+
+// ---------------------------------------------------------------------------
+// Segunda revisión (22/11)
+// ---------------------------------------------------------------------------
+
+test("segunda revisión I-1: el tope de 3 automáticos se mira antes de reservar y, si llega tarde, cierra la tarea y libera la marca", () => {
+  const motor = leer("src/lib/seguimiento/motor.ts");
+  const meta = motor.slice(motor.indexOf("async function processTask(supabase"));
+  const pre = meta.indexOf("if (await frenaPorTope(task.contact_id, supabase)) return noInsistir(supabase, task, TEXTO_TOPE);");
+  assert.ok(pre > 0, "pre-chequeo");
+  assert.ok(pre < meta.indexOf("await reservarRecontacto("), "antes de reservar");
+  assert.ok(pre < meta.indexOf('rpc("followup_claim"'), "antes del claim");
+  // Si igual llega después de la reserva, se cierra con el token (updateTask no toca una tarea 'enviando').
+  assert.match(meta, /frenaPorTope\(task\.contact_id, supabase\)\) return noInsistir\(supabase, task, TEXTO_TOPE, token\)/);
+  const fn = motor.slice(motor.indexOf("async function noInsistir"), motor.indexOf("async function cancelarRecontacto"));
+  assert.match(fn, /await finish\(supabase, task\.id, token, "cancelada", reason\)/);
+  assert.match(fn, /update\(\{ canal: null, telefono_clave: null \}\)/);
+  // Entre la reserva y el envío ningún otro return deja la tarea 'enviando' con la marca: compuerta, hora y fallas cierran con token.
+  const tramo = meta.slice(meta.indexOf("await reservarRecontacto("), meta.indexOf("sendWhatsAppTemplate("));
+  const returns = tramo.split("\n").filter((l) => /\breturn\b/.test(l) && !/^\s*(\/\/|\*)/.test(l));
+  for (const l of returns) assert.match(l, /ocupada|cancelarRecontacto|pendiente|frenada|noInsistir\(.*token\)|applyTiming\(supabase, task, third, token\)/, l);
+});
+
+test("segunda revisión I-2: la edad de la calidad se valida por línea (`leidoAt`), no por la hora global", () => {
+  const cal = leer("src/lib/whatsapp/calidad-servidor.ts");
+  assert.match(cal, /leidoAt\?: string/);
+  assert.equal((cal.match(/leidoAt: ahora\.toISOString\(\)/g) ?? []).length, 2);
+  // Al conservar la lectura vieja (Meta no respondió) no se renueva.
+  assert.match(cal, /if \(antes\) nuevo\.lineas\[l\.id\] = antes;/);
+  const srv = leer("src/lib/seguimiento/recontacto-plantilla-servidor.ts");
+  const fn = srv.slice(srv.indexOf("export async function calidadDeLinea"), srv.indexOf("/** Campañas de Meta de la línea. */"));
+  assert.match(fn, /linea\?\.leidoAt/);
+  assert.doesNotMatch(fn, /v\.at\b/);
+});
+
+test("segunda revisión I-3: la ruta de lanzamiento tiene maxDuration y el reordenamiento un presupuesto de 20 s", () => {
+  assert.match(leer("src/app/api/campaigns/[id]/launch/route.ts"), /export const maxDuration = 60;/);
+  const src = leer("src/lib/campaign-recipients.ts");
+  assert.match(src, /PRESUPUESTO_REORDEN_MS = 20_000/);
+  const fn = src.slice(src.indexOf("export async function reordenarPendientesPorGravedad"));
+  // Corta entre grupos (un grupo se escribe entero) y antes de escribir si se agotó leyendo.
+  assert.match(fn, /if \(sinTiempo\(\)\) return corte;/);
+  assert.match(fn, /if \(sinTiempo\(\)\) \{\s*\n\s*cortado = true;\s*\n\s*break;/);
+  assert.ok(fn.indexOf("return corte;") < fn.indexOf(".update({ priority: prioridad })"));
+  assert.match(fn, /escritos\.set\(prioridad, ids\)/);
+});
+
+test("segunda revisión M-1: las filas de base se leen de a 50 contactos y paginadas", () => {
+  const src = leer("src/lib/campaign-recipients.ts");
+  const fn = src.slice(src.indexOf("export async function reordenarPendientesPorGravedad"));
+  assert.match(fn, /chunk\(contactIds, 50\)/);
+  assert.match(fn, /\.order\("id"\)\s*\n\s*\.range\(from, from \+ PAGE - 1\)/);
+  assert.match(fn, /if \(filasBase\.length < PAGE\) break;/);
+});
+
+test("segunda revisión M-2: la 0640 rellena la clave y el canal de los contactos 2 de Jurídico de los últimos 30 días", () => {
+  const sql = sinComentarios(leer("supabase/migrations/0640_recontacto_plantilla_meta.sql"));
+  assert.match(sql, /create or replace function public\.recontacto_clave_telefono/);
+  const upd = sql.slice(sql.indexOf("update public.followup_tasks t"));
+  assert.match(upd, /t\.rubro_id = '11111111-1111-1111-1111-111111111111'/);
+  assert.match(upd, /t\.step = 2/);
+  assert.match(upd, /t\.status = 'enviada'/);
+  assert.match(upd, /t\.sent_at >= now\(\) - interval '30 days'/);
+  assert.match(upd, /t\.canal is null\s+and t\.telefono_clave is null/);
+  assert.ok(!/delete\s+from/i.test(sql));
+});
+
+test("segunda revisión M-7: el detalle de la campaña ordena la prioridad ascendente como el envío real", () => {
+  const v = leer("src/components/campanas/campaign-detail-view.tsx");
+  assert.match(v, /\.order\("priority", \{ ascending: true \}\)/);
+  assert.doesNotMatch(v, /\.order\("priority", \{ ascending: false \}\)/);
+});
+
+test("segunda revisión M-4: la entrega trae INFORME.md y MIGRACIONES.md", () => {
+  const informe = leer("docs/recontacto-2211/INFORME.md");
+  const migraciones = leer("docs/recontacto-2211/MIGRACIONES.md");
+  assert.match(informe, /No se probó/i);
+  assert.match(migraciones, /Revertir/i);
+  assert.match(migraciones, /0640_recontacto_plantilla_meta\.sql/);
 });

@@ -521,9 +521,16 @@ async function cerrarEnviada(supabase: Db, task: any, token: string, messageId: 
  * La tarea se cancela con su motivo y la oportunidad deja de recibir contactos
  * automáticos (queda «caído», igual que cuando no responde al contacto 2).
  */
-async function noInsistir(supabase: Db, task: any, motivo: string): Promise<ExecResult> {
+async function noInsistir(supabase: Db, task: any, motivo: string, token: string | null = null): Promise<ExecResult> {
   const reason = motivoNoInsistir(task.step, motivo);
-  await updateTask(supabase, task.id, { status: "cancelada", status_reason: reason });
+  if (token) {
+    // Tarea ya reservada ('enviando'): `updateTask` no la toca. Se cierra con su token y se libera la marca de
+    // recontacto, para que una tarea que no salió no cuente como «ya recibió» ni para el tope del día.
+    await finish(supabase, task.id, token, "cancelada", reason);
+    await (supabase.from("followup_tasks") as any).update({ canal: null, telefono_clave: null }).eq("id", task.id).neq("status", "enviada");
+  } else {
+    await updateTask(supabase, task.id, { status: "cancelada", status_reason: reason });
+  }
   await setOpportunityState({
     opportunityId: task.opportunity_id,
     dimension: "seguimiento",
@@ -634,7 +641,7 @@ async function processTaskWasender(
   const frenada = await pasarCompuerta(supabase, task, token);
   if (frenada) return frenada;
   // Revisión 15/11: tope único de 3 automáticos sin respuesta por persona.
-  if (await frenaPorTope(task.contact_id, supabase)) return noInsistir(supabase, task, TEXTO_TOPE);
+  if (await frenaPorTope(task.contact_id, supabase)) return noInsistir(supabase, task, TEXTO_TOPE, token);
 
   const atSend = clock();
   const third = decideAtExecution(timing, atSend, fresh.calendar);
@@ -824,6 +831,9 @@ async function processTask(supabase: Db, task: any, now: Date, calendar: Contact
   );
   if (criterio && !criterio.escribir) return noInsistir(supabase, task, criterio.motivo);
 
+  // 22/11: el tope de 3 automáticos sin respuesta se mira ANTES de reservar y de marcar el recontacto.
+  if (await frenaPorTope(task.contact_id, supabase)) return noInsistir(supabase, task, TEXTO_TOPE);
+
   // Hora y calendario de nuevo, después de las consultas y antes de reservar.
   const beforeClaim = clock();
   const fresh = await loadContactCalendar(beforeClaim);
@@ -859,7 +869,7 @@ async function processTask(supabase: Db, task: any, now: Date, calendar: Contact
   const frenada = await pasarCompuerta(supabase, task, token);
   if (frenada) return frenada;
   // Revisión 15/11: tope único de 3 automáticos sin respuesta por persona.
-  if (await frenaPorTope(task.contact_id, supabase)) return noInsistir(supabase, task, TEXTO_TOPE);
+  if (await frenaPorTope(task.contact_id, supabase)) return noInsistir(supabase, task, TEXTO_TOPE, token);
 
   // Última comprobación de hora, calendario y plazo, justo antes de llamar a Meta.
   const atSend = clock();

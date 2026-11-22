@@ -78,7 +78,8 @@ export async function CampaignDetailView({
     .select("id, status, sent_at, error, review_reason, send_uncertain, contact_id, contacts(full_name, phone)", { count: "exact" })
     .eq("campaign_id", campaignId)
     .order("sent_at", { ascending: false, nullsFirst: true })
-    .order("priority", { ascending: false })
+    .order("priority", { ascending: true }) // 22/11: como el envío real (menor = antes)
+    .order("queued_at", { ascending: true })
     .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
   if (filter.statuses) recipientsQuery = recipientsQuery.in("status", filter.statuses);
 

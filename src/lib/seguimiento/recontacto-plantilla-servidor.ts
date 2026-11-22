@@ -106,9 +106,12 @@ export async function calidadDeLinea(lineId: string, ahora: Date = new Date(), s
   if (error) return null;
   const v = (data as any)?.value;
   if (!v || typeof v !== "object") return null;
-  const at = Date.parse(String(v.at ?? ""));
-  if (!Number.isFinite(at) || ahora.getTime() - at > CALIDAD_VIGENTE_MS) return null;
-  const calidad = v.lineas?.[lineId]?.calidad;
+  // La edad se valida por línea (`leidoAt`): si Meta no respondió por esta línea, el latido conserva la lectura
+  // vieja y renueva solo el `at` global, que por eso no sirve. Sin `leidoAt` (formato anterior): sin leer.
+  const linea = v.lineas?.[lineId];
+  const leidoAt = Date.parse(String(linea?.leidoAt ?? ""));
+  if (!Number.isFinite(leidoAt) || ahora.getTime() - leidoAt > CALIDAD_VIGENTE_MS) return null;
+  const calidad = linea?.calidad;
   return typeof calidad === "string" && calidad.trim() ? calidad : null;
 }
 

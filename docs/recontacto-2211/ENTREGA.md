@@ -106,6 +106,15 @@ Sin la migración, el código publicado se comporta como antes (la clave no exis
 6. **Migración 0640** en `begin; … commit;`, solo Jurídico encendido.
 7. **Menores**: si no se puede leer la calidad de la línea (error, sin registro, sin dato o lectura de más de 3 h) no se envía; en el choque de la reserva la tarea se cancela y la oportunidad queda sin `followup_next_at` colgado; en gravedad «sin lesiones/sin lesión» no cuenta como leve y «rotura/ruptura» solo cuenta si habla de una parte del cuerpo.
 
+### Segunda revisión (22/11)
+
+- **I-1**: el tope de 3 automáticos se mira antes de reservar; si igual llega tarde (después de la reserva), `noInsistir` cierra la tarea con su token y libera `canal`/`telefono_clave`, así una tarea que no salió no cuenta como «ya recibió» ni para el tope. Ningún otro retorno entre la reserva y el envío deja la marca (compuerta, hora y fallas cierran con token y los estados que no cuentan).
+- **I-2**: `leidoAt` por línea en `calidad_lineas` (no se renueva al conservar la lectura vieja); `calidadDeLinea` valida 3 h por línea y sin `leidoAt` no se envía.
+- **I-3**: `maxDuration = 60` en la ruta de lanzamiento y presupuesto de 20 s en el reordenamiento (corta entre grupos de prioridad, sin escribir un grupo a medias; si se agota leyendo, no escribe nada).
+- **M-1**: filas de base de a 50 contactos, paginadas.
+- **M-2**: relleno en la 0640 (`recontacto_clave_telefono` en SQL + marca de los contactos 2 de Jurídico enviados en los últimos 30 días).
+- **M-4**: `INFORME.md` y `MIGRACIONES.md`. **M-7**: el detalle ordena `priority` ascendente y luego `queued_at`.
+
 Pruebas nuevas: `tests/unitarias/recontacto-2211-revision.test.ts` (una por arreglo; lo que toca la base se verifica sobre el código y la migración).
 
 ## Riesgos y decisiones pendientes
