@@ -265,3 +265,11 @@ Todo lo demás son **decisiones de negocio** del dueño (abajo), no trabas de pr
 | Usar subagentes para gastar menos, y usar el cerebro como apoyo en cada tarea | este chat |
 | Evaluar toda herramienta, skill o video que pase el dueño: qué sirve y si se puede implementar | este chat |
 | Asistente personal tipo Jarvis dentro del panel (propuesta en `16`) | este chat |
+
+## Órdenes del 22/11 (tarde)
+
+- **Claude orquesta como director ejecutivo**: reparte el trabajo en subagentes especializados por escritorio (en copias separadas si tocan código), no hace todo solo, y usa siempre el cerebro y la memoria. Claude revisa, junta, publica y verifica.
+- Rediseño, animaciones y mejoras: **aplicarlos en cada detalle del panel** (estética del cerebro, bento, accesibilidad AA). El gestor de dispositivos y chips queda pendiente.
+- Oficina: Gemini ordena en el panel, Claude trabaja; los agentes arrancan solo con «Arrancar ahora»; hasta borrador.
+- La sesión «accesos» arranca pidiendo al dueño que **conecte Supabase a mano** (en la sesión y en la tarea programada de la Oficina).
+- PostHog, Firecrawl y Skill Arena: instalados o por instalar, pero se usan solo con autorización o si hace falta de verdad.
