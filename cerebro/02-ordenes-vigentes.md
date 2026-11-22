@@ -277,3 +277,4 @@ Todo lo demás son **decisiones de negocio** del dueño (abajo), no trabas de pr
 - **Gravedad en campañas de Jurídico (22/11 noche, respuesta a la pregunta 5):** la etiqueta de gravedad (fractura, amputación…) se conecta a las campañas. Primero se envía a los lesionados más graves y el foco del cupo va a ellos.
 - **Ramas y Vercel (22/11 noche):** el dueño pidió ordenarlas. Primero inventario y propuesta (`21-orden-de-ramas-y-vercel.md`); se archiva con etiqueta y nada se borra sin su OK.
 - **Memoria en claude.ai:** el dueño la está cargando con Claude in Chrome (22/11 noche).
+- **Ramas y PR (22/11 noche):** no tocar ramas ni archivar nada por ahora. Los PR sin integrar (#77, #80 y #40) quedan para después.

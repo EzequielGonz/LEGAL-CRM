@@ -118,3 +118,9 @@ Más 6 ramas locales `worktree-agent-*` y las locales `claude/admiring-euler-ctf
 1. Si se etiquetan y quitan las 87 ramas ya integradas (empezando por 18) y los 5 worktrees de agentes.
 2. Qué se hace con Redes (`claude/happy-wozniak-ajfi1z` + `redes-*`, PR #77) y con la medición sin terminar (PR abiertos en las 4 landings).
 3. Qué pasa con `claude/pensive-galileo-d6ephy` (Archivar del 19/11), `landings-conexion` (#40), `trabajo-1410`, `test-escritura-claude`, el PR #80, y si se retiran las variables de Preview de `wasender-integracion` y se filtran los Previews de documentación.
+
+## Decisión del dueño (22/11 noche)
+
+- **Ramas:** no se toca nada. El inventario era para ordenarse; se archiva solo si hace falta de verdad.
+- **PR sin integrar** (#77 Redes y ramas `redes-*`, #80 medición de landings, #40 aviso por correo): quedan para después.
+- **Vistas previas de las ramas de documentos:** preguntó para qué sirven. Se le explicó; falta su respuesta sobre si se frenan las de `cerebro-chats` y `admiring-euler`.
