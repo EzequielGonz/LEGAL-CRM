@@ -1,0 +1,31 @@
+/* Citas (22/11): calendario por día y semana. Tokens --d-* y .pp; misma familia visual que Contactos (contactos.css). */
+.ct-citas { display: grid; gap: 1rem; }
+.ct-barra { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1rem; padding: 0.875rem 1.125rem; border-radius: var(--pm-r-tarjeta, 18px); border: 1px solid var(--d-linea); background: linear-gradient(180deg, rgb(var(--d-tarjeta)), rgb(var(--d-tarjeta-2))); box-shadow: var(--pp-brillo), var(--pp-capas); animation: ct-entra 420ms var(--d-curva) backwards; }
+.ct-barra__nav, .ct-barra__vistas { display: flex; gap: 0.375rem; }
+.ct-barra__titulo { flex: 1 1 12rem; font-size: 1.0625rem; font-weight: 650; letter-spacing: -0.01em; color: var(--d-texto); text-transform: capitalize; text-wrap: balance; }
+.ct-resumen { font-size: 0.875rem; color: var(--d-texto-2); }
+.ct-resumen strong { color: var(--d-texto); }
+.ct-resumen__alerta { color: rgb(var(--d-aviso)); font-weight: 600; }
+.ct-aviso--en-linea { margin: 0; }
+.ct-dias { display: grid; gap: 0.875rem; }
+.ct-citas-dia { padding: 0.875rem 1rem 1rem; border-radius: var(--pm-r-tarjeta, 18px); border: 1px solid var(--d-linea); background: rgb(var(--d-tarjeta)); box-shadow: var(--pp-brillo), var(--pp-capas); animation: ct-entra 420ms var(--d-curva) backwards; animation-delay: calc(var(--ct-orden, 0) * var(--d-escalon)); }
+.ct-citas-dia--hoy { border-color: rgb(var(--c-gold-500) / 0.55); box-shadow: var(--pp-brillo), var(--pp-capas), 0 0 0 3px var(--d-acento-suave); }
+.ct-citas-dia__t { font-size: 0.9375rem; font-weight: 650; text-transform: capitalize; color: var(--d-texto); }
+.ct-citas-lista { list-style: none; margin: 0.5rem 0 0; padding: 0; display: grid; gap: 0.5rem; }
+.ct-cita { display: grid; grid-template-columns: 4.5rem minmax(0, 1fr) auto; gap: 0.75rem; align-items: center; padding: 0.625rem 0.75rem; border-radius: var(--d-r-m); background: rgb(var(--d-tarjeta-2)); border: 1px solid var(--d-linea); transition: box-shadow var(--d-t-medio) ease, transform var(--d-t-medio) var(--d-curva); animation: ct-entra 320ms var(--d-curva) backwards; }
+.ct-cita:hover { box-shadow: var(--pp-brillo), var(--pp-capas); transform: translateY(-1px); }
+.ct-cita--baja { opacity: 0.7; }
+.ct-cita__hora { display: grid; font-size: 1.0625rem; color: var(--d-texto); }
+.ct-cita__datos { min-width: 0; display: grid; gap: 0.2rem; }
+.ct-etiqueta { display: inline-block; margin-left: 0.4rem; padding: 0.1rem 0.5rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600; background: var(--d-acento-suave); color: var(--d-acento-texto); }
+.ct-menu__enlace { display: flex; align-items: center; min-height: 44px; padding: 0 0.75rem; border-radius: var(--d-r-s); color: var(--d-texto); text-decoration: none; font-size: 0.9375rem; }
+.ct-menu__enlace:hover { background: var(--d-acento-suave); }
+.ct-menu__enlace:focus-visible { outline: 2px solid var(--d-acento); outline-offset: -2px; }
+@media (max-width: 720px) {
+  .ct-cita { grid-template-columns: 3.75rem minmax(0, 1fr); }
+  .ct-cita .ct-acciones-fila { grid-column: 1 / -1; justify-content: flex-start; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ct-barra, .ct-citas-dia, .ct-cita { animation: none !important; transition: none; }
+  .ct-cita:hover { transform: none; }
+}

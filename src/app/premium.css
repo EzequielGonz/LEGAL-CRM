@@ -1,0 +1,812 @@
+/*
+ * Fundación visual premium (22/11 · «fácil, sencillo, estadísticas circulares,
+ * animaciones simples, ultra premium»). Guía: brief de diseño del 22/11.
+ *
+ * Convive con lo anterior: todo lleva prefijo `pm-` (clases) o `--pm-` (variables)
+ * y vive dentro de `.pm-lienzo` (la superficie premium, siempre oscura), así no
+ * toca ninguna pantalla existente. Reglas:
+ *  - borde fino + relieve `inset`, no sombras apiladas; el vidrio (blur) solo en
+ *    barra lateral, Jarvis y modales (`.pm-tarjeta--vidrio`);
+ *  - se animan solo `transform`, `opacity` y el trazo del anillo;
+ *  - con «reducir movimiento» no se mueve nada y el anillo y la cifra salen en su valor final;
+ *  - contrastes calculados (WCAG 2.1): texto 17,5 / 8,3 / 5,1 o más sobre el fondo;
+ *    acentos 7,7 o más. Las pruebas de `premium-paleta` comparan este archivo con rubros.ts.
+ */
+
+/* ------------------------------------------------------------------ tokens */
+:root {
+  /* Superficies */
+  --pm-fondo: #0b0d12;
+  --pm-sup-1: #15171b;
+  --pm-sup-2: #1c1e23;
+  --pm-vidrio-1: rgba(255, 255, 255, 0.04);
+  --pm-vidrio-2: rgba(255, 255, 255, 0.07);
+  --pm-borde: rgba(255, 255, 255, 0.08);
+  --pm-borde-fuerte: rgba(255, 255, 255, 0.14);
+  --pm-relieve: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --pm-pista: rgba(255, 255, 255, 0.08);
+
+  /* Texto */
+  --pm-texto: #f2f3f5;
+  --pm-texto-2: #b8bdca;
+  --pm-texto-3: #868b99; /* fechas y ayudas: sobre fondo o vidrio 1 */
+
+  /* Estados */
+  --pm-ok: #4ade80;
+  --pm-error: #f87171;
+  --pm-atencion: #fbbf24;
+  --pm-info: #8b9cff;
+
+  /* Acentos por rubro: luminosidad pareja, 7,7:1 o más sobre el fondo */
+  --pm-ac-juridico: #8b9cff;
+  --pm-ac-coberturas_medicas: #4fd1c5;
+  --pm-ac-agencia_0km: #f5b544;
+  --pm-ac-marketing: #f47fbf;
+  --pm-acento: var(--pm-ac-juridico);
+  --pm-sobre-acento: #0b0d12;
+
+  /* Vidrio de verdad (22/11, orden del dueño): blur 24, blanco 5 a 10 % sobre un velo oscuro que
+     asegura el contraste AA del texto aunque debajo pase la nube más clara (lo comprueba premium-paleta). */
+  --pm-velo: rgba(10, 11, 18, 0.62);
+  --pm-vidrio-bg: linear-gradient(160deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)), var(--pm-velo);
+  --pm-vidrio-bg-fuerte: linear-gradient(160deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.06)), rgba(10, 11, 18, 0.62);
+  --pm-vidrio-borde: rgba(255, 255, 255, 0.14);
+  --pm-brillo-sup: inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(255, 255, 255, 0.03);
+  /* Sombras en capas: de contacto, media y larga y difusa. Objetos que flotan. */
+  --pm-flota: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 32px -8px rgba(0, 0, 0, 0.55), 0 32px 64px -24px rgba(0, 0, 0, 0.5);
+  --pm-flota-alta: 0 2px 4px rgba(0, 0, 0, 0.4), 0 20px 44px -8px rgba(0, 0, 0, 0.6), 0 44px 80px -24px rgba(0, 0, 0, 0.55);
+  /* Neumorfismo sobrio (oscuro): luz arriba a la izquierda, sombra abajo a la derecha. */
+  --pm-neu-base: linear-gradient(145deg, #23262e, #16181e);
+  --pm-neu-sale: -4px -4px 10px rgba(255, 255, 255, 0.05), 6px 6px 14px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  --pm-neu-sale-poco: -2px -2px 6px rgba(255, 255, 255, 0.05), 3px 3px 8px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  --pm-neu-hundido: inset 4px 4px 10px rgba(0, 0, 0, 0.6), inset -3px -3px 8px rgba(255, 255, 255, 0.04);
+
+  /* Radios */
+  --pm-r-chico: 8px;
+  --pm-r-tarjeta: 20px;
+  --pm-r-jarvis: 28px;
+  --pm-r-pastilla: 999px;
+
+  /* Espaciado (base 4) */
+  --pm-e1: 4px;
+  --pm-e2: 8px;
+  --pm-e3: 12px;
+  --pm-e4: 16px;
+  --pm-e6: 24px;
+  --pm-e8: 32px;
+  --pm-e12: 48px;
+  --pm-margen: 16px;
+  --pm-ancho-max: 1240px;
+
+  /* Sombra única (solo hover y modales) y blur */
+  --pm-sombra: 0 8px 32px rgba(0, 0, 0, 0.35);
+  --pm-blur: blur(24px) saturate(150%);
+  --pm-blur-fuerte: blur(28px) saturate(160%);
+
+  /* Tipografía (las variables las define layout.tsx con next/font) */
+  --pm-sans: var(--font-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --pm-mono: var(--font-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --pm-serif: var(--font-serif), "Iowan Old Style", Georgia, serif;
+
+  /* Movimiento */
+  --pm-ease: cubic-bezier(0.2, 0, 0, 1);
+  --pm-ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --pm-t-rapido: 150ms;
+  --pm-t-aparecer: 300ms;
+  --pm-t-anillo: 900ms;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --pm-margen: 32px;
+  }
+}
+
+/* Acento por rubro: se aplica en cualquier contenedor (tarjeta, anillo, pantalla). */
+.pm-rubro-juridico { --pm-acento: var(--pm-ac-juridico); }
+.pm-rubro-coberturas_medicas { --pm-acento: var(--pm-ac-coberturas_medicas); }
+.pm-rubro-agencia_0km { --pm-acento: var(--pm-ac-agencia_0km); }
+.pm-rubro-marketing { --pm-acento: var(--pm-ac-marketing); }
+
+/* ------------------------------------------------------------------ lienzo */
+.pm-lienzo {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  overflow: hidden;
+  background: var(--pm-fondo);
+  color: var(--pm-texto);
+  font-family: var(--pm-sans);
+  font-size: 16px;
+  line-height: 1.5;
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+}
+.pm-lienzo *,
+.pm-lienzo *::before,
+.pm-lienzo *::after {
+  box-sizing: border-box;
+}
+.pm-pagina {
+  position: relative;
+  z-index: 1;
+  max-width: var(--pm-ancho-max);
+  margin: 0 auto;
+  padding: var(--pm-e8) var(--pm-margen) var(--pm-e12);
+  display: grid;
+  gap: var(--pm-e8);
+}
+.pm-titulo-pantalla {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+.pm-subtitulo {
+  margin: var(--pm-e2) 0 0;
+  max-width: 62ch;
+  color: var(--pm-texto-2);
+}
+.pm-seccion__titulo {
+  margin: 0 0 var(--pm-e4);
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+.pm-seccion__nota {
+  margin: calc(-1 * var(--pm-e2)) 0 var(--pm-e4);
+  max-width: 62ch;
+  color: var(--pm-texto-2);
+  font-size: 14px;
+}
+
+/* Foco visible: 2 px del acento, siempre (pisa el foco claro del panel anterior). */
+.pm-lienzo a:focus-visible,
+.pm-lienzo button:focus-visible,
+.pm-lienzo summary:focus-visible,
+.pm-lienzo [tabindex]:focus-visible {
+  outline: 2px solid var(--pm-acento);
+  outline-offset: 2px;
+  box-shadow: none;
+  border-radius: var(--pm-r-chico);
+}
+
+/* ---------------------------------------------------------------- tarjeta */
+.pm-tarjeta {
+  position: relative;
+  padding: var(--pm-e6);
+  border: 1px solid var(--pm-vidrio-borde);
+  border-radius: var(--pm-r-tarjeta);
+  /* Vidrio sobre el mesh: el fondo se ve desenfocado a través de la tarjeta. */
+  background: var(--pm-vidrio-bg);
+  -webkit-backdrop-filter: var(--pm-blur);
+  backdrop-filter: var(--pm-blur);
+  box-shadow: var(--pm-brillo-sup), var(--pm-flota);
+  transition: border-color var(--pm-t-rapido) var(--pm-ease), transform var(--pm-t-rapido) var(--pm-ease), box-shadow 250ms var(--pm-ease);
+}
+.pm-tarjeta--viva:not(.pm-tarjeta--relieve):hover {
+  border-color: rgba(255, 255, 255, 0.22);
+  transform: translateY(-2px);
+  box-shadow: var(--pm-brillo-sup), var(--pm-flota-alta);
+}
+/* Vidrio intenso: Jarvis, paneles y modales (más blur y velo algo más oscuro). */
+.pm-tarjeta--vidrio {
+  background: var(--pm-vidrio-bg-fuerte);
+  -webkit-backdrop-filter: var(--pm-blur-fuerte);
+  backdrop-filter: var(--pm-blur-fuerte);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .pm-tarjeta,
+  .pm-tarjeta--vidrio { background: rgba(21, 23, 27, 0.94); }
+}
+.pm-tarjeta__cabeza {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--pm-e3);
+  margin-bottom: var(--pm-e4);
+}
+.pm-tarjeta__titulo {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+.pm-tarjeta__accion {
+  font-size: 14px;
+  color: var(--pm-texto-2);
+}
+/* Aparecer: opacidad y 8 px, 300 ms; el escalonado de 50 ms lo da `--pm-orden` (0 a 7) en el contenedor. */
+.pm-aparece {
+  /* `backwards` (no `both`): al terminar, el `transform` queda libre para el relieve y el hover. */
+  animation: pm-aparecer var(--pm-t-aparecer) var(--pm-ease-expo) backwards;
+  animation-delay: calc(var(--pm-orden, 0) * 50ms);
+}
+@keyframes pm-aparecer {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Vidrio (panel, Jarvis, modales): entra desde 8 px con fundido de 220 ms, una sola vez. */
+.pm-entra-vidrio {
+  animation: pm-aparecer 220ms var(--pm-ease-expo) backwards;
+}
+.pm-modal {
+  -webkit-backdrop-filter: var(--pm-blur-fuerte);
+  backdrop-filter: var(--pm-blur-fuerte);
+  background: var(--pm-vidrio-bg-fuerte);
+  border: 1px solid var(--pm-vidrio-borde);
+  border-radius: var(--pm-r-jarvis);
+  box-shadow: var(--pm-brillo-sup), var(--pm-flota-alta);
+  animation: pm-aparecer 220ms var(--pm-ease-expo) backwards;
+}
+
+/* ------------------------------------------------------ escena y relieve 3D */
+/* Escena: punto de fuga común (solo CSS). Las tarjetas con relieve llevan su propia perspective(). */
+.pm-escena {
+  perspective: var(--pm-persp, 1000px);
+  perspective-origin: 50% 40%;
+}
+/* Relieve: inclinación de hasta 5° con resorte suave al soltar (350 ms), elevación de 2 px y brillo
+   en el borde que sigue al puntero. Solo se animan transform y opacity. */
+.pm-tarjeta--relieve {
+  --pm-rx: 0deg;
+  --pm-ry: 0deg;
+  --pm-bx: 50%;
+  --pm-by: 0%;
+  transform: perspective(1000px) rotateX(var(--pm-rx)) rotateY(var(--pm-ry)) translateZ(0);
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: transform 350ms cubic-bezier(0.22, 1.25, 0.36, 1), border-color var(--pm-t-rapido) var(--pm-ease);
+}
+.pm-tarjeta--relieve[data-inclinando="1"] {
+  /* Mientras sigue al puntero, casi sin demora; al soltar vuelve la transición con resorte. */
+  transition: transform 90ms linear, border-color var(--pm-t-rapido) var(--pm-ease);
+}
+.pm-tarjeta--relieve:hover {
+  transform: perspective(1000px) rotateX(var(--pm-rx)) rotateY(var(--pm-ry)) translate3d(0, -2px, 8px);
+}
+/* Sombra de elevación: capa aparte, sube solo su opacidad (60 fps). */
+.pm-tarjeta--relieve::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.35), 0 24px 48px -8px rgba(0, 0, 0, 0.6), 0 48px 90px -28px rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  pointer-events: none;
+  z-index: -1;
+  transition: opacity 250ms var(--pm-ease);
+}
+.pm-tarjeta--relieve:hover::after { opacity: 1; }
+/* Brillo en el borde: aro de 1 px con un radial que sigue al puntero. */
+.pm-tarjeta--relieve::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  padding: 1.5px;
+  border-radius: inherit;
+  background: radial-gradient(260px circle at var(--pm-bx) var(--pm-by), color-mix(in srgb, var(--pm-acento) 55%, white), transparent 70%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 250ms var(--pm-ease);
+}
+.pm-tarjeta--relieve:hover::before { opacity: 1; }
+
+/* ------------------------------------------------------------------ cifra */
+.pm-cifra {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 2px;
+  font-family: var(--pm-sans);
+}
+.pm-cifra__valor {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--pm-texto);
+}
+.pm-cifra--xl .pm-cifra__valor { font-size: 48px; }
+.pm-cifra--l .pm-cifra__valor { font-size: 32px; }
+.pm-cifra--m .pm-cifra__valor { font-size: 20px; letter-spacing: -0.01em; }
+.pm-cifra--s .pm-cifra__valor { font-size: 16px; letter-spacing: 0; }
+.pm-cifra__sufijo {
+  font-size: 0.5em;
+  font-weight: 500;
+  color: var(--pm-texto-2);
+  letter-spacing: 0;
+}
+.pm-cifra__etiqueta {
+  font-size: 14px;
+  font-weight: 500;
+}
+.pm-cifra__detalle {
+  font-size: 13px;
+  color: var(--pm-texto-2);
+}
+/* El número que sube: el valor real queda transparente en su lugar y se dibuja con ::after. */
+.pm-cifra__n {
+  position: relative;
+  display: inline-block;
+}
+.pm-contando {
+  color: transparent !important;
+  -webkit-text-fill-color: transparent;
+}
+.pm-contando::after {
+  content: attr(data-cuenta);
+  content: attr(data-cuenta) / "";
+  position: absolute;
+  inset: 0;
+  text-align: right;
+  white-space: nowrap;
+  pointer-events: none;
+  color: var(--pm-texto);
+  -webkit-text-fill-color: var(--pm-texto);
+}
+
+/* ------------------------------------------------------------------ anillo */
+.pm-anillo {
+  position: relative;
+  display: inline-block;
+  flex: none;
+}
+.pm-anillo svg {
+  display: block;
+  overflow: visible; /* el glow del arco no se corta en el borde del SVG */
+}
+.pm-anillo__pista,
+.pm-medidor__pista {
+  stroke: var(--pm-pista);
+}
+.pm-anillo__arco,
+.pm-medidor__arco {
+  stroke: var(--pm-acento);
+  stroke-dasharray: var(--pm-largo);
+  stroke-dashoffset: var(--pm-fin);
+  transition: stroke-dashoffset var(--pm-ms, var(--pm-t-anillo)) var(--pm-ease-expo);
+}
+.pm-anillo--grande .pm-anillo__arco,
+.pm-medidor__arco {
+  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--pm-acento) 25%, transparent));
+}
+/* Previa: arco vacío, listo para llenarse; «llenar» y «listo» dejan el valor final. */
+.pm-anillo[data-fase="previa"] .pm-anillo__arco,
+.pm-medidor[data-fase="previa"] .pm-medidor__arco {
+  stroke-dashoffset: var(--pm-largo);
+  transition: none;
+}
+@media (scripting: none) {
+  .pm-anillo[data-fase="previa"] .pm-anillo__arco,
+  .pm-medidor[data-fase="previa"] .pm-medidor__arco {
+    stroke-dashoffset: var(--pm-fin);
+  }
+}
+/* Relieve del anillo: degradé del acento, glow leve (la pista «hundida» va en un filtro del SVG). */
+.pm-grad-a { stop-color: color-mix(in srgb, var(--pm-acento) 70%, white); }
+.pm-grad-b { stop-color: var(--pm-acento); }
+.pm-anillo--relieve .pm-anillo__arco {
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--pm-acento) 35%, transparent));
+}
+.pm-anillo--relieve .pm-anillo__centro {
+  transform: perspective(600px) translateZ(0) scale(1);
+  transition: transform 600ms var(--pm-ease-expo) 100ms, opacity 400ms var(--pm-ease-expo) 100ms;
+}
+.pm-anillo--relieve[data-fase="previa"] .pm-anillo__centro {
+  transform: perspective(600px) translateZ(-24px) scale(0.96);
+  opacity: 0;
+  transition: none;
+}
+@media (scripting: none) {
+  .pm-anillo--relieve[data-fase="previa"] .pm-anillo__centro { transform: none; opacity: 1; }
+}
+.pm-anillo__centro {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  text-align: center;
+}
+.pm-anillo__numero {
+  display: inline-flex;
+  align-items: baseline;
+  font-size: var(--pm-cifra, 48px);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--pm-texto);
+}
+.pm-anillo--chico .pm-anillo__numero { letter-spacing: 0; }
+.pm-anillo__sufijo {
+  font-size: 0.45em;
+  font-weight: 500;
+  color: var(--pm-texto-2);
+  margin-left: 1px;
+}
+.pm-anillo__meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  line-height: 1.2;
+  color: var(--pm-texto-2);
+}
+.pm-anillo__tilde {
+  color: var(--pm-acento);
+}
+
+/* ----------------------------------------------------------------- medidor */
+.pm-medidor {
+  position: relative;
+  width: 100%;
+  max-width: 240px;
+}
+.pm-medidor svg {
+  display: block;
+  overflow: visible;
+  width: 100%;
+  height: auto;
+}
+.pm-medidor__centro {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  text-align: center;
+}
+.pm-medidor__numero {
+  display: inline-flex;
+  align-items: baseline;
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.pm-medidor__sufijo {
+  margin-left: 1px;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--pm-texto-2);
+}
+.pm-medidor__etiqueta {
+  font-size: 13px;
+  color: var(--pm-texto-2);
+}
+
+/* ---------------------------------------------------------------- pastilla */
+.pm-pastilla {
+  --pm-p: var(--pm-texto-2);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 24px;
+  padding: 2px 10px 2px 8px;
+  border: 1px solid var(--pm-borde);
+  border-radius: var(--pm-r-pastilla);
+  background: var(--pm-vidrio-1);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--pm-texto);
+  white-space: nowrap;
+}
+.pm-pastilla__punto {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--pm-p);
+  flex: none;
+}
+.pm-pastilla--ok { --pm-p: var(--pm-ok); }
+.pm-pastilla--atencion { --pm-p: var(--pm-atencion); }
+.pm-pastilla--error { --pm-p: var(--pm-error); }
+.pm-pastilla--info { --pm-p: var(--pm-info); }
+
+/* ------------------------------------------------------------------ botón */
+/* Neumorfismo sobrio (oscuro): el botón «sale» de la superficie; al presionar se hunde.
+   Solo botones de acción e íconos; nunca tarjetas. */
+.pm-boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--pm-e2);
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 var(--pm-e6);
+  border: 0;
+  border-radius: 14px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  color: var(--pm-texto);
+  background: var(--pm-neu-base);
+  box-shadow: var(--pm-neu-sale);
+  transition: box-shadow 150ms var(--pm-ease), transform 150ms var(--pm-ease), filter 150ms var(--pm-ease);
+}
+.pm-boton:hover { filter: brightness(1.08); }
+.pm-boton:active,
+.pm-boton[aria-pressed="true"] {
+  box-shadow: var(--pm-neu-hundido);
+  transform: translateY(1px);
+  filter: none;
+}
+.pm-boton:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; filter: none; }
+.pm-boton--primario {
+  background: linear-gradient(145deg, color-mix(in srgb, var(--pm-acento) 82%, white), var(--pm-acento) 55%, color-mix(in srgb, var(--pm-acento) 80%, black));
+  color: var(--pm-sobre-acento);
+  font-weight: 600;
+  box-shadow: -3px -3px 9px rgba(255, 255, 255, 0.07), 6px 8px 16px rgba(0, 0, 0, 0.55), 0 0 24px -6px color-mix(in srgb, var(--pm-acento) 55%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+.pm-boton--primario:active,
+.pm-boton--primario[aria-pressed="true"] {
+  box-shadow: inset 4px 4px 10px rgba(0, 0, 0, 0.35), inset -3px -3px 8px rgba(255, 255, 255, 0.18);
+}
+.pm-boton--icono {
+  width: 44px;
+  padding: 0;
+  border-radius: 50%;
+  box-shadow: var(--pm-neu-sale-poco);
+}
+.pm-boton__icono { display: inline-flex; }
+.pm-boton__icono svg { width: 20px; height: 20px; }
+
+/* ------------------------------------------------------------------ Jarvis */
+.pm-jarvis {
+  padding: var(--pm-e8);
+  border-radius: var(--pm-r-jarvis);
+  display: grid;
+  gap: var(--pm-e4);
+  --pm-acento: var(--pm-ac-juridico);
+}
+.pm-jarvis__orbe {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--pm-acento);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--pm-acento) 60%, transparent);
+  animation: pm-respirar 2s ease-in-out infinite;
+}
+@keyframes pm-respirar {
+  50% { transform: scale(1.15); }
+}
+.pm-jarvis__saludo {
+  margin: 0;
+  font-family: var(--pm-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+.pm-jarvis__frases {
+  display: grid;
+  gap: var(--pm-e1);
+  max-width: 60ch;
+  color: var(--pm-texto-2);
+  font-size: 16px;
+}
+.pm-jarvis__frases p { margin: 0; }
+.pm-jarvis__frases p:first-child { color: var(--pm-texto); }
+.pm-jarvis__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--pm-e3);
+  padding-top: var(--pm-e2);
+}
+
+/* ----------------------------------------------------------------- ver más */
+.pm-vermas {
+  border-top: 1px solid var(--pm-borde);
+  margin-top: var(--pm-e4);
+}
+.pm-vermas__boton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--pm-e2);
+  min-height: 44px;
+  padding: 0 var(--pm-e1);
+  cursor: pointer;
+  list-style: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--pm-texto-2);
+  transition: color var(--pm-t-rapido) var(--pm-ease);
+}
+.pm-vermas__boton::-webkit-details-marker { display: none; }
+.pm-vermas__boton:hover { color: var(--pm-texto); }
+.pm-vermas__flecha { transition: transform var(--pm-t-rapido) var(--pm-ease); }
+.pm-vermas[open] .pm-vermas__flecha { transform: rotate(180deg); }
+.pm-vermas__texto--abierto { display: none; }
+.pm-vermas[open] .pm-vermas__texto--abierto { display: inline; }
+.pm-vermas[open] .pm-vermas__texto--cerrado { display: none; }
+.pm-vermas[open] .pm-vermas__cuerpo { animation: pm-aparecer var(--pm-t-aparecer) var(--pm-ease-expo) both; }
+
+/* ------------------------------------------------------------------ bento */
+.pm-bento {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-auto-flow: dense;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.pm-bento__celda { min-width: 0; display: grid; }
+.pm-bento__celda > .pm-tarjeta { height: 100%; }
+.pm-c-1 { grid-column: span 1; } .pm-c-2 { grid-column: span 2; } .pm-c-3 { grid-column: span 3; } .pm-c-4 { grid-column: span 4; }
+.pm-c-5 { grid-column: span 5; } .pm-c-6 { grid-column: span 6; } .pm-c-7 { grid-column: span 7; } .pm-c-8 { grid-column: span 8; }
+.pm-c-9 { grid-column: span 9; } .pm-c-10 { grid-column: span 10; } .pm-c-11 { grid-column: span 11; } .pm-c-12 { grid-column: span 12; }
+.pm-f-1 { grid-row: span 1; } .pm-f-2 { grid-row: span 2; } .pm-f-3 { grid-row: span 3; }
+@media (max-width: 1023px) {
+  .pm-bento { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .pm-m-1 { grid-column: span 1; } .pm-m-2 { grid-column: span 2; } .pm-m-3 { grid-column: span 3; }
+  .pm-m-4 { grid-column: span 4; } .pm-m-5 { grid-column: span 5; } .pm-m-6 { grid-column: span 6; }
+}
+@media (max-width: 639px) {
+  .pm-bento { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .pm-bento__celda { grid-column: 1 / -1; grid-row: auto; }
+}
+.pm-anillo-celda {
+  display: grid;
+  justify-items: center;
+  gap: var(--pm-e3);
+  text-align: center;
+  align-content: center;
+  height: 100%;
+}
+
+
+/* ------------------------------------------------------------ grillas (muestra) */
+.pm-fila-anillos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--pm-e4);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.pm-anillo-tarjeta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--pm-e3);
+  text-align: center;
+}
+.pm-anillo-tarjeta__etiqueta { font-size: 16px; font-weight: 500; }
+.pm-anillo-tarjeta__contexto { font-size: 13px; color: var(--pm-texto-2); }
+.pm-grilla-2 {
+  display: grid;
+  gap: var(--pm-e4);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.pm-lista-filas { list-style: none; margin: 0; padding: 0; display: grid; }
+.pm-lista-filas li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--pm-e3);
+  min-height: 56px;
+  padding: var(--pm-e2) 0;
+  border-top: 1px solid var(--pm-borde);
+}
+.pm-lista-filas li:first-child { border-top: 0; }
+.pm-fila-chica {
+  display: flex;
+  align-items: center;
+  gap: var(--pm-e3);
+}
+.pm-fila-chica span:last-child { font-size: 14px; color: var(--pm-texto-2); }
+.pm-nota { margin: 0; font-size: 13px; color: var(--pm-texto-2); }
+.pm-paleta { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--pm-e3); }
+.pm-muestra-color { display: grid; gap: var(--pm-e1); font-size: 13px; color: var(--pm-texto-2); }
+.pm-muestra-color i { display: block; height: 40px; border-radius: var(--pm-r-chico); border: 1px solid var(--pm-borde); }
+.pm-muestra-color code { font-family: var(--pm-mono); font-size: 12px; color: var(--pm-texto); }
+
+@media (max-width: 1023px) {
+  .pm-fila-anillos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 767px) {
+  /* Celular: anillos en fila deslizable, uno por pantalla casi completa. */
+  .pm-fila-anillos {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    margin-inline: calc(-1 * var(--pm-margen));
+    padding-inline: var(--pm-margen);
+    scroll-padding-inline: var(--pm-margen);
+  }
+  .pm-fila-anillos > * { flex: 0 0 72%; scroll-snap-align: start; }
+  .pm-grilla-2 { grid-template-columns: minmax(0, 1fr); }
+  .pm-jarvis { padding: var(--pm-e6); }
+  .pm-jarvis__saludo { font-size: 28px; }
+  .pm-jarvis__acciones .pm-boton { flex: 1 1 100%; }
+  .pm-titulo-pantalla { font-size: 28px; }
+}
+
+/* ---------------------------------------------------- movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+  .pm-jarvis__orbe,
+  .pm-aparece,
+  .pm-vermas[open] .pm-vermas__cuerpo { animation: none !important; }
+  .pm-anillo__arco,
+  .pm-medidor__arco { transition: none !important; }
+  .pm-anillo[data-fase="previa"] .pm-anillo__arco,
+  .pm-medidor[data-fase="previa"] .pm-medidor__arco { stroke-dashoffset: var(--pm-fin); }
+  .pm-tarjeta--viva:hover,
+  .pm-tarjeta--relieve,
+  .pm-tarjeta--relieve:hover { transform: none; }
+  .pm-tarjeta--relieve::before,
+  .pm-tarjeta--relieve::after { display: none; }
+  .pm-entra-vidrio,
+  .pm-modal { animation: none !important; }
+  .pm-boton { transition: none; }
+  .pm-anillo--relieve .pm-anillo__centro,
+  .pm-anillo--relieve[data-fase="previa"] .pm-anillo__centro { transform: none; opacity: 1; transition: none; }
+}
+/* Pantallas táctiles: sin inclinación ni brillo (el hook tampoco se engancha). */
+@media (hover: none), (pointer: coarse) {
+  .pm-tarjeta--relieve,
+  .pm-tarjeta--relieve:hover { transform: none; }
+  .pm-tarjeta--relieve::before,
+  .pm-tarjeta--relieve::after { display: none; }
+}
+
+/* ------------------------------------------------------- franja ancha (muestra) */
+.pm-franja {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--pm-e8);
+}
+.pm-franja .pm-medidor { width: 200px; }
+@media (max-width: 767px) {
+  .pm-franja { grid-template-columns: minmax(0, 1fr); justify-items: start; gap: var(--pm-e4); }
+  .pm-franja .pm-medidor { width: 100%; max-width: 220px; }
+}
+@media (max-width: 1023px) {
+  .pm-f-2, .pm-f-3 { grid-row: span 1; }
+}
+
+/* Orbes detrás del vidrio: se ven nítidos fuera de la tarjeta y desenfocados a través de ella. */
+.pm-orbes { position: relative; display: grid; }
+.pm-orbes > .pm-tarjeta { position: relative; z-index: 1; }
+.pm-orbe { position: absolute; z-index: 0; border-radius: 50%; pointer-events: none; }
+.pm-orbe--a {
+  width: 190px; height: 190px; right: 7%; top: -46px;
+  background: radial-gradient(circle at 30% 28%, color-mix(in srgb, var(--pm-acento) 85%, white), var(--pm-acento) 55%, color-mix(in srgb, var(--pm-acento) 55%, #000));
+  box-shadow: 0 30px 60px -16px rgba(0, 0, 0, 0.6);
+}
+.pm-orbe--b {
+  width: 130px; height: 130px; right: 21%; bottom: -26px;
+  background: radial-gradient(circle at 30% 28%, #ffb0e0, #c2468f 55%, #7a2a5a);
+  box-shadow: 0 24px 48px -14px rgba(0, 0, 0, 0.6);
+}
+.pm-orbe--c {
+  width: 84px; height: 84px; right: 2%; bottom: 14%;
+  background: radial-gradient(circle at 30% 28%, #7ff0e2, #2a8f86 60%, #1f5f5a);
+  box-shadow: 0 18px 36px -12px rgba(0, 0, 0, 0.6);
+}
+@media (max-width: 767px) {
+  .pm-orbe--a { width: 120px; height: 120px; right: 4%; top: -34px; }
+  .pm-orbe--b { width: 84px; height: 84px; right: 30%; bottom: -30px; }
+  .pm-orbe--c { display: none; }
+}

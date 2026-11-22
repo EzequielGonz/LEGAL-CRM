@@ -27,6 +27,7 @@ Reglas de la sesión:
 | A9 | 🟡 22/11 (`RESEND_API_KEY` ya está en Vercel, Production; falta `LANDING_EMAIL_FROM`: el dueño elige el remitente) | Clave de Resend | Aviso por correo de formularios (PR #40) | Formulario seguro o variable en Vercel |
 | A10 | ⬜ | Canva y Cloudflare (Turnstile) | Diseño de piezas; antispam en formularios | Conectar en claude.ai si los quieren usar |
 | A11 | ⬜ | Skill Arena | Varias versiones compiten cuando hay que corregir muchas veces | No está en el catálogo: instalarla del repo después de leerlo. Uso solo con OK y tope |
+| A12 | ⬜ | Secreto del latido en Vault (`crm_cron_secret`) | Que el job de `pg_cron` lea el secreto desde Vault y no lo tenga escrito (migración 0639, ya aplicada pero en espera) | Después de rotar `CRON_SECRET` (P2): cargar el mismo valor en Supabase → Vault con el nombre `crm_cron_secret` y volver a correr 0639 |
 
 El resto de los plugins que piden cuenta están en `18-mapa-de-skills-y-plugins.md` § «Necesitan cuenta, acceso o pago», con prioridad.
 
@@ -40,7 +41,7 @@ El resto de los plugins que piden cuenta están en `18-mapa-de-skills-y-plugins.
 | P4 | ⬜ | Reconectar Wasender (QR) y conectar los 13 chips | El gestor de dispositivos queda para después (orden 22/11) |
 | P5 | ⬜ | Elegir quién recibe los avisos de cada perfil | 6 captaciones quedaron sin aviso |
 | P6 | ⬜ | Abrir TikTok y YouTube y conectarlos a Metricool | |
-| P7 | ⬜ | Cambiar el código de ingreso al panel | Cuando quieran; nunca se escribe en archivos |
+| P7 | ⬜ | **URGENTE (22/11):** cambiar el código de ingreso al panel | El código actual quedó escrito en el repo (un fragmento pegado por error en `15` y un ejemplo en una prueba). Se sacó de `main` y de la rama del cerebro el 22/11, pero sigue en el historial de git y en ramas viejas: solo cambiarlo lo cierra. Hacer privado el repo (P1) suma. El nuevo nunca se escribe en archivos |
 | P8 | ⬜ | Perfil de Empresa de Google de VITA y Autos | Hace falta dirección y horarios |
 | P9 | ⬜ | Revisar la incidencia de amenaza legal del 18/11 (Jurídico) | Claude puede resumirla sin datos personales |
 

@@ -85,7 +85,7 @@ export async function FollowupPanel({ rubroId }: { rubroId: string }) {
         {/* 15/11: son enlaces a cada lista, no una lista de definiciones (antes había <dt> dentro de <a>). */}
         <ul className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
           {[
-            { t: "Programados", n: o.programadas.length, h: "#seg-programados" },
+            { t: "Contactos programados", n: o.programadas.length, h: "#seg-programados" },
             { t: "Enviados", n: o.enviadas.length, h: "#seg-enviados" },
             { t: "Soltados", n: o.detenidas.length, h: "#seg-soltados" },
             { t: "Para revisar", n: o.atencion.length, h: "#seg-revision" },
@@ -156,7 +156,7 @@ export async function FollowupPanel({ rubroId }: { rubroId: string }) {
       </section>
 
       <section id="seg-programados" tabIndex={-1} className="rounded-xl border border-slate-200 bg-white p-5">
-        <h2 className="mb-2 text-base font-semibold text-slate-900">Programados ({o.programadas.length})</h2>
+        <h2 className="mb-2 text-base font-semibold text-slate-900">Contactos programados ({o.programadas.length})</h2>
         <ul className="divide-y divide-slate-100">
           {o.programadas.map((t) => (
             <TaskLine key={t.id} t={t} perfil={perfil} />

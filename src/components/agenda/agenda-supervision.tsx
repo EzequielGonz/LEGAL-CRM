@@ -39,7 +39,10 @@ export async function AgendaSupervision({
   searchParams,
   fichaHref,
   conversationHref,
+  sinCitas = false,
 }: {
+  /** 22/11: las citas ya tienen su calendario arriba; acá quedan solo las demás pestañas. */
+  sinCitas?: boolean;
   rubroId: string;
   areas: string[];
   /** ruta de esta Agenda (para los enlaces de pestañas y páginas) */
@@ -51,7 +54,8 @@ export async function AgendaSupervision({
   conversationHref?: string | null;
 }) {
   const supabase = createClient();
-  const tab: Tab = (TABS.find((t) => t.key === searchParams.tab)?.key ?? "citas") as Tab;
+  const TABS_VISIBLES = sinCitas ? TABS.filter((t) => t.key !== "citas") : TABS;
+  const tab: Tab = (TABS_VISIBLES.find((t) => t.key === searchParams.tab)?.key ?? TABS_VISIBLES[0].key) as Tab;
   const page = pageFromParam(searchParams.pagina);
   const selected = searchParams.ficha && /^[0-9a-f-]{36}$/i.test(searchParams.ficha) ? searchParams.ficha : null;
   const from = (page - 1) * PAGE_SIZE;
@@ -167,10 +171,10 @@ export async function AgendaSupervision({
   return (
     <div>
       <div className="mb-4 flex flex-wrap gap-2">
-        {TABS.map((t) => (
+        {TABS_VISIBLES.map((t) => (
           <Link prefetch={false}
             key={t.key}
-            href={href({ tab: t.key === "citas" ? undefined : t.key })}
+            href={href({ tab: t.key === TABS_VISIBLES[0].key ? undefined : t.key })}
             aria-current={tab === t.key ? "page" : undefined}
             className={clsx(
               "tactil inline-flex items-center gap-1.5 rounded-full border px-4 text-sm font-medium",

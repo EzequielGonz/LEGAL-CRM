@@ -2,6 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
+import { cantidad } from "@/lib/textos/pantalla";
 
 /**
  * Etapa 2 · Bloque 2.3 — Activar o apagar el seguimiento automático de un
@@ -212,7 +213,7 @@ export function RepescaBaseButton({ rubroId, count }: { rubroId: string; count: 
     if (!res.ok) setMsg({ ok: false, text: data.error ?? "No se pudo generar." });
     else {
       const total = (data.bases ?? []).reduce((n: number, b: any) => n + (b.filas ?? 0), 0);
-      setMsg({ ok: true, text: `Base generada con ${total} contacto(s). Está en Bases; la campaña se arma aparte, a mano.` });
+      setMsg({ ok: true, text: `Base generada con ${cantidad(total, "contacto")}. Está en Bases; la campaña se arma aparte, a mano.` });
       router.refresh();
     }
   }

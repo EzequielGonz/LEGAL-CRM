@@ -1239,6 +1239,11 @@ export function operacionPorClave(clave: string): OperacionPanel | null {
  * toda ruta del panel esté en el catálogo, en una herramienta propia o acá.
  */
 export const FUERA_DEL_CATALOGO: Record<string, string> = {
+  "jarvis/mensaje": "Charla con Jarvis (22/11): conversa y deja propuestas con tarjeta «¿Lo hago?»; no lanza campañas, no publica ni le escribe a nadie. Es la puerta del asistente, no una acción sobre el panel.",
+  "cerebro/conocimiento": "Cuaderno del cerebro (22/11): el dueño le enseña notas y reglas desde /cerebro con su propia confirmación; Jarvis las lee con consultar_cerebro y la propuesta a Claude va por la Bandeja.",
+  "cerebro/preguntar": "Búsqueda del cerebro (22/11): solo lee la memoria y lo aprendido, sin IA.",
+  "laboratorio/simular": "Simulador del bot (22/11): corre mensajes ficticios con el prompt real y herramientas simuladas; no envía nada ni cambia estados.",
+  "jarvis/parte": "Parte del día de Jarvis (22/11): solo lee cifras del perfil y no cambia nada.",
   oficina: "Lee y crea tareas de la Oficina de agentes (22/11): tiene su propia pantalla en el Cerebro; desde el asistente se usa pedir_cambio_de_codigo, que va a la misma bandeja.",
   "oficina/arrancar": "Despierta a los agentes de Claude y usa el plan de Claude: lo toca el dueño en la Oficina, no el asistente.",
   "oficina/[id]": "La aprobación de una entrega de la Oficina la da el dueño en persona, no el asistente.",
@@ -1254,6 +1259,7 @@ export const FUERA_DEL_CATALOGO: Record<string, string> = {
   "agentes/roles": "Guardar un rol y cargarlo a una base ya tienen herramienta propia (proponer_rol, proponer_rol_base); archivar y cargar a una campaña están en el catálogo.",
   "agentes/simulador": "Es una prueba que no cambia nada; se usa desde Bot IA.",
   "appointments/[id]/cancel": "Duplicada: cancelar una cita se hace con «cambiar el estado de una cita», que además deja historial.",
+  "appointments/[id]/mover": "Mover una cita (22/11): se hace desde Citas, con confirmación y horario; el asistente cambia el estado de una cita pero no reprograma.",
   "bases/[id]": "Duplicada: archivar una base está en el catálogo con su motivo.",
   "campaigns": "Ya tiene herramienta propia (proponer_campana).",
   "campaigns/[id]": "El borrado es en realidad archivar (está en el catálogo); la línea de Meta y el límite tienen herramienta propia.",

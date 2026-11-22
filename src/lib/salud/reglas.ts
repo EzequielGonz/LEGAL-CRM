@@ -6,6 +6,12 @@
 
 import { rutaDePerfil } from "@/lib/perfil-ruta";
 import type { SlugPerfil } from "@/lib/marca";
+import { itemAtrasoLatido, type HuecoRegistrado } from "./latido-atraso";
+import { itemsPresupuestoGemini, type ResumenParaSalud } from "@/lib/presupuesto/salud";
+import { cantidad } from "@/lib/textos/pantalla";
+
+/** Cifra con la que empieza un título («12 mensajes…» → 12). */
+const cifraDelTitulo = (t: string) => Number(t.split(" ")[0].replace(/\./g, "")) || 0;
 
 export type EstadoSalud = "rojo" | "amarillo" | "verde";
 
@@ -29,6 +35,16 @@ export interface DatosSalud {
   pausa: { ia: boolean; envios: boolean; problema?: string | null };
   /** Webhooks en cuarentena sin revisar en las últimas 24 h, con su motivo más reciente. */
   cuarentena24h: { cantidad: number; motivo: string | null };
+  /**
+   * 22/11: retenidos pendientes por perfil (definición única de `definiciones/retenidos.ts`: sin revisar,
+   * sin tope de horas, del perfil de la línea). Si viene, reemplaza al global de arriba: un control por perfil.
+   */
+  retenidosPorPerfil?: Record<string, { cantidad: number; motivo: string | null }>;
+  /**
+   * 22/11: acceso REAL de cada línea de Meta (lo que informa Meta, solo lectura). Tener las credenciales cargadas
+   * no alcanza: Marketing figuraba «en orden» con una línea sin acceso al número.
+   */
+  accesoLineas?: { slug: string; nombre: string; linea: string; estado: string | null; ok: boolean; etiqueta?: string | null }[];
   secretoMeta: boolean;
   ultimoEntrante: string | null;
   /** Por perfil: nombre visible, credenciales de WhatsApp y agente. */
@@ -38,6 +54,10 @@ export interface DatosSalud {
   presupuestosAtrasados: number;
   /** Líneas que mandan pero no reciben avisos de Meta (mensajes entrantes ni estados). */
   avisosMeta?: { nombre: string; sinAvisos: boolean; resultado: string | null }[];
+  /** 22/11: último hueco largo entre dos latidos (se recuerda una hora). */
+  latidoHueco?: HuecoRegistrado | null;
+  /** 22/11: gasto de IA del mes y de hoy por perfil (null = no se pudo leer). */
+  presupuestoGemini?: ResumenParaSalud | null;
   /** 24/10: calidad de cada línea según Meta (la vigila el latido). */
   calidadLineas?: { slug: string; nombre: string; linea: string; calidad: string | null; pausadas: string[] }[];
 }
@@ -98,6 +118,10 @@ export function evaluarSalud(d: DatosSalud): ItemSalud[] {
     );
   }
 
+  // 22/11: atraso del latido (amarillo antes del rojo, y memoria de un corte reciente).
+  const atrasoLatido = itemAtrasoLatido({ ahora: d.ahora, ultimoLatido: d.ultimoLatido, hueco: d.latidoHueco ?? null });
+  if (atrasoLatido) items.push(atrasoLatido);
+
   // Pausa general
   if (d.pausa.problema) {
     items.push({ clave: "pausa", estado: "rojo", titulo: "No se pudo leer la pausa general", detalle: d.pausa.problema, accion: "Revisar la pausa general", href: "/configuracion#pausa" });
@@ -112,10 +136,34 @@ export function evaluarSalud(d: DatosSalud): ItemSalud[] {
   if (!d.secretoMeta) {
     items.push({ clave: "secreto_meta", estado: "rojo", titulo: "Falta el secreto de la app de Meta", detalle: "Sin META_APP_SECRET los mensajes entrantes quedan en cuarentena y nadie los responde.", accion: "Cargar META_APP_SECRET en Vercel (Meta → App → Configuración básica → Clave secreta)" });
   }
-  if (d.cuarentena24h.cantidad > 0) {
-    items.push({ clave: "cuarentena", estado: "rojo", titulo: `${d.cuarentena24h.cantidad} mensaje(s) entrante(s) en cuarentena`, detalle: d.cuarentena24h.motivo ?? "Webhook rechazado.", accion: "Revisar la cuarentena", href: "/configuracion#cuarentena" });
+  if (d.retenidosPorPerfil) {
+    for (const [slug, r] of Object.entries(d.retenidosPorPerfil)) {
+      if (r.cantidad > 0) {
+        items.push({ clave: "cuarentena", perfil: slug, estado: "rojo", titulo: `${cantidad(r.cantidad, "mensaje entrante retenido", "mensajes entrantes retenidos")} sin revisar`, detalle: r.motivo ?? "Webhook rechazado.", accion: "Revisar los retenidos", href: `/incidencias?perfil=${slug}&vista=retenidos` });
+      } else if (d.secretoMeta) {
+        items.push({ clave: "cuarentena", perfil: slug, estado: "verde", titulo: "Webhooks", detalle: "Sin mensajes retenidos sin revisar." });
+      }
+    }
+  } else if (d.cuarentena24h.cantidad > 0) {
+    items.push({ clave: "cuarentena", estado: "rojo", titulo: `${cantidad(d.cuarentena24h.cantidad, "mensaje entrante", "mensajes entrantes")} en cuarentena`, detalle: d.cuarentena24h.motivo ?? "Webhook rechazado.", accion: "Revisar la cuarentena", href: "/configuracion#cuarentena" });
   } else if (d.secretoMeta) {
     items.push({ clave: "cuarentena", estado: "verde", titulo: "Webhooks", detalle: "Sin mensajes en cuarentena en las últimas 24 h." });
+  }
+
+  // Acceso real a cada línea de Meta (22/11)
+  const porPerfil = new Map<string, number>();
+  for (const a of d.accesoLineas ?? []) porPerfil.set(a.slug, (porPerfil.get(a.slug) ?? 0) + 1);
+  for (const a of d.accesoLineas ?? []) {
+    const clave = (porPerfil.get(a.slug) ?? 1) > 1 ? `acceso_${a.slug}_${a.linea.toLowerCase()}` : `acceso_${a.slug}`;
+    const href = rutaDePerfil(a.slug as SlugPerfil, "configuracion");
+    if (a.ok) {
+      items.push({ clave, perfil: a.slug, estado: "verde", titulo: `${a.nombre}: la línea ${a.linea} tiene acceso`, detalle: "Meta confirma el número conectado." });
+    } else if (a.estado === "no_comprobado" || a.estado === "sin_credenciales" || !a.estado) {
+      items.push({ clave, perfil: a.slug, estado: "amarillo", titulo: `${a.nombre}: no se pudo comprobar el acceso de la línea ${a.linea}`, detalle: "No se pudo comprobar con Meta si el número está conectado. No se da por «en orden».", accion: "Verificar el número", href });
+    } else {
+      const que = a.estado === "sin_acceso" ? "no tiene acceso al número en Meta" : a.estado === "token_invalido" ? "el token de acceso de Meta no sirve (vencido o revocado)" : a.etiqueta ? a.etiqueta.toLowerCase() : "Meta informa un problema con el número";
+      items.push({ clave, perfil: a.slug, estado: "rojo", titulo: `${a.nombre}: la línea ${a.linea} ${a.estado === "sin_acceso" ? "no tiene acceso al número" : "tiene un problema de conexión"}`, detalle: `${que[0].toUpperCase()}${que.slice(1)}: no recibe ni contesta mensajes hasta resolverlo.`, accion: "Verificar el número en Configuración › Líneas", href });
+    }
   }
 
   // Último mensaje entrante
@@ -151,7 +199,7 @@ export function evaluarSalud(d: DatosSalud): ItemSalud[] {
     items.push({
       clave: "errores_ia",
       estado: alto ? "rojo" : "amarillo",
-      titulo: `${d.turnos24h.errores} respuesta(s) de la IA con error en 24 h`,
+      titulo: `${cantidad(d.turnos24h.errores, "respuesta de la IA", "respuestas de la IA")} con error en 24 h`,
       detalle: `De ${d.turnos24h.total} turnos.${quien ? ` Último: ${quien}. ${explicarErrorIA(u!.error)}` : ""}`,
       accion: u?.conversacionId ? "Abrir la conversación" : "Ver las conversaciones",
       href: u?.conversacionId ? `/conversacion/${u.conversacionId}` : "/inbox",
@@ -177,8 +225,10 @@ export function evaluarSalud(d: DatosSalud): ItemSalud[] {
     }
   }
   if (d.presupuestosAtrasados > 0) {
-    items.push({ clave: "presupuestos", estado: "rojo", titulo: `${d.presupuestosAtrasados} presupuesto(s) pedido(s) hace más de 20 h`, detalle: "Se prometió en menos de 24 h.", accion: "Cargar presupuesto", href: "/panel/marketing/presupuestos" });
+    items.push({ clave: "presupuestos", estado: "rojo", titulo: `${cantidad(d.presupuestosAtrasados, "presupuesto pedido", "presupuestos pedidos")} hace más de 20 h`, detalle: "Se prometió en menos de 24 h.", accion: "Cargar presupuesto", href: "/panel/marketing/presupuestos" });
   }
+  // 22/11: gasto de IA (tope del mes y tope diario por perfil).
+  items.push(...itemsPresupuestoGemini(d.presupuestoGemini));
   const orden: Record<EstadoSalud, number> = { rojo: 0, amarillo: 1, verde: 2 };
   return items.sort((a, b) => orden[a.estado] - orden[b.estado]);
 }
@@ -224,7 +274,7 @@ export function lecturaSimple(i: ItemSalud): LecturaSimple {
     return { que: "Los mensajes que entran por WhatsApp quedan retenidos por seguridad y nadie los responde.", quien: "tecnico", accion: null, href: null };
   }
   if (i.clave === "cuarentena" && i.estado !== "verde") {
-    return { que: `${i.titulo.split(" ")[0]} mensaje(s) que entraron quedaron retenidos por seguridad y no se respondieron.`, quien: "panel", accion: "Revisarlos", href: i.href ?? null };
+    return { que: `${cifraDelTitulo(i.titulo) === 1 ? "1 mensaje que entró quedó retenido por seguridad y no se respondió" : `${cantidad(cifraDelTitulo(i.titulo), "mensaje")} que entraron quedaron retenidos por seguridad y no se respondieron`}.`, quien: "panel", accion: "Revisarlos", href: i.href ?? null };
   }
   if (base === "whatsapp") {
     return { que: `${perfilDe(i.titulo)} no tiene una línea de WhatsApp conectada: no puede responder ni enviar por ese canal.`, quien: "tecnico", accion: null, href: null };
@@ -234,7 +284,7 @@ export function lecturaSimple(i: ItemSalud): LecturaSimple {
   }
   if (i.clave === "errores_ia") {
     const extra = i.detalle.replace(/^De \d+ turnos\.\s*/, "");
-    return { que: `La IA tuvo ${i.titulo.split(" ")[0]} error(es) al responder en las últimas 24 h.${extra ? ` ${extra}` : ""}`, quien: "panel", accion: i.href && i.href !== "/inbox" ? "Abrir la conversación" : "Ver qué pasó", href: i.href ?? null };
+    return { que: `La IA tuvo ${cantidad(cifraDelTitulo(i.titulo), "error", "errores")} al responder en las últimas 24 h.${extra ? ` ${extra}` : ""}`, quien: "panel", accion: i.href && i.href !== "/inbox" ? "Abrir la conversación" : "Ver qué pasó", href: i.href ?? null };
   }
   if (base === "avisos") {
     return { que: `${perfilDe(i.titulo)}: los mensajes que contestan por esta línea no llegan al panel, así que el agente no responde. El sistema intenta conectarla solo.`, quien: "tecnico", accion: null, href: null };

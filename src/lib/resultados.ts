@@ -104,7 +104,7 @@ const ESTADO_CAPTACION: Record<string, string> = {
   captado: "Captado",
   perdido: "Perdido",
   en_conversacion: "En conversación",
-  en_seguimiento: "En seguimiento",
+  en_seguimiento: "Con seguimiento enviado",
   sin_contactar: "Sin contactar",
   contactado: "Contactado, sin respuesta",
 };

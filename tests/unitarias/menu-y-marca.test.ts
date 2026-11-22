@@ -14,20 +14,24 @@ test("cada perfil tiene marca, logo https y tema propio; lo desconocido cae en J
   assert.equal(marcaDe("marketing").nombre, "Kocos Marketing");
 });
 
-test("menú (24/10): Trabajo y Configurar, iguales en los cuatro perfiles, sin rutas de Jurídico en los demás", () => {
+test("menú (22/11): cinco destinos y «Más», iguales en los cuatro perfiles, sin rutas de Jurídico en los demás", () => {
   for (const s of SLUGS_PERFIL) {
     const secc = seccionesDePerfil(s);
     // 17/11: Meta y Wasender en secciones separadas.
-    assert.deepEqual(secc.map((x) => x.label), ["Hoy", "Chats", "Contactos", "Campañas", "Bot IA", "WhatsApp oficial (Meta)", "WhatsApp por QR (Wasender)", "Redes", "Ajustes"]);
-    assert.deepEqual(secc.map((x) => x.grupo), ["trabajo", "trabajo", "trabajo", "trabajo", "configurar", "configurar", "configurar", "configurar", "configurar"]);
+    assert.deepEqual(secc.map((x) => x.label), ["Hoy", "Chats", "Campañas", "Resultados", "Salud", "Contactos", "Bot IA", "WhatsApp oficial (Meta)", "WhatsApp por QR (Wasender)", "Redes", "Ajustes"]);
+    // Cinco destinos de trabajo; todo lo demás va a «Más» (sigue accesible).
+    assert.deepEqual(secc.map((x) => x.grupo), ["trabajo", "trabajo", "trabajo", "trabajo", "trabajo", "mas", "mas", "mas", "mas", "mas", "mas"]);
     // 12/11: Chats separa lo que sirve de lo descartado; Redes tiene los accesos.
     assert.ok(secc[1].tabs.some((t) => t.label === "Descartados"));
-    assert.equal(secc[7].tabs[0].label, "Accesos");
+    assert.equal(secc[9].tabs[0].label, "Accesos");
     const hrefs = secc.flatMap((x) => x.tabs.map((i) => i.href));
     assert.equal(new Set(hrefs).size, hrefs.length, `sin duplicados en ${s}`);
     assert.ok(!hrefs.some((h) => h.includes("comparacion-agentes")), "sin comparación de agentes (21/10)");
     // La agenda vive dentro de Contactos (como «Citas»).
-    assert.ok(secc[2].tabs.some((t) => t.label === "Citas"));
+    assert.ok(secc[5].tabs.some((t) => t.label === "Citas"));
+    // Resultados (con el Historial) y Salud tienen su propio destino.
+    assert.ok(secc[3].tabs.some((t) => t.label === "Historial"));
+    assert.equal(secc[4].tabs[0].label, "Salud del sistema");
     if (s !== "juridico") {
       for (const h of hrefs) assert.ok(h.startsWith(`/panel/${s}/`) || h.includes(`perfil=${s}`), `${s}: ${h}`);
     }
@@ -56,5 +60,8 @@ test("vistas filtradas: una conversación filtrada va a Conversaciones; sin filt
   assert.equal(seccionActiva(secc, "/oportunidades", "?perfil=coberturas_medicas&indicador=requiere_humano")?.seccion.clave, "conversaciones");
   assert.equal(seccionActiva(secc, "/oportunidades", "perfil=coberturas_medicas")?.seccion.clave, "contactos");
   assert.equal(seccionActiva(secc, "/hoy", "perfil=coberturas_medicas")?.tab.label, "Resumen");
+  assert.equal(seccionActiva(secc, "/resultados", "perfil=coberturas_medicas")?.seccion.clave, "resultados");
+  assert.equal(seccionActiva(secc, "/panel/coberturas_medicas/estadisticas", null)?.seccion.clave, "resultados");
+  assert.equal(seccionActiva(secc, "/salud", "perfil=coberturas_medicas")?.seccion.clave, "salud");
   assert.equal(seccionActiva(secc, "/panel/coberturas_medicas/agenda", null)?.seccion.clave, "contactos");
 });

@@ -11,7 +11,9 @@ import { asegurarAvisosDeLineas } from "@/lib/whatsapp/avisos-servidor";
 import { contactarFormulariosDeLanding } from "@/lib/landing-seguimiento";
 import { avanzarExtraccion } from "@/lib/marketing/extraer";
 import { enviarPresupuestosProgramados } from "@/lib/marketing/presupuestos";
-import { registrarLatido } from "@/lib/salud";
+import { leerUltimoLatido, registrarLatido } from "@/lib/salud";
+import { huecoParaAvisar, huecoParaRegistrar } from "@/lib/salud/latido-atraso";
+import { vigilarPresupuesto } from "@/lib/presupuesto/servidor";
 import { procesarRecontactos } from "@/lib/recontacto/motor";
 import { procesarSegundosIntentos } from "@/lib/seguimiento/segundo-intento-motor";
 import { cerrarDescartesAutomaticos } from "@/lib/hoy/descartes-motor";
@@ -20,7 +22,7 @@ import { sincronizarCatalogosSiToca } from "@/lib/plantillas/auto-asignar";
 import { rescatarTurnosPerdidos } from "@/lib/ai-agent/rescate";
 import { vigilarCalidadLineas } from "@/lib/whatsapp/calidad-servidor";
 import { procesarPedidoPlantillas } from "@/lib/plantillas/pedido-meta";
-import { avisarFallasDelSistema, avisarLatidoFallido } from "@/lib/salud/avisar-fallas";
+import { avisarAtrasoDeLatido, avisarFallasDelSistema, avisarLatidoFallido } from "@/lib/salud/avisar-fallas";
 import { respuestaErrorInterno } from "@/lib/error-publico";
 
 // El análisis de negocios (descargar la web + IA) necesita más de los 10s por defecto.
@@ -53,6 +55,10 @@ export async function POST(request: Request) {
   }
 
   const inicio = Date.now();
+  // 22/11: hueco desde el latido anterior (si el latido estuvo parado, se anota y se avisa al volver).
+  const latidoPrevio = await leerUltimoLatido();
+  const huecoMs = latidoPrevio?.at ? inicio - Date.parse(latidoPrevio.at) : null;
+  const hueco = huecoParaRegistrar(latidoPrevio, new Date(inicio));
   // 13/11: cuánto tarda cada etapa, para verlo en Salud (antes solo se sabía el total).
   const etapas: Record<string, number> = {};
   let marcaAnterior = inicio;
@@ -290,11 +296,23 @@ export async function POST(request: Request) {
       marca("fallas");
     }
 
+    // 10 bis) Gasto de IA (22/11): cada 10 minutos, aviso al 80 % del mes y a los topes. No le escribe a nadie.
+    let presupuestoIa: unknown = null;
+    if (new Date().getUTCMinutes() % 10 === 7 && Date.now() - inicio < 45_000) {
+      try {
+        presupuestoIa = await vigilarPresupuesto();
+      } catch (err: any) {
+        presupuestoIa = { error: String(err?.message ?? err) };
+      }
+      marca("presupuesto_ia");
+    }
+
     // Tablero de salud: deja la hora del último latido y cuánto tardó cada etapa.
-    await registrarLatido(true, { ms: Date.now() - inicio, etapas });
-    return NextResponse.json({ ok: true, results, plantillas, seguimiento, recontacto, segundoIntento, descartes, rescate, calidad, marketing, servidor, extraccion, avisos, formularios, presupuestos, catalogo, fallas });
+    await registrarLatido(true, { ms: Date.now() - inicio, etapas, hueco });
+    if (huecoParaAvisar(Number.isFinite(huecoMs as number) ? huecoMs : null)) await avisarAtrasoDeLatido(huecoMs as number, new Date());
+    return NextResponse.json({ ok: true, results, plantillas, seguimiento, recontacto, segundoIntento, descartes, rescate, calidad, marketing, servidor, extraccion, avisos, formularios, presupuestos, catalogo, fallas, presupuestoIa });
   } catch (err: any) {
-    await registrarLatido(false, { error: String(err?.message ?? err).slice(0, 200), ms: Date.now() - inicio, etapas });
+    await registrarLatido(false, { error: String(err?.message ?? err).slice(0, 200), ms: Date.now() - inicio, etapas, hueco });
     await avisarLatidoFallido();
     return respuestaErrorInterno(err, "campaigns/tick", 500);
   }

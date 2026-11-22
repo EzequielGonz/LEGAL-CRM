@@ -178,7 +178,7 @@ export interface RegistroTurno {
   resultado: "enviado" | "retenido" | "sin_texto" | "bloqueado" | "error";
   motivos?: string[];
   error?: string | null;
-  uso?: "conversacion" | "analisis" | "evaluacion_plantillas";
+  uso?: "conversacion" | "analisis" | "evaluacion_plantillas" | "recontacto";
   /** 25/10: versión del conocimiento del bot y fichas usadas en la respuesta. */
   knowledgeVersion?: number | null;
   knowledgeItems?: string[];

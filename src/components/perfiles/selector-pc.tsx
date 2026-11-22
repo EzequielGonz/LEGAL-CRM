@@ -9,6 +9,7 @@ import { marcaDe, temaDe, type SlugPerfil } from "@/lib/marca";
 import { variablesAcento } from "@/lib/acento";
 import { LogoPerfil } from "@/components/ui/logo-perfil";
 import { Icono } from "@/components/ui/icono-seccion";
+import { cantidad } from "@/lib/textos/pantalla";
 import { Chip, ESTADO_CAMPANA, EditarPerfil, MenuAcciones, usePerfilesEnVivo, type MarcaTarjeta } from "@/components/perfiles/perfil-selector";
 
 function n(v: number | null | undefined) {
@@ -74,7 +75,7 @@ export function SelectorPerfilesPC({
           const pendientes = p.accion.sin_derivar + p.accion.humano;
           const ficha = (id: string) => (slug === "juridico" ? `/prospectos/${id}` : `/ficha/${id}`);
           return (
-            <li key={p.id} data-tema={slug} data-inclinar style={{ ...estilo, animationDelay: `${i * 70}ms` }} className="perfil-pc tarjeta-perfil relative flex flex-col overflow-hidden rounded-3xl">
+            <li key={p.id} data-tema={slug} data-inclinar style={{ ...estilo, animationDelay: `${i * 70}ms` }} className="perfil-pc tarjeta-perfil d-tarjeta--brillo relative isolate flex flex-col overflow-hidden rounded-3xl">
               <span className="absolute inset-x-0 top-0 h-1 bg-gold-500" aria-hidden="true" />
               <div className="flex flex-1 flex-col p-5 pt-6">
                 {/* Marca */}
@@ -90,7 +91,7 @@ export function SelectorPerfilesPC({
                     <div className="mt-2 flex flex-wrap gap-1.5">
                       {p.accion.sin_derivar > 0 && <Chip tono="urgente">{p.accion.sin_derivar === 1 ? "1 captado sin derivar" : `${p.accion.sin_derivar} captados sin derivar`}</Chip>}
                       {p.accion.humano > 0 && <Chip tono="urgente">{p.accion.humano === 1 ? "1 pide una persona" : `${p.accion.humano} piden una persona`}</Chip>}
-                      {(p.recibidos24h ?? 0) > 0 && <Chip tono="info">{p.recibidos24h} persona(s) escribieron en 24 h</Chip>}
+                      {(p.recibidos24h ?? 0) > 0 && <Chip tono="info">{p.recibidos24h === 1 ? "1 persona escribió" : `${cantidad(p.recibidos24h, "persona")} escribieron`} en 24 h</Chip>}
                       {p.campana && <Chip tono={p.campana.estado === "en_curso" ? "ok" : "info"}>Campaña {ESTADO_CAMPANA[p.campana.estado] ?? p.campana.estado}</Chip>}
                       {(p.programadas ?? 0) > 0 && <Chip tono="info">{p.programadas} publicaciones programadas</Chip>}
                       {pendientes === 0 && !(p.recibidos24h ?? 0) && <Chip tono="ok">Todo al día</Chip>}
@@ -106,7 +107,7 @@ export function SelectorPerfilesPC({
 
                 {/* Esta semana */}
                 <div className="mt-5">
-                  <p className="text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">Esta semana</p>
+                  <p className="d-kicker">Esta semana</p>
                   <dl className="mt-2 grid grid-cols-4 gap-2">
                     {[
                       { t: "Escribieron", v: c?.semana.respuestas },
@@ -117,7 +118,7 @@ export function SelectorPerfilesPC({
                       // 15/11: el término va antes que la cifra (dl válida); se ve igual con flex-col-reverse.
                       <div key={x.t} className="perfil-pc-cifra flex flex-col-reverse rounded-2xl px-3 py-2.5">
                         <dt className="text-xs text-slate-500">{x.t}</dt>
-                        <dd className="text-xl font-semibold tabular-nums text-slate-950">{n(x.v)}</dd>
+                        <dd className="cifra-premium text-2xl font-semibold tabular-nums text-slate-950">{n(x.v)}</dd>
                       </div>
                     ))}
                   </dl>
@@ -126,7 +127,7 @@ export function SelectorPerfilesPC({
                 {/* Última base y captados */}
                 <div className="mt-4 grid gap-4 sm:grid-cols-2">
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">
+                    <p className="d-kicker">
                       {b?.tipo === "campana" ? (b.estado === "en_curso" ? "Campaña enviando" : b.estado === "pausada" ? "Campaña pausada" : "Última campaña") : "Última base"}
                     </p>
                     {b ? (
@@ -156,8 +157,8 @@ export function SelectorPerfilesPC({
                     )}
                   </div>
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">
-                      Captados <span className="font-normal normal-case tracking-normal">({n(p.agendados)} en total)</span>
+                    <p className="d-kicker">
+                      Captados <span className="font-normal normal-case tracking-normal text-slate-600">({n(p.agendados)} en total)</span>
                     </p>
                     {p.casos.length > 0 ? (
                       <ul className="mt-2 space-y-0.5">

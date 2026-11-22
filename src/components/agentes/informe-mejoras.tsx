@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { abrirAsistente } from "@/components/asistente/asistente-panel";
 import { pedidoParaAsistente } from "@/lib/agentes/informe-mejoras-texto";
 import { pedirConfirmacion } from "@/components/ui/dialogo-confirmar";
+import { cantidad } from "@/lib/textos/pantalla";
 
 type Destino = "conocimiento" | "rol";
 
@@ -204,7 +205,7 @@ function VistaInforme({ perfil, informe, onAplicada }: { perfil: string; informe
                       {h.titulo}
                     </p>
                     <p className="mt-1 text-sm text-slate-700">{h.detalle}</p>
-                    {h.conversaciones ? <p className="mt-1 text-xs text-slate-600">Visto en {h.conversaciones} conversación(es)</p> : null}
+                    {h.conversaciones ? <p className="mt-1 text-xs text-slate-600">Visto en {cantidad(h.conversaciones, "conversación")}</p> : null}
                   </li>
                 ))}
               </ul>

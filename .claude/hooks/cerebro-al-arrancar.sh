@@ -12,7 +12,8 @@ echo "=== CEREBRO DEL PROYECTO (se carga solo al arrancar) ==="
 echo "Antes de responder: releé cerebro/README.md y cerebro/02-ordenes-vigentes.md completos, y el archivo temático de la tarea."
 echo "Durante el trabajo: todo dato, orden o corrección nueva del dueño se anota en el archivo del cerebro que corresponda en el momento."
 echo "Al cerrar: 07-estado, 08-pendientes, bitacora; y revisar si conviene sumar roles, skills o plugins en 11-equipo-y-herramientas.md (SearchSkills / SearchPlugins)."
-echo "Palabras clave del dueño: «accesos» → skill accesos (cerebro/17); «oficina» → skill oficina (procesar la Oficina de agentes)."
+echo "Palabras clave del dueño: «accesos» → skill accesos (cerebro/17); «oficina» → skill oficina (procesar la Oficina de agentes); «memoria» → skill memoria (cargar perfil y memoria en claude.ai desde Chrome)."
+echo "ARRANQUE OBLIGATORIO (Claude y subagentes): leer cerebro/00-arranque-para-agentes.md; usar todas las skills, plugins, conectores y agentes que sumen (mapa en cerebro/18); al delegar, pegar esa línea en el pedido."
 echo "Mapa de skills, plugins y agentes por escritorio: cerebro/18-mapa-de-skills-y-plugins.md (usar todos los que sumen)."
 echo
 sed -n '/^# Cerebro/,$p' "$C/README.md" | head -60

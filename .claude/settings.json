@@ -8,6 +8,10 @@
             "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/cerebro-al-arrancar.sh\" 2>/dev/null || true",
             "timeout": 20,
             "statusMessage": "Cargando el cerebro del proyecto…"
+          },
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/graphify.sh\" 2>/dev/null || true"
           }
         ]
       }

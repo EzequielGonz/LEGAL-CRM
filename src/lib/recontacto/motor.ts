@@ -20,6 +20,10 @@ import { contactBlockReason } from "@/lib/detention";
 import { loadContactCalendar } from "@/lib/contacto/calendario";
 import { agentReadiness, getProfile, profileIdForArea } from "@/lib/profiles";
 import { identificadorModelo } from "@/lib/agentes/modelo";
+import { conTiempoYReintento, esFallaTransitoria } from "@/lib/ai-agent/reintento";
+import { registrarTurno } from "@/lib/experimento/servicio";
+import { chequearTopeGemini } from "@/lib/presupuesto/servidor";
+import { MARCA_TOPE_GASTO } from "@/lib/presupuesto/reglas";
 import { validarTextoSalida } from "@/lib/agentes/contrato";
 import { instruccionesDeRol } from "@/lib/agentes/roles";
 import { modoDelContacto } from "@/lib/agentes/entrante";
@@ -32,12 +36,15 @@ import type { Area } from "@/lib/supabase/database.types";
 import { salidaDeConversacion } from "@/lib/wasender/proveedor";
 import {
   CLAVE_RECONTACTO,
+  destinoTrasFallaDelModelo,
   excluidoDelRecontacto,
   instruccionRecontacto,
   leerDecision,
   MINIMO_ENTRE_MENSAJES_MS,
   planRecontacto,
   recontactoEncendido,
+  TIEMPO_ENVIO_RECONTACTO_MS,
+  TIEMPO_MODELO_RECONTACTO_MS,
   type PasoRecontacto,
 } from "./reglas";
 
@@ -165,6 +172,7 @@ export async function procesarRecontactos(opts: { enviar?: boolean; presupuestoM
   // Mismo orden: primero las que esperan hace más tiempo.
   convs.sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id));
 
+  const topes = new Map<string, Awaited<ReturnType<typeof chequearTopeGemini>>>();
   for (const c of (convs ?? []) as any[]) {
     if (Date.now() - inicio > presupuesto) break;
     const perfil = perfilDeArea(c.area);
@@ -237,6 +245,20 @@ export async function procesarRecontactos(opts: { enviar?: boolean; presupuestoM
       continue;
     }
 
+    // 22/11: tope de gasto de IA. El recontacto es iniciativa propia del bot: con el tope
+    // alcanzado no se llama al modelo y no se marca nada (vuelve a evaluarse al subir el
+    // tope o al día siguiente; si la ventana de 24 h se cierra antes, ya no sale).
+    let tope = topes.get(perfil);
+    if (!tope) {
+      tope = await chequearTopeGemini({ area: c.area, rubroId: c.contacts?.rubro_id ?? null }, ahora);
+      topes.set(perfil, tope);
+    }
+    if (tope.bloquea) {
+      r.esperando++;
+      r.detalle.push({ conversacion: c.id, perfil, accion: "esperar", paso: plan.paso, motivo: `${MARCA_TOPE_GASTO}: ${tope.motivo}` });
+      continue;
+    }
+
     // Reserva: una sola ejecución toma este turno.
     const { data: tomado } = await (s.from("messages") as any)
       .update({ metadata: { ...(ultimo.metadata ?? {}), recontacto_estado: "en_curso", recontacto_at: new Date().toISOString() } })
@@ -246,6 +268,7 @@ export async function procesarRecontactos(opts: { enviar?: boolean; presupuestoM
     if (!tomado || !tomado.length) continue;
     const reservado = { id: ultimo.id, metadata: { ...(ultimo.metadata ?? {}), recontacto_estado: "en_curso" } };
 
+    let fase: "antes" | "modelo" | "envio" | "despues" = "antes";
     try {
       const area = c.area as Area;
       const { data: agente } = await s.from("ai_agents").select("*").eq("area", area).maybeSingle();
@@ -289,10 +312,39 @@ export async function procesarRecontactos(opts: { enviar?: boolean; presupuestoM
       const contents = historial(conPlantillas);
       const horas = (ahora.getTime() - new Date(ultimo.created_at).getTime()) / 3_600_000;
       contents.push({ role: "user", parts: [{ text: instruccionRecontacto(plan.paso, horas) }] });
-      const resp = await gemini().models.generateContent({
-        model: identificadorModelo(),
-        contents,
-        config: { systemInstruction: system, responseMimeType: "application/json" },
+      // 22/11: con tiempo máximo y sin reintento (el próximo latido lo vuelve a tomar si la falla fue pasajera).
+      fase = "modelo";
+      const t0 = Date.now();
+      const resp = await conTiempoYReintento(
+        () =>
+          gemini().models.generateContent({
+            model: identificadorModelo(),
+            contents,
+            config: { systemInstruction: system, responseMimeType: "application/json" },
+          }),
+        { tiempoMs: TIEMPO_MODELO_RECONTACTO_MS, reintentos: 0 }
+      );
+      fase = "despues";
+      const u: any = (resp as any).usageMetadata ?? {};
+      // 22/11: el recontacto no dejaba registro de tokens; ahora cuenta para el tope de gasto.
+      await registrarTurno({
+        experimentId: null,
+        candidato: null,
+        precio: null,
+        opportunityId: null,
+        conversationId: c.id,
+        rubroId: c.contacts?.rubro_id ?? null,
+        proveedor: "gemini_api",
+        modeloPedido: identificadorModelo(),
+        modeloRespuesta: (resp as any).modelVersion ?? null,
+        llamadas: 1,
+        tokensEntrada: u.promptTokenCount ?? 0,
+        tokensSalida: u.candidatesTokenCount ?? 0,
+        tokensRazonamiento: u.thoughtsTokenCount ?? 0,
+        latenciaMs: Date.now() - t0,
+        herramientas: [],
+        resultado: "sin_texto",
+        uso: "recontacto",
       });
       const crudo = (resp.candidates?.[0]?.content?.parts ?? []).map((p: any) => (typeof p.text === "string" ? p.text : "")).join("");
       const decision = leerDecision(crudo);
@@ -318,7 +370,13 @@ export async function procesarRecontactos(opts: { enviar?: boolean; presupuestoM
         await marcar(s, reservado, "cancelado", "la persona volvió a escribir");
         continue;
       }
-      const enviado = await sendOutboundMessage({ conversationId: c.id, senderType: "agente_ia", body: decision.texto, origin: "recuperacion" });
+      fase = "envio";
+      // Tiempo máximo del envío. Si se pasa, el turno queda en «error» y NO se reintenta (podría haber salido).
+      const enviado = await conTiempoYReintento(
+        () => sendOutboundMessage({ conversationId: c.id, senderType: "agente_ia", body: decision.texto, origin: "recuperacion" }),
+        { tiempoMs: TIEMPO_ENVIO_RECONTACTO_MS, reintentos: 0 }
+      );
+      fase = "despues";
       if (enviado.messageId) {
         await (s.from("messages") as any).update({ metadata: { recontacto: plan.paso, recontacto_motivo: decision.motivo || null } }).eq("id", enviado.messageId);
       }
@@ -327,6 +385,17 @@ export async function procesarRecontactos(opts: { enviar?: boolean; presupuestoM
       r.detalle.push({ conversacion: c.id, perfil, accion: "enviado", paso: plan.paso });
     } catch (err: any) {
       const bloqueado = err instanceof AutomaticSendBlockedError;
+      // 22/11: si falló el modelo por algo pasajero (tiempo agotado, 429, 5xx), el turno se libera
+      // para el próximo latido (hasta MAX_INTENTOS_RECONTACTO). Una falla del envío nunca se reintenta.
+      const intentos = Number(ultimo.metadata?.recontacto_intentos ?? 0);
+      if (fase === "modelo" && destinoTrasFallaDelModelo(esFallaTransitoria(err), intentos) === "liberar") {
+        await (s.from("messages") as any)
+          .update({ metadata: { ...(ultimo.metadata ?? {}), recontacto_estado: null, recontacto_intentos: intentos + 1, recontacto_ultima_falla: String(err?.message ?? err).slice(0, 120) } })
+          .eq("id", ultimo.id);
+        r.errores++;
+        console.error(`[recontacto] ${c.id}: el modelo no respondió; se reintenta en el próximo latido.`);
+        continue;
+      }
       await marcar(s, reservado, bloqueado ? "bloqueado" : "error", String(err?.message ?? err).slice(0, 200));
       if (bloqueado) r.descartados++;
       else r.errores++;

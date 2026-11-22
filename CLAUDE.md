@@ -2,6 +2,10 @@
 
 Panel de captación para cuatro perfiles (Jurídico con Civil y Penal, Coberturas médicas, Autos 0 km y Marketing) sobre Next.js 15.5, Supabase y la API oficial de Meta, publicado en Vercel.
 
+## Regla número uno (22/11): arranque obligatorio para todos
+
+**Claude y cada subagente** (copias aisladas, escritorios de la Oficina, tareas programadas) leen `cerebro/00-arranque-para-agentes.md` antes de empezar. Ahí está el cerebro completo, y cada uno usa **todas** las skills, plugins, conectores y agentes que sumen. Quien delega copia esa línea en el pedido. Al cerrar, se informa qué herramientas se usaron.
+
 ## Leer primero
 
 - **`cerebro/README.md`**: la memoria de Claude. Índice, cómo arrancar en 5 minutos y cómo cerrar cada vuelta. Desde ahí: `02-ordenes-vigentes.md` (qué manda hoy), `07-estado-verificado.md` (qué está encendido) y `08-pendientes-y-plan.md` (qué sigue). Se actualiza al cierre de cada vuelta, con commit y push.

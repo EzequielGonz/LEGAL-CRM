@@ -195,6 +195,7 @@ export type TemplatePurpose =
   | "campana"
   | "seguimiento"
   | "seguimiento_3"
+  | "recontacto"
   | "reagendamiento"
   | "inicio_cita"
   | "aviso_interno"
@@ -208,6 +209,12 @@ export const TEMPLATE_PURPOSES: { key: TemplatePurpose; label: string; enabled: 
     label: "Seguimiento: contacto 3 (si no hay, se usa la del contacto 2)",
     enabled: true,
     when: "Etapa 2 (bloque 2.3)",
+  },
+  {
+    key: "recontacto",
+    label: "Recontacto de las 72 h fuera de la ventana de 24 h (contacto 2; sin esta, no sale nada)",
+    enabled: true,
+    when: "22/11 (necesita la migración 0640)",
   },
   { key: "reagendamiento", label: "Reagendamiento de la cita", enabled: false, when: "Se habilita en la Etapa 2 (bloque 2.2)" },
   { key: "inicio_cita", label: "Inicio de la cita (Fase 2)", enabled: false, when: "Se habilita en la Etapa 2 (bloque 2.2)" },

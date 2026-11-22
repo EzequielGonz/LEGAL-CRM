@@ -15,6 +15,7 @@ import { AdjuntosLista } from "@/components/adjuntos/adjuntos-lista";
 import { ResultadoPosteriorForm } from "@/components/ficha/resultado-posterior-form";
 import { FUENTE_LABEL, esFuente } from "@/lib/fuente";
 import { estadoCorto, siguientePasoFicha } from "@/lib/inicio";
+import { atencionVisible } from "@/lib/definiciones/estado-chat";
 import { fuenteDe, origenEnPalabras } from "@/lib/resultados";
 import { enlaceConversacion } from "@/lib/cartera";
 import { esSlugPerfil } from "@/lib/marca";
@@ -181,7 +182,7 @@ export async function FichaSection({
           {chip("Contacto", CONTACT_STATE_LABEL[opp.contact_state])}
           {chip("Captación", CAPTURE_STATE_LABEL[opp.capture_state] + (opp.capture_reason ? ` · ${opp.capture_reason}` : ""))}
           {chip("Seguimiento", FOLLOWUP_STATE_LABEL[opp.followup_state])}
-          {chip("Atención", ATTENTION_STATE_LABEL[opp.attention_state])}
+          {chip("Atención", atencionVisible({ captureState: opp.capture_state, attentionState: opp.attention_state, attentionReason: (opp as any).attention_reason }) ?? (opp.capture_state === "captado" || opp.capture_state === "perdido" ? "—" : ATTENTION_STATE_LABEL[opp.attention_state]))}
           {chip(
             "Derivación",
             opp.capture_state === "captado"

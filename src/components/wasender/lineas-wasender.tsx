@@ -1,5 +1,6 @@
 "use client";
 
+import { textoRitmoDeLinea } from "@/lib/definiciones/ritmo";
 import { useCallback, useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { Icono } from "@/components/ui/icono-seccion";
@@ -427,11 +428,7 @@ export function LineasWasender({ slug, marca }: { slug: SlugPerfil; marca: strin
                     </div>
                   )}
                   {l.calentamiento && (
-                    <p className="mt-3 text-sm text-slate-700">
-                      {l.calentamiento.porCalentamiento
-                        ? `Día ${l.calentamiento.dia} de calentamiento: hoy puede enviar hasta ${l.calentamiento.limite} mensajes de campaña. Sube sola cada semana.`
-                        : `Campañas: hasta ${l.calentamiento.limite} mensajes por día.`}
-                    </p>
+                    <p className="mt-3 text-sm text-slate-700">{textoRitmoDeLinea({ estado: l.estado, habilitada: l.habilitada, calentamiento: l.calentamiento })}</p>
                   )}
                   <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm">
                     <Interruptor activo={l.habilitada} onClick={() => cambiar(l, { habilitada: !l.habilitada })} texto="Envía mensajes" ayuda="Apagada no sale nada por esta línea." />

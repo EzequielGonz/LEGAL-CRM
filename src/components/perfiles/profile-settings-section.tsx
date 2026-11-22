@@ -10,6 +10,8 @@ import { ProfileSettings } from "@/components/perfiles/profile-settings";
 import { consultarEstadosLineas } from "@/lib/whatsapp/estado-linea";
 import { profileHasCampaignTemplate } from "@/lib/plantillas";
 import type { Area } from "@/lib/supabase/database.types";
+import { conexionesOfrecibles } from "@/lib/definiciones/lineas";
+import type { SlugPerfil } from "@/lib/marca";
 
 /**
  * Sección "Perfil" de Configuración (bloque 1.4): nombre del perfil o
@@ -37,7 +39,8 @@ export async function ProfileSettingsSection({ slug, soloLineas = false }: { slu
   // 24/10: una conexión que ya usa otro perfil no se ofrece para «asignar» acá (evita mezclar líneas).
   const { data: todasLasLineas } = await supabase.from("profile_lines").select("credential_key, active");
   const registered = new Set(((todasLasLineas ?? []) as { credential_key: string; active: boolean }[]).filter((l) => l.active).map((l) => l.credential_key));
-  const detected = detectedCredentialKeys()
+  // 22/11: y una conexión con el nombre de otro perfil (Penal fuera de Jurídico, por ejemplo) tampoco.
+  const detected = conexionesOfrecibles(detectedCredentialKeys(), slug as SlugPerfil)
     .filter((k) => !registered.has(k))
     .map((k) => ({ key: k, credentials: credentialStatus(k) }));
 

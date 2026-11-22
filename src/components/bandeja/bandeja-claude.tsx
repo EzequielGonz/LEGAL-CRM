@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import clsx from "clsx";
 import { Icono } from "@/components/ui/icono-seccion";
+import { Bento, Estadistica, Kicker, Luz, Tarjeta, Vacio } from "@/components/ui/diseno";
 import type { SlugPerfil } from "@/lib/marca";
 import {
   ETIQUETA_ESTADO,
@@ -99,7 +100,8 @@ export function BandejaClaude({
   return (
     <div className="mx-auto max-w-4xl space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold text-slate-900">Bandeja para Claude</h1>
+        <Kicker className="mb-1.5">Tareas para Claude</Kicker>
+        <h1 className="text-2xl font-semibold text-slate-900 sm:text-3xl">Bandeja para Claude</h1>
         <p className="mt-1 max-w-2xl text-sm text-slate-600">
           Dejá acá tareas complejas (armar y cargar contenido, mejorar una landing, revisar algo del panel). Claude las toma desde Cowork, con el contexto del
           proyecto, cuando abrís un chat nuevo del proyecto y decís <strong>«ok»</strong>. Lo que cambie el panel o el código vuelve como propuesta para
@@ -129,7 +131,7 @@ export function BandejaClaude({
       )}
 
       {/* Nueva tarea */}
-      <section aria-labelledby="bandeja-nueva" className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+      <section aria-labelledby="bandeja-nueva" className="d-tarjeta d-tarjeta--brillo !block sm:!p-5">
         <h2 id="bandeja-nueva" className="text-base font-semibold text-slate-900">
           Nueva tarea
         </h2>
@@ -203,6 +205,22 @@ export function BandejaClaude({
         </form>
       </section>
 
+      {/* 22/11: las tres cifras de la bandeja en bento, con su luz. */}
+      <Bento etiqueta="Resumen de la bandeja">
+        <Tarjeta ancho="3" estado={resumen.en_espera ? "aviso" : "apagado"}>
+          <div className="flex items-center gap-2"><Luz estado={resumen.en_espera ? "aviso" : "apagado"} late={resumen.en_espera > 0} /><Kicker>Te esperan</Kicker></div>
+          <Estadistica etiqueta="En espera de una respuesta tuya" valor={resumen.en_espera} chico />
+        </Tarjeta>
+        <Tarjeta ancho="3" estado={resumen.en_curso ? "ok" : "apagado"}>
+          <div className="flex items-center gap-2"><Luz estado={resumen.en_curso ? "ok" : "apagado"} late={resumen.en_curso > 0} /><Kicker>Trabajando</Kicker></div>
+          <Estadistica etiqueta="En curso" valor={resumen.en_curso} chico />
+        </Tarjeta>
+        <Tarjeta ancho="3" estado={resumen.pendiente ? "info" : "apagado"}>
+          <div className="flex items-center gap-2"><Luz estado={resumen.pendiente ? "info" : "apagado"} /><Kicker>En cola</Kicker></div>
+          <Estadistica etiqueta="Pendientes" valor={resumen.pendiente} chico />
+        </Tarjeta>
+      </Bento>
+
       {/* Abiertas */}
       <section aria-labelledby="bandeja-abiertas" className="space-y-3">
         <div className="flex flex-wrap items-baseline justify-between gap-2">
@@ -215,7 +233,9 @@ export function BandejaClaude({
           </p>
         </div>
         {abiertas.length === 0 ? (
-          <p className="rounded-xl border border-dashed border-slate-300 bg-white p-5 text-sm text-slate-600">No hay tareas abiertas.</p>
+          <div className="d-tarjeta">
+            <Vacio titulo="No hay tareas abiertas" texto="Lo que dejes arriba queda pendiente hasta que digas «ok» en un chat del proyecto." />
+          </div>
         ) : (
           <ul className="space-y-3">
             {abiertas.map((t) => (

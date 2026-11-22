@@ -27,9 +27,24 @@ const CSP = [
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // 22/11: Jarvis consulta la memoria del cerebro (cerebro/**/*.md) desde estas rutas.
+  outputFileTracingIncludes: {
+    "/api/jarvis/**": ["./cerebro/**/*.md"],
+    "/api/asistente/**": ["./cerebro/**/*.md"],
+    // 22/11: «Preguntale al cerebro» y «Decisiones y órdenes» leen los .md desde la página y su ruta.
+    "/api/cerebro/**": ["./cerebro/**/*.md"],
+    "/cerebro": ["./cerebro/**/*.md"],
+  },
   // 13/11 (seguridad): el panel no usa el optimizador de imágenes de Next; se apaga
   // para que su dirección (/_next/image) no quede expuesta a los fallos conocidos.
   images: { unoptimized: true },
+  // 22/11 (velocidad): sin la cabecera X-Powered-By, con compresión y con imports finos de las
+  // librerías con barrel (solo se empaquetan las piezas que se usan; el resultado visible es el mismo).
+  poweredByHeader: false,
+  compress: true,
+  experimental: {
+    optimizePackageImports: ["date-fns", "@supabase/supabase-js", "@react-three/drei", "three"],
+  },
   eslint: {
     ignoreDuringBuilds: false,
   },

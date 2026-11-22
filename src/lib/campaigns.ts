@@ -15,10 +15,12 @@ import { effectiveSendHours, getSendWindow, startOfArgentinaDay } from "@/lib/ho
 import { loadContactCalendar } from "@/lib/contacto/calendario";
 import { clasificarFallaWasender, completarTextoDeCampana, cupoDeLinea, enviosRecientesDeLinea, frenoDeLinea, notaFallaWasender, numeroConWhatsApp, preparacionWasender, proveedorDe } from "@/lib/wasender/campanas";
 import { desfaseEnElMinuto, esperaIrregular } from "@/lib/wasender/ritmo";
+import { mapConTope } from "@/lib/concurrencia";
 import { cortarTanda, elegirTextoAlAzar, esperaParaRepartir, estadoDelPlan, fechaArgentina, instanteDelDia, minutosArgentina, pausaEntreTandas, planDelDia } from "@/lib/wasender/ritmo-humano";
 import { enviarPorWasender } from "@/lib/wasender/envio";
 import { frenaPorTope, TEXTO_TOPE } from "@/lib/contacto/tope";
 import { frenoRespuestaSalteado, PREFIJO_FRENO_RESPUESTA } from "@/lib/wasender/ritmo";
+import { reordenarPendientesPorGravedad } from "@/lib/campaign-recipients";
 
 // El horario vive en src/lib/horario.ts (sin dependencias, se prueba solo); se
 // sigue exportando desde acá para quien ya lo importaba de este archivo.
@@ -93,6 +95,10 @@ export interface TickResult {
 
 /** Vigencia del bloqueo por campaña (segundos): vence solo si la ejecución se corta. */
 export const TICK_LOCK_SECONDS = 120;
+/** 22/11: campañas que se procesan a la vez en el latido, tiempo máximo por campaña y tiempo para empezar nuevas. */
+export const CAMPANAS_EN_PARALELO = 5;
+export const TIEMPO_MAXIMO_POR_GRUPO_MS = 30_000;
+export const PRESUPUESTO_CAMPANAS_MS = 35_000;
 /** Una reserva más vieja que esto se considera cortada (segundos). */
 export const CLAIM_LEASE_SECONDS = 600;
 
@@ -694,14 +700,63 @@ export async function tickAllActiveCampaigns(): Promise<TickResult[]> {
   const supabase = createAdminClient();
   const { data: activeCampaigns } = await supabase
     .from("campaigns")
-    .select("id")
+    .select("id, line_id, wasender_line_id" as any)
     .eq("status", "en_curso");
 
+  // 22/11: antes se recorrían en serie y cada campaña de Wasender dormía hasta 20 s
+  // (el desfase al azar): con tres campañas se gastaba todo el latido. Ahora las
+  // líneas corren a la vez (hasta 5) con tiempo máximo, y lo que no alcanza queda
+  // para el próximo latido. Las campañas de una misma línea siguen en serie (comparten
+  // cupo y ritmo) y cada una tiene su bloqueo, así que una que se pasó de tiempo no
+  // se pisa con la siguiente ejecución.
+  const grupos = agruparPorLinea((activeCampaigns ?? []) as any[]);
+  const hechos = new Map<string, TickResult>();
+  const motivos = new Map<string, "no_empezo" | "tiempo_agotado" | "error">();
+  const sinHacer = (id: string, motivo: "no_empezo" | "tiempo_agotado" | "error"): TickResult => ({
+    campaignId: id,
+    action: "busy",
+    detail:
+      motivo === "no_empezo"
+        ? "No hubo tiempo en este latido: sigue en el próximo."
+        : motivo === "error"
+          ? "Falló en este latido: se reintenta en el próximo."
+          : "Se pasó del tiempo máximo en este latido: sigue en el próximo (su bloqueo evita que se pise).",
+  });
+  const porGrupo = await mapConTope(
+    grupos,
+    async (ids) => {
+      for (const id of ids) hechos.set(id, await tickCampaign(id));
+      return ids;
+    },
+    {
+      concurrencia: CAMPANAS_EN_PARALELO,
+      tiempoMs: TIEMPO_MAXIMO_POR_GRUPO_MS,
+      presupuestoMs: PRESUPUESTO_CAMPANAS_MS,
+      sinTiempo: (ids, motivo) => {
+        for (const id of ids) motivos.set(id, motivo);
+        return ids;
+      },
+      alFallar: (ids, err) => console.error(`[latido] Falló o se pasó de tiempo el grupo de campañas ${ids.join(",")}:`, (err as any)?.message ?? err),
+    }
+  );
+  // Resultado por campaña, en el orden original; lo que no terminó queda marcado.
   const results: TickResult[] = [];
-  for (const c of activeCampaigns ?? []) {
-    results.push(await tickCampaign(c.id));
+  for (const ids of porGrupo) {
+    for (const id of ids) results.push(hechos.get(id) ?? sinHacer(id, motivos.get(id) ?? "tiempo_agotado"));
   }
   return results;
+}
+
+/** Campañas de la misma línea juntas (comparten cupo y ritmo); las demás, cada una por su lado. Pura. */
+export function agruparPorLinea(campanas: { id: string; line_id?: string | null; wasender_line_id?: string | null }[]): string[][] {
+  const grupos = new Map<string, string[]>();
+  for (const c of campanas) {
+    const clave = c.wasender_line_id ? `w:${c.wasender_line_id}` : c.line_id ? `m:${c.line_id}` : `c:${c.id}`;
+    const g = grupos.get(clave);
+    if (g) g.push(c.id);
+    else grupos.set(clave, [c.id]);
+  }
+  return Array.from(grupos.values());
 }
 
 /**
@@ -740,6 +795,15 @@ export async function launchCampaign(campaignId: string): Promise<TickResult> {
   // Estado real de la plantilla en Meta en el momento de lanzar (pregunta 22).
   const live = await confirmTemplateLive(readiness.template.template.id, readiness.line);
   if (!live.ok) throw new CampaignNotReadyError([live.message ?? "No se pudo confirmar la plantilla en Meta"]);
+  }
+
+  // 22/11: en Jurídico, al lanzar o reanudar, lo que falta enviar se ordena por gravedad (los más
+  // graves primero). Solo cambia la prioridad de los pendientes: nunca reenvía ni duplica. Si no se
+  // puede reordenar, la campaña sale igual con el orden que ya tenía.
+  try {
+    await reordenarPendientesPorGravedad(campaignId);
+  } catch (err: any) {
+    console.error(`[campañas] no se pudo reordenar por gravedad ${campaignId}:`, err?.message ?? err);
   }
 
   await supabase

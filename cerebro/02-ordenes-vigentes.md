@@ -273,3 +273,29 @@ Todo lo demás son **decisiones de negocio** del dueño (abajo), no trabas de pr
 - Oficina: Gemini ordena en el panel, Claude trabaja; los agentes arrancan solo con «Arrancar ahora»; hasta borrador.
 - La sesión «accesos» arranca pidiendo al dueño que **conecte Supabase a mano** (en la sesión y en la tarea programada de la Oficina).
 - PostHog, Firecrawl y Skill Arena: instalados o por instalar, pero se usan solo con autorización o si hace falta de verdad.
+- **Segundo contacto (72 h) por plantilla de Meta, automático (22/11 noche):** el límite es la ventana de 24 h de Meta. Mientras se migra a Wasender, el recontacto sale solo con plantillas aprobadas de Meta. No cierra ventas por conversación: solo reabre la charla.
+- **Gravedad en campañas de Jurídico (22/11 noche, respuesta a la pregunta 5):** la etiqueta de gravedad (fractura, amputación…) se conecta a las campañas. Primero se envía a los lesionados más graves y el foco del cupo va a ellos.
+- **Ramas y Vercel (22/11 noche):** el dueño pidió ordenarlas. Primero inventario y propuesta (`21-orden-de-ramas-y-vercel.md`); se archiva con etiqueta y nada se borra sin su OK.
+- **Memoria en claude.ai:** el dueño la está cargando con Claude in Chrome (22/11 noche).
+- **Ramas y PR (22/11 noche):** no tocar ramas ni archivar nada por ahora. Los PR sin integrar (#77, #80 y #40) quedan para después.
+
+## Órdenes del 22/11 (cierre): rehacer el panel, simple y premium
+
+- **El rediseño anterior no alcanzó** («no tiene ningún rediseño gráfico, solo mínimos detalles… todo es básico, genérico, con botones… lo dejaste más feo y más desorganizado»). Se rehace de verdad: ultra premium, interactivo, con las referencias que pasó (videos, code.xr).
+- **Fácil y sencillo:** «demasiado extenso, demasiadas funciones, demasiado de todo que no te lleva a nada». Menos cosas por pantalla, **estadísticas circulares** (anillos), **animaciones simples**, textos sin tecnicismos. Lo que sale de la vista no se borra: va a «Más».
+- **La Oficina como el video 1** (oficina 3D con agentes trabajando en escritorios), animada; el cerebro y el panel con la misma calidad. **Jarvis tiene que existir** de verdad en el panel.
+- Usar referencias de otras páginas y CRM, y todas las skills, plugins, conectores y agentes, con los mejores modelos.
+- Después: **propuesta de gestión de teléfonos** desde la computadora, con reconexión automática de líneas caídas (o aviso y reconexión en un toque).
+- **Jarvis, secretario de todo el panel (22/11 cierre):** «tiene que ayudarme en todo el panel… como el asistente que está ahora pero mejorado nivel 1000». Se construye sobre el asistente actual (sin borrarlo): presente en cada pantalla, sabe dónde estás, da el parte del día, busca, resume, redacta borradores, lleva a la pantalla correcta y crea tareas, siempre con confirmación para lo que cambia algo. No lanza campañas ni publica.
+- **Estilo del panel (22/11 cierre): el del reel 2** (Df93dArgY10). Fondo gradient mesh oscuro, glassmorphism real, sombras en capas, bento grid, botones neumórficos sobrios, parallax suave y efectos 3D sobrios: inclinación leve y anillos con relieve. «No tarjetas y animaciones genéricas, básicas». Siempre con estadísticas circulares, simple y accesible.
+- **Corrección (22/11 cierre, más reciente):** «ese fondo raro no, manteniendo la estética clásica del panel pero sumando detalles». Sin gradient mesh ni esferas de color: fondo, colores y tipografía del panel de siempre. Se suman detalles premium: anillos con relieve, sombras suaves en capas, borde fino con brillo, inclinación 3D leve, entradas escalonadas y un vidrio sutil solo en la barra lateral y en Jarvis.
+
+### 22/11 · Jarvis puede hacer TODO, siempre preguntando
+- Orden del dueño: «que Jarvis pueda hacer TODO, preguntándome antes siempre». Reemplaza la veda anterior (Jarvis no lanzaba, no publicaba ni le escribía a nadie).
+- Ahora Jarvis puede proponer lanzar o reanudar campañas, publicar, responder chats y encender bots o seguimientos. Lo que hace salir mensajes o publica nunca baja de **confirmación reforzada** (marcar que se entendió a quién, cuántos y desde qué línea) o código si el permiso lo pide. Nada se ejecuta sin el Sí del dueño. Sigue valiendo: las campañas las lanzan los dueños, ahora también confirmando desde Jarvis.
+- Código: `src/lib/jarvis/seguridad.ts` (`esPropuestaSensible`, `decisionConfirmar`), prompt v1.x regla 2, pruebas en `tests/unitarias/jarvis-seguridad.test.ts`.
+
+### 22/11 · El cerebro orquesta y la Oficina es un edificio por sectores
+- Cada escritorio es un sector con puestos por tarea específica (guionista, render, analista…); se entra a cada uno desde `/oficina`. El Cerebro está al centro y recibe, reparte y revisa (Dirección = Cerebro).
+- Mapa del código con Graphify en `cerebro/mapa-codigo/`: los agentes lo consultan antes de tocar código.
+- Propuestas pendientes de OK (líneas propias con Evolution API, Jarvis con código vía rama + vista previa): `biblioteca/propuesta-lineas-codigo-agentes-2211.md`.

@@ -1,6 +1,9 @@
+import { unstable_cache } from "next/cache";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getProfileMetrics } from "@/lib/metrics";
 import { personasQueEscribieron } from "@/lib/estadisticas-personas";
+import { aplicarCondiciones } from "@/lib/indicadores";
+import { ESPERAN_A_UNA_PERSONA } from "@/lib/definiciones/cifras";
 
 /**
  * Vista previa de cada perfil (pantalla de perfiles y teléfono). Usa el
@@ -42,7 +45,7 @@ const AREAS: Record<string, string[]> = {
 };
 
 /** Rubros activos en el orden de la pantalla (15/11: aparte, para empezar otras lecturas sin esperar las cifras). */
-export async function leerRubrosActivos(): Promise<RubroRow[]> {
+async function leerRubrosActivosSinCache(): Promise<RubroRow[]> {
   const { data } = await createAdminClient()
     .from("rubros")
     .select("id, slug, name, emoji, description")
@@ -50,6 +53,9 @@ export async function leerRubrosActivos(): Promise<RubroRow[]> {
     .order("sort_order", { ascending: true });
   return (data ?? []) as RubroRow[];
 }
+
+/** 22/11 (velocidad): la lista de rubros casi no cambia; se guarda 60 s en el servidor (no lleva datos de personas ni cifras). La sesión se comprueba antes, en cada pantalla. */
+export const leerRubrosActivos: () => Promise<RubroRow[]> = unstable_cache(leerRubrosActivosSinCache, ["rubros-activos"], { revalidate: 60, tags: ["rubros"] });
 
 /** Con `rubrosLeidos` no vuelve a leer los rubros (la pantalla de perfiles ya los tiene). */
 export async function loadPerfiles(rubrosLeidos?: RubroRow[]): Promise<PerfilStats[]> {
@@ -76,14 +82,8 @@ export async function loadPerfiles(rubrosLeidos?: RubroRow[]): Promise<PerfilSta
         personasQueEscribieron(areas, desde),
         supabase.from("campaigns").select("id, name, status").in("area", areas).is("archived_at", null).order("created_at", { ascending: false }).limit(1),
         supabase.from("content_pieces").select("id", { count: "exact", head: true }).eq("rubro_id", r.id).eq("estado", "programada"),
-        supabase
-          .from("opportunities")
-          .select("id", { count: "exact", head: true })
-          .eq("rubro_id", r.id)
-          .eq("attention_state", "requiere_humano")
-          .neq("capture_state", "perdido")
-          .or("attention_category.is.null,attention_category.neq.detencion")
-          .gte("updated_at", semana),
+        // 22/11: definición única de «Esperan a una persona» (sin ventana de fechas).
+        aplicarCondiciones(supabase.from("opportunities").select("id", { count: "exact", head: true }).eq("rubro_id", r.id), ESPERAN_A_UNA_PERSONA),
       ]);
       const c: any = (camp ?? [])[0];
       return {

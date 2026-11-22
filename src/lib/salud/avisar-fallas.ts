@@ -7,6 +7,7 @@
  * avisos.
  */
 import { MARCAS, type SlugPerfil } from "@/lib/marca";
+import { RUBRO_IDS } from "@/lib/rubros";
 import { leerFallas, type Falla } from "@/lib/salud/fallas";
 
 const PERFILES: SlugPerfil[] = ["juridico", "coberturas_medicas", "agencia_0km", "marketing"];
@@ -58,11 +59,31 @@ export async function avisarFallasDelSistema(ahora: Date = new Date()): Promise<
       if (f.alcance === "sistema") yaDelSistema.add(clave);
       revisadas++;
       const t = textoDeAviso(slug, f);
-      const { results } = await sendToDevices({ ...t, tag: `falla-${f.clave}`, kind: "aviso", eventKey: clave });
+      const { results } = await sendToDevices({ ...t, tag: `falla-${f.clave}`, kind: "aviso", eventKey: clave, rubroId: f.alcance === "perfil" ? RUBRO_IDS[slug] : null });
       if (results.some((r) => r.status === "enviado")) avisadas++;
     }
   }
   return { avisadas, revisadas };
+}
+
+/**
+ * 22/11: el latido volvió después de un hueco largo (10 minutos o más sin correr).
+ * Un aviso por hora como mucho. No lleva datos de nadie.
+ */
+export async function avisarAtrasoDeLatido(huecoMs: number, ahora: Date = new Date()): Promise<void> {
+  try {
+    const { sendToDevices } = await import("@/lib/push");
+    await sendToDevices({
+      title: "Falla del sistema",
+      body: `El latido (campañas, seguimientos, recontacto) estuvo ${Math.round(huecoMs / 60_000)} min sin correr y volvió. Tocá para verlo en Salud.`,
+      url: "/salud",
+      tag: "falla-latido-atraso",
+      kind: "aviso",
+      eventKey: `falla:latido-atraso:${ahora.toISOString().slice(0, 13)}`,
+    });
+  } catch (err) {
+    console.error("[salud] No se pudo avisar el atraso del latido:", err);
+  }
 }
 
 /** El latido terminó con error: un aviso por hora como mucho. */

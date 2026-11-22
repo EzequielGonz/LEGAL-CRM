@@ -4,6 +4,7 @@ import { leerSalud, resumenSalud, type ItemSalud } from "@/lib/salud";
 import { lecturaSimple } from "@/lib/salud/reglas";
 import { itemsDelPerfil } from "@/lib/salud/por-perfil";
 import { Icono } from "@/components/ui/icono-seccion";
+import { cantidad } from "@/lib/textos/pantalla";
 
 const COLOR: Record<ItemSalud["estado"], string> = {
   rojo: "border-red-300 bg-red-50 text-red-900",
@@ -16,7 +17,7 @@ const COLOR: Record<ItemSalud["estado"], string> = {
  * de en cada navegación (son ~14 consultas). El tablero /salud sigue leyendo
  * en vivo.
  */
-const saludResumida = unstable_cache(() => leerSalud(), ["barra-salud"], { revalidate: 60 });
+export const saludResumida = unstable_cache(() => leerSalud(), ["barra-salud"], { revalidate: 60 });
 
 /**
  * Barra de salud arriba de cada panel (16/10): lo que frena la operación se
@@ -37,7 +38,7 @@ export async function BarraSalud({ slug }: { slug: string }) {
   if (r.rojo === 0 && r.amarillo === 0) return null;
   const urgentes = items.filter((i) => i.estado === "rojo").slice(0, 3);
   const mostrar = urgentes.length ? urgentes : items.filter((i) => i.estado === "amarillo").slice(0, 2);
-  const titulo = r.rojo ? `${r.rojo} problema(s) frenan la operación` : `${r.amarillo} punto(s) para revisar`;
+  const titulo = r.rojo ? (r.rojo === 1 ? "Un problema frena la operación" : `${cantidad(r.rojo, "problema")} frenan la operación`) : r.amarillo === 1 ? "Un punto para revisar" : `${cantidad(r.amarillo, "punto")} para revisar`;
   const primero = lecturaSimple(mostrar[0]);
   return (
     <section aria-label="Salud del sistema" className={`barra-salud mb-5 rounded-xl border p-3 ${r.rojo ? COLOR.rojo : COLOR.amarillo}`}>

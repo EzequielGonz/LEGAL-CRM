@@ -1,0 +1,292 @@
+/* =====================================================================
+   Motion y detalles del panel (22/11). Capa final: entrada de página,
+   elevación con sombras en capas, foco, presión y esqueletos.
+   Reglas: solo transform/opacity (y `translate`/`scale` individuales, que
+   no pisan los transform existentes); nada de sombras animadas en bucle;
+   con «reducir movimiento» todo queda quieto. No cambia colores ni fondos.
+   ===================================================================== */
+:root {
+  --m-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --m-ease-suave: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --m-sombra-reposo: 0 1px 2px rgb(15 23 42 / 0.06), 0 4px 12px -6px rgb(15 23 42 / 0.16);
+  --m-sombra-alta: 0 1px 2px rgb(15 23 42 / 0.08), 0 8px 18px -8px rgb(15 23 42 / 0.22), 0 22px 44px -22px rgb(15 23 42 / 0.3);
+  --m-foco: rgb(var(--c-gold-600));
+  --m-sk-base: rgb(var(--c-slate-100));
+  --m-sk-brillo: rgb(255 255 255 / 0.7);
+}
+html[data-modo="oscuro"] {
+  --m-sombra-reposo: 0 1px 0 rgb(255 255 255 / 0.03), 0 8px 20px -12px rgb(0 0 0 / 0.7);
+  --m-sombra-alta: 0 1px 0 rgb(255 255 255 / 0.05), 0 10px 22px -10px rgb(0 0 0 / 0.7), 0 28px 56px -28px rgb(0 0 0 / 0.85);
+  --m-foco: rgb(var(--c-gold-400, 253 140 63));
+  --m-sk-base: rgb(255 255 255 / 0.05);
+  --m-sk-brillo: rgb(255 255 255 / 0.09);
+}
+
+@keyframes m-pagina-entra {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes m-brillo-pasa {
+  from { transform: translateX(-120%); }
+  to { transform: translateX(120%); }
+}
+@keyframes m-sk-pasa {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+/* ---------------------------------------------------- foco visible (AA) */
+:is(a, button, [role="button"], summary, input, select, textarea, [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 2px solid var(--m-foco);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* ------------------------------------------- entrada de página suave */
+  /* `backwards`: al terminar no queda ningún transform (no rompe fixed/sticky). */
+  main#contenido,
+  .modo-telefono > main {
+    animation: m-pagina-entra 380ms var(--m-ease) backwards;
+  }
+
+  /* ----------------------------------- elevación en tarjetas (al pasar) */
+  :is(a.d-tarjeta, .d-tarjeta--enlace, .tarjeta-luz, .card-lift, a.tarjeta-cifra, .tarjeta-perfil-tel) {
+    transition-property: border-color, box-shadow, translate, scale, background-color;
+    transition-duration: 220ms;
+    transition-timing-function: var(--m-ease);
+  }
+  .card-lift { box-shadow: var(--m-sombra-reposo); }
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  :is(a.d-tarjeta, .d-tarjeta--enlace, .tarjeta-luz, .card-lift, a.tarjeta-cifra, .tarjeta-perfil-tel):hover {
+    translate: 0 -2px;
+  }
+  /* Sombra en capas solo donde la tarjeta no trae la suya. */
+  :is(.card-lift, a.tarjeta-cifra, .tarjeta-perfil-tel):hover { box-shadow: var(--m-sombra-alta); }
+  :is(.btn-gold, .btn-gold-sm, .btn-suave, .btn-suave-sm, .pm-boton):hover:not(:disabled) {
+    translate: 0 -1px;
+  }
+}
+
+/* ----------------------------------------- presión (micro-interacción) */
+@media (prefers-reduced-motion: no-preference) {
+  :is(.btn-gold, .btn-gold-sm, .btn-suave, .btn-suave-sm, .pm-boton, .chip-filtro, .chip-estado, .pestana, .menu-item):not(:disabled) {
+    transition-property: color, background-color, border-color, box-shadow, translate, scale, filter, transform, opacity;
+    transition-duration: 160ms;
+    transition-timing-function: var(--m-ease);
+  }
+  :is(.btn-gold, .btn-gold-sm, .btn-suave, .btn-suave-sm, .pm-boton, .chip-filtro, .chip-estado, .pestana):active:not(:disabled),
+  :is(a.d-tarjeta, .d-tarjeta--enlace, .tarjeta-luz, .tarjeta-perfil-tel):active {
+    scale: 0.98;
+    translate: 0 0;
+  }
+}
+
+/* ------------------------------------- brillo suave que recorre el botón */
+/* Solo en el botón principal del ingreso; el recorrido es un ::after que se
+   traslada (transform) y se corta con overflow. Una pasada cada pocos segundos. */
+.pin-boton { position: relative; overflow: hidden; isolation: isolate; }
+.pin-boton::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 42%;
+  background: linear-gradient(100deg, transparent, rgb(255 244 214 / 0.2), transparent);
+  transform: translateX(-120%);
+  opacity: 0;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .pin-boton:not(:disabled)::after { animation: m-brillo-pasa 3.2s var(--m-ease-suave) 1.4s infinite; opacity: 1; }
+  .pin-boton:disabled::after { animation: none; }
+}
+
+/* --------------------------------------------- esqueletos con shimmer */
+.skeleton-shimmer, .d-esqueleto {
+  position: relative;
+  overflow: hidden;
+  background-image: none !important;
+  background-color: var(--m-sk-base);
+}
+.skeleton-shimmer::after, .d-esqueleto::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, var(--m-sk-brillo), transparent);
+  transform: translateX(-100%);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .skeleton-shimmer::after, .d-esqueleto::after { animation: m-sk-pasa 1.6s ease-in-out infinite; }
+}
+
+/* ------------------------------------------------ ingreso: entrada en motion */
+/* Logo con escala y brillo, luego título, campo y botón escalonados. */
+@keyframes m-logo-entra {
+  from { opacity: 0; transform: scale(0.82); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes m-sube {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes m-tarjeta-entra {
+  from { opacity: 0; transform: translateY(14px) scale(0.985); }
+  to { opacity: 1; transform: none; }
+}
+.marca-maestra--anima {
+  position: relative;
+  overflow: hidden;
+  border-radius: 22%;
+}
+.marca-maestra--anima::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 55%;
+  background: linear-gradient(105deg, transparent, rgb(255 240 200 / 0.38), transparent);
+  transform: translateX(-130%);
+  opacity: 0;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .lampara-tarjeta { animation: m-tarjeta-entra 700ms var(--m-ease) 120ms backwards; }
+  .marca-maestra--anima svg { animation: m-logo-entra 760ms var(--m-ease) 260ms backwards; }
+  .marca-maestra--anima::after { opacity: 1; animation: m-brillo-pasa 1100ms var(--m-ease-suave) 900ms 1 both; }
+  .pin-tarjeta > div > :nth-child(2) { animation: m-sube 560ms var(--m-ease) 420ms backwards; }
+  .pin-tarjeta > div > :nth-child(3) { animation: m-sube 560ms var(--m-ease) 490ms backwards; }
+  .pin-tarjeta > div > :nth-child(4) { animation: m-sube 560ms var(--m-ease) 560ms backwards; }
+  .pin-tarjeta > .pin-etiqueta { animation: m-sube 560ms var(--m-ease) 640ms backwards; }
+  .pin-tarjeta > .pin-campo { animation: m-sube 560ms var(--m-ease) 710ms backwards; }
+  .pin-tarjeta > .pin-boton { animation: m-sube 560ms var(--m-ease) 780ms backwards; }
+}
+
+/* ---------------------------------------------------- reducir movimiento */
+@media (prefers-reduced-motion: reduce) {
+  main#contenido, .modo-telefono > main { animation: none !important; }
+  .pin-boton::after, .skeleton-shimmer::after, .d-esqueleto::after, .marca-maestra--anima::after { animation: none !important; opacity: 0; }
+  .lampara-tarjeta, .marca-maestra--anima svg, .pin-tarjeta > div > *, .pin-tarjeta > .pin-etiqueta, .pin-tarjeta > .pin-campo, .pin-tarjeta > .pin-boton { animation: none !important; }
+  :is(a, button, .d-tarjeta, .tarjeta-luz, .card-lift, .pm-boton):is(:hover, :active) { translate: none !important; scale: none !important; }
+}
+
+/* =====================================================================
+   Pulido ultra premium (22/11, vuelta 4). Una sola escala de sombras y de
+   tipografía para todo el panel; nitidez; entradas escalonadas.
+   Estética clásica: no cambia colores base, fondos ni acentos.
+   ===================================================================== */
+:root {
+  /* Sombras en capas (valores enteros: nada de blur fraccional). */
+  --sh-brillo: inset 0 1px 0 rgb(255 255 255 / 0.7);
+  --sh-1: 0 1px 2px rgb(15 23 42 / 0.06), 0 2px 6px -2px rgb(15 23 42 / 0.1);
+  --sh-2: 0 1px 2px rgb(15 23 42 / 0.06), 0 6px 16px -6px rgb(15 23 42 / 0.16), 0 18px 36px -20px rgb(15 23 42 / 0.22);
+  --sh-3: 0 2px 4px rgb(15 23 42 / 0.07), 0 12px 24px -8px rgb(15 23 42 / 0.18), 0 32px 56px -28px rgb(15 23 42 / 0.3);
+  --sh-4: 0 4px 8px rgb(15 23 42 / 0.08), 0 20px 40px -12px rgb(15 23 42 / 0.28), 0 48px 96px -32px rgb(15 23 42 / 0.4);
+  --sh-hundido: inset 0 1px 3px rgb(15 23 42 / 0.14);
+  /* Escala tipográfica única. */
+  --t-xs: 0.75rem;
+  --t-sm: 0.875rem;
+  --t-base: 1rem;
+  --t-lg: 1.125rem;
+  --t-xl: 1.375rem;
+  --t-2xl: 1.75rem;
+  --t-3xl: 2.25rem;
+  --t-interletrado-titulo: -0.02em;
+  /* Los tokens viejos apuntan a la escala nueva. */
+  --d-sombra-1: var(--sh-2);
+  --d-sombra-2: var(--sh-3);
+  --m-sombra-reposo: var(--sh-1);
+  --m-sombra-alta: var(--sh-3);
+}
+html[data-modo="oscuro"] {
+  --sh-brillo: inset 0 1px 0 rgb(255 255 255 / 0.06);
+  --sh-1: 0 1px 0 rgb(255 255 255 / 0.03), 0 2px 8px -2px rgb(0 0 0 / 0.55);
+  --sh-2: 0 1px 0 rgb(255 255 255 / 0.04), 0 8px 20px -8px rgb(0 0 0 / 0.7), 0 20px 40px -22px rgb(0 0 0 / 0.8);
+  --sh-3: 0 1px 0 rgb(255 255 255 / 0.05), 0 14px 28px -10px rgb(0 0 0 / 0.75), 0 36px 64px -30px rgb(0 0 0 / 0.9);
+  --sh-4: 0 1px 0 rgb(255 255 255 / 0.06), 0 24px 48px -14px rgb(0 0 0 / 0.8), 0 56px 110px -36px rgb(0 0 0 / 0.95);
+  --sh-hundido: inset 0 2px 5px rgb(0 0 0 / 0.5);
+  --d-sombra-1: var(--sh-2);
+  --d-sombra-2: var(--sh-3);
+  --m-sombra-reposo: var(--sh-1);
+  --m-sombra-alta: var(--sh-3);
+}
+
+/* ---------------------------------------------------------- nitidez */
+/* Nada de raster escalado ni de texto en capas difusas: vectores con
+   geometría exacta, imágenes sin suavizado raro y capas 3D solo mientras
+   se usan (en reposo el texto vuelve a pintarse en pantalla, no en textura). */
+svg { shape-rendering: geometricPrecision; }
+img, video { image-rendering: auto; }
+body { font-kerning: normal; font-optical-sizing: auto; -webkit-text-size-adjust: 100%; }
+.placa-logo img, .placa-logo svg, .marca-maestra svg { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.pm-tarjeta--relieve:not(:hover):not([data-inclinando="1"]) { will-change: auto; }
+@media (hover: none), (pointer: coarse) {
+  .pm-tarjeta--relieve { transform: none !important; will-change: auto; }
+}
+
+/* ------------------------------------------------------- tipografía */
+main#contenido :is(h1, h2), .d-titulo { letter-spacing: var(--t-interletrado-titulo); text-wrap: balance; }
+main#contenido :is(h3, h4) { letter-spacing: -0.01em; text-wrap: balance; }
+main#contenido :is(p, li, dd) { text-wrap: pretty; }
+:is(time, output, .tabular, [class~="tabular-nums"], .cifra-premium, .d-cifra, th, td) { font-variant-numeric: tabular-nums lining-nums; }
+main#contenido :is(h1, h2, h3, .d-titulo) { font-feature-settings: "ss01", "cv11"; }
+:is(.d-etiqueta, .etiqueta-seccion, [class~="uppercase"]) { letter-spacing: 0.06em; }
+
+/* ------------------------------------------------ superficies y relieve */
+:is(.d-tarjeta, .pm-tarjeta, .tarjeta-luz, .card-lift) { box-shadow: var(--sh-brillo), var(--sh-2); }
+:is(.cc-ficha, .cc-filtro) { box-shadow: var(--sh-brillo), var(--sh-2); }
+/* Campos con relieve hundido y anillo de foco de 3 px (además del contorno AA). */
+:is(main#contenido, .modo-telefono, [role="dialog"]) :is(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="color"]), select, textarea):not(.pin-campo):not(.cc-campo) {
+  box-shadow: var(--sh-hundido);
+  transition: border-color 160ms var(--m-ease), box-shadow 160ms var(--m-ease);
+}
+:is(main#contenido, .modo-telefono, [role="dialog"]) :is(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="color"]), select, textarea):not(.pin-campo):not(.cc-campo):focus {
+  box-shadow: var(--sh-hundido), 0 0 0 3px rgb(var(--c-gold-500) / 0.22);
+}
+/* Menús, desplegables y modales: sombra alta y entrada suave. */
+:is([role="dialog"], [role="menu"], [role="listbox"], dialog[open], #menu-perfil, .menu-flotante) { box-shadow: var(--sh-4); }
+/* `translate` y `scale` individuales: componen con el transform propio del menú (centrado, etc.). */
+@keyframes m-pop { from { opacity: 0; translate: 0 6px; scale: 0.98; } to { opacity: 1; translate: 0 0; scale: 1; } }
+@keyframes m-sube-t { from { opacity: 0; translate: 0 10px; } to { opacity: 1; translate: 0 0; } }
+@keyframes m-velo { from { opacity: 0; } to { opacity: 1; } }
+
+@media (prefers-reduced-motion: no-preference) {
+  :is([role="dialog"], [role="menu"], [role="listbox"], dialog[open], #menu-perfil, .menu-flotante):not([data-sin-entrada]) { animation: m-pop 200ms var(--m-ease) backwards; }
+
+  /* ------------------------------------------- listas escalonadas */
+  /* Los primeros ocho elementos de cada lista entran de a uno. Solo opacity/transform. */
+  main#contenido :is(ul.divide-y, ul.hy-semana, ul.hy-decidir, ul.ac-fila, ul.grid, ul.cc-camp, ul.cc-metricas) > li:nth-child(-n + 8) {
+    animation: m-sube-t 420ms var(--m-ease) backwards;
+  }
+  main#contenido :is(ul.divide-y, ul.hy-semana, ul.hy-decidir, ul.ac-fila, ul.grid, ul.cc-camp, ul.cc-metricas) > li:nth-child(2) { animation-delay: 50ms; }
+  main#contenido :is(ul.divide-y, ul.hy-semana, ul.hy-decidir, ul.ac-fila, ul.grid, ul.cc-camp, ul.cc-metricas) > li:nth-child(3) { animation-delay: 100ms; }
+  main#contenido :is(ul.divide-y, ul.hy-semana, ul.hy-decidir, ul.ac-fila, ul.grid, ul.cc-camp, ul.cc-metricas) > li:nth-child(4) { animation-delay: 150ms; }
+  main#contenido :is(ul.divide-y, ul.hy-semana, ul.hy-decidir, ul.ac-fila, ul.grid, ul.cc-camp, ul.cc-metricas) > li:nth-child(5) { animation-delay: 200ms; }
+  main#contenido :is(ul.divide-y, ul.hy-semana, ul.hy-decidir, ul.ac-fila, ul.grid, ul.cc-camp, ul.cc-metricas) > li:nth-child(6) { animation-delay: 250ms; }
+  main#contenido :is(ul.divide-y, ul.hy-semana, ul.hy-decidir, ul.ac-fila, ul.grid, ul.cc-camp, ul.cc-metricas) > li:nth-child(n + 7) { animation-delay: 300ms; }
+
+  /* Pestañas: el cambio de vista se siente (la activa sube un pelo y el texto se afirma). */
+  .pestana { transition-property: color, background-color, box-shadow, translate; }
+  .pestana[aria-current="page"] { box-shadow: var(--sh-brillo), var(--sh-1); }
+  /* Menú lateral y barra inferior: el ícono responde al tocar. */
+  .menu-item svg, .barra-inferior-item svg { transition: transform 200ms var(--m-ease), color 160ms; }
+  .menu-item:hover svg, .barra-inferior-item:hover svg { transform: translateX(1px) scale(1.06); }
+  .barra-inferior-item:active svg { transform: scale(0.92); }
+  .menu-item:active { scale: 0.985; }
+  /* Fotos y logos del encabezado: entran con un fundido. */
+  .placa-logo { animation: m-velo 400ms var(--m-ease) backwards; }
+}
+/* Sombra y contorno del menú y de la barra inferior (relieve consistente). */
+.barra-inferior { box-shadow: 0 -1px 0 var(--d-linea, rgb(15 23 42 / 0.08)), 0 -10px 28px -14px rgb(15 23 42 / 0.28); }
+html[data-modo="oscuro"] .barra-inferior { box-shadow: 0 -1px 0 rgb(255 255 255 / 0.06), 0 -12px 28px -14px rgb(0 0 0 / 0.8); }
+
+/* Tocables: 44 px de alto mínimo en pantallas táctiles y sin retardo de toque. */
+@media (pointer: coarse) {
+  :is(.btn-gold, .btn-gold-sm, .btn-suave, .btn-suave-sm, .pm-boton, .chip-filtro, .pestana, .menu-item, .barra-inferior-item) { min-height: 44px; }
+}
+:is(a, button, [role="button"], summary, label, select) { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+
+@media (prefers-reduced-motion: reduce) {
+  main#contenido ul > li, .placa-logo, [role="dialog"], [role="menu"], [role="listbox"], dialog[open], #menu-perfil { animation: none !important; }
+  .menu-item svg, .barra-inferior-item svg { transition: none; transform: none !important; }
+  .menu-item:active { scale: none; }
+}

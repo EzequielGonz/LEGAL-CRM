@@ -1,0 +1,562 @@
+/*
+ * Sistema de diseño común del panel (22/11 · «ese rediseño, animaciones,
+ * mejoras, aplicalo en cada detalle del panel»).
+ *
+ * Lleva al panel el lenguaje de /cerebro, la pantalla que le gustó al dueño:
+ * tarjetas tipo bento, tipografía Inter Tight con detalles en JetBrains Mono,
+ * luces de estado que laten y revelados suaves. No reemplaza el color de cada
+ * perfil: el acento sigue siendo `--c-gold-*` (dorado VITA, verde Coberturas,
+ * celeste Autos, naranja Marketing) y los dos modos (claro y oscuro) siguen
+ * andando igual.
+ *
+ * Esta hoja va última (layout.tsx): define los tokens en un solo lugar, los
+ * componentes base (`.d-*`, ver src/components/ui/diseno.tsx) y unos pocos
+ * arreglos que valen en todas las pantallas. Reglas de movimiento:
+ *  - solo se animan `transform` y `opacity`, nada que corra el contenido;
+ *  - con «reducir movimiento» del sistema no se mueve nada;
+ *  - lo que late (luces) es chico y nunca tapa texto.
+ */
+
+/* ------------------------------------------------------------------ tokens */
+:root {
+  /* Espacios (escala de 4/8 px). */
+  --d-e1: 4px;
+  --d-e2: 8px;
+  --d-e3: 12px;
+  --d-e4: 16px;
+  --d-e5: 20px;
+  --d-e6: 24px;
+  --d-e8: 32px;
+  --d-e12: 48px;
+
+  /* Radios. */
+  --d-r-s: 8px;
+  --d-r-m: 12px;
+  --d-r-l: 16px;
+  --d-r-xl: 22px;
+  --d-r-pildora: 999px;
+
+  /* Movimiento. */
+  --d-curva: cubic-bezier(0.16, 1, 0.3, 1);
+  --d-curva-suave: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --d-t-rapido: 150ms;
+  --d-t-medio: 260ms;
+  --d-t-lento: 520ms;
+  --d-escalon: 55ms;
+
+  /* Tipografía. */
+  --d-f-titulo: var(--font-titulo, var(--font-sans)), "Inter", ui-sans-serif, system-ui, sans-serif;
+  --d-f-mono: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Superficies y texto (modo claro). */
+  --d-fondo: 244 246 250;
+  --d-tarjeta: 255 255 255;
+  --d-tarjeta-2: 248 249 252;
+  --d-linea: rgb(15 23 42 / 0.09);
+  --d-linea-fuerte: rgb(15 23 42 / 0.16);
+
+  /* Estados (luces y chips). Colores medidos para texto AA sobre la tarjeta. */
+  --d-ok: 5 150 105;
+  --d-aviso: 180 83 9;
+  --d-mal: 220 38 38;
+  --d-info: 2 132 199;
+  --d-apagado: 100 116 139;
+
+  /* Sombras. */
+  --d-sombra-1: 0 1px 2px rgb(15 23 42 / 0.05), 0 6px 18px -12px rgb(15 23 42 / 0.22);
+  --d-sombra-2: 0 2px 6px -2px rgb(15 23 42 / 0.08), 0 22px 44px -26px rgb(15 23 42 / 0.32);
+}
+/* Lo que depende de la paleta del perfil se declara también en cada [data-tema]:
+   una variable se resuelve donde se declara, y en :root la paleta es la de Jurídico. */
+:root,
+[data-tema] {
+  --d-texto: rgb(var(--c-slate-950));
+  --d-texto-2: rgb(var(--c-slate-600));
+  --d-texto-3: rgb(var(--c-slate-500));
+  /* El acento como texto: el paso 700 pasa 4,5:1 en los dos modos (en oscuro la escala se invierte). */
+  --d-acento: rgb(var(--c-gold-500));
+  --d-acento-texto: rgb(var(--c-gold-700));
+  --d-acento-suave: rgb(var(--c-gold-500) / 0.14);
+  --d-sombra-acento: 0 24px 54px -30px rgb(var(--c-gold-500) / 0.55);
+}
+html[data-modo="oscuro"],
+html[data-modo="oscuro"] [data-tema] {
+  --d-sombra-acento: 0 0 0 1px rgb(var(--c-gold-500) / 0.18), 0 26px 60px -32px rgb(var(--c-gold-500) / 0.55);
+  --d-texto: rgb(241 239 245);
+  --d-texto-2: rgb(176 173 189);
+  --d-texto-3: rgb(150 147 163);
+}
+html[data-modo="oscuro"] {
+  /* Los mismos valores que la escena de /cerebro. */
+  --d-fondo: 8 8 11;
+  --d-tarjeta: 18 18 25;
+  --d-tarjeta-2: 13 13 18;
+  --d-linea: rgb(255 255 255 / 0.08);
+  --d-linea-fuerte: rgb(255 255 255 / 0.16);
+  --d-ok: 94 224 143;
+  --d-aviso: 255 181 71;
+  --d-mal: 255 107 107;
+  --d-info: 70 217 230;
+  --d-apagado: 150 147 163;
+  --d-sombra-1: 0 1px 0 rgb(255 255 255 / 0.03), 0 10px 28px -16px rgb(0 0 0 / 0.75);
+  --d-sombra-2: 0 1px 0 rgb(255 255 255 / 0.04), 0 26px 56px -30px rgb(0 0 0 / 0.9);
+}
+
+/* -------------------------------------------------------------- tipografía */
+/* Títulos y cifras con Inter Tight, como /cerebro (antes, serif en oscuro). */
+main h1,
+main h2,
+.d-titulo,
+.cifra-premium,
+.cifra,
+.tarjeta-cifra-valor {
+  font-family: var(--d-f-titulo);
+  text-wrap: balance;
+}
+main h1 { letter-spacing: -0.025em; font-weight: 650; }
+html[data-modo="oscuro"] main h1 { font-family: var(--d-f-titulo); font-weight: 650; letter-spacing: -0.025em; }
+main h2 { letter-spacing: -0.015em; }
+html[data-modo="oscuro"] .cifra-premium,
+.cifra-premium {
+  font-family: var(--d-f-titulo);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Rótulo chico en mayúsculas, el «kicker» de /cerebro. */
+.d-kicker {
+  font: 500 0.7rem/1.2 var(--d-f-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--d-acento-texto);
+}
+.d-mono { font-family: var(--d-f-mono); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------- grilla bento */
+.d-bento {
+  display: grid;
+  gap: var(--d-e3);
+  grid-template-columns: minmax(0, 1fr);
+  align-items: stretch;
+}
+@media (min-width: 640px) {
+  .d-bento { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--d-e4); }
+  .d-bento > * { grid-column: span 3; }
+  .d-bento > .d-b-2 { grid-column: span 2; }
+  .d-bento > .d-b-3 { grid-column: span 3; }
+  .d-bento > .d-b-4 { grid-column: span 6; }
+  .d-bento > .d-b-6 { grid-column: span 6; }
+}
+@media (min-width: 1024px) {
+  .d-bento { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .d-bento > * { grid-column: span 4; }
+  .d-bento > .d-b-2 { grid-column: span 3; }
+  .d-bento > .d-b-3 { grid-column: span 4; }
+  .d-bento > .d-b-4 { grid-column: span 6; }
+  .d-bento > .d-b-6 { grid-column: span 8; }
+  .d-bento > .d-b-12 { grid-column: 1 / -1; }
+  .d-bento > .d-alto { grid-row: span 2; }
+}
+.d-bento > .d-b-12 { grid-column: 1 / -1; }
+.d-bento > * { min-width: 0; }
+/* En el celular, las tarjetas chicas de cifras van de a dos; las listas, a todo el ancho. */
+@media (max-width: 639.98px) {
+  .d-bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .d-bento > * { grid-column: 1 / -1; }
+  .d-bento > :is(.d-b-2, .d-b-3) { grid-column: span 1; }
+}
+
+/* ----------------------------------------------------------------- tarjeta */
+.d-tarjeta {
+  position: relative;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--d-e2);
+  padding: var(--d-e4) var(--d-e5);
+  border-radius: var(--d-r-l);
+  border: 1px solid var(--d-linea);
+  background: rgb(var(--d-tarjeta));
+  color: var(--d-texto);
+  box-shadow: var(--d-sombra-1);
+  overflow: hidden;
+  isolation: isolate;
+}
+.d-tarjeta > header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--d-e1) var(--d-e3);
+}
+.d-tarjeta--sin-relleno { padding: 0; gap: 0; }
+.d-tarjeta--sin-relleno > header { padding: var(--d-e4) var(--d-e5) var(--d-e3); border-bottom: 1px solid var(--d-linea); }
+/* Brillo del color del perfil en una esquina (como las tarjetas de marca de /cerebro). */
+.d-tarjeta--brillo::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -45% -35% auto auto;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(var(--c-gold-500) / 0.9), transparent);
+  opacity: 0.16;
+  pointer-events: none;
+  transition: opacity var(--d-t-medio) ease;
+}
+html[data-modo="oscuro"] .d-tarjeta--brillo::before { opacity: 0.22; }
+/* Tarjeta destacada: borde del acento. */
+.d-tarjeta--acento { border-color: rgb(var(--c-gold-500) / 0.45); box-shadow: var(--d-sombra-1), var(--d-sombra-acento); }
+/* Borde izquierdo de estado (lista de alertas de /cerebro). */
+.d-tarjeta[data-estado] { border-left: 3px solid rgb(var(--d-luz, var(--d-apagado))); }
+
+/* Tarjeta que abre algo: toda la superficie es el enlace. */
+a.d-tarjeta, .d-tarjeta--enlace { cursor: pointer; text-decoration: none; }
+@media (hover: hover) and (pointer: fine) {
+  a.d-tarjeta:hover, .d-tarjeta--enlace:hover {
+    border-color: rgb(var(--c-gold-500) / 0.55);
+    box-shadow: var(--d-sombra-2), var(--d-sombra-acento);
+  }
+  a.d-tarjeta:hover.d-tarjeta--brillo::before, .d-tarjeta--enlace:hover.d-tarjeta--brillo::before { opacity: 0.32; }
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  a.d-tarjeta, .d-tarjeta--enlace { transition: transform var(--d-t-medio) var(--d-curva-suave), box-shadow var(--d-t-medio) ease, border-color var(--d-t-rapido) ease; }
+  a.d-tarjeta:hover, .d-tarjeta--enlace:hover { transform: translateY(-3px); }
+}
+
+/* ------------------------------------------------------------- estadística */
+.d-stat { display: grid; gap: 2px; align-content: start; min-width: 0; }
+.d-stat__etiqueta { font-size: 0.8125rem; font-weight: 500; color: var(--d-texto-2); }
+.d-stat__valor {
+  font-family: var(--d-f-titulo);
+  font-weight: 800;
+  font-size: clamp(1.75rem, 1.2rem + 1.6vw, 2.35rem);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums;
+  color: var(--d-texto);
+  overflow-wrap: anywhere;
+}
+.d-stat__valor--chico { font-size: clamp(1.35rem, 1.1rem + 0.8vw, 1.7rem); }
+.d-stat__valor[data-vacio] { color: var(--d-texto-3); }
+.d-stat__nota { font-size: 0.8125rem; color: var(--d-texto-2); }
+.d-stat__tendencia { font: 500 0.72rem/1.3 var(--d-f-mono); }
+.d-stat__tendencia[data-tono="sube"] { color: rgb(var(--d-ok)); }
+.d-stat__tendencia[data-tono="baja"] { color: rgb(var(--d-aviso)); }
+.d-stat__tendencia[data-tono="igual"] { color: var(--d-texto-3); }
+/* Tira de cifras unidas (como `.cz-stats`). */
+.d-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9.5rem), 1fr));
+  border-radius: var(--d-r-l);
+  border: 1px solid var(--d-linea);
+  background: rgb(var(--d-tarjeta));
+  box-shadow: var(--d-sombra-1);
+  overflow: hidden;
+}
+.d-stats > * { padding: var(--d-e4); box-shadow: inset -1px 0 0 var(--d-linea), inset 0 -1px 0 var(--d-linea); }
+
+/* ------------------------------------------------------- luz y chip de estado */
+.d-luz {
+  --d-luz: var(--d-apagado);
+  position: relative;
+  display: inline-block;
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgb(var(--d-luz));
+  box-shadow: 0 0 0 3px rgb(var(--d-luz) / 0.16), 0 0 10px rgb(var(--d-luz) / 0.55);
+}
+[data-estado="ok"] { --d-luz: var(--d-ok); }
+[data-estado="aviso"] { --d-luz: var(--d-aviso); }
+[data-estado="mal"] { --d-luz: var(--d-mal); }
+[data-estado="info"] { --d-luz: var(--d-info); }
+[data-estado="apagado"] { --d-luz: var(--d-apagado); }
+.d-luz[data-estado="apagado"] { box-shadow: none; }
+/* Una luz que late: solo cuando algo está pasando ahora (enviando, conectado, en vivo). */
+.d-luz--late::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: rgb(var(--d-luz));
+  opacity: 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .d-luz--late::after { animation: d-latido 1.8s ease-out infinite; }
+}
+@keyframes d-latido {
+  0% { transform: scale(1); opacity: 0.55; }
+  70%, 100% { transform: scale(3.2); opacity: 0; }
+}
+
+.d-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--d-e2);
+  max-width: 100%;
+  min-height: 2.25rem;
+  padding: 0.35rem 0.8rem 0.35rem 0.7rem;
+  border-radius: var(--d-r-pildora);
+  border: 1px solid var(--d-linea-fuerte);
+  background: rgb(var(--d-tarjeta));
+  color: var(--d-texto);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.3;
+  text-decoration: none;
+}
+/* El texto del chip se parte en dos líneas antes que cortarse (lista del 20/11, punto i). */
+.d-chip > span:last-child { min-width: 0; overflow-wrap: anywhere; }
+a.d-chip:hover { border-color: rgb(var(--c-gold-500) / 0.55); }
+.d-chip[data-estado="mal"] { border-color: rgb(var(--d-mal) / 0.45); }
+.d-chip[data-estado="aviso"] { border-color: rgb(var(--d-aviso) / 0.45); }
+@media (pointer: coarse) { .d-chip { min-height: 2.75rem; } }
+
+/* Etiqueta mono chiquita (como `.cz-tag`). */
+.d-etiqueta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font: 500 0.68rem/1.2 var(--d-f-mono);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: rgb(var(--c-slate-500) / 0.1);
+  color: var(--d-texto-2);
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------- vacío */
+.d-vacio {
+  display: grid;
+  justify-items: center;
+  gap: var(--d-e2);
+  padding: var(--d-e8) var(--d-e5);
+  text-align: center;
+  color: var(--d-texto-2);
+}
+.d-vacio__icono {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: var(--d-acento-suave);
+  color: var(--d-acento-texto);
+  box-shadow: inset 0 0 0 1px rgb(var(--c-gold-500) / 0.25);
+}
+.d-vacio__titulo { font-family: var(--d-f-titulo); font-size: 0.98rem; font-weight: 600; color: var(--d-texto); }
+.d-vacio__texto { max-width: 46ch; font-size: 0.875rem; }
+
+/* ------------------------------------------------------------- cargando */
+.d-esqueleto {
+  display: block;
+  border-radius: var(--d-r-m);
+  background: linear-gradient(100deg, rgb(var(--c-slate-500) / 0.1) 30%, rgb(var(--c-slate-500) / 0.2) 50%, rgb(var(--c-slate-500) / 0.1) 70%);
+  background-size: 300% 100%;
+  background-position: 100% 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .d-esqueleto { animation: d-brillo-carga 1.6s ease-in-out infinite; }
+}
+@keyframes d-brillo-carga { to { background-position: -50% 0; } }
+.d-cargando { display: inline-flex; align-items: center; gap: var(--d-e2); color: var(--d-texto-2); font-size: 0.875rem; }
+.d-cargando i { width: 6px; height: 6px; border-radius: 50%; background: var(--d-acento); opacity: 0.35; }
+@media (prefers-reduced-motion: no-preference) {
+  .d-cargando i { animation: d-tecleo 1.1s ease-in-out infinite; }
+  .d-cargando i:nth-child(2) { animation-delay: 0.15s; }
+  .d-cargando i:nth-child(3) { animation-delay: 0.3s; }
+}
+@keyframes d-tecleo { 0%, 80%, 100% { opacity: 0.3; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-3px); } }
+
+/* --------------------------------------------------- revelado escalonado */
+/* Los hijos de `.d-revelar` entran de a uno (solo opacidad y 10 px de recorrido). */
+@media (prefers-reduced-motion: no-preference) {
+  .d-revelar > * { animation: d-entra var(--d-t-lento) var(--d-curva) both; }
+  .d-revelar > :nth-child(2) { animation-delay: calc(var(--d-escalon) * 1); }
+  .d-revelar > :nth-child(3) { animation-delay: calc(var(--d-escalon) * 2); }
+  .d-revelar > :nth-child(4) { animation-delay: calc(var(--d-escalon) * 3); }
+  .d-revelar > :nth-child(5) { animation-delay: calc(var(--d-escalon) * 4); }
+  .d-revelar > :nth-child(6) { animation-delay: calc(var(--d-escalon) * 5); }
+  .d-revelar > :nth-child(7) { animation-delay: calc(var(--d-escalon) * 6); }
+  .d-revelar > :nth-child(n + 8) { animation-delay: calc(var(--d-escalon) * 7); }
+}
+@keyframes d-entra { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+/* ----------------------------------------------------------- encabezado de pantalla */
+.d-cabeza { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--d-e3) var(--d-e4); }
+.d-cabeza > div { min-width: 0; display: grid; gap: 6px; }
+.d-cabeza h1 { margin: 0; font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.1rem); line-height: 1.1; color: var(--d-texto); }
+.d-cabeza p { color: var(--d-texto-2); font-size: 0.9rem; }
+
+/* ================================================================
+   Arreglos que valen en todo el panel
+   ================================================================ */
+
+/* Desborde a lo ancho en el celular (lista del 21/11: /agentes 406–642 px y
+   /resultados 409 px sobre 390). Los textos largos sin espacios (nombres de
+   bases, enlaces, claves) pueden partirse, y los menús desplegables no se
+   estiran más que su columna. */
+.lienzo-contenido { overflow-wrap: break-word; }
+.lienzo-contenido :is(select, input, textarea) { max-width: 100%; }
+.lienzo-contenido select { min-width: 0; text-overflow: ellipsis; }
+.lienzo-contenido :is(img, video, svg, canvas, iframe, audio) { max-width: 100%; }
+.lienzo-contenido pre { white-space: pre-wrap; overflow-wrap: anywhere; max-width: 100%; }
+@media (max-width: 639.98px) {
+  /* Se hereda a todo lo que está adentro (spans y enlaces incluidos). */
+  .lienzo-contenido :is(p, li, dd, dt, td, th, label, small, h2, h3, h4, summary, figcaption) { overflow-wrap: anywhere; }
+  .lienzo-contenido :is(.grid, [class*="grid-cols"]) > * { min-width: 0; }
+  /* Una grilla sin columnas propias en el celular («grid sm:grid-cols-2») tiene una sola
+     columna automática que se estira hasta el menú desplegable más largo (/agentes: 642 px). */
+  .lienzo-contenido [class~="grid"]:not([class^="grid-cols"]):not([class*=" grid-cols"]):not([class*="grid-flow-col"]):not([class*="auto-cols"]):not([class*="grid-rows"]) { grid-template-columns: minmax(0, 1fr); }
+  /* Las tablas anchas se deslizan dentro de su tarjeta, no la página. */
+  .lienzo-contenido table:not(.sr-only) { display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+}
+
+/* Foco visible en los dos modos, con anillo de 3:1 contra el fondo. */
+.d-tarjeta:focus-visible,
+a.d-chip:focus-visible,
+.d-btn:focus-visible {
+  outline: 2px solid rgb(var(--c-gold-700));
+  outline-offset: 2px;
+}
+
+/* Botones: píldora, como /cerebro. Altura táctil de 44 px en pantallas táctiles. */
+:is(.btn-gold, .btn-suave) { border-radius: var(--d-r-pildora); }
+:is(.btn-gold-sm, .btn-suave-sm) { border-radius: var(--d-r-pildora); }
+@media (pointer: coarse) {
+  :is(.btn-gold-sm, .btn-suave-sm) { min-height: 44px; }
+}
+
+/* Chips de estado de Hoy: el texto se parte en vez de cortarse en seco. */
+.chip-estado > span:last-child { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; }
+
+/* -------------------------------------- menú: tarjeta «Bandeja para Claude» */
+/* Lista del 20/11, punto j: el subtítulo daba 1,91:1 en oscuro. */
+.menu-tarjeta-sub { color: rgb(255 255 255 / 0.8); }
+html[data-modo="oscuro"] .menu-tarjeta-sub { color: rgb(var(--c-slate-800)); }
+.menu-tarjeta-sub[data-espera] { color: rgb(253 230 138); }
+html[data-modo="oscuro"] .menu-tarjeta-sub[data-espera] { color: rgb(255 200 110); }
+
+/* -------------------------------------- barra inferior del celular */
+/* Lista del 20/11, punto i: íconos sin texto. Cada ícono lleva su nombre abajo. */
+@media (max-width: 1023.98px) {
+  .barra-inferior ul { padding: 0.25rem 0.35rem; }
+  .barra-inferior li { flex: 1 1 0; justify-content: center; }
+  .barra-inferior-item {
+    flex-direction: column;
+    gap: 2px;
+    width: 100%;
+    min-height: 3.1rem;
+    padding: 0.3rem 0.25rem;
+    border-radius: 18px;
+    font-size: 0.6875rem;
+    line-height: 1.1;
+  }
+  .barra-inferior-nombre { display: block; max-width: 100%; }
+  .con-barra-inferior { padding-bottom: calc(6rem + env(safe-area-inset-bottom, 0px)); }
+}
+
+/* -------------------------------------- pestañas de cada sección */
+/* Lista del 20/11, punto i: en el celular se cortaban sin señal de que había más.
+   Cuando hay más pestañas a un costado, ese borde se desvanece y aparece una flecha. */
+.pestanas-riel { position: relative; min-width: 0; width: max-content; max-width: 100%; margin-bottom: 1.25rem; }
+.lienzo-contenido > .pestanas-riel { margin-left: max(0px, calc((100% - var(--columna, 100%)) / 2)); }
+.pestanas-riel > .pestanas-seccion { margin-bottom: 0; }
+.pestanas-riel:not([data-mas-izquierda]):not([data-mas-derecha]) > .pestanas-seccion { -webkit-mask-image: none; mask-image: none; padding-right: 0.25rem; }
+@media (max-width: 640px) { .pestanas-riel { width: 100%; } }
+.pestanas-riel[data-mas-derecha] > .pestanas-seccion { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 44px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 44px), transparent); }
+.pestanas-riel[data-mas-izquierda] > .pestanas-seccion { -webkit-mask-image: linear-gradient(90deg, transparent, #000 44px); mask-image: linear-gradient(90deg, transparent, #000 44px); }
+.pestanas-riel[data-mas-izquierda][data-mas-derecha] > .pestanas-seccion { -webkit-mask-image: linear-gradient(90deg, transparent, #000 44px, #000 calc(100% - 44px), transparent); mask-image: linear-gradient(90deg, transparent, #000 44px, #000 calc(100% - 44px), transparent); }
+.pestanas-flecha {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  display: none;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  margin-top: -16px;
+  border-radius: 50%;
+  border: 1px solid var(--d-linea-fuerte);
+  background: rgb(var(--d-tarjeta));
+  color: var(--d-texto);
+  box-shadow: var(--d-sombra-1);
+  font-size: 1rem;
+  line-height: 1;
+}
+.pestanas-flecha[data-lado="der"] { right: 0; }
+.pestanas-flecha[data-lado="izq"] { left: 0; }
+.pestanas-riel[data-mas-derecha] .pestanas-flecha[data-lado="der"],
+.pestanas-riel[data-mas-izquierda] .pestanas-flecha[data-lado="izq"] { display: grid; }
+.pestanas-flecha:focus-visible { outline: 2px solid rgb(var(--c-gold-700)); outline-offset: 2px; }
+/* Cambio de pestaña: la activa toma color con una transición corta. */
+@media (prefers-reduced-motion: no-preference) {
+  .pestana { transition: background-color var(--d-t-medio) ease, color var(--d-t-medio) ease, box-shadow var(--d-t-medio) ease; }
+}
+
+/* -------------------------------------- aviso del código de ingreso */
+/* Lista del 20/11, punto i: en el celular ocupaba media pantalla. Ahora es una línea. */
+.aviso-codigo,
+.d-aviso {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 12px;
+  margin-bottom: var(--d-e3);
+  padding: 6px 6px 6px 14px;
+  border-radius: var(--d-r-m);
+  border: 1px solid rgb(var(--d-aviso) / 0.35);
+  background: rgb(var(--d-aviso) / 0.08);
+  font-size: 0.8125rem;
+  color: var(--d-texto);
+}
+.aviso-codigo p { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.aviso-codigo a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 12px;
+  border-radius: var(--d-r-pildora);
+  font-weight: 600;
+  color: var(--d-texto);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.lienzo-contenido > .aviso-codigo { max-width: var(--columna, 100%); margin-left: auto; margin-right: auto; }
+
+/* -------------------------------------- detalle de chat */
+/* Lista del 20/11, punto c: «Más opciones» quedaba pegado debajo de donde se escribe.
+   En las pantallas de chat va arriba del chat, alineado a la derecha y chico. */
+.lienzo-contenido:has(.marco-inbox) { display: flex; flex-direction: column; }
+.lienzo-contenido:has(.marco-inbox) > .mas-opciones { order: -1; justify-content: flex-end; margin: 0 0 var(--d-e2); }
+.lienzo-contenido:has(.marco-inbox) > .mas-opciones button { min-height: 2.25rem; font-size: 0.8125rem; }
+/* El encabezado del chat queda fijo arriba del hilo mientras se lee. */
+.chat-cabecera { position: sticky; top: 0; z-index: 3; }
+/* En el celular, donde se escribe queda siempre a la vista al pie del chat. */
+@media (max-width: 1023.98px) {
+  .chat-compositor { position: sticky; bottom: 0; z-index: 3; box-shadow: 0 -10px 24px -18px rgb(0 0 0 / 0.45); }
+}
+
+/* -------------------------------------- ingreso */
+.pin-kicker {
+  font: 500 0.68rem/1.2 var(--d-f-mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgb(var(--c-gold-400));
+}
+html[data-modo="oscuro"] .pin-kicker { color: rgb(var(--c-gold-600)); }
+
+/* ================================================================
+   Movimiento general: con «reducir movimiento», nada se mueve.
+   ================================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .d-revelar > *, .d-luz--late::after, .d-esqueleto, .d-cargando i { animation: none !important; }
+  a.d-tarjeta, .d-tarjeta--enlace { transition: none !important; transform: none !important; }
+}

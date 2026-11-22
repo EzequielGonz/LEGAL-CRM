@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { pedirConfirmacion } from "@/components/ui/dialogo-confirmar";
+import { cantidad } from "@/lib/textos/pantalla";
 
 interface LineaView {
   id: string;
@@ -51,7 +52,7 @@ export function EnviarPropuestas({ lines }: { lines: LineaView[] }) {
       }
       const ok = await pedirConfirmacion({
         titulo: "¿Enviar las plantillas a Meta?",
-        texto: `Se enviarán ${nuevas.length} plantilla(s) a Meta para su revisión (${existentes} ya existen y se omiten).\n\nNo se envía ningún mensaje a personas.`,
+        texto: `Se enviarán ${cantidad(nuevas.length, "plantilla")} a Meta para su revisión (${existentes} ya existen y se omiten).\n\nNo se envía ningún mensaje a personas.`,
         confirmar: "Enviar a revisión",
       });
       if (!ok) {
@@ -68,7 +69,7 @@ export function EnviarPropuestas({ lines }: { lines: LineaView[] }) {
       const fallas = r.filter((x) => x.estado === "error");
       setMsg({
         ok: fallas.length === 0,
-        text: `${enviadas} plantilla(s) enviadas a revisión de Meta.${
+        text: `${cantidad(enviadas, "plantilla")} ${enviadas === 1 ? "enviada" : "enviadas"} a revisión de Meta.${
           fallas.length ? ` ${fallas.length} con error: ${fallas.map((x) => `${x.nombre} (${x.detalle})`).join("; ")}.` : ""
         } Usá «Leer plantillas de Meta» para ver su estado.`,
       });

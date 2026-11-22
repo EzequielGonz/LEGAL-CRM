@@ -53,8 +53,13 @@ Esta carpeta es la memoria de trabajo de Claude. Reemplaza tener que releer los 
 | `17-accesos-y-pendientes.md` | Accesos que faltan, pendientes de los dueños y preguntas: los recorre la sesión «accesos» |
 | `18-mapa-de-skills-y-plugins.md` | Qué skill, plugin y agente usa cada escritorio de la Oficina |
 | `19-perfil-y-memoria-claude-ai.md` | Textos listos para pegar en claude.ai: preferencias personales, memoria e instrucciones del proyecto |
+| `20-conocimiento-para-claude-ai.md` | Todo el conocimiento del proyecto en un solo documento, para subir como «conocimiento del proyecto» en claude.ai (lo carga la sesión «memoria») |
+| `traspaso-sesion-2026-11-22-c.md` | **Traspaso del 22/11 cierre (leer primero al retomar)** |
+| `traspaso-sesion-2026-11-22-b.md` | Traspaso del 22/11 noche (leer primero al retomar) |
 | `traspaso-sesion-2026-11-22.md` | Traspaso antes de compactar del 22/11: pedidos, hecho, agentes en curso y próximos pasos |
 | `traspaso-sesion-2026-11-21-c.md` | Estado al compactar el 21/11 (agentes, próximos pasos) |
+| `biblioteca/complementaria-2211/` | **Extra, no reemplaza nada (22/11):** biblioteca complementaria que trajo el dueño. Son 9 capítulos (VITA, Coberturas, Autos Kocos, Kocos Marketing, casos, cerebro y glosario), 135 fichas sectoriales propuestas que están **inactivas** y fuentes oficiales con fecha. Se consulta cuando hace falta y no pisa las órdenes ni las fichas vigentes. Antes de activar alguna ficha hay que comparar duplicados y conflictos (`LEER_PRIMERO.md`) y tener el OK de los dueños |
+| `00-arranque-para-agentes.md` | **Obligatorio para todos los agentes (22/11).** Qué leer del cerebro, qué herramientas usar (todas las que sumen) y las reglas que nunca se saltean |
 | `bitacora.md` | Diario de sesiones y aprendizajes (lo más nuevo arriba) |
 
 ## Fuentes de verdad (en orden)

@@ -48,3 +48,6 @@ Si pide «revisar la oficina»: listá lo `lista` sin decisión y lo `aprobada` 
 ## Al terminar la vuelta
 
 Cerrá el arranque, sumá una entrada a `cerebro/bitacora.md` (qué tareas, qué escritorios, qué quedó esperando OK) y lo aprendido por área en `cerebro/areas/<área>.md` (creálo si no existe). Commit y push del cerebro.
+
+## Antes de empezar
+Cada escritorio y cada subagente lee `cerebro/00-arranque-para-agentes.md` y usa todas las skills, plugins, conectores y agentes que sumen; al cerrar informa cuáles usó.

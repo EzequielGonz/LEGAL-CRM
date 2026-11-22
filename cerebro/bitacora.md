@@ -4,6 +4,15 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 
 # Bitácora
 
+## 22/11 (noche) — Quinta vuelta: todo funcional y pulido de punta a punta
+
+- **Pedido:** «nada tiene función, es todo decoración»; Oficina como edificio 3D del reel; Contactos con lo perdido; Resumen, Jarvis, Laboratorio y Cerebro que hagan cosas; pulido ultra premium; carga más rápida.
+- **Hecho (5 agentes en copias separadas, integrados en `integracion/rediseno-2211`):** Oficina edificio 3D con salas por sector y agentes que llevan tareas al Cerebro; Contactos con buscador, filtros, acciones por fila y en lote, CSV; Citas con calendario y crear/mover/cancelar; Resumen accionable; estética nueva en «Más»; Jarvis con acciones por pantalla; Laboratorio con simulador y comparación de roles; Cerebro con «Preguntale» y «Enseñale algo» (tabla `cerebro_conocimiento`, migración 0650 aplicada); sombras, tipografía y chat pulidos.
+- **Verificado:** typecheck, lint, 887 pruebas, build. El primer despliegue a producción falló por una caída pasajera de Google Fonts en Vercel (la Preview del mismo commit quedó READY); se republica.
+- **Recorrido en producción (`2dc44a9`):** 30 pantallas en 1440 y 390 px, todas 200, sin errores de consola ni desborde horizontal; un chat abierto con sus mensajes sin errores. Resumen bajó de 2,7 s a 0,8–1,3 s de respuesta (la comparación semanal se guarda 2 min); el resto entre 0,2 y 0,8 s.
+- **Aprendido:** los agentes no ven el panel con sesión; todo lo visual se confirma en el recorrido posterior.
+
+
 
 
 
@@ -111,3 +120,59 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 - A10 ⬜: Canva y Cloudflare siguen pidiendo autenticación; no aparecen herramientas.
 - A11: Skill Arena = `Jakeschincariol/arena-skill` (MIT, Python estándar, sin red). Instalación frenada por el sistema de permisos; pendiente.
 - A1 en curso: el dueño arma el disparo por API de la tarea «Oficina · procesar tareas».
+
+## 2026-11-22 (noche) · Seguridad, captación y operación
+
+- **Seguridad:** el agente de captación avisó de una «instrucción» dentro de `15-hallazgos-21-11.md`. Era un fragmento de un comando de Claude, pegado por error al final del archivo en una sesión anterior, y traía el código de acceso del panel. Además el código estaba como ejemplo en `tests/unitarias/acceso-y-webhooks.test.ts` desde el 11/10. Se sacó de `main` y `cerebro-chats` (071f646e / 052819b). Sigue en el historial y en ramas viejas: cambiar el código pasó a urgente (P7 en `17`).
+- **Lección:** antes de cada commit del cerebro, revisar que ningún archivo termine con restos de llamadas de herramientas (`</content>`, `<parameter`) y buscar el código y teléfonos con grep.
+- Terminaron los frentes de operación (tope de Gemini, tiempos del latido y job versionado) y de captación (72 h, rubros, evidencia, cifras, Hoy, Salud). Un integrador los junta y los revisa. El freno diario de Gemini queda solo como aviso, porque los precios por token no están verificados; el del mes (USD 30) sí frena.
+- Sesión «memoria» creada (skill). Un agente reescribe `19` con todo el historial y arma `20`, el conocimiento completo para el proyecto de claude.ai.
+
+## 2026-11-22 (noche, cierre) · Publicado: rediseño del panel, captación, cifras y operación
+
+- **Publicado en producción** (`main` 8c1a94c, Vercel READY). Junta tres frentes, revisados por un integrador:
+  - rediseño visual de todo el panel (tipografía y estilo del cerebro, bento, animaciones, celular, contraste);
+  - captación y cifras (72 h, rubros separados, evidencia de captación, una definición por cifra, por qué para cada perfil, Salud);
+  - operación (tope de Gemini: el mes frena en USD 30, el día solo avisa; tiempos máximos en recontacto y campañas; aviso si el latido se atrasa).
+- **Migraciones aplicadas:** 0636 (Oficina), 0637, 0638 y 0639. La 0639 quedó en espera porque falta el secreto en Vault (A12 en `17`); el latido sigue como estaba y anda.
+- **Verificado en producción** (computadora y celular, 390 px): Perfiles, Salud, Resultados, Bot IA, Bandeja y Cerebro abren con 200 y sin desborde. Apareció el error de React #418 (hidratación) en Perfiles, Salud, Bot IA y Bandeja: lo arregla un agente en `arreglos/hidratacion-2211`.
+- **Pendiente de decisión del dueño:** precios reales por token de Gemini; si el asistente, el Laboratorio y los audios cuentan para el tope; la etiqueta de gravedad conectada a las campañas.
+- **Memoria completa** lista: `19` (147 recuerdos), `20` (conocimiento completo) y el prompt para Claude in Chrome en `biblioteca/`.
+
+## 22/11 cierre: biblioteca complementaria (extra)
+- El dueño subió la «Biblioteca complementaria CRM 4 rubros» (Word y paquete). Se guardó tal cual en `biblioteca/complementaria-2211/` como material extra de consulta. No se cambió ni se pisó nada del cerebro, las fichas, los prompts ni los bots. Las 135 fichas propuestas siguen inactivas: el mecanismo de alta las crearía activas, así que no se usa hasta hacer la comparación y tener el OK.
+
+## 22/11 cierre: rediseño, Jarvis, Oficina 3D, recontacto y regla de arranque
+- Publicados en main: el recontacto de las 72 h (con la 0640 aplicada y solo Jurídico encendido), la Oficina 3D y la regla número uno (`00-arranque-para-agentes.md`).
+- En ramas: la fundación visual, Jarvis, el menú con Hoy, Chats y Campañas, y Resultados, Salud y Cerebro. Falta integrarlas, pasar la revisión final con agentes especialistas y publicar si cumplen. Detalle en `traspaso-sesion-2026-11-22-c.md`.
+- Correcciones del dueño: «ese fondo raro no» (estética clásica más detalles); «usá TODAS las herramientas y agentes personalizados, el cerebro completo para todos».
+## 22/11 noche: repaso de la Oficina 3D
+- Festeja el escritorio que terminó su parte (no siempre Dirección). Fondo neutro del panel, sin colores raros. Detalle en `docs/oficina-3d-2211/`. Pendiente: pasar la revisión por `fairmind-design:fairmind-accessibility-orchestrator` (no estuvo disponible en la copia aislada).
+
+## 22/11 · Rediseño publicado (commit 823d77c en main)
+
+- **Integrado:** marco-hoy + Jarvis repaso + chats-campañas + resultados-salud-cerebro + oficina-3d-repaso en `integracion/rediseno-2211`. Conflictos: Jarvis quedó con la versión del repaso; `VerMas` con una sola prop (`abiertoAlInicio`). Las piezas premium usan las fuentes clásicas del panel (no se cargan Geist ni Instrument).
+- **Revisión independiente (5 agentes en paralelo):** Artisan (diseño), accessibility-specialist, code-reviewer, Skeptic (producto) y perf-forensics. Arreglado antes de publicar:
+  - Seguridad: Jarvis vetaba solo por palabras («lanzar», «enviar»); `marketing_ejecutar_base` y otras que hacen salir mensajes pasaban. Ahora están vedadas, hay prueba sobre todo el catálogo y la ruta de confirmación devuelve 403 si la confirmación viene de Jarvis.
+  - Jarvis en oscuro: el tema invierte la escala slate y la hoja salía clara con textos pastel ilegibles. Hoja oscura de verdad, botón principal con texto oscuro, foco dorado 700, foco devuelto al cerrar, tope de 20 turnos.
+  - Hoy: anillos con el color de cada perfil (estaba Jurídico fijo) y atajos a Contactos, Citas y Seguimiento (pasaron a «Más»).
+  - Resultados y Salud: sin dato muestra «—» (no 0 ni 100 %).
+  - Claro: dorado 600/700 en arcos e íconos; pista del anillo sin sombra negra. Oficina: sin blur sobre el canvas.
+- **Verificado:** typecheck, 824 pruebas, build; humo con sesión en 10 pantallas a 1440 y 390 en Preview y en producción: todo 200, sin desborde, consola limpia, Jarvis presente, canvas 3D en /cerebro, sin fondo mesh.
+- **Queda para otra vuelta (no bloquea):** unificar los 3 CSS de mapeo (`.pp`, `.cc`, `.pm-clasico`); sacar de `premium.css` el mesh que ya no se monta; Cerebro todavía largo (11 pestañas detrás de «Ver más»); textos técnicos en Salud («Meta», «Wasender»); conteo «Responder a N» de Hoy mezcla posibles captaciones; Jarvis carga su hoja completa en todas las pantallas (cargar perezosa); probar la Oficina 3D en un celular real; lector de pantalla a mano.
+
+## 22/11 · Tercera vuelta publicada (main 98b2bb6+)
+- Jarvis puede hacer TODO con confirmación (ver `02`); lo que envía o publica pide confirmación reforzada o código.
+- `/asistente` (Jarvis general): mismo aspecto que el Jarvis del panel, gráficos de la semana (anillos y barras por perfil), chips de pedidos y `?pedido=` precargado.
+- `/laboratorio`: pestañas por rubro, «Cómo anda el bot» en anillos y lenguaje simple, roles por rubro (crear con plantillas, pedir mejora, archivar, usar en campaña) y ficha del negocio, todo con confirmación. Lo técnico quedó detrás de «Ver más». Falta: publicar agentes de la biblioteca (pide PIN).
+- `/cerebro`: «Lo que el cerebro recomienda hoy» (botón Hacerlo → Jarvis), «Reglas vigentes» con proponer cambio a la Bandeja.
+- `/resumen`: anillo total, comparación semanal, «Pedile a Jarvis que lo haga» por fila, propuestas por confirmar.
+- Humo en producción con sesión a 1440 y 390: 6 pantallas 200, consola limpia.
+
+## 22/11 · Cuarta vuelta
+- Oficina 3D por sectores, Jarvis con `consultar_cerebro`, Graphify en los 5 repos y en el entorno, propuesta de granja de teléfonos. Recorrido real: Resumen, Contactos y Citas casi sin acciones (ver `traspaso-sesion-2026-11-22-d.md`).
+
+## 22/11 · Graphify en el cerebro
+- Graphify ya estaba en `main` (skill + hook de arranque, commit 9e5cef7) pero no en las demás ramas ni con mapa guardado: solo `main`, `cerebro-chats`, `claude/admiring-euler-ctf4sg` e `integracion/rediseno-2211` lo tienen.
+- Se trajo `main` a esta rama y se generó el mapa del código en `cerebro/mapa-codigo/` (6.911 nodos, 12.405 aristas, con las migraciones SQL). Cómo consultarlo y actualizarlo: `cerebro/mapa-codigo/LEEME.md`.
+- Comprobado con el grafo y con grep: 136 de 140 rutas de la API usan `requireSession`; las 4 sin él son públicas a propósito (ingresar, salir, formulario de landings, webhook de Wasender con firma).

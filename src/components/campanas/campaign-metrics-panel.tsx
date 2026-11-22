@@ -1,4 +1,7 @@
 import type { CampaignMetrics } from "@/lib/campaign-metrics";
+import type { SlugPerfil } from "@/lib/marca";
+import { Anillo, Tarjeta, VerMas } from "@/components/premium";
+import "@/app/chats-campanas.css";
 
 function pct(n: number, d: number): string {
   if (d <= 0) return "Sin datos";
@@ -21,7 +24,7 @@ const TONO: Record<Tono, string> = {
  * queda solo para lo que avisa algo) y etiquetas cortas en una línea; el
  * nombre completo de cada cifra queda en el título de la tarjeta.
  */
-export function CampaignMetricsPanel({ m, compact = false, enlaceRespondieron }: { m: CampaignMetrics | null; compact?: boolean; enlaceRespondieron?: string }) {
+export function CampaignMetricsPanel({ m, compact = false, enlaceRespondieron, rubro }: { m: CampaignMetrics | null; compact?: boolean; enlaceRespondieron?: string; rubro?: SlugPerfil }) {
   if (!m) {
     return <p className="rounded-xl border border-dashed border-slate-300 p-4 text-sm text-slate-600">No se pudieron calcular las cifras de la campaña.</p>;
   }
@@ -44,6 +47,62 @@ export function CampaignMetricsPanel({ m, compact = false, enlaceRespondieron }:
     (m.en_envio ?? 0) > 0 ? `${m.en_envio} en envío` : null,
     m.detenidos > 0 ? `${m.detenidos} destinatarios detenidos (no reciben más envíos)` : null,
   ].filter(Boolean);
+  if (rubro && !compact) {
+    const pctEntero = (n: number, d: number) => (d > 0 ? Math.min(100, Math.round((n / d) * 100)) : 0);
+    const chico = (titulo: string, detalle: string, valor: number, meta: number, unidad: string, retraso: number) => (
+      <div className="cc-ring cc-ring--col" key={titulo}>
+        <Anillo valor={valor} meta={Math.max(meta, valor, 1)} rubro={rubro} tamano="chico" nombre={titulo} unidad={unidad} retrasoMs={retraso} />
+        <div className="cc-ring__texto">
+          <p className="cc-ring__titulo" style={{ fontSize: "0.95rem" }}>{titulo}</p>
+          <p className="cc-ring__detalle">{detalle}</p>
+        </div>
+      </div>
+    );
+    return (
+      <div className="cc">
+        <Tarjeta relieve rubro={rubro} aparecer={0}>
+          <div className="cc-anillos">
+            <div className="cc-ring cc-ring--col">
+              <Anillo valor={pctEntero(m.personas_responden, m.enviados)} rubro={rubro} tamano="grande" sufijo="%" nombre="Tasa de respuesta" unidad={`${m.personas_responden} de ${m.enviados} con envío respondieron`} />
+              <div className="cc-ring__texto">
+                <h2 className="cc-ring__titulo">Tasa de respuesta</h2>
+                <p className="cc-ring__detalle">{m.personas_responden} de {m.enviados} con envío</p>
+              </div>
+            </div>
+            <div className="cc-anillos__chicos">
+              {chico("Con envío", `de ${m.prospectos.toLocaleString("es-AR")}`, m.enviados, m.prospectos, `de ${m.prospectos} destinatarios`, 80)}
+              {chico("Cierres", `de ${m.personas_responden.toLocaleString("es-AR")} que respondieron`, m.cierres, m.personas_responden, `de ${m.personas_responden} que respondieron`, 160)}
+              {chico("Pendientes", "todavía sin enviar", m.pendientes, m.prospectos, `de ${m.prospectos} destinatarios`, 240)}
+            </div>
+          </div>
+          <VerMas cerrado="Ver todas las cifras" abierto="Ocultar las cifras">
+            <ul className="cc-metricas">
+              {tiles.map((t) => {
+                const clase = t.valor === 0 ? "cc-metricas__valor cc-metricas__valor--cero" : `cc-metricas__valor${t.tono === "atencion" ? " cc-metricas__valor--atencion" : t.tono === "logro" ? " cc-metricas__valor--logro" : ""}`;
+                const cuerpo = (
+                  <>
+                    <p className="cc-metricas__rotulo">{t.corto}</p>
+                    <p className={clase}>{t.valor.toLocaleString("es-AR")}</p>
+                    {t.href ? <p className="cc-metricas__rotulo" style={{ color: "var(--d-acento-texto)" }}>Ver quiénes →</p> : null}
+                  </>
+                );
+                return (
+                  <li key={t.largo} title={t.largo}>
+                    {t.href ? <a href={t.href} className="cc-metricas__item">{cuerpo}</a> : <div className="cc-metricas__item">{cuerpo}</div>}
+                  </li>
+                );
+              })}
+            </ul>
+            {extras.length > 0 && <p className="mt-3 text-xs text-slate-600">{extras.join(" · ")}</p>}
+            <p className="mt-2 text-xs text-slate-500">
+              Todas las cifras cuentan destinatarios.
+              {m.actualizado ? ` Última actividad: ${new Date(m.actualizado).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", hourCycle: "h23" })}.` : " Todavía sin actividad."}
+            </p>
+          </VerMas>
+        </Tarjeta>
+      </div>
+    );
+  }
   return (
     <div>
       <div className={compact ? "grid grid-cols-4 gap-2" : "grid grid-cols-4 gap-3 md:grid-cols-8"}>
