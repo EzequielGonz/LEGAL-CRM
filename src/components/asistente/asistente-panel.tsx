@@ -13,7 +13,8 @@ import { useDialogo } from "@/components/ui/use-dialogo";
  * bot?», «que el bot sea más breve»). Lo que cambia algo vuelve como
  * propuesta con «Confirmar»: nada se ejecuta sin ese clic.
  */
-const EVENTO = "crm:asistente";
+export const EVENTO_ASISTENTE = "crm:asistente";
+const EVENTO = EVENTO_ASISTENTE;
 
 export function abrirAsistente(texto?: string) {
   window.dispatchEvent(new CustomEvent(EVENTO, { detail: texto ?? null }));
@@ -71,7 +72,7 @@ const SUGERENCIAS = [
   "Ayudame a armar una campaña con una de las bases cargadas",
 ];
 
-function textoResultado(p: Propuesta): string | null {
+export function textoResultado(p: Propuesta): string | null {
   const r = p.resultado;
   if (!r) return null;
   if (r.error) return `No se pudo: ${r.error}`;

@@ -1,0 +1,369 @@
+/*
+ * Detalles premium sobre la estética clásica del panel (22/11 · corrección del dueño: «ese fondo raro no,
+ * manteniendo la estética clásica del panel pero sumando detalles»).
+ *
+ * Nada de mesh, nubes ni esferas de color. Fondo, colores base y tipografía son los del panel de siempre
+ * (`diseno.css`: --d-*, Inter Tight, acento del perfil `--c-gold-*`, modo oscuro y claro). Esta hoja suma:
+ *  - sombras en capas suaves y borde fino con brillo superior en las tarjetas;
+ *  - anillos con relieve, botones con relieve y entradas escalonadas suaves;
+ *  - inclinación 3D leve en las tarjetas con `relieve` (solo mouse, sin «reducir movimiento»);
+ *  - vidrio sutil únicamente en la barra lateral, la hoja «Más» y el panel de Jarvis.
+ *
+ * Los componentes de `src/components/premium` (prefijo `pm-`) se pintan con los colores del panel:
+ * dentro de `.pp` (la clase del marco) se reasignan sus variables `--pm-*` a las `--d-*` del panel.
+ * La muestra `/diseno-muestra` no lleva `.pp`, así que no cambia.
+ */
+
+/* ------------------------------------------------------------------ tokens */
+.pp {
+  --pp-brillo: inset 0 1px 0 rgb(255 255 255 / 0.07);
+  --pp-capas: 0 1px 2px rgb(0 0 0 / 0.3), 0 6px 14px -6px rgb(0 0 0 / 0.34), 0 22px 38px -22px rgb(0 0 0 / 0.5);
+  --pp-capas-alta: 0 2px 3px rgb(0 0 0 / 0.3), 0 12px 24px -8px rgb(0 0 0 / 0.4), 0 34px 58px -26px rgb(0 0 0 / 0.6);
+
+  --pm-texto: var(--d-texto);
+  --pm-texto-2: var(--d-texto-2);
+  --pm-texto-3: var(--d-texto-3);
+  --pm-acento: var(--d-acento);
+  --pm-sobre-acento: #0b0d12;
+  --pm-sans: var(--d-f-titulo);
+  --pm-mono: var(--d-f-mono);
+  --pm-ok: rgb(var(--d-ok));
+  --pm-error: rgb(var(--d-mal));
+  --pm-atencion: rgb(var(--d-aviso));
+  --pm-info: rgb(var(--d-info));
+  --pm-borde: var(--d-linea);
+  --pm-borde-fuerte: var(--d-linea-fuerte);
+  --pm-pista: rgb(var(--d-apagado) / 0.22);
+  --pm-vidrio-1: rgb(var(--d-tarjeta-2));
+  /* Las tarjetas son sólidas (sin vidrio): superficie del panel con un leve degradé. */
+  --pm-vidrio-bg: linear-gradient(180deg, rgb(var(--d-tarjeta)), rgb(var(--d-tarjeta-2)));
+  --pm-vidrio-bg-fuerte: var(--pm-vidrio-bg);
+  --pm-vidrio-borde: var(--d-linea);
+  --pm-blur: none;
+  --pm-blur-fuerte: none;
+  --pm-brillo-sup: var(--pp-brillo);
+  --pm-flota: var(--pp-capas);
+  --pm-flota-alta: var(--pp-capas-alta);
+  --pm-r-tarjeta: 18px;
+  --pm-r-jarvis: 22px;
+  /* Botones con relieve sobre la superficie del panel. */
+  --pm-neu-base: linear-gradient(150deg, rgb(255 255 255 / 0.07), rgb(255 255 255 / 0.01)), rgb(var(--d-tarjeta));
+  --pm-neu-sale: -3px -3px 8px rgb(255 255 255 / 0.04), 5px 6px 12px rgb(0 0 0 / 0.5), inset 0 1px 0 rgb(255 255 255 / 0.09);
+  --pm-neu-sale-poco: -2px -2px 6px rgb(255 255 255 / 0.04), 3px 4px 8px rgb(0 0 0 / 0.45), inset 0 1px 0 rgb(255 255 255 / 0.09);
+  --pm-neu-hundido: inset 3px 3px 8px rgb(0 0 0 / 0.5), inset -2px -2px 6px rgb(255 255 255 / 0.04);
+}
+html:not([data-modo="oscuro"]) .pp {
+  --pp-brillo: inset 0 1px 0 rgb(255 255 255 / 0.95);
+  --pp-capas: 0 1px 2px rgb(15 23 42 / 0.06), 0 6px 14px -6px rgb(15 23 42 / 0.1), 0 22px 38px -24px rgb(15 23 42 / 0.2);
+  --pp-capas-alta: 0 2px 3px rgb(15 23 42 / 0.07), 0 12px 24px -8px rgb(15 23 42 / 0.14), 0 34px 58px -28px rgb(15 23 42 / 0.28);
+  --pm-neu-base: linear-gradient(150deg, #ffffff, rgb(var(--d-tarjeta-2)));
+  --pm-neu-sale: -3px -3px 8px #ffffff, 4px 5px 11px rgb(15 23 42 / 0.15), inset 0 1px 0 #ffffff;
+  --pm-neu-sale-poco: -2px -2px 6px #ffffff, 3px 4px 8px rgb(15 23 42 / 0.14), inset 0 1px 0 #ffffff;
+  --pm-neu-hundido: inset 3px 3px 7px rgb(15 23 42 / 0.16), inset -2px -2px 6px #ffffff;
+  --pm-pista: rgb(var(--d-apagado) / 0.2);
+}
+/* Un solo acento por pantalla: el del perfil (las clases de rubro de la muestra no pisan al panel). */
+.pp .pm-rubro-juridico,
+.pp .pm-rubro-coberturas_medicas,
+.pp .pm-rubro-agencia_0km,
+.pp .pm-rubro-marketing { --pm-acento: var(--d-acento); }
+/* Texto del acento en modo claro: el paso 700 pasa 4,5:1 sobre blanco. */
+html:not([data-modo="oscuro"]) .pp { --pm-acento-texto: var(--d-acento-texto); }
+
+/* ---------------------------------------------------------------- tarjetas */
+.pp .pm-tarjeta {
+  border-radius: var(--pm-r-tarjeta);
+  padding: 20px 22px;
+}
+/* La tarjeta de Jarvis de la fundación fija el acento índigo: acá manda el del perfil. */
+.pp .pm-jarvis { --pm-acento: var(--d-acento); }
+.pp .pm-tarjeta--viva:not(.pm-tarjeta--relieve):hover {
+  border-color: rgb(var(--c-gold-500) / 0.5);
+}
+.pp .pm-tarjeta--relieve::after { box-shadow: var(--pp-capas-alta); }
+.pp .pm-tarjeta__titulo { font-weight: 600; letter-spacing: -0.01em; }
+.pp .pm-pastilla { background: rgb(var(--d-tarjeta-2)); }
+.pp .pm-vermas__boton { color: var(--d-texto-2); }
+.pp .pm-vermas__boton:hover { color: var(--d-texto); }
+.pp .pm-vermas { border-top-color: var(--d-linea); }
+.pp .pm-lista-filas li { border-top-color: var(--d-linea); }
+
+/* Foco visible del acento en todo lo nuevo (el panel ya usa el suyo en el resto). */
+.pp .pm-boton:focus-visible,
+.pp .pm-vermas__boton:focus-visible,
+.pp .hy-enlace:focus-visible,
+.pp .mas-hoja a:focus-visible,
+.pp .mas-hoja button:focus-visible {
+  outline: 2px solid var(--d-acento-texto);
+  outline-offset: 2px;
+}
+.pp .pm-boton--primario { font-weight: 650; }
+
+/* -------------------------------------------------------------- barra lateral */
+/* Vidrio sutil: el menú deja pasar apenas el fondo del panel, con un brillo fino en el borde. */
+@media (min-width: 1024px) {
+  .pp .menu-estudio {
+    -webkit-backdrop-filter: blur(16px) saturate(130%);
+    backdrop-filter: blur(16px) saturate(130%);
+    box-shadow: inset -1px 0 0 var(--d-linea), 1px 0 0 rgb(255 255 255 / 0.03), 12px 0 28px -22px rgb(0 0 0 / 0.5);
+  }
+}
+html:not([data-modo="oscuro"]) .pp .menu-estudio { background: rgb(255 255 255 / 0.8); }
+.pp .menu-item { transition: background-color var(--d-t-rapido) ease, color var(--d-t-rapido) ease, box-shadow var(--d-t-medio) ease; }
+.pp .menu-item[aria-current="page"] { box-shadow: var(--pp-brillo), 0 6px 14px -8px rgb(var(--c-gold-500) / 0.5); }
+.pp .menu-mas[data-activa="1"] { background: rgb(var(--c-gold-500) / 0.1); color: var(--d-texto); font-weight: 600; }
+.pp .menu-mas[aria-expanded="true"] { background: rgb(var(--c-gold-500) / 0.14); color: var(--d-texto); }
+.pp .menu-pie { display: grid; gap: 2px; }
+.pp .menu-pie-cerebro { min-height: 2.5rem; }
+.pp .barra-inferior-item[data-activa="1"] { color: var(--d-texto); }
+.pp .barra-inferior-item[data-activa="1"] svg { color: rgb(var(--c-gold-500)); }
+@media (max-width: 1023.98px) {
+  /* Cinco destinos y «Más»: el nombre de la activa cabe porque los demás son solo ícono. */
+  .pp .barra-inferior-item { min-width: 0; }
+}
+
+/* --------------------------------------------------------------- hoja «Más» */
+.mas-velo {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgb(4 6 12 / 0.5);
+}
+.mas-hoja {
+  position: fixed;
+  z-index: 61;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: var(--d-texto);
+  background: rgb(var(--d-tarjeta) / 0.9);
+  -webkit-backdrop-filter: blur(18px) saturate(130%);
+  backdrop-filter: blur(18px) saturate(130%);
+  border: 1px solid var(--d-linea-fuerte);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.07), 0 2px 4px rgb(0 0 0 / 0.3), 0 24px 56px -16px rgb(0 0 0 / 0.6);
+  /* Celular: hoja desde abajo. */
+  left: 0.5rem;
+  right: 0.5rem;
+  bottom: calc(0.5rem + env(safe-area-inset-bottom, 0px));
+  max-height: min(78vh, 40rem);
+  border-radius: 1.25rem;
+  animation: mas-sube 260ms var(--d-curva) both;
+}
+@media (min-width: 1024px) {
+  .mas-hoja {
+    left: 16.75rem;
+    right: auto;
+    top: 0.75rem;
+    bottom: auto;
+    max-height: calc(100vh - 1.5rem);
+    width: min(34rem, calc(100vw - 18rem));
+    border-radius: 1.25rem;
+    animation-name: mas-entra;
+  }
+  .mas-hoja[data-plegado="1"] { left: 5rem; }
+}
+@keyframes mas-sube {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes mas-entra {
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: none; }
+}
+.mas-cabeza {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.1rem 0.5rem 1.25rem;
+}
+.mas-titulo { margin: 0; font-size: 1.15rem; font-weight: 650; letter-spacing: -0.015em; }
+.mas-cerrar {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--d-linea);
+  background: rgb(var(--d-tarjeta-2));
+  color: var(--d-texto-2);
+  cursor: pointer;
+  box-shadow: var(--pp-brillo, inset 0 1px 0 rgb(255 255 255 / 0.07));
+}
+.mas-cerrar:hover { color: var(--d-texto); border-color: var(--d-linea-fuerte); }
+.mas-cuerpo { overflow-y: auto; overscroll-behavior: contain; padding: 0.5rem 1rem 1.1rem; display: grid; gap: 1rem; scrollbar-width: thin; }
+.mas-grilla { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.6rem; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 640px) {
+  .mas-grilla { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.mas-tarjeta {
+  min-width: 0;
+  padding: 0.8rem 0.9rem 0.7rem;
+  border-radius: 1rem;
+  border: 1px solid var(--d-linea);
+  background: linear-gradient(180deg, rgb(var(--d-tarjeta)), rgb(var(--d-tarjeta-2)));
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.06), 0 1px 2px rgb(0 0 0 / 0.25), 0 10px 20px -14px rgb(0 0 0 / 0.5);
+}
+.mas-tarjeta[data-activa="1"] { border-color: rgb(var(--c-gold-500) / 0.5); }
+.mas-tarjeta-cab { display: flex; align-items: center; gap: 0.6rem; min-height: 2.75rem; text-decoration: none; color: var(--d-texto); font-weight: 600; font-size: 0.95rem; }
+.mas-icono {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  flex: none;
+  border-radius: 0.6rem;
+  color: rgb(var(--c-gold-500));
+  background: rgb(var(--c-gold-500) / 0.12);
+}
+.mas-nombre { min-width: 0; overflow-wrap: anywhere; }
+.mas-vistas { list-style: none; margin: 0.15rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.1rem 0.15rem; }
+.mas-vistas a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.5rem;
+  padding: 0 0.6rem;
+  border-radius: 0.6rem;
+  font-size: 0.85rem;
+  color: var(--d-texto-2);
+  text-decoration: none;
+}
+.mas-vistas a:hover { background: rgb(var(--c-gold-500) / 0.1); color: var(--d-texto); }
+.mas-otros { list-style: none; margin: 0; padding: 0.7rem 0 0; display: flex; flex-wrap: wrap; gap: 0.4rem; border-top: 1px solid var(--d-linea); }
+.mas-enlace {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0 0.9rem;
+  border-radius: 0.8rem;
+  border: 1px solid var(--d-linea);
+  background: rgb(var(--d-tarjeta-2));
+  color: var(--d-texto);
+  font-size: 0.85rem;
+  font-weight: 550;
+  text-decoration: none;
+}
+.mas-enlace:hover { border-color: rgb(var(--c-gold-500) / 0.5); }
+.mas-enlace-sub { font-size: 0.75rem; font-weight: 400; color: var(--d-texto-2); }
+.mas-enlace-sub[data-espera] { color: rgb(var(--d-aviso)); font-weight: 600; }
+@media (prefers-reduced-motion: reduce) {
+  .mas-hoja { animation: none; }
+}
+
+/* ------------------------------------------------------------------- Hoy */
+.hy-pagina { display: grid; gap: var(--d-e4); width: 100%; max-width: 80rem; margin-inline: auto; }
+.hy-pagina h1 { margin: 0; }
+
+/* Saludo: tarjeta del panel con una línea fina del acento arriba (sin esferas ni degradés de color). */
+.pp .hy-saludo.pm-jarvis {
+  gap: var(--d-e3);
+  padding: 22px 26px 24px;
+  overflow: hidden;
+}
+.pp .hy-saludo.pm-jarvis::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2px;
+  background: linear-gradient(90deg, rgb(var(--c-gold-500) / 0.9), rgb(var(--c-gold-500) / 0));
+}
+.pp .pm-jarvis__saludo {
+  font-family: var(--d-f-titulo);
+  font-style: normal;
+  font-weight: 650;
+  font-size: clamp(1.6rem, 1.25rem + 1.3vw, 2.2rem);
+  letter-spacing: -0.025em;
+}
+.pp .pm-jarvis__frases { font-size: 1rem; }
+
+.hy-protagonista { display: grid; justify-items: center; align-content: center; text-align: center; gap: var(--d-e3); min-height: 100%; }
+.hy-etiqueta { font-size: 1.05rem; font-weight: 650; letter-spacing: -0.01em; color: var(--d-texto); }
+.hy-contexto { font-size: 0.875rem; color: var(--d-texto-2); max-width: 28ch; }
+.hy-semana { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--d-e3); align-items: start; }
+.hy-semana > li { list-style: none; display: grid; justify-items: center; gap: 6px; text-align: center; min-width: 0; }
+.hy-semana { margin: 0; padding: 0; }
+.hy-semana .hy-etiqueta { font-size: 0.9rem; font-weight: 600; }
+.hy-semana .hy-contexto { font-size: 0.8125rem; }
+
+.hy-decidir { list-style: none; margin: 0; padding: 0; display: grid; }
+.hy-decidir > li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--d-e3);
+  min-height: 3.5rem;
+  padding: var(--d-e2) 0;
+  border-top: 1px solid var(--d-linea);
+}
+.hy-decidir > li:first-child { border-top: 0; }
+.hy-decidir .hy-quien { min-width: 0; display: grid; gap: 2px; }
+.hy-decidir .hy-quien strong { font-size: 1rem; font-weight: 600; letter-spacing: -0.01em; }
+.hy-decidir .hy-quien span { font-size: 0.8125rem; color: var(--d-texto-2); }
+.hy-decidir .pm-boton { min-height: 44px; padding: 0 var(--d-e4); flex: none; font-size: 14px; }
+.hy-vacio { margin: 0; padding: var(--d-e4) 0 var(--d-e2); color: var(--d-texto-2); font-size: 0.95rem; }
+
+/* Franja de estado: una sola línea. En rojo cuando algo frena la operación (nunca queda detrás de «Ver más»). */
+.hy-franja {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--d-e2) var(--d-e4);
+  padding: 12px 16px;
+  border-radius: 16px;
+  border: 1px solid var(--d-linea);
+  background: linear-gradient(180deg, rgb(var(--d-tarjeta)), rgb(var(--d-tarjeta-2)));
+  box-shadow: var(--pp-brillo), var(--pp-capas);
+  color: var(--d-texto);
+}
+.hy-franja[data-estado="mal"] { border-color: rgb(var(--d-mal) / 0.55); background: linear-gradient(180deg, rgb(var(--d-mal) / 0.14), rgb(var(--d-mal) / 0.06)), rgb(var(--d-tarjeta)); }
+.hy-franja[data-estado="aviso"] { border-color: rgb(var(--d-aviso) / 0.5); background: linear-gradient(180deg, rgb(var(--d-aviso) / 0.12), rgb(var(--d-aviso) / 0.05)), rgb(var(--d-tarjeta)); }
+.hy-franja__luz { width: 10px; height: 10px; border-radius: 50%; flex: none; background: rgb(var(--d-ok)); box-shadow: 0 0 0 3px rgb(var(--d-ok) / 0.2); }
+.hy-franja[data-estado="mal"] .hy-franja__luz { background: rgb(var(--d-mal)); box-shadow: 0 0 0 3px rgb(var(--d-mal) / 0.22); }
+.hy-franja[data-estado="aviso"] .hy-franja__luz { background: rgb(var(--d-aviso)); box-shadow: 0 0 0 3px rgb(var(--d-aviso) / 0.22); }
+.hy-franja__texto { flex: 1 1 18rem; min-width: 0; font-size: 0.95rem; overflow-wrap: anywhere; }
+.hy-franja__texto strong { font-weight: 650; }
+.hy-enlace {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 var(--d-e3);
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--d-texto);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.hy-detalle { display: grid; gap: var(--d-e4); }
+
+@media (max-width: 639.98px) {
+  .hy-semana { grid-template-columns: minmax(0, 1fr); }
+  .hy-semana > li { grid-template-columns: auto 1fr; justify-items: start; text-align: left; column-gap: var(--d-e4); row-gap: 2px; align-content: center; align-items: end; }
+  .hy-semana > li > .hy-contexto { align-self: start; }
+  .hy-semana > li > .pm-anillo { grid-row: span 2; }
+  .hy-decidir > li { flex-wrap: wrap; }
+  .hy-decidir .pm-boton { width: 100%; }
+}
+
+/* Detalles de uso (web-design-guidelines): toque sin demora, títulos equilibrados, sin saltos al desplazar dentro de las hojas. */
+.pp .pm-boton,
+.pp .hy-enlace,
+.pp .mas-hoja a,
+.pp .mas-hoja button,
+.pp .barra-inferior-item { touch-action: manipulation; }
+.pp .pm-tarjeta__titulo,
+.pp .pm-jarvis__saludo,
+.pp .hy-etiqueta,
+.pp .mas-titulo { text-wrap: balance; }
+.pp .hy-contexto,
+.pp .pm-jarvis__frases p { text-wrap: pretty; }
+.jv-cuerpo { overscroll-behavior: contain; }
+
+/* Barra inferior con cinco destinos y «Más»: nombres chicos que entran sin cortarse. */
+@media (max-width: 1023.98px) {
+  .pp .barra-inferior-item { padding-inline: 2px; }
+  .pp .barra-inferior-nombre { font-size: 10.5px; max-width: none; text-overflow: clip; }
+}
+
+/* Que el botón flotante de Jarvis no tape lo último de la pantalla. */
+.hy-pagina { padding-bottom: 4.5rem; }

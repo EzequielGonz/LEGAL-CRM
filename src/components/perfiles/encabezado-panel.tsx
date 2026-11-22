@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { seccionActiva, seccionesDePerfil } from "@/lib/menu";
@@ -20,7 +20,12 @@ export function EncabezadoPanel({ slug, nombre, menu = null }: { slug: SlugPerfi
   const activa = seccionActiva(seccionesDePerfil(slug, menu), pathname, search?.toString() ?? null);
   const marca = marcaDe(slug);
   const titulo = nombre?.trim() || marca.nombre;
-  const hoy = new Intl.DateTimeFormat("es-AR", { weekday: "long", day: "numeric", month: "long", timeZone: "America/Argentina/Buenos_Aires" }).format(new Date());
+  // 22/11 (hidratación): la fecha se arma en el navegador, después de hidratar. En el servidor queda vacía,
+  // así el HTML nunca difiere (antes, cruzar la medianoche entre servidor y cliente daba el error #418).
+  const [hoy, setHoy] = useState("");
+  useEffect(() => {
+    setHoy(new Intl.DateTimeFormat("es-AR", { weekday: "long", day: "numeric", month: "long", timeZone: "America/Argentina/Buenos_Aires" }).format(new Date()));
+  }, []);
   // 13/11 · cada rubro separado: la pestaña del navegador dice primero en qué perfil se está.
   const vista = activa?.tab.label ?? activa?.seccion.label ?? null;
   useEffect(() => {
@@ -38,7 +43,7 @@ export function EncabezadoPanel({ slug, nombre, menu = null }: { slug: SlugPerfi
         {activa && <span className="encabezado-seccion">{activa.seccion.label}</span>}
       </div>
       <div className="flex items-center gap-3">
-        <span className="encabezado-fecha" aria-hidden="true" suppressHydrationWarning>
+        <span className="encabezado-fecha" aria-hidden="true">
           {hoy}
         </span>
         <button
@@ -47,7 +52,7 @@ export function EncabezadoPanel({ slug, nombre, menu = null }: { slug: SlugPerfi
           className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 text-xs font-medium text-slate-700 shadow-sm hover:border-slate-300 hover:text-slate-950"
         >
           <Icono nombre="asistente" className="h-4 w-4 text-gold-600" />
-          Pedile algo
+          Hablar con Jarvis
         </button>
       </div>
     </div>

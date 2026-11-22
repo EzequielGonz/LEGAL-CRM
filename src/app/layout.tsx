@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter_Tight, JetBrains_Mono, Playfair_Display } from "next/font/google";
+import { Geist, Geist_Mono, Instrument_Serif, Inter_Tight, JetBrains_Mono, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import "./panel.css";
 import "./controles.css";
@@ -11,6 +11,8 @@ import "./tema-premium-ajustes.css";
 import "./vidrio.css";
 import "./accesible.css";
 import "./diseno.css";
+import "./premium.css";
+import "./panel-premium.css";
 import { SCRIPT_MODO } from "@/lib/modo";
 
 // Fuentes autoalojadas por Next (16/10). 22/11: Inter Tight para toda la
@@ -19,6 +21,12 @@ import { SCRIPT_MODO } from "@/lib/modo";
 const sans = Inter_Tight({ subsets: ["latin"], display: "swap", variable: "--font-sans" });
 const mono = JetBrains_Mono({ subsets: ["latin"], display: "swap", variable: "--font-mono" });
 const serif = Playfair_Display({ subsets: ["latin"], weight: ["600", "700"], display: "swap", variable: "--font-serif" });
+
+// 22/11: fundación visual premium (premium.css): Geist para la interfaz, Geist Mono para cifras chicas
+// y Instrument Serif itálica solo en el saludo de Jarvis. Solo definen variables: no cambian lo anterior.
+const geist = Geist({ subsets: ["latin"], display: "swap", variable: "--font-geist" });
+const geistMono = Geist_Mono({ subsets: ["latin"], display: "swap", variable: "--font-geist-mono" });
+const instrument = Instrument_Serif({ subsets: ["latin"], weight: "400", style: "italic", display: "swap", variable: "--font-instrument" });
 
 export const viewport: Viewport = {
   themeColor: "#15171C",
@@ -56,7 +64,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es" data-modo="oscuro" suppressHydrationWarning className={`${sans.variable} ${mono.variable} ${serif.variable}`}>
+    <html lang="es" data-modo="oscuro" suppressHydrationWarning className={`${sans.variable} ${mono.variable} ${serif.variable} ${geist.variable} ${geistMono.variable} ${instrument.variable}`}>
       <head>
         {/* 24/10: modo oscuro premium por defecto; el claro se elige en el menú y se recuerda. */}
         <script dangerouslySetInnerHTML={{ __html: SCRIPT_MODO }} />

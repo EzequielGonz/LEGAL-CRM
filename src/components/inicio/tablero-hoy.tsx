@@ -1,4 +1,4 @@
-import { indicadorPorClave, listarIndicador } from "@/lib/indicadores";
+import { enlaceIndicador, indicadorPorClave, listarIndicador } from "@/lib/indicadores";
 import Link from "next/link";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { GRUPOS_PERSONAS, motivoLegible, resumenPersonas, type GrupoPersonas } from "@/lib/estadisticas-personas";
@@ -14,6 +14,13 @@ import { contarFallidos24h } from "@/lib/salud/fallas";
 import { motivosDeParo } from "@/lib/definiciones/parado";
 import { getAutomationPause } from "@/lib/automation-pause";
 import { Bento, ChipEstado, Kicker, Luz, Vacio, estadoDeTono } from "@/components/ui/diseno";
+import { HoyBento } from "@/components/inicio/hoy-bento";
+import { cifrasDePeriodo, rangoDePeriodo } from "@/lib/hoy/periodos";
+import { filasParaDecidir, franjaDeEstado, frasesDeHoy, metaDelAnillo } from "@/lib/hoy/resumen-hoy";
+import { saludResumida } from "@/components/salud/barra-salud";
+import { resumenSalud } from "@/lib/salud";
+import { lecturaSimple } from "@/lib/salud/reglas";
+import { itemsDelPerfil } from "@/lib/salud/por-perfil";
 
 /**
  * Tablero de «Hoy» (24/10, boceto v3 aprobado; 22/11 sin chip del bot ni «También hoy»): estado de la línea y la
@@ -85,6 +92,10 @@ export async function TableroHoy({
   delBot = [],
   filtroCola,
   verTodo = false,
+  saludo,
+  totalCaptados = null,
+  esperanDeMas = 0,
+  cifrasSinLeer = 0,
 }: {
   slug: SlugPerfil;
   rubroId: string;
@@ -95,12 +106,21 @@ export async function TableroHoy({
   delBot?: DatoDelBot[];
   filtroCola?: string;
   verTodo?: boolean;
+  /** «Buen día», «Buenas tardes» o «Buenas noches» (sin nombre). Lo calcula la página con la hora argentina. */
+  saludo: string;
+  /** Captados sin derivar, contados completos (la lista solo trae los primeros). */
+  totalCaptados?: number | null;
+  /** De esos, cuántos esperan el llamado hace más de 24 horas. */
+  esperanDeMas?: number;
+  /** Cifras de la pantalla que no se pudieron leer. */
+  cifrasSinLeer?: number;
 }) {
   const s = createAdminClient();
   const aqui = `/hoy?perfil=${slug}`;
   const baseCampanas = slug === "juridico" ? "/campanas" : `/panel/${slug}/campanas`;
 
-  const [reales, posibles, colas, { data: lineasWa }, personas, { data: lineas }, { data: camps }] = await Promise.all([
+  const semana = rangoDePeriodo("semana", new Date());
+  const [reales, posibles, colas, { data: lineasWa }, personas, { data: lineas }, { data: camps }, cifrasSemana, saludItems] = await Promise.all([
     // 13/11: «Oportunidades reales» (ordenadas por interés) y «Posible captación a revisar», con la misma definición que en Chats.
     listarIndicador(rubroId, indicadorPorClave("piden_persona")!).catch(() => ({ filas: [] as any[] })),
     listarIndicador(rubroId, indicadorPorClave("posible_captacion")!).catch(() => ({ filas: [] as any[] })),
@@ -116,6 +136,10 @@ export async function TableroHoy({
       .in("status", ["en_curso", "pausada"])
       .order("created_at", { ascending: false })
       .limit(5),
+    // 22/11: los tres anillos chicos usan las mismas cuentas que Resultados (semana desde el lunes).
+    cifrasDePeriodo(rubroId, areas, semana.desde, semana.hasta).catch(() => null),
+    // 22/11: la franja de estado resume lo que hoy dicen las barras de salud (cacheado un minuto).
+    saludResumida().then((x) => itemsDelPerfil(x, slug)).catch(() => null),
   ]);
 
   const lineasActivas = ((lineas ?? []) as any[]).filter((l) => l.credential_key);
@@ -200,10 +224,10 @@ export async function TableroHoy({
   // 22/11 (orden del 19/11): sin el chip del bot ni el bloque «También hoy».
   const bot = delBot.filter((d) => d.n !== null && d.n !== undefined && (d.n > 0 || d.de != null));
 
-  return (
-    <section aria-labelledby="hoy-tablero" className="tablero-hoy space-y-4">
+  const detalle = (
+    <div className="tablero-hoy space-y-4">
       <h2 id="hoy-tablero" className="sr-only">
-        Tablero de hoy
+        Detalle de hoy
       </h2>
       <ul className="d-revelar flex flex-wrap gap-2" aria-label="Estado de la línea y la campaña">
         <Chip tono={chipLinea.tono} texto={chipLinea.texto} />
@@ -238,6 +262,7 @@ export async function TableroHoy({
           modo="atender"
         />
         <ColaHoy
+          id="hoy-captados"
           titulo="Captados para derivar"
           kicker="Pasalos"
           bajada="Ya aceptaron el siguiente paso: pasalos a quien los atiende."
@@ -332,7 +357,45 @@ export async function TableroHoy({
           </ul>
         </div>
       )}
-    </section>
+    </div>
+  );
+
+  // ---- 22/11: la pantalla principal (bento) con los mismos datos de arriba; el detalle queda en «Ver más».
+  const porDerivar = totalCaptados ?? paraDerivar.length;
+  const conteos = { esperan: atender.length, porDerivar, esperanDeMas, posibles: ((posibles.filas ?? []) as any[]).length };
+  const salud = saludItems ? resumenSalud(saludItems) : null;
+  const primero = saludItems && salud && salud.rojo > 0 ? lecturaSimple(saludItems.filter((i) => i.estado === "rojo")[0]).que : saludItems && salud && salud.amarillo > 0 ? lecturaSimple(saludItems.filter((i) => i.estado === "amarillo")[0]).que : null;
+  const franja = franjaDeEstado({
+    rojos: salud?.rojo ?? 0,
+    amarillos: salud?.amarillo ?? 0,
+    primero,
+    hrefSalud: `/salud?perfil=${encodeURIComponent(slug)}`,
+    lineas: [{ tono: chipLinea.tono as any, texto: chipLinea.texto }, ...chipsWasender.map((c) => ({ tono: c.tono as any, texto: c.texto, href: c.href })), ...motivosParo.map((m) => ({ tono: m.tono as any, texto: m.texto }))],
+    cifrasSinLeer,
+  });
+  const decidir = filasParaDecidir({
+    ...conteos,
+    hrefResponder: `${aqui}&todo=1#hoy-cola`,
+    hrefDerivar: `${aqui}&todo=1#hoy-captados`,
+    hrefPosibles: enlaceIndicador(slug, "posible_captacion", aqui),
+    campana: camp ? { texto: chipCampana.texto, href: chipCampana.href ?? baseCampanas, tono: chipCampana.tono as any } : null,
+  });
+  return (
+    <HoyBento
+      d={{
+        slug,
+        saludo,
+        frases: frasesDeHoy(conteos),
+        porDerivar,
+        derivadosSemana: cifrasSemana?.derivados ?? null,
+        semana: { contactados: cifrasSemana?.contactados ?? null, escribieron: cifrasSemana?.respondieron ?? null, captados: cifrasSemana?.captados ?? null, derivados: cifrasSemana?.derivados ?? null },
+        metaAnillo: metaDelAnillo(porDerivar, cifrasSemana?.derivados ?? null),
+        decidir,
+        franja,
+        detalle,
+        verMasAbierto: verTodo || !!elegido,
+      }}
+    />
   );
 }
 

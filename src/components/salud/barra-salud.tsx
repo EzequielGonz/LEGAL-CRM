@@ -17,7 +17,7 @@ const COLOR: Record<ItemSalud["estado"], string> = {
  * de en cada navegación (son ~14 consultas). El tablero /salud sigue leyendo
  * en vivo.
  */
-const saludResumida = unstable_cache(() => leerSalud(), ["barra-salud"], { revalidate: 60 });
+export const saludResumida = unstable_cache(() => leerSalud(), ["barra-salud"], { revalidate: 60 });
 
 /**
  * Barra de salud arriba de cada panel (16/10): lo que frena la operación se
