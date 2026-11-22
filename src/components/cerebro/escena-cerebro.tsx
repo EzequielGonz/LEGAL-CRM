@@ -12,19 +12,25 @@ import { formatoNumero } from "@/lib/premium/anillo";
  */
 export type Frase = [string, string, string];
 
-export function EsferaCerebro({ pulso }: { pulso: number }) {
+export function EsferaCerebro({ pulso, pensando = false, escala = 0.78, puntos = 900 }: { pulso: number; pensando?: boolean; escala?: number; puntos?: number }) {
   const ref = useRef<HTMLCanvasElement>(null);
   const pulsoRef = useRef(0);
+  const pensandoRef = useRef(pensando);
   useEffect(() => {
     pulsoRef.current = 1;
   }, [pulso]);
+  // Vuelta 6: el núcleo del anillo late y gira más rápido mientras el cerebro piensa.
+  useEffect(() => {
+    pensandoRef.current = pensando;
+    if (pensando) pulsoRef.current = 1;
+  }, [pensando]);
   useEffect(() => {
     const cv = ref.current;
     if (!cv) return;
     const ctx = cv.getContext("2d");
     if (!ctx) return;
     const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const N = 900;
+    const N = puntos;
     const pts: [number, number, number][] = [];
     const g = Math.PI * (3 - Math.sqrt(5));
     for (let i = 0; i < N; i++) {
@@ -42,7 +48,7 @@ export function EsferaCerebro({ pulso }: { pulso: number }) {
       cv.width = W * dpr;
       cv.height = H * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      R = Math.min(W, H) * 0.78;
+      R = Math.min(W, H) * escala;
     };
     const mover = (e: PointerEvent) => {
       const b = cv.getBoundingClientRect();
@@ -66,8 +72,8 @@ export function EsferaCerebro({ pulso }: { pulso: number }) {
         ctx.fill();
       }
       if (!reduce) {
-        rot += 0.0035;
-        pulsoRef.current *= 0.94;
+        rot += pensandoRef.current ? 0.02 : 0.0035;
+        pulsoRef.current = pensandoRef.current ? Math.max(pulsoRef.current * 0.94, 0.35 + 0.35 * Math.sin(performance.now() / 160)) : pulsoRef.current * 0.94;
         raf = requestAnimationFrame(draw);
       }
     };
@@ -80,7 +86,7 @@ export function EsferaCerebro({ pulso }: { pulso: number }) {
       window.removeEventListener("resize", size);
       cv.parentElement?.removeEventListener("pointermove", mover);
     };
-  }, []);
+  }, [escala, puntos]);
   return <canvas ref={ref} aria-hidden="true" />;
 }
 
