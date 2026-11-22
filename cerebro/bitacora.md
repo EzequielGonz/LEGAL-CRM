@@ -115,3 +115,6 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 - **Verificado en producción** (computadora y celular, 390 px): Perfiles, Salud, Resultados, Bot IA, Bandeja y Cerebro abren con 200 y sin desborde. Apareció el error de React #418 (hidratación) en Perfiles, Salud, Bot IA y Bandeja: lo arregla un agente en `arreglos/hidratacion-2211`.
 - **Pendiente de decisión del dueño:** precios reales por token de Gemini; si el asistente, el Laboratorio y los audios cuentan para el tope; la etiqueta de gravedad conectada a las campañas.
 - **Memoria completa** lista: `19` (147 recuerdos), `20` (conocimiento completo) y el prompt para Claude in Chrome en `biblioteca/`.
+
+## 22/11 cierre: biblioteca complementaria (extra)
+- El dueño subió la «Biblioteca complementaria CRM 4 rubros» (Word y paquete). Se guardó tal cual en `biblioteca/complementaria-2211/` como material extra de consulta. No se cambió ni se pisó nada del cerebro, las fichas, los prompts ni los bots. Las 135 fichas propuestas siguen inactivas: el mecanismo de alta las crearía activas, así que no se usa hasta hacer la comparación y tener el OK.

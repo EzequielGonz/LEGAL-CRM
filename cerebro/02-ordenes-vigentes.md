@@ -278,3 +278,14 @@ Todo lo demás son **decisiones de negocio** del dueño (abajo), no trabas de pr
 - **Ramas y Vercel (22/11 noche):** el dueño pidió ordenarlas. Primero inventario y propuesta (`21-orden-de-ramas-y-vercel.md`); se archiva con etiqueta y nada se borra sin su OK.
 - **Memoria en claude.ai:** el dueño la está cargando con Claude in Chrome (22/11 noche).
 - **Ramas y PR (22/11 noche):** no tocar ramas ni archivar nada por ahora. Los PR sin integrar (#77, #80 y #40) quedan para después.
+
+## Órdenes del 22/11 (cierre): rehacer el panel, simple y premium
+
+- **El rediseño anterior no alcanzó** («no tiene ningún rediseño gráfico, solo mínimos detalles… todo es básico, genérico, con botones… lo dejaste más feo y más desorganizado»). Se rehace de verdad: ultra premium, interactivo, con las referencias que pasó (videos, code.xr).
+- **Fácil y sencillo:** «demasiado extenso, demasiadas funciones, demasiado de todo que no te lleva a nada». Menos cosas por pantalla, **estadísticas circulares** (anillos), **animaciones simples**, textos sin tecnicismos. Lo que sale de la vista no se borra: va a «Más».
+- **La Oficina como el video 1** (oficina 3D con agentes trabajando en escritorios), animada; el cerebro y el panel con la misma calidad. **Jarvis tiene que existir** de verdad en el panel.
+- Usar referencias de otras páginas y CRM, y todas las skills, plugins, conectores y agentes, con los mejores modelos.
+- Después: **propuesta de gestión de teléfonos** desde la computadora, con reconexión automática de líneas caídas (o aviso y reconexión en un toque).
+- **Jarvis, secretario de todo el panel (22/11 cierre):** «tiene que ayudarme en todo el panel… como el asistente que está ahora pero mejorado nivel 1000». Se construye sobre el asistente actual (sin borrarlo): presente en cada pantalla, sabe dónde estás, da el parte del día, busca, resume, redacta borradores, lleva a la pantalla correcta y crea tareas, siempre con confirmación para lo que cambia algo. No lanza campañas ni publica.
+- **Estilo del panel (22/11 cierre): el del reel 2** (Df93dArgY10). Fondo gradient mesh oscuro, glassmorphism real, sombras en capas, bento grid, botones neumórficos sobrios, parallax suave y efectos 3D sobrios: inclinación leve y anillos con relieve. «No tarjetas y animaciones genéricas, básicas». Siempre con estadísticas circulares, simple y accesible.
+- **Corrección (22/11 cierre, más reciente):** «ese fondo raro no, manteniendo la estética clásica del panel pero sumando detalles». Sin gradient mesh ni esferas de color: fondo, colores y tipografía del panel de siempre. Se suman detalles premium: anillos con relieve, sombras suaves en capas, borde fino con brillo, inclinación 3D leve, entradas escalonadas y un vidrio sutil solo en la barra lateral y en Jarvis.

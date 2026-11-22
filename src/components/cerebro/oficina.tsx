@@ -1,13 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { MAX_PEDIDO, pareceDatoPersonal } from "@/lib/bandeja-claude";
+import { OficinaVisual } from "@/components/cerebro/oficina-visual";
 import {
   ETIQUETA_ETAPA,
   NOMBRE_AREA,
   escritorioActual,
   etapaDe,
-  vistaEscritorios,
   type Area,
   type TareaOficina,
 } from "@/lib/oficina/reglas";
@@ -78,7 +78,10 @@ export function Oficina({ inicial, arranqueInicial }: { inicial: TareaOficina[];
     return () => clearInterval(id);
   }, [hayMovimiento, recargar]);
 
-  const escritorios = useMemo(() => vistaEscritorios(tareas), [tareas]);
+  // «hace 5 min» depende de la hora: se dibuja recién en el cliente para que no difiera del servidor.
+  const [montado, setMontado] = useState(false);
+  useEffect(() => setMontado(true), []);
+  const formulario = useRef<HTMLFormElement>(null);
   const enCurso = tareas.filter((t) => ["entrada", "trabajando", "trabada"].includes(etapaDe(t)));
   const esperando = tareas.filter((t) => etapaDe(t) === "esperando_ok");
   const aprobadas = tareas.filter((t) => etapaDe(t) === "aprobada").slice(0, 5);
@@ -140,44 +143,33 @@ export function Oficina({ inicial, arranqueInicial }: { inicial: TareaOficina[];
           <strong>{esperando.length}</strong> esperando tu OK
           {arranque && (
             <small>
-              Último arranque: {TEXTO_ARRANQUE[arranque.estado] ?? arranque.estado} · {hace(arranque.pedido_at)}
+              Último arranque: {TEXTO_ARRANQUE[arranque.estado] ?? arranque.estado}
+              {montado ? ` · ${hace(arranque.pedido_at)}` : ""}
             </small>
           )}
         </div>
-        <button type="button" className="cz-btn cz-of-arrancar" onClick={arrancar} disabled={arrancando || enEntrada === 0}>
-          <span className="pulso" aria-hidden="true" />
-          {arrancando ? "Arrancando…" : "Arrancar ahora"}
-        </button>
+        <div className="cz-of-botones">
+          <button
+            type="button"
+            className="cz-btn sec"
+            onClick={() => {
+              formulario.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+              formulario.current?.querySelector("textarea")?.focus({ preventScroll: true });
+            }}
+          >
+            Dejar una tarea
+          </button>
+          <button type="button" className="cz-btn cz-of-arrancar" onClick={arrancar} disabled={arrancando || enEntrada === 0}>
+            <span className="pulso" aria-hidden="true" />
+            {arrancando ? "Arrancando…" : "Arrancar ahora"}
+          </button>
+        </div>
       </div>
 
-      <ul className="cz-of-grid" aria-label="Escritorios">
-        {escritorios.map((e) => (
-          <li key={e.area} className={`cz-desk ${e.estado}`} data-area={e.area}>
-            <header>
-              <span className="luz" aria-hidden="true" />
-              <h3>{e.nombre}</h3>
-              <span className="carga">{e.estado === "trabajando" ? "Trabajando" : e.estado === "en_cola" ? `${e.carga} en cola` : "Libre"}</span>
-            </header>
-            <p className="rol">{e.rol}</p>
-            <div className="equipo" aria-label="Agentes">
-              {e.equipo.map((n) => (
-                <span key={n}>{n}</span>
-              ))}
-            </div>
-            {e.estado === "trabajando" && (
-              <div className="tecleo" aria-hidden="true">
-                <i />
-                <i />
-                <i />
-              </div>
-            )}
-            {e.ultima && <p className="ultima">«{e.ultima.length > 110 ? `${e.ultima.slice(0, 107)}…` : e.ultima}»</p>}
-          </li>
-        ))}
-      </ul>
+      <OficinaVisual tareas={tareas} renderEnMarcha={(t) => <TareaEnMarcha key={t.id} t={t} />} renderAprobar={(t) => <TareaParaAprobar key={t.id} t={t} alDecidir={recargar} />} />
 
       <div className="cz-grid2">
-        <form onSubmit={dejarTarea} className="cz-form" aria-label="Dejar una tarea en la oficina">
+        <form ref={formulario} onSubmit={dejarTarea} className="cz-form" aria-label="Dejar una tarea en la oficina">
           <label>
             Perfil
             <select value={perfil} onChange={(e) => setPerfil(e.target.value)}>
@@ -266,20 +258,20 @@ function Ruta({ t }: { t: TareaOficina }) {
   );
 }
 
-function TareaEnMarcha({ t }: { t: TareaOficina }) {
+export function TareaEnMarcha({ t }: { t: TareaOficina }) {
   const etapa = etapaDe(t);
   return (
     <li>
       <div className="fila">
         <strong>{t.titulo}</strong>
-        <span className={`cz-chip ${etapa === "trabada" ? "c-warn" : etapa === "trabajando" ? "c-ok" : "c-idk"}`}>{ETIQUETA_ETAPA[etapa]}</span>
+        <span className={`cz-chip ${etapa === "trabada" ? "c-bad" : etapa === "trabajando" ? "c-warn" : "c-idk"}`}>{ETIQUETA_ETAPA[etapa]}</span>
       </div>
       {t.ruta.length > 0 && <Ruta t={t} />}
     </li>
   );
 }
 
-function TareaParaAprobar({ t, alDecidir }: { t: TareaOficina; alDecidir: () => Promise<void> }) {
+export function TareaParaAprobar({ t, alDecidir }: { t: TareaOficina; alDecidir: () => Promise<void> }) {
   const [abierta, setAbierta] = useState(false);
   const [nota, setNota] = useState("");
   const [modo, setModo] = useState<"cambios" | "rechazada" | null>(null);

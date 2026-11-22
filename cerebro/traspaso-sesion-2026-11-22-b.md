@@ -71,3 +71,26 @@ En `17`:
 - Antes de cada commit del cerebro: buscar con grep restos de herramientas (`</content>`, `<parameter`), el código, teléfonos y correos.
 - Las sesiones en la nube no manejan el Chrome del dueño: para claude.ai se usa Claude in Chrome con el prompt preparado.
 - Los agentes que trabajan en copias aisladas no pueden lanzar subagentes revisores. La revisión con varios agentes la lanza Claude directamente, o un agente sin aislamiento.
+
+## Actualización (22/11, cierre): rehacer el panel y teléfonos
+
+- **Cupo:** se agotó el cupo semanal de Opus (vuelve el 26/11 22:00 UTC). Los agentes siguen con Sonnet.
+- **Material listo (scratchpad de la sesión, copiar al cerebro al cerrar):**
+  - `diseno-premium/BRIEF.md`: guía de diseño medida (11 referencias, paleta oscura con acentos por rubro, Geist, componente anillo de 160 px y Hoy en 3 bloques).
+  - `video-oficina/ESPEC.md`: especificación de la oficina 3D del video 1. Es una oficina low-poly con muñecos chibi que teclean y tarjetas flotantes de estado, con cámara que salta de agente en agente y una vista cenital. Propuesta: lista accesible + diorama CSS 3D en celular + react-three-fiber diferido en escritorio.
+  - `estado-actual/`: capturas de producción. El cerebro mide 9558 px de alto.
+- **Agentes trabajando:**
+  - plan de simplificación (`simplificacion/PLAN.md`);
+  - fundación visual (rama `diseno/fundacion-2211`);
+  - investigación de teléfonos (`telefonos/INVESTIGACION.md`);
+  - arreglos del recontacto (misma rama `captacion/recontacto-plantillas-y-gravedad`).
+- **Recontacto: decisiones del director.**
+  - Una vez por oportunidad y como máximo una por teléfono cada 30 días; no pasa a «caído».
+  - Tope diario por rubro.
+  - La 0640 enciende solo Jurídico.
+  - Antes de publicar falta una segunda revisión.
+- **Lo que sigue:**
+  - construir Hoy con Jarvis, la navegación simple, la Oficina 3D y el Cerebro corto, con la fundación;
+  - revisión de accesibilidad y diseño;
+  - publicar y verificar con capturas;
+  - después, la propuesta de teléfonos.

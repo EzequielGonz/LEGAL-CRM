@@ -21,6 +21,8 @@ export interface EstadoCalidadLinea {
   desde: string | null;
   /** Campañas pausadas por la calidad baja. */
   pausadas: string[];
+  /** Cuándo respondió Meta por última vez para esta línea (no se renueva al conservar una lectura vieja). */
+  leidoAt?: string;
 }
 
 export interface EstadoCalidad {
@@ -79,13 +81,14 @@ export async function vigilarCalidadLineas(ahora = new Date()): Promise<unknown>
         rubroId: l.rubro_id,
         calidad: "baja",
         desde: nuevaBaja ? ahora.toISOString() : antes?.desde ?? ahora.toISOString(),
+        leidoAt: ahora.toISOString(),
         pausadas: Array.from(new Set([...(antes?.pausadas ?? []), ...pausadas])),
       };
       if (nuevaBaja || pausadas.length) {
         avisos.push({ texto: `Línea ${l.label}: calidad baja en Meta.${pausadas.length ? ` Se pausó: ${pausadas.join(", ")}.` : " No tenía campañas en curso."}`, rubroId: l.rubro_id });
       }
     } else {
-      nuevo.lineas[l.id] = { label: l.label, rubroId: l.rubro_id, calidad: inf.calidad, desde: null, pausadas: [] };
+      nuevo.lineas[l.id] = { label: l.label, rubroId: l.rubro_id, calidad: inf.calidad, desde: null, pausadas: [], leidoAt: ahora.toISOString() };
     }
   }
   await s.from("system_settings").upsert({ key: CLAVE_CALIDAD, value: nuevo as any }, { onConflict: "key" });

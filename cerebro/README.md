@@ -57,6 +57,7 @@ Esta carpeta es la memoria de trabajo de Claude. Reemplaza tener que releer los 
 | `traspaso-sesion-2026-11-22-b.md` | Traspaso del 22/11 noche (leer primero al retomar) |
 | `traspaso-sesion-2026-11-22.md` | Traspaso antes de compactar del 22/11: pedidos, hecho, agentes en curso y próximos pasos |
 | `traspaso-sesion-2026-11-21-c.md` | Estado al compactar el 21/11 (agentes, próximos pasos) |
+| `biblioteca/complementaria-2211/` | **Extra, no reemplaza nada (22/11):** biblioteca complementaria que trajo el dueño. Son 9 capítulos (VITA, Coberturas, Autos Kocos, Kocos Marketing, casos, cerebro y glosario), 135 fichas sectoriales propuestas que están **inactivas** y fuentes oficiales con fecha. Se consulta cuando hace falta y no pisa las órdenes ni las fichas vigentes. Antes de activar alguna ficha hay que comparar duplicados y conflictos (`LEER_PRIMERO.md`) y tener el OK de los dueños |
 | `bitacora.md` | Diario de sesiones y aprendizajes (lo más nuevo arriba) |
 
 ## Fuentes de verdad (en orden)
