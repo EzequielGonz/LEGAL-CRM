@@ -167,10 +167,10 @@
 @keyframes cz-of-pulso { 0% { box-shadow: 0 0 0 0 #12030a99; } 70% { box-shadow: 0 0 0 8px #12030a00; } 100% { box-shadow: 0 0 0 0 #12030a00; } }
 
 .cz-of-grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); }
+@media (min-width: 1000px) { .cz-of-grid { grid-template-columns: repeat(4, 1fr); } }
 .cz-desk { --tono: var(--dim); position: relative; overflow: hidden; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 16px; display: grid; gap: 8px; align-content: start; transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s; }
 .cz-desk:hover { transform: translateY(-2px); border-color: #3a3a4c; }
-.cz-desk[data-area="direccion"] { grid-column: span 2; background: radial-gradient(120% 140% at 100% 0%, #ff4f9a1f, transparent 60%), var(--card); }
-@media (max-width: 520px) { .cz-desk[data-area="direccion"] { grid-column: auto; } }
+.cz-desk[data-area="direccion"] { background: radial-gradient(120% 140% at 100% 0%, #ff4f9a1f, transparent 60%), var(--card); }
 .cz-desk.trabajando { --tono: var(--green); border-color: #2f5c43; box-shadow: 0 0 0 1px #5ee08f22, 0 18px 50px -30px #5ee08f88; }
 .cz-desk.en_cola { --tono: var(--amber); border-color: #5c4a2a; }
 .cz-desk header { display: flex; align-items: center; gap: 9px; }

@@ -214,7 +214,7 @@ export function Oficina({ inicial, arranqueInicial }: { inicial: TareaOficina[];
         <div className="cz-card">
           <header>
             <h3>En marcha</h3>
-            <small className="cz-muted">{enCurso.length ? `${enCurso.length} tareas` : "Nada en marcha"}</small>
+            <small className="cz-muted">{enCurso.length ? `${enCurso.length} ${enCurso.length === 1 ? "tarea" : "tareas"}` : "Nada en marcha"}</small>
           </header>
           {enCurso.length ? (
             <ul className="cz-of-tareas">
