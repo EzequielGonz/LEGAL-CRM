@@ -32,6 +32,8 @@ import {
   CANAL_PLANTILLA_RECONTACTO,
   decidirRecontacto,
   PROPOSITO_RECONTACTO,
+  proximoIntento,
+  TEXTO_TOPE_DIA,
   TEXTO_WASENDER_PENDIENTE,
   TEXTO_YA_RECIBIO,
 } from "@/lib/seguimiento/recontacto-plantilla";
@@ -40,6 +42,8 @@ import {
   configRecontactoPlantilla,
   enviadosHoyPorLinea,
   frenoDeLineaMeta,
+  recontactosHoyDelRubro,
+  reservarRecontacto,
   ultimoEntranteDe,
   yaRecibioRecontacto,
 } from "@/lib/seguimiento/recontacto-plantilla-servidor";
@@ -231,14 +235,28 @@ export async function runDueFollowups(
   const { calendar, error: calendarError } = await loadContactCalendar(now);
   if (calendarError) return { skipped: calendarError, results: [] };
 
-  const { data: tasks, error } = await supabase
-    .from("followup_tasks")
-    .select("*")
-    .in("status", ["programada", "pendiente"])
-    .lte("scheduled_at", now.toISOString())
-    .order("scheduled_at", { ascending: true })
-    .limit(opts.max ?? 5);
-  if (error) return { skipped: `No se pudieron leer las tareas: ${error.message}`, results: [] };
+  // 22/11: primero las «programada» (las que todavía no se intentaron) y con lo que sobre las «pendiente»
+  // (reintentos). Una tarea pendiente por un motivo del recontacto (calidad baja, tope, sin plantilla…) corre
+  // su hora 45 min cada vez, pero igual no tiene que tapar al resto: nunca ocupa el lugar de una programada.
+  const max = opts.max ?? 5;
+  const leer = (estado: "programada" | "pendiente", limite: number) =>
+    supabase
+      .from("followup_tasks")
+      .select("*")
+      .eq("status", estado)
+      .lte("scheduled_at", now.toISOString())
+      .order("scheduled_at", { ascending: true })
+      .limit(limite);
+  const programadas = await leer("programada", max);
+  if (programadas.error) return { skipped: `No se pudieron leer las tareas: ${programadas.error.message}`, results: [] };
+  const faltan = max - (programadas.data?.length ?? 0);
+  let pendientes: any[] = [];
+  if (faltan > 0) {
+    const r = await leer("pendiente", faltan);
+    if (r.error) return { skipped: `No se pudieron leer las tareas: ${r.error.message}`, results: [] };
+    pendientes = r.data ?? [];
+  }
+  const tasks = [...(programadas.data ?? []), ...pendientes];
 
   // Reloj de cada comprobación y del envío: el real; en las pruebas, el simulado.
   const clock = opts.clock ?? (opts.now ? () => opts.now as Date : () => new Date());
@@ -292,7 +310,7 @@ async function release(
   token: string,
   status: "programada" | "pendiente" | "conflicto",
   reason: string | null,
-  schedule: { at: Date; offsetHours: number } | null = null
+  schedule: { at: Date; offsetHours: number | null } | null = null
 ): Promise<boolean> {
   for (let i = 0; i < SAVE_RETRIES; i++) {
     const { data, error } = await supabase.rpc("followup_release", {
@@ -364,6 +382,15 @@ async function markPending(supabase: Db, task: any, reason: string, fields: Reco
       detail: { tarea: task.id, contacto: task.step },
     });
   }
+}
+
+/**
+ * 22/11: la tarea del recontacto que no sale ahora (calidad baja, tope diario, sin plantilla, lectura fallida,
+ * Wasender, fuera de horario) corre su hora a ahora + 45 min, con tope en la base + 75 h: sin esto quedaba
+ * siempre al frente de la lista de vencidas y trababa el seguimiento de los cuatro perfiles.
+ */
+function reintentoDelRecontacto(task: any, ahora: Date): { scheduled_at: string } {
+  return { scheduled_at: proximoIntento(ahora, new Date(task.base_at)).toISOString() };
 }
 
 /**
@@ -511,21 +538,40 @@ async function noInsistir(supabase: Db, task: any, motivo: string): Promise<Exec
 }
 
 /**
- * 22/11: el recontacto por plantilla no sale y no va a salir (pidió no recibir o ya lo recibió). La
- * tarea se cancela con su motivo y la oportunidad deja de recibir contactos automáticos («caído»).
+ * 22/11: el recontacto por plantilla no sale y no va a salir. La tarea se cancela con su motivo.
+ *  - `caer: true` (pidió no recibir): la oportunidad deja de recibir contactos automáticos («caído»).
+ *  - `caer: false` (ya recibió un recontacto en los últimos 30 días): la oportunidad NO pasa a «caído»; solo se
+ *    limpia el próximo contacto programado, para que no quede una fecha colgada de una tarea cancelada. Si la
+ *    persona no responde, la cierra el motor de caídos como siempre.
+ * `token`: si la tarea ya estaba reservada, se cierra con `followup_finish`.
  */
-async function cancelarRecontacto(supabase: Db, task: any, motivo: string): Promise<ExecResult> {
-  await updateTask(supabase, task.id, { status: "cancelada", status_reason: motivo });
-  await setOpportunityState({
-    opportunityId: task.opportunity_id,
-    dimension: "seguimiento",
-    field: "followup_state",
-    value: "caido",
-    actor: "sistema",
-    reason: motivo,
-    extra: { followup_reason: motivo, followup_next_at: null },
-    detail: { tarea: task.id, contacto: task.step, canal: CANAL_PLANTILLA_RECONTACTO },
-  });
+async function cancelarRecontacto(supabase: Db, task: any, motivo: string, opts: { caer: boolean; token?: string | null } = { caer: true }): Promise<ExecResult> {
+  if (opts.token) await finish(supabase, task.id, opts.token, "cancelada", motivo);
+  else await updateTask(supabase, task.id, { status: "cancelada", status_reason: motivo });
+  if (opts.caer) {
+    await setOpportunityState({
+      opportunityId: task.opportunity_id,
+      dimension: "seguimiento",
+      field: "followup_state",
+      value: "caido",
+      actor: "sistema",
+      reason: motivo,
+      extra: { followup_reason: motivo, followup_next_at: null },
+      detail: { tarea: task.id, contacto: task.step, canal: CANAL_PLANTILLA_RECONTACTO },
+    });
+  } else {
+    await (supabase.from("opportunities") as any)
+      .update({ followup_next_at: null, followup_reason: motivo, updated_at: new Date().toISOString() })
+      .eq("id", task.opportunity_id);
+    await logOpportunityEvent({
+      opportunityId: task.opportunity_id,
+      actor: "sistema",
+      dimension: "seguimiento",
+      to: "cancelado",
+      reason: motivo,
+      detail: { tarea: task.id, contacto: task.step, canal: CANAL_PLANTILLA_RECONTACTO },
+    });
+  }
   return { taskId: task.id, action: "cancelada", detail: motivo };
 }
 
@@ -706,7 +752,7 @@ async function processTask(supabase: Db, task: any, now: Date, calendar: Contact
     // PUNTO DE EXTENSIÓN (migración a Wasender): cuando el rubro tenga sus líneas de Wasender, el
     // recontacto sale por `processTaskWasender` en lugar de la plantilla. Todavía no está conectado:
     // la tarea queda pendiente con el motivo y no sale nada por Meta.
-    await markPending(supabase, task, TEXTO_WASENDER_PENDIENTE);
+    await markPending(supabase, task, TEXTO_WASENDER_PENDIENTE, reintentoDelRecontacto(task, clock()));
     return { taskId: id, action: "pendiente", detail: TEXTO_WASENDER_PENDIENTE };
   }
   const porRecontacto = canal.canal === "plantilla_recontacto";
@@ -718,12 +764,13 @@ async function processTask(supabase: Db, task: any, now: Date, calendar: Contact
   const check = await purposeTemplateCheck(line, [...purposes]);
   if (porRecontacto) {
     const ahoraRecontacto = clock();
-    const [yaRecibio, bloqueo, calidad, freno, enviadosHoy] = await Promise.all([
-      yaRecibioRecontacto(task.rubro_id, task.contact_id, id, supabase),
+    const [yaRecibio, bloqueo, calidad, freno, enviadosHoy, recontactosHoyRubro] = await Promise.all([
+      yaRecibioRecontacto(task.rubro_id, contact.phone, id, ahoraRecontacto, supabase),
       contactBlockReason(task.contact_id),
-      calidadDeLinea(line.id),
+      calidadDeLinea(line.id, ahoraRecontacto, supabase),
       frenoDeLineaMeta(line.id, ahoraRecontacto, supabase),
       line.daily_limit != null ? enviadosHoyPorLinea(line.id, ahoraRecontacto, supabase) : Promise.resolve(0),
+      recontactosHoyDelRubro(task.rubro_id, ahoraRecontacto, supabase),
     ]);
     const decision = decidirRecontacto({
       ahora: ahoraRecontacto,
@@ -736,19 +783,25 @@ async function processTask(supabase: Db, task: any, now: Date, calendar: Contact
       freno,
       limiteDiario: line.daily_limit,
       enviadosHoy,
+      maxDia: configRecontacto.maxDia,
+      recontactosHoyRubro,
     });
     if (!decision.salir) {
-      if (decision.destino === "esperar") return { taskId: id, action: "esperar", detail: decision.motivo };
+      if (decision.destino === "esperar") {
+        // Fuera de horario: se corre la hora para no quedar al frente de la lista (la franja la decide el calendario).
+        await updateTask(supabase, id, reintentoDelRecontacto(task, ahoraRecontacto));
+        return { taskId: id, action: "esperar", detail: decision.motivo };
+      }
       if (decision.destino === "pendiente") {
-        await markPending(supabase, task, decision.motivo, { line_id: line.id });
+        await markPending(supabase, task, decision.motivo, { line_id: line.id, ...reintentoDelRecontacto(task, ahoraRecontacto) });
         return { taskId: id, action: "pendiente", detail: decision.motivo };
       }
-      return cancelarRecontacto(supabase, task, decision.motivo);
+      return cancelarRecontacto(supabase, task, decision.motivo, { caer: decision.caer });
     }
   }
   if (!check.resolved) {
     const reason = `Falta configurar: ${check.missing.join("; ")}. El seguimiento queda pendiente.`;
-    await updateTask(supabase, id, { status: "pendiente", status_reason: reason, line_id: line.id });
+    await updateTask(supabase, id, { status: "pendiente", status_reason: reason, line_id: line.id, ...(porRecontacto ? reintentoDelRecontacto(task, clock()) : {}) });
     return { taskId: id, action: "pendiente", detail: reason };
   }
   const profile = await getProfile(task.rubro_id);
@@ -759,7 +812,7 @@ async function processTask(supabase: Db, task: any, now: Date, calendar: Contact
   });
   if (!built.ok) {
     const reason = `No se envía: falta ${built.missing.map((m) => `${m.label} para ${m.variable}`).join(", ")}. Queda pendiente.`;
-    await updateTask(supabase, id, { status: "pendiente", status_reason: reason, line_id: line.id, template_id: check.resolved.template.id });
+    await updateTask(supabase, id, { status: "pendiente", status_reason: reason, line_id: line.id, template_id: check.resolved.template.id, ...(porRecontacto ? reintentoDelRecontacto(task, clock()) : {}) });
     return { taskId: id, action: "pendiente", detail: reason };
   }
 
@@ -784,16 +837,20 @@ async function processTask(supabase: Db, task: any, now: Date, calendar: Contact
   if (claimed !== true) return { taskId: id, action: "ocupada" };
   await supabase.from("followup_tasks").update({ line_id: line.id, template_id: check.resolved.template.id }).eq("id", id);
   if (porRecontacto) {
-    // Marca de recontacto por plantilla (migración 0640). El índice único de la base no deja que una
-    // misma persona tenga dos recontactos enviados, enviándose o inciertos: si choca, no sale.
-    const { error: canalError } = await (supabase.from("followup_tasks") as any).update({ canal: CANAL_PLANTILLA_RECONTACTO }).eq("id", id).eq("claim_token", token);
-    if (canalError) {
-      if ((canalError as any).code === "23505") {
-        await finish(supabase, id, token, "cancelada", TEXTO_YA_RECIBIO);
-        return { taskId: id, action: "cancelada", detail: TEXTO_YA_RECIBIO };
-      }
-      const motivo = "No se pudo marcar el recontacto (¿falta aplicar la migración 0640?): no se envía y queda pendiente.";
-      await release(supabase, id, token, "pendiente", motivo);
+    // Candado en la base (migración 0640, RPC `followup_recontacto_reservar`): una sola reserva por teléfono
+    // normalizado a la vez; comprueba ahí adentro la ventana de 30 días y el tope diario del rubro, y deja la
+    // marca de canal y la clave de teléfono. Dos latidos simultáneos no pueden mandarle a la misma persona.
+    const reserva = await reservarRecontacto({ tarea: id, token, telefono: contact.phone, maxDia: configRecontacto.maxDia, ahora: clock() }, supabase);
+    if (reserva === "reserva_perdida") return { taskId: id, action: "ocupada" };
+    if (reserva === "ya_recibio") return cancelarRecontacto(supabase, task, TEXTO_YA_RECIBIO, { caer: false, token });
+    if (reserva === "tope_dia") {
+      const motivo = TEXTO_TOPE_DIA(configRecontacto.maxDia);
+      await release(supabase, id, token, "pendiente", motivo, { at: proximoIntento(clock(), new Date(task.base_at)), offsetHours: null });
+      return { taskId: id, action: "pendiente", detail: motivo };
+    }
+    if (reserva === "error") {
+      const motivo = "No se pudo reservar el recontacto (¿falta aplicar la migración 0640?): no se envía y queda pendiente.";
+      await release(supabase, id, token, "pendiente", motivo, { at: proximoIntento(clock(), new Date(task.base_at)), offsetHours: null });
       return { taskId: id, action: "pendiente", detail: motivo };
     }
   }

@@ -87,22 +87,35 @@ export const PRIORIDAD_POR_NIVEL: Record<NivelGravedad, number> = {
 };
 
 /** Lesiones de cuidado que no son de las tres graves (por la raíz, para no depender de tildes). */
-const LESION_DE_CUIDADO = /luxac|quemad|traumatism|herida|desgarr|hemorrag|hernia|neumot|conmoc|aplastam|politraum|secuela|medular|rotura|ruptura/i;
+const LESION_DE_CUIDADO = /luxac|quemad|traumatism|herida|desgarr|hemorrag|hernia|neumot|conmoc|aplastam|politraum|secuela|medular/i;
+/** «Rotura» o «ruptura» solo son una lesión si hablan de una parte del cuerpo («ruptura de contrato» no lo es). */
+const ROTURA = /rotura|ruptura/i;
+const PARTE_DEL_CUERPO =
+  /ligament|tend[oó]n|menisc|manguito|hueso|[oó]se[oa]|bazo|h[ií]gado|ri[ñn][oó]n|pulm[oó]n|t[ií]mpano|cr[aá]neo|brazo|antebrazo|pierna|mano|pie\b|rodilla|hombro|codo|mu[ñn]eca|tobillo|cadera|cuello|columna|costilla|cl[aá]vic|nariz|mand[ií]bula|\bojo|labio|muslo|dedo|vejiga|[uú]tero|aorta|arteria|diafragma|esf[ií]nter|ves[ií]cula|intestino|est[oó]mago|globo ocular|retina|cart[ií]lago|m[uú]sculo|f[eé]mur|t[ií]bia|peron[eé]|h[uú]mero|r[aá]dio|c[uú]bito|pelvis|v[eé]rtebra|disco/i;
 /** Lo «superficial» (traumatismo superficial, herida superficial) es leve aunque nombre una lesión. */
 const SUPERFICIAL = /superficial/i;
+/** «Sin lesiones» / «sin lesión» / «no presenta lesiones»: dice que no hay lesión, no es un diagnóstico leve. */
+const SIN_LESION = /\b(sin|ninguna?|no\s+(presenta|tiene|hubo|hay|registra))\s+(ninguna\s+)?lesi[oó]n(es)?\b/i;
+
+function hayLesionDeCuidado(texto: string): boolean {
+  return LESION_DE_CUIDADO.test(texto) || (ROTURA.test(texto) && PARTE_DEL_CUERPO.test(texto));
+}
 
 /**
  * Nivel de gravedad de una fila de Jurídico. Las tres graves salen de `gravedadDeFila`; si no, una
- * lesión de cuidado; si hay un diagnóstico cualquiera, leve; si no dice nada, sin lesión.
- * `diagnostico` es la columna de la lesión; `otros` (tipo de consulta, motivo) solo suben de nivel si
- * nombran una lesión: por sí solos no cuentan como diagnóstico.
+ * lesión de cuidado; si hay un diagnóstico cualquiera, leve; si no dice nada (o dice «sin lesiones»),
+ * sin lesión. `diagnostico` es la columna de la lesión; `otros` (tipo de consulta, motivo) solo suben
+ * de nivel si nombran una lesión: por sí solos no cuentan como diagnóstico.
  */
 export function nivelDeGravedad(diagnostico: string | null | undefined, ...otros: (string | null | undefined)[]): NivelGravedad {
   const grave = gravedadDeFila(diagnostico, ...otros);
   if (grave) return grave;
   const todo = [diagnostico, ...otros].filter((x): x is string => Boolean(x)).join(" ");
-  if (LESION_DE_CUIDADO.test(todo) && !SUPERFICIAL.test(todo)) return "lesion";
-  if ((diagnostico ?? "").trim() || LESION_DE_CUIDADO.test(todo)) return "lesion_leve";
+  const cuidado = hayLesionDeCuidado(todo);
+  if (cuidado && !SUPERFICIAL.test(todo)) return "lesion";
+  if (cuidado) return "lesion_leve";
+  const dx = (diagnostico ?? "").trim();
+  if (dx && !SIN_LESION.test(dx)) return "lesion_leve";
   return "sin_lesion";
 }
 
@@ -152,19 +165,37 @@ export function resumenPorGravedad(prioridades: Iterable<number>): Record<GrupoD
   return out;
 }
 
+export interface FuenteDeDiagnostico {
+  diagnostico?: string | null;
+  tipoDeConsulta?: string | null;
+}
+
+/**
+ * Prioridad más grave entre varias fuentes del mismo destinatario (la fila de la base con que se
+ * encoló y lo guardado en el contacto): si una fuente dice fractura y la otra está vacía, vale la
+ * fractura. Sin fuentes, la de «sin lesión anotada».
+ */
+export function prioridadMasGrave(fuentes: FuenteDeDiagnostico[]): number {
+  if (!fuentes.length) return PRIORIDAD_POR_NIVEL.sin_lesion;
+  return Math.min(...fuentes.map((f) => prioridadDeEnvio("juridico", f.diagnostico, f.tipoDeConsulta)));
+}
+
 /**
  * Cambios de prioridad para reordenar lo que falta enviar de una cola de Jurídico. Solo filas
  * pendientes y solo las que cambian: lo enviado, lo que se está enviando y lo que está a revisar
- * no se toca (reordenar nunca genera un reenvío). Devuelve prioridad nueva → ids.
+ * no se toca (reordenar nunca genera un reenvío). Una fila que ya estaba en prioridad grave (<= 0)
+ * nunca baja. Devuelve prioridad nueva → ids.
  */
 export function cambiosDePrioridad(
-  filas: { id: string; status: string; prioridad: number; diagnostico?: string | null; tipoDeConsulta?: string | null }[]
+  filas: { id: string; status: string; prioridad: number; diagnostico?: string | null; tipoDeConsulta?: string | null; fuentes?: FuenteDeDiagnostico[] }[]
 ): Map<number, string[]> {
   const out = new Map<number, string[]>();
   for (const f of filas) {
     if (f.status !== "pendiente") continue;
-    const nueva = prioridadDeEnvio("juridico", f.diagnostico, f.tipoDeConsulta);
+    const nueva = f.fuentes ? prioridadMasGrave(f.fuentes) : prioridadDeEnvio("juridico", f.diagnostico, f.tipoDeConsulta);
     if (nueva === f.prioridad) continue;
+    // Una fila que ya estaba en prioridad grave (<= 0) nunca baja: solo puede subir (p. ej. de 0 a fallecimiento).
+    if (f.prioridad <= 0 && nueva > f.prioridad) continue;
     out.set(nueva, [...(out.get(nueva) ?? []), f.id]);
   }
   return out;

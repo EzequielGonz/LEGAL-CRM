@@ -22,7 +22,7 @@ const art = (day: string, hh: number, mm = 0) => {
 const H = 3600 * 1000;
 const LUNES_10 = art("2026-11-23", 10);
 
-const ENCENDIDO = { activo: true, via: "meta_plantilla" as const };
+const ENCENDIDO = { activo: true, via: "meta_plantilla" as const, maxDia: 40 };
 
 const base = (over: Partial<DatosRecontacto> = {}): DatosRecontacto => ({
   ahora: LUNES_10,
@@ -33,6 +33,8 @@ const base = (over: Partial<DatosRecontacto> = {}): DatosRecontacto => ({
   freno: null,
   limiteDiario: 100,
   enviadosHoy: 10,
+  maxDia: 40,
+  recontactosHoyRubro: 3,
   ...over,
 });
 
@@ -52,7 +54,7 @@ test("22/11: dentro de la ventana, en el contacto 3 o con el rubro apagado, sigu
   assert.equal(dentro.canal, "como_hoy");
   const paso3 = canalDelContacto({ config: ENCENDIDO, paso: 3, ultimoEntranteAt: new Date(LUNES_10.getTime() - 72 * H), ahora: LUNES_10 });
   assert.equal(paso3.canal, "como_hoy");
-  const apagado = canalDelContacto({ config: { activo: false, via: "meta_plantilla" }, paso: 2, ultimoEntranteAt: null, ahora: LUNES_10 });
+  const apagado = canalDelContacto({ config: { activo: false, via: "meta_plantilla", maxDia: 40 }, paso: 2, ultimoEntranteAt: null, ahora: LUNES_10 });
   assert.equal(apagado.canal, "como_hoy");
 });
 
@@ -64,17 +66,17 @@ test("22/11: la ventana cierra justo a las 24 h del último mensaje de la person
 });
 
 test("22/11: punto de extensión de Wasender: con `via: wasender` no sale por plantilla de Meta", () => {
-  const c = canalDelContacto({ config: { activo: true, via: "wasender" }, paso: 2, ultimoEntranteAt: null, ahora: LUNES_10 });
+  const c = canalDelContacto({ config: { activo: true, via: "wasender", maxDia: 40 }, paso: 2, ultimoEntranteAt: null, ahora: LUNES_10 });
   assert.equal(c.canal, "wasender");
 });
 
 test("22/11: configuración por rubro: solo un `activo: true` explícito lo enciende", () => {
-  assert.deepEqual(configDelRubro(null, "juridico"), { activo: false, via: "meta_plantilla" });
-  assert.deepEqual(configDelRubro({}, "juridico"), { activo: false, via: "meta_plantilla" });
-  assert.deepEqual(configDelRubro({ juridico: { activo: "si" } }, "juridico"), { activo: false, via: "meta_plantilla" });
-  assert.deepEqual(configDelRubro({ juridico: { activo: true } }, "juridico"), { activo: true, via: "meta_plantilla" });
-  assert.deepEqual(configDelRubro({ juridico: { activo: true, via: "wasender" } }, "juridico"), { activo: true, via: "wasender" });
-  assert.deepEqual(configDelRubro({ juridico: true }, "juridico"), { activo: true, via: "meta_plantilla" });
+  assert.deepEqual(configDelRubro(null, "juridico"), { activo: false, via: "meta_plantilla", maxDia: 40 });
+  assert.deepEqual(configDelRubro({}, "juridico"), { activo: false, via: "meta_plantilla", maxDia: 40 });
+  assert.deepEqual(configDelRubro({ juridico: { activo: "si" } }, "juridico"), { activo: false, via: "meta_plantilla", maxDia: 40 });
+  assert.deepEqual(configDelRubro({ juridico: { activo: true } }, "juridico"), { activo: true, via: "meta_plantilla", maxDia: 40 });
+  assert.deepEqual(configDelRubro({ juridico: { activo: true, via: "wasender" } }, "juridico"), { activo: true, via: "wasender", maxDia: 40 });
+  assert.deepEqual(configDelRubro({ juridico: true }, "juridico"), { activo: true, via: "meta_plantilla", maxDia: 40 });
   // Rubros separados: encender uno no enciende otro.
   assert.equal(configDelRubro({ juridico: { activo: true } }, "marketing").activo, false);
 });
@@ -93,7 +95,7 @@ test("22/11: rubro sin plantilla de recontacto: no sale nada (queda pendiente)",
 });
 
 test("22/11: nunca dos veces: si ya lo recibió se cancela; si no se puede saber, no sale", () => {
-  assert.deepEqual(decidirRecontacto(base({ yaRecibio: true })), { salir: false, destino: "cancelar", motivo: TEXTO_YA_RECIBIO });
+  assert.deepEqual(decidirRecontacto(base({ yaRecibio: true })), { salir: false, destino: "cancelar", motivo: TEXTO_YA_RECIBIO, caer: false });
   const duda = decidirRecontacto(base({ yaRecibio: null }));
   assert.equal(duda.salir, false);
   assert.equal(duda.salir === false && duda.destino, "pendiente");
@@ -168,7 +170,7 @@ test("22/11: la migración 0640 es aditiva, repetible y deja la garantía de una
     .join("\n");
   assert.ok(!/\bdelete\s+from\b|\btruncate\b|\bdrop\s+table\b|\bdrop\s+column\b/i.test(codigo), "sin borrados");
   assert.match(codigo, /add column if not exists canal/);
-  assert.match(codigo, /create unique index if not exists followup_tasks_recontacto_una_vez/);
+  assert.match(codigo, /create unique index if not exists followup_tasks_recontacto_por_oportunidad/);
   assert.match(codigo, /'recontacto'/);
   assert.match(codigo, /on conflict \(key\) do nothing/);
   assert.match(codigo, /t\.status = 'APPROVED'/);

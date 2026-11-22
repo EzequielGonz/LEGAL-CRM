@@ -1,6 +1,6 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { detainedContactIds } from "@/lib/detention";
-import { cambiosDePrioridad, prioridadDeEnvio, resumenPorGravedad } from "@/lib/bases/gravedad";
+import { cambiosDePrioridad, prioridadDeEnvio, resumenPorGravedad, type FuenteDeDiagnostico } from "@/lib/bases/gravedad";
 import { computeCampaignPriority } from "@/lib/bases/priority";
 import { perfilDeArea } from "@/lib/navegacion";
 import { extractRowFields } from "@/lib/bases/mapping";
@@ -221,19 +221,41 @@ export async function reordenarPendientesPorGravedad(campaignId: string): Promis
     filas.push(...((data ?? []) as any[]));
     if (!data || data.length < PAGE) break;
   }
-  const datos = new Map<string, { diagnostico: string | null; tipo: string | null }>();
-  for (const part of chunk([...new Set(filas.map((f) => f.contact_id))], ID_CHUNK)) {
-    const { data } = await supabase.from("contacts").select("id, qualification_data").in("id", part);
+  // Fuentes del diagnóstico: las mismas con que se encoló. Una cola armada desde una base usó la fila de
+  // la base (`imported_base_rows.raw_data`); una armada desde una selección usó `contacts.qualification_data`.
+  // Se mira cada una y vale la más grave. Si cualquier lectura falla, se aborta sin tocar nada.
+  const contactIds = [...new Set(filas.map((f) => f.contact_id))];
+  const fuentes = new Map<string, FuenteDeDiagnostico[]>();
+  const agregar = (contactId: string, f: FuenteDeDiagnostico) => fuentes.set(contactId, [...(fuentes.get(contactId) ?? []), f]);
+  for (const part of chunk(contactIds, ID_CHUNK)) {
+    const { data, error } = await supabase.from("contacts").select("id, qualification_data").in("id", part);
+    if (error) throw new Error(`No se pudieron leer los contactos para reordenar la cola (no se cambió nada): ${error.message}`);
     for (const c of (data ?? []) as any[]) {
-      datos.set(c.id, { diagnostico: c.qualification_data?.diagnostico ?? null, tipo: c.qualification_data?.tipo_de_consulta ?? null });
+      agregar(c.id, { diagnostico: c.qualification_data?.diagnostico ?? null, tipoDeConsulta: c.qualification_data?.tipo_de_consulta ?? null });
     }
   }
-  const cambios = cambiosDePrioridad(
-    filas.map((f) => ({ id: f.id, status: f.status, prioridad: f.priority, diagnostico: datos.get(f.contact_id)?.diagnostico, tipoDeConsulta: datos.get(f.contact_id)?.tipo }))
-  );
+  const baseJuridico = new Map<string, boolean>();
+  for (const part of chunk(contactIds, ID_CHUNK)) {
+    const { data, error } = await supabase.from("imported_base_rows").select("contact_id, base_id, raw_data").in("contact_id", part);
+    if (error) throw new Error(`No se pudieron leer las filas de las bases para reordenar la cola (no se cambió nada): ${error.message}`);
+    const filasBase = (data ?? []) as any[];
+    const faltan = [...new Set(filasBase.map((r) => r.base_id as string))].filter((id) => !baseJuridico.has(id));
+    if (faltan.length) {
+      const { data: bases, error: errBases } = await supabase.from("imported_bases").select("id, area").in("id", faltan);
+      if (errBases) throw new Error(`No se pudieron leer las bases para reordenar la cola (no se cambió nada): ${errBases.message}`);
+      for (const b of (bases ?? []) as any[]) baseJuridico.set(b.id, esJuridico(b.area));
+      for (const id of faltan) if (!baseJuridico.has(id)) baseJuridico.set(id, false);
+    }
+    for (const r of filasBase) {
+      if (!r.contact_id || !baseJuridico.get(r.base_id)) continue;
+      const f = extractRowFields((r.raw_data ?? {}) as Record<string, unknown>);
+      agregar(r.contact_id, { diagnostico: f.diagnostico, tipoDeConsulta: f.tipo_de_consulta });
+    }
+  }
+  const cambios = cambiosDePrioridad(filas.map((f) => ({ id: f.id, status: f.status, prioridad: f.priority, fuentes: fuentes.get(f.contact_id) ?? [] })));
   let cambiados = 0;
   for (const [prioridad, ids] of cambios) {
-    for (const part of chunk(ids, 500)) {
+    for (const part of chunk(ids, ID_CHUNK)) {
       const { data, error } = await supabase.from("campaign_contacts").update({ priority: prioridad }).in("id", part).eq("status", "pendiente").select("id");
       if (error) throw new Error(`No se pudo reordenar la cola: ${error.message}`);
       cambiados += data?.length ?? 0;
