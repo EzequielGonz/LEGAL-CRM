@@ -4,7 +4,7 @@ import { requirePageSession } from "@/lib/acceso/pagina";
 import { ChatAsistenteGeneral, type AccesoAsistente } from "@/components/asistente/chat-asistente-general";
 import { ResumenSemana } from "@/components/asistente/resumen-semana";
 
-export const metadata = { title: "Asistente" };
+export const metadata = { title: "Jarvis" };
 export const dynamic = "force-dynamic";
 
 /**
@@ -30,8 +30,8 @@ export default async function AsistentePage() {
       <div className="mx-auto flex max-w-6xl flex-col gap-8">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h1 className="text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">Asistente general</h1>
-            <p className="mt-1 text-sm text-slate-600">Los cuatro perfiles en un solo lugar. Nada cambia hasta que confirmes.</p>
+            <h1 className="text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">Jarvis</h1>
+            <p className="mt-1 text-sm text-slate-600">Tu secretario de todo el panel: propone, vos confirmás</p>
           </div>
           <Link href="/perfiles" prefetch={false} className="inline-flex min-h-[44px] items-center rounded-lg border border-slate-300 bg-white px-4 text-sm font-medium text-slate-800 hover:bg-slate-100">
             Volver a Perfiles

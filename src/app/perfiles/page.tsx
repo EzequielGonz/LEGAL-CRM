@@ -3,9 +3,8 @@ import { EfectosVidrio } from "@/components/ui/efectos-vidrio";
 import { LogoutButton } from "@/components/acceso/logout-button";
 import { type MarcaTarjeta } from "@/components/perfiles/perfil-selector";
 import { SelectorPerfilesPC } from "@/components/perfiles/selector-pc";
-import { ConocimientoBot } from "@/components/perfiles/conocimiento-bot";
-import { AsistenteGeneral } from "@/components/asistente/asistente-general";
-import { EntradaCerebro } from "@/components/cerebro/entrada-cerebro";
+import { AccesosCentrales } from "@/components/perfiles/accesos-centrales";
+import "@/components/perfiles/accesos-centrales.css";
 import { SalaLampara } from "@/components/ui/lampara-dibujo";
 import { MarcaPanel } from "@/components/ui/marca-panel";
 import { leerRubrosActivos, loadPerfiles, type RubroRow } from "@/lib/perfiles-stats";
@@ -34,7 +33,6 @@ export default async function PerfilesPage() {
         SLUGS_PERFIL.map((s) => [s, { nombre: marcas[s].nombre, logo: marcas[s].origenLogo === "configuracion" ? marcas[s].logoPanel : null, acento: marcas[s].colores?.panel ?? null }])
       )
     : {};
-  const nombres = Object.fromEntries(rubros.map((p) => [p.slug, tarjetas[p.slug as SlugPerfil]?.nombre ?? p.name]));
 
   return (
     <div className="escena-oscura sala-perfil flex min-h-screen items-start justify-center px-4 py-12 sm:px-6">
@@ -46,8 +44,8 @@ export default async function PerfilesPage() {
             antes además se recargaba toda la página cada 30 s, lo que duplicaba las mismas lecturas. */}
         {/* 22/11: sin el cuadro «En vivo» (orden del 19/11: «sacarlo»). El componente sigue en
             src/components/perfiles/en-vivo-rubros.tsx por si se quiere volver a mostrar. */}
-        {/* 21/11: el cerebro del negocio, arriba de todo (pedido de los dueños). */}
-        <EntradaCerebro />
+        {/* 22/11: cuatro accesos iguales (Cerebro, Oficina, Laboratorio de bots, Jarvis) y «Resumen de todo» resaltado. */}
+        <AccesosCentrales />
         <div className="mb-10 text-center">
           <MarcaPanel className="sello-grande mx-auto mb-5" />
           <p className="d-kicker mb-3" style={{ color: "rgb(var(--c-gold-400))" }}>Panel central · cuatro perfiles</p>
@@ -57,10 +55,7 @@ export default async function PerfilesPage() {
         <Suspense fallback={<EsqueletoTarjetas cantidad={rubros.length} />}>
           <TarjetasPerfiles rubros={rubros} marcas={tarjetas} />
         </Suspense>
-        {/* 15/11: asistente general (los cuatro perfiles, sin entrar a cada uno). */}
-        <AsistenteGeneral />
-        {/* 25/10: versiones del conocimiento del bot (v1/v2) y su comparación con resultados reales. */}
-        <ConocimientoBot nombres={nombres} />
+        {/* 22/11: el asistente general vive en /asistente (Jarvis) y el laboratorio de bots en /laboratorio; nada se borró. */}
         <div className="mt-12 flex items-center justify-center gap-6 text-sm">
           <LogoutButton className="!text-slate-400 hover:!text-white" />
         </div>
