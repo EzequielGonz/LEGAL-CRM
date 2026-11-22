@@ -24,6 +24,7 @@ import {
 } from "@/lib/laboratorio/vista-simple";
 import { Confirmar, type PedidoConfirmacion } from "./confirmar";
 import { HistorialCambios, PublicarAgente, Simulador } from "./laboratorio-herramientas";
+import { CalidadDelRol, PruebaEnUnToque, TableroPerfiles } from "./laboratorio-tablero";
 import "./laboratorio.css";
 
 /**
@@ -63,6 +64,7 @@ export function LaboratorioSimple({ nombres }: { nombres: Record<string, string>
   const [error, setError] = useState<string | null>(null);
   const [pedido, setPedido] = useState<PedidoConfirmacion | null>(null);
   const [cambios, setCambios] = useState(0);
+  const [precarga, setPrecarga] = useState<{ texto: string; n: number } | null>(null);
   const idBase = useId();
   const mensajeRef = useRef<HTMLDivElement>(null);
 
@@ -87,6 +89,7 @@ export function LaboratorioSimple({ nombres }: { nombres: Record<string, string>
 
   function elegir(p: SlugPerfil) {
     setPerfil(p);
+    setPrecarga(null);
     setOk(null);
     setError(null);
     try { localStorage.setItem("laboratorio-simple-perfil", p); } catch { /* nada */ }
@@ -118,6 +121,7 @@ export function LaboratorioSimple({ nombres }: { nombres: Record<string, string>
 
   return (
     <div className="lab space-y-5">
+      <TableroPerfiles nombres={nombres} roles={biblio?.roles ?? []} cargandoRoles={!biblio && !errorCarga} />
       <ul role="tablist" aria-label="Perfil" className="lab-pestanas">
         {SLUGS_PERFIL.map((p, i) => (
           <li key={p}>
@@ -145,6 +149,16 @@ export function LaboratorioSimple({ nombres }: { nombres: Record<string, string>
 
       <div role="tabpanel" id={`${idBase}-panel`} aria-labelledby={`${idBase}-tab-${perfil}`} className={`space-y-5 ${CLASE[perfil]}`}>
         {errorCarga && <p role="alert" className="lab-msg lab-msg-error">{errorCarga}</p>}
+        <PruebaEnUnToque
+          key={`u-${perfil}`}
+          perfil={perfil}
+          nombre={nombre}
+          alProbar={(texto) => {
+            setPrecarga((x) => ({ texto, n: (x?.n ?? 0) + 1 }));
+            setTimeout(() => document.getElementById(`${idBase}-simulador`)?.scrollIntoView({ behavior: "smooth", block: "center" }), 0);
+          }}
+        />
+        <CalidadDelRol key={`q-${perfil}`} perfil={perfil} nombre={nombre} roles={roles} />
         <ComoAnda key={`a-${perfil}`} perfil={perfil} nombre={nombre} s={s} cargando={!stats && !errorCarga} />
         <Roles
           key={`r-${perfil}`}
@@ -155,7 +169,7 @@ export function LaboratorioSimple({ nombres }: { nombres: Record<string, string>
           cargando={!biblio && !errorCarga}
           pedir={setPedido}
         />
-        <Simulador key={`s-${perfil}`} perfil={perfil} nombre={nombre} roles={roles} />
+        <div id={`${idBase}-simulador`}><Simulador key={`s-${perfil}`} perfil={perfil} nombre={nombre} roles={roles} precarga={precarga} /></div>
         <Ficha key={`f-${perfil}`} perfil={perfil} nombre={nombre} pedir={setPedido} />
         <PublicarAgente key={`p-${perfil}`} perfil={perfil} nombre={nombre} pedirConfirmacion={setPedido} />
         <HistorialCambios perfil={perfil} nombre={nombre} version={cambios} />
