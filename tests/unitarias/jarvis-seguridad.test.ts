@@ -95,3 +95,20 @@ test("el gasto de Jarvis se registra como el resto de la IA del panel y el texto
   assert.match(motor, /bloqueJarvis\(\{ pantalla: opciones\.pantalla, ruta: opciones\.ruta, perfilNombre: nombre \}\)/);
   assert.match(motor, /armarContenidos\(mensajes, imagenes, \[\]\)/);
 });
+
+test("corrección del dueño: la estética de Jarvis es la clásica del panel, sin gradient mesh ni esferas de color ni fuentes ajenas", () => {
+  const css = readFileSync(join(__dirname, "../../src/components/jarvis/jarvis.css"), "utf8");
+  const sinComentarios = css.replace(/\/\*[\s\S]*?\*\//g, "");
+  for (const rastro of ["jv-mesh", "jv-mancha", "jv-violeta", "jv-magenta", "jv-turquesa", "jv-esfera", "jv-halo"]) assert.ok(!sinComentarios.includes(rastro), `no debe quedar ${rastro}`);
+  // Colores y tipografía del panel: escalas del perfil y Inter Tight (--font-sans).
+  assert.match(sinComentarios, /--c-slate-900/);
+  assert.match(sinComentarios, /--c-gold-500/);
+  assert.match(sinComentarios, /var\(--font-sans\)/);
+  assert.ok(!/Geist|Instrument/.test(sinComentarios));
+  // El vidrio (blur) va solo en la hoja de Jarvis.
+  const conBlur = sinComentarios.split("}").filter((b) => /backdrop-filter/.test(b)).map((b) => b.split("{")[0].trim());
+  assert.ok(conBlur.every((sel) => /^\.jv-hoja$|^@supports/.test(sel) || sel.includes(".jv-hoja")), `blur solo en la hoja: ${conBlur.join(" | ")}`);
+  assert.ok(!existsSync(join(__dirname, "../../src/components/jarvis/fuentes.ts")));
+  // Con «reducir movimiento» nada se anima.
+  assert.match(css, /prefers-reduced-motion/);
+});

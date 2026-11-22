@@ -6,9 +6,6 @@ import type { Propuesta } from "@/components/asistente/asistente-panel";
 import { JvAnillo } from "@/components/jarvis/jv-anillo";
 import { JvConfirmar } from "@/components/jarvis/jv-confirmar";
 
-/** Un color por anillo (violeta, magenta y turquesa de la paleta de Jarvis). */
-const COLOR_ANILLO: Record<string, string> = { captados: "#a99bff", chats: "#ff7cc3", tareas: "#4fe3d0" };
-
 interface Props {
   parte: ParteDelDia;
   pendientes: Propuesta[];
@@ -39,8 +36,8 @@ export function JvParte({ parte, pendientes, otrasEnAsistente, alCerrar, alPedir
       </div>
 
       {parte.anillos.map((a) => (
-        <div key={a.clave} className={`jv-baldosa jv-baldosa-anillo jv-tinte-${a.clave}`}>
-          <JvAnillo valor={a.valor} meta={a.meta} etiqueta={a.etiqueta} nota={a.nota} color={COLOR_ANILLO[a.clave]} />
+        <div key={a.clave} className={`jv-baldosa jv-baldosa-anillo`}>
+          <JvAnillo valor={a.valor} meta={a.meta} etiqueta={a.etiqueta} nota={a.nota} />
           <p className="jv-anillo-etiqueta">{a.etiqueta}</p>
           <p className="jv-anillo-nota">{a.nota}</p>
         </div>

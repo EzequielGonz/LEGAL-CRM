@@ -15,13 +15,11 @@ interface Props {
   meta: number;
   etiqueta: string;
   nota?: string;
-  /** Color del arco (CSS). */
-  color: string;
   tamano?: number;
   grosor?: number;
 }
 
-export function JvAnillo({ valor, meta, etiqueta, nota, color, tamano = 76, grosor = 7 }: Props) {
+export function JvAnillo({ valor, meta, etiqueta, nota, tamano = 76, grosor = 7 }: Props) {
   const r = (tamano - grosor) / 2;
   const circ = 2 * Math.PI * r;
   const objetivo = proporcionAnillo(valor, meta);
@@ -61,6 +59,7 @@ export function JvAnillo({ valor, meta, etiqueta, nota, color, tamano = 76, gros
   return (
     <div className="jv-anillo" role="img" aria-label={`${etiqueta}: ${valor}${meta > 0 ? ` de ${meta}` : ""}`}>
       <svg width={tamano} height={tamano} viewBox={`0 0 ${tamano} ${tamano}`} aria-hidden="true" focusable="false">
+        <circle className="jv-anillo-relieve" cx={tamano / 2} cy={tamano / 2} r={r} fill="none" strokeWidth={grosor + 2} />
         <circle className="jv-anillo-pista" cx={tamano / 2} cy={tamano / 2} r={r} fill="none" strokeWidth={grosor} />
         <circle
           className="jv-anillo-arco"
@@ -70,11 +69,9 @@ export function JvAnillo({ valor, meta, etiqueta, nota, color, tamano = 76, gros
           fill="none"
           strokeWidth={grosor}
           strokeLinecap="round"
-          stroke={color}
           strokeDasharray={circ}
           strokeDashoffset={circ * (1 - prop)}
           transform={`rotate(-90 ${tamano / 2} ${tamano / 2})`}
-          style={{ filter: `drop-shadow(0 0 6px ${color})` }}
         />
       </svg>
       <span className="jv-anillo-cifra" aria-hidden="true">
