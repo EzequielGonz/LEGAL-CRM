@@ -13,7 +13,8 @@
 
 /* ------------------------------------------------------- tokens (claro) */
 .jv-hoja,
-.jv-orbe {
+.jv-orbe,
+.jv-pagina {
   --jv-acento: rgb(var(--c-gold-500));
   --jv-arco: rgb(var(--c-gold-700));
   --jv-hoja-fondo: rgb(255 255 255 / 0.9);
@@ -34,7 +35,8 @@
 /* En oscuro el tema invierte la escala slate (slate-50 ≈ negro, slate-950 ≈ blanco): por eso
    la hoja usa slate-100 de fondo y slate-950 de texto. Ratios AA medidos en la revisión del 22/11. */
 html[data-modo="oscuro"] .jv-hoja,
-html[data-modo="oscuro"] .jv-orbe {
+html[data-modo="oscuro"] .jv-orbe,
+html[data-modo="oscuro"] .jv-pagina {
   --jv-arco: rgb(var(--c-gold-600));
   --jv-hoja-fondo: rgb(var(--c-slate-100) / 0.94);
   --jv-texto: rgb(var(--c-slate-950));
@@ -308,3 +310,60 @@ html[data-modo="oscuro"] .jv-estado-error { color: #fca5a5; }
   .jv-hoja { background: rgb(var(--c-slate-50)); }
   html[data-modo="oscuro"] .jv-hoja { background: rgb(var(--c-slate-100)); }
 }
+
+/* ==========================================================================
+   Jarvis en su pantalla propia (/asistente, 22/11). Mismos tokens y piezas que
+   la hoja lateral: cabeza con orbe, burbujas, «¿Lo hago?» y chips; arriba, la
+   semana de los cuatro perfiles con anillos y barras (aditivo: no toca la hoja).
+   ========================================================================== */
+.jv-pagina { color: var(--jv-texto); }
+.jv-pagina :focus-visible { outline: 3px solid var(--jv-foco); outline-offset: 2px; }
+.jv-pagina-cabeza { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }
+.jv-pagina-cabeza .jv-orbe-mini { width: 2.75rem; height: 2.75rem; }
+.jv-pagina-cabeza .jv-orbe-icono-mini { width: 1.4rem; height: 1.4rem; }
+.jv-pagina-cabeza .jv-cabeza-texto { flex: 1 1 14rem; }
+.jv-pagina-titulo { margin: 0; font-size: 1.6rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1.15; }
+.jv-pagina-sub { margin: 0.1rem 0 0; font-size: 0.9rem; color: var(--jv-texto-2); }
+.jv-pagina-volver { text-decoration: none; }
+
+/* Panel de la charla: la misma hoja, pero en la página (sin vidrio). */
+.jv-panel {
+  overflow: hidden; border-radius: 1.5rem; color: var(--jv-texto);
+  background: var(--jv-hoja-fondo); border: 1px solid var(--jv-borde);
+  box-shadow: var(--jv-sombra-hoja), var(--jv-relieve);
+}
+html[data-modo="oscuro"] .jv-panel { background: rgb(var(--c-slate-100)); }
+.jv-panel .jv-cuerpo { padding-top: 0.5rem; }
+.jv-panel .jv-form { align-items: flex-end; }
+.jv-panel .jv-sugerencias { flex-wrap: wrap; overflow: visible; }
+
+/* La semana */
+.jv-semana-titulo { margin: 0; font-size: 1.05rem; font-weight: 600; letter-spacing: -0.01em; }
+.jv-semana-sub { margin: 0.15rem 0 0; font-size: 0.85rem; color: var(--jv-texto-2); }
+.jv-semana-total { list-style: none; margin: 0.75rem 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem; }
+@media (min-width: 640px) { .jv-semana-total { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.jv-semana-grilla { list-style: none; margin: 0.75rem 0 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.75rem; }
+@media (min-width: 640px) { .jv-semana-grilla { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1280px) { .jv-semana-grilla { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.jv-dato { border-radius: 1rem; padding: 0.75rem 0.9rem; background: var(--jv-baldosa); border: 1px solid var(--jv-borde); box-shadow: var(--jv-sombra-baldosa), var(--jv-relieve); min-width: 0; }
+.jv-dato-n { margin: 0.1rem 0 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem; font-size: 1.7rem; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.jv-dato-t { margin: 0; font-size: 0.8rem; font-weight: 500; color: var(--jv-texto-2); }
+.jv-flecha { font-size: 0.8rem; font-weight: 600; color: var(--jv-texto-2); }
+.jv-flecha-sube { color: rgb(21 128 61); }
+.jv-flecha-baja { color: rgb(180 83 9); }
+html[data-modo="oscuro"] .jv-flecha-sube { color: #86efac; }
+html[data-modo="oscuro"] .jv-flecha-baja { color: #fcd34d; }
+.jv-perfil { border-radius: 1.1rem; padding: 0.9rem; background: var(--jv-baldosa); border: 1px solid var(--jv-borde); box-shadow: var(--jv-sombra-baldosa), var(--jv-relieve); display: flex; flex-direction: column; gap: 0.7rem; min-width: 0; }
+.jv-perfil-nombre { margin: 0; font-size: 0.95rem; font-weight: 600; letter-spacing: -0.01em; }
+.jv-anillos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.25rem; justify-items: center; }
+.jv-anillo-col { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0.2rem; min-width: 0; }
+.jv-anillo-col .jv-anillo-etiqueta { margin: 0; font-size: 0.75rem; }
+.jv-barras { display: grid; gap: 0.35rem; margin: 0; padding: 0; list-style: none; }
+.jv-barra { display: grid; grid-template-columns: 6.2rem minmax(0, 1fr) auto; align-items: center; gap: 0.5rem; font-size: 0.75rem; color: var(--jv-texto-2); }
+.jv-barra-carril { height: 0.6rem; border-radius: 9999px; background: rgb(var(--c-slate-500) / 0.2); overflow: hidden; box-shadow: inset 0 1px 2px rgb(var(--c-slate-900) / 0.15); }
+.jv-barra-relleno { display: block; height: 100%; border-radius: 9999px; background: var(--jv-arco); transform-origin: left; }
+.jv-barra-relleno-ant { background: rgb(var(--c-slate-500) / 0.55); }
+@media (prefers-reduced-motion: no-preference) { .jv-barra-relleno { animation: jv-barra 700ms var(--jv-ease) both; } }
+@keyframes jv-barra { from { transform: scaleX(0); } to { transform: none; } }
+.jv-barra-n { font-weight: 600; font-variant-numeric: tabular-nums; color: var(--jv-texto); min-width: 2rem; text-align: right; }
+.jv-perfil-pie { margin: 0; font-size: 0.75rem; color: var(--jv-texto-3); }
