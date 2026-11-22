@@ -25,6 +25,24 @@ import { prepararEnvioWasender, textoDePlantilla } from "@/lib/seguimiento/wasen
 import { consultarCriterio } from "@/lib/seguimiento/criterio-servidor";
 import { motivoNoInsistir } from "@/lib/seguimiento/criterio";
 import { frenaPorTope, TEXTO_TOPE } from "@/lib/contacto/tope";
+import { contactBlockReason } from "@/lib/detention";
+import { perfilDeArea } from "@/lib/navegacion";
+import {
+  canalDelContacto,
+  CANAL_PLANTILLA_RECONTACTO,
+  decidirRecontacto,
+  PROPOSITO_RECONTACTO,
+  TEXTO_WASENDER_PENDIENTE,
+  TEXTO_YA_RECIBIO,
+} from "@/lib/seguimiento/recontacto-plantilla";
+import {
+  calidadDeLinea,
+  configRecontactoPlantilla,
+  enviadosHoyPorLinea,
+  frenoDeLineaMeta,
+  ultimoEntranteDe,
+  yaRecibioRecontacto,
+} from "@/lib/seguimiento/recontacto-plantilla-servidor";
 
 /**
  * Etapa 2 · Bloque 2.3 — Motor del seguimiento general (cuatro perfiles).
@@ -493,6 +511,25 @@ async function noInsistir(supabase: Db, task: any, motivo: string): Promise<Exec
 }
 
 /**
+ * 22/11: el recontacto por plantilla no sale y no va a salir (pidió no recibir o ya lo recibió). La
+ * tarea se cancela con su motivo y la oportunidad deja de recibir contactos automáticos («caído»).
+ */
+async function cancelarRecontacto(supabase: Db, task: any, motivo: string): Promise<ExecResult> {
+  await updateTask(supabase, task.id, { status: "cancelada", status_reason: motivo });
+  await setOpportunityState({
+    opportunityId: task.opportunity_id,
+    dimension: "seguimiento",
+    field: "followup_state",
+    value: "caido",
+    actor: "sistema",
+    reason: motivo,
+    extra: { followup_reason: motivo, followup_next_at: null },
+    detail: { tarea: task.id, contacto: task.step, canal: CANAL_PLANTILLA_RECONTACTO },
+  });
+  return { taskId: task.id, action: "cancelada", detail: motivo };
+}
+
+/**
  * Contacto de seguimiento por Wasender (12/11). Mismos pasos que por Meta:
  * preparar, volver a mirar la hora, reservar, compuerta, última comprobación,
  * enviar y registrar. Un resultado incierto queda a revisar y nunca se reenvía solo.
@@ -656,8 +693,59 @@ async function processTask(supabase: Db, task: any, now: Date, calendar: Contact
     return { taskId: id, action: "pendiente", detail: lineCheck.reason };
   }
   const line = lineCheck.line;
-  const purposes = task.step === 3 ? (["seguimiento_3", "seguimiento"] as const) : (["seguimiento"] as const);
+
+  // 22/11: recontacto de las 72 h por plantilla de Meta. Fuera de la ventana de 24 h el contacto 2
+  // sale con la plantilla de recontacto del rubro (y si no hay, no sale nada). Con el rubro apagado,
+  // en el contacto 3 o con la ventana abierta, todo sigue como antes.
+  const perfil = perfilDeArea((conversation as any).area);
+  const configRecontacto = await configRecontactoPlantilla(perfil, supabase);
+  const canal = configRecontacto.activo
+    ? canalDelContacto({ config: configRecontacto, paso: task.step, ultimoEntranteAt: await ultimoEntranteDe(task.conversation_id, supabase), ahora: clock() })
+    : ({ canal: "como_hoy", motivo: "apagado" } as const);
+  if (canal.canal === "wasender") {
+    // PUNTO DE EXTENSIÓN (migración a Wasender): cuando el rubro tenga sus líneas de Wasender, el
+    // recontacto sale por `processTaskWasender` en lugar de la plantilla. Todavía no está conectado:
+    // la tarea queda pendiente con el motivo y no sale nada por Meta.
+    await markPending(supabase, task, TEXTO_WASENDER_PENDIENTE);
+    return { taskId: id, action: "pendiente", detail: TEXTO_WASENDER_PENDIENTE };
+  }
+  const porRecontacto = canal.canal === "plantilla_recontacto";
+  const purposes = porRecontacto
+    ? ([PROPOSITO_RECONTACTO] as const)
+    : task.step === 3
+    ? (["seguimiento_3", "seguimiento"] as const)
+    : (["seguimiento"] as const);
   const check = await purposeTemplateCheck(line, [...purposes]);
+  if (porRecontacto) {
+    const ahoraRecontacto = clock();
+    const [yaRecibio, bloqueo, calidad, freno, enviadosHoy] = await Promise.all([
+      yaRecibioRecontacto(task.rubro_id, task.contact_id, id, supabase),
+      contactBlockReason(task.contact_id),
+      calidadDeLinea(line.id),
+      frenoDeLineaMeta(line.id, ahoraRecontacto, supabase),
+      line.daily_limit != null ? enviadosHoyPorLinea(line.id, ahoraRecontacto, supabase) : Promise.resolve(0),
+    ]);
+    const decision = decidirRecontacto({
+      ahora: ahoraRecontacto,
+      calendar,
+      hayPlantilla: !!check.resolved,
+      yaRecibio,
+      baja: bloqueo?.detentionId ? bloqueo.label : null,
+      bajaSinComprobar: !!bloqueo && !bloqueo.detentionId,
+      calidadLinea: calidad,
+      freno,
+      limiteDiario: line.daily_limit,
+      enviadosHoy,
+    });
+    if (!decision.salir) {
+      if (decision.destino === "esperar") return { taskId: id, action: "esperar", detail: decision.motivo };
+      if (decision.destino === "pendiente") {
+        await markPending(supabase, task, decision.motivo, { line_id: line.id });
+        return { taskId: id, action: "pendiente", detail: decision.motivo };
+      }
+      return cancelarRecontacto(supabase, task, decision.motivo);
+    }
+  }
   if (!check.resolved) {
     const reason = `Falta configurar: ${check.missing.join("; ")}. El seguimiento queda pendiente.`;
     await updateTask(supabase, id, { status: "pendiente", status_reason: reason, line_id: line.id });
@@ -695,6 +783,20 @@ async function processTask(supabase: Db, task: any, now: Date, calendar: Contact
   const { data: claimed } = await supabase.rpc("followup_claim", { p_task: id, p_token: token });
   if (claimed !== true) return { taskId: id, action: "ocupada" };
   await supabase.from("followup_tasks").update({ line_id: line.id, template_id: check.resolved.template.id }).eq("id", id);
+  if (porRecontacto) {
+    // Marca de recontacto por plantilla (migración 0640). El índice único de la base no deja que una
+    // misma persona tenga dos recontactos enviados, enviándose o inciertos: si choca, no sale.
+    const { error: canalError } = await (supabase.from("followup_tasks") as any).update({ canal: CANAL_PLANTILLA_RECONTACTO }).eq("id", id).eq("claim_token", token);
+    if (canalError) {
+      if ((canalError as any).code === "23505") {
+        await finish(supabase, id, token, "cancelada", TEXTO_YA_RECIBIO);
+        return { taskId: id, action: "cancelada", detail: TEXTO_YA_RECIBIO };
+      }
+      const motivo = "No se pudo marcar el recontacto (¿falta aplicar la migración 0640?): no se envía y queda pendiente.";
+      await release(supabase, id, token, "pendiente", motivo);
+      return { taskId: id, action: "pendiente", detail: motivo };
+    }
+  }
 
   // Compuerta en la base inmediatamente antes de enviar.
   const frenada = await pasarCompuerta(supabase, task, token);
@@ -771,7 +873,13 @@ async function processTask(supabase: Db, task: any, now: Date, calendar: Contact
         delivery_status: "enviado",
         delivery_status_at: sentAt,
         created_at: sentAt,
-        metadata: { automatico: "seguimiento", followup_task_id: id, followup_step: task.step, plantilla: template.name },
+        metadata: {
+          automatico: "seguimiento",
+          followup_task_id: id,
+          followup_step: task.step,
+          plantilla: template.name,
+          ...(porRecontacto ? { recontacto_plantilla: true, canal: CANAL_PLANTILLA_RECONTACTO } : {}),
+        },
         origin: "seguimiento",
       }, { select: "id" });
     messageId = msg?.id ?? null;

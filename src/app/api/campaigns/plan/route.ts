@@ -60,7 +60,7 @@ export async function POST(request: Request) {
       filasSinContacto = bc.filasSinContacto;
     } else {
       ids = contact_ids as string[];
-      priority = await contactPriorities(ids);
+      priority = await contactPriorities(ids, campaign?.area ?? null);
     }
     const plan = await planRecipients(ids, {
       campaignId: campaign?.id ?? null,

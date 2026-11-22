@@ -20,6 +20,7 @@ import { cortarTanda, elegirTextoAlAzar, esperaParaRepartir, estadoDelPlan, fech
 import { enviarPorWasender } from "@/lib/wasender/envio";
 import { frenaPorTope, TEXTO_TOPE } from "@/lib/contacto/tope";
 import { frenoRespuestaSalteado, PREFIJO_FRENO_RESPUESTA } from "@/lib/wasender/ritmo";
+import { reordenarPendientesPorGravedad } from "@/lib/campaign-recipients";
 
 // El horario vive en src/lib/horario.ts (sin dependencias, se prueba solo); se
 // sigue exportando desde acá para quien ya lo importaba de este archivo.
@@ -794,6 +795,15 @@ export async function launchCampaign(campaignId: string): Promise<TickResult> {
   // Estado real de la plantilla en Meta en el momento de lanzar (pregunta 22).
   const live = await confirmTemplateLive(readiness.template.template.id, readiness.line);
   if (!live.ok) throw new CampaignNotReadyError([live.message ?? "No se pudo confirmar la plantilla en Meta"]);
+  }
+
+  // 22/11: en Jurídico, al lanzar o reanudar, lo que falta enviar se ordena por gravedad (los más
+  // graves primero). Solo cambia la prioridad de los pendientes: nunca reenvía ni duplica. Si no se
+  // puede reordenar, la campaña sale igual con el orden que ya tenía.
+  try {
+    await reordenarPendientesPorGravedad(campaignId);
+  } catch (err: any) {
+    console.error(`[campañas] no se pudo reordenar por gravedad ${campaignId}:`, err?.message ?? err);
   }
 
   await supabase
