@@ -6,6 +6,7 @@ import { SelectorPerfilesPC } from "@/components/perfiles/selector-pc";
 import { EnVivoRubros } from "@/components/perfiles/en-vivo-rubros";
 import { ConocimientoBot } from "@/components/perfiles/conocimiento-bot";
 import { AsistenteGeneral } from "@/components/asistente/asistente-general";
+import { EntradaCerebro } from "@/components/cerebro/entrada-cerebro";
 import { SalaLampara } from "@/components/ui/lampara-dibujo";
 import { MarcaPanel } from "@/components/ui/marca-panel";
 import { leerRubrosActivos, loadPerfiles, type RubroRow } from "@/lib/perfiles-stats";
@@ -46,6 +47,8 @@ export default async function PerfilesPage() {
             antes además se recargaba toda la página cada 30 s, lo que duplicaba las mismas lecturas. */}
         {/* 24/10: seguimiento en vivo de los cuatro rubros (esquina superior en la computadora). */}
         <EnVivoRubros nombres={nombres} />
+        {/* 21/11: el cerebro del negocio, arriba de todo (pedido de los dueños). */}
+        <EntradaCerebro />
         <div className="mb-10 text-center">
           <MarcaPanel className="sello-grande mx-auto mb-5" />
           <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">¿Con qué perfil trabajás?</h1>
