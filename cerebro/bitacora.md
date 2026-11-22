@@ -137,3 +137,14 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
   - Claro: dorado 600/700 en arcos e íconos; pista del anillo sin sombra negra. Oficina: sin blur sobre el canvas.
 - **Verificado:** typecheck, 824 pruebas, build; humo con sesión en 10 pantallas a 1440 y 390 en Preview y en producción: todo 200, sin desborde, consola limpia, Jarvis presente, canvas 3D en /cerebro, sin fondo mesh.
 - **Queda para otra vuelta (no bloquea):** unificar los 3 CSS de mapeo (`.pp`, `.cc`, `.pm-clasico`); sacar de `premium.css` el mesh que ya no se monta; Cerebro todavía largo (11 pestañas detrás de «Ver más»); textos técnicos en Salud («Meta», «Wasender»); conteo «Responder a N» de Hoy mezcla posibles captaciones; Jarvis carga su hoja completa en todas las pantallas (cargar perezosa); probar la Oficina 3D en un celular real; lector de pantalla a mano.
+
+## 22/11 · Tercera vuelta publicada (main 98b2bb6+)
+- Jarvis puede hacer TODO con confirmación (ver `02`); lo que envía o publica pide confirmación reforzada o código.
+- `/asistente` (Jarvis general): mismo aspecto que el Jarvis del panel, gráficos de la semana (anillos y barras por perfil), chips de pedidos y `?pedido=` precargado.
+- `/laboratorio`: pestañas por rubro, «Cómo anda el bot» en anillos y lenguaje simple, roles por rubro (crear con plantillas, pedir mejora, archivar, usar en campaña) y ficha del negocio, todo con confirmación. Lo técnico quedó detrás de «Ver más». Falta: publicar agentes de la biblioteca (pide PIN).
+- `/cerebro`: «Lo que el cerebro recomienda hoy» (botón Hacerlo → Jarvis), «Reglas vigentes» con proponer cambio a la Bandeja.
+- `/resumen`: anillo total, comparación semanal, «Pedile a Jarvis que lo haga» por fila, propuestas por confirmar.
+- Humo en producción con sesión a 1440 y 390: 6 pantallas 200, consola limpia.
+
+## 22/11 · Cuarta vuelta
+- Oficina 3D por sectores, Jarvis con `consultar_cerebro`, Graphify en los 5 repos y en el entorno, propuesta de granja de teléfonos. Recorrido real: Resumen, Contactos y Citas casi sin acciones (ver `traspaso-sesion-2026-11-22-d.md`).
