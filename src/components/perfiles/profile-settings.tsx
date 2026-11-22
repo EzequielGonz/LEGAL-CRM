@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { rotuloAreaDeLinea } from "@/lib/definiciones/lineas";
 import type { InformeLinea } from "@/lib/whatsapp/estado-linea";
 import { VerificarNumero } from "@/components/perfiles/verificar-numero";
 
@@ -167,7 +168,7 @@ export function ProfileSettings({
             <li key={l.id} className={`flex flex-col gap-2 p-3 text-sm sm:flex-row sm:items-center sm:justify-between ${l.active ? "" : "opacity-60"}`}>
               <div>
                 <p className="font-medium text-slate-800">
-                  {l.label} <span className="text-xs font-normal text-slate-500">· {AREA_LABEL[l.area] ?? l.area}{l.phone_display ? ` · ${l.phone_display}` : ""}</span>
+                  {l.label} <span className="text-xs font-normal text-slate-500">· {rotuloAreaDeLinea(l as any)}{l.phone_display ? ` · ${l.phone_display}` : ""}</span>
                 </p>
                 <p className="text-xs text-slate-600">
                   Variables {l.credential_key}_* ·{" "}
