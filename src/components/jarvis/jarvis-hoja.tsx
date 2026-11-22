@@ -252,7 +252,7 @@ export function JarvisHoja({ slug, nombrePerfil, ruta, pedido, datosParte, alCer
       <div ref={dialogoRef} role="dialog" aria-modal="true" aria-labelledby="jv-modo-titulo" tabIndex={-1} data-asistente="" className="jv-modo">
         <header className="jv-modo-cabeza">
           <span className="jv-modo-orbe">
-            <OrbeVivo tamano={58} estado={estadoOrbe} />
+            <OrbeVivo tamano={64} estado={estadoOrbe} />
           </span>
           <div className="jv-modo-id">
             <Cartel como="h2" id="jv-modo-titulo" texto="*Jarvis*" className="jv-modo-nombre" />
@@ -273,6 +273,7 @@ export function JarvisHoja({ slug, nombrePerfil, ruta, pedido, datosParte, alCer
             )}
             {mensajes.length > 0 && (
               <button type="button" className="jv-ctrl" onClick={() => setMensajes([])}>
+                <Icono nombre="mas" className="h-4 w-4" />
                 <span className="jv-ctrl-texto">Charla nueva</span>
               </button>
             )}

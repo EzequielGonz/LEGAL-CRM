@@ -70,3 +70,32 @@ La redacción opcional del parte se valida antes de mostrarse: se descarta si ti
 ## Herramientas usadas en esta vuelta
 
 Ver el informe final del agente.
+
+## Vuelta 6 (22/11, noche): Jarvis vivo, con gráficos y más funciones
+
+Pedido del dueño: «Jarvis lo mismo, antes estaba con gráficos de estadísticas mejor armado», «que Jarvis pueda hacer TODO, preguntándome antes siempre», y aplicar las marcas que hizo sobre el video de diseño (bento de colores, vidrio sobre círculos, botones neumórficos, gradient mesh en tarjeta, parallax y carteles), **sin** fondo de manchas en el panel.
+
+### Qué cambia a la vista
+
+- **Orbe flotante vivo** (`jv-orbe-vivo.tsx`, canvas 2D, sin WebGL): respira, el plasma gira, brilla y el reflejo sigue al mouse; al pensar, hablar o escuchar se ilumina y le salen ondas. Contador rojo con lo que espera el OK. Quieto con «reducir movimiento»; se pausa fuera de pantalla o con la pestaña oculta.
+- **Modo Jarvis inmersivo** (`jarvis-hoja.tsx`): vidrio a pantalla completa sobre el panel desenfocado. Siempre modal (foco atrapado, Esc cierra, el foco vuelve al orbe o a donde estaba; Ctrl/Cmd+J abre y cierra).
+  - Bento de colores con gráficos animados (`jv-bento.tsx`, `jv-graficos.tsx`): saludo en tarjeta gradient mesh con cartel palabra por palabra; mensajes de la semana (área por día); captados (barritas por día); esperan respuesta (aro); derivados; respondieron (porcentaje); semana contra la anterior; campañas recientes (enviados y respuestas).
+  - A la derecha: acciones como botones neumórficos, «Esperan tu OK» en tarjetas de vidrio sobre círculos de color que flotan, e historial del día en línea de tiempo.
+  - Charla: la respuesta se escribe en vivo (el texto completo se lee una sola vez con lector de pantalla), tarjetas ricas (barras, personas con nombre corto, estado de líneas), onda del micrófono al dictar y lectura en voz alta apagable (Web Speech API, sin servicios pagos).
+- **/asistente** como pantalla completa con el mismo lenguaje: cabecera mesh con parallax y orbe grande, bento de los cuatro perfiles (respuestas por perfil, chats que piden una persona, captados, derivados, citas, semana contra la anterior), charla y, a la derecha, botones neumórficos y propuestas de vidrio por perfil.
+
+### Funciones nuevas (siempre como propuesta con «¿Lo hago?»)
+
+- Catálogo: `oficina_pedir_tarea` (POST `/api/oficina`, deja la tarea en la mesa de entrada; los agentes arrancan solo con «Arrancar ahora») y `cerebro_ensenar` (POST `/api/cerebro/conocimiento`, con la validación de siempre: sin datos de personas ni claves). Salen de `FUERA_DEL_CATALOGO`; arrancar la Oficina y aprobar entregas siguen siendo del dueño en persona.
+- En todas las pantallas (`ACCIONES_SIEMPRE`): agendar una cita, mover a alguien de etapa, pedirle una tarea a la Oficina, enseñarle algo al cerebro y consultar el cerebro. Se suman a las acciones de cada pantalla (responder a los que esperan, armar campaña con una base, derivar captados…).
+- Prompt v1.2: enseña esas funciones con sus herramientas y que los gráficos los arma el panel.
+- `seguridad.ts` sin cambios: lo que hace salir mensajes sigue con confirmación reforzada.
+
+### Datos
+
+- `GET /api/jarvis/tablero?perfil=`: solo conteos del perfil pedido (enviados y captados por día en hora de Argentina, la semana contra la anterior desde `resumenSemanaEnMemoria`, hasta 3 campañas). Caché de 2 minutos en el servidor y en la sesión.
+- Las tarjetas de la charla salen de lo que devolvieron las herramientas de lectura (`tarjetasDeResultados`): no se inventa ningún número.
+
+### Pruebas
+
+- `tests/unitarias/jarvis-tablero.test.ts`: días de Argentina, camino del gráfico, proporciones, nombre corto, tarjetas, carteles, acciones nuevas, operaciones del catálogo y prompt v1.2.

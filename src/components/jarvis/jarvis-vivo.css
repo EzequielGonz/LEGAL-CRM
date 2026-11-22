@@ -123,7 +123,7 @@
   border-bottom: 1px solid rgb(255 255 255 / 0.08);
 }
 @media (min-width: 1024px) { .jv-modo-cabeza { padding: 0.9rem 1.4rem; } }
-.jv-modo-orbe { flex: none; width: 58px; height: 58px; }
+.jv-modo-orbe { flex: none; width: 64px; height: 64px; }
 .jv-modo-id { min-width: 0; flex: 1; }
 .jv-modo-nombre { margin: 0; font-size: 1.5rem; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em; }
 .jv-modo-estado { margin: 0.2rem 0 0; display: flex; align-items: center; gap: 0.45rem; font-size: 0.82rem; color: var(--jv-texto-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -186,8 +186,9 @@
 
 /* ---------------------------------------------------- bento de colores */
 .jv-bento2 { display: grid; gap: 0.75rem; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-areas: "sal sal" "msj msj" "cap esp" "der res" "cmp cmp" "cam cam"; }
-@media (min-width: 760px) {
-  .jv-bento2 { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-areas: "sal sal msj msj" "cap esp der res" "cmp cmp esp cam"; }
+.jv-modo-scroll { container-type: inline-size; }
+@container (min-width: 600px) {
+  .jv-bento2 { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-areas: "sal sal msj msj" "cap esp der res" "cam esp cmp cmp"; }
 }
 .jv-b {
   position: relative; min-width: 0; overflow: hidden; border-radius: 1.35rem; padding: 1rem 1.05rem;
@@ -216,6 +217,8 @@
 .jv-b-msj { grid-area: msj; background: var(--jv-violeta); color: #fff; }
 .jv-b-cap { grid-area: cap; background: var(--jv-rosa); }
 .jv-b-esp { grid-area: esp; background: var(--jv-amarillo); align-items: flex-start; }
+.jv-b-esp .jv-g-aro { margin: 0.4rem auto 0.2rem; }
+.jv-b-esp .jv-g-aro-centro { font-size: 2rem; }
 .jv-b-der { grid-area: der; background: var(--jv-agua); align-items: flex-start; }
 .jv-b-res { grid-area: res; background: var(--jv-lila); align-items: flex-start; }
 .jv-b-cmp { grid-area: cmp; background: var(--jv-rosa-claro); }
@@ -337,7 +340,7 @@
 .jv-res-personas, .jv-res-estado { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.4rem; }
 .jv-res-personas li, .jv-res-estado li { display: flex; align-items: center; gap: 0.6rem; padding: 0.45rem 0.55rem; border-radius: 0.8rem; background: rgb(255 255 255 / 0.05); }
 @media (prefers-reduced-motion: no-preference) { .jv-res-personas li { opacity: 0; animation: jv-baldosa-crece 420ms var(--jv-ease) forwards; } }
-.jv-res-inicial { flex: none; display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 9999px; font-weight: 800; font-size: 0.85rem; color: var(--jv-tinta); background: linear-gradient(135deg, #fbcfe8, #c4b5fd); }
+.jv-res-inicial { flex: none; display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 9999px; font-weight: 800; font-size: 0.85rem; color: #14101f; background: linear-gradient(135deg, #fbcfe8, #c4b5fd); }
 .jv-res-quien { min-width: 0; flex: 1; display: flex; flex-direction: column; }
 .jv-res-quien b { font-size: 0.88rem; }
 .jv-res-quien span { font-size: 0.76rem; color: var(--jv-texto-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -377,6 +380,7 @@
 .jv-form2-escucha { border-color: rgb(255 77 109 / 0.7); }
 .jv-texto2 { flex: 1; min-width: 0; resize: none; max-height: 8rem; min-height: 2.75rem; padding: 0.6rem 0; border: 0; outline: none; background: transparent; color: var(--jv-texto); font: inherit; font-size: 0.95rem; line-height: 1.45; }
 .jv-texto2::placeholder { color: var(--jv-texto-3); }
+.jv-modo .jv-texto2:focus-visible { outline: none; }
 .jv-onda { flex: none; width: 6.5rem; height: 2rem; color: #ff8fa3; }
 @media (max-width: 479px) { .jv-onda { width: 4.5rem; } }
 .jv-redondo {

@@ -51,7 +51,7 @@ export function TextoVivo({ texto, animar, alTerminar }: { texto: string; animar
 /** Tarjeta rica de resultado: gráfico de barras, lista de personas (nombre corto) o estado. */
 export function TarjetaResultado({ t, alIr }: { t: TarjetaJarvis; alIr?: () => void }) {
   return (
-    <div className={`jv-res jv-res-${t.tipo}`}>
+    <div className={`jv-res jv-res-t-${t.tipo}`}>
       <p className="jv-res-titulo">
         <span className="jv-res-icono" aria-hidden="true">
           <Icono nombre={t.tipo === "personas" ? "prospectos" : t.tipo === "estado" ? "salud" : "estadisticas"} className="h-3.5 w-3.5" />

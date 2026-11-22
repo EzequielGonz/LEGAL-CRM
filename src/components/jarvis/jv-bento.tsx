@@ -86,7 +86,7 @@ export function JvBento({ parte, tablero, errorTablero, hrefChats, perfilNombre 
       {/* Esperan respuesta: alto, con el aro contra las charlas abiertas. */}
       <div className="jv-b jv-b-esp" style={{ ["--i" as string]: 3 }}>
         <p className="jv-b-et">Esperan respuesta</p>
-        <Aro valor={chats?.valor ?? null} total={chats?.meta ?? null} etiqueta="Personas que esperan respuesta" tamano={104} />
+        <Aro valor={chats?.valor ?? null} total={chats?.meta ?? null} etiqueta="Personas que esperan respuesta" tamano={128} />
         <p className="jv-b-nota">{chats ? chats.nota : "Leyendo los chats…"}</p>
         <Link prefetch={false} href={hrefChats} className="jv-b-boton">
           Ver chats

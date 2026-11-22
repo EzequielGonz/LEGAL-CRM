@@ -138,10 +138,12 @@ export function Aro({ valor, total, etiqueta, centro, tamano = 92 }: { valor: nu
 
 /** Esta semana contra la anterior, en barras pareadas horizontales. */
 export function Comparacion({ filas, titulo }: { filas: { etiqueta: string; actual: number | null; anterior: number | null }[]; titulo: string }) {
-  const max = Math.max(1, ...filas.flatMap((f) => [f.actual ?? 0, f.anterior ?? 0]));
+  // Cada fila con su propia escala: así 8 contra 5 se ve igual de claro que 385 contra 252.
   return (
     <ul className="jv-g-comp" aria-label={titulo}>
-      {filas.map((f, i) => (
+      {filas.map((f, i) => {
+        const max = Math.max(1, f.actual ?? 0, f.anterior ?? 0);
+        return (
         <li key={f.etiqueta}>
           <span className="jv-g-comp-et">{f.etiqueta}</span>
           <span className="jv-g-comp-barras" aria-hidden="true">
@@ -157,7 +159,8 @@ export function Comparacion({ filas, titulo }: { filas: { etiqueta: string; actu
             <small aria-hidden="true"> / {fmt(f.anterior)}</small>
           </span>
         </li>
-      ))}
+        );
+      })}
     </ul>
   );
 }
