@@ -30,14 +30,14 @@
   --jv-foco: #ffd166;
   --jv-ease: cubic-bezier(0.16, 1, 0.3, 1);
   --jv-serif: var(--font-serif), "Iowan Old Style", Georgia, serif;
-  --jv-violeta: #25223a;
-  --jv-rosa: #2c2231;
-  --jv-amarillo: #2b2820;
-  --jv-agua: #1e2b2a;
-  --jv-lila: #26253a;
-  --jv-rosa-claro: #2a2430;
-  --jv-cielo: #1f2a36;
-  --jv-tinta: #ecebf3;
+  --jv-violeta: #bcb9d2;
+  --jv-rosa: #d6c4cc;
+  --jv-amarillo: #d9d1ba;
+  --jv-agua: #bdd1cb;
+  --jv-lila: #c8c6d9;
+  --jv-rosa-claro: #dacdd3;
+  --jv-cielo: #c0ceda;
+  --jv-tinta: #1d1a28;
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
@@ -530,4 +530,4 @@ html .jv-escenario .jv-panel, html[data-modo] .jv-escenario .jv-panel { backgrou
 }
 
 /* 22/11 · colores simples: baldosas oscuras sobrias con borde fino. */
-.jv-b-msj, .jv-b-cap, .jv-b-esp, .jv-b-der, .jv-b-res, .jv-b-cmp, .jv-b-cam, .jv-bg-env, .jv-bg-cap, .jv-bg-esp, .jv-bg-rpp, .jv-bg-der, .jv-bg-cit, .jv-bg-cmp { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.07), 0 0 0 1px rgb(255 255 255 / 0.08), 0 18px 40px -24px rgb(0 0 0 / 0.9) !important; color: var(--jv-texto); }
+.jv-b-msj, .jv-b-cap, .jv-b-esp, .jv-b-der, .jv-b-res, .jv-b-cmp, .jv-b-cam, .jv-bg-env, .jv-bg-cap, .jv-bg-esp, .jv-bg-rpp, .jv-bg-der, .jv-bg-cit, .jv-bg-cmp { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.5), 0 0 0 1px rgb(0 0 0 / 0.04), 0 16px 34px -24px rgb(0 0 0 / 0.7) !important; color: var(--jv-tinta) !important; }

@@ -175,8 +175,9 @@ export function CentroCerebro({
       if (rueda.current.t) window.clearTimeout(rueda.current.t);
       rueda.current.t = window.setTimeout(() => setGiro((g) => ajustar(g, n)), 160);
     };
-    el.addEventListener("wheel", alRodar, { passive: false });
-    return () => el.removeEventListener("wheel", alRodar);
+    // Pedido del dueño (22/11): el anillo no se mueve con el mouse ni la rueda; solo con los botones de los costados y el teclado.
+    void alRodar;
+    return;
   }, [n]);
 
   const teclas = (e: KeyboardEvent<HTMLButtonElement>) => {
@@ -203,7 +204,7 @@ export function CentroCerebro({
   const datoAbierta = abierta ? porId[abierta] : undefined;
 
   return (
-    <div ref={raiz} className="cz-centro" onPointerMove={mover} data-pensando={pensando ? "1" : "0"}>
+    <div ref={raiz} className="cz-centro" data-pensando={pensando ? "1" : "0"}>
       <svg className="cz-particulas" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
         {PARTICULAS.map((p, i) => (
           <circle key={i} cx={p.x} cy={p.y} r={p.t * 0.09} style={{ ["--d" as string]: `${p.d}s`, opacity: p.o }} />
@@ -252,13 +253,9 @@ export function CentroCerebro({
           ref={escena}
           className="cz-escena"
           data-arrastrando={arrastrando ? "1" : "0"}
-          onPointerDown={bajar}
-          onPointerMove={arrastrar}
-          onPointerUp={soltar}
-          onPointerCancel={soltar}
           role="group"
           aria-roledescription="anillo de pantallas"
-          aria-label="Funciones del cerebro. Usá las flechas para girar y Enter para abrir."
+          aria-label="Funciones del cerebro. Usá los botones de los costados o las flechas para girar y Enter para abrir."
           style={{ ["--r" as string]: `${radio}px`, ["--w" as string]: `${ANCHO}px`, ["--h" as string]: `${ALTO}px` } as CSSProperties}
         >
           <div className="cz-camara">
@@ -347,7 +344,7 @@ export function CentroCerebro({
           ))}
         </ul>
         <p className="cz-pista" aria-hidden="true">
-          Arrastrá, usá la rueda o las flechas · tocá la de adelante para abrirla
+          Usá los botones de los costados o las flechas del teclado · tocá la de adelante para abrirla
         </p>
 
         {/* Celular y «menos movimiento»: las mismas funciones en un bento de colores, en lista. */}
