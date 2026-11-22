@@ -24,7 +24,7 @@ Al retomar: leé este archivo, `02-ordenes-vigentes.md` (al final, órdenes del 
 | Skills `oficina`, `accesos` (pide conectar Supabase a mano) y `memoria` (con plan B para la nube) + palabras clave en el arranque | varios | En `main` |
 | Rediseño de todo el panel + captación y cifras + operación (integración de 3 ramas revisada) | 8c1a94c | Publicado y verificado: 6 pantallas en compu y celular, sin desborde |
 | Migraciones 0637, 0638 y 0639 | — | Aplicadas. La 0639 quedó en espera: falta el secreto en Vault (A12); el latido sigue igual y anda |
-| Arreglo del error React #418 (hidratación): contador sin nodos y `<p>` dentro de `<p>` | add6a8c | Publicado; **falta verificar en producción** que la consola quede limpia |
+| Arreglo del error React #418 (hidratación): contador sin nodos y `<p>` dentro de `<p>` | add6a8c | Publicado y verificado: consola limpia en las 7 pantallas, compu y celular |
 | Seguridad: fragmento de comando con el código sacado de `cerebro/15` y de una prueba | 71f646e / 052819b | Hecho; sigue en el historial: cambiar el código |
 | Memoria completa para claude.ai: `19` (147 recuerdos), `20` (conocimiento) y prompt para Claude in Chrome en `biblioteca/` | 8b07fef | El dueño la está cargando con Claude in Chrome |
 | Mapa de 275 plugins por escritorio (`18`) | c1b1247 | Hecho |
@@ -38,7 +38,7 @@ Tarea programada «Oficina · procesar tareas» (id `trig_014WFWpDh5kpkXHWhSurCP
    - aplicar sus migraciones `0640+`;
    - publicar en `main` y verificar.
    - Ojo: **manda mensajes reales a personas**. Revisar topes, horarios, baja y que un rubro sin plantilla no envíe nada. Si falta una plantilla en Meta, el texto propuesto va al dueño para que la cargue.
-2. **Inventario de ramas, PR y Vercel** (solo lectura; escribe `cerebro/21-orden-de-ramas-y-vercel.md`). Al terminar:
+2. **Inventario de ramas, PR y Vercel: TERMINADO** (`cerebro/21-orden-de-ramas-y-vercel.md`: 99 ramas en LEGAL-CRM, 87 ya integradas; 4 PR abiertos; un solo proyecto en Vercel; 100 Previews en 22 h, el 86 % de ramas de documentos). Al terminar:
    - mostrarle al dueño el plan y las decisiones;
    - archivar con etiqueta `archivo/<rama>` solo con su OK.
    - No tocar `cerebro-chats`, `claude/admiring-euler-ctf4sg`, `claude/cerebro-panel` ni `claude/pensive-galileo-d6ephy` (botón Archivar del 19/11, pendiente).
