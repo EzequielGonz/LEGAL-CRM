@@ -1,0 +1,206 @@
+[
+  {
+    "id": "J01",
+    "descripcion": "Ley 24.557 actualizada y distinción de contingencias",
+    "url": "https://www.argentina.gob.ar/normativa/nacional/ley-24557-27971/actualizacion",
+    "consultado_el": "2026-11-22"
+  },
+  {
+    "id": "J02",
+    "descripcion": "SRT y prestaciones médicas",
+    "url": "https://www.argentina.gob.ar/srt/trabajadores/prestaciones-medicas",
+    "consultado_el": "2026-11-22"
+  },
+  {
+    "id": "J03",
+    "descripcion": "SRT y disconformidad con el alta médica",
+    "url": "https://www.argentina.gob.ar/servicio/resolver-la-disconformidad-con-el-alta-medica-otorgada",
+    "consultado_el": "2026-11-22"
+  },
+  {
+    "id": "J04",
+    "descripcion": "SRT y revisión de rechazo de accidente o enfermedad",
+    "url": "https://www.argentina.gob.ar/node/130185",
+    "consultado_el": "2026-11-22"
+  },
+  {
+    "id": "J05",
+    "descripcion": "Resolución SRT 41 de 2025 y procedimientos de incapacidad",
+    "url": "https://www.argentina.gob.ar/normativa/nacional/resoluci%C3%B3n-41-2025-417816/texto",
+    "consultado_el": "2026-11-22"
+  },
+  {
+    "id": "J06",
+    "descripcion": "Código Civil y Comercial actualizado y responsabilidad civil",
+    "url": "https://www.argentina.gob.ar/normativa/nacional/c%C3%B3digo-civil-y-comercial-de-la-naci%C3%B3n-235975/actualizacion",
+    "consultado_el": "2026-11-22"
+  },
+  {
+    "id": "J07",
+    "descripcion": "SSN y preguntas frecuentes de seguro automotor",
+    "url": "https://www.argentina.gob.ar/superintendencia-de-seguros/portal-ciudadano/preguntas-frecuentes/automotor",
+    "consultado_el": "2026-11-22"
+  },
+  {
+    "id": "J08",
+    "descripcion": "Ley de Contrato de Trabajo y consulta de sus modificaciones",
+    "url": "https://biblioteca.afip.gob.ar/dcp/TOR_C_020744_1976_05_13",
+    "consultado_el": "2026-11-22"
+  },
+  {
+    "id": "J09",
+    "descripcion": "Ley 27.802 publicada el 6 de marzo de 2026",
+    "url": "https://www.argentina.gob.ar/normativa/nacional/norma-423680/texto",
+    "consultado_el": "2026-11-22"
+  },
+  {
+    "id": "J10",
+    "descripcion": "Derecho Fácil y orientación general sobre sucesiones",
+    "url": "https://www.argentina.gob.ar/justicia/derechofacil/leysimple/sucesiones-parte-general",
+    "consultado_el": "2026-11-22"
+  },
+  {
+    "id": "J11",
+    "descripcion": "Derecho Fácil y divorcio",
+    "url": "https://www.argentina.gob.ar/justicia/derechofacil/leysimple/divorcio",
+    "consultado_el": "2026-11-22"
+  },
+  {
+    "id": "J12",
+    "descripcion": "Derecho Fácil y alimentos de los hijos",
+    "url": "https://www.argentina.gob.ar/justicia/derechofacil/aplicalaley/los-alimentos-de-los-hijos",
+    "consultado_el": "2026-11-22"
+  },
+  {
+    "id": "J13",
+    "descripcion": "Ley 26.589 de mediación y conciliación actualizada",
+    "url": "https://www.argentina.gob.ar/normativa/nacional/ley-26589-166999/actualizacion",
+    "consultado_el": "2026-11-22"
+  },
+  {
+    "id": "S01",
+    "descripcion": "Ley 26.682 actualizada y reglas generales de medicina prepaga",
+    "url": "https://www.argentina.gob.ar/normativa/nacional/ley-26682-182180/actualizacion",
+    "consultado_el": "2026-11-22"
+  },
+  {
+    "id": "S02",
+    "descripcion": "SSSalud y contenido de la cartilla médico asistencial",
+    "url": "https://www.argentina.gob.ar/servicio/presentar-cartilla-medico-asistencial",
+    "consultado_el": "2026-11-22"
+  },
+  {
+    "id": "S03",
+    "descripcion": "SSSalud y opción de cambio de agente del seguro",
+    "url": "https://www.argentina.gob.ar/servicio/realizar-opcion-de-cambio-libre-eleccion-de-agentes-del-seguro",
+    "consultado_el": "2026-11-22"
+  },
+  {
+    "id": "S04",
+    "descripcion": "SSSalud y régimen de monotributistas",
+    "url": "https://www.argentina.gob.ar/sssalud/usuarios/cambio-obra-sociales/monotributistas",
+    "consultado_el": "2026-11-22"
+  },
+  {
+    "id": "S05",
+    "descripcion": "Resolución SSSalud 1725 de 2025 y condiciones contractuales",
+    "url": "https://www.argentina.gob.ar/normativa/nacional/resoluci%C3%B3n-1725-2025-417745/texto",
+    "consultado_el": "2026-11-22"
+  },
+  {
+    "id": "S06",
+    "descripcion": "SSSalud y canales de trámites y reclamos",
+    "url": "https://www.argentina.gob.ar/sssalud/tramites-y-servicios",
+    "consultado_el": "2026-11-22"
+  },
+  {
+    "id": "A01",
+    "descripcion": "IGJ y Control Federal de Ahorro",
+    "url": "https://www.argentina.gob.ar/justicia/igj/institucional/control-federal-de-ahorro",
+    "consultado_el": "2026-11-22"
+  },
+  {
+    "id": "A02",
+    "descripcion": "BCRA y comparación de costos de préstamos",
+    "url": "https://www.bcra.gob.ar/prestamos-personales-comparar-costos-y-condiciones/",
+    "consultado_el": "2026-11-22"
+  },
+  {
+    "id": "A03",
+    "descripcion": "BCRA y texto ordenado de tasas de interés en operaciones de crédito",
+    "url": "https://www.bcra.gob.ar/archivos/Pdfs/Texord/t-tasint.pdf",
+    "consultado_el": "2026-11-22"
+  },
+  {
+    "id": "A04",
+    "descripcion": "Resolución General IGJ 8 de 2015 y sistemas de ahorro",
+    "url": "https://www.argentina.gob.ar/normativa/nacional/resoluci%C3%B3n-8-2015-253124/texto",
+    "consultado_el": "2026-11-22"
+  },
+  {
+    "id": "A05",
+    "descripcion": "DNRPA e informe de dominio",
+    "url": "https://www.argentina.gob.ar/servicio/solicitar-un-informe-de-dominio-del-automotor",
+    "consultado_el": "2026-11-22"
+  },
+  {
+    "id": "A06",
+    "descripcion": "DNRPA y transferencia de dominio",
+    "url": "https://www.argentina.gob.ar/servicio/hacer-la-transferencia-de-dominio-de-un-auto-moto-o-maquinaria",
+    "consultado_el": "2026-11-22"
+  },
+  {
+    "id": "A07",
+    "descripcion": "IGJ y gastos de entrega del bien",
+    "url": "https://www.argentina.gob.ar/justicia/igj/institucional/control-federal-de-ahorro/gastos-de-entrega-del-bien",
+    "consultado_el": "2026-11-22"
+  },
+  {
+    "id": "A08",
+    "descripcion": "Ley 24.240 actualizada y garantía legal",
+    "url": "https://www.argentina.gob.ar/normativa/nacional/638/actualizacion",
+    "consultado_el": "2026-11-22"
+  },
+  {
+    "id": "M01",
+    "descripcion": "W3C y criterio de contraste mínimo de WCAG 2.2",
+    "url": "https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html",
+    "consultado_el": "2026-11-22"
+  },
+  {
+    "id": "M02",
+    "descripcion": "Google y Core Web Vitals",
+    "url": "https://web.dev/articles/vitals",
+    "consultado_el": "2026-11-22"
+  },
+  {
+    "id": "M03",
+    "descripcion": "Google y guía inicial de SEO",
+    "url": "https://developers.google.com/search/docs/fundamentals/seo-starter-guide",
+    "consultado_el": "2026-11-22"
+  },
+  {
+    "id": "M04",
+    "descripcion": "Google y optimización para funciones generativas de búsqueda",
+    "url": "https://developers.google.com/search/docs/fundamentals/ai-optimization-guide",
+    "consultado_el": "2026-11-22"
+  },
+  {
+    "id": "M05",
+    "descripcion": "Google Analytics y eventos recomendados",
+    "url": "https://support.google.com/analytics/answer/9267735",
+    "consultado_el": "2026-11-22"
+  },
+  {
+    "id": "P01",
+    "descripcion": "Ley 25.326 actualizada y protección de datos personales",
+    "url": "https://www.argentina.gob.ar/normativa/nacional/ley-25326-64790/actualizacion",
+    "consultado_el": "2026-11-22"
+  },
+  {
+    "id": "P02",
+    "descripcion": "WhatsApp y política de mensajes comerciales consultada",
+    "url": "https://whatsappbusiness.com/policy/",
+    "consultado_el": "2026-11-22"
+  }
+]
