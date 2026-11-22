@@ -239,6 +239,47 @@ export function pedidoDesdeCerebro(texto: string, foto: string | null): string {
   return foto ? `${base}\n\n${foto}` : base;
 }
 
+/** Tipos de enseñanza que el cerebro acepta (propuesta, nunca se aplica sola). */
+export const TIPOS_ENSENANZA = [
+  { clave: "nota", nombre: "Una nota para recordar" },
+  { clave: "regla", nombre: "Una regla nueva" },
+  { clave: "correccion", nombre: "Algo que tenías mal" },
+] as const;
+export type TipoEnsenanza = (typeof TIPOS_ENSENANZA)[number]["clave"];
+
+/** Pedido a la Bandeja para Claude: una enseñanza queda como PROPUESTA y espera la confirmación del dueño. */
+export function pedidoEnsenanza(texto: string, tipo: TipoEnsenanza): string {
+  const t = TIPOS_ENSENANZA.find((x) => x.clave === tipo)?.nombre ?? TIPOS_ENSENANZA[0].nombre;
+  return `Desde el cerebro, enseñanza (PROPUESTA, no aplicar sin confirmación del dueño). ${t}: ${texto.trim()}\n\nQué hacer: dejarla redactada como propuesta en cerebro/ y consultar antes de tocar reglas, bots o código.`;
+}
+
+/** Buscador del cerebro: ¿el texto contiene todas las palabras buscadas (sin tildes ni mayúsculas)? */
+export function coincideBusqueda(texto: string, consulta: string): boolean {
+  const norm = (x: string) => x.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  const palabras = norm(consulta).split(/\s+/).filter((w) => w.length >= 2);
+  if (!palabras.length) return false;
+  const t = norm(texto);
+  return palabras.every((w) => t.includes(w));
+}
+
+/** Textos de las secciones del cerebro que el buscador recorre (panel = id de pestaña en «Ver más»). */
+export interface EntradaBusqueda {
+  panel: string;
+  seccion: string;
+  texto: string;
+}
+export function indiceBusqueda(): EntradaBusqueda[] {
+  const e: EntradaBusqueda[] = [];
+  for (const a of ALERTAS) e.push({ panel: "alertas", seccion: "Alertas", texto: `${a.titulo}. ${a.detalle}` });
+  for (const q of PREGUNTAS_ABIERTAS) e.push({ panel: "preguntas", seccion: "Preguntas", texto: q });
+  for (const t of ENTIENDO) e.push({ panel: "entiendo", seccion: "Lo que entiendo", texto: t });
+  for (const m of MARCAS_CEREBRO) e.push({ panel: "entiendo", seccion: "Lo que entiendo", texto: `${m.nombre}. Deriva a ${m.derivaA}. ${m.queVale}` });
+  for (const c of PENDIENTES) for (const i of c.items) e.push({ panel: "pendientes", seccion: "Pendientes", texto: i.texto });
+  for (const p of PROPUESTAS) e.push({ panel: "propuestas", seccion: "Propuestas", texto: `${p.titulo}. ${p.porque}` });
+  for (const c of CORRECCIONES) e.push({ panel: "corregi", seccion: "Lo que corregí", texto: `${c.decia}. ${c.real}` });
+  return e;
+}
+
 /** Frases del hero: lo que el cerebro sabe, con las cifras vivas de la semana. */
 export function frasesDelCerebro(perfiles: PerfilSemana[] | null, alertasAltas: number, preguntas: number): [string, string, string][] {
   const suma = (k: keyof CifrasPerfilSemana) => (perfiles ?? []).reduce((s, p) => s + (n(p.cifras[k].actual) ?? 0), 0);

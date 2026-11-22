@@ -101,7 +101,7 @@ export function Oficina({ inicial, arranqueInicial }: { inicial: TareaOficina[];
       setAviso({
         tipo: "ok",
         texto: d?.rapida
-          ? "Quedó en la mesa de entrada. Ojo: parece una consulta rápida, el Asistente de más abajo te la contesta al instante."
+          ? "Quedó en la mesa de entrada. Ojo: parece una consulta rápida, Jarvis (/asistente) te la contesta al instante."
           : `Quedó en la mesa de entrada. Ruta: ${ruta.map((a) => NOMBRE_AREA[a]).join(" → ")}. Tocá «Arrancar ahora» cuando quieras que trabajen.`,
       });
       setTexto("");

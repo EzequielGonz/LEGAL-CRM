@@ -1,6 +1,7 @@
 "use client";
 
 import { Fragment, useEffect, useRef, useState } from "react";
+import { formatoNumero } from "@/lib/premium/anillo";
 
 /**
  * Esfera de puntos y frase cinética del cerebro (21/11), la misma de la
@@ -148,7 +149,7 @@ export function HeroCerebro({ frases, numero, bajada, fecha }: { frases: Frase[]
         <p className="cz-k">Memoria de Claude · al {fecha}</p>
         {numero != null && (
           <div className="cz-big">
-            +{cuenta.toLocaleString("es-AR")}
+            +{formatoNumero(cuenta)}
             <small>{bajada}</small>
           </div>
         )}

@@ -3,7 +3,6 @@ import { Inter_Tight, JetBrains_Mono } from "next/font/google";
 import "./cerebro.css";
 import { requirePageSession } from "@/lib/acceso/pagina";
 import { CerebroVista } from "@/components/cerebro/cerebro-vista";
-import { leerOficina } from "@/lib/oficina/servidor";
 import { resumenSemana } from "@/lib/asistente/semana";
 import { leerRubrosActivos } from "@/lib/perfiles-stats";
 import { leerSalud } from "@/lib/salud";
@@ -42,15 +41,14 @@ async function contarContactos(): Promise<number | null> {
 export default async function CerebroPage() {
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
-  const [semana, contactos, salud, pedidos, rubros, oficina] = await Promise.all([
+  const [semana, contactos, salud, pedidos, rubros] = await Promise.all([
     leerSemana(),
     contarContactos(),
     leerSalud().catch(() => null),
     leerPedidos(),
     leerRubrosActivos().catch(() => []),
-    leerOficina(),
   ]);
-  return <CerebroVista fuentes={{ clase: `${fuente.variable} ${mono.variable}`, estilo: { ["--cz-f" as string]: fuente.style.fontFamily, ["--cz-mono" as string]: mono.style.fontFamily } }} semana={semana} contactos={contactos} salud={salud} pedidos={pedidos} rubros={rubros} oficina={oficina} />;
+  return <CerebroVista fuentes={{ clase: `${fuente.variable} ${mono.variable}`, estilo: { ["--cz-f" as string]: fuente.style.fontFamily, ["--cz-mono" as string]: mono.style.fontFamily } }} semana={semana} contactos={contactos} salud={salud} pedidos={pedidos} rubros={rubros} />;
 }
 
 /** Lo último que se le pidió a Claude. */
