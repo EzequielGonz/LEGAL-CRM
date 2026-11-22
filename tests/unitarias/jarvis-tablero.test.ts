@@ -17,6 +17,7 @@ import {
   tarjetaDeHerramienta,
   tarjetasDeResultados,
   textoParaVoz,
+  respuestaSinIA,
 } from "../../src/lib/jarvis/tablero";
 import { ACCIONES_SIEMPRE, todasLasAcciones } from "../../src/lib/jarvis/pantallas";
 import { operacionPorClave, FUERA_DEL_CATALOGO } from "../../src/lib/asistente/catalogo";
@@ -189,4 +190,25 @@ test("Jarvis devuelve tarjetas armadas con lo que leyeron sus herramientas, sin 
   const ruta = readFileSync(join(__dirname, "../../src/app/api/jarvis/tablero/route.ts"), "utf8");
   assert.match(ruta, /requireSession/);
   assert.doesNotMatch(ruta, /export async function (POST|PATCH|PUT|DELETE)/, "el tablero solo lee");
+});
+
+test("sin IA (sin clave o con tope) Jarvis igual contesta la semana con los números del tablero", () => {
+  const t = {
+    perfil: "marketing" as const,
+    enviadosPorDia: [],
+    captadosPorDia: [],
+    campanas: [],
+    semana: { enviados: { actual: 385, anterior: 252 }, respondieron: { actual: 61, anterior: null }, captados: { actual: 4, anterior: 4 }, citas: { actual: 0, anterior: 0 }, derivados: { actual: 1, anterior: 0 }, campanas: { actual: 1, anterior: null }, piden: { actual: 5, anterior: null } },
+  };
+  const r = respuestaSinIA("¿Cómo viene la semana?", t, "sin_clave");
+  assert.match(r.texto, /salieron 385 mensajes \(más que la semana anterior, que fueron 252\)/);
+  assert.match(r.texto, /4 captados \(igual que la semana anterior\)/);
+  assert.match(r.texto, /sin IA/);
+  assert.equal(r.tarjetas.length, 1);
+  assert.deepEqual(r.tarjetas[0].tipo === "barras" && r.tarjetas[0].datos.map((d) => d.valor), [385, 61, 4, 0, 1]);
+  // Otro pedido, o sin datos: lo dice y no inventa.
+  const otro = respuestaSinIA("Lanzá la campaña", t, "tope");
+  assert.match(otro.texto, /tope de gasto/);
+  assert.equal(otro.tarjetas.length, 0);
+  assert.equal(respuestaSinIA("¿cómo viene la semana?", null, "sin_clave").tarjetas.length, 0);
 });

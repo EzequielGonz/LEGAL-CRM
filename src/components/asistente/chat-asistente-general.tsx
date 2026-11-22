@@ -7,6 +7,7 @@ import { TarjetaPropuesta, type Propuesta } from "@/components/asistente/asisten
 import { BocetoCampanas } from "@/components/asistente/boceto-campanas";
 import { MAX_ARCHIVOS, MAX_FILAS_ARCHIVO, repetidosEntreArchivos, resumirHoja, type ResumenArchivo } from "@/lib/asistente/general";
 import { TextoVivo } from "@/components/jarvis/jv-resultado";
+import { OrbeVivo } from "@/components/jarvis/jv-orbe-vivo";
 import { JvConfirmar } from "@/components/jarvis/jv-confirmar";
 import { CharlasAnteriores, type CharlaResumen } from "@/components/asistente/charlas-anteriores";
 
@@ -460,8 +461,8 @@ export function ChatAsistenteGeneral({
             <header className={jv ? "jv-cabeza" : "flex items-center justify-between gap-3 border-b border-slate-100 px-4 py-3"}>
               <div className={jv ? "jv-cabeza-texto flex min-w-0 items-center gap-2.5" : "flex min-w-0 items-center gap-2.5"}>
                 {jv ? (
-                  <span className="jv-orbe-mini" aria-hidden="true">
-                    <Icono nombre="asistente" className="jv-orbe-icono-mini" />
+                  <span className="jv-chat-orbe" aria-hidden="true">
+                    <OrbeVivo tamano={44} />
                   </span>
                 ) : (
                   <span aria-hidden="true" className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-gold-500/15 text-gold-700">

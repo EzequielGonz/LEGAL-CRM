@@ -71,6 +71,7 @@ export function JvBento({ parte, tablero, errorTablero, hrefChats, perfilNombre 
           {sem && <Delta v={variacion(sem.enviados.actual, sem.enviados.anterior)} />}
         </p>
         {tablero ? <Area serie={tablero.enviadosPorDia} titulo="Mensajes enviados por día" /> : <div className="jv-b-esqueleto" />}
+        {tablero && enviadosSemana === 0 && <p className="jv-b-nota">Esta semana no salieron campañas en este perfil.</p>}
       </div>
 
       {/* Captados: barritas por día. */}
@@ -127,7 +128,7 @@ export function JvBento({ parte, tablero, errorTablero, hrefChats, perfilNombre 
 
       {/* Campañas recientes: enviados y respuestas. */}
       <div className="jv-b jv-b-cam" style={{ ["--i" as string]: 7 }}>
-        <p className="jv-b-et">Campañas</p>
+        <p className="jv-b-et">Campañas recientes · total</p>
         {tablero && tablero.campanas.length > 0 ? (
           <Barras titulo="Campañas recientes: mensajes enviados y respuestas" segundo="resp." datos={tablero.campanas.map((c) => ({ etiqueta: c.nombre, valor: c.enviados, segundo: c.respondieron }))} />
         ) : tablero ? (

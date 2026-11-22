@@ -301,3 +301,41 @@ export function diaCorto(dia: string): string {
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dia);
   return m ? `${m[3]}/${m[2]}` : "";
 }
+
+const PIDE_NUMEROS = /semana|c[oó]mo (viene|vamos|va|venimos|estamos)|resum|n[uú]meros|cifras|estad[ií]stic|qu[eé] tal/i;
+
+/**
+ * Respuesta por reglas cuando no se puede usar la IA (sin clave en este entorno o con el tope de gasto):
+ * si la persona pide números de la semana, contesta con los del tablero y una tarjeta de barras; si no,
+ * explica por qué no puede pensar la respuesta. Nunca inventa: todo sale del tablero.
+ */
+export function respuestaSinIA(pedido: string, t: TableroJarvis | null, motivo: "sin_clave" | "tope"): { texto: string; tarjetas: TarjetaJarvis[] } {
+  const porQue =
+    motivo === "tope"
+      ? "Por hoy llegué al tope de gasto de IA que dejaste configurado, así que no puedo pensar respuestas nuevas."
+      : "En este entorno no tengo la clave de la IA, así que no puedo pensar respuestas nuevas.";
+  const s = t?.semana ?? null;
+  if (!PIDE_NUMEROS.test(pedido) || !s) {
+    return { texto: `${porQue} Igual te muestro los números del panel: preguntame «¿cómo viene la semana?».`, tarjetas: [] };
+  }
+  const n = (v: number | null) => (typeof v === "number" ? String(v) : "sin dato");
+  const comp = (a: number | null, b: number | null) => {
+    if (a == null || b == null) return "";
+    if (a === b) return " (igual que la semana anterior)";
+    return a > b ? ` (más que la semana anterior, que fueron ${b})` : ` (menos que la semana anterior, que fueron ${b})`;
+  };
+  const texto = [
+    `Esta semana salieron ${n(s.enviados.actual)} mensajes${comp(s.enviados.actual, s.enviados.anterior)} y respondieron ${n(s.respondieron.actual)} personas.`,
+    `Hay ${n(s.captados.actual)} captados${comp(s.captados.actual, s.captados.anterior)} y ${n(s.derivados.actual)} derivados.`,
+    `Te lo armé con los números del panel, sin IA: ${porQue.charAt(0).toLowerCase()}${porQue.slice(1)}`,
+  ].join(" ");
+  const filas: [string, number | null][] = [
+    ["Enviados", s.enviados.actual],
+    ["Respondieron", s.respondieron.actual],
+    ["Captados", s.captados.actual],
+    ["Citas", s.citas.actual],
+    ["Derivados", s.derivados.actual],
+  ];
+  const datos = filas.filter((f): f is [string, number] => typeof f[1] === "number").map(([etiqueta, valor]) => ({ etiqueta, valor }));
+  return { texto, tarjetas: datos.length ? [{ tipo: "barras", titulo: "La semana en números", datos }] : [] };
+}
