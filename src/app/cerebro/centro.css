@@ -7,9 +7,9 @@
  */
 
 .cz--v6 {
-  --amarillo: #ffd23f; --violeta: #8b7bff; --rosa: #ff7eb6; --agua: #4fe3c1; --lila: #b9a6ff; --coral: #ff8a5c;
-  --cielo: #5cc8ff; --lima: #b6f36a; --durazno: #ffb38a; --menta: #8ef0d0; --fucsia: #ff6fd0;
-  --tinta: #15121c;
+  --amarillo: #2b2820; --violeta: #25223a; --rosa: #2c2231; --agua: #1e2b2a; --lila: #26253a; --coral: #2c2423;
+  --cielo: #1f2a36; --lima: #252b1f; --durazno: #2c2622; --menta: #1f2b28; --fucsia: #2c2232;
+  --tinta: #ecebf3;
   --vidrio: rgba(255, 255, 255, 0.06);
   --vidrio-borde: rgba(255, 255, 255, 0.13);
   --sombra-capas: 0 1px 0 rgba(255, 255, 255, 0.06) inset, 0 2px 4px rgba(0, 0, 0, 0.35), 0 12px 24px -8px rgba(0, 0, 0, 0.55), 0 40px 80px -30px rgba(0, 0, 0, 0.7);

@@ -5,6 +5,7 @@ import { MAX_PEDIDO, pareceDatoPersonal } from "@/lib/bandeja-claude";
 import { OficinaVisual, type ResultadoEnvio } from "@/components/cerebro/oficina-visual";
 import { pedidoParaAgente } from "@/lib/oficina/recorrido";
 import { pedidoParaSector } from "@/lib/oficina/panel";
+import { ORDEN_SECTORES, SECTORES } from "@/lib/oficina/sectores";
 import {
   ETIQUETA_ETAPA,
   NOMBRE_AREA,
@@ -84,6 +85,8 @@ export function Oficina({ inicial, arranqueInicial, sector = null }: { inicial: 
   const [montado, setMontado] = useState(false);
   useEffect(() => setMontado(true), []);
   const formulario = useRef<HTMLFormElement>(null);
+  // Departamento elegido a mano; vacío = el de la sala abierta (o el Cerebro reparte).
+  const [depto, setDepto] = useState<Area | "">("");
   const esperando = tareas.filter((t) => etapaDe(t) === "esperando_ok");
   const aprobadas = tareas.filter((t) => etapaDe(t) === "aprobada").slice(0, 5);
   const enEntrada = tareas.filter((t) => t.estado === "pendiente" || t.estado === "en_espera").length;
@@ -157,7 +160,7 @@ export function Oficina({ inicial, arranqueInicial, sector = null }: { inicial: 
   // El formulario vive en el panel lateral del edificio; recibe la sala abierta para dirigir la tarea a ese sector.
   function formularioDeTarea(sala: Area | null) {
     return (
-      <form id="oficina-tarea" ref={formulario} onSubmit={(e) => dejarTarea(e, sala)} className="cz-form" aria-label="Dejar una tarea en la oficina">
+      <form id="oficina-tarea" ref={formulario} onSubmit={(e) => dejarTarea(e, depto || sala)} className="cz-form" aria-label="Dejar una tarea en la oficina">
         <label>
           Perfil
           <select value={perfil} onChange={(e) => setPerfil(e.target.value)}>
@@ -169,7 +172,18 @@ export function Oficina({ inicial, arranqueInicial, sector = null }: { inicial: 
           </select>
         </label>
         <label>
-          {sala && sala !== "direccion" ? `Tarea para ${NOMBRE_AREA[sala]}` : "Tarea para la oficina"}
+          Departamento
+          <select value={depto || sala || ""} onChange={(e) => setDepto((e.target.value || "") as Area | "")}>
+            <option value="">El Cerebro decide a quién</option>
+            {ORDEN_SECTORES.map((a) => (
+              <option key={a} value={a}>
+                {SECTORES[a].titulo}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          {(depto || sala) && (depto || sala) !== "direccion" ? `Tarea para ${NOMBRE_AREA[(depto || sala) as Area]}` : "Tarea para la oficina"}
           <textarea
             value={texto}
             onChange={(e) => setTexto(e.target.value)}

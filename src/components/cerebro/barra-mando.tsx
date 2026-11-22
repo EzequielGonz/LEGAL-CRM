@@ -8,6 +8,8 @@ import { NOMBRE_TIPO, TIPOS_CONOCIMIENTO, validarEntrada, type TipoConocimiento 
 import { pedidoOrden } from "@/lib/cerebro/anillo";
 import { CIERRE_CONFIRMAR } from "@/lib/resumen/pedidos";
 import { NOMBRE_AREA, type Area } from "@/lib/oficina/reglas";
+import { pedidoParaSector } from "@/lib/oficina/panel";
+import { ORDEN_SECTORES, SECTORES } from "@/lib/oficina/sectores";
 
 /**
  * La barra para hablarle al cerebro (vuelta 6): tres modos claros, en botones en relieve que «salen
@@ -85,6 +87,7 @@ export function BarraMando({ alPensar }: { alPensar: (pensando: boolean) => void
   const [perfil, setPerfil] = useState("");
   // Ordenale
   const [perfilOrden, setPerfilOrden] = useState<string>("juridico");
+  const [deptoOrden, setDeptoOrden] = useState<Area | "">("");
   const campo = useRef<HTMLTextAreaElement>(null);
   const idAyuda = useId();
   const actual = MODOS.find((m) => m.id === modo)!;
@@ -153,7 +156,7 @@ export function BarraMando({ alPensar }: { alPensar: (pensando: boolean) => void
     alPensar(true);
     setError(null);
     try {
-      const j = await api<{ tarea: { titulo: string; ruta: Area[] } | null; plan: string | null; ordenadaPor: string }>("/api/oficina", { perfil: perfilOrden, pedido });
+      const j = await api<{ tarea: { titulo: string; ruta: Area[] } | null; plan: string | null; ordenadaPor: string }>("/api/oficina", { perfil: perfilOrden, pedido: pedidoParaSector(deptoOrden || null, pedido) });
       setRes({ tipo: "ordenado", titulo: j.tarea?.titulo ?? "Pedido nuevo", ruta: j.tarea?.ruta ?? [], plan: j.plan, ordenadaPor: j.ordenadaPor });
       setTexto("");
     } catch (er) {
@@ -343,6 +346,17 @@ export function BarraMando({ alPensar }: { alPensar: (pensando: boolean) => void
                 {PERFILES.map((p) => (
                   <option key={p.slug} value={p.slug}>
                     {p.nombre}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="cz-inline">
+              Para qué departamento
+              <select value={deptoOrden} onChange={(e) => setDeptoOrden((e.target.value || "") as Area | "")}>
+                <option value="">El Cerebro reparte</option>
+                {ORDEN_SECTORES.filter((a) => a !== "direccion").map((a) => (
+                  <option key={a} value={a}>
+                    {SECTORES[a].titulo}
                   </option>
                 ))}
               </select>
