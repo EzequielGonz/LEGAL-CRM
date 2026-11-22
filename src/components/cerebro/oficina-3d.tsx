@@ -10,7 +10,7 @@
  * escena, nunca texto dentro del canvas. Es un espejo de la lista accesible:
  * la escena entera es aria-hidden.
  */
-import { Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, memo, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Html } from "@react-three/drei/web/Html";
 import * as THREE from "three";
@@ -470,7 +470,7 @@ function Tarjeta({ p, foco, hover, lejos, glifo, paso, cen }: { p: PuestoVisual;
 
 // --- Un puesto completo ---------------------------------------------------------------------------------
 
-function Puesto({
+const Puesto = memo(function Puesto({
   p,
   foco,
   hover,
@@ -498,14 +498,14 @@ function Puesto({
   alElegir: (a: Area) => void;
 }) {
   const festejoDesde = useRef<number | null>(null);
-  const anterior = useRef<string | null>(null);
+  const anterior = useRef<number | null>(null);
   const aro = useRef<THREE.Mesh>(null);
-  // El festejo arranca una sola vez cada vez que el puesto pasa a «listo».
+  // Festeja una sola vez cuando el escritorio termina su parte (suma una parte hecha).
+  // Al abrir la página no festeja: arranca con el valor que ya tiene.
   useEffect(() => {
-    if (p.estado === "listo" && anterior.current !== "listo") festejoDesde.current = tRef.current;
-    if (p.estado !== "listo") festejoDesde.current = null;
-    anterior.current = p.estado;
-  }, [p.estado, tRef]);
+    if (anterior.current !== null && p.partesHechas > anterior.current) festejoDesde.current = tRef.current;
+    anterior.current = p.partesHechas;
+  }, [p.partesHechas, tRef]);
 
   useFrame(() => {
     if (!aro.current) return;
@@ -610,7 +610,7 @@ function Puesto({
       </Html>
     </group>
   );
-}
+});
 
 // --- Sala ------------------------------------------------------------------------------------------------------
 
@@ -684,7 +684,7 @@ function Sala({ puestos, vista, animar, alElegir, recursos }: Pick<Escena3DProps
             tRef={tRef}
             recursos={recursos}
             glifo={g}
-            paso={paso}
+            paso={g ? paso : 0}
             setHover={setHover}
             alElegir={alElegir}
           />
@@ -703,8 +703,8 @@ export default function Escena3D(props: Escena3DProps) {
       gl={{ antialias: true, powerPreference: "high-performance" }}
       camera={{ fov: 40, near: 0.5, far: 80, position: camaraDe("sala").pos }}
       onCreated={({ gl, scene }) => {
-        gl.setClearColor("#1b1c36");
-        scene.background = new THREE.Color("#1b1c36");
+        gl.setClearColor("#0d0d12");
+        scene.background = new THREE.Color("#0d0d12");
         props.alListo?.();
       }}
       style={{ position: "absolute", inset: 0 }}

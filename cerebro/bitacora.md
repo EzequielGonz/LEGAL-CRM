@@ -118,3 +118,6 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 
 ## 22/11 cierre: biblioteca complementaria (extra)
 - El dueño subió la «Biblioteca complementaria CRM 4 rubros» (Word y paquete). Se guardó tal cual en `biblioteca/complementaria-2211/` como material extra de consulta. No se cambió ni se pisó nada del cerebro, las fichas, los prompts ni los bots. Las 135 fichas propuestas siguen inactivas: el mecanismo de alta las crearía activas, así que no se usa hasta hacer la comparación y tener el OK.
+
+## 22/11 noche: repaso de la Oficina 3D
+- Festeja el escritorio que terminó su parte (no siempre Dirección). Fondo neutro del panel, sin colores raros. Detalle en `docs/oficina-3d-2211/`. Pendiente: pasar la revisión por `fairmind-design:fairmind-accessibility-orchestrator` (no estuvo disponible en la copia aislada).

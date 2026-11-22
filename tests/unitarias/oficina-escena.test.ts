@@ -196,3 +196,26 @@ test("diorama: el puesto de la izquierda cae a la izquierda del centro y el zoom
   assert.deepEqual(proyeccionDiorama(6), proyeccionDiorama(6));
   assert.ok(centroPuestoDiorama(4).y > centroPuestoDiorama(0).y);
 });
+
+test("festejo: festeja el escritorio que terminó su parte, no siempre Dirección", async () => {
+  const { areasQueTerminaron } = await import("../../src/lib/oficina/escena");
+  const antes = puestosVisuales([tarea({ estado: "en_curso", ruta: ["analisis", "redes", "direccion"] })]);
+  // Análisis deja su parte y la tarea pasa a Redes: festeja Análisis (y nadie más).
+  const ahora = puestosVisuales([tarea({ estado: "en_curso", ruta: ["analisis", "redes", "direccion"], recorrido: [paso("analisis")] })]);
+  assert.deepEqual(areasQueTerminaron(antes, ahora), ["analisis"]);
+  assert.equal(ahora.find((x) => x.area === "analisis")!.partesHechas, 1);
+  assert.match(ahora.find((x) => x.area === "analisis")!.queHace, /Ya dejó su parte/);
+  // Después Redes termina: festeja Redes.
+  const luego = puestosVisuales([tarea({ estado: "en_curso", ruta: ["analisis", "redes", "direccion"], recorrido: [paso("analisis"), paso("redes")] })]);
+  assert.deepEqual(areasQueTerminaron(ahora, luego), ["redes"]);
+});
+
+test("festejo: sin foto anterior o sin cambios no festeja nadie; al aprobar no hay festejo falso", async () => {
+  const { areasQueTerminaron } = await import("../../src/lib/oficina/escena");
+  const t1 = puestosVisuales([tarea({ estado: "en_curso", recorrido: [paso("analisis")] })]);
+  assert.deepEqual(areasQueTerminaron(null, t1), []);
+  assert.deepEqual(areasQueTerminaron(t1, t1), []);
+  const aprobada = puestosVisuales([tarea({ estado: "lista", decision: "aprobada", recorrido: [paso("analisis")] })]);
+  assert.deepEqual(areasQueTerminaron(t1, aprobada), []);
+  assert.equal(aprobada.find((x) => x.area === "analisis")!.partesHechas, 0);
+});
