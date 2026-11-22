@@ -52,7 +52,7 @@ export function PinLoginForm({ configured, next }: { configured: boolean; next: 
       aria-busy={loading}
     >
       <div className="mb-6 flex flex-col items-center text-center">
-        <MarcaPanel className="mb-4" />
+        <MarcaPanel className="mb-4" animada />
         {/* 22/11: rótulo mono como /cerebro, arriba del título. */}
         <p className="pin-kicker mb-2">Acceso privado · 4 perfiles</p>
         <h1 className="pin-titulo font-serif text-2xl font-semibold">Panel central</h1>
