@@ -118,3 +118,8 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 
 ## 22/11 cierre: biblioteca complementaria (extra)
 - El dueño subió la «Biblioteca complementaria CRM 4 rubros» (Word y paquete). Se guardó tal cual en `biblioteca/complementaria-2211/` como material extra de consulta. No se cambió ni se pisó nada del cerebro, las fichas, los prompts ni los bots. Las 135 fichas propuestas siguen inactivas: el mecanismo de alta las crearía activas, así que no se usa hasta hacer la comparación y tener el OK.
+
+## 22/11 cierre: rediseño, Jarvis, Oficina 3D, recontacto y regla de arranque
+- Publicados en main: el recontacto de las 72 h (con la 0640 aplicada y solo Jurídico encendido), la Oficina 3D y la regla número uno (`00-arranque-para-agentes.md`).
+- En ramas: la fundación visual, Jarvis, el menú con Hoy, Chats y Campañas, y Resultados, Salud y Cerebro. Falta integrarlas, pasar la revisión final con agentes especialistas y publicar si cumplen. Detalle en `traspaso-sesion-2026-11-22-c.md`.
+- Correcciones del dueño: «ese fondo raro no» (estética clásica más detalles); «usá TODAS las herramientas y agentes personalizados, el cerebro completo para todos».

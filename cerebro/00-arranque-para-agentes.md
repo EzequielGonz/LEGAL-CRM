@@ -82,3 +82,28 @@ Orden del dueño (22/11): «siempre tienen que estar esas reglas marcadas, para 
   - informar qué se especificó, qué se implementó, qué se probó y qué se publicó;
   - informar qué herramientas se usaron.
 - Lo aprendido se anota en el cerebro (bitácora o archivo del área). Una corrección del dueño va a la tabla de errores de `14`.
+
+## 4. Agentes personalizados (usarlos, no solo los generales)
+
+Hay unos 280 agentes instalados por plugins. Hay que elegir el especialista, no un agente general:
+
+- **Diseño:**
+  - `a1-gallery:design-researcher` para referencias medidas;
+  - `agentic-council:Artisan`, `agentic-council:Advocate` y la skill `design-council`;
+  - `fairmind-design:*` para verificar el diseño y la accesibilidad;
+  - `agent-protocols:accessibility-specialist`.
+- **Código:**
+  - `agent-protocols:code-reviewer`, `agent-protocols:security-auditor`, `agent-protocols:test-engineer` y `agent-protocols:performance-engineer`;
+  - `backend-design:*` para esquema, seguridad e incidentes;
+  - `web-vitals-auditor:perf-forensics`;
+  - `claude-security:claude-security` para la revisión completa.
+- **Decisiones:**
+  - `agentic-council:Skeptic` como abogado del diablo, más `Strategist` y `Steward`;
+  - `mind-plus-plus:specialist-judge`.
+- **Análisis y redes:**
+  - `mind-plus-plus:marketing-*`;
+  - `brand-voice:*`;
+  - en `agent-architecture-designer`: «Strateg Tresci Social» y «Pisarz w Twoim Glosie».
+- **SEO:** `searchfit-seo:*` y `ai-advisors:ai-visibility-auditor`.
+
+Cada tarea grande termina con al menos 2 revisores independientes de especialidades distintas.
