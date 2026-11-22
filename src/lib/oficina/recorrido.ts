@@ -176,9 +176,10 @@ export function entradaA(lugar: Lugar): PuntoDeVista {
   }
   const s = SALAS[lugar];
   if (lugar === "direccion") {
-    const x = 0;
-    const z = s.z0 + 0.55;
-    return { x, z, yaw: yawHacia(x, z, 0, s.z1), pitch: -0.1 };
+    // Por la puerta oeste: de costado se ven el orbe, la bandeja de entregas y los escritorios.
+    const x = s.x0 + 0.6;
+    const z = -1.6;
+    return { x, z, yaw: yawHacia(x, z, s.x1 - 1, 1.4), pitch: -0.12 };
   }
   // En el rincón del lado de la puerta, mirando en diagonal hacia el rincón opuesto: se ve la sala entera.
   const [px, pz] = s.puerta;

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Instrument_Serif, Inter_Tight, JetBrains_Mono } from "next/font/google";
+import { Inter_Tight, JetBrains_Mono } from "next/font/google";
 import "../cerebro/cerebro.css";
 import "./oficina.css";
 import { requirePageSession } from "@/lib/acceso/pagina";
@@ -12,7 +12,6 @@ export const metadata = { title: "Oficina de agentes" };
 export const dynamic = "force-dynamic";
 
 const fuente = Inter_Tight({ subsets: ["latin"], weight: ["300", "400", "500", "600", "800"], display: "swap", variable: "--cz-f" });
-const serif = Instrument_Serif({ subsets: ["latin"], weight: "400", style: ["normal", "italic"], display: "swap", variable: "--of3-serif" });
 const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500", "700"], display: "swap", variable: "--cz-mono" });
 
 /**
@@ -28,7 +27,7 @@ export default async function OficinaPage({ searchParams }: { searchParams: Prom
   const sector = esSector(sp.sector) ? sp.sector : null;
   const oficina = await leerOficina();
     return (
-    <div className={`cz of3-pagina ${fuente.variable} ${mono.variable} ${serif.variable}`} style={{ ["--cz-f" as string]: fuente.style.fontFamily, ["--cz-mono" as string]: mono.style.fontFamily, ["--of3-serif" as string]: serif.style.fontFamily }}>
+    <div className={`cz of3-pagina ${fuente.variable} ${mono.variable}`} style={{ ["--cz-f" as string]: fuente.style.fontFamily, ["--cz-mono" as string]: mono.style.fontFamily }}>
       <Clasico cerebro>
         <nav className="cz-top" aria-label="Volver">
           <Link href="/cerebro" prefetch={false}>
