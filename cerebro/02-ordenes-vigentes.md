@@ -273,3 +273,7 @@ Todo lo demás son **decisiones de negocio** del dueño (abajo), no trabas de pr
 - Oficina: Gemini ordena en el panel, Claude trabaja; los agentes arrancan solo con «Arrancar ahora»; hasta borrador.
 - La sesión «accesos» arranca pidiendo al dueño que **conecte Supabase a mano** (en la sesión y en la tarea programada de la Oficina).
 - PostHog, Firecrawl y Skill Arena: instalados o por instalar, pero se usan solo con autorización o si hace falta de verdad.
+- **Segundo contacto (72 h) por plantilla de Meta, automático (22/11 noche):** el límite es la ventana de 24 h de Meta. Mientras se migra a Wasender, el recontacto sale solo con plantillas aprobadas de Meta. No cierra ventas por conversación: solo reabre la charla.
+- **Gravedad en campañas de Jurídico (22/11 noche, respuesta a la pregunta 5):** la etiqueta de gravedad (fractura, amputación…) se conecta a las campañas. Primero se envía a los lesionados más graves y el foco del cupo va a ellos.
+- **Ramas y Vercel (22/11 noche):** el dueño pidió ordenarlas. Primero inventario y propuesta (`21-orden-de-ramas-y-vercel.md`); se archiva con etiqueta y nada se borra sin su OK.
+- **Memoria en claude.ai:** el dueño la está cargando con Claude in Chrome (22/11 noche).
