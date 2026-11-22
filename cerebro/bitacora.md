@@ -123,3 +123,17 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 - Publicados en main: el recontacto de las 72 h (con la 0640 aplicada y solo Jurídico encendido), la Oficina 3D y la regla número uno (`00-arranque-para-agentes.md`).
 - En ramas: la fundación visual, Jarvis, el menú con Hoy, Chats y Campañas, y Resultados, Salud y Cerebro. Falta integrarlas, pasar la revisión final con agentes especialistas y publicar si cumplen. Detalle en `traspaso-sesion-2026-11-22-c.md`.
 - Correcciones del dueño: «ese fondo raro no» (estética clásica más detalles); «usá TODAS las herramientas y agentes personalizados, el cerebro completo para todos».
+## 22/11 noche: repaso de la Oficina 3D
+- Festeja el escritorio que terminó su parte (no siempre Dirección). Fondo neutro del panel, sin colores raros. Detalle en `docs/oficina-3d-2211/`. Pendiente: pasar la revisión por `fairmind-design:fairmind-accessibility-orchestrator` (no estuvo disponible en la copia aislada).
+
+## 22/11 · Rediseño publicado (commit 823d77c en main)
+
+- **Integrado:** marco-hoy + Jarvis repaso + chats-campañas + resultados-salud-cerebro + oficina-3d-repaso en `integracion/rediseno-2211`. Conflictos: Jarvis quedó con la versión del repaso; `VerMas` con una sola prop (`abiertoAlInicio`). Las piezas premium usan las fuentes clásicas del panel (no se cargan Geist ni Instrument).
+- **Revisión independiente (5 agentes en paralelo):** Artisan (diseño), accessibility-specialist, code-reviewer, Skeptic (producto) y perf-forensics. Arreglado antes de publicar:
+  - Seguridad: Jarvis vetaba solo por palabras («lanzar», «enviar»); `marketing_ejecutar_base` y otras que hacen salir mensajes pasaban. Ahora están vedadas, hay prueba sobre todo el catálogo y la ruta de confirmación devuelve 403 si la confirmación viene de Jarvis.
+  - Jarvis en oscuro: el tema invierte la escala slate y la hoja salía clara con textos pastel ilegibles. Hoja oscura de verdad, botón principal con texto oscuro, foco dorado 700, foco devuelto al cerrar, tope de 20 turnos.
+  - Hoy: anillos con el color de cada perfil (estaba Jurídico fijo) y atajos a Contactos, Citas y Seguimiento (pasaron a «Más»).
+  - Resultados y Salud: sin dato muestra «—» (no 0 ni 100 %).
+  - Claro: dorado 600/700 en arcos e íconos; pista del anillo sin sombra negra. Oficina: sin blur sobre el canvas.
+- **Verificado:** typecheck, 824 pruebas, build; humo con sesión en 10 pantallas a 1440 y 390 en Preview y en producción: todo 200, sin desborde, consola limpia, Jarvis presente, canvas 3D en /cerebro, sin fondo mesh.
+- **Queda para otra vuelta (no bloquea):** unificar los 3 CSS de mapeo (`.pp`, `.cc`, `.pm-clasico`); sacar de `premium.css` el mesh que ya no se monta; Cerebro todavía largo (11 pestañas detrás de «Ver más»); textos técnicos en Salud («Meta», «Wasender»); conteo «Responder a N» de Hoy mezcla posibles captaciones; Jarvis carga su hoja completa en todas las pantallas (cargar perezosa); probar la Oficina 3D en un celular real; lector de pantalla a mano.
