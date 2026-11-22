@@ -168,7 +168,7 @@ export function AccesosCerebro() {
         <b>Pedile a Jarvis</b>
         <span>Preguntas rápidas y cambios del panel. Lo que proponga queda para confirmar.</span>
       </Link>
-      <a href="#laboratorio" className="cz-acceso">
+      <a href="/laboratorio" className="cz-acceso">
         <b>Laboratorio de bots</b>
         <span>Probá cambios en los bots antes de que rijan. Se abre acá abajo; ningún botón envía mensajes.</span>
       </a>
