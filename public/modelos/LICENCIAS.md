@@ -2,7 +2,7 @@
 
 Todos los archivos de `public/modelos/oficina/` son de dominio público (CC0 1.0). Se descargaron de
 espejos en GitHub, se comprobó el archivo de licencia del autor en cada espejo, y se recomprimieron con
-glTF-Transform (meshopt, cuantización, sin animaciones repetidas). No se pagó nada.
+glTF-Transform (cuantización KHR_mesh_quantization y sin animaciones repetidas; sin meshopt ni Draco, que necesitan WebAssembly y la política de seguridad del panel no lo permite). No se pagó nada.
 
 | Archivo | Qué es | Autor | Licencia | Espejo de donde se bajó |
 |---|---|---|---|---|

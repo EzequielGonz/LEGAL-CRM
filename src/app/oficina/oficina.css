@@ -24,7 +24,7 @@
 .of3 .cz-ed-canvas { opacity: 1; }
 .of3-lienzo { position: absolute; inset: 0; }
 .of3-lienzo canvas { touch-action: none; }
-.of3 .of3-escena[data-listo="0"] .cz-ed-plano { filter: blur(2px) brightness(0.55); }
+.of3 .of3-escena[data-modo="3d"][data-listo="0"] .cz-ed-plano { filter: blur(2px) brightness(0.55); }
 
 /* --- Carga ------------------------------------------------------------------------------- */
 .of3-carga { position: absolute; inset: 0; z-index: 70; display: grid; place-content: center; justify-items: center; gap: 14px; background: radial-gradient(80% 70% at 50% 45%, rgba(18, 20, 36, 0.86), rgba(8, 9, 16, 0.94)); color: #f1eff5; text-align: center; }

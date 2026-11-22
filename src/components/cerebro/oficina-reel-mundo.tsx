@@ -373,7 +373,7 @@ const InstanciasMueble = memo(function InstanciasMueble({ pl, items, sombra }: {
 });
 
 function MueblesKenney({ items, sombra }: { items: Mueble[]; sombra: boolean }) {
-  const { scene } = useGLTF(RUTA_MUEBLES, false, true);
+  const { scene } = useGLTF(RUTA_MUEBLES, false, false);
   const pls = useMemo(() => plantillas(scene), [scene]);
   const porPieza = useMemo(() => {
     const m: Record<string, Mueble[]> = {};
@@ -1158,4 +1158,4 @@ export function Mundo({ salas, hojas, sombras, luces, aerea, resaltada, alTocarP
   );
 }
 
-useGLTF.preload(RUTA_MUEBLES, false, true);
+useGLTF.preload(RUTA_MUEBLES, false, false);

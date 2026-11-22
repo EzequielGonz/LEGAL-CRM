@@ -546,13 +546,13 @@ function actividadCafeQuieto(pl: Plan, t: number): boolean {
 }
 
 function Personajes({ salas, animar, aerea, agenteSel, sombras, alElegir }: { salas: Record<Area, SalaVisual>; animar: boolean; aerea: boolean; agenteSel: string | null; sombras: boolean; alElegir: (c: string) => void }) {
-  const g0 = useGLTF(RUTA(MODELOS[0]), false, true);
-  const g1 = useGLTF(RUTA(MODELOS[1]), false, true);
-  const g2 = useGLTF(RUTA(MODELOS[2]), false, true);
-  const g3 = useGLTF(RUTA(MODELOS[3]), false, true);
-  const g4 = useGLTF(RUTA(MODELOS[4]), false, true);
-  const g5 = useGLTF(RUTA(MODELOS[5]), false, true);
-  const anim = useGLTF(RUTA_ANIM, false, true);
+  const g0 = useGLTF(RUTA(MODELOS[0]), false, false);
+  const g1 = useGLTF(RUTA(MODELOS[1]), false, false);
+  const g2 = useGLTF(RUTA(MODELOS[2]), false, false);
+  const g3 = useGLTF(RUTA(MODELOS[3]), false, false);
+  const g4 = useGLTF(RUTA(MODELOS[4]), false, false);
+  const g5 = useGLTF(RUTA(MODELOS[5]), false, false);
+  const anim = useGLTF(RUTA_ANIM, false, false);
   const escenas = useMemo(() => ({ [MODELOS[0]]: g0.scene, [MODELOS[1]]: g1.scene, [MODELOS[2]]: g2.scene, [MODELOS[3]]: g3.scene, [MODELOS[4]]: g4.scene, [MODELOS[5]]: g5.scene }) as Record<string, THREE.Object3D>, [g0, g1, g2, g3, g4, g5]);
   const lista = useMemo(() => planes(salas), [salas]);
   const tRef = useRef(0);
@@ -742,5 +742,5 @@ export default function OficinaReel3D(props: Escena3DProps) {
   );
 }
 
-for (const m of MODELOS) useGLTF.preload(RUTA(m), false, true);
-useGLTF.preload(RUTA_ANIM, false, true);
+for (const m of MODELOS) useGLTF.preload(RUTA(m), false, false);
+useGLTF.preload(RUTA_ANIM, false, false);
