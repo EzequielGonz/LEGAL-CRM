@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { Boton } from "./boton";
 
 export interface AccionJarvis {
@@ -12,14 +13,16 @@ export interface SaludoJarvisProps {
   frases: [string, string?];
   /** Hasta dos acciones; la primera es la principal. */
   acciones?: [AccionJarvis, AccionJarvis?];
+  /** Botón extra (por ejemplo el que abre Jarvis): va después de las acciones. */
+  children?: ReactNode;
+  className?: string;
   id?: string;
 }
 
 /** Tarjeta de Jarvis: vidrio intenso, radio 24, saludo en serif itálica, dos frases y como mucho dos botones. */
-export function SaludoJarvis({ saludo, frases, acciones, id = "pm-jarvis" }: SaludoJarvisProps) {
+export function SaludoJarvis({ saludo, frases, acciones, children, className, id = "pm-jarvis" }: SaludoJarvisProps) {
   return (
-    <section className="pm-tarjeta pm-tarjeta--vidrio pm-entra-vidrio pm-jarvis" aria-labelledby={`${id}-saludo`}>
-      <span className="pm-jarvis__orbe" aria-hidden="true" />
+    <section className={`pm-tarjeta pm-tarjeta--vidrio pm-entra-vidrio pm-jarvis${className ? ` ${className}` : ""}`} aria-labelledby={`${id}-saludo`}>
       <h2 id={`${id}-saludo`} className="pm-jarvis__saludo">
         {saludo}
       </h2>
@@ -28,15 +31,16 @@ export function SaludoJarvis({ saludo, frases, acciones, id = "pm-jarvis" }: Sal
           <p key={f}>{f}</p>
         ))}
       </div>
-      {acciones ? (
+      {acciones || children ? (
         <div className="pm-jarvis__acciones">
-          {acciones
+          {((acciones ?? []) as (AccionJarvis | undefined)[])
             .filter((a): a is AccionJarvis => !!a)
             .map((a, i) => (
               <Boton key={a.href + a.texto} href={a.href} variante={i === 0 ? "primario" : "secundario"}>
                 {a.texto}
               </Boton>
             ))}
+          {children}
         </div>
       ) : null}
     </section>

@@ -9,7 +9,6 @@ import type { ParteDelDia } from "@/lib/jarvis/parte";
 import { EVENTO_ASISTENTE, type Propuesta } from "@/components/asistente/asistente-panel";
 import { useDialogo } from "@/components/ui/use-dialogo";
 import { Icono } from "@/components/ui/icono-seccion";
-import { geist, instrumentSerif } from "@/components/jarvis/fuentes";
 import { guardarAbierto, guardarCharla, guardarParteCache, guardarParteCerrado, guardarUltimaVisita, leerAbierto, leerCharla, leerParteCache, leerParteCerrado, leerUltimaVisita, type MensajeJarvis } from "@/components/jarvis/almacen";
 import { JvConfirmar } from "@/components/jarvis/jv-confirmar";
 import { JvParte } from "@/components/jarvis/jv-parte";
@@ -233,30 +232,15 @@ export function Jarvis({ slug, nombrePerfil }: { slug: SlugPerfil; nombrePerfil:
     }
   }
 
-  // ---- parallax sutil de las manchas (apagado con «reducir movimiento»)
-  const cuadro = useRef(0);
-  function alMover(e: React.PointerEvent<HTMLElement>) {
-    if (typeof window === "undefined" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const el = panel.current;
-    if (!el || cuadro.current) return;
-    const { clientX, clientY } = e;
-    cuadro.current = requestAnimationFrame(() => {
-      cuadro.current = 0;
-      const r = el.getBoundingClientRect();
-      el.style.setProperty("--jv-px", (((clientX - r.left) / r.width) * 2 - 1).toFixed(3));
-      el.style.setProperty("--jv-py", (((clientY - r.top) / r.height) * 2 - 1).toFixed(3));
-    });
-  }
-
   const hayAviso = !abierto && parteVisible && datosParte !== null;
-  const claseRaiz = `${geist.variable} ${instrumentSerif.variable}`;
 
   return (
-    <div className={claseRaiz}>
+    <div>
       {!abierto && (
         <button type="button" className="jv-orbe" onClick={() => abrir()} aria-label="Abrir Jarvis" aria-keyshortcuts="Control+J Meta+J" title="Jarvis · Ctrl J">
-          <span className="jv-orbe-halo" aria-hidden="true" />
-          <span className="jv-orbe-esfera" aria-hidden="true" />
+          <span className="jv-orbe-esfera" aria-hidden="true">
+            <Icono nombre="asistente" />
+          </span>
           {hayAviso && <span className="jv-orbe-aviso" aria-hidden="true" />}
           {hayAviso && <span className="sr-only">Hay un parte del día para leer</span>}
         </button>
@@ -276,19 +260,14 @@ export function Jarvis({ slug, nombrePerfil }: { slug: SlugPerfil; nombrePerfil:
             tabIndex={-1}
             data-asistente=""
             className="jv-hoja"
-            onPointerMove={alMover}
             onKeyDown={(e) => {
               if (e.key === "Escape" && !modal) cerrar();
             }}
           >
-            <div className="jv-mesh" aria-hidden="true">
-              <i className="jv-mancha jv-mancha-violeta" />
-              <i className="jv-mancha jv-mancha-magenta" />
-              <i className="jv-mancha jv-mancha-turquesa" />
-            </div>
-
             <header className="jv-cabeza">
-              <span className="jv-orbe-mini" aria-hidden="true" />
+              <span className="jv-orbe-mini" aria-hidden="true">
+                <Icono nombre="asistente" />
+              </span>
               <div className="jv-cabeza-texto">
                 <p className="jv-nombre">Jarvis</p>
                 <p className="jv-sub">Tu secretario en {nombrePerfil}</p>

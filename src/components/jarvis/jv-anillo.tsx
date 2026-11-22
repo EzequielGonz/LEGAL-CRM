@@ -70,11 +70,10 @@ export function JvAnillo({ valor, meta, etiqueta, nota, color, tamano = 76, gros
           fill="none"
           strokeWidth={grosor}
           strokeLinecap="round"
-          stroke={color}
           strokeDasharray={circ}
           strokeDashoffset={circ * (1 - prop)}
           transform={`rotate(-90 ${tamano / 2} ${tamano / 2})`}
-          style={{ filter: `drop-shadow(0 0 6px ${color})` }}
+          style={{ stroke: color, filter: "drop-shadow(0 0 4px rgb(var(--c-gold-500) / 0.35))" }}
         />
       </svg>
       <span className="jv-anillo-cifra" aria-hidden="true">

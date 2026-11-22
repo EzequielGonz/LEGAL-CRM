@@ -11,7 +11,7 @@ const etiquetas = (s: { label: string }[]) => s.map((x) => x.label);
 test("sin nada guardado, el menú es el de fábrica", () => {
   assert.deepEqual(seccionesDePerfil("marketing", null), fabrica);
   assert.deepEqual(aplicarMenuPersonal(fabrica, {}), fabrica);
-  assert.deepEqual(etiquetas(fabrica), ["Hoy", "Chats", "Contactos", "Campañas", "Bot IA", "WhatsApp oficial (Meta)", "WhatsApp por QR (Wasender)", "Redes", "Ajustes"]);
+  assert.deepEqual(etiquetas(fabrica), ["Hoy", "Chats", "Campañas", "Resultados", "Salud", "Contactos", "Bot IA", "WhatsApp oficial (Meta)", "WhatsApp por QR (Wasender)", "Redes", "Ajustes"]);
 });
 
 test("renombrar, ocultar y mover una sección", () => {
@@ -19,12 +19,13 @@ test("renombrar, ocultar y mover una sección", () => {
   assert.equal(f.ok, true);
   if (!f.ok) return;
   const menu = seccionesDePerfil("marketing", f.valor);
-  assert.deepEqual(etiquetas(menu.filter((s) => s.grupo === "trabajo")), ["Campañas", "Hoy", "Chats", "Clientes"]);
+  assert.deepEqual(etiquetas(menu.filter((s) => s.grupo === "trabajo")), ["Campañas", "Hoy", "Chats", "Resultados", "Salud"]);
+  assert.deepEqual(etiquetas(menu.filter((s) => s.grupo === "mas")), ["Clientes", "Bot IA", "WhatsApp oficial (Meta)", "WhatsApp por QR (Wasender)", "Redes", "Ajustes"]);
   assert.equal(menu.find((s) => s.clave === "redes")?.oculta, true);
   assert.equal(menu.find((s) => s.clave === "contactos")?.href, fabrica.find((s) => s.clave === "contactos")?.href, "cambia el nombre, no a dónde lleva");
   assert.equal(f.descripcion.length, 3);
-  // Mover no saca a «Configurar» de su lugar.
-  assert.deepEqual(etiquetas(menu).slice(4), ["Bot IA", "WhatsApp oficial (Meta)", "WhatsApp por QR (Wasender)", "Redes", "Ajustes"]);
+  // Mover no saca a «Más» de su lugar: va después de los cinco destinos.
+  assert.deepEqual(etiquetas(menu).slice(5), ["Clientes", "Bot IA", "WhatsApp oficial (Meta)", "WhatsApp por QR (Wasender)", "Redes", "Ajustes"]);
 });
 
 test("se puede seguir nombrando a una sección por su nombre nuevo, y volver al original", () => {
@@ -46,10 +47,10 @@ test("Hoy y Ajustes no se pueden ocultar: sin ellas no hay cómo volver", () => 
 });
 
 test("renombrar una pestaña", () => {
-  const f = fusionarMenu(null, [{ seccion: "Hoy", pestana: "Resultados", nombre_pestana: "Números" }], fabrica);
+  const f = fusionarMenu(null, [{ seccion: "Resultados", pestana: "Historial", nombre_pestana: "Números" }], fabrica);
   assert.ok(f.ok);
-  const hoy = seccionesDePerfil("marketing", f.ok ? f.valor : null).find((s) => s.clave === "inicio")!;
-  assert.ok(hoy.tabs.some((t) => t.label === "Números"));
+  const res = seccionesDePerfil("marketing", f.ok ? f.valor : null).find((s) => s.clave === "resultados")!;
+  assert.ok(res.tabs.some((t) => t.label === "Números"));
   assert.equal(fusionarMenu(null, [{ seccion: "Hoy", pestana: "No existe", nombre_pestana: "X" }], fabrica).ok, false);
 });
 

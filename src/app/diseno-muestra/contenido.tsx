@@ -1,5 +1,5 @@
 import { ACENTO_RUBRO, NOMBRE_RUBRO, RUBROS_PREMIUM, TEXTO_PREMIUM, FONDO_PREMIUM, claseRubro } from "@/lib/premium/rubros";
-import { Anillo, Bento, BentoCelda, Boton, Cifra, Encabezado, FondoVivo, Medidor, Pastilla, SaludoJarvis, Tarjeta, VerMas } from "@/components/premium";
+import { Anillo, Bento, BentoCelda, Boton, Cifra, Encabezado, Medidor, Pastilla, SaludoJarvis, Tarjeta, VerMas } from "@/components/premium";
 
 /**
  * Muestra de la fundación visual (22/11): todos los componentes premium con datos sintéticos, y una
@@ -49,7 +49,6 @@ function CeldaAnillo({ i }: { i: number }) {
 export function ContenidoMuestra() {
   return (
     <div className="pm-lienzo">
-      <FondoVivo />
       <main id="contenido" className="pm-pagina">
         <Encabezado titulo="Hoy" subtitulo="Una pantalla armada en bento con la nueva base visual y datos de prueba." rubro="juridico">
           <Boton soloIcono etiqueta="Actualizar" icono={IconoActualizar} />
@@ -59,10 +58,7 @@ export function ContenidoMuestra() {
 
         <Bento>
           <BentoCelda columnas={12} columnasMedio={6}>
-            <div className="pm-orbes pm-rubro-juridico">
-              <span className="pm-orbe pm-orbe--a" aria-hidden="true" />
-              <span className="pm-orbe pm-orbe--b" aria-hidden="true" />
-              <span className="pm-orbe pm-orbe--c" aria-hidden="true" />
+            <div>
               <SaludoJarvis
               saludo="Buen día, Ana."
               frases={["Entraron 46 consultas desde ayer.", "3 personas esperan respuesta hace más de 2 horas."]}

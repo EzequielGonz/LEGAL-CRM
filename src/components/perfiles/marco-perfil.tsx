@@ -16,8 +16,8 @@ import { AvisoCodigoAnterior } from "@/components/acceso/aviso-codigo-anterior";
 
 /**
  * Marco común de los paneles (renovado 18/10): paleta del perfil
- * (`data-tema`, y el acento elegido en el lápiz si hay uno), menú de seis
- * secciones, pestañas de la sección actual, «Más opciones» al pie y el
+ * (`data-tema`, y el acento elegido en el lápiz si hay uno), menú de cinco
+ * destinos más «Más» (22/11), pestañas de la sección actual, «Más opciones» al pie y el
  * asistente IA (Jarvis). Arriba de cada pantalla, la barra de salud (solo cuando algo
  * frena la operación), transmitida aparte para no demorar el contenido.
  */
@@ -37,11 +37,12 @@ export async function MarcoPerfil({ slug, children, sinSalud = false }: { slug: 
   const estilo = (variablesAcento(marca.acento) ?? undefined) as React.CSSProperties | undefined;
   return (
     <NivelProvider>
-      <div data-tema={slug} style={estilo} className="marco-panel min-h-screen lg:flex">
+      <div data-tema={slug} style={estilo} className="marco-panel pp min-h-screen lg:flex">
         {/* 15/11: primero de todo, antes de la barra del celular, para que funcione también ahí. */}
         <a href="#contenido" className="skip-link">
           Saltar al contenido
         </a>
+        {/* 22/11: `pp` baja los detalles premium (sombras en capas, relieve) sobre la estética clásica del panel; sin mesh ni esferas. */}
         <Suspense fallback={<div className="hidden w-[16rem] shrink-0 border-r border-slate-200 bg-white lg:block" aria-hidden="true" />}>
           <MenuPerfil slug={slug} nombre={marca.nombre} logo={marca.logo} menu={menu} />
         </Suspense>

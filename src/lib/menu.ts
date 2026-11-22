@@ -2,7 +2,13 @@
  * Menú del panel (reorganización 18/10). Seis secciones iguales en los
  * cuatro perfiles; cada sección agrupa sus vistas en pestañas:
  *
- * 24/10: dos grupos. Trabajo (Hoy · Chats · Contactos · Campañas) y
+ * 22/11 (simplificación): cinco destinos de trabajo (Hoy · Chats · Campañas ·
+ * Resultados · Salud) y «Más», que junta todo lo demás (Contactos, Bot IA,
+ * WhatsApp, Redes, Ajustes). Nada se borra: lo que sale de la barra sigue
+ * abriendo por su dirección y está en el panel «Más». Cerebro y el cambio de
+ * perfil van al pie del menú.
+ *
+ * 24/10 (histórico): dos grupos. Trabajo (Hoy · Chats · Contactos · Campañas) y
  * Configurar (Bot IA · Línea y plantillas · Redes · Ajustes).
  *
  *  1. Inicio          — resumen (captados primero), estadísticas y salud.
@@ -33,12 +39,12 @@ export interface ItemMenu {
   oculto?: boolean;
 }
 
-export type ClaveSeccion = "inicio" | "conversaciones" | "contactos" | "captacion" | "wasender" | "bot" | "linea" | "redes" | "configuracion";
+export type ClaveSeccion = "inicio" | "conversaciones" | "contactos" | "captacion" | "resultados" | "salud" | "wasender" | "bot" | "linea" | "redes" | "configuracion";
 
 export interface SeccionMenu {
   clave: ClaveSeccion;
-  /** 24/10: «trabajo» (lo diario) o «configurar». */
-  grupo: "trabajo" | "configurar";
+  /** 22/11: «trabajo» (los cinco destinos de la barra) o «mas» (todo lo demás, en el panel «Más»). */
+  grupo: "trabajo" | "mas";
   label: string;
   /** Nombre del ícono (ver `Icono`). */
   icono: string;
@@ -77,13 +83,13 @@ function seccionesDeFabrica(slug: SlugPerfil): SeccionMenu[] {
   const base = j ? "" : `/panel/${slug}`;
   const mk = slug === "marketing";
 
-  const inicio: ItemMenu[] = [
-    { href: comun(slug, "hoy"), label: "Resumen", match: "/hoy" },
-    // 13/11: cada cifra con sus personas (quién se captó, se derivó o se cerró, y de dónde vino).
+  const inicio: ItemMenu[] = [{ href: comun(slug, "hoy"), label: "Resumen", match: "/hoy" }];
+  // 13/11: cada cifra con sus personas (quién se captó, se derivó o se cerró, y de dónde vino).
+  const resultados: ItemMenu[] = [
     { href: comun(slug, "resultados"), label: "Resultados", match: "/resultados" },
     { href: `${base}/estadisticas`, label: "Historial" },
-    { href: comun(slug, "salud"), label: "Salud del sistema", match: "/salud" },
   ];
+  const salud: ItemMenu[] = [{ href: comun(slug, "salud"), label: "Salud del sistema", match: "/salud" }];
 
   // Reorganización 2 (18/10): Conversaciones y Contactos muestran solo lo que
   // vale la pena, agrupado; la base fría vive en Prospectos, por base.
@@ -159,13 +165,16 @@ function seccionesDeFabrica(slug: SlugPerfil): SeccionMenu[] {
   return [
     seccion("inicio", "Hoy", "inicio", inicio),
     seccion("conversaciones", "Chats", "inbox", conversaciones),
-    seccion("contactos", "Contactos", "prospectos", contactos),
     seccion("captacion", "Campañas", "campanas", captacion),
-    seccion("bot", "Bot IA", "agentes", bot, "configurar"),
-    seccion("linea", "WhatsApp oficial (Meta)", "redes", linea, "configurar"),
-    seccion("wasender", "WhatsApp por QR (Wasender)", "wasender", wasender, "configurar"),
-    seccion("redes", "Redes", "redes", redes, "configurar"),
-    seccion("configuracion", "Ajustes", "configuracion", configuracion, "configurar"),
+    seccion("resultados", "Resultados", "estadisticas", resultados),
+    seccion("salud", "Salud", "salud", salud),
+    // «Más»: Contactos y la configuración. Siguen todos accesibles desde el panel «Más».
+    seccion("contactos", "Contactos", "prospectos", contactos, "mas"),
+    seccion("bot", "Bot IA", "agentes", bot, "mas"),
+    seccion("linea", "WhatsApp oficial (Meta)", "redes", linea, "mas"),
+    seccion("wasender", "WhatsApp por QR (Wasender)", "wasender", wasender, "mas"),
+    seccion("redes", "Redes", "redes", redes, "mas"),
+    seccion("configuracion", "Ajustes", "configuracion", configuracion, "mas"),
   ];
 }
 

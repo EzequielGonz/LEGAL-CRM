@@ -13,3 +13,4 @@ export { Bento, BentoCelda, type BentoProps, type BentoCeldaProps } from "./bent
 export { Boton, type BotonProps } from "./boton";
 export { Encabezado, type EncabezadoProps } from "./encabezado";
 export { useParalaje, type OpcionesParalaje } from "./use-paralaje";
+export { BotonJarvis } from "./boton-jarvis";
