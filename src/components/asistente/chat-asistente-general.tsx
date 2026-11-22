@@ -6,6 +6,7 @@ import { Icono } from "@/components/ui/icono-seccion";
 import { TarjetaPropuesta, type Propuesta } from "@/components/asistente/asistente-panel";
 import { BocetoCampanas } from "@/components/asistente/boceto-campanas";
 import { MAX_ARCHIVOS, MAX_FILAS_ARCHIVO, repetidosEntreArchivos, resumirHoja, type ResumenArchivo } from "@/lib/asistente/general";
+import { TextoVivo } from "@/components/jarvis/jv-resultado";
 import { JvConfirmar } from "@/components/jarvis/jv-confirmar";
 import { CharlasAnteriores, type CharlaResumen } from "@/components/asistente/charlas-anteriores";
 
@@ -98,7 +99,10 @@ export function ChatAsistenteGeneral({
   alCambiarPropuesta,
   variante = "clasica",
   pedidoInicial = "",
+  ocultarAccesos = false,
 }: {
+  /** Vuelta 6: en /asistente los accesos van como botones neumórficos al costado (llegan por el evento «jarvis:acceso»). */
+  ocultarAccesos?: boolean;
   /** Texto precargado (por ejemplo desde «Pedile a Jarvis» en Resumen o Cerebro). No se envía solo. */
   pedidoInicial?: string;
   accesos?: AccesoAsistente[];
@@ -114,6 +118,8 @@ export function ChatAsistenteGeneral({
 }) {
   const jv = variante === "jarvis";
   const [mensajes, setMensajes] = useState<Mensaje[]>([]);
+  /** Vuelta 6: la última respuesta recién llegada se escribe en vivo (solo en la variante Jarvis). */
+  const [nuevo, setNuevo] = useState<number | null>(null);
   const [texto, setTexto] = useState(pedidoInicial);
   const [pensando, setPensando] = useState(false);
   const [adjuntos, setAdjuntos] = useState<Adjunto[]>([]);
@@ -393,7 +399,10 @@ export function ChatAsistenteGeneral({
         const data = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(data?.error ?? "No pude responder.");
         const respuesta: Mensaje = { rol: "asistente", texto: data.texto, propuestas: data.propuestas ?? [], enlaces: data.enlaces ?? [] };
-        setMensajes((m) => [...m, respuesta]);
+        setMensajes((m) => {
+          setNuevo(m.length);
+          return [...m, respuesta];
+        });
         guardarEnCharla([historial[historial.length - 1], respuesta]);
       } catch (e) {
         setMensajes((m) => [...m, { rol: "asistente", texto: (e as Error).message, error: true }]);
@@ -414,6 +423,19 @@ export function ChatAsistenteGeneral({
     if (a.accion === "archivos") archivo.current?.click();
     else window.setTimeout(() => entrada.current?.focus(), 0);
   }
+  // Vuelta 6: los botones neumórficos de /asistente piden un acceso por su título.
+  const usarAccesoRef = useRef(usarAcceso);
+  usarAccesoRef.current = usarAcceso;
+  useEffect(() => {
+    if (!jv) return;
+    const alAcceso = (e: Event) => {
+      const titulo = (e as CustomEvent<string>).detail;
+      const a = accesos.find((x) => x.titulo === titulo);
+      if (a) usarAccesoRef.current(a);
+    };
+    window.addEventListener("jarvis:acceso", alAcceso);
+    return () => window.removeEventListener("jarvis:acceso", alAcceso);
+  }, [jv, accesos]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -516,7 +538,11 @@ export function ChatAsistenteGeneral({
                 return (
                   <div key={i} className={jv ? (m.rol === "usuario" ? "jv-fila jv-fila-yo" : "jv-fila") : m.rol === "usuario" ? "flex justify-end" : ""}>
                     <div className={jv ? (m.rol === "usuario" ? "jv-burbuja jv-burbuja-yo" : m.error ? "jv-burbuja jv-burbuja-error" : "jv-burbuja") : m.rol === "usuario" ? "max-w-[85%] rounded-2xl rounded-br-md bg-slate-900 px-3.5 py-2 text-sm text-white" : "max-w-full"}>
-                      <p className={jv ? "jv-burbuja-texto" : `whitespace-pre-wrap text-sm ${m.rol === "usuario" ? "" : m.error ? "text-red-700" : "text-slate-800"}`}>{m.texto}</p>
+                      {jv && m.rol !== "usuario" && !m.error ? (
+                        <TextoVivo texto={m.texto} animar={nuevo === i} />
+                      ) : (
+                        <p className={jv ? "jv-burbuja-texto" : `whitespace-pre-wrap text-sm ${m.rol === "usuario" ? "" : m.error ? "text-red-700" : "text-slate-800"}`}>{m.texto}</p>
+                      )}
                       {planes.length > 0 && <BocetoCampanas propuestas={planes} alCambiar={(np) => actualizarPropuesta(i, np)} />}
                       {otras.map((p) =>
                         jv ? <JvConfirmar key={p.id} p={p} alCambiar={(np) => actualizarPropuesta(i, np)} /> : <TarjetaPropuesta key={p.id} p={p} alCambiar={(np) => actualizarPropuesta(i, np)} />
@@ -555,7 +581,7 @@ export function ChatAsistenteGeneral({
                 enviar(texto);
               }}
             >
-              {jv && accesos.length > 0 && (
+              {jv && !ocultarAccesos && accesos.length > 0 && (
                 <div className="jv-sugerencias" role="group" aria-label="Sugerencias rápidas">
                   {accesos.map((a) => (
                     <button key={a.titulo} type="button" className="jv-chip" disabled={pensando} title={a.descripcion} onClick={() => usarAcceso(a)}>

@@ -5,6 +5,7 @@
  */
 import type { Propuesta } from "@/lib/asistente/eventos";
 import { hechosValidos, type HechoJarvis } from "@/lib/jarvis/historial";
+import type { TarjetaJarvis } from "@/lib/jarvis/tablero";
 
 export interface MensajeJarvis {
   rol: "usuario" | "jarvis";
@@ -12,6 +13,8 @@ export interface MensajeJarvis {
   propuestas?: Propuesta[];
   enlaces?: { href: string; texto: string }[];
   borradores?: { para: string | null; texto: string }[];
+  /** Vuelta 6: gráficos y listas armados con lo que leyó Jarvis. */
+  tarjetas?: TarjetaJarvis[];
   error?: boolean;
 }
 
@@ -132,6 +135,25 @@ export function leerHechos(slug: string): HechoJarvis[] {
 export function guardarHechos(slug: string, hechos: HechoJarvis[]) {
   try {
     local()?.setItem(`jarvis:hechos:${slug}`, JSON.stringify(hechos));
+  } catch {
+    /* nada */
+  }
+}
+
+/** Caché corta en la sesión (por ejemplo, el tablero de la semana: 2 minutos). */
+export function leerCacheSesion(clave: string, ahoraMs: number, vigenciaMs: number): unknown | null {
+  try {
+    const crudo = sesion()?.getItem(`jarvis:cache:${clave}`);
+    if (!crudo) return null;
+    const v = JSON.parse(crudo) as ParteGuardado;
+    return ahoraMs - v.t < vigenciaMs ? v.datos : null;
+  } catch {
+    return null;
+  }
+}
+export function guardarCacheSesion(clave: string, datos: unknown, ahoraMs: number) {
+  try {
+    sesion()?.setItem(`jarvis:cache:${clave}`, JSON.stringify({ t: ahoraMs, datos }));
   } catch {
     /* nada */
   }

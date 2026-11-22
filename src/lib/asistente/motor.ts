@@ -28,6 +28,7 @@ import { DECLARACIONES_JARVIS, NOMBRES_JARVIS } from "@/lib/jarvis/herramientas"
 import { HERRAMIENTAS_VEDADAS, sinVedadas } from "@/lib/jarvis/seguridad";
 import { ejecutarHerramientaJarvis, registrarGastoJarvis, type BorradorJarvis, type UsoModelo } from "@/lib/jarvis/servidor";
 import type { PantallaId } from "@/lib/jarvis/pantallas";
+import { tarjetasDeResultados, type TarjetaJarvis } from "@/lib/jarvis/tablero";
 import { DECLARACIONES_LABORATORIO, NOMBRES_LABORATORIO, REGLAS_LABORATORIO, ejecutarHerramientaLaboratorio } from "@/lib/laboratorio/asistente";
 
 export interface MensajeAsistente {
@@ -479,6 +480,8 @@ export async function conversarConAsistente(
 
 export interface RespuestaJarvis extends RespuestaAsistente {
   borradores: BorradorJarvis[];
+  /** Vuelta 6: tarjetas ricas (gráfico, personas con nombre corto, estado) armadas con lo que leyeron las herramientas. */
+  tarjetas: TarjetaJarvis[];
   /** Propuestas que se descartaron por ser de las que Jarvis no hace. */
   descartadas: number;
 }
@@ -492,6 +495,7 @@ export async function conversarConJarvis(slug: SlugPerfil, mensajes: MensajeAsis
   const sistemaJarvis = [sistema(slug, nombre), bloqueJarvis({ pantalla: opciones.pantalla, ruta: opciones.ruta, perfilNombre: nombre })].join("\n");
   const uso: UsoModelo = { entrada: 0, salida: 0, razonamiento: 0, llamadas: 0 };
   const usadas = new Set<string>();
+  const leidos: { nombre: string; resultado: unknown }[] = [];
   const t0 = Date.now();
   let texto = "";
   try {
@@ -502,8 +506,9 @@ export async function conversarConJarvis(slug: SlugPerfil, mensajes: MensajeAsis
       async (n, a) => {
         usadas.add(n);
         if (HERRAMIENTAS_VEDADAS.includes(n)) return { error: "Jarvis no tiene esa herramienta: lanzar, publicar y escribirle a una persona lo hacen los dueños." };
-        if ((NOMBRES_JARVIS as readonly string[]).includes(n)) return ejecutarHerramientaJarvis(n, a, { slug, rubroId, borradores });
-        return ejecutar(n, a, ctx);
+        const r = (NOMBRES_JARVIS as readonly string[]).includes(n) ? await ejecutarHerramientaJarvis(n, a, { slug, rubroId, borradores }) : await ejecutar(n, a, ctx);
+        leidos.push({ nombre: n, resultado: r });
+        return r;
       },
       (u) => {
         uso.entrada += u.entrada;
@@ -526,7 +531,7 @@ export async function conversarConJarvis(slug: SlugPerfil, mensajes: MensajeAsis
       .in("id", vedadas.map((v) => v.id))
       .eq("estado", "propuesta");
   }
-  return { texto: texto || "Listo.", propuestas: visibles, enlaces: ctx.enlaces, borradores, descartadas: vedadas.length };
+  return { texto: texto || "Listo.", propuestas: visibles, enlaces: ctx.enlaces, borradores, tarjetas: tarjetasDeResultados(leidos, slug), descartadas: vedadas.length };
 }
 
 // ---------------------------------------------------------------------------

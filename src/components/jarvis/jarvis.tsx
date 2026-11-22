@@ -6,9 +6,10 @@ import { usePathname } from "next/navigation";
 import type { SlugPerfil } from "@/lib/marca";
 import type { ParteDelDia } from "@/lib/jarvis/parte";
 import { EVENTO_ASISTENTE, type Propuesta } from "@/lib/asistente/eventos";
-import { Icono } from "@/components/ui/icono-seccion";
-import { guardarAbierto, guardarParteCache, guardarUltimaVisita, leerAbierto, leerParteCache, leerParteCerrado, leerUltimaVisita } from "@/components/jarvis/almacen";
+import { guardarAbierto, guardarParteCache, guardarUltimaVisita, leerParteCache, leerParteCerrado, leerUltimaVisita } from "@/components/jarvis/almacen";
+import { OrbeVivo } from "@/components/jarvis/jv-orbe-vivo";
 import "./jarvis.css";
+import "./jarvis-vivo.css";
 
 export interface DatosParte {
   parte: ParteDelDia;
@@ -24,24 +25,28 @@ const cargarHoja = () => import("@/components/jarvis/jarvis-hoja").then((m) => m
 const JarvisHoja = dynamic(cargarHoja, {
   ssr: false,
   loading: () => (
-    <aside className="jv-hoja jv-hoja-cargando" aria-label="Jarvis">
-      <p role="status" className="jv-inicio-texto">
-        Abriendo Jarvis…
-      </p>
-    </aside>
+    <>
+      <div className="jv-velo2" aria-hidden="true" />
+      <div className="jv-modo jv-modo-cargando" aria-label="Jarvis">
+        <p role="status" className="jv-modo-estado">
+          Abriendo Jarvis…
+        </p>
+      </div>
+    </>
   ),
 });
 
 /**
- * Jarvis (22/11): el secretario del panel. Un orbe flotante abajo a la derecha abre una hoja de vidrio con la
- * charla, las acciones rápidas de la pantalla, el historial de lo confirmado hoy y el parte del día. Atajo
- * Ctrl/Cmd+J. Todo lo que cambia algo (incluso lanzar, publicar o responder) pasa por «¿Lo hago?».
+ * Jarvis (22/11, vuelta 6): el secretario del panel. Un orbe vivo flotante abajo a la derecha (respira,
+ * brilla al pasar el mouse y muestra cuántas cosas esperan tu OK) abre el modo Jarvis inmersivo: vidrio
+ * sobre el panel desenfocado, estado del día con gráficos, charla y acciones. Atajo Ctrl/Cmd+J; Esc cierra
+ * y el foco vuelve a donde estaba. Todo lo que cambia algo pasa por «¿Lo hago?».
  */
 export function Jarvis({ slug, nombrePerfil }: { slug: SlugPerfil; nombrePerfil: string }) {
   const pathname = usePathname() ?? "/";
   const [ruta, setRuta] = useState(pathname);
   const [abierto, setAbierto] = useState(false);
-  const [modal, setModal] = useState(false);
+  const [encima, setEncima] = useState(false);
   const [pedido, setPedido] = useState<{ texto: string; n: number } | null>(null);
   const [datosParte, setDatosParte] = useState<DatosParte | null>(null);
   const [parteVisible, setParteVisible] = useState(false);
@@ -60,16 +65,6 @@ export function Jarvis({ slug, nombrePerfil }: { slug: SlugPerfil; nombrePerfil:
     guardarAbierto(false);
     devolverFoco();
   }, [devolverFoco]);
-
-  // ---- arranque: pantalla chica (hoja a pantalla completa) y si estaba abierta
-  useEffect(() => {
-    const m = window.matchMedia("(max-width: 1023px)");
-    setModal(m.matches);
-    const alCambiar = (e: MediaQueryListEvent) => setModal(e.matches);
-    m.addEventListener("change", alCambiar);
-    if (!m.matches && leerAbierto()) setAbierto(true);
-    return () => m.removeEventListener("change", alCambiar);
-  }, []);
 
   useEffect(() => {
     setRuta(`${pathname}${window.location.search}`);
@@ -139,9 +134,11 @@ export function Jarvis({ slug, nombrePerfil }: { slug: SlugPerfil; nombrePerfil:
     };
   }, [slug]);
 
-  const hayAviso = !abierto && parteVisible && datosParte !== null;
-  // Al acercarse al orbe se adelanta la descarga de la hoja: al tocar ya está.
+  const avisos = datosParte ? datosParte.parte.decisiones.length + datosParte.pendientes.length : 0;
+  const hayAviso = !abierto && (avisos > 0 || (parteVisible && datosParte !== null));
+  // Al acercarse al orbe se adelanta la descarga del modo Jarvis: al tocar ya está.
   const adelantar = () => void cargarHoja();
+  const etiqueta = avisos > 0 ? `Abrir Jarvis, ${avisos} ${avisos === 1 ? "cosa espera" : "cosas esperan"} tu OK` : hayAviso ? "Abrir Jarvis, hay un parte del día para leer" : "Abrir Jarvis";
 
   return (
     <div>
@@ -149,20 +146,34 @@ export function Jarvis({ slug, nombrePerfil }: { slug: SlugPerfil; nombrePerfil:
         <button
           ref={orbe}
           type="button"
-          className="jv-orbe"
+          className="jv-orbe2"
           onClick={() => abrir()}
-          onPointerEnter={adelantar}
-          onFocus={adelantar}
+          onPointerEnter={() => {
+            adelantar();
+            setEncima(true);
+          }}
+          onPointerLeave={() => setEncima(false)}
+          onFocus={() => {
+            adelantar();
+            setEncima(true);
+          }}
+          onBlur={() => setEncima(false)}
           onTouchStart={adelantar}
-          aria-label={hayAviso ? "Abrir Jarvis, hay un parte del día para leer" : "Abrir Jarvis"}
+          aria-label={etiqueta}
           aria-keyshortcuts="Control+J Meta+J"
           title="Jarvis · Ctrl J"
         >
-          <span className="jv-orbe-pulso" aria-hidden="true" />
-          <span className="jv-orbe-cuerpo" aria-hidden="true">
-            <Icono nombre="asistente" className="jv-orbe-icono" />
+          <OrbeVivo tamano={68} brillo={encima ? 1 : 0} className="jv-orbe2-lienzo" />
+          {avisos > 0 ? (
+            <span className="jv-orbe2-cuenta" aria-hidden="true">
+              {avisos > 9 ? "9+" : avisos}
+            </span>
+          ) : hayAviso ? (
+            <span className="jv-orbe2-punto" aria-hidden="true" />
+          ) : null}
+          <span className="jv-orbe2-tip" aria-hidden="true">
+            Jarvis <kbd>Ctrl J</kbd>
           </span>
-          {hayAviso && <span className="jv-orbe-aviso" aria-hidden="true" />}
         </button>
       )}
       {abierto && (
@@ -170,12 +181,10 @@ export function Jarvis({ slug, nombrePerfil }: { slug: SlugPerfil; nombrePerfil:
           slug={slug}
           nombrePerfil={nombrePerfil}
           ruta={ruta}
-          modal={modal}
           pedido={pedido}
           datosParte={datosParte}
-          parteVisible={parteVisible}
           alCerrar={cerrar}
-          alCerrarParte={() => setParteVisible(false)}
+          alLeerParte={() => setParteVisible(false)}
           alCambiarPendiente={(p) => setDatosParte((d) => (d ? { ...d, pendientes: d.pendientes.map((x) => (x.id === p.id ? p : x)) } : d))}
         />
       )}

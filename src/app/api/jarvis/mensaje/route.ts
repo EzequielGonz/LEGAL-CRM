@@ -14,7 +14,7 @@ export const maxDuration = 60;
  * El texto de la persona va al modelo como mensaje de usuario (dato); la
  * ruta y el perfil se validan acá. Responde texto, propuestas para confirmar
  * (se confirman aparte, con tarjeta), borradores y botones a pantallas.
- * No envía mensajes, no lanza campañas ni publica.
+ * Nada se ejecuta acá: lo que cambia algo vuelve como propuesta y se confirma aparte.
  */
 export async function POST(request: Request) {
   const auth = await requireSession(request);
@@ -37,7 +37,7 @@ export async function POST(request: Request) {
   // Tope de gasto de IA (USD 30 al mes): si se llegó, Jarvis no llama al modelo y lo dice claro.
   const tope = await chequearTopeGemini({ rubroId: RUBRO_IDS[perfil] });
   if (tope.bloquea) {
-    return NextResponse.json({ texto: "Por hoy llegué al tope de gasto de IA que dejaste configurado, así que no puedo pensar respuestas nuevas. Todo lo demás del panel sigue andando y el parte del día sigue disponible.", propuestas: [], enlaces: [], borradores: [], descartadas: 0 });
+    return NextResponse.json({ texto: "Por hoy llegué al tope de gasto de IA que dejaste configurado, así que no puedo pensar respuestas nuevas. Todo lo demás del panel sigue andando y el parte del día sigue disponible.", propuestas: [], enlaces: [], borradores: [], tarjetas: [], descartadas: 0 });
   }
   try {
     const ruta = rutaSegura(body?.ruta);
