@@ -140,7 +140,7 @@ html:not([data-modo="oscuro"]) .vv-cita { color: rgb(15 23 42 / 0.75); }
 .vv-celda--lila { --vv-fondo: var(--vv-lila); }
 .vv-celda--rosa-claro { --vv-fondo: var(--vv-rosa-claro); }
 .vv-celda--celeste { --vv-fondo: var(--vv-celeste); }
-.vv-celda__etiqueta { position: relative; z-index: 2; font-size: 12.5px; font-weight: 600; letter-spacing: 0.01em; color: rgb(22 18 43 / 0.78); }
+.vv-celda__etiqueta { position: relative; z-index: 2; font-size: 12.5px; font-weight: 600; letter-spacing: 0.01em; color: rgb(236 235 243 / 0.78); }
 .vv-celda__cuerpo { position: relative; z-index: 2; display: flex; flex: 1; flex-direction: column; justify-content: flex-end; gap: 6px; min-width: 0; }
 .vv-celda__enlace { display: flex; flex: 1; flex-direction: column; color: inherit; text-decoration: none; border-radius: inherit; outline: none; }
 .vv-celda:has(.vv-celda__enlace:focus-visible) { box-shadow: 0 0 0 3px #fff, 0 0 0 6px var(--vv-violeta-2); }
@@ -148,11 +148,11 @@ html:not([data-modo="oscuro"]) .vv-cita { color: rgb(15 23 42 / 0.75); }
 .vv-num { display: block; font-size: clamp(40px, 4.4vw, 64px); font-weight: 750; line-height: 0.95; letter-spacing: -0.045em; font-variant-numeric: tabular-nums; color: var(--vv-tinta); }
 .vv-num--m { font-size: clamp(30px, 3vw, 42px); }
 .vv-num .pm-cifra, .vv-num .pm-cifra__n, .vv-num .pm-cifra__valor { color: inherit !important; font: inherit !important; letter-spacing: inherit; }
-.vv-celda__texto { margin: 0; font-size: 13.5px; font-weight: 500; line-height: 1.35; color: rgb(22 18 43 / 0.78); }
+.vv-celda__texto { margin: 0; font-size: 13.5px; font-weight: 500; line-height: 1.35; color: rgb(236 235 243 / 0.78); }
 .vv-celda__texto strong { color: var(--vv-tinta); font-weight: 700; }
 /* Anillo blanco sobre el color. */
-.vv-celda .pm-anillo__pista { stroke: rgb(22 18 43 / 0.16) !important; filter: none !important; }
-.vv-celda .pm-anillo__arco { stroke: #fff !important; filter: drop-shadow(0 3px 6px rgb(22 18 43 / 0.25)); }
+.vv-celda .pm-anillo__pista { stroke: rgb(236 235 243 / 0.16) !important; filter: none !important; }
+.vv-celda .pm-anillo__arco { stroke: #fff !important; filter: drop-shadow(0 3px 6px rgb(236 235 243 / 0.25)); }
 .vv-celda .pm-anillo__numero, .vv-celda .pm-anillo__meta, .vv-celda .pm-cifra__n { color: var(--vv-tinta) !important; }
 .vv-celda .pm-anillo__tilde { color: var(--vv-tinta); }
 .vv-celda-fila { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
@@ -172,10 +172,10 @@ html:not([data-modo="oscuro"]) .vv-cita { color: rgb(15 23 42 / 0.75); }
 .vv-barras { display: flex; align-items: flex-end; gap: 10px; margin: 0; padding: 0; list-style: none; min-height: 110px; }
 .vv-barras__i { display: grid; flex: 1; grid-template-rows: auto 1fr auto; justify-items: center; gap: 6px; min-width: 0; height: 100%; }
 .vv-barras__n { font-size: 15px; font-weight: 750; font-variant-numeric: tabular-nums; color: var(--vv-tinta); }
-.vv-barras__riel { position: relative; display: block; width: 100%; max-width: 56px; height: 78px; border-radius: 12px; background: rgb(22 18 43 / 0.1); overflow: hidden; }
-.vv-barras__b { position: absolute; inset: auto 0 0 0; border-radius: 12px; background: rgb(22 18 43 / 0.55); transform-origin: bottom; box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.3); }
+.vv-barras__riel { position: relative; display: block; width: 100%; max-width: 56px; height: 78px; border-radius: 12px; background: rgb(236 235 243 / 0.1); overflow: hidden; }
+.vv-barras__b { position: absolute; inset: auto 0 0 0; border-radius: 12px; background: rgb(236 235 243 / 0.55); transform-origin: bottom; box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.3); }
 .vv-barras__i--fuerte .vv-barras__b { background: var(--vv-tinta); }
-.vv-barras__nombre { font-size: 12px; font-weight: 600; color: rgb(22 18 43 / 0.75); text-align: center; line-height: 1.15; }
+.vv-barras__nombre { font-size: 12px; font-weight: 600; color: rgb(236 235 243 / 0.75); text-align: center; line-height: 1.15; }
 @keyframes vv-barra { from { transform: scaleY(0); } to { transform: scaleY(1); } }
 @media (prefers-reduced-motion: no-preference) {
   .vv-barras__b { animation: vv-barra 900ms var(--vv-resorte) backwards; }
@@ -528,7 +528,7 @@ html .pin-campo:focus { transform: translateY(-1px); box-shadow: 0 0 0 3px rgb(v
 .vv-bento { grid-auto-flow: dense; }
 .vv-celda .pm-anillo { flex-shrink: 0; }
 @media (max-width: 560px) { .vv-celda .pm-anillo { display: none; } }
-.vv-variacion { font-size: 13px; font-weight: 700; color: rgb(22 18 43 / 0.8); background: rgb(255 255 255 / 0.45); padding: 3px 8px; border-radius: 999px; white-space: nowrap; }
+.vv-variacion { font-size: 13px; font-weight: 700; color: rgb(236 235 243 / 0.8); background: rgb(255 255 255 / 0.45); padding: 3px 8px; border-radius: 999px; white-space: nowrap; }
 .vv-celda .vv-barras { min-height: 96px; margin-top: 8px; }
 .vv-celda .vv-barras__riel { height: 58px; }
 .rs-total-vivo { display: grid; gap: 12px; margin-bottom: 28px; }
@@ -553,13 +553,13 @@ html .lienzo-contenido .vv-cartel h1.vv-cartel__titulo { padding-bottom: 2px; }
 .vv-paralaje__capa--medio { height: 50% !important; }
 .vv-paralaje__capa--cerca { height: 36% !important; }
 .vv-c-grande .vv-num:not(.vv-num--m) { font-size: clamp(72px, 8vw, 132px); }
-.vv-anillo-pie { display: grid; justify-items: center; gap: 4px; font-size: 12.5px; font-weight: 600; color: rgb(22 18 43 / 0.78); }
+.vv-anillo-pie { display: grid; justify-items: center; gap: 4px; font-size: 12.5px; font-weight: 600; color: rgb(236 235 243 / 0.78); }
 .vv-paralaje__capa--lejos { fill: #9a6fd6 !important; opacity: 0.55 !important; }
 .vv-paralaje__capa--medio { fill: #4b2f8a !important; }
 .vv-paralaje__capa--cerca { fill: #170f2c !important; }
 .vv-c-toda .vv-barras { min-height: 150px; gap: clamp(10px, 3vw, 40px); }
 .vv-c-toda .vv-barras__riel { height: 104px; max-width: 120px; }
-.vv-barras__riel { background: rgb(255 255 255 / 0.38); box-shadow: inset 0 2px 6px rgb(22 18 43 / 0.12); }
+.vv-barras__riel { background: rgb(255 255 255 / 0.38); box-shadow: inset 0 2px 6px rgb(236 235 243 / 0.12); }
 .vv-barras__b { background: linear-gradient(180deg, #4a3bd0, var(--vv-tinta)); }
 .vv-barras__i--fuerte .vv-barras__b { background: linear-gradient(180deg, var(--vv-violeta-2), #2a1f8a); }
 .vv-barras__n { font-size: 18px; }
@@ -583,8 +583,8 @@ html .lienzo-contenido .vv-cartel h1.vv-cartel__titulo { padding-bottom: 2px; }
 html .vv-celda--res { padding: 18px 14px; }
 html .vv-celda--res .pc-celda { position: relative; z-index: 2; }
 html .vv-celda--res :is(.pc-etiqueta, .pc-contexto, .pc-contexto strong, .pc-enlace) { color: var(--vv-tinta) !important; }
-html .vv-celda--res .pc-contexto { color: rgb(22 18 43 / 0.78) !important; }
-html .vv-celda--res .pc-paso { background: rgb(255 255 255 / 0.5) !important; border-color: rgb(22 18 43 / 0.12) !important; color: var(--vv-tinta) !important; box-shadow: none !important; }
+html .vv-celda--res .pc-contexto { color: rgb(236 235 243 / 0.78) !important; }
+html .vv-celda--res .pc-paso { background: rgb(255 255 255 / 0.5) !important; border-color: rgb(236 235 243 / 0.12) !important; color: var(--vv-tinta) !important; box-shadow: none !important; }
 html .vv-celda--res.pc-activa { box-shadow: 0 0 0 3px #fff, 0 0 0 6px var(--vv-violeta-2), 0 20px 40px -20px rgb(0 0 0 / 0.8); }
 html .vv-celda--res .pc-enlace:focus-visible { outline-color: var(--vv-tinta) !important; }
 html .vv-celda--res .pm-anillo__centro { display: grid; }
@@ -624,7 +624,7 @@ html .mas-tarjeta { transition: transform 280ms var(--vv-resorte), box-shadow 28
 html .cc-bento-color .cc-ring { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; }
 html .cc-bento-color :is(.cc-ring__titulo, .cc-ring__detalle) { color: var(--vv-tinta) !important; }
 html .cc-bento-color .cc-ring__titulo { font-size: 20px; font-weight: 750; letter-spacing: -0.02em; }
-html .cc-bento-color .cc-ring__detalle { color: rgb(22 18 43 / 0.78) !important; max-width: 40ch; }
+html .cc-bento-color .cc-ring__detalle { color: rgb(236 235 243 / 0.78) !important; max-width: 40ch; }
 html .cc-bento-color .cc-ring__texto { flex: 1; min-width: 200px; }
 html .cc-bento-color .pm-anillo__numero, html .cc-bento-color .pm-anillo__meta { color: var(--vv-tinta) !important; }
 

@@ -25,7 +25,10 @@ import { NOMBRE_MOTOR, SECTORES } from "@/lib/oficina/sectores";
 import { SUGERENCIAS, enlaceJarvis, iniciales, mensajesDelEquipo, respuestaAgente, type Lugar, type Pregunta } from "@/lib/oficina/recorrido";
 import type { Calidad, Vista3D } from "@/components/cerebro/oficina-reel-3d";
 
-const Escena3D = dynamic(() => import("@/components/cerebro/oficina-reel-3d"), { ssr: false, loading: () => null });
+const cargarEscena3D = () => import("@/components/cerebro/oficina-reel-3d");
+// Velocidad: el código de la escena empieza a bajar apenas carga este módulo en el navegador, sin esperar el chequeo de WebGL.
+if (typeof window !== "undefined") void cargarEscena3D();
+const Escena3D = dynamic(cargarEscena3D, { ssr: false, loading: () => null });
 
 type Modo = "pendiente" | "3d" | "liviano";
 type Seccion = "agentes" | "ok" | "tarea" | "actividad";

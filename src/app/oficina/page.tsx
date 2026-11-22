@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { preload } from "react-dom";
 import { Inter_Tight, JetBrains_Mono } from "next/font/google";
 import "../cerebro/cerebro.css";
 import "./oficina.css";
@@ -23,6 +24,10 @@ const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500", "700"],
 export default async function OficinaPage({ searchParams }: { searchParams: Promise<{ sector?: string | string[] }> }) {
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
+  // Velocidad (22/11): los modelos 3D empiezan a bajar con el HTML, en paralelo con el código de la escena.
+  for (const m of ["muebles", "animaciones", "casual_male", "casual_female", "suit_male", "suit_female", "worker_female", "casual2_male"]) {
+    preload(`/modelos/oficina/${m}.glb`, { as: "fetch", crossOrigin: "anonymous" });
+  }
   const sp = await searchParams;
   const sector = esSector(sp.sector) ? sp.sector : null;
   const oficina = await leerOficina();

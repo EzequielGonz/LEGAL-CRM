@@ -98,7 +98,7 @@
 .cz-fuentes { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
 .cz-fuentes li { display: grid; gap: 4px; padding: 12px 14px; border-radius: 14px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-left: 3px solid #8b7bff; animation: czAparece 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both; animation-delay: calc(var(--i) * 110ms + 80ms); }
 .cz-fuentes li p { font-size: 0.92rem; color: #c9c5d6; }
-.cz-fuente-chip { justify-self: start; font: 500 0.7rem/1 var(--cz-mono), monospace; letter-spacing: 0.04em; padding: 5px 8px; border-radius: 999px; color: #15121c; background: var(--amarillo); }
+.cz-fuente-chip { justify-self: start; font: 500 0.7rem/1 var(--cz-mono), monospace; letter-spacing: 0.04em; padding: 5px 8px; border-radius: 999px; color: #f2e3a6; background: var(--amarillo); }
 .cz-resp-acc { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 .cz-inline { display: inline-flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: 0.9rem; color: #c9c5d6; }
 .cz-resp-caja select, .cz-resp-caja input { min-height: 44px; border-radius: 12px; border: 1px solid #34304a; background: #0d0c14; color: #fff; padding: 0 12px; font: inherit; }
@@ -141,7 +141,7 @@
 .cz-pant__uni { font-size: 0.9rem; font-weight: 600; line-height: 1.2; }
 .cz-pant__pie { display: flex; align-items: flex-end; gap: 10px; min-height: 0; }
 .cz-pant__ctx { font-size: 0.8rem; line-height: 1.3; opacity: 0.82; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.cz-pant__abrir { justify-self: start; display: inline-flex; gap: 6px; align-items: center; margin-top: 8px; padding: 7px 12px; border-radius: 999px; background: rgba(21, 18, 28, 0.88); color: #fff; font-size: 0.78rem; font-weight: 600; opacity: 0; transform: translateY(6px); transition: opacity 0.3s, transform 0.3s; }
+.cz-pant__abrir { justify-self: start; display: inline-flex; gap: 6px; align-items: center; margin-top: 8px; padding: 7px 12px; border-radius: 999px; background: rgba(255, 255, 255, 0.12); color: #fff; font-size: 0.78rem; font-weight: 600; opacity: 0; transform: translateY(6px); transition: opacity 0.3s, transform 0.3s; }
 .cz-pant[data-frente="1"] .cz-pant__abrir { opacity: 1; transform: none; }
 .cz-piso { position: absolute; left: 10%; right: 10%; bottom: 0; height: 120px; background: radial-gradient(50% 50% at 50% 50%, rgba(124, 108, 255, 0.22), transparent 70%); pointer-events: none; z-index: -1; }
 

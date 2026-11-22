@@ -530,4 +530,4 @@ html .jv-escenario .jv-panel, html[data-modo] .jv-escenario .jv-panel { backgrou
 }
 
 /* 22/11 · colores simples: baldosas oscuras sobrias con borde fino. */
-[class*="jv-b-"], [class*="jv-bg-"] { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.07), 0 0 0 1px rgb(255 255 255 / 0.08), 0 18px 40px -24px rgb(0 0 0 / 0.9) !important; color: var(--jv-texto); }
+.jv-b-msj, .jv-b-cap, .jv-b-esp, .jv-b-der, .jv-b-res, .jv-b-cmp, .jv-b-cam, .jv-bg-env, .jv-bg-cap, .jv-bg-esp, .jv-bg-rpp, .jv-bg-der, .jv-bg-cit, .jv-bg-cmp { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.07), 0 0 0 1px rgb(255 255 255 / 0.08), 0 18px 40px -24px rgb(0 0 0 / 0.9) !important; color: var(--jv-texto); }
