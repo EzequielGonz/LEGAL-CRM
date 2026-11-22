@@ -53,6 +53,7 @@ Esta carpeta es la memoria de trabajo de Claude. Reemplaza tener que releer los 
 | `17-accesos-y-pendientes.md` | Accesos que faltan, pendientes de los dueños y preguntas: los recorre la sesión «accesos» |
 | `18-mapa-de-skills-y-plugins.md` | Qué skill, plugin y agente usa cada escritorio de la Oficina |
 | `19-perfil-y-memoria-claude-ai.md` | Textos listos para pegar en claude.ai: preferencias personales, memoria e instrucciones del proyecto |
+| `20-conocimiento-para-claude-ai.md` | Todo el conocimiento del proyecto en un solo documento, para subir como «conocimiento del proyecto» en claude.ai (lo carga la sesión «memoria») |
 | `traspaso-sesion-2026-11-22.md` | Traspaso antes de compactar del 22/11: pedidos, hecho, agentes en curso y próximos pasos |
 | `traspaso-sesion-2026-11-21-c.md` | Estado al compactar el 21/11 (agentes, próximos pasos) |
 | `bitacora.md` | Diario de sesiones y aprendizajes (lo más nuevo arriba) |
