@@ -5,7 +5,7 @@ import { join } from "node:path";
 import { contraste, mezclar } from "@/lib/premium/contraste";
 import { ACENTO_RUBRO, FONDO_PREMIUM, NOMBRE_RUBRO, TEXTO_PREMIUM, RUBROS_PREMIUM } from "@/lib/premium/rubros";
 
-const css = readFileSync(join(process.cwd(), "src/app/premium.css"), "utf8");
+const css = readFileSync(join(process.cwd(), "src/app/premium.css"), "utf8") + readFileSync(join(process.cwd(), "src/app/premium-fondo.css"), "utf8"); // 22/11: el fondo vivo y el encabezado viven en premium-fondo.css
 const variable = (nombre: string) => {
   const m = new RegExp(`${nombre}:\\s*(#[0-9a-fA-F]{6})`).exec(css);
   assert.ok(m, `falta ${nombre} en premium.css`);

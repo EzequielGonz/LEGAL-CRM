@@ -1,5 +1,6 @@
 "use client";
 
+import "@/app/premium-fondo.css";
 import { useRef, type CSSProperties, type ReactNode } from "react";
 import type { SlugPerfil } from "@/lib/marca";
 import { claseRubro } from "@/lib/premium/rubros";

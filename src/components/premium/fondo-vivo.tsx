@@ -1,5 +1,6 @@
 "use client";
 
+import "@/app/premium-fondo.css";
 import { useRef } from "react";
 import { useParalaje } from "./use-paralaje";
 
