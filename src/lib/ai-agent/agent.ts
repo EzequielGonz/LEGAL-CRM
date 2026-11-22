@@ -39,6 +39,8 @@ import { armarContexto, armarResumen } from "@/lib/agentes/contexto";
 import { asignacionActiva } from "@/lib/agentes/servicio";
 import { identificadorModelo } from "@/lib/agentes/modelo";
 import { registrarTurno } from "@/lib/experimento/servicio";
+import { chequearTopeGemini } from "@/lib/presupuesto/servidor";
+import { MARCA_TOPE_GASTO } from "@/lib/presupuesto/reglas";
 import { instruccionesDeRol } from "@/lib/agentes/roles";
 import { buildSystemPrompt, criterioDelRubro, REGLAS_ESTRICTAS } from "./prompt";
 import { GUIA_CAPTACION_Y_CIERRE } from "@/lib/agentes/guia-cierre";
@@ -446,6 +448,36 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
   const toolCtx: ToolContext = { area, contact, conversationId, cierre: false, finalAckToken: null, opportunityId, pendingDetention: null, postergo: esPostergaFirme(ultimaRespuesta), ultimoEntrante: [...ordenados].reverse().find((m: any) => m.direction === "entrante")?.body ?? null };
   // Horario de atención (18/10, todos los perfiles): fuera de la franja de asesores igual se capta.
   systemWithBrief = `${systemWithBrief}\n\n${bloqueHorarioAtencion(new Date())}`;
+
+  // 22/11: tope de gasto de IA (USD 30 por mes para los bots; tope diario por perfil).
+  // Con el tope alcanzado el bot no se corta en seco: no llama al modelo, responde con el
+  // cierre de reserva del rubro (el mismo que sale si el modelo no da uno válido), el chat
+  // pasa a una persona con su tarea de atención y Salud lo muestra. Por debajo del tope no
+  // cambia nada. Si no se puede medir el gasto, el bot sigue (ver chequearTopeGemini).
+  const tope = await chequearTopeGemini({ area, rubroId: contact.rubro_id ?? null });
+  if (tope.bloquea) {
+    const marcaTope = `${MARCA_TOPE_GASTO}_${tope.estado === "tope_mes" ? "mes" : "dia"}: ${tope.motivo}`.slice(0, 400);
+    console.warn(`[agente] Tope de gasto de IA en ${conversationId}: ${tope.motivo}`);
+    try {
+      await atencionDelAgente(toolCtx, "consulta_fuera_alcance", `La IA está frenada por el tope de gasto. ${tope.motivo}`);
+      await sendOutboundMessage({
+        conversationId,
+        senderType: "agente_ia",
+        body: cierreDeReserva(area, contact.full_name),
+        origin: "respuesta_entrante",
+        finalAckToken: toolCtx.finalAckToken,
+      });
+      await registrar("enviado", { error: marcaTope });
+    } catch (err) {
+      if (err instanceof AutomaticSendBlockedError) {
+        await registrar("bloqueado", { error: `${marcaTope} (${err.message})`.slice(0, 480) });
+        return;
+      }
+      await registrar("error", { error: `${marcaTope} (${String((err as any)?.message ?? err)})`.slice(0, 480) });
+      throw err;
+    }
+    return;
+  }
 
   let retenido: string[] | null = null;
   try {

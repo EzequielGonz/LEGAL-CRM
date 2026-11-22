@@ -4,6 +4,7 @@ import { agentReadiness } from "@/lib/profiles";
 import { envPrefixForArea, RUBRO_IDS } from "@/lib/rubros";
 import { leerEstadoCalidad } from "@/lib/whatsapp/calidad-servidor";
 import { leerEstadoAvisos } from "@/lib/whatsapp/avisos-servidor";
+import { resumenPresupuesto } from "@/lib/presupuesto/servidor";
 import { evaluarSalud, type DatosSalud, type ItemSalud } from "./reglas";
 
 export { evaluarSalud, resumenSalud, type ItemSalud, type EstadoSalud } from "./reglas";
@@ -31,6 +32,16 @@ export async function registrarLatido(ok: boolean, detalle: Record<string, unkno
       .upsert({ key: CLAVE_LATIDO, value: { at: new Date().toISOString(), ok, ...detalle } }, { onConflict: "key" });
   } catch (err) {
     console.error("[salud] No se pudo registrar el latido:", err);
+  }
+}
+
+/** 22/11: el registro del último latido (hora, hueco reciente y tiempos); null si falla o no existe. */
+export async function leerUltimoLatido(): Promise<{ at?: string; ok?: boolean; hueco?: { ms: number; at: string } | null } | null> {
+  try {
+    const { data } = await createAdminClient().from("system_settings").select("value").eq("key", CLAVE_LATIDO).maybeSingle();
+    return ((data as any)?.value ?? null) as any;
+  } catch {
+    return null;
   }
 }
 
@@ -117,6 +128,8 @@ export async function leerSalud(ahora = new Date()): Promise<ItemSalud[]> {
   const datos: DatosSalud = {
     ahora,
     ultimoLatido: (latido as any)?.at ?? null,
+    latidoHueco: (latido as any)?.hueco ?? null,
+    presupuestoGemini: await seguro(() => resumenPresupuesto(ahora), null),
     latidoTiempos: latido ? { ms: typeof (latido as any).ms === "number" ? (latido as any).ms : null, etapas: (latido as any).etapas ?? {} } : null,
     pausa: { ia: pausa.aiRepliesPaused, envios: pausa.outboundPaused, problema: pausa.configProblem ?? pausa.readError ?? null },
     cuarentena24h: cuarentena,

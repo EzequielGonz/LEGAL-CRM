@@ -65,6 +65,26 @@ export async function avisarFallasDelSistema(ahora: Date = new Date()): Promise<
   return { avisadas, revisadas };
 }
 
+/**
+ * 22/11: el latido volvió después de un hueco largo (10 minutos o más sin correr).
+ * Un aviso por hora como mucho. No lleva datos de nadie.
+ */
+export async function avisarAtrasoDeLatido(huecoMs: number, ahora: Date = new Date()): Promise<void> {
+  try {
+    const { sendToDevices } = await import("@/lib/push");
+    await sendToDevices({
+      title: "Falla del sistema",
+      body: `El latido (campañas, seguimientos, recontacto) estuvo ${Math.round(huecoMs / 60_000)} min sin correr y volvió. Tocá para verlo en Salud.`,
+      url: "/salud",
+      tag: "falla-latido-atraso",
+      kind: "aviso",
+      eventKey: `falla:latido-atraso:${ahora.toISOString().slice(0, 13)}`,
+    });
+  } catch (err) {
+    console.error("[salud] No se pudo avisar el atraso del latido:", err);
+  }
+}
+
 /** El latido terminó con error: un aviso por hora como mucho. */
 export async function avisarLatidoFallido(ahora: Date = new Date()): Promise<void> {
   try {

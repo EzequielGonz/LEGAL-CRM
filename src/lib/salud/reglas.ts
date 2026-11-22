@@ -6,6 +6,8 @@
 
 import { rutaDePerfil } from "@/lib/perfil-ruta";
 import type { SlugPerfil } from "@/lib/marca";
+import { itemAtrasoLatido, type HuecoRegistrado } from "./latido-atraso";
+import { itemsPresupuestoGemini, type ResumenParaSalud } from "@/lib/presupuesto/salud";
 
 export type EstadoSalud = "rojo" | "amarillo" | "verde";
 
@@ -38,6 +40,10 @@ export interface DatosSalud {
   presupuestosAtrasados: number;
   /** Líneas que mandan pero no reciben avisos de Meta (mensajes entrantes ni estados). */
   avisosMeta?: { nombre: string; sinAvisos: boolean; resultado: string | null }[];
+  /** 22/11: último hueco largo entre dos latidos (se recuerda una hora). */
+  latidoHueco?: HuecoRegistrado | null;
+  /** 22/11: gasto de IA del mes y de hoy por perfil (null = no se pudo leer). */
+  presupuestoGemini?: ResumenParaSalud | null;
   /** 24/10: calidad de cada línea según Meta (la vigila el latido). */
   calidadLineas?: { slug: string; nombre: string; linea: string; calidad: string | null; pausadas: string[] }[];
 }
@@ -97,6 +103,10 @@ export function evaluarSalud(d: DatosSalud): ItemSalud[] {
         : { clave: "latido", estado: "verde", titulo: "Latido del servidor", detalle: `Último latido ${haceTexto(ult, d.ahora)}.${tiemposDelLatido(d.latidoTiempos)}` }
     );
   }
+
+  // 22/11: atraso del latido (amarillo antes del rojo, y memoria de un corte reciente).
+  const atrasoLatido = itemAtrasoLatido({ ahora: d.ahora, ultimoLatido: d.ultimoLatido, hueco: d.latidoHueco ?? null });
+  if (atrasoLatido) items.push(atrasoLatido);
 
   // Pausa general
   if (d.pausa.problema) {
@@ -179,6 +189,8 @@ export function evaluarSalud(d: DatosSalud): ItemSalud[] {
   if (d.presupuestosAtrasados > 0) {
     items.push({ clave: "presupuestos", estado: "rojo", titulo: `${d.presupuestosAtrasados} presupuesto(s) pedido(s) hace más de 20 h`, detalle: "Se prometió en menos de 24 h.", accion: "Cargar presupuesto", href: "/panel/marketing/presupuestos" });
   }
+  // 22/11: gasto de IA (tope del mes y tope diario por perfil).
+  items.push(...itemsPresupuestoGemini(d.presupuestoGemini));
   const orden: Record<EstadoSalud, number> = { rojo: 0, amarillo: 1, verde: 2 };
   return items.sort((a, b) => orden[a.estado] - orden[b.estado]);
 }

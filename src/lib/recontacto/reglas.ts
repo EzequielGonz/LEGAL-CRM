@@ -160,3 +160,25 @@ export function recontactoEncendido(valor: unknown, perfil: string): boolean {
   const v = (valor ?? {}) as Record<string, unknown>;
   return v[perfil] !== false;
 }
+
+// ---------------------------------------------------------------------------
+// 22/11: tiempo máximo del recontacto. Una llamada colgada al modelo o al envío
+// no puede atrasar todo lo automático (el latido corre cada minuto).
+// ---------------------------------------------------------------------------
+
+/** Tiempo máximo de la llamada al modelo en el recontacto (el presupuesto de todo el paso es de 15 s). */
+export const TIEMPO_MODELO_RECONTACTO_MS = 12_000;
+/** Tiempo máximo del envío del mensaje de recontacto. */
+export const TIEMPO_ENVIO_RECONTACTO_MS = 15_000;
+/** Cuántas veces se intenta un turno cuya falla fue del modelo (tiempo agotado, 429, 5xx) antes de darlo por error. */
+export const MAX_INTENTOS_RECONTACTO = 2;
+
+/**
+ * ¿Qué hacer con un turno de recontacto cuya llamada al modelo falló?
+ * Una falla pasajera libera el turno para el próximo latido (hasta
+ * MAX_INTENTOS_RECONTACTO intentos en total); si no es pasajera o ya se
+ * intentó, queda marcado como error y no se reintenta. Pura.
+ */
+export function destinoTrasFallaDelModelo(transitoria: boolean, intentosPrevios: number): "liberar" | "error" {
+  return transitoria && intentosPrevios + 1 < MAX_INTENTOS_RECONTACTO ? "liberar" : "error";
+}
