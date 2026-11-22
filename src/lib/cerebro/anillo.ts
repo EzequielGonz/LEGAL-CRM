@@ -102,6 +102,15 @@ export function radioAnillo(n: number, ancho: number, aire = 28): number {
   return Math.round((ancho + aire) / (2 * Math.tan(Math.PI / n)));
 }
 
+/** Recorta un texto en el último espacio antes de `max` y suma «…» (para el contexto de cada pantalla). */
+export function recortar(texto: string, max: number): string {
+  const t = (texto ?? "").replace(/\s+/g, " ").trim();
+  if (t.length <= max) return t;
+  const corte = t.slice(0, max - 1);
+  const espacio = corte.lastIndexOf(" ");
+  return `${(espacio > max * 0.5 ? corte.slice(0, espacio) : corte).replace(/[\s.,;:·-]+$/, "")}…`;
+}
+
 // --- «Ordenale» ---------------------------------------------------------------
 
 export const MIN_ORDEN = 8;

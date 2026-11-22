@@ -20,7 +20,7 @@ import { CIFRAS_SEMANA, totalSemana, variacion } from "@/lib/asistente/semana-re
 import type { leerSalud } from "@/lib/salud";
 import { lecturaSimple, resumenSalud } from "@/lib/salud/reglas";
 import { perfilDeRubroId, ETIQUETA_ESTADO, type TareaBandeja } from "@/lib/bandeja-claude";
-import type { IdPantalla, ResumenGrafo } from "@/lib/cerebro/anillo";
+import { recortar, type IdPantalla, type ResumenGrafo } from "@/lib/cerebro/anillo";
 import {
   ACTUALIZADO,
   ALERTAS,
@@ -148,9 +148,9 @@ export function CerebroVista({ fuentes, semana, contactos, salud, pedidos, rubro
     { id: "pendientes", numero: pendientesUrgentes, unidad: pendientesUrgentes === 1 ? "urgente" : "urgentes", contexto: `${pendientesTotal} en total · ${PREGUNTAS_ABIERTAS.length} preguntas`, parte: pendientesTotal ? pendientesUrgentes / pendientesTotal : null },
     { id: "oficina", numero: trabajando, unidad: trabajando === 1 ? "escritorio trabajando" : "escritorios trabajando", contexto: oficina ? `${abiertasOficina} tareas abiertas · ${esperanOk} esperan tu OK` : "No pude leer la Oficina", parte: escritorios ? (trabajando ?? 0) / Math.max(1, escritorios.length) : null },
     { id: "jarvis", numero: propuestas ? propuestas.length : null, unidad: propuestas?.length === 1 ? "propuesta esperando" : "propuestas esperando", contexto: "Las abrís y confirmás en Jarvis", parte: null },
-    { id: "recomienda", numero: recos.length, unidad: recos.length === 1 ? "para hoy" : "para hoy", contexto: recos[0]?.titulo.slice(0, 64) ?? "Nada urgente hoy", parte: null },
+    { id: "recomienda", numero: recos.length, unidad: recos.length === 1 ? "para hoy" : "para hoy", contexto: recos[0] ? recortar(recos[0].titulo, 64) : "Nada urgente hoy", parte: null },
     { id: "aprendido", numero: aprendidos, unidad: "cosas aprendidas", contexto: aprendidos == null ? "Cuaderno sin activar" : "Notas, reglas y aprendizajes", parte: null },
-    { id: "decisiones", numero: decisiones.length, unidad: "decisiones y órdenes", contexto: decisiones[0]?.titulo.slice(0, 64) ?? "Órdenes vigentes", parte: null },
+    { id: "decisiones", numero: decisiones.length, unidad: "decisiones y órdenes", contexto: decisiones[0] ? recortar(decisiones[0].titulo, 64) : "Órdenes vigentes", parte: null },
     { id: "semana", numero: enviados, unidad: "mensajes esta semana", contexto: vEnviados && vEnviados.flecha !== "sin_dato" ? `${vEnviados.texto} contra la anterior` : "En los 4 perfiles", parte: null },
     { id: "salud", numero: salud ? problemas.length : null, unidad: problemas.length === 1 ? "cosa para revisar" : "cosas para revisar", contexto: salud ? `${semaforo?.verde ?? 0} de ${salud.length} controles en verde` : "No pude leer la salud", parte: salud && salud.length ? (semaforo?.verde ?? 0) / salud.length : null },
     { id: "laboratorio", numero: 4, unidad: "bots en el laboratorio", contexto: "Versiones, rendimiento y pruebas", parte: null },

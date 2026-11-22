@@ -13,6 +13,7 @@ import {
   pedidoOrden,
   posicion,
   radioAnillo,
+  recortar,
   resumenGrafo,
 } from "../../src/lib/cerebro/anillo";
 
@@ -112,4 +113,13 @@ test("mapa del código: tolera un informe vacío o incompleto y filtra sin tilde
   assert.equal(h.relaciones, 8314);
   assert.deepEqual(filtrarBarrios(["oficina/reglas.ts", "salud/reglas.ts"], "OFICINA"), ["oficina/reglas.ts"]);
   assert.deepEqual(filtrarBarrios(["a", "b"], "  "), ["a", "b"]);
+});
+
+test("recortar: corta en el último espacio y suma puntos suspensivos", () => {
+  assert.equal(recortar("corto", 64), "corto");
+  const r = recortar("22/11 · El cerebro orquesta y la Oficina es un edificio por sectores", 40);
+  assert.ok(r.length <= 40);
+  assert.ok(r.endsWith("…"));
+  assert.ok(!/\s…$/.test(r));
+  assert.equal(recortar("", 10), "");
 });
