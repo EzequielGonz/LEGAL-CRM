@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { MAX_PEDIDO, pareceDatoPersonal } from "@/lib/bandeja-claude";
-import { OficinaVisual } from "@/components/cerebro/oficina-visual";
+import { OficinaVisual, type ResultadoEnvio } from "@/components/cerebro/oficina-visual";
+import { pedidoParaAgente } from "@/lib/oficina/recorrido";
 import { pedidoParaSector } from "@/lib/oficina/panel";
 import {
   ETIQUETA_ETAPA,
@@ -137,6 +138,22 @@ export function Oficina({ inicial, arranqueInicial, sector = null }: { inicial: 
 
   const trabajando = tareas.filter((t) => t.estado === "en_curso").length;
 
+  // Chat con un agente: el pedido va por el mismo canal de la Oficina (mesa de entrada), dirigido a su sector.
+  async function mandarAAgente(area: Area, nombre: string, pedidoTexto: string): Promise<ResultadoEnvio> {
+    if (pareceDatoPersonal(pedidoTexto)) return { ok: false, texto: "Sacá teléfonos, documentos o correos: la oficina no guarda datos personales." };
+    const pedido = pedidoParaAgente(area, nombre, pedidoTexto).slice(0, MAX_PEDIDO);
+    if (!pedido) return { ok: false, texto: "Escribí el pedido." };
+    try {
+      const r = await fetch("/api/oficina", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ perfil, pedido }) });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d?.error || "No se pudo mandar.");
+      await recargar();
+      return { ok: true, texto: d?.rapida ? "Anotado en la mesa de entrada. Parece una consulta rápida: Jarvis te la contesta al instante." : "Anotado en la mesa de entrada. Lo trabajo cuando toques «Arrancar ahora»." };
+    } catch (err) {
+      return { ok: false, texto: err instanceof Error ? err.message : "No se pudo mandar." };
+    }
+  }
+
   // El formulario vive en el panel lateral del edificio; recibe la sala abierta para dirigir la tarea a ese sector.
   function formularioDeTarea(sala: Area | null) {
     return (
@@ -162,7 +179,7 @@ export function Oficina({ inicial, arranqueInicial, sector = null }: { inicial: 
           />
         </label>
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
-          <button className="cz-btn" type="submit" disabled={enviando}>
+          <button className="cz-btn of3-neu" type="submit" disabled={enviando}>
             {enviando ? "Ordenando…" : "Dejar en la oficina"}
           </button>
           <small className="cz-muted">Gemini la ordena al instante; los agentes la trabajan cuando arranques.</small>
@@ -184,6 +201,7 @@ export function Oficina({ inicial, arranqueInicial, sector = null }: { inicial: 
         renderEnMarcha={(t) => <TareaEnMarcha key={t.id} t={t} />}
         renderAprobar={(t) => <TareaParaAprobar key={t.id} t={t} alDecidir={recargar} />}
         renderFormulario={formularioDeTarea}
+        alMandarAAgente={mandarAAgente}
       />
 
       <div className="cz-of-barra">
@@ -198,10 +216,10 @@ export function Oficina({ inicial, arranqueInicial, sector = null }: { inicial: 
           {aprobadas.length > 0 && <small>Aprobadas hace poco: {aprobadas.map((t) => t.titulo).join(" · ")}</small>}
         </div>
         <div className="cz-of-botones">
-          <button type="button" className="cz-btn sec" onClick={() => window.dispatchEvent(new Event("oficina:tarea"))}>
+          <button type="button" className="cz-btn sec of3-neu sec" onClick={() => window.dispatchEvent(new Event("oficina:tarea"))}>
             Dejar una tarea
           </button>
-          <button type="button" className="cz-btn cz-of-arrancar" onClick={arrancar} disabled={arrancando || enEntrada === 0}>
+          <button type="button" className="cz-btn cz-of-arrancar of3-neu" onClick={arrancar} disabled={arrancando || enEntrada === 0}>
             <span className="pulso" aria-hidden="true" />
             {arrancando ? "Arrancando…" : "Arrancar ahora"}
           </button>
