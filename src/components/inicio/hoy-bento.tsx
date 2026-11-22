@@ -84,7 +84,7 @@ export function HoyBento({ d }: { d: DatosHoyBento }) {
 
       {/* Vuelta 6: cabecera parallax en capas (como «Viaja lejos» del video) con el saludo como cartel animado. */}
       <div className="vv-hoy__fila">
-        <Paralaje className="hy-saludo">
+        <Paralaje>
           <Cartel como="h2" tamano="xl" antetitulo={`Jarvis · ${marcaDe(d.slug).nombre}`} texto={saludoCartel(d.saludo)} />
           <p className="vv-paralaje__frases">
             <span>{d.frases[0]}</span>
@@ -130,7 +130,12 @@ export function HoyBento({ d }: { d: DatosHoyBento }) {
         <CeldaColor color="violeta" etiqueta="Captados sin derivar" area="vv-c-grande" orden={0} como="section">
           <div className="vv-celda-fila">
             <NumeroCelda valor={d.porDerivar} />
-            <Anillo valor={d.porDerivar} meta={d.metaAnillo} rubro={d.slug} tamano="medio" nombre="Captados sin derivar" unidad="captados esperan" mostrarMeta={false} />
+            {d.derivadosSemana === null ? null : (
+              <span className="vv-anillo-pie">
+                <Anillo valor={d.derivadosSemana} meta={Math.max(1, d.porDerivar + d.derivadosSemana)} rubro={d.slug} tamano="medio" nombre="Derivados esta semana" unidad="captados de la semana" />
+                Derivados
+              </span>
+            )}
           </div>
           <p className="vv-celda__texto">
             {d.derivadosSemana === null ? "No se pudo leer cuántos se derivaron esta semana." : d.derivadosSemana === 0 ? "Todavía no derivaste ninguno esta semana." : (
@@ -219,7 +224,7 @@ export function EsqueletoHoyBento({ saludo }: { saludo: string }) {
   return (
     <div className="hy-pagina vv-hoy" role="status" aria-label="Cargando el resumen de hoy">
       <div className="vv-hoy__fila">
-        <Paralaje className="hy-saludo">
+        <Paralaje>
           <Cartel como="p" tamano="xl" texto={saludoCartel(saludo)} />
           <p className="vv-paralaje__frases">
             <span>Estoy armando tu resumen de hoy.</span>

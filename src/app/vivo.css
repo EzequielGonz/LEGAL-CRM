@@ -546,3 +546,35 @@ html .lienzo-contenido .vv-cartel h1.vv-cartel__titulo { padding-bottom: 2px; }
   html .lienzo-contenido h1:not(.sr-only):not(.vv-cartel__titulo) { animation: vv-palabra 700ms var(--vv-suave) backwards; }
   html .lienzo-contenido h1:not(.sr-only):not(.vv-cartel__titulo)::after { animation: vv-raya 900ms var(--vv-resorte) 250ms backwards; }
 }
+
+/* Iteración 2 (capturas locales): ajustes de lectura. */
+.vv-paralaje__capa { max-width: none !important; height: auto; }
+.vv-paralaje__capa--lejos { height: 62% !important; }
+.vv-paralaje__capa--medio { height: 50% !important; }
+.vv-paralaje__capa--cerca { height: 36% !important; }
+.vv-c-grande .vv-num:not(.vv-num--m) { font-size: clamp(72px, 8vw, 132px); }
+.vv-anillo-pie { display: grid; justify-items: center; gap: 4px; font-size: 12.5px; font-weight: 600; color: rgb(22 18 43 / 0.78); }
+.vv-paralaje__capa--lejos { fill: #9a6fd6 !important; opacity: 0.55 !important; }
+.vv-paralaje__capa--medio { fill: #4b2f8a !important; }
+.vv-paralaje__capa--cerca { fill: #170f2c !important; }
+.vv-c-toda .vv-barras { min-height: 150px; gap: clamp(10px, 3vw, 40px); }
+.vv-c-toda .vv-barras__riel { height: 104px; max-width: 120px; }
+.vv-barras__riel { background: rgb(255 255 255 / 0.38); box-shadow: inset 0 2px 6px rgb(22 18 43 / 0.12); }
+.vv-barras__b { background: linear-gradient(180deg, #4a3bd0, var(--vv-tinta)); }
+.vv-barras__i--fuerte .vv-barras__b { background: linear-gradient(180deg, var(--vv-violeta-2), #2a1f8a); }
+.vv-barras__n { font-size: 18px; }
+@media (max-width: 560px) {
+  .vv-c-grande { grid-row: span 1; min-height: 168px; }
+  .vv-paralaje__sol { right: 6%; top: auto; bottom: 30%; width: 48px; opacity: 0.85; }
+  .vv-neu-placa { gap: 8px; padding: 16px 12px; }
+  .vv-neu { min-width: 64px; min-height: 68px; padding: 10px 6px; font-size: 11.5px; border-radius: 18px; }
+  .vv-c-toda .vv-barras__riel { height: 80px; }
+  .vv-paralaje { min-height: 0; }
+}
+/* El velo oscuro cubre toda la escena (antes terminaba donde terminaba el texto y dejaba una raya). */
+.vv-paralaje { display: flex; flex-direction: column; }
+.vv-paralaje__contenido { flex: 1; }
+.vv-paralaje__contenido::before { display: none; }
+.vv-paralaje__escena::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgb(12 9 26 / 0.8) 0%, rgb(12 9 26 / 0.5) 50%, rgb(12 9 26 / 0.05) 100%); }
+@media (max-width: 640px) { .vv-paralaje__escena::after { background: linear-gradient(180deg, rgb(12 9 26 / 0.55), rgb(12 9 26 / 0.85) 70%); } }
+.vv-ingreso-escena .vv-paralaje__escena::after { background: radial-gradient(circle at 50% 50%, rgb(12 9 26 / 0.5), rgb(12 9 26 / 0.05) 70%); }

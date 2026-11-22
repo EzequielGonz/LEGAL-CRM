@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { SalaLampara } from "@/components/ui/lampara-dibujo";
-import { Anillo } from "@/components/premium/anillo";
 import "@/components/perfiles/accesos-centrales.css";
 import "./resumen.css";
 import { leerResumenTodo } from "@/lib/resumen/servidor";
@@ -57,7 +56,6 @@ export default async function ResumenPage() {
             <CeldaColor color="violeta" etiqueta="Pendiente en los cuatro perfiles" area="vv-c-grande" orden={0}>
               <div className="vv-celda-fila">
                 <span className="vv-num">{total === null ? "—" : <Cifra valor={total} tamano="xl" />}</span>
-                {total === null ? null : <Anillo valor={total} meta={Math.max(10, total)} rubro="juridico" tamano="medio" nombre="Pendiente en los cuatro perfiles" unidad="pendientes" mostrarMeta={false} />}
               </div>
               <p className="vv-celda__texto">Tocá una fila de abajo para resolverlo acá mismo.</p>
             </CeldaColor>

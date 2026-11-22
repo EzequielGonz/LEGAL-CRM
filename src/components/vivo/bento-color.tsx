@@ -61,7 +61,8 @@ export function BarrasMini({ datos, etiqueta }: { datos: { nombre: string; valor
   return (
     <ul className="vv-barras" aria-label={etiqueta}>
       {datos.map((d, i) => {
-        const alto = d.valor === null ? 4 : Math.max(6, Math.round((d.valor / max) * 100));
+        // Raíz cuadrada: las cifras chicas del embudo se siguen viendo al lado de las grandes (el número exacto va arriba).
+        const alto = d.valor === null ? 4 : Math.max(6, Math.round(Math.sqrt(d.valor / max) * 100));
         return (
           <li key={d.nombre} className={d.resaltar ? "vv-barras__i vv-barras__i--fuerte" : "vv-barras__i"}>
             <span className="vv-barras__n">{d.valor === null ? "—" : formatoNumero(d.valor)}</span>
