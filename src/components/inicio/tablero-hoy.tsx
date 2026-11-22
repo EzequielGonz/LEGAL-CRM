@@ -383,9 +383,11 @@ function ColaHoy({
           </h2>
           <p className="mt-0.5 text-[13px] text-slate-600">{bajada}</p>
         </div>
-        <p className="d-stat__valor d-stat__valor--chico" data-contar="" aria-label={`${total} en la lista`}>
+        {/* Accesibilidad: `aria-label` en un <p> no se anuncia; la cifra que cuenta queda oculta al lector y se lee la frase. */}
+        <p className="d-stat__valor d-stat__valor--chico" data-contar="" aria-hidden="true">
           {total.toLocaleString("es-AR")}
         </p>
+        <span className="sr-only">{total === 1 ? "1 persona en la lista" : `${total.toLocaleString("es-AR")} personas en la lista`}</span>
       </header>
       {filas.length === 0 ? (
         <Vacio titulo={vacio} texto="Cuando haya alguien, aparece acá." />
