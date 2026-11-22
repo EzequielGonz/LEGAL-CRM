@@ -13,6 +13,7 @@ import "./accesible.css";
 import "./diseno.css";
 import "./premium.css";
 import "./panel-premium.css";
+import "./motion.css";
 import { SCRIPT_MODO } from "@/lib/modo";
 
 // Fuentes autoalojadas por Next (16/10). 22/11: Inter Tight para toda la
