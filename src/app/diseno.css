@@ -482,7 +482,8 @@ html[data-modo="oscuro"] .menu-tarjeta-sub[data-espera] { color: rgb(255 200 110
 
 /* -------------------------------------- aviso del código de ingreso */
 /* Lista del 20/11, punto i: en el celular ocupaba media pantalla. Ahora es una línea. */
-.aviso-codigo {
+.aviso-codigo,
+.d-aviso {
   display: flex;
   flex-wrap: wrap;
   align-items: center;

@@ -14,6 +14,7 @@ import { AREAS_DE_PERFIL, contarGrupo } from "@/lib/cartera-servidor";
 import { getCampaignFunnelCounts } from "@/lib/campaigns";
 import { TableroHoy } from "@/components/inicio/tablero-hoy";
 import { captadoEsperaDeMas, ESPERA_CAPTADO_HORAS } from "@/lib/hoy/colas";
+import { CabezaPantalla, Esqueleto } from "@/components/ui/diseno";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Hoy" };
@@ -48,15 +49,17 @@ export default async function InicioPerfilPage(
   return (
     <MarcoPerfil slug={slug}>
       <div className="mx-auto max-w-5xl space-y-6">
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-semibold text-slate-950">{saludo()}</h1>
-            <p className="mt-1 text-sm text-slate-600">{fechaHoy()} · personas, no mensajes</p>
-          </div>
-          <BotonAsistente variante="suave" texto="Resumen de hoy">
-            Pedile algo
-          </BotonAsistente>
-        </div>
+        {/* 22/11: encabezado con el estilo de /cerebro. Sin «personas, no mensajes» (orden del 19/11). */}
+        <CabezaPantalla
+          kicker={fechaHoy()}
+          titulo={saludo()}
+          bajada="A quién le escribís ahora y a quién pasás."
+          accion={
+            <BotonAsistente variante="suave" texto="Resumen de hoy">
+              Pedile algo
+            </BotonAsistente>
+          }
+        />
 
         {/* 13/11: el marco y el saludo se pintan enseguida; los datos llegan apenas están. */}
         <Suspense fallback={<EsqueletoHoy />}>
@@ -72,14 +75,14 @@ function EsqueletoHoy() {
     <div role="status" aria-label="Cargando el tablero de hoy" className="space-y-6">
       <div className="flex flex-wrap gap-2">
         {[40, 56, 44].map((w, i) => (
-          <span key={i} className="h-9 animate-pulse rounded-full bg-slate-200/70" style={{ width: `${w * 4}px` }} />
+          <Esqueleto key={i} alto="2.25rem" ancho={`${w * 4}px`} className="!rounded-full" />
         ))}
       </div>
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="h-72 animate-pulse rounded-2xl bg-slate-200/60" />
-        <div className="h-72 animate-pulse rounded-2xl bg-slate-200/60" />
+      <div className="d-bento">
+        <Esqueleto alto="18rem" className="d-b-4 !rounded-2xl" />
+        <Esqueleto alto="18rem" className="d-b-4 !rounded-2xl" />
       </div>
-      <div className="h-40 animate-pulse rounded-2xl bg-slate-200/60" />
+      <Esqueleto alto="10rem" className="!rounded-2xl" />
     </div>
   );
 }
@@ -143,7 +146,7 @@ async function CuerpoHoy({ slug, rubroId, searchParams }: { slug: SlugPerfil; ru
   return (
     <>
       {esperanDeMas > 0 && (
-        <p role="status" className="rounded-xl border border-amber-300 bg-amber-50 p-3 text-sm font-medium text-amber-900">
+        <p role="status" className="d-aviso !py-2.5 font-medium">
           {esperanDeMas === 1 ? "Una persona captada espera" : `${esperanDeMas} personas captadas esperan`} el llamado hace más de 24 horas. En la lista de abajo aparecen con «Más de 24 h».
         </p>
       )}
