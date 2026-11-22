@@ -32,10 +32,10 @@ drop index if exists public.agent_turn_logs_rubro_fecha_idx;
 
 ```sql
 insert into system_settings (key, value)
-values ('presupuesto_gemini', '{"mensualUsd": 30, "avisoFraccion": 0.8, "topeDiarioPorPerfilUsd": 0.4, "precioEntradaMillon": 0.3, "precioSalidaMillon": 2.5, "frenar": true}'::jsonb)
+values ('presupuesto_gemini', '{"mensualUsd": 30, "avisoFraccion": 0.8, "topeDiarioPorPerfilUsd": 0.4, "precioEntradaMillon": 0.3, "precioSalidaMillon": 2.5, "frenar": true, "frenoDiario": false}'::jsonb)
 on conflict (key) do update set value = excluded.value;
 ```
-Para apagar el freno y solo medir y avisar: `"frenar": false`. Para volver a los valores por defecto: borrar o reemplazar esa fila (es una configuración, no un dato de negocio).
+Para apagar el freno y solo medir y avisar: `"frenar": false`. El tope **diario** por perfil es solo aviso por defecto (`"frenoDiario": false`, pedido de Dirección del 22/11: los precios por token son estimados); para que también corte al bot: `"frenoDiario": true`. El tope del **mes** frena siempre que `frenar` esté en `true`. Para volver a los valores por defecto: reemplazar el valor de esa fila con `{}` (es una configuración; no se borra la fila).
 
 ## 0639 · `0639_latido_pg_cron.sql`
 

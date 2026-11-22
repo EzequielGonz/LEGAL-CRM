@@ -37,6 +37,7 @@ export function itemsPresupuestoGemini(r: ResumenParaSalud | null | undefined): 
         : { clave: "presupuesto_gemini", estado: "verde", titulo: "Gasto de IA del mes", detalle: `${usd(mes.gastoMesUsd)} de ${usd(r.config.mensualUsd)} (${mes.porcentajeMes} %).` }
     );
   }
+  const frenaElDia = r.config.frenar && r.config.frenoDiario;
   for (const p of r.perfiles) {
     if (p.diaUsd < p.topeDiaUsd) continue;
     items.push({
@@ -44,9 +45,12 @@ export function itemsPresupuestoGemini(r: ResumenParaSalud | null | undefined): 
       estado: "amarillo",
       perfil: p.slug,
       titulo: `${p.nombre}: tope diario de IA alcanzado`,
-      detalle: `Hoy lleva ${usd(p.diaUsd)} de ${usd(p.topeDiaUsd)}.${p.turnosFrenadosHoy ? ` ${p.turnosFrenadosHoy} conversación(es) pasaron a una persona.` : ""} Se destraba a la medianoche de Argentina.`,
-      accion: "Mirar las conversaciones que pasaron a una persona",
-      href: "/inbox",
+      // 22/11: por defecto el tope diario es solo aviso (precios estimados); con `frenoDiario` corta al bot.
+      detalle: frenaElDia
+        ? `Hoy lleva ${usd(p.diaUsd)} de ${usd(p.topeDiaUsd)}.${p.turnosFrenadosHoy ? ` ${p.turnosFrenadosHoy} conversación(es) pasaron a una persona.` : ""} Se destraba a la medianoche de Argentina.`
+        : `Hoy lleva ${usd(p.diaUsd)} de ${usd(p.topeDiaUsd)}. Es solo un aviso: el bot sigue respondiendo (los precios por token son estimados). El tope del mes sí frena.`,
+      accion: frenaElDia ? "Mirar las conversaciones que pasaron a una persona" : "Revisar el gasto del perfil",
+      href: frenaElDia ? "/inbox" : "/configuracion",
     });
   }
   return items;

@@ -20,6 +20,8 @@ test("valores por defecto: USD 30 por mes, aviso al 80 %, tope diario por perfil
   assert.equal(D.avisoFraccion, 0.8);
   assert.equal(D.topeDiarioPorPerfilUsd, 0.4);
   assert.equal(D.frenar, true);
+  // 22/11 (Dirección): el tope diario por perfil es solo aviso por defecto.
+  assert.equal(D.frenoDiario, false);
 });
 
 test("la configuración guardada se mezcla con los valores por defecto y lo inválido se ignora", () => {
@@ -32,6 +34,8 @@ test("la configuración guardada se mezcla con los valores por defecto y lo inv�
   assert.equal(c.precioEntradaMillon, D.precioEntradaMillon);
   assert.equal(c.frenar, true);
   assert.equal(normalizarConfig({ frenar: false }).frenar, false);
+  assert.equal(normalizarConfig({ frenoDiario: true }).frenoDiario, true);
+  assert.equal(normalizarConfig({ frenoDiario: "si" }).frenoDiario, false);
 });
 
 test("costo estimado: entrada y salida por millón; el razonamiento se cobra como salida", () => {
@@ -57,18 +61,33 @@ test("al 80 % del mes avisa pero no frena", () => {
   assert.equal(evaluarPresupuesto({ mesUsd: 23.99, diaPerfilUsd: 0 }, D).estado, "libre");
 });
 
-test("el tope diario frena solo a ese perfil", () => {
+test("por defecto el tope diario es solo aviso: mide y avisa pero NO corta al bot", () => {
   const a = evaluarPresupuesto({ mesUsd: 10, diaPerfilUsd: 0.4 }, D);
   assert.equal(a.estado, "tope_dia");
-  assert.equal(a.bloquea, true);
-  const otro = evaluarPresupuesto({ mesUsd: 10, diaPerfilUsd: 0.39 }, D);
-  assert.equal(otro.bloquea, false);
+  assert.equal(a.bloquea, false);
+  assert.match(textoAvisoPresupuesto(a, "Marketing").body, /solo un aviso/);
+  assert.doesNotMatch(textoAvisoPresupuesto(a, "Marketing").body, /deriva a una persona/);
+  // Muy por encima del tope diario, mientras el mes no llegue a USD 30, tampoco corta.
+  assert.equal(evaluarPresupuesto({ mesUsd: 29.99, diaPerfilUsd: 25 }, D).bloquea, false);
 });
 
-test("el tope del mes frena a todos y manda sobre el del día", () => {
+test("con frenoDiario encendido el tope diario frena solo a ese perfil", () => {
+  const c = normalizarConfig({ frenoDiario: true });
+  const a = evaluarPresupuesto({ mesUsd: 10, diaPerfilUsd: 0.4 }, c);
+  assert.equal(a.estado, "tope_dia");
+  assert.equal(a.bloquea, true);
+  assert.match(textoAvisoPresupuesto(a, "Marketing").body, /deriva a una persona/);
+  const otro = evaluarPresupuesto({ mesUsd: 10, diaPerfilUsd: 0.39 }, c);
+  assert.equal(otro.bloquea, false);
+  // Con el freno general apagado, ni el diario corta.
+  assert.equal(evaluarPresupuesto({ mesUsd: 10, diaPerfilUsd: 0.4 }, { ...c, frenar: false }).bloquea, false);
+});
+
+test("el tope del mes (USD 30) frena a todos y manda sobre el del día, con frenoDiario apagado", () => {
   const d = evaluarPresupuesto({ mesUsd: 30, diaPerfilUsd: 0 }, D);
   assert.equal(d.estado, "tope_mes");
   assert.equal(d.bloquea, true);
+  assert.equal(evaluarPresupuesto({ mesUsd: 30, diaPerfilUsd: 5 }, D).bloquea, true);
   assert.match(d.motivo, /30,00/);
 });
 
@@ -124,7 +143,10 @@ test("Salud: un perfil con tope del día aparece solo en su perfil", () => {
   const propios = items.filter((i) => i.clave.startsWith("presupuesto_dia_"));
   assert.equal(propios.length, 1);
   assert.equal(propios[0].perfil, "marketing");
-  assert.match(propios[0].detalle, /3 conversación/);
+  // Por defecto es solo aviso: no dice que pasaron a una persona.
+  assert.match(propios[0].detalle, /solo un aviso/);
+  const conFreno = itemsPresupuestoGemini({ ...resumen(3, [{ slug: "marketing", diaUsd: 0.5, turnosFrenadosHoy: 3 }]), config: { ...D, frenoDiario: true } });
+  assert.match(conFreno.find((i) => i.clave === "presupuesto_dia_marketing")!.detalle, /3 conversación/);
   assert.equal(itemsDelPerfil(items, "marketing").some((i) => i.clave === "presupuesto_dia_marketing"), true);
   assert.equal(itemsDelPerfil(items, "juridico").some((i) => i.clave === "presupuesto_dia_marketing"), false);
   // El del mes es de todo el sistema: se ve en los cuatro perfiles.

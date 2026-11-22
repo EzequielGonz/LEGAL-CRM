@@ -11,8 +11,12 @@
  * Estados, de menos a más severo:
  *  - libre: por debajo de todo.
  *  - aviso: el mes llegó al 80 % del presupuesto (se avisa; el bot sigue igual).
- *  - tope_dia: el perfil llegó a su tope del día (el bot deja de usar la IA
- *    con ese perfil hasta la medianoche de Argentina).
+ *  - tope_dia: el perfil llegó a su tope del día. Por defecto es SOLO AVISO
+ *    (22/11, Dirección): se mide y se avisa en Salud y a los dispositivos,
+ *    pero el bot sigue respondiendo, porque los precios por token son
+ *    estimados y no están verificados. Con `frenoDiario: true` en
+ *    `system_settings.presupuesto_gemini` vuelve a frenar a ese perfil hasta
+ *    la medianoche de Argentina.
  *  - tope_mes: el mes llegó al 100 % (el bot deja de usar la IA en todos los
  *    perfiles hasta que el dueño suba el presupuesto o empiece otro mes).
  *
@@ -31,8 +35,14 @@ export interface ConfigPresupuesto {
   /** Precios del modelo, en USD por millón de tokens. */
   precioEntradaMillon: number;
   precioSalidaMillon: number;
-  /** Interruptor: con false no se frena nada (solo se mide y se avisa). */
+  /** Interruptor general: con false no se frena nada (solo se mide y se avisa). */
   frenar: boolean;
+  /**
+   * 22/11 (Dirección): ¿el tope DIARIO por perfil corta al bot? Por defecto no:
+   * es solo aviso, porque los precios por token son estimados y sin verificar.
+   * El tope del MES sí frena (si `frenar` está encendido).
+   */
+  frenoDiario: boolean;
 }
 
 /**
@@ -48,6 +58,7 @@ export const CONFIG_PRESUPUESTO_POR_DEFECTO: ConfigPresupuesto = {
   precioEntradaMillon: 0.3,
   precioSalidaMillon: 2.5,
   frenar: true,
+  frenoDiario: false,
 };
 
 function num(v: unknown, def: number, min: number, max: number): number {
@@ -67,6 +78,7 @@ export function normalizarConfig(crudo: unknown): ConfigPresupuesto {
     precioEntradaMillon: num(v.precioEntradaMillon, d.precioEntradaMillon, 0, 1_000),
     precioSalidaMillon: num(v.precioSalidaMillon, d.precioSalidaMillon, 0, 1_000),
     frenar: typeof v.frenar === "boolean" ? v.frenar : d.frenar,
+    frenoDiario: typeof v.frenoDiario === "boolean" ? v.frenoDiario : d.frenoDiario,
   };
 }
 
@@ -109,7 +121,8 @@ export function evaluarPresupuesto(gasto: { mesUsd: number; diaPerfilUsd: number
     return { ...base, estado: "tope_mes", bloquea: config.frenar, motivo: `El gasto del mes (${usd(mes)}) llegó al presupuesto de ${usd(config.mensualUsd)}.` };
   }
   if (dia >= config.topeDiarioPorPerfilUsd) {
-    return { ...base, estado: "tope_dia", bloquea: config.frenar, motivo: `El perfil llegó a su tope de hoy (${usd(dia)} de ${usd(config.topeDiarioPorPerfilUsd)}).` };
+    // 22/11: el tope del día solo corta si se encendió `frenoDiario` (por defecto es aviso).
+    return { ...base, estado: "tope_dia", bloquea: config.frenar && config.frenoDiario, motivo: `El perfil llegó a su tope de hoy (${usd(dia)} de ${usd(config.topeDiarioPorPerfilUsd)}).` };
   }
   if (mes >= config.mensualUsd * config.avisoFraccion) {
     return { ...base, estado: "aviso", bloquea: false, motivo: `El mes lleva ${usd(mes)} de ${usd(config.mensualUsd)} (${porcentajeMes} %).` };
@@ -166,6 +179,9 @@ export function mesAr(ahora: Date): string {
 /** Aviso de gasto (80 % del mes) y de tope: texto sin datos de personas. Pura. */
 export function textoAvisoPresupuesto(d: DecisionPresupuesto, perfilNombre?: string): { title: string; body: string; url: string } {
   if (d.estado === "tope_mes") return { title: "Tope de gasto de IA alcanzado", body: `${d.motivo} Los bots derivan a una persona. Tocá para verlo en Salud.`, url: "/salud" };
-  if (d.estado === "tope_dia") return { title: `Tope diario de IA${perfilNombre ? ` · ${perfilNombre}` : ""}`, body: `${d.motivo} Hasta la medianoche el bot deriva a una persona. Tocá para verlo en Salud.`, url: "/salud" };
+  if (d.estado === "tope_dia") {
+    const efecto = d.bloquea ? "Hasta la medianoche el bot deriva a una persona." : "Es solo un aviso: el bot sigue respondiendo.";
+    return { title: `Tope diario de IA${perfilNombre ? ` · ${perfilNombre}` : ""}`, body: `${d.motivo} ${efecto} Tocá para verlo en Salud.`, url: "/salud" };
+  }
   return { title: "Gasto de IA al 80 % del mes", body: `${d.motivo} Tocá para verlo en Salud.`, url: "/salud" };
 }

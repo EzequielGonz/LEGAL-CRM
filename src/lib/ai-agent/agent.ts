@@ -449,7 +449,7 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
   // Horario de atención (18/10, todos los perfiles): fuera de la franja de asesores igual se capta.
   systemWithBrief = `${systemWithBrief}\n\n${bloqueHorarioAtencion(new Date())}`;
 
-  // 22/11: tope de gasto de IA (USD 30 por mes para los bots; tope diario por perfil).
+  // 22/11: tope de gasto de IA (USD 30 por mes para los bots; el tope diario por perfil es solo aviso salvo `frenoDiario`).
   // Con el tope alcanzado el bot no se corta en seco: no llama al modelo, responde con el
   // cierre de reserva del rubro (el mismo que sale si el modelo no da uno válido), el chat
   // pasa a una persona con su tarea de atención y Salud lo muestra. Por debajo del tope no
