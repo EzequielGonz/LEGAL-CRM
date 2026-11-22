@@ -16,6 +16,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { Anillo, Bento, BentoCelda, Boton, Pastilla, Tarjeta, VerMas } from "@/components/premium";
 import { esperaHace } from "@/lib/premium/espera";
 import "@/app/chats-campanas.css";
+import { Cartel } from "@/components/vivo/cartel";
 
 const PUNTO: Record<Tono, string> = {
   caliente: "bg-gold-500",
@@ -148,8 +149,8 @@ async function CuerpoCartera({ vista, slug, rubroId, searchParams }: { vista: Vi
   return (
       <div className="cc mx-auto max-w-6xl space-y-6">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-950">{def.titulo}</h1>
-          <p className="mt-1 text-sm text-slate-600">{def.bajada}</p>
+          <Cartel como="h1" tamano="l" texto={def.titulo.replace(/[[\]]/g, "")} />
+          <p className="mt-2 text-sm text-slate-600">{def.bajada}</p>
           {vista === "descartados" ? (
             <p className="mt-2 text-sm text-slate-700">
               El 13/11 se reubicó a cada persona según lo que dice su chat.{" "}

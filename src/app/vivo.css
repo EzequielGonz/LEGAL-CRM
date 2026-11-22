@@ -532,3 +532,17 @@ html .pin-campo:focus { transform: translateY(-1px); box-shadow: 0 0 0 3px rgb(v
 .vv-celda .vv-barras { min-height: 96px; margin-top: 8px; }
 .vv-celda .vv-barras__riel { height: 58px; }
 .rs-total-vivo { display: grid; gap: 12px; margin-bottom: 28px; }
+
+/* Títulos de las demás pantallas: entran con desenfoque y una raya de acento que se dibuja debajo. */
+html .lienzo-contenido h1:not(.sr-only):not(.vv-cartel__titulo) { position: relative; padding-bottom: 6px; }
+html .lienzo-contenido h1:not(.sr-only):not(.vv-cartel__titulo)::after {
+  content: ""; position: absolute; left: 0; bottom: 0; width: 56px; height: 3px; border-radius: 3px;
+  background: linear-gradient(90deg, rgb(var(--c-gold-400)), var(--vv-rosa));
+  transform-origin: left;
+}
+html .lienzo-contenido .vv-cartel h1.vv-cartel__titulo { padding-bottom: 2px; }
+@keyframes vv-raya { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@media (prefers-reduced-motion: no-preference) {
+  html .lienzo-contenido h1:not(.sr-only):not(.vv-cartel__titulo) { animation: vv-palabra 700ms var(--vv-suave) backwards; }
+  html .lienzo-contenido h1:not(.sr-only):not(.vv-cartel__titulo)::after { animation: vv-raya 900ms var(--vv-resorte) 250ms backwards; }
+}
