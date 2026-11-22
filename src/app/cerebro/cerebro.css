@@ -440,3 +440,21 @@
 .cz-acceso:hover { border-color: #3a3a4e; transform: translateY(-1px); }
 @media (max-width: 560px) { .cz-ens-fila { grid-template-columns: minmax(0, 1fr); } }
 @media (prefers-reduced-motion: reduce) { .cz-pastilla, .cz-pastilla:hover, .cz-acceso, .cz-acceso:hover { transform: none; transition: none; } }
+
+/* 22/11: recomendaciones, reglas vigentes y confirmaciones. Tarjetas con relieve y sombras en capas, sin fondos nuevos. */
+.cz-recos { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); }
+.cz-reco { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px; display: grid; gap: 8px; align-content: start; box-shadow: 0 1px 0 rgb(255 255 255 / 0.06) inset, 0 1px 2px rgb(0 0 0 / 0.35), 0 10px 22px -12px rgb(0 0 0 / 0.7), 0 26px 40px -26px rgb(0 0 0 / 0.6); animation: cz-reco-entra 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards; animation-delay: calc(var(--i, 0) * 80ms); }
+.cz-reco h3 { margin: 0; font-size: 1rem; line-height: 1.3; color: var(--fg); }
+.cz-reco p { margin: 0; font-size: 0.88rem; color: var(--muted); }
+.cz-reco small { font-size: 0.78rem; color: var(--muted); }
+.cz-reco__rubro { font-size: 0.74rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.cz-reco .cz-btn { justify-self: start; }
+.cz-regla { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.cz-regla span { flex: 1 1 14rem; }
+.cz-reglas { display: grid; gap: 10px; }
+.cz-confirma { display: grid; gap: 10px; border: 1px solid var(--line); border-radius: 12px; padding: 12px; background: var(--bg2); }
+.cz-confirma p { margin: 0; font-size: 0.88rem; }
+.cz-confirma__botones { display: flex; flex-wrap: wrap; gap: 10px; }
+.cz-reco .cz-btn:focus-visible, .cz-regla .cz-btn:focus-visible, .cz-confirma .cz-btn:focus-visible { outline: 2px solid var(--box); outline-offset: 2px; }
+@keyframes cz-reco-entra { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .cz-reco { animation: none; } }
