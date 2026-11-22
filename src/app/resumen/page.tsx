@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { SalaLampara } from "@/components/ui/lampara-dibujo";
-import { Anillo } from "@/components/premium/anillo";
 import "@/components/perfiles/accesos-centrales.css";
 import "./resumen.css";
 import { leerResumenTodo } from "@/lib/resumen/servidor";
@@ -8,7 +7,9 @@ import { cifrasSinLeer, filasParaHoy } from "@/lib/resumen/filas";
 import { requirePageSession } from "@/lib/acceso/pagina";
 import { ResumenVivo } from "@/components/resumen/resumen-vivo";
 import { resumenSemanaEnMemoria } from "@/lib/asistente/semana-cache";
-import { formatoNumero } from "@/lib/premium/anillo";
+import { Cifra } from "@/components/premium/cifra";
+import { Cartel } from "@/components/vivo/cartel";
+import { BarrasMini, BentoColor, CeldaColor } from "@/components/vivo/bento-color";
 import { comparacionSemanal, totalPendiente } from "@/lib/resumen/pedidos";
 
 export const metadata = { title: "Resumen de todo" };
@@ -34,8 +35,8 @@ export default async function ResumenPage() {
       <main id="resumen" className="escena-capa rs relative w-full max-w-6xl">
         <div className="ac-cabecera">
           <div>
-            <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Resumen de todo</h1>
-            <p className="mt-2 text-sm">Lo pendiente de los cuatro perfiles, en un vistazo. Tocá una cifra o una fila para ver quiénes son y resolverlo acá mismo.</p>
+            <Cartel como="h1" tamano="xl" antetitulo="Los cuatro perfiles," texto="Resumen de [todo]" />
+            <p className="mt-3 text-sm">Lo pendiente de los cuatro perfiles, en un vistazo. Tocá una cifra o una fila para ver quiénes son y resolverlo acá mismo.</p>
           </div>
           <div className="flex flex-wrap gap-2">
             <Link href="/asistente" prefetch={false} className="ac-resumen">
@@ -48,29 +49,45 @@ export default async function ResumenPage() {
           </div>
         </div>
 
-        <section aria-labelledby="rs-total" className="rs-total">
-          <h2 id="rs-total" className="rs-hoy__titulo">Los cuatro perfiles juntos</h2>
-          <div className="rs-total__cuerpo">
-            <div className="rs-total__anillo">
-              {total === null ? (
-                <span className="rs-sin rs-sin--grande" role="img" aria-label="Total pendiente: sin dato">—</span>
-              ) : (
-                <Anillo valor={total} meta={Math.max(10, total)} rubro="juridico" tamano="grande" nombre="Pendiente en los cuatro perfiles" unidad="pendientes" mostrarMeta={false} />
-              )}
-              <span className="rs-total__et">Pendiente en total</span>
-            </div>
-            <ul className="rs-sem" aria-label="Esta semana contra la anterior">
-              {comparacion.map((c) => (
-                <li key={c.clave} className="rs-sem__item">
-                  <b>{c.actual === null ? "—" : formatoNumero(c.actual)}</b>
-                  <span>{c.titulo}</span>
-                  <i className={`rs-sem__var rs-sem__var--${c.variacion.flecha}`} aria-label={c.variacion.largo}>
-                    {c.variacion.flecha === "sin_dato" ? "—" : `${c.variacion.flecha === "sube" ? "▲" : c.variacion.flecha === "baja" ? "▼" : "="} ${c.variacion.texto}`}
-                  </i>
-                </li>
-              ))}
-            </ul>
-          </div>
+        {/* Vuelta 6: bento de colores con las cifras reales (cada caja entra creciendo, escalonada). */}
+        <section aria-labelledby="rs-total" className="rs-total-vivo">
+          <h2 id="rs-total" className="sr-only">Los cuatro perfiles juntos</h2>
+          <BentoColor etiqueta="Los cuatro perfiles juntos, esta semana contra la anterior">
+            <CeldaColor color="violeta" etiqueta="Pendiente en los cuatro perfiles" area="vv-c-grande" orden={0}>
+              <div className="vv-celda-fila">
+                <span className="vv-num">{total === null ? "—" : <Cifra valor={total} tamano="xl" />}</span>
+              </div>
+              <BarrasMini
+                etiqueta="Pendiente de cada perfil"
+                datos={perfiles.map((p) => ({
+                  nombre: p.nombre,
+                  valor: p.cifras.some((c) => c.clave !== "citasHoy" && c.valor === null) ? null : p.cifras.reduce((t, c) => (c.clave === "citasHoy" ? t : t + (c.valor ?? 0)), 0),
+                }))}
+              />
+              <p className="vv-celda__texto">Lo pendiente de cada perfil. Tocá una fila de abajo para resolverlo acá mismo.</p>
+            </CeldaColor>
+            {comparacion.map((c, i) => {
+              const color = (["rosa", "amarillo", "agua", "lila"] as const)[i % 4];
+              const area = ["vv-c-media", "vv-c-chica", "vv-c-chica", "vv-c-media"][i % 4];
+              return (
+                <CeldaColor key={c.clave} color={color} etiqueta={c.titulo} area={area} orden={i + 1}>
+                  <div className="vv-celda-fila">
+                    <span className="vv-num vv-num--m">{c.actual === null ? "—" : <Cifra valor={c.actual} tamano="l" />}</span>
+                    <span className="vv-variacion" aria-label={c.variacion.largo}>
+                      {c.variacion.flecha === "sin_dato" ? "—" : `${c.variacion.flecha === "sube" ? "▲" : c.variacion.flecha === "baja" ? "▼" : "="} ${c.variacion.texto}`}
+                    </span>
+                  </div>
+                  <BarrasMini
+                    etiqueta={`${c.titulo}: semana anterior contra esta`}
+                    datos={[
+                      { nombre: "Anterior", valor: c.anterior },
+                      { nombre: "Esta", valor: c.actual, resaltar: true },
+                    ]}
+                  />
+                </CeldaColor>
+              );
+            })}
+          </BentoColor>
           <p className="rs-nota rs-nota--izq">Semana contra la anterior. «—» es que no hay dato para comparar.</p>
         </section>
 
