@@ -4,6 +4,13 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 
 # Bitácora
 
+## 22/11 (noche) — Vuelta 6: lo visible
+
+- **Pedido:** «sigue todo igual… súper básico… la oficina nada que ver con el video… el cerebro tiene todo abajo… usá las marcas que te hice (bento de colores, vidrio, neumorfismo, gradient mesh, parallax, carteles), no el fondo».
+- **Error de la vuelta 5:** se publicó sin mirar en pantalla. Regla nueva: ningún agente termina sin capturas en Preview con sesión comparadas con la referencia; el orquestador mira producción antes de informar.
+- **Publicado (`b625c87`) y mirado en producción:** Oficina edificio 3D con muebles, living con pool y cocina, panel de equipo y canal en vivo, modo «Recorrer»; Cerebro con Preguntale/Enseñale/Ordenale arriba y anillo 3D de pantallas de color; Hoy y Resumen en bento de colores con carteles, parallax y botones neumórficos; Jarvis con bento de gráficos y orbe vivo. Sin errores en 30 pantallas.
+
+
 ## 22/11 (noche) — Graphify en todos lados, verificado
 
 - **Pedido:** «¿lo sumaste a todas las ramas y todo el proyecto?» (la sesión Accesos dijo que en `main` no había mapa: falso, está desde `d56ca67`; su búsqueda cortaba la lista a 10 renglones).
