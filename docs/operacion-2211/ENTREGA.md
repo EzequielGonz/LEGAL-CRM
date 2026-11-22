@@ -14,12 +14,13 @@ Estado de cada cosa: **especificado** sí, **implementado** sí, **probado** con
 |---|---|
 | Presupuesto del mes (todos los bots) | USD 30 |
 | Aviso | al 80 % del mes (USD 24) |
-| Tope diario por perfil | USD 0,40 (el promedio es USD 1,00 por día en total; un día con campaña no se corta, y el tope del mes es la última barrera) |
+| Tope diario por perfil | USD 0,40 (el promedio es USD 1,00 por día en total). **Solo aviso por defecto** (integración 22/11, pedido de Dirección: los precios por token son estimados y sin verificar): mide y avisa en Salud y a los dispositivos, pero no corta al bot |
 | Precio de entrada | USD 0,30 por millón de tokens |
 | Precio de salida (incluye razonamiento) | USD 2,50 por millón |
-| Freno | encendido (apagado = solo mide y avisa) |
+| Freno general (`frenar`) | encendido: el tope del **mes** frena (apagado = solo mide y avisa) |
+| Freno diario (`frenoDiario`) | **apagado**: el tope del día es solo aviso; con `true` también corta a ese perfil hasta la medianoche |
 
-**Qué pasa al llegar al tope** (`src/lib/ai-agent/agent.ts`, antes de la primera llamada al modelo):
+**Qué pasa al llegar al tope del mes** (o al del día, solo si `frenoDiario` está en `true`) (`src/lib/ai-agent/agent.ts`, antes de la primera llamada al modelo):
 - El bot no se corta en seco: responde con el **cierre de reserva del rubro** que ya existía (el mismo que sale si el modelo no da un cierre válido), el chat pasa a una persona con su tarea de atención (mismo camino que «consulta fuera de alcance») y el turno queda registrado con `error = 'tope_gasto_dia: …'` o `tope_gasto_mes: …`.
 - Como el chat queda pausado para la IA, no se repite ni se manda más de una vez a la misma persona.
 - El recontacto automático no sale mientras haya tope (no llama al modelo y no marca nada).
