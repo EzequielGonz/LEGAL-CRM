@@ -7,7 +7,7 @@ import { leerResumenTodo } from "@/lib/resumen/servidor";
 import { cifrasSinLeer, filasParaHoy } from "@/lib/resumen/filas";
 import { requirePageSession } from "@/lib/acceso/pagina";
 import { ResumenVivo } from "@/components/resumen/resumen-vivo";
-import { resumenSemana } from "@/lib/asistente/semana";
+import { resumenSemanaEnMemoria } from "@/lib/asistente/semana-cache";
 import { formatoNumero } from "@/lib/premium/anillo";
 import { comparacionSemanal, totalPendiente } from "@/lib/resumen/pedidos";
 
@@ -23,7 +23,7 @@ export const dynamic = "force-dynamic";
 export default async function ResumenPage() {
   const sesion = await requirePageSession();
   if (!sesion.ok) return sesion.fallback;
-  const [perfiles, semana] = await Promise.all([leerResumenTodo(), resumenSemana().catch(() => null)]);
+  const [perfiles, semana] = await Promise.all([leerResumenTodo(), resumenSemanaEnMemoria().catch(() => null)]);
   const total = totalPendiente(perfiles);
   const comparacion = comparacionSemanal(semana ? semana.perfiles.map((p) => p.cifras) : null);
   const filas = filasParaHoy(perfiles, 20);

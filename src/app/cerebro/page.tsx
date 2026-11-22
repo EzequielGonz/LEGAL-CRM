@@ -3,7 +3,7 @@ import { Inter_Tight, JetBrains_Mono } from "next/font/google";
 import "./cerebro.css";
 import { requirePageSession } from "@/lib/acceso/pagina";
 import { CerebroVista } from "@/components/cerebro/cerebro-vista";
-import { resumenSemana } from "@/lib/asistente/semana";
+import { resumenSemanaEnMemoria } from "@/lib/asistente/semana-cache";
 import { leerRubrosActivos } from "@/lib/perfiles-stats";
 import { leerSalud } from "@/lib/salud";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -27,7 +27,7 @@ const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500", "700"],
  */
 
 /** Una sola lectura de la semana por pedido, compartida por los bloques. */
-const leerSemana = cache(async (): Promise<{ desde: string; perfiles: PerfilSemana[] } | null> => resumenSemana().catch(() => null));
+const leerSemana = cache(async (): Promise<{ desde: string; perfiles: PerfilSemana[] } | null> => resumenSemanaEnMemoria().catch(() => null));
 
 async function contarContactos(): Promise<number | null> {
   try {

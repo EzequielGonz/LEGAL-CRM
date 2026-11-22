@@ -1,4 +1,4 @@
-import { resumenSemana } from "@/lib/asistente/semana";
+import { resumenSemanaEnMemoria } from "@/lib/asistente/semana-cache";
 import { CIFRAS_SEMANA, proporciones, totalSemana, variacion, type CifraSemana, type Variacion } from "@/lib/asistente/semana-reglas";
 import { NOMBRE_PERFIL } from "@/lib/asistente/general";
 import { Anillo } from "@/components/premium/anillo";
@@ -69,7 +69,7 @@ function Barras({ titulo, c }: { titulo: string; c: CifraSemana }) {
 }
 
 export async function ResumenSemana() {
-  const datos = await resumenSemana().catch(() => null);
+  const datos = await resumenSemanaEnMemoria().catch(() => null);
   if (!datos) {
     return <p className="jv-dato jv-nota-chica">No se pudo leer el resumen de la semana. Probá recargar en un rato.</p>;
   }
