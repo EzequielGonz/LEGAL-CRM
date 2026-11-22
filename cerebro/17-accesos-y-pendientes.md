@@ -27,6 +27,7 @@ Reglas de la sesión:
 | A9 | ⬜ | Clave de Resend | Aviso por correo de formularios (PR #40) | Formulario seguro o variable en Vercel |
 | A10 | ⬜ | Canva y Cloudflare (Turnstile) | Diseño de piezas; antispam en formularios | Conectar en claude.ai si los quieren usar |
 | A11 | ⬜ | Skill Arena | Varias versiones compiten cuando hay que corregir muchas veces | No está en el catálogo: instalarla del repo después de leerlo. Uso solo con OK y tope |
+| A12 | ⬜ | Secreto del latido en Vault (`crm_cron_secret`) | Que el job de `pg_cron` lea el secreto desde Vault y no lo tenga escrito (migración 0639, ya aplicada pero en espera) | Después de rotar `CRON_SECRET` (P2): cargar el mismo valor en Supabase → Vault con el nombre `crm_cron_secret` y volver a correr 0639 |
 
 El resto de los plugins que piden cuenta están en `18-mapa-de-skills-y-plugins.md` § «Necesitan cuenta, acceso o pago», con prioridad.
 
