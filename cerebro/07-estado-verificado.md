@@ -75,6 +75,8 @@ Wasender: las 3 `logged_out`, `habilitada=false`, modo de prueba encendido. «As
 
 ## Producción y código
 
+- 22/11 noche: tabla `cerebro_conocimiento` creada (migración 0650, RLS activo, sin permisos públicos, 0 filas). Versión con las cinco partes de la quinta vuelta en `main` (ver bitácora).
+
 - Vercel producción: último despliegue 20/11 05:25 `36f742b` (READY). Sin errores de runtime en 24 h.
 - Migraciones: **77 aplicadas, última `0634_asistente_charlas`** (20/11 05:22). Ojo: la rama de trabajo `claude/admiring-euler-ctf4sg` llega solo a `0633` (está 43 commits detrás de main).
 - Bandeja para Claude: **0 tareas abiertas** (la única quedó «lista» el 20/11 05:26).
