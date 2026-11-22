@@ -17,12 +17,12 @@ Reglas de la sesión:
 | # | Estado | Qué | Para qué | Cómo |
 |---|---|---|---|---|
 | A1 | ⬜ | Disparo de la Oficina (token de la tarea programada) | Que «Arrancar ahora» del panel despierte a los agentes | En claude.ai/code → Tareas programadas → «Oficina · procesar tareas» (ya creada el 22/11, sin horario): **sumarle el conector Supabase** (sin eso los agentes no leen la bandeja) y el repositorio LEGAL-CRM; después, agregar disparo por API y copiar la dirección y el token. Claude los carga en Vercel como `OFICINA_DISPARO_URL` y `OFICINA_DISPARO_TOKEN` (y `OFICINA_DISPARO_BETA` si la página lo pide) |
-| A2 | ⬜ | Google Search Console y GA4 | Escritorios de Análisis y SEO | Conector de Google (AdCopilot o el kit de Search Console) con la cuenta de Google de las landings |
-| A3 | ⬜ | Analítica de Metricool | Ciclo semanal «publicar → medir → aprender» | Ya está conectado; comprobar que devuelve métricas por marca |
+| A2 | 🟨 | Google Search Console y GA4 | Escritorios de Análisis y SEO | **22/11:** Windsor tiene conectadas las 4 propiedades de GA4 y los 4 dominios de Search Console, pero **las lecturas están pausadas** (plan gratis de Windsor = 1 cuenta; 8 conectadas). Camino gratis: conectar AdCopilot (Search Console + GA4 + Tag Manager, prueba Pro hasta el 26/11) con la cuenta de Google de las landings. El kit de Search Console (`search-visibility-kit`) no conectó |
+| A3 | ✅ | Analítica de Metricool | Ciclo semanal «publicar → medir → aprender» | **22/11:** devuelve métricas por marca (4 marcas con Facebook, Instagram y cuenta de Meta Ads vinculados). Probado con reels de VITA: alcance, vistas, tiempo medio, tasa de vista y de salto |
 | A4 | ⬜ | GitHub (conector) | Ingeniería: ramas y PR desde los agentes | Reconectar GitHub en claude.ai (hoy falla con «encabezado mal formado») |
 | A5 | ⬜ | PostHog (plugin instalado) | Embudos y mapas de calor de las landings | Iniciar sesión en PostHog (plan gratis). Uso solo con OK |
 | A6 | ⬜ | Firecrawl (plugin instalado) | Leer marca y precios de la competencia | Clave de API del plan gratis por el formulario seguro (host `api.firecrawl.dev`). Uso solo con OK |
-| A7 | ⬜ | Gmail y Google Calendar | Jarvis: resumen diario y recordatorios | Conector de Google en claude.ai |
+| A7 | 🟨 | Gmail y Google Calendar | Jarvis: resumen diario y recordatorios | **22/11:** Gmail conectado y responde (etiquetas leídas). Calendar sin probar |
 | A8 | ⬜ | Vercel de las landings (otra cuenta) | Cargar etiquetas de GA4 y píxel | Invitar a Claude al equipo o dar acceso al proyecto |
 | A9 | ⬜ | Clave de Resend | Aviso por correo de formularios (PR #40) | Formulario seguro o variable en Vercel |
 | A10 | ⬜ | Canva y Cloudflare (Turnstile) | Diseño de piezas; antispam en formularios | Conectar en claude.ai si los quieren usar |

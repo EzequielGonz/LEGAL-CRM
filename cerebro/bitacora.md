@@ -178,3 +178,8 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 - Debajo, anillo 3D de 11 pantallas de colores alrededor del núcleo (la esfera, que late cuando piensa): Pendientes, Oficina, Jarvis, Recomienda, Aprendido, Decisiones, Semana, Salud, Laboratorio, Mapa del código (Graphify) y Pedidos a Claude. Se gira arrastrando, con rueda o flechas; la de adelante se abre a pantalla completa como bento de colores y vidrio con su función operable. Celular y «menos movimiento»: bento en lista.
 - Piezas del video marcado: carteles con la palabra clave en serif itálica recuadrada, bento de colores vivos, vidrio sobre círculos de color dentro de la tarjeta, degradé de nubes por marca, capas en parallax y botones neumórficos. Fondo de la página oscuro y limpio.
 - No se perdió nada: las secciones viejas (`#alertas`, `#preguntas`, `#corregi`…) abren su pantalla nueva. Código: `src/lib/cerebro/anillo.ts` (con pruebas), `src/components/cerebro/centro-cerebro.tsx`, `barra-mando.tsx`, `pantallas-cerebro.tsx`, `bento-cerebro.tsx`, `src/app/cerebro/centro.css`.
+
+## 22/11 · Revisión de accesos (Google y Meta)
+- Vercel (solo nombres): Resend y remitente, Gemini, Wasender, Outscraper, Meta (app, verificación), WhatsApp de los 4 perfiles, página y cuenta de Instagram solo de Civil y Penal. Faltan `OFICINA_DISPARO_*`.
+- Metricool: 4 marcas, lectura de métricas de reels funcionando. Mejor pieza de VITA en noviembre: «Choque: nunca digas esto» (1.575 vistas, 74 % de tasa de vista); la mayoría de los reels dio 0 de alcance.
+- Windsor: GA4 y Search Console conectados pero con lecturas pausadas por el plan gratis (1 cuenta). AdCopilot sin Google conectado.
