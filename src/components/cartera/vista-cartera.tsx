@@ -13,10 +13,13 @@ import { AREAS_DE_PERFIL, contarDetenidos, contarVista, listarGrupo, resumenCifr
 import { getProfileMetrics } from "@/lib/metrics";
 import { nivelDeInteres } from "@/lib/atencion/interes";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { Anillo, Bento, BentoCelda, Boton, Pastilla, Tarjeta, VerMas } from "@/components/premium";
+import { Anillo, Boton, Pastilla, VerMas } from "@/components/premium";
 import { esperaHace } from "@/lib/premium/espera";
 import "@/app/chats-campanas.css";
 import { Cartel } from "@/components/vivo/cartel";
+import { BentoColor, CeldaColor } from "@/components/vivo/bento-color";
+import { Cifra } from "@/components/premium/cifra";
+import { formatoNumero } from "@/lib/premium/anillo";
 
 const PUNTO: Record<Tono, string> = {
   caliente: "bg-gold-500",
@@ -193,51 +196,43 @@ async function CuerpoCartera({ vista, slug, rubroId, searchParams }: { vista: Vi
         ) : null}
 
         {vista === "conversaciones" ? (
-          <Bento>
-            <BentoCelda columnas={6} columnasMedio={6}>
-              <Tarjeta relieve rubro={slug} aparecer={0}>
-                <div className="cc-ring">
-                  <Anillo valor={esperan} meta={Math.max(totalActivos, esperan, 1)} rubro={slug} tamano="grande" unidad="personas esperando respuesta" nombre="Esperando respuesta" />
-                  <div className="cc-ring__texto">
-                    <h2 className="cc-ring__titulo">{esperan === 0 ? "Nadie te está esperando" : esperan === 1 ? "Persona esperando respuesta" : "Personas esperando respuesta"}</h2>
-                    <p className="cc-ring__detalle">
-                      {esperan === 0
-                        ? "Todo contestado. Cuando alguien escriba y el bot no le conteste, aparece acá."
-                        : esperaMax
-                        ? `La que más espera lleva ${esperaMax.texto.replace("hace ", "")}. Escribieron y el bot no les contesta.`
-                        : "Escribieron y el bot no les contesta porque el chat lo tiene una persona."}
-                    </p>
-                    {esperan > 0 ? (
-                      <div style={{ marginTop: 12 }}>
-                        <Boton href={`/hoy?perfil=${slug}&cola=responder#hoy-cola`} variante="primario">
-                          Responder ahora
-                        </Boton>
-                      </div>
-                    ) : null}
-                  </div>
+          // Vuelta 6: bento de colores (cajas que entran creciendo) con las cifras reales de los chats.
+          <BentoColor className="cc-bento-color" etiqueta="Chats en un vistazo">
+            <CeldaColor color="violeta" etiqueta="Esperando respuesta" area="vv-c-grande" orden={0} como="section">
+              <div className="cc-ring">
+                <Anillo valor={esperan} meta={Math.max(totalActivos, esperan, 1)} rubro={slug} tamano="grande" unidad="personas esperando respuesta" nombre="Esperando respuesta" />
+                <div className="cc-ring__texto">
+                  <h2 className="cc-ring__titulo">{esperan === 0 ? "Nadie te está esperando" : esperan === 1 ? "Persona esperando respuesta" : "Personas esperando respuesta"}</h2>
+                  <p className="cc-ring__detalle">
+                    {esperan === 0
+                      ? "Todo contestado. Cuando alguien escriba y el bot no le conteste, aparece acá."
+                      : esperaMax
+                      ? `La que más espera lleva ${esperaMax.texto.replace("hace ", "")}. Escribieron y el bot no les contesta.`
+                      : "Escribieron y el bot no les contesta porque el chat lo tiene una persona."}
+                  </p>
+                  {esperan > 0 ? (
+                    <div style={{ marginTop: 12 }}>
+                      <Boton href={`/hoy?perfil=${slug}&cola=responder#hoy-cola`} variante="primario">
+                        Responder ahora
+                      </Boton>
+                    </div>
+                  ) : null}
                 </div>
-              </Tarjeta>
-            </BentoCelda>
-            <BentoCelda columnas={6} columnasMedio={6}>
-              <Tarjeta relieve rubro={slug} aparecer={1}>
-                <div className="cc-ring--par">
-                  {([["captados", "Para cerrar", "personas para cerrar"], ["piden", "Con interés real", "personas con interés real"]] as const).map(([clave, rotulo, unidad], i) => {
-                    const n = conteos[clave];
-                    if (n === null || n === undefined) return null;
-                    return (
-                      <div key={clave} className="cc-ring cc-ring--col">
-                        <Anillo valor={n} meta={Math.max(totalActivos, n, 1)} rubro={slug} tamano="chico" unidad={unidad} nombre={rotulo} retrasoMs={80 * (i + 1)} />
-                        <div className="cc-ring__texto">
-                          <h2 className="cc-ring__titulo">{rotulo}</h2>
-                          <p className="cc-ring__detalle">{n === 1 ? "1 persona" : `${n.toLocaleString("es-AR")} personas`}</p>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </Tarjeta>
-            </BentoCelda>
-          </Bento>
+              </div>
+            </CeldaColor>
+            {([["captados", "Para cerrar", "rosa"], ["piden", "Con interés real", "amarillo"]] as const).map(([clave, rotulo, color], i) => {
+              const n = conteos[clave];
+              if (n === null || n === undefined) return null;
+              return (
+                <CeldaColor key={clave} color={color} etiqueta={rotulo} area="vv-c-tres" orden={i + 1}>
+                  <span className="vv-num vv-num--m">
+                    <Cifra valor={n} tamano="xl" />
+                  </span>
+                  <p className="vv-celda__texto">{n === 1 ? "1 persona" : `${formatoNumero(n)} personas`} de {formatoNumero(Math.max(totalActivos, n))} activas</p>
+                </CeldaColor>
+              );
+            })}
+          </BentoColor>
         ) : null}
 
         {todoVacio ? null : (

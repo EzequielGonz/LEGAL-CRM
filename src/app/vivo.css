@@ -614,3 +614,52 @@ html .mas-tarjeta { transition: transform 280ms var(--vv-resorte), box-shadow 28
   html .mas-grilla > .mas-tarjeta:nth-child(n + 7) { animation-delay: 240ms; }
 }
 @media (prefers-reduced-motion: reduce) { html .mas-tarjeta, html .mas-icono { animation: none !important; transition: none !important; } }
+.vv-perfil-banda .vv-mesh__texto { justify-content: flex-start; }
+.vv-neu-placa { display: grid; grid-template-columns: repeat(auto-fit, minmax(72px, 1fr)); gap: 12px; padding: 18px; }
+.vv-neu-placa .vv-neu { min-width: 0; }
+.vv-c-grande .vv-barras { flex: 1; margin-top: 10px; }
+.vv-c-grande .vv-barras__riel { height: 120px; max-width: 90px; }
+.vv-c-grande .vv-barras__nombre { font-size: 12.5px; }
+/* Chats: el resumen de arriba en cajas de color. */
+html .cc-bento-color .cc-ring { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; }
+html .cc-bento-color :is(.cc-ring__titulo, .cc-ring__detalle) { color: var(--vv-tinta) !important; }
+html .cc-bento-color .cc-ring__titulo { font-size: 20px; font-weight: 750; letter-spacing: -0.02em; }
+html .cc-bento-color .cc-ring__detalle { color: rgb(22 18 43 / 0.78) !important; max-width: 40ch; }
+html .cc-bento-color .cc-ring__texto { flex: 1; min-width: 200px; }
+html .cc-bento-color .pm-anillo__numero, html .cc-bento-color .pm-anillo__meta { color: var(--vv-tinta) !important; }
+
+/* Chat abierto: burbujas con identidad (nuestras en violeta del bento, del contacto en vidrio), separador de día como píldora amarilla, filas de la lista que entran y avatares de color. */
+html[data-modo="oscuro"] .cc-hilo .cc-burbuja--admin:not(.cc-escribiendo),
+html[data-modo="oscuro"] .cc-hilo .cc-burbuja--ia {
+  background: linear-gradient(140deg, #6d5cf6, #4d3ccf) !important;
+  border-color: rgb(255 255 255 / 0.16) !important;
+  color: #fff !important;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.28), 0 14px 30px -16px rgb(109 92 246 / 0.9) !important;
+}
+html[data-modo="oscuro"] .cc-hilo .cc-burbuja--ia { background: linear-gradient(140deg, #3d3480, #2b2463) !important; }
+html[data-modo="oscuro"] .cc-hilo :is(.cc-burbuja--admin, .cc-burbuja--ia) :is(.cc-burbuja__hora, p, a) { color: rgb(255 255 255 / 0.92) !important; }
+html[data-modo="oscuro"] .cc-hilo .cc-burbuja--ent {
+  background: linear-gradient(160deg, rgb(255 255 255 / 0.09), rgb(255 255 255 / 0.04)) !important;
+  border: 1px solid rgb(255 255 255 / 0.12) !important;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.08), 0 12px 26px -18px rgb(0 0 0 / 0.9) !important;
+}
+html .cc-hilo .cc-dia > span:not([aria-hidden]), html .cc-hilo .cc-dia > :is(b, strong, time) {
+  background: linear-gradient(180deg, #ffe07f, #f5c948) !important; color: #241a00 !important; border: 0 !important;
+  font-family: var(--font-mono), ui-monospace, monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.6), 0 8px 18px -8px rgb(245 201 72 / 0.7);
+}
+html .cc-fila { transition: transform 260ms var(--vv-resorte), background-color 200ms ease; }
+@media (hover: hover) { html .cc-fila:hover { transform: translateX(4px); } }
+html .cc-fila[aria-current="page"] { box-shadow: inset 4px 0 0 var(--vv-violeta), inset 0 0 0 1px rgb(138 123 255 / 0.35) !important; background: linear-gradient(90deg, rgb(138 123 255 / 0.18), transparent) !important; }
+@media (prefers-reduced-motion: no-preference) {
+  html .cc-fila { animation: vv-fila 480ms var(--vv-suave) backwards; animation-delay: calc(var(--cc-i, 0) * 45ms); }
+}
+html :is(.cc-fila, .cc-ficha, .cc-cabecera-chat) .avatar-ficha { color: var(--vv-tinta) !important; box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.5), 0 6px 14px -8px rgb(0 0 0 / 0.8); }
+html .cc-fila:nth-child(5n + 1) .avatar-ficha, html .cc-ficha:nth-child(5n + 1) .avatar-ficha { background: var(--vv-violeta) !important; }
+html .cc-fila:nth-child(5n + 2) .avatar-ficha, html .cc-ficha:nth-child(5n + 2) .avatar-ficha { background: var(--vv-rosa) !important; }
+html .cc-fila:nth-child(5n + 3) .avatar-ficha, html .cc-ficha:nth-child(5n + 3) .avatar-ficha { background: var(--vv-amarillo) !important; }
+html .cc-fila:nth-child(5n + 4) .avatar-ficha, html .cc-ficha:nth-child(5n + 4) .avatar-ficha { background: var(--vv-agua) !important; }
+html .cc-fila:nth-child(5n + 5) .avatar-ficha, html .cc-ficha:nth-child(5n + 5) .avatar-ficha { background: var(--vv-lila) !important; }
+@media (prefers-reduced-motion: reduce) { html .cc-fila { animation: none !important; transition: none !important; } }

@@ -57,7 +57,14 @@ export default async function ResumenPage() {
               <div className="vv-celda-fila">
                 <span className="vv-num">{total === null ? "—" : <Cifra valor={total} tamano="xl" />}</span>
               </div>
-              <p className="vv-celda__texto">Tocá una fila de abajo para resolverlo acá mismo.</p>
+              <BarrasMini
+                etiqueta="Pendiente de cada perfil"
+                datos={perfiles.map((p) => ({
+                  nombre: p.nombre,
+                  valor: p.cifras.some((c) => c.clave !== "citasHoy" && c.valor === null) ? null : p.cifras.reduce((t, c) => (c.clave === "citasHoy" ? t : t + (c.valor ?? 0)), 0),
+                }))}
+              />
+              <p className="vv-celda__texto">Lo pendiente de cada perfil. Tocá una fila de abajo para resolverlo acá mismo.</p>
             </CeldaColor>
             {comparacion.map((c, i) => {
               const color = (["rosa", "amarillo", "agua", "lila"] as const)[i % 4];
