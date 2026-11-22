@@ -4,6 +4,13 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 
 # Bitácora
 
+## 22/11 (noche) — Graphify en todos lados, verificado
+
+- **Pedido:** «¿lo sumaste a todas las ramas y todo el proyecto?» (la sesión Accesos dijo que en `main` no había mapa: falso, está desde `d56ca67`; su búsqueda cortaba la lista a 10 renglones).
+- **Hecho:** mapa del CRM regenerado con las migraciones SQL (6.911 nodos, 12.405 aristas). En los 4 repos de landings Graphify estaba solo en `claude/admiring-euler-ctf4sg`; ahora está en `main` de los cuatro (skill, hook de arranque y mapa en `mapa-codigo/`).
+- **Ramas viejas:** de las 109 del CRM, las de trabajo terminadas no se tocan; toda sesión nueva arranca de `main` y lo recibe.
+
+
 ## 22/11 (noche) — Quinta vuelta: todo funcional y pulido de punta a punta
 
 - **Pedido:** «nada tiene función, es todo decoración»; Oficina como edificio 3D del reel; Contactos con lo perdido; Resumen, Jarvis, Laboratorio y Cerebro que hagan cosas; pulido ultra premium; carga más rápida.
