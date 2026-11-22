@@ -1,43 +1,10 @@
-import { EnlaceAvanzado } from "@/components/nivel/nivel";
-import { AgendaSupervision } from "@/components/agenda/agenda-supervision";
-import { RUBRO_IDS } from "@/lib/rubros";
+import { PaginaCitas } from "@/components/agenda/pagina-citas";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Citas" };
 
-/**
- * Agenda de Jurídico (bloque 1.8): supervisión de citas, captados sin
- * derivar, seguimientos y atención humana, gestionados desde acá mismo con
- * la ficha al costado. La disponibilidad horaria vive en Configuración (Etapa 3).
- */
-export default async function AgendaPage(
-  props: {
-    searchParams: Promise<{ tab?: string; ficha?: string; pagina?: string }>;
-  }
-) {
+/** Citas de Jurídico (22/11): calendario con acciones y, debajo, los otros pendientes. Horarios en Configuración. */
+export default async function AgendaPage(props: { searchParams: Promise<{ tab?: string; ficha?: string; pagina?: string; vista?: string; fecha?: string; canceladas?: string }> }) {
   const searchParams = await props.searchParams;
-  return (
-    <div>
-      <h1 className="mb-1 text-2xl font-semibold text-slate-950">Citas</h1>
-      <p className="mb-6 text-sm text-slate-600">Quién tiene cita y cuándo (incluidas las de Fase 2 con la IA). Elegí una persona para ver su ficha al costado.</p>
-
-      <div className="mb-8">
-        <AgendaSupervision
-          rubroId={RUBRO_IDS.juridico}
-          areas={["civil", "penal"]}
-          basePath="/agenda"
-          searchParams={searchParams ?? {}}
-          fichaHref="/prospectos"
-          conversationHref="/inbox"
-        />
-      </div>
-
-      <p className="solo-avanzado text-sm text-slate-700">
-        Los días y horarios en que se dan citas se definen en la configuración.{" "}
-        <EnlaceAvanzado href="/configuracion#disponibilidad" className="font-medium text-slate-900 underline underline-offset-2">
-          Personalizar horarios para citas
-        </EnlaceAvanzado>
-      </p>
-    </div>
-  );
+  return <PaginaCitas slug="juridico" basePath="/agenda" searchParams={searchParams ?? {}} fichaHref="/prospectos" conversationHref="/inbox" configHref="/configuracion#disponibilidad" />;
 }
