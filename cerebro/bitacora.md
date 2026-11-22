@@ -169,3 +169,8 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 - Esta sesión no tenía Claude in Chrome ni una computadora conectada (lista de carpetas vacía): no se pudo entrar a resend.com, a la otra cuenta de Vercel ni a claude.ai → Conectores.
 - Comprobado por el conector de Vercel: un solo equipo con un solo proyecto (`legal-crm`); en Production está `RESEND_API_KEY` (Sensitive) y falta `LANDING_EMAIL_FROM`. No se cambió nada en Vercel.
 - Canva y Cloudflare siguen sin autorizar (los autoriza el dueño en claude.ai). Pendiente: conflicto del PR #40 en `src/app/api/landing/route.ts`.
+
+## 22/11 · A9 (Resend): variable cargada por el dueño
+- El dueño verificó en Resend un dominio propio y cargó `LANDING_EMAIL_FROM` en Production (Sensitive) con un remitente neutro para las 4 marcas. Comprobado por el conector de Vercel: la variable existe y el alias de producción apunta a un deploy Ready creado después de ella.
+- Un Redeploy manual del mismo commit dio error en el build (cargador de fuentes de Google); producción no se afectó. Si se repite, evaluar descargar la fuente al repo.
+- Sigue pendiente el PR #40 y probar un envío real. Los correos del PR dicen «Agencia Kocos» y «Estudio Jurídico Vita»: corregir a «Autos Kocos» y «VITA Abogados».
