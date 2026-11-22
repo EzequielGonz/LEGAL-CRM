@@ -54,13 +54,6 @@
   --d-tarjeta-2: 248 249 252;
   --d-linea: rgb(15 23 42 / 0.09);
   --d-linea-fuerte: rgb(15 23 42 / 0.16);
-  --d-texto: rgb(var(--c-slate-950));
-  --d-texto-2: rgb(var(--c-slate-600));
-  --d-texto-3: rgb(var(--c-slate-500));
-  /* El acento como texto: el paso 700 pasa 4,5:1 en los dos modos (en oscuro la escala se invierte). */
-  --d-acento: rgb(var(--c-gold-500));
-  --d-acento-texto: rgb(var(--c-gold-700));
-  --d-acento-suave: rgb(var(--c-gold-500) / 0.14);
 
   /* Estados (luces y chips). Colores medidos para texto AA sobre la tarjeta. */
   --d-ok: 5 150 105;
@@ -72,8 +65,26 @@
   /* Sombras. */
   --d-sombra-1: 0 1px 2px rgb(15 23 42 / 0.05), 0 6px 18px -12px rgb(15 23 42 / 0.22);
   --d-sombra-2: 0 2px 6px -2px rgb(15 23 42 / 0.08), 0 22px 44px -26px rgb(15 23 42 / 0.32);
+}
+/* Lo que depende de la paleta del perfil se declara también en cada [data-tema]:
+   una variable se resuelve donde se declara, y en :root la paleta es la de Jurídico. */
+:root,
+[data-tema] {
+  --d-texto: rgb(var(--c-slate-950));
+  --d-texto-2: rgb(var(--c-slate-600));
+  --d-texto-3: rgb(var(--c-slate-500));
+  /* El acento como texto: el paso 700 pasa 4,5:1 en los dos modos (en oscuro la escala se invierte). */
+  --d-acento: rgb(var(--c-gold-500));
+  --d-acento-texto: rgb(var(--c-gold-700));
+  --d-acento-suave: rgb(var(--c-gold-500) / 0.14);
   --d-sombra-acento: 0 24px 54px -30px rgb(var(--c-gold-500) / 0.55);
-  --d-anillo-foco: 0 0 0 2px rgb(var(--d-tarjeta)), 0 0 0 4px rgb(var(--c-gold-700));
+}
+html[data-modo="oscuro"],
+html[data-modo="oscuro"] [data-tema] {
+  --d-sombra-acento: 0 0 0 1px rgb(var(--c-gold-500) / 0.18), 0 26px 60px -32px rgb(var(--c-gold-500) / 0.55);
+  --d-texto: rgb(241 239 245);
+  --d-texto-2: rgb(176 173 189);
+  --d-texto-3: rgb(150 147 163);
 }
 html[data-modo="oscuro"] {
   /* Los mismos valores que la escena de /cerebro. */
@@ -82,9 +93,6 @@ html[data-modo="oscuro"] {
   --d-tarjeta-2: 13 13 18;
   --d-linea: rgb(255 255 255 / 0.08);
   --d-linea-fuerte: rgb(255 255 255 / 0.16);
-  --d-texto: rgb(241 239 245);
-  --d-texto-2: rgb(176 173 189);
-  --d-texto-3: rgb(150 147 163);
   --d-ok: 94 224 143;
   --d-aviso: 255 181 71;
   --d-mal: 255 107 107;
@@ -92,7 +100,6 @@ html[data-modo="oscuro"] {
   --d-apagado: 150 147 163;
   --d-sombra-1: 0 1px 0 rgb(255 255 255 / 0.03), 0 10px 28px -16px rgb(0 0 0 / 0.75);
   --d-sombra-2: 0 1px 0 rgb(255 255 255 / 0.04), 0 26px 56px -30px rgb(0 0 0 / 0.9);
-  --d-sombra-acento: 0 0 0 1px rgb(var(--c-gold-500) / 0.18), 0 26px 60px -32px rgb(var(--c-gold-500) / 0.55);
 }
 
 /* -------------------------------------------------------------- tipografía */
@@ -153,6 +160,12 @@ html[data-modo="oscuro"] .cifra-premium,
 }
 .d-bento > .d-b-12 { grid-column: 1 / -1; }
 .d-bento > * { min-width: 0; }
+/* En el celular, las tarjetas chicas de cifras van de a dos; las listas, a todo el ancho. */
+@media (max-width: 639.98px) {
+  .d-bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .d-bento > * { grid-column: 1 / -1; }
+  .d-bento > :is(.d-b-2, .d-b-3) { grid-column: span 1; }
+}
 
 /* ----------------------------------------------------------------- tarjeta */
 .d-tarjeta {
