@@ -4,6 +4,13 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 
 # Bitácora
 
+## 22/11 (noche) — Graphify en todos lados, verificado
+
+- **Pedido:** «¿lo sumaste a todas las ramas y todo el proyecto?» (la sesión Accesos dijo que en `main` no había mapa: falso, está desde `d56ca67`; su búsqueda cortaba la lista a 10 renglones).
+- **Hecho:** mapa del CRM regenerado con las migraciones SQL (6.911 nodos, 12.405 aristas). En los 4 repos de landings Graphify estaba solo en `claude/admiring-euler-ctf4sg`; ahora está en `main` de los cuatro (skill, hook de arranque y mapa en `mapa-codigo/`).
+- **Ramas viejas:** de las 109 del CRM, las de trabajo terminadas no se tocan; toda sesión nueva arranca de `main` y lo recibe.
+
+
 ## 22/11 (noche) — Quinta vuelta: todo funcional y pulido de punta a punta
 
 - **Pedido:** «nada tiene función, es todo decoración»; Oficina como edificio 3D del reel; Contactos con lo perdido; Resumen, Jarvis, Laboratorio y Cerebro que hagan cosas; pulido ultra premium; carga más rápida.
@@ -173,6 +180,6 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 - Oficina 3D por sectores, Jarvis con `consultar_cerebro`, Graphify en los 5 repos y en el entorno, propuesta de granja de teléfonos. Recorrido real: Resumen, Contactos y Citas casi sin acciones (ver `traspaso-sesion-2026-11-22-d.md`).
 
 ## 22/11 · Graphify en el cerebro
-- Graphify ya estaba en `main` (skill + hook de arranque, commit 9e5cef7) pero no en las demás ramas ni con mapa guardado: solo `main`, `cerebro-chats`, `claude/admiring-euler-ctf4sg` e `integracion/rediseno-2211` lo tienen.
-- Se trajo `main` a esta rama y se generó el mapa del código en `cerebro/mapa-codigo/` (6.911 nodos, 12.405 aristas, con las migraciones SQL). Cómo consultarlo y actualizarlo: `cerebro/mapa-codigo/LEEME.md`.
+- Corrección: el mapa del código ya estaba en `main` (`cerebro/mapa-codigo/`, commits d56ca67 y 076c475); mi búsqueda cortada con `head` no lo vio. Esta rama quedó alineada con `main`, sin copia propia ni LEEME duplicado (vale el `README.md` de esa carpeta).
+- Graphify (skill + hook de arranque) está en `main` y en los 4 repos de landings; las ramas viejas no lo tienen hasta que traigan `main`.
 - Comprobado con el grafo y con grep: 136 de 140 rutas de la API usan `requireSession`; las 4 sin él son públicas a propósito (ingresar, salir, formulario de landings, webhook de Wasender con firma).
