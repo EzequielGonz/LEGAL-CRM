@@ -245,6 +245,7 @@ Para no repetirlos. Cada uno con su fuente.
 | **Contenido «genérico» o «muy hecho por IA»** | «no quiero contenido genérico»; «sigue viéndose muy IA» | C-ctx, 08/11 y 09/11 |
 | **Decir que no se le podía pasar una tarea a Cowork** | Quería un prompt listo para pegar | `02` (tabla «Lo que no quiere») |
 | **Rediseño de «mínimos detalles» presentado como rediseño completo; pantallas largas y con demasiadas funciones** | «no tiene ningún rediseño gráfico, solo mínimos detalles»; «demasiado extenso, demasiadas funciones… que sea fácil, sencillo, con estadísticas circulares, animaciones simples» | este chat, 22/11 cierre |
+| **Funciones del Cerebro enterradas al final de la página** | «el cerebro no tiene funciones, está todo abajo, tiene que ser distinto». Las funciones van arriba y se ven sin bajar (barra de mando y anillo de pantallas) | vuelta 6, 22/11 |
 
 Errores de proceso para no repetir (lo que aprendió Claude, no un reproche textual): leer el repo y el cerebro **antes** de preguntar; verificar en la base antes de decir «está encendido»; no repetir exigencias viejas que él ya reemplazó; no copiar al cerebro un dato de un resumen de un modelo chico sin confirmarlo (`13`).
 
