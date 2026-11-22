@@ -373,3 +373,134 @@ a.cc-metricas__item:hover { border-color: color-mix(in srgb, var(--pm-acento) 55
   .cc .pm-boton, .cc-enviar, .cc-filtro, .cc-fila { transition: none; }
   .cc-enviar:active, .cc .pm-boton:active { transform: none; }
 }
+
+/* =====================================================================
+   Chat premium (22/11, vuelta 4): burbujas con cola y capas de sombra,
+   separador de día, «escribiendo», campo con relieve y la IA distinguible.
+   Solo presentación; el color sale de los tokens del panel y del perfil.
+   ===================================================================== */
+.cc .cc-hilo.space-y-3 > :not([hidden]) ~ :not([hidden]) { margin-top: 4px; }
+.cc .cc-hilo.space-y-3 > .cc-tanda { margin-top: 16px; }
+.cc .cc-hilo.space-y-3 > .cc-dia { margin-top: 18px; margin-bottom: 8px; }
+.cc .cc-hilo.space-y-3 > .cc-dia + div { margin-top: 0; }
+.cc-hilo { scroll-behavior: smooth; overscroll-behavior: contain; }
+
+/* Separador de día */
+.cc-dia { display: flex; align-items: center; gap: 12px; color: var(--d-texto-2); }
+.cc-dia::before, .cc-dia::after { content: ""; flex: 1; height: 1px; background: var(--d-linea); }
+.cc-dia > span {
+  padding: 4px 12px;
+  border: 1px solid var(--d-linea);
+  border-radius: 999px;
+  background: rgb(var(--d-tarjeta));
+  box-shadow: var(--cc-brillo), var(--sh-1, none);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Burbujas: sombra en capas, cola sutil y jerarquía de texto */
+.cc-burbuja {
+  --cb-fin: rgb(var(--d-tarjeta-2));
+  box-shadow: var(--cc-brillo), 0 1px 2px rgb(15 23 42 / 0.08), 0 8px 20px -10px rgb(15 23 42 / 0.28);
+  backface-visibility: hidden;
+  transform-origin: 100% 100%;
+}
+html[data-modo="oscuro"] .cc-burbuja {
+  box-shadow: var(--cc-brillo), 0 1px 2px rgb(0 0 0 / 0.4), 0 10px 22px -10px rgb(0 0 0 / 0.65);
+}
+.cc-burbuja--ent { --cb-fin: rgb(var(--d-tarjeta-2)); transform-origin: 0 100%; }
+.cc-burbuja--ia {
+  --cb-fin: rgb(var(--d-tarjeta));
+  box-shadow: var(--cc-brillo), inset -3px 0 0 color-mix(in srgb, rgb(var(--d-info)) 70%, transparent), 0 1px 2px rgb(15 23 42 / 0.08), 0 8px 20px -10px rgb(15 23 42 / 0.28);
+}
+html[data-modo="oscuro"] .cc-burbuja--ia {
+  box-shadow: var(--cc-brillo), inset -3px 0 0 color-mix(in srgb, rgb(var(--d-info)) 70%, transparent), 0 1px 2px rgb(0 0 0 / 0.4), 0 10px 22px -10px rgb(0 0 0 / 0.65);
+}
+.cc-burbuja--admin { --cb-fin: color-mix(in srgb, rgb(var(--c-gold-500)) 12%, rgb(var(--d-tarjeta))); }
+.cc-burbuja p:first-child { margin: 0; }
+.cc-burbuja__hora {
+  font-size: 12px;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+}
+.cc-burbuja--cola::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  width: 10px;
+  height: 14px;
+  background: var(--cb-fin);
+  pointer-events: none;
+}
+.cc-burbuja--ent.cc-burbuja--cola::before { left: -7px; clip-path: polygon(100% 0, 100% 100%, 0 100%, 40% 70%); }
+.cc-burbuja--ia.cc-burbuja--cola::before,
+.cc-burbuja--admin.cc-burbuja--cola::before { right: -7px; clip-path: polygon(0 0, 0 100%, 100% 100%, 60% 70%); }
+
+@keyframes cc-burbuja-entra {
+  from { opacity: 0; transform: translateY(8px) scale(0.96); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .cc .cc-burbuja.animate-fade-in-up { animation: cc-burbuja-entra 260ms var(--m-ease, cubic-bezier(0.16, 1, 0.3, 1)) both; }
+}
+
+/* «Escribiendo» / enviando: tres puntos que suben y bajan (transform + opacity) */
+.cc-escribiendo { display: inline-flex; align-items: center; gap: 5px; min-height: 22px; }
+.cc-escribiendo i { width: 7px; height: 7px; border-radius: 50%; background: var(--d-texto-2); opacity: 0.55; }
+@keyframes cc-punto { 0%, 60%, 100% { transform: none; opacity: 0.4; } 30% { transform: translateY(-4px); opacity: 1; } }
+@media (prefers-reduced-motion: no-preference) {
+  .cc-escribiendo i { animation: cc-punto 1.2s ease-in-out infinite; }
+  .cc-escribiendo i:nth-child(2) { animation-delay: 0.15s; }
+  .cc-escribiendo i:nth-child(3) { animation-delay: 0.3s; }
+}
+
+/* Cabecera del chat: nombre, dato y estado con jerarquía */
+.cc-cabecera-chat .text-sm.font-semibold { font-family: var(--d-f-titulo); font-size: 1.0625rem; letter-spacing: -0.01em; line-height: 1.25; }
+.cc-cabecera-chat .text-xs { font-size: 12.5px; font-variant-numeric: tabular-nums; }
+
+/* Compositor: campo con relieve hundido, adjuntar y enviar con volumen */
+.cc-compositor { background: rgb(var(--d-tarjeta)); }
+.cc-campo, .cc-compositor input[type="text"], .cc-compositor input:not([type]) {
+  min-height: 44px;
+  border-radius: 12px;
+  border: 1px solid var(--d-linea-fuerte);
+  background: rgb(var(--d-tarjeta-2));
+  color: var(--d-texto);
+  box-shadow: inset 0 1px 3px rgb(15 23 42 / 0.12), inset 0 0 0 1px rgb(255 255 255 / 0.02);
+  transition: border-color 150ms, box-shadow 150ms;
+}
+html[data-modo="oscuro"] .cc-campo { box-shadow: inset 0 2px 5px rgb(0 0 0 / 0.5); }
+.cc-campo::placeholder { color: var(--d-texto-3); }
+.cc-campo:focus { border-color: rgb(var(--c-gold-500)); box-shadow: inset 0 1px 3px rgb(15 23 42 / 0.1), 0 0 0 3px rgb(var(--c-gold-500) / 0.22); }
+.cc-adjuntar {
+  min-width: 44px;
+  justify-content: center;
+  border-radius: 12px;
+  border: 1px solid var(--d-linea-fuerte);
+  background: var(--cc-neu-base);
+  color: var(--d-texto);
+  box-shadow: var(--cc-neu-sale);
+  transition: box-shadow 150ms, transform 150ms, border-color 150ms;
+}
+.cc-adjuntar:hover { border-color: rgb(var(--c-gold-500) / 0.6); transform: translateY(-1px); }
+.cc-adjuntar:active { box-shadow: var(--cc-neu-hundido); transform: none; }
+.cc-adjuntar:focus-within { outline: 2px solid var(--m-foco, currentColor); outline-offset: 2px; }
+.cc-adjunto {
+  width: fit-content;
+  max-width: 100%;
+  padding: 6px 12px;
+  border: 1px solid var(--d-linea);
+  border-radius: 999px;
+  background: rgb(var(--d-tarjeta-2));
+  box-shadow: var(--cc-brillo);
+  color: var(--d-texto);
+  font-weight: 550;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cc-hilo { scroll-behavior: auto; }
+  .cc-escribiendo i { animation: none; opacity: 0.7; }
+  .cc-adjuntar { transition: none; }
+}

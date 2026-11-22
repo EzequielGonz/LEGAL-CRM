@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import type { Area, Message } from "@/lib/supabase/database.types";
 import { AreaBadge, SourceBadge, StatusBadge } from "@/components/ui/badge";
 import { mergeAudios, mergePoll, type AudioUpdate, type DeliveryUpdate } from "@/lib/inbox/estados";
@@ -8,6 +8,12 @@ import { AudioTexto } from "@/components/inbox/audio-texto";
 import { explicarError, lineaError } from "@/lib/envios/explicacion";
 import { Pastilla } from "@/components/premium/pastilla";
 import "@/app/chats-campanas.css";
+
+/** Día legible en hora argentina para el separador del hilo (formato fijo: igual en servidor y navegador). */
+function diaDe(iso: string): string {
+  const f = new Date(iso).toLocaleDateString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", weekday: "long", day: "numeric", month: "long" });
+  return f.charAt(0).toUpperCase() + f.slice(1);
+}
 
 export interface ThreadContact {
   id: string;
@@ -228,13 +234,24 @@ export function ConversationThread({
 
         {/* 15/11 (accesibilidad): los mensajes nuevos se anuncian a los lectores de pantalla. */}
         <div role="log" aria-live="polite" aria-label="Mensajes" tabIndex={0} className="cc-hilo flex-1 space-y-3 overflow-y-auto bg-slate-50 p-3 sm:p-5">
-          {visibles.map((m) => (
+          {visibles.map((m, i) => {
+            // Separador de día y cola de la burbuja solo en la primera de cada tanda (presentación).
+            const previo = i > 0 ? visibles[i - 1] : null;
+            const dia = diaDe(m.created_at);
+            const nuevoDia = !previo || diaDe(previo.created_at) !== dia;
+            const primeroDeTanda = nuevoDia || previo!.direction !== m.direction || previo!.sender_type !== m.sender_type;
+            return (
+            <Fragment key={m.id}>
+            {nuevoDia && (
+              <div role="separator" aria-label={dia} className="cc-dia">
+                <span>{dia}</span>
+              </div>
+            )}
             <div
-              key={m.id}
-              className={`flex ${m.direction === "saliente" ? "justify-end" : "justify-start"}`}
+              className={`flex ${m.direction === "saliente" ? "justify-end" : "justify-start"} ${primeroDeTanda && !nuevoDia ? "cc-tanda" : ""}`}
             >
               <div
-                className={`cc-burbuja min-w-0 max-w-[85%] animate-fade-in-up rounded-2xl px-4 py-2.5 [overflow-wrap:anywhere] sm:max-w-md ${
+                className={`cc-burbuja ${primeroDeTanda ? "cc-burbuja--cola" : ""} min-w-0 max-w-[85%] animate-fade-in-up rounded-2xl px-4 py-2.5 [overflow-wrap:anywhere] sm:max-w-md ${
                   m.direction === "saliente"
                     ? m.sender_type === "admin"
                       ? "cc-burbuja--admin rounded-br-md"
@@ -287,7 +304,16 @@ export function ConversationThread({
                 )}
               </div>
             </div>
-          ))}
+            </Fragment>
+            );
+          })}
+          {sending && (
+            <div className="flex justify-end" role="status" aria-label="Enviando mensaje">
+              <div className="cc-burbuja cc-burbuja--admin cc-escribiendo rounded-2xl rounded-br-md px-4 py-3" aria-hidden="true">
+                <i /><i /><i />
+              </div>
+            </div>
+          )}
           <div ref={bottomRef} />
         </div>
 
@@ -300,7 +326,7 @@ export function ConversationThread({
             <span className="text-xs text-slate-600">{aiOn ? "Si escribís vos, el agente se apaga en este chat." : "Responde una persona; el agente no escribe."}</span>
           </div>
           {archivo && (
-            <p className="mb-2 flex items-center gap-2 text-xs text-slate-700">
+            <p className="cc-adjunto mb-2 flex items-center gap-2 text-xs text-slate-700">
               Adjunto: {archivo.name}
               <button type="button" onClick={() => { setArchivo(null); if (fileRef.current) fileRef.current.value = ""; }} className="underline">Quitar</button>
             </p>
@@ -317,9 +343,9 @@ export function ConversationThread({
                   : "Escribir un mensaje como administrador..."
               }
               aria-label="Mensaje"
-              className="min-w-0 flex-1 rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
+              className="cc-campo min-w-0 flex-1 rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus-gold"
             />
-            <label className="tactil inline-flex cursor-pointer items-center rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-700 hover:bg-slate-50" title="Adjuntar foto, video o PDF">
+            <label className="cc-adjuntar tactil inline-flex cursor-pointer items-center rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-700 hover:bg-slate-50" title="Adjuntar foto, video o PDF">
               <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
                 <path d="m20.5 11.5-8.1 8.1a5 5 0 0 1-7.1-7.1l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7l-8.5 8.5a1.7 1.7 0 0 1-2.4-2.4l7.8-7.8" />
               </svg>

@@ -172,72 +172,6 @@
   border-radius: var(--pm-r-chico);
 }
 
-/* ------------------------------------------------------------- fondo vivo */
-/* Gradient mesh: nubes grandes y muy difuminadas (violeta, magenta, teal, índigo) sobre casi negro.
-   La capa externa recibe el parallax (puntero + scroll) y la nube interna deriva muy lento. */
-.pm-fondo {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  pointer-events: none;
-  background: radial-gradient(120% 90% at 50% 0%, #0d0d16 0%, var(--pm-fondo) 70%);
-}
-.pm-fondo__capa {
-  position: absolute;
-  inset: 0;
-  will-change: transform;
-  transition: transform 700ms cubic-bezier(0.2, 0.6, 0.2, 1);
-  transform: translate3d(calc(var(--pm-px, 0) * var(--pm-k, 20) * 1px), calc(var(--pm-py, 0) * var(--pm-k, 20) * 1px - var(--pm-sy, 0) * var(--pm-k, 20) * 0.5px), 0);
-}
-.pm-fondo__nube {
-  position: absolute;
-  border-radius: 50%;
-  will-change: transform;
-}
-.pm-fondo__nube--violeta {
-  top: -22%;
-  left: -18%;
-  width: 78vmax;
-  height: 78vmax;
-  background: radial-gradient(closest-side, #2a1a5e 0%, rgba(42, 26, 94, 0.88) 45%, rgba(42, 26, 94, 0) 100%);
-  animation: pm-flotar-a 38s ease-in-out infinite alternate;
-}
-.pm-fondo__nube--magenta {
-  top: 12%;
-  right: -26%;
-  width: 66vmax;
-  height: 66vmax;
-  background: radial-gradient(closest-side, #7a2a5a 0%, rgba(122, 42, 90, 0.82) 45%, rgba(122, 42, 90, 0) 100%);
-  animation: pm-flotar-b 44s ease-in-out infinite alternate;
-}
-.pm-fondo__nube--teal {
-  bottom: -34%;
-  left: 8%;
-  width: 82vmax;
-  height: 70vmax;
-  background: radial-gradient(closest-side, #1f5f5a 0%, rgba(31, 95, 90, 0.86) 45%, rgba(31, 95, 90, 0) 100%);
-  animation: pm-flotar-c 50s ease-in-out infinite alternate;
-}
-.pm-fondo__nube--indigo {
-  top: 38%;
-  left: 34%;
-  width: 44vmax;
-  height: 44vmax;
-  background: radial-gradient(closest-side, rgba(58, 42, 138, 0.55) 0%, rgba(58, 42, 138, 0) 100%);
-  animation: pm-flotar-b 56s ease-in-out infinite alternate-reverse;
-}
-/* Grano finísimo para que los degradés no hagan bandas. */
-.pm-fondo__grano {
-  position: absolute;
-  inset: 0;
-  opacity: 0.06;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-@keyframes pm-flotar-a { to { transform: translate3d(5vmax, 3vmax, 0) scale(1.06); } }
-@keyframes pm-flotar-b { to { transform: translate3d(-4vmax, 4vmax, 0) scale(1.08); } }
-@keyframes pm-flotar-c { to { transform: translate3d(3vmax, -3vmax, 0) scale(1.05); } }
-
 /* ---------------------------------------------------------------- tarjeta */
 .pm-tarjeta {
   position: relative;
@@ -740,76 +674,6 @@
   height: 100%;
 }
 
-/* ------------------------------------------------------ encabezado parallax */
-.pm-encabezado {
-  position: relative;
-  isolation: isolate;
-  min-height: 176px;
-  display: grid;
-  align-items: end;
-  border-radius: var(--pm-r-jarvis);
-  overflow: hidden;
-  border: 1px solid var(--pm-vidrio-borde);
-  box-shadow: var(--pm-brillo-sup), var(--pm-flota);
-  background: rgba(10, 11, 18, 0.35);
-}
-.pm-encabezado__capa {
-  position: absolute;
-  inset: -24px;
-  will-change: transform;
-  transition: transform 600ms cubic-bezier(0.2, 0.6, 0.2, 1);
-  transform: translate3d(calc(var(--pm-px, 0) * var(--pm-k, 6) * 1px), calc(var(--pm-py, 0) * var(--pm-k, 6) * 0.6px - var(--pm-sy, 0) * var(--pm-k, 6) * 0.4px), 0);
-}
-.pm-encabezado__capa--fondo,
-.pm-encabezado__capa--formas { position: absolute; inset: -24px; }
-.pm-encabezado__degrade {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(60% 120% at 8% 0%, color-mix(in srgb, var(--pm-acento) 30%, transparent), transparent 70%),
-    linear-gradient(120deg, rgba(42, 26, 94, 0.85), rgba(122, 42, 90, 0.45) 60%, rgba(31, 95, 90, 0.5));
-}
-.pm-encabezado__esfera { position: absolute; border-radius: 50%; }
-.pm-encabezado__esfera--a {
-  width: 150px; height: 150px; right: 14%; top: 14%;
-  background: radial-gradient(circle at 30% 28%, color-mix(in srgb, var(--pm-acento) 90%, white), var(--pm-acento) 55%, color-mix(in srgb, var(--pm-acento) 60%, #000));
-  box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.6);
-  opacity: 0.9;
-}
-.pm-encabezado__esfera--b {
-  width: 92px; height: 92px; right: 5%; bottom: 8%;
-  background: radial-gradient(circle at 30% 28%, #c58bff, #7a2a5a 70%);
-  box-shadow: 0 18px 36px -10px rgba(0, 0, 0, 0.6);
-  opacity: 0.85;
-}
-.pm-encabezado__esfera--c {
-  width: 56px; height: 56px; right: 30%; bottom: 22%;
-  background: radial-gradient(circle at 30% 28%, #5fe0d2, #1f5f5a 70%);
-  box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.6);
-  opacity: 0.85;
-}
-/* Cristal por delante de las esferas: se ven desenfocadas detrás del texto, como en una tarjeta de vidrio. */
-.pm-encabezado__capa--texto {
-  position: relative;
-  inset: auto;
-  margin: 24px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: var(--pm-e4);
-  flex-wrap: wrap;
-  padding: var(--pm-e6);
-  border-radius: 20px;
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03)), rgba(10, 11, 18, 0.52);
-  -webkit-backdrop-filter: var(--pm-blur);
-  backdrop-filter: var(--pm-blur);
-  box-shadow: var(--pm-brillo-sup);
-  border: 1px solid var(--pm-vidrio-borde);
-}
-.pm-encabezado__acciones { display: flex; gap: var(--pm-e3); flex-wrap: wrap; }
-@media (max-width: 767px) {
-  .pm-encabezado__esfera--a { width: 100px; height: 100px; }
-}
 
 /* ------------------------------------------------------------ grillas (muestra) */
 .pm-fila-anillos {
@@ -880,7 +744,6 @@
 
 /* ---------------------------------------------------- movimiento reducido */
 @media (prefers-reduced-motion: reduce) {
-  .pm-fondo__nube,
   .pm-jarvis__orbe,
   .pm-aparece,
   .pm-vermas[open] .pm-vermas__cuerpo { animation: none !important; }
@@ -895,8 +758,6 @@
   .pm-tarjeta--relieve::after { display: none; }
   .pm-entra-vidrio,
   .pm-modal { animation: none !important; }
-  .pm-fondo__capa,
-  .pm-encabezado__capa { transition: none !important; transform: none !important; }
   .pm-boton { transition: none; }
   .pm-anillo--relieve .pm-anillo__centro,
   .pm-anillo--relieve[data-fase="previa"] .pm-anillo__centro { transform: none; opacity: 1; transition: none; }

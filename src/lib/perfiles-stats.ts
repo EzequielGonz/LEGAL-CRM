@@ -1,3 +1,4 @@
+import { unstable_cache } from "next/cache";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getProfileMetrics } from "@/lib/metrics";
 import { personasQueEscribieron } from "@/lib/estadisticas-personas";
@@ -44,7 +45,7 @@ const AREAS: Record<string, string[]> = {
 };
 
 /** Rubros activos en el orden de la pantalla (15/11: aparte, para empezar otras lecturas sin esperar las cifras). */
-export async function leerRubrosActivos(): Promise<RubroRow[]> {
+async function leerRubrosActivosSinCache(): Promise<RubroRow[]> {
   const { data } = await createAdminClient()
     .from("rubros")
     .select("id, slug, name, emoji, description")
@@ -52,6 +53,9 @@ export async function leerRubrosActivos(): Promise<RubroRow[]> {
     .order("sort_order", { ascending: true });
   return (data ?? []) as RubroRow[];
 }
+
+/** 22/11 (velocidad): la lista de rubros casi no cambia; se guarda 60 s en el servidor (no lleva datos de personas ni cifras). La sesión se comprueba antes, en cada pantalla. */
+export const leerRubrosActivos: () => Promise<RubroRow[]> = unstable_cache(leerRubrosActivosSinCache, ["rubros-activos"], { revalidate: 60, tags: ["rubros"] });
 
 /** Con `rubrosLeidos` no vuelve a leer los rubros (la pantalla de perfiles ya los tiene). */
 export async function loadPerfiles(rubrosLeidos?: RubroRow[]): Promise<PerfilStats[]> {
