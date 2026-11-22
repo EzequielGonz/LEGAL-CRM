@@ -18,6 +18,16 @@ import { EnlaceAvanzado } from "@/components/nivel/nivel";
 import { agruparErrores, explicarError, leerErrorGuardado, lineaError } from "@/lib/envios/explicacion";
 import { EntrenamientoCampana } from "@/components/campanas/entrenamiento-campana";
 import { cantidad, motivoPausaLegible } from "@/lib/textos/pantalla";
+import { esSlugPerfil, type SlugPerfil } from "@/lib/marca";
+import { Pastilla } from "@/components/premium";
+import "@/app/chats-campanas.css";
+
+/** Perfil según la ruta de regreso: «/campanas» es Jurídico; «/panel/<perfil>/campanas», el resto. */
+function rubroDe(backHref: string): SlugPerfil | undefined {
+  if (backHref === "/campanas") return "juridico";
+  const m = /^\/panel\/([a-z0-9_]+)\/campanas/.exec(backHref);
+  return m && esSlugPerfil(m[1]) ? m[1] : undefined;
+}
 
 const PAGE_SIZE = 100;
 
@@ -128,7 +138,7 @@ export async function CampaignDetailView({
   const enlaceChat = (convId: string) => (backHref === "/campanas" ? `/inbox/${convId}` : `/conversacion/${convId}`);
 
   return (
-    <div>
+    <div className="cc">
       <Link prefetch={false} href={backHref} className="tactil mb-2 inline-flex items-center text-sm font-medium text-slate-700 underline-offset-2 hover:underline">
         ← Volver a campañas
       </Link>
@@ -137,7 +147,7 @@ export async function CampaignDetailView({
         <div className="min-w-0">
           <h1 className="text-2xl font-semibold text-slate-900 [overflow-wrap:anywhere]">{campaign.name}</h1>
           <p className="mt-1 text-sm text-slate-700">
-            Estado: <strong className="font-semibold">{CAMPAIGN_STATUS_LABEL[campaign.status] ?? campaign.status}</strong>
+            <Pastilla estado={campaign.status === "en_curso" ? "ok" : campaign.status === "pausada" ? "atencion" : campaign.status === "borrador" ? "info" : "neutro"}>{CAMPAIGN_STATUS_LABEL[campaign.status] ?? campaign.status}</Pastilla>
             {campaign.status === "borrador" || campaign.status === "pausada" ? " — no envía nada hasta que la lances y lo confirmes." : ""}
           </p>
           {/* 24/10: el motivo real de la pausa, arriba de todo. */}
@@ -228,7 +238,7 @@ export async function CampaignDetailView({
       </div>
 
       <div className="mb-6">
-        <CampaignMetricsPanel m={metrics} enlaceRespondieron={`${detailPath}?estado=respondieron#destinatarios`} />
+        <CampaignMetricsPanel m={metrics} rubro={rubroDe(backHref)} enlaceRespondieron={`${detailPath}?estado=respondieron#destinatarios`} />
       </div>
 
       {!campaign.archived_at && (
