@@ -352,3 +352,58 @@
 @media (prefers-reduced-motion: reduce) {
   .cz *, .cz *::before, .cz *::after { animation: none !important; transition: none !important; }
 }
+
+/* ---- 22/11 · Cerebro corto: oficina arriba, tres anillos y el resto en «Ver más» (pestañas) ---- */
+.cz-top { position: static; padding-block: 14px 0; }
+.cz-cab { padding-block: 18px 4px; }
+.cz-cab > .cz-in { display: grid; gap: 8px; }
+.cz-cab h1 { font-size: clamp(1.5rem, 3.2vw, 2.2rem); font-weight: 300; }
+.cz-cab h1 b { font-weight: 800; }
+.cz #oficina { padding-block: 24px 8px; }
+.cz #estado { padding-block: 40px 8px; }
+.cz #mas { padding-block: 28px 56px; }
+.cz-estado-titulo { font-size: clamp(1.3rem, 2.8vw, 1.8rem) !important; }
+.cz-anillos { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.cz-anillos > li { min-width: 0; display: grid; }
+.cz-anillos .pm-tarjeta { width: 100%; }
+.cz-anillo-celda { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
+.cz-anillo-et { font-size: 1rem; font-weight: 600; }
+.cz-anillo-ctx { font-size: 0.82rem; color: var(--muted); line-height: 1.35; max-width: 26ch; }
+.cz-anillo-ver { font-size: 0.84rem; font-weight: 600; color: var(--fg); text-decoration: underline; text-underline-offset: 3px; position: relative; }
+.cz-anillo-ver:focus-visible { outline: 2px solid var(--pink); outline-offset: 3px; }
+.cz-estado-nota { margin-top: 4px; }
+@media (max-width: 767px) { .cz-anillos { grid-template-columns: minmax(0, 1fr); } }
+
+.cz-mas { display: grid; gap: 18px; }
+.cz-mas__boton {
+  touch-action: manipulation;
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center; column-gap: 14px; row-gap: 2px;
+  width: 100%; min-height: 56px; padding: 10px 20px; text-align: left; cursor: pointer;
+  font: inherit; font-weight: 600; color: var(--fg);
+  border: 1px solid var(--line); border-radius: 14px;
+  background: linear-gradient(180deg, #1d1d28, #14141c);
+  box-shadow: 0 1px 0 rgb(255 255 255 / 0.08) inset, 0 1px 2px rgb(0 0 0 / 0.5), 0 10px 18px -8px rgb(0 0 0 / 0.7);
+  transition: transform 150ms, border-color 150ms, box-shadow 150ms;
+}
+.cz-mas__boton small { grid-column: 2; font-weight: 400; color: var(--muted); font-size: 0.8rem; }
+.cz-mas__boton > span { grid-column: 1; grid-row: 1; }
+.cz-mas__boton small { grid-row: 1; }
+.cz-mas__flecha { grid-column: 3; grid-row: 1; transition: transform 150ms; }
+.cz-mas__boton:hover { border-color: #3a3a4e; transform: translateY(-1px); }
+.cz-mas__boton:focus-visible { outline: 2px solid var(--pink); outline-offset: 3px; }
+.cz-mas[data-abierto="1"] .cz-mas__boton { box-shadow: inset 0 2px 6px rgb(0 0 0 / 0.6); transform: none; }
+.cz-mas[data-abierto="1"] .cz-mas__flecha { transform: rotate(180deg); }
+.cz-pestanas { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
+.cz-pestanas [role="tab"] {
+  font: inherit; font-size: 0.86rem; font-weight: 500; min-height: 44px; touch-action: manipulation; padding: 0 14px; cursor: pointer;
+  color: var(--muted); border: 1px solid var(--line); border-radius: 999px; background: var(--card);
+  box-shadow: 0 1px 0 rgb(255 255 255 / 0.06) inset, 0 4px 10px -6px rgb(0 0 0 / 0.7);
+}
+.cz-pestanas [role="tab"]:hover { color: var(--fg); border-color: #3a3a4e; }
+.cz-pestanas [role="tab"][aria-selected="true"] { color: var(--fg); border-color: var(--pink); background: var(--pink-soft); box-shadow: inset 0 2px 6px rgb(0 0 0 / 0.5); }
+.cz-pestanas [role="tab"]:focus-visible { outline: 2px solid var(--pink); outline-offset: 2px; }
+.cz-panel { display: grid; gap: 22px; }
+.cz-panel-caja:focus { outline: none; }
+.cz-panel .cz-head h2 { font-size: clamp(1.3rem, 2.6vw, 1.8rem); }
+.cz-card, .cz-alert, .cz-task, .cz-brand, .cz-stats { box-shadow: 0 1px 0 rgb(255 255 255 / 0.05) inset, 0 8px 18px -12px rgb(0 0 0 / 0.7); }
+@media (prefers-reduced-motion: reduce) { .cz-mas__boton, .cz-mas__boton:hover { transform: none; transition: none; } }

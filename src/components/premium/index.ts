@@ -11,6 +11,7 @@ export { Inclinable } from "./inclinable";
 export { useInclinacion, type OpcionesInclinacion } from "./use-inclinacion";
 export { Bento, BentoCelda, type BentoProps, type BentoCeldaProps } from "./bento";
 export { Boton, type BotonProps } from "./boton";
+export { Clasico } from "./clasico";
 export { Encabezado, type EncabezadoProps } from "./encabezado";
 export { useParalaje, type OpcionesParalaje } from "./use-paralaje";
 export { BotonJarvis } from "./boton-jarvis";

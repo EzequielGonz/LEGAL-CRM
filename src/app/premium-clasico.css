@@ -1,0 +1,210 @@
+/*
+ * Premium «clásico» (22/11, corrección del dueño: «ese fondo raro no, manteniendo la estética clásica
+ * del panel pero sumando detalles»). Las piezas de `premium.css` se pintan con el fondo, los colores y
+ * la tipografía del panel actual (variables `--d-*` y `--c-*` de diseno.css y globals.css, modo claro y
+ * oscuro) o, con `.pm-clasico--cz`, con los del cerebro (`.cz`). Sin mesh, sin esferas, sin vidrio:
+ * solo detalles: anillos con relieve, sombras en capas suaves, borde fino con brillo superior,
+ * inclinación 3D leve, entradas escalonadas y botones con relieve.
+ */
+.pm-clasico {
+  --pc-t: var(--d-texto);
+  --pc-t2: var(--d-texto-2);
+  --pc-t3: var(--d-texto-3);
+  --pc-ac: rgb(var(--c-gold-600));
+  --pc-ac-texto: rgb(var(--c-gold-700));
+  --pc-sup: rgb(var(--d-tarjeta));
+  --pc-sup2: rgb(var(--d-tarjeta-2));
+  --pc-linea: var(--d-linea);
+  --pc-linea-fuerte: var(--d-linea-fuerte);
+  --pc-pista: rgb(var(--c-slate-200));
+  --pc-sobre: #1b1405;
+  --pc-brillo: inset 0 1px 0 rgb(255 255 255 / 0.95);
+  --pc-sombra: 0 1px 2px rgb(15 23 42 / 0.06), 0 8px 20px -12px rgb(15 23 42 / 0.18), 0 22px 36px -28px rgb(15 23 42 / 0.26);
+  --pc-sombra-alta: 0 2px 4px rgb(15 23 42 / 0.08), 0 14px 28px -12px rgb(15 23 42 / 0.24), 0 34px 52px -30px rgb(15 23 42 / 0.32);
+  --pc-boton: linear-gradient(180deg, rgb(255 255 255), rgb(244 246 250));
+  --pc-boton-sombra: 0 1px 0 rgb(255 255 255 / 0.9) inset, 0 1px 2px rgb(15 23 42 / 0.12), 0 6px 12px -6px rgb(15 23 42 / 0.28);
+  --pc-boton-hundido: inset 0 2px 5px rgb(15 23 42 / 0.18), inset 0 -1px 0 rgb(255 255 255 / 0.7);
+
+  --pm-texto: var(--pc-t);
+  --pm-texto-2: var(--pc-t2);
+  --pm-texto-3: var(--pc-t3);
+  --pm-acento: var(--pc-ac);
+  --pm-sobre-acento: var(--pc-sobre);
+  --pm-pista: var(--pc-pista);
+  --pm-borde: var(--pc-linea);
+  --pm-vidrio-1: var(--pc-sup2);
+  --pm-ok: rgb(var(--d-ok));
+  --pm-error: rgb(var(--d-mal));
+  --pm-atencion: rgb(var(--d-aviso));
+  --pm-info: rgb(var(--d-info));
+  color: var(--pc-t);
+  font-family: inherit;
+}
+html[data-modo="oscuro"] .pm-clasico,
+.pm-clasico--cz {
+  --pc-brillo: inset 0 1px 0 rgb(255 255 255 / 0.08);
+  --pc-sombra: 0 1px 2px rgb(0 0 0 / 0.45), 0 10px 22px -12px rgb(0 0 0 / 0.65), 0 26px 44px -30px rgb(0 0 0 / 0.75);
+  --pc-sombra-alta: 0 2px 4px rgb(0 0 0 / 0.5), 0 16px 32px -12px rgb(0 0 0 / 0.7), 0 38px 60px -30px rgb(0 0 0 / 0.8);
+  --pc-boton: linear-gradient(180deg, rgb(40 40 50), rgb(26 26 34));
+  --pc-boton-sombra: 0 1px 0 rgb(255 255 255 / 0.09) inset, 0 1px 2px rgb(0 0 0 / 0.5), 0 8px 14px -6px rgb(0 0 0 / 0.7);
+  --pc-boton-hundido: inset 0 2px 6px rgb(0 0 0 / 0.6), inset 0 -1px 0 rgb(255 255 255 / 0.05);
+}
+/* Cerebro: la misma escena oscura de `.cz`. */
+.pm-clasico--cz {
+  --pc-t: var(--fg);
+  --pc-t2: var(--muted);
+  --pc-t3: var(--muted);
+  --pc-ac: var(--pink);
+  --pc-ac-texto: var(--pink);
+  --pc-sup: var(--card);
+  --pc-sup2: var(--card2);
+  --pc-linea: var(--line);
+  --pc-linea-fuerte: #3a3a4e;
+  --pc-pista: #262634;
+  --pc-sobre: #1a0610;
+  --pm-ok: var(--green);
+  --pm-error: var(--red);
+  --pm-atencion: var(--amber);
+  --pm-info: var(--cyan);
+}
+/* El acento lo manda el panel (dorado de cada perfil), no la paleta de rubros del brief. */
+.pm-clasico [class*="pm-rubro-"] { --pm-acento: var(--pc-ac); }
+
+/* ---- tarjeta: borde fino con brillo arriba y sombras en capas, sin vidrio */
+.pm-clasico .pm-tarjeta {
+  padding: 20px;
+  border: 1px solid var(--pc-linea);
+  border-radius: 16px;
+  background: var(--pc-sup);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: var(--pc-brillo), var(--pc-sombra);
+  color: var(--pc-t);
+}
+.pm-clasico .pm-tarjeta--viva:not(.pm-tarjeta--relieve):hover {
+  border-color: var(--pc-linea-fuerte);
+  box-shadow: var(--pc-brillo), var(--pc-sombra-alta);
+}
+.pm-clasico .pm-tarjeta--relieve::after { box-shadow: var(--pc-sombra-alta); }
+.pm-clasico .pm-tarjeta--relieve::before {
+  background: radial-gradient(240px circle at var(--pm-bx) var(--pm-by), color-mix(in srgb, var(--pc-ac) 75%, transparent), transparent 70%);
+}
+.pm-clasico .pm-tarjeta__titulo { font-size: 15px; font-weight: 600; color: var(--pc-t); }
+.pm-clasico .pm-tarjeta__accion { color: var(--pc-t2); }
+
+/* ---- anillo: pista a ras (sin sombra interior pesada), arco con degradé y un leve elevado */
+.pm-clasico .pm-anillo__pista,
+.pm-clasico .pm-medidor__pista { filter: none; stroke: var(--pc-pista); }
+.pm-clasico .pm-anillo--relieve svg { filter: drop-shadow(0 2px 3px rgb(15 23 42 / 0.14)); }
+.pm-clasico--cz .pm-anillo--relieve svg,
+html[data-modo="oscuro"] .pm-clasico .pm-anillo--relieve svg { filter: drop-shadow(0 2px 4px rgb(0 0 0 / 0.5)); }
+.pm-clasico .pm-grad-a { stop-color: color-mix(in srgb, var(--pc-ac) 80%, white); }
+.pm-clasico .pm-anillo__numero,
+.pm-clasico .pm-medidor__numero { font-family: var(--d-f-titulo); color: var(--pc-t); }
+.pm-clasico .pm-anillo__meta,
+.pm-clasico .pm-anillo__sufijo,
+.pm-clasico .pm-medidor__sufijo,
+.pm-clasico .pm-medidor__etiqueta { color: var(--pc-t2); }
+.pm-clasico .pm-anillo__tilde { color: var(--pc-ac-texto); }
+
+/* ---- botones: relieve sobrio */
+.pm-clasico .pm-boton {
+  border: 1px solid var(--pc-linea);
+  border-radius: 12px;
+  background: var(--pc-boton);
+  box-shadow: var(--pc-boton-sombra);
+  color: var(--pc-t);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 0 18px;
+}
+.pm-clasico .pm-boton:hover { filter: none; border-color: var(--pc-linea-fuerte); transform: translateY(-1px); }
+.pm-clasico .pm-boton:active,
+.pm-clasico .pm-boton[aria-pressed="true"] { box-shadow: var(--pc-boton-hundido); transform: translateY(1px); }
+.pm-clasico .pm-boton--primario {
+  border-color: color-mix(in srgb, var(--pc-ac) 70%, black);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--pc-ac) 55%, white), color-mix(in srgb, var(--pc-ac) 90%, white) 45%, var(--pc-ac));
+  color: var(--pc-sobre);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.55), 0 1px 2px rgb(15 23 42 / 0.2), 0 8px 14px -6px color-mix(in srgb, var(--pc-ac) 60%, black);
+}
+.pm-clasico .pm-boton--primario:active { box-shadow: inset 0 2px 6px rgb(0 0 0 / 0.3); }
+
+/* ---- «Ver más»: botón con relieve */
+.pm-clasico .pm-vermas { border-top: 1px solid var(--pc-linea); }
+.pm-clasico .pm-vermas__boton {
+  margin-top: 12px;
+  padding: 0 16px;
+  border: 1px solid var(--pc-linea);
+  border-radius: 999px;
+  background: var(--pc-boton);
+  box-shadow: var(--pc-boton-sombra);
+  color: var(--pc-t);
+  font-weight: 600;
+}
+.pm-clasico .pm-vermas__boton:hover { color: var(--pc-t); border-color: var(--pc-linea-fuerte); }
+.pm-clasico .pm-vermas[open] > .pm-vermas__boton { box-shadow: var(--pc-boton-hundido); }
+.pm-clasico .pm-vermas__cuerpo { padding-top: 16px; }
+
+/* ---- pastilla */
+.pm-clasico .pm-pastilla { border: 1px solid var(--pc-linea); background: var(--pc-sup2); color: var(--pc-t); }
+
+/* ---- estructura de las pantallas rediseñadas */
+.pm-clasico .pc-fila-anillos {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.pm-clasico .pc-fila-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 767px) {
+  .pm-clasico .pc-fila-anillos { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .pm-clasico .pc-fila-3 { grid-template-columns: minmax(0, 1fr); }
+  .pm-clasico .pm-tarjeta { padding: 14px; }
+}
+.pm-clasico .pc-celda { display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; min-width: 0; }
+.pm-clasico .pc-etiqueta { font-size: 15px; font-weight: 600; color: var(--pc-t); }
+.pm-clasico .pc-contexto { font-size: 13px; color: var(--pc-t2); line-height: 1.35; }
+.pm-clasico .pc-contexto strong { color: var(--pc-t); font-variant-numeric: tabular-nums; }
+.pm-clasico .pc-paso {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 10px; border-radius: 999px;
+  border: 1px solid var(--pc-linea); background: var(--pc-sup2);
+  box-shadow: var(--pc-brillo);
+  font-size: 12px; font-weight: 600; color: var(--pc-t); font-variant-numeric: tabular-nums;
+}
+.pm-clasico .pc-enlace { color: var(--pc-t); font-size: 13px; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.pm-clasico .pc-enlace::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+.pm-clasico .pc-enlace:focus-visible { outline: 2px solid var(--pc-ac-texto); outline-offset: 3px; }
+.pm-clasico .pc-activa { border-color: var(--pc-ac); }
+
+/* Salud */
+.pm-clasico .pc-salud { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 14px; align-items: stretch; }
+@media (max-width: 767px) { .pm-clasico .pc-salud { grid-template-columns: minmax(0, 1fr); } }
+.pm-clasico .pc-medidor-celda { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-align: center; min-height: 220px; }
+.pm-clasico .pc-lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.pm-clasico .pc-falla {
+  display: grid; gap: 6px; padding: 12px 14px; border-radius: 12px;
+  border: 1px solid var(--pc-linea); border-left: 4px solid var(--pc-estado, var(--pc-linea));
+  background: var(--pc-sup2); box-shadow: var(--pc-brillo);
+}
+.pm-clasico .pc-falla[data-estado="mal"] { --pc-estado: rgb(var(--d-mal)); }
+.pm-clasico .pc-falla[data-estado="aviso"] { --pc-estado: rgb(var(--d-aviso)); }
+.pm-clasico .pc-falla__que { font-size: 15px; color: var(--pc-t); margin: 0; overflow-wrap: anywhere; }
+.pm-clasico .pc-falla__fila { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.pm-clasico .pc-nota { font-size: 14px; color: var(--pc-t2); margin: 0; }
+.pm-clasico .pc-grave {
+  border-color: rgb(var(--d-mal) / 0.55);
+  background: linear-gradient(0deg, rgb(var(--d-mal) / 0.07), rgb(var(--d-mal) / 0.07)), var(--pc-sup);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pm-clasico .pm-boton:hover, .pm-clasico .pm-boton:active { transform: none; }
+}
+
+/* Pautas web: gesto táctil sin demora, títulos balanceados y anclas que no quedan pegadas al borde. */
+.pm-clasico .pm-boton, .pm-clasico .pm-vermas__boton, .pm-clasico .pc-enlace { touch-action: manipulation; }
+.pm-clasico h1, .pm-clasico h2, .pm-clasico h3, .pm-clasico .pc-etiqueta { text-wrap: balance; }
+.pm-clasico .pc-contexto, .pm-clasico .pc-nota { text-wrap: pretty; }
+.pm-clasico section, .pm-clasico [id] { scroll-margin-top: 24px; }
