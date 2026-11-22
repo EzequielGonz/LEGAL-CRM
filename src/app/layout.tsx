@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Instrument_Serif, Inter_Tight, JetBrains_Mono, Playfair_Display } from "next/font/google";
+import { Inter_Tight, JetBrains_Mono, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import "./panel.css";
 import "./controles.css";
@@ -22,11 +22,8 @@ const sans = Inter_Tight({ subsets: ["latin"], display: "swap", variable: "--fon
 const mono = JetBrains_Mono({ subsets: ["latin"], display: "swap", variable: "--font-mono" });
 const serif = Playfair_Display({ subsets: ["latin"], weight: ["600", "700"], display: "swap", variable: "--font-serif" });
 
-// 22/11: fundación visual premium (premium.css): Geist para la interfaz, Geist Mono para cifras chicas
-// y Instrument Serif itálica solo en el saludo de Jarvis. Solo definen variables: no cambian lo anterior.
-const geist = Geist({ subsets: ["latin"], display: "swap", variable: "--font-geist" });
-const geistMono = Geist_Mono({ subsets: ["latin"], display: "swap", variable: "--font-geist-mono" });
-const instrument = Instrument_Serif({ subsets: ["latin"], weight: "400", style: "italic", display: "swap", variable: "--font-instrument" });
+// 22/11: la fundación premium (premium.css) usa estas mismas fuentes del panel: el dueño pidió mantener
+// la estética clásica, así que no se cargan fuentes nuevas.
 
 export const viewport: Viewport = {
   themeColor: "#15171C",
@@ -64,7 +61,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es" data-modo="oscuro" suppressHydrationWarning className={`${sans.variable} ${mono.variable} ${serif.variable} ${geist.variable} ${geistMono.variable} ${instrument.variable}`}>
+    <html lang="es" data-modo="oscuro" suppressHydrationWarning className={`${sans.variable} ${mono.variable} ${serif.variable}`}>
       <head>
         {/* 24/10: modo oscuro premium por defecto; el claro se elige en el menú y se recuerda. */}
         <script dangerouslySetInnerHTML={{ __html: SCRIPT_MODO }} />

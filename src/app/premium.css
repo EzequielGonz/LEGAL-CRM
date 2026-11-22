@@ -84,9 +84,9 @@
   --pm-blur-fuerte: blur(28px) saturate(160%);
 
   /* Tipografía (las variables las define layout.tsx con next/font) */
-  --pm-sans: var(--font-geist), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --pm-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
-  --pm-serif: var(--font-instrument), "Iowan Old Style", Georgia, serif;
+  --pm-sans: var(--font-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --pm-mono: var(--font-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --pm-serif: var(--font-serif), "Iowan Old Style", Georgia, serif;
 
   /* Movimiento */
   --pm-ease: cubic-bezier(0.2, 0, 0, 1);
