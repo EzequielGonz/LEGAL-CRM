@@ -452,7 +452,11 @@ html[data-modo="oscuro"] .menu-tarjeta-sub[data-espera] { color: rgb(255 200 110
 /* -------------------------------------- pestañas de cada sección */
 /* Lista del 20/11, punto i: en el celular se cortaban sin señal de que había más.
    Cuando hay más pestañas a un costado, ese borde se desvanece y aparece una flecha. */
-.pestanas-riel { position: relative; min-width: 0; }
+.pestanas-riel { position: relative; min-width: 0; width: max-content; max-width: 100%; margin-bottom: 1.25rem; }
+.lienzo-contenido > .pestanas-riel { margin-left: max(0px, calc((100% - var(--columna, 100%)) / 2)); }
+.pestanas-riel > .pestanas-seccion { margin-bottom: 0; }
+.pestanas-riel:not([data-mas-izquierda]):not([data-mas-derecha]) > .pestanas-seccion { -webkit-mask-image: none; mask-image: none; padding-right: 0.25rem; }
+@media (max-width: 640px) { .pestanas-riel { width: 100%; } }
 .pestanas-riel[data-mas-derecha] > .pestanas-seccion { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 44px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 44px), transparent); }
 .pestanas-riel[data-mas-izquierda] > .pestanas-seccion { -webkit-mask-image: linear-gradient(90deg, transparent, #000 44px); mask-image: linear-gradient(90deg, transparent, #000 44px); }
 .pestanas-riel[data-mas-izquierda][data-mas-derecha] > .pestanas-seccion { -webkit-mask-image: linear-gradient(90deg, transparent, #000 44px, #000 calc(100% - 44px), transparent); mask-image: linear-gradient(90deg, transparent, #000 44px, #000 calc(100% - 44px), transparent); }
