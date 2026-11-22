@@ -110,4 +110,5 @@ Supabase (URL, clave pública, clave de servicio) · `WHATSAPP_<LÍNEA>` por lí
 - Windsor.ai: GA4 (4 propiedades) y Search Console (4 dominios). Reemplaza al kit de Search Console y a AdCopilot.
 - Metricool: las 4 marcas, con analítica.
 - Gmail y Google Calendar: cuenta del estudio, para Jarvis (resumen diario y recordatorios).
-- Siguen sin andar: GitHub (el plugin rechaza la autorización), PostHog y Canva (falta iniciar sesión), Firecrawl (sin clave).
+- GitHub: el conector de claude.ai responde (`get_me`); el plugin aparte falla y no hace falta.
+- Siguen sin andar: PostHog y Canva (falta iniciar sesión), Firecrawl (sin clave).

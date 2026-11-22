@@ -103,4 +103,5 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 - A2 ✅: GA4 y Search Console disponibles por Windsor.ai (4 propiedades, 4 dominios).
 - A3 ✅: Metricool devuelve las 4 marcas y analítica por día.
 - A7 ✅: Gmail y Google Calendar conectados en claude.ai; verificado con `list_labels` y `list_calendars` (cuenta del estudio, sin leer correos).
+- A4 ✅: el conector GitHub de claude.ai responde (`get_me`). El plugin «github» aparte sigue fallando, pero no hace falta.
 - A1 en curso: el dueño arma el disparo por API de la tarea «Oficina · procesar tareas».
