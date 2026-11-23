@@ -183,3 +183,7 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 - Vercel (solo nombres): Resend y remitente, Gemini, Wasender, Outscraper, Meta (app, verificación), WhatsApp de los 4 perfiles, página y cuenta de Instagram solo de Civil y Penal. Faltan `OFICINA_DISPARO_*`.
 - Metricool: 4 marcas, lectura de métricas de reels funcionando. Mejor pieza de VITA en noviembre: «Choque: nunca digas esto» (1.575 vistas, 74 % de tasa de vista); la mayoría de los reels dio 0 de alcance.
 - Windsor: GA4 y Search Console conectados pero con lecturas pausadas por el plan gratis (1 cuenta). AdCopilot sin Google conectado.
+
+## 23/11 · Graphify también en el cerebro y la memoria
+- Nuevo mapa de los documentos en `cerebro/mapa-cerebro/` (cerebro, bitácora, traspasos, chats volcados, biblioteca, `CLAUDE.md` y `.claude/referencias/`). El del código sigue en `cerebro/mapa-codigo/`. El arranque de cada sesión avisa de los dos.
+- Se arma sin modelo de lenguaje (títulos y secciones); no contiene claves ni datos de prospectos.

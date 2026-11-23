@@ -9,3 +9,6 @@ RAIZ="${CLAUDE_PROJECT_DIR:-$(cd "$(dirname "$0")/../.." && pwd)}"
 if [ -f "$RAIZ/cerebro/mapa-codigo/graph.json" ]; then
   echo "Graphify: mapa del código en cerebro/mapa-codigo/ (graphify explain \"X\" --graph cerebro/mapa-codigo/graph.json). Consultalo antes de buscar con grep."
 fi
+if [ -f "$RAIZ/cerebro/mapa-cerebro/graph.json" ]; then
+  echo "Graphify: mapa del cerebro y la memoria (documentos) en cerebro/mapa-cerebro/ (graphify section \"X\" --graph cerebro/mapa-cerebro/graph.json)."
+fi

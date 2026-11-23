@@ -8,6 +8,7 @@ Panel de captación para cuatro perfiles (Jurídico con Civil y Penal, Cobertura
 
 ## Leer primero
 
+- **Graphify:** mapa del código en `cerebro/mapa-codigo/` y mapa de los documentos del cerebro y la memoria en `cerebro/mapa-cerebro/` (`graphify explain|section|path "X" --graph <mapa>/graph.json`). Consultalos antes de buscar con grep.
 - **`cerebro/README.md`**: la memoria de Claude. Índice, cómo arrancar en 5 minutos y cómo cerrar cada vuelta. Desde ahí: `02-ordenes-vigentes.md` (qué manda hoy), `07-estado-verificado.md` (qué está encendido) y `08-pendientes-y-plan.md` (qué sigue). Se actualiza al cierre de cada vuelta, con commit y push.
 - Detalle fino cuando la tarea lo pide: `.claude/referencias/reglas-comunes.md` (reglas de negocio), `.claude/referencias/casos-de-aceptacion.md` (A01–A35), `.claude/referencias/redes/` (dirección de arte, marcas, logos), `.claude/referencias/bandeja-claude.md` (cuando la responsable dice «ok»), `docs/ESTADO.md` (historial operativo largo).
 - Skills del proyecto según la tarea: `kocos-crm-contexto`, `kocos-crm-reglas-de-captacion`, `kocos-crm-diseno-y-accesibilidad`, `kocos-crm-pruebas-de-aceptacion`, `kocos-landings-seo-y-conversion`, `kocos-contenido-y-publicacion`, `kocos-agentes-entrenamiento-y-evaluacion`. Las demás carpetas de `.claude/skills` son de terceros (`PROCEDENCIA.md`); si contradicen al proyecto, prevalece el proyecto.
