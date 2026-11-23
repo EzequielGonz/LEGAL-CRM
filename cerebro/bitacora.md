@@ -183,3 +183,6 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 - Vercel (solo nombres): Resend y remitente, Gemini, Wasender, Outscraper, Meta (app, verificación), WhatsApp de los 4 perfiles, página y cuenta de Instagram solo de Civil y Penal. Faltan `OFICINA_DISPARO_*`.
 - Metricool: 4 marcas, lectura de métricas de reels funcionando. Mejor pieza de VITA en noviembre: «Choque: nunca digas esto» (1.575 vistas, 74 % de tasa de vista); la mayoría de los reels dio 0 de alcance.
 - Windsor: GA4 y Search Console conectados pero con lecturas pausadas por el plan gratis (1 cuenta). AdCopilot sin Google conectado.
+
+## 23/11 · Vuelta de la Oficina (chat)
+- Arranque tomado y cerrado. Bandeja sin tareas pendientes ni en espera: 0 tareas procesadas, ningún escritorio activado, nada esperando OK.
