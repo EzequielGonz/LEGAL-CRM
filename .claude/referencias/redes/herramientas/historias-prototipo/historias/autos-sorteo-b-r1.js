@@ -1,0 +1,3 @@
+// Autos · remake R de «autos-sorteo-b» (21/11 19:20): el taller de aire de Mati en Villa Crespo y el Tano que le grita «¡en la cuota dos lo tenés!»; giro: la pantalla partida se rompe; objeto: las fichas de sorteo y licitación.
+import {armarKit} from './autos-kit.js';
+export const armar = V => armarKit(V, {lugar: 'taller', pjs: ['mati', 'tano'], quien: 'mati', est0: {tano: 'festeja'}, obj: 'fichas', items: ['Nadie te garantiza la cuota', 'Cómo funciona cada uno', 'Todo por escrito'], irreal: 'vidrio', vidrio: ['¿CUOTA DOS?', '¿SEGURO?'], respuesta: 'SORTEO O LICITACIÓN', grade: 'oro', cam: 'lateral'});

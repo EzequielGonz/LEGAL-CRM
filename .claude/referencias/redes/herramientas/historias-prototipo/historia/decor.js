@@ -97,6 +97,7 @@ export const sofa = ({x, y, c = '#4b5d7a'}) => `<g transform="translate(${x},${y
 export const lampara = ({x, y, on = true}) => { const g = id('lp'); return `<defs><radialGradient id="${g}"><stop offset="0" stop-color="#ffd59a" stop-opacity=".6"/><stop offset="1" stop-color="#ffd59a" stop-opacity="0"/></radialGradient></defs>
   <rect x="${x - 4}" y="${y - 420}" width="8" height="420" fill="#2c2c2c"/><path d="M${x - 70},${y - 420} L${x + 70},${y - 420} L${x + 46},${y - 500} L${x - 46},${y - 500} Z" fill="#e8dcc2"/>${on ? `<circle cx="${x}" cy="${y - 420}" r="260" fill="url(#${g})"/>` : ''}<ellipse cx="${x}" cy="${y}" rx="60" ry="10" fill="#2c2c2c"/>`; };
 export function calendario({x, y, s = 1, dia = 'HOY', mes = 'NOVIEMBRE', acento = '#D4AF37'}) {
+  { const m = /^(\d{1,2})\s*DIC$/.exec(dia); if (m && mes === 'NOVIEMBRE') { dia = m[1]; mes = 'DICIEMBRE'; } }
   return `<g transform="translate(${x},${y}) scale(${s})"><rect x="-120" y="-150" width="240" height="300" rx="14" fill="#fbfaf6"/><rect x="-120" y="-150" width="240" height="70" rx="14" fill="${acento}"/><rect x="-120" y="-100" width="240" height="20" fill="${acento}"/>
     <text x="0" y="-104" font-family="Manrope" font-weight="800" font-size="26" fill="#fff" text-anchor="middle" letter-spacing="2">${mes}</text><text class="dia" x="0" y="60" font-family="Manrope" font-weight="800" font-size="${dia.length > 3 ? 64 : 96}" fill="#25282b" text-anchor="middle">${dia}</text>
     <circle cx="-70" cy="-158" r="8" fill="#555"/><circle cx="70" cy="-158" r="8" fill="#555"/></g>`;

@@ -1,0 +1,3 @@
+// Autos · gastos-fijos B (21/11 10:30): abre en el final (Juli aliviada) y rebobina; cocina de Villa Crespo; giro: la llave gigante gira y la cámara pasa por el llavero; objeto: la libreta de Juli.
+import {armarKit} from './autos-kit.js';
+export const armar = V => armarKit(V, {lugar: 'cocina', pjs: ['juli'], quien: 'juli', pos: {juli: [760, 1490]}, abre: 'final', obj: 'libreta', titulo: 'Cuenta del mes', items: ['Seguro', 'Patente', 'Cochera'], total: 'CUENTA COMPLETA', irreal: 'llaveTunel', llaveTags: ['SEGURO', 'PATENTE', 'COCHERA'], grade: 'calido', cam: 'empuje', mesaProp: '<g transform="translate(640,1255) rotate(-8)"><rect x="-70" y="-12" width="140" height="40" rx="6" fill="#fbf7ec"/><rect x="-70" y="-12" width="140" height="8" fill="#9cc3e6"/></g>'});
