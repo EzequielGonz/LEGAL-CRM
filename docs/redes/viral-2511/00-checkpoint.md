@@ -20,3 +20,8 @@
 Estilo/animación: DfDOvols8DU, DgASo7RBtxo.
 Virales: DfhVvkqodie, DfXSSrCJC2L, DfFvERfhoTc, DfLmu7ZM_ce, DfRVhZPt50F, DfqyfppoGjw, DdE82pGodCD, DeZCLJBBrmn, DgBuCP-vbOQ, Df96ihUiqJF, DecvxHktyGJ, DgBc-w-B9_Z, DexEEAjo4xN, DewRRZgsfLB.
 (URL: https://www.instagram.com/reel/<id>/)
+
+## Avance 25/11 (después de la pausa)
+- Paso 1 hecho: el dueño trajo el análisis de los 16 reels y 3D Atlas hecho con Claude in Chrome → `03-referencias.md`.
+- Relanzados en paralelo: contenido propio (`01`), competencia (`02`), herramientas del motor (`04`) y boceto VITA «PLAZO» (`boceto-vita/`).
+- Falta: estrategia viral (`05-estrategia.md`) con todo lo anterior, informe al dueño y boceto entregado.
