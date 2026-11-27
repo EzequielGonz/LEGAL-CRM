@@ -6,6 +6,11 @@ Rama `claude/brave-hawking-nzsr60` · PR EzequielGonz/LEGAL-CRM#82 (seguido, en 
 - El dueño frenó el boceto de VITA. **No hay agentes trabajando ni nada programado.** Lo programado en Metricool del 25 al 29/11 (12 historias + 1 carrusel por día y marca) NO se toca.
 - **Esperando:** el dueño busca 1 o 2 reels de referencia con el 3D que imagina. Al recibirlos, analizarlos (gancho, cámara, luz, nivel de realismo, animación, efectos) y recién ahí hacer el boceto de VITA con el guion `vita-2711-1`.
 
+## Novedad 27/11 07:20: llegaron las referencias
+- Reel de referencia (@sunnyshoots.ai: Tripo + Blender + Seedance 2.5) y 3D Atlas (37 estilos con three.js). Análisis, costos y estilos elegidos en `docs/redes/viral-2511/07-referencia-3d-ia-y-costos.md`.
+- Se le preguntó si autoriza USD 50 para una prueba híbrida única (Tripo Pro USD 20 + saldo Seedance USD 30). **Sin su OK no se paga nada.**
+- Ruta gratis: falta que Claude in Chrome copie los prompts del Atlas (el botón «Copiar prompt»; pedirlos directo al servidor lo bloqueó el filtro de seguridad) y los guarde en `.claude/referencias/redes/herramientas/atlas-prompts/`.
+
 ## Qué quiere el dueño (leer antes de diseñar)
 - **Los reels 2D de personajes que ya subimos** (Nico en la esquina, el celular con la notificación, los papeles volando, el calendario «HOY», karaoke), **pero en 3D, de mejor calidad, más reales, más animados, con voz y efectos «wow»**. Ejemplo de lo que subimos: `estudio-juridico-vita-final/apps/web/public/redes/2011/vita-nunca-frases-a.mp4` (motor `historia.html` + `historia/personaje.js`).
 - Rechazó el 27/11, en este orden (detalle en `cerebro/14`, tabla «Lo que rechazó»):
