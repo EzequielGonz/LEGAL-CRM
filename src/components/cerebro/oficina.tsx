@@ -11,6 +11,7 @@ import { ORDEN_SECTORES, SECTORES } from "@/lib/oficina/sectores";
 import { alcanceDeSelector } from "@/lib/oficina/alcance-ui";
 import { CANDIDATOS_POR_DEFECTO, MAX_CANDIDATOS_OFICINA } from "@/lib/oficina/ejecucion";
 import { NOMBRE_AREA, TEXTO_SIN_CLAUDE, esParaRepasar, etapaDe, type Area, type TareaOficina } from "@/lib/oficina/reglas";
+import { puedeGemini } from "@/lib/oficina/clases";
 
 /**
  * La Oficina (22/11; 27/11 alcance, Gemini por botón y arena): escritorios de
@@ -149,6 +150,34 @@ export function Oficina({
     }
   }
 
+  /** Sin disparo de Claude: Gemini resuelve, de a una, las tareas de la mesa de entrada que puede hacer. */
+  async function arrancarConGemini() {
+    const entrada = tareas.filter((t) => t.estado === "pendiente" || t.estado === "en_espera");
+    const aptas = entrada.filter((t) => puedeGemini(t.clase).ok);
+    const soloClaude = entrada.length - aptas.length;
+    if (!aptas.length) {
+      setAviso({ tipo: "err", texto: soloClaude ? `Claude no está conectado y ${soloClaude === 1 ? "la tarea que espera es" : "las tareas que esperan son"} de código, publicación o envío: esas no las hace Gemini. Quedan en la mesa de entrada.` : TEXTO_SIN_CLAUDE });
+      return;
+    }
+    let hechas = 0;
+    let ultimoError = "";
+    for (const [i, t] of aptas.entries()) {
+      setAviso({ tipo: "ok", texto: `Claude no está conectado: Gemini está resolviendo la tarea ${i + 1} de ${aptas.length} (varias respuestas y un juez). Puede tardar unos minutos.` });
+      try {
+        const g = await fetch(`/api/oficina/${t.id}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ accion: "gemini" }) });
+        const gd = await g.json().catch(() => ({}));
+        if (g.ok) hechas++;
+        else ultimoError = gd?.error || "Gemini no pudo con una tarea.";
+      } catch {
+        ultimoError = "Se cortó la conexión con Gemini.";
+      }
+      await recargar();
+    }
+    const resto = soloClaude ? ` ${soloClaude} ${soloClaude === 1 ? "queda" : "quedan"} para Claude (código, publicación o envío).` : "";
+    if (hechas) setAviso({ tipo: "ok", texto: `Gemini resolvió ${hechas} de ${aptas.length}. ${hechas === 1 ? "Queda" : "Quedan"} «Hecho por Gemini · sin repasar».${ultimoError ? ` ${ultimoError}` : ""}${resto}` });
+    else setAviso({ tipo: "err", texto: `${ultimoError || "Gemini no pudo resolver las tareas."}${resto}` });
+  }
+
   async function arrancar() {
     setAviso(null);
     setArrancando(true);
@@ -157,8 +186,9 @@ export function Oficina({
       const d = await r.json().catch(() => ({}));
       if (d?.arranque) setArranque(d.arranque);
       if (d?.disparo) setDisparo(d.disparo);
-      if (r.status === 503) {
-        setAviso({ tipo: "err", texto: `${d?.error || TEXTO_SIN_CLAUDE} Mientras tanto, usá «Que lo haga Gemini» en cada tarea o escribí «oficina» en un chat de Claude del proyecto.` });
+      if (r.status === 503 || r.status === 502) {
+        // Orden del dueño (27/11): si él pide arrancar y Claude no tiene disparo, lo resuelve Gemini.
+        await arrancarConGemini();
       } else if (!r.ok) {
         throw new Error(d?.error || "No se pudo arrancar.");
       } else {
