@@ -6,7 +6,28 @@ Rama `claude/brave-hawking-nzsr60` · PR EzequielGonz/LEGAL-CRM#82 (seguido, en 
 - El dueño frenó el boceto de VITA. **No hay agentes trabajando ni nada programado.** Lo programado en Metricool del 25 al 29/11 (12 historias + 1 carrusel por día y marca) NO se toca.
 - **Esperando:** el dueño busca 1 o 2 reels de referencia con el 3D que imagina. Al recibirlos, analizarlos (gancho, cámara, luz, nivel de realismo, animación, efectos) y recién ahí hacer el boceto de VITA con el guion `vita-2711-1`.
 
-## CORRIDA 1 · 27/11 18:32 (Buenos Aires) — FRENADA POR PLUGINS NUEVOS, esperando al dueño
+## CHECKPOINT 27/11 ~19:00 BA (21:56 UTC) — CORRIDA 1 EN PRODUCCIÓN, preparado para compactar
+**Destrabado:** el dueño eliminó en claude.ai los plugins `simple-workflow`, `sixth-sense`, `one-shot-prompting` y (a pedido suyo) `naksha`. Sus copias locales se archivaron (no borradas) en `/root/.claude/plugins/archivo-desactivados-2711/` y quedaron en `false` en `/root/.claude/settings.json`. Descargas y `git push` funcionan. El plugin `superstack` pide un recibo en `.superstack/outward-pass` antes de cada push (excluido de git): agregar una línea con la revisión de claves y datos personales y reintentar.
+
+| Pieza | Estado |
+|---|---|
+| Escenas de las 4 marcas | **Aprobadas** (hojas en `atlas/prueba/<marca>-hoja*.jpg`) |
+| Voces de los 40 reels de la tanda 1 | **Listas** en `atlas/audio/<id>-voz.wav` (ElevenLabs Flash, 13.669 de 40.000 caracteres usados en el mes). Lista en `audio/voces-listas.txt` |
+| Producción | **Andando sola**: `atlas/cola.sh` recorre 2811 → 2911 → 3011 → 0112 → 0212 (vita, marketing, coberturas, autos; a y b) y corre `lote.py` por reel. Registro: `atlas/lote.log`; salida `atlas/out/<id>.mp4` + `.jpg`; control `atlas/prueba/chk/<id>-0/1/2.jpg` |
+| Velocidad medida | **unos 20 a 30 min por reel** (≈1 cuadro por segundo con 3 procesos; 4 núcleos, render por software). 8 reels por día ≈ 3 a 4 h. Si no alcanza: proponer 24 cuadros por segundo |
+| Alojar | `atlas/alojar.sh <ddmm> <ids…>` copia a `apps/web/public/redes/<ddmm>/` de cada landing, sube a main y a la rama, y anota el 200 en `atlas/alojados.log` |
+| Metricool | Nada programado todavía de la tanda 1. Relevamiento de lo ya programado: `docs/redes/tanda-2811-0712/metricool-programado-2711.md` (28 y 29/11: carrusel 11:00 + 12 historias por marca; Marketing con 5 reels el 28/11, borradores y repetidos viejos que no se tocan; del 30/11 en adelante vacío) |
+| Horarios del 28/11 | VITA 08:40 y 21:10 · Autos 09:10 y 17:10 · Marketing 12:20 y 18:40 · Coberturas 12:40 y 18:10 (no pisan lo programado). Todas IG + FB |
+| Calibración previa | `docs/redes/tanda-2811-0712/calibracion-2711-1832.md` (parte B vacía) |
+
+**Próximo paso (control programado `trig_01QZhmnBj84nRBryACu9WkBh`, 22:19 UTC):**
+1. Revisar `prueba/chk/vita-2811-a-*.jpg` y `lote.log`.
+2. Cuando estén los 8 de 2811: `./alojar.sh 2811 vita-2811-a vita-2811-b marketing-2811-a marketing-2811-b coberturas-2811-a coberturas-2811-b autos-2811-a autos-2811-b` y programar en Metricool (REEL, `isAiGenerated: true`, IG + FB, hora del plan, copy del plan, tapa como `videoThumbnailUrl`), registrar en `docs/redes/programadas.jsonl`.
+3. Repetir por día; dejar un control programado cada ~2 h hasta terminar la tanda 1.
+4. Pendiente de la corrida 1: parte B de la calibración, tanda 2 (03 al 07/12), posts, carruseles e historias desde el 30/11, informe al dueño y marcar la fila 1 del calendario `06`.
+- Pendiente de decisión del dueño: pasar a borrador los repetidos viejos de Marketing en Metricool (ofrecido, sin respuesta).
+
+## CORRIDA 1 · 27/11 18:32 (Buenos Aires) — FRENADA POR PLUGINS NUEVOS (resuelto, ver arriba)
 - Hecho: los 3 agentes de escena retomados; inventario de herramientas en `docs/redes/tareas-programadas/07-herramientas.md`; análisis previo en curso (`calibracion-2711-1832.md`); `atlas/lote.py` (alinear → render → mezcla → mp4 → tapa → 3 cuadros de control); cierre «Escribinos por WhatsApp» agregado a la voz de `vita-2811-a`. Commit `c7b0751`, **sin subir**.
 - Voz de `vita-2811-a` generada y pagada (374 caracteres, flow `mqs9MS7CnBo1i9GNz2Mg`), **sin bajar**: el link vence el 28/11 00:00 UTC; después se baja desde el flow de ElevenLabs sin volver a pagar. No generar las otras 39 hasta poder bajarlas.
 - Bloqueos (hooks de plugins sincronizados, no se saltean):
