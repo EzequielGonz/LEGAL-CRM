@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<style>html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000}canvas{display:block}</style>
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script>
+</head><body>
+<script type="module">
+import * as THREE from 'three';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {RGBELoader} from 'three/addons/loaders/RGBELoader.js';
+import {EffectComposer} from 'three/addons/postprocessing/EffectComposer.js';
+import {RenderPass} from 'three/addons/postprocessing/RenderPass.js';
+import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
+import {BokehPass} from 'three/addons/postprocessing/BokehPass.js';
+import {OutputPass} from 'three/addons/postprocessing/OutputPass.js';
+import {ShaderPass} from 'three/addons/postprocessing/ShaderPass.js';
+
+const W=1080,H=1920;
+const r=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});
+r.setSize(W,H);r.setPixelRatio(1);r.shadowMap.enabled=true;r.shadowMap.type=THREE.PCFSoftShadowMap;
+r.toneMapping=THREE.ACESFilmicToneMapping;r.toneMappingExposure=1.0;r.outputColorSpace=THREE.SRGBColorSpace;
+document.body.appendChild(r.domElement);
+const scene=new THREE.Scene();
+const cam=new THREE.PerspectiveCamera(32,W/H,.1,200);
+
+const hdr=await new RGBELoader().loadAsync('assets3d/calle_noche_4k.hdr');
+hdr.mapping=THREE.EquirectangularReflectionMapping;
+scene.environment=hdr;scene.background=hdr;scene.backgroundBlurriness=.0;scene.backgroundIntensity=.9;scene.environmentIntensity=.8;
+scene.backgroundRotation.y=window.ROT||0;scene.environmentRotation.y=window.ROT||0;
+
+// piso de adoquines (CC0) que se funde con el fondo
+const tl=new THREE.TextureLoader();const tex=n=>{const t=tl.load('assets3d/adoq_'+n+'.jpg');t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(5,5);t.anisotropy=8;return t};
+const dif=tex('Diffuse');dif.colorSpace=THREE.SRGBColorSpace;
+const piso=new THREE.Mesh(new THREE.CircleGeometry(9,64),new THREE.MeshStandardMaterial({map:dif,normalMap:tex('nor_gl'),roughnessMap:tex('Rough'),aoMap:tex('AO'),roughness:.85,color:0x9a9aa6}));
+piso.rotation.x=-Math.PI/2;piso.receiveShadow=true;scene.add(piso);
+
+// luces: farol cálido + borde frío + balizas
+const farol=new THREE.SpotLight(0xffb36b,140,22,Math.PI/5,.6,1.6);farol.position.set(-2.2,5.2,1.2);farol.target.position.set(0,0,0);
+farol.castShadow=true;farol.shadow.mapSize.set(2048,2048);farol.shadow.bias=-.0004;scene.add(farol,farol.target);
+const borde=new THREE.DirectionalLight(0x8fb3ff,2.4);borde.position.set(3,3,-4);scene.add(borde);
+const baliza=new THREE.PointLight(0xff7a1a,0,6,2);baliza.position.set(1.6,.7,-1.4);scene.add(baliza);
+const glowMat=new THREE.SpriteMaterial({color:0xff8a2a,transparent:true,opacity:.9,blending:THREE.AdditiveBlending,depthWrite:false});
+const glow=new THREE.Sprite(glowMat);glow.scale.set(.5,.5,1);glow.position.copy(baliza.position);scene.add(glow);
+const lampGlow=new THREE.Sprite(new THREE.SpriteMaterial({color:0xffc27a,transparent:true,opacity:.8,blending:THREE.AdditiveBlending,depthWrite:false}));
+lampGlow.scale.set(1.2,1.2,1);lampGlow.position.set(-2.2,5.2,1.2);scene.add(lampGlow);
+
+// personaje con animación de captura de movimiento (Mixamo)
+const L=new GLTFLoader();
+const mich=await L.loadAsync('assets3d/'+(window.PJ||'Michelle')+'.glb');
+const bot=await L.loadAsync('assets3d/Xbot.glb');
+const pj=mich.scene;pj.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;if(o.material){o.material.envMapIntensity=1}}});
+const bb=new THREE.Box3().setFromObject(pj);const alto=bb.max.y-bb.min.y;pj.scale.multiplyScalar(1.72/alto);pj.updateMatrixWorld(true);const bb2=new THREE.Box3().setFromObject(pj);pj.position.y-=bb2.min.y;pj.rotation.y=window.GIRO||0.35;
+scene.add(pj);
+const mixer=new THREE.AnimationMixer(pj);
+const clip=n=>mich.animations.find(a=>a.name===n)||bot.animations.find(a=>a.name===n)||mich.animations[0];
+console.log('propias',mich.animations.map(a=>a.name).join(','));
+console.log('alto',JSON.stringify(new THREE.Box3().setFromObject(pj)));
+window.CLIPS=bot.animations.map(a=>a.name);
+const a1=mixer.clipAction(clip(window.ANIM||'idle'));a1.play();
+const add=window.ADD?mixer.clipAction(THREE.AnimationUtils.makeClipAdditive(clip(window.ADD).clone())):null;if(add){add.setEffectiveWeight(1);add.play()}
+
+// post: bloom + profundidad de campo + grano y viñeta
+const comp=new EffectComposer(r);comp.addPass(new RenderPass(scene,cam));
+const bloom=new UnrealBloomPass(new THREE.Vector2(W,H),.55,.6,.82);comp.addPass(bloom);
+const dof=new BokehPass(scene,cam,{focus:4.2,aperture:.0016,maxblur:.008});comp.addPass(dof);
+const grano=new ShaderPass({uniforms:{tDiffuse:{value:null},t:{value:0}},vertexShader:`varying vec2 v;void main(){v=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
+ fragmentShader:`uniform sampler2D tDiffuse;uniform float t;varying vec2 v;float h(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233))+t)*43758.5453);}
+ void main(){vec4 c=texture2D(tDiffuse,v);float d=distance(v,vec2(.5,.45));c.rgb*=smoothstep(.95,.35,d);c.rgb+=(h(v*1000.)-.5)*.045;gl_FragColor=c;}`});
+comp.addPass(grano);comp.addPass(new OutputPass());
+
+window.frame=(t)=>{
+ mixer.setTime(t);
+ const k=t/6;cam.position.set(.4-0.25*k,1.15+.05*k,4.4-0.6*k);cam.lookAt(0,1.05,0);
+ const on=(Math.floor(t*1.6)%2)===0;baliza.intensity=on?18:0;glow.material.opacity=on?.95:.0;
+ grano.uniforms.t.value=t*7.0;comp.render();
+};
+window.listo=true;
+</script></body></html>

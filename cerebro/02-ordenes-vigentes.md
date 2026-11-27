@@ -7,7 +7,7 @@ actualizado: 20/11/2026 06:00
 
 ## La única restricción
 
-**No se paga nada sin autorización expresa del dueño**: créditos, planes, publicidad, generadores pagos (Veo, Kling, Runway, ElevenLabs, vidIQ con créditos), servidores, celulares en la nube, dominios. Presupuesto ya autorizado: Gemini para los bots, USD 30 por mes (20/10). Recomendación vigente: dejar desactivado el pase automático a créditos pagos de Claude o con tope bajo.
+**No se paga nada sin autorización expresa del dueño**: créditos, planes, publicidad, generadores pagos (Veo, Kling, Runway, vidIQ con créditos; ElevenLabs Starter autorizado 27/11), servidores, celulares en la nube, dominios. Presupuesto ya autorizado: Gemini para los bots, USD 30 por mes (20/10). Recomendación vigente: dejar desactivado el pase automático a créditos pagos de Claude o con tope bajo.
 
 Todo lo demás son **decisiones de negocio** del dueño (abajo), no trabas de proceso. Claude implementa, prueba, publica y verifica sin pedir «dale» por cada paso.
 
@@ -151,7 +151,12 @@ Todo lo demás son **decisiones de negocio** del dueño (abajo), no trabas de pr
 | 20/11 | Cierre: «Comentá PALABRA» o «Respondé esta historia con PALABRA». **Nunca «el botón está en el perfil»** (no existe) | «Escribinos PALABRA por WhatsApp · botón en el perfil» |
 | 20/11 | **No tocar la bio ni el botón** de los perfiles | Auditoría: cargar el botón y reescribir bios |
 | 20/11 | Sin publicidad paga por ahora («esperemos que pegue algún reel») | — |
-| 20/11 | Sin generadores pagos: todo con código y herramientas gratis | — |
+| 27/11 | **Regla: siempre que sirva, se usa todo lo instalado** (plugins, conectores, herramientas MCP, skills, agentes personalizados, memoria Cognee y archivos de memoria, herramientas del sistema e instrucciones de cada servicio), sin esperar a que el dueño lo pida. Al empezar cada tarea se buscan las que aplican (`ToolSearch`, `SearchSkills`, lista de agentes) y al cerrar se informa cuáles se usaron. Los 16-minds, para debatir decisiones | 15/11–20/11: «usar las que sumen» (se refuerza) |
+| 27/11 | **Lo pago se puede usar, siempre con autorización expresa del dueño** (no es «nada pago»). Autorizado hoy: ElevenLabs con el plan Starter ya pagado (voz Flash) para los reels | 20/11: «Sin generadores pagos: todo con código y herramientas gratis» |
+| 27/11 | Reels: 6 por día por rubro (4 con voz ElevenLabs + 2 variantes recicladas con voz gratis del motor). Nunca reels sin voz | 25/11: 6 reels sin definir voz |
+| 27/11 | VITA Instagram arranca con 2 reels por día y sube progresivo hasta 6 (27–28: 2 · 29–30: 3 · 1–2/12: 4 · 3–4/12: 5 · 5–6/12: 6). Facebook de VITA con los 6 desde el inicio | «No bajar el ritmo» (se mantiene en el resto) |
+| 27/11 | Cierre de reels: «Comentá PALABRA y te mando [recurso]», «guardalo» o «mandáselo a…», según la fórmula (05-estrategia) | 20/11: «Comentá PALABRA» solo |
+| 27/11 | Horarios de Facebook a la noche: los decide Claude con los datos (0 vistas en 16:30–20:50 del 21–22/11) | — |
 | 20/11 | Lo que se mejora en un rubro va al motor compartido y después a los otros tres | — |
 | 20/11 | Las 44 de Kocos del 25 al 29/11 (estilo viejo) pasan a borrador | Reprogramarlas 25–29/11 (18/11) |
 | 20/11 | Feed y estética del kit de perfil: aprobados | — |

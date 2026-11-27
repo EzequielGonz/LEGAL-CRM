@@ -7,3 +7,5 @@ voz/h/*.f32
 voz/*-voz.wav
 node_modules/
 piper/*.onnx
+tanda/trabajo/*
+!tanda/trabajo/.gitkeep

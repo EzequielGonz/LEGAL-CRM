@@ -187,3 +187,9 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 ## 23/11 · Graphify también en el cerebro y la memoria
 - Nuevo mapa de los documentos en `cerebro/mapa-cerebro/` (cerebro, bitácora, traspasos, chats volcados, biblioteca, `CLAUDE.md` y `.claude/referencias/`). El del código sigue en `cerebro/mapa-codigo/`. El arranque de cada sesión avisa de los dos.
 - Se arma sin modelo de lenguaje (títulos y secciones); no contiene claves ni datos de prospectos.
+
+## 27/11 · Redes: análisis viral, estrategia y tanda 27/11–06/12
+- Hechos y en `docs/redes/viral-2511/`: contenido propio (Metricool), competencia AR, 16 reels de referencia + 3D Atlas, herramientas del motor y estrategia (05).
+- Tanda en `docs/redes/tanda-2811-0712/`: guiones en curso; piloto de VITA renderizado (22 s) pero no llega a premium (mitad de abajo vacía, íconos planos): se rehace como boceto con 3D diorama y el guion vita-2711-1. Nada programado todavía: espera el OK del dueño al boceto.
+- Decisiones del dueño: voz gratis para los 2 reels extra; VITA IG progresivo de 2 a 6; Facebook nocturno lo decide Claude; lo pago siempre con autorización (actualizado en `02`).
+- Ojo: hay otra sesión trabajando en paralelo; esta trabaja solo en `docs/redes/` y en el motor de reels, en la rama `claude/brave-hawking-nzsr60` (PR #82).

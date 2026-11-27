@@ -1,0 +1,416 @@
+{
+ "id": "vita-piloto",
+ "marca": "vita",
+ "T": 22.14,
+ "lead": 0.3,
+ "voz_dur": 20.245,
+ "nombre": "VITA Abogados",
+ "logo": "vita.png",
+ "palabra": "CHOQUE",
+ "cierre": "Guardalo para cuando lo necesites",
+ "lugar": "Av. Rivadavia",
+ "personaje": "conductor silueta",
+ "escena": "esquina porteña en miniatura, dos autos con un golpe leve, un papel que se acerca",
+ "beats": [
+  {
+   "texto": "Choque: no firmes esto",
+   "t0": 0.0,
+   "voz": "Choque en Avenida Rivadavia. Te ofrecen arreglar ahí mismo y firmar un papel. Pará.",
+   "frases": [
+    {
+     "t0": 0.25,
+     "t1": 2.247,
+     "txt": "Choque en Avenida Rivadavia."
+    },
+    {
+     "t0": 2.7510000000000003,
+     "t1": 4.887,
+     "txt": "Te ofrecen arreglar ahí mismo"
+    },
+    {
+     "t0": 4.627,
+     "t1": 5.895,
+     "txt": "y firmar un papel."
+    },
+    {
+     "t0": 6.4190000000000005,
+     "t1": 6.961,
+     "txt": "Pará."
+    }
+   ],
+   "t1": 7.5440000000000005
+  },
+  {
+   "texto": "Fotos de los dos autos",
+   "t0": 7.5440000000000005,
+   "voz": "Antes de firmar: sacá fotos de los dos autos y la patente.",
+   "frases": [
+    {
+     "t0": 7.554,
+     "t1": 8.705,
+     "txt": "Antes de firmar:"
+    },
+    {
+     "t0": 9.299,
+     "t1": 11.232,
+     "txt": "sacá fotos de los dos autos"
+    },
+    {
+     "t0": 10.972,
+     "t1": 12.274,
+     "txt": "y la patente."
+    }
+   ],
+   "t1": 12.965
+  },
+  {
+   "texto": "Datos del seguro",
+   "t0": 12.965,
+   "voz": "Pedí los datos del seguro del otro.",
+   "frases": [
+    {
+     "t0": 12.975,
+     "t1": 15.041,
+     "txt": "Pedí los datos del seguro del otro."
+    }
+   ],
+   "t1": 15.6
+  },
+  {
+   "texto": "No firmes sin entender",
+   "t0": 15.6,
+   "voz": "Y no firmes nada que no entiendas.",
+   "frases": [
+    {
+     "t0": 15.61,
+     "t1": 17.681,
+     "txt": "Y no firmes nada que no entiendas."
+    }
+   ],
+   "t1": 18.307000000000002
+  },
+  {
+   "texto": "Guardalo",
+   "t0": 18.307000000000002,
+   "voz": "Guardalo para cuando lo necesites.",
+   "frases": [
+    {
+     "t0": 18.317,
+     "t1": 20.755,
+     "txt": "Guardalo para cuando lo necesites."
+    }
+   ],
+   "t1": 22.14
+  }
+ ],
+ "words": [
+  {
+   "w": "Choque",
+   "p": "Choque",
+   "t": 0.3,
+   "e": 0.589
+  },
+  {
+   "w": "en",
+   "p": "en",
+   "t": 0.629,
+   "e": 0.778
+  },
+  {
+   "w": "Avenida",
+   "p": "Avenida",
+   "t": 0.818,
+   "e": 1.388
+  },
+  {
+   "w": "Rivadavia",
+   "p": "Rivadavia.",
+   "t": 1.428,
+   "e": 1.997
+  },
+  {
+   "w": "Te",
+   "p": "Te",
+   "t": 2.801,
+   "e": 2.944
+  },
+  {
+   "w": "ofrecen",
+   "p": "ofrecen",
+   "t": 2.984,
+   "e": 3.401
+  },
+  {
+   "w": "arreglar",
+   "p": "arreglar",
+   "t": 3.441,
+   "e": 3.857
+  },
+  {
+   "w": "ahí",
+   "p": "ahí",
+   "t": 3.897,
+   "e": 4.178
+  },
+  {
+   "w": "mismo",
+   "p": "mismo",
+   "t": 4.218,
+   "e": 4.637
+  },
+  {
+   "w": "y",
+   "p": "y",
+   "t": 4.677,
+   "e": 4.821
+  },
+  {
+   "w": "firmar",
+   "p": "firmar",
+   "t": 4.861,
+   "e": 5.141
+  },
+  {
+   "w": "un",
+   "p": "un",
+   "t": 5.181,
+   "e": 5.325
+  },
+  {
+   "w": "papel",
+   "p": "papel.",
+   "t": 5.365,
+   "e": 5.645
+  },
+  {
+   "w": "Pará",
+   "p": "Pará.",
+   "t": 6.469,
+   "e": 6.711
+  },
+  {
+   "w": "Antes",
+   "p": "Antes",
+   "t": 7.604,
+   "e": 7.91
+  },
+  {
+   "w": "de",
+   "p": "de",
+   "t": 7.95,
+   "e": 8.109
+  },
+  {
+   "w": "firmar",
+   "p": "firmar:",
+   "t": 8.149,
+   "e": 8.455
+  },
+  {
+   "w": "sacá",
+   "p": "sacá",
+   "t": 9.349,
+   "e": 9.663
+  },
+  {
+   "w": "fotos",
+   "p": "fotos",
+   "t": 9.703,
+   "e": 10.017
+  },
+  {
+   "w": "de",
+   "p": "de",
+   "t": 10.057,
+   "e": 10.221
+  },
+  {
+   "w": "los",
+   "p": "los",
+   "t": 10.261,
+   "e": 10.424
+  },
+  {
+   "w": "dos",
+   "p": "dos",
+   "t": 10.464,
+   "e": 10.628
+  },
+  {
+   "w": "autos",
+   "p": "autos",
+   "t": 10.668,
+   "e": 10.982
+  },
+  {
+   "w": "y",
+   "p": "y",
+   "t": 11.022,
+   "e": 11.316
+  },
+  {
+   "w": "la",
+   "p": "la",
+   "t": 11.356,
+   "e": 11.519
+  },
+  {
+   "w": "patente",
+   "p": "patente.",
+   "t": 11.559,
+   "e": 12.024
+  },
+  {
+   "w": "Pedí",
+   "p": "Pedí",
+   "t": 13.025,
+   "e": 13.279
+  },
+  {
+   "w": "los",
+   "p": "los",
+   "t": 13.319,
+   "e": 13.448
+  },
+  {
+   "w": "datos",
+   "p": "datos",
+   "t": 13.488,
+   "e": 13.741
+  },
+  {
+   "w": "del",
+   "p": "del",
+   "t": 13.781,
+   "e": 13.91
+  },
+  {
+   "w": "seguro",
+   "p": "seguro",
+   "t": 13.95,
+   "e": 14.329
+  },
+  {
+   "w": "del",
+   "p": "del",
+   "t": 14.369,
+   "e": 14.497
+  },
+  {
+   "w": "otro",
+   "p": "otro.",
+   "t": 14.537,
+   "e": 14.791
+  },
+  {
+   "w": "Y",
+   "p": "Y",
+   "t": 15.66,
+   "e": 15.801
+  },
+  {
+   "w": "no",
+   "p": "no",
+   "t": 15.841,
+   "e": 15.983
+  },
+  {
+   "w": "firmes",
+   "p": "firmes",
+   "t": 16.023,
+   "e": 16.3
+  },
+  {
+   "w": "nada",
+   "p": "nada",
+   "t": 16.34,
+   "e": 16.616
+  },
+  {
+   "w": "que",
+   "p": "que",
+   "t": 16.656,
+   "e": 16.798
+  },
+  {
+   "w": "no",
+   "p": "no",
+   "t": 16.838,
+   "e": 16.98
+  },
+  {
+   "w": "entiendas",
+   "p": "entiendas.",
+   "t": 17.02,
+   "e": 17.431
+  },
+  {
+   "w": "Guardalo",
+   "p": "Guardalo",
+   "t": 18.367,
+   "e": 18.776
+  },
+  {
+   "w": "para",
+   "p": "para",
+   "t": 18.816,
+   "e": 19.09
+  },
+  {
+   "w": "cuando",
+   "p": "cuando",
+   "t": 19.13,
+   "e": 19.405
+  },
+  {
+   "w": "lo",
+   "p": "lo",
+   "t": 19.445,
+   "e": 19.585
+  },
+  {
+   "w": "necesites",
+   "p": "necesites.",
+   "t": 19.625,
+   "e": 20.505
+  }
+ ],
+ "receta": {
+  "seed": 427,
+  "fondo": "ciudad",
+  "layout": "A",
+  "cam": "mix",
+  "trans": "deslizar",
+  "card": "sello",
+  "sub": "color",
+  "ft": "Playfair Display",
+  "fs": "Manrope",
+  "pal": {
+   "bg1": "#112250",
+   "bg2": "#0E1218",
+   "ink": "#fff",
+   "acc": "#D4AF37",
+   "acc2": "#C1AE7A",
+   "onacc": "#0E1218",
+   "card": "#F5F4F0",
+   "cardInk": "#112250",
+   "k": "#F5F4F0",
+   "d": "#0E1218",
+   "line": "#D4AF37",
+   "luz": "#ffe9b0",
+   "subFill": "#fff",
+   "subStroke": "rgba(8,12,28,.92)",
+   "pill": "rgba(10,16,34,.6)",
+   "pillInk": "#fff",
+   "grade": "linear-gradient(180deg,rgba(0,70,110,.16),rgba(0,0,0,0) 45%,rgba(255,150,70,.10))"
+  },
+  "vin": 0.4,
+  "tilt": true,
+  "cartas": true,
+  "contador": false,
+  "escala": true,
+  "fw": 700,
+  "ts": 104,
+  "hs": 118
+ }
+}

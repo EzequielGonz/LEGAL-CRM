@@ -1,0 +1,37 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="../fonts/fuentes.css"><style>
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000;font-family:Manrope,Inter,sans-serif}
+div{box-sizing:border-box}
+#root{position:absolute;inset:0;width:1080px;height:1920px;overflow:hidden}
+#world{position:absolute;inset:-120px;width:1320px;height:2160px;transform-origin:50% 50%}
+#bg,#luz,#bok{position:absolute;left:0;top:0;width:1320px;height:2160px}
+#bgsvg{position:absolute;left:0;top:0}
+.bobj{position:absolute;left:120px;top:120px;width:1080px;height:1920px;opacity:0}
+.bobj svg{position:absolute;left:0;top:0}
+.num{position:absolute;left:0;width:1080px;text-align:center;font-weight:800;color:var(--acc);text-shadow:0 10px 40px rgba(0,0,0,.35);line-height:1}
+#tilt1,#tilt2{position:absolute;left:0;width:1080px;pointer-events:none;backdrop-filter:blur(9px)}
+#tilt1{top:0;height:520px;-webkit-mask-image:linear-gradient(#000,transparent);mask-image:linear-gradient(#000,transparent)}
+#tilt2{top:1380px;height:540px;-webkit-mask-image:linear-gradient(transparent,#000);mask-image:linear-gradient(transparent,#000)}
+#vin{position:absolute;inset:0;background:radial-gradient(ellipse 80% 62% at 50% 46%,transparent 52%,rgba(0,0,0,var(--vin,.4)))}
+#grade{position:absolute;inset:0;mix-blend-mode:soft-light}
+#txt{position:absolute;inset:0}
+.btxt{position:absolute;left:80px;width:860px;display:flex;justify-content:center;opacity:0;transform-origin:50% 50%}
+.btxt .t{font-family:var(--ft);font-weight:var(--fw,800);color:var(--ink);text-align:center;line-height:1.04;max-width:860px;letter-spacing:-.01em;text-wrap:balance}
+.st-pastilla .t{background:var(--acc);color:var(--onacc);padding:18px 44px 26px;border-radius:44px;box-shadow:0 16px 50px rgba(0,0,0,.3)}
+.st-sello .t{border:12px solid var(--acc);color:var(--acc);padding:14px 40px 22px;border-radius:26px;text-transform:uppercase;background:rgba(0,0,0,.18)}
+.st-ticket .t{background:var(--card);color:var(--cardInk);padding:22px 44px 30px;border-radius:14px;border-left:26px solid var(--acc);box-shadow:0 18px 50px rgba(0,0,0,.3)}
+.st-marco .t{border:8px solid var(--acc);padding:20px 40px 28px;border-radius:8px;color:var(--ink)}
+.st-subrayado .t{background:linear-gradient(transparent 82%,var(--acc) 82% 94%,transparent 94%);padding:6px 10px 14px}
+.st-cinta .t{background:var(--acc);color:var(--onacc);padding:20px 60px 28px;transform:rotate(-2.5deg);box-shadow:0 14px 40px rgba(0,0,0,.35)}
+#subw{position:absolute;left:80px;width:860px;top:1250px;height:250px;display:flex;align-items:flex-start;justify-content:center}
+#sub{text-align:center;font-family:var(--fs);font-weight:800;font-size:72px;line-height:1.1;color:#fff;-webkit-text-stroke:14px var(--subStroke);paint-order:stroke fill;max-width:860px}
+#sub .w{display:inline-block;transform-origin:50% 80%;margin:0 .12em}
+#marca{position:absolute;left:50%;transform:translateX(-50%);top:232px;padding:8px 28px 8px 16px;border-radius:40px;background:var(--pill);backdrop-filter:blur(6px);white-space:nowrap;display:flex;align-items:center;gap:16px;font-family:var(--ft);font-weight:700;font-size:40px;color:var(--pillInk)}
+#marca img{height:70px}
+#cta{position:absolute;left:80px;width:860px;top:var(--ctaTop,760px);text-align:center;opacity:0}
+#cta .c1{font-weight:700;font-size:62px;color:var(--ink);-webkit-text-stroke:10px var(--subStroke);paint-order:stroke fill}
+#cta .kw{display:inline-block;margin-top:14px;padding:10px 54px 20px;border-radius:32px;background:var(--acc);color:var(--onacc);font-family:var(--ft);font-weight:800;font-size:128px;box-shadow:0 20px 70px rgba(0,0,0,.35)}
+#cartas{position:absolute;left:0;top:0;width:1080px;height:1920px;opacity:0}
+</style></head><body><div id="root"><div id="world"><div id="bg"></div><div id="luz"></div><div id="bok"></div><div id="objs"></div></div>
+<div id="tilt1"></div><div id="tilt2"></div><div id="grade"></div><div id="vin"></div><div id="txt"></div><div id="subw"><div id="sub"></div></div><div id="marca"></div><div id="cta"></div></div>
+<script type="module" src="motor/serie.js"></script></body></html>
