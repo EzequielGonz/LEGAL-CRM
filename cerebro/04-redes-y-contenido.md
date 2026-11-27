@@ -135,3 +135,13 @@ Detalle completo: `.claude/referencias/redes/direccion-de-arte.md`.
 - Subir el contraste del azul destacado en Autos; sumar planos irreales a Coberturas, Autos y Kocos.
 - Render de prueba de un cuadro por marca antes de producir en serie.
 - Logos vectoriales para 4K.
+
+## Estrategia viral y tanda 27/11–06/12 (27/11)
+
+- Análisis completos en `docs/redes/viral-2511/`: `01-contenido-propio` (Metricool), `02-competencia` (Argentina por rubro), `03-referencias` (16 reels virales + 3D Atlas, hecho por Claude in Chrome), `04-herramientas-motor` (motor v2, ElevenLabs, reciclado), `05-estrategia` (la estrategia vigente).
+- Hallazgos que mandan: gana el formato (voz + tres ✔ + conflicto en el segundo 1 = 79 % de las vistas); «Comentá X» dio 0 comentarios (la palabra clave rinde solo si se entrega algo concreto); nadie en los 4 rubros usa animación, personaje ilustrado ni 3D (hueco nuestro); Meta castiga repetir textos (VITA IG en 0).
+- Tanda: `docs/redes/tanda-2811-0712/` (guiones por marca, `GUIONES.md`, `PRODUCCION.md`, `boceto-vita/`). 6 reels por día por rubro: 4 con ElevenLabs (Flash, voces Claudiio VITA, Sol Coberturas, Franco Autos, Santo Marketing) + 2 variantes con voz gratis. VITA IG sube progresivo de 2 a 6.
+- Horarios con voz: VITA 08:40·11:10·13:40·21:10 · Coberturas 12:40·18:10·21:40·22:40 · Autos 09:10·13:10·17:10·21:30 · Marketing 08:10·12:20·18:40·21:20. Extra con voz gratis: VITA 16:10·19:40 · Coberturas 15:10·20:10 · Autos 11:10·19:10 · Marketing 10:10·15:40. Metricool no tiene datos de audiencia activa (devuelve 0).
+- Facebook a la noche (decisión de Claude, 27/11): se mantienen los horarios; se revisan las vistas de FB a las 24 h de los dos primeros días. Si vuelven a dar 0–1 a la noche, los reels de FB de después de las 18 pasan al tramo 12–14 h (IG sigue igual).
+- ElevenLabs: plan Starter (40.000 caracteres/mes) da licencia comercial también para voces de la biblioteca; puede haber condiciones propias de cada voz y siempre rige la política de usos prohibidos. Avisar «Voz generada con IA» en el copy (ya está). Música y efectos gastan del mismo saldo.
+- Motor v2 (cadena por lotes): `.claude/referencias/redes/herramientas/historias-prototipo/tanda/` (`producir.py`, `render_t.js`, `revision_t.js`, `motor/serie.js`).

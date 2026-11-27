@@ -31,3 +31,6 @@ Virales: DfhVvkqodie, DfXSSrCJC2L, DfFvERfhoTc, DfLmu7ZM_ce, DfRVhZPt50F, Dfqyfp
 2. Con eso, estrategia `05-estrategia.md` (datos, reportes, fórmulas).
 3. Recién ahí, boceto VITA basado en la estrategia (el primer intento se frenó por arrancar sin análisis).
 4. Sumar todo al cerebro (04-redes-y-contenido, 02-órdenes, 08-pendientes, bitácora), a la memoria y al motor gráfico (motor v2), y regenerar el mapa de Graphify del cerebro.
+
+## Estado 27/11 06:30 UTC
+Análisis 01–05 hechos. Tanda y boceto en curso. Traspaso completo: `cerebro/traspaso-sesion-2026-11-27-redes.md`.

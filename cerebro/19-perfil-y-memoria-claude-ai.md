@@ -283,3 +283,7 @@ Nada todavía. Si algún campo de claude.ai tiene límite de caracteres, la sesi
 ### Última carga en claude.ai
 
 Sin cargar todavía con esta versión (22/11/2026).
+
+- (27/11) Pagos: lo pago se usa **siempre con autorización expresa**; no significa «nada pago». ElevenLabs Starter autorizado para voces de reels.
+- (27/11) Reels: nunca sin voz. 6 por día por rubro. Reciclar editando fuerte (Meta castiga lo repetido).
+- (27/11) El boceto se basa en análisis y datos, nunca en una idea previa.
