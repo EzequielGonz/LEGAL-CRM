@@ -187,3 +187,9 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 ## 23/11 · Graphify también en el cerebro y la memoria
 - Nuevo mapa de los documentos en `cerebro/mapa-cerebro/` (cerebro, bitácora, traspasos, chats volcados, biblioteca, `CLAUDE.md` y `.claude/referencias/`). El del código sigue en `cerebro/mapa-codigo/`. El arranque de cada sesión avisa de los dos.
 - Se arma sin modelo de lenguaje (títulos y secciones); no contiene claves ni datos de prospectos.
+
+## 27/11 · Recorrido propio del panel, propuesta de reorganización y muestra de diseño
+- Claude recorrió el panel publicado como dueño: 148 pantallas de las cuatro cuentas más una segunda pasada abriendo formularios, sin enviar ni guardar nada.
+- Hallazgos: el embudo aparece en seis lugares, hay nueve listas de las mismas personas, tres pantallas del bot y cinco lugares para pedir algo; las cifras se contradicen entre pantallas; Hoy tarda de 11 a 14 segundos en frío.
+- Propuesta en `cerebro/24-reorganizacion-y-muestra-2711.md`: cuatro secciones por perfil (Bandeja, Campañas, Contactos, Resultados) más Configuración; afuera, Inicio, Jarvis, Cerebro y Oficina.
+- Colores: el dueño rechazó los pasteles («infantiles y de colegio»). Propuesta «grafito y latón», dos tipografías. Muestra enviada en siete imágenes (pidió fotos, no una muestra navegable). Espera su OK.

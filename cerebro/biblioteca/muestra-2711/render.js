@@ -1,0 +1,4 @@
+const {chromium}=require('playwright');(async()=>{const b=await chromium.launch();const c=await b.newContext({viewport:{width:1440,height:900},deviceScaleFactor:2});const p=await c.newPage();
+const D=process.argv[2];for(const [f,q] of [['1-inicio',''],['2-bandeja',''],['3-contactos',''],['4-campanas',''],['5-resultados',''],['6-paleta',''],['2-bandeja','?claro'],['1-inicio','?claro']]){await p.goto('file://'+D+'/'+f+'.html'+q,{waitUntil:'networkidle'});await p.evaluate(()=>document.fonts.ready);await p.waitForTimeout(400);
+ const ov=await p.evaluate(()=>[...document.querySelectorAll('.app *')].filter(e=>e.scrollWidth>e.clientWidth+2&&getComputedStyle(e).overflow==='visible'&&e.children.length===0).map(e=>e.className+':'+e.textContent.slice(0,30)).slice(0,8));
+ await p.screenshot({path:D+'/'+f+(q?'-claro':'')+'.png'});console.log(f+q,'desborde:',JSON.stringify(ov))}await b.close()})();
