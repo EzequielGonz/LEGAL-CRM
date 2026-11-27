@@ -236,7 +236,7 @@ def sonido(args):
     fl = ('[0:a]aresample=48000,highpass=f=80,equalizer=f=230:t=q:w=1.2:g=-2.5,equalizer=f=3200:t=q:w=1.4:g=2,equalizer=f=9000:t=h:w=1:g=1.5,deesser=i=0.35,acompressor=threshold=-22dB:ratio=2.5:attack=8:release=120:makeup=2,'
           f'loudnorm=I=-17:TP=-2:LRA=7,adelay={lead_ms}|{lead_ms},apad=whole_dur={T},atrim=0:{T},pan=stereo|c0=c0|c1=c0,asplit=3[v][vk][vk2];'
           '[2:a]volume=0.5[m];[m][vk]sidechaincompress=threshold=0.025:ratio=10:attack=15:release=350[md];[3:a]volume=0.9[a];[a][vk2]sidechaincompress=threshold=0.03:ratio=3:attack=20:release=400[ad];'
-          '[v]volume=1.5[vv];[1:a]volume=0.8[s];[vv][s][md][ad]amix=inputs=4:normalize=0,loudnorm=I=-14:TP=-1.5:LRA=9,afade=t=out:st=%.2f:d=.25[o]' % (T - .25))
+          '[v]volume=1.5[vv];[1:a]volume=0.8[s];[vv][s][md][ad]amix=inputs=4:normalize=0,loudnorm=I=-14:TP=-1.5:LRA=9,afade=t=out:st=%.2f:d=0.25[o]' % (T - .25))
     sh('ffmpeg', '-y', '-v', 'error', '-i', mp3, '-i', f'{d}/sfx.wav', '-i', f'{d}/mus.wav', '-i', f'{d}/amb.wav', '-filter_complex', fl, '-map', '[o]', '-ar', SR, f'{d}/mezcla.wav')
     print(f'{args.id}: audio listo ({T:.1f} s)')
 
