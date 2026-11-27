@@ -72,11 +72,11 @@ export default async function (datos, plan) {
   beats.forEach(b => { b.ws = Math.max(0, b.l0 + b.nl - NV); b.fila = b.l0 - b.ws; });
   const yTop = 4.8, yF0 = yTop - HEAD, yL0 = yF0 - RF * FH - DIV, yBot = yL0 - NV * LH - MARG;
   const filaY = r => yL0 - LH * (r + .5);
-  const hP = clamp(yBot - .12, 1.15, 1.62), zP = 2.75, hTop = hP + .06; // pedestal: el objeto apoya en hTop
+  const zP = 3.7, hP = clamp(yBot - .3, 1.0, 1.45), hTop = hP + .06, OS = 1.24; // OS: escala de los objetos // pedestal: el objeto apoya en hTop
 
   // ── texturas dibujadas ────────────────────────────────────────────────────
   const travertino = lienzo(1024, 1024, (x, w, h) => {
-    x.fillStyle = variante === 1 ? '#E6D0B6' : '#ECDDC9'; x.fillRect(0, 0, w, h);
+    x.fillStyle = variante === 1 ? '#D4B593' : '#DCC4A6'; x.fillRect(0, 0, w, h);
     for (let i = 0; i < 150; i++) { const y0 = hash(i * 3.1 + 1) * h, a = .03 + hash(i * 5.7) * .08, claro = hash(i * 9.3) > .5;
       x.strokeStyle = claro ? `rgba(255,248,236,${a})` : `rgba(150,118,86,${a})`; x.lineWidth = 1 + hash(i * 2.2) * 5; x.beginPath();
       for (let k = 0; k <= 32; k++) { const xx = k / 32 * w, yy = y0 + Math.sin(k * .5 + i) * 5 + ruido(k * .3, i) * 7; k ? x.lineTo(xx, yy) : x.moveTo(xx, yy); } x.stroke(); }
@@ -134,10 +134,10 @@ export default async function (datos, plan) {
   const mPared = new THREE.MeshStandardMaterial({map: travertino, roughness: .82});
   malla(new THREE.PlaneGeometry(18, 10), mPared, 0, 5, 0);
   malla(new THREE.BoxGeometry(18, .14, .05), new THREE.MeshStandardMaterial({color: 0x3b3029, roughness: .45}), 0, .07, .025);
-  const mPiso = new THREE.MeshStandardMaterial({map: terrazo, roughness: .3});
+  const mPiso = new THREE.MeshStandardMaterial({map: terrazo, roughness: .3, color: 0xE8DCCD});
   const piso = malla(new THREE.PlaneGeometry(40, 40), mPiso, 0, 0, 10); piso.rotation.x = -Math.PI / 2;
   const reflejo = new Reflector(new THREE.PlaneGeometry(40, 40), {textureWidth: 384, textureHeight: 683, clipBias: .003, multisample: 0, color: 0xfff4e6, shader: {
-    name: 'GranitoPulido', uniforms: {color: {value: null}, tDiffuse: {value: null}, textureMatrix: {value: null}, fuerza: {value: .5}},
+    name: 'GranitoPulido', uniforms: {color: {value: null}, tDiffuse: {value: null}, textureMatrix: {value: null}, fuerza: {value: .62}},
     vertexShader: `uniform mat4 textureMatrix;varying vec4 vUv;varying vec3 vW;void main(){vUv=textureMatrix*vec4(position,1.);vec4 w=modelMatrix*vec4(position,1.);vW=w.xyz;gl_Position=projectionMatrix*viewMatrix*w;}`,
     fragmentShader: `uniform vec3 color;uniform sampler2D tDiffuse;uniform float fuerza;varying vec4 vUv;varying vec3 vW;
       void main(){vec2 uv=vUv.xy/vUv.w;vec3 c=vec3(0.);float s=0.;for(int i=-3;i<=3;i++){float w=1.-abs(float(i))/4.;c+=texture2D(tDiffuse,uv+vec2(0.,float(i)*.004)).rgb*w;s+=w;}
@@ -151,21 +151,23 @@ export default async function (datos, plan) {
   { const s = malla(new THREE.PlaneGeometry(18, .9), plano(degradeV, .18, 0x2a1a0c, false), 0, .003, .45); s.rotation.x = -Math.PI / 2; }
 
   // ── luz: sol de ventanal, relleno, cenital sobre el pedestal, entorno ─────
-  const hemi = new THREE.HemisphereLight(0xFFEBD6, 0xC9AC93, .85); scene.add(hemi);
-  const sol = new THREE.DirectionalLight(0xFFD3A2, 2.3); sol.position.set(lado * 7, 9, 6.5); scene.add(sol);
-  const relleno = new THREE.DirectionalLight(0xFFF2E6, .5); relleno.position.set(-lado * 5, 3, 9); scene.add(relleno);
-  const cenital = new THREE.SpotLight(0xFFE2C0, 26, 13, .4, .75, 1.3); cenital.position.set(xP - .25 * lado, 6.4, zP + 1.4); cenital.target.position.set(xP, hTop + .4, zP); scene.add(cenital, cenital.target);
+  const hemi = new THREE.HemisphereLight(0xFFE3C4, 0xB89574, .55); scene.add(hemi);
+  const sol = new THREE.DirectionalLight(0xFFC98E, 1.9); sol.position.set(lado * 7, 9, 6.5); scene.add(sol);
+  const relleno = new THREE.DirectionalLight(0xFFEEDD, .35); relleno.position.set(-lado * 5, 3, 9); scene.add(relleno);
+  const cenital = new THREE.SpotLight(0xFFE2C0, 13, 13, .42, .8, 1.3); cenital.position.set(xP - .25 * lado, 6.4, zP + 1.4); cenital.target.position.set(xP, hTop + .4, zP); scene.add(cenital, cenital.target);
   const luzFlash = new THREE.PointLight(0xFFFFFF, 0, 9, 1.4); luzFlash.position.set(xP - .6, hTop + 1.4, zP + 2.2); scene.add(luzFlash);
   // manchas de ventanal en la pared y el piso, haces de luz y polvo
   const manchas = [];
-  { const g = new THREE.PlaneGeometry(2.6, 1.9); g.applyMatrix4(new THREE.Matrix4().makeShear(0, 0, -lado * .55, 0, 0, 0));
-    const m = malla(g, plano(ventanaTx, .32, 0xFFC98E), -lado * 1.7, 5.7, .012); manchas.push([m, .32]);
-    const g2 = new THREE.PlaneGeometry(2.4, 3.2); g2.applyMatrix4(new THREE.Matrix4().makeShear(0, 0, -lado * .6, 0, 0, 0));
-    const m2 = malla(g2, plano(ventanaTx, .26, 0xFFC48A), lado * 1.25, .004, 5.1); m2.rotation.x = -Math.PI / 2; manchas.push([m2, .26]); }
+  { const g = new THREE.PlaneGeometry(3.6, 2.4); g.applyMatrix4(new THREE.Matrix4().makeShear(0, 0, -lado * .55, 0, 0, 0));
+    manchas.push([malla(g, plano(ventanaTx, .55, 0xFFB872), -lado * 1.5, 5.75, .012), .55]);
+    const g3 = new THREE.PlaneGeometry(1.6, 3.4); g3.applyMatrix4(new THREE.Matrix4().makeShear(0, 0, -lado * .5, 0, 0, 0));
+    manchas.push([malla(g3, plano(ventanaTx, .4, 0xFFB872), lado * 2.9, 3.4, .1), .4]);
+    const g2 = new THREE.PlaneGeometry(3.2, 4.2); g2.applyMatrix4(new THREE.Matrix4().makeShear(0, 0, -lado * .6, 0, 0, 0));
+    const m2 = malla(g2, plano(ventanaTx, .5, 0xFFBE80), lado * .9, .004, 7.6); m2.rotation.x = -Math.PI / 2; manchas.push([m2, .5]); }
   const camW = new THREE.Vector3(Math.sin(yaw0) * 12.8, 2, Math.cos(yaw0) * 12.8);
   const haces = [];
-  [[0, 1.0, .11], [.55, .7, .08], [-.5, .55, .07]].forEach(([d, ancho, op]) => {
-    const A = new THREE.Vector3(lado * 6.2, 8.2, 7.2 + d), B = new THREE.Vector3(lado * 1.3 + d * .6, 0, 5.0 + d * .5);
+  [[0, 1.2, .16], [.6, .8, .12], [-.55, .6, .1]].forEach(([d, ancho, op]) => {
+    const A = new THREE.Vector3(lado * 6.5, 8.6, 9.6 + d), B = new THREE.Vector3(lado * .9 + d * .6, 0, 7.4 + d * .5);
     const dir = B.clone().sub(A), L = dir.length(); dir.normalize(); const mid = A.clone().add(B).multiplyScalar(.5);
     const c = camW.clone().sub(mid).normalize(); const n = c.clone().sub(dir.clone().multiplyScalar(c.dot(dir))).normalize(); const r = new THREE.Vector3().crossVectors(dir, n);
     const m = malla(new THREE.PlaneGeometry(ancho, L), plano(hazTx, op, 0xFFD7A6), 0, 0, 0); m.matrixAutoUpdate = false; m.matrix.makeBasis(r, dir.clone().negate(), n).setPosition(mid); m.renderOrder = 5; haces.push([m, op]); });
@@ -174,7 +176,7 @@ export default async function (datos, plan) {
     const p = new THREE.Points(g, new THREE.PointsMaterial({size: .028, map: puntoTx, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: .75, color: 0xFFE2BC})); p.frustumCulled = false; scene.add(p); return {p, pos, sem}; })();
   // globos opalinos colgantes (cálidos)
   const globos = [];
-  [[.55, 4.62, 4.9, .2], [1.5, 5.05, 3.3, .24], [-.45 + rnd(11) * .3, 5.4, 1.6, .22]].forEach(([x, y, z, r], i) => {
+  [[.62, 4.2, 5.2, .19], [1.55, 4.75, 3.4, .23], [-.5 + rnd(11) * .3, 5.25, 1.7, .21]].forEach(([x, y, z, r], i) => {
     const m = new THREE.MeshStandardMaterial({color: 0xFFF1DE, emissive: 0xFFD9A8, emissiveIntensity: 1.6, roughness: .4}); const g = malla(new THREE.SphereGeometry(r, 32, 20), m, x, y, z);
     malla(new THREE.CylinderGeometry(.005, .005, 4, 6), new THREE.MeshBasicMaterial({color: 0x2a2420}), x, y + r + 2, z); malla(new THREE.CylinderGeometry(.045, .06, .07, 20), mk.laton(), x, y + r + .02, z); globos.push(m); });
 
@@ -272,7 +274,7 @@ export default async function (datos, plan) {
         if(vKind<.5)g=vG.y;else if(vKind<1.5)g=vG.x;else if(dorso){g=vG.y;v=1.-v;}else g=vG.x;
         float hg=abs(v-.5);if(hg<.012)discard;
         vec2 d=abs(vec2(u,v)-.5)*vec2(vAsp,1.);float r=.05;if(length(max(d-(vec2(.5*vAsp,.5)-r),0.))>r)discard;
-        float nar=step(99.5,g);float gi=g-100.*nar;vec2 cel=vec2(mod(gi,uGrid.x),floor(gi/uGrid.x));
+        float nar=step(99.5,g);float gi=g-100.*nar;float fy=floor((gi+.5)/uGrid.x);vec2 cel=vec2(gi-fy*uGrid.x,fy);
         vec2 auv=vec2((cel.x+.03+u*.94)/uGrid.x,(uGrid.y-cel.y-1.+.02+v*.96)/uGrid.y);float m=texture2D(tA,auv).r;
         vec3 base=mix(mix(uFlap,uFlapN,nar),mix(uInk,uInkN,nar),m)*(.86+.18*v);
         vec3 N=normalize(dorso?-vN:vN);vec3 V=normalize(cameraPosition-vW);vec3 L=normalize(uL);
@@ -475,8 +477,8 @@ export default async function (datos, plan) {
     x.lineWidth = 20; x.lineCap = 'round'; x.lineJoin = 'round'; x.beginPath(); x.moveTo(82, 132); x.lineTo(114, 164); x.lineTo(176, 96); x.stroke(); });
   beats.forEach((b, i) => {
     if (b.efecto === 'tachar') { const m = malla(new THREE.BoxGeometry(1, .034, .014), new THREE.MeshStandardMaterial({color: NARANJA, emissive: NARANJA, emissiveIntensity: 1.4}), 0, 0, zB + .2); m.visible = false; marcas.push({i, tipo: 'tachar', m, t0: b.t + .75}); sfx(b.t + .75, 'rasgu', .9); }
-    if (b.efecto === 'sello') { const m = malla(new THREE.CylinderGeometry(.16, .16, .03, 48), [new THREE.MeshStandardMaterial({color: 0xc4521a, roughness: .5}), new THREE.MeshStandardMaterial({map: selloTx, roughness: .5}), new THREE.MeshStandardMaterial({color: 0xc4521a})], 0, 0, zB + .22);
-      m.rotation.x = Math.PI / 2; m.visible = false; marcas.push({i, tipo: 'sello', m, t0: b.t + .82, rz: (rnd(60 + i) - .5) * .5}); sfx(b.t + .82, 'sello', 1); golpes.push([b.t + .82, .8]); }
+    if (b.efecto === 'sello') { const m = new THREE.Group(); scene.add(m); const cs = malla(new THREE.CylinderGeometry(.16, .16, .03, 48), new THREE.MeshStandardMaterial({color: 0xc4521a, roughness: .5}), 0, 0, -.016, m); cs.rotation.x = Math.PI / 2;
+      malla(new THREE.CircleGeometry(.16, 48), new THREE.MeshStandardMaterial({map: selloTx, roughness: .45, emissive: 0xffffff, emissiveMap: selloTx, emissiveIntensity: .15}), 0, 0, .0, m); m.visible = false; marcas.push({i, tipo: 'sello', m, t0: b.t + .82, rz: (rnd(60 + i) - .5) * .5}); sfx(b.t + .82, 'sello', 1); golpes.push([b.t + .82, .8]); }
     if (b.efecto === 'cuenta') { const n = Math.min(10, b.num + 1 || 6); for (let q = 0; q < n; q++) sfx(b.t - .1 + q * .1, 'tick', .45); }
     if (b.efecto === 'barrido') { sfx(b.t + .6, 'whoosh_largo', .5); sfx(b.t + 1.05, 'ding', .35); }
     if (b.efecto === 'lupa') { sfx(b.t + .4, 'whoosh', .45); sfx(b.t + 1.0, 'chime', .3); }
@@ -510,11 +512,11 @@ export default async function (datos, plan) {
     }
     return mejor;
   }
-  const objC = [xP, hTop + .5, zP];
+  const objC = [xP, hTop + .5 * OS, zP];
   const ANCHO = encuadre({dist: 12.8, xc: 0, yaw: yaw0, pA: [0, yTop + .16, zB], yA: 336 + alto0 * 30, pB: objC, yB: 1005, hmin: 1.2, hmax: 3.4});
   const txc = b => x0 + LP * (2 + Math.min(LT, b.len) / 2);
   const tomaFila = (b, i, sg) => encuadre({dist: 10.2 + (rnd(20 + i) - .5) * .9, xc: clamp(lerp(txc(b), xP, .5), -.45, .55), yaw: sg * (.08 + rnd(30 + i) * .1), pA: [txc(b), filaY(b.fila + (b.nl - 1) / 2), zB], yA: 590, pB: objC, yB: 965});
-  const tomaObjeto = (b, i, sg) => encuadre({dist: 3.5, xc: xP - sg * .1, zc: zP, yaw: sg * (.28 + rnd(50 + i) * .14), pA: objC, yA: 900, hmin: hTop + .55, hmax: hTop + .55});
+  const tomaObjeto = (b, i, sg) => encuadre({dist: 4.2, xc: xP - sg * .1, zc: zP, yaw: sg * (.28 + rnd(50 + i) * .14), pA: objC, yA: 900, hmin: hTop + .7, hmax: hTop + .7});
   const tomaDetalle = (b) => encuadre({dist: 5.6, xc: txc(b) + .2, yaw: 0, pA: [txc(b), filaY(b.fila), zB], yA: 760, hmin: filaY(b.fila) - .2, hmax: filaY(b.fila) - .2});
   const tomaCierre = encuadre({dist: 11.4, xc: .1, yaw: -lado * .07, pA: [0, yF0 - FH * RF / 2, zB], yA: 600, pB: objC, yB: 1000});
   const tomas = [{t: -20, dur: .01, ease: E.io3, der: 0, ...ANCHO}];
@@ -573,31 +575,31 @@ export default async function (datos, plan) {
       let o = null, w = null; for (const v of it.ventanas) { if (t >= v.a && t <= v.b + .3) { w = v; break; } }
       if (w) { o = {dx: 0, dy: 0, dz: 0, s: 1, sy: 1, sxz: 1, rx: 0, ry: 0, rz: 0, pres: 1, desp: -1}; entrada(w.ent, t - w.a, o); if (t > w.b) salida(w.sal, t - w.b, o); }
       it.g.visible = it.sm.visible = !!o; if (!o) continue;
-      const g = it.g, s = Math.max(.001, o.s); g.position.set(xP + o.dx, hTop + o.dy, zP + o.dz); g.scale.set(s * o.sxz, Math.max(.001, s * o.sy), s * o.sxz);
+      const g = it.g, s = Math.max(.001, o.s) * OS; g.position.set(xP + o.dx, hTop + o.dy, zP + o.dz); g.scale.set(s * o.sxz, Math.max(.001, s * o.sy), s * o.sxz);
       g.rotation.set(o.rx, it.yaw + o.ry + .05 * Math.sin(fase(t) + it.k), o.rz);
       const ud = g.userData; if (ud.anim) ud.anim(t, t - w.a, !!w.heroe);
       ud.piezas.forEach((p, q) => { const b = p.userData.b; if (o.desp < 0) { p.position.copy(b.p); p.rotation.copy(b.r); return; }
         const k = E.out3(seg(o.desp, .07 * q, .07 * q + .55)); p.position.copy(b.p).addScaledVector(b.d, 1 - k); p.rotation.set(b.r.x + b.w.x * (1 - k), b.r.y + b.w.y * (1 - k), b.r.z + b.w.z * (1 - k)); });
       const br = w.ef === 'barrido' ? Math.exp(-Math.pow((t - (w.a + PRE[w.ent] + .95)) / .16, 2)) : 0;
       ud.brillan.forEach(m => { if (br > .01) { m.emissive.copy(cBr); m.emissiveIntensity = m.userData.i0 + br * .7; } else { m.emissive.copy(m.userData.e0); m.emissiveIntensity = m.userData.i0; } });
-      const alt = Math.min(1, o.dy / 1.6); it.sm.scale.setScalar(ud.ancho * 1.35 * s * (1 - .4 * alt)); it.sm.material.opacity = .5 * o.pres * (1 - .7 * alt) * Math.min(1, s);
+      const alt = Math.min(1, o.dy / 1.6); it.sm.scale.setScalar(ud.ancho * 1.35 * s * (1 - .4 * alt)); it.sm.material.opacity = .5 * o.pres * (1 - .7 * alt) * Math.min(1, s / OS);
     }
     // marcas sobre la fila (tachado, sello)
     for (const mc of marcas) { const b = beats[mc.i], r = b.l0 - ws, vis = t >= mc.t0 && t < tR + .08 && r >= 0 && r < NV; mc.m.visible = vis; if (!vis) continue;
       const y = filaY(r + (b.nl - 1) / 2);
       if (mc.tipo === 'tachar') { const L = LP * Math.min(LT, b.len) + .08, k = E.out3(seg(t, mc.t0, mc.t0 + .28)); mc.m.scale.x = Math.max(.001, L * k); mc.m.position.set(x0 + LP * 2 - .04 + L * k / 2, y, zB + .2); }
-      else { const k = seg(t, mc.t0, mc.t0 + .18), x = Math.min(x0 + LP * (2 + Math.min(LT, b.len)) + .24, IW / 2 - .2); mc.m.position.set(x, y, zB + .22); mc.m.scale.setScalar(Math.max(.001, lerp(2.6, 1, E.outExpo(k)))); mc.m.rotation.set(Math.PI / 2, mc.rz * (1 - k) * 2 + mc.rz, 0, 'XZY'); } }
+      else { const k = seg(t, mc.t0, mc.t0 + .18), x = Math.min(x0 + LP * (2 + Math.min(LT, b.len)) + .24, IW / 2 - .2); mc.m.position.set(x, y, zB + .22); mc.m.scale.setScalar(Math.max(.001, lerp(2.6, 1, E.outExpo(k)))); mc.m.rotation.set(0, 0, mc.rz * (1 - k) * 2 + mc.rz); } }
     // barrido y lupa
     let bv = false; for (const b of beats) { if (b.efecto !== 'barrido') continue; const k = seg(t, b.t + .6, b.t + 1.15); if (k > 0 && k < 1) { const r = b.l0 - ws; bv = true; banda.position.set(x0 - .3 + (IW + .6) * E.io2(k), filaY(r + (b.nl - 1) / 2), zB + .25); banda.material.opacity = .55 * Math.sin(k * Math.PI); } } banda.visible = bv;
     let lv = false; for (const b of beats) { if (b.efecto !== 'lupa') continue; const k = seg(t, b.t + .35, b.t + 1.7); if (k > 0 && k < 1) { const r = b.l0 - ws; lv = true; const xa = x0 + LP * (2 + Math.min(LT, b.len)) + .3, xb = x0 + LP * 2 + .2;
       lupa.position.set(lerp(xa, xb, E.io2(k)), filaY(r) + .02 * Math.sin(k * 9), zB + .45 + .25 * Math.sin(k * Math.PI)); lupa.rotation.z = -.15 + .1 * Math.sin(k * 6); lupa.scale.setScalar(E.outBack(seg(k, 0, .15)) * (1 - E.in3(seg(k, .85, 1))) + .001); } } lupa.visible = lv;
     // luces del hall (apagón, flash) y atmósfera
-    hemi.intensity = .85 * lerp(.1, 1, apg); sol.intensity = 2.3 * lerp(.04, 1, apg); relleno.intensity = .5 * lerp(.08, 1, apg); scene.environmentIntensity = .42 * lerp(.12, 1, apg);
-    cenital.intensity = 26 * (1 + 2.2 * (1 - apg)); conoA.material.uniforms.op.value = .5 * (1 - apg);
+    hemi.intensity = .55 * lerp(.12, 1, apg); sol.intensity = 1.9 * lerp(.04, 1, apg); relleno.intensity = .35 * lerp(.08, 1, apg); scene.environmentIntensity = .42 * lerp(.12, 1, apg);
+    cenital.intensity = 13 * (1 + 3.5 * (1 - apg)); conoA.material.uniforms.op.value = .5 * (1 - apg);
     manchas.forEach(([m, op]) => m.material.opacity = op * apg); haces.forEach(([m, op]) => m.material.opacity = op * apg * (.85 + .15 * Math.sin(fase(t) * .5))); globos.forEach(m => m.emissiveIntensity = 1.6 * lerp(.35, 1, apg));
     let fl = 0; for (const b of flashes) if (t >= b.t + .02) fl += Math.exp(-(t - b.t - .02) / .09); for (const b of golpesF) if (t >= b.t) fl += .25 * Math.exp(-(t - b.t) / .07);
     luzFlash.intensity = 90 * fl; M.cine.uniforms.flash.value = Math.min(.6, fl * .5); M.cine.uniforms.vineta.value = .24 + .3 * (1 - apg);
-    const fp = fase(t); for (let i = 0; i < polvo.sem.length; i++) { const [a, b, c, d] = polvo.sem[i]; const u = a, A = [lado * 6.2, 8.2, 7.2], Bp = [lado * 1.3, 0, 5.0];
+    const fp = fase(t); for (let i = 0; i < polvo.sem.length; i++) { const [a, b, c, d] = polvo.sem[i]; const u = a, A = [lado * 6.5, 8.6, 9.6], Bp = [lado * .9, 0, 7.4];
       polvo.pos[i * 3] = lerp(A[0], Bp[0], u) + (b - .5) * 1.6 + Math.sin(fp + d * 6.28) * .08; polvo.pos[i * 3 + 1] = lerp(A[1], Bp[1], u) + Math.sin(fp * .5 + c * 6.28) * .1; polvo.pos[i * 3 + 2] = lerp(A[2], Bp[2], u) + (c - .5) * 1.4 + Math.cos(fp + b * 6.28) * .08; }
     polvo.p.geometry.attributes.position.needsUpdate = true; polvo.p.material.opacity = .75 * apg;
     kar(t); subrayado(t);
