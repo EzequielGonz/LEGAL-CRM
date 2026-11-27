@@ -254,10 +254,13 @@ def servidor():
     try: s.connect(('127.0.0.1', PUERTO)); s.close(); return
     except OSError: pass
     subprocess.Popen(['python3', '-m', 'http.server', str(PUERTO), '--bind', '127.0.0.1'], cwd=PROTO, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True); time.sleep(1.2)
-def nodo(script, *a, **k): return subprocess.run(['node', f'{AQUI}/{script}', *map(str, a)], env=dict(os.environ, PUERTO=str(PUERTO), NODE_PATH=subprocess.run(['npm', 'root', '-g'], capture_output=True, text=True).stdout.strip()), **k)
+def pagina(id_):
+    try: return 'serie3d' if json.load(open(f'{TRAB}/{id_}/plan.json'))['receta'].get('motor') == '3d' else 'serie'
+    except Exception: return 'serie'
+def nodo(script, *a, **k): return subprocess.run(['node', f'{AQUI}/{script}', *map(str, a)], env=dict(os.environ, PUERTO=str(PUERTO), PAGINA=pagina(a[0]), NODE_PATH=subprocess.run(['npm', 'root', '-g'], capture_output=True, text=True).stdout.strip()), **k)
 def render(args):
     servidor(); d = f'{TRAB}/{args.id}'; fr = f'{d}/fr'; shutil.rmtree(fr, ignore_errors=True); os.makedirs(fr); t0 = time.time(); W = args.workers
-    ps = [subprocess.Popen(['node', f'{AQUI}/render_t.js', args.id, fr, str(args.fps), str(W), str(k)], env=dict(os.environ, PUERTO=str(PUERTO), NODE_PATH=subprocess.run(['npm', 'root', '-g'], capture_output=True, text=True).stdout.strip())) for k in range(W)]
+    ps = [subprocess.Popen(['node', f'{AQUI}/render_t.js', args.id, fr, str(args.fps), str(W), str(k)], env=dict(os.environ, PUERTO=str(PUERTO), PAGINA=pagina(args.id), NODE_PATH=subprocess.run(['npm', 'root', '-g'], capture_output=True, text=True).stdout.strip())) for k in range(W)]
     [p.wait() for p in ps]; n = len(os.listdir(fr)); s = time.time() - t0
     json.dump(dict(cuadros=n, segundos=round(s, 1)), open(f'{d}/tiempo_render.json', 'w')); print(f'{args.id}: {n} cuadros en {s:.0f} s ({s / max(1, n) * 1000:.0f} ms/cuadro con {W} sesiones)')
 

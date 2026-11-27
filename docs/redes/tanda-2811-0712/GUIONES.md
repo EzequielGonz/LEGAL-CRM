@@ -22,17 +22,17 @@ VITA en Instagram sube de a poco: 2 reels por día el 27 y 28/11, 3 el 29 y 30/1
 | Marca | Reels ElevenLabs | Caracteres | Promedio | Reels voz gratis |
 |---|---|---|---|---|
 | VITA | 44 | 10.236 | 232 | 20 |
-| Compara Tu Obra Social | 44 | 9.714 | 220 | 0 |
+| Compara Tu Obra Social | 44 | 9.714 | 220 | 20 |
 | Automotores Kocos | 44 | 8.709 | 197 | 0 |
 | Kocos Marketing | 44 | 8.649 | 196 | 0 |
-| **Total** | **176** | **37.308** | 211 | 20 |
+| **Total** | **176** | **37.308** | 211 | 40 |
 
 Tope pedido: 38.000 caracteres (presupuesto ElevenLabs 40.000). Dentro del tope. Las voces gratis no gastan ElevenLabs.
 
 ## Reparto de fórmulas por marca (todos los reels)
 
 - **VITA:** tres cartas cerradas 8 · segunda persona «vos» 8 · escena con hora o número 7 · contador que avanza 7 · mito roto 7 · advertencia 6 · ¿cuál sos? (identidad) 6 · pregunta con respuesta numérica 5 · loop 5 · serie (parte 1) 2 · serie (parte 2) 2 · advertencia + escena con hora + contador + loop 1
-- **Compara Tu Obra Social:** mito roto 5 · segunda persona «vos» 5 · tres cartas cerradas 5 · advertencia 5 · pregunta con respuesta numérica 4 · escena con hora o número 4 · ¿cuál sos? (identidad) 4 · contador que avanza 4 · loop 4 · serie (parte 1) 2 · serie (parte 2) 2
+- **Compara Tu Obra Social:** mito roto 8 · segunda persona «vos» 8 · escena con hora o número 7 · pregunta con respuesta numérica 7 · advertencia 7 · contador que avanza 6 · tres cartas cerradas 6 · ¿cuál sos? (identidad) 6 · loop 5 · serie (parte 1) 2 · serie (parte 2) 2
 - **Automotores Kocos:** escena con hora o número 5 · tres cartas cerradas 5 · advertencia 5 · segunda persona «vos» 5 · pregunta con respuesta numérica 4 · ¿cuál sos? (identidad) 4 · contador que avanza 4 · mito roto 4 · loop 4 · serie (parte 1) 2 · serie (parte 2) 2
 - **Kocos Marketing:** segunda persona «vos» 5 · tres cartas cerradas 5 · pregunta con respuesta numérica 5 · advertencia 5 · escena con hora o número 4 · mito roto 4 · contador que avanza 4 · ¿cuál sos? (identidad) 4 · loop 4 · serie (parte 1) 2 · serie (parte 2) 2
 
@@ -110,43 +110,63 @@ Tope pedido: 38.000 caracteres (presupuesto ElevenLabs 40.000). Dentro del tope.
 | Día | Hora | Voz | Fórmula | Gancho | Palabra | Redes | Caracteres |
 |---|---|---|---|---|---|---|---|
 | 27/11 | 12:40 | ElevenLabs | mito roto | «Con una enfermedad previa no me aceptan.» | PLAN | IG + FB | 246 |
+| 27/11 | 15:10 | gratis (de coberturas-2711-1) | escena con hora o número | Jueves 15:10: «con esa enfermedad, no». | PLAN | IG + FB | 207 |
 | 27/11 | 18:10 | ElevenLabs | segunda persona «vos» | Mirá tu recibo: hay un 3 % que es tuyo. | APORTES | IG + FB | 246 |
+| 27/11 | 20:10 | gratis (de coberturas-2711-2) | contador que avanza | Mes 1, mes 6, mes 12: tu 3 %. | APORTES | IG + FB | 179 |
 | 27/11 | 21:40 | ElevenLabs | pregunta con respuesta numérica | Sumás a tu mamá: ¿cuánto más aportás? | FAMILIA | IG + FB | 266 |
 | 27/11 | 22:40 | ElevenLabs | tres cartas cerradas | Antes de cambiarte de prepaga: tres cartas. | CAMBIO | IG + FB | 253 |
 | 28/11 | 12:40 | ElevenLabs | escena con hora o número | Lunes 9:00: te despiden. ¿Y la obra social? | TRABAJO | IG + FB | 252 |
+| 28/11 | 15:10 | gratis (de coberturas-2711-3) | segunda persona «vos» | Vos cuidás a tu mamá. ¿Y su cobertura? | FAMILIA | IG + FB | 200 |
 | 28/11 | 18:10 | ElevenLabs | ¿cuál sos? (identidad) | Te llega el aumento de la prepaga. ¿Cuál sos? | COMPARAR | IG + FB | 243 |
+| 28/11 | 20:10 | gratis (de coberturas-2711-4) | pregunta con respuesta numérica | Carencias para el PMO: ¿cuántos meses? | CAMBIO | IG + FB | 196 |
 | 28/11 | 21:40 | ElevenLabs | advertencia | Declaración jurada: no la llenes apurado. | DECLARACION | IG + FB | 251 |
 | 28/11 | 22:40 | ElevenLabs | contador que avanza | Diez años en la misma prepaga: contá conmigo. | 65 | IG + FB | 240 |
 | 29/11 | 12:40 | ElevenLabs | serie (parte 1) | Parte 1: Lucía paga y no sabe qué. | MONO | IG + FB | 201 |
+| 29/11 | 15:10 | gratis (de coberturas-2811-1) | mito roto | «Me echaron, ya no tengo obra social.» | TRABAJO | IG + FB | 180 |
 | 29/11 | 18:10 | ElevenLabs | loop | 2 de la mañana: ¿tu guardia te atiende? | CARTILLA | IG + FB | 209 |
+| 29/11 | 20:10 | gratis (de coberturas-2811-2) | advertencia | Aumento: no te des de baja enojado. | COMPARAR | IG + FB | 184 |
 | 29/11 | 21:40 | ElevenLabs | mito roto | «Si me cambio, espero un año para todo.» | CARENCIAS | IG + FB | 218 |
 | 29/11 | 22:40 | ElevenLabs | segunda persona «vos» | Te vas a la costa. ¿Tu cobertura también? | VIAJE | IG + FB | 204 |
 | 30/11 | 12:40 | ElevenLabs | pregunta con respuesta numérica | ¿Qué parte del sueldo va a tu obra social? | TRES | IG + FB | 206 |
+| 30/11 | 15:10 | gratis (de coberturas-2811-3) | ¿cuál sos? (identidad) | Declaración jurada: ¿cuál sos? | DECLARACION | IG + FB | 201 |
 | 30/11 | 18:10 | ElevenLabs | tres cartas cerradas | Te mudás de barrio: tres cartas. | MUDANZA | IG + FB | 221 |
+| 30/11 | 20:10 | gratis (de coberturas-2811-4) | segunda persona «vos» | Vos cumplís 65 el mes que viene. | 65 | IG + FB | 172 |
 | 30/11 | 21:40 | ElevenLabs | escena con hora o número | Martes 11:20: pagaste la consulta vos. | REINTEGRO | IG + FB | 241 |
 | 30/11 | 22:40 | ElevenLabs | ¿cuál sos? (identidad) | Elegís prepaga: ¿cuál de los tres sos? | ELEGIR | IG + FB | 234 |
 | 01/12 | 12:40 | ElevenLabs | advertencia | Tu plan se da de baja: no esperes. | BAJA | IG + FB | 212 |
+| 01/12 | 15:10 | gratis (de coberturas-2911-2) | tres cartas cerradas | Tu cartilla: tres cartas para esta noche. | CARTILLA | IG + FB | 176 |
 | 01/12 | 18:10 | ElevenLabs | contador que avanza | Primer día de trabajo: ¿qué obra social? | NUEVO | IG + FB | 223 |
+| 01/12 | 20:10 | gratis (de coberturas-2911-4) | escena con hora o número | Sábado 8:00: la valija ya está en el auto. | VIAJE | IG + FB | 204 |
 | 01/12 | 21:40 | ElevenLabs | serie (parte 2) | Parte 2: esa línea es tu obra social. | MONO | IG + FB | 226 |
 | 01/12 | 22:40 | ElevenLabs | loop | Estás en tratamiento y te querés cambiar. | TRATAMIENTO | IG + FB | 214 |
 | 02/12 | 12:40 | ElevenLabs | mito roto | «La obra social del trabajo no se cambia.» | ELEGIR | IG + FB | 217 |
+| 02/12 | 15:10 | gratis (de coberturas-3011-2) | loop | Nueva dirección. ¿Misma cartilla? | MUDANZA | IG + FB | 168 |
 | 02/12 | 18:10 | ElevenLabs | segunda persona «vos» | ¿Encontrás tu cartilla en un minuto? | URGENCIA | IG + FB | 180 |
+| 02/12 | 20:10 | gratis (de coberturas-3011-3) | mito roto | «Si no está en cartilla, perdí la plata.» | REINTEGRO | IG + FB | 180 |
 | 02/12 | 21:40 | ElevenLabs | pregunta con respuesta numérica | Suspendido sin goce: ¿cuántos meses cubierto? | SUSPENSION | IG + FB | 198 |
 | 02/12 | 22:40 | ElevenLabs | tres cartas cerradas | Derivar aportes: tres cartas antes. | DERIVAR | IG + FB | 231 |
 | 03/12 | 12:40 | ElevenLabs | escena con hora o número | 18/12: cobrás el aguinaldo y ves esto. | SAC | IG + FB | 241 |
+| 03/12 | 15:10 | gratis (de coberturas-3011-4) | pregunta con respuesta numérica | Elegís plan: ¿cuántas cosas mirás? | ELEGIR | IG + FB | 169 |
 | 03/12 | 18:10 | ElevenLabs | ¿cuál sos? (identidad) | Tu familia y la cobertura: ¿cuál sos? | FAMILIA | IG + FB | 207 |
+| 03/12 | 20:10 | gratis (de coberturas-0112-1) | contador que avanza | Llegó el aviso de baja: paso 1, 2, 3. | BAJA | IG + FB | 186 |
 | 03/12 | 21:40 | ElevenLabs | advertencia | No tires la factura de esa consulta. | FACTURA | IG + FB | 194 |
 | 03/12 | 22:40 | ElevenLabs | contador que avanza | Cambiarte de obra social, paso a paso. | TRAMITE | IG + FB | 216 |
 | 04/12 | 12:40 | ElevenLabs | serie (parte 1) | Parte 1: Vero pide licencia sin sueldo. | SINGOCE | IG + FB | 208 |
+| 04/12 | 15:10 | gratis (de coberturas-0112-2) | segunda persona «vos» | Vos arrancás un trabajo el lunes. | NUEVO | IG + FB | 177 |
 | 04/12 | 18:10 | ElevenLabs | loop | Este mes usaste la prepaga: ¿cuántas veces? | USO | IG + FB | 222 |
+| 04/12 | 20:10 | gratis (de coberturas-0112-4) | advertencia | En pleno tratamiento: no te cambies sin esto. | TRATAMIENTO | IG + FB | 163 |
 | 04/12 | 21:40 | ElevenLabs | mito roto | «A los 65 me suben la cuota sí o sí.» | 65 | IG + FB | 199 |
 | 04/12 | 22:40 | ElevenLabs | segunda persona «vos» | Temporada: ¿y la obra social en invierno? | TEMPORADA | IG + FB | 242 |
 | 05/12 | 12:40 | ElevenLabs | pregunta con respuesta numérica | Sin trabajo: ¿cuánto hay que haber trabajado? | TRABAJO | IG + FB | 196 |
+| 05/12 | 15:10 | gratis (de coberturas-0212-2) | escena con hora o número | Domingo 4:00: buscás la guardia en el celu. | URGENCIA | IG + FB | 181 |
 | 05/12 | 18:10 | ElevenLabs | tres cartas cerradas | Enfermedad previa: tres cartas. | PREVIA | IG + FB | 256 |
+| 05/12 | 20:10 | gratis (de coberturas-0212-3) | ¿cuál sos? (identidad) | Te suspenden sin sueldo: ¿cuál sos? | SUSPENSION | IG + FB | 197 |
 | 05/12 | 21:40 | ElevenLabs | escena con hora o número | Ruta 11, 23:00: fiebre lejos de casa. | COSTA | IG + FB | 211 |
 | 05/12 | 22:40 | ElevenLabs | ¿cuál sos? (identidad) | Cambio en pleno tratamiento: ¿cuál sos? | CURSO | IG + FB | 236 |
 | 06/12 | 12:40 | ElevenLabs | advertencia | Monotributo: no dejes de pagar la cuota. | VENCIMIENTO | IG + FB | 212 |
+| 06/12 | 15:10 | gratis (de coberturas-0212-4) | mito roto | «Derivar aportes es pagar dos veces.» | DERIVAR | IG + FB | 194 |
 | 06/12 | 18:10 | ElevenLabs | contador que avanza | Mudanza: día 1, día 7, día 30. | BARRIO | IG + FB | 179 |
+| 06/12 | 20:10 | gratis (de coberturas-0312-1) | pregunta con respuesta numérica | Aguinaldo: ¿qué parte va a tu obra social? | SAC | IG + FB | 183 |
 | 06/12 | 21:40 | ElevenLabs | serie (parte 2) | Parte 2: Vero puede mantener su obra social. | SINGOCE | IG + FB | 225 |
 | 06/12 | 22:40 | ElevenLabs | loop | Somos cuatro. ¿Cuántas coberturas pagamos? | GRUPO | IG + FB | 176 |
 | reserva |  | ElevenLabs | advertencia | No pagues el aumento sin leer la carta. | AUMENTO | IG + FB | 206 |

@@ -1,0 +1,29 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="../fonts/fuentes.css">
+<script type="importmap">{"imports":{"three":"../node_modules/three/build/three.module.js","three/addons/":"../node_modules/three/examples/jsm/"}}</script>
+<style>
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000;font-family:Inter,Manrope,sans-serif}
+div{box-sizing:border-box}
+#root{position:absolute;inset:0;width:1080px;height:1920px;overflow:hidden}
+#c3{position:absolute;left:0;top:0;width:1080px;height:1920px}
+#txt{position:absolute;inset:0}
+.bt{position:absolute;left:80px;width:860px;opacity:0;display:flex;align-items:center;justify-content:center;transform-origin:50% 40%}
+.bt .t{font-family:Inter,Manrope,sans-serif;font-weight:800;font-size:112px;line-height:1.02;letter-spacing:-.025em;color:#fff;text-align:center;text-wrap:balance;text-shadow:0 4px 0 rgba(20,24,48,.18),0 8px 40px rgba(20,24,48,.55)}
+.bt .t em{font-family:'Playfair Display',serif;font-style:italic;font-weight:700;color:var(--acc);letter-spacing:-.01em;text-shadow:0 6px 36px rgba(20,24,48,.6)}
+#chico{position:absolute;left:80px;width:860px;text-align:center;font-weight:700;font-size:46px;color:#fff;opacity:0;text-shadow:0 3px 24px rgba(20,24,48,.7)}
+#chico em{font-family:'Playfair Display',serif;font-style:italic;color:var(--acc)}
+#subw{position:absolute;left:80px;width:860px;top:1262px;height:200px;display:flex;align-items:flex-start;justify-content:center}
+#sub{text-align:center;font-family:Inter,Manrope,sans-serif;font-weight:800;font-size:72px;line-height:1.08;color:#fff;-webkit-text-stroke:11px rgba(22,18,40,.55);paint-order:stroke fill;max-width:860px;letter-spacing:-.01em}
+#sub .w{display:inline-block;transform-origin:50% 80%;margin:0 .1em}
+#marca{position:absolute;left:0;width:1080px;top:226px;display:flex;align-items:center;justify-content:center;gap:14px;font-weight:700;font-size:34px;color:#fff;text-shadow:0 2px 14px rgba(20,24,48,.7)}
+#marca img{height:68px;filter:drop-shadow(0 2px 10px rgba(0,0,0,.55))}
+#prog{position:absolute;left:150px;width:780px;top:332px;opacity:0}
+#prog .lab{font-weight:800;font-size:40px;color:#fff;text-align:center;margin-bottom:12px;text-shadow:0 2px 16px rgba(20,24,48,.7);letter-spacing:.02em}
+#prog .lab b{color:var(--acc);font-weight:800}
+#prog .bar{display:flex;gap:14px}#prog .seg{flex:1;height:7px;border-radius:4px;background:rgba(255,255,255,.35);overflow:hidden}#prog .seg i{display:block;height:100%;width:0;background:var(--acc)}
+#burbuja{position:absolute;left:0;top:0;opacity:0;font-weight:800;font-size:46px;color:#1b1d26;background:#fff;border-radius:34px;padding:20px 32px 24px;box-shadow:0 14px 40px rgba(20,24,48,.35);white-space:nowrap;transform-origin:50% 100%}
+#burbuja i{position:absolute;bottom:-22px;width:34px;height:34px;background:#fff;clip-path:polygon(0 0,100% 0,25% 100%)}
+#burbuja .tr{position:absolute;left:24px;top:50%;height:9px;margin-top:-2px;background:var(--acc);border-radius:5px;transform-origin:0 50%;width:calc(100% - 48px);transform:scaleX(0)}
+#flash{position:absolute;inset:0;background:#fff;opacity:0;mix-blend-mode:screen}
+</style></head><body><div id="root"><canvas id="c3" width="1080" height="1920"></canvas><div id="txt"></div><div id="flash"></div><div id="prog"></div><div id="subw"><div id="sub"></div></div><div id="marca"></div><div id="chico"></div><div id="burbuja"></div></div>
+<script type="module" src="motor/serie3d.js"></script></body></html>

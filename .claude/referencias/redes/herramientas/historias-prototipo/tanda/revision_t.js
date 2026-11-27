@@ -1,8 +1,8 @@
 // node revision_t.js <id> <dir> → cuadros cada 0,5 s (t_XX.XX.jpg) + rev.json con desbordes y zonas seguras (reel: 220 arriba, 420 abajo, 140 derecha)
 const {chromium} = require('playwright'); const fs = require('fs');
-(async () => { const [id, dir] = process.argv.slice(2); const b = await chromium.launch(); const p = await b.newPage({viewport: {width: 1080, height: 1920}});
+(async () => { const [id, dir] = process.argv.slice(2); const b = await chromium.launch({args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist']}); const p = await b.newPage({viewport: {width: 1080, height: 1920}});
   p.on('pageerror', e => console.log('ERR', e.message));
-  await p.goto(`http://127.0.0.1:${process.env.PUERTO || 8801}/tanda/serie.html?id=${id}`); await p.waitForFunction('window.ready', null, {timeout: 120000});
+  await p.goto(`http://127.0.0.1:${process.env.PUERTO || 8801}/tanda/${process.env.PAGINA || 'serie'}.html?id=${id}`); await p.waitForFunction('window.ready', null, {timeout: 120000});
   const T = await p.evaluate('window.TOTAL'); const problemas = [];
   for (let t = 0; t <= T - .05; t += .5) {
     await p.evaluate(t => window.render(t), t);
