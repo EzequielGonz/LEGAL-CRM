@@ -22,7 +22,7 @@ export async function PuntajeBots({ rubroId }: { rubroId: string }) {
   const radio = 52;
   const vuelta = 2 * Math.PI * radio;
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+    <section className="d-tarjeta d-tarjeta--brillo !block sm:!p-6">
       <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
         <div className="relative mx-auto h-36 w-36 shrink-0 sm:mx-0" aria-hidden="true">
           <svg viewBox="0 0 120 120" className="h-full w-full -rotate-90">
@@ -33,13 +33,13 @@ export async function PuntajeBots({ rubroId }: { rubroId: string }) {
           </svg>
           <div className="absolute inset-0 grid place-items-center text-center">
             <div>
-              <p className="text-3xl font-semibold tabular-nums text-slate-950">{p.puntaje ?? "—"}</p>
+              <p className="cifra-premium text-3xl font-semibold tabular-nums text-slate-950">{p.puntaje ?? "—"}</p>
               <p className="text-xs text-slate-500">de 100</p>
             </div>
           </div>
         </div>
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-medium text-slate-500">Cómo viene el bot</p>
+          <p className="d-kicker">Cómo viene el bot</p>
           <p className="mt-0.5 text-2xl font-semibold text-slate-950">{p.etiqueta}</p>
           <p className="mt-1 text-sm text-slate-600">
             {p.conversaciones} conversaciones · {p.captados} captados. Calculado con resultados reales del perfil.

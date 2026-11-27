@@ -249,7 +249,7 @@ function TarjetaVersion({ v, perfil, nombrePerfil, cubreTodos, bloqueado, hacer 
                     await pedir({ accion: "aplicar_version", perfil: r, version: v.version, confirmado: true });
                     hechos.push(r);
                   } catch (e) {
-                    throw new Error(`${hechos.length ? `Se aplicó en ${hechos.length} perfil(es). ` : ""}En ${r} no se pudo: ${(e as Error).message}`);
+                    throw new Error(`${hechos.length ? `Se aplicó en ${hechos.length === 1 ? "1 perfil" : `${hechos.length} perfiles`}. ` : ""}En ${r} no se pudo: ${(e as Error).message}`);
                   }
                 }
                 return `Listo: los cuatro perfiles usan «${v.nombre}».`;

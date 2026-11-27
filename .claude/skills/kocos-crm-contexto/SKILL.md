@@ -3,6 +3,8 @@ name: kocos-crm-contexto
 description: Contexto obligatorio del CRM multirubro (Jurídico, Coberturas médicas, Autos 0 km y Marketing) - etapas, autorizaciones, estado operativo, entrega por ZIP, migraciones, datos y los cinco estados de evidencia. Leer antes de cualquier cambio, revisión, prueba o informe en este repositorio.
 ---
 
+> **Aviso 20/11/2026:** lo vigente está en `cerebro/` (empezar por `cerebro/README.md`; órdenes en `cerebro/02-ordenes-vigentes.md`). Si este documento dice pausa general, agentes o seguimiento apagados, entrega por ZIP, que Claude no escribe en GitHub, «solo Wasender» o que se lea primero `CONTEXTO_ACTUAL_CRM.md`, eso quedó reemplazado. Única restricción vigente: no pagar sin autorización. Se conserva el texto como historia.
+
 # Contexto del CRM multirubro
 
 Panel único en Next.js 14 (App Router) con base en Supabase (PostgreSQL), publicado en Vercel. Atiende conversaciones de WhatsApp, Instagram y Facebook por la API oficial de Meta, con campañas, agenda, fichas y agentes de IA por perfil. Las reglas de negocio viven en **`.claude/referencias/reglas-comunes.md`** (versión 1.0): leerlas antes de tocar comportamiento; esta skill no las repite.

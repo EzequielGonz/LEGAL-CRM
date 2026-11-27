@@ -63,7 +63,7 @@ export function MetricsPanel({
             <p className="mb-2 font-semibold text-slate-700">Captación</p>
             <Row label="Nuevos" value={m.captacion.nuevo}  href={to("nuevo")} />
             <Row label="En conversación" value={m.captacion.en_conversacion}  href={to("en_conversacion")} />
-            <Row label="En seguimiento" value={m.captacion.en_seguimiento}  href={to("en_seguimiento")} />
+            <Row label="Con seguimiento enviado" value={m.captacion.en_seguimiento}  href={to("en_seguimiento")} />
             <Row label="Captados" value={m.captacion.captado}  href={to("captado")} />
             <Row label="Perdidos" value={m.captacion.perdido}  href={to("perdido")} />
           </div>

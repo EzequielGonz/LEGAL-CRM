@@ -3,6 +3,8 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { areasForProfile } from "@/lib/profiles";
 import type { Area } from "@/lib/supabase/database.types";
 import { requireSession } from "@/lib/acceso/autorizacion";
+import { perfilDeConexion } from "@/lib/definiciones/lineas";
+import { RUBRO_IDS } from "@/lib/rubros";
 
 export const dynamic = "force-dynamic";
 
@@ -24,6 +26,11 @@ export async function POST(request: Request, props: { params: Promise<{ id: stri
   if (!label) return NextResponse.json({ error: "Poné un nombre para la línea." }, { status: 400 });
   if (!/^[A-Z][A-Z0-9_]{2,60}$/.test(key)) {
     return NextResponse.json({ error: "El prefijo de las variables tiene que ser algo como WHATSAPP_CIVIL." }, { status: 400 });
+  }
+  // 22/11: cada rubro separado: la conexión de otro perfil (Penal fuera de Jurídico, por ejemplo) no se asigna acá.
+  const dueno = perfilDeConexion(key);
+  if (dueno && RUBRO_IDS[dueno] !== params.id) {
+    return NextResponse.json({ error: "Esa conexión pertenece a otro perfil: no se puede asignar a este." }, { status: 400 });
   }
   const dailyLimit = body?.daily_limit ? Number(body.daily_limit) : null;
   if (dailyLimit !== null && (!Number.isInteger(dailyLimit) || dailyLimit <= 0)) {

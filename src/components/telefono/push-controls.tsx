@@ -1,5 +1,6 @@
 "use client";
 
+import { perfilDeRuta } from "@/lib/perfil-ruta";
 import { useCallback, useEffect, useState } from "react";
 
 interface Device {
@@ -124,7 +125,7 @@ export function PushControls({ showDevices = false }: { showDevices?: boolean })
       const res = await fetch("/api/push/suscripcion", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ subscription: sub.toJSON(), label: label.trim() || guessLabel() }),
+        body: JSON.stringify({ subscription: sub.toJSON(), label: label.trim() || guessLabel(), perfil: perfilDeRuta(window.location.pathname, new URLSearchParams(window.location.search).get("perfil")) }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error ?? "No se pudo registrar el dispositivo");

@@ -1,0 +1,144 @@
+{
+  "paquete": "amp20261122",
+  "fecha": "2026-11-22",
+  "estadisticas": {
+    "fecha": "2026-11-22",
+    "palabras": 34803,
+    "capitulos": [
+      {
+        "archivo": "00_integracion_y_preservacion.md",
+        "titulo": "Biblioteca complementaria para el cerebro del CRM multirubro",
+        "palabras": 1534
+      },
+      {
+        "archivo": "01_conversacion_y_criterio_general.md",
+        "titulo": "Conversación y criterio compartido",
+        "palabras": 2445
+      },
+      {
+        "archivo": "02_vita_conocimiento_juridico.md",
+        "titulo": "Estudio Jurídico VITA",
+        "palabras": 6446
+      },
+      {
+        "archivo": "03_coberturas_medicas.md",
+        "titulo": "Compara tu Obra Social",
+        "palabras": 4696
+      },
+      {
+        "archivo": "04_automotores_kocos.md",
+        "titulo": "Automotores Kocos",
+        "palabras": 4300
+      },
+      {
+        "archivo": "05_kocos_marketing.md",
+        "titulo": "Kocos Marketing",
+        "palabras": 7278
+      },
+      {
+        "archivo": "06_casos_preguntas_y_derivacion.md",
+        "titulo": "Casos prácticos y respuestas para ampliar criterio",
+        "palabras": 4506
+      },
+      {
+        "archivo": "07_conocimiento_operativo_del_cerebro.md",
+        "titulo": "Conocimiento operativo para el cerebro central",
+        "palabras": 1586
+      },
+      {
+        "archivo": "08_glosario_y_fuentes.md",
+        "titulo": "Glosario y fuentes de consulta",
+        "palabras": 2012
+      }
+    ],
+    "fichas_nuevas": 135,
+    "fichas_por_rubro": {
+      "juridico": 36,
+      "coberturas_medicas": 27,
+      "agencia_0km": 25,
+      "marketing": 47
+    },
+    "fuentes_oficiales": 34,
+    "casos_practicos": 32,
+    "registros_v2_unicos_leidos": 212,
+    "apartados": 218,
+    "conservacion": "Lectura sin modificaciones al CRM; candidatos sin activar."
+  },
+  "archivos": [
+    {
+      "archivo": "Biblioteca_Complementaria_Completa.md",
+      "bytes": 229911,
+      "sha256": "17776c7884f0821afac80836cc510c3c4dd5c19a848c90d6523dabf3d3ceced9"
+    },
+    {
+      "archivo": "LEER_PRIMERO.md",
+      "bytes": 2392,
+      "sha256": "befb76d16babb3531faf661b6180a2e3b4a19ca7b42c042e8ec71a2bed9d8783"
+    },
+    {
+      "archivo": "PROMPT_PARA_CLAUDE.txt",
+      "bytes": 3277,
+      "sha256": "235b9a03d81c0ed92635999a50cf7b361f265d76adf4b5349d15530c917f4d3e"
+    },
+    {
+      "archivo": "capitulos/00_integracion_y_preservacion.md",
+      "bytes": 9703,
+      "sha256": "5930b9957683f97a5cda765c5f82710e1f2fc9d9fae4be37b40e1ba8b1c9d4b3"
+    },
+    {
+      "archivo": "capitulos/01_conversacion_y_criterio_general.md",
+      "bytes": 15916,
+      "sha256": "ff61dbf1a4d17a222e710001a15184dad71637d0a017a68c96c12e71aa1b600c"
+    },
+    {
+      "archivo": "capitulos/02_vita_conocimiento_juridico.md",
+      "bytes": 42128,
+      "sha256": "016a44b50b95af622d37f1248627675f9776f7a6f96f1d09b81c884255028150"
+    },
+    {
+      "archivo": "capitulos/03_coberturas_medicas.md",
+      "bytes": 30753,
+      "sha256": "1cb7a16b0757214b078e8d1d599fcf71d57174b10ec3b2f817fa87714e2a17bd"
+    },
+    {
+      "archivo": "capitulos/04_automotores_kocos.md",
+      "bytes": 28017,
+      "sha256": "38499570c7e223e4349178a74e17a587da8d753c8314eed6d43ae49d7d1dc63b"
+    },
+    {
+      "archivo": "capitulos/05_kocos_marketing.md",
+      "bytes": 48713,
+      "sha256": "1b6517cda8dcd287cd2ed1020e93179e8686a984706cf69c8498781bb22c6231"
+    },
+    {
+      "archivo": "capitulos/06_casos_preguntas_y_derivacion.md",
+      "bytes": 29550,
+      "sha256": "ea6e1ad0464cf00ab38df71c6362ec202a2b6a008d8d20eabf4d7e3bf8a165bb"
+    },
+    {
+      "archivo": "capitulos/07_conocimiento_operativo_del_cerebro.md",
+      "bytes": 10743,
+      "sha256": "861a7a1ffb1cccf5ec91b56426255037b53341b34c2199d1153f6ae154b4710b"
+    },
+    {
+      "archivo": "capitulos/08_glosario_y_fuentes.md",
+      "bytes": 14380,
+      "sha256": "1674667aec4d8ad35e8eab4a9916dd64df61a146a265cb85112fa57fb47aa215"
+    },
+    {
+      "archivo": "fichas_nuevas_propuestas.json",
+      "bytes": 238542,
+      "sha256": "390af686c67251c395fa36f804ba26a6df08995053f6441f0201f33283a1c070"
+    },
+    {
+      "archivo": "fuentes_oficiales.json",
+      "bytes": 7445,
+      "sha256": "d88efdf613c49bb331da144e761e062b4778ca306d3cd6afa6bd021d94c8ce77"
+    },
+    {
+      "archivo": "inventario_actual_v2.json",
+      "bytes": 123872,
+      "sha256": "318e9b0a10babd4b7be65f439cc2404da14c4b9ba2fc10fa3282f3555b70855b"
+    }
+  ]
+}

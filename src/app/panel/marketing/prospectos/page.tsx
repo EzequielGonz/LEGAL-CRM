@@ -4,6 +4,7 @@ import { LEAD_COLUMNS, LeadList, type LeadRow } from "@/components/marketing/lea
 import { AutoOutreachControl } from "@/components/marketing/auto-outreach-control";
 import { AUTO_CAMPAIGN_NAME } from "@/lib/marketing/outreach";
 import { ETAPA_LABEL } from "@/lib/marketing/venta";
+import { cantidad } from "@/lib/textos/pantalla";
 
 export const dynamic = "force-dynamic";
 
@@ -56,7 +57,7 @@ export default async function ProspectosPage(
         <p className="text-sm text-slate-500">
           Negocios de Google Maps ya analizados (web + ficha de Google), ordenados por oportunidad. Los de prioridad alta
           y media reciben el primer mensaje; los de prioridad baja no se contactan.
-          {pendientes ? ` Hay ${pendientes} negocio(s) en cola de análisis.` : ""}
+          {pendientes ? ` Hay ${cantidad(pendientes, "negocio")} en cola de análisis.` : ""}
         </p>
         <p className="mt-1 text-sm text-slate-600">
           Las bases de «Extraer negocios» reciben la apertura genérica y se analizan recién cuando aceptan escuchar la propuesta.

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { mensajeDeError } from "@/lib/errores-ui";
 
 /**
  * Acciones sobre un destinatario "a revisar": volver a la cola o descartar.
@@ -34,6 +35,8 @@ export function RecipientReview({
       const data = await res.json().catch(() => ({}));
       if (!res.ok) setMsg(data.error ?? "No se pudo.");
       else router.refresh();
+    } catch (e) {
+      setMsg(mensajeDeError(e, "No se pudo. Probá de nuevo."));
     } finally {
       setBusy(false);
     }
@@ -63,7 +66,7 @@ export function RecipientReview({
       >
         Descartar
       </button>
-      {msg && <span className="text-red-600">{msg}</span>}
+      {msg && <span role="alert" className="text-red-600">{msg}</span>}
     </div>
   );
 }

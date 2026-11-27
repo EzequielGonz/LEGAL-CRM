@@ -1,0 +1,67 @@
+/* Muestra 27/11 · una sola base neutra, un solo acento, estados apagados. Dos familias: Geist (todo) y Newsreader (títulos y cifras grandes). */
+:root{--fondo:#0e0e10;--sup1:#141416;--sup2:#1a1a1d;--sup3:#212125;--linea:#26262a;--linea2:#34343a;
+--tinta:#ecebe6;--tinta2:#a9a69f;--tinta3:#76736d;--acento:#c8ab70;--acento-suave:rgba(200,171,112,.12);--acento-tinta:#17130a;
+--ok:#8fb09c;--alerta:#d09478;--info:#93a4bd;--alerta-suave:rgba(208,148,120,.10);
+--j:#b89662;--c:#74a79d;--a:#7896bd;--m:#a98aae;--sombra:0 1px 0 rgba(255,255,255,.03) inset,0 12px 32px rgba(0,0,0,.35)}
+[data-modo=claro]{--fondo:#f4f2ed;--sup1:#faf9f6;--sup2:#ffffff;--sup3:#f0ede6;--linea:#e4e0d7;--linea2:#d3cec3;
+--tinta:#1b1a17;--tinta2:#5d5a54;--tinta3:#8b877f;--acento:#8a6a2c;--acento-suave:rgba(138,106,44,.10);--acento-tinta:#fffaf0;
+--ok:#3f7a5e;--alerta:#b05f3e;--info:#4a6288;--alerta-suave:rgba(176,95,62,.08);--sombra:0 1px 2px rgba(40,30,10,.06),0 10px 28px rgba(40,30,10,.07)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--fondo);color:var(--tinta);font:14px/1.45 "Geist","Inter",system-ui,sans-serif;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+.serif{font-family:"Newsreader","Source Serif 4",Georgia,serif;font-weight:400;letter-spacing:-.01em;font-variant-numeric:lining-nums}
+.app{display:grid;grid-template-columns:232px 1fr;height:900px;width:1440px;overflow:hidden;background:var(--fondo);color:var(--tinta)}
+/* riel */
+.riel{background:var(--sup1);border-right:1px solid var(--linea);display:flex;flex-direction:column;padding:16px 12px;gap:4px}
+.perfil{display:flex;align-items:center;gap:10px;padding:8px;border-radius:10px;border:1px solid var(--linea);background:var(--sup2);margin-bottom:14px}
+.logo{width:34px;height:34px;border-radius:8px;background:#0b0b0c;display:grid;place-items:center;overflow:hidden;flex:none;border:1px solid var(--linea2)}
+.logo img{width:100%;height:100%;object-fit:cover}
+.perfil b{font-weight:600;font-size:13.5px;display:block;line-height:1.2}
+.perfil span{color:var(--tinta3);font-size:12px}
+.perfil .cambia{margin-left:auto;color:var(--tinta3)}
+.nav a{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:var(--tinta2);text-decoration:none;font-weight:500}
+.nav a svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.6;flex:none}
+.nav a.on{background:var(--sup3);color:var(--tinta)}
+.nav a .n{margin-left:auto;font-size:12px;color:var(--tinta);background:var(--acento-suave);border:1px solid rgba(200,171,112,.25);padding:0 7px;border-radius:99px;line-height:19px}
+.nav .sep{height:1px;background:var(--linea);margin:10px 6px}
+.riel .pie{margin-top:auto;display:flex;flex-direction:column;gap:8px}
+.jarvis{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:10px;border:1px solid var(--linea2);background:var(--sup2);color:var(--tinta2)}
+.jarvis i{width:8px;height:8px;border-radius:50%;background:var(--acento);box-shadow:0 0 0 4px var(--acento-suave)}
+.jarvis kbd{margin-left:auto;font:11px "Geist",sans-serif;color:var(--tinta3);border:1px solid var(--linea2);border-radius:5px;padding:1px 5px}
+.mini{display:flex;justify-content:space-between;color:var(--tinta3);font-size:12px;padding:0 4px}
+/* cuerpo */
+.cuerpo{display:flex;flex-direction:column;min-width:0;height:900px}
+.barra{height:56px;border-bottom:1px solid var(--linea);display:flex;align-items:center;gap:16px;padding:0 28px;flex:none}
+.barra h1{font-size:15px;font-weight:600}
+.barra .estado{display:flex;gap:18px;margin-left:auto;color:var(--tinta2);font-size:12.5px;align-items:center}
+.pto{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:7px;vertical-align:1px;background:var(--ok)}
+.pto.al{background:var(--alerta)}.pto.gr{background:var(--tinta3)}.pto.ac{background:var(--acento)}
+.buscar{border:1px solid var(--linea);background:var(--sup1);border-radius:8px;padding:7px 12px;color:var(--tinta3);width:230px;font-size:13px;display:flex;justify-content:space-between}
+.aviso{margin:14px 28px 0;border:1px solid rgba(208,148,120,.28);background:var(--alerta-suave);border-radius:10px;padding:9px 14px;display:flex;align-items:center;gap:10px;font-size:13px;flex:none}
+.aviso b{font-weight:600}.aviso .btn{margin-left:auto}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--linea2);background:var(--sup2);color:var(--tinta);border-radius:8px;padding:7px 12px;font:500 13px "Geist",sans-serif;white-space:nowrap}
+.btn.pri{background:var(--acento);border-color:var(--acento);color:var(--acento-tinta);font-weight:600}
+.btn.ch{padding:4px 9px;font-size:12px;border-radius:7px}
+.btn.fan{background:transparent;color:var(--tinta2)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--linea2);border-radius:99px;padding:2px 9px;font-size:12px;color:var(--tinta2);white-space:nowrap}
+.chip.ac{border-color:rgba(200,171,112,.4);color:var(--acento);background:var(--acento-suave)}
+.chip.al{border-color:rgba(208,148,120,.35);color:var(--alerta)}
+.chip.ok{border-color:rgba(143,176,156,.35);color:var(--ok)}
+.et{font-size:11.5px;color:var(--tinta3);letter-spacing:.04em;text-transform:uppercase;font-weight:500}
+.cont{padding:26px 28px;overflow:hidden;flex:1;min-height:0;display:flex;flex-direction:column;gap:22px}
+.tit{font-size:34px;line-height:1.1}
+.sub{color:var(--tinta2);font-size:15px;margin-top:6px}
+.caja{background:var(--sup1);border:1px solid var(--linea);border-radius:14px}
+table{width:100%;border-collapse:collapse}
+th{font-size:11.5px;color:var(--tinta3);letter-spacing:.04em;text-transform:uppercase;font-weight:500;text-align:left;padding:10px 16px;border-bottom:1px solid var(--linea)}
+td{padding:13px 16px;border-bottom:1px solid var(--linea);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+.num{font-variant-numeric:tabular-nums}
+.seg{display:inline-flex;border:1px solid var(--linea);border-radius:9px;padding:3px;background:var(--sup1);gap:2px}
+.seg span{padding:6px 12px;border-radius:6px;color:var(--tinta2);font-weight:500;font-size:13px;white-space:nowrap}
+.seg span.on{background:var(--sup3);color:var(--tinta)}
+.seg span em{font-style:normal;color:var(--tinta3);margin-left:6px}
+.seg span.on em{color:var(--acento)}
+.pie-muestra{position:absolute;right:14px;bottom:8px;font-size:10.5px;color:var(--tinta3)}
+.marco{position:relative;width:1440px;height:900px}
+th{white-space:nowrap}.jarvis{white-space:nowrap;font-size:13px}.jarvis kbd{white-space:nowrap}.buscar{white-space:nowrap;gap:14px;width:auto;min-width:250px}

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { mensajeDeError } from "@/lib/errores-ui";
 
 interface Rol {
   id: string;
@@ -34,7 +35,7 @@ export function RolDeCampana({ campaignId, perfil, rolActualId }: { campaignId: 
       if (!r.ok) throw new Error(j.error ?? "No se pudieron leer los roles.");
       setRoles(j.roles ?? []);
     } catch (e) {
-      setMsg({ ok: false, text: String((e as Error).message) });
+      setMsg({ ok: false, text: mensajeDeError(e, "No se pudo guardar. Probá de nuevo.") });
     }
   }, [perfil]);
 
@@ -58,7 +59,7 @@ export function RolDeCampana({ campaignId, perfil, rolActualId }: { campaignId: 
       setMsg({ ok: true, text: rolId ? "Rol asignado a esta campaña." : "La campaña quedó sin rol propio." });
       router.refresh();
     } catch (e) {
-      setMsg({ ok: false, text: String((e as Error).message) });
+      setMsg({ ok: false, text: mensajeDeError(e, "No se pudo guardar. Probá de nuevo.") });
     } finally {
       setBusy(false);
     }
@@ -78,7 +79,7 @@ export function RolDeCampana({ campaignId, perfil, rolActualId }: { campaignId: 
       setMsg({ ok: true, text: form.id ? "Rol guardado." : "Rol creado y asignado a esta campaña." });
       router.refresh();
     } catch (e) {
-      setMsg({ ok: false, text: String((e as Error).message) });
+      setMsg({ ok: false, text: mensajeDeError(e, "No se pudo guardar. Probá de nuevo.") });
     } finally {
       setBusy(false);
     }
@@ -117,7 +118,7 @@ export function RolDeCampana({ campaignId, perfil, rolActualId }: { campaignId: 
         <button type="button" disabled={busy} onClick={() => setForm({ ...VACIO })} className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">
           Crear un rol nuevo
         </button>
-        {msg && <span className={`text-xs ${msg.ok ? "text-green-600" : "text-red-600"}`}>{msg.text}</span>}
+        {msg && <span role={msg.ok ? "status" : "alert"} className={`text-xs ${msg.ok ? "text-green-600" : "text-red-600"}`}>{msg.text}</span>}
       </div>
 
       {form && (

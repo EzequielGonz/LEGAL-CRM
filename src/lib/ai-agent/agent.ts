@@ -38,12 +38,14 @@ import { cierreDeReserva, esCierreValido, instruccionCierre, pedidoDeCierre } fr
 import { armarContexto, armarResumen } from "@/lib/agentes/contexto";
 import { asignacionActiva } from "@/lib/agentes/servicio";
 import { identificadorModelo } from "@/lib/agentes/modelo";
+import { evidenciaDeCaptacion, NOTA_SIN_EVIDENCIA, type MensajeParaEvidencia } from "@/lib/captacion/evidencia";
 import { registrarTurno } from "@/lib/experimento/servicio";
+import { chequearTopeGemini } from "@/lib/presupuesto/servidor";
+import { MARCA_TOPE_GASTO } from "@/lib/presupuesto/reglas";
 import { instruccionesDeRol } from "@/lib/agentes/roles";
 import { buildSystemPrompt, criterioDelRubro, REGLAS_ESTRICTAS } from "./prompt";
 import { GUIA_CAPTACION_Y_CIERRE } from "@/lib/agentes/guia-cierre";
 import { conTiempoYReintento, esFallaTransitoria, MARCA_FALLA_MODELO } from "@/lib/ai-agent/reintento";
-import { aceptacionReal } from "@/lib/agentes/aceptacion";
 import { marcaDeTiempo } from "@/lib/agentes/tiempo-historial";
 import { modoDelContacto } from "@/lib/agentes/entrante";
 import { historialConPlantillas } from "@/lib/agentes/historial-servidor";
@@ -190,7 +192,7 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
 
   const { data: messageRows } = await supabase
     .from("messages")
-    .select("direction, sender_type, body, metadata, created_at, audio_texto, audio_texto_estado")
+    .select("id, direction, sender_type, body, metadata, created_at, audio_texto, audio_texto_estado")
     .eq("conversation_id", conversationId)
     .order("created_at", { ascending: false })
     .limit(HISTORY_LIMIT);
@@ -443,9 +445,39 @@ async function runAgentTurnCon(conversationId: string, modelo: ModeloAgente): Pr
     });
   // Contexto de las herramientas. Si la IA deriva a una persona, la
   // herramienta deja acá el permiso de un solo uso para el acuse final.
-  const toolCtx: ToolContext = { area, contact, conversationId, cierre: false, finalAckToken: null, opportunityId, pendingDetention: null, postergo: esPostergaFirme(ultimaRespuesta), ultimoEntrante: [...ordenados].reverse().find((m: any) => m.direction === "entrante")?.body ?? null };
+  const toolCtx: ToolContext = { area, contact, conversationId, cierre: false, finalAckToken: null, opportunityId, pendingDetention: null, postergo: esPostergaFirme(ultimaRespuesta), ultimoEntrante: [...ordenados].reverse().find((m: any) => m.direction === "entrante")?.body ?? null, historialEvidencia: ordenados.map((m: any) => ({ id: m.id ?? null, direction: m.direction, sender_type: m.sender_type ?? null, body: m.body ?? null, created_at: m.created_at ?? null })) };
   // Horario de atención (18/10, todos los perfiles): fuera de la franja de asesores igual se capta.
   systemWithBrief = `${systemWithBrief}\n\n${bloqueHorarioAtencion(new Date())}`;
+
+  // 22/11: tope de gasto de IA (USD 30 por mes para los bots; el tope diario por perfil es solo aviso salvo `frenoDiario`).
+  // Con el tope alcanzado el bot no se corta en seco: no llama al modelo, responde con el
+  // cierre de reserva del rubro (el mismo que sale si el modelo no da uno válido), el chat
+  // pasa a una persona con su tarea de atención y Salud lo muestra. Por debajo del tope no
+  // cambia nada. Si no se puede medir el gasto, el bot sigue (ver chequearTopeGemini).
+  const tope = await chequearTopeGemini({ area, rubroId: contact.rubro_id ?? null });
+  if (tope.bloquea) {
+    const marcaTope = `${MARCA_TOPE_GASTO}_${tope.estado === "tope_mes" ? "mes" : "dia"}: ${tope.motivo}`.slice(0, 400);
+    console.warn(`[agente] Tope de gasto de IA en ${conversationId}: ${tope.motivo}`);
+    try {
+      await atencionDelAgente(toolCtx, "consulta_fuera_alcance", `La IA está frenada por el tope de gasto. ${tope.motivo}`);
+      await sendOutboundMessage({
+        conversationId,
+        senderType: "agente_ia",
+        body: cierreDeReserva(area, contact.full_name),
+        origin: "respuesta_entrante",
+        finalAckToken: toolCtx.finalAckToken,
+      });
+      await registrar("enviado", { error: marcaTope });
+    } catch (err) {
+      if (err instanceof AutomaticSendBlockedError) {
+        await registrar("bloqueado", { error: `${marcaTope} (${err.message})`.slice(0, 480) });
+        return;
+      }
+      await registrar("error", { error: `${marcaTope} (${String((err as any)?.message ?? err)})`.slice(0, 480) });
+      throw err;
+    }
+    return;
+  }
 
   let retenido: string[] | null = null;
   try {
@@ -628,6 +660,8 @@ interface ToolContext {
   postergo?: boolean;
   /** 15/11: texto del último mensaje de la persona (segunda llave antes de captar) */
   ultimoEntrante?: string | null;
+  /** 22/11: historial de la conversación con id de cada mensaje, para guardar el mensaje real de la persona como evidencia. */
+  historialEvidencia?: MensajeParaEvidencia[];
 }
 
 const NOTA_AHORA_NO =
@@ -870,11 +904,14 @@ async function executeTool(
         await supabase.from("contacts").update({ status: "cerrado_ganado" }).eq("id", ctx.contact.id);
         if (ctx.opportunityId) {
           try {
+            const ev = evidenciaDeCaptacion(ctx.historialEvidencia ?? [], `Aceptó el contacto del profesional. Disponibilidad: ${disponibilidad}`, { exigirAceptacion: false });
+            if (!ev.ok) throw new Error(`Sin evidencia de la persona (${ev.motivo}): no se registra la captación.`);
             await registrarCaptacion({
               opportunityId: ctx.opportunityId,
               actor: "ia",
               aceptacion: true,
-              evidencia: `Aceptó el contacto del profesional. Disponibilidad: ${disponibilidad}`,
+              evidencia: ev.evidencia,
+              evidenciaMensajeId: ev.messageId,
               datos: merged,
             });
           } catch (err) {
@@ -934,7 +971,9 @@ async function executeTool(
 
       if (resultado === "aprobado" && ctx.opportunityId) {
         try {
-          await registrarCaptacion({ opportunityId: ctx.opportunityId, actor: "ia", aceptacion: true, evidencia: motivo });
+          const ev = evidenciaDeCaptacion(ctx.historialEvidencia ?? [], motivo, { exigirAceptacion: false });
+          if (!ev.ok) throw new Error(`Sin evidencia de la persona (${ev.motivo}): no se registra la captación.`);
+          await registrarCaptacion({ opportunityId: ctx.opportunityId, actor: "ia", aceptacion: true, evidencia: ev.evidencia, evidenciaMensajeId: ev.messageId });
         } catch (err) {
           console.error("[agente] No se pudo registrar la captación de Marketing:", err);
         }
@@ -1002,7 +1041,9 @@ async function executeTool(
         // «Pide presupuesto» cuenta como captado (decisión del 16/10).
         if (ctx.opportunityId) {
           try {
-            await registrarCaptacion({ opportunityId: ctx.opportunityId, actor: "ia", aceptacion: true, evidencia: `Pidió presupuesto: ${detalle}`.slice(0, 500) });
+            const ev = evidenciaDeCaptacion(ctx.historialEvidencia ?? [], `Pidió presupuesto: ${detalle}`, { exigirAceptacion: false });
+            if (!ev.ok) throw new Error(`Sin evidencia de la persona (${ev.motivo}): no se registra la captación.`);
+            await registrarCaptacion({ opportunityId: ctx.opportunityId, actor: "ia", aceptacion: true, evidencia: ev.evidencia, evidenciaMensajeId: ev.messageId });
           } catch (err) {
             console.error("[agente] No se pudo registrar la captación por presupuesto:", err);
           }
@@ -1113,26 +1154,18 @@ async function executeTool(
         await atencionDelAgente(ctx, "precio_fuera_alcance", String(input.evidencia ?? "Consultó solo el precio"));
         return { output: { ok: true, captado: false, instruccion: INSTRUCCION_RESPUESTA.aviso_de_persona }, escalated: true };
       }
-      // 15/11: segunda llave: un rechazo o una pregunta sin ningún «sí» no capta.
-      const llave = aceptacionReal(ctx.ultimoEntrante);
-      if (!llave.ok && llave.motivo !== "vacio") {
-        return {
-          output: {
-            ok: false,
-            captado: false,
-            motivo: llave.motivo,
-            nota:
-              llave.motivo === "rechazo"
-                ? "Su último mensaje no es una aceptación. No captes: seguí la regla de rechazos."
-                : "Su último mensaje es una pregunta sin aceptación. Respondela y volvé a proponer el siguiente paso.",
-          },
-        };
+      // 22/11: la evidencia es el mensaje real de la persona (con su id): un contestador, un rechazo, una
+      // pregunta sin aceptación o la falta de mensaje no captan.
+      const ev = evidenciaDeCaptacion(ctx.historialEvidencia ?? [], String(input.evidencia ?? ""));
+      if (!ev.ok) {
+        return { output: { ok: false, captado: false, motivo: ev.motivo, nota: NOTA_SIN_EVIDENCIA[ev.motivo] } };
       }
       const r = await registrarCaptacion({
         opportunityId: ctx.opportunityId,
         actor: "ia",
         aceptacion: input.aceptacion === true,
-        evidencia: String(input.evidencia ?? ""),
+        evidencia: ev.evidencia,
+        evidenciaMensajeId: ev.messageId,
       });
       if (!r.captado) {
         return { output: { ok: false, captado: false, motivo: r.evaluacion.motivo, nota: "Sin aceptación con evidencia no hay captación. Seguí la conversación." } };

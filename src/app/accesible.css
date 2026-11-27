@@ -124,16 +124,21 @@ html:not([data-modo="oscuro"]) :is(.bg-slate-50, .bg-slate-100, .bg-white) > .op
 }
 
 /* Contador de cifras (EfectosVidrio): el valor real queda en su lugar, transparente
-   mientras se anima la copia de arriba, para que el lector de pantalla lo lea entero. */
+   mientras sube el número dibujado con ::after (sin tocar el DOM que maneja React),
+   para que el lector de pantalla lea el valor entero y no los pasos de la cuenta. */
 .cifra-contando {
   color: transparent !important;
   -webkit-text-fill-color: transparent;
 }
-.cifra-animada {
+.cifra-contando::after {
+  content: attr(data-cuenta);
+  content: attr(data-cuenta) / "";
   position: absolute;
   inset: 0;
   white-space: nowrap;
   pointer-events: none;
+  color: var(--cifra-color);
+  -webkit-text-fill-color: var(--cifra-color);
 }
 
 /* Regiones con desplazamiento propio que se pueden enfocar con teclado: foco visible. */

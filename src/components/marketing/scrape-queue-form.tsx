@@ -2,6 +2,7 @@
 
 import { useState, useId } from "react";
 import { useRouter } from "next/navigation";
+import { cantidad as cuantas } from "@/lib/textos/pantalla";
 
 // Ciudades principales de Argentina (capitales provinciales y grandes centros urbanos).
 const CIUDADES_ARGENTINA = [
@@ -138,7 +139,7 @@ export function ScrapeQueueForm() {
           </div>
           <div className="flex items-center gap-3">
             <button type="submit" disabled={loading || zonas.length === 0 || !rubro.trim()} className="btn-gold">
-              {loading ? "Cargando…" : `Poner en cola ${zonas.length} búsqueda(s)`}
+              {loading ? "Cargando…" : `Poner en cola ${cuantas(zonas.length, "búsqueda")}`}
             </button>
             {zonas.length > 0 && (
               <span className="text-xs text-slate-400">Hasta {zonas.length * cantidad} negocios en total</span>

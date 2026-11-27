@@ -14,20 +14,11 @@ import { AREAS_DE_PERFIL, contarGrupo } from "@/lib/cartera-servidor";
 import { getCampaignFunnelCounts } from "@/lib/campaigns";
 import { TableroHoy } from "@/components/inicio/tablero-hoy";
 import { captadoEsperaDeMas, ESPERA_CAPTADO_HORAS } from "@/lib/hoy/colas";
+import { EsqueletoHoyBento } from "@/components/inicio/hoy-bento";
+import { horaEnBuenosAires, saludoPorHora } from "@/lib/hoy/resumen-hoy";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Hoy" };
-
-/** Saludo según la hora de Buenos Aires (24/10). */
-function saludo(ahora = new Date()): string {
-  const h = Number(new Intl.DateTimeFormat("es-AR", { hour: "numeric", hourCycle: "h23", timeZone: "America/Argentina/Buenos_Aires" }).format(ahora));
-  return h < 12 ? "Buen día" : h < 20 ? "Buenas tardes" : "Buenas noches";
-}
-
-function fechaHoy(ahora = new Date()): string {
-  const t = new Intl.DateTimeFormat("es-AR", { weekday: "long", day: "numeric", month: "long", timeZone: "America/Argentina/Buenos_Aires" }).format(ahora);
-  return t.charAt(0).toUpperCase() + t.slice(1);
-}
 
 /**
  * Inicio del perfil. Desde el 13/11 muestra solo lo que lleva a una acción:
@@ -45,46 +36,23 @@ export default async function InicioPerfilPage(
   const rubroId = rubroIdDe(perfil);
   if (!rubroId || !esSlugPerfil(perfil)) notFound();
   const slug: SlugPerfil = perfil;
+  // 22/11: el saludo se calcula acá, en el servidor, con la hora argentina (sin nombre de persona). Es un texto ya
+  // armado que viaja como dato: el navegador no vuelve a leer la hora, así que no hay diferencias de hidratación.
+  const saludo = saludoPorHora(horaEnBuenosAires(new Date()));
   return (
-    <MarcoPerfil slug={slug}>
-      <div className="mx-auto max-w-5xl space-y-6">
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-semibold text-slate-950">{saludo()}</h1>
-            <p className="mt-1 text-sm text-slate-600">{fechaHoy()} · personas, no mensajes</p>
-          </div>
-          <BotonAsistente variante="suave" texto="Resumen de hoy">
-            Pedile algo
-          </BotonAsistente>
-        </div>
-
+    <MarcoPerfil slug={slug} sinSalud>
+      <div className="mx-auto max-w-[80rem]">
+        <h1 className="sr-only">Hoy</h1>
         {/* 13/11: el marco y el saludo se pintan enseguida; los datos llegan apenas están. */}
-        <Suspense fallback={<EsqueletoHoy />}>
-          <CuerpoHoy slug={slug} rubroId={rubroId} searchParams={searchParams} />
+        <Suspense fallback={<EsqueletoHoyBento saludo={saludo} />}>
+          <CuerpoHoy slug={slug} rubroId={rubroId} searchParams={searchParams} saludo={saludo} />
         </Suspense>
       </div>
     </MarcoPerfil>
   );
 }
 
-function EsqueletoHoy() {
-  return (
-    <div role="status" aria-label="Cargando el tablero de hoy" className="space-y-6">
-      <div className="flex flex-wrap gap-2">
-        {[40, 56, 44].map((w, i) => (
-          <span key={i} className="h-9 animate-pulse rounded-full bg-slate-200/70" style={{ width: `${w * 4}px` }} />
-        ))}
-      </div>
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="h-72 animate-pulse rounded-2xl bg-slate-200/60" />
-        <div className="h-72 animate-pulse rounded-2xl bg-slate-200/60" />
-      </div>
-      <div className="h-40 animate-pulse rounded-2xl bg-slate-200/60" />
-    </div>
-  );
-}
-
-async function CuerpoHoy({ slug, rubroId, searchParams }: { slug: SlugPerfil; rubroId: string; searchParams: { grupo?: string; cola?: string; todo?: string; periodo?: string } }) {
+async function CuerpoHoy({ slug, rubroId, searchParams, saludo }: { slug: SlugPerfil; rubroId: string; saludo: string; searchParams: { grupo?: string; cola?: string; todo?: string; periodo?: string } }) {
   const aqui = `/hoy?perfil=${slug}`;
   const areas = AREAS_DE_PERFIL[slug];
   const s = createAdminClient();
@@ -93,13 +61,14 @@ async function CuerpoHoy({ slug, rubroId, searchParams }: { slug: SlugPerfil; ru
 
   // 13/11 (pedido de la responsable): en Hoy queda solo lo que lleva a una acción.
   // Las cifras de la semana, la última base y los indicadores sueltos se ven en Resultados.
-  const claves = ["captado_sin_derivar", "derivado_sin_resultado", "dejaron_de_responder"] as const;
+  // 22/11 (orden del 19/11): sin el bloque «También hoy»; ya no se leen «Derivados sin resultado» ni «Citas próximas» acá
+  // (siguen en Resultados y en Chats).
+  const claves = ["captado_sin_derivar", "dejaron_de_responder"] as const;
   // 18/11 (velocidad): antes eran cinco tandas de consultas, una detrás de la otra. Ahora son dos.
   const hace24 = new Date(Date.now() - ESPERA_CAPTADO_HORAS * 3_600_000).toISOString();
-  const [conteos, captados, agendaron, hablando, { data: activas }, { data: viejos }] = await Promise.all([
+  const [conteos, captados, hablando, { data: activas }, { data: viejos }] = await Promise.all([
     Promise.all(claves.map(async (c) => [c, await contarIndicador(rubroId as string, indicadorPorClave(c)!)] as const)),
     listarIndicador(rubroId, indicadorPorClave("captado_sin_derivar")!, { orden: "reciente" }),
-    contarGrupo(rubroId, areas, grupo("agendaron")).catch(() => null),
     contarGrupo(rubroId, areas, grupo("hablando")).catch(() => null),
     // Campañas que están enviando ahora, con su avance. Solo lectura.
     s.from("campaigns").select("id, name, status").in("area", areas).is("archived_at", null).eq("status", "en_curso").order("created_at", { ascending: false }).limit(3),
@@ -125,12 +94,7 @@ async function CuerpoHoy({ slug, rubroId, searchParams }: { slug: SlugPerfil; ru
   ]);
   const citaDe = (id: string) => ((citas ?? []) as any[]).find((c) => c.contact_id === id && !/cancel/.test(String(c.status ?? "")));
 
-  // Lo que pide algo tuyo (solo se muestra si hay alguien)…
-  const tareas = [
-    { titulo: "Citas próximas", n: agendaron, detalle: "Mirá quién viene y a qué hora", href: `/conversaciones?perfil=${slug}&grupo=agendaron` },
-    { titulo: "Derivados sin resultado", n: cuenta.derivado_sin_resultado.count, detalle: "Anotá cómo terminó cada uno", href: enlaceIndicador(slug, "derivado_sin_resultado", aqui) },
-  ];
-  // …y lo que el bot lleva adelante solo: se informa en una línea, cada dato abre su lista.
+  // Lo que el bot lleva adelante solo: se informa en una línea, cada dato abre su lista.
   const delBot = [
     { texto: "en charla con el bot", n: hablando, href: `/conversaciones?perfil=${slug}&grupo=hablando` },
     { texto: "en seguimiento", n: cuenta.dejaron_de_responder.count, href: enlaceIndicador(slug, "dejaron_de_responder", aqui) },
@@ -142,11 +106,6 @@ async function CuerpoHoy({ slug, rubroId, searchParams }: { slug: SlugPerfil; ru
 
   return (
     <>
-      {esperanDeMas > 0 && (
-        <p role="status" className="rounded-xl border border-amber-300 bg-amber-50 p-3 text-sm font-medium text-amber-900">
-          {esperanDeMas === 1 ? "Una persona captada espera" : `${esperanDeMas} personas captadas esperan`} el llamado hace más de 24 horas. En la lista de abajo aparecen con «Más de 24 h».
-        </p>
-      )}
       <TableroHoy
         slug={slug}
         rubroId={rubroId}
@@ -154,7 +113,10 @@ async function CuerpoHoy({ slug, rubroId, searchParams }: { slug: SlugPerfil; ru
         grupo={searchParams.grupo}
         filtroCola={searchParams.cola}
         verTodo={searchParams.todo === "1"}
-        enMarcha={tareas}
+        saludo={saludo}
+        totalCaptados={cuenta.captado_sin_derivar.count}
+        esperanDeMas={esperanDeMas}
+        cifrasSinLeer={errores}
         delBot={delBot}
         captados={(captados.filas ?? []).map((o: any) => {
           const cita = citaDe(o.contact_id);
@@ -169,12 +131,6 @@ async function CuerpoHoy({ slug, rubroId, searchParams }: { slug: SlugPerfil; ru
           };
         })}
       />
-
-      {errores > 0 && (
-        <p className="rounded-xl bg-red-50 p-3 text-sm font-medium text-red-800">
-          No se pudieron leer {errores} de las cifras. Las que faltan figuran como «—»: no son cero.
-        </p>
-      )}
 
       {slug === "marketing" ? <CircuitosMarketing /> : null}
 

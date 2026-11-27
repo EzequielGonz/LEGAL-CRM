@@ -473,6 +473,39 @@ export const CATALOGO: readonly OperacionPanel[] = [
     nivel: "cambio",
     efecto: "Queda en la Bandeja para Claude como pendiente. Claude la toma cuando la responsable le dice «ok».",
   },
+  // Vuelta 6 (22/11): Jarvis puede pedirle una tarea a un sector de la Oficina y enseñarle algo al cerebro,
+  // siempre como propuesta con «¿Lo hago?». Van a las mismas rutas que usan la Oficina y el Cerebro.
+  {
+    clave: "oficina_pedir_tarea",
+    grupo: "pedidos a Claude",
+    titulo: "Pedirle una tarea a un sector de la Oficina",
+    descripcion:
+      "Deja una tarea en la mesa de entrada de la Oficina de agentes. Empezá el pedido con el sector («Para Redes: …», «Para Diseño: …», «Para Análisis: …», «Para Bots: …», «Para SEO: …», «Para Ingeniería: …»): la Oficina la ordena por áreas. Sin datos personales.",
+    metodo: "POST",
+    ruta: "oficina",
+    perfil: PERFIL,
+    campos: [{ nombre: "pedido", tipo: "texto", obligatorio: true, descripcion: "El pedido completo, empezando por el sector (hasta 4000 caracteres)" }],
+    nivel: "cambio",
+    efecto: "Queda en la mesa de entrada de la Oficina. Los agentes arrancan solo cuando el dueño toca «Arrancar ahora» y todo queda en borrador.",
+  },
+  {
+    clave: "cerebro_ensenar",
+    grupo: "pedidos a Claude",
+    titulo: "Enseñarle algo al cerebro",
+    descripcion:
+      "Guarda en el cuaderno del cerebro una nota, una regla, un documento, un enlace o un aprendizaje del dueño para que Jarvis y Claude lo tengan en cuenta. Sin teléfonos, documentos, correos ni claves (se rechazan).",
+    metodo: "POST",
+    ruta: "cerebro/conocimiento",
+    perfil: PERFIL,
+    campos: [
+      { nombre: "tipo", tipo: "texto", obligatorio: true, valores: ["nota", "regla", "documento", "enlace", "aprendizaje"], descripcion: "Qué es" },
+      { nombre: "titulo", tipo: "texto", obligatorio: true, descripcion: "Título corto (3 a 120 letras)" },
+      { nombre: "contenido", tipo: "texto", obligatorio: true, descripcion: "Lo que tiene que saber el cerebro (hasta 4000 letras)" },
+      { nombre: "fuente", tipo: "texto", descripcion: "De dónde sale (opcional; para un enlace, la dirección completa)" },
+    ],
+    nivel: "cambio",
+    efecto: "Queda guardado en el cerebro de este perfil. No cambia nada del panel; se puede archivar desde el Cerebro.",
+  },
   {
     clave: "bandeja_descartar",
     grupo: "pedidos a Claude",
@@ -1239,6 +1272,14 @@ export function operacionPorClave(clave: string): OperacionPanel | null {
  * toda ruta del panel esté en el catálogo, en una herramienta propia o acá.
  */
 export const FUERA_DEL_CATALOGO: Record<string, string> = {
+  "jarvis/mensaje": "Charla con Jarvis (22/11): conversa y deja propuestas con tarjeta «¿Lo hago?»; no lanza campañas, no publica ni le escribe a nadie. Es la puerta del asistente, no una acción sobre el panel.",
+  "cerebro/preguntar": "Búsqueda del cerebro (22/11): solo lee la memoria y lo aprendido, sin IA.",
+  "laboratorio/simular": "Simulador del bot (22/11): corre mensajes ficticios con el prompt real y herramientas simuladas; no envía nada ni cambia estados.",
+  "jarvis/parte": "Parte del día de Jarvis (22/11): solo lee cifras del perfil y no cambia nada.",
+  "oficina/arrancar": "Despierta a los agentes de Claude y usa el plan de Claude: lo toca el dueño en la Oficina, no el asistente.",
+  "oficina/[id]": "La aprobación de una entrega de la Oficina la da el dueño en persona, no el asistente.",
+  "asistente/charlas": "Guarda y lista las charlas del propio asistente (20/11): es su memoria, no una acción sobre el panel.",
+  "asistente/charlas/[id]": "Lee, renombra o archiva una charla guardada del asistente: es su memoria, no una acción sobre el panel.",
   "agentes/informes/[id]/aplicar": "Aplica una propuesta de un informe por su número: desde el asistente se usa «Sumar una ficha de conocimiento al bot del perfil» o proponer_rol con el texto de la propuesta.",
   "agenda/availability": "Reemplaza todos los horarios del área borrando primero los anteriores, sin deshacer si falla: hasta arreglar eso, se hace solo desde Ajustes.",
   "agentes/ajuste": "Autoriza un gasto de entrenamiento del modelo: se hace desde Bot IA, con la pantalla que muestra el costo.",
@@ -1249,6 +1290,7 @@ export const FUERA_DEL_CATALOGO: Record<string, string> = {
   "agentes/roles": "Guardar un rol y cargarlo a una base ya tienen herramienta propia (proponer_rol, proponer_rol_base); archivar y cargar a una campaña están en el catálogo.",
   "agentes/simulador": "Es una prueba que no cambia nada; se usa desde Bot IA.",
   "appointments/[id]/cancel": "Duplicada: cancelar una cita se hace con «cambiar el estado de una cita», que además deja historial.",
+  "appointments/[id]/mover": "Mover una cita (22/11): se hace desde Citas, con confirmación y horario; el asistente cambia el estado de una cita pero no reprograma.",
   "bases/[id]": "Duplicada: archivar una base está en el catálogo con su motivo.",
   "campaigns": "Ya tiene herramienta propia (proponer_campana).",
   "campaigns/[id]": "El borrado es en realidad archivar (está en el catálogo); la línea de Meta y el límite tienen herramienta propia.",

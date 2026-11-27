@@ -6,6 +6,10 @@ import { Icono } from "@/components/ui/icono-seccion";
 import { TarjetaPropuesta, type Propuesta } from "@/components/asistente/asistente-panel";
 import { BocetoCampanas } from "@/components/asistente/boceto-campanas";
 import { MAX_ARCHIVOS, MAX_FILAS_ARCHIVO, repetidosEntreArchivos, resumirHoja, type ResumenArchivo } from "@/lib/asistente/general";
+import { TextoVivo } from "@/components/jarvis/jv-resultado";
+import { OrbeVivo } from "@/components/jarvis/jv-orbe-vivo";
+import { JvConfirmar } from "@/components/jarvis/jv-confirmar";
+import { CharlasAnteriores, type CharlaResumen } from "@/components/asistente/charlas-anteriores";
 
 /**
  * Chat del asistente general (15/11). Desde el pedido de la responsable
@@ -94,7 +98,14 @@ export function ChatAsistenteGeneral({
   placeholder = "Ej.: con estas planillas armá una campaña por perfil",
   alto = "h-[min(70vh,44rem)]",
   alCambiarPropuesta,
+  variante = "clasica",
+  pedidoInicial = "",
+  ocultarAccesos = false,
 }: {
+  /** Vuelta 6: en /asistente los accesos van como botones neumórficos al costado (llegan por el evento «jarvis:acceso»). */
+  ocultarAccesos?: boolean;
+  /** Texto precargado (por ejemplo desde «Pedile a Jarvis» en Resumen o Cerebro). No se envía solo. */
+  pedidoInicial?: string;
   accesos?: AccesoAsistente[];
   contexto?: ContextoChat | null;
   titulo?: string;
@@ -103,9 +114,14 @@ export function ChatAsistenteGeneral({
   placeholder?: string;
   alto?: string;
   alCambiarPropuesta?: () => void;
+  /** «jarvis»: mismo aspecto que el Jarvis lateral (burbujas, «¿Lo hago?», chips). Los accesos pasan a ser chips. */
+  variante?: "clasica" | "jarvis";
 }) {
+  const jv = variante === "jarvis";
   const [mensajes, setMensajes] = useState<Mensaje[]>([]);
-  const [texto, setTexto] = useState("");
+  /** Vuelta 6: la última respuesta recién llegada se escribe en vivo (solo en la variante Jarvis). */
+  const [nuevo, setNuevo] = useState<number | null>(null);
+  const [texto, setTexto] = useState(pedidoInicial);
   const [pensando, setPensando] = useState(false);
   const [adjuntos, setAdjuntos] = useState<Adjunto[]>([]);
   const [planillas, setPlanillas] = useState<Planilla[]>([]);
@@ -136,6 +152,133 @@ export function ChatAsistenteGeneral({
   }, [contexto]);
   const mensajesRef = useRef<Mensaje[]>([]);
   mensajesRef.current = mensajes;
+
+  // 20/11: charlas guardadas (pedido de la Bandeja). Cada charla se guarda sola
+  // después de cada respuesta y se puede retomar desde «Charlas anteriores».
+  // Solo se suma esto: lo demás del chat funciona igual.
+  const perfilCharla = contexto?.perfil ?? null;
+  const consultaPerfil = perfilCharla ? `?perfil=${encodeURIComponent(perfilCharla)}` : "";
+  const [charlaId, setCharlaId] = useState<string | null>(null);
+  const charlaIdRef = useRef<string | null>(null);
+  // Cambia al empezar o abrir otra charla: un guardado viejo no escribe en la nueva.
+  const generacion = useRef(0);
+  const colaGuardado = useRef<Promise<void>>(Promise.resolve());
+  const [charlas, setCharlas] = useState<CharlaResumen[]>([]);
+  const [cargandoCharlas, setCargandoCharlas] = useState(true);
+  const [errorCharlas, setErrorCharlas] = useState<string | null>(null);
+  const [verCharlas, setVerCharlas] = useState(false);
+  const [abriendoCharla, setAbriendoCharla] = useState<string | null>(null);
+  const [avisoGuardado, setAvisoGuardado] = useState<string | null>(null);
+  const botonCharlas = useRef<HTMLButtonElement>(null);
+
+  function cambiarCharla(id: string | null) {
+    generacion.current += 1;
+    charlaIdRef.current = id;
+    setCharlaId(id);
+    setAvisoGuardado(null);
+  }
+
+  async function cargarCharlas() {
+    setCargandoCharlas(true);
+    try {
+      const r = await fetch(`/api/asistente/charlas${consultaPerfil}`);
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d?.error);
+      setCharlas((d?.charlas ?? []) as CharlaResumen[]);
+      setErrorCharlas(null);
+    } catch {
+      setErrorCharlas("No se pudieron traer las charlas anteriores.");
+    } finally {
+      setCargandoCharlas(false);
+    }
+  }
+
+  // Lista al abrir y al cambiar de perfil en el Laboratorio (si cambia el perfil, charla nueva: no se mezclan).
+  const perfilAnterior = useRef(perfilCharla);
+  useEffect(() => {
+    if (perfilAnterior.current !== perfilCharla) {
+      perfilAnterior.current = perfilCharla;
+      cambiarCharla(null);
+      setMensajes([]);
+      setVerCharlas(false);
+    }
+    void cargarCharlas();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [perfilCharla]);
+
+  /** Guarda en la charla actual (o crea una) los mensajes nuevos. Nunca frena el chat. */
+  function guardarEnCharla(nuevos: Mensaje[]) {
+    const gen = generacion.current;
+    const perfilEnvio = perfilCharla;
+    const cuerpo = nuevos.filter((m) => !m.error).map((m) => ({ rol: m.rol, texto: m.texto, propuestas: m.propuestas ?? [], enlaces: m.enlaces ?? [] }));
+    if (!cuerpo.length) return;
+    colaGuardado.current = colaGuardado.current.then(async () => {
+      if (gen !== generacion.current) return;
+      const id = charlaIdRef.current;
+      try {
+        const r = await fetch(id ? `/api/asistente/charlas/${id}` : "/api/asistente/charlas", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...(perfilEnvio ? { perfil: perfilEnvio } : {}), mensajes: cuerpo }),
+        });
+        const d = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error(d?.error);
+        if (gen !== generacion.current) return;
+        if (!id && d?.id) {
+          charlaIdRef.current = d.id;
+          setCharlaId(d.id);
+          void cargarCharlas();
+        }
+        setAvisoGuardado(null);
+      } catch {
+        if (gen === generacion.current) setAvisoGuardado("No se pudo guardar esta charla. Podés seguir igual.");
+      }
+    });
+  }
+
+  async function abrirCharla(id: string) {
+    if (id === charlaIdRef.current && mensajes.length > 0) {
+      setVerCharlas(false);
+      return;
+    }
+    setAbriendoCharla(id);
+    try {
+      const r = await fetch(`/api/asistente/charlas/${id}${consultaPerfil}`);
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d?.error ?? "No se pudo abrir la charla.");
+      cambiarCharla(id);
+      setMensajes(((d?.mensajes ?? []) as Mensaje[]).map((m) => ({ rol: m.rol, texto: m.texto, propuestas: m.propuestas ?? [], enlaces: m.enlaces ?? [] })));
+      setPlanillas([]);
+      setAdjuntos([]);
+      telefonos.current.clear();
+      setVerCharlas(false);
+      window.setTimeout(() => entrada.current?.focus(), 0);
+    } catch (e) {
+      setErrorCharlas((e as Error).message || "No se pudo abrir la charla.");
+    } finally {
+      setAbriendoCharla(null);
+    }
+  }
+
+  async function quitarCharla(id: string) {
+    const r = await fetch(`/api/asistente/charlas/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...(perfilCharla ? { perfil: perfilCharla } : {}), archivar: true }),
+    }).catch(() => null);
+    if (!r?.ok) {
+      setErrorCharlas("No se pudo quitar la charla de la lista.");
+      return;
+    }
+    setCharlas((cs) => cs.filter((c) => c.id !== id));
+    // Si era la abierta, lo que sigas escribiendo se guarda como charla nueva.
+    if (id === charlaIdRef.current) cambiarCharla(null);
+  }
+
+  function cerrarCharlas() {
+    setVerCharlas(false);
+    window.setTimeout(() => botonCharlas.current?.focus(), 0);
+  }
   useEffect(() => {
     lista.current?.scrollTo({ top: lista.current.scrollHeight, behavior: "smooth" });
   }, [mensajes, pensando]);
@@ -256,7 +399,12 @@ export function ChatAsistenteGeneral({
         });
         const data = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(data?.error ?? "No pude responder.");
-        setMensajes((m) => [...m, { rol: "asistente", texto: data.texto, propuestas: data.propuestas ?? [], enlaces: data.enlaces ?? [] }]);
+        const respuesta: Mensaje = { rol: "asistente", texto: data.texto, propuestas: data.propuestas ?? [], enlaces: data.enlaces ?? [] };
+        setMensajes((m) => {
+          setNuevo(m.length);
+          return [...m, respuesta];
+        });
+        guardarEnCharla([historial[historial.length - 1], respuesta]);
       } catch (e) {
         setMensajes((m) => [...m, { rol: "asistente", texto: (e as Error).message, error: true }]);
       } finally {
@@ -276,10 +424,23 @@ export function ChatAsistenteGeneral({
     if (a.accion === "archivos") archivo.current?.click();
     else window.setTimeout(() => entrada.current?.focus(), 0);
   }
+  // Vuelta 6: los botones neumórficos de /asistente piden un acceso por su título.
+  const usarAccesoRef = useRef(usarAcceso);
+  usarAccesoRef.current = usarAcceso;
+  useEffect(() => {
+    if (!jv) return;
+    const alAcceso = (e: Event) => {
+      const titulo = (e as CustomEvent<string>).detail;
+      const a = accesos.find((x) => x.titulo === titulo);
+      if (a) usarAccesoRef.current(a);
+    };
+    window.addEventListener("jarvis:acceso", alAcceso);
+    return () => window.removeEventListener("jarvis:acceso", alAcceso);
+  }, [jv, accesos]);
 
   return (
     <div className="flex flex-col gap-4">
-      {accesos.length > 0 && (
+      {!jv && accesos.length > 0 && (
         <ul aria-label="Accesos directos" className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {accesos.map((a) => (
             <li key={a.titulo}>
@@ -296,19 +457,41 @@ export function ChatAsistenteGeneral({
           ))}
         </ul>
       )}
-      <section aria-labelledby={`${ids}-titulo`} data-asistente="" className={`flex ${alto} flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white text-slate-900 shadow-sm`}>
-            <header className="flex items-center justify-between gap-3 border-b border-slate-100 px-4 py-3">
-              <div className="flex min-w-0 items-center gap-2.5">
-                <span aria-hidden="true" className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-gold-500/15 text-gold-700">
-                  <Icono nombre="asistente" className="h-5 w-5" />
-                </span>
+      <section aria-labelledby={`${ids}-titulo`} data-asistente="" className={jv ? `jv-panel flex ${alto} flex-col` : `flex ${alto} flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white text-slate-900 shadow-sm`}>
+            <header className={jv ? "jv-cabeza" : "flex items-center justify-between gap-3 border-b border-slate-100 px-4 py-3"}>
+              <div className={jv ? "jv-cabeza-texto flex min-w-0 items-center gap-2.5" : "flex min-w-0 items-center gap-2.5"}>
+                {jv ? (
+                  <span className="jv-chat-orbe" aria-hidden="true">
+                    <OrbeVivo tamano={44} />
+                  </span>
+                ) : (
+                  <span aria-hidden="true" className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-gold-500/15 text-gold-700">
+                    <Icono nombre="asistente" className="h-5 w-5" />
+                  </span>
+                )}
                 <div className="min-w-0">
-                  <h2 id={`${ids}-titulo`} className="text-sm font-semibold text-slate-950">
+                  <h2 id={`${ids}-titulo`} className={jv ? "jv-nombre" : "text-sm font-semibold text-slate-950"}>
                     {titulo}
                   </h2>
-                  <p className="truncate text-xs text-slate-600">{bajada}</p>
+                  <p className={jv ? "jv-sub" : "truncate text-xs text-slate-600"}>{bajada}</p>
                 </div>
               </div>
+              <div className="flex shrink-0 items-center gap-1">
+              {(charlas.length > 0 || charlaId) && (
+                <button
+                  ref={botonCharlas}
+                  type="button"
+                  onClick={() => {
+                    if (verCharlas) return cerrarCharlas();
+                    setVerCharlas(true);
+                    void cargarCharlas();
+                  }}
+                  aria-expanded={verCharlas}
+                  className={jv ? "jv-boton jv-boton-chico" : "tactil rounded-lg px-2.5 text-sm font-medium text-slate-700 hover:bg-slate-100"}
+                >
+                  {verCharlas ? "Volver a la charla" : "Charlas anteriores"}
+                </button>
+              )}
               {(mensajes.length > 0 || planillas.length > 0) && (
                 <button
                   type="button"
@@ -317,15 +500,23 @@ export function ChatAsistenteGeneral({
                     setPlanillas([]);
                     setAdjuntos([]);
                     telefonos.current.clear();
+                    cambiarCharla(null);
+                    setVerCharlas(false);
                   }}
-                  className="tactil rounded-lg px-2.5 text-sm font-medium text-slate-700 hover:bg-slate-100"
+                  className={jv ? "jv-boton jv-boton-chico" : "tactil rounded-lg px-2.5 text-sm font-medium text-slate-700 hover:bg-slate-100"}
                 >
                   Nueva charla
                 </button>
               )}
+              </div>
             </header>
 
-            <div ref={lista} role="log" aria-live="polite" aria-label={`Conversación con el ${titulo.toLowerCase()}`} tabIndex={0} className="flex-1 space-y-4 overflow-y-auto bg-slate-50 px-4 py-4">
+            {verCharlas && (
+              <div className={jv ? "jv-cuerpo" : "flex-1 overflow-y-auto bg-slate-50 px-4 py-4"}>
+                <CharlasAnteriores modo="completa" charlas={charlas} actual={charlaId} cargando={cargandoCharlas} error={errorCharlas} abriendo={abriendoCharla} alAbrir={abrirCharla} alQuitar={quitarCharla} alVolver={cerrarCharlas} />
+              </div>
+            )}
+            <div ref={lista} role="log" aria-live="polite" aria-label={`Conversación con el ${titulo.toLowerCase()}`} tabIndex={0} hidden={verCharlas} className={jv ? "jv-cuerpo" : "flex-1 space-y-4 overflow-y-auto bg-slate-50 px-4 py-4"}>
               {pendientes.length > 0 && (
                 <div className="rounded-xl border border-amber-300 bg-amber-50 p-3">
                   <p className="text-sm font-semibold text-amber-950">Quedaron campañas por revisar o a medio hacer</p>
@@ -334,26 +525,33 @@ export function ChatAsistenteGeneral({
                 </div>
               )}
               {mensajes.length === 0 && (
-                <p className="text-sm text-slate-700">
+                <p className={jv ? "jv-inicio-texto" : "text-sm text-slate-700"}>
                   {vacio ??
                     "Escribime lo que necesites de los cuatro perfiles. Podés adjuntar planillas (Excel o CSV), por ejemplo una por perfil: te digo a qué perfil va cada una, cuántas personas hay para contactar y te armo un boceto de campaña para revisar. De cada planilla veo solo un resumen, con los teléfonos ocultos."}
                 </p>
+              )}
+              {mensajes.length === 0 && (
+                <CharlasAnteriores modo="recientes" charlas={charlas} actual={charlaId} cargando={cargandoCharlas} error={errorCharlas} abriendo={abriendoCharla} alAbrir={abrirCharla} alVerTodas={() => setVerCharlas(true)} />
               )}
               {mensajes.map((m, i) => {
                 const planes = (m.propuestas ?? []).filter((p) => p.tipo === "plan_campanas");
                 const otras = (m.propuestas ?? []).filter((p) => p.tipo !== "plan_campanas");
                 return (
-                  <div key={i} className={m.rol === "usuario" ? "flex justify-end" : ""}>
-                    <div className={m.rol === "usuario" ? "max-w-[85%] rounded-2xl rounded-br-md bg-slate-900 px-3.5 py-2 text-sm text-white" : "max-w-full"}>
-                      <p className={`whitespace-pre-wrap text-sm ${m.rol === "usuario" ? "" : m.error ? "text-red-700" : "text-slate-800"}`}>{m.texto}</p>
+                  <div key={i} className={jv ? (m.rol === "usuario" ? "jv-fila jv-fila-yo" : "jv-fila") : m.rol === "usuario" ? "flex justify-end" : ""}>
+                    <div className={jv ? (m.rol === "usuario" ? "jv-burbuja jv-burbuja-yo" : m.error ? "jv-burbuja jv-burbuja-error" : "jv-burbuja") : m.rol === "usuario" ? "max-w-[85%] rounded-2xl rounded-br-md bg-slate-900 px-3.5 py-2 text-sm text-white" : "max-w-full"}>
+                      {jv && m.rol !== "usuario" && !m.error ? (
+                        <TextoVivo texto={m.texto} animar={nuevo === i} />
+                      ) : (
+                        <p className={jv ? "jv-burbuja-texto" : `whitespace-pre-wrap text-sm ${m.rol === "usuario" ? "" : m.error ? "text-red-700" : "text-slate-800"}`}>{m.texto}</p>
+                      )}
                       {planes.length > 0 && <BocetoCampanas propuestas={planes} alCambiar={(np) => actualizarPropuesta(i, np)} />}
-                      {otras.map((p) => (
-                        <TarjetaPropuesta key={p.id} p={p} alCambiar={(np) => actualizarPropuesta(i, np)} />
-                      ))}
+                      {otras.map((p) =>
+                        jv ? <JvConfirmar key={p.id} p={p} alCambiar={(np) => actualizarPropuesta(i, np)} /> : <TarjetaPropuesta key={p.id} p={p} alCambiar={(np) => actualizarPropuesta(i, np)} />
+                      )}
                       {(m.enlaces ?? []).length > 0 && (
-                        <div className="mt-2 flex flex-wrap gap-2">
+                        <div className={jv ? "jv-fila-botones" : "mt-2 flex flex-wrap gap-2"}>
                           {m.enlaces!.map((e) => (
-                            <Link prefetch={false} key={e.href} href={e.href} className="inline-flex min-h-[44px] items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 text-xs font-medium text-slate-800 hover:border-slate-300">
+                            <Link prefetch={false} key={e.href} href={e.href} className={jv ? "jv-boton" : "inline-flex min-h-[44px] items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 text-xs font-medium text-slate-800 hover:border-slate-300"}>
                               {e.texto} <Icono nombre="flecha" className="h-3.5 w-3.5" />
                             </Link>
                           ))}
@@ -364,19 +562,35 @@ export function ChatAsistenteGeneral({
                 );
               })}
               {pensando && (
-                <p role="status" className="text-sm text-slate-600">
+                <p role="status" className={jv ? "jv-pensando" : "text-sm text-slate-600"}>
+                  {jv && (
+                    <span className="jv-puntos" aria-hidden="true">
+                      <i />
+                      <i />
+                      <i />
+                    </span>
+                  )}
                   Pensando…
                 </p>
               )}
             </div>
 
             <form
-              className="border-t border-slate-100 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]"
+              className={jv ? "jv-pie" : "border-t border-slate-100 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]"}
               onSubmit={(e) => {
                 e.preventDefault();
                 enviar(texto);
               }}
             >
+              {jv && !ocultarAccesos && accesos.length > 0 && (
+                <div className="jv-sugerencias" role="group" aria-label="Sugerencias rápidas">
+                  {accesos.map((a) => (
+                    <button key={a.titulo} type="button" className="jv-chip" disabled={pensando} title={a.descripcion} onClick={() => usarAcceso(a)}>
+                      {a.titulo}
+                    </button>
+                  ))}
+                </div>
+              )}
               {planillas.length > 0 && (
                 <ul aria-label="Planillas adjuntas" className="mb-2 flex flex-wrap gap-2">
                   {planillas.map((p) => (
@@ -430,10 +644,15 @@ export function ChatAsistenteGeneral({
                   {aviso}
                 </p>
               )}
+              {avisoGuardado && (
+                <p role="status" className="mb-2 text-xs text-slate-600">
+                  {avisoGuardado}
+                </p>
+              )}
               <p role="status" aria-live="polite" className="sr-only">
                 {leyendo ? "Leyendo y subiendo planillas…" : ""}
               </p>
-              <div className="flex items-end gap-2 rounded-xl border border-slate-300 bg-white p-2 focus-within:border-slate-900">
+              <div className={jv ? "jv-form" : "flex items-end gap-2 rounded-xl border border-slate-300 bg-white p-2 focus-within:border-slate-900"}>
                 <input
                   ref={archivo}
                   type="file"
@@ -444,7 +663,7 @@ export function ChatAsistenteGeneral({
                   className="hidden"
                   onChange={(e) => adjuntar(e.target.files)}
                 />
-                <button type="button" onClick={() => archivo.current?.click()} className="tactil grid shrink-0 place-items-center rounded-lg text-slate-700 hover:bg-slate-100" aria-label="Adjuntar planillas, imágenes o PDF" title="Adjuntar planillas (Excel o CSV), imágenes o PDF">
+                <button type="button" onClick={() => archivo.current?.click()} className={jv ? "jv-boton jv-boton-redondo" : "tactil grid shrink-0 place-items-center rounded-lg text-slate-700 hover:bg-slate-100"} aria-label="Adjuntar planillas, imágenes o PDF" title="Adjuntar planillas (Excel o CSV), imágenes o PDF">
                   <span aria-hidden="true" className="text-xl leading-none">
                     +
                   </span>
@@ -465,9 +684,9 @@ export function ChatAsistenteGeneral({
                     }
                   }}
                   placeholder={placeholder}
-                  className="sin-anillo max-h-40 min-h-[2.75rem] flex-1 resize-none border-0 bg-transparent p-1 text-sm text-slate-900 shadow-none focus:ring-0"
+                  className={jv ? "jv-texto" : "sin-anillo max-h-40 min-h-[2.75rem] flex-1 resize-none border-0 bg-transparent p-1 text-sm text-slate-900 shadow-none focus:ring-0"}
                 />
-                <button type="submit" disabled={pensando || leyendo || (!texto.trim() && adjuntos.length === 0)} className="btn-gold-sm tactil" aria-label={leyendo ? "Esperá a que terminen de subir las planillas" : "Enviar"}>
+                <button type="submit" disabled={pensando || leyendo || (!texto.trim() && adjuntos.length === 0)} className={jv ? "jv-boton jv-boton-redondo jv-boton-acento" : "btn-gold-sm tactil"} aria-label={leyendo ? "Esperá a que terminen de subir las planillas" : "Enviar"}>
                   <Icono nombre="enviar" className="h-4 w-4" />
                 </button>
               </div>

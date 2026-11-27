@@ -12,6 +12,8 @@ import { RUBRO_IDS } from "@/lib/rubros";
 import { SLUGS_PERFIL, type SlugPerfil } from "@/lib/marca";
 import { AREAS_DE_PERFIL } from "@/lib/cartera-servidor";
 import { personasQueEscribieron } from "@/lib/estadisticas-personas";
+import { aplicarCondiciones } from "@/lib/indicadores";
+import { ESPERAN_A_UNA_PERSONA } from "@/lib/definiciones/cifras";
 import type { CifrasPerfilSemana } from "./semana-reglas";
 
 const DIA = 86_400_000;
@@ -52,8 +54,8 @@ export async function resumenSemana(ahora = new Date()): Promise<{ desde: string
         cuenta(rango(opp().eq("derivation_state", "derivado"), "derived_at", desde, null)),
         cuenta(rango(opp().eq("derivation_state", "derivado"), "derived_at", antes, desde)),
         cuenta(s.from("campaigns").select("id", { count: "exact", head: true }).in("area", areas).eq("status", "en_curso").is("archived_at", null)),
-        // Igual que la pantalla de Perfiles: pedidos de la última semana, sin perdidos ni detenidos.
-        cuenta(opp().eq("attention_state", "requiere_humano").neq("capture_state", "perdido").or("attention_category.is.null,attention_category.neq.detencion").gte("updated_at", desde)),
+        // 22/11: la misma definición única de «Esperan a una persona» que Perfiles y Estadísticas.
+        cuenta(aplicarCondiciones(opp(), ESPERAN_A_UNA_PERSONA)),
       ]);
       const cifras: CifrasPerfilSemana = {
         enviados: { actual: envA, anterior: envB },

@@ -41,13 +41,13 @@ test("sesión: cookie alterada o con otra clave no vale", async () => {
 });
 
 test("PIN: formato de 6 números", () => {
-  for (const ok of ["909013", "000001", "482915"]) assert.ok(isValidPinFormat(ok), ok);
+  for (const ok of ["583027", "000001", "482915"]) assert.ok(isValidPinFormat(ok), ok);
   for (const no of ["12345", "1234567", "12a456", " 12345", "", null, 123456]) assert.ok(!isValidPinFormat(no as any), String(no));
 });
 
 test("PIN: rechaza los fáciles de adivinar", () => {
   for (const weak of ["000000", "111111", "123456", "654321", "890123", "121212", "123123"]) assert.ok(isWeakPin(weak), weak);
-  for (const strong of ["909013", "482915", "730194"]) assert.ok(!isWeakPin(strong), strong);
+  for (const strong of ["583027", "482915", "730194"]) assert.ok(!isWeakPin(strong), strong);
 });
 
 test("PIN: hash y verificación (scrypt)", async () => {

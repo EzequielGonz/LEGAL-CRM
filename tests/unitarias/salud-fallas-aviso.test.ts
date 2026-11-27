@@ -12,12 +12,13 @@ test("fallas: se avisa lo que frena el trabajo, no lo que se resuelve solo", () 
   assert.deepEqual(claves, ["fallidos", "bot", "audios", "retenidos"]);
 });
 
-test("fallas: un aviso por tipo, perfil y día; las de todo el sistema, una sola vez", () => {
+test("fallas: un aviso por tipo, perfil y día (los retenidos desde el 22/11 también son por perfil)", () => {
   const ahora = new Date("2026-11-14T01:30:00Z"); // 13/11 22:30 en Argentina
   assert.equal(diaAr(ahora), "2026-11-13");
   const [bot, retenidos] = fallasParaAvisar(armarFallas("marketing", { ...sin, bot24h: 2, retenidos: 1 }));
   assert.equal(claveDeAviso("marketing", bot, ahora), "falla:marketing:bot:2026-11-13");
-  assert.equal(claveDeAviso("marketing", retenidos, ahora), claveDeAviso("juridico", retenidos, ahora));
+  assert.equal(claveDeAviso("marketing", retenidos, ahora), "falla:marketing:retenidos:2026-11-13");
+  assert.notEqual(claveDeAviso("marketing", retenidos, ahora), claveDeAviso("juridico", retenidos, ahora));
 });
 
 test("fallas: el aviso lleva a Salud del perfil y no nombra a nadie", () => {

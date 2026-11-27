@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { CabezaPantalla } from "@/components/ui/diseno";
 import { AgentEditor } from "@/components/agentes/agent-editor";
 import { AgentesEtapa3 } from "@/components/agentes/agentes-etapa3";
 import { ResumenSeccion } from "@/components/nivel/resumen-seccion";
@@ -42,10 +43,7 @@ export async function AgentesPerfilView({
 
   return (
     <div className="mx-auto max-w-5xl space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold text-slate-900">Bot IA</h1>
-        <p className="mt-1 text-sm text-slate-700">{descripcion}</p>
-      </div>
+      <CabezaPantalla kicker="Agentes IA" titulo="Bot IA" bajada={descripcion} />
 
       {error ? (
         <p role="alert" className="rounded-lg bg-red-50 p-3 text-sm font-medium text-red-800">

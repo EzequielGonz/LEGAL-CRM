@@ -178,6 +178,9 @@ export async function currentSessionVersion(): Promise<SessionVersionResult> {
     const res = await fetch(`${url}/rest/v1/access_pin?select=session_version&id=eq.true`, {
       headers: { apikey: key, Authorization: `Bearer ${key}` },
       cache: "no-store",
+      // 27/11 (auditoría): si la base tarda más de 3 s, cae en el catch → «no comprobable»
+      // (503 recuperable, sin borrar la cookie) en vez de colgar cada pedido.
+      signal: AbortSignal.timeout(3000),
     });
     if (!res.ok) return { ok: false, reason: `respuesta_${res.status}` };
     const rows = (await res.json()) as { session_version: number }[];

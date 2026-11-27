@@ -37,57 +37,91 @@ export async function getAvailableSlots(
       .gte("starts_at", now.toISOString()),
   ]);
 
+  return calcularTurnos({
+    reglas: rules ?? [],
+    bloqueos: blocks ?? [],
+    citas: appointments ?? [],
+    ahora: now,
+    daysAhead,
+    limit,
+  });
+}
+
+const OFFSET_AR_MS = 3 * 3_600_000; // Argentina: UTC−3 fijo, sin horario de verano.
+
+export interface ReglaTurnos {
+  weekday: number;
+  start_time: string;
+  end_time: string;
+  slot_duration_minutes: number;
+}
+
+/**
+ * Arma los turnos libres en hora argentina (27/11, auditoría): el servidor
+ * corre en UTC y antes «9 a 13» salía 06 a 10 de Argentina y el día de la
+ * semana se corría desde las 21 h. Pura: recibe reglas, bloqueos, citas y
+ * `ahora`, y devuelve instantes ISO (UTC) igual que antes.
+ */
+export function calcularTurnos({
+  reglas,
+  bloqueos,
+  citas,
+  ahora,
+  daysAhead = 14,
+  limit = 20,
+}: {
+  reglas: ReglaTurnos[];
+  bloqueos: { starts_at: string; ends_at: string }[];
+  citas: { starts_at: string; ends_at: string; kind?: string | null }[];
+  ahora: Date;
+  daysAhead?: number;
+  limit?: number;
+}): Slot[] {
   const slots: Slot[] = [];
-  const rulesByWeekday = new Map<number, typeof rules>();
-  for (const rule of rules ?? []) {
-    const arr = rulesByWeekday.get(rule.weekday) ?? [];
-    arr.push(rule);
-    rulesByWeekday.set(rule.weekday, arr);
+  const nowMs = ahora.getTime();
+  const horizonMs = nowMs + daysAhead * 24 * 60 * 60 * 1000;
+
+  const porDia = new Map<number, ReglaTurnos[]>();
+  for (const regla of reglas) {
+    const arr = porDia.get(regla.weekday) ?? [];
+    arr.push(regla);
+    porDia.set(regla.weekday, arr);
   }
 
-  const cursor = new Date(now);
-  cursor.setMinutes(cursor.getMinutes() >= 30 ? 60 : 30, 0, 0); // redondeo a la próxima media hora
+  // Las citas de IA (Fase 2) no consumen turnos humanos.
+  const ocupadas = citas
+    .filter((a) => a.kind !== "ia")
+    .map((a) => [Date.parse(a.starts_at), Date.parse(a.ends_at)] as const);
+  const bloqueadas = bloqueos.map((b) => [Date.parse(b.starts_at), Date.parse(b.ends_at)] as const);
 
-  while (cursor < horizon && slots.length < limit) {
-    const weekday = cursor.getDay();
-    const dayRules = rulesByWeekday.get(weekday) ?? [];
+  // Fecha de hoy en Argentina, leída con los campos UTC del instante corrido 3 h.
+  const hoyAR = new Date(nowMs - OFFSET_AR_MS);
+  for (let n = 0; slots.length < limit; n++) {
+    const dia = new Date(Date.UTC(hoyAR.getUTCFullYear(), hoyAR.getUTCMonth(), hoyAR.getUTCDate() + n));
+    // Medianoche argentina de ese día, como instante.
+    const medianocheMs = dia.getTime() + OFFSET_AR_MS;
+    if (medianocheMs >= horizonMs) break;
 
-    for (const rule of dayRules) {
-      const [startH, startM] = rule.start_time.split(":").map(Number);
-      const [endH, endM] = rule.end_time.split(":").map(Number);
+    for (const regla of porDia.get(dia.getUTCDay()) ?? []) {
+      const [startH, startM] = regla.start_time.split(":").map(Number);
+      const [endH, endM] = regla.end_time.split(":").map(Number);
+      const durMs = regla.slot_duration_minutes * 60_000;
+      if (!(durMs > 0)) continue;
+      const inicioMs = medianocheMs + (startH * 60 + startM) * 60_000;
+      const finMs = medianocheMs + (endH * 60 + endM) * 60_000;
 
-      const dayStart = new Date(cursor);
-      dayStart.setHours(startH, startM, 0, 0);
-      const dayEnd = new Date(cursor);
-      dayEnd.setHours(endH, endM, 0, 0);
-
-      for (
-        let slotStart = new Date(dayStart);
-        slotStart.getTime() + rule.slot_duration_minutes * 60000 <= dayEnd.getTime();
-        slotStart = new Date(slotStart.getTime() + rule.slot_duration_minutes * 60000)
-      ) {
-        if (slotStart < now) continue;
-        const slotEnd = new Date(slotStart.getTime() + rule.slot_duration_minutes * 60000);
-
-        // Las citas de IA (Fase 2) no consumen turnos humanos.
-        const overlapsAppointment = (appointments ?? []).filter((a: any) => a.kind !== "ia").some(
-          (a: any) => new Date(a.starts_at) < slotEnd && new Date(a.ends_at) > slotStart
-        );
-        const overlapsBlock = (blocks ?? []).some(
-          (b) => new Date(b.starts_at) < slotEnd && new Date(b.ends_at) > slotStart
-        );
-
-        if (!overlapsAppointment && !overlapsBlock) {
-          slots.push({ starts_at: slotStart.toISOString(), ends_at: slotEnd.toISOString() });
+      for (let t = inicioMs; t + durMs <= finMs; t += durMs) {
+        if (t < nowMs || t >= horizonMs) continue;
+        const tFin = t + durMs;
+        const choca =
+          ocupadas.some(([a, b]) => a < tFin && b > t) || bloqueadas.some(([a, b]) => a < tFin && b > t);
+        if (!choca) {
+          slots.push({ starts_at: new Date(t).toISOString(), ends_at: new Date(tFin).toISOString() });
           if (slots.length >= limit) break;
         }
       }
       if (slots.length >= limit) break;
     }
-
-    cursor.setDate(cursor.getDate() + 1);
-    cursor.setHours(0, 0, 0, 0);
-    if (slots.length >= limit) break;
   }
 
   return slots;

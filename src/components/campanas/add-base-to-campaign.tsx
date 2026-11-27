@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { mensajeDeError } from "@/lib/errores-ui";
 import { CAMPAIGN_STATUS_LABEL } from "@/lib/campaign-status";
 
 interface PlanSummary {
@@ -64,7 +65,7 @@ export function AddBaseToCampaign({
       setPlan(data.plan);
       setCampaign(data.campaign);
     } catch (err: any) {
-      setError(String(err?.message ?? err));
+      setError(mensajeDeError(err, "No se pudo calcular la vista previa. Probá de nuevo."));
     } finally {
       setLoading(false);
     }
@@ -89,7 +90,7 @@ export function AddBaseToCampaign({
       onAdded?.(data.agregados ?? 0);
       router.refresh();
     } catch (err: any) {
-      setError(String(err?.message ?? err));
+      setError(mensajeDeError(err, "No se pudieron agregar los contactos. Probá de nuevo."));
     } finally {
       setSaving(false);
     }
@@ -97,7 +98,7 @@ export function AddBaseToCampaign({
 
   if (done !== null) {
     return (
-      <div className="rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-green-800">
+      <div role="status" className="rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-green-800">
         {done} contactos agregados a la campaña «{campaign?.name}» como pendientes. La campaña no se lanzó: sigue{" "}
         {campaign ? (CAMPAIGN_STATUS_LABEL[campaign.status] ?? campaign.status).toLowerCase() : "como estaba"} hasta que la lances a mano.
       </div>
@@ -159,7 +160,7 @@ export function AddBaseToCampaign({
           La campaña está en curso: pausala antes de agregar contactos.
         </p>
       )}
-      {error && <p className="mb-2 text-xs text-red-600">{error}</p>}
+      {error && <p role="alert" className="mb-2 text-xs text-red-600">{error}</p>}
       <button
         type="button"
         onClick={confirm}

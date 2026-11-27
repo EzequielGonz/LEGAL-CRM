@@ -1,0 +1,19 @@
+Leé esta biblioteca completa y sumala como INFORMACIÓN adicional al cerebro del CRM multirubro. Conservá íntegro todo lo importante que ya existe.
+
+Antes de integrar, releé el cerebro, las órdenes vigentes, la ficha comercial y el conocimiento actual de los cuatro perfiles. No asumas que el estado del 22 de noviembre de 2026 sigue siendo el último. La lectura del paquete no cambia reglas ni autoriza gastos, mensajes o publicaciones.
+
+Trabajá de forma aditiva. Creá un espacio nuevo de biblioteca, con claves nuevas. No borres, resumas, reemplaces, renombres ni reescribas documentos, fichas, roles, prompts, configuraciones o decisiones anteriores. Las fichas propuestas nacen inactivas y no tienen versión destino. Conservá O002, O003, O014 y O018 en su estado actual y no las reactives.
+
+Usá el manual extenso como referencia recuperable. No lo pegues entero en cada turno ni lo conviertas en nuevas bases generales permanentes. El código consultado usa hasta dos temas y tres objeciones, con 12.000 caracteres para el bloque; las bases siempre entran. Verificá los límites actuales antes de proponer otra arquitectura.
+
+Compará cada candidato con lo vigente. Entregá una matriz con nuevo, ampliación, duplicado o conflicto, indicando las claves actuales relacionadas. Los duplicados no se eliminan del histórico. Los conflictos no se resuelven por intuición. La autoridad operativa existente y las órdenes actuales prevalecen; cualquier dato legal o comercial requiere fuente y vigencia.
+
+Prestá especial atención a aceptación contextual de ok o dale, identidad del bot, duración y gratuidad de llamadas, restricciones de precio, duplicados del seguro y diferencias entre alertas viejas y arreglos recientes. No cambies ninguna de esas reglas como consecuencia de un ejemplo del manual.
+
+Verificá el mecanismo de alta antes de usarlo. El código leído de sumarFichaDirecta y fichaDesdePropuesta crea fichas activas en v2; el endpoint de alta no sirve como borrador inactivo. No llames ese endpoint ni ejecutes migraciones que activen el lote por accidente. Prepará primero una incorporación en archivos nuevos o un borrador realmente inactivo, según el esquema vigente.
+
+Mantené separados los cuatro rubros. La memoria de dirección y los casos de práctica no deben llegar indiscriminadamente al bot de atención. Revisá los disparadores: hay temas que amplían conceptos ya existentes y podrían desplazar fichas actuales aun sin editarlas. Probá sinónimos, falsos positivos, mensajes breves y consultas de varios temas.
+
+Incluí validación de conservación: mismo conjunto previo de claves y mismas huellas de los campos previos, con las diferencias nuevas identificadas por lote. Si hubo cambios desde la lectura del paquete, releé y conservá el estado actual; no restaures una versión vieja. La reversión debe retirar solo las nuevas fichas del lote.
+
+Prepará un informe concreto con qué aporta cada rubro, qué puede sumarse de inmediato como referencia, qué necesita revisión profesional o de fuentes y qué necesita una decisión de los dueños. Para activar cambios de conducta o producción, cumplí la autorización vigente del proyecto. No presentes una propuesta o un archivo guardado como si ya estuviera activo.

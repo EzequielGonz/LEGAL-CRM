@@ -50,3 +50,4 @@ Comprobado el 13/10/2026 en el catálogo de complementos de esta cuenta de Claud
 1. Clonar el repositorio de origen en un commit nuevo y comparar con la copia (`diff -r`).
 2. Conservar la licencia y las notas del proyecto, y no agregar scripts que necesiten red o claves.
 3. Actualizar esta tabla con el commit, la fecha y los cambios.
+- graphify: Graphify-Labs/graphify (Apache-2.0), skill copiada el 22/11 con `graphify install` (graphifyy 0.9.115).

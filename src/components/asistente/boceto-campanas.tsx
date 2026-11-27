@@ -5,6 +5,7 @@ import Link from "next/link";
 import type { Propuesta } from "@/components/asistente/asistente-panel";
 import { DIAS_SEMANA, NOMBRE_PERFIL, diasEnPalabras, lineaDelPlan, type PayloadPlan } from "@/lib/asistente/general";
 import { ENTRENAMIENTO } from "@/lib/campanas/entrenamiento";
+import { cantidad } from "@/lib/textos/pantalla";
 
 /**
  * Boceto del plan de campañas del asistente general (15/11): una tarjeta por
@@ -137,8 +138,8 @@ export function BocetoCampanas({ propuestas, alCambiar }: { propuestas: Propuest
       <p className="text-xs font-semibold uppercase tracking-wide text-gold-700">Boceto de campañas · propuesta</p>
       <h3 id={idTotales} className="mt-1 text-base font-semibold text-slate-950">
         {pendientes.length
-          ? `${n(totales.campanas)} campaña(s) · ${n(totales.personas)} personas · ${n(totales.lineas)} línea(s)`
-          : `${propuestas.length} campaña(s) del plan`}
+          ? `${cantidad(totales.campanas, "campaña")} · ${cantidad(totales.personas, "persona")} · ${cantidad(totales.lineas, "línea")}`
+          : `${cantidad(propuestas.length, "campaña")} del plan`}
       </h3>
       {pendientes.length > 0 && (
         <p className="mt-1 text-sm text-slate-600">
@@ -176,7 +177,7 @@ export function BocetoCampanas({ propuestas, alCambiar }: { propuestas: Propuest
           <button type="button" className="btn-gold" disabled={ocupado || guardando.length > 0 || (totales.lanzan > 0 && !entendido)} onClick={() => confirmar(incluidas)}>
             {ocupado
               ? "Confirmando…"
-              : `${totales.lanzan ? "Confirmar y lanzar" : "Confirmar"} ${n(totales.campanas)} campaña(s) · ${n(totales.personas)} personas`}
+              : `${totales.lanzan ? "Confirmar y lanzar" : "Confirmar"} ${cantidad(totales.campanas, "campaña")} · ${cantidad(totales.personas, "persona")}`}
           </button>
           {guardando.length > 0 && <span className="text-sm text-slate-600">Guardando cambios…</span>}
         </div>
@@ -261,8 +262,8 @@ function TarjetaPlan({
               {b.columna_nombre ? ` · Nombre: columna «${b.columna_nombre}»` : " · sin columna de nombre"}.
             </p>
             <p className="text-slate-700">
-              <strong className="text-base text-slate-950 tabular-nums">{n(b.elegibles)}</strong> personas para contactar. Quedan afuera {n(b.detenidos)} detenida(s) y {n(b.ya_contactados)} ya contactada(s)
-              {b.filas > b.utilizables ? `; ${n(b.filas - b.utilizables)} fila(s) sin teléfono válido se guardan igual` : ""}.
+              <strong className="text-base text-slate-950 tabular-nums">{n(b.elegibles)}</strong> personas para contactar. Quedan afuera {cantidad(b.detenidos, "detenida")} y {cantidad(b.ya_contactados, "ya contactada", "ya contactadas")}
+              {b.filas > b.utilizables ? `; ${cantidad(b.filas - b.utilizables, "fila")} sin teléfono válido se ${b.filas - b.utilizables === 1 ? "guarda" : "guardan"} igual` : ""}.
             </p>
           </div>
 
@@ -368,13 +369,13 @@ function TarjetaPlan({
             <p className="font-medium text-slate-950">Ritmo</p>
             <p className="text-slate-700">{b.ritmo}</p>
             <p className="text-slate-700">
-              {b.estimado ? `Unos ${n(b.estimado.dias_de_envio)} día(s) de envío: termina cerca del ${fecha(b.estimado.termina)}.` : "Sin límite propio no se puede estimar cuántos días tarda: rige el límite de la línea."}
+              {b.estimado ? `${b.estimado.dias_de_envio === 1 ? "Un día" : `Unos ${cantidad(b.estimado.dias_de_envio, "día")}`} de envío: termina cerca del ${fecha(b.estimado.termina)}.` : "Sin límite propio no se puede estimar cuántos días tarda: rige el límite de la línea."}
             </p>
           </div>
 
           <div>
             <p className="font-medium text-slate-950">
-              Mensajes de ejemplo · rota al azar entre {n(b.rotacion.plantillas)} plantilla(s) de inicio ({n(b.rotacion.textos)} textos)
+              Mensajes de ejemplo · rota al azar entre {cantidad(b.rotacion.plantillas, "plantilla")} de inicio ({n(b.rotacion.textos)} textos)
             </p>
             {b.ejemplos.length ? (
               <ul className="mt-1 space-y-1.5">

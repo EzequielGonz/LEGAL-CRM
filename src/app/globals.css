@@ -145,6 +145,34 @@ body {
 }
 
 @layer base {
+  /* Tipografía prolija (22/11): kerning y ligaduras, suavizado, cifras
+     tabulares donde se alinean columnas y cortes de línea cuidados. */
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-kerning: normal;
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  }
+  h1, h2, h3, h4 { text-wrap: balance; line-height: 1.2; }
+  h1 { letter-spacing: -0.025em; }
+  h2 { letter-spacing: -0.018em; }
+  h3 { letter-spacing: -0.012em; }
+  h4 { letter-spacing: -0.006em; }
+  p, li, dd, blockquote, figcaption { text-wrap: pretty; line-height: 1.6; }
+  small, .text-xs { letter-spacing: 0.005em; }
+  table, time, output, td, th, .tabular-nums, [class*="cifra"], [class*="contador"] {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "kern" 1, "tnum" 1;
+  }
+  code, kbd, samp, pre, .font-mono {
+    font-feature-settings: "calt" 0, "tnum" 1;
+    font-variant-ligatures: none;
+  }
+  ::selection { background: rgb(var(--c-gold-500) / 0.28); }
+
   /* Títulos en Inter como el resto de la operación (bloque 4). Playfair se
      usa solo con la clase font-serif, en la marca y en el ingreso. */
   h1,

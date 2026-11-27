@@ -2,6 +2,7 @@ import { handleInboundMessage } from "@/lib/inbound";
 import type { Area } from "@/lib/supabase/database.types";
 import { NUEVAS_AREAS_WHATSAPP, envPrefixForArea } from "@/lib/rubros";
 import { quarantineWebhook } from "@/lib/webhooks/security";
+import { rubroDeRetenidoPorArea } from "@/lib/definiciones/retenidos";
 import { parseWhatsAppMessage } from "@/lib/webhooks/whatsapp-parse";
 import { applyDeliveryStatus } from "@/lib/delivery-status";
 import { findLineByPhoneNumberId } from "@/lib/profiles";
@@ -90,6 +91,7 @@ export async function processWhatsAppPayload(payload: any): Promise<ProcessSumma
               entry: [{ id: entry?.id ?? null, changes: [{ field: change?.field ?? "messages", value: { ...value, messages: [message], statuses: [] } }] }],
             },
             detail: String(err?.message ?? err).slice(0, 2000),
+            rubroId: rubroDeRetenidoPorArea(area),
           });
           summary.retenidos++;
         }
@@ -176,6 +178,7 @@ export async function processMetaPayload(payload: any): Promise<ProcessSummary> 
           accountId: entry?.id ?? null,
           payload: { object: payload?.object ?? "page", entry: [{ ...entry, messaging: [event] }] },
           detail: String(err?.message ?? err).slice(0, 2000),
+          rubroId: rubroDeRetenidoPorArea(resolved.area),
         });
         summary.retenidos++;
       }

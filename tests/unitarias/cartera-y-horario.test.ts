@@ -94,8 +94,10 @@ test("Facebook: variables por perfil y validación de lo editable", () => {
 test("menú: Conversaciones y Contactos abren la cartera; las listas completas siguen en su sección", () => {
   const s = seccionesDePerfil("agencia_0km");
   assert.ok(s[1].href.startsWith("/conversaciones?"));
-  assert.ok(s[2].href.startsWith("/contactos?"));
-  assert.ok(s[2].tabs.some((t) => t.label === "Por base" && t.href.startsWith("/prospectos-por-base?")));
+  const contactos = s.find((x) => x.clave === "contactos")!;
+  assert.ok(contactos.href.startsWith("/contactos?"));
+  assert.equal(contactos.grupo, "mas", "Contactos pasó a «Más» y sigue abriendo por su dirección");
+  assert.ok(contactos.tabs.some((t) => t.label === "Por base" && t.href.startsWith("/prospectos-por-base?")));
   // 10/11: se busca por clave (Wasender sumó una sección antes de esta).
   assert.ok(s.find((x) => x.clave === "linea")!.tabs.some((t) => t.label === "Perfil de WhatsApp y redes" && !t.oculto));
   assert.equal(seccionActiva(s, "/oportunidades", "perfil=agencia_0km&indicador=captado_sin_derivar")?.seccion.clave, "conversaciones");

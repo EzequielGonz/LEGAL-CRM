@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import clsx from "clsx";
 import { Icono } from "@/components/ui/icono-seccion";
+import { Bento, Estadistica, Kicker, Luz, Tarjeta, Vacio } from "@/components/ui/diseno";
 import type { SlugPerfil } from "@/lib/marca";
 import {
   ETIQUETA_ESTADO,
@@ -20,6 +21,9 @@ import {
 
 export type TareaVista = TareaBandeja & { perfil: SlugPerfil | null };
 
+/** Mismo texto que la Oficina sobre cómo se toman las tareas (antes decían cosas distintas). */
+const COMO_LA_TOMA = "Claude la toma cuando tocás «Arrancar ahora» en la Oficina (si está conectado) o cuando escribís «oficina» en un chat de Claude del proyecto.";
+
 const CHIP: Record<EstadoBandeja, string> = {
   pendiente: "border-slate-300 bg-white text-slate-700",
   en_curso: "border-sky-300 bg-sky-50 text-sky-800",
@@ -34,24 +38,26 @@ const fecha = (iso: string | null) =>
     : "";
 
 /**
- * Pantalla de la Bandeja para Claude: formulario para dejar una tarea y la
- * lista con su estado. Lo que necesita atención (en espera) va arriba y con
- * aviso. Desde acá solo se crea y se descarta (con motivo); el trabajo lo
- * hace Claude desde Cowork y deja acá el resultado.
+ * Pantalla de la Bandeja para Claude dentro de un perfil: formulario para
+ * dejar una tarea y la lista con su estado. Solo lo de ESTE perfil (rubros
+ * separados, 27/11): lo de varios rubros o de todo el panel se pide en la
+ * Oficina. Lo que necesita atención (en espera) va arriba y con aviso. Desde
+ * acá solo se crea y se descarta (con motivo); el trabajo lo hace Claude y
+ * deja acá el resultado.
  */
 export function BandejaClaude({
   slug,
-  perfiles,
+  nombrePerfil,
   iniciales,
   errorLectura,
 }: {
   slug: SlugPerfil;
-  perfiles: { slug: SlugPerfil; nombre: string }[];
+  nombrePerfil: string;
   iniciales: TareaVista[];
   errorLectura: boolean;
 }) {
   const [tareas, setTareas] = useState<TareaVista[]>(iniciales);
-  const [perfil, setPerfil] = useState<SlugPerfil>(slug);
+  const perfil = slug;
   const [pedido, setPedido] = useState("");
   const [enlaces, setEnlaces] = useState("");
   const [enviando, setEnviando] = useState(false);
@@ -64,7 +70,7 @@ export function BandejaClaude({
   const resumen = useMemo(() => resumenBandeja(tareas), [tareas]);
   const abiertas = ordenadas.filter((t) => !["lista", "descartada"].includes(estadoVisible(t, ahora).estado));
   const cerradas = ordenadas.filter((t) => ["lista", "descartada"].includes(estadoVisible(t, ahora).estado));
-  const nombreDe = (s: SlugPerfil | null) => perfiles.find((p) => p.slug === s)?.nombre ?? "Sin perfil";
+  const nombreDe = (s: SlugPerfil | null) => (s === slug ? nombrePerfil : "Otro perfil");
   const datoEnPedido = pedido ? pareceDatoPersonal(pedido) : null;
 
   async function crear(e: React.FormEvent) {
@@ -84,7 +90,7 @@ export function BandejaClaude({
       if (t) setTareas((prev) => [{ ...t, perfil }, ...prev]);
       setPedido("");
       setEnlaces("");
-      setAviso("Listo: la tarea quedó pendiente. Para que Claude la tome, abrí un chat nuevo de Cowork en el proyecto y decí «ok».");
+      setAviso(`Listo: la tarea quedó pendiente. ${COMO_LA_TOMA}`);
     } catch (err: any) {
       setError(err?.message || "No se pudo guardar la tarea.");
     } finally {
@@ -99,11 +105,16 @@ export function BandejaClaude({
   return (
     <div className="mx-auto max-w-4xl space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold text-slate-900">Bandeja para Claude</h1>
+        <Kicker className="mb-1.5">Tareas para Claude</Kicker>
+        <h1 className="text-2xl font-semibold text-slate-900 sm:text-3xl">Bandeja para Claude</h1>
         <p className="mt-1 max-w-2xl text-sm text-slate-600">
-          Dejá acá tareas complejas (armar y cargar contenido, mejorar una landing, revisar algo del panel). Claude las toma desde Cowork, con el contexto del
-          proyecto, cuando abrís un chat nuevo del proyecto y decís <strong>«ok»</strong>. Lo que cambie el panel o el código vuelve como propuesta para
-          confirmar. Para consultas rápidas sigue estando <em>Pedile algo</em>.
+          Dejá acá tareas complejas de <strong>{nombrePerfil}</strong> (armar y cargar contenido, mejorar una landing, revisar algo del panel). {COMO_LA_TOMA} Lo
+          que cambie el panel o el código vuelve como propuesta para confirmar. Para consultas rápidas está <em>Jarvis</em>. Lo que es de varios rubros o de
+          todo el panel se pide en la{" "}
+          <a href="/oficina" className="font-medium underline underline-offset-2">
+            Oficina
+          </a>
+          .
         </p>
       </div>
 
@@ -121,34 +132,24 @@ export function BandejaClaude({
               {resumen.en_espera === 1 ? "Una tarea está en espera" : `${resumen.en_espera} tareas están en espera`}
             </p>
             <p className="mt-0.5">
-              Claude no pudo terminarlas (por ejemplo, se agotó el uso del plan o falta una decisión tuya). Leé el motivo en cada una; la próxima vez que digas
-              «ok» en Cowork las retoma.
+              Claude no pudo terminarlas (por ejemplo, se agotó el uso del plan o falta una decisión tuya). Leé el motivo en cada una; la próxima vez que
+              arranque la Oficina las retoma.
             </p>
           </div>
         </div>
       )}
 
       {/* Nueva tarea */}
-      <section aria-labelledby="bandeja-nueva" className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+      <section aria-labelledby="bandeja-nueva" className="d-tarjeta d-tarjeta--brillo !block sm:!p-5">
         <h2 id="bandeja-nueva" className="text-base font-semibold text-slate-900">
           Nueva tarea
         </h2>
         <form onSubmit={crear} className="mt-3 space-y-4">
           <div className="grid gap-4 sm:grid-cols-[14rem_1fr]">
-            <label className="block text-sm">
+            <div className="block text-sm">
               <span className="font-medium text-slate-800">Perfil</span>
-              <select
-                value={perfil}
-                onChange={(e) => setPerfil(e.target.value as SlugPerfil)}
-                className="tactil mt-1 block w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900"
-              >
-                {perfiles.map((p) => (
-                  <option key={p.slug} value={p.slug}>
-                    {p.nombre}
-                  </option>
-                ))}
-              </select>
-            </label>
+              <p className="tactil mt-1 flex items-center rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-900">{nombrePerfil}</p>
+            </div>
             <label className="block text-sm">
               <span className="font-medium text-slate-800">Enlaces de referencia (opcional)</span>
               <input
@@ -198,10 +199,26 @@ export function BandejaClaude({
               <Icono nombre="enviar" className="h-4 w-4" />
               {enviando ? "Guardando…" : "Dejar para Claude"}
             </button>
-            <span className="text-xs text-slate-500">Guardarla no ejecuta nada: queda pendiente hasta que digas «ok» en Cowork.</span>
+            <span className="text-xs text-slate-500">Guardarla no ejecuta nada: queda pendiente hasta que Claude la tome.</span>
           </div>
         </form>
       </section>
+
+      {/* 22/11: las tres cifras de la bandeja en bento, con su luz. */}
+      <Bento etiqueta="Resumen de la bandeja">
+        <Tarjeta ancho="3" estado={resumen.en_espera ? "aviso" : "apagado"}>
+          <div className="flex items-center gap-2"><Luz estado={resumen.en_espera ? "aviso" : "apagado"} late={resumen.en_espera > 0} /><Kicker>Te esperan</Kicker></div>
+          <Estadistica etiqueta="En espera de una respuesta tuya" valor={resumen.en_espera} chico />
+        </Tarjeta>
+        <Tarjeta ancho="3" estado={resumen.en_curso ? "ok" : "apagado"}>
+          <div className="flex items-center gap-2"><Luz estado={resumen.en_curso ? "ok" : "apagado"} late={resumen.en_curso > 0} /><Kicker>Trabajando</Kicker></div>
+          <Estadistica etiqueta="En curso" valor={resumen.en_curso} chico />
+        </Tarjeta>
+        <Tarjeta ancho="3" estado={resumen.pendiente ? "info" : "apagado"}>
+          <div className="flex items-center gap-2"><Luz estado={resumen.pendiente ? "info" : "apagado"} /><Kicker>En cola</Kicker></div>
+          <Estadistica etiqueta="Pendientes" valor={resumen.pendiente} chico />
+        </Tarjeta>
+      </Bento>
 
       {/* Abiertas */}
       <section aria-labelledby="bandeja-abiertas" className="space-y-3">
@@ -215,7 +232,9 @@ export function BandejaClaude({
           </p>
         </div>
         {abiertas.length === 0 ? (
-          <p className="rounded-xl border border-dashed border-slate-300 bg-white p-5 text-sm text-slate-600">No hay tareas abiertas.</p>
+          <div className="d-tarjeta">
+            <Vacio titulo="No hay tareas abiertas" texto="Lo que dejes arriba queda pendiente hasta que Claude la tome." />
+          </div>
         ) : (
           <ul className="space-y-3">
             {abiertas.map((t) => (
@@ -269,7 +288,7 @@ function TarjetaTarea({ tarea, nombrePerfil, ahora, onCambio }: { tarea: TareaVi
       const r = await fetch(`/api/bandeja-claude/${tarea.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ accion: "descartar", motivo }),
+        body: JSON.stringify({ accion: "descartar", motivo, perfil: tarea.perfil ?? undefined }),
       });
       const d = await r.json().catch(() => ({}));
       if (!r.ok) throw new Error(d?.error || "No se pudo descartar.");

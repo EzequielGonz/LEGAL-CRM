@@ -2,12 +2,15 @@
 
 import { useState } from "react";
 import { MarcaPanel } from "@/components/ui/marca-panel";
+import { Paralaje } from "@/components/vivo/paralaje";
+import { Cartel } from "@/components/vivo/cartel";
 
 export function PinLoginForm({ configured, next }: { configured: boolean; next: string | null }) {
   const [pin, setPin] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [sacudir, setSacudir] = useState(false);
+  const [saliendo, setSaliendo] = useState(false);
 
   function avisarError(msg: string) {
     setError(msg);
@@ -38,7 +41,11 @@ export function PinLoginForm({ configured, next }: { configured: boolean; next: 
         return;
       }
       // Navegación completa: así el servidor ya ve la cookie nueva.
-      window.location.assign(data.next ?? "/inicio");
+      // Vuelta 6: transición al entrar (la tarjeta se agranda y se desvanece) antes de cambiar de pantalla.
+      const destino = data.next ?? "/inicio";
+      const quieto = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      setSaliendo(true);
+      window.setTimeout(() => window.location.assign(destino), quieto ? 0 : 480);
     } catch {
       avisarError("No hay conexión con el servidor. Probá de nuevo.");
       setLoading(false);
@@ -48,12 +55,22 @@ export function PinLoginForm({ configured, next }: { configured: boolean; next: 
   return (
     <form
       onSubmit={handleSubmit}
-      className={`pin-tarjeta${sacudir ? " pin-sacudida" : ""}`}
+      className={`pin-tarjeta${sacudir ? " pin-sacudida" : ""}${saliendo ? " vv-saliendo" : ""}`}
       aria-busy={loading}
     >
+      {/* Vuelta 6: escena parallax en capas con el logo que se dibuja (trazo animado). */}
+      <Paralaje compacta className="vv-ingreso-escena">
+        <span className="vv-logo-trazo">
+          <MarcaPanel animada />
+          <svg className="vv-trazo" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+            <rect x="2" y="2" width="96" height="96" rx="24" pathLength={1} vectorEffect="non-scaling-stroke" />
+          </svg>
+        </span>
+      </Paralaje>
       <div className="mb-6 flex flex-col items-center text-center">
-        <MarcaPanel className="mb-4" />
-        <h1 className="pin-titulo font-serif text-2xl font-semibold">Panel central</h1>
+        {/* 22/11: rótulo mono como /cerebro, arriba del título. */}
+        <p className="pin-kicker mb-2">Acceso privado · 4 perfiles</p>
+        <Cartel como="h1" tamano="l" texto="Panel [central]" retrasoMs={250} className="pin-titulo" />
         <p className="pin-bajada mt-1.5 text-sm">Ingresá el PIN del panel para entrar.</p>
       </div>
 

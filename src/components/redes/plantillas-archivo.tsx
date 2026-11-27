@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { parseSpreadsheetFile } from "@/lib/bases/parse-file";
+import { cantidad } from "@/lib/textos/pantalla";
 
 interface Envio {
   rubro: string;
@@ -161,12 +162,12 @@ export function PlantillasArchivo({ perfil }: { perfil: string }) {
           )}
           {resumen && resumen.enviadas > 0 && resumen.errores === 0 && (
             <p className="text-sm text-emerald-700">
-              Se enviaron {resumen.enviadas} plantilla(s) a Meta para revisión{resumen.yaEstaban ? ` (${resumen.yaEstaban} ya estaban)` : ""}. Meta las revisa (de minutos a 24 h). Para ver el estado, tocá «Leer plantillas de Meta» en la línea, abajo.
+              Se {resumen.enviadas === 1 ? "envió" : "enviaron"} {cantidad(resumen.enviadas, "plantilla")} a Meta para revisión{resumen.yaEstaban ? ` (${resumen.yaEstaban} ya estaban)` : ""}. Meta las revisa (de minutos a 24 h). Para ver el estado, tocá «Leer plantillas de Meta» en la línea, abajo.
             </p>
           )}
           {resumen && resumen.enviadas > 0 && resumen.errores > 0 && (
             <p className="text-sm font-medium text-red-700">
-              Se enviaron {resumen.enviadas} plantilla(s), pero {resumen.errores} tuvieron error (ver arriba). Para ver el estado, tocá «Leer plantillas de Meta» en la línea, abajo.
+              Se {resumen.enviadas === 1 ? "envió" : "enviaron"} {cantidad(resumen.enviadas, "plantilla")}, pero {resumen.errores} tuvieron error (ver arriba). Para ver el estado, tocá «Leer plantillas de Meta» en la línea, abajo.
             </p>
           )}
           {resumen && resumen.enviadas === 0 && (
