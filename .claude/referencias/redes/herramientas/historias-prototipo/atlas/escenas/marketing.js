@@ -24,12 +24,13 @@ function partir(txt, ancho, max = 9) {
   if (cur) L.push(cur); return L.slice(0, max);
 }
 
+const W2 = 540, H2 = 960;
 export default async function (datos, plan) {
   const PL = plan || {};
   const P = datos.palabras, T = datos.total;
   const M = await motor({fondo: 0xE4D3BE, fov: 36, exposicion: 1.0, entorno: .42, bloom: {fuerza: .3, radio: .42, umbral: 1.05},
     cine: {grano: .03, vineta: .3, ca: .0011, lift: [.014, .01, .006], tinte: [1, .985, .96]}});
-  const {scene, cam} = M;
+  const {scene, cam} = M; M.bloom.setSize(W2, H2); // brillo a un cuarto de resolución: mismo halo, la mitad de costo
   const ev = []; const sfx = (t, n, v = 1) => { if (t >= 0 && t < T - .05) ev.push([+t.toFixed(3), n, +v.toFixed(2)]); };
   const golpes = []; // [t, fuerza] para el temblor de cámara
 
@@ -131,12 +132,12 @@ export default async function (datos, plan) {
   const plano = (tex, op, col = 0xffffff, aditivo = true) => new THREE.MeshBasicMaterial({map: tex, color: col, transparent: true, opacity: op, depthWrite: false, blending: aditivo ? THREE.AdditiveBlending : THREE.NormalBlending, side: THREE.DoubleSide, toneMapped: true});
 
   // ── hall: pared, piso pulido con reflejo, listones de nogal, zócalo ───────
-  const mPared = new THREE.MeshStandardMaterial({map: travertino, roughness: .82});
+  const mPared = new THREE.MeshLambertMaterial({map: travertino});
   malla(new THREE.PlaneGeometry(18, 10), mPared, 0, 5, 0);
   malla(new THREE.BoxGeometry(18, .14, .05), new THREE.MeshStandardMaterial({color: 0x3b3029, roughness: .45}), 0, .07, .025);
-  const mPiso = new THREE.MeshStandardMaterial({map: terrazo, roughness: .3, color: 0xE8DCCD});
+  const mPiso = new THREE.MeshLambertMaterial({map: terrazo, color: 0xE8DCCD});
   const piso = malla(new THREE.PlaneGeometry(40, 40), mPiso, 0, 0, 10); piso.rotation.x = -Math.PI / 2;
-  const reflejo = new Reflector(new THREE.PlaneGeometry(40, 40), {textureWidth: 384, textureHeight: 683, clipBias: .003, multisample: 0, color: 0xfff4e6, shader: {
+  const reflejo = new Reflector(new THREE.PlaneGeometry(40, 40), {textureWidth: 288, textureHeight: 512, clipBias: .003, multisample: 0, color: 0xfff4e6, shader: {
     name: 'GranitoPulido', uniforms: {color: {value: null}, tDiffuse: {value: null}, textureMatrix: {value: null}, fuerza: {value: .62}},
     vertexShader: `uniform mat4 textureMatrix;varying vec4 vUv;varying vec3 vW;void main(){vUv=textureMatrix*vec4(position,1.);vec4 w=modelMatrix*vec4(position,1.);vW=w.xyz;gl_Position=projectionMatrix*viewMatrix*w;}`,
     fragmentShader: `uniform vec3 color;uniform sampler2D tDiffuse;uniform float fuerza;varying vec4 vUv;varying vec3 vW;
@@ -145,18 +146,16 @@ export default async function (datos, plan) {
   reflejo.material.transparent = true; reflejo.material.depthWrite = false; reflejo.rotation.x = -Math.PI / 2; reflejo.position.set(0, .002, 10); scene.add(reflejo);
   // listones verticales de nogal: a los costados del cartel (o toda la pared en la variante 2)
   { const xs = []; if (variante === 2) for (let x = -6; x <= 6; x += .13) xs.push(x); else for (let k = 0; k < 18; k++) { xs.push(2.28 + k * .13); xs.push(-2.28 - k * .13); }
-    const li = new THREE.InstancedMesh(new THREE.BoxGeometry(.06, 7.4, .09), new THREE.MeshStandardMaterial({map: nogalTx, roughness: .5}), xs.length); const m4 = new THREE.Matrix4();
+    const li = new THREE.InstancedMesh(new THREE.BoxGeometry(.06, 7.4, .09), new THREE.MeshLambertMaterial({map: nogalTx}), xs.length); const m4 = new THREE.Matrix4();
     xs.forEach((x, i) => { li.setMatrixAt(i, m4.makeTranslation(x, 3.7, .05)); }); scene.add(li); }
   // penumbra arriba de la pared (el sol de ventanal resalta) y sombra suave del piso contra la pared
   malla(new THREE.PlaneGeometry(18, 4.5), plano(degradeV, .42, 0x3a2414, false), 0, 8.4, .008);
   { const s = malla(new THREE.PlaneGeometry(18, .9), plano(degradeV, .18, 0x2a1a0c, false), 0, .003, .45); s.rotation.x = -Math.PI / 2; }
 
   // ── luz: sol de ventanal, relleno, cenital sobre el pedestal, entorno ─────
-  const hemi = new THREE.HemisphereLight(0xFFE3C4, 0xB89574, .55); scene.add(hemi);
+  const hemi = new THREE.HemisphereLight(0xFFE3C4, 0xB89574, .68); scene.add(hemi);
   const sol = new THREE.DirectionalLight(0xFFC98E, 1.9); sol.position.set(lado * 7, 9, 6.5); scene.add(sol);
-  const relleno = new THREE.DirectionalLight(0xFFEEDD, .35); relleno.position.set(-lado * 5, 3, 9); scene.add(relleno);
   const cenital = new THREE.SpotLight(0xFFE2C0, 8, 13, .42, .8, 1.3); cenital.position.set(xP - .25 * lado, 6.4, zP + 1.4); cenital.target.position.set(xP, hTop + .4, zP); scene.add(cenital, cenital.target);
-  const luzFlash = new THREE.PointLight(0xFFFFFF, 0, 9, 1.4); luzFlash.position.set(xP - .6, hTop + 1.4, zP + 2.2); scene.add(luzFlash);
   // manchas de ventanal en la pared y el piso, haces de luz y polvo
   const manchas = [];
   { const g = new THREE.PlaneGeometry(4.4, 2.2); g.applyMatrix4(new THREE.Matrix4().makeShear(0, 0, -lado * .55, 0, 0, 0));
@@ -599,17 +598,17 @@ export default async function (datos, plan) {
     let lv = false; for (const b of beats) { if (b.efecto !== 'lupa') continue; const k = seg(t, b.t + .35, b.t + 1.7); if (k > 0 && k < 1) { const r = b.l0 - ws; lv = true; const xa = x0 + LP * (2 + Math.min(LT, b.len)) + .3, xb = x0 + LP * 2 + .2;
       lupa.position.set(lerp(xa, xb, E.io2(k)), filaY(r) + .02 * Math.sin(k * 9), zB + .45 + .25 * Math.sin(k * Math.PI)); lupa.rotation.z = -.15 + .1 * Math.sin(k * 6); lupa.scale.setScalar(E.outBack(seg(k, 0, .15)) * (1 - E.in3(seg(k, .85, 1))) + .001); } } lupa.visible = lv;
     // luces del hall (apagón, flash) y atmósfera
-    hemi.intensity = .55 * lerp(.12, 1, apg); sol.intensity = 1.9 * lerp(.04, 1, apg); relleno.intensity = .35 * lerp(.08, 1, apg); scene.environmentIntensity = .42 * lerp(.12, 1, apg);
+    sol.intensity = 1.9 * lerp(.04, 1, apg); scene.environmentIntensity = .42 * lerp(.12, 1, apg);
     cenital.intensity = 8 * (1 + 5 * (1 - apg)); conoA.material.uniforms.op.value = .5 * (1 - apg);
     manchas.forEach(([m, op]) => m.material.opacity = op * apg); haces.forEach(([m, op]) => m.material.opacity = op * apg * (.85 + .15 * Math.sin(fase(t) * .5))); globos.forEach(m => m.emissiveIntensity = 1.6 * lerp(.35, 1, apg));
     let fl = 0; for (const b of flashes) if (t >= b.t + .02) fl += Math.exp(-(t - b.t - .02) / .09); for (const b of golpesF) if (t >= b.t) fl += .25 * Math.exp(-(t - b.t) / .07);
-    luzFlash.intensity = 90 * fl; M.cine.uniforms.flash.value = Math.min(.6, fl * .5); M.cine.uniforms.vineta.value = .3 + .3 * (1 - apg);
+    hemi.intensity = .68 * lerp(.12, 1, apg) + 2.2 * fl; M.cine.uniforms.flash.value = Math.min(.6, fl * .5); M.cine.uniforms.vineta.value = .3 + .3 * (1 - apg);
     const fp = fase(t); for (let i = 0; i < polvo.sem.length; i++) { const [a, b, c, d] = polvo.sem[i]; const u = a, A = [lado * 3.4, 7.6, 8.6], Bp = [lado * .15, 0, 6.2];
       polvo.pos[i * 3] = lerp(A[0], Bp[0], u) + (b - .5) * 1.6 + Math.sin(fp + d * 6.28) * .08; polvo.pos[i * 3 + 1] = lerp(A[1], Bp[1], u) + Math.sin(fp * .5 + c * 6.28) * .1; polvo.pos[i * 3 + 2] = lerp(A[2], Bp[2], u) + (c - .5) * 1.4 + Math.cos(fp + b * 6.28) * .08; }
     polvo.p.geometry.attributes.position.needsUpdate = true; polvo.p.material.opacity = .75 * apg;
     kar(t); subrayado(t);
     M.cine.uniforms.t.value = t * 11.7; const _t0 = performance.now(); M.comp.render(); { const gl = M.r.getContext(), px = new Uint8Array(4); gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px); } console.log('LOG render ' + (performance.now() - _t0).toFixed(0));
   }
-  window.__mk = {M, scene, reflejo, luzFlash, relleno, flaps, globos};
+  window.__mk = {M, scene, reflejo, flaps, globos};
   return {update, total: T, eventos: ev.sort((a, b) => a[0] - b[0])};
 }
