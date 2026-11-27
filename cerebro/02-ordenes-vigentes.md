@@ -359,4 +359,4 @@ El dueño aprobó el paso a paso y pidió ejecutarlo y aplicarlo en el panel a p
 | Pendientes del dueño | Mañana (28/11) carga las variables del disparo de la Oficina y cambia el código de ingreso. |
 | Proceso | «De dónde sacaste eso? Por favor leé el cerebro, la memoria, el proyecto completo, chat por chat». Antes de decidir algo que el dueño no dijo, se busca en el cerebro; si no está, se pregunta. |
 
-No respondió sobre la búsqueda con Ctrl+K ni los recordatorios por contacto: no entran.
+**Funciones nuevas que el dueño sumó el 27/11 («sumalo»):** búsqueda con Ctrl+K dentro de cada perfil (contacto, chat, campaña o pantalla, sin cruzar rubros; en el nivel general, solo pantallas) y recordatorios por contacto («volver a llamar el jueves») visibles en Hoy.

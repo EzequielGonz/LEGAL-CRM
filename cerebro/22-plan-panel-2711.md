@@ -43,6 +43,7 @@ La revisión final (`biblioteca/analisis-2026-11-27/critica.md`) comprobó en el
 | B1 | Menús y navegación: un solo agente toca `menu.ts` y `menu-mas.tsx` después de integrar las fases A. | Después de A |
 | B2 | Hoy compacto, usando las cifras únicas y la lista de captados ya hechas. | Después de A |
 | B3 | Jarvis dispara conversaciones con plantilla y el bot usa los datos del Excel. | Después de A6 y A8 |
+| B1 y B2, sumado | **Búsqueda con Ctrl+K** por perfil (va con los menús, fase B1) y **recordatorios por contacto** visibles en Hoy (fase B2, con su migración). Pedidos por el dueño el 27/11. | Después de A |
 | C | Retoque visual. | Cuando el dueño elija el color |
 | D | Repaso cruzado con varios modelos, pruebas y cierre. | Al final de cada fase |
 
