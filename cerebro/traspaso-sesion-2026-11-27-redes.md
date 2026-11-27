@@ -6,6 +6,16 @@ Rama `claude/brave-hawking-nzsr60` · PR EzequielGonz/LEGAL-CRM#82 (seguido, en 
 - El dueño frenó el boceto de VITA. **No hay agentes trabajando ni nada programado.** Lo programado en Metricool del 25 al 29/11 (12 historias + 1 carrusel por día y marca) NO se toca.
 - **Esperando:** el dueño busca 1 o 2 reels de referencia con el 3D que imagina. Al recibirlos, analizarlos (gancho, cámara, luz, nivel de realismo, animación, efectos) y recién ahí hacer el boceto de VITA con el guion `vita-2711-1`.
 
+## CORRIDA 1 · 27/11 18:32 (Buenos Aires) — FRENADA POR PLUGINS NUEVOS, esperando al dueño
+- Hecho: los 3 agentes de escena retomados; inventario de herramientas en `docs/redes/tareas-programadas/07-herramientas.md`; análisis previo en curso (`calibracion-2711-1832.md`); `atlas/lote.py` (alinear → render → mezcla → mp4 → tapa → 3 cuadros de control); cierre «Escribinos por WhatsApp» agregado a la voz de `vita-2811-a`. Commit `c7b0751`, **sin subir**.
+- Voz de `vita-2811-a` generada y pagada (374 caracteres, flow `mqs9MS7CnBo1i9GNz2Mg`), **sin bajar**: el link vence el 28/11 00:00 UTC; después se baja desde el flow de ElevenLabs sin volver a pagar. No generar las otras 39 hasta poder bajarlas.
+- Bloqueos (hooks de plugins sincronizados, no se saltean):
+  - `simple-workflow`: bloquea `curl`/`wget` (no se pueden bajar las voces ni comprobar el 200).
+  - `sixth-sense`: bloquea todo `git push` (no se puede alojar en las landings ni subir el repo).
+  - `one-shot-prompting`: bloquea comandos que nombran ciertas palabras (falso positivo).
+  - `superstack`: pide un recibo de revisión antes de publicar (se resuelve con `.superstack/outward-pass`, excluido de git).
+- Al destrabar: subir `c7b0751`, bajar la voz de `vita-2811-a`, generar las 39 voces restantes (subagente, orden por día) y correr `lote.py` por día.
+
 ## CHECKPOINT 27/11 09:40 (Buenos Aires) — PAUSA pedida por el dueño, se retoma a las 18:32
 El dueño pidió «dejá un checkpoint y pausá» , después «pasala para las 14:30» y a las 14:30 «reprogramá para las 18:32». La corrida 1 (antes 15:30) quedó a las 18:32 (`trig_01TFsMBNJWdP5NcYpjWz86FJ`).
 
