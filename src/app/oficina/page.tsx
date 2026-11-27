@@ -59,14 +59,14 @@ export default async function OficinaPage({ searchParams }: { searchParams: Prom
               </span>
             </h1>
             <p className="cz-lead of3-lead">
-              Entrá a cada sala, caminá entre los escritorios y hablá con cada agente. Los que terminan llevan su carpeta al <q>Cerebro</q>, que revisa todo antes de que te llegue. Nada se publica sin tu OK.
+              Entrá a cada sala, caminá entre los escritorios y hablá con cada agente. Cada tarea se resuelve con varias respuestas que compiten y un juez elige la mejor; los que terminan llevan su carpeta al <q>Cerebro</q>, que revisa todo antes de que te llegue. Nada se publica sin tu OK.
             </p>
           </div>
         </header>
         <main>
           <section id="oficina" className="of3-seccion">
             <div className="of3-ancho">
-              {oficina ? <Oficina inicial={oficina.tareas} arranqueInicial={oficina.arranque} sector={sector} /> : <p className="cz-muted">No pude leer la oficina ahora. Probá recargar en un rato.</p>}
+              {oficina ? <Oficina inicial={oficina.tareas} arranqueInicial={oficina.arranque} sector={sector} disparoInicial={oficina.disparo} geminiInicial={oficina.gemini} /> : <p className="cz-muted">No pude leer la oficina ahora. Probá recargar en un rato.</p>}
             </div>
           </section>
         </main>

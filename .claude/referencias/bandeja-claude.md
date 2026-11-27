@@ -4,6 +4,14 @@
 
 Versión 1.0 · 19/10/2026. Complementa `reglas-comunes.md`; no cambia ninguna regla.
 
+## Cambios del 27/11 (mandan sobre el resto de este archivo)
+
+- Se toma con la skill `oficina` (botón «Arrancar ahora» de la Oficina, si el disparo está conectado, o escribiendo «oficina» en un chat de Claude del proyecto). Cowork y el «ok» quedan como historia.
+- Cada tarea tiene **alcance** (`alcance` jsonb): un rubro, varios juntos (`rubro_id` null, un resultado conjunto), varios por separado (una fila por rubro con `grupo_id`) o todo el panel (`rubro_id` null). Por eso las consultas usan `left join` con `rubros`.
+- La pantalla Bandeja dentro de un perfil muestra SOLO las tareas de ese rubro; lo conjunto y lo del panel vive en la Oficina.
+- Lo que hizo Gemini (`ejecutor='gemini'`, `repaso='sin_repasar'`) se repasa antes que lo nuevo y no se aprueba sin ese repaso (ver la skill `oficina`).
+- El asistente «Pedile algo» se retiró: quedan Jarvis y esta Bandeja.
+
 ## Qué es
 
 La responsable deja tareas complejas en el panel (barra izquierda, abajo, arriba de «Pedile algo»: «Bandeja para Claude»). Claude **no corre dentro del panel** y no hay tarea programada: las toma cuando la responsable abre un chat nuevo de Cowork en el proyecto «crm» y dice **«ok»** (también desde la app del celular). El asistente del panel («Pedile algo») sigue en Gemini.
@@ -14,9 +22,9 @@ La responsable deja tareas complejas en el panel (barra izquierda, abajo, arriba
 2. Leer lo pendiente en la base (proyecto Supabase `legal-crm`), lo más viejo primero:
 
    ```sql
-   select b.id, r.slug as perfil, b.pedido, b.enlaces, b.estado, b.motivo_espera, b.created_at
-   from public.bandeja_claude b join public.rubros r on r.id = b.rubro_id
-   where b.estado in ('pendiente', 'en_espera')
+   select b.id, r.slug as perfil, b.alcance, b.grupo_id, b.pedido, b.enlaces, b.estado, b.motivo_espera, b.created_at
+   from public.bandeja_claude b left join public.rubros r on r.id = b.rubro_id
+   where b.estado in ('pendiente', 'en_espera') and coalesce(b.ejecutor, 'claude') <> 'gemini'
    order by (b.estado = 'en_espera') desc, b.created_at;
    ```
 

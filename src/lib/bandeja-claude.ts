@@ -1,7 +1,8 @@
 /**
- * Bandeja para Claude (19/10). Tareas complejas que la responsable deja en el
- * panel (generar y cargar contenido, mejorar landings, etc.) para que Claude
- * las tome desde Cowork cuando ella abre un chat del proyecto y dice «ok».
+ * Bandeja para Claude (19/10; 27/11 con alcance). Tareas complejas que se
+ * dejan en el panel (generar y cargar contenido, mejorar landings, etc.) para
+ * que Claude las tome con la Oficina («Arrancar ahora») o cuando se escribe
+ * «oficina» en un chat de Claude del proyecto.
  *
  * Claude no corre dentro del panel: el panel solo guarda el pedido y muestra
  * el estado y el resultado. Lo que cambie el panel o el código sigue el
@@ -13,6 +14,7 @@
  */
 import { RUBRO_IDS } from "@/lib/rubros";
 import { esSlugPerfil, type SlugPerfil } from "@/lib/marca";
+import { etiquetaAlcance, expandirTareas, normalizarAlcance, validarAlcance, type Alcance } from "@/lib/alcance";
 
 export const ESTADOS_BANDEJA = ["pendiente", "en_curso", "en_espera", "lista", "descartada"] as const;
 export type EstadoBandeja = (typeof ESTADOS_BANDEJA)[number];
@@ -34,7 +36,11 @@ export const HORAS_SIN_AVANCE = 6;
 
 export interface TareaBandeja {
   id: string;
-  rubro_id: string;
+  /** null = tarea conjunta de varios rubros o de «Todo el panel» (27/11): se ve solo en la Oficina. */
+  rubro_id: string | null;
+  /** Alcance guardado (27/11). null en las filas viejas: son del rubro de rubro_id. */
+  alcance: Alcance | null;
+  grupo_id: string | null;
   pedido: string;
   enlaces: string[];
   estado: EstadoBandeja;
@@ -68,6 +74,51 @@ export function rubroIdDePerfil(slug: unknown): string | null {
 export function perfilDeRubroId(id: unknown): SlugPerfil | null {
   for (const [slug, rid] of Object.entries(RUBRO_IDS)) if (rid === id && esSlugPerfil(slug)) return slug;
   return null;
+}
+
+// --- Alcance (27/11) ----------------------------------------------------
+
+/**
+ * Lee el destino de una tarea del cuerpo de un pedido. Acepta el alcance
+ * nuevo (`alcance`, ver src/lib/alcance.ts) y el formato viejo (`perfil`), que
+ * siguen mandando varias pantallas. Sin nada, error (no se elige Jurídico por
+ * defecto).
+ */
+export function destinoDeCuerpo(body: unknown): Resultado<Alcance> {
+  const b = (body ?? {}) as Record<string, unknown>;
+  const crudo = b.alcance !== undefined && b.alcance !== null && b.alcance !== "" ? b.alcance : b.perfil;
+  if (crudo === undefined || crudo === null || crudo === "") return { ok: false, error: "Elegí para qué rubro (o rubros) es la tarea." };
+  const errores = typeof crudo === "string" ? [] : validarAlcance(crudo);
+  if (errores.length) return { ok: false, error: errores[0] };
+  const alcance = normalizarAlcance(crudo);
+  return alcance ? { ok: true, valor: alcance } : { ok: false, error: "Perfil no válido." };
+}
+
+export interface FilaDeAlcance {
+  /** null = conjunta o del panel. */
+  rubro_id: string | null;
+  slug: SlugPerfil | null;
+  clave: string;
+}
+
+/** Qué filas de la bandeja crea un alcance: una, o una por rubro si van por separado. */
+export function filasDeAlcance(alcance: Alcance): FilaDeAlcance[] {
+  return expandirTareas(alcance).map((t) => ({ rubro_id: t.rubro ? RUBRO_IDS[t.rubro] : null, slug: t.rubro, clave: t.clave }));
+}
+
+/** Texto del alcance de una tarea guardada (las viejas, sin alcance, son de su perfil). */
+export function etiquetaDeTarea(t: Pick<TareaBandeja, "rubro_id" | "alcance">, nombrePerfil: (s: SlugPerfil | null) => string): string {
+  if (t.alcance && !(t.alcance.tipo === "rubros" && t.alcance.rubros.length === 1)) {
+    const base = etiquetaAlcance(t.alcance);
+    const propio = perfilDeRubroId(t.rubro_id);
+    return propio ? `${nombrePerfil(propio)} · ${base}` : base;
+  }
+  return nombrePerfil(perfilDeRubroId(t.rubro_id));
+}
+
+/** ¿Se ve esta tarea dentro del perfil? Solo las de ese rubro (lo conjunto y lo del panel, solo en la Oficina). */
+export function esDelPerfil(t: Pick<TareaBandeja, "rubro_id">, slug: SlugPerfil): boolean {
+  return t.rubro_id === RUBRO_IDS[slug];
 }
 
 // --- Datos personales -----------------------------------------------------
@@ -161,19 +212,19 @@ export function puedeDescartar(estado: EstadoBandeja): boolean {
   return DESCARTABLES.includes(estado);
 }
 
-/** Lo que Claude toma cuando la responsable dice «ok»: lo pendiente y lo que quedó en espera. */
+/** Lo que Claude toma en cada vuelta: lo pendiente y lo que quedó en espera. */
 export const PARA_TOMAR: EstadoBandeja[] = ["pendiente", "en_espera"];
 
 export function estadoVisible(t: Pick<TareaBandeja, "estado" | "motivo_espera" | "updated_at">, ahora: Date = new Date()): EstadoVisible {
   if (t.estado === "en_espera") {
-    return { estado: "en_espera", aviso: t.motivo_espera?.trim() || "Claude no pudo terminarla. La retoma la próxima vez que digas «ok».", deducido: false };
+    return { estado: "en_espera", aviso: t.motivo_espera?.trim() || "Claude no pudo terminarla. La retoma la próxima vez que arranque la Oficina.", deducido: false };
   }
   if (t.estado === "en_curso") {
     const desde = Date.parse(t.updated_at);
     if (Number.isFinite(desde) && ahora.getTime() - desde > HORAS_SIN_AVANCE * 3600 * 1000) {
       return {
         estado: "en_espera",
-        aviso: `Lleva más de ${HORAS_SIN_AVANCE} h sin avance: puede que se haya agotado el uso del plan. La retoma la próxima vez que digas «ok».`,
+        aviso: `Lleva más de ${HORAS_SIN_AVANCE} h sin avance: puede que se haya agotado el uso del plan. La retoma la próxima vez que arranque la Oficina.`,
         deducido: true,
       };
     }
@@ -208,7 +259,9 @@ export function filaATarea(f: any): TareaBandeja | null {
   const enlaces = (v: unknown) => (Array.isArray(v) ? v.filter((e): e is string => typeof e === "string" && /^https?:\/\//i.test(e.trim())).map((e) => e.trim()) : []);
   return {
     id: f.id,
-    rubro_id: String(f.rubro_id ?? ""),
+    rubro_id: typeof f.rubro_id === "string" && f.rubro_id ? f.rubro_id : null,
+    alcance: f.alcance ? normalizarAlcance(f.alcance) : null,
+    grupo_id: typeof f.grupo_id === "string" ? f.grupo_id : null,
     pedido: String(f.pedido ?? ""),
     enlaces: enlaces(f.enlaces),
     estado: f.estado,
