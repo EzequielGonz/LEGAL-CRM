@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<style>
+@font-face{font-family:'Manrope';src:url(../fonts/Manrope.ttf);font-weight:200 800}
+@font-face{font-family:'Playfair Display';src:url(../fonts/PlayfairDisplay.ttf);font-weight:400 900}
+@font-face{font-family:'Playfair Display';src:url(../fonts/PlayfairDisplay-Italic.ttf);font-weight:400 900;font-style:italic}
+@font-face{font-family:'Outfit';src:url(fonts/Outfit.ttf);font-weight:100 900}
+@font-face{font-family:'Archivo';src:url(fonts/Archivo.ttf);font-weight:100 900;font-stretch:62% 125%}
+@font-face{font-family:'Plus Jakarta Sans';src:url(fonts/PlusJakartaSans.ttf);font-weight:200 800}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000}
+#lienzo canvas{display:block}
+#capa{position:absolute;left:0;top:0;width:1080px;height:1920px;pointer-events:none}
+.karaoke{position:absolute;left:80px;right:80px;top:1270px;text-align:center;line-height:1.12;font-size:72px}
+.logo{position:absolute;left:80px;top:236px;display:flex;align-items:center;gap:14px}
+</style>
+<script type="importmap">{"imports":{"three":"../node_modules/three/build/three.module.js","three/addons/":"../node_modules/three/examples/jsm/"}}</script>
+</head><body><div id="lienzo"></div><div id="capa"></div>
+<script>document.fonts.load('700 72px Manrope');document.fonts.load('italic 700 80px "Playfair Display"');document.fonts.load('800 80px Outfit');document.fonts.load('800 80px Archivo');document.fonts.load('700 70px "Plus Jakarta Sans"');</script>
+<script type="module">import {arrancar} from './base.js'; arrancar().catch(e => { console.error('FALLA', e.message, e.stack); window.falla = e.message; });</script>
+</body></html>

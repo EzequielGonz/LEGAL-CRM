@@ -20,3 +20,9 @@ docs/redes/tanda-2811-0712/salida/**/*.mp4
 .claude/referencias/redes/herramientas/historias-prototipo/assets3d/*.hdr
 .claude/referencias/redes/herramientas/historias-prototipo/assets3d/*.glb
 .claude/referencias/redes/herramientas/historias-prototipo/assets3d/*.jpg
+# Motor Atlas de reels: pesados y regenerables (voces, cuadros, pruebas, salida y fuentes descargables)
+.claude/referencias/redes/herramientas/historias-prototipo/atlas/audio/
+.claude/referencias/redes/herramientas/historias-prototipo/atlas/fr/
+.claude/referencias/redes/herramientas/historias-prototipo/atlas/prueba/
+.claude/referencias/redes/herramientas/historias-prototipo/atlas/out/
+.claude/referencias/redes/herramientas/historias-prototipo/atlas/fonts/

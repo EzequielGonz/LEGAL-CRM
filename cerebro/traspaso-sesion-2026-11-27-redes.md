@@ -6,6 +6,35 @@ Rama `claude/brave-hawking-nzsr60` · PR EzequielGonz/LEGAL-CRM#82 (seguido, en 
 - El dueño frenó el boceto de VITA. **No hay agentes trabajando ni nada programado.** Lo programado en Metricool del 25 al 29/11 (12 historias + 1 carrusel por día y marca) NO se toca.
 - **Esperando:** el dueño busca 1 o 2 reels de referencia con el 3D que imagina. Al recibirlos, analizarlos (gancho, cámara, luz, nivel de realismo, animación, efectos) y recién ahí hacer el boceto de VITA con el guion `vita-2711-1`.
 
+## CHECKPOINT 27/11 07:35 (el dueño dijo «frena, poné un checkpoint»)
+- **Pedido vigente:** UN solo reel de boceto, el de VITA (`vita-2711-1`), gratis, con el motor nuevo «Atlas» y el estilo Spotlight Stage (teatrito de juguete). Las otras 3 marcas quedan para después: el dueño lo corrigió en medio del trabajo.
+- **Motor Atlas** en `.claude/referencias/redes/herramientas/historias-prototipo/atlas/`:
+  - `base.js`: render ACES, entorno de estudio, bloom, profundidad de campo, grano, viñeta, aberración y flash; karaoke por palabra; logo; texturas en canvas; ruido de normales.
+  - `reel.html` (`?m=<id>`).
+  - `render.js`: `node render.js <id> prueba t1 t2…` da cuadros sueltos en `prueba/`; `node render.js <id> 30 3` da los cuadros del video en `fr/<id>/` y los eventos de sonido.
+  - `voz.py <ids>`: VITA usa el mp3 de ElevenLabs con los tiempos de silencedetect; las demás marcas, edge-tts gratis con el tiempo de cada palabra.
+  - `mezcla.py <id>`: voz, música de marca y efectos a −14 LUFS en `audio/<id>-mezcla.wav`.
+  - `escenas/vita.js`: la escena.
+  - Fuentes Outfit, Archivo y Plus Jakarta bajadas de Google Fonts a `atlas/fonts/`; no van en git y se bajan de nuevo de `raw.githubusercontent.com/google/fonts`.
+- **Estado del boceto de VITA:** especificado e implementado; probado solo con cuadros sueltos (~1,9 s por cuadro). No hay video renderizado, no se mezcló el audio, no se publicó ni se programó nada.
+  - Última hoja: `docs/redes/tanda-2811-0712/boceto-vita/atlas-teatrito-prueba-4.jpg` (no se revisó a ojo antes de frenar); la anterior, `-3.jpg`.
+  - Va bien: el teatrito entero con el gancho en el frontón; el globo «Perdón, fue mi culpa» desde el cuadro 1; el tachón dorado y el sello NUNCA; los pasos 1/3, 2/3 y 3/3 en el atril; las fotos en un tendedero con flash; testigos; almanaque con sello; avión de papel; loop al plano general.
+  - Último ajuste aplicado: brillo solo en las ventanas, apagón en «Nunca», globo entero hasta que se rompe, atril y fotos dentro del cuadro.
+- **Para retomar:**
+  1. Mirar `prueba-4`.
+  2. Corregir lo que haga falta.
+  3. `node render.js vita-2711-1 30 3` (unos 1.040 cuadros, ~12 min con 3 procesos).
+  4. `python3 mezcla.py vita-2711-1`.
+  5. Unir los cuadros con ffmpeg: `fr/vita-2711-1/%05d.jpg` a 30 fps con `audio/vita-2711-1-mezcla.wav`, x264 CRF 17, a `out/vita-2711-1-atlas.mp4`.
+  6. Mandarlo al dueño para su OK.
+  - Antes, regenerar las voces con `python3 voz.py vita-2711-1`; las carpetas `audio/` y `fr/` no van en git.
+- **Arena** (pidió usar agentes; la skill «arena» no existe ni en el proyecto ni en sus skills de claude.ai): 3 propuestas en `docs/redes/tanda-2811-0712/arena/`: A (ganchos), B (viral) y C (escena). Para VITA se tomaron:
+  - de B, el globo visible desde el cuadro 1;
+  - de C, el apagón en «Nunca» y el rebobinado al final;
+  - de A, el sello NUNCA y la caída del globo.
+  - Las propuestas de Coberturas, Autos y Marketing quedan para cuando se hagan esas marcas.
+- Consumo de esta vuelta: vidIQ 10 créditos gratis (quedan 70, se renuevan el 9/12). Nada pago.
+
 ## Novedad 27/11 07:20: llegaron las referencias
 - Reel de referencia (@sunnyshoots.ai: Tripo + Blender + Seedance 2.5) y 3D Atlas (37 estilos con three.js). Análisis, costos y estilos elegidos en `docs/redes/viral-2511/07-referencia-3d-ia-y-costos.md`.
 - Se le preguntó si autoriza USD 50 para una prueba híbrida única (Tripo Pro USD 20 + saldo Seedance USD 30). **Sin su OK no se paga nada.**
