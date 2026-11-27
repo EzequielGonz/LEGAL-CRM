@@ -88,3 +88,32 @@ El código de ingreso no se escribe en archivos. Sin datos de prospectos en docu
 **Campañas:** «Campaña Graves 2711» y «ART - Noviembre 2411» se pausaron solas a las 11:19 (hora argentina) por calidad baja de la línea Civil en Meta. No se tocaron. Reanudarlas es decisión del dueño. Mientras estén pausadas se puede aplicar la migración de A4.
 
 **Sigue pendiente del pedido original:** Cerebro funcional, captados, chats y ficha, bots por rubro, menús y Ctrl+K, Hoy compacto y recordatorios, Jarvis con plantillas, retoque visual y entrada 3D, lista de los 36 captados, verificar Graphify. Del dueño: cargar `OFICINA_DISPARO_URL` y `OFICINA_DISPARO_TOKEN` en Vercel y cambiar el código de ingreso.
+
+## Checkpoint 27/11 · 14:30 (pausa pedida por el dueño; retomar 18:31 hora de Argentina)
+
+El dueño, textual: «pausa todo y pone un checkpoint para retomar, programa retomar todo otra vez tal cual como quedo ahora y con las mismas instrucciones a las 6 31 pm de argentina».
+
+**Qué se frenó (los tres flujos, sin resultados perdidos de lo ya terminado):**
+
+| Flujo | Run | Estado al frenar |
+|---|---|---|
+| Auditoría web, solo lectura (12 zonas + revisor por zona) | `wf_8e9edcef-4cc` | Recién arrancaban `entrada-hoy` y `juridico`; ninguna zona terminó. |
+| Pruebas con acciones (5 recorridos) | `wf_7a9b68b6-95d` | Recién arrancaban `acc-oficina` y `acc-laboratorio`; ninguna terminó. No crearon nada en producción (comprobado en la base). |
+| Plan aprobado, fases 0 y A1–A8 | `wf_6a348c3b-a19` | Implementación A1–A8 terminada; revisiones de A1 y A2 terminadas; A3 y A4 cortadas; A5–A8 sin revisar. |
+
+**Cómo retomar (mismo orden):**
+1. Leer `cerebro/00-arranque-para-agentes.md`, `02-ordenes-vigentes.md` (últimas tres secciones del 27/11) y este traspaso.
+2. Auditoría primero. Si el scratchpad sobrevivió, relanzar los dos flujos con su `scriptPath` y `resumeFromRunId`. Si no, están copiados en `docs/oficina/auditoria-web/` (`flujo-solo-lectura.js`, `flujo-con-acciones.js`, `nav.js`, `entrar.js`): copiar `nav.js` y `entrar.js` a una carpeta `aud-web/` del scratchpad nuevo, crear `shots/`, iniciar sesión con `PANEL_CODE=… node entrar.js` (el código va solo en línea, nunca en archivos), corregir la ruta `D` de los flujos y lanzarlos.
+3. La máquina tiene 4 núcleos: cada flujo corre de a 2 agentes. Conviene lanzar primero el de solo lectura y, cuando avance, el de acciones.
+4. Al terminar: juntar hallazgos confirmados, escribir `docs/oficina/2026-11-27-auditoria-web.md`, dejar la tarea en la Oficina y arreglar lo que corresponda junto con las tandas del plan.
+5. Recién después, el plan: relanzar `wf_6a348c3b-a19` con `resumeFromRunId` para las revisiones que faltan (A3–A8) e integrar de a una tanda en `integracion/rediseno-2211`.
+
+**Límites de la auditoría:** el dueño dijo «toca todo lo que quieras, solo no lances campañas». Por criterio de Claude se mantiene además: no pausar ni editar campañas, ningún mensaje a personas reales, no cambiar el bot en vivo ni datos de prospectos, nada se borra, lo creado se llama «PRUEBA AUDITORÍA 27/11». `nav.js` lo hace cumplir (modo `escribir:true` con lista de rutas vedadas).
+
+**Estado comprobado en la base a las 14:28:** «Campaña Graves 2711» y «ART - Noviembre 2411» figuran otra vez `en_curso` (Claude no las tocó). Mientras estén en curso no se aplica la migración de A4. Oficina: 7 tareas `lista` esperando el OK del dueño.
+
+**Sin publicar en producción:** los commits `df06743` y este están solo en la rama `integracion/rediseno-2211`; main sigue en `920569d`. Se publica junto con el informe de la auditoría.
+
+**Ya hecho hoy que no hay que repetir:** auditoría del Laboratorio por código (`docs/oficina/2026-11-27-auditoria-laboratorio.md`, 20 hallazgos); carpeta `/home/user/LEGAL-CRM` puesta en la versión publicada.
+
+**Pendiente de respuesta al dueño:** lista verificada de IA con plan gratuito (DeepSeek y otras) para sumar a la arena de la Oficina; necesita que él cargue las claves en Vercel.
