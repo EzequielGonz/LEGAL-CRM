@@ -6,6 +6,37 @@ Rama `claude/brave-hawking-nzsr60` · PR EzequielGonz/LEGAL-CRM#82 (seguido, en 
 - El dueño frenó el boceto de VITA. **No hay agentes trabajando ni nada programado.** Lo programado en Metricool del 25 al 29/11 (12 historias + 1 carrusel por día y marca) NO se toca.
 - **Esperando:** el dueño busca 1 o 2 reels de referencia con el 3D que imagina. Al recibirlos, analizarlos (gancho, cámara, luz, nivel de realismo, animación, efectos) y recién ahí hacer el boceto de VITA con el guion `vita-2711-1`.
 
+## RITMO VIGENTE (pedido del dueño, 27/11 12:10): manda sobre todo lo anterior
+**Desde el 28/11, por marca y por día:**
+
+| Pieza | Cantidad por día |
+|---|---|
+| Reels | 6 |
+| Post | 1 |
+| Carrusel | 1 |
+| Historias | 2 |
+
+- Lo ya programado no se toca: historias (12 por día) y carruseles (1 por día) hasta el 29/11.
+- **Excepción de VITA** (lo hablado): en Instagram los reels suben de 2 a 6 por día, de a poco. Los demás reels de VITA van solo a Facebook.
+- Hoy está en producción la tanda 1: 2 reels por día y marca del 28/11 al 02/12. **Faltan, por día y marca, 4 reels y 1 post**, y desde el 30/11 también 1 carrusel y 2 historias.
+- Cada corrida programada:
+  1. consulta getScheduledPosts;
+  2. arma la tabla de faltantes;
+  3. calibra con estadísticas, perfiles y competencia;
+  4. produce empezando por el día más cercano.
+
+| Cuándo (Buenos Aires) | trigger |
+|---|---|
+| Hoy 27/11 15:30 | `trig_01TFsMBNJWdP5NcYpjWz86FJ`: termina la tanda 1 y completa el ritmo del 28/11 en adelante |
+| Sáb 28/11 13:00 | `trig_01YEtziqXSGoXu3bzb7Byf85` |
+| Dom 29/11 13:00 | `trig_01MwTFfvxAabHtoHGCYnjjuW` |
+| Dom 29/11 18:00 | `trig_01L6mweLEKYsNRzZNQ4CeFro` |
+| Lun 30/11 21:00 | `trig_01UBqJxCNRzNquL65EDWyd6A` |
+| 01/12 al 06/12, 16:20 | `trig_01Qh2oAbdu4BMz6qZ7Y67DHE`, `trig_016prp3YvGLMrizyKyfrPXMF`, `trig_01DsjEWxzQQ4kGMZb7U94ZLW`, `trig_01WDgb8tnuJaadoCgBnGoveU`, `trig_01JkeqbxAujLhkS8HYJ7cxFB`, `trig_01R7gV7DBLHXrHd7ZMZeTBjd` (la del 06/12 pregunta si sigue el ritmo después del 07/12) |
+
+- Las del 28/11 al 30/11 son pedido explícito del dueño: como mínimo 2 reels más por marca en cada una, más el resto de los faltantes.
+- **Capacidad medida:** un reel 3D tarda unos 5 min en exportarse con RAPIDO=1 y 3 procesos, así que 24 reels por día son unas 2 h de máquina. Más las voces, el alojamiento y Metricool.
+
 ## 27/11 12:30 — TANDA 1 EN PRODUCCIÓN (checkpoint para compactar)
 **El dueño dio el OK** (27/11 ~11:50) con estos ajustes:
 - subtítulos sincronizados y el cartel de arriba sin cortar;
