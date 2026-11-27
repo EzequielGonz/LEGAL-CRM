@@ -16,54 +16,50 @@ export function crear({P, pal, canvas, W = 1080, H = 1920}) {
   renderer.setPixelRatio(1); renderer.setSize(W, H, false); renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = R.expo ?? 1.0;
   const cv = (w, h, fn) => { const c = document.createElement('canvas'); c.width = w; c.height = h; const x = c.getContext('2d'); fn(x, w, h); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; return t; };
-  const scene = new THREE.Scene(); const cielo = R.cielo || ['#4f78c4', '#9db8e8', '#ffcf9a', '#ffb078'];
-  scene.background = cv(4, 512, (x, w, h) => { const g = x.createLinearGradient(0, 0, 0, h); g.addColorStop(0, cielo[0]); g.addColorStop(.45, cielo[1]); g.addColorStop(.8, cielo[2]); g.addColorStop(1, cielo[3]); x.fillStyle = g; x.fillRect(0, 0, w, h); });
-  scene.fog = new THREE.Fog(C('#f3bd94'), 55, 150);
-  const cam = new THREE.PerspectiveCamera(R.fov || 34, W / H, .5, 400);
+  const scene = new THREE.Scene(); const IV = ['#F5F4F0', '#E7E2CE'];
+  // fondo marfil liso (degradé muy suave); de noche pasa a tinta
+  const fondoTex = n => cv(4, 256, (x, w, h) => { const g = x.createLinearGradient(0, 0, 0, h); const m = (a, b) => { const A = C(a), Bc = C(b); return '#' + A.lerp(Bc, n).getHexString(); }; g.addColorStop(0, m(IV[0], '#2a3358')); g.addColorStop(1, m(IV[1], '#8a7a66')); x.fillStyle = g; x.fillRect(0, 0, w, h); });
+  scene.background = fondoTex(0);
+  const cam = new THREE.PerspectiveCamera(R.fov || 28, W / H, .5, 400);
   // ---------- texturas ----------
-  const ventanas = (wall, seed, lit) => cv(128, 256, (x, w, h) => { x.fillStyle = lit ? '#000' : wall; x.fillRect(0, 0, w, h); for (let r = 0; r < 10; r++) for (let k = 0; k < 4; k++) { const on = hash(seed * 13 + r * 5 + k) > .6; x.fillStyle = lit ? (on ? '#ffc56e' : '#000') : (on ? '#ffe0a8' : '#5a6f93'); x.fillRect(12 + k * 28, 14 + r * 24, 18, 14); } });
-  const MUROS = ['#d9b79a', '#e8d9bf', '#b9c6d6', '#d39a86', '#b7cdb8', '#e2c48a', '#c9a89a', '#a9b9a0'];
-  const BM = MUROS.map((c, i) => new THREE.MeshStandardMaterial({map: ventanas(c, i + 1, false), emissiveMap: ventanas(c, i + 1, true), emissive: C('#ffffff'), emissiveIntensity: .75, roughness: .9}));
-  const roof = new THREE.MeshStandardMaterial({color: '#8a8f9c', roughness: .9});
+  const ventanas = (wall, seed, lit) => cv(128, 256, (x, w, h) => { x.fillStyle = lit ? '#000' : wall; x.fillRect(0, 0, w, h); for (let r = 0; r < 8; r++) for (let k = 0; k < 4; k++) { const on = hash(seed * 13 + r * 5 + k) > .55; x.fillStyle = lit ? (on ? '#ffd58a' : '#000') : (on ? '#f7efd8' : '#8d97aa'); x.fillRect(12 + k * 28, 18 + r * 28, 18, 16); } if (!lit) { x.fillStyle = '#C1AE7A'; x.fillRect(0, 4, w, 4); } });
+  const MUROS = ['#E7E2CE', '#EFEADB', '#DDD6C0', '#E3DCC8'];
+  const BM = MUROS.map((c, i) => new THREE.MeshStandardMaterial({map: ventanas(c, i + 1, false), emissiveMap: ventanas(c, i + 1, true), emissive: C('#ffffff'), emissiveIntensity: 0, roughness: .9}));
+  const roof = new THREE.MeshStandardMaterial({color: '#B9B2A2', roughness: .9});
   const std = (c, o = {}) => new THREE.MeshStandardMaterial({color: c, roughness: .75, ...o});
   const mesh = (g, m, x = 0, y = 0, z = 0, sh = true) => { const o = new THREE.Mesh(g, m); o.position.set(x, y, z); o.castShadow = sh; o.receiveShadow = true; return o; };
   const grp = () => new THREE.Group(); const mundo = grp(); scene.add(mundo);
-  // ---------- luz de atardecer ----------
-  scene.add(new THREE.HemisphereLight(C('#9ec0ff'), C('#8a6a4a'), 1.15));
-  const sol = new THREE.DirectionalLight(C('#ffb06a'), 3.6); sol.position.set(-22, 15, 14); sol.castShadow = true; sol.shadow.mapSize.set(2048, 2048); const sc = sol.shadow.camera; sc.left = -24; sc.right = 24; sc.top = 24; sc.bottom = -24; sc.near = 1; sc.far = 90; sol.shadow.radius = 6; sol.shadow.bias = -.0004; sol.shadow.normalBias = .04; scene.add(sol);
-  const contra = new THREE.DirectionalLight(C('#8fa8ff'), .55); contra.position.set(18, 10, -12); scene.add(contra);
-  // ---------- ciudad: veredas, calles, edificios bajos, árboles ----------
-  mundo.add(mesh(new THREE.PlaneGeometry(260, 260), std('#c5bdae', {roughness: .95}), 0, -.01, 0, false)).children.at(-1).rotation.x = -Math.PI / 2;
-  const asf = std('#474c58', {roughness: .95}), amar = std('#f1c44c', {roughness: .6}), blanco = std('#f4efe2', {roughness: .6}), verde = ['#5f9a58', '#74ad63', '#4f8a54'];
-  const calle = (x, z, w, d) => mundo.add(mesh(new THREE.BoxGeometry(w, .08, d), asf, x, .02, z, false));
-  calle(0, 0, 260, 3.8); calle(0, 0, 3.8, 260); calle(0, 21, 260, 3.8); calle(0, -21, 260, 3.8); calle(21, 0, 3.8, 260); calle(-21, 0, 3.8, 260);
-  for (let i = -30; i <= 30; i++) { if (Math.abs(i) < 2) continue; mundo.add(mesh(new THREE.BoxGeometry(.9, .02, .12), amar, i * 1.1, .07, 0, false)); mundo.add(mesh(new THREE.BoxGeometry(.12, .02, .9), amar, 0, .07, i * 1.1, false)); }
-  for (const s of [-1, 1]) for (let k = -3; k <= 3; k++) { mundo.add(mesh(new THREE.BoxGeometry(.4, .02, 1.2), blanco, s * 2.55, .07, k * .55, false)); mundo.add(mesh(new THREE.BoxGeometry(1.2, .02, .4), blanco, k * .55, .07, s * 2.55, false)); }
-  const arbol = (x, z, s = 1) => { const g = grp(); g.add(mesh(new THREE.CylinderGeometry(.13, .17, .9, 8), std('#6a4a34'), 0, .45, 0)); g.add(mesh(new THREE.IcosahedronGeometry(.7 * s, 1), std(verde[Math.floor(hash(x * 7 + z) * 3)], {flatShading: true}), 0, 1.35, 0)); g.position.set(x, .08, z); mundo.add(g); };
-  for (let gx = -42; gx <= 42; gx += 5.4) for (let gz = -42; gz <= 42; gz += 5.4) {
-    if (Math.abs(gx) < 2.6 || Math.abs(gz) < 2.6 || Math.abs(Math.abs(gx) - 21) < 2.8 || Math.abs(Math.abs(gz) - 21) < 2.8) continue;
-    if (gz > 6 || (gz > -3.5 && Math.hypot(gx, gz) < 17)) { if (hash(gx + gz * 3) > .35 && Math.abs(gx) > 3) arbol(gx, gz, 1.1); continue; }
-    const i = Math.round(gx * 3 + gz * 7); const w = 3.6 + hash(i) * 1.3, d = 3.6 + hash(i + 9) * 1.2; const cerca = Math.hypot(gx, gz) < 12; const frente = gz > 0;
-    const h = cerca ? (frente ? 1.3 + hash(i + 3) * 1.4 : 2.6 + hash(i + 3) * 2.6) : 2 + hash(i + 3) * 8; const m1 = BM[Math.floor(hash(i + 5) * 8)], m2 = BM[Math.floor(hash(i + 6) * 8)];
-    const px = gx + (hash(i + 1) - .5) * .6, pz = gz + (hash(i + 2) - .5) * .6;
-    mundo.add(mesh(new THREE.BoxGeometry(w + .9, .16, d + .9), std('#d4cdbd'), px, .08, pz, false));
-    const b = new THREE.Mesh(new RoundedBoxGeometry(w, h, d, 2, .08), [m1, m1, roof, roof, m2, m2]); b.position.set(px, .16 + h / 2, pz); b.castShadow = b.receiveShadow = true; mundo.add(b);
-    if (hash(i + 4) > .5) mundo.add(mesh(new THREE.BoxGeometry(w * .45, .5, d * .45), roof, px, .16 + h + .25, pz)); }
-  for (const [x, z] of [[3.6, 3.6], [-3.4, 3.6], [-3.5, -3.5], [3.8, -3.4], [6.8, 3.4], [-7, 3.4], [-6.8, -3.4], [7.2, -3.4], [3.4, 7], [-3.5, 7.2]]) arbol(x, z, .9 + hash(x + z) * .3);
-  const pasto = mesh(new THREE.PlaneGeometry(90, 52), std('#79ad66', {roughness: 1}), 0, .0, 33, false); pasto.rotation.x = -Math.PI / 2; mundo.add(pasto);
-  mundo.add(mesh(new THREE.BoxGeometry(90, .16, 3.4), std('#d9d2c0'), 0, .09, 7.4, false));
-  for (const [x, z] of [[-9, 12], [-4, 16], [6, 14], [11, 11], [-12, 18], [14, 19], [2, 22], [-7, 24], [9, 26]]) arbol(x, z, 1.2 + hash(x) * .4);
-  // semáforo y reloj de la esquina (19:10)
-  const semaforo = (x, z, ry) => { const g = grp(); g.add(mesh(new THREE.CylinderGeometry(.08, .1, 3.4, 8), std('#34373f'), 0, 1.7, 0)); const arm = mesh(new THREE.BoxGeometry(1.8, .1, .1), std('#34373f'), -.9, 3.3, 0); g.add(arm); g.add(mesh(new RoundedBoxGeometry(.42, 1.1, .34, 2, .08), std('#1b1d22'), -1.7, 3.0, 0));
-    [['#ff3b30', 3.3, 1.5], ['#ffd23a', 3.0, .2], ['#2ee06a', 2.7, .2]].forEach(([c, y, e]) => g.add(mesh(new THREE.SphereGeometry(.12, 10, 8), new THREE.MeshStandardMaterial({color: c, emissive: C(c), emissiveIntensity: e}), -1.7, y, .18, false))); g.position.set(x, .08, z); g.rotation.y = ry; mundo.add(g); };
-  semaforo(2.6, -2.6, Math.PI * .5); semaforo(-2.6, -2.6, -Math.PI * .5);
+  // ---------- luz: sol de tarde desde atrás a la izquierda ----------
+  const hemi = new THREE.HemisphereLight(C('#EEF1F5'), C('#CDBFA3'), .75); scene.add(hemi);
+  const sol = new THREE.DirectionalLight(C('#FFE2B8'), 2.6); sol.position.set(-13, 13, -12); sol.castShadow = true; sol.shadow.mapSize.set(2048, 2048); const sc = sol.shadow.camera; sc.left = -16; sc.right = 16; sc.top = 16; sc.bottom = -16; sc.near = 1; sc.far = 70; sol.shadow.radius = 4; sol.shadow.bias = -.0004; sol.shadow.normalBias = .03; scene.add(sol);
+  // ---------- baldosa flotante con canto, vereda, calles, manzanas bajas ----------
+  const HX = 7.6, HZ = 11.4;
+  mundo.add(mesh(new RoundedBoxGeometry(HX * 2, 1.3, HZ * 2, 4, .3), std('#25282B', {roughness: .5}), 0, -.66, 0));
+  const vereda = std('#D9D3C3', {roughness: .95}), cordon = std('#B9B2A2'), asf = std('#6D6D69', {roughness: .95}), amar = std('#D4AF37', {roughness: .6}), blanco = std('#F5F4F0', {roughness: .6});
+  mundo.add(mesh(new THREE.BoxGeometry(HX * 2 - .1, .06, HZ * 2 - .1), vereda, 0, .005, 0, false));
+  mundo.add(mesh(new THREE.BoxGeometry(3.4, .08, HZ * 2 - .1), asf, 0, .02, 0, false)); mundo.add(mesh(new THREE.BoxGeometry(HX * 2 - .1, .08, 3.4), asf, 0, .021, 0, false));
+  for (const s of [-1, 1]) { mundo.add(mesh(new THREE.BoxGeometry(.12, .14, HZ * 2 - .1), cordon, s * 1.75, .06, 0, false)); mundo.add(mesh(new THREE.BoxGeometry(HX * 2 - .1, .14, .12), cordon, 0, .06, s * 1.75, false)); }
+  for (let i = -10; i <= 10; i++) { if (Math.abs(i) < 2) continue; mundo.add(mesh(new THREE.BoxGeometry(.1, .02, .7), blanco, 0, .07, i * 1.05, false)); }
+  for (let i = -6; i <= 6; i++) { if (Math.abs(i) < 2) continue; mundo.add(mesh(new THREE.BoxGeometry(.7, .02, .1), blanco, i * 1.05, .071, 0, false)); }
+  for (const s of [-1, 1]) for (let k = -3; k <= 3; k++) { mundo.add(mesh(new THREE.BoxGeometry(.3, .02, 1.0), blanco, s * 1.3, .072, k * .45 + (s > 0 ? 3.3 : 0) * 0, false)); }
+  const arbol = (x, z, s = 1) => { const g = grp(); g.add(mesh(new THREE.CylinderGeometry(.1, .14, .8, 8), std('#6a5a48'), 0, .4, 0)); g.add(mesh(new THREE.IcosahedronGeometry(.62 * s, 1), std('#5E6B4E', {flatShading: true}), 0, 1.2, 0)); g.position.set(x, .06, z); mundo.add(g); };
+  const lote = (sx, sz, i) => { const cx = sx * (1.75 + (HX - 1.75) / 2), cz = sz * (1.75 + (HZ - 1.75) / 2); const nb = sz < 0 ? 2 : 1;
+    for (let k = 0; k < (sz > 0 ? 1 : 2); k++) { const w = (HX - 1.75 - .8) , d = sz > 0 ? 2.6 : 3.4, h = sz > 0 ? 1.3 + hash(i) * .8 : 2.2 + hash(i + k * 5) * 2.0; const pz = sz > 0 ? cz + 3.2 : cz - 3.6 + k * 4.6;
+      const m1 = BM[(i + k) % 4], m2 = BM[(i + k + 1) % 4]; const bb = new THREE.Mesh(new RoundedBoxGeometry(w, h, d, 2, .06), [m1, m1, roof, roof, m2, m2]); bb.position.set(cx, .06 + h / 2, pz); bb.castShadow = bb.receiveShadow = true; mundo.add(bb); bb.userData.mat = [m1, m2]; }
+    arbol(sx * 2.5, sz * (2.6 + 5.2 * hash(i)), .9); };
+  [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([a, b], i) => lote(a, b, i + 1));
+  // tres faroles = progreso (se encienden de a uno)
+  const FAR = [[2.35, 5.2], [-2.35, -4.2], [2.35, -8.2]]; const faroles = FAR.map(([x, z]) => { const g = grp(); g.add(mesh(new THREE.CylinderGeometry(.07, .1, 3.0, 8), std('#25282B'), 0, 1.5, 0)); const lamp = mesh(new THREE.SphereGeometry(.24, 14, 10), new THREE.MeshStandardMaterial({color: '#cfc8b4', emissive: C('#D4AF37'), emissiveIntensity: 0}), 0, 3.15, 0, false); g.add(lamp); g.add(mesh(new THREE.CylinderGeometry(.34, .34, .06, 14), std('#25282B'), 0, 3.42, 0)); g.position.set(x, .06, z); mundo.add(g); g.userData.lamp = lamp; return g; });
+  const semaforo = (x, z, ry) => { const g = grp(); g.add(mesh(new THREE.CylinderGeometry(.07, .09, 3.0, 8), std('#3a3d44'), 0, 1.5, 0)); g.add(mesh(new THREE.BoxGeometry(1.6, .09, .09), std('#3a3d44'), -.8, 2.95, 0)); g.add(mesh(new RoundedBoxGeometry(.38, .95, .3, 2, .07), std('#25282B'), -1.5, 2.7, 0));
+    ['#8a7a4a', '#8a7a4a', '#6d7a6a'].forEach((c, k) => g.add(mesh(new THREE.SphereGeometry(.1, 10, 8), std(c), -1.5, 2.95 - k * .26, .16, false))); g.position.set(x, .06, z); g.rotation.y = ry; mundo.add(g); };
+  semaforo(2.45, -2.45, Math.PI * .5);
   const hora = P.hora || '19:10';
-  const relTex = cv(512, 256, (x, w, h) => { x.fillStyle = '#1a1c24'; x.fillRect(0, 0, w, h); x.strokeStyle = ACC; x.lineWidth = 12; x.strokeRect(12, 12, w - 24, h - 24); x.fillStyle = ACC; x.font = '800 150px Inter, Manrope'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(hora, w / 2, h / 2 + 6); });
-  const reloj = grp(); reloj.add(mesh(new THREE.CylinderGeometry(.1, .12, 3.6, 8), std('#34373f'), 0, 1.8, 0)); const mt = std('#1a1c24'); reloj.add(mesh(new RoundedBoxGeometry(2.1, 1.05, .22, 2, .08), [mt, mt, mt, mt, new THREE.MeshStandardMaterial({map: relTex, emissiveMap: relTex, emissive: C('#fff'), emissiveIntensity: 1.5}), mt], 0, 3.7, 0)); reloj.position.set(-2.7, .08, 3.0); reloj.rotation.y = .45; mundo.add(reloj);
-  // edificio del seguro (destino del paso 3)
-  const segTex = cv(512, 256, (x, w, h) => { x.fillStyle = '#10213f'; x.fillRect(0, 0, w, h); x.fillStyle = ACC; x.beginPath(); x.moveTo(90, 50); x.lineTo(150, 70); x.lineTo(150, 130); x.quadraticCurveTo(150, 180, 90, 205); x.quadraticCurveTo(30, 180, 30, 130); x.lineTo(30, 70); x.fill(); x.fillStyle = '#fff'; x.font = '800 78px Inter, Manrope'; x.textAlign = 'left'; x.fillText('seguro', 190, 150); });
-  const seguro = new THREE.Mesh(new RoundedBoxGeometry(5.4, 5.6, 4.2, 2, .1), [BM[1], BM[1], roof, roof, BM[1], BM[1]]); seguro.position.set(-7.2, .16 + 2.8, -6.4); seguro.castShadow = seguro.receiveShadow = true; mundo.add(seguro);
-  const seguroCartel = mesh(new THREE.PlaneGeometry(4.6, 2.3), new THREE.MeshStandardMaterial({map: segTex, emissiveMap: segTex, emissive: C('#fff'), emissiveIntensity: .6}), -7.2, 4.6, -4.27, false); mundo.add(seguroCartel);
+  const relTex = cv(512, 256, (x, w, h) => { x.fillStyle = '#25282B'; x.fillRect(0, 0, w, h); x.strokeStyle = '#D4AF37'; x.lineWidth = 10; x.strokeRect(12, 12, w - 24, h - 24); x.fillStyle = '#D4AF37'; x.font = '800 150px Manrope'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(hora, w / 2, h / 2 + 6); });
+  const reloj = grp(); reloj.add(mesh(new THREE.CylinderGeometry(.09, .11, 3.2, 8), std('#3a3d44'), 0, 1.6, 0)); const mt = std('#25282B'); reloj.add(mesh(new RoundedBoxGeometry(2.0, 1.0, .22, 2, .08), [mt, mt, mt, mt, new THREE.MeshStandardMaterial({map: relTex, emissiveMap: relTex, emissive: C('#fff'), emissiveIntensity: .5}), mt], 0, 3.45, 0)); reloj.position.set(-2.55, .06, 2.6); reloj.rotation.y = .5; mundo.add(reloj);
+  // el seguro: destino del paso 3 (fachada con cartel, atrás a la izquierda)
+  const segTex = cv(512, 192, (x, w, h) => { x.fillStyle = '#112250'; x.fillRect(0, 0, w, h); x.fillStyle = '#D4AF37'; x.font = 'italic 700 120px "Playfair Display"'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText('seguro', w / 2, h / 2 + 6); });
+  const segCartel = mesh(new THREE.PlaneGeometry(3.6, 1.35), new THREE.MeshStandardMaterial({map: segTex, emissiveMap: segTex, emissive: C('#fff'), emissiveIntensity: .35}), -4.55, 3.2, -6.4 + 1.72 + .02, false); mundo.add(segCartel);
+  const mundoFarolInit = null;
   // ---------- autos low-poly ----------
   function auto(color, o = {}) { const g = grp(); const car = std(color, {roughness: .3, metalness: .3}), vid = std('#1d2a4a', {roughness: .1, metalness: .6});
     g.add(mesh(new RoundedBoxGeometry(4.3, .95, 1.95, 4, .28), car, 0, .78, 0)); g.add(mesh(new RoundedBoxGeometry(2.4, .85, 1.72, 4, .32), car, -.25, 1.55, 0)); g.add(mesh(new RoundedBoxGeometry(2.25, .6, 1.76, 3, .22), vid, -.25, 1.58, 0));
