@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<style>
+@font-face{font-family:Manrope;src:url(Manrope.ttf);font-weight:200 800}
+@font-face{font-family:Playfair;src:url(PlayfairDisplay-Italic.ttf);font-style:italic;font-weight:400 900}
+:root{--marfil:#F5F2EA;--tinta:#0D1B3D;--oro:#B8892B;--gris:#8A8C93;--linea:#E3DED1}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--marfil)}
+body{font-family:Manrope;color:var(--tinta);position:relative}
+.grano{position:absolute;inset:0;opacity:.35;mix-blend-mode:multiply;
+ background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .4  0 0 0 0 .38  0 0 0 0 .33  0 0 0 .18 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.vineta{position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 40%,transparent 55%,rgba(60,45,20,.10))}
+/* barra de progreso tipo historias */
+.prog{position:absolute;top:236px;left:80px;right:140px;display:flex;gap:14px}
+.prog i{flex:1;height:6px;border-radius:3px;background:var(--linea);overflow:hidden;position:relative}
+.prog i b{position:absolute;inset:0;background:var(--tinta);transform-origin:left}
+.meta{position:absolute;top:276px;left:80px;right:140px;display:flex;justify-content:space-between;align-items:center;
+ font-size:26px;letter-spacing:.22em;font-weight:600;color:var(--gris)}
+.meta .vivo{display:flex;align-items:center;gap:14px}
+.meta .vivo:before{content:"";width:14px;height:14px;border-radius:50%;background:#C8412F;box-shadow:0 0 0 8px rgba(200,65,47,.14)}
+.marca{font-weight:800;letter-spacing:.08em;color:var(--tinta)}
+.marca em{font-family:Playfair;font-style:italic;font-weight:600;letter-spacing:0;color:var(--oro);text-transform:none}
+.esc{position:absolute;left:80px;right:140px;top:400px;bottom:420px;display:none}
+.on{display:block}
+/* escena 1: gancho */
+.g1{font-weight:800;font-size:118px;line-height:1.0;letter-spacing:-.035em}
+.g2{font-weight:800;font-size:118px;line-height:1.0;letter-spacing:-.035em;margin-top:6px}
+.nunca{font-family:Playfair;font-style:italic;font-weight:700;font-size:330px;line-height:.9;color:var(--oro);letter-spacing:-.03em;margin-top:40px;position:relative;display:inline-block}
+.nunca:after{content:"";position:absolute;left:8px;right:-10px;bottom:-26px;height:10px;background:var(--tinta);transform:scaleX(.62);transform-origin:left}
+.pie1{position:absolute;bottom:0;left:0;right:0;border-top:2px solid var(--tinta);padding-top:30px;display:flex;justify-content:space-between;font-size:30px;font-weight:600}
+.pie1 b{font-weight:800}
+/* escena 2: chat */
+.rot{font-size:28px;letter-spacing:.22em;font-weight:700;color:var(--gris);text-transform:uppercase}
+.tel{margin-top:44px;background:#fff;border-radius:44px;padding:44px 44px 40px;box-shadow:0 40px 80px -30px rgba(13,27,61,.35),0 0 0 2px var(--linea)}
+.tel .cab{display:flex;align-items:center;gap:22px;padding-bottom:30px;border-bottom:2px solid #EEE}
+.tel .av{width:76px;height:76px;border-radius:50%;background:linear-gradient(135deg,#D9D3C3,#B9B2A1)}
+.tel .nom{font-size:34px;font-weight:700}.tel .sub{font-size:24px;color:var(--gris);font-weight:500;margin-top:4px}
+.bur{margin-top:34px;max-width:78%;padding:26px 32px;border-radius:30px;font-size:38px;font-weight:600;line-height:1.25}
+.otro{background:#F1EFE9;border-bottom-left-radius:8px}
+.yo{margin-left:auto;background:var(--tinta);color:#F5F2EA;border-bottom-right-radius:8px;position:relative}
+.yo .tach{position:absolute;left:22px;right:22px;top:50%;height:8px;background:var(--oro);border-radius:4px;transform:rotate(-4deg)}
+.estado{text-align:right;margin-top:14px;font-size:24px;color:#C8412F;font-weight:700;letter-spacing:.04em}
+.escrib{margin-top:40px;display:flex;gap:16px;align-items:center}
+.escrib .caja{flex:1;height:84px;border-radius:42px;border:2px solid #E6E2D8;padding:0 30px;display:flex;align-items:center;font-size:30px;color:#B5B1A6}
+.escrib .env{width:84px;height:84px;border-radius:50%;background:#E6E2D8}
+.karaoke{position:absolute;left:0;right:0;bottom:0;font-size:76px;font-weight:800;letter-spacing:-.02em;line-height:1.05}
+.karaoke span{color:#C9C3B4}.karaoke .act{color:var(--tinta)}
+.karaoke em{font-family:Playfair;font-style:italic;font-weight:700;color:var(--oro)}
+/* escena 3: paso 2 */
+.num{font-family:Playfair;font-style:italic;font-weight:700;font-size:460px;line-height:.78;color:transparent;-webkit-text-stroke:3px var(--tinta)}
+.paso{font-size:84px;font-weight:800;letter-spacing:-.03em;line-height:1.02;margin-top:30px}
+.paso em{font-family:Playfair;font-style:italic;font-weight:700;color:var(--oro);letter-spacing:-.01em}
+.lista{margin-top:60px;border-top:2px solid var(--tinta)}
+.it{display:flex;align-items:center;justify-content:space-between;padding:30px 0;border-bottom:2px solid var(--linea);font-size:44px;font-weight:700}
+.it .ok{width:64px;height:64px;border-radius:50%;border:3px solid var(--tinta);display:grid;place-items:center}
+.it .ok.si{background:var(--tinta)}
+.it .ok.si:after{content:"";width:22px;height:12px;border-left:5px solid var(--marfil);border-bottom:5px solid var(--marfil);transform:rotate(-45deg) translate(2px,-3px)}
+.it.pend{color:#B5B1A6}.it.pend .ok{border-color:#D3CEC2}
+</style></head><body>
+<div class="grano"></div><div class="vineta"></div>
+<div class="prog"><i><b id="p1"></b></i><i><b id="p2"></b></i><i><b id="p3"></b></i></div>
+<div class="meta"><span class="vivo">DOMINGO · 19:10</span><span class="marca">VITA <em>Abogados</em></span></div>
+
+<section class="esc" id="e0">
+ <div class="g1">Recién chocaste.</div>
+ <div class="g2">Esta frase,</div>
+ <div class="nunca">nunca.</div>
+ <div class="pie1"><span>Lo que decís en la calle</span><b>cuenta después →</b></div>
+</section>
+
+<section class="esc" id="e8">
+ <div class="rot">Lo que no se manda</div>
+ <div class="tel">
+  <div class="cab"><div class="av"></div><div><div class="nom">Conductor del otro auto</div><div class="sub">en línea</div></div></div>
+  <div class="bur otro">¿Me pasás tus datos para el seguro?</div>
+  <div class="bur yo">Perdón, fue mi culpa.<span class="tach"></span></div>
+  <div class="estado">✕ NO LO ENVIÉS</div>
+  <div class="escrib"><div class="caja">Te paso patente y póliza.</div><div class="env"></div></div>
+ </div>
+ <div class="karaoke"><span class="act">Nunca digas</span> <em>esto.</em></div>
+</section>
+
+<section class="esc" id="e18">
+ <div class="num">2</div>
+ <div class="paso">Datos del otro<br>y de <em>testigos.</em></div>
+ <div class="lista">
+  <div class="it">Patente<span class="ok si"></span></div>
+  <div class="it">Seguro y póliza<span class="ok si"></span></div>
+  <div class="it pend">Teléfono de un testigo<span class="ok"></span></div>
+ </div>
+</section>
+<script>
+const t=new URLSearchParams(location.search).get('t')||'0';
+document.getElementById('e'+t).classList.add('on');
+const f={0:[.35,0,0],8:[1,.2,0],18:[1,1,.45]}[t];
+['p1','p2','p3'].forEach((id,i)=>document.getElementById(id).style.transform=`scaleX(${f[i]})`);
+</script>
+</body></html>

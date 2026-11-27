@@ -1118,11 +1118,11 @@
     "formula": "mito roto",
     "tema": "monotributista que trabaja como empleado",
     "basado_en": "variante de vita-3011-3 (Te fuiste del trabajo: pedí tu certificado de trabajo)",
-    "gancho_pantalla": "«Facturo como monotributista, no soy empleado.»",
+    "gancho_pantalla": "«Facturo, así que no soy empleado.»",
     "voz": "«Me pagan con factura, así que no soy empleado.» No siempre. Si tenés horario fijo, un jefe y un solo lugar de trabajo, puede haber una relación laboral. Guardá todo y consultá. Mandáselo a quien factura todos los meses al mismo lugar.",
     "caracteres_voz": 235,
     "textos_pantalla": [
-      "«Facturo como monotributista, no soy empleado.»",
+      "«Facturo, así que no soy empleado.»",
       "Horario fijo",
       "Un jefe",
       "Un solo lugar",
@@ -1134,7 +1134,7 @@
     "escena_visual": "Una factura se transforma en un recibo de sueldo y vuelve a ser factura.",
     "cierre": "Mandáselo a quien factura todos los meses al mismo lugar. O comentá «ENCUBIERTO» y te mando la guía «Monotributista que trabaja como empleado».",
     "palabra": "ENCUBIERTO",
-    "copy": "«Facturo como monotributista, no soy empleado.»\n\n✔ Horario fijo\n✔ Un jefe\n✔ Un solo lugar\n\nMandáselo a quien factura todos los meses al mismo lugar. O comentá «ENCUBIERTO» y te mando la guía «Monotributista que trabaja como empleado».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "«Facturo, así que no soy empleado.»\n\n✔ Horario fijo\n✔ Un jefe\n✔ Un solo lugar\n\nMandáselo a quien factura todos los meses al mismo lugar. O comentá «ENCUBIERTO» y te mando la guía «Monotributista que trabaja como empleado».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": ""
   },
   {
@@ -1643,23 +1643,23 @@
     "formula": "contador que avanza",
     "tema": "compra online que no llega",
     "basado_en": "nuevo",
-    "gancho_pantalla": "Compraste online. Día 1, día 10, día 30: nada.",
+    "gancho_pantalla": "Compra online: día 1, día 10, día 30.",
     "voz": "Compraste online. Día uno: pagaste. Día diez: no llegó. Día treinta: no te responden. Guardá la factura y los mensajes, reclamá por escrito y, si no contestan, consultá. Guardalo para tu próxima compra online.",
     "caracteres_voz": 209,
     "textos_pantalla": [
-      "Compraste online. Día 1, día 10, día 30: nada.",
+      "Compra online: día 1, día 10, día 30.",
       "Día 1: pagaste",
       "Día 10: no llegó",
       "Día 30: reclamo por escrito",
       "Guardalo para tu próxima compra online.",
-      "Comentá «COMPRA»"
+      "Comentá «ONLINE»"
     ],
     "personaje": "Nico",
     "lugar_ba": "Puerta de la casa de Nico en Nueva Pompeya",
     "escena_visual": "Un contador de días sobre una caja vacía que nunca llega; la cámara mira la puerta mientras pasan los días.",
-    "cierre": "Guardalo para tu próxima compra online. O comentá «COMPRA» y te mando la guía «Compra online que no llega».",
-    "palabra": "COMPRA",
-    "copy": "Compraste online. Día 1, día 10, día 30: nada.\n\n✔ Día 1: pagaste\n✔ Día 10: no llegó\n✔ Día 30: reclamo por escrito\n\nGuardalo para tu próxima compra online. O comentá «COMPRA» y te mando la guía «Compra online que no llega».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "cierre": "Guardalo para tu próxima compra online. O comentá «ONLINE» y te mando la guía «Compra online que no llega».",
+    "palabra": "ONLINE",
+    "copy": "Compra online: día 1, día 10, día 30.\n\n✔ Día 1: pagaste\n✔ Día 10: no llegó\n✔ Día 30: reclamo por escrito\n\nGuardalo para tu próxima compra online. O comentá «ONLINE» y te mando la guía «Compra online que no llega».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": ""
   },
   {
@@ -1973,11 +1973,11 @@
     "formula": "segunda persona «vos»",
     "tema": "choque en bicicleta",
     "basado_en": "nuevo",
-    "gancho_pantalla": "Te chocaron en bici. También se puede reclamar.",
+    "gancho_pantalla": "Te chocaron en bici: también hay reclamo.",
     "voz": "Vos ibas en bici y te chocó un auto. También se puede reclamar. Uno: fotos de la bici, el auto y la patente. Dos: datos de testigos. Tres: guardia médica y certificado, aunque parezca poco. Mandáselo a quien va en bici.",
     "caracteres_voz": 219,
     "textos_pantalla": [
-      "Te chocaron en bici. También se puede reclamar.",
+      "Te chocaron en bici: también hay reclamo.",
       "Fotos y patente",
       "Testigos",
       "Guardia y certificado",
@@ -1989,7 +1989,7 @@
     "escena_visual": "La bici queda suspendida en el aire en cámara lenta; los tres pasos aparecen pintados en la bicisenda.",
     "cierre": "Mandáselo a quien va en bici. O comentá «BICI» y te mando la guía «Choque en bicicleta».",
     "palabra": "BICI",
-    "copy": "Te chocaron en bici. También se puede reclamar.\n\n✔ Fotos y patente\n✔ Testigos\n✔ Guardia y certificado\n\nMandáselo a quien va en bici. O comentá «BICI» y te mando la guía «Choque en bicicleta».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Te chocaron en bici: también hay reclamo.\n\n✔ Fotos y patente\n✔ Testigos\n✔ Guardia y certificado\n\nMandáselo a quien va en bici. O comentá «BICI» y te mando la guía «Choque en bicicleta».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": ""
   },
   {
