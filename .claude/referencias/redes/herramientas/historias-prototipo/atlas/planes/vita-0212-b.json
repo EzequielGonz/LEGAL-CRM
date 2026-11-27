@@ -1,0 +1,84 @@
+{
+  "id": "vita-0212-b",
+  "marca": "vita",
+  "base": "vita-0112-1",
+  "fecha_pub": "2026-12-02",
+  "hora": "21:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Te despiden: firmar rápido no te conviene.",
+  "voz": "Te despiden: firmar rápido no te conviene. Hay tres reacciones. La que firma todo para irse rápido. La que se va sin pedir copia de nada. Y la que lee, pide copia y consulta antes. ¿Cuál sos? La tercera es la que se queda con papeles. Comentá «COPIA» y te mando la guía. Mandáselo a quien esté pasando por esto, porque si mañana…",
+  "palabra": "COPIA",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "despiden",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "firma",
+      "texto": "Firmá acá",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Hay",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "nico",
+      "texto": "Tres reacciones",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "todo",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "firma",
+      "texto": "1/3 Firma todo",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "va",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "sobre",
+      "texto": "2/3 Se va sin copia",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "lee",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "documento",
+      "texto": "3/3 Lee, pide copia, consulta",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Cuál",
+      "n": 0,
+      "tipo": "giro",
+      "objeto": "globo",
+      "texto": "¿Cuál sos?",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "tercera",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "sello",
+      "texto": "Se queda con papeles",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Comentá",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sobre",
+      "texto": "Comentá COPIA",
+      "efecto": "flash"
+    }
+  ],
+  "cierre": "Comentá «COPIA»",
+  "copy": "Te despiden: firmar rápido no te conviene.\n\n1/3 La que firma todo para irse rápido.\n2/3 La que se va sin pedir copia de nada.\n3/3 La que lee, pide copia y consulta antes. ¿Cuál sos?\n\nComentá «COPIA» y te mando la guía «Despido: cómo reaccionás».\n\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #Despido #DerechoLaboral #Trabajadores",
+  "fuente": ""
+}

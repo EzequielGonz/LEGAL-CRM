@@ -1,0 +1,84 @@
+{
+  "id": "vita-0212-a",
+  "marca": "vita",
+  "base": "vita-0112-2",
+  "fecha_pub": "2026-12-02",
+  "hora": "11:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Tu baja por ART puede durar dos años.",
+  "voz": "Tu baja por ART puede durar dos años. Te accidentaste en el trabajo y estás de baja. ¿Cuánto puede durar como máximo? ¿Seis meses? ¿Un año? Hasta dos años desde la primera manifestación, salvo alta antes. Uno: seguí el tratamiento. Dos: guardá cada papel. Comentá «REPOSO» y te mando la guía. Mandáselo a un compañero de baja, porque…",
+  "palabra": "REPOSO",
+  "contador": 2,
+  "beats": [
+    {
+      "palabra": "baja",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "reloj",
+      "texto": "Baja por ART",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "accidentaste",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "ambulancia",
+      "texto": "Estás de baja",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Cuánto",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "reloj",
+      "texto": "¿Cuánto como máximo?",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "Seis",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "almanaque",
+      "texto": "¿Seis meses? ¿Un año?",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Hasta",
+      "n": 0,
+      "tipo": "giro",
+      "objeto": "almanaque",
+      "texto": "Hasta 2 años, salvo alta",
+      "efecto": "tachar"
+    },
+    {
+      "palabra": "Uno",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "documento",
+      "texto": "1/2 Seguí el tratamiento",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Dos",
+      "n": 2,
+      "tipo": "paso",
+      "objeto": "sobre",
+      "texto": "2/2 Guardá cada papel",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Comentá",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Comentá REPOSO",
+      "efecto": "sello"
+    }
+  ],
+  "cierre": "Comentá «REPOSO»",
+  "copy": "Tu baja por ART puede durar dos años.\n\nHasta dos años desde la primera manifestación, salvo alta antes.\n✔ Seguí el tratamiento\n✔ Guardá cada papel\n\nComentá «REPOSO» y te mando la guía «ART: cuánto dura la baja».\n\nFuente: Ley 24.557, art. 7.\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #ART #AccidenteLaboral #DerechoLaboral",
+  "fuente": "Ley 24.557, art. 7"
+}

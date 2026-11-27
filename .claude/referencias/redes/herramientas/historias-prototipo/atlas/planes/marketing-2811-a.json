@@ -1,0 +1,84 @@
+{
+ "id": "marketing-2811-a",
+ "marca": "marketing",
+ "base": "marketing-2711-2",
+ "fecha_pub": "2026-11-28",
+ "hora": "12:20",
+ "redes": [
+  "instagram",
+  "facebook"
+ ],
+ "gancho": "Cerrás el local, pero tu WhatsApp no.",
+ "voz": "Cerrás el local, pero tu WhatsApp no. Once de la noche: alguien te pide el precio. Contestás mañana a las diez: quizás ya compró. Uno: respuesta automática con tu horario. Dos: respondé lo básico esa misma noche. Tres: retomá temprano, por orden. Comentá CRM y te mando la prueba del chat. Porque esta noche, otra vez:",
+ "palabra": "CRM",
+ "contador": 3,
+ "beats": [
+  {
+   "palabra": "Cerrás",
+   "n": 0,
+   "tipo": "gancho",
+   "objeto": "cartel",
+   "texto": "Local cerrado, WhatsApp abierto",
+   "efecto": "giro"
+  },
+  {
+   "palabra": "Once",
+   "n": 0,
+   "tipo": "problema",
+   "objeto": "chat",
+   "texto": "23:00 ¿Qué precio tiene?",
+   "efecto": "rebote"
+  },
+  {
+   "palabra": "Contestás",
+   "n": 0,
+   "tipo": "giro",
+   "objeto": "reloj_arena",
+   "texto": "10:00 ¿Ya compró?",
+   "efecto": "apagon"
+  },
+  {
+   "palabra": "Uno",
+   "n": 0,
+   "tipo": "paso",
+   "objeto": "celular",
+   "texto": "Respuesta automática con horario",
+   "efecto": "flash"
+  },
+  {
+   "palabra": "Dos",
+   "n": 0,
+   "tipo": "paso",
+   "objeto": "chat",
+   "texto": "Lo básico, esa noche",
+   "efecto": "golpe"
+  },
+  {
+   "palabra": "Tres",
+   "n": 0,
+   "tipo": "paso",
+   "objeto": "check",
+   "texto": "Temprano, por orden",
+   "efecto": "sello"
+  },
+  {
+   "palabra": "Comentá",
+   "n": 0,
+   "tipo": "cierre",
+   "objeto": "carta",
+   "texto": "Comentá «CRM»",
+   "efecto": "caida"
+  },
+  {
+   "palabra": "Porque",
+   "n": 0,
+   "tipo": "cierre",
+   "objeto": "cartel",
+   "texto": "Local cerrado, WhatsApp abierto",
+   "efecto": "giro"
+  }
+ ],
+ "cierre": "Comentá «CRM»",
+ "copy": "Cerrás el local, pero tu WhatsApp no.\n\n✔ Respuesta automática con tu horario\n✔ Lo básico, esa misma noche\n✔ A primera hora, retomá por orden de llegada\n\nComentá «CRM» y te mando la guía «La prueba del chat».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #AtencionAlCliente #Pymes #Comercios",
+ "fuente": ""
+}

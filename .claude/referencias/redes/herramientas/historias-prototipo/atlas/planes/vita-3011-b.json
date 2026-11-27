@@ -1,0 +1,84 @@
+{
+  "id": "vita-3011-b",
+  "marca": "vita",
+  "base": "vita-2911-2",
+  "fecha_pub": "2026-11-30",
+  "hora": "21:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Te detienen: tu silencio es un derecho.",
+  "voz": "Te detienen: tu silencio es un derecho. Nadie te obliga a declarar contra vos. Esa noche, en la comisaría, ¿qué decís? Uno: tu nombre y tus datos. Dos: que querés un abogado. Tres: nada más. Comentá «DETENIDO» y te mando la guía. Mandáselo a quien sale de noche, porque si un día…",
+  "palabra": "DETENIDO",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "detienen",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "nico",
+      "texto": "Tu silencio, tu derecho",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "Nadie",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "martillo",
+      "texto": "Constitución Nacional, art. 18",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "noche",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "globo",
+      "texto": "¿Qué decís?",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "Uno",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "documento",
+      "texto": "1/3 Nombre y datos",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Dos",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "globo",
+      "texto": "2/3 «Quiero un abogado»",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "Tres",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "globo",
+      "texto": "3/3 Nada más",
+      "efecto": "tachar"
+    },
+    {
+      "palabra": "Comentá",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sobre",
+      "texto": "Comentá DETENIDO",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien sale",
+      "efecto": "caida"
+    }
+  ],
+  "cierre": "Comentá «DETENIDO»",
+  "copy": "Te detienen: tu silencio es un derecho.\n\n✔ 1/3 Tu nombre y tus datos\n✔ 2/3 Que querés un abogado\n✔ 3/3 Nada más\n\nComentá «DETENIDO» y te mando la guía «Penal: detención».\n\nFuente: Constitución Nacional, art. 18 (nadie puede ser obligado a declarar contra sí mismo).\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoPenal #Detencion #BuenosAires",
+  "fuente": "Constitución Nacional, art. 18"
+}

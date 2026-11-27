@@ -1,0 +1,84 @@
+{
+  "id": "vita-2911-b",
+  "marca": "vita",
+  "base": "vita-2811-4",
+  "fecha_pub": "2026-11-29",
+  "hora": "21:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "El aguinaldo no vence el 31 de diciembre.",
+  "voz": "El aguinaldo no vence el 31 de diciembre. ¿Qué día vence la segunda cuota? Pensá una fecha. Es el 18 de diciembre. Se calcula sobre la mitad del mejor sueldo del semestre. Si no llega, guardá tus recibos y consultá. Comentá «AGUINALDO» y te mando la guía. Mandáselo a quien cobra sueldo y revisá tu recibo, porque…",
+  "palabra": "AGUINALDO",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "aguinaldo",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "almanaque",
+      "texto": "¿31 de diciembre?",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "Qué",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "globo",
+      "texto": "¿Qué día vence?",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "Pensá",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "reloj",
+      "texto": "Pensá una fecha",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "18",
+      "n": 0,
+      "tipo": "giro",
+      "objeto": "almanaque",
+      "texto": "18 DE DICIEMBRE",
+      "efecto": "tachar"
+    },
+    {
+      "palabra": "mitad",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "billete",
+      "texto": "Mitad del mejor sueldo",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "llega",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "documento",
+      "texto": "Guardá tus recibos",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Comentá",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Comentá AGUINALDO",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sobre",
+      "texto": "Mandáselo y revisá tu recibo",
+      "efecto": "flash"
+    }
+  ],
+  "cierre": "Comentá «AGUINALDO»",
+  "copy": "El aguinaldo no vence el 31 de diciembre.\n\nLa segunda cuota vence el 18 de diciembre.\nSe calcula sobre la mitad del mejor sueldo del semestre.\nSi no llega, guardá tus recibos y consultá.\n\nComentá «AGUINALDO» y te mando la guía «Aguinaldo: fecha de pago».\n\nFuente: Ley de Contrato de Trabajo, art. 122.\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #Aguinaldo #DerechoLaboral #Trabajadores",
+  "fuente": "Ley de Contrato de Trabajo, art. 122"
+}

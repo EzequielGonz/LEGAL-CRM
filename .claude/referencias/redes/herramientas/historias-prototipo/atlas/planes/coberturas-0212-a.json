@@ -1,0 +1,84 @@
+{
+  "id": "coberturas-0212-a",
+  "marca": "coberturas",
+  "base": "coberturas-0112-1",
+  "fecha_pub": "2026-12-02",
+  "hora": "12:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Te asignan otro plan: no es el único.",
+  "voz": "Te asignan otro plan: no es el único. Lucía recibió el aviso: su plan se da de baja. No esperes al último día. Uno: pedí el aviso por escrito, con la fecha. Dos: averiguá a qué plan te pasan y qué cambia. Tres: compará antes de aceptar. Comentá BAJA y te mando la guía. Porque cuando te asignan otro plan…",
+  "palabra": "BAJA",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "Te",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "credencial",
+      "texto": "¿Otro plan y listo?",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "Lucía",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "celular",
+      "texto": "Aviso: plan de baja",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "esperes",
+      "n": 0,
+      "tipo": "giro",
+      "objeto": "reloj",
+      "texto": "No esperes al último día",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Uno",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "carpeta",
+      "texto": "1. Aviso por escrito",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Dos",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "pregunta",
+      "texto": "2. ¿Qué cambia?",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Tres",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "frasco",
+      "texto": "3. Compará antes",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Comentá",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Comentá «BAJA»",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "Porque",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "credencial",
+      "texto": "¿Otro plan y listo?",
+      "efecto": "giro"
+    }
+  ],
+  "cierre": "Comentá «BAJA»",
+  "copy": "Te asignan otro plan: no es el único.\n\n✔ Pedí el aviso de baja por escrito, con la fecha.\n✔ Averiguá a qué plan te pasan y qué cambia.\n✔ Compará antes de aceptar.\n\nComentá «BAJA» y te mando la guía «Tu prepaga se da de baja».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Prepaga #ObraSocial #CambioDePlan #BuenosAires",
+  "fuente": ""
+}

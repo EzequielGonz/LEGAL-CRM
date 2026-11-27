@@ -1,0 +1,84 @@
+{
+  "id": "vita-2911-a",
+  "marca": "vita",
+  "base": "vita-2811-1",
+  "fecha_pub": "2026-11-29",
+  "hora": "08:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Tu culpa no te deja sin ART.",
+  "voz": "Tu culpa no te deja sin ART. «Me lastimé por un error mío: no me cubre.» Falso. En general, la ART cubre aunque te hayas equivocado. Queda afuera el daño hecho a propósito o la fuerza mayor ajena al trabajo. Así que avisá, atendete y guardá todo. Comentá «CULPA» y te mando la guía. Mandáselo a un compañero, porque…",
+  "palabra": "CULPA",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "culpa",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "casco",
+      "texto": "Tu culpa",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "lastimé",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "globo",
+      "texto": "«La ART no me cubre»",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Falso",
+      "n": 0,
+      "tipo": "giro",
+      "objeto": "sello",
+      "texto": "FALSO",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "aunque",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "balanza",
+      "texto": "Cubre aunque te equivoques",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "Queda",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "Afuera: daño a propósito",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "fuerza",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "martillo",
+      "texto": "Fuerza mayor ajena",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "avisá",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "ambulancia",
+      "texto": "Avisá, atendete, guardá todo",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Comentá",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Comentá CULPA",
+      "efecto": "sello"
+    }
+  ],
+  "cierre": "Comentá «CULPA»",
+  "copy": "Tu culpa no te deja sin ART.\n\nEn general, la ART cubre aunque te hayas equivocado.\nQuedan afuera el daño hecho a propósito y la fuerza mayor ajena al trabajo.\nAvisá, atendete y guardá todo.\n\nComentá «CULPA» y te mando la guía «ART: el error propio».\n\nFuente: Ley 24.557, art. 6, inc. 3.\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #ART #AccidenteLaboral #DerechoLaboral",
+  "fuente": "Ley 24.557, art. 6, inc. 3"
+}

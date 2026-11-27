@@ -1,0 +1,84 @@
+{
+  "id": "coberturas-3011-b",
+  "marca": "coberturas",
+  "base": "coberturas-2911-3",
+  "fecha_pub": "2026-11-30",
+  "hora": "21:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Cambiarte de prepaga no congela todo un año.",
+  "voz": "Cambiarte de prepaga no congela todo un año. Gabriel lo creía: «si me cambio, espero un año para todo». Tranqui, no es así. Para lo que está en el Programa Médico Obligatorio no puede haber carencias. Lo demás tiene que estar en el contrato. Antes de firmar, pedí el contrato y revisá cada espera. Comentá CARENCIAS y te mando la guía. Porque cambiarte de prepaga…",
+  "palabra": "CARENCIAS",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Cambiarte",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "reloj",
+      "texto": "¿Un año esperando?",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Gabriel",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "personaje",
+      "texto": "Se quiere cambiar",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "espero",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "almanaque",
+      "texto": "«Espero un año»",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Tranqui",
+      "n": 0,
+      "tipo": "giro",
+      "objeto": "reloj",
+      "texto": "No es así",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Programa",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "sello",
+      "texto": "PMO: sin carencias",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "demás",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "carpeta",
+      "texto": "Lo demás, por contrato",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Antes",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "check",
+      "texto": "Pedí el contrato",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Comentá",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "carpeta",
+      "texto": "Comentá «CARENCIAS»",
+      "efecto": "giro"
+    }
+  ],
+  "cierre": "Comentá «CARENCIAS»",
+  "copy": "Cambiarte de prepaga no congela todo un año.\n\n✔ Para lo que está en el Programa Médico Obligatorio no puede haber carencias.\n✔ Lo demás tiene que estar escrito en el contrato.\n✔ Antes de firmar, pedí el contrato y revisá cada espera.\n\nComentá «CARENCIAS» y te mando la guía «Carencias del PMO».\n\nFuente: Ley 26.682, art. 10.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Prepaga #PMO #CambioDePrepaga #BuenosAires",
+  "fuente": "Ley 26.682, art. 10"
+}

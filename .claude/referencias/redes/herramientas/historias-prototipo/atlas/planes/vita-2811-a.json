@@ -1,0 +1,84 @@
+{
+  "id": "vita-2811-a",
+  "marca": "vita",
+  "base": "vita-2711-1",
+  "fecha_pub": "2026-11-28",
+  "hora": "08:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Chocaste: pedir perdón te puede jugar en contra.",
+  "voz": "Domingo, 19:10. Recién chocaste y te sale decir: «Perdón, fue mi culpa». Nunca digas esto. Antes de hablar, tres pasos. Uno: fotos de los autos, la patente y la esquina. Dos: datos del otro conductor y de los testigos. Tres: avisá a tu seguro dentro de los tres días. Mandáselo a quien maneje todos los días. Porque recién chocaste… y te sale decir:",
+  "palabra": "NUNCA",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "Domingo",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "reloj",
+      "texto": "Domingo, 19:10",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Perdón",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "globo",
+      "texto": "«Perdón, fue mi culpa»",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "Nunca",
+      "n": 0,
+      "tipo": "giro",
+      "objeto": "sello",
+      "texto": "NUNCA",
+      "efecto": "tachar"
+    },
+    {
+      "palabra": "Antes",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "nico",
+      "texto": "Antes de hablar: 0/3",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "Uno",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "camara",
+      "texto": "1/3 Fotos",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Dos",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "testigo",
+      "texto": "2/3 Datos y testigos",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Tres",
+      "n": 1,
+      "tipo": "paso",
+      "objeto": "almanaque",
+      "texto": "3/3 Seguro: 3 días",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sobre",
+      "texto": "Mandáselo. Comentá NUNCA",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Comentá «NUNCA»",
+  "copy": "Chocaste: pedir perdón te puede jugar en contra.\n\n✔ 1/3 Fotos de los autos, la patente y la esquina\n✔ 2/3 Datos del otro conductor y de los testigos\n✔ 3/3 Aviso a tu seguro dentro de los 3 días\n\nComentá «NUNCA» y te mando «Qué decir y qué no después de un choque».\n\nFuente: Ley 17.418, art. 46 (aviso del siniestro en 3 días).\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #AccidenteDeTransito #Choque #BuenosAires",
+  "fuente": "Ley 17.418, art. 46 (aviso del siniestro en 3 días)"
+}

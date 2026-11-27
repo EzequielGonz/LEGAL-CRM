@@ -1,0 +1,84 @@
+{
+  "id": "vita-2811-b",
+  "marca": "vita",
+  "base": "vita-2711-4",
+  "fecha_pub": "2026-11-28",
+  "hora": "21:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Heredar la casa no alcanza para venderla.",
+  "voz": "Heredar la casa no alcanza para venderla. Vos y tus hermanos heredan la casa de sus padres. ¿La pueden vender mañana? En general, no. Uno: hay que iniciar la sucesión. Dos: junten partidas, escritura e impuestos. Tres: pónganse de acuerdo por escrito antes de avanzar. Comentá «HERENCIA» y te mando los primeros pasos. Mandáselo a tus hermanos, porque…",
+  "palabra": "HERENCIA",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "Heredar",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "edificio",
+      "texto": "Heredaste la casa",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "hermanos",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "nico",
+      "texto": "Vos y tus hermanos",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "mañana",
+      "n": 0,
+      "tipo": "giro",
+      "objeto": "sello",
+      "texto": "¿Mañana? Todavía no",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Uno",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "documento",
+      "texto": "1/3 Iniciar la sucesión",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Dos",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "edificio",
+      "texto": "2/3 Partidas, escritura, impuestos",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Tres",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "firma",
+      "texto": "3/3 Acuerdo por escrito",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Comentá",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sobre",
+      "texto": "Comentá HERENCIA",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a tus hermanos",
+      "efecto": "caida"
+    }
+  ],
+  "cierre": "Comentá «HERENCIA»",
+  "copy": "Heredar la casa no alcanza para venderla.\n\n✔ 1/3 Primero se inicia la sucesión\n✔ 2/3 Partidas, escritura e impuestos\n✔ 3/3 Acuerdo entre hermanos, por escrito\n\nComentá «HERENCIA» y te mando «Los primeros pasos de una sucesión».\n\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #Sucesion #Herencia #DerechoCivil #BuenosAires",
+  "fuente": ""
+}

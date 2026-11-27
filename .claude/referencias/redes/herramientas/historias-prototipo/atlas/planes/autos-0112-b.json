@@ -1,0 +1,84 @@
+{
+  "id": "autos-0112-b",
+  "marca": "autos",
+  "base": "autos-3011-4",
+  "fecha_pub": "2026-12-01",
+  "hora": "21:30",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "La mejor forma de pago no existe.",
+  "voz": "La mejor forma de pago no existe. Lo que existe es la tuya. Hay tres compradores. El que tiene la plata paga contado. El que tiene anticipo busca un crédito prendario. El que no tiene apuro ahorra con un plan. ¿Cuál de los tres sos vos? Comentá FORMA y te mando la guía. Mandáselo a quien no sabe cómo pagar. Porque ya sabés:",
+  "palabra": "FORMA",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "La",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "llave",
+      "texto": "¿La mejor forma?",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Lo",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "auto",
+      "texto": "Tres compradores",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "El",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "llave",
+      "texto": "Contado",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "El",
+      "n": 1,
+      "tipo": "paso",
+      "objeto": "documento",
+      "texto": "Anticipo + prendario",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "El",
+      "n": 2,
+      "tipo": "paso",
+      "objeto": "almanaque",
+      "texto": "Sin apuro: plan",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Cuál",
+      "n": 0,
+      "tipo": "giro",
+      "objeto": "auto",
+      "texto": "¿Cuál sos?",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "Comentá",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Comentá «FORMA»",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "llave",
+      "texto": "¿La mejor forma?",
+      "efecto": "barrido"
+    }
+  ],
+  "cierre": "Comentá «FORMA»",
+  "copy": "La mejor forma de pago no existe. Existe la tuya.\n\n✔ Tenés la plata: contado.\n✔ Tenés anticipo: crédito prendario.\n✔ No tenés apuro: plan de ahorro.\n\n¿Cuál sos? Comentá «FORMA» y te mando la guía «Contado, prendario o plan».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #PlanDeAhorro #CreditoPrendario",
+  "fuente": ""
+}

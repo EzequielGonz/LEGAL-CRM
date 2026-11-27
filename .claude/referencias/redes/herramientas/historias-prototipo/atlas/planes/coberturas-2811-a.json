@@ -1,0 +1,84 @@
+{
+  "id": "coberturas-2811-a",
+  "marca": "coberturas",
+  "base": "coberturas-2711-1",
+  "fecha_pub": "2026-11-28",
+  "hora": "12:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Una enfermedad previa no te deja afuera.",
+  "voz": "Una enfermedad previa no te deja afuera. Lucía creía que sí. Pensaba: «ninguna prepaga me va a aceptar». Falso. Por ley, una preexistencia no puede ser motivo de rechazo. Lo que sí puede cambiar es el valor de la cuota. Por eso, antes de firmar, preguntá cuánto y pedilo por escrito. Comentá PLAN y te mando la guía. Porque una enfermedad previa…",
+  "palabra": "PLAN",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Una",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "personaje",
+      "texto": "¿Enfermedad previa?",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Pensaba",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "pregunta",
+      "texto": "«No me van a aceptar»",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "Falso",
+      "n": 0,
+      "tipo": "giro",
+      "objeto": "sello",
+      "texto": "RECHAZADA",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "preexistencia",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "carpeta",
+      "texto": "Por ley: no es rechazo",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Lo",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "frasco",
+      "texto": "El valor puede cambiar",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Por",
+      "n": 1,
+      "tipo": "paso",
+      "objeto": "check",
+      "texto": "Pedilo por escrito",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Comentá",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "carpeta",
+      "texto": "Comentá «PLAN»",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Porque",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "personaje",
+      "texto": "¿Enfermedad previa?",
+      "efecto": "caida"
+    }
+  ],
+  "cierre": "Comentá «PLAN»",
+  "copy": "Una enfermedad previa no te deja afuera.\n\n✔ Por ley, una preexistencia no puede ser motivo de rechazo.\n✔ Lo que sí puede cambiar es el valor de la cuota.\n✔ Antes de firmar, preguntá cuánto y pedilo por escrito.\n\nComentá «PLAN» y te mando la guía «Preexistencia».\n\nFuente: Ley 26.682, art. 10.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Prepaga #ObraSocial #Preexistencia #BuenosAires",
+  "fuente": "Ley 26.682, art. 10"
+}

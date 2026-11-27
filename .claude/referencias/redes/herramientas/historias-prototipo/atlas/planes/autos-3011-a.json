@@ -1,0 +1,76 @@
+{
+  "id": "autos-3011-a",
+  "marca": "autos",
+  "base": "autos-2911-g1",
+  "fecha_pub": "2026-11-30",
+  "hora": "11:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Menor tasa no siempre es menor costo.",
+  "voz": "Menor tasa no siempre es menor costo. Te ofrecen un crédito con una tasa que parece baja. Mirá qué hay detrás de ese número. Pedí el costo total financiero: suma intereses, gastos y seguros. Dos créditos con la misma tasa pueden costar distinto. Comentá la palabra y te mando la guía. Si te venden solo la tasa, pensá:",
+  "palabra": "CFT",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Menor",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "velocimetro",
+      "texto": "Menor tasa",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "Te",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "documento",
+      "texto": "Tasa que parece baja",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Mirá",
+      "n": 0,
+      "tipo": "giro",
+      "objeto": "lupa",
+      "texto": "Detrás del número",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Pedí",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "Costo total financiero",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Dos",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "Misma tasa, otro costo",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Comentá",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Comentá «CFT»",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Si",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "velocimetro",
+      "texto": "Menor tasa",
+      "efecto": "giro"
+    }
+  ],
+  "cierre": "Comentá «CFT»",
+  "copy": "Menor tasa no siempre es menor costo.\n\n✔ La tasa sola no cuenta todo.\n✔ El costo total financiero suma intereses, gastos y seguros.\n✔ Compará créditos con ese número.\n\nComentá «CFT» y te mando la guía «Costo total financiero».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #CreditoPrendario #FinanciarAuto",
+  "fuente": ""
+}

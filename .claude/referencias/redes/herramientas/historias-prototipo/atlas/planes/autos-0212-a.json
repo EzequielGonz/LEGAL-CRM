@@ -1,0 +1,84 @@
+{
+  "id": "autos-0212-a",
+  "marca": "autos",
+  "base": "autos-0112-2",
+  "fecha_pub": "2026-12-02",
+  "hora": "13:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "El seguro va antes que la llave.",
+  "voz": "El seguro va antes que la llave. «Lo veo después de retirar», dice Mati. No. Para circular, tenés que tener el seguro obligatorio. Uno: cotizá antes del retiro. Dos: mirá qué cubre de verdad. Tres: llevá la póliza ese día. Comentá CIRCULAR y te mando la guía. Mandáselo a quien retira esta semana. Acordate el orden:",
+  "palabra": "CIRCULAR",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "El",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "escudo",
+      "texto": "Seguro antes que llave",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Lo",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "llave",
+      "texto": "«Lo veo después»",
+      "efecto": "tachar"
+    },
+    {
+      "palabra": "Para",
+      "n": 0,
+      "tipo": "giro",
+      "objeto": "auto",
+      "texto": "Obligatorio para circular",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Uno",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "poliza",
+      "texto": "Cotizá antes",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Dos",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "lupa",
+      "texto": "Qué cubre de verdad",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Tres",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "poliza",
+      "texto": "Póliza el día del retiro",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Comentá",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Comentá «CIRCULAR»",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "escudo",
+      "texto": "Seguro antes que llave",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Comentá «CIRCULAR»",
+  "copy": "El seguro va antes que la llave.\n\n✔ Para circular necesitás el seguro obligatorio (Ley 24.449, arts. 40 y 68).\n✔ Cotizá antes del retiro y mirá qué cubre de verdad.\n✔ Llevá la póliza el día que retirás.\n\nComentá «CIRCULAR» y te mando la guía «Seguro antes de retirar».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #SeguroDelAuto #RetiroDel0km",
+  "fuente": "Ley 24.449, arts. 40 y 68"
+}

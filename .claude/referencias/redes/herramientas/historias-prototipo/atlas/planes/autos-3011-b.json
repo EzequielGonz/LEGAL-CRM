@@ -1,0 +1,84 @@
+{
+  "id": "autos-3011-b",
+  "marca": "autos",
+  "base": "autos-2911-g2",
+  "fecha_pub": "2026-11-30",
+  "hora": "19:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Tu sobrino de 8 años no va adelante.",
+  "voz": "Tu sobrino de ocho años no va adelante. Aunque se ponga el cinturón. Aunque sea un viaje corto. Los menores de diez años viajan en el asiento de atrás: lo dice la ley de tránsito. Y con cinturón o la sillita que corresponda. Comentá «atrás» y te mando la guía. Mandáselo a quien lleva chicos y repetí conmigo:",
+  "palabra": "ATRAS",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Tu",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "auto",
+      "texto": "¿Adelante? No.",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Aunque",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "cruz",
+      "texto": "Con cinturón, igual no",
+      "efecto": "tachar"
+    },
+    {
+      "palabra": "Aunque",
+      "n": 1,
+      "tipo": "problema",
+      "objeto": "velocimetro",
+      "texto": "Viaje corto, igual no",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "Los",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "auto",
+      "texto": "Menores de 10: atrás",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "lo",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "Ley 24.449, art. 40",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Y",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "check",
+      "texto": "Cinturón o sillita",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "Comentá",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Comentá «ATRAS»",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "auto",
+      "texto": "¿Adelante? No.",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Comentá «ATRAS»",
+  "copy": "Tu sobrino de 8 años no va adelante.\n\n✔ Los menores de 10 años viajan en el asiento de atrás (Ley 24.449, art. 40, inc. g).\n✔ Aunque se ponga el cinturón y aunque el viaje sea corto.\n✔ Atrás, con cinturón o la sillita que corresponda.\n\nComentá «ATRAS» y te mando la guía «Chicos en el asiento de atrás».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #SeguridadVial #ViajarConChicos #LeyDeTransito",
+  "fuente": "Ley 24.449, art. 40, inc. g"
+}

@@ -1,0 +1,84 @@
+{
+ "id": "marketing-0212-b",
+ "marca": "marketing",
+ "base": "marketing-0112-4",
+ "fecha_pub": "2026-12-02",
+ "hora": "21:20",
+ "redes": [
+  "instagram",
+  "facebook"
+ ],
+ "gancho": "Mirar tu web en la compu no alcanza.",
+ "voz": "Mirar tu web en la compu no alcanza. Tu cliente llega desde WhatsApp, en el celular. Hacé la prueba ahora, con una sola mano. Uno: ¿encontrás el precio? Dos: ¿el botón para hacer el pedido? Tres: ¿el WhatsApp? Si no, tu cliente tampoco. Comentá CELULAR y te mando la guía. Así que guardá la compu, porque:",
+ "palabra": "CELULAR",
+ "contador": 3,
+ "beats": [
+  {
+   "palabra": "Mirar",
+   "n": 0,
+   "tipo": "gancho",
+   "objeto": "vidriera",
+   "texto": "En la compu no alcanza",
+   "efecto": "barrido"
+  },
+  {
+   "palabra": "Tu",
+   "n": 1,
+   "tipo": "problema",
+   "objeto": "celular",
+   "texto": "En el celular",
+   "efecto": "golpe"
+  },
+  {
+   "palabra": "Hacé",
+   "n": 0,
+   "tipo": "problema",
+   "objeto": "reloj_arena",
+   "texto": "Probala ahora",
+   "efecto": "cuenta"
+  },
+  {
+   "palabra": "Uno",
+   "n": 0,
+   "tipo": "paso",
+   "objeto": "etiqueta",
+   "texto": "¿El precio?",
+   "efecto": "lupa"
+  },
+  {
+   "palabra": "Dos",
+   "n": 0,
+   "tipo": "paso",
+   "objeto": "cruz",
+   "texto": "¿El botón de pedir?",
+   "efecto": "rebote"
+  },
+  {
+   "palabra": "Tres",
+   "n": 0,
+   "tipo": "paso",
+   "objeto": "chat",
+   "texto": "¿El WhatsApp?",
+   "efecto": "despiece"
+  },
+  {
+   "palabra": "Comentá",
+   "n": 0,
+   "tipo": "cierre",
+   "objeto": "carta",
+   "texto": "Comentá «CELULAR»",
+   "efecto": "sello"
+  },
+  {
+   "palabra": "Así",
+   "n": 0,
+   "tipo": "cierre",
+   "objeto": "vidriera",
+   "texto": "En la compu no alcanza",
+   "efecto": "giro"
+  }
+ ],
+ "cierre": "Comentá «CELULAR»",
+ "copy": "Mirar tu web en la compu no alcanza.\n\n✔ ¿Encontrás el precio?\n✔ ¿Y el botón para hacer el pedido?\n✔ ¿Y el WhatsApp, a un toque?\n\nComentá «CELULAR» y te mando la guía «Web en el celular».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #PaginaWeb #Emprendedores #Pymes",
+ "fuente": ""
+}

@@ -1,0 +1,76 @@
+{
+  "id": "autos-2811-a",
+  "marca": "autos",
+  "base": "autos-2711-1",
+  "fecha_pub": "2026-11-28",
+  "hora": "09:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "El precio de lista no es el final.",
+  "voz": "El precio de lista no es el final. Juli hizo la cuenta con ese número. Y al firmar, apareció otro. ¿Qué pasó? Se suman, en general, flete, formularios, patentamiento y sellos. Antes de ilusionarte, pedí el precio llave en mano. Comentá la palabra y te mando los ítems del precio final. Si alguien te dice «sale lo que dice la lista», contestale:",
+  "palabra": "0KM",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "El",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "documento",
+      "texto": "PRECIO DE LISTA",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Juli",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "auto",
+      "texto": "La cuenta de Juli",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "Y",
+      "n": 0,
+      "tipo": "giro",
+      "objeto": "documento",
+      "texto": "Otro número",
+      "efecto": "tachar"
+    },
+    {
+      "palabra": "Se",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "Flete, formularios, patente, sellos",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Antes",
+      "n": 0,
+      "tipo": "giro",
+      "objeto": "llave",
+      "texto": "Llave en mano",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Comentá",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Comentá «0KM»",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "Si",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "documento",
+      "texto": "PRECIO DE LISTA",
+      "efecto": "barrido"
+    }
+  ],
+  "cierre": "Comentá «0KM»",
+  "copy": "El precio de lista no es el final.\n\n✔ A la lista se suman, en general, flete, formularios, patentamiento y sellos.\n✔ Pedí siempre el precio llave en mano.\n✔ Compará con ese número, no con la lista.\n\nComentá «0KM» y te mando «Los ítems del precio final».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #PrecioFinal #AutoNuevo #BuenosAires",
+  "fuente": ""
+}

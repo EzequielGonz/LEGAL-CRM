@@ -1,0 +1,84 @@
+{
+  "id": "coberturas-0212-b",
+  "marca": "coberturas",
+  "base": "coberturas-0112-2",
+  "fecha_pub": "2026-12-02",
+  "hora": "18:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "La obra social del trabajo la elegís vos.",
+  "voz": "La obra social del trabajo la elegís vos. Gabriel arranca en un trabajo nuevo. Día uno: le dan una obra social. Día dos: mira su cartilla. Día tres: compara con otras. Si trabajás en relación de dependencia, podés elegir a cuál van tus aportes. Preguntá cómo hacer el cambio. Comentá NUEVO y te mando la guía. Porque en tu trabajo nuevo…",
+  "palabra": "NUEVO",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "La",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "credencial",
+      "texto": "¿Te la dan o elegís?",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "Gabriel",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "personaje",
+      "texto": "Trabajo nuevo",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Día",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "almanaque",
+      "texto": "Día 1: le dan una",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Día",
+      "n": 1,
+      "tipo": "paso",
+      "objeto": "celular",
+      "texto": "Día 2: cartilla",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Día",
+      "n": 2,
+      "tipo": "paso",
+      "objeto": "escalera",
+      "texto": "Día 3: compará",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "podés",
+      "n": 0,
+      "tipo": "giro",
+      "objeto": "sello",
+      "texto": "Podés elegir",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Preguntá",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "pregunta",
+      "texto": "¿Cómo hago el cambio?",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Comentá",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "carpeta",
+      "texto": "Comentá «NUEVO»",
+      "efecto": "caida"
+    }
+  ],
+  "cierre": "Comentá «NUEVO»",
+  "copy": "La obra social del trabajo la elegís vos.\n\n✔ Si trabajás en relación de dependencia, podés elegir a cuál van tus aportes.\n✔ Antes de quedarte con la que te dan, mirá su cartilla.\n✔ Compará con otras y preguntá cómo hacer el cambio.\n\nComentá «NUEVO» y te mando la guía «Elegir obra social en un trabajo nuevo».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #TrabajoNuevo #Empleo #BuenosAires",
+  "fuente": ""
+}

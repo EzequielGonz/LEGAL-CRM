@@ -1,0 +1,84 @@
+{
+  "id": "autos-2811-b",
+  "marca": "autos",
+  "base": "autos-2711-3",
+  "fecha_pub": "2026-11-28",
+  "hora": "17:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Señar sin recibo no te asegura el auto.",
+  "voz": "Señar sin recibo no te asegura el auto. Encontraste el auto y lo querés reservar. Pero pedí el recibo, con estos datos. Uno: modelo, versión y color. Dos: el monto y la fecha. Tres: qué pasa con la seña si la operación no sigue. Comentá la palabra y te mando la guía. Cuando te digan «dejala así, después vemos», acordate:",
+  "palabra": "SENA",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "Señar",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "llave",
+      "texto": "Seña sin recibo",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Encontraste",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "auto",
+      "texto": "El auto que querías",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Pero",
+      "n": 0,
+      "tipo": "giro",
+      "objeto": "documento",
+      "texto": "Pedí el recibo",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "Uno",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "documento",
+      "texto": "Modelo, versión y color",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Dos",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "almanaque",
+      "texto": "Monto y fecha",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Tres",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "candado",
+      "texto": "¿Y si no sigue?",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Comentá",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Comentá «SENA»",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "Cuando",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "llave",
+      "texto": "Seña sin recibo",
+      "efecto": "caida"
+    }
+  ],
+  "cierre": "Comentá «SENA»",
+  "copy": "Señar sin recibo no te asegura el auto.\n\n✔ Que el recibo diga modelo, versión y color.\n✔ Que figuren el monto y la fecha.\n✔ Que aclare qué pasa con la seña si la operación no sigue.\n\nComentá «SENA» y te mando la guía «Seña sin recibo».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #Seña #ComprarAuto",
+  "fuente": ""
+}

@@ -1,0 +1,84 @@
+{
+  "id": "autos-0212-b",
+  "marca": "autos",
+  "base": "autos-0112-3",
+  "fecha_pub": "2026-12-02",
+  "hora": "17:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Lavar tu usado no alcanza.",
+  "voz": "Lavar tu usado no alcanza. Antes de la tasación, juntá lo que le suma valor. Uno: el service al día, con comprobantes. Dos: los papeles en regla. Tres: cero deudas de patente o multas. Así llegás a la tasación con argumentos. Comentá USADO y te mando la guía. Mandáselo a quien vende su auto, y acordate:",
+  "palabra": "USADO",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "Lavar",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "auto",
+      "texto": "Brillo no alcanza",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Antes",
+      "n": 0,
+      "tipo": "giro",
+      "objeto": "documento",
+      "texto": "Antes de la tasación",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Uno",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "velocimetro",
+      "texto": "Service con comprobantes",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "Dos",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "documento",
+      "texto": "Papeles en regla",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Tres",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "cruz",
+      "texto": "Cero deudas ni multas",
+      "efecto": "tachar"
+    },
+    {
+      "palabra": "Así",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "auto",
+      "texto": "Llegás con argumentos",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Comentá",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Comentá «USADO»",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "auto",
+      "texto": "Brillo no alcanza",
+      "efecto": "barrido"
+    }
+  ],
+  "cierre": "Comentá «USADO»",
+  "copy": "Lavar tu usado no alcanza.\n\nAntes de la tasación, juntá:\n✔ El service al día, con comprobantes.\n✔ Los papeles en regla.\n✔ Cero deudas de patente o multas.\n\nComentá «USADO» y te mando la guía «El usado como parte de pago».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #UsadoComoPartePago #Tasacion",
+  "fuente": ""
+}

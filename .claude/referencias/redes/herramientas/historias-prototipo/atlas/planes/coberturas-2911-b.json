@@ -1,0 +1,76 @@
+{
+  "id": "coberturas-2911-b",
+  "marca": "coberturas",
+  "base": "coberturas-2811-4",
+  "fecha_pub": "2026-11-29",
+  "hora": "22:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Cumplir 65 no siempre te sube la cuota.",
+  "voz": "Cumplir 65 no siempre te sube la cuota. Gabriel lo descubrió con la prepaga de su mamá. Si tenés más de diez años de antigüedad, a los 65 no te pueden aumentar la cuota por la edad. Buscá el comprobante de cuándo entraste y pedí la respuesta por escrito. Comentá 65 y te mando la guía. Porque cumplir 65…",
+  "palabra": "65",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Cumplir",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "credencial",
+      "texto": "65: ¿sube la cuota?",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "Gabriel",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "personaje",
+      "texto": "La prepaga de mamá",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "tenés",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "almanaque",
+      "texto": "Diez años de antigüedad",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "no",
+      "n": 1,
+      "tipo": "giro",
+      "objeto": "sello",
+      "texto": "Sin aumento por edad",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Buscá",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "carpeta",
+      "texto": "¿Cuándo entraste?",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "pedí",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "check",
+      "texto": "Respuesta por escrito",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Comentá",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "credencial",
+      "texto": "Comentá «65»",
+      "efecto": "giro"
+    }
+  ],
+  "cierre": "Comentá «65»",
+  "copy": "Cumplir 65 no siempre te sube la cuota.\n\n✔ Si tenés 65 o más y más de diez años de antigüedad, no te pueden aumentar la cuota por la edad.\n✔ Buscá el comprobante de cuándo entraste.\n✔ Pedí la respuesta por escrito.\n\nComentá «65» y te mando la guía «65 años y antigüedad».\n\nFuente: Ley 26.682, art. 12.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Prepaga #AdultosMayores #BuenosAires",
+  "fuente": "Ley 26.682, art. 12"
+}

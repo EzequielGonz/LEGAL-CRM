@@ -1,0 +1,84 @@
+{
+  "id": "coberturas-2811-b",
+  "marca": "coberturas",
+  "base": "coberturas-2711-2",
+  "fecha_pub": "2026-11-28",
+  "hora": "18:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Ese descuento del recibo no es plata perdida.",
+  "voz": "Ese descuento del recibo no es plata perdida. Gabriel lo pasaba de largo todos los meses. Error. Esa línea es tu aporte a la obra social: tu cobertura. Uno: fijate a qué obra social va. Dos: revisá qué cartilla tenés cerca. Tres: preguntá si te conviene otra. Comentá APORTES y te mando cómo leer tu recibo. Y la próxima vez que veas ese descuento…",
+  "palabra": "APORTES",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "Ese",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "orden",
+      "texto": "Recibo: ¿plata perdida?",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Gabriel",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "personaje",
+      "texto": "Lo pasaba de largo",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Error",
+      "n": 0,
+      "tipo": "giro",
+      "objeto": "orden",
+      "texto": "Error: es tu cobertura",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Uno",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "check",
+      "texto": "1. ¿A cuál va?",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Dos",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "celular",
+      "texto": "2. Cartilla cerca",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Tres",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "pregunta",
+      "texto": "3. ¿Te conviene otra?",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "Comentá",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "carpeta",
+      "texto": "Comentá «APORTES»",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "próxima",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "orden",
+      "texto": "Recibo: ¿plata perdida?",
+      "efecto": "caida"
+    }
+  ],
+  "cierre": "Comentá «APORTES»",
+  "copy": "Ese descuento del recibo no es plata perdida.\n\n✔ Fijate a qué obra social va tu aporte.\n✔ Revisá qué cartilla tenés cerca.\n✔ Preguntá si te conviene otra.\n\nComentá «APORTES» y te mando «Cómo leer tu recibo».\n\nFuente: Ley 23.660, art. 16.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #ReciboDeSueldo #Aportes #BuenosAires",
+  "fuente": "Ley 23.660, art. 16"
+}

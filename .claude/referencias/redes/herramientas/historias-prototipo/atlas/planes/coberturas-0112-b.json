@@ -1,0 +1,84 @@
+{
+  "id": "coberturas-0112-b",
+  "marca": "coberturas",
+  "base": "coberturas-3011-4",
+  "fecha_pub": "2026-12-01",
+  "hora": "22:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "El nombre de la prepaga no te atiende.",
+  "voz": "El nombre de la prepaga no te atiende. Hay tres formas de elegir. Por el precio más bajo. Por el nombre que suena. O por la cartilla de tu zona. Lucía eligió la tercera, por lo que usa de verdad. ¿Cuál sos vos? Revisá la cartilla antes de firmar. Comentá ELEGIR y te mando la guía. Porque el nombre…",
+  "palabra": "ELEGIR",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "El",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "mostrador",
+      "texto": "¿El nombre te atiende?",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Hay",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "check",
+      "texto": "Tres formas de elegir",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Por",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "frasco",
+      "texto": "1. Lo más barato",
+      "efecto": "tachar"
+    },
+    {
+      "palabra": "Por",
+      "n": 1,
+      "tipo": "paso",
+      "objeto": "credencial",
+      "texto": "2. El nombre que suena",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "O",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "celular",
+      "texto": "3. Tu cartilla, tu zona",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Lucía",
+      "n": 0,
+      "tipo": "giro",
+      "objeto": "personaje",
+      "texto": "Eligió la tercera",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Cuál",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "pregunta",
+      "texto": "¿Cuál sos vos?",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "Comentá",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "carpeta",
+      "texto": "Comentá «ELEGIR»",
+      "efecto": "sello"
+    }
+  ],
+  "cierre": "Comentá «ELEGIR»",
+  "copy": "El nombre de la prepaga no te atiende.\n\n✔ Se puede elegir por precio, por nombre o por cartilla.\n✔ Lo que te sirve en la guardia es la cartilla de tu zona.\n✔ Revisá la cartilla antes de firmar.\n\nComentá «ELEGIR» y te mando la guía «Elegir plan por cartilla».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Prepaga #ObraSocial #Cartilla #BuenosAires",
+  "fuente": ""
+}

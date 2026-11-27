@@ -1,0 +1,84 @@
+{
+  "id": "vita-3011-a",
+  "marca": "vita",
+  "base": "vita-2911-3",
+  "fecha_pub": "2026-11-30",
+  "hora": "13:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Tu liquidación final no se paga cuando quieren.",
+  "voz": "Tu liquidación final no se paga cuando quieren. Te piden firmar ya. No firmes sin revisarla. Uno: los días trabajados del mes. Dos: aguinaldo y vacaciones proporcionales. Tres: el plazo. Si cobrabas por mes, tienen cuatro días hábiles para pagarte. Comentá «LIQUIDACION» y te mando la guía. Mandáselo a quien se va del trabajo, porque…",
+  "palabra": "LIQUIDACION",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "liquidación",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "documento",
+      "texto": "Liquidación final",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "piden",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "firma",
+      "texto": "Te piden firmar ya",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "firmes",
+      "n": 0,
+      "tipo": "giro",
+      "objeto": "sello",
+      "texto": "NO FIRMES SIN REVISAR",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Uno",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "almanaque",
+      "texto": "1/3 Días trabajados",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Dos",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "billete",
+      "texto": "2/3 Aguinaldo y vacaciones",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Tres",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "reloj",
+      "texto": "3/3 El plazo",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "cuatro",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "almanaque",
+      "texto": "4 días hábiles",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "Comentá",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sobre",
+      "texto": "Comentá LIQUIDACION",
+      "efecto": "caida"
+    }
+  ],
+  "cierre": "Comentá «LIQUIDACION»",
+  "copy": "Tu liquidación final no se paga cuando quieren.\n\n✔ 1/3 Días trabajados del mes\n✔ 2/3 Aguinaldo y vacaciones proporcionales\n✔ 3/3 Si cobrabas por mes: dentro de los 4 días hábiles\n\nComentá «LIQUIDACION» y te mando la guía «Liquidación final».\n\nFuente: Ley de Contrato de Trabajo, arts. 128 y 255 bis.\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #LiquidacionFinal #Despido #DerechoLaboral",
+  "fuente": "Ley de Contrato de Trabajo, arts. 128 y 255 bis"
+}

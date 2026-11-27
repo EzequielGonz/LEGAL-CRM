@@ -1,0 +1,84 @@
+{
+  "id": "autos-2911-a",
+  "marca": "autos",
+  "base": "autos-2811-2",
+  "fecha_pub": "2026-11-29",
+  "hora": "13:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Mirar solo la cuota te sale caro.",
+  "voz": "Mirar solo la cuota te sale caro. Hay tres compradores de cero kilómetro. El primero mira la cuota. El segundo suma cuota y seguro. El tercero suma todo: cuota, seguro, patente, cochera y nafta. Ese no se lleva sorpresas. ¿Cuál sos? Comentá GASTOS y te mando la guía. Mandáselo a quien solo mira la cuota. Porque ya sabés:",
+  "palabra": "GASTOS",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "Mirar",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "documento",
+      "texto": "SOLO LA CUOTA",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Hay",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "auto",
+      "texto": "Tres compradores",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "El",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "documento",
+      "texto": "Solo la cuota",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "El",
+      "n": 1,
+      "tipo": "paso",
+      "objeto": "escudo",
+      "texto": "Cuota + seguro",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "El",
+      "n": 2,
+      "tipo": "paso",
+      "objeto": "lupa",
+      "texto": "La cuenta completa",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Ese",
+      "n": 0,
+      "tipo": "giro",
+      "objeto": "check",
+      "texto": "¿Cuál sos?",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "Comentá",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Comentá «GASTOS»",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "documento",
+      "texto": "SOLO LA CUOTA",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Comentá «GASTOS»",
+  "copy": "Mirar solo la cuota te sale caro.\n\n✔ La cuota es solo una parte.\n✔ Sumá seguro, patente, cochera y nafta.\n✔ La cuenta completa es la que evita sorpresas.\n\n¿Cuál de los tres compradores sos? Comentá «GASTOS» y te mando la guía «Gastos después de comprar».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #GastosDelAuto #AutoNuevo",
+  "fuente": ""
+}

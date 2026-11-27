@@ -1,0 +1,84 @@
+{
+  "id": "coberturas-3011-a",
+  "marca": "coberturas",
+  "base": "coberturas-2911-1",
+  "fecha_pub": "2026-11-30",
+  "hora": "12:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Tu monotributo no es solo un impuesto.",
+  "voz": "Tu monotributo no es solo un impuesto. Lucía paga el monotributo y, además, una prepaga. Un día mira el detalle del pago: hay una línea que no entiende. Es su obra social. En general, una parte del monotributo ya va ahí. Revisá a cuál va y qué cartilla tenés cerca. Quizá pagás dos veces. Comentá MONO y te mando la guía. Porque tu monotributo…",
+  "palabra": "MONO",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Tu",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "orden",
+      "texto": "¿Solo un impuesto?",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Lucía",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "personaje",
+      "texto": "Monotributo y prepaga",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "mira",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "orden",
+      "texto": "Detalle del pago",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "línea",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "pregunta",
+      "texto": "¿Y esta línea?",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "obra",
+      "n": 0,
+      "tipo": "giro",
+      "objeto": "credencial",
+      "texto": "Es tu obra social",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Revisá",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "celular",
+      "texto": "¿A cuál va?",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Quizá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "frasco",
+      "texto": "¿Pagás dos veces?",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Comentá",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "carpeta",
+      "texto": "Comentá «MONO»",
+      "efecto": "giro"
+    }
+  ],
+  "cierre": "Comentá «MONO»",
+  "copy": "Tu monotributo no es solo un impuesto.\n\n✔ En general, una parte del monotributo ya va a una obra social.\n✔ Revisá a cuál va y qué cartilla tenés cerca.\n✔ Si además pagás una prepaga, preguntá si estás pagando dos veces.\n\nComentá «MONO» y te mando la guía «Monotributo y obra social».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Monotributo #ObraSocial #Prepaga #BuenosAires",
+  "fuente": ""
+}

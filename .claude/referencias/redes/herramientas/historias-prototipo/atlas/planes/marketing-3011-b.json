@@ -1,0 +1,84 @@
+{
+ "id": "marketing-3011-b",
+ "marca": "marketing",
+ "base": "marketing-2911-4",
+ "fecha_pub": "2026-11-30",
+ "hora": "21:20",
+ "redes": [
+  "instagram",
+  "facebook"
+ ],
+ "gancho": "Google no lee el cartel de tu puerta.",
+ "voz": "Google no lee el cartel de tu puerta. Domingo, diez y cuarto: «¿abren hoy?». En la puerta pegaste el horario de fiestas. Pero tu perfil de Google dice otro. Uno: cargá los horarios especiales de fiestas y feriados. Dos: revisalos antes de cada fecha. Comentá HORARIO y te mando la guía. Pegá el cartel, sí. Pero ojo:",
+ "palabra": "HORARIO",
+ "contador": 2,
+ "beats": [
+  {
+   "palabra": "Google",
+   "n": 0,
+   "tipo": "gancho",
+   "objeto": "cartel",
+   "texto": "Google no lee carteles",
+   "efecto": "flash"
+  },
+  {
+   "palabra": "Domingo",
+   "n": 0,
+   "tipo": "problema",
+   "objeto": "chat",
+   "texto": "¿Abren hoy?",
+   "efecto": "rebote"
+  },
+  {
+   "palabra": "En",
+   "n": 0,
+   "tipo": "problema",
+   "objeto": "vidriera",
+   "texto": "Horario de fiestas",
+   "efecto": "caida"
+  },
+  {
+   "palabra": "Pero",
+   "n": 0,
+   "tipo": "giro",
+   "objeto": "celular",
+   "texto": "Google dice otro",
+   "efecto": "tachar"
+  },
+  {
+   "palabra": "Uno",
+   "n": 0,
+   "tipo": "paso",
+   "objeto": "cartel",
+   "texto": "Horarios especiales",
+   "efecto": "barrido"
+  },
+  {
+   "palabra": "Dos",
+   "n": 0,
+   "tipo": "paso",
+   "objeto": "check",
+   "texto": "Antes de cada fecha",
+   "efecto": "sello"
+  },
+  {
+   "palabra": "Comentá",
+   "n": 0,
+   "tipo": "cierre",
+   "objeto": "carta",
+   "texto": "Comentá «HORARIO»",
+   "efecto": "golpe"
+  },
+  {
+   "palabra": "Pegá",
+   "n": 0,
+   "tipo": "cierre",
+   "objeto": "cartel",
+   "texto": "Google no lee carteles",
+   "efecto": "giro"
+  }
+ ],
+ "cierre": "Comentá «HORARIO»",
+ "copy": "Google no lee el cartel de tu puerta.\n\n✔ Cargá en tu perfil de Google los horarios especiales de fiestas y feriados\n✔ Revisalos antes de cada fecha\n✔ Que el horario de la puerta y el del perfil digan lo mismo\n\nComentá «HORARIO» y te mando la guía «Horarios en Google».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #PerfilDeGoogle #NegocioLocal #Comercios",
+ "fuente": ""
+}
