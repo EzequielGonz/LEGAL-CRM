@@ -50,7 +50,8 @@
 .cz-idx { position: sticky; top: 0; z-index: 10; background: #07070acc; backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
 .cz-idx ul { list-style: none; margin: 0 auto; padding-block: 10px; display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
 .cz-idx a { display: block; white-space: nowrap; padding: 6px 12px; border-radius: 999px; color: var(--muted); text-decoration: none; font-size: 0.84rem; font-weight: 500; transition: color 0.2s, background 0.2s; }
-.cz-idx a:hover, .cz-idx a:focus-visible { color: #fff; background: var(--card2); outline: none; }
+.cz-idx a:hover, .cz-idx a:focus-visible { color: #fff; background: var(--card2); }
+.cz-idx a:focus-visible { outline: 2px solid #fff; outline-offset: -2px; }
 
 .cz section { padding-block: 72px 8px; scroll-margin-top: 56px; }
 .cz section > .cz-in { display: grid; gap: 22px; }

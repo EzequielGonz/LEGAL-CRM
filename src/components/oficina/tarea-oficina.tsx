@@ -124,7 +124,7 @@ function Arena({ t }: { t: TareaOficina }) {
               <summary>
                 <b>{c.id}</b> · {c.error ? "no compitió" : c.puntaje !== null ? `${c.puntaje}/10` : "sin puntaje"} · <span className="cz-muted">{c.enfoque}</span>
               </summary>
-              {c.error ? <p className="cz-err">{c.error}</p> : null}
+              {c.error ? <p className="cz-err" role="alert">{c.error}</p> : null}
               {c.porque && <p className="cz-muted">Juez: {c.porque}</p>}
               {c.texto && <p className="resultado">{c.texto}</p>}
             </details>
@@ -203,7 +203,7 @@ export function BotonGemini({ t, alTerminar, ocupado, setOcupado }: { t: TareaOf
         </>
       )}
       {aviso && (
-        <p className={aviso.tipo === "ok" ? "cz-ok" : "cz-err"} role="status">
+        <p className={aviso.tipo === "ok" ? "cz-ok" : "cz-err"} role={aviso.tipo === "ok" ? "status" : "alert"}>
           {aviso.texto}
         </p>
       )}
@@ -272,7 +272,7 @@ export function DecisionDueno({ t, alDecidir }: { t: TareaOficina; alDecidir: ()
           {aprobar.motivo}
         </p>
       )}
-      {error && <p className="cz-err">{error}</p>}
+      {error && <p className="cz-err" role="alert">{error}</p>}
     </div>
   );
 }

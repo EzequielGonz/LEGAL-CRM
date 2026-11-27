@@ -299,7 +299,7 @@ export function CampaignLiveModal({
                 </div>
                 <div className="h-2.5 w-full overflow-hidden rounded-full bg-slate-100">
                   <div
-                    className="h-full rounded-full bg-gold-500 transition-all duration-500"
+                    className="h-full rounded-full bg-gold-600 [html[data-modo=oscuro]_&]:bg-gold-500 transition-all duration-500"
                     style={{ width: `${progressPct}%` }}
                   />
                 </div>

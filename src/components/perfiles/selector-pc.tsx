@@ -55,7 +55,7 @@ export function SelectorPerfilesPC({
   cifras: Record<string, ResumenCifras | null>;
 }) {
   const router = useRouter();
-  const { perfiles, setPerfiles, aviso, pausar, cifras: cifrasVivas } = usePerfilesEnVivo(inicial, { cifras: cifrasIniciales });
+  const { perfiles, setPerfiles, aviso, avisoError, pausar, cifras: cifrasVivas } = usePerfilesEnVivo(inicial, { cifras: cifrasIniciales });
   const cifras = cifrasVivas ?? cifrasIniciales;
   const [marcas, setMarcas] = useState(marcasIniciales);
   const [editando, setEditando] = useState<string | null>(null);
@@ -63,7 +63,7 @@ export function SelectorPerfilesPC({
   return (
     <div>
       {aviso && (
-        <p role="status" className="mx-auto mb-5 max-w-xl rounded-xl bg-white px-4 py-3 text-center text-sm text-slate-800 shadow-sm">
+        <p role={avisoError ? "alert" : "status"} className="mx-auto mb-5 max-w-xl rounded-xl bg-white px-4 py-3 text-center text-sm text-slate-800 shadow-sm">
           {aviso}
         </p>
       )}
@@ -154,7 +154,7 @@ export function SelectorPerfilesPC({
                         </p>
                         {b.tipo === "campana" && b.base && <p className="truncate text-xs text-slate-500" title={b.base}>Base: {b.base}</p>}
                         <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-100" aria-hidden="true">
-                          <div className="h-full rounded-full bg-gold-500" style={{ width: `${porcentaje(b.contactados, b.cargados)}%` }} />
+                          <div className="h-full rounded-full bg-gold-600 [html[data-modo=oscuro]_&]:bg-gold-500" style={{ width: `${porcentaje(b.contactados, b.cargados)}%` }} />
                         </div>
                         <p className="mt-1.5 text-xs text-slate-600 tabular-nums">
                           {b.tipo === "campana"

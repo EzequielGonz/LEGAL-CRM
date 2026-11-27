@@ -2,6 +2,7 @@
 
 import { useState, useId } from "react";
 import { useRouter } from "next/navigation";
+import { mensajeDeError } from "@/lib/errores-ui";
 
 /** Agenda una cita manualmente desde la ficha del prospecto (ej. se coordinó
  *  por teléfono y hay que dejarla registrada), sin pasar por el agente IA. */
@@ -20,24 +21,29 @@ export function ScheduleAppointmentForm({ contactId }: { contactId: string }) {
     setSaving(true);
     setError(null);
 
-    const res = await fetch(`/api/contacts/${contactId}/appointments`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        starts_at: new Date(startsAt).toISOString(),
-        duration_minutes: duration,
-      }),
-    });
-    const data = await res.json();
-    setSaving(false);
+    try {
+      const res = await fetch(`/api/contacts/${contactId}/appointments`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          starts_at: new Date(startsAt).toISOString(),
+          duration_minutes: duration,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
 
-    if (!res.ok) {
-      setError(data.error ?? "No se pudo agendar la cita.");
-      return;
+      if (!res.ok) {
+        setError(data.error ?? "No se pudo agendar la cita.");
+        return;
+      }
+
+      setStartsAt("");
+      router.refresh();
+    } catch (e) {
+      setError(mensajeDeError(e, "No se pudo agendar la cita. Probá de nuevo."));
+    } finally {
+      setSaving(false);
     }
-
-    setStartsAt("");
-    router.refresh();
   }
 
   return (

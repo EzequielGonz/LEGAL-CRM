@@ -13,8 +13,10 @@ import type { Area } from "@/lib/supabase/database.types";
  * el envío ella misma, como cualquier link de WhatsApp normal.
  *
  * `derived_at` en la base es solo un tilde visual de "ya lo mandé" (se
- * marca apenas se toca el botón, no cuando de verdad se confirma el envío
- * en WhatsApp, porque eso ya pasa fuera de nuestra app) — así la persona
+ * marca cuando se toca el botón y el guardado respondió bien; no cuando de
+ * verdad se confirma el envío en WhatsApp, porque eso ya pasa fuera de
+ * nuestra app). Mientras no esté guardado, se rotula «Abierto en
+ * WhatsApp» y no «Enviado» (auditoría 27/11) — así la persona
  * que va revisando esta lista no tiene que acordarse a mano cuáles ya
  * pasó. El caso no desaparece de la lista al marcarse: sigue ahí por si
  * hace falta reenviarlo.
@@ -41,20 +43,25 @@ export function CasoCard({
   const [derived, setDerived] = useState(initiallyDerived);
   const [sending, setSending] = useState(false);
   const [copied, setCopied] = useState(false);
+  // Se abrió WhatsApp pero todavía no se guardó el tilde (o el guardado falló).
+  const [abierto, setAbierto] = useState(false);
 
   async function handleEnviar() {
     setSending(true);
     window.open(`https://wa.me/?text=${encodeURIComponent(waText)}`, "_blank");
-    setDerived(true);
+    setAbierto(true);
     try {
-      await fetch(`/api/contacts/${contactId}`, {
+      const res = await fetch(`/api/contacts/${contactId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ derived_at: new Date().toISOString() }),
       });
+      // Recién con el guardado confirmado se marca como enviado.
+      if (res.ok) setDerived(true);
     } catch {
       // Si falla el guardado del tilde no pasa nada grave: el mensaje ya se
-      // abrió en WhatsApp igual, y se puede volver a tocar el botón.
+      // abrió en WhatsApp igual (queda «Abierto en WhatsApp») y se puede
+      // volver a tocar el botón.
     } finally {
       setSending(false);
     }
@@ -92,26 +99,35 @@ export function CasoCard({
         </div>
       </div>
 
-      {derived && (
+      {derived ? (
         <p className="mb-3 inline-flex items-center gap-1 rounded-full bg-green-100 px-2.5 py-1 text-xs font-medium text-green-700">
           <Icono nombre="check" className="h-3.5 w-3.5" /> Enviado
         </p>
+      ) : (
+        abierto && (
+          <p className="mb-3 inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700">
+            <Icono nombre="check" className="h-3.5 w-3.5" /> Abierto en WhatsApp
+          </p>
+        )
       )}
 
       <div className="flex gap-2">
         <button type="button"
           onClick={handleEnviar}
           disabled={sending}
-          className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#25D366] px-4 py-3.5 text-sm font-semibold text-white shadow-sm transition-transform active:scale-[0.98] disabled:opacity-60"
+          className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#25D366] px-4 py-3.5 text-sm font-semibold text-[#0B2B26] shadow-sm transition-transform active:scale-[0.98] disabled:opacity-60"
         >
-          <Icono nombre="enviar" className="h-4 w-4" /> {derived ? "Reenviar a WhatsApp" : "Enviar a WhatsApp"}
+          <Icono nombre="enviar" className="h-4 w-4" /> {derived || abierto ? "Reenviar a WhatsApp" : "Enviar a WhatsApp"}
         </button>
         <button type="button"
           onClick={handleCopiar}
+          aria-label={copied ? "Copiado" : "Copiar el mensaje"}
+          title={copied ? "Copiado" : "Copiar el mensaje"}
           className="flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-3.5 text-sm font-semibold text-slate-700 shadow-sm transition-transform active:scale-[0.98]"
         >
           {copied ? <Icono nombre="check" className="h-5 w-5" /> : <Icono nombre="copiar" className="h-5 w-5" />}
         </button>
+        <span role="status" className="sr-only">{copied ? "Copiado" : ""}</span>
       </div>
     </div>
   );

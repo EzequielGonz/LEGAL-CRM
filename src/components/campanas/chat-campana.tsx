@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import type { SlugPerfil } from "@/lib/marca";
+import { mensajeDeError } from "@/lib/errores-ui";
 import { TarjetaPropuesta, type Propuesta } from "@/components/asistente/asistente-panel";
 
 /**
@@ -122,7 +123,7 @@ export function ChatCampana({ slug, onCerrar }: { slug: SlugPerfil; onCerrar: ()
         if (!res.ok) throw new Error(data?.error ?? "No pude responder.");
         setMensajes((m) => [...m, { rol: "asistente", texto: data.texto, propuestas: data.propuestas ?? [], enlaces: data.enlaces ?? [] }]);
       } catch (e) {
-        setMensajes((m) => [...m, { rol: "asistente", texto: (e as Error).message, error: true }]);
+        setMensajes((m) => [...m, { rol: "asistente", texto: mensajeDeError(e, "No pude responder. Probá de nuevo."), error: true }]);
       } finally {
         setPensando(false);
       }

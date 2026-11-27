@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CampaignLiveModal } from "./campaign-live-modal";
 import { motivoPausaLegible } from "@/lib/textos/pantalla";
+import { mensajeDeError } from "@/lib/errores-ui";
 
 const ACTION_MESSAGE: Record<string, string> = {
   sent: "Primer mensaje enviado. El resto de los envíos van a seguir en segundo plano, solos, respetando el ritmo configurado — no hace falta dejar esta pantalla abierta.",
@@ -28,6 +29,8 @@ export function CampaignControls({
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  // Un fallo (al lanzar o al pausar) se muestra aparte, con role="alert".
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [showLive, setShowLive] = useState(false);
   const [prep, setPrep] = useState<{ ready: boolean; missing: string[]; pausa_general: boolean; pause_reason: string | null } | null>(null);
   const [pauseReason, setPauseReason] = useState("");
@@ -52,33 +55,49 @@ export function CampaignControls({
     setConfirmando(false);
     setLoading(true);
     setMessage(null);
-    const res = await fetch(`/api/campaigns/${campaignId}/launch`, { method: "POST" });
-    const data = await res.json();
-    setLoading(false);
-
-    if (data.error) {
-      setMessage(`Error: ${data.error}`);
-    } else {
-      setMessage(ACTION_MESSAGE[data.action] ?? "Campaña lanzada.");
-      // Al lanzar, abrimos directo el panel de seguimiento en vivo para que
-      // se vea el progreso sin tener que buscarlo aparte.
-      setShowLive(true);
+    setErrorMsg(null);
+    try {
+      const res = await fetch(`/api/campaigns/${campaignId}/launch`, { method: "POST" });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || data.error) {
+        setErrorMsg(data.error ? `Error: ${data.error}` : "No se pudo lanzar. Probá de nuevo.");
+      } else {
+        setMessage(ACTION_MESSAGE[data.action] ?? "Campaña lanzada.");
+        // Al lanzar, abrimos directo el panel de seguimiento en vivo para que
+        // se vea el progreso sin tener que buscarlo aparte.
+        setShowLive(true);
+      }
+    } catch (e) {
+      setErrorMsg(mensajeDeError(e, "No se pudo lanzar. Probá de nuevo."));
+    } finally {
+      setLoading(false);
+      router.refresh();
     }
-    router.refresh();
   }
 
   async function pause() {
     setLoading(true);
-    await fetch(`/api/campaigns/${campaignId}/pause`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ motivo: pauseReason.trim() || undefined }),
-    });
-    setLoading(false);
-    setAskingPause(false);
-    setPauseReason("");
-    setMessage("Campaña pausada: no se va a enviar nada más hasta que la reactives.");
-    router.refresh();
+    setMessage(null);
+    setErrorMsg(null);
+    try {
+      const res = await fetch(`/api/campaigns/${campaignId}/pause`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ motivo: pauseReason.trim() || undefined }),
+      });
+      if (!res.ok) {
+        setErrorMsg("No se pudo pausar: la campaña puede seguir enviando. Probá de nuevo.");
+      } else {
+        setAskingPause(false);
+        setPauseReason("");
+        setMessage("Campaña pausada: no se va a enviar nada más hasta que la reactives.");
+      }
+    } catch {
+      setErrorMsg("No se pudo pausar: la campaña puede seguir enviando. Probá de nuevo.");
+    } finally {
+      setLoading(false);
+      router.refresh();
+    }
   }
 
   // Mientras no se sabe si está lista, no se ofrece lanzar (el servidor igual lo rechazaría).
@@ -103,6 +122,17 @@ export function CampaignControls({
                 className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-2 text-sm font-medium text-amber-700"
               >
                 Confirmar pausa
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setAskingPause(false);
+                  setPauseReason("");
+                }}
+                disabled={loading}
+                className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm text-slate-800"
+              >
+                Cancelar
               </button>
             </span>
           ) : (
@@ -170,6 +200,7 @@ export function CampaignControls({
           )}
         </div>
       )}
+      {errorMsg && <p role="alert" className="mt-2 max-w-md rounded-lg bg-red-50 px-3 py-2 text-sm font-medium text-red-800">{errorMsg}</p>}
       {message && <p role="status" className="mt-2 max-w-md text-sm text-slate-700">{message}</p>}
       {status === "en_curso" && !message && (
         <p className="mt-2 max-w-md text-sm text-slate-700">

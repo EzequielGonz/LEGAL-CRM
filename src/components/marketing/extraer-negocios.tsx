@@ -169,7 +169,7 @@ export function ExtraerNegocios({ limites, usadosHoy, faltan, avisos }: { limite
           {total > 0 && (
             <div className="mt-3">
               <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100" role="progressbar" aria-valuemin={0} aria-valuemax={total} aria-valuenow={hechas} aria-label="Zonas procesadas">
-                <div className="h-full bg-gold-500 transition-all" style={{ width: `${Math.round((hechas / total) * 100)}%` }} />
+                <div className="h-full bg-gold-600 [html[data-modo=oscuro]_&]:bg-gold-500 transition-all" style={{ width: `${Math.round((hechas / total) * 100)}%` }} />
               </div>
               <p className="mt-1 text-xs text-slate-600">Zonas: {hechas} de {total}{ext.progreso?.pendientes?.[0] && ["pendiente", "ejecutando"].includes(ext.estado) ? ` · sigue con ${ext.progreso.pendientes[0]}` : ""}</p>
             </div>

@@ -306,6 +306,16 @@ export async function CampanasListView({
                   {verArchivadas ? "No hay campañas archivadas." : `Todavía no creaste ninguna campaña de ${perfilNombre}.`}
                 </li>
               ) : null}
+              {!error && (campaigns ?? []).length > 0 && visibles.length === 0 ? (
+                <li className="rounded-xl border border-dashed border-slate-300 p-8 text-center text-sm text-slate-700" style={{ gridColumn: "1 / -1" }}>
+                  <p>No hay campañas con este método.</p>
+                  <p className="mt-2">
+                    <Link prefetch={false} href={`${basePath}${verArchivadas ? "?archivadas=1" : ""}`} className="font-semibold text-slate-900 underline underline-offset-2">
+                      Ver todas
+                    </Link>
+                  </p>
+                </li>
+              ) : null}
             </ul>
             {visibles.length > 3 ? (
               <VerMas cerrado={`Ver las otras ${visibles.length - 3} campañas`} abierto="Ocultar las otras campañas">

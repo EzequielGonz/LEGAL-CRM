@@ -7,6 +7,7 @@ import { SendLimitsFields } from "./send-limits-fields";
 import { TemplatePicker } from "@/components/plantillas/template-picker";
 import { ChatCampana } from "@/components/campanas/chat-campana";
 import type { SlugPerfil } from "@/lib/marca";
+import { mensajeDeError } from "@/lib/errores-ui";
 import { apagaEntrenamiento, ENTRENAMIENTO } from "@/lib/campanas/entrenamiento";
 
 export function NewCampaignForm({
@@ -85,40 +86,45 @@ export function NewCampaignForm({
       return;
     }
 
-    const res = await fetch("/api/campaigns", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name,
-        channel_id: channelId,
-        template_id: porWasender ? null : template || null,
-        min_send_delay_seconds: minDelaySeconds,
-        max_send_delay_seconds: maxDelaySeconds,
-        batch_size: batchSize,
-        batch_pause_seconds: batchPauseSeconds,
-        daily_send_limit: dailyLimit === "" ? null : dailyLimit,
-        // Sin límite (vacío) es ir por más volumen: el entrenamiento no aplica.
-        entrenamiento: entrenamiento && dailyLimit !== "" && !apagaEntrenamiento(dailyLimit),
-        line_id: porWasender ? null : lineId || null,
-        ...(porWasender ? { proveedor: "wasender", wasender_line_id: waLinea || null, wasender_plantilla_id: waPlantilla === "rotar" ? null : waPlantilla || null, wasender_rotar_inicio: waPlantilla === "rotar" } : {}),
-        base_id: baseId || undefined,
-        agent_role_id: rolId || null,
-      }),
-    });
-    const data = await res.json();
-    setLoading(false);
+    try {
+      const res = await fetch("/api/campaigns", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          channel_id: channelId,
+          template_id: porWasender ? null : template || null,
+          min_send_delay_seconds: minDelaySeconds,
+          max_send_delay_seconds: maxDelaySeconds,
+          batch_size: batchSize,
+          batch_pause_seconds: batchPauseSeconds,
+          daily_send_limit: dailyLimit === "" ? null : dailyLimit,
+          // Sin límite (vacío) es ir por más volumen: el entrenamiento no aplica.
+          entrenamiento: entrenamiento && dailyLimit !== "" && !apagaEntrenamiento(dailyLimit),
+          line_id: porWasender ? null : lineId || null,
+          ...(porWasender ? { proveedor: "wasender", wasender_line_id: waLinea || null, wasender_plantilla_id: waPlantilla === "rotar" ? null : waPlantilla || null, wasender_rotar_inicio: waPlantilla === "rotar" } : {}),
+          base_id: baseId || undefined,
+          agent_role_id: rolId || null,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
 
-    // Antes, si esto fallaba (por ejemplo la sesión vencida o algún error del
-    // servidor), el formulario se cerraba solo y no avisaba nada — parecía
-    // que "no se podían crear más campañas" cuando en realidad no hay ningún
-    // límite, solo faltaba mostrar el error.
-    if (!res.ok || data.error || !data.campaign) {
-      setError(data.error ?? "No se pudo crear la campaña. Probá de nuevo.");
-      return;
+      // Antes, si esto fallaba (por ejemplo la sesión vencida o algún error del
+      // servidor), el formulario se cerraba solo y no avisaba nada — parecía
+      // que "no se podían crear más campañas" cuando en realidad no hay ningún
+      // límite, solo faltaba mostrar el error.
+      if (!res.ok || data.error || !data.campaign) {
+        setError(data.error ?? "No se pudo crear la campaña. Probá de nuevo.");
+        return;
+      }
+
+      setOpen(false);
+      router.push(`${redirectBase}/${data.campaign.id}`);
+    } catch (e) {
+      setError(mensajeDeError(e, "No se pudo crear la campaña. Probá de nuevo."));
+    } finally {
+      setLoading(false);
     }
-
-    setOpen(false);
-    router.push(`${redirectBase}/${data.campaign.id}`);
   }
 
   if (!open) {

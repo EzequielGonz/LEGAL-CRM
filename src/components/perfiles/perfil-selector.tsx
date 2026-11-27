@@ -9,6 +9,7 @@ import { variablesAcento } from "@/lib/acento";
 import { LogoPerfil } from "@/components/ui/logo-perfil";
 import { Icono } from "@/components/ui/icono-seccion";
 import { pedirConfirmacion } from "@/components/ui/dialogo-confirmar";
+import { mensajeDeError } from "@/lib/errores-ui";
 import { cantidad } from "@/lib/textos/pantalla";
 
 /** La vista previa se vuelve a pedir al servidor cada 20 s (pestaña visible) y al abrir la pantalla. */
@@ -131,7 +132,7 @@ export function EditarPerfil({ p, marca, onCerrar, onGuardado }: { p: PerfilStat
       onGuardado({ nombre, logo: d.logo ?? null, acento: usarColor ? color : null }, interno);
       onCerrar();
     } catch (err) {
-      setError((err as Error).message);
+      setError(mensajeDeError(err, "No se pudo guardar. Probá de nuevo."));
     } finally {
       setGuardando(false);
     }
@@ -195,7 +196,7 @@ export function EditarPerfil({ p, marca, onCerrar, onGuardado }: { p: PerfilStat
           </label>
           <input type="color" value={color} disabled={!usarColor} onChange={(e) => setColor(e.target.value)} className="h-9 w-14 cursor-pointer rounded-md border border-slate-300 p-0.5 disabled:opacity-40" aria-label="Color de acento" />
         </div>
-        {error && <p className="mt-4 text-sm text-red-700">{error}</p>}
+        {error && <p role="alert" className="mt-4 text-sm text-red-700">{error}</p>}
         <div className="mt-6 flex justify-end gap-2">
           <button type="button" onClick={onCerrar} className="btn-suave">
             Cancelar
@@ -217,6 +218,7 @@ export function usePerfilesEnVivo<C = unknown>(initial: PerfilStats[], opciones:
   const [perfiles, setPerfiles] = useState(initial);
   const [cifras, setCifras] = useState<C | undefined>(opciones.cifras);
   const [aviso, setAviso] = useState<string | null>(null);
+  const [avisoError, setAvisoError] = useState(false);
   const conCifras = opciones.cifras !== undefined;
 
   const refrescar = useCallback(async () => {
@@ -261,12 +263,18 @@ export function usePerfilesEnVivo<C = unknown>(initial: PerfilStats[], opciones:
     if (!p.campana) return;
     const campana = p.campana;
     if (!(await pedirConfirmacion({ titulo: `¿Pausar la campaña «${campana.nombre}»?`, texto: "Deja de enviar hasta que la reanudes.", confirmar: "Pausar" }))) return;
-    const res = await fetch(`/api/campaigns/${p.campana.id}/pause`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ motivo: "Pausada desde la pantalla de perfiles" }) });
-    setAviso(res.ok ? `Campaña «${p.campana.nombre}» pausada.` : "No se pudo pausar la campaña.");
+    try {
+      const res = await fetch(`/api/campaigns/${campana.id}/pause`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ motivo: "Pausada desde la pantalla de perfiles" }) });
+      setAvisoError(!res.ok);
+      setAviso(res.ok ? `Campaña «${campana.nombre}» pausada.` : "No se pudo pausar: la campaña puede seguir enviando. Probá de nuevo.");
+    } catch {
+      setAvisoError(true);
+      setAviso("No se pudo pausar: la campaña puede seguir enviando. Revisá la conexión y probá de nuevo.");
+    }
     refrescar();
   }
 
-  return { perfiles, setPerfiles, cifras, aviso, pausar };
+  return { perfiles, setPerfiles, cifras, aviso, avisoError, pausar };
 }
 
 /**
@@ -278,14 +286,14 @@ export function usePerfilesEnVivo<C = unknown>(initial: PerfilStats[], opciones:
  */
 export function PerfilSelector({ perfiles: initial, marcas: marcasIniciales, modo = "telefono" }: { perfiles: PerfilStats[]; marcas: Partial<Record<SlugPerfil, MarcaTarjeta>>; modo?: "pc" | "telefono" }) {
   const router = useRouter();
-  const { perfiles, setPerfiles, aviso, pausar } = usePerfilesEnVivo(initial);
+  const { perfiles, setPerfiles, aviso, avisoError, pausar } = usePerfilesEnVivo(initial);
   const [marcas, setMarcas] = useState(marcasIniciales);
   const [editando, setEditando] = useState<string | null>(null);
 
   return (
     <div>
       {aviso && (
-        <p role="status" className="mb-4 rounded-xl bg-white px-4 py-3 text-sm text-slate-800 shadow-sm ring-1 ring-slate-200">
+        <p role={avisoError ? "alert" : "status"} className="mb-4 rounded-xl bg-white px-4 py-3 text-sm text-slate-800 shadow-sm ring-1 ring-slate-200">
           {aviso}
         </p>
       )}

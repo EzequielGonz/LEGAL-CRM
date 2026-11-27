@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { mensajeDeError } from "@/lib/errores-ui";
 import { TemplatePicker } from "@/components/plantillas/template-picker";
 
 // Los domingos no se envía (pregunta 39): el horario general es de lunes a sábado de 8 a 21.
@@ -88,6 +89,8 @@ export function CampaignSetup({
       const data = await res.json().catch(() => ({}));
       setMsg(res.ok ? { ok: true, text: "Guardado." } : { ok: false, text: data.error ?? "No se pudo guardar." });
       if (res.ok) router.refresh();
+    } catch (e) {
+      setMsg({ ok: false, text: mensajeDeError(e, "No se pudo guardar. Probá de nuevo.") });
     } finally {
       setBusy(false);
     }
@@ -227,7 +230,7 @@ export function CampaignSetup({
         <button type="button" onClick={save} disabled={busy} className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">
           {busy ? "Guardando..." : "Guardar"}
         </button>
-        {msg && <span className={`text-xs ${msg.ok ? "text-green-600" : "text-red-600"}`}>{msg.text}</span>}
+        {msg && <span role={msg.ok ? "status" : "alert"} className={`text-xs ${msg.ok ? "text-green-600" : "text-red-600"}`}>{msg.text}</span>}
       </div>
       {!porWa && lines.length === 0 && (
         <p className="mt-2 text-xs text-amber-700">Este perfil no tiene líneas habilitadas para campañas: se registran en Configuración → Perfil, nombres y líneas.</p>
