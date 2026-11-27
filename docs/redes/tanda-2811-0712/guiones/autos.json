@@ -541,11 +541,11 @@
     "formula": "segunda persona «vos»",
     "tema": "gastos después de comprar",
     "basado_en": "variante de autos-2811-2 (El 0 km también tiene gastos fijos: seguro, patente, cochera)",
-    "gancho_pantalla": "Vos sumaste la cochera a la cuenta?",
+    "gancho_pantalla": "¿Sumaste la cochera a la cuenta?",
     "voz": "Vos ya hiciste la cuenta de la cuota. ¿Sumaste la cochera? ¿Y el seguro y la patente? Sumalos antes de elegir: son todos los meses. Guardalo y sumá todo.",
     "caracteres_voz": 153,
     "textos_pantalla": [
-      "Vos sumaste la cochera a la cuenta?",
+      "¿Sumaste la cochera a la cuenta?",
       "La cochera",
       "El seguro",
       "La patente",
@@ -557,7 +557,7 @@
     "escena_visual": "Estilo blueprint: la cochera se dibuja en líneas azules con cotas de gastos.",
     "cierre": "Guardalo y sumá todo. O comentá «GASTOS» y te mando la guía «Gastos después de comprar».",
     "palabra": "GASTOS",
-    "copy": "Vos sumaste la cochera a la cuenta?\n\n✔ La cochera\n✔ El seguro\n✔ La patente\n\nGuardalo y sumá todo. O comentá «GASTOS» y te mando la guía «Gastos después de comprar».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "¿Sumaste la cochera a la cuenta?\n\n✔ La cochera\n✔ El seguro\n✔ La patente\n\nGuardalo y sumá todo. O comentá «GASTOS» y te mando la guía «Gastos después de comprar».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -1234,11 +1234,11 @@
     "formula": "advertencia",
     "tema": "contado, prendario o plan",
     "basado_en": "variante de autos-3011-4 (¿Contado, prendario o plan? De qué depende)",
-    "gancho_pantalla": "No elijas cómo pagar por lo que hizo tu cuñado.",
+    "gancho_pantalla": "Cómo pagar el 0 km: no copies a tu cuñado.",
     "voz": "No elijas contado, prendario o plan por lo que hizo tu cuñado. Depende de cuánto tenés hoy, cuánto podés pagar por mes y cuánto podés esperar. Mandáselo a tu cuñado.",
     "caracteres_voz": 165,
     "textos_pantalla": [
-      "No elijas cómo pagar por lo que hizo tu cuñado.",
+      "Cómo pagar el 0 km: no copies a tu cuñado.",
       "Cuánto tenés hoy",
       "Cuánto por mes",
       "Cuánto podés esperar",
@@ -1250,7 +1250,7 @@
     "escena_visual": "Estilo ilustración: el consejo del cuñado sale en un globo de humo de parrilla y se disipa.",
     "cierre": "Mandáselo a tu cuñado. O comentá «FORMA» y te mando la guía «Contado, prendario o plan».",
     "palabra": "FORMA",
-    "copy": "No elijas cómo pagar por lo que hizo tu cuñado.\n\n✔ Cuánto tenés hoy\n✔ Cuánto por mes\n✔ Cuánto podés esperar\n\nMandáselo a tu cuñado. O comentá «FORMA» y te mando la guía «Contado, prendario o plan».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "Cómo pagar el 0 km: no copies a tu cuñado.\n\n✔ Cuánto tenés hoy\n✔ Cuánto por mes\n✔ Cuánto podés esperar\n\nMandáselo a tu cuñado. O comentá «FORMA» y te mando la guía «Contado, prendario o plan».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {

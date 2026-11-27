@@ -42,6 +42,7 @@ export function crear({P, pal, canvas, W = 1080, H = 1920}) {
   const arbol = (x, z, s = 1) => { const g = grp(); g.add(mesh(new THREE.CylinderGeometry(.13, .17, .9, 8), std('#6a4a34'), 0, .45, 0)); g.add(mesh(new THREE.IcosahedronGeometry(.7 * s, 1), std(verde[Math.floor(hash(x * 7 + z) * 3)], {flatShading: true}), 0, 1.35, 0)); g.position.set(x, .08, z); mundo.add(g); };
   for (let gx = -42; gx <= 42; gx += 5.4) for (let gz = -42; gz <= 42; gz += 5.4) {
     if (Math.abs(gx) < 2.6 || Math.abs(gz) < 2.6 || Math.abs(Math.abs(gx) - 21) < 2.8 || Math.abs(Math.abs(gz) - 21) < 2.8) continue;
+    if (gz > -3.5 && Math.hypot(gx, gz) < 17) { if (hash(gx + gz * 3) > .35 && Math.abs(gx) > 3) arbol(gx, gz, 1.1); continue; }
     const i = Math.round(gx * 3 + gz * 7); const w = 3.6 + hash(i) * 1.3, d = 3.6 + hash(i + 9) * 1.2; const cerca = Math.hypot(gx, gz) < 12; const frente = gz > 0;
     const h = cerca ? (frente ? 1.3 + hash(i + 3) * 1.4 : 2.6 + hash(i + 3) * 2.6) : 2 + hash(i + 3) * 8; const m1 = BM[Math.floor(hash(i + 5) * 8)], m2 = BM[Math.floor(hash(i + 6) * 8)];
     const px = gx + (hash(i + 1) - .5) * .6, pz = gz + (hash(i + 2) - .5) * .6;
@@ -52,7 +53,7 @@ export function crear({P, pal, canvas, W = 1080, H = 1920}) {
   // semáforo y reloj de la esquina (19:10)
   const semaforo = (x, z, ry) => { const g = grp(); g.add(mesh(new THREE.CylinderGeometry(.08, .1, 3.4, 8), std('#34373f'), 0, 1.7, 0)); const arm = mesh(new THREE.BoxGeometry(1.8, .1, .1), std('#34373f'), -.9, 3.3, 0); g.add(arm); g.add(mesh(new RoundedBoxGeometry(.42, 1.1, .34, 2, .08), std('#1b1d22'), -1.7, 3.0, 0));
     [['#ff3b30', 3.3, 1.5], ['#ffd23a', 3.0, .2], ['#2ee06a', 2.7, .2]].forEach(([c, y, e]) => g.add(mesh(new THREE.SphereGeometry(.12, 10, 8), new THREE.MeshStandardMaterial({color: c, emissive: C(c), emissiveIntensity: e}), -1.7, y, .18, false))); g.position.set(x, .08, z); g.rotation.y = ry; mundo.add(g); };
-  semaforo(2.5, 2.5, Math.PI * .5); semaforo(-2.5, -2.5, -Math.PI * .5);
+  semaforo(2.6, -2.6, Math.PI * .5); semaforo(-2.6, -2.6, -Math.PI * .5);
   const hora = P.hora || '19:10';
   const relTex = cv(512, 256, (x, w, h) => { x.fillStyle = '#1a1c24'; x.fillRect(0, 0, w, h); x.strokeStyle = ACC; x.lineWidth = 12; x.strokeRect(12, 12, w - 24, h - 24); x.fillStyle = ACC; x.font = '800 150px Inter, Manrope'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(hora, w / 2, h / 2 + 6); });
   const reloj = grp(); reloj.add(mesh(new THREE.CylinderGeometry(.1, .12, 3.6, 8), std('#34373f'), 0, 1.8, 0)); const mt = std('#1a1c24'); reloj.add(mesh(new RoundedBoxGeometry(2.1, 1.05, .22, 2, .08), [mt, mt, mt, mt, new THREE.MeshStandardMaterial({map: relTex, emissiveMap: relTex, emissive: C('#fff'), emissiveIntensity: 1.5}), mt], 0, 3.7, 0)); reloj.position.set(-2.7, .08, 3.0); reloj.rotation.y = .45; mundo.add(reloj);
@@ -68,8 +69,8 @@ export function crear({P, pal, canvas, W = 1080, H = 1920}) {
     if (o.taxi) g.add(mesh(new RoundedBoxGeometry(.9, .3, .4, 2, .08), new THREE.MeshStandardMaterial({color: '#fff', emissive: C('#fff0b0'), emissiveIntensity: 1.4}), -.25, 2.2, 0));
     if (o.capot) { const c = mesh(new THREE.BoxGeometry(.7, .5, 1.6), std('#2a2c34', {roughness: .9}), 1.95, 1.0, 0); c.rotation.z = -.35; c.rotation.y = .1; g.add(c); }
     return g; }
-  const autoA = auto('#2f7fe0', {capot: true}); autoA.position.set(-1.3, .1, -.5); autoA.rotation.y = .1; mundo.add(autoA);
-  const autoB = auto('#e0473d', {capot: true}); autoB.position.set(.9, .1, 1.6); autoB.rotation.y = Math.PI / 2 + .2; mundo.add(autoB);
+  const autoA = auto('#2f7fe0', {capot: true}); autoA.scale.setScalar(1.3); autoA.position.set(-1.6, .1, -.6); autoA.rotation.y = .1; mundo.add(autoA);
+  const autoB = auto('#e0473d', {capot: true}); autoB.scale.setScalar(1.3); autoB.position.set(1.0, .1, 1.9); autoB.rotation.y = Math.PI / 2 + .2; mundo.add(autoB);
   const taxi = auto('#f1c232', {taxi: true}); mundo.add(taxi);
   const patTex = cv(256, 96, (x, w, h) => { x.fillStyle = '#f4f4f0'; x.fillRect(0, 0, w, h); x.strokeStyle = '#223'; x.lineWidth = 6; x.strokeRect(3, 3, w - 6, h - 6); x.fillStyle = '#223'; x.font = '800 62px Inter, Manrope'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText('AB 123 CD', w / 2, h / 2 + 4); });
   const patente = mesh(new THREE.PlaneGeometry(.95, .36), new THREE.MeshStandardMaterial({map: patTex}), 0, .75, .98, false); autoB.add(patente); patente.rotation.y = 0; patente.position.set(-2.2, .8, 0); patente.rotation.y = -Math.PI / 2; 
@@ -80,7 +81,7 @@ export function crear({P, pal, canvas, W = 1080, H = 1920}) {
   const persona = (color, esc = 1, rim = ACC) => { const g = grp(); const m = new THREE.MeshStandardMaterial({color, roughness: .55, emissive: C(rim), emissiveIntensity: .1});
     g.add(mesh(new THREE.CapsuleGeometry(.36, .95, 6, 14), m, 0, 1.0, 0)); g.add(mesh(new THREE.SphereGeometry(.33, 18, 14), m, 0, 2.0, 0)); for (const s of [-1, 1]) { const b = mesh(new THREE.CapsuleGeometry(.1, .65, 4, 8), m, s * .5, 1.15, 0); b.rotation.z = s * .22; g.add(b); }
     g.scale.setScalar(esc); g.userData.cabeza = new THREE.Vector3(0, 2.4 * esc, 0); return g; };
-  const nico = persona('#1c2233', 1.3); nico.position.set(3.7, .16, 3.5); nico.rotation.y = -.7; mundo.add(nico);
+  const nico = persona('#141a2e', 1.75, '#D4AF37'); nico.position.set(3.4, .16, 3.6); nico.rotation.y = -.7; mundo.add(nico);
   const otro = persona('#7a2a2a', 1.2, '#ffb0a0'); otro.position.set(-.2, .1, 3.3); otro.rotation.y = .5; otro.visible = false; mundo.add(otro);
   const tes = [persona('#2a5c8a', 1.0, '#9fd0ff'), persona('#3a7a4a', 1.05, '#b6ffc4')]; tes[0].position.set(-4.2, .16, 3.8); tes[1].position.set(5.2, .16, -3.7); tes.forEach(t => { t.visible = false; mundo.add(t); });
   // ---------- props de los 3 pasos (dentro de la escena) ----------
@@ -102,10 +103,10 @@ export function crear({P, pal, canvas, W = 1080, H = 1920}) {
     fragmentShader: 'uniform sampler2D tDiffuse;uniform vec2 dir;uniform vec2 res;uniform float foco;uniform float r;varying vec2 vUv;void main(){float d=smoothstep(.14,.5,abs(vUv.y-foco));float rad=r*d;vec4 s=vec4(0.);float ws=0.;for(int i=-6;i<=6;i++){float f=float(i)/6.;float w=exp(-f*f*2.2);s+=texture2D(tDiffuse,vUv+dir*rad*f*2./res)*w;ws+=w;}gl_FragColor=s/ws;}'});
   const tH = tilt([1, 0]), tV = tilt([0, 1]); comp.addPass(tH); comp.addPass(tV); comp.addPass(new OutputPass());
   const fin = new ShaderPass({uniforms: {tDiffuse: {value: null}, tm: {value: 0}, grano: {value: R.grano ?? .05}}, vertexShader: vs,
-    fragmentShader: 'uniform sampler2D tDiffuse;uniform float tm;uniform float grano;varying vec2 vUv;float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7))+tm)*43758.5453);}void main(){vec4 c=texture2D(tDiffuse,vUv);vec2 q=vUv-.5;float v=smoothstep(.98,.25,length(q*vec2(.9,.6)));c.rgb*=mix(.72,1.,v);c.rgb*=vec3(1.03,1.0,.96);c.rgb+=(h(vUv*vec2(1080.,1920.))-.5)*grano;gl_FragColor=c;}'}); comp.addPass(fin);
+    fragmentShader: 'uniform sampler2D tDiffuse;uniform float tm;uniform float grano;varying vec2 vUv;float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7))+tm)*43758.5453);}void main(){vec4 c=texture2D(tDiffuse,vUv);vec2 q=vUv-.5;float v=smoothstep(.98,.25,length(q*vec2(.9,.6)));c.rgb*=mix(.72,1.,v);c.rgb*=vec3(1.03,1.0,.96);c.rgb*=1.-.38*smoothstep(.6,1.,vUv.y);c.rgb*=1.-.3*smoothstep(.42,0.,vUv.y);c.rgb+=(h(vUv*vec2(1080.,1920.))-.5)*grano;gl_FragColor=c;}'}); comp.addPass(fin);
   // ---------- cámara: siempre en movimiento ----------
-  const CFG = [{az: [14, 30], el: 29, d: [44, 40], f: [0, 1.6, .5]}, {az: [34, 52], el: 24, d: [30, 25], f: [0, 1.6, .8]}, {az: [24, 8], el: 20, d: [27, 21], f: [2.6, 2.2, 3.0]}, {az: [-6, -30], el: 24, d: [38, 30], f: [-4.2, 3.2, -1.6]}, {az: [30, 14], el: 29, d: [42, 44], f: [0, 1.6, .5]}];
-  const cfgDe = i => B[i].loop ? {az: [14, 14], el: 29, d: [44, 44], f: [0, 1.6, .5]} : CFG[Math.min(i, CFG.length - 1)];
+  const CFG = [{az: [14, 30], el: 27, d: [36, 32], f: [0, 1.7, .6]}, {az: [34, 52], el: 24, d: [26, 21], f: [0, 1.6, .8]}, {az: [28, 12], el: 20, d: [24, 18], f: [3.0, 2.2, 3.2]}, {az: [-6, -28], el: 24, d: [32, 25], f: [-3.4, 3.2, -1.0]}, {az: [30, 14], el: 27, d: [34, 36], f: [0, 1.7, .6]}];
+  const cfgDe = i => B[i].loop ? {az: [14, 14], el: 27, d: [36, 36], f: [0, 1.7, .6]} : CFG[Math.min(i, CFG.length - 1)];
   const posa = (i, u) => { const c = cfgDe(i); const e = ease(u); return {az: lerp(c.az[0], c.az[1], e) * Math.PI / 180, el: c.el * Math.PI / 180, d: lerp(c.d[0], c.d[1], e), f: new THREE.Vector3(...c.f)}; };
   const idx = t => { let i = B.length - 1; while (i > 0 && B[i].t0 > t) i--; return i; };
   const pose0 = posa(0, 0);

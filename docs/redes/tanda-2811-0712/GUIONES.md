@@ -24,8 +24,8 @@ VITA en Instagram sube de a poco: 2 reels por día el 27 y 28/11, 3 el 29 y 30/1
 | VITA | 44 | 10.236 | 232 | 20 |
 | Compara Tu Obra Social | 44 | 9.714 | 220 | 20 |
 | Automotores Kocos | 44 | 8.709 | 197 | 20 |
-| Kocos Marketing | 44 | 8.649 | 196 | 0 |
-| **Total** | **176** | **37.308** | 211 | 60 |
+| Kocos Marketing | 44 | 8.649 | 196 | 20 |
+| **Total** | **176** | **37.308** | 211 | 80 |
 
 Tope pedido: 38.000 caracteres (presupuesto ElevenLabs 40.000). Dentro del tope. Las voces gratis no gastan ElevenLabs.
 
@@ -34,7 +34,7 @@ Tope pedido: 38.000 caracteres (presupuesto ElevenLabs 40.000). Dentro del tope.
 - **VITA:** tres cartas cerradas 8 · segunda persona «vos» 8 · escena con hora o número 7 · contador que avanza 7 · mito roto 7 · advertencia 6 · ¿cuál sos? (identidad) 6 · pregunta con respuesta numérica 5 · loop 5 · serie (parte 1) 2 · serie (parte 2) 2 · advertencia + escena con hora + contador + loop 1
 - **Compara Tu Obra Social:** mito roto 8 · segunda persona «vos» 8 · escena con hora o número 7 · pregunta con respuesta numérica 7 · advertencia 7 · contador que avanza 6 · tres cartas cerradas 6 · ¿cuál sos? (identidad) 6 · loop 5 · serie (parte 1) 2 · serie (parte 2) 2
 - **Automotores Kocos:** escena con hora o número 8 · tres cartas cerradas 8 · advertencia 8 · segunda persona «vos» 8 · loop 6 · mito roto 6 · pregunta con respuesta numérica 6 · ¿cuál sos? (identidad) 6 · contador que avanza 4 · serie (parte 1) 2 · serie (parte 2) 2
-- **Kocos Marketing:** segunda persona «vos» 5 · tres cartas cerradas 5 · pregunta con respuesta numérica 5 · advertencia 5 · escena con hora o número 4 · mito roto 4 · contador que avanza 4 · ¿cuál sos? (identidad) 4 · loop 4 · serie (parte 1) 2 · serie (parte 2) 2
+- **Kocos Marketing:** segunda persona «vos» 8 · advertencia 8 · tres cartas cerradas 7 · escena con hora o número 7 · pregunta con respuesta numérica 7 · ¿cuál sos? (identidad) 6 · mito roto 6 · contador que avanza 6 · loop 5 · serie (parte 1) 2 · serie (parte 2) 2
 
 ## VITA
 
@@ -194,7 +194,7 @@ Tope pedido: 38.000 caracteres (presupuesto ElevenLabs 40.000). Dentro del tope.
 | 29/11 | 11:10 | gratis (de autos-2811-1) | advertencia | No compares 0 km por precio de lista. | 0KM | IG + FB | 159 |
 | 29/11 | 13:10 | ElevenLabs | loop | Diciembre o enero: ¿cuándo lo patentás? | ENERO | IG + FB | 236 |
 | 29/11 | 17:10 | ElevenLabs | escena con hora o número | Sábado 17:10: lo probaste dos minutos. | PRUEBA | IG + FB | 198 |
-| 29/11 | 19:10 | gratis (de autos-2811-2) | segunda persona «vos» | Vos sumaste la cochera a la cuenta? | GASTOS | IG + FB | 153 |
+| 29/11 | 19:10 | gratis (de autos-2811-2) | segunda persona «vos» | ¿Sumaste la cochera a la cuenta? | GASTOS | IG + FB | 153 |
 | 29/11 | 21:30 | ElevenLabs | tres cartas cerradas | Plan de ahorro: tres cartas antes de firmar. | PREGUNTAS | IG + FB | 203 |
 | 30/11 | 09:10 | ElevenLabs | advertencia | Precio de palabra: desconfiá. | PRESUPUESTO | IG + FB | 191 |
 | 30/11 | 11:10 | gratis (de autos-2811-3) | tres cartas cerradas | Día del retiro: tres cartas. | LLAVE | IG + FB | 170 |
@@ -215,7 +215,7 @@ Tope pedido: 38.000 caracteres (presupuesto ElevenLabs 40.000). Dentro del tope.
 | 02/12 | 19:10 | gratis (de autos-3011-1) | pregunta con respuesta numérica | Presupuesto: ¿cuántas cosas tiene que decir? | PRESUPUESTO | IG + FB | 176 |
 | 02/12 | 21:30 | ElevenLabs | segunda persona «vos» | Cobrás el aguinaldo. ¿Va al anticipo? | EXTRA | IG + FB | 211 |
 | 03/12 | 09:10 | ElevenLabs | pregunta con respuesta numérica | Plan de ahorro: ¿de cuántas formas te lo dan? | LICITACION | IG + FB | 180 |
-| 03/12 | 11:10 | gratis (de autos-3011-4) | advertencia | No elijas cómo pagar por lo que hizo tu cuñado. | FORMA | IG + FB | 165 |
+| 03/12 | 11:10 | gratis (de autos-3011-4) | advertencia | Cómo pagar el 0 km: no copies a tu cuñado. | FORMA | IG + FB | 165 |
 | 03/12 | 13:10 | ElevenLabs | ¿cuál sos? (identidad) | En el showroom, ¿cuál de los tres sos? | SHOWROOM | IG + FB | 218 |
 | 03/12 | 17:10 | ElevenLabs | contador que avanza | Mes 1, mes 2, mes 3: lo que viene después. | FIJOS | IG + FB | 172 |
 | 03/12 | 19:10 | gratis (de autos-3011-3) | loop | Abrís el baúl del 0 km. ¿Está todo? | KIT | IG + FB | 153 |
@@ -248,43 +248,63 @@ Tope pedido: 38.000 caracteres (presupuesto ElevenLabs 40.000). Dentro del tope.
 | Día | Hora | Voz | Fórmula | Gancho | Palabra | Redes | Caracteres |
 |---|---|---|---|---|---|---|---|
 | 27/11 | 08:10 | ElevenLabs | segunda persona «vos» | Hoy te escriben todos. ¿Quién les contesta? | ORDEN | IG + FB | 261 |
+| 27/11 | 10:10 | gratis (de marketing-2711-1) | tres cartas cerradas | Black Friday: tres cartas para no explotar. | ORDEN | IG + FB | 198 |
 | 27/11 | 12:20 | ElevenLabs | escena con hora o número | 21:03: te piden precio. Contestás mañana. | CRM | IG + FB | 278 |
+| 27/11 | 15:40 | gratis (de marketing-2711-2) | ¿cuál sos? (identidad) | Te escriben a las 21: ¿cuál sos? | CRM | IG + FB | 219 |
 | 27/11 | 18:40 | ElevenLabs | mito roto | «El precio se pasa por privado.» Error. | RESPUESTAS | IG + FB | 238 |
 | 27/11 | 21:20 | ElevenLabs | contador que avanza | Un segundo, dos, tres: tu cliente se fue. | WEB | IG + FB | 244 |
 | 28/11 | 08:10 | ElevenLabs | tres cartas cerradas | Tres respuestas rápidas que te faltan. | RAPIDAS | IG + FB | 200 |
+| 28/11 | 10:10 | gratis (de marketing-2711-3) | escena con hora o número | Lunes 12:20: «¿precio?» en un comentario. | RESPUESTAS | IG + FB | 190 |
 | 28/11 | 12:20 | ElevenLabs | pregunta con respuesta numérica | «Lo pienso»: ¿cuántas veces volvés? | SEGUIR | IG + FB | 229 |
+| 28/11 | 15:40 | gratis (de marketing-2711-4) | segunda persona «vos» | Vos abrís tu web y esperás. | WEB | IG + FB | 170 |
 | 28/11 | 18:40 | ElevenLabs | advertencia | Desconfiá de tus fotos de stock. | FOTOS | IG + FB | 243 |
 | 28/11 | 21:20 | ElevenLabs | ¿cuál sos? (identidad) | ¿Qué vendedor de WhatsApp sos? | VENDEDOR | IG + FB | 227 |
 | 29/11 | 08:10 | ElevenLabs | serie (parte 1) | Parte 1: 3:12 a. m., alguien quiere comprar. | AUTO | IG + FB | 210 |
+| 29/11 | 10:10 | gratis (de marketing-2811-1) | advertencia | No escribas lo mismo 20 veces por día. | RAPIDAS | IG + FB | 161 |
 | 29/11 | 12:20 | ElevenLabs | loop | Tu bio tiene tres segundos. Contá. | BIO | IG + FB | 187 |
+| 29/11 | 15:40 | gratis (de marketing-2811-2) | escena con hora o número | Jueves 18:00: tres días del «lo pienso». | SEGUIR | IG + FB | 184 |
 | 29/11 | 18:40 | ElevenLabs | segunda persona «vos» | Vos no sabés en qué quedó cada chat. | ETIQUETAS | IG + FB | 173 |
 | 29/11 | 21:20 | ElevenLabs | escena con hora o número | Domingo 10:15: «¿abren hoy?». | HORARIO | IG + FB | 213 |
 | 30/11 | 08:10 | ElevenLabs | mito roto | «Pedir reseñas queda mal.» No. | RESENAS | IG + FB | 194 |
+| 30/11 | 10:10 | gratis (de marketing-2811-3) | loop | La foto de tu local, ¿es tu local? | FOTOS | IG + FB | 181 |
 | 30/11 | 12:20 | ElevenLabs | contador que avanza | Diciembre: tu WhatsApp listo en cinco pasos. | CHECKLIST | IG + FB | 181 |
+| 30/11 | 15:40 | gratis (de marketing-2811-4) | mito roto | «Por audio se entiende mejor.» No siempre. | VENDEDOR | IG + FB | 186 |
 | 30/11 | 18:40 | ElevenLabs | tres cartas cerradas | WhatsApp común, Business o API: tres cartas. | API | IG + FB | 224 |
 | 30/11 | 21:20 | ElevenLabs | pregunta con respuesta numérica | Tomi abrió Instagram: ¿cuántos sin ver? | SOLICITUDES | IG + FB | 207 |
 | 01/12 | 08:10 | ElevenLabs | advertencia | No cierres por las fiestas sin este mensaje. | AUSENCIA | IG + FB | 149 |
+| 01/12 | 10:10 | gratis (de marketing-2911-2) | pregunta con respuesta numérica | ¿Cuántas cosas tiene que decir tu bio? | BIO | IG + FB | 158 |
 | 01/12 | 12:20 | ElevenLabs | ¿cuál sos? (identidad) | ¿Qué local sos en Google? | GOOGLE | IG + FB | 187 |
+| 01/12 | 15:40 | gratis (de marketing-3011-1) | contador que avanza | Venta 1, venta 2, venta 3: pedí la reseña. | RESENAS | IG + FB | 167 |
 | 01/12 | 18:40 | ElevenLabs | serie (parte 2) | Parte 2: a las 3:12 contesta el automático. | AUTO | IG + FB | 178 |
 | 01/12 | 21:20 | ElevenLabs | loop | Abrí tu web en el celular. Ahora. | CELULAR | IG + FB | 181 |
 | 02/12 | 08:10 | ElevenLabs | segunda persona «vos» | Tu catálogo de WhatsApp está vacío. | CATALOGO | IG + FB | 168 |
+| 02/12 | 10:10 | gratis (de marketing-3011-2) | tres cartas cerradas | Diciembre en WhatsApp: tres cartas. | CHECKLIST | IG + FB | 145 |
 | 02/12 | 12:20 | ElevenLabs | escena con hora o número | 18/12: cobran el aguinaldo y te escriben. | DIECIOCHO | IG + FB | 204 |
+| 02/12 | 15:40 | gratis (de marketing-3011-4) | advertencia | No ignores las solicitudes de mensaje. | SOLICITUDES | IG + FB | 162 |
 | 02/12 | 18:40 | ElevenLabs | mito roto | «Contestar rápido es de desesperado.» No. | RAPIDO | IG + FB | 206 |
 | 02/12 | 21:20 | ElevenLabs | contador que avanza | La misma pregunta 10, 20, 30 veces. | FRECUENTES | IG + FB | 188 |
 | 03/12 | 08:10 | ElevenLabs | tres cartas cerradas | Tus estados de WhatsApp: tres cartas. | ESTADOS | IG + FB | 170 |
+| 03/12 | 10:10 | gratis (de marketing-0112-1) | segunda persona «vos» | Vos te vas el 24 y volvés el 2. | AUSENCIA | IG + FB | 155 |
 | 03/12 | 12:20 | ElevenLabs | pregunta con respuesta numérica | 3 segundos en vez de 1: ¿cuántos más se van? | VELOCIDAD | IG + FB | 186 |
+| 03/12 | 15:40 | gratis (de marketing-0112-2) | escena con hora o número | Sábado 15:40: buscan «tortas cerca». | GOOGLE | IG + FB | 164 |
 | 03/12 | 18:40 | ElevenLabs | advertencia | No le mandes un audio de tres minutos. | AUDIOS | IG + FB | 197 |
 | 03/12 | 21:20 | ElevenLabs | ¿cuál sos? (identidad) | ¿Qué bio de negocio sos? | PERFIL | IG + FB | 192 |
 | 04/12 | 08:10 | ElevenLabs | serie (parte 1) | Parte 1: el pedido de la torta se perdió. | PEDIDOS | IG + FB | 174 |
+| 04/12 | 10:10 | gratis (de marketing-0112-4) | ¿cuál sos? (identidad) | Tu web en el celu: ¿cuál sos? | CELULAR | IG + FB | 173 |
 | 04/12 | 12:20 | ElevenLabs | loop | Abrís WhatsApp: 52 chats en verde. | VERDES | IG + FB | 209 |
+| 04/12 | 15:40 | gratis (de marketing-0212-2) | contador que avanza | 15, 16, 17, 18 de diciembre. | DIECIOCHO | IG + FB | 191 |
 | 04/12 | 18:40 | ElevenLabs | segunda persona «vos» | Vos respondés el precio y... ¿después? | PASO | IG + FB | 177 |
 | 04/12 | 21:20 | ElevenLabs | escena con hora o número | Martes 16:40: un mensaje de hace 9 días. | INSTAGRAM | IG + FB | 217 |
 | 05/12 | 08:10 | ElevenLabs | mito roto | «La API es solo para empresas grandes.» | VOLUMEN | IG + FB | 221 |
+| 05/12 | 10:10 | gratis (de marketing-0212-3) | advertencia | No dejes una consulta para mañana. | RAPIDO | IG + FB | 170 |
 | 05/12 | 12:20 | ElevenLabs | contador que avanza | Hora 24, día 3, día 7: el seguimiento. | CALENDARIO | IG + FB | 185 |
+| 05/12 | 15:40 | gratis (de marketing-0212-4) | pregunta con respuesta numérica | ¿Cuántas preguntas se repiten? Cinco. | FRECUENTES | IG + FB | 162 |
 | 05/12 | 18:40 | ElevenLabs | tres cartas cerradas | Te dejaron una reseña de una estrella. | ESTRELLA | IG + FB | 211 |
 | 05/12 | 21:20 | ElevenLabs | pregunta con respuesta numérica | ¿Cuántas etiquetas necesitás? Cuatro. | CUATRO | IG + FB | 151 |
 | 06/12 | 08:10 | ElevenLabs | advertencia | No pongas «consultar precio» en el catálogo. | DESDE | IG + FB | 173 |
+| 06/12 | 10:10 | gratis (de marketing-0312-3) | segunda persona «vos» | Vos mandás audios de tres minutos. | AUDIOS | IG + FB | 152 |
 | 06/12 | 12:20 | ElevenLabs | ¿cuál sos? (identidad) | ¿Qué tipo de estados de WhatsApp subís? | VIDRIERA | IG + FB | 184 |
+| 06/12 | 15:40 | gratis (de marketing-0412-3) | mito roto | «Si quiere, me vuelve a escribir.» | PASO | IG + FB | 173 |
 | 06/12 | 18:40 | ElevenLabs | serie (parte 2) | Parte 2: los pedidos, en un solo lugar. | PEDIDOS | IG + FB | 163 |
 | 06/12 | 21:20 | ElevenLabs | loop | «¿Abren hoy?» Otra vez. | ABREN | IG + FB | 195 |
 | reserva |  | ElevenLabs | advertencia | Tu foto de perfil no se entiende chiquita. | FOTO | IG + FB | 181 |
