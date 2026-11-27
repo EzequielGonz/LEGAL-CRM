@@ -16,6 +16,9 @@ VITA_IG_PREF = ['08:40', '21:10', '13:40', '11:10', '16:10', '19:40']
 VITA_TRANSITO = {'NUNCA', 'PLAZO', 'CHOQUE', 'TRAYECTO', 'FIESTAS', 'SEGURO', 'HERIDOS', 'DANOS',
                  'FIRMA', 'ARREGLO', 'RUTA', 'HORAS', 'BICI'}
 PRIMERA_SEMANA_HASTA = '2026-12-03'
+BOCETO_VOZ = ('Domingo, 19:10. Recién chocaste y te sale decir: «Perdón, fue mi culpa». Nunca digas esto. Antes de hablar, tres pasos. '
+              'Uno: fotos de los autos, la patente y la esquina. Dos: datos del otro conductor y de los testigos. '
+              'Tres: avisá a tu seguro dentro de los tres días. Mandáselo a quien maneje todos los días. Porque recién chocaste… y te sale decir:')
 MARCA = {'vita': 'VITA', 'coberturas': 'Compara Tu Obra Social', 'autos': 'Automotores Kocos', 'marketing': 'Kocos Marketing'}
 TAGS = {'vita': '#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires',
         'coberturas': '#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires',
@@ -36,7 +39,7 @@ FORMULAS = {'ADV': 'advertencia', 'ESC': 'escena con hora o número', 'CONT': 'c
             'SERIE1': 'serie (parte 1)', 'SERIE2': 'serie (parte 2)', 'LOOP': 'loop',
             'BOCETO': 'advertencia + escena con hora + contador + loop'}
 PROHIBIDAS = ['¿Sabías que', 'Te contamos todo', 'No te lo pierdas', 'botón está en el perfil',
-              'Agencia Kocos', 'ORVIAN', 'plata rápido', 'garantizado', 'te aseguramos']
+              'Agencia Kocos', 'ORVIAN', 'plata rápido', 'garantizado', 'te aseguramos', 'Black Friday', 'la mitad resuelta', 'casi nunca pasa', 'SINGOCE', '«AUTO»']
 
 def cargar(m):
     spec = importlib.util.spec_from_file_location(m, os.path.join(AQUI, m + '.py'))
@@ -69,7 +72,7 @@ def armar(m, r, fecha, hora, rid, motor, variante_de=''):
 
 def main():
     errores, todos, ganchos = [], {}, collections.Counter()
-    palabras = collections.defaultdict(set)
+    palabras = collections.defaultdict(list)
     for m in ['vita', 'coberturas', 'autos', 'marketing']:
         reels, reserva, variantes = cargar(m)
         lista, por_id, crudo = [], {}, {}
@@ -113,14 +116,22 @@ def main():
             if x['caracteres_voz'] > 380: errores.append(f"{x['id']}: voz {x['caracteres_voz']} > 380")
             if len(x['gancho_pantalla']) > 45: errores.append(f"{x['id']}: gancho {len(x['gancho_pantalla'])} > 45")
             ganchos[x['gancho_pantalla'].lower()] += 1
-            palabras[x['palabra']].add(m)
+            palabras[x['palabra']].append(x)
             if x['fecha'] != 'reserva':
                 if prev == x['formula']: errores.append(f"{x['id']}: misma fórmula que el anterior ({prev})")
                 prev = x['formula']
             temas[x['tema']].append(x)
+            if m == 'coberturas' and re.search(r'\d+(,\d+)? ?%|por ciento', x['voz'] + ' '.join(x['textos_pantalla'])):
+                errores.append(f"{x['id']}: número de aporte o cuota en Coberturas")
             for p in PROHIBIDAS:
                 if p.lower() in (x['voz'] + x['copy']).lower(): errores.append(f"{x['id']}: contiene «{p}»")
         for t, xs in temas.items():
+            fechadas = sorted(x['fecha'] for x in xs if x['fecha'] != 'reserva')
+            es_serie = all('serie' in x['formula'] for x in xs)
+            from datetime import date
+            for a, b in zip(fechadas, fechadas[1:]):
+                if not es_serie and (date.fromisoformat(b) - date.fromisoformat(a)).days < 7:
+                    errores.append(f"{m}: tema «{t}» se repite en menos de 7 días ({a} y {b})")
             con_voz = [x for x in xs if x['motor_voz'] == 'elevenlabs']
             if len(con_voz) > 2 or len(xs) > 3: errores.append(f"{m}: tema «{t}» sale {len(xs)} veces")
             if len(con_voz) == 2:
@@ -132,8 +143,13 @@ def main():
             json.dump(lista, f, ensure_ascii=False, indent=2)
     for g, n in ganchos.items():
         if n > 1: errores.append(f"gancho repetido: {g}")
-    for p, ms in palabras.items():
-        if len(ms) > 1: errores.append(f"palabra «{p}» en más de un rubro: {sorted(ms)}")
+    for p, xs in palabras.items():
+        series = {x['tema'] for x in xs if 'serie' in x['formula']}
+        resto = [x for x in xs if 'serie' not in x['formula']]
+        if len(series) > 1 or len(resto) > 1 or (series and resto):
+            errores.append(f"palabra «{p}» repetida: {[x['id'] for x in xs]}")
+    b = [x for x in todos['vita'] if x['id'] == 'vita-2711-1'][0]['voz']
+    if b != BOCETO_VOZ: errores.append('vita-2711-1: la voz del boceto cambió (ya está generada)')
     escribir_md(todos)
     for e in errores: print('ERROR', e)
     for m, l in todos.items():
