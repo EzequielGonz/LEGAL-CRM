@@ -94,9 +94,13 @@ export function Oficina({
   }, []);
 
   const hayMovimiento = tareas.some((t) => t.estado === "en_curso") || arranque?.estado === "disparado" || arranque?.estado === "tomado";
+  // Siempre se refresca sola: cada 8 s si hay movimiento y cada 30 s en reposo (así se ve cuando
+  // Claude o Gemini toman una tarea desde otro lado). Con la pestaña oculta no consulta.
   useEffect(() => {
-    if (!hayMovimiento) return;
-    const id = setInterval(recargar, 20000);
+    const id = setInterval(() => {
+      if (typeof document !== "undefined" && document.hidden) return;
+      void recargar();
+    }, hayMovimiento ? 8000 : 30000);
     return () => clearInterval(id);
   }, [hayMovimiento, recargar]);
 
@@ -164,7 +168,11 @@ export function Oficina({
     for (const [i, t] of aptas.entries()) {
       setAviso({ tipo: "ok", texto: `Claude no está conectado: Gemini está resolviendo la tarea ${i + 1} de ${aptas.length} (varias respuestas y un juez). Puede tardar unos minutos.` });
       try {
-        const g = await fetch(`/api/oficina/${t.id}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ accion: "gemini" }) });
+        const pedidoGemini = fetch(`/api/oficina/${t.id}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ accion: "gemini" }) });
+        // A los 3 s la tarea ya figura «en marcha»: se refresca para que se vea el escritorio trabajando.
+        const verla = setTimeout(() => void recargar(), 3000);
+        const g = await pedidoGemini;
+        clearTimeout(verla);
         const gd = await g.json().catch(() => ({}));
         if (g.ok) hechas++;
         else ultimoError = gd?.error || "Gemini no pudo con una tarea.";
