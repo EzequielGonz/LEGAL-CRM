@@ -1,6 +1,6 @@
 # 22 · Plan del panel (pedido del 27/11)
 
-**Estado al 27/11, dicho sin vueltas: de este pedido todavía no hay nada implementado en el código.** Hasta acá se hizo el relevamiento: 111 hallazgos con pasos y archivos, por área, en `cerebro/biblioteca/analisis-2026-11-27/`; el recorrido propio del panel (`24-…`); y el dossier de gustos (`23-…`). Este documento ordena la ejecución.
+**Estado al 27/11, dicho sin vueltas: de este pedido todavía no hay nada implementado en el código.** Hasta acá se hizo el relevamiento: 140 hallazgos (con la revisión final y seguridad) con pasos y archivos, por área, en `cerebro/biblioteca/analisis-2026-11-27/`; el recorrido propio del panel (`24-…`); y el dossier de gustos (`23-…`). Este documento ordena la ejecución.
 
 ## Lo que ya decidió el dueño (manda sobre todo lo demás)
 
@@ -29,6 +29,31 @@ Cada tanda toca archivos distintos, así pueden avanzar en paralelo en copias se
 | **9 · Retoque visual** | 6 | Mismo panel, mismos bloques y animaciones. Cajas sin pastel (tonos profundos con letra clara y anillo dorado). Tarjetas de perfiles: bordes, logos al tamaño correcto y color de marca bien leído. Tipografía: de cinco familias a las dos de siempre, bien cargadas. Contrastes que hoy fallan. Entrada 3D en lugar de la lámpara. Va después de que el dueño elija entre las variantes de color. | `diseno-auditoria.md` 1 a 6, 8, 10 |
 
 **Orden.** Primero 1, 2, 3 y 4 juntas (son lo que más reclamó). Después 5, 6, 7 y 8. La 9 cuando elija el color.
+
+## Orden de ejecución, corregido por la revisión final
+
+La revisión final (`biblioteca/analisis-2026-11-27/critica.md`) comprobó en el código lo que dijeron los especialistas y encontró que varias tandas querían tocar los mismos archivos. Para que no se pisen, la ejecución queda en fases, con dueño único por archivo:
+
+| Fase | Qué | Cuándo |
+|---|---|---|
+| 0 · Contratos | Reparto de números de migración, tipo de alcance compartido y lista de archivos de cada fase. Un solo agente, antes de todo. | Primero |
+| A1 a A8 | Las tandas 1 a 8 de arriba, en paralelo, cada una con sus archivos: Oficina y Bandeja · Jarvis · Cerebro · Plantillas y línea única · Bots · Captados · Velocidad y cifras · Chats y ficha. | En paralelo |
+| B1 | Menús y navegación: un solo agente toca `menu.ts` y `menu-mas.tsx` después de integrar las fases A. | Después de A |
+| B2 | Hoy compacto, usando las cifras únicas y la lista de captados ya hechas. | Después de A |
+| B3 | Jarvis dispara conversaciones con plantilla y el bot usa los datos del Excel. | Después de A6 y A8 |
+| C | Retoque visual. | Cuando el dueño elija el color |
+| D | Repaso cruzado con varios modelos, pruebas y cierre. | Al final de cada fase |
+
+**Tres cosas que la revisión corrigió.**
+- El tope de gasto de Gemini ya existe y funciona para los bots y Jarvis; falta conectarlo a la Oficina y a «Preguntale».
+- En los datos no hay mezcla de rubros: cada conversación está en su rubro. La mezcla que ve el dueño está en las pantallas (Bot IA, Laboratorio general) y en el texto base común de los bots.
+- El cartel de Hoy «Campaña con fallas · X no salieron» es falso: suma las fallas de todo el perfil en 24 horas, no las de esa campaña. Entra en la tanda 8.
+
+**Límite real de «Gemini si no hay uso en Claude».** El panel no puede saber cuánto uso le queda al plan de Claude. Lo que sí puede ver es si Claude tomó la tarea. Por eso Gemini entra por botón, o si el dueño lo pide, cuando Claude no la tomó en 30 minutos.
+
+**Internet para el Cerebro.** La búsqueda de Google desde Gemini puede cobrarse fuera del cupo gratis. Queda apagada hasta que el dueño decida.
+
+**Seguridad (16 hallazgos en `seguridad.md`).** Lo urgente sigue siendo cambiar el código de ingreso. Además: enviar a personas pasa a pedir el código (hoy alcanza con una casilla), Salud deja de mostrar el nombre de un prospecto en una alerta y lo aprendido se filtra por rubro.
 
 ## Opciones que tomo si el dueño no dice otra cosa
 
