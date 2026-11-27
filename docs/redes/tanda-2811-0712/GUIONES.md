@@ -8,17 +8,17 @@ Estado: **especificado** (guiones escritos y validados). No producido, no progra
 
 | Marca | Reels | Caracteres | Promedio |
 |---|---|---|---|
-| VITA | 8 | 2.069 | 258 |
+| VITA | 44 | 10.236 | 232 |
 | Compara Tu Obra Social | 8 | 1.997 | 249 |
 | Automotores Kocos | 8 | 1.907 | 238 |
 | Kocos Marketing | 8 | 1.920 | 240 |
-| **Total** | **32** | **7.893** | 246 |
+| **Total** | **68** | **16.060** | 236 |
 
 Tope pedido: 38.000 caracteres (presupuesto ElevenLabs 40.000). Dentro del tope.
 
 ## Reparto de fórmulas por marca
 
-- **VITA:** advertencia + escena con hora + contador + loop 1 · escena con hora o número 1 · tres cartas cerradas 1 · segunda persona «vos» 1 · contador que avanza 1 · mito roto 1 · ¿cuál sos? (identidad) 1 · pregunta con respuesta numérica 1
+- **VITA:** escena con hora o número 5 · tres cartas cerradas 5 · segunda persona «vos» 5 · mito roto 5 · contador que avanza 4 · ¿cuál sos? (identidad) 4 · pregunta con respuesta numérica 4 · loop 4 · advertencia 3 · serie (parte 1) 2 · serie (parte 2) 2 · advertencia + escena con hora + contador + loop 1
 - **Compara Tu Obra Social:** mito roto 1 · segunda persona «vos» 1 · pregunta con respuesta numérica 1 · tres cartas cerradas 1 · escena con hora o número 1 · ¿cuál sos? (identidad) 1 · advertencia 1 · contador que avanza 1
 - **Automotores Kocos:** escena con hora o número 1 · tres cartas cerradas 1 · advertencia 1 · segunda persona «vos» 1 · pregunta con respuesta numérica 1 · ¿cuál sos? (identidad) 1 · contador que avanza 1 · mito roto 1
 - **Kocos Marketing:** segunda persona «vos» 1 · escena con hora o número 1 · mito roto 1 · contador que avanza 1 · tres cartas cerradas 1 · pregunta con respuesta numérica 1 · advertencia 1 · ¿cuál sos? (identidad) 1
@@ -35,6 +35,42 @@ Tope pedido: 38.000 caracteres (presupuesto ElevenLabs 40.000). Dentro del tope.
 | 28/11 | 11:10 | mito roto | «Fue mi error, la ART no me cubre.» Falso. | CULPA | 253 |
 | 28/11 | 13:40 | ¿cuál sos? (identidad) | Después de un choque, ¿cuál de los tres sos? | CHOQUE | 235 |
 | 28/11 | 21:10 | pregunta con respuesta numérica | Aguinaldo: ¿qué día vence la segunda cuota? | AGUINALDO | 229 |
+| 29/11 | 08:40 | serie (parte 1) | Parte 1: salió a trabajar y no llegó. | TRAYECTO | 225 |
+| 29/11 | 11:10 | loop | Te llevan detenido. ¿Qué decís? | DETENIDO | 207 |
+| 29/11 | 13:40 | advertencia | Liquidación final: no firmes sin contar. | LIQUIDACION | 246 |
+| 29/11 | 21:10 | escena con hora o número | 24/12, 23:40: te chocan llegando a la cena. | FIESTAS | 229 |
+| 30/11 | 08:40 | tres cartas cerradas | La ART te rechazó. Tres cartas para hoy. | ART | 231 |
+| 30/11 | 11:10 | segunda persona «vos» | Te enterás por un mensaje: te denunciaron. | DENUNCIA | 224 |
+| 30/11 | 13:40 | contador que avanza | Te fuiste: corren 45 días hábiles. | CERTIFICADO | 238 |
+| 30/11 | 21:10 | mito roto | «No tenía seguro, perdí.» No tan rápido. | SEGURO | 200 |
+| 01/12 | 08:40 | ¿cuál sos? (identidad) | Te despiden: ¿cuál de las tres sos? | DESPIDO | 245 |
+| 01/12 | 11:10 | pregunta con respuesta numérica | ART: ¿cuánto puede durar la baja? | REPOSO | 243 |
+| 01/12 | 13:40 | serie (parte 2) | Parte 2: el choque de Nico también cuenta. | TRAYECTO | 232 |
+| 01/12 | 21:10 | loop | Te dieron el alta. Mañana volvés. Y duele. | ALTA | 244 |
+| 02/12 | 08:40 | advertencia | Carta documento del trabajo: no la guardes. | TELEGRAMA | 233 |
+| 02/12 | 11:10 | escena con hora o número | Tres años trabajando y cero recibos. | REGISTRO | 245 |
+| 02/12 | 13:40 | tres cartas cerradas | Choque con heridos: tres cartas que no ves. | HERIDOS | 223 |
+| 02/12 | 21:10 | segunda persona «vos» | Estuviste 20 días sin trabajar por un choque. | DANOS | 213 |
+| 03/12 | 08:40 | contador que avanza | Te fuiste en agosto: el aguinaldo suma. | PROPORCIONAL | 242 |
+| 03/12 | 11:10 | mito roto | «Sin testamento no hay herencia.» Falso. | HERENCIA | 220 |
+| 03/12 | 13:40 | ¿cuál sos? (identidad) | Te llega una citación. ¿Cuál de los tres sos? | CITACION | 222 |
+| 03/12 | 21:10 | pregunta con respuesta numérica | Cambiás el camino al trabajo: ¿72 horas? | RECORRIDO | 244 |
+| 04/12 | 08:40 | serie (parte 1) | Parte 1: le ofrecen plata rápida a Nico. | FIRMA | 219 |
+| 04/12 | 11:10 | loop | Seis de la mañana: golpean la puerta. | PUERTA | 225 |
+| 04/12 | 13:40 | advertencia | «Arreglemos acá»: desconfiá de esa frase. | ARREGLO | 213 |
+| 04/12 | 21:10 | escena con hora o número | Ruta 2, km 150: te chocan de vacaciones. | RUTA | 207 |
+| 05/12 | 08:40 | tres cartas cerradas | ¿Heredás las deudas? Tres cartas. | DEUDAS | 238 |
+| 05/12 | 11:10 | segunda persona «vos» | Cargás cajas hace años. La espalda, no. | ESPALDA | 230 |
+| 05/12 | 13:40 | contador que avanza | Hora 0, hora 3, hora 24: después del choque. | HORAS | 221 |
+| 05/12 | 21:10 | mito roto | «Si renuncio, no cobro nada.» Falso. | RENUNCIA | 239 |
+| 06/12 | 08:40 | ¿cuál sos? (identidad) | Te lastimás en el trabajo: ¿cuál sos? | AVISO | 219 |
+| 06/12 | 11:10 | pregunta con respuesta numérica | Te enfermás: ¿cuántos meses te pagan? | LICENCIA | 227 |
+| 06/12 | 13:40 | serie (parte 2) | Parte 2: lo que firmás puede cerrarlo todo. | FIRMA | 208 |
+| 06/12 | 21:10 | loop | Te robaron el celular. «¿Para qué denunciar?» | ROBO | 240 |
+| reserva |  | segunda persona «vos» | Te chocaron en bici. También podés reclamar. | BICI | 216 |
+| reserva |  | escena con hora o número | Trabajás 48 horas y el recibo dice 20. | EXTRAS | 214 |
+| reserva |  | mito roto | «Sin contrato no tengo derechos.» Falso. | CONTRATO | 228 |
+| reserva |  | tres cartas cerradas | Casa heredada: 3 cartas antes de escriturar. | ESCRITURA | 217 |
 
 ## Compara Tu Obra Social
 
