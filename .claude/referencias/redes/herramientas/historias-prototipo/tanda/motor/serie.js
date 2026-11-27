@@ -115,14 +115,14 @@ window.render = t => {
   B.forEach((b, i) => {
     const o = obj[i], x = txt[i]; const ini = i === 0 ? 0 : win(t, b.t0, b.t0 + .38), fin = i === N - 1 ? 0 : win(t, b.t1 - .16, b.t1); const vis = t >= b.t0 - .02 && (t < b.t1 + .02 || i === N - 1);
     if (!vis) { o.style.opacity = 0; x.style.opacity = 0; return; }
-    const dir = i % 2 ? 1 : -1; const p = i === 0 ? clamp(.35 + t / .3) : ini; const ent = entrar(p, R.trans, dir);
+    const dir = i % 2 ? 1 : -1; const p = i === 0 ? 1 : ini; const ent = entrar(p, R.trans, dir);
     const oculto = cartas && cartas.idx.includes(i); aplicar(x, ent, fin); aplicar(o, ent, fin); if (oculto) o.style.opacity = 0; if (i === N - 1) o.style.opacity = (+o.style.opacity) * (1 - ctaK);
     const ob = o.querySelector('.ob'), ico = o.querySelector('.ico'); const fl = Math.sin(t * 2.2 + i) * 10; const pop = 1 + .1 * Math.exp(-(t - Math.max(b.t0, cortes.filter(u => u <= t).pop() || 0)) * 8);
     const oc = o.querySelector('.oc'); oc.setAttribute('transform', `translate(540,${OY + fl}) rotate(${Math.sin(t * 1.4 + i) * 2.5}) scale(${pop})`);
     const n = o.querySelector('.num'); if (n) { const kk = win(t, b.t0 + .1, b.t0 + 1.2); n.textContent = b.num ? Math.round(b.num * easeOut(kk)).toLocaleString('es-AR') : b.paso; const pp = b.num ? 1 : 1 + .25 * Math.exp(-(t - b.t0) * 6); n.style.transform = `scale(${pp})`; if (!b.num) n.style.left = '-250px'; }
     (b.ins || []).forEach((x, k) => { const g = o.querySelector(`.ins[data-k="${k}"]`); const a = win(t, x.t0 - .05, x.t0 + .3), z = 1 - win(t, x.t1 - .12, x.t1 + .05); g.setAttribute('opacity', a * z); g.setAttribute('transform', `translate(0,${fl * .5}) scale(${.5 + .5 * backOut(a, 1.8)}) rotate(${(1 - a) * -12})`); });
     { const ia = (b.ins || []).reduce((m, x) => Math.max(m, win(t, x.t0 - .05, x.t0 + .2) * (1 - win(t, x.t1 - .1, x.t1 + .1))), 0); ob.setAttribute('opacity', 1 - .78 * ia); }
-    if (i === 0 && R.escala) { const e2 = easeOut(win(t, 0, .6)); ob.setAttribute('transform', `scale(${.25 + .75 * backOut(e2, 1.2)})`); }
+    if (i === 0 && R.escala) { const e2 = easeOut(win(t, 0, .6)); ob.setAttribute('transform', `scale(${.7 + .3 * backOut(e2, 1.2)})`); }
   });
   if (cartas) { const a = B[cartas.idx[0]].t0, z = B[N - 1].t0; cartas.el.style.opacity = clamp(win(t, a - .05, a + .2)) * (1 - win(t, z - .15, z + .05));
     cartas.cds.forEach((d, k) => { const bi = cartas.idx[k], b = B[bi], p = win(t, b.t0, b.t0 + .55), act = t >= b.t0 && t < b.t1; const f = d.firstChild; const ent = ease(win(t, a + k * .08 - .05, a + k * .08 + .3));

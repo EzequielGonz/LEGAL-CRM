@@ -9,17 +9,17 @@ Estado: **especificado** (guiones escritos y validados). No producido, no progra
 | Marca | Reels | Caracteres | Promedio |
 |---|---|---|---|
 | VITA | 44 | 10.236 | 232 |
-| Compara Tu Obra Social | 8 | 1.997 | 249 |
+| Compara Tu Obra Social | 44 | 9.714 | 220 |
 | Automotores Kocos | 8 | 1.907 | 238 |
 | Kocos Marketing | 8 | 1.920 | 240 |
-| **Total** | **68** | **16.060** | 236 |
+| **Total** | **104** | **23.777** | 228 |
 
 Tope pedido: 38.000 caracteres (presupuesto ElevenLabs 40.000). Dentro del tope.
 
 ## Reparto de fórmulas por marca
 
 - **VITA:** escena con hora o número 5 · tres cartas cerradas 5 · segunda persona «vos» 5 · mito roto 5 · contador que avanza 4 · ¿cuál sos? (identidad) 4 · pregunta con respuesta numérica 4 · loop 4 · advertencia 3 · serie (parte 1) 2 · serie (parte 2) 2 · advertencia + escena con hora + contador + loop 1
-- **Compara Tu Obra Social:** mito roto 1 · segunda persona «vos» 1 · pregunta con respuesta numérica 1 · tres cartas cerradas 1 · escena con hora o número 1 · ¿cuál sos? (identidad) 1 · advertencia 1 · contador que avanza 1
+- **Compara Tu Obra Social:** mito roto 5 · segunda persona «vos» 5 · tres cartas cerradas 5 · advertencia 5 · pregunta con respuesta numérica 4 · escena con hora o número 4 · ¿cuál sos? (identidad) 4 · contador que avanza 4 · loop 4 · serie (parte 1) 2 · serie (parte 2) 2
 - **Automotores Kocos:** escena con hora o número 1 · tres cartas cerradas 1 · advertencia 1 · segunda persona «vos» 1 · pregunta con respuesta numérica 1 · ¿cuál sos? (identidad) 1 · contador que avanza 1 · mito roto 1
 - **Kocos Marketing:** segunda persona «vos» 1 · escena con hora o número 1 · mito roto 1 · contador que avanza 1 · tres cartas cerradas 1 · pregunta con respuesta numérica 1 · advertencia 1 · ¿cuál sos? (identidad) 1
 
@@ -84,6 +84,42 @@ Tope pedido: 38.000 caracteres (presupuesto ElevenLabs 40.000). Dentro del tope.
 | 28/11 | 18:10 | ¿cuál sos? (identidad) | Te llega el aumento de la prepaga. ¿Cuál sos? | COMPARAR | 243 |
 | 28/11 | 21:40 | advertencia | Declaración jurada: no la llenes apurado. | DECLARACION | 251 |
 | 28/11 | 22:40 | contador que avanza | Diez años en la misma prepaga: contá conmigo. | 65 | 240 |
+| 29/11 | 12:40 | serie (parte 1) | Parte 1: Lucía paga y no sabe qué. | MONO | 201 |
+| 29/11 | 18:10 | loop | 2 de la mañana: ¿tu guardia te atiende? | CARTILLA | 209 |
+| 29/11 | 21:40 | mito roto | «Si me cambio, espero un año para todo.» | CARENCIAS | 218 |
+| 29/11 | 22:40 | segunda persona «vos» | Te vas a la costa. ¿Tu cobertura también? | VIAJE | 204 |
+| 30/11 | 12:40 | pregunta con respuesta numérica | ¿Qué parte del sueldo va a tu obra social? | TRES | 206 |
+| 30/11 | 18:10 | tres cartas cerradas | Te mudás de barrio: tres cartas. | MUDANZA | 221 |
+| 30/11 | 21:40 | escena con hora o número | Martes 11:20: pagaste la consulta vos. | REINTEGRO | 241 |
+| 30/11 | 22:40 | ¿cuál sos? (identidad) | Elegís prepaga: ¿cuál de los tres sos? | ELEGIR | 234 |
+| 01/12 | 12:40 | advertencia | Tu plan se da de baja: no esperes. | BAJA | 212 |
+| 01/12 | 18:10 | contador que avanza | Primer día de trabajo: ¿qué obra social? | NUEVO | 223 |
+| 01/12 | 21:40 | serie (parte 2) | Parte 2: esa línea es tu obra social. | MONO | 226 |
+| 01/12 | 22:40 | loop | Estás en tratamiento y te querés cambiar. | TRATAMIENTO | 214 |
+| 02/12 | 12:40 | mito roto | «La obra social del trabajo no se cambia.» | ELEGIR | 217 |
+| 02/12 | 18:10 | segunda persona «vos» | ¿Encontrás tu cartilla en un minuto? | URGENCIA | 180 |
+| 02/12 | 21:40 | pregunta con respuesta numérica | Suspendido sin goce: ¿cuántos meses cubierto? | SUSPENSION | 198 |
+| 02/12 | 22:40 | tres cartas cerradas | Derivar aportes: tres cartas antes. | DERIVAR | 231 |
+| 03/12 | 12:40 | escena con hora o número | 18/12: cobrás el aguinaldo y ves esto. | AGUINALDO | 241 |
+| 03/12 | 18:10 | ¿cuál sos? (identidad) | Tu familia y la cobertura: ¿cuál sos? | FAMILIA | 207 |
+| 03/12 | 21:40 | advertencia | No tires la factura de esa consulta. | FACTURA | 194 |
+| 03/12 | 22:40 | contador que avanza | Cambiarte de obra social, paso a paso. | TRAMITE | 216 |
+| 04/12 | 12:40 | serie (parte 1) | Parte 1: Vero pide licencia sin sueldo. | LICENCIA | 208 |
+| 04/12 | 18:10 | loop | Este mes usaste la prepaga: ¿cuántas veces? | USO | 222 |
+| 04/12 | 21:40 | mito roto | «A los 65 me suben la cuota sí o sí.» | 65 | 199 |
+| 04/12 | 22:40 | segunda persona «vos» | Temporada: ¿y la obra social en invierno? | TEMPORADA | 242 |
+| 05/12 | 12:40 | pregunta con respuesta numérica | Sin trabajo: ¿cuánto hay que haber trabajado? | TRABAJO | 196 |
+| 05/12 | 18:10 | tres cartas cerradas | Enfermedad previa: tres cartas. | PREVIA | 256 |
+| 05/12 | 21:40 | escena con hora o número | Ruta 11, 23:00: fiebre lejos de casa. | COSTA | 211 |
+| 05/12 | 22:40 | ¿cuál sos? (identidad) | Cambio en pleno tratamiento: ¿cuál sos? | CURSO | 236 |
+| 06/12 | 12:40 | advertencia | Monotributo: no dejes de pagar la cuota. | CUOTA | 212 |
+| 06/12 | 18:10 | contador que avanza | Mudanza: día 1, día 7, día 30. | BARRIO | 179 |
+| 06/12 | 21:40 | serie (parte 2) | Parte 2: Vero puede mantener su obra social. | LICENCIA | 225 |
+| 06/12 | 22:40 | loop | Somos cuatro. ¿Cuántas coberturas pagamos? | GRUPO | 176 |
+| reserva |  | advertencia | No pagues el aumento sin leer la carta. | AUMENTO | 206 |
+| reserva |  | mito roto | «Obra social y prepaga son lo mismo.» No. | DIFERENCIA | 220 |
+| reserva |  | segunda persona «vos» | Tu hijo empieza a trabajar: ¿y su cobertura? | PRIMER | 228 |
+| reserva |  | tres cartas cerradas | Excedencia: tres cartas de tu obra social. | EXCEDENCIA | 208 |
 
 ## Automotores Kocos
 
