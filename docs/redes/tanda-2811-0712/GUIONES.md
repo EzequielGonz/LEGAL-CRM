@@ -23,9 +23,9 @@ VITA en Instagram sube de a poco: 2 reels por día el 27 y 28/11, 3 el 29 y 30/1
 |---|---|---|---|---|
 | VITA | 44 | 10.236 | 232 | 20 |
 | Compara Tu Obra Social | 44 | 9.714 | 220 | 20 |
-| Automotores Kocos | 44 | 8.709 | 197 | 0 |
+| Automotores Kocos | 44 | 8.709 | 197 | 20 |
 | Kocos Marketing | 44 | 8.649 | 196 | 0 |
-| **Total** | **176** | **37.308** | 211 | 40 |
+| **Total** | **176** | **37.308** | 211 | 60 |
 
 Tope pedido: 38.000 caracteres (presupuesto ElevenLabs 40.000). Dentro del tope. Las voces gratis no gastan ElevenLabs.
 
@@ -33,7 +33,7 @@ Tope pedido: 38.000 caracteres (presupuesto ElevenLabs 40.000). Dentro del tope.
 
 - **VITA:** tres cartas cerradas 8 · segunda persona «vos» 8 · escena con hora o número 7 · contador que avanza 7 · mito roto 7 · advertencia 6 · ¿cuál sos? (identidad) 6 · pregunta con respuesta numérica 5 · loop 5 · serie (parte 1) 2 · serie (parte 2) 2 · advertencia + escena con hora + contador + loop 1
 - **Compara Tu Obra Social:** mito roto 8 · segunda persona «vos» 8 · escena con hora o número 7 · pregunta con respuesta numérica 7 · advertencia 7 · contador que avanza 6 · tres cartas cerradas 6 · ¿cuál sos? (identidad) 6 · loop 5 · serie (parte 1) 2 · serie (parte 2) 2
-- **Automotores Kocos:** escena con hora o número 5 · tres cartas cerradas 5 · advertencia 5 · segunda persona «vos» 5 · pregunta con respuesta numérica 4 · ¿cuál sos? (identidad) 4 · contador que avanza 4 · mito roto 4 · loop 4 · serie (parte 1) 2 · serie (parte 2) 2
+- **Automotores Kocos:** escena con hora o número 8 · tres cartas cerradas 8 · advertencia 8 · segunda persona «vos» 8 · loop 6 · mito roto 6 · pregunta con respuesta numérica 6 · ¿cuál sos? (identidad) 6 · contador que avanza 4 · serie (parte 1) 2 · serie (parte 2) 2
 - **Kocos Marketing:** segunda persona «vos» 5 · tres cartas cerradas 5 · pregunta con respuesta numérica 5 · advertencia 5 · escena con hora o número 4 · mito roto 4 · contador que avanza 4 · ¿cuál sos? (identidad) 4 · loop 4 · serie (parte 1) 2 · serie (parte 2) 2
 
 ## VITA
@@ -179,44 +179,64 @@ Tope pedido: 38.000 caracteres (presupuesto ElevenLabs 40.000). Dentro del tope.
 | Día | Hora | Voz | Fórmula | Gancho | Palabra | Redes | Caracteres |
 |---|---|---|---|---|---|---|---|
 | 27/11 | 09:10 | ElevenLabs | escena con hora o número | Sábado 11:30: la lista y la sorpresa. | 0KM | IG + FB | 249 |
+| 27/11 | 11:10 | gratis (de autos-2711-1) | loop | La lista dice un número. Vos pagás otro. | 0KM | IG + FB | 182 |
 | 27/11 | 13:10 | ElevenLabs | tres cartas cerradas | «Te lo damos en la cuota 2»: tres cartas. | SORTEO | IG + FB | 269 |
 | 27/11 | 17:10 | ElevenLabs | advertencia | No dejes una seña sin recibo. | SENA | IG + FB | 227 |
+| 27/11 | 19:10 | gratis (de autos-2711-2) | mito roto | «Si pago puntual, me lo dan antes.» | SORTEO | IG + FB | 181 |
 | 27/11 | 21:30 | ElevenLabs | segunda persona «vos» | Vos elegí la cuota antes que el auto. | CUOTA | IG + FB | 223 |
 | 28/11 | 09:10 | ElevenLabs | pregunta con respuesta numérica | ¿Cuántos costos se suman al precio de lista? | 0KM | IG + FB | 214 |
+| 28/11 | 11:10 | gratis (de autos-2711-3) | escena con hora o número | Sábado 18:00: dejás la seña de palabra. | SENA | IG + FB | 184 |
 | 28/11 | 13:10 | ElevenLabs | ¿cuál sos? (identidad) | ¿Qué comprador de 0 km sos? | GASTOS | IG + FB | 245 |
 | 28/11 | 17:10 | ElevenLabs | contador que avanza | Retiro del 0 km: 5 chequeos antes de firmar. | LLAVE | IG + FB | 232 |
+| 28/11 | 19:10 | gratis (de autos-2711-4) | ¿cuál sos? (identidad) | Anticipo o cuota: ¿cuál sos? | CUOTA | IG + FB | 202 |
 | 28/11 | 21:30 | ElevenLabs | mito roto | «La cuota del plan es fija.» No. | AHORRO | IG + FB | 248 |
 | 29/11 | 09:10 | ElevenLabs | serie (parte 1) | Parte 1: Mati quiere entregar «el gris». | USADO | IG + FB | 195 |
+| 29/11 | 11:10 | gratis (de autos-2811-1) | advertencia | No compares 0 km por precio de lista. | 0KM | IG + FB | 159 |
 | 29/11 | 13:10 | ElevenLabs | loop | Diciembre o enero: ¿cuándo lo patentás? | ENERO | IG + FB | 236 |
 | 29/11 | 17:10 | ElevenLabs | escena con hora o número | Sábado 17:10: lo probaste dos minutos. | PRUEBA | IG + FB | 198 |
+| 29/11 | 19:10 | gratis (de autos-2811-2) | segunda persona «vos» | Vos sumaste la cochera a la cuenta? | GASTOS | IG + FB | 153 |
 | 29/11 | 21:30 | ElevenLabs | tres cartas cerradas | Plan de ahorro: tres cartas antes de firmar. | PREGUNTAS | IG + FB | 203 |
 | 30/11 | 09:10 | ElevenLabs | advertencia | Precio de palabra: desconfiá. | PRESUPUESTO | IG + FB | 191 |
+| 30/11 | 11:10 | gratis (de autos-2811-3) | tres cartas cerradas | Día del retiro: tres cartas. | LLAVE | IG + FB | 170 |
 | 30/11 | 13:10 | ElevenLabs | segunda persona «vos» | Vas por tu primer 0 km: llevá esto. | PRIMERO | IG + FB | 197 |
 | 30/11 | 17:10 | ElevenLabs | pregunta con respuesta numérica | ¿Cuántas cosas te tienen que dar con el 0 km? | KIT | IG + FB | 197 |
+| 30/11 | 19:10 | gratis (de autos-2811-4) | escena con hora o número | Mes 8 del plan: la cuota subió. | AHORRO | IG + FB | 191 |
 | 30/11 | 21:30 | ElevenLabs | ¿cuál sos? (identidad) | Contado, prendario o plan: ¿cuál sos? | FORMA | IG + FB | 202 |
 | 01/12 | 09:10 | ElevenLabs | contador que avanza | Kilómetro 0, 500, 1.000: el primer service. | SERVICE | IG + FB | 215 |
+| 01/12 | 11:10 | gratis (de autos-2911-2) | pregunta con respuesta numérica | Patentar en diciembre: ¿cuántas preguntas? | ENERO | IG + FB | 172 |
 | 01/12 | 13:10 | ElevenLabs | mito roto | «El seguro lo veo después.» No. | CIRCULAR | IG + FB | 209 |
 | 01/12 | 17:10 | ElevenLabs | serie (parte 2) | Parte 2: así vale más «el gris». | USADO | IG + FB | 204 |
+| 01/12 | 19:10 | gratis (de autos-2911-3) | ¿cuál sos? (identidad) | Prueba de manejo: ¿cuál sos? | PRUEBA | IG + FB | 185 |
 | 01/12 | 21:30 | ElevenLabs | loop | ¿Un híbrido? Primero, esto. | HIBRIDO | IG + FB | 194 |
 | 02/12 | 09:10 | ElevenLabs | escena con hora o número | Viernes 6:00: primer viaje con el 0 km. | SALIDA | IG + FB | 182 |
+| 02/12 | 11:10 | gratis (de autos-2911-4) | segunda persona «vos» | Vos te anotás en un plan mañana. | PREGUNTAS | IG + FB | 165 |
 | 02/12 | 13:10 | ElevenLabs | tres cartas cerradas | Crédito prendario: tres cartas. | PRENDARIO | IG + FB | 201 |
 | 02/12 | 17:10 | ElevenLabs | advertencia | No te vayas sin estos papeles. | PAPELES | IG + FB | 180 |
+| 02/12 | 19:10 | gratis (de autos-3011-1) | pregunta con respuesta numérica | Presupuesto: ¿cuántas cosas tiene que decir? | PRESUPUESTO | IG + FB | 176 |
 | 02/12 | 21:30 | ElevenLabs | segunda persona «vos» | Cobrás el aguinaldo. ¿Va al anticipo? | EXTRA | IG + FB | 211 |
 | 03/12 | 09:10 | ElevenLabs | pregunta con respuesta numérica | Plan de ahorro: ¿de cuántas formas te lo dan? | LICITACION | IG + FB | 180 |
+| 03/12 | 11:10 | gratis (de autos-3011-4) | advertencia | No elijas cómo pagar por lo que hizo tu cuñado. | FORMA | IG + FB | 165 |
 | 03/12 | 13:10 | ElevenLabs | ¿cuál sos? (identidad) | En el showroom, ¿cuál de los tres sos? | SHOWROOM | IG + FB | 218 |
 | 03/12 | 17:10 | ElevenLabs | contador que avanza | Mes 1, mes 2, mes 3: lo que viene después. | FIJOS | IG + FB | 172 |
+| 03/12 | 19:10 | gratis (de autos-3011-3) | loop | Abrís el baúl del 0 km. ¿Está todo? | KIT | IG + FB | 153 |
 | 03/12 | 21:30 | ElevenLabs | mito roto | «El precio de lista es lo que pagás.» No. | 0KM | IG + FB | 192 |
 | 04/12 | 09:10 | ElevenLabs | serie (parte 1) | Parte 1: Juli lo quiere antes de las fiestas. | ENTREGA | IG + FB | 184 |
+| 04/12 | 11:10 | gratis (de autos-0112-2) | segunda persona «vos» | Vos retirás el viernes. ¿Y el seguro? | CIRCULAR | IG + FB | 170 |
 | 04/12 | 13:10 | ElevenLabs | loop | ¿Qué trae el 0 km? Preguntá antes. | VERSION | IG + FB | 183 |
 | 04/12 | 17:10 | ElevenLabs | escena con hora o número | Viernes 17:00: retirás y no tenés póliza. | POLIZA | IG + FB | 185 |
+| 04/12 | 19:10 | gratis (de autos-0212-2) | mito roto | «El prendario es solo la cuota.» No. | PRENDARIO | IG + FB | 163 |
 | 04/12 | 21:30 | ElevenLabs | tres cartas cerradas | Garantía del 0 km: tres cartas. | GARANTIA | IG + FB | 168 |
 | 05/12 | 09:10 | ElevenLabs | advertencia | No elijas la cuota sin sumar todo. | ANTICIPO | IG + FB | 199 |
+| 05/12 | 11:10 | gratis (de autos-0212-4) | tres cartas cerradas | Aguinaldo y 0 km: tres cartas. | EXTRA | IG + FB | 191 |
 | 05/12 | 13:10 | ElevenLabs | segunda persona «vos» | Vos querés estrenarlo en Año Nuevo. | ANIO | IG + FB | 196 |
 | 05/12 | 17:10 | ElevenLabs | pregunta con respuesta numérica | Híbrido: ¿cuántas preguntas antes? Tres. | BATERIA | IG + FB | 180 |
+| 05/12 | 19:10 | gratis (de autos-0312-2) | escena con hora o número | Sábado 12:00: el showroom está lleno. | SHOWROOM | IG + FB | 170 |
 | 05/12 | 21:30 | ElevenLabs | ¿cuál sos? (identidad) | Primer 0 km: ¿cuál de los tres sos? | PRIMER | IG + FB | 205 |
 | 06/12 | 09:10 | ElevenLabs | contador que avanza | Antes de la ruta: cuatro chequeos. | CHEQUEO | IG + FB | 164 |
+| 06/12 | 11:10 | gratis (de autos-0412-2) | tres cartas cerradas | Versión del 0 km: tres cartas. | VERSION | IG + FB | 184 |
 | 06/12 | 13:10 | ElevenLabs | mito roto | «El 0 km no necesita service.» No. | TALLER | IG + FB | 179 |
 | 06/12 | 17:10 | ElevenLabs | serie (parte 2) | Parte 2: la fecha de entrega, por escrito. | ENTREGA | IG + FB | 165 |
+| 06/12 | 19:10 | gratis (de autos-0412-4) | advertencia | No pierdas la garantía por un service. | GARANTIA | IG + FB | 171 |
 | 06/12 | 21:30 | ElevenLabs | loop | La carpeta del 0 km: ¿está completa? | CARPETA | IG + FB | 160 |
 | reserva |  | ElevenLabs | segunda persona «vos» | Querés sumarle accesorios. Antes, esto. | ACCESORIOS | IG + FB | 179 |
 | reserva |  | ElevenLabs | advertencia | No firmes la orden sin leer el modelo. | COMPRA | IG + FB | 143 |
