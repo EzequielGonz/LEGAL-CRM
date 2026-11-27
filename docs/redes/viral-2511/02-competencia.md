@@ -68,3 +68,46 @@ Relevado el 27/11/2026 por un subagente, con Firecrawl (búsqueda y scraping), W
 - Casi todo es **cara a cámara** con subtítulos grandes; los recortes de vivos y las respuestas a comentarios dominan en TikTok. Cero cuentas jurídicas argentinas relevadas usan animación, 3D o personaje ilustrado: **hueco claro para VITA**.
 - Duración: lo viral está entre 30 s (Brandi) y 90 s (María Paula). Las listas de pasos andan en 35–75 s.
 - CTA: «escribinos», número de WhatsApp en el texto, «contame en comentarios». **Ninguna usa palabra clave para comentar** (verificado en los textos leídos); Coberturas sí (ver 2.2).
+
+---
+
+## 2. Coberturas médicas (Compara Tu Obra Social: comparar prepagas y obras sociales, aportes, monotributo)
+
+### 2.1 Cuentas relevadas
+
+| # | Cuenta | Red | Seguidores (27/11) | Qué es | Fuente |
+| --- | --- | --- | --- | --- | --- |
+| 1 | @elisabet.piacentini (contadora) | IG | 100 mil (verificado) | Impuestos y monotributo; tocó obra social | Perfil IG y ficha del reel |
+| 2 | @nazur.alegre | TikTok | s/d | Monotributo, amparos de salud | Ficha del video |
+| 3 | @rpestudiocontable (RP Estudio, contadoras) | TikTok | s/d | Monotributo | Ficha del video |
+| 4 | @contadora.evecostoya | TikTok | s/d | Monotributo | Ficha del video |
+| 5 | @rocio.gallardoo | TikTok | s/d | Creadora común (no vende salud): experiencia de usuaria | Ficha del video |
+| 6 | @amparandosalud (Amparos de Salud) | IG | 20,8 mil (verificado) | Abogados de reclamos a prepagas y obras sociales | Perfil IG |
+| 7 | @ignacio.online (contador) | IG | 166 mil (verificado) | Novedades laborales e impositivas; posteos de obra social de monotributo | Perfil IG y buscador |
+| 8 | @opciones.salud («Cami», asesora) | IG | 3,8 mil (verificado) | Asesora de prepagas, competidora directa | Perfil IG |
+| 9 | @maia.asesoraensalud, @val.cobertura, asesores de una prepaga en el sur | IG | s/d (cuentas chicas) | Asesoras/es de venta, competencia directa | Fichas de reels |
+| 10 | @mimejorprepaga | IG | 245 (verificado) | Comparador con blog | Perfil IG (contraejemplo) |
+
+### 2.2 Piezas que rindieron
+
+| Cuenta | Pieza | Fecha | Números visibles | Duración | Formato | Gancho 0–3 s | CTA |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Elisabet Piacentini | [«¿Sos monotributista y no sabés qué pasa con tu obra social?»](https://www.instagram.com/reel/DPHOLuFEZL0/) | 27/09/2025 | **195 mil reproducciones · 4,4 mil me gusta · 2.517 comentarios** (verificado) | s/d | Cara a cámara + texto largo en la descripción | Pregunta en segunda persona a un grupo preciso (monotributistas) | **«Dejame LISTADO en los comentarios y te lo paso»**: casi todos los comentarios son «Listado» (verificado) |
+| nazur.alegre | [Cómo elegir obra social siendo monotributista](https://www.tiktok.com/@nazur.alegre/video/7699804417251413300) | 23/10/2026 | **175 mil vistas · 2.247 guardados · 919 compartidos** (verificado) | 55 s | Tutorial paso a paso (pantalla de ARCA, inferido) | «Cuando te inscribís en el monotributo, una de las cosas que tenés que hacer es elegir obra social…» (transcripción, verificado) | s/d |
+| Rocío Gallardo | [Fue a buscar la caja maternal de su prepaga](https://www.tiktok.com/@rocio.gallardoo/video/7662453619563777298) | 14/07/2026 | **468 mil vistas · 18 mil me gusta** (verificado) | 151 s | Experiencia propia + «a ver qué trae» | Curiosidad: abrir la caja | Ninguno (no vende) |
+| RP Estudio | [Obras sociales que aceptan monotributistas](https://www.tiktok.com/@rpestudiocontable/video/7611657806839860488) | 27/02/2026 | 64 mil vistas · **705 guardados** (verificado) | 21 s | Lista en pantalla | «Te dejo la lista actualizada…» (verificado) | Guardar (implícito) |
+| Eve Costoya | [Obra social para monotributistas](https://www.tiktok.com/@contadora.evecostoya/video/7683162526158228757) | 08/09/2026 | 36 mil vistas · 270 guardados (verificado) | 79 s | Explicación | «Qué obra social podés tener como monotributista…» (verificado) | s/d |
+| Amparos de Salud | Posteos de discapacidad y jubilación | jul–sep 2026 | 11 mil reproducciones máx. (verificado) | s/d | Placa con texto + reel | Noticia que afecta a un grupo | «Escribinos» |
+| Asesoras de venta (Maia, Valentina, asesor del sur) | «¿Te subió la cuota…?», «Si te volvió a aumentar la prepaga…» | oct–nov 2026 | 263, 723 y 4.219 reproducciones (verificado) | s/d | Cara a cámara | Aumento de cuota | «Comentá INFO / COMPARAR» (verificado) |
+| Opciones Salud | «¿Cuáles fueron las 3 prepagas más elegidas?» | 28/08/2026 | 975 reproducciones (verificado) | s/d | Ranking | Top 3 | Comentarios |
+
+### 2.3 Por qué funcionaron
+
+- **Lo viral en salud no lo hacen los vendedores de prepagas sino contadoras y usuarias.** Las 3 piezas más grandes (468 mil, 195 mil y 175 mil) son de una usuaria, una contadora y un creador de monotributo. Las asesoras de venta que copian «¿te aumentó la cuota? comentá COMPARAR» quedan entre 263 y 4 mil reproducciones (verificado). Inferido: el «aumento de cuota» está gastado y huele a venta.
+- **Grupo preciso + trámite que nadie entiende** (monotributo, ARCA, «la afiliación no es automática»): muchos guardados (705, 2.247) porque es una guía para usar después.
+- **Palabra clave a cambio de un recurso** («LISTADO»): 2.517 comentarios. Es exactamente nuestro cierre, pero con algo concreto que se entrega.
+- **Curiosidad de usuaria** (abrir la caja): no vende, pero muestra que «qué te da tu cobertura que no sabías» engancha.
+
+### 2.4 Formato
+
+- Todo cara a cámara o tutorial con capturas. **Nadie usa personaje animado, 3D ni historia ilustrada** (verificado en lo relevado). Duración 21–80 s; la lista de 21 s tuvo la mejor relación guardados/vistas.
