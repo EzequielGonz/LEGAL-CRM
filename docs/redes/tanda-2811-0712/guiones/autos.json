@@ -4,6 +4,12 @@
     "fecha": "2026-11-27",
     "hora": "09:10",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "escena con hora o número",
     "tema": "precio de lista y precio final",
     "basado_en": "Precio de lista no es precio final",
@@ -16,14 +22,14 @@
       "Pedí precio llave en mano",
       "Flete, formularios, patente y sellos",
       "Mandáselo a quien esté por comprar un 0 km.",
-      "«LLAVE» por WhatsApp"
+      "Comentá «0KM»"
     ],
     "personaje": "Juli",
     "lugar_ba": "Showroom de Automotores Kocos, sábado 11:30",
     "escena_visual": "La etiqueta de precio en el parabrisas se estira hacia arriba como un ticket de supermercado; Juli la frena con la mano.",
-    "cierre": "Mandáselo a quien esté por comprar un 0 km. O escribinos «LLAVE» por WhatsApp.",
-    "palabra": "LLAVE",
-    "copy": "Sábado 11:30: la lista y la sorpresa.\n\n✔ Lista ≠ lo que pagás\n✔ Pedí precio llave en mano\n✔ Flete, formularios, patente y sellos\n\nMandáselo a quien esté por comprar un 0 km. O escribinos «LLAVE» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "cierre": "Mandáselo a quien esté por comprar un 0 km. O comentá «0KM» y te mando «Los ítems del precio final».",
+    "palabra": "0KM",
+    "copy": "Sábado 11:30: la lista y la sorpresa.\n\n✔ Lista ≠ lo que pagás\n✔ Pedí precio llave en mano\n✔ Flete, formularios, patente y sellos\n\nMandáselo a quien esté por comprar un 0 km. O comentá «0KM» y te mando «Los ítems del precio final».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -31,6 +37,12 @@
     "fecha": "2026-11-27",
     "hora": "13:10",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "tres cartas cerradas",
     "tema": "adjudicación del plan",
     "basado_en": "Mito: «con el plan te dan el auto en la cuota 2, seguro»",
@@ -43,14 +55,14 @@
       "Carta 2: nadie garantiza la cuota",
       "Carta 3: todo por escrito",
       "Mandáselo a quien esté por anotarse en un plan.",
-      "«SORTEO» por WhatsApp"
+      "Comentá «SORTEO»"
     ],
     "personaje": "Mati",
     "lugar_ba": "Taller de aire acondicionado de Mati, Villa Crespo",
     "escena_visual": "Tres cartas azules sobre el banco de trabajo; se dan vuelta de a una. La segunda tacha «cuota 2» con una línea de luz.",
-    "cierre": "Mandáselo a quien esté por anotarse en un plan. O escribinos «SORTEO» por WhatsApp.",
+    "cierre": "Mandáselo a quien esté por anotarse en un plan. O comentá «SORTEO» y te mando la guía «Adjudicación del plan».",
     "palabra": "SORTEO",
-    "copy": "«Te lo damos en la cuota 2»: tres cartas.\n\n✔ Carta 1: sorteo o licitación\n✔ Carta 2: nadie garantiza la cuota\n✔ Carta 3: todo por escrito\n\nMandáselo a quien esté por anotarse en un plan. O escribinos «SORTEO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "«Te lo damos en la cuota 2»: tres cartas.\n\n✔ Carta 1: sorteo o licitación\n✔ Carta 2: nadie garantiza la cuota\n✔ Carta 3: todo por escrito\n\nMandáselo a quien esté por anotarse en un plan. O comentá «SORTEO» y te mando la guía «Adjudicación del plan».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -58,6 +70,12 @@
     "fecha": "2026-11-27",
     "hora": "17:10",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "advertencia",
     "tema": "seña sin recibo",
     "basado_en": "nuevo",
@@ -70,14 +88,14 @@
       "Monto y fecha",
       "¿Qué pasa si no sigue?",
       "Guardalo para el día que señes.",
-      "«SENA» por WhatsApp"
+      "Comentá «SENA»"
     ],
     "personaje": "Juli y Mati",
     "lugar_ba": "Mostrador del showroom de Automotores Kocos",
     "escena_visual": "Un billete sale volando de la mano de Mati y se convierte en un recibo que se imprime solo, línea por línea.",
-    "cierre": "Guardalo para el día que señes. O escribinos «SENA» por WhatsApp.",
+    "cierre": "Guardalo para el día que señes. O comentá «SENA» y te mando la guía «Seña sin recibo».",
     "palabra": "SENA",
-    "copy": "No dejes una seña sin recibo.\n\n✔ Modelo, versión y color\n✔ Monto y fecha\n✔ ¿Qué pasa si no sigue?\n\nGuardalo para el día que señes. O escribinos «SENA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "No dejes una seña sin recibo.\n\n✔ Modelo, versión y color\n✔ Monto y fecha\n✔ ¿Qué pasa si no sigue?\n\nGuardalo para el día que señes. O comentá «SENA» y te mando la guía «Seña sin recibo».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -85,6 +103,12 @@
     "fecha": "2026-11-27",
     "hora": "21:30",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "segunda persona «vos»",
     "tema": "anticipo o cuota",
     "basado_en": "¿Anticipo grande o cuota baja?",
@@ -97,14 +121,14 @@
       "2. Cuánto de anticipo",
       "3. Recién ahí, el auto",
       "Guardalo y hacé la cuenta esta noche.",
-      "«CUOTA» por WhatsApp"
+      "Comentá «CUOTA»"
     ],
     "personaje": "Juli y Mati",
     "lugar_ba": "Cocina del departamento de Villa Crespo, de noche",
     "escena_visual": "Las muestras de color del auto giran como ruleta; Juli las frena y en su lugar aparece una calculadora gigante.",
-    "cierre": "Guardalo y hacé la cuenta esta noche. O escribinos «CUOTA» por WhatsApp.",
+    "cierre": "Guardalo y hacé la cuenta esta noche. O comentá «CUOTA» y te mando la guía «Anticipo o cuota».",
     "palabra": "CUOTA",
-    "copy": "Vos elegí la cuota antes que el auto.\n\n✔ 1. La cuota que podés pagar\n✔ 2. Cuánto de anticipo\n✔ 3. Recién ahí, el auto\n\nGuardalo y hacé la cuenta esta noche. O escribinos «CUOTA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "Vos elegí la cuota antes que el auto.\n\n✔ 1. La cuota que podés pagar\n✔ 2. Cuánto de anticipo\n✔ 3. Recién ahí, el auto\n\nGuardalo y hacé la cuenta esta noche. O comentá «CUOTA» y te mando la guía «Anticipo o cuota».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -112,6 +136,12 @@
     "fecha": "2026-11-28",
     "hora": "09:10",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "pregunta con respuesta numérica",
     "tema": "costos que no están en la lista",
     "basado_en": "Flete, formularios, patentamiento y sellos: qué es cada uno",
@@ -124,14 +154,14 @@
       "Cuatro: flete, formularios, patente, sellos",
       "Aparte: el seguro",
       "Guardalo para pedir el presupuesto.",
-      "«COSTOS» por WhatsApp"
+      "Comentá «0KM»"
     ],
     "personaje": "Mati y Leo",
     "lugar_ba": "Showroom de Automotores Kocos",
     "escena_visual": "Cuatro fichas caen sobre el capot y se apilan con un contador 1, 2, 3, 4; Leo agrega la quinta con la palabra «seguro».",
-    "cierre": "Guardalo para pedir el presupuesto. O escribinos «COSTOS» por WhatsApp.",
-    "palabra": "COSTOS",
-    "copy": "¿Cuántos costos se suman al precio de lista?\n\n✔ ¿Uno? ¿Dos?\n✔ Cuatro: flete, formularios, patente, sellos\n✔ Aparte: el seguro\n\nGuardalo para pedir el presupuesto. O escribinos «COSTOS» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "cierre": "Guardalo para pedir el presupuesto. O comentá «0KM» y te mando «Los ítems del precio final».",
+    "palabra": "0KM",
+    "copy": "¿Cuántos costos se suman al precio de lista?\n\n✔ ¿Uno? ¿Dos?\n✔ Cuatro: flete, formularios, patente, sellos\n✔ Aparte: el seguro\n\nGuardalo para pedir el presupuesto. O comentá «0KM» y te mando «Los ítems del precio final».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -139,6 +169,12 @@
     "fecha": "2026-11-28",
     "hora": "13:10",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "¿cuál sos? (identidad)",
     "tema": "gastos después de comprar",
     "basado_en": "El 0 km también tiene gastos fijos: seguro, patente, cochera",
@@ -151,14 +187,14 @@
       "El que suma el seguro",
       "El que hace la cuenta completa",
       "Mandáselo a quien solo mira la cuota.",
-      "«GASTOS» por WhatsApp"
+      "Comentá «GASTOS»"
     ],
     "personaje": "Tres siluetas (Juli es la tercera)",
     "lugar_ba": "Estacionamiento de Av. Juan B. Justo, de noche",
     "escena_visual": "Pantalla partida en tres cocheras; en cada una aparece un ticket más largo. La tercera, con la cuenta completa, queda iluminada en azul.",
-    "cierre": "Mandáselo a quien solo mira la cuota. O escribinos «GASTOS» por WhatsApp.",
+    "cierre": "Mandáselo a quien solo mira la cuota. O comentá «GASTOS» y te mando la guía «Gastos después de comprar».",
     "palabra": "GASTOS",
-    "copy": "¿Qué comprador de 0 km sos?\n\n✔ El que mira solo la cuota\n✔ El que suma el seguro\n✔ El que hace la cuenta completa\n\nMandáselo a quien solo mira la cuota. O escribinos «GASTOS» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "¿Qué comprador de 0 km sos?\n\n✔ El que mira solo la cuota\n✔ El que suma el seguro\n✔ El que hace la cuenta completa\n\nMandáselo a quien solo mira la cuota. O comentá «GASTOS» y te mando la guía «Gastos después de comprar».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -166,6 +202,12 @@
     "fecha": "2026-11-28",
     "hora": "17:10",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "contador que avanza",
     "tema": "revisión el día del retiro",
     "basado_en": "Retirás tu 0 km: antes de firmar, revisá",
@@ -178,14 +220,14 @@
       "2 Sin rayones · 3 Manual",
       "4 Llave extra · 5 Auxilio",
       "Guardalo para el día del retiro.",
-      "«RETIRO» por WhatsApp"
+      "Comentá «LLAVE»"
     ],
     "personaje": "Juli",
     "lugar_ba": "Playón de entrega de Automotores Kocos, día del retiro",
     "escena_visual": "Un contador 1/5 a 5/5 avanza arriba; Juli recorre el auto con una linterna y cada chequeo hace un clic con destello azul.",
-    "cierre": "Guardalo para el día del retiro. O escribinos «RETIRO» por WhatsApp.",
-    "palabra": "RETIRO",
-    "copy": "Retiro del 0 km: 5 chequeos antes de firmar.\n\n✔ 1 Chasis = papeles\n✔ 2 Sin rayones · 3 Manual\n✔ 4 Llave extra · 5 Auxilio\n\nGuardalo para el día del retiro. O escribinos «RETIRO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "cierre": "Guardalo para el día del retiro. O comentá «LLAVE» y te mando «La revisión del retiro».",
+    "palabra": "LLAVE",
+    "copy": "Retiro del 0 km: 5 chequeos antes de firmar.\n\n✔ 1 Chasis = papeles\n✔ 2 Sin rayones · 3 Manual\n✔ 4 Llave extra · 5 Auxilio\n\nGuardalo para el día del retiro. O comentá «LLAVE» y te mando «La revisión del retiro».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -193,6 +235,12 @@
     "fecha": "2026-11-28",
     "hora": "21:30",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "mito roto",
     "tema": "cuota del plan de ahorro",
     "basado_en": "¿Por qué subió la cuota del plan de ahorro?",
@@ -205,14 +253,14 @@
       "Si sube el auto, sube la cuota",
       "Preguntá cómo se actualiza",
       "Mandáselo a quien esté por anotarse en un plan.",
-      "«AHORRO» por WhatsApp"
+      "Comentá «AHORRO»"
     ],
     "personaje": "Mati",
     "lugar_ba": "Vereda de Villa Crespo, frente al edificio de Mati",
     "escena_visual": "Un cartel de cuota pegado con cinta se despega y sube como globo; Mati lo persigue por la vereda.",
-    "cierre": "Mandáselo a quien esté por anotarse en un plan. O escribinos «AHORRO» por WhatsApp.",
+    "cierre": "Mandáselo a quien esté por anotarse en un plan. O comentá «AHORRO» y te mando la guía «Cuota del plan de ahorro».",
     "palabra": "AHORRO",
-    "copy": "«La cuota del plan es fija.» No.\n\n✔ Se calcula sobre el precio actual\n✔ Si sube el auto, sube la cuota\n✔ Preguntá cómo se actualiza\n\nMandáselo a quien esté por anotarse en un plan. O escribinos «AHORRO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "«La cuota del plan es fija.» No.\n\n✔ Se calcula sobre el precio actual\n✔ Si sube el auto, sube la cuota\n✔ Preguntá cómo se actualiza\n\nMandáselo a quien esté por anotarse en un plan. O comentá «AHORRO» y te mando la guía «Cuota del plan de ahorro».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -220,6 +268,12 @@
     "fecha": "2026-11-29",
     "hora": "09:10",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "serie (parte 1)",
     "tema": "el usado como parte de pago",
     "basado_en": "Tu usado vale más si tenés esto",
@@ -232,14 +286,14 @@
       "Le parece poco",
       "¿Qué lo hace valer más?",
       "Guardalo para ver la parte 2.",
-      "«USADO» por WhatsApp"
+      "Comentá «USADO»"
     ],
     "personaje": "Mati",
     "lugar_ba": "Vereda de Villa Crespo con «el gris» estacionado",
     "escena_visual": "El auto gris se achica como un juguete en la mano de Mati; aparece un signo de pregunta azul. Cierra con «Parte 2».",
-    "cierre": "Guardalo para ver la parte 2. O escribinos «USADO» por WhatsApp.",
+    "cierre": "Guardalo para ver la parte 2. O comentá «USADO» y te mando la guía «El usado como parte de pago».",
     "palabra": "USADO",
-    "copy": "Parte 1: Mati quiere entregar «el gris».\n\n✔ Entrega «el gris»\n✔ Le parece poco\n✔ ¿Qué lo hace valer más?\n\nGuardalo para ver la parte 2. O escribinos «USADO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "Parte 1: Mati quiere entregar «el gris».\n\n✔ Entrega «el gris»\n✔ Le parece poco\n✔ ¿Qué lo hace valer más?\n\nGuardalo para ver la parte 2. O comentá «USADO» y te mando la guía «El usado como parte de pago».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -247,6 +301,12 @@
     "fecha": "2026-11-29",
     "hora": "13:10",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "loop",
     "tema": "patentar en diciembre o enero",
     "basado_en": "¿Lo patentás en diciembre o esperás a enero?",
@@ -259,14 +319,14 @@
       "Fecha de entrega",
       "¿Cambia el precio?",
       "Mandáselo a quien compra antes de fin de año.",
-      "«ENERO» por WhatsApp"
+      "Comentá «ENERO»"
     ],
     "personaje": "Juli y Mati",
     "lugar_ba": "Balcón del departamento de Villa Crespo, de noche",
     "escena_visual": "Un calendario que pasa de diciembre a enero y vuelve; las luces de fin de año se reflejan en la llave. Último cuadro igual al primero.",
-    "cierre": "Mandáselo a quien compra antes de fin de año. O escribinos «ENERO» por WhatsApp.",
+    "cierre": "Mandáselo a quien compra antes de fin de año. O comentá «ENERO» y te mando la guía «Patentar en diciembre o enero».",
     "palabra": "ENERO",
-    "copy": "Diciembre o enero: ¿cuándo lo patentás?\n\n✔ Año del modelo\n✔ Fecha de entrega\n✔ ¿Cambia el precio?\n\nMandáselo a quien compra antes de fin de año. O escribinos «ENERO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "Diciembre o enero: ¿cuándo lo patentás?\n\n✔ Año del modelo\n✔ Fecha de entrega\n✔ ¿Cambia el precio?\n\nMandáselo a quien compra antes de fin de año. O comentá «ENERO» y te mando la guía «Patentar en diciembre o enero».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -274,6 +334,12 @@
     "fecha": "2026-11-29",
     "hora": "17:10",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "escena con hora o número",
     "tema": "prueba de manejo",
     "basado_en": "nuevo",
@@ -286,14 +352,14 @@
       "Avenida y estacionar",
       "Posición de manejo",
       "Mandáselo a quien prueba apurado.",
-      "«PRUEBA» por WhatsApp"
+      "Comentá «PRUEBA»"
     ],
     "personaje": "Juli",
     "lugar_ba": "Av. Juan B. Justo, Villa Crespo, sábado 17:10",
     "escena_visual": "El reloj del tablero marca 17:10; la cuadra se estira como una pista y Juli dobla con líneas de velocidad.",
-    "cierre": "Mandáselo a quien prueba apurado. O escribinos «PRUEBA» por WhatsApp.",
+    "cierre": "Mandáselo a quien prueba apurado. O comentá «PRUEBA» y te mando la guía «Prueba de manejo».",
     "palabra": "PRUEBA",
-    "copy": "Sábado 17:10: lo probaste dos minutos.\n\n✔ Dos minutos no alcanzan\n✔ Avenida y estacionar\n✔ Posición de manejo\n\nMandáselo a quien prueba apurado. O escribinos «PRUEBA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "Sábado 17:10: lo probaste dos minutos.\n\n✔ Dos minutos no alcanzan\n✔ Avenida y estacionar\n✔ Posición de manejo\n\nMandáselo a quien prueba apurado. O comentá «PRUEBA» y te mando la guía «Prueba de manejo».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -301,6 +367,12 @@
     "fecha": "2026-11-29",
     "hora": "21:30",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "tres cartas cerradas",
     "tema": "preguntas antes de un plan",
     "basado_en": "3 preguntas antes de suscribir un plan de ahorro",
@@ -313,14 +385,14 @@
       "¿Cómo se adjudica?",
       "¿Y si dejás de pagar?",
       "Guardalo para antes de anotarte.",
-      "«PREGUNTAS» por WhatsApp"
+      "Comentá «PREGUNTAS»"
     ],
     "personaje": "Juli y Leo",
     "lugar_ba": "Escritorio de Leo en el showroom de Automotores Kocos",
     "escena_visual": "Tres cartas azules sobre el escritorio de Leo; cada una se da vuelta con un ícono: flecha, bolillero y pausa.",
-    "cierre": "Guardalo para antes de anotarte. O escribinos «PREGUNTAS» por WhatsApp.",
+    "cierre": "Guardalo para antes de anotarte. O comentá «PREGUNTAS» y te mando la guía «Preguntas antes de un plan».",
     "palabra": "PREGUNTAS",
-    "copy": "Plan de ahorro: tres cartas antes de firmar.\n\n✔ ¿Cómo se actualiza?\n✔ ¿Cómo se adjudica?\n✔ ¿Y si dejás de pagar?\n\nGuardalo para antes de anotarte. O escribinos «PREGUNTAS» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "Plan de ahorro: tres cartas antes de firmar.\n\n✔ ¿Cómo se actualiza?\n✔ ¿Cómo se adjudica?\n✔ ¿Y si dejás de pagar?\n\nGuardalo para antes de anotarte. O comentá «PREGUNTAS» y te mando la guía «Preguntas antes de un plan».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -328,6 +400,12 @@
     "fecha": "2026-11-30",
     "hora": "09:10",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "advertencia",
     "tema": "presupuesto por escrito",
     "basado_en": "nuevo",
@@ -340,14 +418,14 @@
       "Versión y gastos",
       "Fecha de validez",
       "Mandáselo a quien compra de palabra.",
-      "«PRESUPUESTO» por WhatsApp"
+      "Comentá «PRESUPUESTO»"
     ],
     "personaje": "Mati y Leo",
     "lugar_ba": "Showroom de Automotores Kocos",
     "escena_visual": "Las palabras salen de un globo de diálogo y se evaporan; en su lugar se imprime un presupuesto con sello azul.",
-    "cierre": "Mandáselo a quien compra de palabra. O escribinos «PRESUPUESTO» por WhatsApp.",
+    "cierre": "Mandáselo a quien compra de palabra. O comentá «PRESUPUESTO» y te mando la guía «Presupuesto por escrito».",
     "palabra": "PRESUPUESTO",
-    "copy": "Precio de palabra: desconfiá.\n\n✔ Por escrito\n✔ Versión y gastos\n✔ Fecha de validez\n\nMandáselo a quien compra de palabra. O escribinos «PRESUPUESTO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "Precio de palabra: desconfiá.\n\n✔ Por escrito\n✔ Versión y gastos\n✔ Fecha de validez\n\nMandáselo a quien compra de palabra. O comentá «PRESUPUESTO» y te mando la guía «Presupuesto por escrito».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -355,6 +433,12 @@
     "fecha": "2026-11-30",
     "hora": "13:10",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "segunda persona «vos»",
     "tema": "primer 0 km",
     "basado_en": "Tu primer 0 km: 3 cosas antes de ir a la agencia",
@@ -367,14 +451,14 @@
       "Tu anticipo",
       "Las preguntas anotadas",
       "Mandáselo a quien compra su primer auto.",
-      "«PRIMERO» por WhatsApp"
+      "Comentá «PRIMERO»"
     ],
     "personaje": "Juli",
     "lugar_ba": "Puerta del showroom de Automotores Kocos",
     "escena_visual": "Juli abre la puerta y su lista del celular se despliega en el aire como un holograma azul.",
-    "cierre": "Mandáselo a quien compra su primer auto. O escribinos «PRIMERO» por WhatsApp.",
+    "cierre": "Mandáselo a quien compra su primer auto. O comentá «PRIMERO» y te mando la guía «Primer 0 km».",
     "palabra": "PRIMERO",
-    "copy": "Vas por tu primer 0 km: llevá esto.\n\n✔ Tu cuota máxima\n✔ Tu anticipo\n✔ Las preguntas anotadas\n\nMandáselo a quien compra su primer auto. O escribinos «PRIMERO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "Vas por tu primer 0 km: llevá esto.\n\n✔ Tu cuota máxima\n✔ Tu anticipo\n✔ Las preguntas anotadas\n\nMandáselo a quien compra su primer auto. O comentá «PRIMERO» y te mando la guía «Primer 0 km».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -382,6 +466,12 @@
     "fecha": "2026-11-30",
     "hora": "17:10",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "pregunta con respuesta numérica",
     "tema": "lo que te dan con el 0 km",
     "basado_en": "Lo que te tienen que dar con el 0 km",
@@ -394,14 +484,14 @@
       "Llave de repuesto",
       "Auxilio y herramientas",
       "Guardalo para el día del retiro.",
-      "«KIT» por WhatsApp"
+      "Comentá «KIT»"
     ],
     "personaje": "Mati",
     "lugar_ba": "Playón de entrega de Automotores Kocos",
     "escena_visual": "El baúl se abre y cuatro objetos salen flotando con un contador 1 a 4; la llave extra brilla.",
-    "cierre": "Guardalo para el día del retiro. O escribinos «KIT» por WhatsApp.",
+    "cierre": "Guardalo para el día del retiro. O comentá «KIT» y te mando la guía «Lo que te dan con el 0 km».",
     "palabra": "KIT",
-    "copy": "¿Cuántas cosas te tienen que dar con el 0 km?\n\n✔ Manual y garantía\n✔ Llave de repuesto\n✔ Auxilio y herramientas\n\nGuardalo para el día del retiro. O escribinos «KIT» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "¿Cuántas cosas te tienen que dar con el 0 km?\n\n✔ Manual y garantía\n✔ Llave de repuesto\n✔ Auxilio y herramientas\n\nGuardalo para el día del retiro. O comentá «KIT» y te mando la guía «Lo que te dan con el 0 km».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -409,6 +499,12 @@
     "fecha": "2026-11-30",
     "hora": "21:30",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "¿cuál sos? (identidad)",
     "tema": "contado, prendario o plan",
     "basado_en": "¿Contado, prendario o plan? De qué depende",
@@ -421,14 +517,14 @@
       "Anticipo + prendario",
       "Sin apuro: plan",
       "Mandáselo a quien no sabe cómo pagar.",
-      "«FORMA» por WhatsApp"
+      "Comentá «FORMA»"
     ],
     "personaje": "Tres siluetas (Juli, Mati y Leo)",
     "lugar_ba": "Cocina del departamento de Villa Crespo",
     "escena_visual": "Pantalla partida en tres alcancías de distinto tamaño; cada una se abre con una llave azul.",
-    "cierre": "Mandáselo a quien no sabe cómo pagar. O escribinos «FORMA» por WhatsApp.",
+    "cierre": "Mandáselo a quien no sabe cómo pagar. O comentá «FORMA» y te mando la guía «Contado, prendario o plan».",
     "palabra": "FORMA",
-    "copy": "Contado, prendario o plan: ¿cuál sos?\n\n✔ Contado\n✔ Anticipo + prendario\n✔ Sin apuro: plan\n\nMandáselo a quien no sabe cómo pagar. O escribinos «FORMA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "Contado, prendario o plan: ¿cuál sos?\n\n✔ Contado\n✔ Anticipo + prendario\n✔ Sin apuro: plan\n\nMandáselo a quien no sabe cómo pagar. O comentá «FORMA» y te mando la guía «Contado, prendario o plan».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -436,6 +532,12 @@
     "fecha": "2026-12-01",
     "hora": "09:10",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "contador que avanza",
     "tema": "primer service",
     "basado_en": "Primer service del 0 km: no lo saltees",
@@ -448,14 +550,14 @@
       "Taller autorizado",
       "Comprobante para la garantía",
       "Guardalo para tu primer service.",
-      "«SERVICE» por WhatsApp"
+      "Comentá «SERVICE»"
     ],
     "personaje": "Mati",
     "lugar_ba": "Av. Corrientes, Villa Crespo",
     "escena_visual": "El odómetro gira en primer plano mientras el auto avanza por Corrientes; al llegar, aparece una llave inglesa azul.",
-    "cierre": "Guardalo para tu primer service. O escribinos «SERVICE» por WhatsApp.",
+    "cierre": "Guardalo para tu primer service. O comentá «SERVICE» y te mando la guía «Primer service».",
     "palabra": "SERVICE",
-    "copy": "Kilómetro 0, 500, 1.000: el primer service.\n\n✔ Cuando dice el manual\n✔ Taller autorizado\n✔ Comprobante para la garantía\n\nGuardalo para tu primer service. O escribinos «SERVICE» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "Kilómetro 0, 500, 1.000: el primer service.\n\n✔ Cuando dice el manual\n✔ Taller autorizado\n✔ Comprobante para la garantía\n\nGuardalo para tu primer service. O comentá «SERVICE» y te mando la guía «Primer service».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -463,6 +565,12 @@
     "fecha": "2026-12-01",
     "hora": "13:10",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "mito roto",
     "tema": "seguro antes de retirar",
     "basado_en": "Sin seguro no salís de la agencia",
@@ -475,14 +583,14 @@
       "Cotizá antes",
       "Póliza el día del retiro",
       "Mandáselo a quien retira esta semana.",
-      "«SEGURO» por WhatsApp"
+      "Comentá «CIRCULAR»"
     ],
     "personaje": "Mati y Leo",
     "lugar_ba": "Salida del showroom de Automotores Kocos",
     "escena_visual": "El auto sale del showroom y una barrera de luz azul lo frena hasta que aparece la póliza.",
-    "cierre": "Mandáselo a quien retira esta semana. O escribinos «SEGURO» por WhatsApp.",
-    "palabra": "SEGURO",
-    "copy": "«El seguro lo veo después.» No.\n\n✔ Obligatorio para circular\n✔ Cotizá antes\n✔ Póliza el día del retiro\n\nMandáselo a quien retira esta semana. O escribinos «SEGURO» por WhatsApp.\n\nFuente: Ley 24.449, arts. 40 y 68.\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "cierre": "Mandáselo a quien retira esta semana. O comentá «CIRCULAR» y te mando la guía «Seguro antes de retirar».",
+    "palabra": "CIRCULAR",
+    "copy": "«El seguro lo veo después.» No.\n\n✔ Obligatorio para circular\n✔ Cotizá antes\n✔ Póliza el día del retiro\n\nMandáselo a quien retira esta semana. O comentá «CIRCULAR» y te mando la guía «Seguro antes de retirar».\n\nFuente: Ley 24.449, arts. 40 y 68.\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": "Ley 24.449, arts. 40 y 68"
   },
   {
@@ -490,6 +598,12 @@
     "fecha": "2026-12-01",
     "hora": "17:10",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "serie (parte 2)",
     "tema": "el usado como parte de pago",
     "basado_en": "Antes de entregar tu usado: papeles, patentes y multas",
@@ -502,14 +616,14 @@
       "Papeles en regla",
       "Sin deudas ni multas",
       "Mandáselo a quien vende su auto.",
-      "«USADO» por WhatsApp"
+      "Comentá «USADO»"
     ],
     "personaje": "Mati",
     "lugar_ba": "Taller de aire acondicionado de Mati, Villa Crespo",
     "escena_visual": "El auto gris crece de nuevo a tamaño real mientras se apilan comprobantes; el número de la tasación se ilumina.",
-    "cierre": "Mandáselo a quien vende su auto. O escribinos «USADO» por WhatsApp.",
+    "cierre": "Mandáselo a quien vende su auto. O comentá «USADO» y te mando la guía «El usado como parte de pago».",
     "palabra": "USADO",
-    "copy": "Parte 2: así vale más «el gris».\n\n✔ Service con comprobantes\n✔ Papeles en regla\n✔ Sin deudas ni multas\n\nMandáselo a quien vende su auto. O escribinos «USADO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "Parte 2: así vale más «el gris».\n\n✔ Service con comprobantes\n✔ Papeles en regla\n✔ Sin deudas ni multas\n\nMandáselo a quien vende su auto. O comentá «USADO» y te mando la guía «El usado como parte de pago».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -517,6 +631,12 @@
     "fecha": "2026-12-01",
     "hora": "21:30",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "loop",
     "tema": "híbrido: preguntas",
     "basado_en": "¿0 km híbrido? Qué preguntar antes",
@@ -529,14 +649,14 @@
       "¿Dónde el service?",
       "¿Garantía de la batería?",
       "Mandáselo a quien piensa en un híbrido.",
-      "«HIBRIDO» por WhatsApp"
+      "Comentá «HIBRIDO»"
     ],
     "personaje": "Mati y Juli",
     "lugar_ba": "Showroom de Automotores Kocos",
     "escena_visual": "Un ícono de batería se carga en tres pasos; al llenarse, la cámara vuelve al plano del inicio.",
-    "cierre": "Mandáselo a quien piensa en un híbrido. O escribinos «HIBRIDO» por WhatsApp.",
+    "cierre": "Mandáselo a quien piensa en un híbrido. O comentá «HIBRIDO» y te mando la guía «Híbrido: preguntas».",
     "palabra": "HIBRIDO",
-    "copy": "¿Un híbrido? Primero, esto.\n\n✔ ¿Cuánto en ciudad?\n✔ ¿Dónde el service?\n✔ ¿Garantía de la batería?\n\nMandáselo a quien piensa en un híbrido. O escribinos «HIBRIDO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "¿Un híbrido? Primero, esto.\n\n✔ ¿Cuánto en ciudad?\n✔ ¿Dónde el service?\n✔ ¿Garantía de la batería?\n\nMandáselo a quien piensa en un híbrido. O comentá «HIBRIDO» y te mando la guía «Híbrido: preguntas».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -544,6 +664,12 @@
     "fecha": "2026-12-02",
     "hora": "09:10",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "escena con hora o número",
     "tema": "primer viaje a la ruta",
     "basado_en": "Primer viaje largo con tu 0 km: qué revisar antes de salir",
@@ -556,14 +682,14 @@
       "Matafuego y balizas",
       "Papeles y seguro",
       "Mandáselo a quien sale a la ruta.",
-      "«VIAJE» por WhatsApp"
+      "Comentá «SALIDA»"
     ],
     "personaje": "Juli y Mati",
     "lugar_ba": "Vereda de Villa Crespo, cargando el 0 km",
     "escena_visual": "El sol sale detrás del auto cargado; cada chequeo se marca con un clic azul sobre el capot.",
-    "cierre": "Mandáselo a quien sale a la ruta. O escribinos «VIAJE» por WhatsApp.",
-    "palabra": "VIAJE",
-    "copy": "Viernes 6:00: primer viaje con el 0 km.\n\n✔ Presión de neumáticos\n✔ Matafuego y balizas\n✔ Papeles y seguro\n\nMandáselo a quien sale a la ruta. O escribinos «VIAJE» por WhatsApp.\n\nFuente: Ley 24.449, art. 40.\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "cierre": "Mandáselo a quien sale a la ruta. O comentá «SALIDA» y te mando la guía «Primer viaje a la ruta».",
+    "palabra": "SALIDA",
+    "copy": "Viernes 6:00: primer viaje con el 0 km.\n\n✔ Presión de neumáticos\n✔ Matafuego y balizas\n✔ Papeles y seguro\n\nMandáselo a quien sale a la ruta. O comentá «SALIDA» y te mando la guía «Primer viaje a la ruta».\n\nFuente: Ley 24.449, art. 40.\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": "Ley 24.449, art. 40"
   },
   {
@@ -571,6 +697,12 @@
     "fecha": "2026-12-02",
     "hora": "13:10",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "tres cartas cerradas",
     "tema": "crédito prendario",
     "basado_en": "¿Qué es un crédito prendario?",
@@ -583,14 +715,14 @@
       "Costo total",
       "¿Y si cancelás antes?",
       "Guardalo antes de pedir el crédito.",
-      "«PRENDARIO» por WhatsApp"
+      "Comentá «PRENDARIO»"
     ],
     "personaje": "Juli y Leo",
     "lugar_ba": "Escritorio de Leo en el showroom",
     "escena_visual": "Tres cartas se dan vuelta sobre una llave atada a un candado azul que se abre al final.",
-    "cierre": "Guardalo antes de pedir el crédito. O escribinos «PRENDARIO» por WhatsApp.",
+    "cierre": "Guardalo antes de pedir el crédito. O comentá «PRENDARIO» y te mando la guía «Crédito prendario».",
     "palabra": "PRENDARIO",
-    "copy": "Crédito prendario: tres cartas.\n\n✔ El auto, como garantía\n✔ Costo total\n✔ ¿Y si cancelás antes?\n\nGuardalo antes de pedir el crédito. O escribinos «PRENDARIO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "Crédito prendario: tres cartas.\n\n✔ El auto, como garantía\n✔ Costo total\n✔ ¿Y si cancelás antes?\n\nGuardalo antes de pedir el crédito. O comentá «PRENDARIO» y te mando la guía «Crédito prendario».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -598,6 +730,12 @@
     "fecha": "2026-12-02",
     "hora": "17:10",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "advertencia",
     "tema": "papeles del 0 km",
     "basado_en": "Los papeles que te llevás con el 0 km",
@@ -610,14 +748,14 @@
       "Título y cédula",
       "Póliza del seguro",
       "Guardalo para el día del retiro.",
-      "«PAPELES» por WhatsApp"
+      "Comentá «PAPELES»"
     ],
     "personaje": "Juli y Leo",
     "lugar_ba": "Mostrador de entrega de Automotores Kocos",
     "escena_visual": "Una carpeta azul se abre y los papeles se acomodan solos en abanico; una lupa compara números.",
-    "cierre": "Guardalo para el día del retiro. O escribinos «PAPELES» por WhatsApp.",
+    "cierre": "Guardalo para el día del retiro. O comentá «PAPELES» y te mando la guía «Papeles del 0 km».",
     "palabra": "PAPELES",
-    "copy": "No te vayas sin estos papeles.\n\n✔ Factura\n✔ Título y cédula\n✔ Póliza del seguro\n\nGuardalo para el día del retiro. O escribinos «PAPELES» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "No te vayas sin estos papeles.\n\n✔ Factura\n✔ Título y cédula\n✔ Póliza del seguro\n\nGuardalo para el día del retiro. O comentá «PAPELES» y te mando la guía «Papeles del 0 km».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -625,6 +763,12 @@
     "fecha": "2026-12-02",
     "hora": "21:30",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "segunda persona «vos»",
     "tema": "aguinaldo como anticipo",
     "basado_en": "Cobraste el aguinaldo: ¿te alcanza para el anticipo?",
@@ -637,14 +781,14 @@
       "Gastos del retiro",
       "Lo que queda, al anticipo",
       "Mandáselo a quien sueña con su 0 km.",
-      "«AGUINALDO» por WhatsApp"
+      "Comentá «EXTRA»"
     ],
     "personaje": "Juli",
     "lugar_ba": "Cajero automático de Villa Crespo",
     "escena_visual": "Los billetes del cajero se reparten en tres frascos de vidrio con etiquetas azules.",
-    "cierre": "Mandáselo a quien sueña con su 0 km. O escribinos «AGUINALDO» por WhatsApp.",
-    "palabra": "AGUINALDO",
-    "copy": "Cobrás el aguinaldo. ¿Va al anticipo?\n\n✔ Un resto para imprevistos\n✔ Gastos del retiro\n✔ Lo que queda, al anticipo\n\nMandáselo a quien sueña con su 0 km. O escribinos «AGUINALDO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "cierre": "Mandáselo a quien sueña con su 0 km. O comentá «EXTRA» y te mando la guía «Aguinaldo como anticipo».",
+    "palabra": "EXTRA",
+    "copy": "Cobrás el aguinaldo. ¿Va al anticipo?\n\n✔ Un resto para imprevistos\n✔ Gastos del retiro\n✔ Lo que queda, al anticipo\n\nMandáselo a quien sueña con su 0 km. O comentá «EXTRA» y te mando la guía «Aguinaldo como anticipo».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -652,6 +796,12 @@
     "fecha": "2026-12-03",
     "hora": "09:10",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "pregunta con respuesta numérica",
     "tema": "adjudicación del plan",
     "basado_en": "Cómo se adjudica un plan: sorteo y licitación, sin vueltas",
@@ -664,14 +814,14 @@
       "Dos: sorteo",
       "y licitación",
       "Guardalo antes de anotarte.",
-      "«LICITACION» por WhatsApp"
+      "Comentá «LICITACION»"
     ],
     "personaje": "Juli y Mati",
     "lugar_ba": "Sillón del departamento de Villa Crespo",
     "escena_visual": "Un bolillero gigante gira en el living; sale una bolilla azul y, al lado, una mano levanta una paleta de oferta.",
-    "cierre": "Guardalo antes de anotarte. O escribinos «LICITACION» por WhatsApp.",
+    "cierre": "Guardalo antes de anotarte. O comentá «LICITACION» y te mando la guía «Adjudicación del plan».",
     "palabra": "LICITACION",
-    "copy": "Plan de ahorro: ¿de cuántas formas te lo dan?\n\n✔ ¿Cuántas formas?\n✔ Dos: sorteo\n✔ y licitación\n\nGuardalo antes de anotarte. O escribinos «LICITACION» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "Plan de ahorro: ¿de cuántas formas te lo dan?\n\n✔ ¿Cuántas formas?\n✔ Dos: sorteo\n✔ y licitación\n\nGuardalo antes de anotarte. O comentá «LICITACION» y te mando la guía «Adjudicación del plan».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -679,6 +829,12 @@
     "fecha": "2026-12-03",
     "hora": "13:10",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "¿cuál sos? (identidad)",
     "tema": "en el showroom",
     "basado_en": "nuevo",
@@ -691,14 +847,14 @@
       "Pregunta y no decide",
       "Vuelve con la cuenta",
       "Mandáselo a quien se enamora rápido.",
-      "«SHOWROOM» por WhatsApp"
+      "Comentá «SHOWROOM»"
     ],
     "personaje": "Tres siluetas (Mati es el tercero)",
     "lugar_ba": "Showroom de Automotores Kocos, mediodía",
     "escena_visual": "Tres reflejos en el mismo parabrisas; dos se apagan y el tercero se queda con un presupuesto en la mano.",
-    "cierre": "Mandáselo a quien se enamora rápido. O escribinos «SHOWROOM» por WhatsApp.",
+    "cierre": "Mandáselo a quien se enamora rápido. O comentá «SHOWROOM» y te mando la guía «En el showroom».",
     "palabra": "SHOWROOM",
-    "copy": "En el showroom, ¿cuál de los tres sos?\n\n✔ Se enamora y firma\n✔ Pregunta y no decide\n✔ Vuelve con la cuenta\n\nMandáselo a quien se enamora rápido. O escribinos «SHOWROOM» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "En el showroom, ¿cuál de los tres sos?\n\n✔ Se enamora y firma\n✔ Pregunta y no decide\n✔ Vuelve con la cuenta\n\nMandáselo a quien se enamora rápido. O comentá «SHOWROOM» y te mando la guía «En el showroom».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -706,6 +862,12 @@
     "fecha": "2026-12-03",
     "hora": "17:10",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "contador que avanza",
     "tema": "gastos fijos del 0 km",
     "basado_en": "El 0 km también tiene gastos fijos: seguro, patente, cochera",
@@ -718,14 +880,14 @@
       "Mes 2: patente",
       "Mes 3: seguro, cochera, nafta",
       "Guardalo y hacé la cuenta.",
-      "«FIJOS» por WhatsApp"
+      "Comentá «FIJOS»"
     ],
     "personaje": "Juli",
     "lugar_ba": "Cochera de un edificio de Villa Crespo",
     "escena_visual": "Un almanaque magnético en la pared de la cochera suma imanes por mes; el auto queda rodeado de tickets.",
-    "cierre": "Guardalo y hacé la cuenta. O escribinos «FIJOS» por WhatsApp.",
+    "cierre": "Guardalo y hacé la cuenta. O comentá «FIJOS» y te mando la guía «Gastos fijos del 0 km».",
     "palabra": "FIJOS",
-    "copy": "Mes 1, mes 2, mes 3: lo que viene después.\n\n✔ Mes 1: cuota\n✔ Mes 2: patente\n✔ Mes 3: seguro, cochera, nafta\n\nGuardalo y hacé la cuenta. O escribinos «FIJOS» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "Mes 1, mes 2, mes 3: lo que viene después.\n\n✔ Mes 1: cuota\n✔ Mes 2: patente\n✔ Mes 3: seguro, cochera, nafta\n\nGuardalo y hacé la cuenta. O comentá «FIJOS» y te mando la guía «Gastos fijos del 0 km».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -733,6 +895,12 @@
     "fecha": "2026-12-03",
     "hora": "21:30",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "mito roto",
     "tema": "precio de lista",
     "basado_en": "Precio de lista no es precio final",
@@ -745,14 +913,14 @@
       "Pedí llave en mano",
       "Por escrito",
       "Mandáselo a quien mira solo la lista.",
-      "«LISTA» por WhatsApp"
+      "Comentá «0KM»"
     ],
     "personaje": "Leo",
     "lugar_ba": "Vidriera del showroom de Automotores Kocos, de noche",
     "escena_visual": "El número de la etiqueta se rompe como vidrio y se rearma más largo; Leo lo sostiene con una pinza.",
-    "cierre": "Mandáselo a quien mira solo la lista. O escribinos «LISTA» por WhatsApp.",
-    "palabra": "LISTA",
-    "copy": "«El precio de lista es lo que pagás.» No.\n\n✔ Se suman gastos\n✔ Pedí llave en mano\n✔ Por escrito\n\nMandáselo a quien mira solo la lista. O escribinos «LISTA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "cierre": "Mandáselo a quien mira solo la lista. O comentá «0KM» y te mando «Los ítems del precio final».",
+    "palabra": "0KM",
+    "copy": "«El precio de lista es lo que pagás.» No.\n\n✔ Se suman gastos\n✔ Pedí llave en mano\n✔ Por escrito\n\nMandáselo a quien mira solo la lista. O comentá «0KM» y te mando «Los ítems del precio final».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -760,6 +928,12 @@
     "fecha": "2026-12-04",
     "hora": "09:10",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "serie (parte 1)",
     "tema": "fecha de entrega",
     "basado_en": "nuevo",
@@ -772,14 +946,14 @@
       "«Llega en dos semanas»",
       "Nada por escrito",
       "Guardalo para ver la parte 2.",
-      "«ENTREGA» por WhatsApp"
+      "Comentá «ENTREGA»"
     ],
     "personaje": "Juli",
     "lugar_ba": "Showroom de Automotores Kocos con decoración navideña",
     "escena_visual": "Un arbolito con una llave colgada; el calendario se adelanta solo. Cierra con «Parte 2».",
-    "cierre": "Guardalo para ver la parte 2. O escribinos «ENTREGA» por WhatsApp.",
+    "cierre": "Guardalo para ver la parte 2. O comentá «ENTREGA» y te mando la guía «Fecha de entrega».",
     "palabra": "ENTREGA",
-    "copy": "Parte 1: Juli lo quiere antes de las fiestas.\n\n✔ Antes de las fiestas\n✔ «Llega en dos semanas»\n✔ Nada por escrito\n\nGuardalo para ver la parte 2. O escribinos «ENTREGA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "Parte 1: Juli lo quiere antes de las fiestas.\n\n✔ Antes de las fiestas\n✔ «Llega en dos semanas»\n✔ Nada por escrito\n\nGuardalo para ver la parte 2. O comentá «ENTREGA» y te mando la guía «Fecha de entrega».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -787,6 +961,12 @@
     "fecha": "2026-12-04",
     "hora": "13:10",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "loop",
     "tema": "qué viene incluido",
     "basado_en": "nuevo",
@@ -799,14 +979,14 @@
       "¿Qué equipamiento?",
       "¿Qué se paga aparte?",
       "Mandáselo a quien compara versiones.",
-      "«VERSION» por WhatsApp"
+      "Comentá «VERSION»"
     ],
     "personaje": "Mati",
     "lugar_ba": "Showroom de Automotores Kocos",
     "escena_visual": "El auto se despieza en el aire mostrando cada parte con su rótulo y vuelve a armarse en el último cuadro.",
-    "cierre": "Mandáselo a quien compara versiones. O escribinos «VERSION» por WhatsApp.",
+    "cierre": "Mandáselo a quien compara versiones. O comentá «VERSION» y te mando la guía «Qué viene incluido».",
     "palabra": "VERSION",
-    "copy": "¿Qué trae el 0 km? Preguntá antes.\n\n✔ ¿Qué versión?\n✔ ¿Qué equipamiento?\n✔ ¿Qué se paga aparte?\n\nMandáselo a quien compara versiones. O escribinos «VERSION» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "¿Qué trae el 0 km? Preguntá antes.\n\n✔ ¿Qué versión?\n✔ ¿Qué equipamiento?\n✔ ¿Qué se paga aparte?\n\nMandáselo a quien compara versiones. O comentá «VERSION» y te mando la guía «Qué viene incluido».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -814,6 +994,12 @@
     "fecha": "2026-12-04",
     "hora": "17:10",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "escena con hora o número",
     "tema": "retiro sin póliza",
     "basado_en": "Sin seguro no salís de la agencia",
@@ -826,14 +1012,14 @@
       "Cotizá con tiempo",
       "Llevá el comprobante",
       "Mandáselo a quien retira el viernes.",
-      "«POLIZA» por WhatsApp"
+      "Comentá «POLIZA»"
     ],
     "personaje": "Juli",
     "lugar_ba": "Playón de entrega de Automotores Kocos, viernes 17:00",
     "escena_visual": "El reloj del playón marca 17:00; las llaves cuelgan de un gancho que no se suelta hasta que aparece la póliza.",
-    "cierre": "Mandáselo a quien retira el viernes. O escribinos «POLIZA» por WhatsApp.",
+    "cierre": "Mandáselo a quien retira el viernes. O comentá «POLIZA» y te mando la guía «Retiro sin póliza».",
     "palabra": "POLIZA",
-    "copy": "Viernes 17:00: retirás y no tenés póliza.\n\n✔ Sin póliza no salís\n✔ Cotizá con tiempo\n✔ Llevá el comprobante\n\nMandáselo a quien retira el viernes. O escribinos «POLIZA» por WhatsApp.\n\nFuente: Ley 24.449, art. 68.\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "Viernes 17:00: retirás y no tenés póliza.\n\n✔ Sin póliza no salís\n✔ Cotizá con tiempo\n✔ Llevá el comprobante\n\nMandáselo a quien retira el viernes. O comentá «POLIZA» y te mando la guía «Retiro sin póliza».\n\nFuente: Ley 24.449, art. 68.\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": "Ley 24.449, art. 68"
   },
   {
@@ -841,6 +1027,12 @@
     "fecha": "2026-12-04",
     "hora": "21:30",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "tres cartas cerradas",
     "tema": "garantía de fábrica",
     "basado_en": "nuevo",
@@ -853,14 +1045,14 @@
       "Services a tiempo",
       "Todos los comprobantes",
       "Guardalo con los papeles del auto.",
-      "«GARANTIA» por WhatsApp"
+      "Comentá «GARANTIA»"
     ],
     "personaje": "Mati",
     "lugar_ba": "Taller de aire acondicionado de Mati",
     "escena_visual": "Tres cartas sobre el banco de trabajo; al darse vuelta, arman un escudo azul sobre el auto.",
-    "cierre": "Guardalo con los papeles del auto. O escribinos «GARANTIA» por WhatsApp.",
+    "cierre": "Guardalo con los papeles del auto. O comentá «GARANTIA» y te mando la guía «Garantía de fábrica».",
     "palabra": "GARANTIA",
-    "copy": "Garantía del 0 km: tres cartas.\n\n✔ Qué cubre y qué no\n✔ Services a tiempo\n✔ Todos los comprobantes\n\nGuardalo con los papeles del auto. O escribinos «GARANTIA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "Garantía del 0 km: tres cartas.\n\n✔ Qué cubre y qué no\n✔ Services a tiempo\n✔ Todos los comprobantes\n\nGuardalo con los papeles del auto. O comentá «GARANTIA» y te mando la guía «Garantía de fábrica».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -868,6 +1060,12 @@
     "fecha": "2026-12-05",
     "hora": "09:10",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "advertencia",
     "tema": "cuota sin cuenta completa",
     "basado_en": "¿Anticipo grande o cuota baja?",
@@ -880,14 +1078,14 @@
       "Mirá el plazo",
       "Cuenta completa",
       "Mandáselo a quien mira solo la cuota.",
-      "«ANTICIPO» por WhatsApp"
+      "Comentá «ANTICIPO»"
     ],
     "personaje": "Juli y Mati",
     "lugar_ba": "Mesa de un bar de Villa Crespo",
     "escena_visual": "Una balanza azul con el anticipo de un lado y las cuotas del otro; se inclina hasta equilibrarse.",
-    "cierre": "Mandáselo a quien mira solo la cuota. O escribinos «ANTICIPO» por WhatsApp.",
+    "cierre": "Mandáselo a quien mira solo la cuota. O comentá «ANTICIPO» y te mando la guía «Cuota sin cuenta completa».",
     "palabra": "ANTICIPO",
-    "copy": "No elijas la cuota sin sumar todo.\n\n✔ Anticipo chico, cuota más alta\n✔ Mirá el plazo\n✔ Cuenta completa\n\nMandáselo a quien mira solo la cuota. O escribinos «ANTICIPO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "No elijas la cuota sin sumar todo.\n\n✔ Anticipo chico, cuota más alta\n✔ Mirá el plazo\n✔ Cuenta completa\n\nMandáselo a quien mira solo la cuota. O comentá «ANTICIPO» y te mando la guía «Cuota sin cuenta completa».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -895,6 +1093,12 @@
     "fecha": "2026-12-05",
     "hora": "13:10",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "segunda persona «vos»",
     "tema": "fin de año: patentar",
     "basado_en": "¿Lo patentás en diciembre o esperás a enero?",
@@ -907,14 +1111,14 @@
       "¿Qué año de modelo?",
       "¿Cambia el precio?",
       "Mandáselo a quien quiere estrenar en enero.",
-      "«ANIO» por WhatsApp"
+      "Comentá «ANIO»"
     ],
     "personaje": "Juli",
     "lugar_ba": "Terraza de Villa Crespo con fuegos artificiales",
     "escena_visual": "Fuegos artificiales que dibujan «2027» sobre el capot; una pregunta azul aparece en el humo.",
-    "cierre": "Mandáselo a quien quiere estrenar en enero. O escribinos «ANIO» por WhatsApp.",
+    "cierre": "Mandáselo a quien quiere estrenar en enero. O comentá «ANIO» y te mando la guía «Fin de año: patentar».",
     "palabra": "ANIO",
-    "copy": "Vos querés estrenarlo en Año Nuevo.\n\n✔ ¿Diciembre o enero?\n✔ ¿Qué año de modelo?\n✔ ¿Cambia el precio?\n\nMandáselo a quien quiere estrenar en enero. O escribinos «ANIO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "Vos querés estrenarlo en Año Nuevo.\n\n✔ ¿Diciembre o enero?\n✔ ¿Qué año de modelo?\n✔ ¿Cambia el precio?\n\nMandáselo a quien quiere estrenar en enero. O comentá «ANIO» y te mando la guía «Fin de año: patentar».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -922,6 +1126,12 @@
     "fecha": "2026-12-05",
     "hora": "17:10",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "pregunta con respuesta numérica",
     "tema": "híbrido: preguntas",
     "basado_en": "¿0 km híbrido? Qué preguntar antes",
@@ -934,14 +1144,14 @@
       "Dónde el service",
       "Cuánto en ciudad",
       "Guardalo para antes de elegir.",
-      "«BATERIA» por WhatsApp"
+      "Comentá «BATERIA»"
     ],
     "personaje": "Juli",
     "lugar_ba": "Estacionamiento con cargadores en Palermo",
     "escena_visual": "Tres rayos de batería se encienden uno por uno sobre el auto estacionado.",
-    "cierre": "Guardalo para antes de elegir. O escribinos «BATERIA» por WhatsApp.",
+    "cierre": "Guardalo para antes de elegir. O comentá «BATERIA» y te mando la guía «Híbrido: preguntas».",
     "palabra": "BATERIA",
-    "copy": "Híbrido: ¿cuántas preguntas antes? Tres.\n\n✔ Garantía de la batería\n✔ Dónde el service\n✔ Cuánto en ciudad\n\nGuardalo para antes de elegir. O escribinos «BATERIA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "Híbrido: ¿cuántas preguntas antes? Tres.\n\n✔ Garantía de la batería\n✔ Dónde el service\n✔ Cuánto en ciudad\n\nGuardalo para antes de elegir. O comentá «BATERIA» y te mando la guía «Híbrido: preguntas».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -949,6 +1159,12 @@
     "fecha": "2026-12-05",
     "hora": "21:30",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "¿cuál sos? (identidad)",
     "tema": "primer 0 km: cómo lo vivís",
     "basado_en": "Tu primer 0 km: 3 cosas antes de ir a la agencia",
@@ -961,14 +1177,14 @@
       "Por la cuota",
       "Con la cuenta completa",
       "Mandáselo a quien compra su primer auto.",
-      "«PRIMER» por WhatsApp"
+      "Comentá «PRIMER»"
     ],
     "personaje": "Tres siluetas (Juli es la tercera)",
     "lugar_ba": "Plaza Palermo Viejo, Villa Crespo",
     "escena_visual": "Tres autos en pantalla partida; los dos primeros se desinflan como globos y el tercero queda brillando.",
-    "cierre": "Mandáselo a quien compra su primer auto. O escribinos «PRIMER» por WhatsApp.",
+    "cierre": "Mandáselo a quien compra su primer auto. O comentá «PRIMER» y te mando la guía «Primer 0 km: cómo lo vivís».",
     "palabra": "PRIMER",
-    "copy": "Primer 0 km: ¿cuál de los tres sos?\n\n✔ Por el color\n✔ Por la cuota\n✔ Con la cuenta completa\n\nMandáselo a quien compra su primer auto. O escribinos «PRIMER» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "Primer 0 km: ¿cuál de los tres sos?\n\n✔ Por el color\n✔ Por la cuota\n✔ Con la cuenta completa\n\nMandáselo a quien compra su primer auto. O comentá «PRIMER» y te mando la guía «Primer 0 km: cómo lo vivís».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -976,6 +1192,12 @@
     "fecha": "2026-12-06",
     "hora": "09:10",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "contador que avanza",
     "tema": "checklist de ruta",
     "basado_en": "Primer viaje largo con tu 0 km: qué revisar antes de salir",
@@ -988,14 +1210,14 @@
       "3 Matafuego y balizas",
       "4 Papeles y seguro",
       "Guardalo para tu próximo viaje.",
-      "«RUTA» por WhatsApp"
+      "Comentá «CHEQUEO»"
     ],
     "personaje": "Mati",
     "lugar_ba": "Estación de servicio genérica en la Panamericana",
     "escena_visual": "Contador 1/4 a 4/4 arriba; la estación de servicio de noche con luces azules y cada chequeo en un cartel.",
-    "cierre": "Guardalo para tu próximo viaje. O escribinos «RUTA» por WhatsApp.",
-    "palabra": "RUTA",
-    "copy": "Antes de la ruta: cuatro chequeos.\n\n✔ 1 Neumáticos · 2 Luces\n✔ 3 Matafuego y balizas\n✔ 4 Papeles y seguro\n\nGuardalo para tu próximo viaje. O escribinos «RUTA» por WhatsApp.\n\nFuente: Ley 24.449, art. 40.\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "cierre": "Guardalo para tu próximo viaje. O comentá «CHEQUEO» y te mando la guía «Checklist de ruta».",
+    "palabra": "CHEQUEO",
+    "copy": "Antes de la ruta: cuatro chequeos.\n\n✔ 1 Neumáticos · 2 Luces\n✔ 3 Matafuego y balizas\n✔ 4 Papeles y seguro\n\nGuardalo para tu próximo viaje. O comentá «CHEQUEO» y te mando la guía «Checklist de ruta».\n\nFuente: Ley 24.449, art. 40.\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": "Ley 24.449, art. 40"
   },
   {
@@ -1003,6 +1225,12 @@
     "fecha": "2026-12-06",
     "hora": "13:10",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "mito roto",
     "tema": "primer service",
     "basado_en": "Primer service del 0 km: no lo saltees",
@@ -1015,14 +1243,14 @@
       "Ayuda a mantener la garantía",
       "Guardá el comprobante",
       "Mandáselo a quien estrenó auto.",
-      "«TALLER» por WhatsApp"
+      "Comentá «TALLER»"
     ],
     "personaje": "Leo",
     "lugar_ba": "Taller autorizado genérico en Villa Crespo",
     "escena_visual": "Un sello «NUEVO» se despega del auto y deja ver el calendario de services.",
-    "cierre": "Mandáselo a quien estrenó auto. O escribinos «TALLER» por WhatsApp.",
+    "cierre": "Mandáselo a quien estrenó auto. O comentá «TALLER» y te mando la guía «Primer service».",
     "palabra": "TALLER",
-    "copy": "«El 0 km no necesita service.» No.\n\n✔ Está en el manual\n✔ Ayuda a mantener la garantía\n✔ Guardá el comprobante\n\nMandáselo a quien estrenó auto. O escribinos «TALLER» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "«El 0 km no necesita service.» No.\n\n✔ Está en el manual\n✔ Ayuda a mantener la garantía\n✔ Guardá el comprobante\n\nMandáselo a quien estrenó auto. O comentá «TALLER» y te mando la guía «Primer service».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -1030,6 +1258,12 @@
     "fecha": "2026-12-06",
     "hora": "17:10",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "serie (parte 2)",
     "tema": "fecha de entrega",
     "basado_en": "nuevo",
@@ -1042,14 +1276,14 @@
       "¿Y si se atrasa?",
       "¿Quién te avisa?",
       "Mandáselo a quien espera su 0 km.",
-      "«ENTREGA» por WhatsApp"
+      "Comentá «ENTREGA»"
     ],
     "personaje": "Juli y Leo",
     "lugar_ba": "Escritorio de Leo en el showroom",
     "escena_visual": "El calendario del arbolito se congela en una fecha y queda impresa en un papel con sello azul.",
-    "cierre": "Mandáselo a quien espera su 0 km. O escribinos «ENTREGA» por WhatsApp.",
+    "cierre": "Mandáselo a quien espera su 0 km. O comentá «ENTREGA» y te mando la guía «Fecha de entrega».",
     "palabra": "ENTREGA",
-    "copy": "Parte 2: la fecha de entrega, por escrito.\n\n✔ Fecha estimada por escrito\n✔ ¿Y si se atrasa?\n✔ ¿Quién te avisa?\n\nMandáselo a quien espera su 0 km. O escribinos «ENTREGA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "Parte 2: la fecha de entrega, por escrito.\n\n✔ Fecha estimada por escrito\n✔ ¿Y si se atrasa?\n✔ ¿Quién te avisa?\n\nMandáselo a quien espera su 0 km. O comentá «ENTREGA» y te mando la guía «Fecha de entrega».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -1057,6 +1291,12 @@
     "fecha": "2026-12-06",
     "hora": "21:30",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "loop",
     "tema": "papeles del 0 km",
     "basado_en": "Los papeles que te llevás con el 0 km",
@@ -1069,14 +1309,14 @@
       "Título y cédula",
       "Garantía y póliza",
       "Guardalo en la guantera.",
-      "«CARPETA» por WhatsApp"
+      "Comentá «CARPETA»"
     ],
     "personaje": "Juli",
     "lugar_ba": "Guantera del auto, en la vereda de Villa Crespo",
     "escena_visual": "La guantera se abre y la carpeta azul flota; cada papel se ilumina y la guantera se cierra donde empezó.",
-    "cierre": "Guardalo en la guantera. O escribinos «CARPETA» por WhatsApp.",
+    "cierre": "Guardalo en la guantera. O comentá «CARPETA» y te mando la guía «Papeles del 0 km».",
     "palabra": "CARPETA",
-    "copy": "La carpeta del 0 km: ¿está completa?\n\n✔ Factura\n✔ Título y cédula\n✔ Garantía y póliza\n\nGuardalo en la guantera. O escribinos «CARPETA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "La carpeta del 0 km: ¿está completa?\n\n✔ Factura\n✔ Título y cédula\n✔ Garantía y póliza\n\nGuardalo en la guantera. O comentá «CARPETA» y te mando la guía «Papeles del 0 km».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -1084,6 +1324,12 @@
     "fecha": "reserva",
     "hora": "",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "segunda persona «vos»",
     "tema": "accesorios",
     "basado_en": "nuevo",
@@ -1096,14 +1342,14 @@
       "¿Afectan la garantía?",
       "¿Cuánto suman?",
       "Mandáselo a quien quiere personalizar el auto.",
-      "«ACCESORIOS» por WhatsApp"
+      "Comentá «ACCESORIOS»"
     ],
     "personaje": "Mati",
     "lugar_ba": "Taller de Mati en Villa Crespo",
     "escena_visual": "Accesorios que vuelan hacia el auto como imanes y frenan antes de tocarlo.",
-    "cierre": "Mandáselo a quien quiere personalizar el auto. O escribinos «ACCESORIOS» por WhatsApp.",
+    "cierre": "Mandáselo a quien quiere personalizar el auto. O comentá «ACCESORIOS» y te mando la guía «Accesorios».",
     "palabra": "ACCESORIOS",
-    "copy": "Querés sumarle accesorios. Antes, esto.\n\n✔ ¿Quién los instala?\n✔ ¿Afectan la garantía?\n✔ ¿Cuánto suman?\n\nMandáselo a quien quiere personalizar el auto. O escribinos «ACCESORIOS» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "Querés sumarle accesorios. Antes, esto.\n\n✔ ¿Quién los instala?\n✔ ¿Afectan la garantía?\n✔ ¿Cuánto suman?\n\nMandáselo a quien quiere personalizar el auto. O comentá «ACCESORIOS» y te mando la guía «Accesorios».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -1111,6 +1357,12 @@
     "fecha": "reserva",
     "hora": "",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "advertencia",
     "tema": "orden de compra",
     "basado_en": "nuevo",
@@ -1123,14 +1375,14 @@
       "Color",
       "Precio con gastos",
       "Guardalo para el día de la firma.",
-      "«ORDEN» por WhatsApp"
+      "Comentá «COMPRA»"
     ],
     "personaje": "Juli y Leo",
     "lugar_ba": "Escritorio de Leo en el showroom",
     "escena_visual": "Tres renglones de la orden se iluminan en azul mientras la lapicera espera suspendida.",
-    "cierre": "Guardalo para el día de la firma. O escribinos «ORDEN» por WhatsApp.",
-    "palabra": "ORDEN",
-    "copy": "No firmes la orden sin leer el modelo.\n\n✔ Modelo y versión\n✔ Color\n✔ Precio con gastos\n\nGuardalo para el día de la firma. O escribinos «ORDEN» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "cierre": "Guardalo para el día de la firma. O comentá «COMPRA» y te mando la guía «Orden de compra».",
+    "palabra": "COMPRA",
+    "copy": "No firmes la orden sin leer el modelo.\n\n✔ Modelo y versión\n✔ Color\n✔ Precio con gastos\n\nGuardalo para el día de la firma. O comentá «COMPRA» y te mando la guía «Orden de compra».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -1138,6 +1390,12 @@
     "fecha": "reserva",
     "hora": "",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "escena con hora o número",
     "tema": "seña: el día después",
     "basado_en": "nuevo",
@@ -1150,14 +1408,14 @@
       "Monto y fecha",
       "¿Y si no sigue?",
       "Mandáselo a quien señó.",
-      "«SENA» por WhatsApp"
+      "Comentá «SENA»"
     ],
     "personaje": "Mati",
     "lugar_ba": "Cocina del departamento de Villa Crespo, lunes 9:10",
     "escena_visual": "Mati da vuelta la billetera y caen tickets que no son; aparece el recibo correcto con un brillo azul.",
-    "cierre": "Mandáselo a quien señó. O escribinos «SENA» por WhatsApp.",
+    "cierre": "Mandáselo a quien señó. O comentá «SENA» y te mando la guía «Seña: el día después».",
     "palabra": "SENA",
-    "copy": "Lunes 9:10: señaste el sábado. ¿Tenés recibo?\n\n✔ Modelo y color\n✔ Monto y fecha\n✔ ¿Y si no sigue?\n\nMandáselo a quien señó. O escribinos «SENA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "Lunes 9:10: señaste el sábado. ¿Tenés recibo?\n\n✔ Modelo y color\n✔ Monto y fecha\n✔ ¿Y si no sigue?\n\nMandáselo a quien señó. O comentá «SENA» y te mando la guía «Seña: el día después».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -1165,6 +1423,12 @@
     "fecha": "reserva",
     "hora": "",
     "marca": "Automotores Kocos",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "tres cartas cerradas",
     "tema": "licitar en el plan",
     "basado_en": "Cómo se adjudica un plan: sorteo y licitación, sin vueltas",
@@ -1177,14 +1441,14 @@
       "¿Tenés la plata ese mes?",
       "¿Y si no ganás?",
       "Guardalo antes de licitar.",
-      "«LICITAR» por WhatsApp"
+      "Comentá «LICITAR»"
     ],
     "personaje": "Juli",
     "lugar_ba": "Living del departamento de Villa Crespo",
     "escena_visual": "Tres cartas sobre el sillón; un bolillero gira de fondo.",
-    "cierre": "Guardalo antes de licitar. O escribinos «LICITAR» por WhatsApp.",
+    "cierre": "Guardalo antes de licitar. O comentá «LICITAR» y te mando la guía «Licitar en el plan».",
     "palabra": "LICITAR",
-    "copy": "Licitar en un plan: tres cartas.\n\n✔ ¿Cuántas cuotas adelantás?\n✔ ¿Tenés la plata ese mes?\n✔ ¿Y si no ganás?\n\nGuardalo antes de licitar. O escribinos «LICITAR» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "Licitar en un plan: tres cartas.\n\n✔ ¿Cuántas cuotas adelantás?\n✔ ¿Tenés la plata ese mes?\n✔ ¿Y si no ganás?\n\nGuardalo antes de licitar. O comentá «LICITAR» y te mando la guía «Licitar en el plan».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   }
 ]

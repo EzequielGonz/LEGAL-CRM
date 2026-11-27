@@ -4,6 +4,12 @@
     "fecha": "2026-11-27",
     "hora": "12:40",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "mito roto",
     "tema": "preexistencia",
     "basado_en": "Mito: «tengo una enfermedad previa, no me van a aceptar»",
@@ -16,14 +22,14 @@
       "Puede cambiar el valor de la cuota",
       "Preguntá antes de firmar",
       "Mandáselo a quien crea que no lo aceptan.",
-      "«PLAN» por WhatsApp"
+      "Comentá «PLAN»"
     ],
     "personaje": "Lucía",
     "lugar_ba": "Departamento de Lucía en Caballito, frente a Parque Rivadavia",
     "escena_visual": "La palabra «RECHAZADA» cae como un sello gigante sobre la solicitud de Lucía y rebota sin marcarla; la lupa menta muestra la letra chica.",
-    "cierre": "Mandáselo a quien crea que no lo aceptan. O escribinos «PLAN» por WhatsApp.",
+    "cierre": "Mandáselo a quien crea que no lo aceptan. O comentá «PLAN» y te mando la guía «Preexistencia».",
     "palabra": "PLAN",
-    "copy": "«Con una enfermedad previa no me aceptan.»\n\n✔ No pueden rechazarte por eso\n✔ Puede cambiar el valor de la cuota\n✔ Preguntá antes de firmar\n\nMandáselo a quien crea que no lo aceptan. O escribinos «PLAN» por WhatsApp.\n\nFuente: Ley 26.682, art. 10.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "«Con una enfermedad previa no me aceptan.»\n\n✔ No pueden rechazarte por eso\n✔ Puede cambiar el valor de la cuota\n✔ Preguntá antes de firmar\n\nMandáselo a quien crea que no lo aceptan. O comentá «PLAN» y te mando la guía «Preexistencia».\n\nFuente: Ley 26.682, art. 10.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": "Ley 26.682, art. 10"
   },
   {
@@ -31,6 +37,12 @@
     "fecha": "2026-11-27",
     "hora": "18:10",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "segunda persona «vos»",
     "tema": "aporte del 3 %",
     "basado_en": "Este 3 % sale de tu sueldo todos los meses",
@@ -43,14 +55,14 @@
       "¿A qué obra social va?",
       "¿Qué cartilla tenés cerca?",
       "Guardalo para tu próximo recibo.",
-      "«APORTES» por WhatsApp"
+      "Comentá «APORTES»"
     ],
     "personaje": "Gabriel",
     "lugar_ba": "Cocina de los Ferreyra en Villa Urquiza, fin de mes",
     "escena_visual": "El recibo de Gabriel se agranda hasta ocupar la cocina; la línea del 3 % se ilumina en verde y la lupa menta la sigue como un tren.",
-    "cierre": "Guardalo para tu próximo recibo. O escribinos «APORTES» por WhatsApp.",
+    "cierre": "Guardalo para tu próximo recibo. O comentá «APORTES» y te mando «Cómo leer tu recibo».",
     "palabra": "APORTES",
-    "copy": "Mirá tu recibo: hay un 3 % que es tuyo.\n\n✔ 3 % de tu sueldo, todos los meses\n✔ ¿A qué obra social va?\n✔ ¿Qué cartilla tenés cerca?\n\nGuardalo para tu próximo recibo. O escribinos «APORTES» por WhatsApp.\n\nFuente: Ley 23.660, art. 16, inc. b.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "Mirá tu recibo: hay un 3 % que es tuyo.\n\n✔ 3 % de tu sueldo, todos los meses\n✔ ¿A qué obra social va?\n✔ ¿Qué cartilla tenés cerca?\n\nGuardalo para tu próximo recibo. O comentá «APORTES» y te mando «Cómo leer tu recibo».\n\nFuente: Ley 23.660, art. 16, inc. b.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": "Ley 23.660, art. 16, inc. b"
   },
   {
@@ -58,6 +70,12 @@
     "fecha": "2026-11-27",
     "hora": "21:40",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "pregunta con respuesta numérica",
     "tema": "sumar a un familiar a cargo",
     "basado_en": "nuevo",
@@ -70,14 +88,14 @@
       "1,5 % por persona a cargo",
       "Con autorización: preguntá requisitos",
       "Mandáselo a quien cuida a sus padres.",
-      "«FAMILIA» por WhatsApp"
+      "Comentá «FAMILIA»"
     ],
     "personaje": "Gabriel y Elsa",
     "lugar_ba": "Living de Elsa en Villa Urquiza",
     "escena_visual": "Tres fichas con «5 %», «10 %» y «1,5 %» giran en el aire; cae la de 1,5 % sobre la mesa de Elsa con un golpe suave.",
-    "cierre": "Mandáselo a quien cuida a sus padres. O escribinos «FAMILIA» por WhatsApp.",
+    "cierre": "Mandáselo a quien cuida a sus padres. O comentá «FAMILIA» y te mando la guía «Sumar a un familiar a cargo».",
     "palabra": "FAMILIA",
-    "copy": "Sumás a tu mamá: ¿cuánto más aportás?\n\n✔ ¿5 %? ¿10 %?\n✔ 1,5 % por persona a cargo\n✔ Con autorización: preguntá requisitos\n\nMandáselo a quien cuida a sus padres. O escribinos «FAMILIA» por WhatsApp.\n\nFuente: Ley 23.660, arts. 9 y 16.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "Sumás a tu mamá: ¿cuánto más aportás?\n\n✔ ¿5 %? ¿10 %?\n✔ 1,5 % por persona a cargo\n✔ Con autorización: preguntá requisitos\n\nMandáselo a quien cuida a sus padres. O comentá «FAMILIA» y te mando la guía «Sumar a un familiar a cargo».\n\nFuente: Ley 23.660, arts. 9 y 16.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": "Ley 23.660, arts. 9 y 16"
   },
   {
@@ -85,6 +103,12 @@
     "fecha": "2026-11-27",
     "hora": "22:40",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "tres cartas cerradas",
     "tema": "carencias al cambiarte",
     "basado_en": "Carencias: la pregunta que nadie hace antes de cambiarse",
@@ -97,14 +121,14 @@
       "Carta 2: el PMO no tiene carencias",
       "Carta 3: todo por escrito",
       "Guardalo para cuando te cambies.",
-      "«CAMBIO» por WhatsApp"
+      "Comentá «CAMBIO»"
     ],
     "personaje": "Lucía",
     "lugar_ba": "Café frente a Parque Rivadavia, Caballito",
     "escena_visual": "Tres cartas verdes boca abajo sobre la mesa del café; Lucía las da vuelta con la lupa. La segunda brilla con «PMO».",
-    "cierre": "Guardalo para cuando te cambies. O escribinos «CAMBIO» por WhatsApp.",
+    "cierre": "Guardalo para cuando te cambies. O comentá «CAMBIO» y te mando la guía «Carencias al cambiarte».",
     "palabra": "CAMBIO",
-    "copy": "Antes de cambiarte de prepaga: tres cartas.\n\n✔ Carta 1: ¿qué carencias tiene?\n✔ Carta 2: el PMO no tiene carencias\n✔ Carta 3: todo por escrito\n\nGuardalo para cuando te cambies. O escribinos «CAMBIO» por WhatsApp.\n\nFuente: Ley 26.682, art. 10.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "Antes de cambiarte de prepaga: tres cartas.\n\n✔ Carta 1: ¿qué carencias tiene?\n✔ Carta 2: el PMO no tiene carencias\n✔ Carta 3: todo por escrito\n\nGuardalo para cuando te cambies. O comentá «CAMBIO» y te mando la guía «Carencias al cambiarte».\n\nFuente: Ley 26.682, art. 10.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": "Ley 26.682, art. 10"
   },
   {
@@ -112,6 +136,12 @@
     "fecha": "2026-11-28",
     "hora": "12:40",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "escena con hora o número",
     "tema": "te quedás sin trabajo: cobertura",
     "basado_en": "nuevo",
@@ -124,14 +154,14 @@
       "No: 3 meses más, sin aportar",
       "Usá ese tiempo para elegir",
       "Mandáselo a quien se quedó sin trabajo.",
-      "«TRABAJO» por WhatsApp"
+      "Comentá «TRABAJO»"
     ],
     "personaje": "Gabriel",
     "lugar_ba": "Vereda de Av. Triunvirato, Villa Urquiza, lunes 9:00",
     "escena_visual": "Gabriel sale con una caja; su credencial se apaga y enseguida se vuelve a encender con un contador «3 meses».",
-    "cierre": "Mandáselo a quien se quedó sin trabajo. O escribinos «TRABAJO» por WhatsApp.",
+    "cierre": "Mandáselo a quien se quedó sin trabajo. O comentá «TRABAJO» y te mando la guía «Te quedás sin trabajo: cobertura».",
     "palabra": "TRABAJO",
-    "copy": "Lunes 9:00: te despiden. ¿Y la obra social?\n\n✔ ¿Me quedo sin cobertura hoy?\n✔ No: 3 meses más, sin aportar\n✔ Usá ese tiempo para elegir\n\nMandáselo a quien se quedó sin trabajo. O escribinos «TRABAJO» por WhatsApp.\n\nFuente: Ley 23.660, art. 10, inc. a.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "Lunes 9:00: te despiden. ¿Y la obra social?\n\n✔ ¿Me quedo sin cobertura hoy?\n✔ No: 3 meses más, sin aportar\n✔ Usá ese tiempo para elegir\n\nMandáselo a quien se quedó sin trabajo. O comentá «TRABAJO» y te mando la guía «Te quedás sin trabajo: cobertura».\n\nFuente: Ley 23.660, art. 10, inc. a.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": "Ley 23.660, art. 10, inc. a"
   },
   {
@@ -139,6 +169,12 @@
     "fecha": "2026-11-28",
     "hora": "18:10",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "¿cuál sos? (identidad)",
     "tema": "llega el aumento: cómo reaccionás",
     "basado_en": "Te llegó el aviso de aumento: antes de pagar, compará",
@@ -151,14 +187,14 @@
       "El que se da de baja sin plan",
       "El que compara",
       "Mandáselo a quien siempre paga sin mirar.",
-      "«COMPARAR» por WhatsApp"
+      "Comentá «COMPARAR»"
     ],
     "personaje": "Tres siluetas (Vero es la tercera)",
     "lugar_ba": "Mesa de los Ferreyra en Villa Urquiza",
     "escena_visual": "Tres sobres llegan a la vez a tres casas en pantalla partida; en la tercera, Vero abre una planilla y las otras dos se apagan.",
-    "cierre": "Mandáselo a quien siempre paga sin mirar. O escribinos «COMPARAR» por WhatsApp.",
+    "cierre": "Mandáselo a quien siempre paga sin mirar. O comentá «COMPARAR» y te mando «Lista para antes de cambiarte».",
     "palabra": "COMPARAR",
-    "copy": "Te llega el aumento de la prepaga. ¿Cuál sos?\n\n✔ El que paga sin mirar\n✔ El que se da de baja sin plan\n✔ El que compara\n\nMandáselo a quien siempre paga sin mirar. O escribinos «COMPARAR» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "Te llega el aumento de la prepaga. ¿Cuál sos?\n\n✔ El que paga sin mirar\n✔ El que se da de baja sin plan\n✔ El que compara\n\nMandáselo a quien siempre paga sin mirar. O comentá «COMPARAR» y te mando «Lista para antes de cambiarte».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": ""
   },
   {
@@ -166,6 +202,12 @@
     "fecha": "2026-11-28",
     "hora": "21:40",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "advertencia",
     "tema": "declaración jurada de salud",
     "basado_en": "nuevo",
@@ -178,14 +220,14 @@
       "Contestá todo con la verdad",
       "Guardate una copia firmada",
       "Guardalo para cuando te afilies.",
-      "«DECLARACION» por WhatsApp"
+      "Comentá «DECLARACION»"
     ],
     "personaje": "Elsa",
     "lugar_ba": "Mesa del living de Elsa en Villa Urquiza",
     "escena_visual": "El formulario se despliega como un acordeón infinito; Elsa frena el papel con la lupa y aparecen tres tildes verdes.",
-    "cierre": "Guardalo para cuando te afilies. O escribinos «DECLARACION» por WhatsApp.",
+    "cierre": "Guardalo para cuando te afilies. O comentá «DECLARACION» y te mando la guía «Declaración jurada de salud».",
     "palabra": "DECLARACION",
-    "copy": "Declaración jurada: no la llenes apurado.\n\n✔ Las preexistencias salen de ahí\n✔ Contestá todo con la verdad\n✔ Guardate una copia firmada\n\nGuardalo para cuando te afilies. O escribinos «DECLARACION» por WhatsApp.\n\nFuente: Ley 26.682, art. 10.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "Declaración jurada: no la llenes apurado.\n\n✔ Las preexistencias salen de ahí\n✔ Contestá todo con la verdad\n✔ Guardate una copia firmada\n\nGuardalo para cuando te afilies. O comentá «DECLARACION» y te mando la guía «Declaración jurada de salud».\n\nFuente: Ley 26.682, art. 10.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": "Ley 26.682, art. 10"
   },
   {
@@ -193,6 +235,12 @@
     "fecha": "2026-11-28",
     "hora": "22:40",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "contador que avanza",
     "tema": "65 años y antigüedad",
     "basado_en": "¿Cumplís 65? Mirá tu antigüedad",
@@ -205,14 +253,14 @@
       "65 + 10 años: sin aumento por edad",
       "Buscá cuándo entraste",
       "Mandáselo a quien esté por cumplir 65.",
-      "«65» por WhatsApp"
+      "Comentá «65»"
     ],
     "personaje": "Elsa",
     "lugar_ba": "Plaza de Villa Urquiza, cumpleaños de Elsa",
     "escena_visual": "Velitas de una torta que se van encendiendo como contador de años; al llegar a 10 se ilumina el carnet de Elsa.",
-    "cierre": "Mandáselo a quien esté por cumplir 65. O escribinos «65» por WhatsApp.",
+    "cierre": "Mandáselo a quien esté por cumplir 65. O comentá «65» y te mando la guía «65 años y antigüedad».",
     "palabra": "65",
-    "copy": "Diez años en la misma prepaga: contá conmigo.\n\n✔ Año 1 · año 5 · año 10\n✔ 65 + 10 años: sin aumento por edad\n✔ Buscá cuándo entraste\n\nMandáselo a quien esté por cumplir 65. O escribinos «65» por WhatsApp.\n\nFuente: Ley 26.682, art. 12.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "Diez años en la misma prepaga: contá conmigo.\n\n✔ Año 1 · año 5 · año 10\n✔ 65 + 10 años: sin aumento por edad\n✔ Buscá cuándo entraste\n\nMandáselo a quien esté por cumplir 65. O comentá «65» y te mando la guía «65 años y antigüedad».\n\nFuente: Ley 26.682, art. 12.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": "Ley 26.682, art. 12"
   },
   {
@@ -220,6 +268,12 @@
     "fecha": "2026-11-29",
     "hora": "12:40",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "serie (parte 1)",
     "tema": "monotributo y obra social",
     "basado_en": "Monotributo: una parte de tu cuota ya es obra social",
@@ -232,14 +286,14 @@
       "Y además una prepaga",
       "¿Qué es esa línea?",
       "Guardalo para ver la parte 2.",
-      "«MONO» por WhatsApp"
+      "Comentá «MONO»"
     ],
     "personaje": "Lucía",
     "lugar_ba": "Departamento de Lucía en Caballito, frente a Parque Rivadavia",
     "escena_visual": "La factura del monotributo se agranda como un mapa y la lupa menta frena sobre una línea que parpadea. Cierra con «Parte 2».",
-    "cierre": "Guardalo para ver la parte 2. O escribinos «MONO» por WhatsApp.",
+    "cierre": "Guardalo para ver la parte 2. O comentá «MONO» y te mando la guía «Monotributo y obra social».",
     "palabra": "MONO",
-    "copy": "Parte 1: Lucía paga y no sabe qué.\n\n✔ Monotributo todos los meses\n✔ Y además una prepaga\n✔ ¿Qué es esa línea?\n\nGuardalo para ver la parte 2. O escribinos «MONO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "Parte 1: Lucía paga y no sabe qué.\n\n✔ Monotributo todos los meses\n✔ Y además una prepaga\n✔ ¿Qué es esa línea?\n\nGuardalo para ver la parte 2. O comentá «MONO» y te mando la guía «Monotributo y obra social».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": ""
   },
   {
@@ -247,6 +301,12 @@
     "fecha": "2026-11-29",
     "hora": "18:10",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "loop",
     "tema": "cartilla y guardia",
     "basado_en": "Lo descubriste en la guardia: mirá la cartilla antes",
@@ -259,14 +319,14 @@
       "Pediatra",
       "Farmacia de turno",
       "Mandáselo a quien tenga hijos chicos.",
-      "«CARTILLA» por WhatsApp"
+      "Comentá «CARTILLA»"
     ],
     "personaje": "Vero",
     "lugar_ba": "Cocina de los Ferreyra en Villa Urquiza, 2:00",
     "escena_visual": "Reloj del microondas en 2:00 y la luz de la heladera; el celular con la cartilla se abre como un plano de barrio. El final empalma con el reloj.",
-    "cierre": "Mandáselo a quien tenga hijos chicos. O escribinos «CARTILLA» por WhatsApp.",
+    "cierre": "Mandáselo a quien tenga hijos chicos. O comentá «CARTILLA» y te mando la guía «Cartilla y guardia».",
     "palabra": "CARTILLA",
-    "copy": "2 de la mañana: ¿tu guardia te atiende?\n\n✔ Guardia más cercana\n✔ Pediatra\n✔ Farmacia de turno\n\nMandáselo a quien tenga hijos chicos. O escribinos «CARTILLA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "2 de la mañana: ¿tu guardia te atiende?\n\n✔ Guardia más cercana\n✔ Pediatra\n✔ Farmacia de turno\n\nMandáselo a quien tenga hijos chicos. O comentá «CARTILLA» y te mando la guía «Cartilla y guardia».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": ""
   },
   {
@@ -274,6 +334,12 @@
     "fecha": "2026-11-29",
     "hora": "21:40",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "mito roto",
     "tema": "carencias del PMO",
     "basado_en": "Carencias: la pregunta que nadie hace antes de cambiarse",
@@ -286,14 +352,14 @@
       "Lo demás, escrito en el contrato",
       "Leelo antes de firmar",
       "Mandáselo a quien se quiera cambiar.",
-      "«CARENCIAS» por WhatsApp"
+      "Comentá «CARENCIAS»"
     ],
     "personaje": "Gabriel",
     "lugar_ba": "Sala de espera de una clínica genérica de Villa Urquiza",
     "escena_visual": "Un reloj de arena de un año cae sobre la mesa y se rompe; la arena dibuja la sigla PMO.",
-    "cierre": "Mandáselo a quien se quiera cambiar. O escribinos «CARENCIAS» por WhatsApp.",
+    "cierre": "Mandáselo a quien se quiera cambiar. O comentá «CARENCIAS» y te mando la guía «Carencias del PMO».",
     "palabra": "CARENCIAS",
-    "copy": "«Si me cambio, espero un año para todo.»\n\n✔ El PMO no tiene carencias\n✔ Lo demás, escrito en el contrato\n✔ Leelo antes de firmar\n\nMandáselo a quien se quiera cambiar. O escribinos «CARENCIAS» por WhatsApp.\n\nFuente: Ley 26.682, art. 10.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "«Si me cambio, espero un año para todo.»\n\n✔ El PMO no tiene carencias\n✔ Lo demás, escrito en el contrato\n✔ Leelo antes de firmar\n\nMandáselo a quien se quiera cambiar. O comentá «CARENCIAS» y te mando la guía «Carencias del PMO».\n\nFuente: Ley 26.682, art. 10.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": "Ley 26.682, art. 10"
   },
   {
@@ -301,6 +367,12 @@
     "fecha": "2026-11-29",
     "hora": "22:40",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "segunda persona «vos»",
     "tema": "vacaciones y cobertura",
     "basado_en": "Te vas de vacaciones: qué preguntarle a tu cobertura antes",
@@ -313,14 +385,14 @@
       "¿Cómo pedís una urgencia?",
       "¿Hay reintegros?",
       "Mandáselo a quien sale de vacaciones.",
-      "«VIAJE» por WhatsApp"
+      "Comentá «VIAJE»"
     ],
     "personaje": "Lucía",
     "lugar_ba": "Terminal de Retiro, andén de micros",
     "escena_visual": "La valija de Lucía tiene una credencial pegada que se ilumina al cruzar el mapa de la costa.",
-    "cierre": "Mandáselo a quien sale de vacaciones. O escribinos «VIAJE» por WhatsApp.",
+    "cierre": "Mandáselo a quien sale de vacaciones. O comentá «VIAJE» y te mando la guía «Vacaciones y cobertura».",
     "palabra": "VIAJE",
-    "copy": "Te vas a la costa. ¿Tu cobertura también?\n\n✔ ¿Qué guardias hay allá?\n✔ ¿Cómo pedís una urgencia?\n✔ ¿Hay reintegros?\n\nMandáselo a quien sale de vacaciones. O escribinos «VIAJE» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "Te vas a la costa. ¿Tu cobertura también?\n\n✔ ¿Qué guardias hay allá?\n✔ ¿Cómo pedís una urgencia?\n✔ ¿Hay reintegros?\n\nMandáselo a quien sale de vacaciones. O comentá «VIAJE» y te mando la guía «Vacaciones y cobertura».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": ""
   },
   {
@@ -328,6 +400,12 @@
     "fecha": "2026-11-30",
     "hora": "12:40",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "pregunta con respuesta numérica",
     "tema": "aporte del 3 %",
     "basado_en": "Este 3 % sale de tu sueldo todos los meses",
@@ -340,14 +418,14 @@
       "3 %, todos los meses",
       "Mirá a cuál va",
       "Guardalo para tu próximo recibo.",
-      "«TRES» por WhatsApp"
+      "Comentá «TRES»"
     ],
     "personaje": "Gabriel",
     "lugar_ba": "Oficina de Gabriel en el microcentro",
     "escena_visual": "Una torta de sueldo en 3D se corta en porciones; una porción verde chica con «3 %» sale flotando hacia una credencial.",
-    "cierre": "Guardalo para tu próximo recibo. O escribinos «TRES» por WhatsApp.",
+    "cierre": "Guardalo para tu próximo recibo. O comentá «TRES» y te mando la guía «Aporte del 3 %».",
     "palabra": "TRES",
-    "copy": "¿Qué parte del sueldo va a tu obra social?\n\n✔ ¿1 %? ¿10 %?\n✔ 3 %, todos los meses\n✔ Mirá a cuál va\n\nGuardalo para tu próximo recibo. O escribinos «TRES» por WhatsApp.\n\nFuente: Ley 23.660, art. 16, inc. b.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "¿Qué parte del sueldo va a tu obra social?\n\n✔ ¿1 %? ¿10 %?\n✔ 3 %, todos los meses\n✔ Mirá a cuál va\n\nGuardalo para tu próximo recibo. O comentá «TRES» y te mando la guía «Aporte del 3 %».\n\nFuente: Ley 23.660, art. 16, inc. b.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": "Ley 23.660, art. 16, inc. b"
   },
   {
@@ -355,6 +433,12 @@
     "fecha": "2026-11-30",
     "hora": "18:10",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "tres cartas cerradas",
     "tema": "mudanza y cartilla",
     "basado_en": "Vacaciones o mudanza: tu cartilla en otra zona",
@@ -367,14 +451,14 @@
       "Carta 2: ¿tus médicos?",
       "Carta 3: ¿plan con tu zona?",
       "Mandáselo a quien se esté mudando.",
-      "«MUDANZA» por WhatsApp"
+      "Comentá «MUDANZA»"
     ],
     "personaje": "Los Ferreyra",
     "lugar_ba": "Vereda de Villa Urquiza, cerca de Av. Triunvirato, con cajas de mudanza",
     "escena_visual": "Tres cartas verdes salen de una caja de mudanza; cada una se da vuelta con un mapa del barrio nuevo.",
-    "cierre": "Mandáselo a quien se esté mudando. O escribinos «MUDANZA» por WhatsApp.",
+    "cierre": "Mandáselo a quien se esté mudando. O comentá «MUDANZA» y te mando la guía «Mudanza y cartilla».",
     "palabra": "MUDANZA",
-    "copy": "Te mudás de barrio: tres cartas.\n\n✔ Carta 1: ¿guardia cerca?\n✔ Carta 2: ¿tus médicos?\n✔ Carta 3: ¿plan con tu zona?\n\nMandáselo a quien se esté mudando. O escribinos «MUDANZA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "Te mudás de barrio: tres cartas.\n\n✔ Carta 1: ¿guardia cerca?\n✔ Carta 2: ¿tus médicos?\n✔ Carta 3: ¿plan con tu zona?\n\nMandáselo a quien se esté mudando. O comentá «MUDANZA» y te mando la guía «Mudanza y cartilla».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": ""
   },
   {
@@ -382,6 +466,12 @@
     "fecha": "2026-11-30",
     "hora": "21:40",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "escena con hora o número",
     "tema": "reintegros",
     "basado_en": "Pagaste una consulta: preguntá por el reintegro",
@@ -394,14 +484,14 @@
       "Factura a tu nombre",
       "Plazo para presentarla",
       "Guardalo para tu próxima consulta.",
-      "«REINTEGRO» por WhatsApp"
+      "Comentá «REINTEGRO»"
     ],
     "personaje": "Vero",
     "lugar_ba": "Consultorio genérico de Villa Urquiza, 11:20",
     "escena_visual": "El billete sale de la billetera de Vero, da una vuelta en el aire y vuelve convertido en factura.",
-    "cierre": "Guardalo para tu próxima consulta. O escribinos «REINTEGRO» por WhatsApp.",
+    "cierre": "Guardalo para tu próxima consulta. O comentá «REINTEGRO» y te mando la guía «Reintegros».",
     "palabra": "REINTEGRO",
-    "copy": "Martes 11:20: pagaste la consulta vos.\n\n✔ ¿Tu plan tiene reintegro?\n✔ Factura a tu nombre\n✔ Plazo para presentarla\n\nGuardalo para tu próxima consulta. O escribinos «REINTEGRO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "Martes 11:20: pagaste la consulta vos.\n\n✔ ¿Tu plan tiene reintegro?\n✔ Factura a tu nombre\n✔ Plazo para presentarla\n\nGuardalo para tu próxima consulta. O comentá «REINTEGRO» y te mando la guía «Reintegros».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": ""
   },
   {
@@ -409,6 +499,12 @@
     "fecha": "2026-11-30",
     "hora": "22:40",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "¿cuál sos? (identidad)",
     "tema": "elegir plan por cartilla",
     "basado_en": "nuevo",
@@ -421,14 +517,14 @@
       "Por el nombre",
       "Por tu cartilla y tu uso",
       "Mandáselo a quien esté eligiendo.",
-      "«ELEGIR» por WhatsApp"
+      "Comentá «ELEGIR»"
     ],
     "personaje": "Tres siluetas (Lucía es la tercera)",
     "lugar_ba": "Parque Rivadavia, Caballito",
     "escena_visual": "Pantalla partida en tres caminos del parque; los dos primeros terminan en una pared. El tercero llega a una guardia iluminada.",
-    "cierre": "Mandáselo a quien esté eligiendo. O escribinos «ELEGIR» por WhatsApp.",
+    "cierre": "Mandáselo a quien esté eligiendo. O comentá «ELEGIR» y te mando la guía «Elegir plan por cartilla».",
     "palabra": "ELEGIR",
-    "copy": "Elegís prepaga: ¿cuál de los tres sos?\n\n✔ Por el precio\n✔ Por el nombre\n✔ Por tu cartilla y tu uso\n\nMandáselo a quien esté eligiendo. O escribinos «ELEGIR» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "Elegís prepaga: ¿cuál de los tres sos?\n\n✔ Por el precio\n✔ Por el nombre\n✔ Por tu cartilla y tu uso\n\nMandáselo a quien esté eligiendo. O comentá «ELEGIR» y te mando la guía «Elegir plan por cartilla».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": ""
   },
   {
@@ -436,6 +532,12 @@
     "fecha": "2026-12-01",
     "hora": "12:40",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "advertencia",
     "tema": "tu prepaga se da de baja",
     "basado_en": "Tu prepaga se dio de baja: qué hacer para no quedarte sin cobertura",
@@ -448,14 +550,14 @@
       "¿A qué plan te pasan?",
       "Compará antes de aceptar",
       "Mandáselo a quien le llegó ese aviso.",
-      "«BAJA» por WhatsApp"
+      "Comentá «BAJA»"
     ],
     "personaje": "Gabriel",
     "lugar_ba": "Cocina de los Ferreyra en Villa Urquiza",
     "escena_visual": "La credencial de Gabriel se empieza a borrar desde un borde como arena; él la sostiene con la lupa.",
-    "cierre": "Mandáselo a quien le llegó ese aviso. O escribinos «BAJA» por WhatsApp.",
+    "cierre": "Mandáselo a quien le llegó ese aviso. O comentá «BAJA» y te mando la guía «Tu prepaga se da de baja».",
     "palabra": "BAJA",
-    "copy": "Tu plan se da de baja: no esperes.\n\n✔ Aviso por escrito con fecha\n✔ ¿A qué plan te pasan?\n✔ Compará antes de aceptar\n\nMandáselo a quien le llegó ese aviso. O escribinos «BAJA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "Tu plan se da de baja: no esperes.\n\n✔ Aviso por escrito con fecha\n✔ ¿A qué plan te pasan?\n✔ Compará antes de aceptar\n\nMandáselo a quien le llegó ese aviso. O comentá «BAJA» y te mando la guía «Tu prepaga se da de baja».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": ""
   },
   {
@@ -463,6 +565,12 @@
     "fecha": "2026-12-01",
     "hora": "18:10",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "contador que avanza",
     "tema": "elegir obra social en un trabajo nuevo",
     "basado_en": "Tu obra social la podés elegir: qué mirar antes",
@@ -475,14 +583,14 @@
       "Día 2: mirá la cartilla",
       "Día 3: compará",
       "Mandáselo a quien empieza a trabajar.",
-      "«NUEVO» por WhatsApp"
+      "Comentá «NUEVO»"
     ],
     "personaje": "Martina, la sobrina de Gabriel (adulta, primer empleo)",
     "lugar_ba": "Recepción de una oficina genérica en Belgrano",
     "escena_visual": "Un contador de días en el calendario de escritorio; cada día abre una ventana con una cartilla distinta.",
-    "cierre": "Mandáselo a quien empieza a trabajar. O escribinos «NUEVO» por WhatsApp.",
+    "cierre": "Mandáselo a quien empieza a trabajar. O comentá «NUEVO» y te mando la guía «Elegir obra social en un trabajo nuevo».",
     "palabra": "NUEVO",
-    "copy": "Primer día de trabajo: ¿qué obra social?\n\n✔ Día 1: te asignan una\n✔ Día 2: mirá la cartilla\n✔ Día 3: compará\n\nMandáselo a quien empieza a trabajar. O escribinos «NUEVO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "Primer día de trabajo: ¿qué obra social?\n\n✔ Día 1: te asignan una\n✔ Día 2: mirá la cartilla\n✔ Día 3: compará\n\nMandáselo a quien empieza a trabajar. O comentá «NUEVO» y te mando la guía «Elegir obra social en un trabajo nuevo».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": ""
   },
   {
@@ -490,6 +598,12 @@
     "fecha": "2026-12-01",
     "hora": "21:40",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "serie (parte 2)",
     "tema": "monotributo y obra social",
     "basado_en": "Monotributo: 3 cosas para revisar hoy",
@@ -502,14 +616,14 @@
       "¿Sumaste a tu familia?",
       "¿Pagás dos veces?",
       "Mandáselo a quien sea monotributista.",
-      "«MONO» por WhatsApp"
+      "Comentá «MONO»"
     ],
     "personaje": "Lucía",
     "lugar_ba": "Bar de Caballito frente a Parque Rivadavia",
     "escena_visual": "La línea de la factura se despega y se convierte en una credencial verde que flota junto a la de la prepaga.",
-    "cierre": "Mandáselo a quien sea monotributista. O escribinos «MONO» por WhatsApp.",
+    "cierre": "Mandáselo a quien sea monotributista. O comentá «MONO» y te mando la guía «Monotributo y obra social».",
     "palabra": "MONO",
-    "copy": "Parte 2: esa línea es tu obra social.\n\n✔ Una parte va a una obra social\n✔ ¿Sumaste a tu familia?\n✔ ¿Pagás dos veces?\n\nMandáselo a quien sea monotributista. O escribinos «MONO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "Parte 2: esa línea es tu obra social.\n\n✔ Una parte va a una obra social\n✔ ¿Sumaste a tu familia?\n✔ ¿Pagás dos veces?\n\nMandáselo a quien sea monotributista. O comentá «MONO» y te mando la guía «Monotributo y obra social».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": ""
   },
   {
@@ -517,6 +631,12 @@
     "fecha": "2026-12-01",
     "hora": "22:40",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "loop",
     "tema": "tratamiento en curso",
     "basado_en": "Si te cambiás, ¿qué pasa con tus tratamientos?",
@@ -529,14 +649,14 @@
       "¿Tus médicos están?",
       "¿Desde cuándo?",
       "Guardalo antes de cambiarte.",
-      "«TRATAMIENTO» por WhatsApp"
+      "Comentá «TRATAMIENTO»"
     ],
     "personaje": "Lucía",
     "lugar_ba": "Pasillo de un sanatorio genérico de Caballito",
     "escena_visual": "Una línea verde del tratamiento corre por el pasillo y salta de una credencial a otra sin cortarse. Termina donde empezó.",
-    "cierre": "Guardalo antes de cambiarte. O escribinos «TRATAMIENTO» por WhatsApp.",
+    "cierre": "Guardalo antes de cambiarte. O comentá «TRATAMIENTO» y te mando la guía «Tratamiento en curso».",
     "palabra": "TRATAMIENTO",
-    "copy": "Estás en tratamiento y te querés cambiar.\n\n✔ ¿Lo cubre el plan nuevo?\n✔ ¿Tus médicos están?\n✔ ¿Desde cuándo?\n\nGuardalo antes de cambiarte. O escribinos «TRATAMIENTO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "Estás en tratamiento y te querés cambiar.\n\n✔ ¿Lo cubre el plan nuevo?\n✔ ¿Tus médicos están?\n✔ ¿Desde cuándo?\n\nGuardalo antes de cambiarte. O comentá «TRATAMIENTO» y te mando la guía «Tratamiento en curso».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": ""
   },
   {
@@ -544,6 +664,12 @@
     "fecha": "2026-12-02",
     "hora": "12:40",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "mito roto",
     "tema": "cambiar la obra social del trabajo",
     "basado_en": "Tu obra social la podés elegir: qué mirar antes",
@@ -556,14 +682,14 @@
       "Tus aportes van con vos",
       "Compará antes",
       "Mandáselo a quien cree que no puede.",
-      "«ELEGIR» por WhatsApp"
+      "Comentá «ELEGIR»"
     ],
     "personaje": "Gabriel",
     "lugar_ba": "Ascensor de la oficina de Gabriel",
     "escena_visual": "Una credencial atada con cadena a un escritorio; la cadena se suelta y la credencial vuela a la mano de Gabriel.",
-    "cierre": "Mandáselo a quien cree que no puede. O escribinos «ELEGIR» por WhatsApp.",
+    "cierre": "Mandáselo a quien cree que no puede. O comentá «ELEGIR» y te mando la guía «Cambiar la obra social del trabajo».",
     "palabra": "ELEGIR",
-    "copy": "«La obra social del trabajo no se cambia.»\n\n✔ Podés elegir\n✔ Tus aportes van con vos\n✔ Compará antes\n\nMandáselo a quien cree que no puede. O escribinos «ELEGIR» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "«La obra social del trabajo no se cambia.»\n\n✔ Podés elegir\n✔ Tus aportes van con vos\n✔ Compará antes\n\nMandáselo a quien cree que no puede. O comentá «ELEGIR» y te mando la guía «Cambiar la obra social del trabajo».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": ""
   },
   {
@@ -571,6 +697,12 @@
     "fecha": "2026-12-02",
     "hora": "18:10",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "segunda persona «vos»",
     "tema": "cartilla en el celular",
     "basado_en": "Lo descubriste en la guardia: mirá la cartilla antes",
@@ -583,14 +715,14 @@
       "Teléfono de urgencias",
       "Número de afiliado",
       "Guardalo y hacelo hoy.",
-      "«URGENCIA» por WhatsApp"
+      "Comentá «URGENCIA»"
     ],
     "personaje": "Vero",
     "lugar_ba": "Patio de la escuela de los chicos en Villa Urquiza",
     "escena_visual": "Un cronómetro de un minuto sobre el celular de Vero; los tres datos caen como stickers en la pantalla.",
-    "cierre": "Guardalo y hacelo hoy. O escribinos «URGENCIA» por WhatsApp.",
+    "cierre": "Guardalo y hacelo hoy. O comentá «URGENCIA» y te mando la guía «Cartilla en el celular».",
     "palabra": "URGENCIA",
-    "copy": "¿Encontrás tu cartilla en un minuto?\n\n✔ Guardia más cercana\n✔ Teléfono de urgencias\n✔ Número de afiliado\n\nGuardalo y hacelo hoy. O escribinos «URGENCIA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "¿Encontrás tu cartilla en un minuto?\n\n✔ Guardia más cercana\n✔ Teléfono de urgencias\n✔ Número de afiliado\n\nGuardalo y hacelo hoy. O comentá «URGENCIA» y te mando la guía «Cartilla en el celular».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": ""
   },
   {
@@ -598,6 +730,12 @@
     "fecha": "2026-12-02",
     "hora": "21:40",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "pregunta con respuesta numérica",
     "tema": "suspensión sin goce de sueldo",
     "basado_en": "nuevo",
@@ -610,14 +748,14 @@
       "Tres meses",
       "Después, pagando aportes",
       "Mandáselo a quien esté suspendido.",
-      "«SUSPENSION» por WhatsApp"
+      "Comentá «SUSPENSION»"
     ],
     "personaje": "Gabriel",
     "lugar_ba": "Plaza de Villa Urquiza, de tarde",
     "escena_visual": "Tres fichas numeradas caen en una balanza; la de «3» queda arriba y se ilumina la credencial.",
-    "cierre": "Mandáselo a quien esté suspendido. O escribinos «SUSPENSION» por WhatsApp.",
+    "cierre": "Mandáselo a quien esté suspendido. O comentá «SUSPENSION» y te mando la guía «Suspensión sin goce de sueldo».",
     "palabra": "SUSPENSION",
-    "copy": "Suspendido sin goce: ¿cuántos meses cubierto?\n\n✔ ¿Ninguno? ¿Uno?\n✔ Tres meses\n✔ Después, pagando aportes\n\nMandáselo a quien esté suspendido. O escribinos «SUSPENSION» por WhatsApp.\n\nFuente: Ley 23.660, art. 10, inc. c.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "Suspendido sin goce: ¿cuántos meses cubierto?\n\n✔ ¿Ninguno? ¿Uno?\n✔ Tres meses\n✔ Después, pagando aportes\n\nMandáselo a quien esté suspendido. O comentá «SUSPENSION» y te mando la guía «Suspensión sin goce de sueldo».\n\nFuente: Ley 23.660, art. 10, inc. c.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": "Ley 23.660, art. 10, inc. c"
   },
   {
@@ -625,6 +763,12 @@
     "fecha": "2026-12-02",
     "hora": "22:40",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "tres cartas cerradas",
     "tema": "derivar aportes",
     "basado_en": "Derivar aportes: qué significa y cuándo conviene",
@@ -637,14 +781,14 @@
       "Carta 2: ¿cuánto pagás aparte?",
       "Carta 3: la cartilla",
       "Guardalo para cuando lo pienses.",
-      "«DERIVAR» por WhatsApp"
+      "Comentá «DERIVAR»"
     ],
     "personaje": "Gabriel",
     "lugar_ba": "Mesa de los Ferreyra en Villa Urquiza",
     "escena_visual": "Tres cartas sobre la mesa; una flecha verde lleva monedas de una credencial a otra.",
-    "cierre": "Guardalo para cuando lo pienses. O escribinos «DERIVAR» por WhatsApp.",
+    "cierre": "Guardalo para cuando lo pienses. O comentá «DERIVAR» y te mando la guía «Derivar aportes».",
     "palabra": "DERIVAR",
-    "copy": "Derivar aportes: tres cartas antes.\n\n✔ Carta 1: qué es\n✔ Carta 2: ¿cuánto pagás aparte?\n✔ Carta 3: la cartilla\n\nGuardalo para cuando lo pienses. O escribinos «DERIVAR» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "Derivar aportes: tres cartas antes.\n\n✔ Carta 1: qué es\n✔ Carta 2: ¿cuánto pagás aparte?\n✔ Carta 3: la cartilla\n\nGuardalo para cuando lo pienses. O comentá «DERIVAR» y te mando la guía «Derivar aportes».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": ""
   },
   {
@@ -652,6 +796,12 @@
     "fecha": "2026-12-03",
     "hora": "12:40",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "escena con hora o número",
     "tema": "aguinaldo y aportes",
     "basado_en": "Aguinaldo: también lleva aportes a tu obra social",
@@ -664,14 +814,14 @@
       "Lleva aporte a la obra social",
       "¿Va a la que elegiste?",
       "Guardalo para tu recibo de diciembre.",
-      "«AGUINALDO» por WhatsApp"
+      "Comentá «SAC»"
     ],
     "personaje": "Gabriel",
     "lugar_ba": "Cajero automático de Av. Triunvirato",
     "escena_visual": "El cajero escupe un recibo larguísimo; la lupa menta frena en el descuento y lo convierte en una flecha a la credencial.",
-    "cierre": "Guardalo para tu recibo de diciembre. O escribinos «AGUINALDO» por WhatsApp.",
-    "palabra": "AGUINALDO",
-    "copy": "18/12: cobrás el aguinaldo y ves esto.\n\n✔ El aguinaldo también es sueldo\n✔ Lleva aporte a la obra social\n✔ ¿Va a la que elegiste?\n\nGuardalo para tu recibo de diciembre. O escribinos «AGUINALDO» por WhatsApp.\n\nFuente: Ley 23.660, art. 16; Ley de Contrato de Trabajo, art. 122.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "cierre": "Guardalo para tu recibo de diciembre. O comentá «SAC» y te mando la guía «Aguinaldo y aportes».",
+    "palabra": "SAC",
+    "copy": "18/12: cobrás el aguinaldo y ves esto.\n\n✔ El aguinaldo también es sueldo\n✔ Lleva aporte a la obra social\n✔ ¿Va a la que elegiste?\n\nGuardalo para tu recibo de diciembre. O comentá «SAC» y te mando la guía «Aguinaldo y aportes».\n\nFuente: Ley 23.660, art. 16; Ley de Contrato de Trabajo, art. 122.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": "Ley 23.660, art. 16; Ley de Contrato de Trabajo, art. 122"
   },
   {
@@ -679,6 +829,12 @@
     "fecha": "2026-12-03",
     "hora": "18:10",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "¿cuál sos? (identidad)",
     "tema": "sumar a la familia",
     "basado_en": "¿Te conviene sumar a tu familia a tu plan?",
@@ -691,14 +847,14 @@
       "Paga de más por todos",
       "Mira cada caso antes",
       "Mandáselo a tu familia.",
-      "«FAMILIA» por WhatsApp"
+      "Comentá «FAMILIA»"
     ],
     "personaje": "Los Ferreyra",
     "lugar_ba": "Heladera con imanes de los Ferreyra",
     "escena_visual": "Cuatro credenciales pegadas en la heladera como imanes; se ordenan solas en una fila verde.",
-    "cierre": "Mandáselo a tu familia. O escribinos «FAMILIA» por WhatsApp.",
+    "cierre": "Mandáselo a tu familia. O comentá «FAMILIA» y te mando la guía «Sumar a la familia».",
     "palabra": "FAMILIA",
-    "copy": "Tu familia y la cobertura: ¿cuál sos?\n\n✔ Cada uno en otra y nadie sabe\n✔ Paga de más por todos\n✔ Mira cada caso antes\n\nMandáselo a tu familia. O escribinos «FAMILIA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "Tu familia y la cobertura: ¿cuál sos?\n\n✔ Cada uno en otra y nadie sabe\n✔ Paga de más por todos\n✔ Mira cada caso antes\n\nMandáselo a tu familia. O comentá «FAMILIA» y te mando la guía «Sumar a la familia».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": ""
   },
   {
@@ -706,6 +862,12 @@
     "fecha": "2026-12-03",
     "hora": "21:40",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "advertencia",
     "tema": "reintegros: la factura",
     "basado_en": "Pagaste una consulta: preguntá por el reintegro",
@@ -718,14 +880,14 @@
       "Con orden o receta",
       "Antes del plazo",
       "Guardalo para tu próxima consulta.",
-      "«FACTURA» por WhatsApp"
+      "Comentá «FACTURA»"
     ],
     "personaje": "Lucía",
     "lugar_ba": "Departamento de Lucía en Caballito, de noche",
     "escena_visual": "La factura vuela hacia el tacho de basura y frena en el aire; vuelve a la mano de Lucía con un tilde verde.",
-    "cierre": "Guardalo para tu próxima consulta. O escribinos «FACTURA» por WhatsApp.",
+    "cierre": "Guardalo para tu próxima consulta. O comentá «FACTURA» y te mando la guía «Reintegros: la factura».",
     "palabra": "FACTURA",
-    "copy": "No tires la factura de esa consulta.\n\n✔ A tu nombre\n✔ Con orden o receta\n✔ Antes del plazo\n\nGuardalo para tu próxima consulta. O escribinos «FACTURA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "No tires la factura de esa consulta.\n\n✔ A tu nombre\n✔ Con orden o receta\n✔ Antes del plazo\n\nGuardalo para tu próxima consulta. O comentá «FACTURA» y te mando la guía «Reintegros: la factura».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": ""
   },
   {
@@ -733,6 +895,12 @@
     "fecha": "2026-12-03",
     "hora": "22:40",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "contador que avanza",
     "tema": "cambio de obra social: el trámite",
     "basado_en": "Cambiarte de obra social tarda: planificalo",
@@ -745,14 +913,14 @@
       "Paso 2: el trámite de opción",
       "Paso 3: no des de baja antes",
       "Guardalo para cuando te cambies.",
-      "«TRAMITE» por WhatsApp"
+      "Comentá «TRAMITE»"
     ],
     "personaje": "Lucía",
     "lugar_ba": "Biblioteca de Caballito",
     "escena_visual": "Una escalera de tres escalones se arma con credenciales; Lucía sube y cada escalón se ilumina.",
-    "cierre": "Guardalo para cuando te cambies. O escribinos «TRAMITE» por WhatsApp.",
+    "cierre": "Guardalo para cuando te cambies. O comentá «TRAMITE» y te mando la guía «Cambio de obra social: el trámite».",
     "palabra": "TRAMITE",
-    "copy": "Cambiarte de obra social, paso a paso.\n\n✔ Paso 1: elegí por cartilla\n✔ Paso 2: el trámite de opción\n✔ Paso 3: no des de baja antes\n\nGuardalo para cuando te cambies. O escribinos «TRAMITE» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "Cambiarte de obra social, paso a paso.\n\n✔ Paso 1: elegí por cartilla\n✔ Paso 2: el trámite de opción\n✔ Paso 3: no des de baja antes\n\nGuardalo para cuando te cambies. O comentá «TRAMITE» y te mando la guía «Cambio de obra social: el trámite».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": ""
   },
   {
@@ -760,6 +928,12 @@
     "fecha": "2026-12-04",
     "hora": "12:40",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "serie (parte 1)",
     "tema": "licencia sin goce",
     "basado_en": "nuevo",
@@ -772,14 +946,14 @@
       "Licencia aprobada",
       "¿Pierde la obra social?",
       "Guardalo para ver la parte 2.",
-      "«LICENCIA» por WhatsApp"
+      "Comentá «SINGOCE»"
     ],
     "personaje": "Vero",
     "lugar_ba": "Sala de maestros de una escuela de Villa Urquiza",
     "escena_visual": "Un calendario con cuatro meses en blanco; la credencial de Vero queda en pausa con un ícono de reloj. Cierra con «Parte 2».",
-    "cierre": "Guardalo para ver la parte 2. O escribinos «LICENCIA» por WhatsApp.",
-    "palabra": "LICENCIA",
-    "copy": "Parte 1: Vero pide licencia sin sueldo.\n\n✔ 4 meses sin sueldo\n✔ Licencia aprobada\n✔ ¿Pierde la obra social?\n\nGuardalo para ver la parte 2. O escribinos «LICENCIA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "cierre": "Guardalo para ver la parte 2. O comentá «SINGOCE» y te mando la guía «Licencia sin goce».",
+    "palabra": "SINGOCE",
+    "copy": "Parte 1: Vero pide licencia sin sueldo.\n\n✔ 4 meses sin sueldo\n✔ Licencia aprobada\n✔ ¿Pierde la obra social?\n\nGuardalo para ver la parte 2. O comentá «SINGOCE» y te mando la guía «Licencia sin goce».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": ""
   },
   {
@@ -787,6 +961,12 @@
     "fecha": "2026-12-04",
     "hora": "18:10",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "loop",
     "tema": "pagás por lo que no usás",
     "basado_en": "¿Pagás por cosas que no usás?",
@@ -799,14 +979,14 @@
       "Estudios",
       "Guardias",
       "Mandáselo a quien paga y no usa.",
-      "«USO» por WhatsApp"
+      "Comentá «USO»"
     ],
     "personaje": "Gabriel",
     "lugar_ba": "Mesa de los Ferreyra en Villa Urquiza",
     "escena_visual": "Un contador de usos en la pantalla de la heladera marca casi cero; las credenciales de colores se ordenan por uso. Vuelve al contador.",
-    "cierre": "Mandáselo a quien paga y no usa. O escribinos «USO» por WhatsApp.",
+    "cierre": "Mandáselo a quien paga y no usa. O comentá «USO» y te mando la guía «Pagás por lo que no usás».",
     "palabra": "USO",
-    "copy": "Este mes usaste la prepaga: ¿cuántas veces?\n\n✔ Consultas\n✔ Estudios\n✔ Guardias\n\nMandáselo a quien paga y no usa. O escribinos «USO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "Este mes usaste la prepaga: ¿cuántas veces?\n\n✔ Consultas\n✔ Estudios\n✔ Guardias\n\nMandáselo a quien paga y no usa. O comentá «USO» y te mando la guía «Pagás por lo que no usás».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": ""
   },
   {
@@ -814,6 +994,12 @@
     "fecha": "2026-12-04",
     "hora": "21:40",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "mito roto",
     "tema": "65 años y aumento por edad",
     "basado_en": "¿Cumplís 65? Mirá tu antigüedad",
@@ -826,14 +1012,14 @@
       "+10 años: sin aumento por edad",
       "Buscá desde cuándo estás",
       "Mandáselo a quien cumple 65.",
-      "«65» por WhatsApp"
+      "Comentá «65»"
     ],
     "personaje": "Elsa",
     "lugar_ba": "Feria de Villa Urquiza, sábado",
     "escena_visual": "Una cuota en globo sube sobre la cabeza de Elsa; ella la pincha con la aguja de tejer y baja.",
-    "cierre": "Mandáselo a quien cumple 65. O escribinos «65» por WhatsApp.",
+    "cierre": "Mandáselo a quien cumple 65. O comentá «65» y te mando la guía «65 años y aumento por edad».",
     "palabra": "65",
-    "copy": "«A los 65 me suben la cuota sí o sí.»\n\n✔ Depende de tu antigüedad\n✔ +10 años: sin aumento por edad\n✔ Buscá desde cuándo estás\n\nMandáselo a quien cumple 65. O escribinos «65» por WhatsApp.\n\nFuente: Ley 26.682, art. 12.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "«A los 65 me suben la cuota sí o sí.»\n\n✔ Depende de tu antigüedad\n✔ +10 años: sin aumento por edad\n✔ Buscá desde cuándo estás\n\nMandáselo a quien cumple 65. O comentá «65» y te mando la guía «65 años y aumento por edad».\n\nFuente: Ley 26.682, art. 12.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": "Ley 26.682, art. 12"
   },
   {
@@ -841,6 +1027,12 @@
     "fecha": "2026-12-04",
     "hora": "22:40",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "segunda persona «vos»",
     "tema": "trabajo de temporada",
     "basado_en": "nuevo",
@@ -853,14 +1045,14 @@
       "Invierno sin trabajo",
       "Podés mantenerla pagando",
       "Mandáselo a quien trabaja en la temporada.",
-      "«TEMPORADA» por WhatsApp"
+      "Comentá «TEMPORADA»"
     ],
     "personaje": "Pablo, el hermano de Gabriel",
     "lugar_ba": "Parador de playa en la costa, fin de temporada",
     "escena_visual": "Una sombrilla se cierra y la credencial de Pablo queda colgada con un hilo verde que no se corta.",
-    "cierre": "Mandáselo a quien trabaja en la temporada. O escribinos «TEMPORADA» por WhatsApp.",
+    "cierre": "Mandáselo a quien trabaja en la temporada. O comentá «TEMPORADA» y te mando la guía «Trabajo de temporada».",
     "palabra": "TEMPORADA",
-    "copy": "Temporada: ¿y la obra social en invierno?\n\n✔ Verano con trabajo\n✔ Invierno sin trabajo\n✔ Podés mantenerla pagando\n\nMandáselo a quien trabaja en la temporada. O escribinos «TEMPORADA» por WhatsApp.\n\nFuente: Ley 23.660, art. 10, inc. e.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "Temporada: ¿y la obra social en invierno?\n\n✔ Verano con trabajo\n✔ Invierno sin trabajo\n✔ Podés mantenerla pagando\n\nMandáselo a quien trabaja en la temporada. O comentá «TEMPORADA» y te mando la guía «Trabajo de temporada».\n\nFuente: Ley 23.660, art. 10, inc. e.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": "Ley 23.660, art. 10, inc. e"
   },
   {
@@ -868,6 +1060,12 @@
     "fecha": "2026-12-05",
     "hora": "12:40",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "pregunta con respuesta numérica",
     "tema": "te quedás sin trabajo: requisito",
     "basado_en": "nuevo",
@@ -880,14 +1078,14 @@
       "Más de 3 meses seguidos",
       "3 meses más de cobertura",
       "Guardalo para cuando lo necesites.",
-      "«TRABAJO» por WhatsApp"
+      "Comentá «TRABAJO»"
     ],
     "personaje": "Gabriel",
     "lugar_ba": "Parada de colectivo de Av. Monroe, Villa Urquiza",
     "escena_visual": "Un tablero de colectivo con números que giran; frena en «+3» y la credencial de Gabriel se enciende.",
-    "cierre": "Guardalo para cuando lo necesites. O escribinos «TRABAJO» por WhatsApp.",
+    "cierre": "Guardalo para cuando lo necesites. O comentá «TRABAJO» y te mando la guía «Te quedás sin trabajo: requisito».",
     "palabra": "TRABAJO",
-    "copy": "Sin trabajo: ¿cuánto hay que haber trabajado?\n\n✔ ¿Cuánto trabajaste?\n✔ Más de 3 meses seguidos\n✔ 3 meses más de cobertura\n\nGuardalo para cuando lo necesites. O escribinos «TRABAJO» por WhatsApp.\n\nFuente: Ley 23.660, art. 10, inc. a.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "Sin trabajo: ¿cuánto hay que haber trabajado?\n\n✔ ¿Cuánto trabajaste?\n✔ Más de 3 meses seguidos\n✔ 3 meses más de cobertura\n\nGuardalo para cuando lo necesites. O comentá «TRABAJO» y te mando la guía «Te quedás sin trabajo: requisito».\n\nFuente: Ley 23.660, art. 10, inc. a.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": "Ley 23.660, art. 10, inc. a"
   },
   {
@@ -895,6 +1093,12 @@
     "fecha": "2026-12-05",
     "hora": "18:10",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "tres cartas cerradas",
     "tema": "preexistencia: lo que cambia",
     "basado_en": "Mito: «tengo una enfermedad previa, no me van a aceptar»",
@@ -907,14 +1111,14 @@
       "Carta 2: va en la declaración",
       "Carta 3: puede cambiar el valor",
       "Mandáselo a quien tenga una enfermedad previa.",
-      "«PREVIA» por WhatsApp"
+      "Comentá «PREVIA»"
     ],
     "personaje": "Elsa",
     "lugar_ba": "Escritorio de una oficina de atención genérica en Villa Urquiza",
     "escena_visual": "Tres cartas sobre el escritorio; la tercera muestra una cuota con un asterisco que la lupa agranda.",
-    "cierre": "Mandáselo a quien tenga una enfermedad previa. O escribinos «PREVIA» por WhatsApp.",
+    "cierre": "Mandáselo a quien tenga una enfermedad previa. O comentá «PREVIA» y te mando la guía «Preexistencia: lo que cambia».",
     "palabra": "PREVIA",
-    "copy": "Enfermedad previa: tres cartas.\n\n✔ Carta 1: no te pueden rechazar\n✔ Carta 2: va en la declaración\n✔ Carta 3: puede cambiar el valor\n\nMandáselo a quien tenga una enfermedad previa. O escribinos «PREVIA» por WhatsApp.\n\nFuente: Ley 26.682, art. 10.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "Enfermedad previa: tres cartas.\n\n✔ Carta 1: no te pueden rechazar\n✔ Carta 2: va en la declaración\n✔ Carta 3: puede cambiar el valor\n\nMandáselo a quien tenga una enfermedad previa. O comentá «PREVIA» y te mando la guía «Preexistencia: lo que cambia».\n\nFuente: Ley 26.682, art. 10.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": "Ley 26.682, art. 10"
   },
   {
@@ -922,6 +1126,12 @@
     "fecha": "2026-12-05",
     "hora": "21:40",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "escena con hora o número",
     "tema": "urgencia de vacaciones",
     "basado_en": "Te vas de vacaciones: qué preguntarle a tu cobertura antes",
@@ -934,14 +1144,14 @@
       "Teléfono de urgencias",
       "Cómo pedir reintegro",
       "Mandáselo a quien sale de viaje.",
-      "«COSTA» por WhatsApp"
+      "Comentá «COSTA»"
     ],
     "personaje": "Lucía",
     "lugar_ba": "Auto de Lucía en la Ruta 11, de noche",
     "escena_visual": "Faros en la ruta oscura; el mapa del celular se vuelve una red de puntos verdes que se encienden.",
-    "cierre": "Mandáselo a quien sale de viaje. O escribinos «COSTA» por WhatsApp.",
+    "cierre": "Mandáselo a quien sale de viaje. O comentá «COSTA» y te mando la guía «Urgencia de vacaciones».",
     "palabra": "COSTA",
-    "copy": "Ruta 11, 23:00: fiebre lejos de casa.\n\n✔ Guardia del lugar\n✔ Teléfono de urgencias\n✔ Cómo pedir reintegro\n\nMandáselo a quien sale de viaje. O escribinos «COSTA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "Ruta 11, 23:00: fiebre lejos de casa.\n\n✔ Guardia del lugar\n✔ Teléfono de urgencias\n✔ Cómo pedir reintegro\n\nMandáselo a quien sale de viaje. O comentá «COSTA» y te mando la guía «Urgencia de vacaciones».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": ""
   },
   {
@@ -949,6 +1159,12 @@
     "fecha": "2026-12-05",
     "hora": "22:40",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "¿cuál sos? (identidad)",
     "tema": "tratamiento en curso: cómo reaccionás",
     "basado_en": "Si te cambiás, ¿qué pasa con tus tratamientos?",
@@ -961,14 +1177,14 @@
       "No se cambia por miedo",
       "Pide todo por escrito antes",
       "Mandáselo a quien esté en tratamiento.",
-      "«CURSO» por WhatsApp"
+      "Comentá «CURSO»"
     ],
     "personaje": "Tres siluetas (Lucía es la tercera)",
     "lugar_ba": "Escalera mecánica de un shopping genérico de Caballito",
     "escena_visual": "Tres escaleras mecánicas; dos se frenan a mitad de camino. La tercera llega arriba con un sobre verde.",
-    "cierre": "Mandáselo a quien esté en tratamiento. O escribinos «CURSO» por WhatsApp.",
+    "cierre": "Mandáselo a quien esté en tratamiento. O comentá «CURSO» y te mando la guía «Tratamiento en curso: cómo reaccionás».",
     "palabra": "CURSO",
-    "copy": "Cambio en pleno tratamiento: ¿cuál sos?\n\n✔ Se cambia y después pregunta\n✔ No se cambia por miedo\n✔ Pide todo por escrito antes\n\nMandáselo a quien esté en tratamiento. O escribinos «CURSO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "Cambio en pleno tratamiento: ¿cuál sos?\n\n✔ Se cambia y después pregunta\n✔ No se cambia por miedo\n✔ Pide todo por escrito antes\n\nMandáselo a quien esté en tratamiento. O comentá «CURSO» y te mando la guía «Tratamiento en curso: cómo reaccionás».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": ""
   },
   {
@@ -976,6 +1192,12 @@
     "fecha": "2026-12-06",
     "hora": "12:40",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "advertencia",
     "tema": "monotributo impago",
     "basado_en": "nuevo",
@@ -988,14 +1210,14 @@
       "Atrasarte trae problemas",
       "Revisá tu estado",
       "Guardalo para tu próximo vencimiento.",
-      "«CUOTA» por WhatsApp"
+      "Comentá «VENCIMIENTO»"
     ],
     "personaje": "Lucía",
     "lugar_ba": "Escritorio de Lucía en Caballito",
     "escena_visual": "Un calendario de vencimientos con una fecha que parpadea en rojo; la credencial de Lucía se pone gris y vuelve a verde al pagar.",
-    "cierre": "Guardalo para tu próximo vencimiento. O escribinos «CUOTA» por WhatsApp.",
-    "palabra": "CUOTA",
-    "copy": "Monotributo: no dejes de pagar la cuota.\n\n✔ Una parte es tu obra social\n✔ Atrasarte trae problemas\n✔ Revisá tu estado\n\nGuardalo para tu próximo vencimiento. O escribinos «CUOTA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "cierre": "Guardalo para tu próximo vencimiento. O comentá «VENCIMIENTO» y te mando la guía «Monotributo impago».",
+    "palabra": "VENCIMIENTO",
+    "copy": "Monotributo: no dejes de pagar la cuota.\n\n✔ Una parte es tu obra social\n✔ Atrasarte trae problemas\n✔ Revisá tu estado\n\nGuardalo para tu próximo vencimiento. O comentá «VENCIMIENTO» y te mando la guía «Monotributo impago».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": ""
   },
   {
@@ -1003,6 +1225,12 @@
     "fecha": "2026-12-06",
     "hora": "18:10",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "contador que avanza",
     "tema": "mudanza: los primeros días",
     "basado_en": "Vacaciones o mudanza: tu cartilla en otra zona",
@@ -1015,14 +1243,14 @@
       "Día 7: tus médicos",
       "Día 30: ¿cambiás de plan?",
       "Mandáselo a quien se mudó.",
-      "«BARRIO» por WhatsApp"
+      "Comentá «BARRIO»"
     ],
     "personaje": "Los Ferreyra",
     "lugar_ba": "Departamento nuevo de los Ferreyra en Saavedra",
     "escena_visual": "Cajas de mudanza que se abren con un contador de días; el mapa del barrio nuevo se llena de puntos verdes.",
-    "cierre": "Mandáselo a quien se mudó. O escribinos «BARRIO» por WhatsApp.",
+    "cierre": "Mandáselo a quien se mudó. O comentá «BARRIO» y te mando la guía «Mudanza: los primeros días».",
     "palabra": "BARRIO",
-    "copy": "Mudanza: día 1, día 7, día 30.\n\n✔ Día 1: guardia cercana\n✔ Día 7: tus médicos\n✔ Día 30: ¿cambiás de plan?\n\nMandáselo a quien se mudó. O escribinos «BARRIO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "Mudanza: día 1, día 7, día 30.\n\n✔ Día 1: guardia cercana\n✔ Día 7: tus médicos\n✔ Día 30: ¿cambiás de plan?\n\nMandáselo a quien se mudó. O comentá «BARRIO» y te mando la guía «Mudanza: los primeros días».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": ""
   },
   {
@@ -1030,6 +1258,12 @@
     "fecha": "2026-12-06",
     "hora": "21:40",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "serie (parte 2)",
     "tema": "licencia sin goce",
     "basado_en": "nuevo",
@@ -1042,14 +1276,14 @@
       "Pagando aporte y contribución",
       "Preguntá antes de empezar",
       "Mandáselo a quien vaya a pedir licencia.",
-      "«LICENCIA» por WhatsApp"
+      "Comentá «SINGOCE»"
     ],
     "personaje": "Vero",
     "lugar_ba": "Living de Elsa en Villa Urquiza",
     "escena_visual": "El ícono de pausa de la credencial se transforma en play; Vero y Elsa la miran desde el sillón.",
-    "cierre": "Mandáselo a quien vaya a pedir licencia. O escribinos «LICENCIA» por WhatsApp.",
-    "palabra": "LICENCIA",
-    "copy": "Parte 2: Vero puede mantener su obra social.\n\n✔ Podés mantenerla\n✔ Pagando aporte y contribución\n✔ Preguntá antes de empezar\n\nMandáselo a quien vaya a pedir licencia. O escribinos «LICENCIA» por WhatsApp.\n\nFuente: Ley 23.660, art. 10, inc. d.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "cierre": "Mandáselo a quien vaya a pedir licencia. O comentá «SINGOCE» y te mando la guía «Licencia sin goce».",
+    "palabra": "SINGOCE",
+    "copy": "Parte 2: Vero puede mantener su obra social.\n\n✔ Podés mantenerla\n✔ Pagando aporte y contribución\n✔ Preguntá antes de empezar\n\nMandáselo a quien vaya a pedir licencia. O comentá «SINGOCE» y te mando la guía «Licencia sin goce».\n\nFuente: Ley 23.660, art. 10, inc. d.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": "Ley 23.660, art. 10, inc. d"
   },
   {
@@ -1057,6 +1291,12 @@
     "fecha": "2026-12-06",
     "hora": "22:40",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "loop",
     "tema": "familia: grupo familiar",
     "basado_en": "¿Te conviene sumar a tu familia a tu plan?",
@@ -1069,14 +1309,14 @@
       "Qué usa cada uno",
       "Cuánto cuesta junto",
       "Mandáselo a tu familia.",
-      "«GRUPO» por WhatsApp"
+      "Comentá «GRUPO»"
     ],
     "personaje": "Los Ferreyra",
     "lugar_ba": "Comedor de los Ferreyra en Villa Urquiza, cena",
     "escena_visual": "Cuatro platos y cuatro credenciales distintas; se juntan en una sola y vuelven a separarse en el último cuadro.",
-    "cierre": "Mandáselo a tu familia. O escribinos «GRUPO» por WhatsApp.",
+    "cierre": "Mandáselo a tu familia. O comentá «GRUPO» y te mando la guía «Familia: grupo familiar».",
     "palabra": "GRUPO",
-    "copy": "Somos cuatro. ¿Cuántas coberturas pagamos?\n\n✔ Quién tiene qué\n✔ Qué usa cada uno\n✔ Cuánto cuesta junto\n\nMandáselo a tu familia. O escribinos «GRUPO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "Somos cuatro. ¿Cuántas coberturas pagamos?\n\n✔ Quién tiene qué\n✔ Qué usa cada uno\n✔ Cuánto cuesta junto\n\nMandáselo a tu familia. O comentá «GRUPO» y te mando la guía «Familia: grupo familiar».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": ""
   },
   {
@@ -1084,6 +1324,12 @@
     "fecha": "reserva",
     "hora": "",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "advertencia",
     "tema": "aviso de aumento",
     "basado_en": "Te llegó el aviso de aumento: antes de pagar, compará",
@@ -1096,14 +1342,14 @@
       "¿Qué plan tenés?",
       "Compará opciones",
       "Mandáselo a quien le llegó la carta.",
-      "«AUMENTO» por WhatsApp"
+      "Comentá «AUMENTO»"
     ],
     "personaje": "Vero",
     "lugar_ba": "Buzón del edificio de los Ferreyra",
     "escena_visual": "La carta sale del buzón y se despliega como un acordeón; la lupa frena en el porcentaje.",
-    "cierre": "Mandáselo a quien le llegó la carta. O escribinos «AUMENTO» por WhatsApp.",
+    "cierre": "Mandáselo a quien le llegó la carta. O comentá «AUMENTO» y te mando la guía «Aviso de aumento».",
     "palabra": "AUMENTO",
-    "copy": "No pagues el aumento sin leer la carta.\n\n✔ ¿Cuánto y desde cuándo?\n✔ ¿Qué plan tenés?\n✔ Compará opciones\n\nMandáselo a quien le llegó la carta. O escribinos «AUMENTO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "No pagues el aumento sin leer la carta.\n\n✔ ¿Cuánto y desde cuándo?\n✔ ¿Qué plan tenés?\n✔ Compará opciones\n\nMandáselo a quien le llegó la carta. O comentá «AUMENTO» y te mando la guía «Aviso de aumento».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": ""
   },
   {
@@ -1111,6 +1357,12 @@
     "fecha": "reserva",
     "hora": "",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "mito roto",
     "tema": "obra social y prepaga",
     "basado_en": "nuevo",
@@ -1123,14 +1375,14 @@
       "Prepaga: la contratás",
       "A veces se combinan",
       "Mandáselo a quien las confunde.",
-      "«DIFERENCIA» por WhatsApp"
+      "Comentá «DIFERENCIA»"
     ],
     "personaje": "Lucía",
     "lugar_ba": "Parque Rivadavia, Caballito",
     "escena_visual": "Dos credenciales se superponen como un eclipse y se separan mostrando cada una su rótulo.",
-    "cierre": "Mandáselo a quien las confunde. O escribinos «DIFERENCIA» por WhatsApp.",
+    "cierre": "Mandáselo a quien las confunde. O comentá «DIFERENCIA» y te mando la guía «Obra social y prepaga».",
     "palabra": "DIFERENCIA",
-    "copy": "«Obra social y prepaga son lo mismo.» No.\n\n✔ Obra social: tus aportes\n✔ Prepaga: la contratás\n✔ A veces se combinan\n\nMandáselo a quien las confunde. O escribinos «DIFERENCIA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "«Obra social y prepaga son lo mismo.» No.\n\n✔ Obra social: tus aportes\n✔ Prepaga: la contratás\n✔ A veces se combinan\n\nMandáselo a quien las confunde. O comentá «DIFERENCIA» y te mando la guía «Obra social y prepaga».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": ""
   },
   {
@@ -1138,6 +1390,12 @@
     "fecha": "reserva",
     "hora": "",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "segunda persona «vos»",
     "tema": "primer empleo de un hijo",
     "basado_en": "nuevo",
@@ -1150,14 +1408,14 @@
       "Elegir obra social",
       "Cartilla y guardia cerca",
       "Mandáselo a quien tenga hijos que empiezan a trabajar.",
-      "«PRIMER» por WhatsApp"
+      "Comentá «HIJO»"
     ],
     "personaje": "Gabriel y su sobrina Martina",
     "lugar_ba": "Cocina de los Ferreyra en Villa Urquiza",
     "escena_visual": "Una credencial chiquita se separa de la de Gabriel y crece hasta su tamaño.",
-    "cierre": "Mandáselo a quien tenga hijos que empiezan a trabajar. O escribinos «PRIMER» por WhatsApp.",
-    "palabra": "PRIMER",
-    "copy": "Tu hijo empieza a trabajar: ¿y su cobertura?\n\n✔ Primer trabajo, aportes propios\n✔ Elegir obra social\n✔ Cartilla y guardia cerca\n\nMandáselo a quien tenga hijos que empiezan a trabajar. O escribinos «PRIMER» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "cierre": "Mandáselo a quien tenga hijos que empiezan a trabajar. O comentá «HIJO» y te mando la guía «Primer empleo de un hijo».",
+    "palabra": "HIJO",
+    "copy": "Tu hijo empieza a trabajar: ¿y su cobertura?\n\n✔ Primer trabajo, aportes propios\n✔ Elegir obra social\n✔ Cartilla y guardia cerca\n\nMandáselo a quien tenga hijos que empiezan a trabajar. O comentá «HIJO» y te mando la guía «Primer empleo de un hijo».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": ""
   },
   {
@@ -1165,6 +1423,12 @@
     "fecha": "reserva",
     "hora": "",
     "marca": "Compara Tu Obra Social",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "tres cartas cerradas",
     "tema": "excedencia y obra social",
     "basado_en": "nuevo",
@@ -1177,14 +1441,14 @@
       "Carta 2: pagando aportes",
       "Carta 3: por escrito",
       "Mandáselo a quien acaba de ser mamá.",
-      "«EXCEDENCIA» por WhatsApp"
+      "Comentá «EXCEDENCIA»"
     ],
     "personaje": "Vero",
     "lugar_ba": "Habitación de un bebé en Villa Urquiza",
     "escena_visual": "Tres cartas en la cuna con móvil; se dan vuelta con un sonido de sonajero.",
-    "cierre": "Mandáselo a quien acaba de ser mamá. O escribinos «EXCEDENCIA» por WhatsApp.",
+    "cierre": "Mandáselo a quien acaba de ser mamá. O comentá «EXCEDENCIA» y te mando la guía «Excedencia y obra social».",
     "palabra": "EXCEDENCIA",
-    "copy": "Excedencia: tres cartas de tu obra social.\n\n✔ Carta 1: podés mantenerla\n✔ Carta 2: pagando aportes\n✔ Carta 3: por escrito\n\nMandáselo a quien acaba de ser mamá. O escribinos «EXCEDENCIA» por WhatsApp.\n\nFuente: Ley 23.660, art. 10, inc. g.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
+    "copy": "Excedencia: tres cartas de tu obra social.\n\n✔ Carta 1: podés mantenerla\n✔ Carta 2: pagando aportes\n✔ Carta 3: por escrito\n\nMandáselo a quien acaba de ser mamá. O comentá «EXCEDENCIA» y te mando la guía «Excedencia y obra social».\n\nFuente: Ley 23.660, art. 10, inc. g.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Monotributo #BuenosAires",
     "fuente": "Ley 23.660, art. 10, inc. g"
   }
 ]

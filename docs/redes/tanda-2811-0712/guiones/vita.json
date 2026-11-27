@@ -4,6 +4,12 @@
     "fecha": "2026-11-27",
     "hora": "08:40",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "advertencia + escena con hora + contador + loop",
     "tema": "choque: la frase que no se dice",
     "basado_en": "Después de un choque, nunca digas esto (mejorado con escena, contador y loop)",
@@ -16,14 +22,14 @@
       "2/3 Datos del otro y de testigos",
       "3/3 Aviso al seguro: 3 días",
       "Mandáselo a quien maneje todos los días.",
-      "«NUNCA» por WhatsApp"
+      "Comentá «NUNCA»"
     ],
     "personaje": "Nico",
     "lugar_ba": "Av. Montes de Oca y Suárez, Barracas, domingo 19:10",
     "escena_visual": "Segundo 0: choque congelado y reloj 19:10 en la esquina; la frase «Perdón, fue mi culpa» sale de la boca de Nico y queda tachada en dorado. Contador 1/3, 2/3, 3/3 arriba con el cronómetro dorado; cada paso con golpe de zoom. Último cuadro idéntico al primero (loop).",
-    "cierre": "Mandáselo a quien maneje todos los días. O escribinos «NUNCA» por WhatsApp.",
+    "cierre": "Mandáselo a quien maneje todos los días. O comentá «NUNCA» y te mando «Qué decir y qué no después de un choque».",
     "palabra": "NUNCA",
-    "copy": "Recién chocaste. Esta frase, nunca.\n\n✔ 1/3 Fotos: autos, patente y esquina\n✔ 2/3 Datos del otro y de testigos\n✔ 3/3 Aviso al seguro: 3 días\n\nMandáselo a quien maneje todos los días. O escribinos «NUNCA» por WhatsApp.\n\nFuente: Ley 17.418, art. 46 (aviso del siniestro en 3 días).\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Recién chocaste. Esta frase, nunca.\n\n✔ 1/3 Fotos: autos, patente y esquina\n✔ 2/3 Datos del otro y de testigos\n✔ 3/3 Aviso al seguro: 3 días\n\nMandáselo a quien maneje todos los días. O comentá «NUNCA» y te mando «Qué decir y qué no después de un choque».\n\nFuente: Ley 17.418, art. 46 (aviso del siniestro en 3 días).\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": "Ley 17.418, art. 46 (aviso del siniestro en 3 días)"
   },
   {
@@ -31,6 +37,11 @@
     "fecha": "2026-11-27",
     "hora": "11:10",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "facebook"
+    ],
     "formula": "escena con hora o número",
     "tema": "despido: el papel del viernes",
     "basado_en": "Te despidieron: qué pedir y qué no firmar ese día",
@@ -43,14 +54,14 @@
       "No firmes lo que no entendés",
       "Pedí copia de todo",
       "Guardalo para cuando lo necesites.",
-      "«DESPIDO» por WhatsApp"
+      "Comentá «DESPIDO»"
     ],
     "personaje": "Sole",
     "lugar_ba": "Oficina del supermercado de Flores, viernes 18:05",
     "escena_visual": "Reloj de pared en 18:05, la puerta se cierra detrás de Sole. El papel crece hasta tapar la oficina; la lapicera queda flotando sin tocar la hoja.",
-    "cierre": "Guardalo para cuando lo necesites. O escribinos «DESPIDO» por WhatsApp.",
+    "cierre": "Guardalo para cuando lo necesites. O comentá «DESPIDO» y te mando la guía «Despido: el papel del viernes».",
     "palabra": "DESPIDO",
-    "copy": "Viernes 18:05: te despiden y te dan un papel.\n\n✔ Leelo entero, sin apuro\n✔ No firmes lo que no entendés\n✔ Pedí copia de todo\n\nGuardalo para cuando lo necesites. O escribinos «DESPIDO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Viernes 18:05: te despiden y te dan un papel.\n\n✔ Leelo entero, sin apuro\n✔ No firmes lo que no entendés\n✔ Pedí copia de todo\n\nGuardalo para cuando lo necesites. O comentá «DESPIDO» y te mando la guía «Despido: el papel del viernes».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": ""
   },
   {
@@ -58,6 +69,11 @@
     "fecha": "2026-11-27",
     "hora": "13:40",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "facebook"
+    ],
     "formula": "tres cartas cerradas",
     "tema": "penal: citación",
     "basado_en": "Te llegó una citación penal: qué no hacer antes de hablar con un abogado",
@@ -70,14 +86,78 @@
       "Carta 2: no declares sin abogado",
       "Carta 3: nadie te obliga a declarar contra vos",
       "Mandáselo a quien le llegó una.",
-      "«PENAL» por WhatsApp"
+      "Comentá «PENAL»"
     ],
     "personaje": "Nico",
     "lugar_ba": "Cocina de la casa de Nico en Nueva Pompeya, de noche",
     "escena_visual": "Tres cartas boca abajo con «?» sobre la mesa de la cocina; se dan vuelta de a una con un golpe seco. La tercera se ilumina en dorado.",
-    "cierre": "Mandáselo a quien le llegó una. O escribinos «PENAL» por WhatsApp.",
+    "cierre": "Mandáselo a quien le llegó una. O comentá «PENAL» y te mando la guía «Penal: citación».",
     "palabra": "PENAL",
-    "copy": "Te llegó una citación penal. Tres cartas.\n\n✔ Carta 1: no la ignores\n✔ Carta 2: no declares sin abogado\n✔ Carta 3: nadie te obliga a declarar contra vos\n\nMandáselo a quien le llegó una. O escribinos «PENAL» por WhatsApp.\n\nFuente: Constitución Nacional, art. 18.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Te llegó una citación penal. Tres cartas.\n\n✔ Carta 1: no la ignores\n✔ Carta 2: no declares sin abogado\n✔ Carta 3: nadie te obliga a declarar contra vos\n\nMandáselo a quien le llegó una. O comentá «PENAL» y te mando la guía «Penal: citación».\n\nFuente: Constitución Nacional, art. 18.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "fuente": "Constitución Nacional, art. 18"
+  },
+  {
+    "id": "vita-2711-g1",
+    "fecha": "2026-11-27",
+    "hora": "16:10",
+    "marca": "VITA",
+    "motor_voz": "gratis",
+    "variante_de": "vita-2711-2",
+    "redes": [
+      "facebook"
+    ],
+    "formula": "contador que avanza",
+    "tema": "despido: el papel del viernes",
+    "basado_en": "variante de vita-2711-2 (Te despidieron: qué pedir y qué no firmar ese día)",
+    "gancho_pantalla": "Minuto 1 en la oficina: te despiden.",
+    "voz": "Minuto uno: te dicen que estás despedida. Minuto dos: te dan un papel. Minuto tres: pedí copia. Y antes de firmar, leelo entero. Mandáselo a quien esté pasando por esto.",
+    "caracteres_voz": 169,
+    "textos_pantalla": [
+      "Minuto 1 en la oficina: te despiden.",
+      "Min. 1: la noticia",
+      "Min. 2: el papel",
+      "Min. 3: pedí copia",
+      "Mandáselo a quien esté pasando por esto.",
+      "Comentá «DESPIDO»"
+    ],
+    "personaje": "Sole",
+    "lugar_ba": "Pasillo del supermercado de Flores, 18:00",
+    "escena_visual": "Reloj digital de minutos en estilo cartulina pop-up; cada minuto se despliega una solapa.",
+    "cierre": "Mandáselo a quien esté pasando por esto. O comentá «DESPIDO» y te mando la guía «Despido: el papel del viernes».",
+    "palabra": "DESPIDO",
+    "copy": "Minuto 1 en la oficina: te despiden.\n\n✔ Min. 1: la noticia\n✔ Min. 2: el papel\n✔ Min. 3: pedí copia\n\nMandáselo a quien esté pasando por esto. O comentá «DESPIDO» y te mando la guía «Despido: el papel del viernes».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "fuente": ""
+  },
+  {
+    "id": "vita-2711-g2",
+    "fecha": "2026-11-27",
+    "hora": "19:40",
+    "marca": "VITA",
+    "motor_voz": "gratis",
+    "variante_de": "vita-2711-3",
+    "redes": [
+      "facebook"
+    ],
+    "formula": "advertencia",
+    "tema": "penal: citación",
+    "basado_en": "variante de vita-2711-3 (Te llegó una citación penal: qué no hacer antes de hablar con un abogado)",
+    "gancho_pantalla": "Citación penal: no vayas solo.",
+    "voz": "Te citaron por una causa penal. No vayas solo. Consultá antes con un abogado, llevá la citación y recordá que no estás obligado a declarar contra vos. Guardalo por las dudas.",
+    "caracteres_voz": 174,
+    "textos_pantalla": [
+      "Citación penal: no vayas solo.",
+      "Consultá antes",
+      "Llevá la citación",
+      "No te obligan a declarar contra vos",
+      "Guardalo por las dudas.",
+      "Comentá «PENAL»"
+    ],
+    "personaje": "Nico",
+    "lugar_ba": "Escalinata de un edificio judicial genérico",
+    "escena_visual": "Estilo low-poly: una escalera larga en contrapicado y una silueta que sube con un abogado al lado.",
+    "cierre": "Guardalo por las dudas. O comentá «PENAL» y te mando la guía «Penal: citación».",
+    "palabra": "PENAL",
+    "copy": "Citación penal: no vayas solo.\n\n✔ Consultá antes\n✔ Llevá la citación\n✔ No te obligan a declarar contra vos\n\nGuardalo por las dudas. O comentá «PENAL» y te mando la guía «Penal: citación».\n\nFuente: Constitución Nacional, art. 18.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": "Constitución Nacional, art. 18"
   },
   {
@@ -85,6 +165,12 @@
     "fecha": "2026-11-27",
     "hora": "21:10",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "segunda persona «vos»",
     "tema": "sucesión: vender la casa heredada",
     "basado_en": "nuevo",
@@ -97,14 +183,14 @@
       "Partidas, escritura e impuestos",
       "Acuerdo entre hermanos, por escrito",
       "Mandáselo a tus hermanos.",
-      "«HERENCIA» por WhatsApp"
+      "Comentá «HERENCIA»"
     ],
     "personaje": "Sole y su hermano Dani",
     "lugar_ba": "Casa de los padres de Sole en Parque Avellaneda",
     "escena_visual": "Una llave gigante cuelga sobre la mesa del comedor; Sole y Dani la miran desde abajo. Tres carpetas se apilan solas a medida que habla la narradora.",
-    "cierre": "Mandáselo a tus hermanos. O escribinos «HERENCIA» por WhatsApp.",
+    "cierre": "Mandáselo a tus hermanos. O comentá «HERENCIA» y te mando «Los primeros pasos de una sucesión».",
     "palabra": "HERENCIA",
-    "copy": "Heredaste la casa. ¿La podés vender mañana?\n\n✔ Primero, la sucesión\n✔ Partidas, escritura e impuestos\n✔ Acuerdo entre hermanos, por escrito\n\nMandáselo a tus hermanos. O escribinos «HERENCIA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Heredaste la casa. ¿La podés vender mañana?\n\n✔ Primero, la sucesión\n✔ Partidas, escritura e impuestos\n✔ Acuerdo entre hermanos, por escrito\n\nMandáselo a tus hermanos. O comentá «HERENCIA» y te mando «Los primeros pasos de una sucesión».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": ""
   },
   {
@@ -112,6 +198,11 @@
     "fecha": "2026-11-28",
     "hora": "08:40",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "facebook"
+    ],
     "formula": "contador que avanza",
     "tema": "choque: plazo para reclamar",
     "basado_en": "nuevo",
@@ -124,14 +215,14 @@
       "Plazo general: 3 años",
       "Papeles y estudios, al día",
       "Guardalo para cuando lo necesites.",
-      "«PLAZO» por WhatsApp"
+      "Comentá «PLAZO»"
     ],
     "personaje": "Nico",
     "lugar_ba": "Puente Alsina, Nueva Pompeya, de mañana",
     "escena_visual": "Un contador dorado gigante gira sobre el puente mientras Nico cruza en moto; los números vuelan como hojas de calendario.",
-    "cierre": "Guardalo para cuando lo necesites. O escribinos «PLAZO» por WhatsApp.",
+    "cierre": "Guardalo para cuando lo necesites. O comentá «PLAZO» y te mando la guía «Choque: plazo para reclamar».",
     "palabra": "PLAZO",
-    "copy": "Te chocaron: el reloj de 3 años ya corre.\n\n✔ Día 1 · día 100 · día 500\n✔ Plazo general: 3 años\n✔ Papeles y estudios, al día\n\nGuardalo para cuando lo necesites. O escribinos «PLAZO» por WhatsApp.\n\nFuente: Código Civil y Comercial, art. 2561.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Te chocaron: el reloj de 3 años ya corre.\n\n✔ Día 1 · día 100 · día 500\n✔ Plazo general: 3 años\n✔ Papeles y estudios, al día\n\nGuardalo para cuando lo necesites. O comentá «PLAZO» y te mando la guía «Choque: plazo para reclamar».\n\nFuente: Código Civil y Comercial, art. 2561.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": "Código Civil y Comercial, art. 2561"
   },
   {
@@ -139,6 +230,12 @@
     "fecha": "2026-11-28",
     "hora": "11:10",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "mito roto",
     "tema": "ART: el error propio",
     "basado_en": "Mito: «si fue culpa mía, la ART no me cubre»",
@@ -151,14 +248,14 @@
       "Afuera: lo hecho a propósito",
       "Avisá, atendete y guardá todo",
       "Mandáselo a un compañero de trabajo.",
-      "«CULPA» por WhatsApp"
+      "Comentá «CULPA»"
     ],
     "personaje": "Sole",
     "lugar_ba": "Depósito del supermercado de Flores",
     "escena_visual": "Sole se corta con el cúter; la frase «fue mi culpa» aparece en un cartel de neón que se rompe en pedazos con un golpe de sonido.",
-    "cierre": "Mandáselo a un compañero de trabajo. O escribinos «CULPA» por WhatsApp.",
+    "cierre": "Mandáselo a un compañero de trabajo. O comentá «CULPA» y te mando la guía «ART: el error propio».",
     "palabra": "CULPA",
-    "copy": "«Fue mi error, la ART no me cubre.» Falso.\n\n✔ Un error tuyo no te deja sin ART\n✔ Afuera: lo hecho a propósito\n✔ Avisá, atendete y guardá todo\n\nMandáselo a un compañero de trabajo. O escribinos «CULPA» por WhatsApp.\n\nFuente: Ley 24.557, art. 6, inc. 3.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "«Fue mi error, la ART no me cubre.» Falso.\n\n✔ Un error tuyo no te deja sin ART\n✔ Afuera: lo hecho a propósito\n✔ Avisá, atendete y guardá todo\n\nMandáselo a un compañero de trabajo. O comentá «CULPA» y te mando la guía «ART: el error propio».\n\nFuente: Ley 24.557, art. 6, inc. 3.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": "Ley 24.557, art. 6, inc. 3"
   },
   {
@@ -166,6 +263,11 @@
     "fecha": "2026-11-28",
     "hora": "13:40",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "facebook"
+    ],
     "formula": "¿cuál sos? (identidad)",
     "tema": "choque: cómo reaccionás",
     "basado_en": "Las primeras 24 horas después de un choque (como identidad)",
@@ -178,21 +280,91 @@
       "El que arregla de palabra",
       "El que junta pruebas",
       "Mandáselo al que discute.",
-      "«CHOQUE» por WhatsApp"
+      "Comentá «CHOQUE»"
     ],
     "personaje": "Tres conductores en silueta (Nico es el tercero)",
     "lugar_ba": "Av. Perito Moreno, Parque Avellaneda, mediodía",
     "escena_visual": "Pantalla partida en tres franjas, un auto chocado en cada una con rótulo. Las dos primeras se apagan; la tercera queda iluminada con una carpeta dorada.",
-    "cierre": "Mandáselo al que discute. O escribinos «CHOQUE» por WhatsApp.",
+    "cierre": "Mandáselo al que discute. O comentá «CHOQUE» y te mando la guía «Choque: cómo reaccionás».",
     "palabra": "CHOQUE",
-    "copy": "Después de un choque, ¿cuál de los tres sos?\n\n✔ El que discute a los gritos\n✔ El que arregla de palabra\n✔ El que junta pruebas\n\nMandáselo al que discute. O escribinos «CHOQUE» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Después de un choque, ¿cuál de los tres sos?\n\n✔ El que discute a los gritos\n✔ El que arregla de palabra\n✔ El que junta pruebas\n\nMandáselo al que discute. O comentá «CHOQUE» y te mando la guía «Choque: cómo reaccionás».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": ""
+  },
+  {
+    "id": "vita-2811-g1",
+    "fecha": "2026-11-28",
+    "hora": "16:10",
+    "marca": "VITA",
+    "motor_voz": "gratis",
+    "variante_de": "vita-2711-4",
+    "redes": [
+      "facebook"
+    ],
+    "formula": "tres cartas cerradas",
+    "tema": "sucesión: vender la casa heredada",
+    "basado_en": "variante de vita-2711-4 (nuevo)",
+    "gancho_pantalla": "La casa de tus padres: tres cartas.",
+    "voz": "Heredaron la casa de sus padres. Tres cartas. Primera: acuerdo entre hermanos, por escrito. Segunda: los papeles de la casa. Tercera: la sucesión, antes de vender. Guardalo para hablarlo en familia.",
+    "caracteres_voz": 198,
+    "textos_pantalla": [
+      "La casa de tus padres: tres cartas.",
+      "Acuerdo por escrito",
+      "Papeles de la casa",
+      "Sucesión antes de vender",
+      "Guardalo para hablarlo en familia.",
+      "Comentá «HERENCIA»"
+    ],
+    "personaje": "Sole y su hermano Dani",
+    "lugar_ba": "Patio de la casa de los padres en Parque Avellaneda",
+    "escena_visual": "Tres cartas sobre la mesa del patio, en estilo arcilla con luz de tarde.",
+    "cierre": "Guardalo para hablarlo en familia. O comentá «HERENCIA» y te mando «Los primeros pasos de una sucesión».",
+    "palabra": "HERENCIA",
+    "copy": "La casa de tus padres: tres cartas.\n\n✔ Acuerdo por escrito\n✔ Papeles de la casa\n✔ Sucesión antes de vender\n\nGuardalo para hablarlo en familia. O comentá «HERENCIA» y te mando «Los primeros pasos de una sucesión».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "fuente": ""
+  },
+  {
+    "id": "vita-2811-g2",
+    "fecha": "2026-11-28",
+    "hora": "19:40",
+    "marca": "VITA",
+    "motor_voz": "gratis",
+    "variante_de": "vita-2811-2",
+    "redes": [
+      "facebook"
+    ],
+    "formula": "escena con hora o número",
+    "tema": "ART: el error propio",
+    "basado_en": "variante de vita-2811-2 (Mito: «si fue culpa mía, la ART no me cubre»)",
+    "gancho_pantalla": "Martes 7:15: te cortás en el depósito.",
+    "voz": "Martes, 7:15. Te cortás con el cúter por un descuido. Igual tenés ART. Avisá, atendete y guardá el parte. Lo que queda afuera es lo hecho a propósito. Mandáselo a un compañero de turno.",
+    "caracteres_voz": 185,
+    "textos_pantalla": [
+      "Martes 7:15: te cortás en el depósito.",
+      "Avisá",
+      "Atendete",
+      "Guardá el parte",
+      "Mandáselo a un compañero de turno.",
+      "Comentá «CULPA»"
+    ],
+    "personaje": "Sole",
+    "lugar_ba": "Cámara frigorífica del supermercado de Flores, 7:15",
+    "escena_visual": "Estilo rayos X sobre la mano de Sole; el reloj 7:15 en un display LED.",
+    "cierre": "Mandáselo a un compañero de turno. O comentá «CULPA» y te mando la guía «ART: el error propio».",
+    "palabra": "CULPA",
+    "copy": "Martes 7:15: te cortás en el depósito.\n\n✔ Avisá\n✔ Atendete\n✔ Guardá el parte\n\nMandáselo a un compañero de turno. O comentá «CULPA» y te mando la guía «ART: el error propio».\n\nFuente: Ley 24.557, art. 6, inc. 3.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "fuente": "Ley 24.557, art. 6, inc. 3"
   },
   {
     "id": "vita-2811-4",
     "fecha": "2026-11-28",
     "hora": "21:10",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "pregunta con respuesta numérica",
     "tema": "aguinaldo: fecha de pago",
     "basado_en": "Aguinaldo de diciembre: hasta cuándo te lo tienen que pagar",
@@ -205,14 +377,14 @@
       "Mitad del mejor sueldo del semestre",
       "Guardá tus recibos",
       "Guardalo y revisá tu recibo en diciembre.",
-      "«AGUINALDO» por WhatsApp"
+      "Comentá «AGUINALDO»"
     ],
     "personaje": "Sole",
     "lugar_ba": "Caja del supermercado de Flores, cierre del turno",
     "escena_visual": "Un calendario de pared pasa hojas solo y frena en el 18 de diciembre, que se enciende en dorado; el recibo de Sole se despliega como un mapa.",
-    "cierre": "Guardalo y revisá tu recibo en diciembre. O escribinos «AGUINALDO» por WhatsApp.",
+    "cierre": "Guardalo y revisá tu recibo en diciembre. O comentá «AGUINALDO» y te mando la guía «Aguinaldo: fecha de pago».",
     "palabra": "AGUINALDO",
-    "copy": "Aguinaldo: ¿qué día vence la segunda cuota?\n\n✔ Vence el 18 de diciembre\n✔ Mitad del mejor sueldo del semestre\n✔ Guardá tus recibos\n\nGuardalo y revisá tu recibo en diciembre. O escribinos «AGUINALDO» por WhatsApp.\n\nFuente: Ley de Contrato de Trabajo, art. 122.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Aguinaldo: ¿qué día vence la segunda cuota?\n\n✔ Vence el 18 de diciembre\n✔ Mitad del mejor sueldo del semestre\n✔ Guardá tus recibos\n\nGuardalo y revisá tu recibo en diciembre. O comentá «AGUINALDO» y te mando la guía «Aguinaldo: fecha de pago».\n\nFuente: Ley de Contrato de Trabajo, art. 122.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": "Ley de Contrato de Trabajo, art. 122"
   },
   {
@@ -220,6 +392,11 @@
     "fecha": "2026-11-29",
     "hora": "08:40",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "facebook"
+    ],
     "formula": "serie (parte 1)",
     "tema": "trayecto: choque camino al trabajo",
     "basado_en": "Choque yendo al trabajo: también puede ser accidente laboral",
@@ -232,14 +409,14 @@
       "A 3 cuadras del depósito",
       "¿Choque o accidente de trabajo?",
       "Guardalo para ver la parte 2.",
-      "«TRAYECTO» por WhatsApp"
+      "Comentá «TRAYECTO»"
     ],
     "personaje": "Nico",
     "lugar_ba": "Av. Sáenz y Av. Perito Moreno, Nueva Pompeya, 7:40",
     "escena_visual": "Cámara siguiendo la moto con líneas de velocidad; el golpe congela la escena y el cronómetro dorado marca 7:43. Cierra con «Parte 2» en dorado.",
-    "cierre": "Guardalo para ver la parte 2. O escribinos «TRAYECTO» por WhatsApp.",
+    "cierre": "Guardalo para ver la parte 2. O comentá «TRAYECTO» y te mando «Pasos después del accidente».",
     "palabra": "TRAYECTO",
-    "copy": "Parte 1: salió a trabajar y no llegó.\n\n✔ 7:40, sale en moto\n✔ A 3 cuadras del depósito\n✔ ¿Choque o accidente de trabajo?\n\nGuardalo para ver la parte 2. O escribinos «TRAYECTO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Parte 1: salió a trabajar y no llegó.\n\n✔ 7:40, sale en moto\n✔ A 3 cuadras del depósito\n✔ ¿Choque o accidente de trabajo?\n\nGuardalo para ver la parte 2. O comentá «TRAYECTO» y te mando «Pasos después del accidente».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": ""
   },
   {
@@ -247,6 +424,12 @@
     "fecha": "2026-11-29",
     "hora": "11:10",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "loop",
     "tema": "penal: detención",
     "basado_en": "nuevo",
@@ -259,14 +442,14 @@
       "Que querés un abogado",
       "Nada más",
       "Mandáselo a quien sale de noche.",
-      "«DETENIDO» por WhatsApp"
+      "Comentá «DETENIDO»"
     ],
     "personaje": "Nico (en silueta)",
     "lugar_ba": "Vereda de Av. Caseros, Parque Patricios, de noche",
     "escena_visual": "Luces azules sin patrullero visible, solo reflejos en la vereda; tres palabras aparecen y se apagan. El último cuadro vuelve al primero.",
-    "cierre": "Mandáselo a quien sale de noche. O escribinos «DETENIDO» por WhatsApp.",
+    "cierre": "Mandáselo a quien sale de noche. O comentá «DETENIDO» y te mando la guía «Penal: detención».",
     "palabra": "DETENIDO",
-    "copy": "Te llevan detenido. ¿Qué decís?\n\n✔ Tu nombre y tus datos\n✔ Que querés un abogado\n✔ Nada más\n\nMandáselo a quien sale de noche. O escribinos «DETENIDO» por WhatsApp.\n\nFuente: Constitución Nacional, art. 18.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Te llevan detenido. ¿Qué decís?\n\n✔ Tu nombre y tus datos\n✔ Que querés un abogado\n✔ Nada más\n\nMandáselo a quien sale de noche. O comentá «DETENIDO» y te mando la guía «Penal: detención».\n\nFuente: Constitución Nacional, art. 18.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": "Constitución Nacional, art. 18"
   },
   {
@@ -274,6 +457,12 @@
     "fecha": "2026-11-29",
     "hora": "13:40",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "advertencia",
     "tema": "liquidación final",
     "basado_en": "Liquidación final: qué tiene que incluir",
@@ -286,21 +475,91 @@
       "Aguinaldo y vacaciones proporcionales",
       "Pago: 4 días hábiles",
       "Guardalo para cuando lo necesites.",
-      "«LIQUIDACION» por WhatsApp"
+      "Comentá «LIQUIDACION»"
     ],
     "personaje": "Sole",
     "lugar_ba": "Mesa de la cocina de Sole en Floresta",
     "escena_visual": "La liquidación se despliega como una tira de calculadora que cruza la cocina; tres renglones se marcan con resaltador dorado.",
-    "cierre": "Guardalo para cuando lo necesites. O escribinos «LIQUIDACION» por WhatsApp.",
+    "cierre": "Guardalo para cuando lo necesites. O comentá «LIQUIDACION» y te mando la guía «Liquidación final».",
     "palabra": "LIQUIDACION",
-    "copy": "Liquidación final: no firmes sin contar.\n\n✔ Días trabajados del mes\n✔ Aguinaldo y vacaciones proporcionales\n✔ Pago: 4 días hábiles\n\nGuardalo para cuando lo necesites. O escribinos «LIQUIDACION» por WhatsApp.\n\nFuente: Ley de Contrato de Trabajo, arts. 128 y 255 bis.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Liquidación final: no firmes sin contar.\n\n✔ Días trabajados del mes\n✔ Aguinaldo y vacaciones proporcionales\n✔ Pago: 4 días hábiles\n\nGuardalo para cuando lo necesites. O comentá «LIQUIDACION» y te mando la guía «Liquidación final».\n\nFuente: Ley de Contrato de Trabajo, arts. 128 y 255 bis.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": "Ley de Contrato de Trabajo, arts. 128 y 255 bis"
+  },
+  {
+    "id": "vita-2911-g1",
+    "fecha": "2026-11-29",
+    "hora": "16:10",
+    "marca": "VITA",
+    "motor_voz": "gratis",
+    "variante_de": "vita-2811-4",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
+    "formula": "segunda persona «vos»",
+    "tema": "aguinaldo: fecha de pago",
+    "basado_en": "variante de vita-2811-4 (Aguinaldo de diciembre: hasta cuándo te lo tienen que pagar)",
+    "gancho_pantalla": "Vos esperás el aguinaldo el 18.",
+    "voz": "Vos esperás el aguinaldo para el 18 de diciembre. Revisá el recibo cuando llegue: el monto se calcula sobre la mitad del mejor sueldo del semestre. Si falta, consultá. Guardalo para el 18 de diciembre.",
+    "caracteres_voz": 201,
+    "textos_pantalla": [
+      "Vos esperás el aguinaldo el 18.",
+      "18 de diciembre",
+      "Mitad del mejor sueldo",
+      "Si falta, consultá",
+      "Guardalo para el 18 de diciembre.",
+      "Comentá «AGUINALDO»"
+    ],
+    "personaje": "Sole",
+    "lugar_ba": "Kiosco de Floresta, a la salida del turno",
+    "escena_visual": "Estilo diorama: el kiosco sobre una baldosa flotante con un calendario gigante detrás.",
+    "cierre": "Guardalo para el 18 de diciembre. O comentá «AGUINALDO» y te mando la guía «Aguinaldo: fecha de pago».",
+    "palabra": "AGUINALDO",
+    "copy": "Vos esperás el aguinaldo el 18.\n\n✔ 18 de diciembre\n✔ Mitad del mejor sueldo\n✔ Si falta, consultá\n\nGuardalo para el 18 de diciembre. O comentá «AGUINALDO» y te mando la guía «Aguinaldo: fecha de pago».\n\nFuente: Ley de Contrato de Trabajo, art. 122.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "fuente": "Ley de Contrato de Trabajo, art. 122"
+  },
+  {
+    "id": "vita-2911-g2",
+    "fecha": "2026-11-29",
+    "hora": "19:40",
+    "marca": "VITA",
+    "motor_voz": "gratis",
+    "variante_de": "vita-2811-1",
+    "redes": [
+      "facebook"
+    ],
+    "formula": "tres cartas cerradas",
+    "tema": "choque: plazo para reclamar",
+    "basado_en": "variante de vita-2811-1 (nuevo)",
+    "gancho_pantalla": "Plazo para reclamar un choque: 3 cartas.",
+    "voz": "Tres cartas sobre el plazo para reclamar un choque. Primera: el plazo general es de tres años. Segunda: corre desde el choque. Tercera: no lo dejes para el final. Mandáselo a quien chocó este año.",
+    "caracteres_voz": 196,
+    "textos_pantalla": [
+      "Plazo para reclamar un choque: 3 cartas.",
+      "3 años",
+      "Corre desde el choque",
+      "No lo dejes para el final",
+      "Mandáselo a quien chocó este año.",
+      "Comentá «PLAZO»"
+    ],
+    "personaje": "Nico",
+    "lugar_ba": "Mesa de un bar de Barracas",
+    "escena_visual": "Tres cartas doradas sobre un mantel a cuadros; un reloj de arena en el centro.",
+    "cierre": "Mandáselo a quien chocó este año. O comentá «PLAZO» y te mando la guía «Choque: plazo para reclamar».",
+    "palabra": "PLAZO",
+    "copy": "Plazo para reclamar un choque: 3 cartas.\n\n✔ 3 años\n✔ Corre desde el choque\n✔ No lo dejes para el final\n\nMandáselo a quien chocó este año. O comentá «PLAZO» y te mando la guía «Choque: plazo para reclamar».\n\nFuente: Código Civil y Comercial, art. 2561.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "fuente": "Código Civil y Comercial, art. 2561"
   },
   {
     "id": "vita-2911-4",
     "fecha": "2026-11-29",
     "hora": "21:10",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "facebook"
+    ],
     "formula": "escena con hora o número",
     "tema": "choque en las fiestas",
     "basado_en": "Fiestas: si chocás, lo primero no es discutir",
@@ -313,14 +572,14 @@
       "Datos del otro y testigos",
       "Aviso al seguro en 3 días",
       "Mandáselo a quien maneje en las fiestas.",
-      "«FIESTAS» por WhatsApp"
+      "Comentá «FIESTAS»"
     ],
     "personaje": "Nico",
     "lugar_ba": "Calle de Parque Patricios con guirnaldas, 23:40",
     "escena_visual": "Guirnaldas y bengalas en cámara lenta; el choque frena los fuegos artificiales en el aire. Los tres pasos aparecen como luces del arbolito.",
-    "cierre": "Mandáselo a quien maneje en las fiestas. O escribinos «FIESTAS» por WhatsApp.",
+    "cierre": "Mandáselo a quien maneje en las fiestas. O comentá «FIESTAS» y te mando la guía «Choque en las fiestas».",
     "palabra": "FIESTAS",
-    "copy": "24/12, 23:40: te chocan llegando a la cena.\n\n✔ Fotos de todo\n✔ Datos del otro y testigos\n✔ Aviso al seguro en 3 días\n\nMandáselo a quien maneje en las fiestas. O escribinos «FIESTAS» por WhatsApp.\n\nFuente: Ley 17.418, art. 46.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "24/12, 23:40: te chocan llegando a la cena.\n\n✔ Fotos de todo\n✔ Datos del otro y testigos\n✔ Aviso al seguro en 3 días\n\nMandáselo a quien maneje en las fiestas. O comentá «FIESTAS» y te mando la guía «Choque en las fiestas».\n\nFuente: Ley 17.418, art. 46.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": "Ley 17.418, art. 46"
   },
   {
@@ -328,6 +587,12 @@
     "fecha": "2026-11-30",
     "hora": "08:40",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "tres cartas cerradas",
     "tema": "ART: rechazo del accidente",
     "basado_en": "La ART rechazó tu accidente: no es la última palabra",
@@ -340,14 +605,14 @@
       "Carta 2: seguí atendiéndote",
       "Carta 3: la Comisión Médica",
       "Guardalo para cuando lo necesites.",
-      "«ART» por WhatsApp"
+      "Comentá «ART»"
     ],
     "personaje": "Sole",
     "lugar_ba": "Cocina de Sole en Floresta, de noche",
     "escena_visual": "Una carta con sello rojo cae sobre la mesa; tres cartas doradas salen del sobre y se dan vuelta de a una.",
-    "cierre": "Guardalo para cuando lo necesites. O escribinos «ART» por WhatsApp.",
+    "cierre": "Guardalo para cuando lo necesites. O comentá «ART» y te mando la guía «ART: rechazo del accidente».",
     "palabra": "ART",
-    "copy": "La ART te rechazó. Tres cartas para hoy.\n\n✔ Carta 1: el rechazo, por escrito\n✔ Carta 2: seguí atendiéndote\n✔ Carta 3: la Comisión Médica\n\nGuardalo para cuando lo necesites. O escribinos «ART» por WhatsApp.\n\nFuente: Ley 24.557, art. 6 (Comisiones Médicas).\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "La ART te rechazó. Tres cartas para hoy.\n\n✔ Carta 1: el rechazo, por escrito\n✔ Carta 2: seguí atendiéndote\n✔ Carta 3: la Comisión Médica\n\nGuardalo para cuando lo necesites. O comentá «ART» y te mando la guía «ART: rechazo del accidente».\n\nFuente: Ley 24.557, art. 6 (Comisiones Médicas).\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": "Ley 24.557, art. 6 (Comisiones Médicas)"
   },
   {
@@ -355,6 +620,12 @@
     "fecha": "2026-11-30",
     "hora": "11:10",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "segunda persona «vos»",
     "tema": "penal: te denunciaron",
     "basado_en": "nuevo",
@@ -367,14 +638,14 @@
       "Nada en redes",
       "Consultá antes de cualquier citación",
       "Guardalo por las dudas.",
-      "«DENUNCIA» por WhatsApp"
+      "Comentá «DENUNCIA»"
     ],
     "personaje": "Nico",
     "lugar_ba": "Colectivo por Av. Caseros, Parque Patricios",
     "escena_visual": "El mensaje vibra en el celular y la pantalla se agranda hasta llenar el colectivo; los asientos se vacían alrededor de Nico.",
-    "cierre": "Guardalo por las dudas. O escribinos «DENUNCIA» por WhatsApp.",
+    "cierre": "Guardalo por las dudas. O comentá «DENUNCIA» y te mando la guía «Penal: te denunciaron».",
     "palabra": "DENUNCIA",
-    "copy": "Te enterás por un mensaje: te denunciaron.\n\n✔ No respondas ni borres nada\n✔ Nada en redes\n✔ Consultá antes de cualquier citación\n\nGuardalo por las dudas. O escribinos «DENUNCIA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Te enterás por un mensaje: te denunciaron.\n\n✔ No respondas ni borres nada\n✔ Nada en redes\n✔ Consultá antes de cualquier citación\n\nGuardalo por las dudas. O comentá «DENUNCIA» y te mando la guía «Penal: te denunciaron».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": ""
   },
   {
@@ -382,6 +653,12 @@
     "fecha": "2026-11-30",
     "hora": "13:40",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "contador que avanza",
     "tema": "certificado de trabajo",
     "basado_en": "Te fuiste del trabajo: pedí tu certificado de trabajo",
@@ -394,21 +671,90 @@
       "Pedilos por escrito",
       "Revisá función y aportes",
       "Mandáselo a quien esté por irse.",
-      "«CERTIFICADO» por WhatsApp"
+      "Comentá «CERTIFICADO»"
     ],
     "personaje": "Sole",
     "lugar_ba": "Puerta del supermercado de Flores, último día",
     "escena_visual": "Un contador dorado de días hábiles corre sobre el portón; Sole sale con su carpeta y los números caen como papel picado.",
-    "cierre": "Mandáselo a quien esté por irse. O escribinos «CERTIFICADO» por WhatsApp.",
+    "cierre": "Mandáselo a quien esté por irse. O comentá «CERTIFICADO» y te mando la guía «Certificado de trabajo».",
     "palabra": "CERTIFICADO",
-    "copy": "Te fuiste: corren 45 días hábiles.\n\n✔ Día 1 · día 10 · día 45 hábiles\n✔ Pedilos por escrito\n✔ Revisá función y aportes\n\nMandáselo a quien esté por irse. O escribinos «CERTIFICADO» por WhatsApp.\n\nFuente: Ley de Contrato de Trabajo, art. 80 (texto de la Ley 27.802).\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Te fuiste: corren 45 días hábiles.\n\n✔ Día 1 · día 10 · día 45 hábiles\n✔ Pedilos por escrito\n✔ Revisá función y aportes\n\nMandáselo a quien esté por irse. O comentá «CERTIFICADO» y te mando la guía «Certificado de trabajo».\n\nFuente: Ley de Contrato de Trabajo, art. 80 (texto de la Ley 27.802).\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": "Ley de Contrato de Trabajo, art. 80 (texto de la Ley 27.802)"
+  },
+  {
+    "id": "vita-3011-g1",
+    "fecha": "2026-11-30",
+    "hora": "16:10",
+    "marca": "VITA",
+    "motor_voz": "gratis",
+    "variante_de": "vita-2911-2",
+    "redes": [
+      "facebook"
+    ],
+    "formula": "¿cuál sos? (identidad)",
+    "tema": "penal: detención",
+    "basado_en": "variante de vita-2911-2 (nuevo)",
+    "gancho_pantalla": "Te llevan detenido: ¿cuál sos?",
+    "voz": "Te llevan detenido. Tres tipos. El que habla de más. El que se resiste. Y el que da sus datos, pide un abogado y no declara sin él. ¿Cuál sos? Mandáselo a quien sale de noche.",
+    "caracteres_voz": 175,
+    "textos_pantalla": [
+      "Te llevan detenido: ¿cuál sos?",
+      "El que habla de más",
+      "El que se resiste",
+      "El que pide abogado",
+      "Mandáselo a quien sale de noche.",
+      "Comentá «DETENIDO»"
+    ],
+    "personaje": "Tres siluetas",
+    "lugar_ba": "Tres siluetas en una vereda de Constitución, de noche",
+    "escena_visual": "Pantalla partida en tres, estilo tinta y luz azul; solo la tercera silueta queda iluminada.",
+    "cierre": "Mandáselo a quien sale de noche. O comentá «DETENIDO» y te mando la guía «Penal: detención».",
+    "palabra": "DETENIDO",
+    "copy": "Te llevan detenido: ¿cuál sos?\n\n✔ El que habla de más\n✔ El que se resiste\n✔ El que pide abogado\n\nMandáselo a quien sale de noche. O comentá «DETENIDO» y te mando la guía «Penal: detención».\n\nFuente: Constitución Nacional, art. 18.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "fuente": "Constitución Nacional, art. 18"
+  },
+  {
+    "id": "vita-3011-g2",
+    "fecha": "2026-11-30",
+    "hora": "19:40",
+    "marca": "VITA",
+    "motor_voz": "gratis",
+    "variante_de": "vita-2911-3",
+    "redes": [
+      "facebook"
+    ],
+    "formula": "pregunta con respuesta numérica",
+    "tema": "liquidación final",
+    "basado_en": "variante de vita-2911-3 (Liquidación final: qué tiene que incluir)",
+    "gancho_pantalla": "Liquidación final: ¿en cuántos días?",
+    "voz": "¿En cuántos días te tienen que pagar la liquidación final si cobrabas por mes? ¿Diez? ¿Treinta? Cuatro días hábiles. Anotá la fecha y revisá cada renglón. Guardalo para cuando te vayas.",
+    "caracteres_voz": 185,
+    "textos_pantalla": [
+      "Liquidación final: ¿en cuántos días?",
+      "¿10? ¿30?",
+      "4 días hábiles",
+      "Revisá cada renglón",
+      "Guardalo para cuando te vayas.",
+      "Comentá «LIQUIDACION»"
+    ],
+    "personaje": "Sole",
+    "lugar_ba": "Banco de la plaza de Floresta",
+    "escena_visual": "Fichas numeradas que caen como dominó; queda en pie la del 4.",
+    "cierre": "Guardalo para cuando te vayas. O comentá «LIQUIDACION» y te mando la guía «Liquidación final».",
+    "palabra": "LIQUIDACION",
+    "copy": "Liquidación final: ¿en cuántos días?\n\n✔ ¿10? ¿30?\n✔ 4 días hábiles\n✔ Revisá cada renglón\n\nGuardalo para cuando te vayas. O comentá «LIQUIDACION» y te mando la guía «Liquidación final».\n\nFuente: Ley de Contrato de Trabajo, arts. 128 y 255 bis.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "fuente": "Ley de Contrato de Trabajo, arts. 128 y 255 bis"
   },
   {
     "id": "vita-3011-4",
     "fecha": "2026-11-30",
     "hora": "21:10",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "facebook"
+    ],
     "formula": "mito roto",
     "tema": "choque con un auto sin seguro",
     "basado_en": "Mito: «si el otro no tiene seguro, no puedo reclamar»",
@@ -421,14 +767,14 @@
       "Responden dueño y conductor",
       "Fotos, patente y testigos",
       "Mandáselo a quien maneje.",
-      "«SEGURO» por WhatsApp"
+      "Comentá «SEGURO»"
     ],
     "personaje": "Nico",
     "lugar_ba": "Av. Vélez Sarsfield, Barracas",
     "escena_visual": "Un escudo con la palabra «seguro» se hace añicos; de los pedazos se arman dos siluetas: el dueño y el conductor.",
-    "cierre": "Mandáselo a quien maneje. O escribinos «SEGURO» por WhatsApp.",
+    "cierre": "Mandáselo a quien maneje. O comentá «SEGURO» y te mando la guía «Choque con un auto sin seguro».",
     "palabra": "SEGURO",
-    "copy": "«No tenía seguro, perdí.» No tan rápido.\n\n✔ Sin seguro no es sin reclamo\n✔ Responden dueño y conductor\n✔ Fotos, patente y testigos\n\nMandáselo a quien maneje. O escribinos «SEGURO» por WhatsApp.\n\nFuente: Código Civil y Comercial, art. 1758.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "«No tenía seguro, perdí.» No tan rápido.\n\n✔ Sin seguro no es sin reclamo\n✔ Responden dueño y conductor\n✔ Fotos, patente y testigos\n\nMandáselo a quien maneje. O comentá «SEGURO» y te mando la guía «Choque con un auto sin seguro».\n\nFuente: Código Civil y Comercial, art. 1758.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": "Código Civil y Comercial, art. 1758"
   },
   {
@@ -436,6 +782,12 @@
     "fecha": "2026-12-01",
     "hora": "08:40",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "¿cuál sos? (identidad)",
     "tema": "despido: cómo reaccionás",
     "basado_en": "Te despidieron: qué pedir y qué no firmar ese día",
@@ -448,14 +800,14 @@
       "La que se va sin copia",
       "La que lee y consulta",
       "Mandáselo a quien esté pasando por esto.",
-      "«DESPIDO» por WhatsApp"
+      "Comentá «DESPIDO»"
     ],
     "personaje": "Tres siluetas (Sole es la tercera)",
     "lugar_ba": "Pasillo de góndolas del supermercado de Flores",
     "escena_visual": "Tres carriles de góndolas en pantalla partida; en los dos primeros los papeles se vuelan. En el tercero, una carpeta dorada se cierra.",
-    "cierre": "Mandáselo a quien esté pasando por esto. O escribinos «DESPIDO» por WhatsApp.",
+    "cierre": "Mandáselo a quien esté pasando por esto. O comentá «DESPIDO» y te mando la guía «Despido: cómo reaccionás».",
     "palabra": "DESPIDO",
-    "copy": "Te despiden: ¿cuál de las tres sos?\n\n✔ La que firma todo\n✔ La que se va sin copia\n✔ La que lee y consulta\n\nMandáselo a quien esté pasando por esto. O escribinos «DESPIDO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Te despiden: ¿cuál de las tres sos?\n\n✔ La que firma todo\n✔ La que se va sin copia\n✔ La que lee y consulta\n\nMandáselo a quien esté pasando por esto. O comentá «DESPIDO» y te mando la guía «Despido: cómo reaccionás».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": ""
   },
   {
@@ -463,6 +815,12 @@
     "fecha": "2026-12-01",
     "hora": "11:10",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "pregunta con respuesta numérica",
     "tema": "ART: cuánto dura la baja",
     "basado_en": "nuevo",
@@ -475,14 +833,14 @@
       "Hasta 2 años",
       "Termina antes con el alta",
       "Guardalo para cuando lo necesites.",
-      "«REPOSO» por WhatsApp"
+      "Comentá «REPOSO»"
     ],
     "personaje": "Nico",
     "lugar_ba": "Depósito de bebidas de Barracas",
     "escena_visual": "Un reloj de arena gigante entre los pallets; la arena cae mientras aparecen «6 meses», «1 año» y se clava «2 años» en dorado.",
-    "cierre": "Guardalo para cuando lo necesites. O escribinos «REPOSO» por WhatsApp.",
+    "cierre": "Guardalo para cuando lo necesites. O comentá «REPOSO» y te mando la guía «ART: cuánto dura la baja».",
     "palabra": "REPOSO",
-    "copy": "ART: ¿cuánto puede durar la baja?\n\n✔ ¿6 meses? ¿1 año?\n✔ Hasta 2 años\n✔ Termina antes con el alta\n\nGuardalo para cuando lo necesites. O escribinos «REPOSO» por WhatsApp.\n\nFuente: Ley 24.557, art. 7.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "ART: ¿cuánto puede durar la baja?\n\n✔ ¿6 meses? ¿1 año?\n✔ Hasta 2 años\n✔ Termina antes con el alta\n\nGuardalo para cuando lo necesites. O comentá «REPOSO» y te mando la guía «ART: cuánto dura la baja».\n\nFuente: Ley 24.557, art. 7.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": "Ley 24.557, art. 7"
   },
   {
@@ -490,6 +848,11 @@
     "fecha": "2026-12-01",
     "hora": "13:40",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "facebook"
+    ],
     "formula": "serie (parte 2)",
     "tema": "trayecto: choque camino al trabajo",
     "basado_en": "Qué hacer si el choque fue en el trayecto: empleador, ART y denuncia",
@@ -502,21 +865,92 @@
       "Avisá al empleador y a la ART",
       "Guardá el parte médico",
       "Mandáselo a quien va en moto al trabajo.",
-      "«TRAYECTO» por WhatsApp"
+      "Comentá «TRAYECTO»"
     ],
     "personaje": "Nico",
     "lugar_ba": "Depósito de bebidas de Barracas, mañana siguiente",
     "escena_visual": "Mapa dorado del recorrido de Nico dibujándose desde Pompeya hasta Barracas; el punto del choque late sobre la línea.",
-    "cierre": "Mandáselo a quien va en moto al trabajo. O escribinos «TRAYECTO» por WhatsApp.",
+    "cierre": "Mandáselo a quien va en moto al trabajo. O comentá «TRAYECTO» y te mando «Pasos después del accidente».",
     "palabra": "TRAYECTO",
-    "copy": "Parte 2: el choque de Nico también cuenta.\n\n✔ Camino habitual casa-trabajo\n✔ Avisá al empleador y a la ART\n✔ Guardá el parte médico\n\nMandáselo a quien va en moto al trabajo. O escribinos «TRAYECTO» por WhatsApp.\n\nFuente: Ley 24.557, art. 6, inc. 1.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Parte 2: el choque de Nico también cuenta.\n\n✔ Camino habitual casa-trabajo\n✔ Avisá al empleador y a la ART\n✔ Guardá el parte médico\n\nMandáselo a quien va en moto al trabajo. O comentá «TRAYECTO» y te mando «Pasos después del accidente».\n\nFuente: Ley 24.557, art. 6, inc. 1.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": "Ley 24.557, art. 6, inc. 1"
+  },
+  {
+    "id": "vita-0112-g1",
+    "fecha": "2026-12-01",
+    "hora": "16:10",
+    "marca": "VITA",
+    "motor_voz": "gratis",
+    "variante_de": "vita-2911-4",
+    "redes": [
+      "facebook"
+    ],
+    "formula": "advertencia",
+    "tema": "choque en las fiestas",
+    "basado_en": "variante de vita-2911-4 (Fiestas: si chocás, lo primero no es discutir)",
+    "gancho_pantalla": "Fiestas: no discutas en la calle.",
+    "voz": "Te chocaron en las fiestas. No discutas en la calle. Sacá fotos, pedí los datos del otro y de los testigos, y avisá a tu seguro dentro de los tres días. Mandáselo a quien maneje en las fiestas.",
+    "caracteres_voz": 193,
+    "textos_pantalla": [
+      "Fiestas: no discutas en la calle.",
+      "Fotos",
+      "Datos y testigos",
+      "Seguro en 3 días",
+      "Mandáselo a quien maneje en las fiestas.",
+      "Comentá «FIESTAS»"
+    ],
+    "personaje": "Nico",
+    "lugar_ba": "Av. Caseros con luces de Navidad, Parque Patricios",
+    "escena_visual": "Estilo neón: guirnaldas que se apagan cuando empieza la discusión y se encienden con cada paso.",
+    "cierre": "Mandáselo a quien maneje en las fiestas. O comentá «FIESTAS» y te mando la guía «Choque en las fiestas».",
+    "palabra": "FIESTAS",
+    "copy": "Fiestas: no discutas en la calle.\n\n✔ Fotos\n✔ Datos y testigos\n✔ Seguro en 3 días\n\nMandáselo a quien maneje en las fiestas. O comentá «FIESTAS» y te mando la guía «Choque en las fiestas».\n\nFuente: Ley 17.418, art. 46.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "fuente": "Ley 17.418, art. 46"
+  },
+  {
+    "id": "vita-0112-g2",
+    "fecha": "2026-12-01",
+    "hora": "19:40",
+    "marca": "VITA",
+    "motor_voz": "gratis",
+    "variante_de": "vita-3011-1",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
+    "formula": "mito roto",
+    "tema": "ART: rechazo del accidente",
+    "basado_en": "variante de vita-3011-1 (La ART rechazó tu accidente: no es la última palabra)",
+    "gancho_pantalla": "«Si la ART dice que no, se terminó.»",
+    "voz": "«Si la ART dijo que no, se terminó.» No. Pedí el rechazo por escrito, seguí atendiéndote y presentate en la Comisión Médica. Guardalo para cuando lo necesites.",
+    "caracteres_voz": 159,
+    "textos_pantalla": [
+      "«Si la ART dice que no, se terminó.»",
+      "Rechazo por escrito",
+      "Seguí atendiéndote",
+      "Comisión Médica",
+      "Guardalo para cuando lo necesites.",
+      "Comentá «ART»"
+    ],
+    "personaje": "Sole",
+    "lugar_ba": "Sala de espera de la Comisión Médica, genérica",
+    "escena_visual": "Un sello «NO» gigante se parte en dos al caer; estilo papel recortado.",
+    "cierre": "Guardalo para cuando lo necesites. O comentá «ART» y te mando la guía «ART: rechazo del accidente».",
+    "palabra": "ART",
+    "copy": "«Si la ART dice que no, se terminó.»\n\n✔ Rechazo por escrito\n✔ Seguí atendiéndote\n✔ Comisión Médica\n\nGuardalo para cuando lo necesites. O comentá «ART» y te mando la guía «ART: rechazo del accidente».\n\nFuente: Ley 24.557, art. 6.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "fuente": "Ley 24.557, art. 6"
   },
   {
     "id": "vita-0112-4",
     "fecha": "2026-12-01",
     "hora": "21:10",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "loop",
     "tema": "ART: alta con dolor",
     "basado_en": "Te dieron el alta y todavía te duele",
@@ -529,14 +963,14 @@
       "Seguí con tus estudios",
       "Si no estás de acuerdo: Comisión Médica",
       "Mandáselo a quien esté con ART.",
-      "«ALTA» por WhatsApp"
+      "Comentá «ALTA»"
     ],
     "personaje": "Sole",
     "lugar_ba": "Parada de colectivo en Av. Rivadavia, Flores, 6:30",
     "escena_visual": "Amanecer frío en la parada; Sole se toca el hombro y una onda expansiva dorada sale del punto de dolor. Último cuadro igual al primero.",
-    "cierre": "Mandáselo a quien esté con ART. O escribinos «ALTA» por WhatsApp.",
+    "cierre": "Mandáselo a quien esté con ART. O comentá «ALTA» y te mando «Qué hacer si te dieron el alta y te duele».",
     "palabra": "ALTA",
-    "copy": "Te dieron el alta. Mañana volvés. Y duele.\n\n✔ El alta, por escrito\n✔ Seguí con tus estudios\n✔ Si no estás de acuerdo: Comisión Médica\n\nMandáselo a quien esté con ART. O escribinos «ALTA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Te dieron el alta. Mañana volvés. Y duele.\n\n✔ El alta, por escrito\n✔ Seguí con tus estudios\n✔ Si no estás de acuerdo: Comisión Médica\n\nMandáselo a quien esté con ART. O comentá «ALTA» y te mando «Qué hacer si te dieron el alta y te duele».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": ""
   },
   {
@@ -544,6 +978,12 @@
     "fecha": "2026-12-02",
     "hora": "08:40",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "advertencia",
     "tema": "carta documento del trabajo",
     "basado_en": "Te llegó una carta documento del trabajo: qué no hacer",
@@ -556,14 +996,14 @@
       "Leé qué te reclaman",
       "Plazos cortos: consultá",
       "Guardalo para cuando lo necesites.",
-      "«TELEGRAMA» por WhatsApp"
+      "Comentá «TELEGRAMA»"
     ],
     "personaje": "Sole",
     "lugar_ba": "Puerta de la casa de Sole en Floresta",
     "escena_visual": "El cartero se va y el sobre empieza a latir en la mano de Sole; un cajón se abre solo y ella lo cierra de un golpe.",
-    "cierre": "Guardalo para cuando lo necesites. O escribinos «TELEGRAMA» por WhatsApp.",
+    "cierre": "Guardalo para cuando lo necesites. O comentá «TELEGRAMA» y te mando «Errores del telegrama».",
     "palabra": "TELEGRAMA",
-    "copy": "Carta documento del trabajo: no la guardes.\n\n✔ Anotá el día que llegó\n✔ Leé qué te reclaman\n✔ Plazos cortos: consultá\n\nGuardalo para cuando lo necesites. O escribinos «TELEGRAMA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Carta documento del trabajo: no la guardes.\n\n✔ Anotá el día que llegó\n✔ Leé qué te reclaman\n✔ Plazos cortos: consultá\n\nGuardalo para cuando lo necesites. O comentá «TELEGRAMA» y te mando «Errores del telegrama».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": ""
   },
   {
@@ -571,6 +1011,12 @@
     "fecha": "2026-12-02",
     "hora": "11:10",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "escena con hora o número",
     "tema": "trabajo no registrado",
     "basado_en": "Trabajás sin registrar: qué podés hacer",
@@ -583,14 +1029,14 @@
       "Nombres de compañeros",
       "No firmes sin leer",
       "Mandáselo a quien trabaje sin recibo.",
-      "«REGISTRO» por WhatsApp"
+      "Comentá «REGISTRO»"
     ],
     "personaje": "Nico",
     "lugar_ba": "Playón de carga en Barracas, 6:00",
     "escena_visual": "Billetes que caen sin dejar rastro; Nico junta capturas de pantalla que se apilan como ladrillos dorados.",
-    "cierre": "Mandáselo a quien trabaje sin recibo. O escribinos «REGISTRO» por WhatsApp.",
+    "cierre": "Mandáselo a quien trabaje sin recibo. O comentá «REGISTRO» y te mando la guía «Trabajo no registrado».",
     "palabra": "REGISTRO",
-    "copy": "Tres años trabajando y cero recibos.\n\n✔ Mensajes, audios y fotos\n✔ Nombres de compañeros\n✔ No firmes sin leer\n\nMandáselo a quien trabaje sin recibo. O escribinos «REGISTRO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Tres años trabajando y cero recibos.\n\n✔ Mensajes, audios y fotos\n✔ Nombres de compañeros\n✔ No firmes sin leer\n\nMandáselo a quien trabaje sin recibo. O comentá «REGISTRO» y te mando la guía «Trabajo no registrado».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": ""
   },
   {
@@ -598,6 +1044,11 @@
     "fecha": "2026-12-02",
     "hora": "13:40",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "facebook"
+    ],
     "formula": "tres cartas cerradas",
     "tema": "choque con heridos: causa penal",
     "basado_en": "Choque con heridos: además del reclamo, puede haber causa penal",
@@ -610,21 +1061,92 @@
       "Carta 2: emergencias, no te vayas",
       "Carta 3: no declares sin abogado",
       "Mandáselo a quien maneje de noche.",
-      "«HERIDOS» por WhatsApp"
+      "Comentá «HERIDOS»"
     ],
     "personaje": "Nico",
     "lugar_ba": "Av. Amancio Alcorta, Parque Patricios, de noche",
     "escena_visual": "Tres cartas sobre el asfalto mojado con reflejos de luces; se dan vuelta con el sonido de una sirena lejana.",
-    "cierre": "Mandáselo a quien maneje de noche. O escribinos «HERIDOS» por WhatsApp.",
+    "cierre": "Mandáselo a quien maneje de noche. O comentá «HERIDOS» y te mando la guía «Choque con heridos: causa penal».",
     "palabra": "HERIDOS",
-    "copy": "Choque con heridos: tres cartas que no ves.\n\n✔ Carta 1: puede haber causa penal\n✔ Carta 2: emergencias, no te vayas\n✔ Carta 3: no declares sin abogado\n\nMandáselo a quien maneje de noche. O escribinos «HERIDOS» por WhatsApp.\n\nFuente: Constitución Nacional, art. 18.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Choque con heridos: tres cartas que no ves.\n\n✔ Carta 1: puede haber causa penal\n✔ Carta 2: emergencias, no te vayas\n✔ Carta 3: no declares sin abogado\n\nMandáselo a quien maneje de noche. O comentá «HERIDOS» y te mando la guía «Choque con heridos: causa penal».\n\nFuente: Constitución Nacional, art. 18.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": "Constitución Nacional, art. 18"
+  },
+  {
+    "id": "vita-0212-g1",
+    "fecha": "2026-12-02",
+    "hora": "16:10",
+    "marca": "VITA",
+    "motor_voz": "gratis",
+    "variante_de": "vita-3011-2",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
+    "formula": "contador que avanza",
+    "tema": "penal: te denunciaron",
+    "basado_en": "variante de vita-3011-2 (nuevo)",
+    "gancho_pantalla": "Minuto 1 de enterarte de una denuncia.",
+    "voz": "Minuto uno: te enterás de que te denunciaron. Minuto dos: guardás capturas, sin responder. Minuto tres: llamás a un abogado. Y no hablás del tema en redes. Guardalo por las dudas.",
+    "caracteres_voz": 179,
+    "textos_pantalla": [
+      "Minuto 1 de enterarte de una denuncia.",
+      "Min. 1: te enterás",
+      "Min. 2: capturas",
+      "Min. 3: abogado",
+      "Guardalo por las dudas.",
+      "Comentá «DENUNCIA»"
+    ],
+    "personaje": "Nico",
+    "lugar_ba": "Cocina de la casa de Nico en Nueva Pompeya",
+    "escena_visual": "Cronómetro dorado gigante sobre la mesa; cada minuto cambia el plano.",
+    "cierre": "Guardalo por las dudas. O comentá «DENUNCIA» y te mando la guía «Penal: te denunciaron».",
+    "palabra": "DENUNCIA",
+    "copy": "Minuto 1 de enterarte de una denuncia.\n\n✔ Min. 1: te enterás\n✔ Min. 2: capturas\n✔ Min. 3: abogado\n\nGuardalo por las dudas. O comentá «DENUNCIA» y te mando la guía «Penal: te denunciaron».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "fuente": ""
+  },
+  {
+    "id": "vita-0212-g2",
+    "fecha": "2026-12-02",
+    "hora": "19:40",
+    "marca": "VITA",
+    "motor_voz": "gratis",
+    "variante_de": "vita-3011-3",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
+    "formula": "mito roto",
+    "tema": "certificado de trabajo",
+    "basado_en": "variante de vita-3011-3 (Te fuiste del trabajo: pedí tu certificado de trabajo)",
+    "gancho_pantalla": "«Me fui y no me deben ningún papel.»",
+    "voz": "«Me fui del trabajo y no me tienen que dar nada.» Falso. Tienen que entregarte los certificados de trabajo dentro de los cuarenta y cinco días hábiles. Pedilos por escrito. Mandáselo a quien esté por irse.",
+    "caracteres_voz": 205,
+    "textos_pantalla": [
+      "«Me fui y no me deben ningún papel.»",
+      "Certificados de trabajo",
+      "45 días hábiles",
+      "Pedilos por escrito",
+      "Mandáselo a quien esté por irse.",
+      "Comentá «CERTIFICADO»"
+    ],
+    "personaje": "Sole",
+    "lugar_ba": "Mesa de la cocina de Sole en Floresta",
+    "escena_visual": "Una carpeta vacía se llena de hojas que caen del techo como papel picado.",
+    "cierre": "Mandáselo a quien esté por irse. O comentá «CERTIFICADO» y te mando la guía «Certificado de trabajo».",
+    "palabra": "CERTIFICADO",
+    "copy": "«Me fui y no me deben ningún papel.»\n\n✔ Certificados de trabajo\n✔ 45 días hábiles\n✔ Pedilos por escrito\n\nMandáselo a quien esté por irse. O comentá «CERTIFICADO» y te mando la guía «Certificado de trabajo».\n\nFuente: Ley de Contrato de Trabajo, art. 80 (texto de la Ley 27.802).\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "fuente": "Ley de Contrato de Trabajo, art. 80 (texto de la Ley 27.802)"
   },
   {
     "id": "vita-0212-4",
     "fecha": "2026-12-02",
     "hora": "21:10",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "facebook"
+    ],
     "formula": "segunda persona «vos»",
     "tema": "choque: días sin trabajar",
     "basado_en": "No pudiste trabajar por el choque: eso también se reclama",
@@ -637,14 +1159,14 @@
       "Remedios y traslados",
       "Cada día sin trabajar",
       "Guardalo para cuando lo necesites.",
-      "«DANOS» por WhatsApp"
+      "Comentá «DANOS»"
     ],
     "personaje": "Nico",
     "lugar_ba": "Taller mecánico genérico de Nueva Pompeya",
     "escena_visual": "Un almanaque de taller con veinte días tachados en rojo; los recibos vuelan y se ordenan solos en una carpeta.",
-    "cierre": "Guardalo para cuando lo necesites. O escribinos «DANOS» por WhatsApp.",
+    "cierre": "Guardalo para cuando lo necesites. O comentá «DANOS» y te mando la guía «Choque: días sin trabajar».",
     "palabra": "DANOS",
-    "copy": "Estuviste 20 días sin trabajar por un choque.\n\n✔ Certificado médico\n✔ Remedios y traslados\n✔ Cada día sin trabajar\n\nGuardalo para cuando lo necesites. O escribinos «DANOS» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Estuviste 20 días sin trabajar por un choque.\n\n✔ Certificado médico\n✔ Remedios y traslados\n✔ Cada día sin trabajar\n\nGuardalo para cuando lo necesites. O comentá «DANOS» y te mando la guía «Choque: días sin trabajar».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": ""
   },
   {
@@ -652,6 +1174,12 @@
     "fecha": "2026-12-03",
     "hora": "08:40",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "contador que avanza",
     "tema": "aguinaldo proporcional",
     "basado_en": "Te fuiste en el año: el aguinaldo proporcional",
@@ -664,14 +1192,14 @@
       "Cada mes suma su parte",
       "Va en la liquidación final",
       "Mandáselo a quien cambió de trabajo este año.",
-      "«PROPORCIONAL» por WhatsApp"
+      "Comentá «PROPORCIONAL»"
     ],
     "personaje": "Sole",
     "lugar_ba": "Cocina de Sole en Floresta, de tarde",
     "escena_visual": "Una alcancía transparente se llena con una moneda por mes; el contador de meses avanza arriba en dorado.",
-    "cierre": "Mandáselo a quien cambió de trabajo este año. O escribinos «PROPORCIONAL» por WhatsApp.",
+    "cierre": "Mandáselo a quien cambió de trabajo este año. O comentá «PROPORCIONAL» y te mando la guía «Aguinaldo proporcional».",
     "palabra": "PROPORCIONAL",
-    "copy": "Te fuiste en agosto: el aguinaldo suma.\n\n✔ Julio · agosto\n✔ Cada mes suma su parte\n✔ Va en la liquidación final\n\nMandáselo a quien cambió de trabajo este año. O escribinos «PROPORCIONAL» por WhatsApp.\n\nFuente: Ley de Contrato de Trabajo, art. 123.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Te fuiste en agosto: el aguinaldo suma.\n\n✔ Julio · agosto\n✔ Cada mes suma su parte\n✔ Va en la liquidación final\n\nMandáselo a quien cambió de trabajo este año. O comentá «PROPORCIONAL» y te mando la guía «Aguinaldo proporcional».\n\nFuente: Ley de Contrato de Trabajo, art. 123.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": "Ley de Contrato de Trabajo, art. 123"
   },
   {
@@ -679,6 +1207,12 @@
     "fecha": "2026-12-03",
     "hora": "11:10",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "mito roto",
     "tema": "sucesión sin testamento",
     "basado_en": "nuevo",
@@ -691,14 +1225,14 @@
       "Hijos y cónyuge, según la ley",
       "Partidas, bienes y sucesión",
       "Mandáselo a tu familia.",
-      "«HERENCIA» por WhatsApp"
+      "Comentá «HERENCIA»"
     ],
     "personaje": "Sole y su hermano Dani",
     "lugar_ba": "Escritorio de la narradora de VITA",
     "escena_visual": "Un testamento en blanco se enrolla y desaparece; en su lugar crece un árbol genealógico dorado con dos ramas encendidas.",
-    "cierre": "Mandáselo a tu familia. O escribinos «HERENCIA» por WhatsApp.",
+    "cierre": "Mandáselo a tu familia. O comentá «HERENCIA» y te mando «Los primeros pasos de una sucesión».",
     "palabra": "HERENCIA",
-    "copy": "«Sin testamento no hay herencia.» Falso.\n\n✔ Sin testamento, igual se hereda\n✔ Hijos y cónyuge, según la ley\n✔ Partidas, bienes y sucesión\n\nMandáselo a tu familia. O escribinos «HERENCIA» por WhatsApp.\n\nFuente: Código Civil y Comercial, art. 2424.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "«Sin testamento no hay herencia.» Falso.\n\n✔ Sin testamento, igual se hereda\n✔ Hijos y cónyuge, según la ley\n✔ Partidas, bienes y sucesión\n\nMandáselo a tu familia. O comentá «HERENCIA» y te mando «Los primeros pasos de una sucesión».\n\nFuente: Código Civil y Comercial, art. 2424.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": "Código Civil y Comercial, art. 2424"
   },
   {
@@ -706,6 +1240,12 @@
     "fecha": "2026-12-03",
     "hora": "13:40",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "¿cuál sos? (identidad)",
     "tema": "penal: citación",
     "basado_en": "Te llegó una citación penal: qué no hacer antes de hablar con un abogado",
@@ -718,21 +1258,92 @@
       "El que va solo y cuenta todo",
       "El que consulta y va con abogado",
       "Mandáselo a quien le llegó una.",
-      "«CITACION» por WhatsApp"
+      "Comentá «CITACION»"
     ],
     "personaje": "Tres siluetas (Nico es el tercero)",
     "lugar_ba": "Hall de un edificio de Nueva Pompeya",
     "escena_visual": "Tres buzones en pantalla partida; de cada uno sale la misma citación. Solo la tercera silueta camina con una carpeta dorada.",
-    "cierre": "Mandáselo a quien le llegó una. O escribinos «CITACION» por WhatsApp.",
+    "cierre": "Mandáselo a quien le llegó una. O comentá «CITACION» y te mando la guía «Penal: citación».",
     "palabra": "CITACION",
-    "copy": "Te llega una citación. ¿Cuál de los tres sos?\n\n✔ El que la tira\n✔ El que va solo y cuenta todo\n✔ El que consulta y va con abogado\n\nMandáselo a quien le llegó una. O escribinos «CITACION» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Te llega una citación. ¿Cuál de los tres sos?\n\n✔ El que la tira\n✔ El que va solo y cuenta todo\n✔ El que consulta y va con abogado\n\nMandáselo a quien le llegó una. O comentá «CITACION» y te mando la guía «Penal: citación».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": ""
+  },
+  {
+    "id": "vita-0312-g1",
+    "fecha": "2026-12-03",
+    "hora": "16:10",
+    "marca": "VITA",
+    "motor_voz": "gratis",
+    "variante_de": "vita-0112-2",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
+    "formula": "segunda persona «vos»",
+    "tema": "ART: cuánto dura la baja",
+    "basado_en": "variante de vita-0112-2 (nuevo)",
+    "gancho_pantalla": "Vos estás de baja hace meses.",
+    "voz": "Vos estás de baja por un accidente de trabajo hace meses. La baja puede durar hasta dos años, salvo alta antes. Seguí el tratamiento y guardá cada papel. Mandáselo a quien esté de baja.",
+    "caracteres_voz": 185,
+    "textos_pantalla": [
+      "Vos estás de baja hace meses.",
+      "Hasta 2 años",
+      "Salvo alta antes",
+      "Guardá cada papel",
+      "Mandáselo a quien esté de baja.",
+      "Comentá «REPOSO»"
+    ],
+    "personaje": "Nico",
+    "lugar_ba": "Living de Nico en Nueva Pompeya",
+    "escena_visual": "Estilo diorama: el sillón de Nico en una isla flotante con un almanaque que gira.",
+    "cierre": "Mandáselo a quien esté de baja. O comentá «REPOSO» y te mando la guía «ART: cuánto dura la baja».",
+    "palabra": "REPOSO",
+    "copy": "Vos estás de baja hace meses.\n\n✔ Hasta 2 años\n✔ Salvo alta antes\n✔ Guardá cada papel\n\nMandáselo a quien esté de baja. O comentá «REPOSO» y te mando la guía «ART: cuánto dura la baja».\n\nFuente: Ley 24.557, art. 7.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "fuente": "Ley 24.557, art. 7"
+  },
+  {
+    "id": "vita-0312-g2",
+    "fecha": "2026-12-03",
+    "hora": "19:40",
+    "marca": "VITA",
+    "motor_voz": "gratis",
+    "variante_de": "vita-3011-4",
+    "redes": [
+      "facebook"
+    ],
+    "formula": "escena con hora o número",
+    "tema": "choque con un auto sin seguro",
+    "basado_en": "variante de vita-3011-4 (Mito: «si el otro no tiene seguro, no puedo reclamar»)",
+    "gancho_pantalla": "Sábado 14:00: te choca un auto sin seguro.",
+    "voz": "Sábado, 14:00. Te choca un auto sin seguro. No te vayas sin nada: patente, datos del conductor, del dueño y de testigos. Responden el dueño y quien manejaba. Mandáselo a quien maneje.",
+    "caracteres_voz": 183,
+    "textos_pantalla": [
+      "Sábado 14:00: te choca un auto sin seguro.",
+      "Patente",
+      "Conductor y dueño",
+      "Testigos",
+      "Mandáselo a quien maneje.",
+      "Comentá «SEGURO»"
+    ],
+    "personaje": "Nico",
+    "lugar_ba": "Av. Iriarte, Barracas, sábado 14:00",
+    "escena_visual": "Estilo despiezado: el auto se abre en piezas numeradas en el aire.",
+    "cierre": "Mandáselo a quien maneje. O comentá «SEGURO» y te mando la guía «Choque con un auto sin seguro».",
+    "palabra": "SEGURO",
+    "copy": "Sábado 14:00: te choca un auto sin seguro.\n\n✔ Patente\n✔ Conductor y dueño\n✔ Testigos\n\nMandáselo a quien maneje. O comentá «SEGURO» y te mando la guía «Choque con un auto sin seguro».\n\nFuente: Código Civil y Comercial, art. 1758.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "fuente": "Código Civil y Comercial, art. 1758"
   },
   {
     "id": "vita-0312-4",
     "fecha": "2026-12-03",
     "hora": "21:10",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "pregunta con respuesta numérica",
     "tema": "trayecto modificado",
     "basado_en": "nuevo",
@@ -745,14 +1356,14 @@
       "72 horas para avisar a la ART",
       "Vos, por escrito",
       "Mandáselo a quien estudie y trabaje.",
-      "«RECORRIDO» por WhatsApp"
+      "Comentá «RECORRIDO»"
     ],
     "personaje": "Sole",
     "lugar_ba": "Parada de colectivo en Av. Rivadavia, Floresta",
     "escena_visual": "Un mapa con dos recorridos; el nuevo se dibuja en dorado mientras un reloj de 72 horas da vueltas rápido.",
-    "cierre": "Mandáselo a quien estudie y trabaje. O escribinos «RECORRIDO» por WhatsApp.",
+    "cierre": "Mandáselo a quien estudie y trabaje. O comentá «RECORRIDO» y te mando la guía «Trayecto modificado».",
     "palabra": "RECORRIDO",
-    "copy": "Cambiás el camino al trabajo: ¿72 horas?\n\n✔ Estudio, otro empleo o familiar enfermo\n✔ 72 horas para avisar a la ART\n✔ Vos, por escrito\n\nMandáselo a quien estudie y trabaje. O escribinos «RECORRIDO» por WhatsApp.\n\nFuente: Ley 24.557, art. 6, inc. 1.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Cambiás el camino al trabajo: ¿72 horas?\n\n✔ Estudio, otro empleo o familiar enfermo\n✔ 72 horas para avisar a la ART\n✔ Vos, por escrito\n\nMandáselo a quien estudie y trabaje. O comentá «RECORRIDO» y te mando la guía «Trayecto modificado».\n\nFuente: Ley 24.557, art. 6, inc. 1.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": "Ley 24.557, art. 6, inc. 1"
   },
   {
@@ -760,6 +1371,12 @@
     "fecha": "2026-12-04",
     "hora": "08:40",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "serie (parte 1)",
     "tema": "acuerdo del seguro",
     "basado_en": "Te ofrecen plata rápida después del choque: ¿firmás o no?",
@@ -772,14 +1389,14 @@
       "«Firmá hoy y listo»",
       "¿Firmo ya o espero?",
       "Guardalo para ver la parte 2.",
-      "«FIRMA» por WhatsApp"
+      "Comentá «FIRMA»"
     ],
     "personaje": "Nico",
     "lugar_ba": "Bar de Nueva Pompeya, mediodía",
     "escena_visual": "Un sobre con billetes se desliza por la mesa del bar; la lapicera gigante cuelga sobre Nico. Congelado con «Parte 2».",
-    "cierre": "Guardalo para ver la parte 2. O escribinos «FIRMA» por WhatsApp.",
+    "cierre": "Guardalo para ver la parte 2. O comentá «FIRMA» y te mando «3 cosas para no firmar».",
     "palabra": "FIRMA",
-    "copy": "Parte 1: le ofrecen plata rápida a Nico.\n\n✔ Dos días después del choque\n✔ «Firmá hoy y listo»\n✔ ¿Firmo ya o espero?\n\nGuardalo para ver la parte 2. O escribinos «FIRMA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Parte 1: le ofrecen plata rápida a Nico.\n\n✔ Dos días después del choque\n✔ «Firmá hoy y listo»\n✔ ¿Firmo ya o espero?\n\nGuardalo para ver la parte 2. O comentá «FIRMA» y te mando «3 cosas para no firmar».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": ""
   },
   {
@@ -787,6 +1404,12 @@
     "fecha": "2026-12-04",
     "hora": "11:10",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "loop",
     "tema": "penal: allanamiento",
     "basado_en": "nuevo",
@@ -799,14 +1422,14 @@
       "No te resistas",
       "Abogado, antes de declarar",
       "Guardalo por las dudas.",
-      "«PUERTA» por WhatsApp"
+      "Comentá «PUERTA»"
     ],
     "personaje": "Nico",
     "lugar_ba": "Pasillo de la casa de Nico en Nueva Pompeya, 6:00",
     "escena_visual": "Luz fría por debajo de la puerta y golpes que hacen vibrar la cámara; la orden aparece como un papel luminoso. Termina en la misma puerta.",
-    "cierre": "Guardalo por las dudas. O escribinos «PUERTA» por WhatsApp.",
+    "cierre": "Guardalo por las dudas. O comentá «PUERTA» y te mando la guía «Penal: allanamiento».",
     "palabra": "PUERTA",
-    "copy": "Seis de la mañana: golpean la puerta.\n\n✔ Pedí ver la orden\n✔ No te resistas\n✔ Abogado, antes de declarar\n\nGuardalo por las dudas. O escribinos «PUERTA» por WhatsApp.\n\nFuente: Constitución Nacional, art. 18.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Seis de la mañana: golpean la puerta.\n\n✔ Pedí ver la orden\n✔ No te resistas\n✔ Abogado, antes de declarar\n\nGuardalo por las dudas. O comentá «PUERTA» y te mando la guía «Penal: allanamiento».\n\nFuente: Constitución Nacional, art. 18.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": "Constitución Nacional, art. 18"
   },
   {
@@ -814,6 +1437,12 @@
     "fecha": "2026-12-04",
     "hora": "13:40",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "advertencia",
     "tema": "arreglo de palabra",
     "basado_en": "«Arreglemos acá»: por qué no aceptar arreglos de palabra",
@@ -826,14 +1455,79 @@
       "Sacá fotos",
       "Si arreglan, por escrito",
       "Mandáselo a quien maneje.",
-      "«ARREGLO» por WhatsApp"
+      "Comentá «ARREGLO»"
     ],
     "personaje": "Nico",
     "lugar_ba": "Calle empedrada de Barracas",
     "escena_visual": "Un apretón de manos se convierte en humo; del humo cae un papel que se firma solo por los dos lados.",
-    "cierre": "Mandáselo a quien maneje. O escribinos «ARREGLO» por WhatsApp.",
+    "cierre": "Mandáselo a quien maneje. O comentá «ARREGLO» y te mando la guía «Arreglo de palabra».",
     "palabra": "ARREGLO",
-    "copy": "«Arreglemos acá»: desconfiá de esa frase.\n\n✔ Pedí los datos igual\n✔ Sacá fotos\n✔ Si arreglan, por escrito\n\nMandáselo a quien maneje. O escribinos «ARREGLO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "«Arreglemos acá»: desconfiá de esa frase.\n\n✔ Pedí los datos igual\n✔ Sacá fotos\n✔ Si arreglan, por escrito\n\nMandáselo a quien maneje. O comentá «ARREGLO» y te mando la guía «Arreglo de palabra».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "fuente": ""
+  },
+  {
+    "id": "vita-0412-g1",
+    "fecha": "2026-12-04",
+    "hora": "16:10",
+    "marca": "VITA",
+    "motor_voz": "gratis",
+    "variante_de": "vita-0112-4",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
+    "formula": "tres cartas cerradas",
+    "tema": "ART: alta con dolor",
+    "basado_en": "variante de vita-0112-4 (Te dieron el alta y todavía te duele)",
+    "gancho_pantalla": "Te dieron el alta: tres cartas.",
+    "voz": "Te dieron el alta y seguís con dolor. Tres cartas. Primera: pedila por escrito. Segunda: seguí con tus estudios. Tercera: si no estás de acuerdo, Comisión Médica. Guardalo para cuando lo necesites.",
+    "caracteres_voz": 197,
+    "textos_pantalla": [
+      "Te dieron el alta: tres cartas.",
+      "Alta por escrito",
+      "Tus estudios",
+      "Comisión Médica",
+      "Guardalo para cuando lo necesites.",
+      "Comentá «ALTA»"
+    ],
+    "personaje": "Sole",
+    "lugar_ba": "Consultorio genérico de Flores",
+    "escena_visual": "Tres cartas sobre una camilla; la tercera se ilumina en dorado.",
+    "cierre": "Guardalo para cuando lo necesites. O comentá «ALTA» y te mando «Qué hacer si te dieron el alta y te duele».",
+    "palabra": "ALTA",
+    "copy": "Te dieron el alta: tres cartas.\n\n✔ Alta por escrito\n✔ Tus estudios\n✔ Comisión Médica\n\nGuardalo para cuando lo necesites. O comentá «ALTA» y te mando «Qué hacer si te dieron el alta y te duele».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "fuente": ""
+  },
+  {
+    "id": "vita-0412-g2",
+    "fecha": "2026-12-04",
+    "hora": "19:40",
+    "marca": "VITA",
+    "motor_voz": "gratis",
+    "variante_de": "vita-0112-1",
+    "redes": [
+      "facebook"
+    ],
+    "formula": "segunda persona «vos»",
+    "tema": "despido: cómo reaccionás",
+    "basado_en": "variante de vita-0112-1 (Te despidieron: qué pedir y qué no firmar ese día)",
+    "gancho_pantalla": "Vos te quedaste sin trabajo hoy.",
+    "voz": "Vos te quedaste sin trabajo hoy. No firmes nada apurada. Leé cada papel, pedí copia de todo y consultá antes de aceptar cualquier propuesta. Mandáselo a quien esté pasando por esto.",
+    "caracteres_voz": 181,
+    "textos_pantalla": [
+      "Vos te quedaste sin trabajo hoy.",
+      "No firmes apurada",
+      "Copia de todo",
+      "Consultá antes",
+      "Mandáselo a quien esté pasando por esto.",
+      "Comentá «DESPIDO»"
+    ],
+    "personaje": "Tres siluetas (Sole es la tercera)",
+    "lugar_ba": "Parada de colectivo frente al supermercado de Flores",
+    "escena_visual": "Estilo cartulina: la parada se pliega y despliega como libro mientras pasan los colectivos.",
+    "cierre": "Mandáselo a quien esté pasando por esto. O comentá «DESPIDO» y te mando la guía «Despido: cómo reaccionás».",
+    "palabra": "DESPIDO",
+    "copy": "Vos te quedaste sin trabajo hoy.\n\n✔ No firmes apurada\n✔ Copia de todo\n✔ Consultá antes\n\nMandáselo a quien esté pasando por esto. O comentá «DESPIDO» y te mando la guía «Despido: cómo reaccionás».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": ""
   },
   {
@@ -841,6 +1535,12 @@
     "fecha": "2026-12-04",
     "hora": "21:10",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "escena con hora o número",
     "tema": "choque en la ruta",
     "basado_en": "nuevo",
@@ -853,14 +1553,14 @@
       "Fotos, datos y testigos",
       "Heridos: emergencias",
       "Mandáselo a quien sale a la ruta.",
-      "«RUTA» por WhatsApp"
+      "Comentá «RUTA»"
     ],
     "personaje": "Nico y su pareja",
     "lugar_ba": "Banquina de la Ruta 2, de tarde",
     "escena_visual": "Cartel de ruta «km 150» y balizas; la sombrilla del techo sale volando en cámara lenta. Los pasos aparecen en carteles viales.",
-    "cierre": "Mandáselo a quien sale a la ruta. O escribinos «RUTA» por WhatsApp.",
+    "cierre": "Mandáselo a quien sale a la ruta. O comentá «RUTA» y te mando la guía «Choque en la ruta».",
     "palabra": "RUTA",
-    "copy": "Ruta 2, km 150: te chocan de vacaciones.\n\n✔ Señalizá y ponete a salvo\n✔ Fotos, datos y testigos\n✔ Heridos: emergencias\n\nMandáselo a quien sale a la ruta. O escribinos «RUTA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Ruta 2, km 150: te chocan de vacaciones.\n\n✔ Señalizá y ponete a salvo\n✔ Fotos, datos y testigos\n✔ Heridos: emergencias\n\nMandáselo a quien sale a la ruta. O comentá «RUTA» y te mando la guía «Choque en la ruta».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": ""
   },
   {
@@ -868,6 +1568,12 @@
     "fecha": "2026-12-05",
     "hora": "08:40",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "tres cartas cerradas",
     "tema": "herencia con deudas",
     "basado_en": "nuevo",
@@ -880,14 +1586,14 @@
       "Carta 2: no pongas plata tuya",
       "Carta 3: inventario",
       "Mandáselo a tus hermanos.",
-      "«HERENCIA» por WhatsApp"
+      "Comentá «HERENCIA»"
     ],
     "personaje": "Sole y su hermano Dani",
     "lugar_ba": "Comedor de la casa de los padres en Parque Avellaneda",
     "escena_visual": "Tres cartas sobre el mantel; al dar vuelta la primera, una balanza dorada se equilibra entre bienes y deudas.",
-    "cierre": "Mandáselo a tus hermanos. O escribinos «HERENCIA» por WhatsApp.",
+    "cierre": "Mandáselo a tus hermanos. O comentá «HERENCIA» y te mando «Los primeros pasos de una sucesión».",
     "palabra": "HERENCIA",
-    "copy": "¿Heredás las deudas? Tres cartas.\n\n✔ Carta 1: hasta lo que recibís\n✔ Carta 2: no pongas plata tuya\n✔ Carta 3: inventario\n\nMandáselo a tus hermanos. O escribinos «HERENCIA» por WhatsApp.\n\nFuente: Código Civil y Comercial, art. 2317.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "¿Heredás las deudas? Tres cartas.\n\n✔ Carta 1: hasta lo que recibís\n✔ Carta 2: no pongas plata tuya\n✔ Carta 3: inventario\n\nMandáselo a tus hermanos. O comentá «HERENCIA» y te mando «Los primeros pasos de una sucesión».\n\nFuente: Código Civil y Comercial, art. 2317.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": "Código Civil y Comercial, art. 2317"
   },
   {
@@ -895,6 +1601,12 @@
     "fecha": "2026-12-05",
     "hora": "11:10",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "segunda persona «vos»",
     "tema": "enfermedad del trabajo",
     "basado_en": "nuevo",
@@ -907,14 +1619,14 @@
       "Contá tu tarea al médico",
       "Avisá y guardá estudios",
       "Mandáselo a quien carga peso.",
-      "«ESPALDA» por WhatsApp"
+      "Comentá «ESPALDA»"
     ],
     "personaje": "Nico",
     "lugar_ba": "Depósito de bebidas de Barracas",
     "escena_visual": "Rayos X de la espalda de Nico mientras levanta un cajón; las vértebras se iluminan en dorado una por una.",
-    "cierre": "Mandáselo a quien carga peso. O escribinos «ESPALDA» por WhatsApp.",
+    "cierre": "Mandáselo a quien carga peso. O comentá «ESPALDA» y te mando la guía «Enfermedad del trabajo».",
     "palabra": "ESPALDA",
-    "copy": "Cargás cajas hace años. La espalda, no.\n\n✔ No solo los accidentes\n✔ Contá tu tarea al médico\n✔ Avisá y guardá estudios\n\nMandáselo a quien carga peso. O escribinos «ESPALDA» por WhatsApp.\n\nFuente: Ley 24.557, art. 6, inc. 2.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Cargás cajas hace años. La espalda, no.\n\n✔ No solo los accidentes\n✔ Contá tu tarea al médico\n✔ Avisá y guardá estudios\n\nMandáselo a quien carga peso. O comentá «ESPALDA» y te mando la guía «Enfermedad del trabajo».\n\nFuente: Ley 24.557, art. 6, inc. 2.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": "Ley 24.557, art. 6, inc. 2"
   },
   {
@@ -922,6 +1634,12 @@
     "fecha": "2026-12-05",
     "hora": "13:40",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "contador que avanza",
     "tema": "choque: las primeras horas",
     "basado_en": "Las primeras 24 horas después de un choque",
@@ -934,14 +1652,80 @@
       "Hora 3: guardia médica",
       "Hora 24: carpeta y aviso",
       "Guardalo para cuando lo necesites.",
-      "«HORAS» por WhatsApp"
+      "Comentá «HORAS»"
     ],
     "personaje": "Nico",
     "lugar_ba": "Av. Sáenz, Nueva Pompeya, de noche",
     "escena_visual": "El cronómetro dorado gira y la escena salta en el tiempo: esquina, guardia genérica, mesa de la cocina con carpeta.",
-    "cierre": "Guardalo para cuando lo necesites. O escribinos «HORAS» por WhatsApp.",
+    "cierre": "Guardalo para cuando lo necesites. O comentá «HORAS» y te mando la guía «Choque: las primeras horas».",
     "palabra": "HORAS",
-    "copy": "Hora 0, hora 3, hora 24: después del choque.\n\n✔ Hora 1: fotos y datos\n✔ Hora 3: guardia médica\n✔ Hora 24: carpeta y aviso\n\nGuardalo para cuando lo necesites. O escribinos «HORAS» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Hora 0, hora 3, hora 24: después del choque.\n\n✔ Hora 1: fotos y datos\n✔ Hora 3: guardia médica\n✔ Hora 24: carpeta y aviso\n\nGuardalo para cuando lo necesites. O comentá «HORAS» y te mando la guía «Choque: las primeras horas».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "fuente": ""
+  },
+  {
+    "id": "vita-0512-g1",
+    "fecha": "2026-12-05",
+    "hora": "16:10",
+    "marca": "VITA",
+    "motor_voz": "gratis",
+    "variante_de": "vita-0212-1",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
+    "formula": "¿cuál sos? (identidad)",
+    "tema": "carta documento del trabajo",
+    "basado_en": "variante de vita-0212-1 (Te llegó una carta documento del trabajo: qué no hacer)",
+    "gancho_pantalla": "Te llega una carta documento: ¿cuál sos?",
+    "voz": "Te llega una carta documento del trabajo. Tres tipos. El que no la abre. El que contesta enojado esa noche. Y el que anota la fecha y consulta. ¿Cuál sos? Mandáselo a quien le llegó una.",
+    "caracteres_voz": 186,
+    "textos_pantalla": [
+      "Te llega una carta documento: ¿cuál sos?",
+      "No la abre",
+      "Contesta enojado",
+      "Anota la fecha y consulta",
+      "Mandáselo a quien le llegó una.",
+      "Comentá «TELEGRAMA»"
+    ],
+    "personaje": "Tres siluetas (Sole es la tercera)",
+    "lugar_ba": "Tres puertas de un pasillo de Floresta",
+    "escena_visual": "Pantalla partida en tres puertas; tres sobres iguales caen y solo la tercera puerta se ilumina.",
+    "cierre": "Mandáselo a quien le llegó una. O comentá «TELEGRAMA» y te mando «Errores del telegrama».",
+    "palabra": "TELEGRAMA",
+    "copy": "Te llega una carta documento: ¿cuál sos?\n\n✔ No la abre\n✔ Contesta enojado\n✔ Anota la fecha y consulta\n\nMandáselo a quien le llegó una. O comentá «TELEGRAMA» y te mando «Errores del telegrama».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "fuente": ""
+  },
+  {
+    "id": "vita-0512-g2",
+    "fecha": "2026-12-05",
+    "hora": "19:40",
+    "marca": "VITA",
+    "motor_voz": "gratis",
+    "variante_de": "vita-0212-2",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
+    "formula": "loop",
+    "tema": "trabajo no registrado",
+    "basado_en": "variante de vita-0212-2 (Trabajás sin registrar: qué podés hacer)",
+    "gancho_pantalla": "Otra vez cobrás en mano.",
+    "voz": "Otra vez cobrás en mano y sin recibo. Guardá cada mensaje, anotá tus horarios y los nombres de tus compañeros. Mandáselo a quien trabaje sin recibo. Porque el mes que viene, otra vez cobrás en mano.",
+    "caracteres_voz": 198,
+    "textos_pantalla": [
+      "Otra vez cobrás en mano.",
+      "Mensajes",
+      "Horarios",
+      "Compañeros",
+      "Mandáselo a quien trabaje sin recibo.",
+      "Comentá «REGISTRO»"
+    ],
+    "personaje": "Nico",
+    "lugar_ba": "Vereda del depósito de Barracas al atardecer",
+    "escena_visual": "Un sobre con billetes pasa de mano en mano en loop perfecto; estilo pintado.",
+    "cierre": "Mandáselo a quien trabaje sin recibo. O comentá «REGISTRO» y te mando la guía «Trabajo no registrado».",
+    "palabra": "REGISTRO",
+    "copy": "Otra vez cobrás en mano.\n\n✔ Mensajes\n✔ Horarios\n✔ Compañeros\n\nMandáselo a quien trabaje sin recibo. O comentá «REGISTRO» y te mando la guía «Trabajo no registrado».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": ""
   },
   {
@@ -949,6 +1733,12 @@
     "fecha": "2026-12-05",
     "hora": "21:10",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "mito roto",
     "tema": "renuncia: lo que te pagan",
     "basado_en": "nuevo",
@@ -961,14 +1751,14 @@
       "Aguinaldo proporcional",
       "Vacaciones no gozadas",
       "Mandáselo a quien esté por renunciar.",
-      "«RENUNCIA» por WhatsApp"
+      "Comentá «RENUNCIA»"
     ],
     "personaje": "Sole",
     "lugar_ba": "Banco de Parque Avellaneda, mediodía",
     "escena_visual": "Una puerta de salida se abre y en lugar de vacío aparecen tres sobres dorados que caen en las manos de Sole.",
-    "cierre": "Mandáselo a quien esté por renunciar. O escribinos «RENUNCIA» por WhatsApp.",
+    "cierre": "Mandáselo a quien esté por renunciar. O comentá «RENUNCIA» y te mando la guía «Renuncia: lo que te pagan».",
     "palabra": "RENUNCIA",
-    "copy": "«Si renuncio, no cobro nada.» Falso.\n\n✔ Días trabajados\n✔ Aguinaldo proporcional\n✔ Vacaciones no gozadas\n\nMandáselo a quien esté por renunciar. O escribinos «RENUNCIA» por WhatsApp.\n\nFuente: Ley de Contrato de Trabajo, arts. 123 y 156.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "«Si renuncio, no cobro nada.» Falso.\n\n✔ Días trabajados\n✔ Aguinaldo proporcional\n✔ Vacaciones no gozadas\n\nMandáselo a quien esté por renunciar. O comentá «RENUNCIA» y te mando la guía «Renuncia: lo que te pagan».\n\nFuente: Ley de Contrato de Trabajo, arts. 123 y 156.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": "Ley de Contrato de Trabajo, arts. 123 y 156"
   },
   {
@@ -976,6 +1766,12 @@
     "fecha": "2026-12-06",
     "hora": "08:40",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "¿cuál sos? (identidad)",
     "tema": "ART: aviso del accidente",
     "basado_en": "nuevo",
@@ -988,14 +1784,14 @@
       "El que no avisa",
       "El que avisa y guarda copia",
       "Mandáselo a un compañero.",
-      "«AVISO» por WhatsApp"
+      "Comentá «AVISO»"
     ],
     "personaje": "Tres siluetas (Sole es la tercera)",
     "lugar_ba": "Depósito del supermercado de Flores",
     "escena_visual": "Pantalla partida en tres pasillos; en cada uno cae la misma caja. Solo en el tercero aparece un formulario con tilde dorado.",
-    "cierre": "Mandáselo a un compañero. O escribinos «AVISO» por WhatsApp.",
+    "cierre": "Mandáselo a un compañero. O comentá «AVISO» y te mando la guía «ART: aviso del accidente».",
     "palabra": "AVISO",
-    "copy": "Te lastimás en el trabajo: ¿cuál sos?\n\n✔ El que sigue como si nada\n✔ El que no avisa\n✔ El que avisa y guarda copia\n\nMandáselo a un compañero. O escribinos «AVISO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Te lastimás en el trabajo: ¿cuál sos?\n\n✔ El que sigue como si nada\n✔ El que no avisa\n✔ El que avisa y guarda copia\n\nMandáselo a un compañero. O comentá «AVISO» y te mando la guía «ART: aviso del accidente».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": ""
   },
   {
@@ -1003,6 +1799,12 @@
     "fecha": "2026-12-06",
     "hora": "11:10",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "pregunta con respuesta numérica",
     "tema": "licencia por enfermedad",
     "basado_en": "nuevo",
@@ -1015,14 +1817,14 @@
       "3 meses: menos de 5 años",
       "Hasta 12: más años y familia",
       "Guardalo para cuando lo necesites.",
-      "«LICENCIA» por WhatsApp"
+      "Comentá «LICENCIA»"
     ],
     "personaje": "Sole",
     "lugar_ba": "Sala de espera de un consultorio genérico de Flores",
     "escena_visual": "Un calendario de 12 hojas flota; se iluminan 3, después 6 y después las 12, con un sonido de campanita.",
-    "cierre": "Guardalo para cuando lo necesites. O escribinos «LICENCIA» por WhatsApp.",
+    "cierre": "Guardalo para cuando lo necesites. O comentá «LICENCIA» y te mando la guía «Licencia por enfermedad».",
     "palabra": "LICENCIA",
-    "copy": "Te enfermás: ¿cuántos meses te pagan?\n\n✔ Enfermedad no laboral\n✔ 3 meses: menos de 5 años\n✔ Hasta 12: más años y familia\n\nGuardalo para cuando lo necesites. O escribinos «LICENCIA» por WhatsApp.\n\nFuente: Ley de Contrato de Trabajo, art. 208.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Te enfermás: ¿cuántos meses te pagan?\n\n✔ Enfermedad no laboral\n✔ 3 meses: menos de 5 años\n✔ Hasta 12: más años y familia\n\nGuardalo para cuando lo necesites. O comentá «LICENCIA» y te mando la guía «Licencia por enfermedad».\n\nFuente: Ley de Contrato de Trabajo, art. 208.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": "Ley de Contrato de Trabajo, art. 208"
   },
   {
@@ -1030,6 +1832,12 @@
     "fecha": "2026-12-06",
     "hora": "13:40",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "serie (parte 2)",
     "tema": "acuerdo del seguro",
     "basado_en": "Te ofrecen plata rápida después del choque: ¿firmás o no?",
@@ -1042,14 +1850,80 @@
       "No el mismo día",
       "Revisión de un abogado",
       "Mandáselo a quien acaba de chocar.",
-      "«FIRMA» por WhatsApp"
+      "Comentá «FIRMA»"
     ],
     "personaje": "Nico",
     "lugar_ba": "Escritorio de la narradora de VITA",
     "escena_visual": "El sello dorado de «Antes de firmar» cae sobre el papel del bar y lo deja suspendido; la lapicera vuelve a su lugar.",
-    "cierre": "Mandáselo a quien acaba de chocar. O escribinos «FIRMA» por WhatsApp.",
+    "cierre": "Mandáselo a quien acaba de chocar. O comentá «FIRMA» y te mando «3 cosas para no firmar».",
     "palabra": "FIRMA",
-    "copy": "Parte 2: lo que firmás puede cerrarlo todo.\n\n✔ Propuesta por escrito\n✔ No el mismo día\n✔ Revisión de un abogado\n\nMandáselo a quien acaba de chocar. O escribinos «FIRMA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Parte 2: lo que firmás puede cerrarlo todo.\n\n✔ Propuesta por escrito\n✔ No el mismo día\n✔ Revisión de un abogado\n\nMandáselo a quien acaba de chocar. O comentá «FIRMA» y te mando «3 cosas para no firmar».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "fuente": ""
+  },
+  {
+    "id": "vita-0612-g1",
+    "fecha": "2026-12-06",
+    "hora": "16:10",
+    "marca": "VITA",
+    "motor_voz": "gratis",
+    "variante_de": "vita-0212-3",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
+    "formula": "advertencia",
+    "tema": "choque con heridos: causa penal",
+    "basado_en": "variante de vita-0212-3 (Choque con heridos: además del reclamo, puede haber causa penal)",
+    "gancho_pantalla": "Choque con heridos: no te vayas.",
+    "voz": "Hubo un herido en el choque. No te vayas. Llamá a emergencias, quedate en el lugar y no declares sin abogado: además del reclamo, puede haber una causa penal. Mandáselo a quien maneje de noche.",
+    "caracteres_voz": 193,
+    "textos_pantalla": [
+      "Choque con heridos: no te vayas.",
+      "Emergencias",
+      "Quedate",
+      "No declares sin abogado",
+      "Mandáselo a quien maneje de noche.",
+      "Comentá «HERIDOS»"
+    ],
+    "personaje": "Nico",
+    "lugar_ba": "Av. Brasil, Constitución, de noche",
+    "escena_visual": "Estilo low-poly nocturno con luces de emergencia reflejadas; la cámara no se mueve del lugar.",
+    "cierre": "Mandáselo a quien maneje de noche. O comentá «HERIDOS» y te mando la guía «Choque con heridos: causa penal».",
+    "palabra": "HERIDOS",
+    "copy": "Choque con heridos: no te vayas.\n\n✔ Emergencias\n✔ Quedate\n✔ No declares sin abogado\n\nMandáselo a quien maneje de noche. O comentá «HERIDOS» y te mando la guía «Choque con heridos: causa penal».\n\nFuente: Constitución Nacional, art. 18.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "fuente": "Constitución Nacional, art. 18"
+  },
+  {
+    "id": "vita-0612-g2",
+    "fecha": "2026-12-06",
+    "hora": "19:40",
+    "marca": "VITA",
+    "motor_voz": "gratis",
+    "variante_de": "vita-0212-4",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
+    "formula": "contador que avanza",
+    "tema": "choque: días sin trabajar",
+    "basado_en": "variante de vita-0212-4 (No pudiste trabajar por el choque: eso también se reclama)",
+    "gancho_pantalla": "Día 1, día 10, día 20 sin trabajar.",
+    "voz": "Día uno sin trabajar por el choque. Día diez. Día veinte. Cada día cuenta para el reclamo: guardá el certificado médico, los recibos de remedios y los traslados. Guardalo para cuando lo necesites.",
+    "caracteres_voz": 196,
+    "textos_pantalla": [
+      "Día 1, día 10, día 20 sin trabajar.",
+      "Certificado médico",
+      "Remedios",
+      "Traslados",
+      "Guardalo para cuando lo necesites.",
+      "Comentá «DANOS»"
+    ],
+    "personaje": "Nico",
+    "lugar_ba": "Cocina de la casa de Nico en Nueva Pompeya",
+    "escena_visual": "Contador de días en un calendario de arcilla que se va tachando solo.",
+    "cierre": "Guardalo para cuando lo necesites. O comentá «DANOS» y te mando la guía «Choque: días sin trabajar».",
+    "palabra": "DANOS",
+    "copy": "Día 1, día 10, día 20 sin trabajar.\n\n✔ Certificado médico\n✔ Remedios\n✔ Traslados\n\nGuardalo para cuando lo necesites. O comentá «DANOS» y te mando la guía «Choque: días sin trabajar».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": ""
   },
   {
@@ -1057,6 +1931,12 @@
     "fecha": "2026-12-06",
     "hora": "21:10",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "loop",
     "tema": "hacer una denuncia",
     "basado_en": "nuevo",
@@ -1069,14 +1949,14 @@
       "Datos del equipo y del lugar",
       "Pedí copia",
       "Mandáselo a quien le robaron.",
-      "«ROBO» por WhatsApp"
+      "Comentá «ROBO»"
     ],
     "personaje": "Nico",
     "lugar_ba": "Parada de colectivo en Av. La Plata, Boedo",
     "escena_visual": "La mano vacía de Nico en primer plano; el celular robado se aleja dejando un rastro de luz dorada. El último cuadro vuelve a la mano vacía.",
-    "cierre": "Mandáselo a quien le robaron. O escribinos «ROBO» por WhatsApp.",
+    "cierre": "Mandáselo a quien le robaron. O comentá «ROBO» y te mando la guía «Hacer una denuncia».",
     "palabra": "ROBO",
-    "copy": "Te robaron el celular. «¿Para qué denunciar?»\n\n✔ Comisaría o fiscalía\n✔ Datos del equipo y del lugar\n✔ Pedí copia\n\nMandáselo a quien le robaron. O escribinos «ROBO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Te robaron el celular. «¿Para qué denunciar?»\n\n✔ Comisaría o fiscalía\n✔ Datos del equipo y del lugar\n✔ Pedí copia\n\nMandáselo a quien le robaron. O comentá «ROBO» y te mando la guía «Hacer una denuncia».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": ""
   },
   {
@@ -1084,6 +1964,12 @@
     "fecha": "reserva",
     "hora": "",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "segunda persona «vos»",
     "tema": "choque en bicicleta",
     "basado_en": "nuevo",
@@ -1096,14 +1982,14 @@
       "Testigos",
       "Guardia y certificado",
       "Mandáselo a quien va en bici.",
-      "«BICI» por WhatsApp"
+      "Comentá «BICI»"
     ],
     "personaje": "Sole",
     "lugar_ba": "Bicisenda de Av. Rivadavia, Flores",
     "escena_visual": "La bici queda suspendida en el aire en cámara lenta; los tres pasos aparecen pintados en la bicisenda.",
-    "cierre": "Mandáselo a quien va en bici. O escribinos «BICI» por WhatsApp.",
+    "cierre": "Mandáselo a quien va en bici. O comentá «BICI» y te mando la guía «Choque en bicicleta».",
     "palabra": "BICI",
-    "copy": "Te chocaron en bici. También podés reclamar.\n\n✔ Fotos y patente\n✔ Testigos\n✔ Guardia y certificado\n\nMandáselo a quien va en bici. O escribinos «BICI» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Te chocaron en bici. También podés reclamar.\n\n✔ Fotos y patente\n✔ Testigos\n✔ Guardia y certificado\n\nMandáselo a quien va en bici. O comentá «BICI» y te mando la guía «Choque en bicicleta».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": ""
   },
   {
@@ -1111,6 +1997,12 @@
     "fecha": "reserva",
     "hora": "",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "escena con hora o número",
     "tema": "recibo con menos horas",
     "basado_en": "Trabajás sin registrar: qué podés hacer (variante)",
@@ -1123,14 +2015,14 @@
       "Guardá horarios y mensajes",
       "Consultá antes de firmar",
       "Mandáselo a quien cobra parte en mano.",
-      "«EXTRAS» por WhatsApp"
+      "Comentá «EXTRAS»"
     ],
     "personaje": "Nico",
     "lugar_ba": "Vestuario del depósito de Barracas",
     "escena_visual": "Un reloj de fichar escupe tarjetas que se parten por la mitad; Nico junta las dos mitades.",
-    "cierre": "Mandáselo a quien cobra parte en mano. O escribinos «EXTRAS» por WhatsApp.",
+    "cierre": "Mandáselo a quien cobra parte en mano. O comentá «EXTRAS» y te mando la guía «Recibo con menos horas».",
     "palabra": "EXTRAS",
-    "copy": "Trabajás 48 horas y el recibo dice 20.\n\n✔ 48 horas reales, 20 en el recibo\n✔ Guardá horarios y mensajes\n✔ Consultá antes de firmar\n\nMandáselo a quien cobra parte en mano. O escribinos «EXTRAS» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Trabajás 48 horas y el recibo dice 20.\n\n✔ 48 horas reales, 20 en el recibo\n✔ Guardá horarios y mensajes\n✔ Consultá antes de firmar\n\nMandáselo a quien cobra parte en mano. O comentá «EXTRAS» y te mando la guía «Recibo con menos horas».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": ""
   },
   {
@@ -1138,6 +2030,12 @@
     "fecha": "reserva",
     "hora": "",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "mito roto",
     "tema": "contrato de trabajo de palabra",
     "basado_en": "nuevo",
@@ -1150,14 +2048,14 @@
       "Mensajes y horarios",
       "Comprobantes de pago",
       "Mandáselo a quien trabaje sin contrato.",
-      "«CONTRATO» por WhatsApp"
+      "Comentá «CONTRATO»"
     ],
     "personaje": "Sole",
     "lugar_ba": "Cocina de Sole en Floresta",
     "escena_visual": "Un contrato invisible se dibuja en el aire con línea dorada a medida que aparecen mensajes y horarios.",
-    "cierre": "Mandáselo a quien trabaje sin contrato. O escribinos «CONTRATO» por WhatsApp.",
+    "cierre": "Mandáselo a quien trabaje sin contrato. O comentá «CONTRATO» y te mando la guía «Contrato de trabajo de palabra».",
     "palabra": "CONTRATO",
-    "copy": "«Sin contrato no tengo derechos.» Falso.\n\n✔ Sin papel también hay contrato\n✔ Mensajes y horarios\n✔ Comprobantes de pago\n\nMandáselo a quien trabaje sin contrato. O escribinos «CONTRATO» por WhatsApp.\n\nFuente: Ley de Contrato de Trabajo, art. 48.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "«Sin contrato no tengo derechos.» Falso.\n\n✔ Sin papel también hay contrato\n✔ Mensajes y horarios\n✔ Comprobantes de pago\n\nMandáselo a quien trabaje sin contrato. O comentá «CONTRATO» y te mando la guía «Contrato de trabajo de palabra».\n\nFuente: Ley de Contrato de Trabajo, art. 48.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": "Ley de Contrato de Trabajo, art. 48"
   },
   {
@@ -1165,6 +2063,12 @@
     "fecha": "reserva",
     "hora": "",
     "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "tres cartas cerradas",
     "tema": "escriturar una casa heredada",
     "basado_en": "nuevo",
@@ -1177,14 +2081,14 @@
       "Carta 2: herederos de acuerdo",
       "Carta 3: impuestos al día",
       "Mandáselo a tus hermanos.",
-      "«HERENCIA» por WhatsApp"
+      "Comentá «HERENCIA»"
     ],
     "personaje": "Sole y su hermano Dani",
     "lugar_ba": "Vereda de la casa de los padres en Parque Avellaneda",
     "escena_visual": "La fachada de la casa se pliega como un libro desplegable; tres cartas salen de la puerta.",
-    "cierre": "Mandáselo a tus hermanos. O escribinos «HERENCIA» por WhatsApp.",
+    "cierre": "Mandáselo a tus hermanos. O comentá «HERENCIA» y te mando «Los primeros pasos de una sucesión».",
     "palabra": "HERENCIA",
-    "copy": "Casa heredada: 3 cartas antes de escriturar.\n\n✔ Carta 1: sucesión terminada\n✔ Carta 2: herederos de acuerdo\n✔ Carta 3: impuestos al día\n\nMandáselo a tus hermanos. O escribinos «HERENCIA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Casa heredada: 3 cartas antes de escriturar.\n\n✔ Carta 1: sucesión terminada\n✔ Carta 2: herederos de acuerdo\n✔ Carta 3: impuestos al día\n\nMandáselo a tus hermanos. O comentá «HERENCIA» y te mando «Los primeros pasos de una sucesión».\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": ""
   }
 ]

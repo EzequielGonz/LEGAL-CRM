@@ -4,6 +4,12 @@
     "fecha": "2026-11-27",
     "hora": "08:10",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "segunda persona «vos»",
     "tema": "Black Friday: chats acumulados",
     "basado_en": "Black Friday: 200 mensajes y nadie para contestar. Así se ordena",
@@ -16,14 +22,14 @@
       "Una etiqueta por chat",
       "El resto, por orden de llegada",
       "Mandáselo a quien hoy no da abasto.",
-      "«ORDEN» por WhatsApp"
+      "Comentá «ORDEN»"
     ],
     "personaje": "Romina",
     "lugar_ba": "Mostrador de Dulce Almagro, Av. Corrientes y Medrano",
     "escena_visual": "El celular de Romina vibra y de la pantalla salen burbujas de chat que llenan el local; ella las acomoda en tres columnas de colores.",
-    "cierre": "Mandáselo a quien hoy no da abasto. O escribinos «ORDEN» por WhatsApp.",
+    "cierre": "Mandáselo a quien hoy no da abasto. O comentá «ORDEN» y te mando la guía «Black Friday: chats acumulados».",
     "palabra": "ORDEN",
-    "copy": "Hoy te escriben todos. ¿Quién les contesta?\n\n✔ Respuesta rápida: precio y pago\n✔ Una etiqueta por chat\n✔ El resto, por orden de llegada\n\nMandáselo a quien hoy no da abasto. O escribinos «ORDEN» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "Hoy te escriben todos. ¿Quién les contesta?\n\n✔ Respuesta rápida: precio y pago\n✔ Una etiqueta por chat\n✔ El resto, por orden de llegada\n\nMandáselo a quien hoy no da abasto. O comentá «ORDEN» y te mando la guía «Black Friday: chats acumulados».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -31,6 +37,12 @@
     "fecha": "2026-11-27",
     "hora": "12:20",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "escena con hora o número",
     "tema": "consulta de noche",
     "basado_en": "Llegó una consulta a las 21:03",
@@ -43,14 +55,14 @@
       "Mensaje automático con horario",
       "A primera hora, retomá",
       "Mandáselo a quien deja todo para mañana.",
-      "«CRM» por WhatsApp"
+      "Comentá «CRM»"
     ],
     "personaje": "Romina",
     "lugar_ba": "Sillón de su casa en Almagro, de noche",
     "escena_visual": "Reloj del celular en 21:03; la burbuja de chat se aleja por la ventana hacia otro local que se enciende. Corte a 10:00: silla vacía.",
-    "cierre": "Mandáselo a quien deja todo para mañana. O escribinos «CRM» por WhatsApp.",
+    "cierre": "Mandáselo a quien deja todo para mañana. O comentá «CRM» y te mando «La prueba del chat».",
     "palabra": "CRM",
-    "copy": "21:03: te piden precio. Contestás mañana.\n\n✔ 21:03 llega la consulta\n✔ Mensaje automático con horario\n✔ A primera hora, retomá\n\nMandáselo a quien deja todo para mañana. O escribinos «CRM» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "21:03: te piden precio. Contestás mañana.\n\n✔ 21:03 llega la consulta\n✔ Mensaje automático con horario\n✔ A primera hora, retomá\n\nMandáselo a quien deja todo para mañana. O comentá «CRM» y te mando «La prueba del chat».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -58,6 +70,12 @@
     "fecha": "2026-11-27",
     "hora": "18:40",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "mito roto",
     "tema": "precio por privado",
     "basado_en": "Te preguntan el precio: ¿qué respondés?",
@@ -70,14 +88,14 @@
       "Qué incluye",
       "Un paso siguiente concreto",
       "Guardalo para la próxima vez que te pregunten.",
-      "«RESPUESTAS» por WhatsApp"
+      "Comentá «RESPUESTAS»"
     ],
     "personaje": "Romina",
     "lugar_ba": "Comentarios de Instagram en la vidriera de Dulce Almagro",
     "escena_visual": "Un comentario «¿precio?» rebota contra un cartel de «por privado» que se rompe; aparece una respuesta clara en globo naranja.",
-    "cierre": "Guardalo para la próxima vez que te pregunten. O escribinos «RESPUESTAS» por WhatsApp.",
+    "cierre": "Guardalo para la próxima vez que te pregunten. O comentá «RESPUESTAS» y te mando la guía «Precio por privado».",
     "palabra": "RESPUESTAS",
-    "copy": "«El precio se pasa por privado.» Error.\n\n✔ Precio o rango\n✔ Qué incluye\n✔ Un paso siguiente concreto\n\nGuardalo para la próxima vez que te pregunten. O escribinos «RESPUESTAS» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "«El precio se pasa por privado.» Error.\n\n✔ Precio o rango\n✔ Qué incluye\n✔ Un paso siguiente concreto\n\nGuardalo para la próxima vez que te pregunten. O comentá «RESPUESTAS» y te mando la guía «Precio por privado».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -85,6 +103,12 @@
     "fecha": "2026-11-27",
     "hora": "21:20",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "contador que avanza",
     "tema": "web lenta",
     "basado_en": "Tu web tarda en cargar. Y se van",
@@ -97,14 +121,14 @@
       "+32 % de probabilidad de irse",
       "Probala hoy desde el celular",
       "Mandáselo a quien tenga web.",
-      "«WEB» por WhatsApp"
+      "Comentá «WEB»"
     ],
     "personaje": "Romina; clienta en silueta de espaldas",
     "lugar_ba": "Colectivo por Av. Corrientes, Almagro",
     "escena_visual": "Contador gigante de segundos arriba; la barra de carga avanza lenta mientras la clienta en silueta baja del colectivo y desaparece.",
-    "cierre": "Mandáselo a quien tenga web. O escribinos «WEB» por WhatsApp.",
+    "cierre": "Mandáselo a quien tenga web. O comentá «WEB» y te mando la guía «Web lenta».",
     "palabra": "WEB",
-    "copy": "Un segundo, dos, tres: tu cliente se fue.\n\n✔ 1 s · 2 s · 3 s\n✔ +32 % de probabilidad de irse\n✔ Probala hoy desde el celular\n\nMandáselo a quien tenga web. O escribinos «WEB» por WhatsApp.\n\nFuente: Think with Google, 2017.\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "Un segundo, dos, tres: tu cliente se fue.\n\n✔ 1 s · 2 s · 3 s\n✔ +32 % de probabilidad de irse\n✔ Probala hoy desde el celular\n\nMandáselo a quien tenga web. O comentá «WEB» y te mando la guía «Web lenta».\n\nFuente: Think with Google, 2017.\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": "Think with Google, 2017"
   },
   {
@@ -112,6 +136,12 @@
     "fecha": "2026-11-28",
     "hora": "08:10",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "tres cartas cerradas",
     "tema": "respuestas rápidas",
     "basado_en": "Respuestas rápidas: 3 que necesitás hoy",
@@ -124,14 +154,14 @@
       "Carta 2: horario y dirección",
       "Carta 3: cómo pedir",
       "Guardalo y armalas hoy.",
-      "«RAPIDAS» por WhatsApp"
+      "Comentá «RAPIDAS»"
     ],
     "personaje": "Romina y Tomi",
     "lugar_ba": "Mesa del local con la notebook de Tomi",
     "escena_visual": "Tres cartas naranjas boca abajo sobre la notebook; Tomi las da vuelta y cada una se guarda sola en el celular de Romina.",
-    "cierre": "Guardalo y armalas hoy. O escribinos «RAPIDAS» por WhatsApp.",
+    "cierre": "Guardalo y armalas hoy. O comentá «RAPIDAS» y te mando la guía «Respuestas rápidas».",
     "palabra": "RAPIDAS",
-    "copy": "Tres respuestas rápidas que te faltan.\n\n✔ Carta 1: precio y pagos\n✔ Carta 2: horario y dirección\n✔ Carta 3: cómo pedir\n\nGuardalo y armalas hoy. O escribinos «RAPIDAS» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "Tres respuestas rápidas que te faltan.\n\n✔ Carta 1: precio y pagos\n✔ Carta 2: horario y dirección\n✔ Carta 3: cómo pedir\n\nGuardalo y armalas hoy. O comentá «RAPIDAS» y te mando la guía «Respuestas rápidas».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -139,6 +169,12 @@
     "fecha": "2026-11-28",
     "hora": "12:20",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "pregunta con respuesta numérica",
     "tema": "seguimiento después de «lo pienso»",
     "basado_en": "«Lo pienso» no es un no",
@@ -151,14 +187,14 @@
       "Tres: 24 h, 3 días, 1 semana",
       "Cada vez, algo nuevo",
       "Guardalo para tu próximo «lo pienso».",
-      "«SEGUIR» por WhatsApp"
+      "Comentá «SEGUIR»"
     ],
     "personaje": "Romina",
     "lugar_ba": "Cocina de Dulce Almagro, de noche",
     "escena_visual": "Tres relojes de cocina se encienden en fila; cuando suena el tercero, el chat de la clienta cambia de gris a verde.",
-    "cierre": "Guardalo para tu próximo «lo pienso». O escribinos «SEGUIR» por WhatsApp.",
+    "cierre": "Guardalo para tu próximo «lo pienso». O comentá «SEGUIR» y te mando la guía «Seguimiento después de «lo pienso»».",
     "palabra": "SEGUIR",
-    "copy": "«Lo pienso»: ¿cuántas veces volvés?\n\n✔ ¿Ninguna? ¿Una?\n✔ Tres: 24 h, 3 días, 1 semana\n✔ Cada vez, algo nuevo\n\nGuardalo para tu próximo «lo pienso». O escribinos «SEGUIR» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "«Lo pienso»: ¿cuántas veces volvés?\n\n✔ ¿Ninguna? ¿Una?\n✔ Tres: 24 h, 3 días, 1 semana\n✔ Cada vez, algo nuevo\n\nGuardalo para tu próximo «lo pienso». O comentá «SEGUIR» y te mando la guía «Seguimiento después de «lo pienso»».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -166,6 +202,12 @@
     "fecha": "2026-11-28",
     "hora": "18:40",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "advertencia",
     "tema": "fotos de stock en Google",
     "basado_en": "Fotos reales del local en Google",
@@ -178,14 +220,14 @@
       "El mostrador y los productos",
       "Fotos nuevas cada temporada",
       "Mandáselo a quien tenga local.",
-      "«FOTOS» por WhatsApp"
+      "Comentá «FOTOS»"
     ],
     "personaje": "Tomi",
     "lugar_ba": "Vidriera de Dulce Almagro",
     "escena_visual": "Una foto genérica de una torta perfecta se despega del celular como sticker y cae; detrás aparece la vidriera real con luz cálida.",
-    "cierre": "Mandáselo a quien tenga local. O escribinos «FOTOS» por WhatsApp.",
+    "cierre": "Mandáselo a quien tenga local. O comentá «FOTOS» y te mando la guía «Fotos de stock en Google».",
     "palabra": "FOTOS",
-    "copy": "Desconfiá de tus fotos de stock.\n\n✔ La fachada\n✔ El mostrador y los productos\n✔ Fotos nuevas cada temporada\n\nMandáselo a quien tenga local. O escribinos «FOTOS» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "Desconfiá de tus fotos de stock.\n\n✔ La fachada\n✔ El mostrador y los productos\n✔ Fotos nuevas cada temporada\n\nMandáselo a quien tenga local. O comentá «FOTOS» y te mando la guía «Fotos de stock en Google».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -193,6 +235,12 @@
     "fecha": "2026-11-28",
     "hora": "21:20",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "¿cuál sos? (identidad)",
     "tema": "cómo respondés en WhatsApp",
     "basado_en": "nuevo",
@@ -205,14 +253,14 @@
       "El de «por privado»",
       "El de dos líneas y un paso",
       "Mandáselo a quien manda audios largos.",
-      "«VENDEDOR» por WhatsApp"
+      "Comentá «VENDEDOR»"
     ],
     "personaje": "Tres siluetas (Romina es la tercera)",
     "lugar_ba": "Feria de emprendedores en Plaza Almagro",
     "escena_visual": "Pantalla partida en tres puestos de feria; de los dos primeros sale una onda de audio interminable y un candado. El tercero se ilumina naranja.",
-    "cierre": "Mandáselo a quien manda audios largos. O escribinos «VENDEDOR» por WhatsApp.",
+    "cierre": "Mandáselo a quien manda audios largos. O comentá «VENDEDOR» y te mando la guía «Cómo respondés en WhatsApp».",
     "palabra": "VENDEDOR",
-    "copy": "¿Qué vendedor de WhatsApp sos?\n\n✔ El del audio de 3 minutos\n✔ El de «por privado»\n✔ El de dos líneas y un paso\n\nMandáselo a quien manda audios largos. O escribinos «VENDEDOR» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "¿Qué vendedor de WhatsApp sos?\n\n✔ El del audio de 3 minutos\n✔ El de «por privado»\n✔ El de dos líneas y un paso\n\nMandáselo a quien manda audios largos. O comentá «VENDEDOR» y te mando la guía «Cómo respondés en WhatsApp».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -220,6 +268,12 @@
     "fecha": "2026-11-29",
     "hora": "08:10",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "serie (parte 1)",
     "tema": "consultas de madrugada",
     "basado_en": "Cyber Monday a las 3 de la mañana: ¿quién responde?",
@@ -232,14 +286,14 @@
       "Romina duerme",
       "El chat espera",
       "Guardalo para ver la parte 2.",
-      "«AUTO» por WhatsApp"
+      "Comentá «AUTO»"
     ],
     "personaje": "Romina",
     "lugar_ba": "Dormitorio de Romina en Almagro, 3:12",
     "escena_visual": "Luz azul del celular sobre la mesa de luz; la burbuja de chat flota por la habitación oscura. Cierra con «Parte 2».",
-    "cierre": "Guardalo para ver la parte 2. O escribinos «AUTO» por WhatsApp.",
+    "cierre": "Guardalo para ver la parte 2. O comentá «AUTO» y te mando la guía «Consultas de madrugada».",
     "palabra": "AUTO",
-    "copy": "Parte 1: 3:12 a. m., alguien quiere comprar.\n\n✔ 3:12 a. m.\n✔ Romina duerme\n✔ El chat espera\n\nGuardalo para ver la parte 2. O escribinos «AUTO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "Parte 1: 3:12 a. m., alguien quiere comprar.\n\n✔ 3:12 a. m.\n✔ Romina duerme\n✔ El chat espera\n\nGuardalo para ver la parte 2. O comentá «AUTO» y te mando la guía «Consultas de madrugada».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -247,6 +301,12 @@
     "fecha": "2026-11-29",
     "hora": "12:20",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "loop",
     "tema": "bio en 3 segundos",
     "basado_en": "Tu bio tiene 3 segundos",
@@ -259,14 +319,14 @@
       "Dónde",
       "Cómo te contactan",
       "Mandáselo a quien tenga perfil de negocio.",
-      "«BIO» por WhatsApp"
+      "Comentá «BIO»"
     ],
     "personaje": "Romina",
     "lugar_ba": "Pantalla del perfil de Dulce Almagro",
     "escena_visual": "Un reloj de arena de tres segundos sobre el perfil; cada dato aparece al caer la arena. Termina donde empezó.",
-    "cierre": "Mandáselo a quien tenga perfil de negocio. O escribinos «BIO» por WhatsApp.",
+    "cierre": "Mandáselo a quien tenga perfil de negocio. O comentá «BIO» y te mando la guía «Bio en 3 segundos».",
     "palabra": "BIO",
-    "copy": "Tu bio tiene tres segundos. Contá.\n\n✔ Qué hacés y para quién\n✔ Dónde\n✔ Cómo te contactan\n\nMandáselo a quien tenga perfil de negocio. O escribinos «BIO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "Tu bio tiene tres segundos. Contá.\n\n✔ Qué hacés y para quién\n✔ Dónde\n✔ Cómo te contactan\n\nMandáselo a quien tenga perfil de negocio. O comentá «BIO» y te mando la guía «Bio en 3 segundos».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -274,6 +334,12 @@
     "fecha": "2026-11-29",
     "hora": "18:40",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "segunda persona «vos»",
     "tema": "etiquetas de chats",
     "basado_en": "Etiquetá cada chat por etapa",
@@ -286,14 +352,14 @@
       "Seguimiento · vendido",
       "Un minuto para ver todo",
       "Guardalo y etiquetá hoy.",
-      "«ETIQUETAS» por WhatsApp"
+      "Comentá «ETIQUETAS»"
     ],
     "personaje": "Romina",
     "lugar_ba": "Cocina de Dulce Almagro, de noche",
     "escena_visual": "Los chats caen como fichas de colores en cuatro frascos con etiquetas de cartulina.",
-    "cierre": "Guardalo y etiquetá hoy. O escribinos «ETIQUETAS» por WhatsApp.",
+    "cierre": "Guardalo y etiquetá hoy. O comentá «ETIQUETAS» y te mando la guía «Etiquetas de chats».",
     "palabra": "ETIQUETAS",
-    "copy": "Vos no sabés en qué quedó cada chat.\n\n✔ Nuevo · presupuesto\n✔ Seguimiento · vendido\n✔ Un minuto para ver todo\n\nGuardalo y etiquetá hoy. O escribinos «ETIQUETAS» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "Vos no sabés en qué quedó cada chat.\n\n✔ Nuevo · presupuesto\n✔ Seguimiento · vendido\n✔ Un minuto para ver todo\n\nGuardalo y etiquetá hoy. O comentá «ETIQUETAS» y te mando la guía «Etiquetas de chats».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -301,6 +367,12 @@
     "fecha": "2026-11-29",
     "hora": "21:20",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "escena con hora o número",
     "tema": "horarios en Google",
     "basado_en": "nuevo",
@@ -313,14 +385,14 @@
       "Fiestas y feriados",
       "Respondelo en el perfil",
       "Mandáselo a quien abre en las fiestas.",
-      "«HORARIO» por WhatsApp"
+      "Comentá «HORARIO»"
     ],
     "personaje": "Romina",
     "lugar_ba": "Persiana de Dulce Almagro, domingo 10:15",
     "escena_visual": "La persiana a medio subir; el cartel de horario en el celular cambia de números como un tablero de aeropuerto.",
-    "cierre": "Mandáselo a quien abre en las fiestas. O escribinos «HORARIO» por WhatsApp.",
+    "cierre": "Mandáselo a quien abre en las fiestas. O comentá «HORARIO» y te mando la guía «Horarios en Google».",
     "palabra": "HORARIO",
-    "copy": "Domingo 10:15: «¿abren hoy?».\n\n✔ Horario viejo en Google\n✔ Fiestas y feriados\n✔ Respondelo en el perfil\n\nMandáselo a quien abre en las fiestas. O escribinos «HORARIO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "Domingo 10:15: «¿abren hoy?».\n\n✔ Horario viejo en Google\n✔ Fiestas y feriados\n✔ Respondelo en el perfil\n\nMandáselo a quien abre en las fiestas. O comentá «HORARIO» y te mando la guía «Horarios en Google».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -328,6 +400,12 @@
     "fecha": "2026-11-30",
     "hora": "08:10",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "mito roto",
     "tema": "pedir reseñas",
     "basado_en": "Reseñas en Google: pedíselas a tus clientes reales",
@@ -340,14 +418,14 @@
       "Con el link directo",
       "Sin pedir estrellas",
       "Mandáselo a quien tenga clientes contentos.",
-      "«RESENAS» por WhatsApp"
+      "Comentá «RESENAS»"
     ],
     "personaje": "Romina",
     "lugar_ba": "Mostrador de Dulce Almagro, Av. Corrientes y Medrano",
     "escena_visual": "Una estrella dorada pasa de mano en mano entre clientas en silueta hasta llegar al celular.",
-    "cierre": "Mandáselo a quien tenga clientes contentos. O escribinos «RESENAS» por WhatsApp.",
+    "cierre": "Mandáselo a quien tenga clientes contentos. O comentá «RESENAS» y te mando la guía «Pedir reseñas».",
     "palabra": "RESENAS",
-    "copy": "«Pedir reseñas queda mal.» No.\n\n✔ En el momento justo\n✔ Con el link directo\n✔ Sin pedir estrellas\n\nMandáselo a quien tenga clientes contentos. O escribinos «RESENAS» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "«Pedir reseñas queda mal.» No.\n\n✔ En el momento justo\n✔ Con el link directo\n✔ Sin pedir estrellas\n\nMandáselo a quien tenga clientes contentos. O comentá «RESENAS» y te mando la guía «Pedir reseñas».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -355,6 +433,12 @@
     "fecha": "2026-11-30",
     "hora": "12:20",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "contador que avanza",
     "tema": "checklist de diciembre",
     "basado_en": "Checklist de diciembre: 5 cosas para que tu WhatsApp esté listo",
@@ -367,14 +451,14 @@
       "3 Respuestas rápidas",
       "4 Catálogo · 5 Etiquetas",
       "Guardalo para diciembre.",
-      "«CHECKLIST» por WhatsApp"
+      "Comentá «CHECKLIST»"
     ],
     "personaje": "Romina y Tomi",
     "lugar_ba": "Mostrador de Dulce Almagro con decoración navideña",
     "escena_visual": "Contador 1/5 a 5/5 en luces de arbolito; cada paso enciende una lucecita naranja.",
-    "cierre": "Guardalo para diciembre. O escribinos «CHECKLIST» por WhatsApp.",
+    "cierre": "Guardalo para diciembre. O comentá «CHECKLIST» y te mando «Los 10 mensajes que todo negocio necesita».",
     "palabra": "CHECKLIST",
-    "copy": "Diciembre: tu WhatsApp listo en cinco pasos.\n\n✔ 1 Horario · 2 Ausencia\n✔ 3 Respuestas rápidas\n✔ 4 Catálogo · 5 Etiquetas\n\nGuardalo para diciembre. O escribinos «CHECKLIST» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "Diciembre: tu WhatsApp listo en cinco pasos.\n\n✔ 1 Horario · 2 Ausencia\n✔ 3 Respuestas rápidas\n✔ 4 Catálogo · 5 Etiquetas\n\nGuardalo para diciembre. O comentá «CHECKLIST» y te mando «Los 10 mensajes que todo negocio necesita».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -382,6 +466,12 @@
     "fecha": "2026-11-30",
     "hora": "18:40",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "tres cartas cerradas",
     "tema": "WhatsApp, Business o API",
     "basado_en": "WhatsApp, Business o API: ¿cuál te conviene?",
@@ -394,14 +484,14 @@
       "Business: catálogo y etiquetas",
       "API: mucho volumen",
       "Mandáselo a quien no sabe cuál usar.",
-      "«API» por WhatsApp"
+      "Comentá «API»"
     ],
     "personaje": "Romina y Tomi",
     "lugar_ba": "Mesa del local con la notebook de Tomi",
     "escena_visual": "Tres cartas naranjas se dan vuelta; cada una abre una mini maqueta del local con más gente atendiendo.",
-    "cierre": "Mandáselo a quien no sabe cuál usar. O escribinos «API» por WhatsApp.",
+    "cierre": "Mandáselo a quien no sabe cuál usar. O comentá «API» y te mando la guía «WhatsApp, Business o API».",
     "palabra": "API",
-    "copy": "WhatsApp común, Business o API: tres cartas.\n\n✔ Común: amigos\n✔ Business: catálogo y etiquetas\n✔ API: mucho volumen\n\nMandáselo a quien no sabe cuál usar. O escribinos «API» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "WhatsApp común, Business o API: tres cartas.\n\n✔ Común: amigos\n✔ Business: catálogo y etiquetas\n✔ API: mucho volumen\n\nMandáselo a quien no sabe cuál usar. O comentá «API» y te mando la guía «WhatsApp, Business o API».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -409,6 +499,12 @@
     "fecha": "2026-11-30",
     "hora": "21:20",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "pregunta con respuesta numérica",
     "tema": "mensajes de Instagram sin ver",
     "basado_en": "Mensajes de Instagram sin responder",
@@ -421,14 +517,14 @@
       "Veintitrés",
       "Mirá las solicitudes",
       "Mandáselo a quien atiende el Instagram.",
-      "«SOLICITUDES» por WhatsApp"
+      "Comentá «SOLICITUDES»"
     ],
     "personaje": "Tomi",
     "lugar_ba": "Mesa del local con la notebook de Tomi, de tarde",
     "escena_visual": "Un contador sube de 0 a 23 en la pantalla mientras sobres salen de una carpeta escondida.",
-    "cierre": "Mandáselo a quien atiende el Instagram. O escribinos «SOLICITUDES» por WhatsApp.",
+    "cierre": "Mandáselo a quien atiende el Instagram. O comentá «SOLICITUDES» y te mando la guía «Mensajes de Instagram sin ver».",
     "palabra": "SOLICITUDES",
-    "copy": "Tomi abrió Instagram: ¿cuántos sin ver?\n\n✔ ¿Dos? ¿Cinco?\n✔ Veintitrés\n✔ Mirá las solicitudes\n\nMandáselo a quien atiende el Instagram. O escribinos «SOLICITUDES» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "Tomi abrió Instagram: ¿cuántos sin ver?\n\n✔ ¿Dos? ¿Cinco?\n✔ Veintitrés\n✔ Mirá las solicitudes\n\nMandáselo a quien atiende el Instagram. O comentá «SOLICITUDES» y te mando la guía «Mensajes de Instagram sin ver».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -436,6 +532,12 @@
     "fecha": "2026-12-01",
     "hora": "08:10",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "advertencia",
     "tema": "mensaje de ausencia en las fiestas",
     "basado_en": "Mensaje de ausencia con los horarios de las fiestas",
@@ -448,14 +550,14 @@
       "Cuándo volvés",
       "Cómo dejar un pedido",
       "Guardalo para las fiestas.",
-      "«AUSENCIA» por WhatsApp"
+      "Comentá «AUSENCIA»"
     ],
     "personaje": "Romina",
     "lugar_ba": "Puerta de Dulce Almagro con cartel de fiestas",
     "escena_visual": "La puerta se cierra con guirnaldas y el celular sigue respondiendo solo con una burbuja naranja.",
-    "cierre": "Guardalo para las fiestas. O escribinos «AUSENCIA» por WhatsApp.",
+    "cierre": "Guardalo para las fiestas. O comentá «AUSENCIA» y te mando la guía «Mensaje de ausencia en las fiestas».",
     "palabra": "AUSENCIA",
-    "copy": "No cierres por las fiestas sin este mensaje.\n\n✔ Hasta cuándo cerrás\n✔ Cuándo volvés\n✔ Cómo dejar un pedido\n\nGuardalo para las fiestas. O escribinos «AUSENCIA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "No cierres por las fiestas sin este mensaje.\n\n✔ Hasta cuándo cerrás\n✔ Cuándo volvés\n✔ Cómo dejar un pedido\n\nGuardalo para las fiestas. O comentá «AUSENCIA» y te mando la guía «Mensaje de ausencia en las fiestas».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -463,6 +565,12 @@
     "fecha": "2026-12-01",
     "hora": "12:20",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "¿cuál sos? (identidad)",
     "tema": "perfil de Google",
     "basado_en": "Te buscan en Google y no aparecés",
@@ -475,14 +583,14 @@
       "Fotos viejas",
       "Todo al día",
       "Mandáselo a quien tenga local.",
-      "«GOOGLE» por WhatsApp"
+      "Comentá «GOOGLE»"
     ],
     "personaje": "Tres vidrieras (Dulce Almagro es la tercera)",
     "lugar_ba": "Esquina de Av. Corrientes y Medrano, de noche",
     "escena_visual": "Tres pines de mapa sobre la esquina; dos se apagan y el tercero brilla naranja.",
-    "cierre": "Mandáselo a quien tenga local. O escribinos «GOOGLE» por WhatsApp.",
+    "cierre": "Mandáselo a quien tenga local. O comentá «GOOGLE» y te mando la guía «Perfil de Google».",
     "palabra": "GOOGLE",
-    "copy": "¿Qué local sos en Google?\n\n✔ Sin horario\n✔ Fotos viejas\n✔ Todo al día\n\nMandáselo a quien tenga local. O escribinos «GOOGLE» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "¿Qué local sos en Google?\n\n✔ Sin horario\n✔ Fotos viejas\n✔ Todo al día\n\nMandáselo a quien tenga local. O comentá «GOOGLE» y te mando la guía «Perfil de Google».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -490,6 +598,12 @@
     "fecha": "2026-12-01",
     "hora": "18:40",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "serie (parte 2)",
     "tema": "consultas de madrugada",
     "basado_en": "Cyber Monday a las 3 de la mañana: ¿quién responde?",
@@ -502,14 +616,14 @@
       "Precios",
       "Cómo pedir",
       "Mandáselo a quien le escriben de noche.",
-      "«AUTO» por WhatsApp"
+      "Comentá «AUTO»"
     ],
     "personaje": "Romina",
     "lugar_ba": "Mostrador de Dulce Almagro, 8:00",
     "escena_visual": "La burbuja de la madrugada aterriza en el mostrador al amanecer y se abre como una caja con el pedido.",
-    "cierre": "Mandáselo a quien le escriben de noche. O escribinos «AUTO» por WhatsApp.",
+    "cierre": "Mandáselo a quien le escriben de noche. O comentá «AUTO» y te mando la guía «Consultas de madrugada».",
     "palabra": "AUTO",
-    "copy": "Parte 2: a las 3:12 contesta el automático.\n\n✔ Horario\n✔ Precios\n✔ Cómo pedir\n\nMandáselo a quien le escriben de noche. O escribinos «AUTO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "Parte 2: a las 3:12 contesta el automático.\n\n✔ Horario\n✔ Precios\n✔ Cómo pedir\n\nMandáselo a quien le escriben de noche. O comentá «AUTO» y te mando la guía «Consultas de madrugada».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -517,6 +631,12 @@
     "fecha": "2026-12-01",
     "hora": "21:20",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "loop",
     "tema": "web en el celular",
     "basado_en": "¿Tu web se ve bien en el celular?",
@@ -529,14 +649,14 @@
       "¿Cómo pedir?",
       "¿El WhatsApp?",
       "Mandáselo a quien tenga web.",
-      "«CELULAR» por WhatsApp"
+      "Comentá «CELULAR»"
     ],
     "personaje": "Romina",
     "lugar_ba": "Vereda de Medrano, Almagro",
     "escena_visual": "Una web gigante se achica hasta caber en la mano de Romina; los botones se buscan como en un juego. Vuelve al inicio.",
-    "cierre": "Mandáselo a quien tenga web. O escribinos «CELULAR» por WhatsApp.",
+    "cierre": "Mandáselo a quien tenga web. O comentá «CELULAR» y te mando la guía «Web en el celular».",
     "palabra": "CELULAR",
-    "copy": "Abrí tu web en el celular. Ahora.\n\n✔ ¿El precio?\n✔ ¿Cómo pedir?\n✔ ¿El WhatsApp?\n\nMandáselo a quien tenga web. O escribinos «CELULAR» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "Abrí tu web en el celular. Ahora.\n\n✔ ¿El precio?\n✔ ¿Cómo pedir?\n✔ ¿El WhatsApp?\n\nMandáselo a quien tenga web. O comentá «CELULAR» y te mando la guía «Web en el celular».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -544,6 +664,12 @@
     "fecha": "2026-12-02",
     "hora": "08:10",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "segunda persona «vos»",
     "tema": "catálogo de WhatsApp",
     "basado_en": "El catálogo de WhatsApp Business",
@@ -556,14 +682,14 @@
       "Foto real y precio",
       "Qué incluyen",
       "Guardalo y cargalo esta semana.",
-      "«CATALOGO» por WhatsApp"
+      "Comentá «CATALOGO»"
     ],
     "personaje": "Romina",
     "lugar_ba": "Cocina de Dulce Almagro, de noche",
     "escena_visual": "Una vitrina vacía se llena de tortas en miniatura, cada una con su etiqueta de cartulina.",
-    "cierre": "Guardalo y cargalo esta semana. O escribinos «CATALOGO» por WhatsApp.",
+    "cierre": "Guardalo y cargalo esta semana. O comentá «CATALOGO» y te mando la guía «Catálogo de WhatsApp».",
     "palabra": "CATALOGO",
-    "copy": "Tu catálogo de WhatsApp está vacío.\n\n✔ 10 más pedidos\n✔ Foto real y precio\n✔ Qué incluyen\n\nGuardalo y cargalo esta semana. O escribinos «CATALOGO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "Tu catálogo de WhatsApp está vacío.\n\n✔ 10 más pedidos\n✔ Foto real y precio\n✔ Qué incluyen\n\nGuardalo y cargalo esta semana. O comentá «CATALOGO» y te mando la guía «Catálogo de WhatsApp».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -571,6 +697,12 @@
     "fecha": "2026-12-02",
     "hora": "12:20",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "escena con hora o número",
     "tema": "aguinaldo y consultas",
     "basado_en": "Aguinaldo: más consultas. ¿Quién las responde?",
@@ -583,14 +715,14 @@
       "Catálogo al día",
       "Turnos para atender",
       "Mandáselo a quien vende en diciembre.",
-      "«DIECIOCHO» por WhatsApp"
+      "Comentá «DIECIOCHO»"
     ],
     "personaje": "Romina",
     "lugar_ba": "Mostrador de Dulce Almagro, 18/12 a la tarde",
     "escena_visual": "Un calendario marca 18/12 y del celular salen burbujas en ola; Romina y Tomi se reparten la ola.",
-    "cierre": "Mandáselo a quien vende en diciembre. O escribinos «DIECIOCHO» por WhatsApp.",
+    "cierre": "Mandáselo a quien vende en diciembre. O comentá «DIECIOCHO» y te mando la guía «Aguinaldo y consultas».",
     "palabra": "DIECIOCHO",
-    "copy": "18/12: cobran el aguinaldo y te escriben.\n\n✔ Respuestas rápidas\n✔ Catálogo al día\n✔ Turnos para atender\n\nMandáselo a quien vende en diciembre. O escribinos «DIECIOCHO» por WhatsApp.\n\nFuente: Ley de Contrato de Trabajo, art. 122.\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "18/12: cobran el aguinaldo y te escriben.\n\n✔ Respuestas rápidas\n✔ Catálogo al día\n✔ Turnos para atender\n\nMandáselo a quien vende en diciembre. O comentá «DIECIOCHO» y te mando la guía «Aguinaldo y consultas».\n\nFuente: Ley de Contrato de Trabajo, art. 122.\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": "Ley de Contrato de Trabajo, art. 122"
   },
   {
@@ -598,6 +730,12 @@
     "fecha": "2026-12-02",
     "hora": "18:40",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "mito roto",
     "tema": "responder rápido",
     "basado_en": "Llegó una consulta a las 21:03",
@@ -610,14 +748,14 @@
       "Rápida y clara",
       "La de mañana llega tarde",
       "Mandáselo a quien contesta al otro día.",
-      "«RAPIDO» por WhatsApp"
+      "Comentá «RAPIDO»"
     ],
     "personaje": "Romina",
     "lugar_ba": "Colectivo por Av. Rivadavia, Almagro",
     "escena_visual": "Dos relojes en pantalla partida: uno responde enseguida y el otro sigue girando mientras la burbuja se va.",
-    "cierre": "Mandáselo a quien contesta al otro día. O escribinos «RAPIDO» por WhatsApp.",
+    "cierre": "Mandáselo a quien contesta al otro día. O comentá «RAPIDO» y te mando la guía «Responder rápido».",
     "palabra": "RAPIDO",
-    "copy": "«Contestar rápido es de desesperado.» No.\n\n✔ Decide ahora\n✔ Rápida y clara\n✔ La de mañana llega tarde\n\nMandáselo a quien contesta al otro día. O escribinos «RAPIDO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "«Contestar rápido es de desesperado.» No.\n\n✔ Decide ahora\n✔ Rápida y clara\n✔ La de mañana llega tarde\n\nMandáselo a quien contesta al otro día. O comentá «RAPIDO» y te mando la guía «Responder rápido».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -625,6 +763,12 @@
     "fecha": "2026-12-02",
     "hora": "21:20",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "contador que avanza",
     "tema": "preguntas frecuentes",
     "basado_en": "nuevo",
@@ -637,14 +781,14 @@
       "Las 5 que más se repiten",
       "Fijalas en el perfil",
       "Guardalo y armalas hoy.",
-      "«PREGUNTAS» por WhatsApp"
+      "Comentá «FRECUENTES»"
     ],
     "personaje": "Tomi",
     "lugar_ba": "Mostrador de Dulce Almagro",
     "escena_visual": "Un contador de preguntas sube mientras las burbujas se apilan; al final se ordenan en cinco carteles fijos.",
-    "cierre": "Guardalo y armalas hoy. O escribinos «PREGUNTAS» por WhatsApp.",
-    "palabra": "PREGUNTAS",
-    "copy": "La misma pregunta 10, 20, 30 veces.\n\n✔ 10 · 20 · 30 veces\n✔ Las 5 que más se repiten\n✔ Fijalas en el perfil\n\nGuardalo y armalas hoy. O escribinos «PREGUNTAS» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "cierre": "Guardalo y armalas hoy. O comentá «FRECUENTES» y te mando la guía «Preguntas frecuentes».",
+    "palabra": "FRECUENTES",
+    "copy": "La misma pregunta 10, 20, 30 veces.\n\n✔ 10 · 20 · 30 veces\n✔ Las 5 que más se repiten\n✔ Fijalas en el perfil\n\nGuardalo y armalas hoy. O comentá «FRECUENTES» y te mando la guía «Preguntas frecuentes».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -652,6 +796,12 @@
     "fecha": "2026-12-03",
     "hora": "08:10",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "tres cartas cerradas",
     "tema": "estados de WhatsApp",
     "basado_en": "Estados de WhatsApp: tu vidriera de fin de año",
@@ -664,14 +814,14 @@
       "Detrás de escena",
       "Cómo pedir",
       "Mandáselo a quien no usa los estados.",
-      "«ESTADOS» por WhatsApp"
+      "Comentá «ESTADOS»"
     ],
     "personaje": "Romina",
     "lugar_ba": "Vidriera navideña de Dulce Almagro",
     "escena_visual": "Tres cartas se dan vuelta dentro de la vidriera como adornos del arbolito.",
-    "cierre": "Mandáselo a quien no usa los estados. O escribinos «ESTADOS» por WhatsApp.",
+    "cierre": "Mandáselo a quien no usa los estados. O comentá «ESTADOS» y te mando la guía «Estados de WhatsApp».",
     "palabra": "ESTADOS",
-    "copy": "Tus estados de WhatsApp: tres cartas.\n\n✔ Lo nuevo\n✔ Detrás de escena\n✔ Cómo pedir\n\nMandáselo a quien no usa los estados. O escribinos «ESTADOS» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "Tus estados de WhatsApp: tres cartas.\n\n✔ Lo nuevo\n✔ Detrás de escena\n✔ Cómo pedir\n\nMandáselo a quien no usa los estados. O comentá «ESTADOS» y te mando la guía «Estados de WhatsApp».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -679,6 +829,12 @@
     "fecha": "2026-12-03",
     "hora": "12:20",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "pregunta con respuesta numérica",
     "tema": "web lenta",
     "basado_en": "Tu web tarda en cargar. Y se van",
@@ -691,14 +847,14 @@
       "+32 %",
       "Sacá lo que pesa",
       "Mandáselo a quien tenga web.",
-      "«VELOCIDAD» por WhatsApp"
+      "Comentá «VELOCIDAD»"
     ],
     "personaje": "Tomi",
     "lugar_ba": "Mesa del local con la notebook de Tomi",
     "escena_visual": "Una barra de carga con pesas colgando; Tomi corta las pesas y la barra corre.",
-    "cierre": "Mandáselo a quien tenga web. O escribinos «VELOCIDAD» por WhatsApp.",
+    "cierre": "Mandáselo a quien tenga web. O comentá «VELOCIDAD» y te mando la guía «Web lenta».",
     "palabra": "VELOCIDAD",
-    "copy": "3 segundos en vez de 1: ¿cuántos más se van?\n\n✔ 3 s en vez de 1\n✔ +32 %\n✔ Sacá lo que pesa\n\nMandáselo a quien tenga web. O escribinos «VELOCIDAD» por WhatsApp.\n\nFuente: Think with Google, 2017.\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "3 segundos en vez de 1: ¿cuántos más se van?\n\n✔ 3 s en vez de 1\n✔ +32 %\n✔ Sacá lo que pesa\n\nMandáselo a quien tenga web. O comentá «VELOCIDAD» y te mando la guía «Web lenta».\n\nFuente: Think with Google, 2017.\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": "Think with Google, 2017"
   },
   {
@@ -706,6 +862,12 @@
     "fecha": "2026-12-03",
     "hora": "18:40",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "advertencia",
     "tema": "audios largos",
     "basado_en": "nuevo",
@@ -718,14 +880,14 @@
       "Precio y qué incluye",
       "Audio, solo corto",
       "Mandáselo a quien manda audios largos.",
-      "«AUDIOS» por WhatsApp"
+      "Comentá «AUDIOS»"
     ],
     "personaje": "Romina",
     "lugar_ba": "Feria de emprendedores en Plaza Almagro",
     "escena_visual": "Una onda de audio interminable cruza la plaza; Romina la corta con una tijera y queda un mensaje de dos líneas.",
-    "cierre": "Mandáselo a quien manda audios largos. O escribinos «AUDIOS» por WhatsApp.",
+    "cierre": "Mandáselo a quien manda audios largos. O comentá «AUDIOS» y te mando la guía «Audios largos».",
     "palabra": "AUDIOS",
-    "copy": "No le mandes un audio de tres minutos.\n\n✔ Dos o tres líneas\n✔ Precio y qué incluye\n✔ Audio, solo corto\n\nMandáselo a quien manda audios largos. O escribinos «AUDIOS» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "No le mandes un audio de tres minutos.\n\n✔ Dos o tres líneas\n✔ Precio y qué incluye\n✔ Audio, solo corto\n\nMandáselo a quien manda audios largos. O comentá «AUDIOS» y te mando la guía «Audios largos».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -733,6 +895,12 @@
     "fecha": "2026-12-03",
     "hora": "21:20",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "¿cuál sos? (identidad)",
     "tema": "bio del perfil",
     "basado_en": "Tu bio tiene 3 segundos",
@@ -745,14 +913,14 @@
       "Todo, pero confuso",
       "Qué, dónde y cómo",
       "Mandáselo a quien esté armando su bio.",
-      "«PERFIL» por WhatsApp"
+      "Comentá «PERFIL»"
     ],
     "personaje": "Tres perfiles en silueta",
     "lugar_ba": "Pantalla de Instagram en el celular de Tomi",
     "escena_visual": "Tres perfiles en pantalla partida; dos se desdibujan y el tercero queda nítido con detalle naranja.",
-    "cierre": "Mandáselo a quien esté armando su bio. O escribinos «PERFIL» por WhatsApp.",
+    "cierre": "Mandáselo a quien esté armando su bio. O comentá «PERFIL» y te mando la guía «Bio del perfil».",
     "palabra": "PERFIL",
-    "copy": "¿Qué bio de negocio sos?\n\n✔ Frase linda y nada\n✔ Todo, pero confuso\n✔ Qué, dónde y cómo\n\nMandáselo a quien esté armando su bio. O escribinos «PERFIL» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "¿Qué bio de negocio sos?\n\n✔ Frase linda y nada\n✔ Todo, pero confuso\n✔ Qué, dónde y cómo\n\nMandáselo a quien esté armando su bio. O comentá «PERFIL» y te mando la guía «Bio del perfil».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -760,6 +928,12 @@
     "fecha": "2026-12-04",
     "hora": "08:10",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "serie (parte 1)",
     "tema": "pedidos en papelitos",
     "basado_en": "El pedido anotado en un papelito",
@@ -772,14 +946,14 @@
       "Un papelito",
       "Sábado: perdido",
       "Guardalo para ver la parte 2.",
-      "«PEDIDOS» por WhatsApp"
+      "Comentá «PEDIDOS»"
     ],
     "personaje": "Romina",
     "lugar_ba": "Cocina de Dulce Almagro, viernes 14:00",
     "escena_visual": "El papelito vuela con el ventilador del horno y se pierde entre bandejas. Cierra con «Parte 2».",
-    "cierre": "Guardalo para ver la parte 2. O escribinos «PEDIDOS» por WhatsApp.",
+    "cierre": "Guardalo para ver la parte 2. O comentá «PEDIDOS» y te mando la guía «Pedidos en papelitos».",
     "palabra": "PEDIDOS",
-    "copy": "Parte 1: el pedido de la torta se perdió.\n\n✔ Viernes 14:00\n✔ Un papelito\n✔ Sábado: perdido\n\nGuardalo para ver la parte 2. O escribinos «PEDIDOS» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "Parte 1: el pedido de la torta se perdió.\n\n✔ Viernes 14:00\n✔ Un papelito\n✔ Sábado: perdido\n\nGuardalo para ver la parte 2. O comentá «PEDIDOS» y te mando la guía «Pedidos en papelitos».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -787,6 +961,12 @@
     "fecha": "2026-12-04",
     "hora": "12:20",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "loop",
     "tema": "chats sin responder",
     "basado_en": "47 chats sin responder",
@@ -799,14 +979,14 @@
       "Después: seguimiento",
       "Al final: el resto",
       "Mandáselo a quien tiene el WhatsApp explotado.",
-      "«VERDES» por WhatsApp"
+      "Comentá «VERDES»"
     ],
     "personaje": "Romina",
     "lugar_ba": "Plaza Almagro, de mañana",
     "escena_visual": "Burbujas verdes salen del celular y forman una cola que avanza; vuelve al celular cerrado.",
-    "cierre": "Mandáselo a quien tiene el WhatsApp explotado. O escribinos «VERDES» por WhatsApp.",
+    "cierre": "Mandáselo a quien tiene el WhatsApp explotado. O comentá «VERDES» y te mando la guía «Chats sin responder».",
     "palabra": "VERDES",
-    "copy": "Abrís WhatsApp: 52 chats en verde.\n\n✔ Primero: precio\n✔ Después: seguimiento\n✔ Al final: el resto\n\nMandáselo a quien tiene el WhatsApp explotado. O escribinos «VERDES» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "Abrís WhatsApp: 52 chats en verde.\n\n✔ Primero: precio\n✔ Después: seguimiento\n✔ Al final: el resto\n\nMandáselo a quien tiene el WhatsApp explotado. O comentá «VERDES» y te mando la guía «Chats sin responder».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -814,6 +994,12 @@
     "fecha": "2026-12-04",
     "hora": "18:40",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "segunda persona «vos»",
     "tema": "precio con paso siguiente",
     "basado_en": "Te preguntan el precio: ¿qué respondés?",
@@ -826,14 +1012,14 @@
       "«¿Para qué día?»",
       "«¿Te mando opciones?»",
       "Guardalo para tu próxima respuesta.",
-      "«PASO» por WhatsApp"
+      "Comentá «PASO»"
     ],
     "personaje": "Romina",
     "lugar_ba": "Mostrador de Dulce Almagro",
     "escena_visual": "El chat queda en silencio con un eco; aparece una flecha naranja que lleva a una fecha en el calendario.",
-    "cierre": "Guardalo para tu próxima respuesta. O escribinos «PASO» por WhatsApp.",
+    "cierre": "Guardalo para tu próxima respuesta. O comentá «PASO» y te mando la guía «Precio con paso siguiente».",
     "palabra": "PASO",
-    "copy": "Vos respondés el precio y... ¿después?\n\n✔ «¿Te lo reservo?»\n✔ «¿Para qué día?»\n✔ «¿Te mando opciones?»\n\nGuardalo para tu próxima respuesta. O escribinos «PASO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "Vos respondés el precio y... ¿después?\n\n✔ «¿Te lo reservo?»\n✔ «¿Para qué día?»\n✔ «¿Te mando opciones?»\n\nGuardalo para tu próxima respuesta. O comentá «PASO» y te mando la guía «Precio con paso siguiente».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -841,6 +1027,12 @@
     "fecha": "2026-12-04",
     "hora": "21:20",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "escena con hora o número",
     "tema": "Instagram: mensaje viejo",
     "basado_en": "Mensajes de Instagram sin responder",
@@ -853,14 +1045,14 @@
       "Siempre a la misma hora",
       "Notificaciones activas",
       "Mandáselo a quien atiende el Instagram.",
-      "«INSTAGRAM» por WhatsApp"
+      "Comentá «INSTAGRAM»"
     ],
     "personaje": "Tomi",
     "lugar_ba": "Colectivo por Av. Corrientes, martes 16:40",
     "escena_visual": "Un sobre polvoriento se sacude en la pantalla; el calendario retrocede nueve días.",
-    "cierre": "Mandáselo a quien atiende el Instagram. O escribinos «INSTAGRAM» por WhatsApp.",
+    "cierre": "Mandáselo a quien atiende el Instagram. O comentá «INSTAGRAM» y te mando la guía «Instagram: mensaje viejo».",
     "palabra": "INSTAGRAM",
-    "copy": "Martes 16:40: un mensaje de hace 9 días.\n\n✔ Una vez por día\n✔ Siempre a la misma hora\n✔ Notificaciones activas\n\nMandáselo a quien atiende el Instagram. O escribinos «INSTAGRAM» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "Martes 16:40: un mensaje de hace 9 días.\n\n✔ Una vez por día\n✔ Siempre a la misma hora\n✔ Notificaciones activas\n\nMandáselo a quien atiende el Instagram. O comentá «INSTAGRAM» y te mando la guía «Instagram: mensaje viejo».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -868,6 +1060,12 @@
     "fecha": "2026-12-05",
     "hora": "08:10",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "mito roto",
     "tema": "API de WhatsApp",
     "basado_en": "WhatsApp, Business o API: ¿cuál te conviene?",
@@ -880,14 +1078,14 @@
       "Y de cuántos atienden",
       "Medilo una semana",
       "Mandáselo a quien atiende con varias personas.",
-      "«VOLUMEN» por WhatsApp"
+      "Comentá «VOLUMEN»"
     ],
     "personaje": "Tomi",
     "lugar_ba": "Mesa del local con la notebook de Tomi",
     "escena_visual": "Un edificio de oficinas gigante se achica hasta ser del tamaño del local.",
-    "cierre": "Mandáselo a quien atiende con varias personas. O escribinos «VOLUMEN» por WhatsApp.",
+    "cierre": "Mandáselo a quien atiende con varias personas. O comentá «VOLUMEN» y te mando la guía «API de WhatsApp».",
     "palabra": "VOLUMEN",
-    "copy": "«La API es solo para empresas grandes.»\n\n✔ Depende del volumen\n✔ Y de cuántos atienden\n✔ Medilo una semana\n\nMandáselo a quien atiende con varias personas. O escribinos «VOLUMEN» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "«La API es solo para empresas grandes.»\n\n✔ Depende del volumen\n✔ Y de cuántos atienden\n✔ Medilo una semana\n\nMandáselo a quien atiende con varias personas. O comentá «VOLUMEN» y te mando la guía «API de WhatsApp».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -895,6 +1093,12 @@
     "fecha": "2026-12-05",
     "hora": "12:20",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "contador que avanza",
     "tema": "seguimiento: el calendario",
     "basado_en": "Seguimiento: 24 h, 3 días y una semana",
@@ -907,14 +1111,14 @@
       "Día 3: algo nuevo",
       "Día 7: una fecha",
       "Guardalo para tus seguimientos.",
-      "«CALENDARIO» por WhatsApp"
+      "Comentá «CALENDARIO»"
     ],
     "personaje": "Romina",
     "lugar_ba": "Mostrador de Dulce Almagro",
     "escena_visual": "Un calendario de cartulina con tres casilleros que se iluminan en naranja de a uno.",
-    "cierre": "Guardalo para tus seguimientos. O escribinos «CALENDARIO» por WhatsApp.",
+    "cierre": "Guardalo para tus seguimientos. O comentá «CALENDARIO» y te mando la guía «Seguimiento: el calendario».",
     "palabra": "CALENDARIO",
-    "copy": "Hora 24, día 3, día 7: el seguimiento.\n\n✔ Hora 24: mensaje corto\n✔ Día 3: algo nuevo\n✔ Día 7: una fecha\n\nGuardalo para tus seguimientos. O escribinos «CALENDARIO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "Hora 24, día 3, día 7: el seguimiento.\n\n✔ Hora 24: mensaje corto\n✔ Día 3: algo nuevo\n✔ Día 7: una fecha\n\nGuardalo para tus seguimientos. O comentá «CALENDARIO» y te mando la guía «Seguimiento: el calendario».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -922,6 +1126,12 @@
     "fecha": "2026-12-05",
     "hora": "18:40",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "tres cartas cerradas",
     "tema": "reseña negativa",
     "basado_en": "nuevo",
@@ -934,14 +1144,14 @@
       "Agradecé y ofrecé hablar",
       "Contá qué cambiaste",
       "Mandáselo a quien le dejaron una mala.",
-      "«ESTRELLA» por WhatsApp"
+      "Comentá «ESTRELLA»"
     ],
     "personaje": "Romina",
     "lugar_ba": "Cocina de Dulce Almagro, de noche",
     "escena_visual": "Una estrella sola cae sobre la mesa; tres cartas la rodean y se convierte en un mensaje calmo.",
-    "cierre": "Mandáselo a quien le dejaron una mala. O escribinos «ESTRELLA» por WhatsApp.",
+    "cierre": "Mandáselo a quien le dejaron una mala. O comentá «ESTRELLA» y te mando la guía «Reseña negativa».",
     "palabra": "ESTRELLA",
-    "copy": "Te dejaron una reseña de una estrella.\n\n✔ Sin discutir\n✔ Agradecé y ofrecé hablar\n✔ Contá qué cambiaste\n\nMandáselo a quien le dejaron una mala. O escribinos «ESTRELLA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "Te dejaron una reseña de una estrella.\n\n✔ Sin discutir\n✔ Agradecé y ofrecé hablar\n✔ Contá qué cambiaste\n\nMandáselo a quien le dejaron una mala. O comentá «ESTRELLA» y te mando la guía «Reseña negativa».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -949,6 +1159,12 @@
     "fecha": "2026-12-05",
     "hora": "21:20",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "pregunta con respuesta numérica",
     "tema": "etiquetas",
     "basado_en": "Etiquetá cada chat por etapa",
@@ -961,14 +1177,14 @@
       "Cuatro alcanzan",
       "Nuevo, presupuesto, seguimiento, vendido",
       "Guardalo y armalas hoy.",
-      "«CUATRO» por WhatsApp"
+      "Comentá «CUATRO»"
     ],
     "personaje": "Tomi",
     "lugar_ba": "Vidriera de Dulce Almagro",
     "escena_visual": "Quince etiquetas vuelan y se descartan; quedan cuatro pegadas en frascos.",
-    "cierre": "Guardalo y armalas hoy. O escribinos «CUATRO» por WhatsApp.",
+    "cierre": "Guardalo y armalas hoy. O comentá «CUATRO» y te mando la guía «Etiquetas».",
     "palabra": "CUATRO",
-    "copy": "¿Cuántas etiquetas necesitás? Cuatro.\n\n✔ ¿Diez? ¿Quince?\n✔ Cuatro alcanzan\n✔ Nuevo, presupuesto, seguimiento, vendido\n\nGuardalo y armalas hoy. O escribinos «CUATRO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "¿Cuántas etiquetas necesitás? Cuatro.\n\n✔ ¿Diez? ¿Quince?\n✔ Cuatro alcanzan\n✔ Nuevo, presupuesto, seguimiento, vendido\n\nGuardalo y armalas hoy. O comentá «CUATRO» y te mando la guía «Etiquetas».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -976,6 +1192,12 @@
     "fecha": "2026-12-06",
     "hora": "08:10",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "advertencia",
     "tema": "catálogo sin precio",
     "basado_en": "El catálogo de WhatsApp Business",
@@ -988,14 +1210,14 @@
       "Poné «desde»",
       "Explicá qué cambia",
       "Mandáselo a quien esconde el precio.",
-      "«DESDE» por WhatsApp"
+      "Comentá «DESDE»"
     ],
     "personaje": "Romina",
     "lugar_ba": "Mostrador de Dulce Almagro, sábado",
     "escena_visual": "La etiqueta «consultar precio» se despega y en su lugar se pinta «desde» con pincel naranja.",
-    "cierre": "Mandáselo a quien esconde el precio. O escribinos «DESDE» por WhatsApp.",
+    "cierre": "Mandáselo a quien esconde el precio. O comentá «DESDE» y te mando la guía «Catálogo sin precio».",
     "palabra": "DESDE",
-    "copy": "No pongas «consultar precio» en el catálogo.\n\n✔ Nada de «consultar precio»\n✔ Poné «desde»\n✔ Explicá qué cambia\n\nMandáselo a quien esconde el precio. O escribinos «DESDE» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "No pongas «consultar precio» en el catálogo.\n\n✔ Nada de «consultar precio»\n✔ Poné «desde»\n✔ Explicá qué cambia\n\nMandáselo a quien esconde el precio. O comentá «DESDE» y te mando la guía «Catálogo sin precio».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -1003,6 +1225,12 @@
     "fecha": "2026-12-06",
     "hora": "12:20",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "¿cuál sos? (identidad)",
     "tema": "estados: cómo los usás",
     "basado_en": "Estados de WhatsApp: tu vidriera de fin de año",
@@ -1015,14 +1243,14 @@
       "Nunca",
       "Uno por día con cómo pedir",
       "Mandáselo a quien vende por estados.",
-      "«VIDRIERA» por WhatsApp"
+      "Comentá «VIDRIERA»"
     ],
     "personaje": "Tres celulares en silueta",
     "lugar_ba": "Feria navideña de Almagro",
     "escena_visual": "Tres celulares en pantalla partida; en el tercero aparece un estado con borde naranja.",
-    "cierre": "Mandáselo a quien vende por estados. O escribinos «VIDRIERA» por WhatsApp.",
+    "cierre": "Mandáselo a quien vende por estados. O comentá «VIDRIERA» y te mando la guía «Estados: cómo los usás».",
     "palabra": "VIDRIERA",
-    "copy": "¿Qué tipo de estados de WhatsApp subís?\n\n✔ Diez fotos sin texto\n✔ Nunca\n✔ Uno por día con cómo pedir\n\nMandáselo a quien vende por estados. O escribinos «VIDRIERA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "¿Qué tipo de estados de WhatsApp subís?\n\n✔ Diez fotos sin texto\n✔ Nunca\n✔ Uno por día con cómo pedir\n\nMandáselo a quien vende por estados. O comentá «VIDRIERA» y te mando la guía «Estados: cómo los usás».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -1030,6 +1258,12 @@
     "fecha": "2026-12-06",
     "hora": "18:40",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "serie (parte 2)",
     "tema": "pedidos en papelitos",
     "basado_en": "Fiestas: un formulario simple para tomar pedidos",
@@ -1042,14 +1276,14 @@
       "Día y forma de pago",
       "Todo en una planilla",
       "Mandáselo a quien toma pedidos.",
-      "«PEDIDOS» por WhatsApp"
+      "Comentá «PEDIDOS»"
     ],
     "personaje": "Romina y Tomi",
     "lugar_ba": "Mesa del local con la notebook de Tomi",
     "escena_visual": "Los papelitos del horno vuelven volando y se convierten en filas de una planilla naranja.",
-    "cierre": "Mandáselo a quien toma pedidos. O escribinos «PEDIDOS» por WhatsApp.",
+    "cierre": "Mandáselo a quien toma pedidos. O comentá «PEDIDOS» y te mando la guía «Pedidos en papelitos».",
     "palabra": "PEDIDOS",
-    "copy": "Parte 2: los pedidos, en un solo lugar.\n\n✔ Nombre y pedido\n✔ Día y forma de pago\n✔ Todo en una planilla\n\nMandáselo a quien toma pedidos. O escribinos «PEDIDOS» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "Parte 2: los pedidos, en un solo lugar.\n\n✔ Nombre y pedido\n✔ Día y forma de pago\n✔ Todo en una planilla\n\nMandáselo a quien toma pedidos. O comentá «PEDIDOS» y te mando la guía «Pedidos en papelitos».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -1057,6 +1291,12 @@
     "fecha": "2026-12-06",
     "hora": "21:20",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "loop",
     "tema": "horarios: la pregunta del domingo",
     "basado_en": "nuevo",
@@ -1069,14 +1309,14 @@
       "En Google",
       "En la bienvenida",
       "Mandáselo a quien abre los domingos.",
-      "«ABREN» por WhatsApp"
+      "Comentá «ABREN»"
     ],
     "personaje": "Romina",
     "lugar_ba": "Persiana de Dulce Almagro, de mañana",
     "escena_visual": "La persiana sube y baja como un loop; el horario aparece en tres pantallas a la vez.",
-    "cierre": "Mandáselo a quien abre los domingos. O escribinos «ABREN» por WhatsApp.",
+    "cierre": "Mandáselo a quien abre los domingos. O comentá «ABREN» y te mando la guía «Horarios: la pregunta del domingo».",
     "palabra": "ABREN",
-    "copy": "«¿Abren hoy?» Otra vez.\n\n✔ En el perfil\n✔ En Google\n✔ En la bienvenida\n\nMandáselo a quien abre los domingos. O escribinos «ABREN» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "«¿Abren hoy?» Otra vez.\n\n✔ En el perfil\n✔ En Google\n✔ En la bienvenida\n\nMandáselo a quien abre los domingos. O comentá «ABREN» y te mando la guía «Horarios: la pregunta del domingo».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -1084,6 +1324,12 @@
     "fecha": "reserva",
     "hora": "",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "advertencia",
     "tema": "foto de perfil",
     "basado_en": "nuevo",
@@ -1096,14 +1342,14 @@
       "Fondo liso",
       "Sin texto chico",
       "Mandáselo a quien tenga un perfil de negocio.",
-      "«FOTO» por WhatsApp"
+      "Comentá «FOTO»"
     ],
     "personaje": "Tomi",
     "lugar_ba": "Mesa del local con la notebook de Tomi",
     "escena_visual": "La foto de perfil se achica hasta un punto y se pixela; vuelve a crecer nítida.",
-    "cierre": "Mandáselo a quien tenga un perfil de negocio. O escribinos «FOTO» por WhatsApp.",
+    "cierre": "Mandáselo a quien tenga un perfil de negocio. O comentá «FOTO» y te mando la guía «Foto de perfil».",
     "palabra": "FOTO",
-    "copy": "Tu foto de perfil no se entiende chiquita.\n\n✔ Logo simple\n✔ Fondo liso\n✔ Sin texto chico\n\nMandáselo a quien tenga un perfil de negocio. O escribinos «FOTO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "Tu foto de perfil no se entiende chiquita.\n\n✔ Logo simple\n✔ Fondo liso\n✔ Sin texto chico\n\nMandáselo a quien tenga un perfil de negocio. O comentá «FOTO» y te mando la guía «Foto de perfil».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -1111,6 +1357,12 @@
     "fecha": "reserva",
     "hora": "",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "tres cartas cerradas",
     "tema": "mensaje de bienvenida",
     "basado_en": "nuevo",
@@ -1123,14 +1375,14 @@
       "Horario",
       "Tres opciones",
       "Guardalo y armalo hoy.",
-      "«BIENVENIDA» por WhatsApp"
+      "Comentá «BIENVENIDA»"
     ],
     "personaje": "Romina",
     "lugar_ba": "Mostrador de Dulce Almagro",
     "escena_visual": "Tres cartas sobre el mostrador se convierten en botones de chat.",
-    "cierre": "Guardalo y armalo hoy. O escribinos «BIENVENIDA» por WhatsApp.",
+    "cierre": "Guardalo y armalo hoy. O comentá «BIENVENIDA» y te mando la guía «Mensaje de bienvenida».",
     "palabra": "BIENVENIDA",
-    "copy": "Mensaje de bienvenida: tres cartas.\n\n✔ Quién atiende\n✔ Horario\n✔ Tres opciones\n\nGuardalo y armalo hoy. O escribinos «BIENVENIDA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "Mensaje de bienvenida: tres cartas.\n\n✔ Quién atiende\n✔ Horario\n✔ Tres opciones\n\nGuardalo y armalo hoy. O comentá «BIENVENIDA» y te mando la guía «Mensaje de bienvenida».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -1138,6 +1390,12 @@
     "fecha": "reserva",
     "hora": "",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "pregunta con respuesta numérica",
     "tema": "respuestas rápidas: cuántas",
     "basado_en": "Respuestas rápidas: 3 que necesitás hoy",
@@ -1150,14 +1408,14 @@
       "Tres alcanzan",
       "Precio, horario y pedido",
       "Guardalo y armalas hoy.",
-      "«TRES» por WhatsApp"
+      "Comentá «ARRANQUE»"
     ],
     "personaje": "Romina",
     "lugar_ba": "Cocina de Dulce Almagro",
     "escena_visual": "Veinte tarjetas vuelan y quedan tres en la mano de Romina.",
-    "cierre": "Guardalo y armalas hoy. O escribinos «TRES» por WhatsApp.",
-    "palabra": "TRES",
-    "copy": "¿Cuántas respuestas rápidas para empezar?\n\n✔ ¿Veinte?\n✔ Tres alcanzan\n✔ Precio, horario y pedido\n\nGuardalo y armalas hoy. O escribinos «TRES» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "cierre": "Guardalo y armalas hoy. O comentá «ARRANQUE» y te mando la guía «Respuestas rápidas: cuántas».",
+    "palabra": "ARRANQUE",
+    "copy": "¿Cuántas respuestas rápidas para empezar?\n\n✔ ¿Veinte?\n✔ Tres alcanzan\n✔ Precio, horario y pedido\n\nGuardalo y armalas hoy. O comentá «ARRANQUE» y te mando la guía «Respuestas rápidas: cuántas».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   },
   {
@@ -1165,6 +1423,12 @@
     "fecha": "reserva",
     "hora": "",
     "marca": "Kocos Marketing",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "instagram",
+      "facebook"
+    ],
     "formula": "segunda persona «vos»",
     "tema": "ausencia: volver",
     "basado_en": "Mensaje de ausencia con los horarios de las fiestas",
@@ -1177,14 +1441,14 @@
       "Consultas de precio",
       "Estado: volvimos",
       "Mandáselo a quien se va de vacaciones.",
-      "«VOLVIMOS» por WhatsApp"
+      "Comentá «VOLVIMOS»"
     ],
     "personaje": "Romina",
     "lugar_ba": "Puerta de Dulce Almagro, enero",
     "escena_visual": "La puerta se abre y una avalancha de burbujas cae sobre Romina; se ordenan en tres pilas.",
-    "cierre": "Mandáselo a quien se va de vacaciones. O escribinos «VOLVIMOS» por WhatsApp.",
+    "cierre": "Mandáselo a quien se va de vacaciones. O comentá «VOLVIMOS» y te mando la guía «Ausencia: volver».",
     "palabra": "VOLVIMOS",
-    "copy": "Volvés de vacaciones y hay 80 chats.\n\n✔ Pedidos con fecha\n✔ Consultas de precio\n✔ Estado: volvimos\n\nMandáselo a quien se va de vacaciones. O escribinos «VOLVIMOS» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
+    "copy": "Volvés de vacaciones y hay 80 chats.\n\n✔ Pedidos con fecha\n✔ Consultas de precio\n✔ Estado: volvimos\n\nMandáselo a quien se va de vacaciones. O comentá «VOLVIMOS» y te mando la guía «Ausencia: volver».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #BuenosAires",
     "fuente": ""
   }
 ]
