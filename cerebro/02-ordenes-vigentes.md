@@ -299,3 +299,24 @@ Todo lo demás son **decisiones de negocio** del dueño (abajo), no trabas de pr
 - Cada escritorio es un sector con puestos por tarea específica (guionista, render, analista…); se entra a cada uno desde `/oficina`. El Cerebro está al centro y recibe, reparte y revisa (Dirección = Cerebro).
 - Mapa del código con Graphify en `cerebro/mapa-codigo/`: los agentes lo consultan antes de tocar código.
 - Propuestas pendientes de OK (líneas propias con Evolution API, Jarvis con código vía rama + vista previa): `biblioteca/propuesta-lineas-codigo-agentes-2211.md`.
+
+## Órdenes del 27/11 (panel, Oficina, Jarvis y Cerebro)
+
+Sesión del panel (en paralelo hay otra sesión de **redes**: no se tocan `docs/redes/`, `.claude/referencias/redes/` ni sus filas de este archivo).
+
+| Orden | Reemplaza a |
+| --- | --- |
+| **Oficina: alcance de cada tarea.** Además de un rubro, una tarea u orden se puede dar sobre **todo el panel** o sobre **los 4 rubros a la vez**. Va en el selector de la configuración de tareas de la Oficina | 22/11: tareas por perfil y por departamento |
+| **Oficina: quién ejecuta.** Si no hay uso disponible de Claude, **Gemini ejecuta las tareas de la Oficina** (dentro del tope de USD 30 por mes, aviso al 80 %). Lo hecho por Gemini queda marcado «hecho por Gemini, sin repasar» y **Claude lo repasa después** con subagentes, con Opus como líder y orquestador. Nada hecho por Gemini se da por bueno sin ese repaso | 22/11: «Gemini ordena en el panel, Claude trabaja» |
+| **Orquestación.** Opus lidera y orquesta; reparte en subagentes de **distintos modelos y esfuerzos** según la dificultad, y usa los agentes personalizados, skills, plugins, herramientas MCP, conectores y archivos de memoria que apliquen. Al cerrar se informa qué se usó | 22/11 (tarde): «Claude orquesta como director ejecutivo» (se refuerza) |
+| **Jarvis sin límites de función.** Tiene que poder hacer todo lo que el dueño le pida: conocer todo el cerebro y el panel completo, recibir **Excel adjuntos**, **disparar conversaciones** con su aprobación y **cambiar el código del panel o sumar secciones**. Las confirmaciones antes de enviar, gastar o publicar se mantienen (22/11: «siempre preguntando») | — |
+| **Un solo asistente.** En el panel queda **Jarvis** y la **Bandeja para Claude**. El «asistente virtual» se retira del menú (se archiva, no se borra) | — |
+| **Cerebro funcional, no decorativo.** Tiene que contestar preguntas, aprender lo que se le enseña, ejecutar órdenes y **aprender por sí mismo** (código completo, rubros, recorrido del panel, internet), siempre **sumando** a su memoria, sin pisar lo anterior. Salud, Laboratorio, mapa, pedidos a Claude y pendientes de los dueños tienen que permitir **acciones** desde el propio Cerebro | 22/11: Cerebro como centro de mando (se exige que funcione) |
+| **Bots: rubros separados** también dentro de la sección de bots. Biblioteca y Comparar agentes van **dentro de «Bot IA»** y tienen que funcionar | — |
+| **Chats:** enviar a un contacto puntual una **plantilla de Meta** para reabrir la conversación. La ficha muestra **todos los datos del Excel** del prospecto que están en la base | — |
+| **Plantillas de Meta: asignación manual.** **Penal se unifica con Civil**: una sola línea y un solo canal de Jurídico | Q59 (abierta): se resuelve unificando |
+| **Captados:** un prospecto cuenta como captado solo si **pidió la llamada**; ordenar dónde se encuentran | — |
+| **Hoy de cada perfil:** compacto, con botones que hagan algo; sin cifras repetidas | — |
+| **Rediseño estético de todo el panel:** premium, elegante, colores suaves, tipografía cuidada, animaciones con vida pero sobrias. Entrada con efecto 3D en lugar de la lámpara; lo mismo en Perfiles. Tarjetas de perfiles con bordes y logos corregidos. Más velocidad | 22/11: pasteles apagados (se rehace entero) |
+
+Plan por pasos y preguntas abiertas: `cerebro/22-plan-panel-2711.md`.
