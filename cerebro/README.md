@@ -57,6 +57,7 @@ Esta carpeta es la memoria de trabajo de Claude. Reemplaza tener que releer los 
 | `22-plan-panel-2711.md` | **Plan del pedido del 27/11**: decisiones del dueño, nueve tandas de trabajo y qué necesita de él. El detalle (140 hallazgos con pasos y archivos, más la revisión final) está en `biblioteca/analisis-2026-11-27/` |
 | `23-dossier-de-diseno.md` | Gustos, rechazos y referencias de diseño del dueño, con fechas. Arriba, la corrección del 27/11: se conserva el panel y se retoca |
 | `24-reorganizacion-y-muestra-2711.md` | Propuesta del 27/11: qué se repite y se contradice en el panel, reorganización en cuatro secciones, paleta «grafito y latón» y la muestra en imágenes (fuentes en `biblioteca/muestra-2711/`). La parte de diseño fue rechazada el mismo día; valen los hallazgos |
+| `traspaso-sesion-2026-11-27-ejecucion.md` | **Traspaso del 27/11, ejecución del plan (leer primero al retomar)**: qué corre, qué sigue y la regla de no tocar las campañas en curso |
 | `traspaso-sesion-2026-11-22-c.md` | **Traspaso del 22/11 cierre (leer primero al retomar)** |
 | `traspaso-sesion-2026-11-22-b.md` | Traspaso del 22/11 noche (leer primero al retomar) |
 | `traspaso-sesion-2026-11-22.md` | Traspaso antes de compactar del 22/11: pedidos, hecho, agentes en curso y próximos pasos |

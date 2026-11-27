@@ -208,3 +208,7 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 - Plan `22` aprobado. Decisiones nuevas en `02` (Oficina sin límite y con competencia tipo arena, plantilla directa desde el chat, ficha sin ocultar datos, sin código para enviar, internet del Cerebro encendido, captados actuales a su decisión).
 - Corrección de proceso: Claude había inventado «ver datos sensibles» en la ficha; no estaba en ninguna orden. Antes de decidir algo no dicho, buscar en el cerebro o preguntar.
 - Ejecución programada para las 9:00 (Argentina) del 27/11.
+
+## 27/11 · Arranca la ejecución del plan (9:00)
+- Flujo en segundo plano con fase 0 y fases A1 a A8, cada una en su copia (`/home/user/p27/`) y con revisor de otro modelo. Nada publicado todavía.
+- Regla del dueño: hay campañas corriendo, no se pausan ni se tocan. Traspaso en `traspaso-sesion-2026-11-27-ejecucion.md`.

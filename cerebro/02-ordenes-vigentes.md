@@ -360,3 +360,5 @@ El dueño aprobó el paso a paso y pidió ejecutarlo y aplicarlo en el panel a p
 | Proceso | «De dónde sacaste eso? Por favor leé el cerebro, la memoria, el proyecto completo, chat por chat». Antes de decidir algo que el dueño no dijo, se busca en el cerebro; si no está, se pregunta. |
 
 **Funciones nuevas que el dueño sumó el 27/11 («sumalo»):** búsqueda con Ctrl+K dentro de cada perfil (contacto, chat, campaña o pantalla, sin cruzar rubros; en el nivel general, solo pantallas) y recordatorios por contacto («volver a llamar el jueves») visibles en Hoy.
+
+| Campañas en curso (27/11, 9:10) | «Hay campañas corriendo en el panel, que no se pausen ni nada». Al integrar y publicar el plan no se pausa ni se toca ninguna campaña; las migraciones que tocan campañas, líneas o plantillas se aplican sin campañas enviando. |
