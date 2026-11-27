@@ -75,7 +75,7 @@ export default async function (datos, plan) {
   const filaLinea = (l, t) => { const j = lineas[l].beat; let r = l - beats[j].l0; for (let i = j + 1; i < NB; i++) if (beats[i].nl) r += beats[i].nl * E.io3(seg(t, beats[i].t - .5, beats[i].t - .18)); return r; };
   const yBot = 2.75, yL0 = yBot + MARG + NV * LH, yF0 = yL0 + DIV + RF * FH, yTop = yF0 + HEAD; // el cartel queda arriba del objeto: nunca se tapan
   const filaY = r => yL0 - LH * (r + .5);
-  const zP = 2.75, hP = .85, hTop = hP + .06, OS = 1.0; // OS: escala de los objetos // pedestal: el objeto apoya en hTop
+  const zP = 3.2, hP = .85, hTop = hP + .06, OS = 1.3; // OS: escala de los objetos // pedestal: el objeto apoya en hTop
 
   // ── texturas dibujadas ────────────────────────────────────────────────────
   const travertino = lienzo(1024, 1024, (x, w, h) => {
@@ -521,7 +521,7 @@ export default async function (datos, plan) {
       for (let it = 0; it < 22; it++) { const mid = (lo + hi) / 2; lk = [xc, mid, 0]; if (proy(cp, lk, bSup)[1] > yA) hi = mid; else lo = mid; }
       const yb = proy(cp, lk, objBase)[1], yt = proy(cp, lk, objTope)[1], yi = proy(cp, lk, bInf)[1];
       const xs = [[-IW / 2 - .2, yTop], [IW / 2 + .2, yTop], [-IW / 2 - .2, yBot], [IW / 2 + .2, yBot]].map(([x, y]) => proy(cp, lk, [x, y, zB])[0]);
-      const e = Math.abs(yb - yB) + 4 * Math.max(0, yi + 16 - yt) + 3 * Math.max(0, 36 - Math.min(...xs)) + 3 * Math.max(0, Math.max(...xs) - 1044) + 6 * Math.abs(h - hPref);
+      const e = 3 * Math.abs(yb - yB) + 4 * Math.max(0, yi + 16 - yt) + 3 * Math.max(0, 36 - Math.min(...xs)) + 3 * Math.max(0, Math.max(...xs) - 1044) + 2 * Math.abs(h - hPref) + 40 * d; // lo más cerca posible: cartel grande
       if (!mejor || e < mejor.e) mejor = {e, p: cp, m: lk, fov: 36};
     }
     return mejor;
@@ -546,7 +546,6 @@ export default async function (datos, plan) {
   tomas.push({t: tR - .05, dur: 1.0, ease: E.io3, der: 0, ...ANCHO});
   tomas.sort((a, b) => a.t - b.t);
   tomas.forEach((s, i) => { s.P = new THREE.Vector3(...s.p); s.Mv = new THREE.Vector3(...s.m); s.fin = i < tomas.length - 1 ? tomas[i + 1].t : 1e9; });
-  console.log('LOG errores', tomas.map(s => (s.e ?? -1).toFixed(0) + '@' + s.t.toFixed(1)).join(' '));
   console.log('LOG tomas', tomas.length, 'ancho e', ANCHO.e.toFixed(0), 'h', ANCHO.p[1].toFixed(2), 'FC', FC, 'RF', RF, 'NV', NV, 'lineas', lineas.length, 'heroe', heroTipo);
   const pA_ = new THREE.Vector3(), mA_ = new THREE.Vector3(), pB_ = new THREE.Vector3(), mB_ = new THREE.Vector3();
   const pose = (s, t, oP, oM) => { const k = s.der * clamp((t - s.t) / Math.max(.6, s.fin - s.t)); oP.copy(s.P).lerp(s.Mv, k); oM.copy(s.Mv); };
@@ -580,9 +579,9 @@ export default async function (datos, plan) {
     // cartel: paletas, fila activa y luces de estado
     let jb = -1; for (let i = 0; i < NB; i++) if (t >= beats[i].t - .12) jb = i; if (t >= tR) jb = -1;
     const a0 = jb >= 0 ? 0 : -9, a1 = jb >= 0 && t > beats[jb].t - .18 ? beats[jb].nl : -9;
-    let llenas = 0; for (let l = 0; l < lineas.length; l++) { const b = beats[lineas[l].beat]; if (t >= b.t - .12 && t < tR + .6) llenas = Math.max(llenas, Math.min(NV, Math.ceil(filaLinea(l, t) + .5))); }
+    let llenas = 0; for (let l = 0; l < lineas.length; l++) { const b = beats[lineas[l].beat], r0 = filaLinea(b.l0, t); if (t >= b.t - .12 && t < tR + .6 && r0 + b.nl <= NV + .01) llenas = Math.max(llenas, Math.ceil(filaLinea(l, t) + .5)); }
     for (let ci = 0; ci < NC; ci++) { const ce = celdas[ci], [A, B, an] = estadoCelda(ce, t); let lit, y = null;
-      if (ce.zona === 'LN') { const b = beats[lineas[ce.l].beat], r = filaLinea(ce.l, t), vis = t >= b.t - .2 && t < tR + .8 && r < NV + .02; y = vis ? filaY(r) : -50;
+      if (ce.zona === 'LN') { const b = beats[lineas[ce.l].beat], r = filaLinea(ce.l, t), r0 = filaLinea(b.l0, t), entera = r0 + b.nl <= NV + .01 || Math.abs(r0 - Math.round(r0)) > .001, vis = t >= b.t - .2 && t < tR + .8 && r < NV + .02 && entera; y = vis ? filaY(r) : -50;
         lit = lineas[ce.l].beat === jb ? 1.07 : .8 * lerp(.25, 1, apg); }
       else if (ce.zona === 'S') lit = .8 * lerp(.25, 1, apg); else if (ce.zona === 'F') lit = lerp(.4, 1, apg); else lit = lerp(.3, 1, apg);
       for (let q = 0; q < 3; q++) { const j = ci * 3 + q; gArr[j * 2] = A; gArr[j * 2 + 1] = B; angArr[j] = an; litArr[j] = lit; if (y !== null) offArr[j * 3 + 1] = y; } }

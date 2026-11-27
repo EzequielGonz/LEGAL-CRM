@@ -363,15 +363,18 @@ export default async function (datos, plan) {
     const ok = pz(geoCheck(.09, .016), HUESO); ok.position.z = .016; m.add(ok); m.position.set(.03, .2, .175); m.rotation.z = -.2; m.visible = false; per.cad.add(m); g.marca = m; });
 
   // ── contador: discos en escalones (se dan vuelta de hueso a verde oficial a medida que avanzan los pasos) ───────
-  const cont = nCont ? (() => { const g = new THREE.Group(); g.position.set(.5 * S, 0, -1.22); g.scale.setScalar(.88); scene.add(g);
-    const pasos = []; for (let k = 0; k < nCont; k++) { const hh = .085 + k * .085, x = S * k * .205;
+  // contador: escalera de plastilina que viaja con la cámara arriba a la derecha (a la altura del logo): nada la tapa y nunca toca el borde
+  const cont = nCont ? (() => { const g = new THREE.Group(); g.visible = false; scene.add(g);
+    const pasos = []; for (let k = 0; k < nCont; k++) { const hh = .085 + k * .085, x = k * .205;
       const es = pz(caja(.2, hh, .3, .035), k % 2 ? HUESO : SALVIA); es.position.set(x, hh / 2, 0); g.add(es);
       const d = new THREE.Group(); d.position.set(x, hh + .1, 0); g.add(d);
       const di = new THREE.Mesh(amasar(new THREE.CylinderGeometry(.09, .09, .04, 36), .002, 30, k + 1), [arcilla(SALVIA), arcilla(HUESO), arcilla(ACENTO)]); di.rotation.x = Math.PI / 2; d.add(di);
       const n1 = relieve(String(k + 1), .13, BOSQUE); n1.position.set(0, -.047, .022); d.add(n1); const n2 = relieve(String(k + 1), .13, HUESO); n2.rotation.y = Math.PI; n2.position.set(0, -.047, -.022); d.add(n2);
       pasos.push({d, hh, x}); }
-    const bo = pz(bola(.045), ACENTO); g.add(bo); const sm = new THREE.Group(); sm.position.set(S * (nCont - 1) * .1, 0, 0); g.add(sm); sombra(sm, .1 + nCont * .11, {op: .45}); sombra(bo, .05, {op: .5});
-    return {g, pasos, bo}; })() : null;
+    const estante = pz(caja(nCont * .205 + .3, .045, .34, .02), BOSQUE); estante.position.set((nCont - 1) * .1025 - .05, -.025, 0); g.add(estante);
+    const bo = pz(bola(.045), ACENTO); g.add(bo);
+    const alto = nCont * .085 + .24, ancho_ = (nCont - 1) * .205 + .3, dentro = new THREE.Group(); [...g.children].forEach(c => dentro.add(c)); g.add(dentro); dentro.position.set(-(nCont - 1) * .1025, -alto / 2 + .03, 0);
+    return {g, pasos, bo, alto, ancho: ancho_, ee: 0}; })() : null;
   const act = []; if (nCont) { const pas = golpes.filter(g => g.tipo === 'paso'), resto = golpes.filter((g, i) => g.tipo !== 'paso' && i > 0);
     [...pas, ...resto].slice(0, nCont).sort((a, b) => a.t - b.t).forEach(g => act.push(g.t + .15)); while (act.length < nCont) act.push((act[act.length - 1] ?? 1.5) + .8); act.sort((a, b) => a - b); }
 
@@ -495,13 +498,14 @@ export default async function (datos, plan) {
   // cada texto se centra en el cuadro con la cámara que va a tener cuando se lea
   const ubicar = (B, t) => { if (!B) return; ponerCam(camT, estado(t)); B.oy = paredY(camT, B.top); B.ox = paredX(camT, 540, B.oy - B.hB / 2); };
   ubicar(bGancho, 0); golpes.forEach(g => ubicar(g.bl, g.cambio + .45)); ubicar(bCierre, tCierre + .45);
-  // contador: en primer plano a la derecha (delante de los objetos, así nada tapa el disco 1). Se ubica solo: el último disco
-  // antes del 90 % del ancho y la base arriba de 1245 px, en todos los planos donde se ve.
-  if (cont) { const zc = .15, ks = claves.filter(([t]) => t > primer + .3 && t < TF).map(c => c[1]); if (!ks.length) ks.push({...C0, y: .43});
-    const entra = (x0, k) => ks.every(st => { ponerCam(camT, st); const dn = pant(camT, x0 + S * ((nCont - 1) * .205 + .13) * k, .35 * k, zc)[0], pie = pant(camT, x0 - S * .1 * k, 0, zc + .17 * k)[1];
-      return (S > 0 ? dn <= 970 : dn >= 110) && pie <= 1245; });
-    let el = null; busca: for (let k = .72; k >= .45; k -= .03) for (let x0 = 1.5; x0 >= .45; x0 -= .02) if (entra(S * x0, k)) { el = [S * x0, k]; break busca; }
-    if (!el) el = [S * .6, .45]; cont.g.position.set(el[0], 0, zc); cont.k = el[1]; cont.g.scale.setScalar(el[1]); console.log('LOG contador x', el[0].toFixed(2), 'escala', el[1].toFixed(2)); }
+  const tCont = act.length ? Math.max(act[0] - .5, primer + .35) : 0;
+  const vF = new THREE.Vector3(), vUp = new THREE.Vector3(), vRg = new THREE.Vector3(), qInc = new THREE.Quaternion().setFromEuler(new THREE.Euler(.3, -.4, 0));
+  function pegarContador() {   // 110 px de alto, borde derecho en 950 px, centro vertical en 255 px (franja del logo, arriba del texto)
+    if (!cont || !cont.g.visible) return; const D = 2.2, hh = D * Math.tan(cam.fov / 2 * D2R), hw = hh * cam.aspect, ppu = 960 / hh, k = 110 / ppu / cont.alto;
+    const wpx = cont.ancho * k * ppu, nx = (950 - wpx / 2) / 540 - 1, ny = 1 - 255 / 960;
+    cam.getWorldDirection(vF); vRg.setFromMatrixColumn(cam.matrixWorld, 0); vUp.setFromMatrixColumn(cam.matrixWorld, 1);
+    cont.g.position.copy(cam.position).addScaledVector(vF, D).addScaledVector(vRg, nx * hw).addScaledVector(vUp, ny * hh); cont.g.quaternion.copy(cam.quaternion).multiply(qInc);
+    cont.g.scale.setScalar(Math.max(.001, k * cont.ee)); }
   const impactos = golpes.filter(g => g.efecto === 'golpe' || g.efecto === 'caida').map(g => [g.t, g.efecto === 'golpe' ? 1 : .45, g.px, g.pz]);
   const lupas = golpes.filter(g => g.efecto === 'lupa' && g.o);
   const envBorde = t => seg(t, 0, .5) * (1 - seg(t, T - .6, T - .12));
@@ -521,7 +525,7 @@ export default async function (datos, plan) {
     const e = envBorde(t); tgt.set(c.x, c.y + sac * .02, c.z);
     const el = c.el * D2R, az = c.az * D2R;
     cam.position.set(tgt.x + Math.sin(az) * Math.cos(el) * c.d + ruido(t * .5, 1) * .012 * e, tgt.y + Math.sin(el) * c.d + ruido(t * .45, 2) * .01 * e + sac * .03, tgt.z + Math.cos(az) * Math.cos(el) * c.d);
-    cam.fov = c.fov - punch; cam.updateProjectionMatrix(); cam.lookAt(tgt); cam.updateMatrixWorld(); guardaPersonaje(); M.foco(cam.position.distanceTo(tgt) - .2);
+    cam.fov = c.fov - punch; cam.updateProjectionMatrix(); cam.lookAt(tgt); cam.updateMatrixWorld(); guardaPersonaje(); pegarContador(); M.foco(cam.position.distanceTo(tgt) - .2);
   }
 
   // ── interfaz: logo de la marca y karaoke ───────────────────────────────────────────────────────────────────
@@ -649,11 +653,11 @@ export default async function (datos, plan) {
   }
   // contador: discos que se dan vuelta y la bolita que sube escalón por escalón
   function animContador(ts) {
-    if (!cont) return; const fin = T - .62;
-    const ee = resorte(seg(ts, act[0] - .5, act[0] - .12), 2.2, 5) * (1 - E.in3(seg(ts, T - .32, T - .15))); cont.g.visible = ee > .002; cont.g.scale.setScalar(Math.max(.001, cont.k * ee)); if (!cont.g.visible) return;
+    if (!cont) return; const fin = T - .45;
+    const ee = resorte(seg(ts, tCont, tCont + .38), 2.2, 5) * (1 - E.in3(seg(ts, T - .66, T - .5))); cont.ee = ee; cont.g.visible = ee > .002; if (!cont.g.visible) return;
     cont.pasos.forEach((p, k) => { const ta = act[k], f = resorte(seg(ts, ta, ta + .55), 2, 5) * (1 - E.io2(seg(ts, fin + k * .05, fin + .3 + k * .05)));
-      p.d.rotation.y = Math.PI * f * S; p.d.position.y = p.hh + .1 + Math.sin(Math.PI * seg(ts, ta, ta + .3)) * .07; });
-    const P0 = new THREE.Vector3(-S * .2, .045, .14), pos = k => k < 0 ? P0 : new THREE.Vector3(cont.pasos[k].x, cont.pasos[k].hh + .045, .14);
+      p.d.rotation.y = Math.PI * f; p.d.position.y = p.hh + .1 + Math.sin(Math.PI * seg(ts, ta, ta + .3)) * .07; });
+    const P0 = new THREE.Vector3(-.2, .045, .1), pos = k => k < 0 ? P0 : new THREE.Vector3(cont.pasos[k].x, cont.pasos[k].hh + .045, .1);
     const evs = act.map((ta, k) => [ta - .1, k]).concat([[fin, -1]]); let de = P0.clone(), q = P0.clone();
     for (const [te, k] of evs) { if (ts < te) break; const kk = seg(ts, te, te + .35), dst = pos(k); q = de.clone().lerp(dst, E.io2(kk)); q.y += Math.sin(Math.PI * kk) * .2; if (kk >= 1) de = dst.clone(); }
     cont.bo.position.copy(q);

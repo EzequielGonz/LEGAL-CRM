@@ -85,6 +85,7 @@ void main(){
   col += uAcc * .018 * halo * smoothstep(.6, 1., sin(q.x * .3 + q.y * .45 - uFase * 6.2832 * 3.));
   float jun = max(step(.988, fract(q.x / 2.4)), step(.985, fract(y / 1.6))); col *= 1. - .55 * jun;
   col *= smoothstep(-.3, 1.8, y) * (1. - smoothstep(11., 17., y));
+  vec3 txt = vec3(0.);
   vec2 w = vec2(-envA(th - uWin.x) / (2. * uWin.z) + .5, (y - uWin.y) / (2. * uWin.w) + .5);
   if (w.x > 0. && w.x < 1. && w.y > 0. && w.y < 1.) {
     float lin = 1. - w.y, p = uMix * 1.3 - .15;
@@ -101,9 +102,9 @@ void main(){
       float sh = pow(max(0., sin(ly * PI)), .7) * smoothstep(0., .1, lx) * smoothstep(1., .9, lx);
       tx = mix(tx, mix(vec3(.004, .014, .05), vec3(1.15), dg.r) * sh, uOdoOn);
     }
-    col += tx * uBrillo * (1. - uRefl);
+    txt = tx * uBrillo * (1. - uRefl);
   }
-  col *= (.3 + 1.0 * led) * uLuz;
+  col = (col * (.3 + 1.0 * led) + txt * (.86 + .14 * led)) * uLuz;
   gl_FragColor = vec4(col, 1.);
 }`;
 
@@ -186,7 +187,7 @@ export default async function (datos, planIn) {
     for (let d = 0; d < 10; d++) x.fillText(String(d), w / 2, h - (d + .5) * 160 + 6); }, {srgb: false});
   digTx.wrapT = THREE.RepeatWrapping;
   const LU = {uA: {value: ledA}, uB: {value: ledB}, uDig: {value: digTx}, uMix: {value: 1}, uFase: {value: 0}, uLuz: {value: 1}, uGlow: {value: Math.PI}, uTach: {value: 0},
-    uOdoV: {value: 0}, uOdoOn: {value: 0}, uBrillo: {value: 1.55}, uRefl: {value: 0}, uR: {value: RW}, uWin: {value: new THREE.Vector4(Math.PI, 3, .3, 1)}, uAcc: {value: ACC.clone()}};
+    uOdoV: {value: 0}, uOdoOn: {value: 0}, uBrillo: {value: .9}, uRefl: {value: 0}, uR: {value: RW}, uWin: {value: new THREE.Vector4(Math.PI, 3, .3, 1)}, uAcc: {value: ACC.clone()}};
   const pared = new THREE.Mesh(new THREE.CylinderGeometry(RW, RW, 18, 160, 1, true), new THREE.ShaderMaterial({uniforms: LU, side: THREE.BackSide, fragmentShader: LED_FRAG,
     vertexShader: `varying vec3 vW; void main(){ vec4 w = modelMatrix * vec4(position, 1.); vW = w.xyz; gl_Position = projectionMatrix * viewMatrix * w; }`}));
   pared.position.y = 9; scene.add(pared);
@@ -360,8 +361,8 @@ export default async function (datos, planIn) {
       const tabla = new THREE.Mesh(new RoundedBoxGeometry(.64, .86, .035, 3, .03), lacaNavy); tabla.position.set(0, .45, 0); pieza(tabla, [0, 0, -.28], 'CARPETA');
       const hg = new THREE.PlaneGeometry(.56, .76, 8, 8); { const p = hg.attributes.position; for (let i = 0; i < p.count; i++) p.setZ(i, .012 * Math.pow(p.getX(i) / .28, 2)); hg.computeVertexNormals(); }
       const tx = hojaTx(tipo); const hoja = new THREE.Mesh(hg, new THREE.MeshStandardMaterial({map: tx, roughness: .5, emissive: 0xffffff, emissiveMap: tx, emissiveIntensity: .07})); hoja.position.set(0, .43, .022);
-      pieza(hoja, [0, .08, .25], tipo === 'poliza' ? 'PÓLIZA' : 'HOJA');
-      const clip = new THREE.Mesh(new RoundedBoxGeometry(.26, .08, .05, 2, .02), cromo); clip.position.set(0, .86, .03); pieza(clip, [0, .22, .1], 'CLIP');
+      pieza(hoja, [0, 0, .25], tipo === 'poliza' ? 'PÓLIZA' : 'HOJA');
+      const clip = new THREE.Mesh(new RoundedBoxGeometry(.26, .08, .05, 2, .02), cromo); clip.position.set(0, .86, .03); pieza(clip, [.2, .04, .12], 'CLIP');
       alto = .9; det.set(-.12, .375, .04);
     } else if (tipo === 'celular') {
       const cu = new THREE.Mesh(new RoundedBoxGeometry(.44, .88, .055, 4, .065), titanio); cu.position.set(0, .45, 0); pieza(cu, [0, 0, -.25], 'EQUIPO');
@@ -373,7 +374,7 @@ export default async function (datos, planIn) {
       const tapa = new THREE.Mesh(new RoundedBoxGeometry(.27, .1, .096, 3, .04), cromo); tapa.position.set(0, .56, 0); pieza(tapa, [0, .2, 0], 'TAPA');
       const aro = new THREE.Mesh(new THREE.TorusGeometry(.075, .016, 12, 40), cromo); aro.position.set(0, .68, 0); pieza(aro, [0, .42, 0], 'ARO');
       const bot = new THREE.Group(); [.4, .29, .18].forEach((y, i) => { const m = new THREE.Mesh(new THREE.CylinderGeometry(.042, .042, .014, 24), i === 0 ? botonAzul : titanio); m.rotation.x = Math.PI / 2; m.position.set(0, y, .047); bot.add(m); });
-      bot.position.z = .006; pieza(bot, [0, 0, .3], 'BOTONES'); g.userData.escala = 1.25; alto = .95; det.set(0, .4, .06);
+      bot.position.z = .006; pieza(bot, [0, 0, .3], 'BOTONES'); alto = .76; det.set(0, .4, .06);
     } else if (tipo === 'candado') {
       const cu = new THREE.Mesh(new RoundedBoxGeometry(.5, .42, .22, 4, .07), lacaNavy); cu.position.set(0, .21, 0); pieza(cu, [0, -.12, 0], 'CUERPO');
       const arco = new THREE.Group(); const t0 = new THREE.Mesh(new THREE.TorusGeometry(.15, .036, 16, 48, Math.PI), cromo); t0.position.y = .52; arco.add(t0);
@@ -407,7 +408,8 @@ export default async function (datos, planIn) {
       const m = new THREE.Mesh(new RoundedBoxGeometry(.56, .56, .56, 6, .15), lacaAzul); m.position.y = .36; m.rotation.set(.35, .55, 0); pieza(m, [0, .2, 0], 'PIEZA');
       const a = new THREE.Mesh(new THREE.TorusGeometry(.46, .008, 8, 96), ledAzul); a.rotation.x = Math.PI / 2; a.position.y = .02; g.add(a); alto = .78; det.set(0, .4, .2);
     }
-    g.userData = Object.assign(g.userData, {alto, partes, det, tipo}); g.visible = false; platina.add(g); return g;
+    const ESC = {llave: 2.0, celular: 1.6, candado: 1.6, almanaque: 1.5, velocimetro: 1.45, check: 1.35, cruz: 1.35, rueda: 1.35, documento: 1.15, poliza: 1.15, lupa: 1.25, escudo: 1.2, grieta: 1.2};
+    g.userData = Object.assign(g.userData, {alto, partes, det, tipo, escala: ESC[tipo] || 1.5}); g.visible = false; platina.add(g); return g;
   }
 
   // ── lupa con segunda vista (render a textura) ───────────────────────────
@@ -484,8 +486,9 @@ export default async function (datos, planIn) {
       if (!k) { const op = ['frente', 'perfil', 'trasera', 'heroe'].filter(x => x !== ultAuto); k = op[Math.floor(rnd() * op.length)]; }
       if (b.tipo === 'gancho') k = b.efecto === 'despiece' ? 'alta' : 'heroe';
       ultAuto = k; b.toma = {...tomas[k], fov: FOV0, drift: ORB * (i % 2 ? -1 : 1)}; b.sujeto = k;
-    } else { const az = AZ0 + (iObj++ % 2 ? 1 : -1) * (8 + rnd() * 14) * lado;
-      b.toma = {target: [PED.x, 1.72, PED.z], az, el: 2.5 + rnd() * 3, dist: distPara(9.2), fov: FOV0, drift: ORB * (i % 2 ? -.8 : .8)}; b.obj = hacerObjeto(b.objeto, b); }
+    } else { const az = AZ0 + (iObj++ % 2 ? 1 : -1) * (8 + rnd() * 14) * lado; b.obj = hacerObjeto(b.objeto, b);
+      const H = b.obj.userData.alto * b.obj.userData.escala, pu = 630 / H, cy = 1.05 + .14 + H / 2;
+      b.toma = {target: [PED.x, cy + 60 / pu, PED.z], az, el: 2.5 + rnd() * 3, dist: 1920 / (pu * 2 * Math.tan(FOV0 / 2 * D2R)), fov: FOV0, drift: ORB * (i % 2 ? -.8 : .8)}; }
   });
   const H0 = {...tomas.heroe, fov: FOV0, drift: ORB, t0: 0};
   const SEGS = [{t0: 0, s: H0}];
@@ -532,7 +535,7 @@ export default async function (datos, planIn) {
       if (forzar) lines = [tk.slice(0, -1), tk.slice(-1)]; else { for (const q of tk) { const pr = [...cur, q]; if (cur.length && ancho(pr) > maxW) { lines.push(cur); cur = [q]; } else cur = pr; } if (cur.length) lines.push(cur); }
       if (lines.every(l => ancho(l) <= maxW) && lines.length <= 3 && lines.length * fs * 1.02 <= maxH) break; }
     const lh = fs * 1.02; let yy = y0 + (maxH - lines.length * lh) / 2 + lh / 2; x.textBaseline = 'middle'; x.textAlign = 'left';
-    for (const l of lines) { let xx = (CW - ancho(l)) / 2; for (const q of l) { x.shadowColor = 'rgba(32,124,207,.95)'; x.shadowBlur = fs * .22; x.fillStyle = q.c; x.fillText(q.t, xx, yy); x.shadowBlur = 0; x.fillText(q.t, xx, yy); xx += x.measureText(q.t + ' ').width; } yy += lh; }
+    for (const l of lines) { let xx = (CW - ancho(l)) / 2; for (const q of l) { x.shadowColor = 'rgba(32,124,207,.9)'; x.shadowBlur = fs * .3; x.fillStyle = q.c; x.globalAlpha = .55; x.fillText(q.t, xx, yy); x.globalAlpha = 1; x.shadowBlur = 0; x.fillText(q.t, xx, yy); xx += x.measureText(q.t + ' ').width; } yy += lh; }
     x.letterSpacing = '0px'; tx.needsUpdate = true; tx.userData.key = c.key; }
   const rayo = V3();
   function ventana(py, wPx, hPx) { rayo.set(0, 1 - 2 * py, .5).unproject(cam).sub(cam.position).normalize();
@@ -565,7 +568,7 @@ export default async function (datos, planIn) {
   const estela = new ShaderPass(ESTELA); estela.enabled = false; M.comp.insertPass(estela, 1);
 
   // ── cuadro a cuadro ─────────────────────────────────────────────────────
-  const centroAuto = V3(), sujeto = V3();
+  const centroAuto = V3(), sujeto = V3(), centroObj = V3();
   function update(t) {
     // efectos globales del golpe
     let flash = 0, luz = 1, punch = 0, shake = 0, onda = 0, ondaEnPed = false, tach = 0, barr = 0, bOff = 0, bAuto = true, susp = 0, altoAuto = 0, giroAct = 0;
@@ -613,7 +616,7 @@ export default async function (datos, planIn) {
     // pedestal y objetos
     const up = pedAlto(t); pedCuerpo.position.y = -1.14 * (1 - up); pedCuerpo.visible = up > .001; ped.rotation.y = cp.az * D2R;
     let bObj = null; for (const b of B) if (b.obj && t >= b.t - .02 && t < b.te + .25) bObj = (!bObj || b.t <= t) ? b : bObj;
-    foco.intensity = 38 * up; foco.position.set(PED.x + Math.sin(cp.az * D2R) * 2.2, 6.2, PED.z + Math.cos(cp.az * D2R) * 2.2); foco.target.position.set(PED.x, 1.3, PED.z); foco.target.updateMatrixWorld();
+    foco.intensity = 38 * up; foco.position.set(PED.x + Math.sin(cp.az * D2R) * 2.2, 6.2, PED.z + Math.cos(cp.az * D2R) * 2.2); foco.target.position.set(PED.x, 1.6, PED.z); foco.target.updateMatrixWorld();
     sello.visible = false; laser.visible = laserHalo.visible = false; marca.visible = false;
     for (const b of B) { if (!b.obj) continue; const g = b.obj, ud = g.userData, u = t - b.t, D = b.te - b.t;
       const vis = u > -.02 && u < D + .25; g.visible = vis; if (!vis) { ud.partes.forEach(p => p.m.position.copy(p.base)); continue; }
@@ -628,7 +631,7 @@ export default async function (datos, planIn) {
         default: s = E.outBack(seg(u, 0, .5)); ry += Math.PI * (1 - E.out3(seg(u, 0, .7))); }
       if (b.efecto === 'sello') { const q = t - (b.t + .42); if (q > 0) { const a = Math.exp(-q / .1) * Math.sin(q * 34) * .1; sy *= 1 - a; sx *= 1 + a * .5; } }
       const sal = E.in3(seg(u, D - .04, D + .22)); s *= 1 - sal; y -= sal * .5;
-      g.position.y = y; g.rotation.set(0, ry, 0); s *= ud.escala || 1; g.scale.set(Math.max(.001, s * sx), Math.max(.001, s * sy), Math.max(.001, s * sx));
+      g.position.y = y; g.rotation.set(0, ry, 0); s *= ud.escala || 1; if (u >= -.02 && u < D) centroObj.set(PED.x, pedCuerpo.position.y + 1.05 + y + ud.alto * s * .5, PED.z); g.scale.set(Math.max(.001, s * sx), Math.max(.001, s * sy), Math.max(.001, s * sx));
       // despiece del objeto
       const kd = b.efecto === 'despiece' ? E.out3(seg(u, .1, .65)) * (1 - E.io3(seg(u, Math.max(.8, D - .6), Math.max(.8, D - .6) + .45))) : 0;
       ud.partes.forEach((p, i) => p.m.position.copy(p.base).addScaledVector(p.dir, clamp(kd * 1.3 - i * .08)));
@@ -640,16 +643,16 @@ export default async function (datos, planIn) {
         if (b.efecto === 'sello') { const ti = b.t + .42, q = t - ti, top = ud.alto * s + y; const baja = q < 0 ? E.in3(seg(t, ti - .3, ti)) : 1, sube = q > .1 ? E.out3(seg(q, .1, .34)) : 0;
           sello.visible = t > ti - .3 && q < .34; sello.position.set(PED.x, pedCuerpo.position.y + 1.05 + top + .9 * (1 - baja) + .25 * sube - (q > 0 && q < .1 ? .03 : 0), PED.z); sello.scale.setScalar(Math.max(.001, 1 - sube));
           if (q > 0) { marca.visible = q < .9; const k = seg(q, 0, .9); marca.scale.setScalar(.8 + .9 * E.out3(k)); marca.material.opacity = 1 - k; } }
-        if (b.efecto === 'tachar' && u > .3) { const k = E.io2(seg(u, .32, .62)), fade = 1 - seg(u, .9, 1.3); g.getWorldPosition(sujeto); sujeto.y += ud.alto * .5; tA.copy(sujeto).addScaledVector(camF, -.6);
-          const L = 1.5, d = profundidad(tA), th = 7 / pxu(d); laser.visible = laserHalo.visible = fade > .01;
+        if (b.efecto === 'tachar' && u > .3) { const k = E.io2(seg(u, .32, .62)), fade = 1 - seg(u, .9, 1.3); sujeto.copy(centroObj); tA.copy(sujeto).addScaledVector(camF, -.6);
+          const L = 1.5 * (ud.escala || 1), d = profundidad(tA), th = 7 / pxu(d); laser.visible = laserHalo.visible = fade > .01;
           for (const [m, k2] of [[laser, 1], [laserHalo, 4]]) { m.position.copy(tA).addScaledVector(camR, -L / 2 * Math.cos(.42)).addScaledVector(camU, -L / 2 * Math.sin(.42)); m.quaternion.copy(cam.quaternion); m.rotateZ(.42); m.scale.set(L * k, th * k2, 1); }
           laser.material.opacity = fade; laserHalo.material.opacity = .5 * fade; }
       }
     }
     // barrido: tira de luz frente al sujeto
-    if (barr > .001) { if (bAuto) sujeto.set(0, .75, 0); else sujeto.set(PED.x, pedCuerpo.position.y + 1.45, PED.z);
+    if (barr > .001) { if (bAuto) sujeto.set(0, .75, 0); else sujeto.copy(centroObj);
       UB.uBC.value.copy(sujeto); tA.set(cam.position.x - sujeto.x, 0, cam.position.z - sujeto.z).normalize(); UB.uBN.value.copy(tA); UB.uBT.value.set(tA.z, 0, -tA.x);
-      UB.uBDL.value = bAuto ? 7 : 2.6; UB.uBAnch.value = bAuto ? .5 : .2; UB.uBOff.value = bOff * (bAuto ? 7.5 : 1.7); }
+      UB.uBDL.value = bAuto ? 7 : 3.2; UB.uBAnch.value = bAuto ? .5 : .26; UB.uBOff.value = bOff * (bAuto ? 7.5 : 2.2); }
     UB.uBarr.value = barr;
 
     // rótulos numerados (despiece del auto o del objeto)
@@ -665,8 +668,8 @@ export default async function (datos, planIn) {
       anc.forEach((a, i) => { const k = seg(L.u, .35 + i * .12, .7 + i * .12) * fin; ponerRotulo(rotulo(i + 1, a.n), a.w, slot[i][0], slot[i][1], k); }); }
 
     if (bObj && (bObj.tipo === 'gancho' || bObj.tipo === 'cierre') && bObj.texto && nrm(bObj.texto) !== nrm(ledDe(bObj).txt) && !(lupaB && lupaK > .002)) {
-      const u = t - bObj.t, D = bObj.te - bObj.t, g = bObj.obj; g.updateMatrixWorld(true); const an = g.localToWorld(V3(.22, g.userData.alto * .78, .05));
-      ponerRotulo(rotulo(null, bObj.texto.toLocaleUpperCase('es')), an, .56, .04, seg(u, .35, .7) * (1 - seg(u, D - .3, D))); }
+      const u = t - bObj.t, D = bObj.te - bObj.t, g = bObj.obj; g.updateMatrixWorld(true); const an = g.localToWorld(V3(.24, g.userData.alto * .5, .05));
+      ponerRotulo(rotulo(null, bObj.texto.toLocaleUpperCase('es')), an, .6, -.1, seg(u, .35, .7) * (1 - seg(u, D - .3, D))); }
     // lupa con segunda vista
     lupa.visible = false;
     if (lupaB && lupaK > .002) { const ob = lupaB.obj; let rL;
@@ -685,7 +688,7 @@ export default async function (datos, planIn) {
     let tc = [ledA, ledB].find(x => x.userData.key === cur.key); let tp = [ledA, ledB].find(x => x.userData.key === prv.key && x !== tc);
     if (!tc) { tc = [ledA, ledB].find(x => x !== tp); dibujarLED(tc, cur); } if (!tp) { tp = tc === ledA ? ledB : ledA; if (tp.userData.key !== prv.key) dibujarLED(tp, prv); }
     LU.uA.value = tp; LU.uB.value = tc; LU.uMix.value = ci === 0 ? 1 : E.io2(seg(t, cur.t, cur.t + .32));
-    ventana(.275, 920, 440); LU.uGlow.value = LU.uWin.value.x; LU.uLuz.value = .22 + .78 * luz + flash * .3; LU.uFase.value = t / T; LU.uTach.value = tach;
+    ventana(.258, 920, 400); LU.uGlow.value = LU.uWin.value.x; LU.uLuz.value = .22 + .78 * luz + flash * .3; LU.uFase.value = t / T; LU.uTach.value = tach;
     let ov = odoVal(t); if (cuentaB) ov = (cuentaB.paso || odoTotal) - 30 * (1 - E.outExpo(seg(t - cuentaB.t, .1, 1.3)));
     LU.uOdoV.value = Math.max(0, ov); LU.uOdoOn.value = cur.odo ? (prv.odo && ci > 0 ? 1 : E.out3(seg(t, cur.t + .15, cur.t + .45))) : 0;
 
