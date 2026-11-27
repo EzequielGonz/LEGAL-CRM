@@ -610,5 +610,6 @@ export default async function (datos, plan) {
     kar(t); subrayado(t);
     M.cine.uniforms.t.value = t * 11.7; const _t0 = performance.now(); M.comp.render(); { const gl = M.r.getContext(), px = new Uint8Array(4); gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px); } console.log('LOG render ' + (performance.now() - _t0).toFixed(0));
   }
+  window.__mk = {M, scene, reflejo, luzFlash, relleno, flaps, globos};
   return {update, total: T, eventos: ev.sort((a, b) => a[0] - b[0])};
 }
