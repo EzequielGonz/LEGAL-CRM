@@ -1,6 +1,6 @@
 # 24 · Reorganización del panel y muestra de diseño (27/11)
 
-Propuesta de Claude después de recorrer el panel publicado como dueño, pantalla por pantalla, las cuatro cuentas (148 pantallas, más una segunda pasada abriendo formularios y paneles, sin enviar ni guardar nada). **Estado: propuesta, espera el OK del dueño.** No hay código cambiado.
+Propuesta de Claude después de recorrer el panel publicado como dueño, pantalla por pantalla, las cuatro cuentas (148 pantallas, más una segunda pasada abriendo formularios y paneles, sin enviar ni guardar nada). **Estado: la parte de diseño fue RECHAZADA por el dueño el mismo 27/11** («no así claramente no… es dejarlo tal cual está ahora pero mejorarlo un poco, no así de drástico el cambio; las animaciones y demás del cerebro me encantan pero no es funcional»). Las secciones 3 y 4 quedan como registro de lo que no va. Los hallazgos de la sección 1 siguen valiendo y entran al plan `22-plan-panel-2711.md`. No hay código cambiado.
 
 Pedido del dueño: «entrar al panel como dueño y mirar y usar sección por sección, perfil por perfil, y proponeme una reorganización, orden, mejor flujo de trabajo» y «esos colores re contra infantiles y de colegio… todo es pura decoración y se repite casi todo, el trabajo cotidiano es muy difícil de esta manera». Muestra: «no hace falta muestra navegable, fotos está bien».
 

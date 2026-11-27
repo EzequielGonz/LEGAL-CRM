@@ -328,3 +328,13 @@ Plan por pasos y preguntas abiertas: `cerebro/22-plan-panel-2711.md`.
 - **Captado:** no se redefine preguntando; la definición ya está en los chats y en el entrenamiento de los bots. Se relee y se hace cumplir en el código.
 - **Gemini en la Oficina:** mismo tope de USD 30 por mes, compartido con los bots.
 - **Rediseño:** primero una **página de muestra**. Antes de diseñar, juntar todo el contexto: exigencias, referencias, gustos y pedidos del dueño, releyendo el cerebro y el proyecto entero (dossier en `cerebro/23-dossier-de-diseno.md`).
+
+### Corrección del dueño sobre el diseño, 27/11 (manda sobre lo anterior)
+
+| Orden | Texto |
+|---|---|
+| El diseño no se rehace | «es dejarlo tal cual está ahora pero mejorarlo un poco, no así de drástico el cambio». Se conserva el panel actual y se retoca. Nada de pantallas nuevas planas con tablas y botones. |
+| Lo que le gusta | «las animaciones y demás del cerebro me encantan pero no es funcional». La animación del Cerebro y la Oficina 3D no se tocan; se les suma función. |
+| Lo que no | Los colores pastel de las cajas: «re contra infantiles y de colegio». Y que «todo es pura decoración y se repite casi todo, el trabajo cotidiano es muy difícil». |
+| Muestras | Con fotos alcanza; no hace falta una muestra navegable. |
+| Prioridad | Implementar el pedido del 27/11 (plan en `22-plan-panel-2711.md`), no seguir con muestras. |

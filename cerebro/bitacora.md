@@ -193,3 +193,9 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 - Hallazgos: el embudo aparece en seis lugares, hay nueve listas de las mismas personas, tres pantallas del bot y cinco lugares para pedir algo; las cifras se contradicen entre pantallas; Hoy tarda de 11 a 14 segundos en frío.
 - Propuesta en `cerebro/24-reorganizacion-y-muestra-2711.md`: cuatro secciones por perfil (Bandeja, Campañas, Contactos, Resultados) más Configuración; afuera, Inicio, Jarvis, Cerebro y Oficina.
 - Colores: el dueño rechazó los pasteles («infantiles y de colegio»). Propuesta «grafito y latón», dos tipografías. Muestra enviada en siete imágenes (pidió fotos, no una muestra navegable). Espera su OK.
+
+## 27/11 · El dueño rechaza la muestra drástica; plan por tandas escrito
+- La muestra «grafito y latón» (pantallas nuevas, planas) fue rechazada: quiere el panel como está, mejorado un poco, y que funcione. Asentado en `02`, `23` y `24`.
+- Lección: antes de proponer diseño, leer el dossier entero; lo único que aprobó en voz alta fue la estética clásica con detalles finos, la Oficina 3D y las animaciones.
+- Plan del pedido en `22-plan-panel-2711.md`, con el análisis completo por área en `biblioteca/analisis-2026-11-27/` (111 hallazgos).
+- Al momento de escribir esto no hay código cambiado del pedido del 27/11.
