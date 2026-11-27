@@ -309,7 +309,7 @@ Sesión del panel (en paralelo hay otra sesión de **redes**: no se tocan `docs/
 | **Oficina: alcance de cada tarea.** Además de un rubro, una tarea u orden se puede dar sobre **todo el panel** o sobre **los 4 rubros a la vez**. Va en el selector de la configuración de tareas de la Oficina | 22/11: tareas por perfil y por departamento |
 | **Oficina: quién ejecuta.** Si no hay uso disponible de Claude, **Gemini ejecuta las tareas de la Oficina** (dentro del tope de USD 30 por mes, aviso al 80 %). Lo hecho por Gemini queda marcado «hecho por Gemini, sin repasar» y **Claude lo repasa después** con subagentes, con Opus como líder y orquestador. Nada hecho por Gemini se da por bueno sin ese repaso | 22/11: «Gemini ordena en el panel, Claude trabaja» |
 | **Orquestación.** Opus lidera y orquesta; reparte en subagentes de **distintos modelos y esfuerzos** según la dificultad, y usa los agentes personalizados, skills, plugins, herramientas MCP, conectores y archivos de memoria que apliquen. Al cerrar se informa qué se usó | 22/11 (tarde): «Claude orquesta como director ejecutivo» (se refuerza) |
-| **Jarvis sin límites de función.** Tiene que poder hacer todo lo que el dueño le pida: conocer todo el cerebro y el panel completo, recibir **Excel adjuntos**, **disparar conversaciones** con su aprobación y **cambiar el código del panel o sumar secciones**. Las confirmaciones antes de enviar, gastar o publicar se mantienen (22/11: «siempre preguntando») | — |
+| **Jarvis sin límites de función.** Tiene que poder hacer todo lo que el dueño le pida: conocer todo el cerebro y el panel completo, recibir **Excel adjuntos** y **disparar conversaciones** con su aprobación. **No cambia código** (el dueño lo descartó el 27/11: «olvidate que cambie el código»); los cambios de código los pide por la Oficina o la Bandeja. Las confirmaciones antes de enviar, gastar o publicar se mantienen (22/11: «siempre preguntando») | — |
 | **Un solo asistente.** En el panel queda **Jarvis** y la **Bandeja para Claude**. El «asistente virtual» se retira del menú (se archiva, no se borra) | — |
 | **Cerebro funcional, no decorativo.** Tiene que contestar preguntas, aprender lo que se le enseña, ejecutar órdenes y **aprender por sí mismo** (código completo, rubros, recorrido del panel, internet), siempre **sumando** a su memoria, sin pisar lo anterior. Salud, Laboratorio, mapa, pedidos a Claude y pendientes de los dueños tienen que permitir **acciones** desde el propio Cerebro | 22/11: Cerebro como centro de mando (se exige que funcione) |
 | **Bots: rubros separados** también dentro de la sección de bots. Biblioteca y Comparar agentes van **dentro de «Bot IA»** y tienen que funcionar | — |
@@ -320,3 +320,11 @@ Sesión del panel (en paralelo hay otra sesión de **redes**: no se tocan `docs/
 | **Rediseño estético de todo el panel:** premium, elegante, colores suaves, tipografía cuidada, animaciones con vida pero sobrias. Entrada con efecto 3D en lugar de la lámpara; lo mismo en Perfiles. Tarjetas de perfiles con bordes y logos corregidos. Más velocidad | 22/11: pasteles apagados (se rehace entero) |
 
 Plan por pasos y preguntas abiertas: `cerebro/22-plan-panel-2711.md`.
+
+### Respuestas del dueño, 27/11 (mismo día)
+
+- **Jarvis no cambia código.** Descartado. Lo demás de «sin límites de función» sigue.
+- **Penal + Civil:** queda **la línea de Civil** como única línea de Jurídico. Las conversaciones de Penal pasan a esa; nada se borra.
+- **Captado:** no se redefine preguntando; la definición ya está en los chats y en el entrenamiento de los bots. Se relee y se hace cumplir en el código.
+- **Gemini en la Oficina:** mismo tope de USD 30 por mes, compartido con los bots.
+- **Rediseño:** primero una **página de muestra**. Antes de diseñar, juntar todo el contexto: exigencias, referencias, gustos y pedidos del dueño, releyendo el cerebro y el proyecto entero (dossier en `cerebro/23-dossier-de-diseno.md`).
