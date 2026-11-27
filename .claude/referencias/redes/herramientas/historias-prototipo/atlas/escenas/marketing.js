@@ -176,8 +176,9 @@ export default async function (datos, plan) {
     const p = new THREE.Points(g, new THREE.PointsMaterial({size: .028, map: puntoTx, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: .75, color: 0xFFE2BC})); p.frustumCulled = false; scene.add(p); return {p, pos, sem}; })();
   // globos opalinos colgantes (cálidos)
   const globos = [];
-  [[.62, 4.2, 5.2, .19], [1.55, 4.75, 3.4, .23], [-.5 + rnd(11) * .3, 5.25, 1.7, .21]].forEach(([x, y, z, r], i) => {
-    const m = new THREE.MeshStandardMaterial({color: 0xFFF1DE, emissive: 0xFFD9A8, emissiveIntensity: 1.6, roughness: .4}); const g = malla(new THREE.SphereGeometry(r, 32, 20), m, x, y, z);
+  [[-.55 + rnd(11) * .2, 3.95, 5.6, .17], [.5, 4.4, 3.9, .2], [1.25, 4.75, 2.2, .22]].forEach(([x, y, z, r], i) => {
+    const m = new THREE.MeshStandardMaterial({color: 0xFFEBD2, emissive: 0xFFC890, emissiveIntensity: 1.6, roughness: .4}); const g = malla(new THREE.SphereGeometry(r, 32, 20), m, x, y, z);
+    const halo = malla(new THREE.PlaneGeometry(r * 7, r * 7), plano(puntoTx, .35, 0xFFB46A), x, y, z - .05); halo.renderOrder = 4;
     malla(new THREE.CylinderGeometry(.005, .005, 4, 6), new THREE.MeshBasicMaterial({color: 0x2a2420}), x, y + r + 2, z); malla(new THREE.CylinderGeometry(.045, .06, .07, 20), mk.laton(), x, y + r + .02, z); globos.push(m); });
 
   // ── cartel de paletas: caja, panel, encabezado, divisor ───────────────────
