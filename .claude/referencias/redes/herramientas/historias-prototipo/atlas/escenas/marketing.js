@@ -52,7 +52,7 @@ export default async function (datos, plan) {
   let beats = (Array.isArray(PL.beats) ? PL.beats : []).map(b => ({...b}));
   if (!beats.length) beats = [{palabra: P[0].w, n: 0, tipo: 'gancho', objeto: 'reloj_arena', texto: gancho, efecto: 'golpe'}];
   beats.forEach((b, i) => { b.t = tw(b.palabra, b.n || 0); if (b.t == null) b.t = i ? beats[i - 1].t + 1.8 : P[0].t;
-    if (i && b.t < beats[i - 1].t + .75) b.t = beats[i - 1].t + .75; b.efecto = String(b.efecto || '').toLowerCase(); b.objeto = String(b.objeto || '').toLowerCase(); b.tipo = b.tipo || 'dato'; });
+    if (i && b.t < beats[i - 1].t + .75) b.t = beats[i - 1].t + .75; b.efecto = String(b.efecto || '').toLowerCase(); b.objeto = String(b.objeto || '').toLowerCase(); if (b.objeto === 'megafono') b.objeto = 'chat'; b.tipo = b.tipo || 'dato'; });
   beats = beats.filter(b => b.t < tR - .6);
   const NB = beats.length;
   const iC = beats.findIndex(b => b.tipo === 'cierre');
@@ -159,16 +159,16 @@ export default async function (datos, plan) {
   const luzFlash = new THREE.PointLight(0xFFFFFF, 0, 9, 1.4); luzFlash.position.set(xP - .6, hTop + 1.4, zP + 2.2); scene.add(luzFlash);
   // manchas de ventanal en la pared y el piso, haces de luz y polvo
   const manchas = [];
-  { const g = new THREE.PlaneGeometry(3.6, 2.4); g.applyMatrix4(new THREE.Matrix4().makeShear(0, 0, -lado * .55, 0, 0, 0));
-    manchas.push([malla(g, plano(ventanaTx, .55, 0xFFB872), -lado * 1.5, 5.75, .012), .55]);
+  { const g = new THREE.PlaneGeometry(4.4, 2.2); g.applyMatrix4(new THREE.Matrix4().makeShear(0, 0, -lado * .55, 0, 0, 0));
+    manchas.push([malla(g, plano(ventanaTx, .6, 0xFFB872), -lado * 1.1, 6.0, .012), .6]);
     const g3 = new THREE.PlaneGeometry(1.6, 3.4); g3.applyMatrix4(new THREE.Matrix4().makeShear(0, 0, -lado * .5, 0, 0, 0));
     manchas.push([malla(g3, plano(ventanaTx, .4, 0xFFB872), lado * 2.9, 3.4, .1), .4]);
     const g2 = new THREE.PlaneGeometry(3.2, 4.2); g2.applyMatrix4(new THREE.Matrix4().makeShear(0, 0, -lado * .6, 0, 0, 0));
-    const m2 = malla(g2, plano(ventanaTx, .5, 0xFFBE80), lado * .7, .004, 6.3); m2.rotation.x = -Math.PI / 2; manchas.push([m2, .5]); }
+    const m2 = malla(g2, plano(ventanaTx, .5, 0xFFBE80), lado * .25, .004, 6.4); m2.rotation.x = -Math.PI / 2; manchas.push([m2, .5]); }
   const camW = new THREE.Vector3(Math.sin(yaw0) * 12.8, 2, Math.cos(yaw0) * 12.8);
   const haces = [];
-  [[0, 1.2, .16], [.6, .8, .12], [-.55, .6, .1]].forEach(([d, ancho, op]) => {
-    const A = new THREE.Vector3(lado * 5.8, 8.6, 7.2 + d), B = new THREE.Vector3(lado * .6 + d * .6, 0, 6.0 + d * .5);
+  [[0, 1.0, .12], [.6, .7, .09], [-.55, .5, .08]].forEach(([d, ancho, op]) => {
+    const A = new THREE.Vector3(lado * 3.4, 7.6, 8.6 + d), B = new THREE.Vector3(lado * .15 + d * .6, 0, 6.2 + d * .5);
     const dir = B.clone().sub(A), L = dir.length(); dir.normalize(); const mid = A.clone().add(B).multiplyScalar(.5);
     const c = camW.clone().sub(mid).normalize(); const n = c.clone().sub(dir.clone().multiplyScalar(c.dot(dir))).normalize(); const r = new THREE.Vector3().crossVectors(dir, n);
     const m = malla(new THREE.PlaneGeometry(ancho, L), plano(hazTx, op, 0xFFD7A6), 0, 0, 0); m.matrixAutoUpdate = false; m.matrix.makeBasis(r, dir.clone().negate(), n).setPosition(mid); m.renderOrder = 5; haces.push([m, op]); });
@@ -287,11 +287,14 @@ export default async function (datos, plan) {
   const leds = []; for (let r = 0; r < NV; r++) { const m = new THREE.MeshStandardMaterial({color: 0x3a2214, emissive: NARANJA, emissiveIntensity: 0, roughness: .35}); leds.push(malla(RB(.03, LH * .62, .03, .012, 2), m, x0 + LP * 1.5, filaY(r), zB + .02)); }
 
   // ── pedestal de travertino con tapa de nogal y filete naranja ─────────────
-  { const tx = travertino.clone(); tx.repeat.set(.55, .6); tx.needsUpdate = true;
-    malla(RB(1.12, hP, .98, .035, 3), new THREE.MeshStandardMaterial({map: tx, roughness: .7}), xP, hP / 2, zP);
-    const tapa = nogalTx.clone(); tapa.repeat.set(2, 1); tapa.rotation = Math.PI / 2; tapa.needsUpdate = true;
-    malla(RB(1.18, .06, 1.04, .02, 2), new THREE.MeshStandardMaterial({map: tapa, roughness: .38}), xP, hP + .03, zP);
-    malla(new THREE.BoxGeometry(1.1, .016, .02), new THREE.MeshStandardMaterial({color: 0x552010, emissive: NARANJA, emissiveIntensity: 2.2}), xP, hP - .12, zP + .495);
+  { const acan = lienzo(1024, 512, (x, w, h) => { x.drawImage(travertino.image, 0, 0, 1024, 1024, 0, 0, w, h * 2); const n = 34;
+      for (let q = 0; q < n; q++) { const g = x.createLinearGradient(q * w / n, 0, (q + 1) * w / n, 0); g.addColorStop(0, 'rgba(70,45,25,.32)'); g.addColorStop(.35, 'rgba(255,245,230,.12)'); g.addColorStop(.6, 'rgba(255,245,230,.05)'); g.addColorStop(1, 'rgba(70,45,25,.38)'); x.fillStyle = g; x.fillRect(q * w / n, 0, w / n + 1, h); } });
+    acan.wrapS = THREE.RepeatWrapping; acan.repeat.set(2, 1);
+    malla(new THREE.CylinderGeometry(.6, .62, hP, 96, 1), new THREE.MeshStandardMaterial({map: acan, roughness: .62}), xP, hP / 2, zP);
+    const tapa = nogalTx.clone(); tapa.needsUpdate = true; tapa.repeat.set(1.5, 1.5);
+    malla(new THREE.CylinderGeometry(.66, .66, .06, 96), new THREE.MeshStandardMaterial({map: tapa, roughness: .36}), xP, hP + .03, zP);
+    malla(new THREE.CylinderGeometry(.665, .665, .012, 96), mk.laton(), xP, hP - .004, zP);
+    const anillo = malla(new THREE.TorusGeometry(.612, .009, 8, 96), new THREE.MeshStandardMaterial({color: 0x552010, emissive: NARANJA, emissiveIntensity: 2.4}), xP, hP - .14, zP); anillo.rotation.x = Math.PI / 2;
     const s = malla(new THREE.PlaneGeometry(2.2, 2.0), plano(rectSuave, .42, 0xffffff, false), xP - lado * .32, .006, zP - .05); s.rotation.x = -Math.PI / 2; }
 
   // ── objetos de Marketing (dibujados con geometría; sin modelos externos) ──
@@ -301,6 +304,7 @@ export default async function (datos, plan) {
     while (f > 40 && (ls.some(s => x.measureText(s.toUpperCase()).width > cw * .82) || ls.length * f * 1.02 > (y1 - y0))) { f -= 6; x.font = `800 ${f}px Outfit`; }
     x.fillStyle = color; x.textAlign = 'center'; x.textBaseline = 'middle'; const yc = (y0 + y1) / 2; ls.forEach((s, i) => x.fillText(s.toUpperCase(), cw / 2, yc + (i - (ls.length - 1) / 2) * f * 1.0)); }
   function fabricar(tipo, info, k) {
+    if (tipo === 'megafono') tipo = 'chat'; // el megáfono salió del contrato (cliché prohibido): se dibuja el chat
     const g = new THREE.Group(), mats = []; const M_ = f => { const m = f(); mats.push(m); return m; };
     const add = (geo, mat, x = 0, y = 0, z = 0, padre = g) => malla(geo, mat, x, y, z, padre);
     let anim = null, ancho = .8;
@@ -516,7 +520,7 @@ export default async function (datos, plan) {
   const objC = [xP, hTop + .5 * OS, zP];
   const ANCHO = encuadre({dist: 12.8, xc: 0, yaw: yaw0, pA: [0, yTop + .16, zB], yA: 336 + alto0 * 30, pB: objC, yB: 1005, hmin: 1.2, hmax: 3.4});
   const txc = b => x0 + LP * (2 + Math.min(LT, b.len) / 2);
-  const tomaFila = (b, i, sg) => encuadre({dist: 10.8 + (rnd(20 + i) - .5) * .6, xc: .2 + (rnd(25 + i) - .5) * .12, yaw: sg * (.03 + rnd(30 + i) * .05), pA: [txc(b), filaY(b.fila + (b.nl - 1) / 2), zB], yA: 590, pB: objC, yB: 965});
+  const tomaFila = (b, i, sg) => encuadre({dist: 11.2 + (rnd(20 + i) - .5) * .6, xc: .02 + (rnd(25 + i) - .5) * .1, yaw: sg * (.03 + rnd(30 + i) * .05), pA: [txc(b), filaY(b.fila + (b.nl - 1) / 2), zB], yA: 590, pB: objC, yB: 965});
   const tomaObjeto = (b, i, sg) => encuadre({dist: 4.2, xc: xP - sg * .1, zc: zP, yaw: sg * (.28 + rnd(50 + i) * .14), pA: objC, yA: 900, hmin: hTop + .7, hmax: hTop + .7});
   const tomaDetalle = (b) => encuadre({dist: 5.6, xc: txc(b) + .2, yaw: 0, pA: [txc(b), filaY(b.fila), zB], yA: 760, hmin: filaY(b.fila) - .2, hmax: filaY(b.fila) - .2});
   const tomaCierre = encuadre({dist: 11.4, xc: .1, yaw: -lado * .07, pA: [0, yF0 - FH * RF / 2, zB], yA: 600, pB: objC, yB: 1000});
@@ -600,11 +604,11 @@ export default async function (datos, plan) {
     manchas.forEach(([m, op]) => m.material.opacity = op * apg); haces.forEach(([m, op]) => m.material.opacity = op * apg * (.85 + .15 * Math.sin(fase(t) * .5))); globos.forEach(m => m.emissiveIntensity = 1.6 * lerp(.35, 1, apg));
     let fl = 0; for (const b of flashes) if (t >= b.t + .02) fl += Math.exp(-(t - b.t - .02) / .09); for (const b of golpesF) if (t >= b.t) fl += .25 * Math.exp(-(t - b.t) / .07);
     luzFlash.intensity = 90 * fl; M.cine.uniforms.flash.value = Math.min(.6, fl * .5); M.cine.uniforms.vineta.value = .3 + .3 * (1 - apg);
-    const fp = fase(t); for (let i = 0; i < polvo.sem.length; i++) { const [a, b, c, d] = polvo.sem[i]; const u = a, A = [lado * 5.8, 8.6, 7.2], Bp = [lado * .6, 0, 6.0];
+    const fp = fase(t); for (let i = 0; i < polvo.sem.length; i++) { const [a, b, c, d] = polvo.sem[i]; const u = a, A = [lado * 3.4, 7.6, 8.6], Bp = [lado * .15, 0, 6.2];
       polvo.pos[i * 3] = lerp(A[0], Bp[0], u) + (b - .5) * 1.6 + Math.sin(fp + d * 6.28) * .08; polvo.pos[i * 3 + 1] = lerp(A[1], Bp[1], u) + Math.sin(fp * .5 + c * 6.28) * .1; polvo.pos[i * 3 + 2] = lerp(A[2], Bp[2], u) + (c - .5) * 1.4 + Math.cos(fp + b * 6.28) * .08; }
     polvo.p.geometry.attributes.position.needsUpdate = true; polvo.p.material.opacity = .75 * apg;
     kar(t); subrayado(t);
-    M.cine.uniforms.t.value = t * 11.7; M.comp.render();
+    M.cine.uniforms.t.value = t * 11.7; const _t0 = performance.now(); M.comp.render(); { const gl = M.r.getContext(), px = new Uint8Array(4); gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px); } console.log('LOG render ' + (performance.now() - _t0).toFixed(0));
   }
   return {update, total: T, eventos: ev.sort((a, b) => a[0] - b[0])};
 }
