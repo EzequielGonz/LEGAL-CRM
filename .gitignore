@@ -10,3 +10,8 @@ next-env.d.ts
 .claude/worktrees/
 __pycache__/
 cerebro/mapa-codigo/cache/
+
+# Registros locales de plugins de Claude (no van al repo público)
+.simple-workflow/
+.superstack/
+.naksha/
