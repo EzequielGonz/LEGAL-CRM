@@ -64,3 +64,27 @@ El código de ingreso no se escribe en archivos. Sin datos de prospectos en docu
 **Regla viva**: hay 2 campañas en curso; no se pausan ni se tocan. Comprobar en la base antes y después de cada migración o publicación.
 
 **Retome programado**: 14:30 (tarea programada de esta sesión).
+
+## Checkpoint 27/11 · tarde (para compactar)
+
+**Leer primero al retomar:** este archivo, `02-ordenes-vigentes.md` (tres órdenes nuevas del 27/11 sobre la Oficina y Gemini) y la bitácora.
+
+**Publicado hoy en producción (último commit `14e279f` más este)**
+- Oficina completa: alcance libre, colas, Gemini con arena (3 respuestas y juez; máximo 20 por corrida), «Arrancar» usa Gemini sin disparo de Claude (también desde el Cerebro), refresco solo de la escena, y desde hoy Gemini recibe contexto del cerebro y de los mapas en cada tarea.
+- Auditoría del panel: 54 fallas nuevas; dos tandas de arreglos publicadas. Informe en `docs/oficina/2026-11-27-auditoria-panel.md`.
+- Migraciones aplicadas: 0651 y 0652.
+
+**Corrección del dueño (27/11 tarde):** «el cerebro que estás usando vos acá no está actualizado como el del panel». Causa encontrada: la carpeta `/home/user/LEGAL-CRM`, de donde la sesión carga CLAUDE.md y las skills, estaba en la rama `cerebro-chats` del 22/11, 172 commits atrás. Se dejó en la versión publicada (`git checkout --detach origin/main`; la rama `cerebro-chats` quedó intacta y todos sus archivos existen en main). Al retomar: trabajar siempre en `/home/user/crm-main` y, si esa carpeta vuelve a atrasarse, ponerla al día igual.
+
+**Pedidos nuevos del dueño, pendientes**
+1. **Auditoría del Laboratorio de bots** («está re mal hecho»): agente lanzado en segundo plano; al terminar, armar el informe, dejarlo en la Oficina y aplicar lo que corresponda con la tanda A7 (Bots).
+2. **Más modelos en la arena de la Oficina** (DeepSeek y otros con API gratuita, «que se peleen muchos modelos»): no hecho. Requiere que el dueño cargue las claves en Vercel; armar un proveedor genérico compatible con la API de OpenAI para sumar cualquiera con su clave. Nada pago sin su autorización. Avisarle que los planes gratuitos pueden usar lo enviado para entrenar: sin datos personales (la Oficina ya los bloquea).
+3. Reconocido al dueño: la auditoría de hoy NO fue exhaustiva. No cubrió Laboratorio, Bot IA, Biblioteca, Wasender, importador de bases, la vista de teléfono, modo claro ni nada medido en navegador.
+
+**Workflow `wf_6a348c3b-a19` (tarea `wqm2fzzvj`)**: terminados: ['f0:contratos', 'impl:a1', 'impl:a2', 'impl:a3', 'impl:a4', 'impl:a5', 'impl:a6', 'impl:a7'] | en marcha o cortados: ['impl:a3', 'impl:a5', 'impl:a6', 'impl:a7', 'impl:a8', 'rev:a1', 'rev:a2', 'rev:a4']
+- Listas sin publicar: `p27/a2` (Jarvis, commit `ce83275`) y `p27/a4` (plantillas y línea única, commit `e763104`). Esperan su revisión cruzada.
+- Ojo al integrar: las tandas salieron de una base anterior a los arreglos de hoy; puede haber conflictos en `src/lib/oficina`, `src/components/cerebro`, `campaign-controls.tsx`, `tablero-hoy.tsx` y `agenda.ts`. Integrar de a una, con tipos, lint, pruebas y build.
+
+**Campañas:** «Campaña Graves 2711» y «ART - Noviembre 2411» se pausaron solas a las 11:19 (hora argentina) por calidad baja de la línea Civil en Meta. No se tocaron. Reanudarlas es decisión del dueño. Mientras estén pausadas se puede aplicar la migración de A4.
+
+**Sigue pendiente del pedido original:** Cerebro funcional, captados, chats y ficha, bots por rubro, menús y Ctrl+K, Hoy compacto y recordatorios, Jarvis con plantillas, retoque visual y entrada 3D, lista de los 36 captados, verificar Graphify. Del dueño: cargar `OFICINA_DISPARO_URL` y `OFICINA_DISPARO_TOKEN` en Vercel y cambiar el código de ingreso.
