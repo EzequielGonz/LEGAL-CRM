@@ -73,7 +73,7 @@ const SUELO = {name: 'SueloEstudio',
       gl_FragColor = vec4(col, 1.); }`};
 
 // ── pared LED curva: módulos con puntos, halo detrás del sujeto, texto con barrido de cambio, tachado y odómetro ──
-const LED_FRAG = `uniform sampler2D uA, uB, uDig; uniform float uMix, uFase, uLuz, uGlow, uTach, uOdoV, uOdoOn, uBrillo, uR; uniform vec4 uWin; uniform vec3 uAcc;
+const LED_FRAG = `uniform sampler2D uA, uB, uDig; uniform float uMix, uFase, uLuz, uGlow, uTach, uOdoV, uOdoOn, uBrillo, uR, uRefl; uniform vec4 uWin; uniform vec3 uAcc;
 varying vec3 vW;
 #define PI 3.14159265
 float envA(float a){ return mod(a + PI, 2. * PI) - PI; }
@@ -101,7 +101,7 @@ void main(){
       float sh = pow(max(0., sin(ly * PI)), .7) * smoothstep(0., .1, lx) * smoothstep(1., .9, lx);
       tx = mix(tx, mix(vec3(.004, .014, .05), vec3(1.15), dg.r) * sh, uOdoOn);
     }
-    col += tx * uBrillo;
+    col += tx * uBrillo * (1. - uRefl);
   }
   col *= (.3 + 1.0 * led) * uLuz;
   gl_FragColor = vec4(col, 1.);
@@ -127,7 +127,7 @@ export default async function (datos, planIn) {
   const ENTRADAS = [pick(['sube', 'baja', 'gira']), pick(['gira', 'sube', 'baja'])];
   const distPara = d => d * Math.tan(13 * D2R) / Math.tan(FOV0 / 2 * D2R);
 
-  const M = await motor({fondo: 0x000521, fov: FOV0, exposicion: 1.0, bloom: {fuerza: .55, radio: .42, umbral: .86},
+  const M = await motor({fondo: 0x000521, fov: FOV0, exposicion: 1.0, bloom: {fuerza: .42, radio: .4, umbral: .88},
     cine: {grano: .028, vineta: .42, ca: .0012, lift: [0, .003, .01]}});
   const {scene, cam} = M, R = M.r;
 
@@ -136,7 +136,7 @@ export default async function (datos, planIn) {
     const caja = (w, h, col, k, pos, mira) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({color: new THREE.Color(col).multiplyScalar(k), side: THREE.DoubleSide})); m.position.set(...pos); m.lookAt(...mira); es.add(m); };
     caja(10, 3.4, 0xffffff, 4.5, [0, 9, 0], [0, 0, 0]);
     caja(3.4, 1.2, 0xffffff, 2.6, [0, 6.5, 7.5], [0, 0, 0]);
-    [[40, 0xffffff, 3.4], [140, 0x207CCF, 3.2], [220, 0xffffff, 2.2], [320, 0x207CCF, 3.2]].forEach(([a, c, k]) => { const r = a * D2R; caja(1.1, 6.5, c, k, [Math.sin(r) * 11, 3.4, Math.cos(r) * 11], [0, 3.4, 0]); });
+    [[40, 0xffffff, 2.8, .55], [140, 0x207CCF, 1.4, .4], [220, 0xffffff, 1.8, .55], [320, 0x207CCF, 1.4, .4]].forEach(([a, c, k, an]) => { const r = a * D2R; caja(an, 6.5, c, k, [Math.sin(r) * 11, 3.4, Math.cos(r) * 11], [0, 3.4, 0]); });
     const hz = new THREE.Mesh(new THREE.CylinderGeometry(15, 15, .9, 64, 1, true), new THREE.MeshBasicMaterial({color: new THREE.Color(0xbcd4ff).multiplyScalar(.5), side: THREE.DoubleSide})); hz.position.y = 1.2; es.add(hz);
     const ps = new THREE.Mesh(new THREE.PlaneGeometry(80, 80), new THREE.MeshBasicMaterial({color: 0x01030c})); ps.rotation.x = -Math.PI / 2; ps.position.y = -.05; es.add(ps);
     const pm = new THREE.PMREMGenerator(R); scene.environment = pm.fromScene(es, .03).texture; pm.dispose(); }
@@ -169,7 +169,7 @@ export default async function (datos, planIn) {
   const titanio = std({color: 0x3a414d, metalness: .95, roughness: .28});
   const cuero = new THREE.MeshStandardMaterial({color: 0x1b1f27, roughness: .62});
   const FARO = new THREE.Color(0xcfe8ff), ACC = new THREE.Color(ACENTO);
-  const faroMat = new THREE.MeshStandardMaterial({color: 0x0a0f18, emissive: FARO.clone(), emissiveIntensity: 2.6});
+  const faroMat = new THREE.MeshStandardMaterial({color: 0x0a0f18, emissive: FARO.clone(), emissiveIntensity: 1.8});
   const colaMat = new THREE.MeshStandardMaterial({color: 0x12060a, emissive: new THREE.Color(0xff2440), emissiveIntensity: 1.4});
   const ledAzul = new THREE.MeshBasicMaterial({color: ACC.clone().multiplyScalar(3)});
   const botonAzul = new THREE.MeshStandardMaterial({color: 0x0a1a33, emissive: ACC.clone(), emissiveIntensity: 2.2});
@@ -178,6 +178,9 @@ export default async function (datos, planIn) {
   // ── piso espejado ────────────────────────────────────────────────────────
   const suelo = new Reflector(new THREE.PlaneGeometry(90, 90), {textureWidth: 432, textureHeight: 768, clipBias: .003, multisample: 0, shader: SUELO});
   suelo.rotation.x = -Math.PI / 2; scene.add(suelo); const SU = suelo.material.uniforms;
+  const sinReflejo = []; const obrSuelo = suelo.onBeforeRender;
+  suelo.onBeforeRender = function (...a) { const v = sinReflejo.map(o => o.visible); sinReflejo.forEach(o => o.visible = false); LU.uRefl.value = 1;
+    obrSuelo.apply(this, a); LU.uRefl.value = 0; sinReflejo.forEach((o, i) => o.visible = v[i]); };
 
   // ── pared LED ────────────────────────────────────────────────────────────
   const RW = 26, CW = 2048, CH = 980;
@@ -186,7 +189,7 @@ export default async function (datos, planIn) {
     for (let d = 0; d < 10; d++) x.fillText(String(d), w / 2, h - (d + .5) * 160 + 6); }, {srgb: false});
   digTx.wrapT = THREE.RepeatWrapping;
   const LU = {uA: {value: ledA}, uB: {value: ledB}, uDig: {value: digTx}, uMix: {value: 1}, uFase: {value: 0}, uLuz: {value: 1}, uGlow: {value: Math.PI}, uTach: {value: 0},
-    uOdoV: {value: 0}, uOdoOn: {value: 0}, uBrillo: {value: 2.3}, uR: {value: RW}, uWin: {value: new THREE.Vector4(Math.PI, 3, .3, 1)}, uAcc: {value: ACC.clone()}};
+    uOdoV: {value: 0}, uOdoOn: {value: 0}, uBrillo: {value: 1.55}, uRefl: {value: 0}, uR: {value: RW}, uWin: {value: new THREE.Vector4(Math.PI, 3, .3, 1)}, uAcc: {value: ACC.clone()}};
   const pared = new THREE.Mesh(new THREE.CylinderGeometry(RW, RW, 18, 160, 1, true), new THREE.ShaderMaterial({uniforms: LU, side: THREE.BackSide, fragmentShader: LED_FRAG,
     vertexShader: `varying vec3 vW; void main(){ vec4 w = modelMatrix * vec4(position, 1.); vW = w.xyz; gl_Position = projectionMatrix * viewMatrix * w; }`}));
   pared.position.y = 9; scene.add(pared);
@@ -228,8 +231,7 @@ export default async function (datos, planIn) {
   for (const [x, z] of [[-.05, .36], [-.05, -.36], [-1, .36], [-1, -.36]]) { const a = new THREE.Mesh(new RoundedBoxGeometry(.46, .16, .44, 2, .06), cuero); a.position.set(x, 1.06, z); interior.add(a);
     const r = new THREE.Mesh(new RoundedBoxGeometry(.12, .32, .42, 2, .05), cuero); r.position.set(x - .22, 1.25, z); r.rotation.z = .2; interior.add(r); }
   { const v = new THREE.Mesh(new THREE.TorusGeometry(.15, .022, 10, 32), plastico); v.position.set(.42, 1.24, .36); v.rotation.set(0, Math.PI / 2, 0); v.rotateX(-.45); interior.add(v);
-    const tb = new THREE.Mesh(new RoundedBoxGeometry(.3, .14, 1.3, 2, .05), plastico); tb.position.set(.62, 1.1, 0); interior.add(tb);
-    const pan = new THREE.Mesh(new THREE.PlaneGeometry(.5, .1), ledAzul); pan.position.set(.47, 1.17, 0); pan.rotation.y = Math.PI / 2; interior.add(pan); }
+    const tb = new THREE.Mesh(new RoundedBoxGeometry(.3, .14, 1.3, 2, .05), plastico); tb.position.set(.62, 1.1, 0); interior.add(tb); }
   // pozos de rueda oscuros
   for (const x of [XF, XR]) { const pz = new THREE.Mesh(new THREE.CylinderGeometry(.44, .44, 1.62, 32, 1, true), new THREE.MeshBasicMaterial({color: 0x010204, side: THREE.BackSide})); pz.rotation.x = Math.PI / 2; pz.position.set(x, RU + .02, 0); carro.add(pz); }
   // frente: barra de luz que sigue la trompa, faros, parrilla y patente genérica
@@ -285,7 +287,7 @@ export default async function (datos, planIn) {
       x.shadowColor = ACENTO; x.shadowBlur = 16; x.fillStyle = '#cfe6ff'; x.fillText(txt, w / 2, h / 2 + 4); x.shadowBlur = 0; x.fillStyle = '#ffffff'; x.fillText(txt, w / 2, h / 2 + 4); }
     grabTx.needsUpdate = true; }
   const grab = new THREE.Mesh(new THREE.CylinderGeometry(.553, .553, .13, 48, 1, true, -.62, 1.24), new THREE.MeshBasicMaterial({map: grabTx, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, color: new THREE.Color(1.5, 1.5, 1.5)}));
-  grab.position.y = .9; pedCuerpo.add(grab);
+  grab.position.y = .9; grab.visible = false; pedCuerpo.add(grab);
   const platina = new THREE.Group(); platina.position.y = 1.05; pedCuerpo.add(platina);
 
   // ── objetos de la lista de Autos ────────────────────────────────────────
@@ -301,12 +303,12 @@ export default async function (datos, planIn) {
           x.strokeStyle = `rgb(255,${Math.round(clamp(o) * 255)},0)`; x.lineWidth = Math.max(1.5, ancho * (1 - i / n * .6)); x.beginPath(); x.moveTo(cx, cy); x.lineTo(nx, ny); x.stroke();
           if (prof < 2 && hash(sem + i * 3 + prof * 17) > .55) rama(nx, ny, a + (hash(sem + i + prof) > .5 ? .7 : -.7), largo * .45, ancho * .6, o2, prof + 1); cx = nx; cy = ny; o = o2; } };
       rama(w * .84, h * .12, 2.35, 380, 7, 0, 0); }, {srgb: false});
-    return new THREE.ShaderMaterial({uniforms: {uC: {value: tx}, uProg: {value: .14}, uCol: {value: new THREE.Color(.75, .88, 1)}}, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+    return new THREE.ShaderMaterial({uniforms: {uC: {value: tx}, uProg: {value: .14}, uCol: {value: new THREE.Color(.75, .88, 1)}}, transparent: true, depthWrite: false,
       vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.); }`,
       fragmentShader: `uniform sampler2D uC; uniform float uProg; uniform vec3 uCol; varying vec2 vUv;
         float on(vec2 p){ vec4 c = texture2D(uC, p); return c.r * step(c.g, uProg) * step(.02, c.r); }
         void main(){ float n = on(vUv), g = 0.; for (int i = 0; i < 8; i++) { float a = float(i) * .785; g += on(vUv + vec2(cos(a), sin(a)) * .013); }
-          gl_FragColor = vec4(uCol * (n * 2.8 + g / 8. * 1.2), 1.); }`}); }
+          g /= 8.; vec3 c = mix(vec3(.12, .45, .95) * 1.6, vec3(.004, .01, .04), clamp(n * 1.4, 0., 1.)); gl_FragColor = vec4(c, clamp(n * 1.2 + g * .75, 0., 1.)); }`}); }
   function hojaTx(tipo) { const pol = tipo === 'poliza'; return lienzo(600, 800, (x, w) => { x.fillStyle = '#f4f7fb'; x.fillRect(0, 0, w, 800); x.fillStyle = NAVY; x.fillRect(0, 0, w, 150); x.fillStyle = ACENTO; x.fillRect(0, 150, w, 8);
       x.fillStyle = '#fff'; x.font = '800 72px Archivo'; x.fillText(pol ? 'PÓLIZA' : 'FORMULARIO', 38, 96); x.font = '700 24px "Plus Jakarta Sans"'; x.fillStyle = '#a9c6ea'; x.fillText(pol ? 'SEGURO DEL AUTO' : 'TRÁMITE DEL 0 KM', 40, 132);
       (pol ? ['COBERTURA', 'VIGENCIA', 'FRANQUICIA', 'ASISTENCIA'] : ['TITULAR', 'VEHÍCULO', 'CONDICIONES', 'FIRMA']).forEach((f, i) => { const y = 214 + i * 116, dst = i === 2;
@@ -414,7 +416,7 @@ export default async function (datos, planIn) {
       vec3 col = texture2D(tMap, uv).rgb * 1.08; col *= 1. - .4 * smoothstep(.72, 1., r);
       col += vec3(.7, .85, 1.) * smoothstep(.07, 0., abs(c.x + c.y - .2)) * smoothstep(1., .35, r) * .35 + vec3(.12, .3, .6) * smoothstep(.82, 1., r) * .7;
       gl_FragColor = vec4(col, 1.); }`});
-  const lupa = hacerLupa(vistaMat); lupa.visible = false; scene.add(lupa);
+  const lupa = hacerLupa(vistaMat); lupa.visible = false; scene.add(lupa); sinReflejo.push(lupa);
 
   // ── rótulos numerados con línea guía ────────────────────────────────────
   const rotulos = new Map();
@@ -423,10 +425,10 @@ export default async function (datos, planIn) {
       let tx0 = 40; if (num != null) { x.fillStyle = ACENTO; x.beginPath(); x.arc(92, h / 2, 54, 0, TAU); x.fill(); x.fillStyle = '#fff'; x.font = '800 74px Archivo'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(String(num), 92, h / 2 + 4); tx0 = 168; }
       let fs = 60; x.textAlign = 'left'; x.textBaseline = 'middle'; x.fillStyle = '#fff'; do { x.font = `700 ${fs}px "Plus Jakarta Sans"`; fs -= 2; } while (x.measureText(nombre).width > w - tx0 - 36 && fs > 24); x.fillText(nombre, tx0, h / 2 + 3); });
     const m = new THREE.Mesh(new THREE.PlaneGeometry(1, 168 / 720), new THREE.MeshBasicMaterial({map: tx, transparent: true, depthTest: false, depthWrite: false, color: new THREE.Color(1.45, 1.45, 1.45)}));
-    m.renderOrder = 21; m.visible = false; scene.add(m); const r = {m, guia: guia()}; rotulos.set(k, r); return r; }
+    m.renderOrder = 21; m.visible = false; scene.add(m); sinReflejo.push(m); const r = {m, guia: guia()}; rotulos.set(k, r); return r; }
   const lineaMat = new THREE.MeshBasicMaterial({color: new THREE.Color(TEXTO).multiplyScalar(2.4), depthTest: false, depthWrite: false, transparent: true});
   const lineaGeo = new THREE.CylinderGeometry(1, 1, 1, 6, 1, true); lineaGeo.translate(0, .5, 0); const puntoGeo = new THREE.SphereGeometry(1, 12, 8);
-  function guia() { const m = new THREE.Mesh(lineaGeo, lineaMat), p = new THREE.Mesh(puntoGeo, lineaMat); m.renderOrder = p.renderOrder = 20; m.visible = p.visible = false; scene.add(m, p); return {m, p}; }
+  function guia() { const m = new THREE.Mesh(lineaGeo, lineaMat), p = new THREE.Mesh(puntoGeo, lineaMat); m.renderOrder = p.renderOrder = 20; m.visible = p.visible = false; scene.add(m, p); sinReflejo.push(m, p); return {m, p}; }
   const YUP = V3(0, 1, 0), tA = V3(), tB = V3(), tC = V3(), tD = V3(), camR = V3(), camU = V3(), camF = V3();
   const profundidad = p => tD.copy(p).sub(cam.position).dot(camF);
   const pxu = d => 1920 / (2 * Math.max(.1, d) * Math.tan(cam.fov * D2R / 2));
@@ -442,7 +444,7 @@ export default async function (datos, planIn) {
   const laserG = new THREE.PlaneGeometry(1, 1); laserG.translate(.5, 0, 0);
   const laser = new THREE.Mesh(laserG, new THREE.MeshBasicMaterial({color: new THREE.Color(.8, .92, 1).multiplyScalar(4), transparent: true, depthTest: false, depthWrite: false, blending: THREE.AdditiveBlending}));
   const laserHalo = new THREE.Mesh(laserG, new THREE.MeshBasicMaterial({color: ACC.clone().multiplyScalar(1.2), transparent: true, opacity: .5, depthTest: false, depthWrite: false, blending: THREE.AdditiveBlending}));
-  laser.renderOrder = laserHalo.renderOrder = 18; laser.visible = laserHalo.visible = false; scene.add(laser, laserHalo);
+  laser.renderOrder = laserHalo.renderOrder = 18; laser.visible = laserHalo.visible = false; scene.add(laser, laserHalo); sinReflejo.push(laser, laserHalo);
   const sello = new THREE.Group(); sello.visible = false; scene.add(sello);
   { const c = new THREE.Mesh(new THREE.CylinderGeometry(.13, .15, .3, 40), lacaNavy); c.position.y = .25; sello.add(c);
     const m = new THREE.Mesh(new THREE.SphereGeometry(.12, 24, 16), cromo); m.position.y = .48; m.scale.y = .8; sello.add(m);
@@ -466,11 +468,11 @@ export default async function (datos, planIn) {
   const primerPaso = B.findIndex(b => b.paso);
   const tCierre = (B.find(b => b.tipo === 'cierre') || {t: tHero}).t;
   // tomas de cámara
-  const tomas = {heroe: {target: [0, .76, 0], az: AZ0, el: 5, dist: distPara(16.2)},
+  const tomas = {heroe: {target: [0, .76, 0], az: AZ0, el: 5, dist: distPara(15.4)},
     frente: {target: [.25, .64, 0], az: AZ0 + lado * 30, el: 3.5, dist: distPara(12.8)},
     perfil: {target: [-.1, .72, 0], az: AZ0 - lado * 46, el: 4.5, dist: distPara(17.5)},
     trasera: {target: [-.2, .76, 0], az: AZ0 - lado * 112, el: 7, dist: distPara(16)},
-    alta: {target: [0, 1.0, 0], az: AZ0 - lado * 8, el: 21, dist: distPara(17.5)},
+    alta: {target: [0, 1.0, 0], az: AZ0 - lado * 8, el: 11, dist: distPara(20)},
     rueda: {target: [XF, .45, Math.sign(Math.cos(AZ0 * D2R)) * ZR], az: AZ0 - lado * 18, el: 3, dist: distPara(6.4)}};
   let ultAuto = 'heroe', iObj = 0;
   B.forEach((b, i) => {
@@ -480,7 +482,7 @@ export default async function (datos, planIn) {
       if (b.tipo === 'gancho') k = b.efecto === 'despiece' ? 'alta' : 'heroe';
       ultAuto = k; b.toma = {...tomas[k], fov: FOV0, drift: ORB * (i % 2 ? -1 : 1)}; b.sujeto = k;
     } else { const az = AZ0 + (iObj++ % 2 ? 1 : -1) * (8 + rnd() * 14) * lado;
-      b.toma = {target: [PED.x, 1.36, PED.z], az, el: 6 + rnd() * 4, dist: distPara(8.4), fov: FOV0, drift: ORB * (i % 2 ? -.8 : .8)}; b.obj = hacerObjeto(b.objeto, b); }
+      b.toma = {target: [PED.x, 1.72, PED.z], az, el: 2.5 + rnd() * 3, dist: distPara(9.2), fov: FOV0, drift: ORB * (i % 2 ? -.8 : .8)}; b.obj = hacerObjeto(b.objeto, b); }
   });
   const H0 = {...tomas.heroe, fov: FOV0, drift: ORB, t0: 0};
   const SEGS = [{t0: 0, s: H0}];
@@ -521,10 +523,10 @@ export default async function (datos, planIn) {
     const y0 = c.odo ? CH * .23 : CH * .04, y1 = CH * .97;
     if (c.odo) { x.textBaseline = 'middle'; x.font = '700 70px "Plus Jakarta Sans"'; x.letterSpacing = '4px'; x.fillStyle = '#8fb6e0'; x.textAlign = 'right'; x.fillText('PASO', CW * .608, CH * .115);
       fuenteA(x, 128); x.textAlign = 'left'; x.fillStyle = '#ffffff'; x.fillText('/' + String(odoTotal).padStart(2, '0'), CW * .79, CH * .12); }
-    const tk = tokens(c), maxW = CW * .92, maxH = y1 - y0; let fs = 280, lines = [];
+    const tk = tokens(c), maxW = CW * .92, maxH = y1 - y0; let fs = 280, lines = []; const forzar = c.tipo === 'cierre' && tk.length > 1;
     const ancho = l => x.measureText(l.map(q => q.t).join(' ')).width;
     for (; fs >= 90; fs -= 6) { fuenteA(x, fs); lines = []; let cur = [];
-      for (const q of tk) { const pr = [...cur, q]; if (cur.length && ancho(pr) > maxW) { lines.push(cur); cur = [q]; } else cur = pr; } if (cur.length) lines.push(cur);
+      if (forzar) lines = [tk.slice(0, -1), tk.slice(-1)]; else { for (const q of tk) { const pr = [...cur, q]; if (cur.length && ancho(pr) > maxW) { lines.push(cur); cur = [q]; } else cur = pr; } if (cur.length) lines.push(cur); }
       if (lines.every(l => ancho(l) <= maxW) && lines.length <= 3 && lines.length * fs * 1.02 <= maxH) break; }
     const lh = fs * 1.02; let yy = y0 + (maxH - lines.length * lh) / 2 + lh / 2; x.textBaseline = 'middle'; x.textAlign = 'left';
     for (const l of lines) { let xx = (CW - ancho(l)) / 2; for (const q of l) { x.shadowColor = 'rgba(32,124,207,.95)'; x.shadowBlur = fs * .22; x.fillStyle = q.c; x.fillText(q.t, xx, yy); x.shadowBlur = 0; x.fillText(q.t, xx, yy); xx += x.measureText(q.t + ' ').width; } yy += lh; }
@@ -534,7 +536,7 @@ export default async function (datos, planIn) {
     const ox = cam.position.x, oz = cam.position.z, dx = rayo.x, dz = rayo.z, a = dx * dx + dz * dz, b = 2 * (ox * dx + oz * dz), c = ox * ox + oz * oz - RW * RW;
     const s = (-b + Math.sqrt(Math.max(0, b * b - 4 * a * c))) / (2 * a); const qx = ox + dx * s, qy = cam.position.y + rayo.y * s, qz = oz + dz * s;
     const u = pxu(s * rayo.dot(camF)), cosI = Math.max(.35, Math.abs((dx * qx + dz * qz) / (Math.sqrt(a) * RW)));
-    LU.uWin.value.set(Math.atan2(qx, qz), qy, wPx / u / cosI / 2 / RW, hPx / u / 2); }
+    const hy = hPx / u / 2; LU.uWin.value.set(Math.atan2(qx, qz), clamp(qy, hy + .35, 15 - hy), wPx / u / cosI / 2 / RW, hy); }
   const odoVal = t => B.reduce((v, b) => v + (b.paso ? E.outBack(seg(t, b.t + .1, b.t + .55), 1.4) : 0), 0);
 
   // ── sonido ───────────────────────────────────────────────────────────────
@@ -597,19 +599,18 @@ export default async function (datos, planIn) {
     sombra.material.opacity = .92 * clamp(1 - altoAuto / 2.2);
     DESP.forEach((p, i) => { let k = 0; if (despB) { const D = despB.te - despB.t, sal = Math.max(.8, D - .6); k = E.out3(seg(despU, .05 + i * .06, .6 + i * .06)) * (1 - E.io3(seg(despU, sal + i * .03, sal + .45 + i * .03))); }
       p.o.position.copy(p.base).addScaledVector(p.d, k); });
-    faroMat.emissiveIntensity = 2.6 + 5 * fl + 2 * flash; faroMat.emissive.copy(FARO).lerp(ACC, fl * .85); colaMat.emissiveIntensity = 1.4 + .8 * fl;
+    faroMat.emissiveIntensity = 1.8 + 4 * fl + 1.5 * flash; faroMat.emissive.copy(FARO).lerp(ACC, fl * .85); colaMat.emissiveIntensity = 1.4 + .8 * fl;
     auto.updateMatrixWorld(true);
 
     // luces
     scene.environmentIntensity = .1 + .9 * luz + 1.2 * flash;
     key.intensity = 1.3 * luz + 8 * flash; rimA.intensity = 2.2 * luz; rimB.intensity = 1.5 * luz;
-    M.bloom.strength = .55 + .5 * flash; M.cine.uniforms.flash.value = Math.min(.6, flash * .55);
+    M.bloom.strength = .42 + .5 * flash; M.cine.uniforms.flash.value = Math.min(.6, flash * .55);
 
     // pedestal y objetos
     const up = pedAlto(t); pedCuerpo.position.y = -1.14 * (1 - up); pedCuerpo.visible = up > .001; ped.rotation.y = cp.az * D2R;
     let bObj = null; for (const b of B) if (b.obj && t >= b.t - .02 && t < b.te + .25) bObj = (!bObj || b.t <= t) ? b : bObj;
-    grabar(bObj ? (bObj.paso ? 'PASO ' + bObj.paso : bObj.tipo === 'gancho' ? bObj.texto.toLocaleUpperCase('es') : '0 KM') : '');
-    foco.intensity = 90 * up; foco.position.set(PED.x + Math.sin(cp.az * D2R) * 2.2, 6.2, PED.z + Math.cos(cp.az * D2R) * 2.2); foco.target.position.set(PED.x, 1.3, PED.z); foco.target.updateMatrixWorld();
+    foco.intensity = 38 * up; foco.position.set(PED.x + Math.sin(cp.az * D2R) * 2.2, 6.2, PED.z + Math.cos(cp.az * D2R) * 2.2); foco.target.position.set(PED.x, 1.3, PED.z); foco.target.updateMatrixWorld();
     sello.visible = false; laser.visible = laserHalo.visible = false; marca.visible = false;
     for (const b of B) { if (!b.obj) continue; const g = b.obj, ud = g.userData, u = t - b.t, D = b.te - b.t;
       const vis = u > -.02 && u < D + .25; g.visible = vis; if (!vis) { ud.partes.forEach(p => p.m.position.copy(p.base)); continue; }
@@ -633,8 +634,8 @@ export default async function (datos, planIn) {
       if (ud.grieta) ud.grieta.uniforms.uProg.value = .14 + .86 * (b.efecto === 'golpe' ? E.outExpo(seg(u, 0, .35)) : b.efecto === 'lupa' ? E.io2(seg(u, .3, 1.6)) : b.efecto === 'flash' ? E.outExpo(seg(u, .05, .5)) : .5 * seg(u, .2, 1.4));
       if (u >= 0 && u < D) {   // efectos que se dibujan sobre el objeto
         g.updateMatrixWorld(true);
-        if (b.efecto === 'sello') { const ti = b.t + .42, q = t - ti, top = ud.alto * s + y; const baja = q < 0 ? E.in3(seg(t, ti - .3, ti)) : 1, sube = q > .1 ? E.in3(seg(q, .1, .45)) : 0;
-          sello.visible = t > ti - .3 && q < .45; sello.position.set(PED.x, pedCuerpo.position.y + 1.05 + top + 1.4 * (1 - baja) + 1.6 * sube - (q > 0 && q < .1 ? .03 : 0), PED.z); sello.scale.setScalar(1 - .6 * sube);
+        if (b.efecto === 'sello') { const ti = b.t + .42, q = t - ti, top = ud.alto * s + y; const baja = q < 0 ? E.in3(seg(t, ti - .3, ti)) : 1, sube = q > .1 ? E.out3(seg(q, .1, .34)) : 0;
+          sello.visible = t > ti - .3 && q < .34; sello.position.set(PED.x, pedCuerpo.position.y + 1.05 + top + .9 * (1 - baja) + .25 * sube - (q > 0 && q < .1 ? .03 : 0), PED.z); sello.scale.setScalar(Math.max(.001, 1 - sube));
           if (q > 0) { marca.visible = q < .9; const k = seg(q, 0, .9); marca.scale.setScalar(.8 + .9 * E.out3(k)); marca.material.opacity = 1 - k; } }
         if (b.efecto === 'tachar' && u > .3) { const k = E.io2(seg(u, .32, .62)), fade = 1 - seg(u, .9, 1.3); g.getWorldPosition(sujeto); sujeto.y += ud.alto * .5; tA.copy(sujeto).addScaledVector(camF, -.6);
           const L = 1.5, d = profundidad(tA), th = 7 / pxu(d); laser.visible = laserHalo.visible = fade > .01;
@@ -660,6 +661,9 @@ export default async function (datos, planIn) {
       const slot = {}; izq.forEach((i, k) => slot[i] = [SLOTS[0], SLOTS[2]][k] || SLOTS[2]); der.forEach((i, k) => slot[i] = [SLOTS[1], SLOTS[3]][k] || SLOTS[3]);
       anc.forEach((a, i) => { const k = seg(L.u, .35 + i * .12, .7 + i * .12) * fin; ponerRotulo(rotulo(i + 1, a.n), a.w, slot[i][0], slot[i][1], k); }); }
 
+    if (bObj && (bObj.tipo === 'gancho' || bObj.tipo === 'cierre') && bObj.texto && nrm(bObj.texto) !== nrm(ledDe(bObj).txt) && !(lupaB && lupaK > .002)) {
+      const u = t - bObj.t, D = bObj.te - bObj.t, g = bObj.obj; g.updateMatrixWorld(true); const an = g.localToWorld(V3(.22, g.userData.alto * .78, .05));
+      ponerRotulo(rotulo(null, bObj.texto.toLocaleUpperCase('es')), an, .56, .04, seg(u, .35, .7) * (1 - seg(u, D - .3, D))); }
     // lupa con segunda vista
     lupa.visible = false;
     if (lupaB && lupaK > .002) { const ob = lupaB.obj; let rL;

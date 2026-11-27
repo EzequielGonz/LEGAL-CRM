@@ -9,7 +9,7 @@
     "facebook"
   ],
   "gancho": "Chocaste: pedir perdón te puede jugar en contra.",
-  "voz": "Domingo, 19:10. Recién chocaste y te sale decir: «Perdón, fue mi culpa». Nunca digas esto. Antes de hablar, tres pasos. Uno: fotos de los autos, la patente y la esquina. Dos: datos del otro conductor y de los testigos. Tres: avisá a tu seguro dentro de los tres días. Mandáselo a quien maneje todos los días. Porque recién chocaste… y te sale decir:",
+  "voz": "Domingo, 19:10. Recién chocaste y te sale decir: «Perdón, fue mi culpa». Nunca digas esto. Antes de hablar, tres pasos. Uno: fotos de los autos, la patente y la esquina. Dos: datos del otro conductor y de los testigos. Tres: avisá a tu seguro dentro de los tres días. Escribinos por WhatsApp. Mandáselo a quien maneje todos los días. Porque recién chocaste… y te sale decir:",
   "palabra": "NUNCA",
   "contador": 3,
   "beats": [
@@ -68,6 +68,14 @@
       "objeto": "almanaque",
       "texto": "3/3 Seguro: 3 días",
       "efecto": "giro"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sobre",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
     },
     {
       "palabra": "Mandáselo",

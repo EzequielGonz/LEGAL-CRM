@@ -12,7 +12,7 @@ const MENTA = '#DAF1DE', SALVIA = '#8EB69B', BOSQUE = '#235347', ACENTO = '#003D
 const PIEL = '#E8BF9F', PIEL2 = '#DCAA88', PELO = '#3B2C23', ZAPATO = '#2B3B35', BOCA = '#5B2A25', D2R = Math.PI / 180;
 const EFECTOS = ['golpe', 'caida', 'rebote', 'giro', 'tachar', 'sello', 'flash', 'apagon', 'lupa', 'despiece', 'barrido', 'cuenta'];
 const ALIAS = {calendario: 'almanaque', telefono: 'celular', cel: 'celular', carnet: 'credencial', tarjeta: 'credencial', escalon: 'escalera', escalones: 'escalera',
-  tilde: 'check', ok: 'check', signo: 'pregunta', duda: 'pregunta', persona: 'personaje', documento: 'orden', papel: 'orden', mostrador_: 'mostrador'};
+  estetoscopio: 'credencial', tilde: 'check', ok: 'check', signo: 'pregunta', duda: 'pregunta', persona: 'personaje', documento: 'orden', papel: 'orden', mostrador_: 'mostrador'};
 const PRE = {caida: .45, golpe: .2, rebote: .6, barrido: .3, despiece: .2};   // cuánto antes de la palabra arranca la entrada
 
 export default async function (datos, plan) {
@@ -200,7 +200,7 @@ export default async function (datos, plan) {
 
   // ── posiciones del set ───────────────────────────────────────────────────────────────────────────────────────
   const HX = .2 * S, HZ = -.34;                 // lugar del objeto protagonista
-  const LADO = {x: -.6 * S, z: -.02}, CENTRO = {x: 0, z: -.14};
+  const LADO = {x: -.55 * S, z: -.02}, CENTRO = {x: 0, z: -.14};
   golpes.forEach(g => { const c = g.objeto === 'personaje'; g.px = c ? CENTRO.x : HX; g.pz = c ? CENTRO.z + .12 : HZ; });
 
   // ── personaje de plastilina (Gabriel): suéter, pelo, ojos que miran y boca que acompaña la voz ────────────────
@@ -283,15 +283,6 @@ export default async function (datos, plan) {
       const et = new THREE.Mesh(amasar(new THREE.CylinderGeometry(.194, .194, .15, 40, 1, true), .003, 9, 3), arcilla(SALVIA)); et.position.y = .21; g.add(et);
       const ok = pz(geoCheck(.1, .03), ACENTO); ok.position.set(0, .21, .2); g.add(ok);
       return {g, h: .54, w: .4, fz: .2, partes: [cu, et, ok, ta]}; },
-    estetoscopio() { const g = new THREE.Group(), V = (x, y, z) => new THREE.Vector3(x, y, z);
-      const ba = pz(cil(.13, .04), BOSQUE); ba.position.y = .02; g.add(ba);
-      const po = pz(capsula(.022, .55), SALVIA); po.position.y = .32; g.add(po);
-      const tubo = (p, r) => new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(p), 48, r, 10), arcilla(GRIS));
-      const b1 = tubo([V(-.13, .66, .05), V(-.12, .55, .07), V(-.06, .44, .08), V(0, .4, .08)], .016), b2 = tubo([V(.13, .66, .05), V(.12, .55, .07), V(.06, .44, .08), V(0, .4, .08)], .016);
-      const la = tubo([V(0, .4, .08), V(.02, .28, .1), V(.12, .16, .12), V(.18, .06, .16), V(.14, .03, .24)], .02); g.add(b1, b2, la);
-      const ol = [-1, 1].map(s => { const o = pz(bola(.028), HUESO); o.position.set(s * .135, .68, .05); g.add(o); return o; });
-      const cp = pz(cil(.075, .045), HUESO); cp.position.set(.12, .025, .28); g.add(cp); const ar = pz(toro(.075, .015), SALVIA); ar.rotation.x = Math.PI / 2; ar.position.set(.12, .048, .28); g.add(ar);
-      return {g, h: .7, w: .4, fz: .14, partes: [ba, po, b1, b2, la, ...ol, cp, ar]}; },
     almanaque() { const g = new THREE.Group(), c = inclinado(g, .2), w = .56, h = .62;
       const ta = pz(losa(rrect(w, h, .05), .03, .02), HUESO); ta.position.y = h / 2 + .02; c.add(ta);
       const ca = pz(caja(w, .14, .07, .04), SALVIA); ca.position.set(0, h - .04, .01); c.add(ca);
@@ -372,7 +363,7 @@ export default async function (datos, plan) {
     const ok = pz(geoCheck(.09, .016), HUESO); ok.position.z = .016; m.add(ok); m.position.set(.03, .2, .175); m.rotation.z = -.2; m.visible = false; per.cad.add(m); g.marca = m; });
 
   // ── contador: discos en escalones (se dan vuelta de hueso a verde oficial a medida que avanzan los pasos) ───────
-  const cont = nCont ? (() => { const g = new THREE.Group(); g.position.set(.56 * S, 0, -1.22); g.scale.setScalar(.88); scene.add(g);
+  const cont = nCont ? (() => { const g = new THREE.Group(); g.position.set(.5 * S, 0, -1.22); g.scale.setScalar(.88); scene.add(g);
     const pasos = []; for (let k = 0; k < nCont; k++) { const hh = .085 + k * .085, x = S * k * .205;
       const es = pz(caja(.2, hh, .3, .035), k % 2 ? HUESO : SALVIA); es.position.set(x, hh / 2, 0); g.add(es);
       const d = new THREE.Group(); d.position.set(x, hh + .1, 0); g.add(d);
@@ -395,50 +386,63 @@ export default async function (datos, plan) {
   { const es = new THREE.Group(); es.position.set(.6 * S, .02, 2.05); es.rotation.y = .5 * S; scene.add(es); const ma = pz(capsula(.02, .5), '#C9A77E', {sheen: .2}); ma.rotation.z = Math.PI / 2; es.add(ma);
     const pu = pz(caja(.12, .012, .05, .006), GRIS, {rug: .35}); pu.position.x = -.32; es.add(pu); }
 
-  // ── textos en la pared: letras de plastilina que se pegan de a una y se despegan ───────────────────────────────
+  // ── textos en la pared: letras de plastilina que se pegan y se despegan (el cambio entero dura 0,25 s) ─────────
+  // El tamaño se mide en píxeles de pantalla: mayúsculas de 110 a 125 px en el gancho y de 96 a 112 px en los golpes,
+  // dentro del 8–92 % del ancho. Si hacen falta más renglones, se achica el interlineado, no la letra.
+  const C0 = {x: 0, y: .42, z: -.5, d: 7.5 + R(6) * .3, el: 12.5 + R(7) * 3, az: (R(8) - .5) * 12, fov: 30 + R(9) * 2};
+  const camT = new THREE.PerspectiveCamera(30, 1080 / 1920, .05, 400), vP = new THREE.Vector3();
+  function ponerCam(cm, c) { const el = c.el * D2R, az = c.az * D2R; cm.fov = c.fov; cm.updateProjectionMatrix();
+    cm.position.set(c.x + Math.sin(az) * Math.cos(el) * c.d, c.y + Math.sin(el) * c.d, c.z + Math.cos(az) * Math.cos(el) * c.d); cm.lookAt(c.x, c.y, c.z); cm.updateMatrixWorld(); }
+  const pant = (cm, x, y, z) => { vP.set(x, y, z).project(cm); return [(vP.x + 1) * 540, (1 - vP.y) * 960]; };
+  const paredY = (cm, py) => { let lo = RC, hi = 8; for (let k = 0; k < 32; k++) { const m = (lo + hi) / 2; if (pant(cm, 0, m, PZ)[1] > py) lo = m; else hi = m; } return (lo + hi) / 2; };
+  const paredX = (cm, px, y) => { let lo = -5, hi = 5; for (let k = 0; k < 32; k++) { const m = (lo + hi) / 2; if (pant(cm, m, y, PZ)[0] < px) lo = m; else hi = m; } return (lo + hi) / 2; };
+  ponerCam(camT, C0); const pxu = (pant(camT, 0, 1, PZ)[1] - pant(camT, 0, 1.5, PZ)[1]) / .5;   // píxeles por unidad sobre la pared
+  const capR = medidor.measureText('H').actualBoundingBoxAscent / 100;
   const tonos = [BOSQUE, '#1F4B40', '#285B4D'];
-  function bloque(txt, {tamMax = .38, clave = false, ycen = 1.26} = {}) {
-    if (!txt) return null;
-    let s = tamMax, f = [txt]; const maxA = 1.72, maxAlto = .74, pal = txt.split(/\s+/).filter(Boolean);
-    const cortes = n => { if (n === 1) return [[pal.join(' ')]]; const o = [], N = pal.length; if (n === 2) for (let a = 1; a < N; a++) o.push([pal.slice(0, a).join(' '), pal.slice(a).join(' ')]);
-      if (n === 3) for (let a = 1; a < N - 1; a++) for (let b = a + 1; b < N; b++) o.push([pal.slice(0, a).join(' '), pal.slice(a, b).join(' '), pal.slice(b).join(' ')]); return o; };
-    const mejor = n => cortes(n).map(fs => [fs, Math.max(...fs.map(ancho))]).sort((a, b) => a[1] - b[1])[0];
-    busca: for (; s > .1; s *= .95) for (let n = 1; n <= Math.min(3, pal.length); n++) { const m = mejor(n); if (m && m[1] * s <= maxA && n * s * 1.12 <= maxAlto) { f = m[0]; break busca; } }
-    const lin = s * 1.12, alto = f.length * lin, letras = [], g = new THREE.Group(); scene.add(g);
-    const enClave = [], conComillas = txt.includes('«'); let dentro = false;
-    f.forEach((fila, r) => { const w = ancho(fila), by = ycen + alto / 2 - (r + .8) * lin; let ini = -1;
+  function bloque(txt, {capMin = 96, capMax = 112, clave = false, top = 325, anchoPx = 800, altoPx = 390, gancho = false} = {}) {
+    if (!txt) return null; const pal = txt.split(/\s+/).filter(Boolean), N = pal.length;
+    const mejor = n => { let m = 1e9, f = null; const rec = (i, k, acc) => { if (k === 1) { const fs = [...acc, pal.slice(i).join(' ')], mx = Math.max(...fs.map(ancho)); if (mx < m) { m = mx; f = fs; } return; }
+      for (let j = i + 1; j <= N - k + 1; j++) rec(j, k - 1, [...acc, pal.slice(i, j).join(' ')]); }; rec(0, n, []); return [f, m]; };
+    const sDe = cap => cap / (capR * pxu), anchoU = anchoPx / pxu, altoU = altoPx / pxu, lhDe = n => n >= 4 ? .86 : n === 3 ? .9 : .96, altoEm = n => .92 + (n - 1) * lhDe(n) + .26; let f = null, s = 0;
+    if (clave && N >= 2 && !txt.includes('«')) { f = [pal.slice(0, -1).join(' '), pal[N - 1]]; s = Math.min(sDe(capMax), anchoU / Math.max(...f.map(ancho)), altoU / altoEm(2)); }   // placa del cierre: «Escribinos por / WhatsApp»
+    else if (gancho) { for (let n = 1; n <= Math.min(N, 5); n++) { const [fs, m] = mejor(n); const sn = Math.min(sDe(capMax), anchoU / m); if (!f || sn > s) { f = fs; s = sn; } if (sn >= sDe(capMin)) { f = fs; s = sn; break; } } }   // gancho: los renglones que hagan falta para mayúsculas de 110 px
+    else for (let n = 1; n <= Math.min(N, 4); n++) { const [fs, m] = mejor(n); const sn = Math.min(sDe(capMax), anchoU / m, altoU / altoEm(n)); if (!f || sn > s * 1.02) { f = fs; s = sn; } }   // golpes: la letra más grande que entre en ancho y alto
+    const lh = lhDe(f.length), letras = [], g = new THREE.Group(); scene.add(g);
+    const enClave = [], conComillas = txt.includes('«'); let dentro = false, chapaRel = null;
+    f.forEach((fila, r) => { const w = ancho(fila), by = -(.92 + r * lh) * s; let ini = -1;
       for (let i = 0; i < fila.length; i++) { const ch = fila[i]; if (ch === '«') dentro = true; const esC = clave && (conComillas ? dentro : r === f.length - 1 && i > fila.lastIndexOf(' ')); if (ch === '»') dentro = false;
-        const G = glifo(ch); const x0 = (ancho(fila.slice(0, i)) - w / 2) * s; if (esC && ini < 0) ini = x0; if (esC) enClave.push([x0 + G.adv * s, by, r]); if (!G.geo) continue;
+        const G = glifo(ch); const x0 = (ancho(fila.slice(0, i)) - w / 2) * s; if (esC && ini < 0) ini = x0; if (esC) enClave.push(x0 + G.adv * s); if (!G.geo) continue;
         const m = new THREE.Mesh(G.geo, arcilla(esC ? ACENTO : tonos[Math.floor(hash(letras.length + sem) * 3)])); m.visible = false;
         const sh = new THREE.Mesh(planoV, new THREE.MeshBasicMaterial({color: 0x0f362c, alphaMap: G.sombra.tx, transparent: true, depthWrite: false, opacity: 0})); sh.visible = false; sh.renderOrder = 1;
-        g.add(m, sh); letras.push({m, sh, x: x0, y: by, dz: esC ? .075 : 0, rz: (hash(sem + letras.length * 1.7) - .5) * .1, ry: (hash(sem + letras.length * 2.3) - .5) * .16, G, s}); }
-      if (ini >= 0 && enClave.length) { const fin = enClave[enClave.length - 1][0]; letras.chapa = {x0: ini - s * .18, x1: fin + s * .18, y: by + s * .33, r}; } });
-    let chapa = null; if (letras.chapa) { const c = letras.chapa, w = c.x1 - c.x0, hh = s * 1.05; chapa = pz(losa(rrect(w, hh, hh * .3), .03, .025), HUESO); chapa.position.set((c.x0 + c.x1) / 2, c.y, PZ + .03); chapa.visible = false; g.add(chapa); }
-    return {g, letras, s, chapa, vent: []};
+        g.add(m, sh); letras.push({m, sh, x: x0, y: by, dz: esC ? .075 : 0, rz: (hash(sem + letras.length * 1.7) - .5) * .08, ry: (hash(sem + letras.length * 2.3) - .5) * .14, G, s}); }
+      if (ini >= 0 && enClave.length) chapaRel = {x0: ini - s * .18, x1: enClave[enClave.length - 1] + s * .18, y: by + s * .33}; });
+    let chapa = null; if (chapaRel) { const w = chapaRel.x1 - chapaRel.x0, hh = s * 1.05; chapa = pz(losa(rrect(w, hh, hh * .3), .03, .025), HUESO); chapa.visible = false; g.add(chapa); }
+    return {g, letras, s, chapa, chapaRel, vent: [], hB: (.92 + (f.length - 1) * lh + .26) * s, top, ox: 0, oy: 0, filas: f};
   }
   function animBloque(B, ts) {
-    if (!B) return; const n = B.letras.length; let kc = 0, koc = 1;
+    if (!B) return; let kc = 0, koc = 1; const st = Math.min(.005, .05 / Math.max(1, B.letras.length));
     B.letras.forEach((L, i) => {
-      let k = 0, ko = 0, vis = false;
-      for (const [a, b, st] of B.vent) { const ka = seg(ts, a + i * st, a + i * st + .3), kb = seg(ts, b + i * .007, b + i * .007 + .18); if (ka > 0 && kb < 1) { vis = true; k = ka; ko = kb; break; } }
+      let k = 0, ko = 0, vis = false;   // entrada 0,12 s escalonada en 0,05 s; salida 0,08 s
+      for (const [a, b] of B.vent) { const ka = seg(ts, a + i * st, a + i * st + .12), kb = seg(ts, b, b + .08); if (ka > 0 && kb < 1) { vis = true; k = ka; ko = kb; break; } }
       L.m.visible = L.sh.visible = vis; if (!vis) return; kc = Math.max(kc, k); koc = Math.min(koc, ko);
-      const ent = resorte(k, 2.1, 5.2), sal = E.in3(ko), esc = Math.max(.001, L.s * ent * (1 - sal)), lejos = (1 - E.out3(k)) * .4 + E.out3(ko) * .35;
+      const ent = resorte(k, 2.1, 5.2), sal = E.in3(ko), esc = Math.max(.001, L.s * ent * (1 - sal)), lejos = (1 - E.out3(k)) * .3 + E.out3(ko) * .3, X = L.x + B.ox, Y = L.y + B.oy;
       L.m.scale.set(esc, esc, esc * (1 + .6 * (1 - k)));
-      L.m.position.set(L.x, L.y + ko * .06, PZ + .046 * L.s + .003 + L.dz + lejos);
-      L.m.rotation.set(-ko * .6, L.ry + (1 - k) * .5 * (i % 2 ? 1 : -1), L.rz + (1 - k) * .6 * (i % 2 ? -1 : 1));
+      L.m.position.set(X, Y + ko * .06, PZ + .046 * L.s + .003 + L.dz + lejos);
+      L.m.rotation.set(-ko * .6, L.ry + (1 - k) * .4 * (i % 2 ? 1 : -1), L.rz + (1 - k) * .5 * (i % 2 ? -1 : 1));
       L.sh.material.opacity = .34 * Math.min(1, k * 1.6) * (1 - sal) / (1 + lejos * 5);
       const ds = 1 + lejos * 2; L.sh.scale.set(L.G.sombra.w * L.s * ds, L.G.sombra.h * L.s * ds, 1);
-      L.sh.position.set(L.x + L.G.sombra.cx * L.s - VEN * (.028 + lejos * .5), L.y + L.G.sombra.cy * L.s - .034 - lejos * .35, PZ + .004);
+      L.sh.position.set(X + L.G.sombra.cx * L.s - VEN * (.028 + lejos * .5), Y + L.G.sombra.cy * L.s - .034 - lejos * .35, PZ + .004);
     });
-    if (B.chapa) { const v = kc > 0 && koc < 1; B.chapa.visible = v; if (v) { const e = Math.max(.001, resorte(kc, 2, 5) * (1 - E.in3(koc))); B.chapa.scale.set(e, e, e); } }
+    if (B.chapa) { const v = kc > 0 && koc < 1; B.chapa.visible = v; if (v) { const e = Math.max(.001, resorte(kc, 2, 5) * (1 - E.in3(koc))); B.chapa.scale.set(e, e, e);
+      B.chapa.position.set((B.chapaRel.x0 + B.chapaRel.x1) / 2 + B.ox, B.chapaRel.y + B.oy, PZ + .03); } }
   }
-  const bGancho = bloque(gancho, {tamMax: .4});
-  golpes.forEach(g => { g.bl = g.cambio < TF - .5 ? bloque(g.texto, {tamMax: .38, clave: g.esCierre}) : null; });
-  const bCierre = golpeCierre ? null : bloque(cierre, {tamMax: .4, clave: true});
+  const bGancho = bloque(gancho, {capMin: 110, capMax: 125, top: 318, anchoPx: 864, gancho: true});
+  golpes.forEach(g => { g.bl = g.cambio < TF - .5 ? bloque(g.texto, {clave: g.esCierre}) : null; });
+  const bCierre = golpeCierre ? null : bloque(cierre, {clave: true});
   const primer = golpes.length ? golpes[0].cambio : tCierre;
-  if (bGancho) { const n = bGancho.letras.length; bGancho.vent.push([-6, primer, .02], [T - .52, T + 9, Math.min(.02, .08 / Math.max(1, n))]); }
-  golpes.forEach((g, i) => { if (g.bl) g.bl.vent.push([g.cambio + .2, Math.min(T - .64, golpes[i + 1] && golpes[i + 1].bl ? golpes[i + 1].cambio : bCierre ? tCierre : T - .64), .03]); });
-  if (bCierre) bCierre.vent.push([tCierre + .2, T - .64, .015]);
+  if (bGancho) bGancho.vent.push([-6, primer], [T - .56, T + 9]);
+  golpes.forEach((g, i) => { if (g.bl) g.bl.vent.push([g.cambio + .08, Math.min(T - .64, golpes[i + 1] && golpes[i + 1].bl ? golpes[i + 1].cambio : bCierre ? tCierre : T - .64)]); });
+  if (bCierre) bCierre.vent.push([tCierre + .08, T - .64]);
   const bloques = [bGancho, ...golpes.map(g => g.bl), bCierre].filter(Boolean);
 
   // ── movimientos del personaje: en el centro al principio, a un costado mientras hablan los objetos, al centro en el cierre ──
@@ -468,31 +472,49 @@ export default async function (datos, plan) {
       case 'barrido': sfx(a - .3, 'whoosh_largo', .6); sfx(a, 'arcilla', .7); break;
       case 'cuenta': sfx(a, 'pop', .6); for (let k = 0; k < (nCont || 3); k++) sfx(a + .3 + k * .25, 'tick', .8); break;
     }
-    if (g.bl) sfx(g.cambio + .2, 'flap', .35); });
+    if (g.bl) sfx(g.cambio + .08, 'flap', .35); });
   act.forEach(ta => { sfx(ta, 'ding', .45); sfx(ta + .05, 'pop', .35); });
-  sfx(tCierre - .5, 'riser', .45); sfx(tCierre + .1, 'chime', .7); if (bCierre) sfx(tCierre + .12, 'flap', .4);
-  sfx(T - .62, 'whoosh', .4); sfx(T - .5, 'flap', .3); movs.forEach(m => { sfx(m.t + .22, 'arcilla', .25); sfx(m.t + .47, 'arcilla', .25); });
+  sfx(tCierre - .5, 'riser', .45); sfx(tCierre + .1, 'chime', .7); if (bCierre) sfx(tCierre + .08, 'flap', .4);
+  sfx(T - .62, 'whoosh', .4); sfx(T - .56, 'flap', .3); movs.forEach(m => { sfx(m.t + .22, 'arcilla', .25); sfx(m.t + .47, 'arcilla', .25); });
 
-  // ── cámara por claves (pos fluida, sin stop-motion); la última clave es igual a la primera ───────────────────
-  const C0 = {x: 0, y: .42, z: -.5, d: 7.5 + R(6) * .3, el: 12.5 + R(7) * 3, az: (R(8) - .5) * 12, fov: 30 + R(9) * 2};
+  // ── cámara por claves (fluida, sin stop-motion); la última clave es igual a la primera ───────────────────────
+  // Plano de apertura: se inclina lo justo para que la cabeza del personaje quede debajo del último renglón del gancho.
+  if (bGancho) for (let y = .42; y <= 1.1; y += .02) { ponerCam(camT, {...C0, y}); const top = paredY(camT, bGancho.top);
+    const yb = pant(camT, 0, top - bGancho.hB, PZ)[1], yh = pant(camT, CENTRO.x, .97, CENTRO.z)[1]; C0.y = y; if (yh >= yb + 22) break; }
   const claves = []; const clave = (t, s) => { if (claves.length && t <= claves[claves.length - 1][0] + .05) return; claves.push([t, {...C0, ...s}]); };
-  clave(0, C0); if (golpes.length) clave(Math.max(.3, golpes[0].ini - .5), {d: C0.d - .1});
-  golpes.forEach((g, i) => { const sg = (i + (R(14) < .5 ? 0 : 1)) % 2 ? 1 : -1; const st = {x: HX * .45, y: .43, d: C0.d - .15 - R(20 + i) * .25, el: C0.el + (R(30 + i) - .5) * 4, az: C0.az + sg * (3 + R(40 + i) * 4), fov: C0.fov - R(50 + i) * 2.5};
-    if (g.objeto === 'personaje') st.x = 0; clave(g.t + .12, st); if (g.fin - .55 > g.t + .6) clave(g.fin - .55, {...st, d: st.d - .14, az: st.az + sg * 1.5}); });
+  clave(0, C0); if (golpes.length) clave(Math.max(.3, primer - .05), {d: C0.d - .1});
+  golpes.forEach((g, i) => { const sg = (i + (R(14) < .5 ? 0 : 1)) % 2 ? 1 : -1; const st = {x: HX * .45, y: .43, d: C0.d - .15 - R(20 + i) * .25, el: C0.el + (R(30 + i) - .5) * 4, az: C0.az + sg * (3 + R(40 + i) * 4), fov: C0.fov - R(50 + i) * 1.5};
+    if (g.objeto === 'personaje') st.x = 0; clave(i ? g.t + .12 : Math.max(g.t + .12, primer + .4), st); if (g.fin - .55 > g.t + .6) clave(g.fin - .55, {...st, d: st.d - .14, az: st.az + sg * 1.5}); });
   clave(tCierre + .2, {d: C0.d - .2, y: .45}); clave(T - .62, {d: C0.d - .3, y: .45}); claves.push([T - .1, {...C0}], [T + 9, {...C0}]);
   const CAMPOS = ['x', 'y', 'z', 'd', 'el', 'az', 'fov'], tgt = new THREE.Vector3();
+  const xPer = t => { let p = CENTRO; for (const m of movs) { if (t < m.t) break; const k = seg(t, m.t, m.t + m.dur), a0 = lugar(m.de), a1 = lugar(m.a); p = {x: lerp(a0.x, a1.x, k), z: lerp(a0.z, a1.z, k)}; } return p; };
+  claves.forEach(([t, st]) => { for (let it = 0; it < 3; it++) { ponerCam(camT, st); const p = xPer(t); let mn = 1e9, mx = -1e9;
+    for (const dx of [-.42, .42]) for (const y of [.08, .55, 1]) { const [sx] = pant(camT, p.x + dx, y, p.z); mn = Math.min(mn, sx); mx = Math.max(mx, sx); }
+    const d = mn < 100 ? 100 - mn : mx > 980 ? 980 - mx : 0; if (!d) break; st.x -= d / (pant(camT, p.x + 1, .5, p.z)[0] - pant(camT, p.x, .5, p.z)[0]); } });
+  const estado = t => { let i = 0; while (i < claves.length - 2 && t > claves[i + 1][0]) i++; const [a, A] = claves[i], [b, B] = claves[i + 1], k = E.io2(seg(t, a, b)); const c = {}; CAMPOS.forEach(f => c[f] = lerp(A[f], B[f], k)); return c; };
+  // cada texto se centra en el cuadro con la cámara que va a tener cuando se lea
+  const ubicar = (B, t) => { if (!B) return; ponerCam(camT, estado(t)); B.oy = paredY(camT, B.top); B.ox = paredX(camT, 540, B.oy - B.hB / 2); };
+  ubicar(bGancho, 0); golpes.forEach(g => ubicar(g.bl, g.cambio + .45)); ubicar(bCierre, tCierre + .45);
   const impactos = golpes.filter(g => g.efecto === 'golpe' || g.efecto === 'caida').map(g => [g.t, g.efecto === 'golpe' ? 1 : .45, g.px, g.pz]);
   const lupas = golpes.filter(g => g.efecto === 'lupa' && g.o);
   const envBorde = t => seg(t, 0, .5) * (1 - seg(t, T - .6, T - .12));
+  // guardia: el cuerpo entero del personaje (con los brazos) queda entre el 8 % y el 92 % del ancho; si no, la cámara se corre de costado
+  const vDer = new THREE.Vector3();
+  function guardaPersonaje() {
+    const p = per.raiz.position; let mn = 1e9, mx = -1e9;
+    for (const dx of [-.42, .42]) for (const y of [.08, .55, 1.0]) { const [sx] = pant(cam, p.x + dx, p.y + y, p.z); mn = Math.min(mn, sx); mx = Math.max(mx, sx); }
+    const d = mn < 96 ? 96 - mn : mx > 984 ? 984 - mx : 0; if (!d) return;
+    const u = d / (pant(cam, p.x + 1, .5, p.z)[0] - pant(cam, p.x, .5, p.z)[0]);
+    vDer.setFromMatrixColumn(cam.matrixWorld, 0).setY(0).normalize(); cam.position.addScaledVector(vDer, -u); tgt.addScaledVector(vDer, -u); cam.lookAt(tgt); cam.updateMatrixWorld();
+  }
   function camara(t) {
-    let i = 0; while (i < claves.length - 2 && t > claves[i + 1][0]) i++; const [a, A] = claves[i], [b, B] = claves[i + 1], k = E.io2(seg(t, a, b)); const c = {};
-    CAMPOS.forEach(f => c[f] = lerp(A[f], B[f], k));
+    const c = estado(t);
     for (const g of lupas) { const k = E.io2(seg(t, g.t + .25, g.t + .6)) * (1 - E.io2(seg(t, g.t + 1.25, g.t + 1.6))); c.d -= .55 * k; c.y += .1 * k; }
     let punch = 0, sac = 0; for (const [ti, f] of impactos) { if (t >= ti) { punch += f * 3.2 * Math.exp(-(t - ti) / .16); sac += f * pulso(t, ti, .22); } }
     const e = envBorde(t); tgt.set(c.x, c.y + sac * .02, c.z);
     const el = c.el * D2R, az = c.az * D2R;
     cam.position.set(tgt.x + Math.sin(az) * Math.cos(el) * c.d + ruido(t * .5, 1) * .012 * e, tgt.y + Math.sin(el) * c.d + ruido(t * .45, 2) * .01 * e + sac * .03, tgt.z + Math.cos(az) * Math.cos(el) * c.d);
-    cam.fov = c.fov - punch; cam.updateProjectionMatrix(); cam.lookAt(tgt); M.foco(cam.position.distanceTo(tgt) - .2);
+    cam.fov = c.fov - punch; cam.updateProjectionMatrix(); cam.lookAt(tgt); cam.updateMatrixWorld(); guardaPersonaje(); M.foco(cam.position.distanceTo(tgt) - .2);
   }
 
   // ── interfaz: logo de la marca y karaoke ───────────────────────────────────────────────────────────────────
@@ -631,19 +653,18 @@ export default async function (datos, plan) {
   // luces: flash y apagón
   function luces(t) {
     let A = 1, fl = 0; for (const g of golpes) { if (g.efecto === 'apagon') A = Math.min(A, 1 - .86 * seg(t, g.t - .06, g.t + .04) * (1 - seg(t, g.t + 1.1, g.t + 1.45)));
-      if (g.efecto === 'flash') { const tf = g.t + .18; if (t >= tf) fl += Math.exp(-(t - tf) / .11); } }
-    hemi.intensity = BASE_LUZ.hemi * A; sol.intensity = BASE_LUZ.sol * A * (1 + fl * 1.5); rim.intensity = BASE_LUZ.rim * (.35 + .65 * A); scene.environmentIntensity = BASE_LUZ.env * (.25 + .75 * A);
+      if (g.efecto === 'flash') { const tf = g.t + .18; if (t >= tf && t < tf + .15) fl = Math.max(fl, 1 - (t - tf) / .15); } }
+    hemi.intensity = BASE_LUZ.hemi * A; sol.intensity = BASE_LUZ.sol * A * (1 + fl * .6); rim.intensity = BASE_LUZ.rim * (.35 + .65 * A); scene.environmentIntensity = BASE_LUZ.env * (.25 + .75 * A);
     if (foco) foco.intensity = 55 * (1 - A);
-    M.cine.uniforms.flash.value = Math.min(.7, fl * .65); M.cine.uniforms.vineta.value = .2 + .5 * (1 - A); const ti = .78 + .22 * A; M.cine.uniforms.tinte.value.set(ti, ti, ti * 1.02);
+    M.cine.uniforms.flash.value = .35 * fl; M.cine.uniforms.vineta.value = .2 + .5 * (1 - A); const ti = .78 + .22 * A; M.cine.uniforms.tinte.value.set(ti, ti, ti * 1.02);
   }
 
   function update(t) {
     const ts = stop(t, 12), borde = t < 1 / 12 || t > T - .12, fr = borde ? 0 : Math.round(ts * 12);
     for (const tx of nmaps) tx.offset.set((hash(fr * 1.7) - .5) * .05, (hash(fr * 2.3 + 5) - .5) * .05);   // «boil» de plastilina cuadro a cuadro
-    camara(t); luces(t);
-    bloques.forEach(B => animBloque(B, ts));
+    luces(t); bloques.forEach(B => animBloque(B, ts));
     conObjeto.forEach(g => animObjeto(g, ts, t)); animEfectosGlobales(ts, t);
-    animPersonaje(ts, borde); animContador(ts); sombrasUpd();
+    animPersonaje(ts, borde); animContador(ts); camara(t); sombrasUpd();
     kar(t); M.cine.uniforms.t.value = (t > T - .12 ? 0 : t) * 11.7; M.comp.render();
   }
   console.log('LOG coberturas armada en', Math.round(performance.now() - t00), 'ms ·', glifos.size, 'glifos ·', golpes.length, 'golpes');
