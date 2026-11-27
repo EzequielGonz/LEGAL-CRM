@@ -145,3 +145,21 @@ Scripts en la carpeta de flujos de la sesión y copia en `docs/oficina/auditoria
 **Pendiente de respuesta al dueño:** lista verificada de IA con plan gratuito para la arena de la Oficina.
 
 **Aviso para quien retome:** hay ganchos nuevos de plugins que frenan la subida al remoto (piden un barrido previo de claves y datos personales) y los comandos que nombran archivos de claves; si frenan, hacer el barrido, separar el paso y reintentar.
+
+## Checkpoint 27/11 · 19:00 (para compactar; actualiza el de las 18:50)
+
+**Límite de uso:** a las 18:45 se agotó el límite de 5 horas de la cuenta (se renueva 23:30 de Argentina, 02:30 UTC). Cortó 11 de las 12 zonas web y 4 de las 6 capas de código. Hay un aviso programado para las 23:36 (02:36 UTC) que relanza lo cortado; no borrarlo.
+
+**Estado de los flujos a las 19:00:**
+
+| Flujo | Run | Tarea actual | Estado |
+|---|---|---|---|
+| Web solo lectura | `wf_8e9edcef-4cc` | `wev3jq9mb` | 11 zonas cortadas por el límite, 1 corriendo. Cuando cierre: relanzar con `resumeFromRunId`. |
+| Acciones | `wf_7a9b68b6-95d` | `wh2qg1vug` | Oficina y Laboratorio corriendo; faltan Jarvis/Cerebro, formularios y chats. |
+| Código por capas | `wf_536bd726-0f1` | `w3o4mi3yo` (relanzado 18:53) | Hechas base-rls y sesion-permisos (sin revisor todavía); corriendo el resto. |
+
+**Hallazgos de base-rls, SIN CONFIRMAR por el revisor** (informe en el scratchpad `aud-web/cod-base-rls/informe.md`): seguimiento, audios, análisis de leads de Marketing y relectura de chats llaman a Gemini sin tope ni registro de gasto; si faltan las migraciones 0638 o 0652 el tope queda apagado sin aviso (comprobar en la base qué hay aplicado de 0636 a 0652); consultas con límite mayor a 1000 que la API corta en silencio (exportar contactos, Resultados, cifras del asistente); avisos al teléfono atados a un solo rubro; vista «Detenidos» lee detenciones de todos los rubros; tablas principales sin protección contra borrado por fuera del panel; la base de pruebas no se crea desde la migración 0500. El informe de sesion-permisos está en `aud-web/cod-sesion-permisos/informe.md` y todavía no se leyó.
+
+**Plugins archivados por pedido del dueño** (movidos, no borrados, a `/root/.claude/plugins/archivo-2026-11-27/`): `sixth-sense` (bloqueaba toda subida al remoto) y `naksha` (aviso de cierre que se repetía sin nada que hacer). Sigue activo el control de `superstack` antes de subir: pide un barrido de claves y datos personales; se hace el barrido y al reintentar el mismo comando pasa.
+
+**Repo:** rama `integracion/rediseno-2211` subida con todo lo de hoy; main sigue en `920569d` (sin publicar hasta el informe de la auditoría). `.gitignore` ahora ignora `.simple-workflow/`, `.superstack/` y `.naksha/`.
