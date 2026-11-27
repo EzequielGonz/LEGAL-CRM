@@ -510,7 +510,7 @@ export default async function (datos, plan) {
   function camara(t) {
     const c = estado(t);
     for (const g of lupas) { const k = E.io2(seg(t, g.t + .25, g.t + .6)) * (1 - E.io2(seg(t, g.t + 1.25, g.t + 1.6))); c.d -= .55 * k; c.y += .1 * k; }
-    let punch = 0, sac = 0; for (const [ti, f] of impactos) { if (t >= ti) { punch += f * 3.2 * Math.exp(-(t - ti) / .16); sac += f * pulso(t, ti, .22); } }
+    let punch = 0, sac = 0; const ef = 1 - seg(t, T - .5, T - .12); for (const [ti, f] of impactos) { if (t >= ti) { punch += f * 3.2 * Math.exp(-(t - ti) / .16) * ef; sac += f * pulso(t, ti, .22) * ef; } }
     const e = envBorde(t); tgt.set(c.x, c.y + sac * .02, c.z);
     const el = c.el * D2R, az = c.az * D2R;
     cam.position.set(tgt.x + Math.sin(az) * Math.cos(el) * c.d + ruido(t * .5, 1) * .012 * e, tgt.y + Math.sin(el) * c.d + ruido(t * .45, 2) * .01 * e + sac * .03, tgt.z + Math.cos(az) * Math.cos(el) * c.d);

@@ -135,7 +135,6 @@ export default async function (datos, planIn) {
   { const es = new THREE.Scene(); es.background = new THREE.Color(0x000105);
     const caja = (w, h, col, k, pos, mira) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({color: new THREE.Color(col).multiplyScalar(k), side: THREE.DoubleSide})); m.position.set(...pos); m.lookAt(...mira); es.add(m); };
     caja(10, 3.4, 0xffffff, 4.5, [0, 9, 0], [0, 0, 0]);
-    caja(3.4, 1.2, 0xffffff, 2.6, [0, 6.5, 7.5], [0, 0, 0]);
     [[40, 0xffffff, 2.8, .55], [140, 0x207CCF, 1.4, .4], [220, 0xffffff, 1.8, .55], [320, 0x207CCF, 1.4, .4]].forEach(([a, c, k, an]) => { const r = a * D2R; caja(an, 6.5, c, k, [Math.sin(r) * 11, 3.4, Math.cos(r) * 11], [0, 3.4, 0]); });
     const hz = new THREE.Mesh(new THREE.CylinderGeometry(15, 15, .9, 64, 1, true), new THREE.MeshBasicMaterial({color: new THREE.Color(0xbcd4ff).multiplyScalar(.5), side: THREE.DoubleSide})); hz.position.y = 1.2; es.add(hz);
     const ps = new THREE.Mesh(new THREE.PlaneGeometry(80, 80), new THREE.MeshBasicMaterial({color: 0x01030c})); ps.rotation.x = -Math.PI / 2; ps.position.y = -.05; es.add(ps);
@@ -143,8 +142,8 @@ export default async function (datos, planIn) {
 
   // ── luces directas ───────────────────────────────────────────────────────
   const key = new THREE.DirectionalLight(0xffffff, 1.0); key.position.set(2, 9, 5); scene.add(key);
-  const rimA = new THREE.DirectionalLight(0x207CCF, 2.2); rimA.position.set(-7, 3, -6); scene.add(rimA);
-  const rimB = new THREE.DirectionalLight(0x8fc4ff, 1.5); rimB.position.set(7, 2.5, -5); scene.add(rimB);
+  const rimA = new THREE.DirectionalLight(0x207CCF, .8); rimA.position.set(-7, .9, -6); scene.add(rimA);
+  const rimB = new THREE.DirectionalLight(0x8fc4ff, .6); rimB.position.set(7, .9, -5); scene.add(rimB);
   const foco = new THREE.SpotLight(0xffffff, 0, 16, .32, .55, 1.2); scene.add(foco, foco.target);
 
   // ── materiales ───────────────────────────────────────────────────────────
@@ -211,7 +210,12 @@ export default async function (datos, planIn) {
     for (let i = 0; i < Mx; i++) { const pts = fsec(xs[i]); for (let j = 0; j < N; j++) { const q = pts[j % NS]; pos[k++] = xs[i]; pos[k++] = q[1]; pos[k++] = q[0]; } }
     const A = [], Bz = []; for (let i = 0; i < Mx - 1; i++) for (let j = 0; j < NS; j++) { const a = i * N + j, b = a + N; const th = -Math.PI / 2 + TAU * (j + .5) / NS;
       (conZocalo && Math.sin(th) < -.42 ? Bz : A).push(a, b, a + 1, b, b + 1, a + 1); }
-    const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); g.setIndex(A.concat(Bz)); g.addGroup(0, A.length, 0); if (Bz.length) g.addGroup(A.length, Bz.length, 1); g.computeVertexNormals(); return g; }
+    const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); g.setIndex(A.concat(Bz)); g.addGroup(0, A.length, 0); if (Bz.length) g.addGroup(A.length, Bz.length, 1); g.computeVertexNormals();
+    // los anillos degenerados de las puntas dejan normales nulas (NaN en el shader, cuadrados en el bloom): se reemplazan por una normal hacia afuera
+    const nr = g.attributes.normal, xm = (xs[0] + xs[Mx - 1]) / 2;
+    for (let i = 0; i < nr.count; i++) { const x = nr.getX(i), y = nr.getY(i), z = nr.getZ(i), L = Math.hypot(x, y, z);
+      if (!(L > .5)) { const px = pos[i * 3] - xm, v = V3(Math.sign(px) || 1, .6, 0).normalize(); nr.setXYZ(i, v.x, v.y, v.z); } }
+    return g; }
   function dentro(x, z, y) { const pr = secC(x); if (pr.a < 1e-4) return false; const up = y >= pr.c, n = up ? NT : NB, b = up ? pr.bt : pr.bb; return Math.pow(Math.abs(z / pr.a), n) + Math.pow(Math.abs((y - pr.c) / b), n) <= 1; }
   const frenteX = (z, y) => { let lo = 1.88, hi = LH; for (let k = 0; k < 28; k++) { const m = (lo + hi) / 2; if (dentro(m, z, y)) lo = m; else hi = m; } return lo; };
   const colaX = (z, y) => { let lo = -1.86, hi = -LH; for (let k = 0; k < 28; k++) { const m = (lo + hi) / 2; if (dentro(m, z, y)) lo = m; else hi = m; } return lo; };
@@ -272,7 +276,7 @@ export default async function (datos, planIn) {
     x.filter = 'blur(9px)'; x.globalAlpha = 1; for (const [cx, cy] of [[.245, .19], [.245, .81], [.755, .19], [.755, .81]]) { x.beginPath(); x.ellipse(cx * w, cy * h, 30, 14, 0, 0, TAU); x.fill(); } }, {srgb: false});
   const sombra = new THREE.Mesh(new THREE.PlaneGeometry(5.3, 2.5), new THREE.MeshBasicMaterial({map: sombraTx, transparent: true, depthWrite: false, opacity: .92})); sombra.rotation.x = -Math.PI / 2; sombra.position.y = .005; auto.add(sombra);
   // piezas del despiece del auto
-  const DESP = [{o: cabina, d: V3(0, 1.05, 0)}, {o: frente, d: V3(.8, .05, 0)}, {o: interior, d: V3(0, .5, 0)}, {o: espejos, d: V3(0, .25, 0)}, {o: cola, d: V3(-.6, .05, 0)},
+  const DESP = [{o: cabina, d: V3(0, .7, 0)}, {o: frente, d: V3(.8, .05, 0)}, {o: interior, d: V3(0, .5, 0)}, {o: espejos, d: V3(0, .25, 0)}, {o: cola, d: V3(-.6, .05, 0)},
     ...ruedas.map(w => ({o: w.g, d: V3(0, 0, w.s * .85)}))].map(p => ({...p, base: p.o.position.clone()}));
 
   // ── pedestal que sube del piso, con aro de LED y texto grabado ──────────
@@ -605,7 +609,7 @@ export default async function (datos, planIn) {
 
     // luces
     scene.environmentIntensity = .1 + .9 * luz + 1.2 * flash;
-    key.intensity = 1.0 * luz + 8 * flash; rimA.intensity = 2.2 * luz; rimB.intensity = 1.5 * luz;
+    key.intensity = 1.0 * luz + 8 * flash; rimA.intensity = .8 * luz; rimB.intensity = .6 * luz;
     M.bloom.strength = .42 + .5 * flash; M.cine.uniforms.flash.value = Math.min(.6, flash * .55);
 
     // pedestal y objetos
