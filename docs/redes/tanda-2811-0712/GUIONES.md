@@ -11,8 +11,8 @@ Estado: **especificado** (guiones escritos y validados). No producido, no progra
 | VITA | 44 | 10.236 | 232 |
 | Compara Tu Obra Social | 44 | 9.714 | 220 |
 | Automotores Kocos | 44 | 8.709 | 197 |
-| Kocos Marketing | 8 | 1.920 | 240 |
-| **Total** | **140** | **30.579** | 218 |
+| Kocos Marketing | 44 | 8.649 | 196 |
+| **Total** | **176** | **37.308** | 211 |
 
 Tope pedido: 38.000 caracteres (presupuesto ElevenLabs 40.000). Dentro del tope.
 
@@ -21,7 +21,7 @@ Tope pedido: 38.000 caracteres (presupuesto ElevenLabs 40.000). Dentro del tope.
 - **VITA:** escena con hora o número 5 · tres cartas cerradas 5 · segunda persona «vos» 5 · mito roto 5 · contador que avanza 4 · ¿cuál sos? (identidad) 4 · pregunta con respuesta numérica 4 · loop 4 · advertencia 3 · serie (parte 1) 2 · serie (parte 2) 2 · advertencia + escena con hora + contador + loop 1
 - **Compara Tu Obra Social:** mito roto 5 · segunda persona «vos» 5 · tres cartas cerradas 5 · advertencia 5 · pregunta con respuesta numérica 4 · escena con hora o número 4 · ¿cuál sos? (identidad) 4 · contador que avanza 4 · loop 4 · serie (parte 1) 2 · serie (parte 2) 2
 - **Automotores Kocos:** escena con hora o número 5 · tres cartas cerradas 5 · advertencia 5 · segunda persona «vos» 5 · pregunta con respuesta numérica 4 · ¿cuál sos? (identidad) 4 · contador que avanza 4 · mito roto 4 · loop 4 · serie (parte 1) 2 · serie (parte 2) 2
-- **Kocos Marketing:** segunda persona «vos» 1 · escena con hora o número 1 · mito roto 1 · contador que avanza 1 · tres cartas cerradas 1 · pregunta con respuesta numérica 1 · advertencia 1 · ¿cuál sos? (identidad) 1
+- **Kocos Marketing:** segunda persona «vos» 5 · tres cartas cerradas 5 · pregunta con respuesta numérica 5 · advertencia 5 · escena con hora o número 4 · mito roto 4 · contador que avanza 4 · ¿cuál sos? (identidad) 4 · loop 4 · serie (parte 1) 2 · serie (parte 2) 2
 
 ## VITA
 
@@ -30,7 +30,7 @@ Tope pedido: 38.000 caracteres (presupuesto ElevenLabs 40.000). Dentro del tope.
 | 27/11 | 08:40 | advertencia + escena con hora + contador + loop | Recién chocaste. Esta frase, nunca. | NUNCA | 349 |
 | 27/11 | 11:10 | escena con hora o número | Viernes 18:05: te despiden y te dan un papel. | DESPIDO | 242 |
 | 27/11 | 13:40 | tres cartas cerradas | Te llegó una citación penal. Tres cartas. | PENAL | 252 |
-| 27/11 | 21:10 | segunda persona «vos» | Heredaste la casa. ¿La podés vender mañana? | SUCESION | 263 |
+| 27/11 | 21:10 | segunda persona «vos» | Heredaste la casa. ¿La podés vender mañana? | HERENCIA | 263 |
 | 28/11 | 08:40 | contador que avanza | Te chocaron: el reloj de 3 años ya corre. | PLAZO | 246 |
 | 28/11 | 11:10 | mito roto | «Fue mi error, la ART no me cubre.» Falso. | CULPA | 253 |
 | 28/11 | 13:40 | ¿cuál sos? (identidad) | Después de un choque, ¿cuál de los tres sos? | CHOQUE | 235 |
@@ -59,7 +59,7 @@ Tope pedido: 38.000 caracteres (presupuesto ElevenLabs 40.000). Dentro del tope.
 | 04/12 | 11:10 | loop | Seis de la mañana: golpean la puerta. | PUERTA | 225 |
 | 04/12 | 13:40 | advertencia | «Arreglemos acá»: desconfiá de esa frase. | ARREGLO | 213 |
 | 04/12 | 21:10 | escena con hora o número | Ruta 2, km 150: te chocan de vacaciones. | RUTA | 207 |
-| 05/12 | 08:40 | tres cartas cerradas | ¿Heredás las deudas? Tres cartas. | DEUDAS | 238 |
+| 05/12 | 08:40 | tres cartas cerradas | ¿Heredás las deudas? Tres cartas. | HERENCIA | 238 |
 | 05/12 | 11:10 | segunda persona «vos» | Cargás cajas hace años. La espalda, no. | ESPALDA | 230 |
 | 05/12 | 13:40 | contador que avanza | Hora 0, hora 3, hora 24: después del choque. | HORAS | 221 |
 | 05/12 | 21:10 | mito roto | «Si renuncio, no cobro nada.» Falso. | RENUNCIA | 239 |
@@ -70,7 +70,7 @@ Tope pedido: 38.000 caracteres (presupuesto ElevenLabs 40.000). Dentro del tope.
 | reserva |  | segunda persona «vos» | Te chocaron en bici. También podés reclamar. | BICI | 216 |
 | reserva |  | escena con hora o número | Trabajás 48 horas y el recibo dice 20. | EXTRAS | 214 |
 | reserva |  | mito roto | «Sin contrato no tengo derechos.» Falso. | CONTRATO | 228 |
-| reserva |  | tres cartas cerradas | Casa heredada: 3 cartas antes de escriturar. | ESCRITURA | 217 |
+| reserva |  | tres cartas cerradas | Casa heredada: 3 cartas antes de escriturar. | HERENCIA | 217 |
 
 ## Compara Tu Obra Social
 
@@ -132,7 +132,7 @@ Tope pedido: 38.000 caracteres (presupuesto ElevenLabs 40.000). Dentro del tope.
 | 28/11 | 09:10 | pregunta con respuesta numérica | ¿Cuántos costos se suman al precio de lista? | COSTOS | 214 |
 | 28/11 | 13:10 | ¿cuál sos? (identidad) | ¿Qué comprador de 0 km sos? | GASTOS | 245 |
 | 28/11 | 17:10 | contador que avanza | Retiro del 0 km: 5 chequeos antes de firmar. | RETIRO | 232 |
-| 28/11 | 21:30 | mito roto | «La cuota del plan es fija.» No. | PLAN | 248 |
+| 28/11 | 21:30 | mito roto | «La cuota del plan es fija.» No. | AHORRO | 248 |
 | 29/11 | 09:10 | serie (parte 1) | Parte 1: Mati quiere entregar «el gris». | USADO | 195 |
 | 29/11 | 13:10 | loop | Diciembre o enero: ¿cuándo lo patentás? | ENERO | 236 |
 | 29/11 | 17:10 | escena con hora o número | Sábado 17:10: lo probaste dos minutos. | PRUEBA | 198 |
@@ -153,7 +153,7 @@ Tope pedido: 38.000 caracteres (presupuesto ElevenLabs 40.000). Dentro del tope.
 | 03/12 | 13:10 | ¿cuál sos? (identidad) | En el showroom, ¿cuál de los tres sos? | SHOWROOM | 218 |
 | 03/12 | 17:10 | contador que avanza | Mes 1, mes 2, mes 3: lo que viene después. | FIJOS | 172 |
 | 03/12 | 21:30 | mito roto | «El precio de lista es lo que pagás.» No. | LISTA | 192 |
-| 04/12 | 09:10 | serie (parte 1) | Parte 1: Juli quiere el auto antes de las fiestas. | ENTREGA | 184 |
+| 04/12 | 09:10 | serie (parte 1) | Parte 1: Juli lo quiere antes de las fiestas. | ENTREGA | 184 |
 | 04/12 | 13:10 | loop | ¿Qué trae el 0 km? Preguntá antes. | VERSION | 183 |
 | 04/12 | 17:10 | escena con hora o número | Viernes 17:00: retirás y no tenés póliza. | POLIZA | 185 |
 | 04/12 | 21:30 | tres cartas cerradas | Garantía del 0 km: tres cartas. | GARANTIA | 168 |
@@ -182,3 +182,39 @@ Tope pedido: 38.000 caracteres (presupuesto ElevenLabs 40.000). Dentro del tope.
 | 28/11 | 12:20 | pregunta con respuesta numérica | «Lo pienso»: ¿cuántas veces volvés? | SEGUIR | 229 |
 | 28/11 | 18:40 | advertencia | Desconfiá de tus fotos de stock. | FOTOS | 243 |
 | 28/11 | 21:20 | ¿cuál sos? (identidad) | ¿Qué vendedor de WhatsApp sos? | VENDEDOR | 227 |
+| 29/11 | 08:10 | serie (parte 1) | Parte 1: 3:12 a. m., alguien quiere comprar. | AUTO | 210 |
+| 29/11 | 12:20 | loop | Tu bio tiene tres segundos. Contá. | BIO | 187 |
+| 29/11 | 18:40 | segunda persona «vos» | Vos no sabés en qué quedó cada chat. | ETIQUETAS | 173 |
+| 29/11 | 21:20 | escena con hora o número | Domingo 10:15: «¿abren hoy?». | HORARIO | 213 |
+| 30/11 | 08:10 | mito roto | «Pedir reseñas queda mal.» No. | RESENAS | 194 |
+| 30/11 | 12:20 | contador que avanza | Diciembre: tu WhatsApp listo en cinco pasos. | CHECKLIST | 181 |
+| 30/11 | 18:40 | tres cartas cerradas | WhatsApp común, Business o API: tres cartas. | API | 224 |
+| 30/11 | 21:20 | pregunta con respuesta numérica | Tomi abrió Instagram: ¿cuántos sin ver? | SOLICITUDES | 207 |
+| 01/12 | 08:10 | advertencia | No cierres por las fiestas sin este mensaje. | AUSENCIA | 149 |
+| 01/12 | 12:20 | ¿cuál sos? (identidad) | ¿Qué local sos en Google? | GOOGLE | 187 |
+| 01/12 | 18:40 | serie (parte 2) | Parte 2: a las 3:12 contesta el automático. | AUTO | 178 |
+| 01/12 | 21:20 | loop | Abrí tu web en el celular. Ahora. | CELULAR | 181 |
+| 02/12 | 08:10 | segunda persona «vos» | Tu catálogo de WhatsApp está vacío. | CATALOGO | 168 |
+| 02/12 | 12:20 | escena con hora o número | 18/12: cobran el aguinaldo y te escriben. | DIECIOCHO | 204 |
+| 02/12 | 18:40 | mito roto | «Contestar rápido es de desesperado.» No. | RAPIDO | 206 |
+| 02/12 | 21:20 | contador que avanza | La misma pregunta 10, 20, 30 veces. | PREGUNTAS | 188 |
+| 03/12 | 08:10 | tres cartas cerradas | Tus estados de WhatsApp: tres cartas. | ESTADOS | 170 |
+| 03/12 | 12:20 | pregunta con respuesta numérica | 3 segundos en vez de 1: ¿cuántos más se van? | VELOCIDAD | 186 |
+| 03/12 | 18:40 | advertencia | No le mandes un audio de tres minutos. | AUDIOS | 197 |
+| 03/12 | 21:20 | ¿cuál sos? (identidad) | ¿Qué bio de negocio sos? | PERFIL | 192 |
+| 04/12 | 08:10 | serie (parte 1) | Parte 1: el pedido de la torta se perdió. | PEDIDOS | 174 |
+| 04/12 | 12:20 | loop | Abrís WhatsApp: 52 chats en verde. | VERDES | 209 |
+| 04/12 | 18:40 | segunda persona «vos» | Vos respondés el precio y... ¿después? | PASO | 177 |
+| 04/12 | 21:20 | escena con hora o número | Martes 16:40: un mensaje de hace 9 días. | INSTAGRAM | 217 |
+| 05/12 | 08:10 | mito roto | «La API es solo para empresas grandes.» | VOLUMEN | 221 |
+| 05/12 | 12:20 | contador que avanza | Hora 24, día 3, día 7: el seguimiento. | CALENDARIO | 185 |
+| 05/12 | 18:40 | tres cartas cerradas | Te dejaron una reseña de una estrella. | ESTRELLA | 211 |
+| 05/12 | 21:20 | pregunta con respuesta numérica | ¿Cuántas etiquetas necesitás? Cuatro. | CUATRO | 151 |
+| 06/12 | 08:10 | advertencia | No pongas «consultar precio» en el catálogo. | DESDE | 173 |
+| 06/12 | 12:20 | ¿cuál sos? (identidad) | ¿Qué tipo de estados de WhatsApp subís? | VIDRIERA | 184 |
+| 06/12 | 18:40 | serie (parte 2) | Parte 2: los pedidos, en un solo lugar. | PEDIDOS | 163 |
+| 06/12 | 21:20 | loop | «¿Abren hoy?» Otra vez. | ABREN | 195 |
+| reserva |  | advertencia | Tu foto de perfil no se entiende chiquita. | FOTO | 181 |
+| reserva |  | tres cartas cerradas | Mensaje de bienvenida: tres cartas. | BIENVENIDA | 155 |
+| reserva |  | pregunta con respuesta numérica | ¿Cuántas respuestas rápidas para empezar? | TRES | 151 |
+| reserva |  | segunda persona «vos» | Volvés de vacaciones y hay 80 chats. | VOLVIMOS | 187 |

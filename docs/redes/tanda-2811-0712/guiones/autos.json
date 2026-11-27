@@ -205,14 +205,14 @@
       "Si sube el auto, sube la cuota",
       "Preguntá cómo se actualiza",
       "Mandáselo a quien esté por anotarse en un plan.",
-      "«PLAN» por WhatsApp"
+      "«AHORRO» por WhatsApp"
     ],
     "personaje": "Mati",
     "lugar_ba": "Vereda de Villa Crespo, frente al edificio de Mati",
     "escena_visual": "Un cartel de cuota pegado con cinta se despega y sube como globo; Mati lo persigue por la vereda.",
-    "cierre": "Mandáselo a quien esté por anotarse en un plan. O escribinos «PLAN» por WhatsApp.",
-    "palabra": "PLAN",
-    "copy": "«La cuota del plan es fija.» No.\n\n✔ Se calcula sobre el precio actual\n✔ Si sube el auto, sube la cuota\n✔ Preguntá cómo se actualiza\n\nMandáselo a quien esté por anotarse en un plan. O escribinos «PLAN» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "cierre": "Mandáselo a quien esté por anotarse en un plan. O escribinos «AHORRO» por WhatsApp.",
+    "palabra": "AHORRO",
+    "copy": "«La cuota del plan es fija.» No.\n\n✔ Se calcula sobre el precio actual\n✔ Si sube el auto, sube la cuota\n✔ Preguntá cómo se actualiza\n\nMandáselo a quien esté por anotarse en un plan. O escribinos «AHORRO» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {
@@ -763,11 +763,11 @@
     "formula": "serie (parte 1)",
     "tema": "fecha de entrega",
     "basado_en": "nuevo",
-    "gancho_pantalla": "Parte 1: Juli quiere el auto antes de las fiestas.",
+    "gancho_pantalla": "Parte 1: Juli lo quiere antes de las fiestas.",
     "voz": "Parte uno. Juli quiere el 0 km antes de las fiestas. Le dicen «llega en dos semanas». No le dan nada por escrito. ¿Qué tendría que pedir? En la parte dos. Guardalo para ver la parte 2.",
     "caracteres_voz": 184,
     "textos_pantalla": [
-      "Parte 1: Juli quiere el auto antes de las fiestas.",
+      "Parte 1: Juli lo quiere antes de las fiestas.",
       "Antes de las fiestas",
       "«Llega en dos semanas»",
       "Nada por escrito",
@@ -779,7 +779,7 @@
     "escena_visual": "Un arbolito con una llave colgada; el calendario se adelanta solo. Cierra con «Parte 2».",
     "cierre": "Guardalo para ver la parte 2. O escribinos «ENTREGA» por WhatsApp.",
     "palabra": "ENTREGA",
-    "copy": "Parte 1: Juli quiere el auto antes de las fiestas.\n\n✔ Antes de las fiestas\n✔ «Llega en dos semanas»\n✔ Nada por escrito\n\nGuardalo para ver la parte 2. O escribinos «ENTREGA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
+    "copy": "Parte 1: Juli lo quiere antes de las fiestas.\n\n✔ Antes de las fiestas\n✔ «Llega en dos semanas»\n✔ Nada por escrito\n\nGuardalo para ver la parte 2. O escribinos «ENTREGA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #PlanDeAhorro #BuenosAires",
     "fuente": ""
   },
   {

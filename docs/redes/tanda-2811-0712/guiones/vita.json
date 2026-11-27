@@ -97,14 +97,14 @@
       "Partidas, escritura e impuestos",
       "Acuerdo entre hermanos, por escrito",
       "Mandáselo a tus hermanos.",
-      "«SUCESION» por WhatsApp"
+      "«HERENCIA» por WhatsApp"
     ],
     "personaje": "Sole y su hermano Dani",
     "lugar_ba": "Casa de los padres de Sole en Parque Avellaneda",
     "escena_visual": "Una llave gigante cuelga sobre la mesa del comedor; Sole y Dani la miran desde abajo. Tres carpetas se apilan solas a medida que habla la narradora.",
-    "cierre": "Mandáselo a tus hermanos. O escribinos «SUCESION» por WhatsApp.",
-    "palabra": "SUCESION",
-    "copy": "Heredaste la casa. ¿La podés vender mañana?\n\n✔ Primero, la sucesión\n✔ Partidas, escritura e impuestos\n✔ Acuerdo entre hermanos, por escrito\n\nMandáselo a tus hermanos. O escribinos «SUCESION» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "cierre": "Mandáselo a tus hermanos. O escribinos «HERENCIA» por WhatsApp.",
+    "palabra": "HERENCIA",
+    "copy": "Heredaste la casa. ¿La podés vender mañana?\n\n✔ Primero, la sucesión\n✔ Partidas, escritura e impuestos\n✔ Acuerdo entre hermanos, por escrito\n\nMandáselo a tus hermanos. O escribinos «HERENCIA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": ""
   },
   {
@@ -880,14 +880,14 @@
       "Carta 2: no pongas plata tuya",
       "Carta 3: inventario",
       "Mandáselo a tus hermanos.",
-      "«DEUDAS» por WhatsApp"
+      "«HERENCIA» por WhatsApp"
     ],
     "personaje": "Sole y su hermano Dani",
     "lugar_ba": "Comedor de la casa de los padres en Parque Avellaneda",
     "escena_visual": "Tres cartas sobre el mantel; al dar vuelta la primera, una balanza dorada se equilibra entre bienes y deudas.",
-    "cierre": "Mandáselo a tus hermanos. O escribinos «DEUDAS» por WhatsApp.",
-    "palabra": "DEUDAS",
-    "copy": "¿Heredás las deudas? Tres cartas.\n\n✔ Carta 1: hasta lo que recibís\n✔ Carta 2: no pongas plata tuya\n✔ Carta 3: inventario\n\nMandáselo a tus hermanos. O escribinos «DEUDAS» por WhatsApp.\n\nFuente: Código Civil y Comercial, art. 2317.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "cierre": "Mandáselo a tus hermanos. O escribinos «HERENCIA» por WhatsApp.",
+    "palabra": "HERENCIA",
+    "copy": "¿Heredás las deudas? Tres cartas.\n\n✔ Carta 1: hasta lo que recibís\n✔ Carta 2: no pongas plata tuya\n✔ Carta 3: inventario\n\nMandáselo a tus hermanos. O escribinos «HERENCIA» por WhatsApp.\n\nFuente: Código Civil y Comercial, art. 2317.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": "Código Civil y Comercial, art. 2317"
   },
   {
@@ -1177,14 +1177,14 @@
       "Carta 2: herederos de acuerdo",
       "Carta 3: impuestos al día",
       "Mandáselo a tus hermanos.",
-      "«ESCRITURA» por WhatsApp"
+      "«HERENCIA» por WhatsApp"
     ],
     "personaje": "Sole y su hermano Dani",
     "lugar_ba": "Vereda de la casa de los padres en Parque Avellaneda",
     "escena_visual": "La fachada de la casa se pliega como un libro desplegable; tres cartas salen de la puerta.",
-    "cierre": "Mandáselo a tus hermanos. O escribinos «ESCRITURA» por WhatsApp.",
-    "palabra": "ESCRITURA",
-    "copy": "Casa heredada: 3 cartas antes de escriturar.\n\n✔ Carta 1: sucesión terminada\n✔ Carta 2: herederos de acuerdo\n✔ Carta 3: impuestos al día\n\nMandáselo a tus hermanos. O escribinos «ESCRITURA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "cierre": "Mandáselo a tus hermanos. O escribinos «HERENCIA» por WhatsApp.",
+    "palabra": "HERENCIA",
+    "copy": "Casa heredada: 3 cartas antes de escriturar.\n\n✔ Carta 1: sucesión terminada\n✔ Carta 2: herederos de acuerdo\n✔ Carta 3: impuestos al día\n\nMandáselo a tus hermanos. O escribinos «HERENCIA» por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": ""
   }
 ]
