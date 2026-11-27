@@ -4,7 +4,7 @@ import { useState } from "react";
 import { marcaDe } from "@/lib/marca";
 import { etiquetaDeTarea, perfilDeRubroId } from "@/lib/bandeja-claude";
 import { ETIQUETA_CLASE, puedeGemini } from "@/lib/oficina/clases";
-import { CANDIDATOS_POR_DEFECTO, MAX_CANDIDATOS_OFICINA, puedeReclamarParaGemini } from "@/lib/oficina/ejecucion";
+import { CANDIDATOS_POR_DEFECTO, MAX_CANDIDATOS_POR_CORRIDA, puedeReclamarParaGemini } from "@/lib/oficina/ejecucion";
 import {
   ETIQUETA_ETAPA,
   NOMBRE_AREA,
@@ -192,7 +192,7 @@ export function BotonGemini({ t, alTerminar, ocupado, setOcupado }: { t: TareaOf
         <>
           <label className="of3-numero">
             Respuestas que compiten
-            <input type="number" min={1} max={MAX_CANDIDATOS_OFICINA} value={n} onChange={(e) => setN(Math.max(1, Math.min(MAX_CANDIDATOS_OFICINA, Number(e.target.value) || 1)))} />
+            <input type="number" min={1} max={MAX_CANDIDATOS_POR_CORRIDA} value={n} onChange={(e) => setN(Math.max(1, Math.min(MAX_CANDIDATOS_POR_CORRIDA, Number(e.target.value) || 1)))} />
           </label>
           <small className="cz-muted">
             Gemini arma {n} respuesta{n === 1 ? "" : "s"} con enfoques distintos y un juez elige la mejor. Solo borrador: no publica ni envía. Gasta del tope de USD 30 del mes (compartido con los bots); si no alcanza, corre menos.
