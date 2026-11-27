@@ -2,7 +2,7 @@
 
 Rama `claude/brave-hawking-nzsr60` · PR EzequielGonz/LEGAL-CRM#82 (seguido, en verde). Hay OTRA sesión trabajando en paralelo: tocar solo `docs/redes/`, el motor de reels (`.claude/referencias/redes/herramientas/historias-prototipo/`) y las líneas de redes del cerebro.
 
-## Estado al 27/11 07:00 UTC: TODO FRENADO
+## (VIEJO, ya superado) Estado al 27/11 07:00 UTC: TODO FRENADO
 - El dueño frenó el boceto de VITA. **No hay agentes trabajando ni nada programado.** Lo programado en Metricool del 25 al 29/11 (12 historias + 1 carrusel por día y marca) NO se toca.
 - **Esperando:** el dueño busca 1 o 2 reels de referencia con el 3D que imagina. Al recibirlos, analizarlos (gancho, cámara, luz, nivel de realismo, animación, efectos) y recién ahí hacer el boceto de VITA con el guion `vita-2711-1`.
 
@@ -19,6 +19,20 @@ El dueño pidió «dejá un checkpoint y pausá» , después «pasala para las 1
 | Escena Autos (`escenas/autos.js`, plan `autos-2711-g2`) | **Frenada probando cuadros** (sin errores, menos de 1 s por cuadro). Falta la hoja `prueba/autos-hoja.jpg` y el informe |
 | Escena Marketing (`escenas/marketing.js`, plan `marketing-2711-g1`) | **Frenada antes del primer render de prueba**. Falta la hoja y el informe. Ya sabe: cierre «Escribinos por WhatsApp» y megáfono → chat |
 | Reels de la tanda base 1 | Ninguno producido, alojado ni programado |
+
+- **Aviso de las 14:30:** llegó igual, porque se disparó segundos antes del cambio. No se ejecutó por orden del dueño. La única corrida de hoy es la de las 18:32.
+- **Preparado para compactar (27/11 14:35):** todo commiteado y subido. Último commit al cierre de la vuelta: `218ff4a`.
+- **Archivos locales fuera de git**, presentes al cerrar:
+  - `atlas/fonts/` (Archivo, Outfit y Plus Jakarta);
+  - `atlas/audio/` (voces de prueba);
+  - `atlas/prueba/` (hojas);
+  - `node_modules/three`;
+  - faster-whisper instalado con pip.
+- **Si el contenedor se renueva:**
+  - las fuentes se bajan de `raw.githubusercontent.com/google/fonts`;
+  - `npm ci` en `historias-prototipo/`;
+  - `pip install faster-whisper`;
+  - la voz de VITA base está en `docs/redes/tanda-2811-0712/salida/vita/vita-2711-1.mp3`.
 
 **Para retomar a las 18:32:**
 1. SendMessage a los 3 agentes (ids en la tabla del calendario `06`; Coberturas `ae2799403b7f4cbb6`, Autos `a7a30568baff16336`, Marketing `a236a25ba8ca1a6e0`) para que sigan. Mientras, arrancar VITA (voces, alinear, render, mezcla).
