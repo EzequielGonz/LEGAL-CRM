@@ -21,3 +21,9 @@ Rama `claude/brave-hawking-nzsr60` · PR EzequielGonz/LEGAL-CRM#82 (seguido). Ha
 - Metricool blogId: VITA 7549864 · Compara Tu Obra Social 7549939 · Automotores Kocos 7552104 · Kocos Marketing 7242607.
 - ElevenLabs Starter: 40.000 caracteres/mes; Flash (eleven_flash_v2_5). Voces: Claudiio hVXoK5zuQfMOQB7NrIFY · Sol ijxn8I4NzJccD2Sa7lcj · Franco jbWMqMKDKL7X0v1DXTHH · Santo CNBiCLtxaJJKQwl4Hq2q. Una sola generación por pieza (reintentar cobra de nuevo).
 - vidIQ: 80 créditos sin usar.
+
+## Actualización 27/11 06:30 UTC (antes de compactar)
+- El dueño RECHAZÓ el diseño del piloto (fondo oscuro con rayas doradas, recuadros dorados, íconos planos). Producción rehace el boceto con escena 3D real (diorama/low-poly), luz natural, la acción dentro de la escena, tipografía sans moderna; primero 3 cuadros de prueba en `docs/redes/tanda-2811-0712/boceto-vita/prueba-*.png`. Voz ya hecha: `salida/vita/vita-2711-1.mp3` (no regenerar).
+- Agentes en curso: guionista (guiones 4 marcas), producción (boceto), Artisan (guía visual por marca → `docs/redes/viral-2511/06-direccion-de-arte-v2.md`), Brand Voice QA (informe de errores de guiones, solo en su respuesta).
+- Revisión del boceto antes de mandarlo: Artisan cuadro por cuadro + verificador independiente (`ruflo-ai-team:verifier`).
+- Regla nueva: usar siempre todo lo instalado que sirva (plugins, conectores, MCP, skills, agentes personalizados, memoria Cognee) y decir qué se usó. Guardada en `02`, `00-arranque` y Cognee.
