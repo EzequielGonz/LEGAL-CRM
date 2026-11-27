@@ -427,8 +427,8 @@ export default async function (datos, planIn) {
   const lineaMat = new THREE.MeshBasicMaterial({color: new THREE.Color(TEXTO).multiplyScalar(2.4), depthTest: false, depthWrite: false, transparent: true});
   const lineaGeo = new THREE.CylinderGeometry(1, 1, 1, 6, 1, true); lineaGeo.translate(0, .5, 0); const puntoGeo = new THREE.SphereGeometry(1, 12, 8);
   function guia() { const m = new THREE.Mesh(lineaGeo, lineaMat), p = new THREE.Mesh(puntoGeo, lineaMat); m.renderOrder = p.renderOrder = 20; m.visible = p.visible = false; scene.add(m, p); return {m, p}; }
-  const YUP = V3(0, 1, 0), tA = V3(), tB = V3(), tC = V3(), camR = V3(), camU = V3(), camF = V3();
-  const profundidad = p => tA.copy(p).sub(cam.position).dot(camF);
+  const YUP = V3(0, 1, 0), tA = V3(), tB = V3(), tC = V3(), tD = V3(), camR = V3(), camU = V3(), camF = V3();
+  const profundidad = p => tD.copy(p).sub(cam.position).dot(camF);
   const pxu = d => 1920 / (2 * Math.max(.1, d) * Math.tan(cam.fov * D2R / 2));
   function enPantalla(nx, ny, depth, out) { out.set(nx, ny, .5).unproject(cam).sub(cam.position).normalize(); return out.multiplyScalar(depth / Math.max(.05, out.dot(camF))).add(cam.position); }
   function ponerRotulo(r, ancla, nx, ny, k) { const vis = k > .002; r.m.visible = vis; r.guia.m.visible = r.guia.p.visible = vis; if (!vis) return;
@@ -668,7 +668,7 @@ export default async function (datos, planIn) {
       lupa.position.copy(cen); lupa.quaternion.copy(cam.quaternion); lupa.scale.setScalar(rL / .272 * Math.max(.001, lupaK)); lupa.visible = true;
       const d = cam.position.distanceTo(cen); camL.position.copy(cam.position); camL.lookAt(cen); camL.fov = 2 * Math.atan(rL * lupaK / d) / D2R / 2.4; camL.updateProjectionMatrix(); camL.updateMatrixWorld();
       const rt = rotulo(null, (lupaB.texto || plan.palabra || '').toLocaleUpperCase('es').split(/\s+/).filter(Boolean).slice(-2).join(' ') || 'DETALLE');
-      tC.copy(cen).addScaledVector(camR, rL * lupaK * .7).addScaledVector(camU, rL * lupaK * .7); ponerRotulo(rt, tC, .5, -.2, seg(t - lupaB.t, .5, .85) * lupaK);
+      tC.copy(cen).addScaledVector(camR, rL * lupaK * .7).addScaledVector(camU, rL * lupaK * .7); ponerRotulo(rt, tC.clone(), .5, -.2, seg(t - lupaB.t, .5, .85) * lupaK);
       // render de la segunda vista sin la lupa, los rótulos ni el piso
       const ocultos = [lupa, suelo, laser, laserHalo]; rotulos.forEach(r => ocultos.push(r.m, r.guia.m, r.guia.p)); const prev = ocultos.map(o => o.visible); ocultos.forEach(o => o.visible = false);
       R.setRenderTarget(rtL); R.clear(); R.render(scene, camL); R.setRenderTarget(null); ocultos.forEach((o, i) => o.visible = prev[i]); }
