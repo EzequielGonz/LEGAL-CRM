@@ -25,3 +25,9 @@ Virales: DfhVvkqodie, DfXSSrCJC2L, DfFvERfhoTc, DfLmu7ZM_ce, DfRVhZPt50F, Dfqyfp
 - Paso 1 hecho: el dueño trajo el análisis de los 16 reels y 3D Atlas hecho con Claude in Chrome → `03-referencias.md`.
 - Relanzados en paralelo: contenido propio (`01`), competencia (`02`), herramientas del motor (`04`) y boceto VITA «PLAZO» (`boceto-vita/`).
 - Falta: estrategia viral (`05-estrategia.md`) con todo lo anterior, informe al dueño y boceto entregado.
+
+## Orden corregido por el dueño (25/11)
+1. Terminar los análisis (01 contenido propio, 02 competencia, 03 referencias ✔, 04 herramientas).
+2. Con eso, estrategia `05-estrategia.md` (datos, reportes, fórmulas).
+3. Recién ahí, boceto VITA basado en la estrategia (el primer intento se frenó por arrancar sin análisis).
+4. Sumar todo al cerebro (04-redes-y-contenido, 02-órdenes, 08-pendientes, bitácora), a la memoria y al motor gráfico (motor v2), y regenerar el mapa de Graphify del cerebro.
