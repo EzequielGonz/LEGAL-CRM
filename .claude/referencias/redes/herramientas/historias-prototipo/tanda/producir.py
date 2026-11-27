@@ -62,6 +62,7 @@ def voz_pedidos(args):
     for g in G:
         if ids and g['id'] not in ids: continue
         if os.path.exists(mp3_de(g)): continue
+        if g.get('motor_voz', 'elevenlabs') == 'gratis': continue   # esos van por `voz-gratis`, nunca sin voz
         M = MARCAS[g['_marca']]; n = len(g['voz']); tot += n
         out.append(dict(id=g['id'], marca=g['_marca'], voice_id=M['voz'], voz=M['voz_nombre'], model_id=MODELO_VOZ, generations_count=1, caracteres=n, prompt=g['voz'], destino=mp3_de(g)))
     os.makedirs(TRAB, exist_ok=True); json.dump(out, open(f'{TRAB}/voz_pedidos.json', 'w'), ensure_ascii=False, indent=1)
@@ -77,6 +78,16 @@ def voz_importar(args):
     else: shutil.copy(args.fuente, dest)
     d = dur(dest); print(f'{dest}  {d:.2f} s')
     if d < 3: os.remove(dest); raise SystemExit('audio demasiado corto: descartado')
+
+def voz_gratis(args):
+    # Voz gratis es-AR (edge-tts) para los guiones con motor_voz = "gratis". Misma salida: salida/<marca>/<id>.mp3
+    import asyncio, ssl as _ssl
+    import edge_tts, edge_tts.communicate as _c
+    if os.path.exists('/root/.ccr/ca-bundle.crt'): _c._SSL_CTX = _ssl.create_default_context(cafile='/root/.ccr/ca-bundle.crt')
+    g = guion(args.id, args.guion); dest = mp3_de(g); os.makedirs(os.path.dirname(dest), exist_ok=True)
+    voz = {'vita': 'es-AR-TomasNeural', 'coberturas': 'es-AR-ElenaNeural', 'autos': 'es-AR-TomasNeural', 'marketing': 'es-AR-ElenaNeural'}[g['_marca']]
+    async def go(): await edge_tts.Communicate(g['voz'], voz, rate='+6%').save(dest)
+    asyncio.run(go()); print(f'{dest}  {dur(dest):.2f} s  (voz gratis {voz})')
 
 # ---------------- alineación de palabras (sin gastar créditos) ----------------
 def silencios(f):
@@ -228,7 +239,9 @@ def preparar(args):
         if t0 is not None: tn = next((w['t'] for w in W if w['t'] > t0 + .5 and lim(w['w']) in ('nunca', 'no')), t0 + 1.4); bur = dict(txt=q.group(1), t0=round(t0 - .1, 2), tachar=round(tn, 2), fin=round(beats[1]['t0'] - .05 if len(beats) > 1 else tn + 2, 2))
     hr = re.search(r'\b(\d{1,2}:\d{2})\b', g.get('lugar_ba', '') + ' ' + g.get('voz', ''))
     plan = dict(burbuja=bur, hora=hr.group(1) if hr else None, id=g['id'], marca=g['_marca'], T=T, lead=LEAD, voz_dur=round(D, 3), nombre=M['nombre'], logo=M['logo'], palabra=g['palabra'], cierre=g.get('cierre', ''), lugar=g.get('lugar_ba', ''), personaje=g.get('personaje', ''), escena=g.get('escena_visual', ''), beats=beats, words=W, receta=R)
-    d = f'{TRAB}/{g["id"]}'; os.makedirs(d, exist_ok=True); json.dump(plan, open(f'{d}/plan.json', 'w'), ensure_ascii=False, indent=1); json.dump(g, open(f'{d}/guion.json', 'w'), ensure_ascii=False, indent=1)
+    d = f'{TRAB}/{g["id"]}'; os.makedirs(d, exist_ok=True)
+    json.dump([dict(text=(' ' if i else '') + w['w'], startMs=int(w['t'] * 1000), endMs=int(w['e'] * 1000), timestampMs=int((w['t'] + w['e']) / 2 * 1000), confidence=None) for i, w in enumerate(W)], open(f'{d}/captions.json', 'w'), ensure_ascii=False)
+    json.dump(plan, open(f'{d}/plan.json', 'w'), ensure_ascii=False, indent=1); json.dump(g, open(f'{d}/guion.json', 'w'), ensure_ascii=False, indent=1)
     dur_ok = 15 <= T <= 25
     print(f'{g["id"]}: voz {D:.1f}s → reel {T:.1f}s {"" if dur_ok else "  ¡FUERA DE 15–25 s!"} | {len(beats)} beats | fondo={R["fondo"]} layout={R["layout"]} cam={R["cam"]} trans={R["trans"]} card={R["card"]} sub={R["sub"]} cartas={R["cartas"]} contador={R["contador"]}')
     return plan
@@ -251,9 +264,22 @@ def sonido(args):
     servidor(); cz = json.loads(nodo('cortes_t.js', args.id, capture_output=True, text=True, check=True).stdout.strip().splitlines()[-1]); json.dump(cz, open(f'{TRAB}/{args.id}/cortes.json', 'w'))
     for t in cz[1:]: ev(t - .04, lambda: B.S_whoosh(.22, 600, 6000), .18)
     ev(T - (R.get('ctaDur') or 2.3), B.S_ding, .5); ev(T - (R.get('ctaDur') or 2.3) + .1, B.S_chime, .55)
+    # frase de sonido por paso (riser → impacto → destello), técnica de video-shotcraft
+    for b in P['beats'][1:]:
+        if b.get('paso'): ev(b['t0'] - .45, lambda: B.S_riser(.45), .35); ev(b['t0'], B.S_thud, .6); ev(b['t0'] + .12, B.S_chime, .5)
+    foto = f'{TRAB}/{args.id}/sfx_foto.mp3'
+    if os.path.exists(foto):   # SFX de ElevenLabs (eleven_text_to_sound_v3): obturador en cada disparo de la foto
+        raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', foto, '-f', 'f32le', '-ac', '1', '-ar', str(SR), '-'], capture_output=True, check=True).stdout; cl = np.frombuffer(raw, np.float32).copy()
+        for b in P['beats']:
+            if 'foto' in sin_acento(b['texto']):
+                for w in P['words']:
+                    if b['t0'] <= w['t'] < b['t1'] and re.match(r'(auto|patente|esquina)', sin_acento(w['w'])): add(S, w['t'] - .02, cl, 1.0)
     # música con variaciones por pieza: tempo ±10 BPM y progresión rotada
     key = f'{args.id}'; E = dict(B.ESTILO[MARCAS[g['_marca']]['mus']]); E['bpm'] = E['bpm'] + int(rng.integers(-10, 11)); r = int(rng.integers(0, 4)); E['prog'] = E['prog'][r:] + E['prog'][:r]
-    B.ESTILO[key] = E; mus = B.musica(key, T, [(0.0, .0)])
+    B.ESTILO[key] = E; mus = B.musica(key, T, [(0.0, .0)]); mp = f'{TRAB}/{args.id}/musica.mp3'
+    if os.path.exists(mp):   # música de ElevenLabs (eleven_music_v2_5): recortada al largo del reel, con cola
+        raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', mp, '-f', 'f32le', '-ac', '1', '-ar', str(SR), '-'], capture_output=True, check=True).stdout; m = np.frombuffer(raw, np.float32).copy()
+        mus = np.zeros(N); n = min(N, len(m)); mus[:n] = m[:n]; f0 = int(max(0, T - 1.6) * SR); mus[f0:] *= np.linspace(1, 0, N - f0); mus *= .9 / (np.abs(mus).max() + 1e-9)
     amb = bp(rng.standard_normal(N), 80, 700) * .03
     d = f'{TRAB}/{args.id}'; B.guardar(S * .9, f'{d}/sfx.wav'); B.guardar(mus * .6, f'{d}/mus.wav'); B.guardar(amb, f'{d}/amb.wav')
     mp3 = mp3_de(g); lead_ms = int(LEAD * 1000)
@@ -327,6 +353,7 @@ if __name__ == '__main__':
         p = sp.add_parser(n); p.set_defaults(f=f); p.add_argument('--guion'); p.add_argument('--fps', type=int, default=30); p.add_argument('--workers', type=int, default=4)
         for o in opts: p.add_argument(*o[0], **o[1])
         return p
+    add('voz-gratis', voz_gratis, (['id'], {}))
     add('voz-pedidos', voz_pedidos, (['--marca'], {}), (['--ids'], {})); p = add('voz-importar', voz_importar, (['id'], {}), (['fuente'], {}), (['--forzar'], dict(action='store_true')))
     for n, f in (('preparar', preparar), ('sonido', sonido), ('render', render), ('revisar', revisar), ('entrega', entrega), ('todo', todo)): add(n, f, (['id'], {}))
     add('lote', lote, (['--marca'], {}), (['--desde'], {}), (['--max'], dict(type=int, default=999)), (['--rehacer'], dict(action='store_true')))
