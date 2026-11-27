@@ -26,7 +26,7 @@ Pedido del dueño (27/11): 2 reels nuevos por día y marca, del 28/11 al 02/12, 
     {"palabra": "uno", "n": 0, "tipo": "paso", "objeto": "camara", "texto": "Fotos", "efecto": "flash"}
   ],
   "cierre": "Comentá «NUNCA»",
-  "copy": "Texto de la publicación (gancho + 2–3 líneas de valor + «Comentá PALABRA y te mando …» + «El botón está en el perfil.» + 3 a 5 hashtags).",
+  "copy": "Texto de la publicación (gancho + 2–3 líneas de valor + «Comentá PALABRA y te mando …» + «Situación ilustrativa. Voz generada con IA.» + 3 a 5 hashtags). NUNCA «El botón está en el perfil» (orden del 20/11: ese botón no existe).",
   "fuente": "Ley o norma si el guion base la tenía; si no, vacío"
 }
 ```

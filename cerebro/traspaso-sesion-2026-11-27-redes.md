@@ -103,7 +103,8 @@ Rama `claude/brave-hawking-nzsr60` · PR EzequielGonz/LEGAL-CRM#82 (seguido, en 
    - `python3 mezcla.py <id>`.
    - ffmpeg a `out/<id>.mp4`: CRF 21, maxrate 14M, AAC 256k, faststart.
 4. **Alojamiento:** copiar a `main` de la landing, en `apps/web/public/redes/2811/<id>.mp4`, más la tapa jpg; push y comprobar que responda 200 en el dominio de la landing.
-5. **Metricool:** `createScheduledPost` con `providers: [instagram, facebook]`, `instagramData.type REEL` con `isAiGenerated: true` y `facebookData.type REEL`, `fecha_pub` y `hora` del plan, y el copy del plan. Antes, getScheduledPosts.
+5. **Antes de programar, revisar el copy de cada plan:** sacar «El botón está en el perfil» si aparece (orden del 20/11: ese botón no existe; el contrato lo pedía por error) y cerrar con «Situación ilustrativa. Voz generada con IA.».
+6. **Metricool:** `createScheduledPost` con `providers: [instagram, facebook]`, `instagramData.type REEL` con `isAiGenerated: true` y `facebookData.type REEL`, `fecha_pub` y `hora` del plan, y el copy del plan. Antes, getScheduledPosts.
 
 **Consumo:**
 - ElevenLabs: 1.305 de 40.000 caracteres usados; las 39 voces usan ~16.000.
