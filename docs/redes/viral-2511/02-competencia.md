@@ -12,7 +12,14 @@ Relevado el 27/11/2026 por un subagente, con Firecrawl (búsqueda y scraping), W
 
 ## Resumen en una pantalla
 
-(Se completa al final.)
+| Rubro | Lo más viral que vimos (verificado) | Mecanismo | Hueco para nosotros |
+| --- | --- | --- | --- |
+| Jurídico | Penalista con 18,7 M en TikTok; reels de tránsito con 2,6 M; una cuenta de 7,7 mil seguidores con 409 mil por una norma nueva | Pregunta en segunda persona, norma nueva, respuesta firme a un comentario | Nadie anima; ART, sucesiones y laboral paso a paso casi vacíos |
+| Coberturas | Contadora con 195 mil y 2.517 comentarios («LISTADO»); tutoriales de monotributo con 175 mil y 2.247 guardados | Grupo preciso + trámite + recurso por palabra | Los vendedores de prepagas no pasan de 4 mil; asalariados y recibo sin cubrir |
+| Autos | Agencia con humor y personajes fijos: 6 reels de 360–847 mil; periodista con 429 mil por robos | Personajes fijos, alarma concreta, votación, «NO hagan esto» | Nadie explica el precio final ni el plan de ahorro en video visual |
+| Marketing | Dueño de pymes con 7,1 M (dato contraintuitivo); creadora con 1,78 M y 50 mil comentarios (reel en silencio + recurso) | Dato que contradice, romper el patrón, recurso con nombre | Nadie muestra el «antes y después» del chat que pierde ventas |
+
+**Conclusión:** en los 4 rubros, lo que rinde es cara a cámara o sketch con gente real; **nadie usa animación**. Nuestro formato no tiene competencia directa, y podemos tomar los mecanismos (pregunta en segunda persona, norma nueva, respuesta a comentario, personajes fijos, recurso a cambio de palabra) sin caras ni casos reales.
 
 ---
 
@@ -207,3 +214,131 @@ Relevado el 27/11/2026 por un subagente, con Firecrawl (búsqueda y scraping), W
 ### 4.4 Formato
 
 - Cara a cámara y sketch. Las agencias de pymes de BA tienen pocos seguidores y casi todo es placa o promo. **Ninguna agencia relevada muestra «antes y después» animado de un negocio** (chat sin responder, web vieja vs nueva): es lo que nuestra serie ya plantea.
+
+---
+
+## 5. Desarme de lo viral: qué lo empujó de verdad y qué se puede replicar
+
+Método: skill `social-media-skills:viral-reverse-engineering` (motor real, disparador de envío, prueba de «si lo saco, ¿sigue funcionando?» y chequeo de suerte o tamaño de cuenta). Base: lo verificado arriba (cifras, texto y transcripciones). No se vio el video completo de ninguna pieza: el ritmo de edición y el audio quedan **sin evaluar**.
+
+| Pieza | Motor real (1–2) | Por qué se compartió | ¿Replicable por nosotros? |
+| --- | --- | --- | --- |
+| Brandi, 18,7 M | Personaje + reto sarcástico a una pregunta | Humor y «mandáselo a ese amigo» | **No tal cual**: depende de la cara y la personalidad. Sí el mecanismo «pregunta de la audiencia → respuesta firme en 20 s» con un personaje animado |
+| Abogados de seguros, 409 mil con 7,7 mil seguidores | Norma nueva que afecta a todos los que manejan | Utilidad + discusión («¿quién tiene prioridad?») | **Sí**: no depende del tamaño de la cuenta (lo prueba el salto 50×). Hace falta estar primeros con la novedad |
+| Lexvial y Estudio Chávez, 2,6 M c/u | Caso con giro o ranking de empresas | Indignación y «a mí también me pasó» | **Solo el mecanismo** (giro, ranking): caso real y empresa villana están prohibidos |
+| Piacentini, 195 mil · 2.517 comentarios | Grupo preciso + trámite confuso + recurso por palabra | Utilidad: guardar y pedir la lista | **Sí**: nuestro cierre ya usa palabra; falta el «recurso» que se entrega |
+| nazur, RP Estudio (2.247 y 705 guardados) | Tutorial corto de un trámite | Guardar para después | **Sí**, en lista animada de 20–30 s |
+| NZ Automotores, 360–847 mil × 6 | Personajes fijos del equipo + humor local | Humor y «etiquetá a alguien» | **Sí con personajes animados** (nuestro personaje recurrente cumple ese papel). La producción de la parodia grande es un caso aparte |
+| Abriata, 429 mil | Alarma concreta (robos) explicada | Utilidad + miedo | Parcial: él tiene 272 mil seguidores (ventaja de cuenta). El tema sí se puede tomar |
+| Castellaro, 370 mil (25× su promedio) | Prohibición en el gancho + chiste visual | Humor | **Sí**: cuenta mediana, gancho simple. Ojo: un solo pico, puede ser suerte |
+| Sirena, 7,1 M | Dato contraintuitivo para dueños | Moneda social («mirá lo que te dije») | Parcial: 404 mil seguidores y pieza de 2024. El mecanismo sirve |
+| Araceli, 1,78 M · 50 mil comentarios | Romper el patrón (silencio) + recurso con nombre propio | Curiosidad + recompensa por comentar | **Sí**: la palabra clave funciona cuando promete algo concreto con nombre |
+| Tino, 1,2 M | Diálogo actuado pregunta-respuesta | Debate en comentarios (22 mil) | **Sí** con dos personajes animados |
+
+**Lo que no se puede copiar** (confusiones frecuentes): el tamaño de cuenta de Sirena, Abriata y Brandi; la cara de los creadores; los casos reales con montos; los rankings con nombres de empresas.
+
+---
+
+## 6. Patrones por rubro
+
+| Rubro | Lo que hoy rinde (verificado en cifras) | Lo que no rinde | Duración que vimos rendir |
+| --- | --- | --- | --- |
+| Jurídico | Norma nueva de tránsito o laboral; «¿qué pasa si…?»; respuesta firme a una pregunta; listas de pasos (telegrama) | Placas «Si sufriste un accidente, contactanos» (0–5 me gusta) | 30–90 s |
+| Coberturas | Trámite de monotributo y obra social explicado; lista guardable; palabra clave a cambio de una lista | «¿Te aumentó la cuota? Comentá COMPARAR» (263–4.219) | 20–80 s |
+| Autos | Humor con personajes fijos; alarma (robos, estafas del plan); pregunta de votación; «NO hagan esto» | Lanzamientos, entregas, fotos del auto (474–6.900) | 15–70 s |
+| Marketing | Dato contraintuitivo; romper el patrón; recurso con nombre a cambio de palabra; diálogo actuado | Ofertas de «auditoría gratis» sin pauta; humor de oficina | 15–60 s |
+
+**Transversales** (aparecen en los 4):
+1. El gancho es una **pregunta o una regla en segunda persona** que el público ya se hace («¿Sos monotributista y…?», «¿Qué pasa si chocás…?», «NO hagan esto»). Coincide con `03-referencias.md` (fórmula «segunda persona»).
+2. **Respuesta a una pregunta de la audiencia** (TikTok «Respuesta a @…»): Brandi, Mastrapasqua, vendedores. Da contexto en 1 s y genera más preguntas.
+3. La **palabra clave para comentar** solo rinde cuando se entrega algo concreto (LISTADO, TRICS). Con «INFO», «COMPARAR», «AUDITORÍA» casi no hay comentarios.
+4. **Guardados altos = listas y trámites**; **compartidos altos = humor o normas que afectan a todos**.
+
+---
+
+## 7. Huecos que nadie cubre (oportunidad)
+
+1. **Nadie usa animación, personaje ilustrado ni 3D** en los 4 rubros en Argentina (verificado en las ~40 cuentas y piezas leídas). Todo es cara a cámara, sketch o placa. Nuestro formato (mini historia animada sin caras) **no tiene competencia directa**; el riesgo es que parezca «hecho con IA»: hay que cuidar el arte (ver `03-referencias.md`).
+2. **Jurídico laboral y ART en formato «qué hacer en el minuto después»**: hay mucho de tránsito, poco de ART paso a paso, y casi nada de sucesiones y penal fuera de Brandi.
+3. **Coberturas para asalariados (aportes del recibo)**: lo viral es solo monotributo. «Tu recibo explicado» y «derivar aportes» casi no tienen piezas con tracción.
+4. **Autos: el precio final y el ticket explicados visualmente** (flete, patentamiento, formularios): se habla en placas de texto y notas, no en video que retenga. Lo mismo para «contado vs. prendario vs. plan» y «qué revisar al retirar».
+5. **Marketing: «antes y después» del chat que pierde la venta**: nadie lo muestra; las agencias hablan de sí mismas.
+6. **Palabra clave con recurso**: casi nadie en jurídico ni autos usa palabra clave; en coberturas y marketing la usan mal (sin recurso). Nosotros podemos entregar una guía, lista o checklist propia por palabra.
+7. **YouTube Shorts**: no encontramos cuentas argentinas de estos rubros con Shorts fuertes (inferido, búsquedas sin resultados; Planero de Ley sube videos largos de 2–5 mil vistas). Espacio libre para subir los mismos reels.
+8. **Facebook**: no se pudieron leer cifras desde la nube; lo tratamos como réplica de Instagram con nuestro propio dato a favor (Autos y Coberturas a la tarde-noche).
+
+---
+
+## 8. Ideas de reels propios (10 por rubro)
+
+Reglas de todas: sin caras reales (personaje animado o objetos), sin testimonios ni casos reales («situación ilustrativa»), sin nombrar empresas reales como villanas, datos con fuente y fecha, y cierre con «Comentá «PALABRA» y te respondemos». Cada idea dice qué mecanismo de la competencia toma.
+
+### 8.1 VITA Abogados
+
+| # | Idea (gancho 0–3 s) | Desarrollo | Mecanismo tomado | Palabra |
+| --- | --- | --- | --- | --- |
+| 1 | «Cambió la regla y casi nadie se enteró» | Esquina animada en 3D de maqueta; dos autos; texto de la norma con fecha y fuente; quién pasa primero | Norma nueva (409 mil) | DAÑOS |
+| 2 | «Te chocaron y el otro dice "yo venía por la derecha"» | Tres excepciones en tres cartas que se dan vuelta | Frase que todos dicen + cartas cerradas | SEGURO |
+| 3 | «¿Qué pasa si chocás un auto mucho más caro que el tuyo?» | Balanza que se inclina; explicación general sin montos | Pregunta hipotética con miedo concreto | SEGURO |
+| 4 | «Te accidentaste yendo al trabajo: el minuto después» | Reloj que avanza; 4 pasos que se tildan (aviso, médico, constancia, guardar todo) | Lista de pasos (telegrama) | TRAYECTO |
+| 5 | «Respuesta a la pregunta que más nos hacen: ¿la ART me puede dar el alta si sigo con dolor?» | Personaje lee el comentario en un globo; respuesta firme y general | «Respuesta a @…» (Brandi/Mastrapasqua) sin la cara | ALTA |
+| 6 | «Telegrama de despido: 4 errores que no se corrigen después» | Telegrama gigante que se va completando; tachaduras en rojo | Lista de pasos con «no firmes» | TELEGRAMA |
+| 7 | «No firmes esto hoy» | Papel que cae sobre la mesa; zoom a la línea clave; reloj de arena | Prohibición en el gancho (Castellaro) | FIRMA |
+| 8 | «Mito o verdad: si no te dieron el certificado, no podés reclamar» | Sello de MITO que golpea la pantalla | Mito roto | CERTIFICADO |
+| 9 | «La reforma laboral en 30 segundos: qué cambió para vos» | Línea de tiempo con 3 cambios, fuente y fecha en pantalla | Norma nueva + opinión (María Paula), sin política | REFORMA |
+| 10 | «Una herencia, tres hermanos y una casa: ¿quién decide?» | Casa de maqueta que se divide; preguntas en orden; situación ilustrativa | Curiosidad de sucesiones (hueco) | (palabra nueva a definir, p. ej. HERENCIA) |
+
+### 8.2 Compara Tu Obra Social
+
+| # | Idea (gancho) | Desarrollo | Mecanismo | Palabra |
+| --- | --- | --- | --- | --- |
+| 1 | «¿Sos monotributista? Tu obra social no se activa sola» | Formulario animado que queda «en pausa» hasta completar 3 pasos | Grupo preciso + trámite confuso (195 mil) | APORTES |
+| 2 | «Mirá tu recibo: hay una línea que casi nadie lee» | Recibo en macro; lupa sobre «obra social»; qué significa | Tutorial guardable | APORTES |
+| 3 | «Te doy la lista para revisar antes de cambiarte» | Checklist que se llena; al final «pedí la lista» | Recurso a cambio de palabra (LISTADO) | COMPARAR |
+| 4 | «3 cosas de tu cobertura que pagás y no sabés que tenés» | Tres cajas que se abren | Curiosidad de usuaria (468 mil) sin nombrar empresas | PLAN |
+| 5 | «¿Pagás dos veces por lo mismo?» | Dos monedas que caen en dos frascos (estilo Marble Run) | Comparación con contador | APORTES |
+| 6 | «Respuesta a: "tengo 60 años, ¿me pueden rechazar?"» | Personaje lee el comentario; respuesta general con fuente | «Respuesta a @…» | COMPARAR |
+| 7 | «Cuándo te podés cambiar y cuándo no» | Calendario 3D con fechas marcadas, fuente y fecha | Norma/regla con fecha | BAJA |
+| 8 | «Lo que dijo la Corte y qué cambia para tu cuota» | Martillo animado + 3 puntos simples, sin promesas | Novedad que afecta a todos | CORTE |
+| 9 | «Mito o verdad: si te das de baja, perdés todo lo aportado» | Sello de mito | Mito roto | BAJA |
+| 10 | «Familia de cuatro: cómo se suma cada integrante» | Personajes que entran de a uno a la «casa» del plan | Lista visual guardable | PLAN |
+
+### 8.3 Automotores Kocos
+
+| # | Idea (gancho) | Desarrollo | Mecanismo | Palabra |
+| --- | --- | --- | --- | --- |
+| 1 | «El precio de lista no es lo que pagás» | Ticket que se alarga con cada ítem (flete, formularios, patente), sin montos | Alarma concreta + ticket visual (hueco) | 0KM |
+| 2 | «NO retires tu 0 km sin mirar esto» | Auto en vista despiezada; 5 puntos que se iluminan | Prohibición en el gancho (370 mil) | LLAVE |
+| 3 | «¿Contado, prendario o plan? Votá antes de ver» | Tres puertas; el personaje entra a cada una | Votación en comentarios | PLAN |
+| 4 | «Las 3 frases del plan de ahorro que tenés que leer dos veces» | Folleto con letra chica que se agranda | Estafas del plan (36 mil) sin nombrar marcas | PLAN |
+| 5 | «La pareja que fue a comprar su primer 0 km» (serie con personajes fijos) | Capítulo 1: entran al salón; chiste con el vendedor animado | Humor con personajes fijos (NZ) | 0KM |
+| 6 | «Respuesta a: "¿puedo dejar mi usado como parte de pago?"» | Personaje responde en 20 s | «Respuesta a @…» | LLAVE |
+| 7 | «Cómo cuidar tu 0 km de los robos más comunes» | Pick-up de maqueta con 4 escudos que se encienden; datos con fuente | Alarma actual (429 mil) | 0KM |
+| 8 | «Enero: por qué tanta gente espera para comprar» | Calendario que pasa de diciembre a enero; explicación general | Pregunta que todos se hacen | ENERO |
+| 9 | «El vendedor que no te apura» | Sketch animado: dos vendedores, uno apura, otro explica | Humor de vendedor (sin nombres reales) | 0KM |
+| 10 | «¿Cuál elegís? Ciudad, ruta o familia» | Tres autos genéricos sin marca en una baldosa flotante | Votación (Abriata «¿con cuál te quedás?») | LLAVE |
+
+### 8.4 Kocos Marketing
+
+| # | Idea (gancho) | Desarrollo | Mecanismo | Palabra |
+| --- | --- | --- | --- | --- |
+| 1 | «Este chat perdió una venta» | Celular animado: consulta 22:47, respuesta 09:15, «ya compré en otro lado» | Antes/después (hueco) | CRM |
+| 2 | «Tu negocio no pierde clientes por precio» | Dato contraintuitivo con fuente; tres causas en cartas | Dato contraintuitivo (7,1 M) | ORDEN |
+| 3 | «Revisá tu WhatsApp: ¿cuántos te escribieron y no compraron?» | Contador que sube; prueba para hacer ya | Prueba que el público hace solo | CRM |
+| 4 | «Te doy el checklist de los 10 mensajes que todo negocio necesita» | Lista que se llena con barra 01/10 | Recurso con nombre a cambio de palabra (TRICS) | CHECKLIST |
+| 5 | Reel en silencio: solo un chat que se llena de mensajes sin respuesta | Sin voz; termina con «¿te pasa?» | Romper el patrón (1,78 M) | IA |
+| 6 | «La dueña que respondía a las 3 de la mañana» (serie) | Personaje recurrente; el bot toma el turno noche | Personaje fijo + humor | IA |
+| 7 | «Respuesta a: "¿un bot no espanta a los clientes?"» | Dos personajes: dueña pregunta, asesor responde firme | Diálogo actuado (1,2 M) | IA |
+| 8 | «Tu bio en 3 segundos: ¿se entiende qué vendés?» | Lupa sobre un perfil genérico ficticio; antes/después | Antes/después | BIO |
+| 9 | «¿Cuánto deja una consulta sin responder?» | Cuenta simple y genérica de un comercio ficticio | Cuenta de un negocio (Sirena) | ORDEN |
+| 10 | «Mismo negocio, dos webs: ¿cuál te genera confianza?» | Pantalla partida; votación | Comparación lado a lado | CHECKLIST |
+
+---
+
+## 9. Qué está verificado y qué no
+
+- **Verificado (lo vi en la fuente, 27/11/2026):** seguidores de 25 perfiles de Instagram; vistas, «me gusta», comentarios, compartidos y guardados de 35 piezas (fichas de Instagram y TikTok leídas con Firecrawl); textos de descripción y transcripciones de los TikTok (algunas transcripciones venían traducidas al inglés: las pasé al castellano).
+- **Inferido:** el ritmo de edición, el audio y los recursos visuales (no se reproduce video desde la nube); el «por qué» de cada pieza; que Facebook replica los reels; la ausencia de Shorts fuertes (por búsquedas sin resultados, no por un censo).
+- **No comprobado:** datos que las propias cuentas dicen de sí mismas («las ventas crecieron», «779 mil en un video», «cuenta de 250 mil»).
+- **No encontrado o bloqueado:** perfiles de TikTok completos (el proveedor no los sirve; solo fichas de videos), cifras de reels de Facebook, el perfil de Instagram de Mastrapasqua y de otro abogado mencionado en un reel.
+- **Herramientas:** Firecrawl (búsqueda y scraping de fichas públicas; tope de ~10 pedidos por minuto, se respetó con pausas), Parallel Search, WebSearch y la skill `social-media-skills:viral-reverse-engineering`. No se usaron herramientas con créditos prepagos (manifold, vidIQ, Kling, admakeai).
