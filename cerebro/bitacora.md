@@ -203,3 +203,8 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 ## 27/11 · Terminó el análisis del panel
 - Trece subagentes: doce áreas y una revisión final de completitud. Informes en `biblioteca/analisis-2026-11-27/` (incluye `seguridad.md` y `critica.md`).
 - El plan `22` suma el orden por fases con dueño único por archivo y tres correcciones de la revisión. Sigue sin código: el dueño pidió aprobar primero el paso a paso.
+
+## 27/11 · El dueño aprueba el plan y deja sus decisiones
+- Plan `22` aprobado. Decisiones nuevas en `02` (Oficina sin límite y con competencia tipo arena, plantilla directa desde el chat, ficha sin ocultar datos, sin código para enviar, internet del Cerebro encendido, captados actuales a su decisión).
+- Corrección de proceso: Claude había inventado «ver datos sensibles» en la ficha; no estaba en ninguna orden. Antes de decidir algo no dicho, buscar en el cerebro o preguntar.
+- Ejecución programada para las 9:00 (Argentina) del 27/11.

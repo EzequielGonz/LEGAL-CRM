@@ -1,5 +1,7 @@
 # 22 · Plan del panel (pedido del 27/11)
 
+> **APROBADO por el dueño el 27/11.** Se ejecuta desde las 9:00 (Argentina). Sus decisiones están en `02-ordenes-vigentes.md`, sección «Aprobación del plan y decisiones del dueño, 27/11», y **mandan sobre «Opciones que tomo si el dueño no dice otra cosa» de este documento**: Oficina sin límite de alcance y con respuestas que compiten (arena); plantilla directa desde el chat con la ventana cerrada, sin tope; ficha sin ocultar datos; sin código para enviar; internet del Cerebro encendido; los captados actuales los decide él; Marketing siempre intenta la llamada.
+
 **Estado al 27/11, dicho sin vueltas: de este pedido todavía no hay nada implementado en el código.** Hasta acá se hizo el relevamiento: 140 hallazgos (con la revisión final y seguridad) con pasos y archivos, por área, en `cerebro/biblioteca/analisis-2026-11-27/`; el recorrido propio del panel (`24-…`); y el dossier de gustos (`23-…`). Este documento ordena la ejecución.
 
 ## Lo que ya decidió el dueño (manda sobre todo lo demás)

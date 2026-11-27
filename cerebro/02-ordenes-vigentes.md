@@ -338,3 +338,25 @@ Plan por pasos y preguntas abiertas: `cerebro/22-plan-panel-2711.md`.
 | Lo que no | Los colores pastel de las cajas: «re contra infantiles y de colegio». Y que «todo es pura decoración y se repite casi todo, el trabajo cotidiano es muy difícil». |
 | Muestras | Con fotos alcanza; no hace falta una muestra navegable. |
 | Prioridad | Implementar el pedido del 27/11 (plan en `22-plan-panel-2711.md`), no seguir con muestras. |
+
+### Aprobación del plan y decisiones del dueño, 27/11 (mandan sobre los valores por defecto del plan 22)
+
+El dueño aprobó el paso a paso y pidió ejecutarlo y aplicarlo en el panel a partir de las 9:00 del 27/11 (hora de Argentina).
+
+| Tema | Decisión, con sus palabras |
+|---|---|
+| Oficina, alcance | «se tiene que poder pedir una tarea para los 4 rubros juntos o individuales, o mejoras al panel, etc. No tiene que limitar». Entonces: un rubro, varios, los 4 juntos (una sola tarea con un resultado conjunto), los 4 por separado, o todo el panel. |
+| Oficina, competencia | «oficina tiene que ser todos los agentes ahora, pero que en cada uno de ellos compitan 100 más para ver quién tiene la mejor respuesta, como la skill arena». Cada agente resuelve con varias respuestas que compiten y un juez elige la mejor. |
+| Reabrir un chat | El seguimiento automático cada 72 horas ya existe y no es esto. Lo que pide: «dentro del chat de un prospecto que la ventana de Meta de 24 hs haya cerrado, pueda enviarle un mensaje con una plantilla directo de la ventana del chat». Sin tope diario. |
+| Ficha | Los datos se muestran como ahora, sin esconder nada detrás de «ver datos sensibles» (eso lo inventó Claude y fue rechazado). Se suman las columnas del Excel. |
+| Captado | Incluye aceptar que lo contacte un asesor por WhatsApp, no solo una llamada. |
+| Marketing | Pedir presupuesto pasa a «Interesado»; captado es quien pide reunión o llamada. «Que el bot intente siempre la llamada, porque si no se envían presupuestos que nunca avanzan y se pierde tiempo». |
+| Seguridad | Sin código para enviar: queda la confirmación de siempre. |
+| Gemini en la Oficina | Solo por botón. |
+| Cerebro en internet | Encendido: «necesito que esté constantemente informándose y aprendiendo, de ventas, de absolutamente todo». Dentro del tope de USD 30 compartido. |
+| Los 36 captados actuales | Los decide el dueño uno por uno. |
+| Color | Tonos profundos sí. «Algunas animaciones y detalles del motor gráfico que está hecho también suman, pero no tan colorido». |
+| Pendientes del dueño | Mañana (28/11) carga las variables del disparo de la Oficina y cambia el código de ingreso. |
+| Proceso | «De dónde sacaste eso? Por favor leé el cerebro, la memoria, el proyecto completo, chat por chat». Antes de decidir algo que el dueño no dijo, se busca en el cerebro; si no está, se pregunta. |
+
+No respondió sobre la búsqueda con Ctrl+K ni los recordatorios por contacto: no entran.
