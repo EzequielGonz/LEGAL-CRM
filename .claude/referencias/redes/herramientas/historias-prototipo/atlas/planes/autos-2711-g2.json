@@ -1,0 +1,23 @@
+{
+  "id": "autos-2711-g2",
+  "marca": "autos",
+  "base": "autos-2711-g2",
+  "fecha_pub": "2026-11-27",
+  "hora": "19:10",
+  "redes": ["instagram", "facebook"],
+  "gancho": "«Todo riesgo cubre todo.» No siempre.",
+  "voz": "«Tengo todo riesgo, me cubre todo.» No siempre. Muchas pólizas tienen franquicia: una parte del arreglo la pagás vos. Preguntá cuánto es antes de contratar. Mandáselo a quien está por contratar seguro.",
+  "palabra": "FRANQUICIA",
+  "contador": 3,
+  "beats": [
+    {"palabra": "Tengo", "n": 0, "tipo": "gancho", "objeto": "escudo", "texto": "Todo riesgo", "efecto": "rebote"},
+    {"palabra": "No", "n": 0, "tipo": "giro", "objeto": "grieta", "texto": "No siempre", "efecto": "golpe"},
+    {"palabra": "Muchas", "n": 0, "tipo": "paso", "objeto": "poliza", "texto": "Puede haber franquicia", "efecto": "lupa"},
+    {"palabra": "una", "n": 0, "tipo": "paso", "objeto": "auto", "texto": "Una parte la pagás vos", "efecto": "despiece"},
+    {"palabra": "Preguntá", "n": 0, "tipo": "paso", "objeto": "celular", "texto": "Preguntá cuánto", "efecto": "barrido"},
+    {"palabra": "Mandáselo", "n": 0, "tipo": "cierre", "objeto": "check", "texto": "Mandáselo", "efecto": "sello"}
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "«Todo riesgo cubre todo.» No siempre.\n\n✔ Puede haber franquicia.\n✔ Una parte del arreglo la pagás vos.\n✔ Preguntá cuánto es antes de contratar.\n\nEscribinos por WhatsApp. Y mandáselo a quien está por contratar seguro.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #AutoNuevo #SeguroDelAuto #BuenosAires",
+  "fuente": ""
+}
