@@ -11,7 +11,7 @@ import {OutputPass} from 'three/addons/postprocessing/OutputPass.js';
 import {clamp, lerp, win, ease, easeOut, easeIn, backOut, hash} from '../../historia/base.js';
 const C = s => new THREE.Color(s);
 export function crear({P, pal, canvas, W = 1080, H = 1920}) {
-  const R = P.receta, B = P.beats, T = P.T, words = P.words; const ACC = R.acento || pal.acc;
+  const R = P.receta, B = P.beats, T = P.T, words = P.words; const ACC = '#D4AF37';
   const renderer = new THREE.WebGLRenderer({canvas, antialias: false, preserveDrawingBuffer: true, powerPreference: 'high-performance'});
   renderer.setPixelRatio(1); renderer.setSize(W, H, false); renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = R.expo ?? 1.0;
@@ -65,13 +65,12 @@ export function crear({P, pal, canvas, W = 1080, H = 1920}) {
     g.add(mesh(new RoundedBoxGeometry(4.3, .95, 1.95, 4, .28), car, 0, .78, 0)); g.add(mesh(new RoundedBoxGeometry(2.4, .85, 1.72, 4, .32), car, -.25, 1.55, 0)); g.add(mesh(new RoundedBoxGeometry(2.25, .6, 1.76, 3, .22), vid, -.25, 1.58, 0));
     for (const [x, z] of [[1.35, .98], [1.35, -.98], [-1.35, .98], [-1.35, -.98]]) { const r = mesh(new THREE.CylinderGeometry(.5, .5, .36, 18), std('#17191f', {roughness: .9}), x, .5, z); r.rotation.x = Math.PI / 2; g.add(r); const hb = mesh(new THREE.CylinderGeometry(.24, .24, .38, 12), std('#d2d6de', {metalness: .8, roughness: .3}), x, .5, z); hb.rotation.x = Math.PI / 2; g.add(hb); }
     for (const z of [-.62, .62]) { g.add(mesh(new THREE.BoxGeometry(.1, .22, .4), new THREE.MeshStandardMaterial({color: '#fff6d0', emissive: C('#ffe9a0'), emissiveIntensity: 2}), 2.16, .95, z, false)); g.add(mesh(new THREE.BoxGeometry(.1, .2, .4), new THREE.MeshStandardMaterial({color: '#aa1a1a', emissive: C('#ff2a2a'), emissiveIntensity: 1}), -2.16, .95, z, false)); }
-    if (o.taxi) g.add(mesh(new RoundedBoxGeometry(.9, .3, .4, 2, .08), new THREE.MeshStandardMaterial({color: '#fff', emissive: C('#fff0b0'), emissiveIntensity: 1.4}), -.25, 2.2, 0));
+    if (o.taxi) g.add(mesh(new RoundedBoxGeometry(.9, .3, .4, 2, .08), new THREE.MeshStandardMaterial({color: '#D4AF37', emissive: C('#D4AF37'), emissiveIntensity: .6}), -.25, 2.2, 0));
     if (o.capot) { const c = mesh(new THREE.BoxGeometry(.7, .5, 1.6), std('#2a2c34', {roughness: .9}), 1.95, 1.0, 0); c.rotation.z = -.35; c.rotation.y = .1; g.add(c); }
     return g; }
-  const autoA = auto('#2f7fe0', {capot: true}); autoA.scale.setScalar(1.3); autoA.position.set(-1.6, .1, -.6); autoA.rotation.y = .1; mundo.add(autoA);
-  const autoB = auto('#e0473d', {capot: true}); autoB.scale.setScalar(1.3); autoB.position.set(1.0, .1, 1.9); autoB.rotation.y = Math.PI / 2 + .2; mundo.add(autoB);
-  const taxi = auto('#f1c232', {taxi: true}); mundo.add(taxi);
-  [['#e8e8ee', 7.5, 1.0, 0], ['#5aa469', -9.5, 1.0, 0], ['#8a63c9', 12, -1.0, Math.PI]].forEach(([c, x, z, r]) => { const a = auto(c); a.position.set(x, .1, z + (z > 0 ? .0 : 0)); a.rotation.y = r; a.scale.setScalar(1.15); mundo.add(a); });
+  const autoA = auto('#112250', {capot: true}); autoA.scale.setScalar(1.3); autoA.position.set(-1.6, .1, -.6); autoA.rotation.y = .1; mundo.add(autoA);
+  const autoB = auto('#3B507D', {capot: true}); autoB.scale.setScalar(1.3); autoB.position.set(1.0, .1, 1.9); autoB.rotation.y = Math.PI / 2 + .2; mundo.add(autoB);
+  const taxi = auto('#F5F4F0', {taxi: true}); mundo.add(taxi);
   const patTex = cv(256, 96, (x, w, h) => { x.fillStyle = '#f4f4f0'; x.fillRect(0, 0, w, h); x.strokeStyle = '#223'; x.lineWidth = 6; x.strokeRect(3, 3, w - 6, h - 6); x.fillStyle = '#223'; x.font = '800 62px Inter, Manrope'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText('AB 123 CD', w / 2, h / 2 + 4); });
   const patente = mesh(new THREE.PlaneGeometry(.95, .36), new THREE.MeshStandardMaterial({map: patTex}), 0, .75, .98, false); autoB.add(patente); patente.rotation.y = 0; patente.position.set(-2.2, .8, 0); patente.rotation.y = -Math.PI / 2; 
   const estrella = mesh(new THREE.IcosahedronGeometry(.7, 0), new THREE.MeshStandardMaterial({color: '#ffd54a', emissive: C('#ffb300'), emissiveIntensity: 2.4, flatShading: true}), .55, 1.2, .5, false); mundo.add(estrella);
@@ -82,9 +81,9 @@ export function crear({P, pal, canvas, W = 1080, H = 1920}) {
     g.add(mesh(new THREE.CapsuleGeometry(.36, .95, 6, 14), m, 0, 1.0, 0)); g.add(mesh(new THREE.SphereGeometry(.33, 18, 14), m, 0, 2.0, 0)); for (const s of [-1, 1]) { const b = mesh(new THREE.CapsuleGeometry(.1, .65, 4, 8), m, s * .5, 1.15, 0); b.rotation.z = s * .22; g.add(b); }
     for (const sx of [-1, 1]) g.add(mesh(new THREE.CapsuleGeometry(.14, .55, 4, 8), m, sx * .17, .32, 0));
     g.scale.setScalar(esc); g.userData.cabeza = new THREE.Vector3(0, 2.4 * esc, 0); return g; };
-  const nico = persona('#0d1222', 1.75, '#7a6420'); nico.position.set(3.4, .16, 3.6); nico.rotation.y = -.7; mundo.add(nico);
-  const otro = persona('#7a2a2a', 1.2, '#ffb0a0'); otro.position.set(-.2, .1, 3.3); otro.rotation.y = .5; otro.visible = false; mundo.add(otro);
-  const tes = [persona('#2a5c8a', 1.0, '#9fd0ff'), persona('#3a7a4a', 1.05, '#b6ffc4')]; tes[0].position.set(-4.2, .16, 3.8); tes[1].position.set(5.2, .16, -3.7); tes.forEach(t => { t.visible = false; mundo.add(t); });
+  const nico = persona('#112250', 1.75, '#D4AF37'); nico.position.set(3.2, .06, 3.3); nico.rotation.y = -.7; mundo.add(nico);
+  const otro = persona('#3B507D', 1.2, '#D4AF37'); otro.position.set(-.4, .06, 3.2); otro.rotation.y = .5; otro.visible = false; mundo.add(otro);
+  const tes = [persona('#8a94a6', 1.0, '#D4AF37'), persona('#B9B2A2', 1.05, '#D4AF37')]; tes[0].position.set(-3.4, .06, 3.6); tes[1].position.set(3.4, .06, -3.6); tes.forEach(t => { t.visible = false; mundo.add(t); });
   // ---------- props de los 3 pasos (dentro de la escena) ----------
   const tarjeta = (w, h, fn) => { const t = cv(Math.round(w * 200), Math.round(h * 200), fn); const mt = std('#f6f1e2'); return mesh(new RoundedBoxGeometry(w, h, .1, 2, .05), [mt, mt, mt, mt, new THREE.MeshStandardMaterial({map: t, roughness: .6}), mt]); };
   const celu = grp(); const visor = cv(300, 560, (x, w, h) => { x.fillStyle = '#243448'; x.fillRect(0, 0, w, h); x.fillStyle = '#6a8fb8'; x.fillRect(0, 380, w, 180); x.fillStyle = '#2f7fe0'; x.fillRect(40, 300, 110, 50); x.fillStyle = '#e0473d'; x.fillRect(150, 290, 110, 60); x.strokeStyle = ACC; x.lineWidth = 8; [[20, 120, 60, 0], [280, 120, -60, 0]].forEach(([a, b]) => { x.beginPath(); x.moveTo(a, b + 50); x.lineTo(a, b); x.lineTo(a + (a < 150 ? 50 : -50), b); x.stroke(); x.beginPath(); x.moveTo(a, 470); x.lineTo(a, 520); x.lineTo(a + (a < 150 ? 50 : -50), 520); x.stroke(); }); x.fillStyle = '#fff'; x.beginPath(); x.arc(150, 520, 26, 0, 7); x.fill(); });
@@ -98,16 +97,16 @@ export function crear({P, pal, canvas, W = 1080, H = 1920}) {
   [celu, libreta, calendario, avion, ...estela].forEach(p => { p.visible = false; scene.add(p); });
   // ---------- post: bloom, maqueta (tilt-shift), grano y viñeta ----------
   const rt = new THREE.WebGLRenderTarget(W, H, {type: THREE.HalfFloatType, samples: 4}); const comp = new EffectComposer(renderer, rt); comp.setSize(W, H);
-  comp.addPass(new RenderPass(scene, cam)); comp.addPass(new UnrealBloomPass(new THREE.Vector2(W / 2, H / 2), R.bloom ?? .32, .5, .86));
+  comp.addPass(new RenderPass(scene, cam)); const bloom = new UnrealBloomPass(new THREE.Vector2(W / 2, H / 2), .1, .5, .9); comp.addPass(bloom);
   const vs = 'varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}';
   const tilt = dir => new ShaderPass({uniforms: {tDiffuse: {value: null}, dir: {value: new THREE.Vector2(dir[0], dir[1])}, foco: {value: .5}, r: {value: 6}, res: {value: new THREE.Vector2(W, H)}}, vertexShader: vs,
     fragmentShader: 'uniform sampler2D tDiffuse;uniform vec2 dir;uniform vec2 res;uniform float foco;uniform float r;varying vec2 vUv;void main(){float d=smoothstep(.14,.5,abs(vUv.y-foco));float rad=r*d;vec4 s=vec4(0.);float ws=0.;for(int i=-6;i<=6;i++){float f=float(i)/6.;float w=exp(-f*f*2.2);s+=texture2D(tDiffuse,vUv+dir*rad*f*2./res)*w;ws+=w;}gl_FragColor=s/ws;}'});
   const tH = tilt([1, 0]), tV = tilt([0, 1]); comp.addPass(tH); comp.addPass(tV); comp.addPass(new OutputPass());
-  const fin = new ShaderPass({uniforms: {tDiffuse: {value: null}, tm: {value: 0}, grano: {value: R.grano ?? .05}}, vertexShader: vs,
-    fragmentShader: 'uniform sampler2D tDiffuse;uniform float tm;uniform float grano;varying vec2 vUv;float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7))+tm)*43758.5453);}void main(){vec4 c=texture2D(tDiffuse,vUv);vec2 q=vUv-.5;float v=smoothstep(.98,.25,length(q*vec2(.9,.6)));c.rgb*=mix(.72,1.,v);c.rgb*=vec3(1.03,1.0,.96);c.rgb*=1.-.5*smoothstep(.58,1.,vUv.y);c.rgb*=1.-.3*smoothstep(.42,0.,vUv.y);c.rgb+=(h(vUv*vec2(1080.,1920.))-.5)*grano;gl_FragColor=c;}'}); comp.addPass(fin);
+  const fin = new ShaderPass({uniforms: {tDiffuse: {value: null}, tm: {value: 0}, grano: {value: R.grano ?? .035}}, vertexShader: vs,
+    fragmentShader: 'uniform sampler2D tDiffuse;uniform float tm;uniform float grano;varying vec2 vUv;float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7))+tm)*43758.5453);}void main(){vec4 c=texture2D(tDiffuse,vUv);vec2 q=vUv-.5;float v=smoothstep(.98,.25,length(q*vec2(.9,.6)));c.rgb*=mix(.9,1.,v);c.rgb+=(h(vUv*vec2(1080.,1920.))-.5)*grano;gl_FragColor=c;}'}); comp.addPass(fin);
   // ---------- cámara: siempre en movimiento ----------
-  const CFG = [{az: [14, 30], el: 27, d: [36, 32], f: [0, 1.7, .6]}, {az: [34, 52], el: 24, d: [26, 21], f: [0, 1.6, .8]}, {az: [28, 12], el: 20, d: [24, 18], f: [3.0, 2.2, 3.2]}, {az: [-6, -28], el: 24, d: [32, 25], f: [-3.4, 3.2, -1.0]}, {az: [30, 14], el: 27, d: [34, 36], f: [0, 1.7, .6]}];
-  const cfgDe = i => B[i].loop ? {az: [14, 14], el: 27, d: [36, 36], f: [0, 1.7, .6]} : CFG[Math.min(i, CFG.length - 1)];
+  const CFG = [{az: [10, 22], el: 35, d: [62, 56], f: [0, 1.3, .6]}, {az: [26, 38], el: 31, d: [42, 35], f: [0, 1.3, 1.0]}, {az: [20, 6], el: 29, d: [38, 31], f: [2.2, 1.8, 3.0]}, {az: [-8, -24], el: 32, d: [50, 42], f: [-2.0, 2.4, -1.8]}, {az: [22, 10], el: 34, d: [58, 62], f: [0, 1.3, .6]}];
+  const cfgDe = i => B[i].loop ? {az: [10, 10], el: 35, d: [62, 62], f: [0, 1.3, .6]} : CFG[Math.min(i, CFG.length - 1)];
   const posa = (i, u) => { const c = cfgDe(i); const e = ease(u); return {az: lerp(c.az[0], c.az[1], e) * Math.PI / 180, el: c.el * Math.PI / 180, d: lerp(c.d[0], c.d[1], e), f: new THREE.Vector3(...c.f)}; };
   const idx = t => { let i = B.length - 1; while (i > 0 && B[i].t0 > t) i--; return i; };
   const pose0 = posa(0, 0);
@@ -118,7 +117,7 @@ export function crear({P, pal, canvas, W = 1080, H = 1920}) {
     const asent = win(t, 0, .5) * (1 - win(t, T - 1.4, T - .5)); const hx = (Math.sin(t * 1.7) * .22 + Math.sin(t * 4.3) * .07) * asent, hy = Math.sin(t * 1.3 + 1) * .14 * asent;
     const d = p.d - gp * 6.5, az = p.az + Math.sin(t * .45) * .03 * asent;
     cam.position.set(p.f.x + d * Math.cos(p.el) * Math.sin(az) + hx, p.f.y + d * Math.sin(p.el) + hy, p.f.z + d * Math.cos(p.el) * Math.cos(az)); cam.lookAt(p.f.x, p.f.y, p.f.z);
-    cam.fov = (R.fov || 34) - gp * 4.5; cam.updateProjectionMatrix(); return gp; }
+    cam.fov = (R.fov || 28) - gp * 3.5; cam.updateProjectionMatrix(); return gp; }
   // ---------- tiempos de palabras ----------
   const sa = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
   const tw = (re, desde = 0, def = null) => { const w = words.find(w => w.t >= desde - .01 && re.test(sa(w.w))); return w ? w.t : def; };
@@ -127,14 +126,14 @@ export function crear({P, pal, canvas, W = 1080, H = 1920}) {
   const tOtro = tw(/otro/, b2.t0, b2.t0 + .5), tTes = tw(/testigo/, b2.t0, b2.t0 + 2.2), tSeg = tw(/seguro/, b3.t0, b3.t0 + 1), tDias = tw(/dias/, b3.t0, b3.t0 + 2.5);
   const pop = (t, a, bb) => backOut(win(t, a, a + .4), 2) * (1 - easeIn(win(t, bb - .22, bb)));
   const mira = o => o.lookAt(cam.position); const proy = new THREE.Vector3();
-  const blancos = [new THREE.Vector3(-.2, 1.3, .5), new THREE.Vector3(-.4, .8, 1.4), new THREE.Vector3(-2.7, 3.7, 3.0)];
+  const blancos = [new THREE.Vector3(-.2, 1.3, .5), new THREE.Vector3(-.4, .8, 1.4), new THREE.Vector3(-2.55, 3.5, 2.6)];
   function render(t) {
     const gp = camara(t), bi = idx(t), b = B[bi], loop = !!b.loop; const ti = loop ? 0 : t, fl = .5 + .5 * Math.sin(ti * 9);
     estrella.rotation.set(ti * .8, ti * 1.1, 0); estrella.scale.setScalar(1 + .12 * fl); estrella.material.emissiveIntensity = 2 + fl;
     puas.forEach((m, i) => { const a = m.userData.a + ti * .3, s = .9 + .25 * Math.sin(ti * 8 + i); m.position.set(estrella.position.x + Math.cos(a) * 1.05 * s, estrella.position.y + Math.sin(a) * 1.05 * s * .8, estrella.position.z); m.rotation.z = a - Math.PI / 2; m.scale.setScalar(.8 + .2 * Math.sin(ti * 8 + i)); });
     humo.forEach(m => { const k = (ti * .35 + m.userData.i / 7) % 1; m.position.set(.4 + Math.sin(m.userData.i * 2 + ti) * .35, 1.5 + k * 3.2, .3 + Math.cos(m.userData.i) * .3); m.scale.setScalar(.5 + k * 1.1); m.material.opacity = .5 * (1 - k); });
     // taxi en el último paso
-    const kT = bi === 4 ? ease(win(t, b4.t0 + .3, b4.t1)) : 0; taxi.visible = bi === 4; taxi.position.set(lerp(-22, 22, kT), .1, 1.0);
+    const kT = bi === 4 ? ease(win(t, b4.t0 + .3, b4.t1)) : 0; taxi.position.set(lerp(-11, 11, kT), .1, 0); taxi.rotation.y = 0; taxi.visible = bi === 4 && Math.abs(taxi.position.x) < 6.6;
     // paso 1: el celular flota, saca la foto con flash sobre autos, patente y esquina
     const v1 = bi === 1, p1 = v1 ? pop(t, b1.t0 + .1, b1.t1) : 0; celu.visible = p1 > .01;
     const k1 = tF.filter(a => t >= a).length - 1, tgt = blancos[Math.max(0, k1)]; celu.position.set(tgt.x + 4.4, tgt.y + 2.6 + Math.sin(t * 2) * .15, tgt.z + 1.2); mira(celu); celu.rotateZ(-.18); celu.scale.setScalar(Math.max(.01, p1) * 1.0);
@@ -151,6 +150,11 @@ export function crear({P, pal, canvas, W = 1080, H = 1920}) {
     const ruta = k => new THREE.Vector3(lerp(5, -8, k), 3.4 + Math.sin(k * Math.PI * 1.6) * 1.6 + k * 2.2, lerp(5, -3, k) + Math.sin(k * 6) * .7);
     avion.visible = pa > .01; avion.position.copy(ruta(ease(k4))); avion.lookAt(ruta(Math.min(1, ease(k4) + .03))); avion.rotateZ(Math.sin(t * 5) * .3); avion.scale.setScalar(Math.max(.01, pa) * 1.2);
     estela.forEach((s, i) => { const kk = ease(clamp(k4 - i * .018)); s.visible = v4 && k4 > i * .018; s.position.copy(ruta(kk)); s.material.opacity = (1 - i / estela.length) * .7; s.scale.setScalar(1 - i / estela.length * .7); });
+    // faroles = progreso; noche en el último paso y regreso al día en el loop
+    const lb = B.find(x => x.loop); const nn = bi === 4 ? ease(win(t, b4.t0, b4.t0 + 1.6)) : (loop ? 1 - ease(win(t, lb.t0, lb.t0 + 1.6)) : 0); const nq = Math.round(nn * 20) / 20;
+    faroles.forEach((f, k) => { const on = (B[k + 1] ? ease(win(t, B[k + 1].t0 + .1, B[k + 1].t0 + .6)) : 0) * (loop ? 1 - ease(win(t, lb.t0, lb.t0 + 1.2)) : 1); f.userData.lamp.material.emissiveIntensity = Math.max(on * 2.2, nn * 2.2); f.userData.lamp.material.color.set(on > .05 || nn > .3 ? '#ffe9a8' : '#cfc8b4'); });
+    sol.intensity = 2.6 * (1 - .7 * nn); sol.color.set(nn > .02 ? '#' + C('#FFE2B8').lerp(C('#FFB878'), nn).getHexString() : '#FFE2B8'); sol.position.set(-13, 13 - 8 * nn, -12); hemi.intensity = .75 * (1 - .5 * nn); bloom.strength = .1 + .55 * nn; BM.forEach(m => m.emissiveIntensity = nn * 1.4);
+    if (nq !== window.__nq) { window.__nq = nq; scene.background = fondoTex(nq); }
     tH.uniforms.foco.value = tV.uniforms.foco.value = .52 + (R.focoY || 0); tH.uniforms.r.value = tV.uniforms.r.value = R.dof ?? 6; fin.uniforms.tm.value = (Math.floor(t * 30) % 97) * .37;
     comp.render();
     nico.updateMatrixWorld(); proy.copy(nico.userData.cabeza).applyMatrix4(nico.matrixWorld).project(cam);
