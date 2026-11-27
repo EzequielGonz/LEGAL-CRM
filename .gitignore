@@ -10,3 +10,8 @@ next-env.d.ts
 .claude/worktrees/
 __pycache__/
 cerebro/mapa-codigo/cache/
+
+# Tanda de reels: salidas pesadas fuera de git
+docs/redes/tanda-2811-0712/salida/**/*.mp4
+.claude/referencias/redes/herramientas/historias-prototipo/tanda/trabajo/**/fr/
+.claude/referencias/redes/herramientas/historias-prototipo/tanda/trabajo/**/*.png
