@@ -158,7 +158,8 @@ def receta(g, nbeats):
              card=CARDS[(o * 5 + h(id_, 'k')) % 6], sub=SUBS[(o + h(id_, 's')) % 4], ft=M['fts'][(o + h(id_, 'z')) % len(M['fts'])], fs=M['fs'], pal=PALETAS[g['_marca']][(o + h(id_, 'p')) % 4], vin=.4, tilt=True)
     k = (o + h(id_, 'r')) % 4
     R['cartas'] = (k == 0 and nbeats >= 4); R['contador'] = k in (1, 2) and nbeats >= 4; R['escala'] = (o + h(id_, 'e')) % 3 == 0
-    st = g.get('estilo') or {}
+    st = dict(g.get('estilo') or {}); ov = f'{AQUI}/estilos.json'
+    if os.path.exists(ov): st.update(json.load(open(ov)).get(id_, {}))
     if 'pal' in st and isinstance(st['pal'], int): st['pal'] = PALETAS[g['_marca']][st['pal'] % 4]
     R.update(st); return R
 
@@ -204,13 +205,29 @@ def preparar(args):
         beats.append(dict(texto=tx, t0=t0, voz=voz, frases=fr))
     for j, b in enumerate(beats): b['t1'] = beats[j + 1]['t0'] if j + 1 < len(beats) else T
     R = receta(g, len(beats))
+    # «1/3 Fotos…» → contador de pasos; textos chicos de cierre; sentencia final que repite el gancho → beat de loop (mismo plano que el primero)
+    for b in beats:
+        m = re.match(r'^(\d)/(\d)\s+(.*)$', b['texto'])
+        if m: b['paso'] = int(m.group(1)); b['total'] = int(m.group(2)); b['texto'] = m.group(3)
+    if len(beats) > 2 and len(beats[-1]['texto']) < 28 and sin_acento(beats[-1]['texto']) in sin_acento(g.get('cierre', '')):
+        ch = beats.pop(); beats[-1]['chico'] = re.sub(r'^«', 'o escribinos «', ch['texto']) if ch['texto'].startswith('«') else ch['texto']
+        if len(toks(ch['voz']) & toks(beats[0]['texto'])) >= 2:
+            lp = dict(beats[0]); lp.update(t0=ch['t0'], voz=ch['voz'], frases=ch['frases'], loop=True); beats[-1]['t1'] = ch['t0']; beats.append(lp)
+        else: beats[-1]['voz'] += ' ' + ch['voz']
+    for j, b in enumerate(beats): b['t1'] = beats[j + 1]['t0'] if j + 1 < len(beats) else T
     k = 0
     for j, b in enumerate(beats):
         m = re.search(r'(?<![\d.])(\d{1,3}(?:\.\d{3})*|\d+)(?![\d])', b['texto'])
-        if m and int(m.group(1).replace('.', '')) >= 2 and j > 0: b['num'] = int(m.group(1).replace('.', ''))
+        if b.get('paso') or b.get('loop'): pass
+        elif m and int(m.group(1).replace('.', '')) >= 2 and j > 0: b['num'] = int(m.group(1).replace('.', ''))
         elif R.get('contador') and 0 < j < len(beats) - 1: k += 1; b['paso'] = k
     M = MARCAS[g['_marca']]
-    plan = dict(id=g['id'], marca=g['_marca'], T=T, lead=LEAD, voz_dur=round(D, 3), nombre=M['nombre'], logo=M['logo'], palabra=g['palabra'], cierre=g.get('cierre', ''), lugar=g.get('lugar_ba', ''), personaje=g.get('personaje', ''), escena=g.get('escena_visual', ''), beats=beats, words=W, receta=R)
+    q = re.search(r'«([^»]+)»', g.get('escena_visual', '')); bur = None
+    if q:   # globo de diálogo del personaje: aparece con la 1.ª palabra de la cita y se tacha cuando llega «nunca»/«no»
+        w0 = sin_acento(q.group(1).split()[0]); t0 = next((w['t'] for w in W if sin_acento(w['w']).strip('«»') == w0), None)
+        if t0 is not None: tn = next((w['t'] for w in W if w['t'] > t0 + .5 and sin_acento(w['w']) in ('nunca', 'no')), t0 + 1.4); bur = dict(txt=q.group(1), t0=round(t0 - .1, 2), tachar=round(tn, 2), fin=round(beats[1]['t0'] - .05 if len(beats) > 1 else tn + 2, 2))
+    hr = re.search(r'\b(\d{1,2}:\d{2})\b', g.get('lugar_ba', '') + ' ' + g.get('voz', ''))
+    plan = dict(burbuja=bur, hora=hr.group(1) if hr else None, id=g['id'], marca=g['_marca'], T=T, lead=LEAD, voz_dur=round(D, 3), nombre=M['nombre'], logo=M['logo'], palabra=g['palabra'], cierre=g.get('cierre', ''), lugar=g.get('lugar_ba', ''), personaje=g.get('personaje', ''), escena=g.get('escena_visual', ''), beats=beats, words=W, receta=R)
     d = f'{TRAB}/{g["id"]}'; os.makedirs(d, exist_ok=True); json.dump(plan, open(f'{d}/plan.json', 'w'), ensure_ascii=False, indent=1); json.dump(g, open(f'{d}/guion.json', 'w'), ensure_ascii=False, indent=1)
     dur_ok = 15 <= T <= 25
     print(f'{g["id"]}: voz {D:.1f}s → reel {T:.1f}s {"" if dur_ok else "  ¡FUERA DE 15–25 s!"} | {len(beats)} beats | fondo={R["fondo"]} layout={R["layout"]} cam={R["cam"]} trans={R["trans"]} card={R["card"]} sub={R["sub"]} cartas={R["cartas"]} contador={R["contador"]}')
