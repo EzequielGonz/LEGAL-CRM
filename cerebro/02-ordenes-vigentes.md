@@ -378,3 +378,11 @@ El dueño, textual: «el cerebro conectaselo a gemini y el mapa tambien asi tien
 - Cada pedido que la Oficina le hace a Gemini lleva las partes del cerebro y de los mapas que tocan la tarea, más las órdenes vigentes (`src/lib/oficina/contexto-servidor.ts`). También las ve el juez.
 - Viajan solo los documentos del repositorio; quedan afuera las charlas viejas, los traspasos y la bitácora. Lo aprendido en la base se suma cuando se pueda filtrar por rubro.
 - El repaso de Claude sigue siendo obligatorio antes de aprobar.
+
+### 27/11 · Auditoría exhaustiva en navegador y orden de trabajo
+El dueño, textual: «hacela totalmente exhaustiva y correla en una web, si tenes que dedicar 10 agentes a auditar el panel entero, hacelo». Después: «toca todo lo que quieras, solo no lances campañas. proba todo.» Y: «primero termina la auditoria sobre el panel y despues terminas de implentar el plan aprobado por si hay ajustes».
+
+- La auditoría se hace en producción, con navegador real: 12 zonas en solo lectura (cada una con un revisor que contrasta con el código) y 5 recorridos haciendo clic de verdad.
+- Límite que dio el dueño: no lanzar campañas. Límites que Claude mantiene por criterio propio (no los dijo el dueño en este mensaje, salen de órdenes anteriores): no pausar ni tocar campañas, no mandar mensajes a personas reales, no cambiar cómo responde el bot en vivo, no cambiar datos de prospectos, nada se borra, tope de Gemini.
+- Orden de trabajo: primero se cierra la auditoría; el plan aprobado (tandas A2–A8 y fases B–D) se integra y publica después, con los ajustes que la auditoría pida.
+- También pidió usar más agentes y los agentes personalizados cargados: la auditoría usa los de `agent-protocols` y `agentic-council`.
