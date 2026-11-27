@@ -78,6 +78,12 @@ Rama `claude/brave-hawking-nzsr60` · PR EzequielGonz/LEGAL-CRM#82 (seguido, en 
   - Cada uno deja su hoja en `atlas/prueba/<marca>-hoja.jpg`.
 - Al terminar, revisar sus informes y hojas antes de producir.
 
+**Guiones de la tanda 1: los 40 planes terminados y validados** (resúmenes en `docs/redes/tanda-2811-0712/tanda1/<marca>.md`). Antes de programar, revisar:
+- Marketing: que el bot acepte «reseñas» además de RESENAS, y confirmar en la ayuda oficial los datos de plataforma que se nombran (historias de un día, link de reseñas de Google, «Solicitudes» de Instagram, horarios especiales).
+- Autos: en 0KM, SENA y CFT la voz dice «comentá la palabra», porque la voz sintética lee mal las siglas; la palabra va en pantalla.
+- Coberturas: los personajes pasaron a Lucía o Gabriel.
+- Las horas son las de los guiones base: chequear en Metricool que no se pisen con lo ya programado.
+
 **Motor:**
 - `escenas/vita.js` ahora se arma desde el plan:
   - frontón con el gancho y plano general al principio y al final (loop);
