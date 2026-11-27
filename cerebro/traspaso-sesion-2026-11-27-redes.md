@@ -6,6 +6,24 @@ Rama `claude/brave-hawking-nzsr60` · PR EzequielGonz/LEGAL-CRM#82 (seguido, en 
 - El dueño frenó el boceto de VITA. **No hay agentes trabajando ni nada programado.** Lo programado en Metricool del 25 al 29/11 (12 historias + 1 carrusel por día y marca) NO se toca.
 - **Esperando:** el dueño busca 1 o 2 reels de referencia con el 3D que imagina. Al recibirlos, analizarlos (gancho, cámara, luz, nivel de realismo, animación, efectos) y recién ahí hacer el boceto de VITA con el guion `vita-2711-1`.
 
+## CHECKPOINT 27/11 09:40 (Buenos Aires) — PAUSA pedida por el dueño, se retoma a las 13:30
+El dueño pidió «dejá un checkpoint y pausá, retomá 13:30». La corrida 1 (antes 15:30) se adelantó a las 13:30 (`trig_01TFsMBNJWdP5NcYpjWz86FJ`).
+
+| Pieza | Estado al pausar |
+|---|---|
+| Carpeta `docs/redes/tareas-programadas/` y 21 corridas programadas | Hecho y subido |
+| Cierre «Escribinos por WhatsApp» en los 40 planes y en la placa de `escenas/vita.js` | Hecho, probado con un cuadro (`prueba/vita-pcta-32.50.jpg`) y subido |
+| Objetos cliché fuera (balanza, martillo, estetoscopio, megáfono) | Hecho en planes y contrato |
+| Escena VITA (`escenas/vita.js`) | Lista para producir |
+| Escena Coberturas (`escenas/coberturas.js`) | Hecha. Hoja `prueba/coberturas-hoja.jpg` revisada. **Frenada a mitad de las correcciones**: personaje cortado en el borde, cambio de texto más corto (0,25 s), flash al 35 %, gancho de 3 renglones de 110 px o más y estetoscopio cambiado por credencial. Hoja nueva con `coberturas-2811-a` y `coberturas-0212-b` |
+| Escena Autos (`escenas/autos.js`, plan `autos-2711-g2`) | **Frenada probando cuadros** (sin errores, menos de 1 s por cuadro). Falta la hoja `prueba/autos-hoja.jpg` y el informe |
+| Escena Marketing (`escenas/marketing.js`, plan `marketing-2711-g1`) | **Frenada antes del primer render de prueba**. Falta la hoja y el informe. Ya sabe: cierre «Escribinos por WhatsApp» y megáfono → chat |
+| Reels de la tanda base 1 | Ninguno producido, alojado ni programado |
+
+**Para retomar a las 13:30:**
+1. SendMessage a los 3 agentes (ids en la tabla del calendario `06`; Coberturas `ae2799403b7f4cbb6`, Autos `a7a30568baff16336`, Marketing `a236a25ba8ca1a6e0`) para que sigan. Mientras, arrancar VITA (voces, alinear, render, mezcla).
+2. Revisar cada hoja y después seguir el README de la carpeta.
+
 ## 27/11 09:30 (Buenos Aires) — CARPETA DE TAREAS PROGRAMADAS: manda sobre todo lo de abajo
 - **Todo está en `docs/redes/tareas-programadas/`:**
   - `README.md`: arranque y pasos;
