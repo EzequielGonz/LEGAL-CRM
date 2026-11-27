@@ -33,9 +33,9 @@ Estilo: cartel de aeropuerto con paletas que giran, en un hall cálido (crema `#
 - Cada día se eligieron los temas con la creencia más fuerte para desafiar: precio por privado, «lo pienso», audio largo, pedir reseñas y la carpeta de solicitudes. También se sumaron las fórmulas probadas en nuestras cuentas (escena con hora, advertencia) [05 §2].
 - Las 10 palabras clave son distintas entre sí y distintas de ENTREGA24.
 
-## Decisiones que se apartan del contrato o merecen revisión
+## Decisiones que merecen revisión
 
-1. **«El botón está en el perfil.» no va en el copy.** El contrato la pide, pero la orden vigente del dueño del 20/11 dice «Nunca "el botón está en el perfil"» porque ese botón no existe (`cerebro/02-ordenes-vigentes.md`, `cerebro/14`). Además, `fuente/armar.py` la tiene como frase prohibida. En su lugar va la aclaración del guion base: «Situación ilustrativa. Voz generada con IA.». Ningún plan de las otras marcas la usa. Si el dueño la habilitó de nuevo, hay que agregarla en los 10.
+1. **Copy:** cada copy lleva el gancho, 3 líneas con ✔, «Comentá PALABRA y te mando la guía «…»», «Situación ilustrativa. Voz generada con IA.» y de 4 a 5 hashtags. Ninguno dice «el botón está en el perfil», como pide el contrato corregido del 27/11 y la orden del dueño del 20/11.
 2. **RESENAS:** la voz dice «reseñas» (con ñ, para que se pronuncie bien) y en pantalla y en el copy figura «RESENAS», igual que en el guion base. Falta confirmar que el bot acepte las dos formas.
 3. **`n` de cada golpe:** se calculó con la regla del motor (`escenas/vita.js`): minúsculas, sin signos y coincidencia por prefijo. Por eso, por ejemplo, en BIO el golpe «Es» lleva `n: 1`: el «es» de «no es para vos» también coincide. La `palabra` va escrita igual que en la voz.
 4. **Datos nuevos que no traía el guion base** (todos sobre cómo funcionan las plataformas, ninguno sobre resultados):
