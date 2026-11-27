@@ -1,3 +1,4 @@
+import { contextoParaGemini } from "@/lib/oficina/contexto-servidor";
 import { GoogleGenAI } from "@google/genai";
 import { identificadorModelo } from "@/lib/agentes/modelo";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -311,7 +312,7 @@ export async function ejecutarConGemini(id: string, opciones: { candidatos?: unk
   const tope = evaluarPresupuesto({ mesUsd: gasto.mesUsd, diaPerfilUsd: t.rubro_id ? gasto.porRubro[t.rubro_id]?.diaUsd ?? 0 : 0 }, config);
   if (tope.bloquea || gasto.mesUsd >= config.mensualUsd) return { ok: false, status: 409, error: `Tope del mes de Gemini alcanzado: ${tope.motivo} La tarea queda para Claude.` };
   const modelo = identificadorModelo();
-  const entrada = { titulo: t.titulo, pedido: t.pedido, plan: t.triaje, ruta: t.ruta, alcance: t.alcance };
+  const entrada = { titulo: t.titulo, pedido: t.pedido, plan: t.triaje, ruta: t.ruta, alcance: t.alcance, contexto: contextoParaGemini(t.titulo, t.pedido) };
   const pedidos = normalizarCandidatos(opciones.candidatos ?? t.arena_candidatos ?? undefined);
   const plan = planArena({ pedidos, restanteMesUsd: config.mensualUsd - gasto.mesUsd, promptEjemplo: promptCandidato(entrada, enfoqueDeCandidato(0, t.ruta)), precios: config });
   if (plan.n === 0) return { ok: false, status: 409, error: plan.aviso ?? "No queda presupuesto de Gemini para esta tarea." };

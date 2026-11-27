@@ -33,6 +33,8 @@ const nextConfig = {
     "/api/asistente/**": ["./cerebro/**/*.md"],
     // 22/11: «Preguntale al cerebro» y «Decisiones y órdenes» leen los .md desde la página y su ruta.
     "/api/cerebro/**": ["./cerebro/**/*.md"],
+    // 27/11: Gemini en la Oficina recibe contexto del cerebro y de los mapas.
+    "/api/oficina/**": ["./cerebro/**/*.md"],
     "/cerebro": ["./cerebro/**/*.md"],
   },
   // 13/11 (seguridad): el panel no usa el optimizador de imágenes de Next; se apaga

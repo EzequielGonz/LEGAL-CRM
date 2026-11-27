@@ -370,3 +370,11 @@ El dueño, textual: «que arranque cuando yo te lo pida tambien por mas que no h
 - Cuando él pide arrancar una tarea de la Oficina y el disparador de Claude no está configurado (o no responde), la tarea la resuelve Gemini (3 respuestas que compiten y un juez), en vez de quedar en `sin_disparador`.
 - Reemplaza, para ese caso, la decisión anterior de «Gemini solo por botón». El botón de Gemini sigue estando.
 - Gemini no arranca por su cuenta: solo cuando él lo pide. Se mantiene el tope de USD 30 por mes.
+
+### 27/11 · Gemini con el cerebro y el mapa
+
+El dueño, textual: «el cerebro conectaselo a gemini y el mapa tambien asi tiene todo el contexto».
+
+- Cada pedido que la Oficina le hace a Gemini lleva las partes del cerebro y de los mapas que tocan la tarea, más las órdenes vigentes (`src/lib/oficina/contexto-servidor.ts`). También las ve el juez.
+- Viajan solo los documentos del repositorio; quedan afuera las charlas viejas, los traspasos y la bitácora. Lo aprendido en la base se suma cuando se pueda filtrar por rubro.
+- El repaso de Claude sigue siendo obligatorio antes de aprobar.
