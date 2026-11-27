@@ -107,3 +107,7 @@ Hay unos 280 agentes instalados por plugins. Hay que elegir el especialista, no 
 - **SEO:** `searchfit-seo:*` y `ai-advisors:ai-visibility-auditor`.
 
 Cada tarea grande termina con al menos 2 revisores independientes de especialidades distintas.
+
+
+## Regla del 27/11: usar todo lo instalado
+Antes de empezar, buscá qué herramientas MCP, skills y agentes personalizados sirven para tu tarea (`ToolSearch`, `SearchSkills`, listado de agentes) y usalos sin esperar permiso, salvo lo que cueste plata (eso siempre con autorización expresa). Guardá lo importante también en la memoria (Cognee). Al cerrar, decí qué usaste.
