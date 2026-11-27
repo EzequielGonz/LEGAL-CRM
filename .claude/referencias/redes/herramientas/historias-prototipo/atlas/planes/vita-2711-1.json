@@ -1,0 +1,10 @@
+{"id": "vita-2711-1", "marca": "vita", "gancho": "Pedir perdón te puede costar el juicio.", "palabra": "NUNCA", "contador": 3,
+ "beats": [
+  {"palabra": "domingo", "n": 0, "tipo": "gancho", "objeto": "choque", "texto": "", "efecto": "golpe"},
+  {"palabra": "perdón", "n": 0, "tipo": "problema", "objeto": "globo", "texto": "«Perdón, fue mi culpa»", "efecto": "rebote"},
+  {"palabra": "nunca", "n": 0, "tipo": "giro", "objeto": "sello", "texto": "Esa frase, nunca", "efecto": "tachar"},
+  {"palabra": "uno", "n": 0, "tipo": "paso", "objeto": "camara", "texto": "Fotos: autos y patente", "efecto": "flash"},
+  {"palabra": "dos", "n": 0, "tipo": "paso", "objeto": "testigo", "texto": "Datos y testigos", "efecto": "caida"},
+  {"palabra": "tres", "n": 1, "tipo": "paso", "objeto": "almanaque", "texto": "Aviso al seguro: 3 días", "efecto": "sello"},
+  {"palabra": "mandáselo", "n": 0, "tipo": "cierre", "objeto": "celular", "texto": "Mandáselo a quien maneja", "efecto": "barrido"}
+ ], "cierre": "Comentá «NUNCA»"}

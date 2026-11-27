@@ -6,6 +6,79 @@ Rama `claude/brave-hawking-nzsr60` · PR EzequielGonz/LEGAL-CRM#82 (seguido, en 
 - El dueño frenó el boceto de VITA. **No hay agentes trabajando ni nada programado.** Lo programado en Metricool del 25 al 29/11 (12 historias + 1 carrusel por día y marca) NO se toca.
 - **Esperando:** el dueño busca 1 o 2 reels de referencia con el 3D que imagina. Al recibirlos, analizarlos (gancho, cámara, luz, nivel de realismo, animación, efectos) y recién ahí hacer el boceto de VITA con el guion `vita-2711-1`.
 
+## 27/11 12:30 — TANDA 1 EN PRODUCCIÓN (checkpoint para compactar)
+**El dueño dio el OK** (27/11 ~11:50) con estos ajustes:
+- subtítulos sincronizados y el cartel de arriba sin cortar;
+- más animación y animaciones distintas, jugando con todos los rubros;
+- voz un poco más rápida;
+- ganchos polémicos;
+- roles de editor, marketing, estrategia y copy senior;
+- usar subagentes.
+
+**Decidió:**
+- 2 reels nuevos por día y marca, del 28/11 al 02/12: 40 reels. Los guiones del 27/11 al 01/12 se corren un día.
+- Publicar todo en Metricool: Instagram y Facebook, America/Argentina/Buenos_Aires.
+- Alojar los videos en `main` de cada landing, en `apps/web/public/redes/2811/`, como siempre.
+- La revisión profesional de los textos legales queda cubierta por su OK expreso.
+
+**Tareas programadas** (send_later a esta sesión; el texto de cada una dice qué hacer):
+
+| Cuándo (Buenos Aires) | trigger | Qué hace |
+|---|---|---|
+| Hoy 27/11 15:30 | `trig_01TFsMBNJWdP5NcYpjWz86FJ` | Tanda 2, del 03/12 al 07/12: 40 reels, más carruseles (1 por día) e historias (6 por día) del 30/11 al 07/12 |
+| Sáb 28/11 13:00 | `trig_01YEtziqXSGoXu3bzb7Byf85` | 2 reels más por marca, con calibración previa (estadísticas, perfiles y competencia) |
+| Dom 29/11 13:00 | `trig_01MwTFfvxAabHtoHGCYnjjuW` | Ídem |
+| Dom 29/11 18:00 | `trig_01L6mweLEKYsNRzZNQ4CeFro` | Ídem |
+| Lun 30/11 21:00 | `trig_01UBqJxCNRzNquL65EDWyd6A` | Ídem |
+
+**Metricool (comprobado en VITA el 27/11):** hay 12 historias y 1 carrusel por día solo hasta el 29/11. Desde el 30/11 no hay nada salvo estos reels. Posts sueltos no hay desde el 24/11.
+
+**Contrato guion ↔ escena:** `docs/redes/tanda-2811-0712/tanda1/CONTRATO.md`.
+- Plan por reel en `atlas/planes/<id>.json`, con ids `<marca>-<ddmm>-<a|b>`.
+- Objetos por marca y efectos.
+
+**Agentes lanzados a las 12:00 UTC (en segundo plano):**
+- 4 guionistas: escriben los 10 planes por marca en `atlas/planes/` y un resumen en `docs/redes/tanda-2811-0712/tanda1/<marca>.md`.
+  - `vita-2811-a` usa la voz ya grabada de `vita-2711-1`.
+- 3 constructores de escena:
+  - `escenas/coberturas.js`: plastilina, prueba con `planes/coberturas-2711-g2.json`;
+  - `escenas/autos.js`: estudio de producto, prueba con `autos-2711-g2`;
+  - `escenas/marketing.js`: cartel de aeropuerto, prueba con `marketing-2711-g1`.
+  - Cada uno deja su hoja en `atlas/prueba/<marca>-hoja.jpg`.
+- Al terminar, revisar sus informes y hojas antes de producir.
+
+**Motor:**
+- `escenas/vita.js` ahora se arma desde el plan:
+  - frontón con el gancho y plano general al principio y al final (loop);
+  - biblioteca de objetos de cartulina;
+  - los 12 efectos del contrato;
+  - carteles colgantes, atril con contador y cierre, y Nico de narrador.
+  - Probado con `planes/vita-2711-1.json`; hoja `atlas/prueba/hoja-v3.jpg`.
+- El boceto anterior quedó archivado en `escenas/vita-boceto-archivado.js`.
+- `base.js` carga `planes/<id>.json` y tiene modo `RAPIDO=1` (sin profundidad de campo ni sombras, ~1,1 s por cuadro).
+- `render.js` toma `RAPIDO` del entorno.
+- `alinear.py <id> "<voz>" <audio>`: tiempos reales de cada palabra con faster-whisper small, que se instala con pip y baja de Hugging Face. Reconoce el 100 % de las palabras y corrige el karaoke.
+
+**Pipeline que falta por reel:**
+1. **Voz:**
+   - ElevenLabs `creative_generate_speech`, modelo `eleven_flash_v2_5`, `generations_count: 1`.
+   - Voces: Claudiio `hVXoK5zuQfMOQB7NrIFY` (VITA), Sol `ijxn8I4NzJccD2Sa7lcj` (Coberturas), Franco `jbWMqMKDKL7X0v1DXTHH` (Autos) y Santo `CNBiCLtxaJJKQwl4Hq2q` (Marketing).
+   - Bajar el audio y acelerarlo con `atempo=1.12` (la herramienta no tiene parámetro de velocidad).
+   - Agregar 0,5 s de silencio al principio y guardar `audio/<id>-voz.wav`.
+   - Para `vita-2811-a`, acelerar el wav de `vita-2711-1`.
+2. **Tiempos:** escribir `audio/<id>-palabras.json` con `{id, voz_fin, total: voz_fin + 1.2, palabras, textos, palabra, gancho}` y después correr `python3 alinear.py <id> "<voz>" audio/<id>-voz.wav`.
+3. **Render y mezcla:**
+   - `RAPIDO=1 node render.js <id> 30 3`, unos 5 min por reel.
+   - `python3 mezcla.py <id>`.
+   - ffmpeg a `out/<id>.mp4`: CRF 21, maxrate 14M, AAC 256k, faststart.
+4. **Alojamiento:** copiar a `main` de la landing, en `apps/web/public/redes/2811/<id>.mp4`, más la tapa jpg; push y comprobar que responda 200 en el dominio de la landing.
+5. **Metricool:** `createScheduledPost` con `providers: [instagram, facebook]`, `instagramData.type REEL` con `isAiGenerated: true` y `facebookData.type REEL`, `fecha_pub` y `hora` del plan, y el copy del plan. Antes, getScheduledPosts.
+
+**Consumo:**
+- ElevenLabs: 1.305 de 40.000 caracteres usados; las 39 voces usan ~16.000.
+- vidIQ: 10 créditos gratis.
+- Nada pago.
+
 ## 27/11 11:45 — boceto de VITA terminado y enviado al dueño (espera su OK)
 - Video: `.claude/referencias/redes/herramientas/historias-prototipo/atlas/out/vita-2711-1-atlas-entrega.mp4` (34,6 s, 1080×1920, 30 fps, 53 MB, −15 LUFS; fuera de git por peso; el maestro CRF 17 pesa 174 MB). Hoja de revisión: `docs/redes/tanda-2811-0712/boceto-vita/atlas-teatrito-video-final.jpg`.
 - Estado: especificado, implementado, probado (revisado cuadro por cuadro en 12 momentos, el loop empalma) y **no publicado ni programado**. Ajustes finales: apagón real en «Nunca» (viñeta y luces bajan), atril y Nico dentro del cuadro.

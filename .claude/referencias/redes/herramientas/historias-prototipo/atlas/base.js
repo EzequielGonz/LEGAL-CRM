@@ -71,11 +71,12 @@ const Cine = {
 };
 
 // ── motor ────────────────────────────────────────────────────────────────────
+export const RAPIDO = new URLSearchParams(location.search).get('rapido') === '1';
 export async function motor(cfg = {}) {
-  await document.fonts.ready;
+  await document.fonts.ready; if (RAPIDO) { cfg = {...cfg, dof: null}; }
   const r = new THREE.WebGLRenderer({antialias: true, preserveDrawingBuffer: true, powerPreference: 'high-performance'});
   r.setPixelRatio(1); r.setSize(W, H); r.toneMapping = cfg.tono === 'agx' ? THREE.AgXToneMapping : THREE.ACESFilmicToneMapping; r.toneMappingExposure = cfg.exposicion ?? 1;
-  r.outputColorSpace = THREE.SRGBColorSpace; r.shadowMap.enabled = true; r.shadowMap.type = cfg.sombraDura ? THREE.PCFShadowMap : THREE.PCFSoftShadowMap;
+  r.outputColorSpace = THREE.SRGBColorSpace; r.shadowMap.enabled = !RAPIDO; r.shadowMap.type = cfg.sombraDura ? THREE.PCFShadowMap : THREE.PCFSoftShadowMap;
   document.getElementById('lienzo').appendChild(r.domElement);
   const scene = new THREE.Scene(); if (cfg.fondo) scene.background = new THREE.Color(cfg.fondo);
   const cam = new THREE.PerspectiveCamera(cfg.fov ?? 30, W / H, .05, 400);
@@ -116,8 +117,9 @@ export function css(txt) { const s = document.createElement('style'); s.textCont
 export async function arrancar() {
   const q = new URLSearchParams(location.search); const id = q.get('m'); const marca = id.split('-')[0];
   const datos = await (await fetch(`audio/${id}-palabras.json`)).json();
+  let plan = null; try { const r = await fetch(`planes/${id}.json`); if (r.ok) plan = await r.json(); } catch (e) {}
   const escena = (await import(`./escenas/${marca}.js?v=${Date.now()}`)).default;
-  const {update, total, eventos = []} = await escena(datos);
+  const {update, total, eventos = []} = await escena(datos, plan);
   window.TOTAL = total ?? datos.total; window.EVENTOS = eventos;
   window.frame = t => update(t);
   window.listo = true;
