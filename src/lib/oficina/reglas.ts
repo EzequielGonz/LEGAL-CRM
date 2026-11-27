@@ -337,6 +337,24 @@ export const TEXTO_SIN_CLAUDE = "Falta conectar a Claude; la tarea queda en la m
 export const TEXTO_ARRANQUE =
   "Arranque desde la Oficina del panel. Procesá la Oficina con la skill «oficina» del repositorio: primero repasá lo que hizo Gemini (cola «Para repasar»), después tomá las tareas en la mesa de entrada y las que tienen cambios pedidos, resolvé cada una en modo arena (varias respuestas y un juez), pasalas por los agentes de cada área de su ruta, revisalas como Dirección y dejalas listas para el OK del dueño. Hasta borrador: no publiques, no programes ni toques producción.";
 
+export const MARCA_VERSION_ANTERIOR = "Versión anterior (pidieron cambios";
+
+/**
+ * Qué queda en `resultado` cuando el dueño pide cambios (27/11, auditoría): la
+ * tarea vuelve a la mesa de entrada y el resultado viejo no puede verse como
+ * vigente. Nada se borra: si lo hizo Gemini, su texto sigue en
+ * `resultado_gemini` y `resultado` queda vacío; si no, se conserva marcado como
+ * versión anterior. Pura.
+ */
+export function resultadoAlPedirCambios(resultado: string | null | undefined, resultadoGemini: string | null | undefined, ahora: Date): string | null {
+  const viejo = (resultado ?? "").trim();
+  if (!viejo) return null;
+  if ((resultadoGemini ?? "").trim()) return null;
+  if (viejo.startsWith(MARCA_VERSION_ANTERIOR)) return viejo;
+  const dia = ahora.toLocaleDateString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", day: "2-digit", month: "2-digit" });
+  return `${MARCA_VERSION_ANTERIOR} el ${dia}; no es la entrega vigente)\n\n${viejo}`;
+}
+
 /** Normaliza una fila de la base para la Oficina. */
 export function filaATareaOficina(f: any): TareaOficina | null {
   if (!f || typeof f.id !== "string") return null;

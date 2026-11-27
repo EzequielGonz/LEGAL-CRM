@@ -3,7 +3,7 @@
  * salen los puestos de cada sala, los mensajeros que van al Cerebro, las hojas apiladas y la
  * actividad reciente. No cambia ninguna regla de tareas.
  */
-import { ETIQUETA_ETAPA, NOMBRE_AREA, etapaDe, type Area, type TareaOficina } from "@/lib/oficina/reglas";
+import { ETIQUETA_ETAPA, NOMBRE_AREA, colasDeTareas, etapaDe, type Area, type TareaOficina } from "@/lib/oficina/reglas";
 import { SALAS_ORDEN, mensajerosDeSala } from "@/lib/oficina/edificio";
 import { SECTORES, estadoSector, puestosDeSector, puestosOcupados, type EstadoSector } from "@/lib/oficina/sectores";
 import type { PuestoVisual } from "@/lib/oficina/escena";
@@ -39,9 +39,13 @@ export function salasVisuales(tareas: TareaOficina[]): Record<Area, SalaVisual> 
   return salida;
 }
 
-/** Cuántas entregas esperan el OK en el escritorio del Cerebro. */
-export function hojasParaOk(tareas: Pick<TareaOficina, "estado" | "decision">[]): number {
-  return tareas.filter((t) => etapaDe(t) === "esperando_ok").length;
+/**
+ * Cuántas entregas esperan el OK en el escritorio del Cerebro. 27/11
+ * (auditoría): lo que hizo Gemini y Claude todavía no repasó no cuenta; va a
+ * «Para repasar» (misma regla que `colasDeTareas`).
+ */
+export function hojasParaOk(tareas: TareaOficina[]): number {
+  return colasDeTareas(tareas).ok.length;
 }
 
 export interface Actividad {
@@ -60,9 +64,9 @@ export function actividadReciente(tareas: TareaOficina[], max = 6): Actividad[] 
     .map((t) => ({ id: t.id, titulo: t.titulo, etapa: ETIQUETA_ETAPA[etapaDe(t)], sector: t.area ? NOMBRE_AREA[t.area] : "Mesa de entrada", updated_at: t.updated_at }));
 }
 
-/** Tareas que esperan el OK del dueño, las más nuevas primero. */
+/** Tareas que esperan el OK del dueño, las más nuevas primero (sin las que falta repasar). */
 export function entregasParaOk(tareas: TareaOficina[]): TareaOficina[] {
-  return tareas.filter((t) => etapaDe(t) === "esperando_ok").sort((a, b) => Date.parse(b.updated_at) - Date.parse(a.updated_at));
+  return [...colasDeTareas(tareas).ok].sort((a, b) => Date.parse(b.updated_at) - Date.parse(a.updated_at));
 }
 
 /** Pedido que se manda a la mesa de entrada cuando se deja una tarea desde una sala: nombra el sector para que el triaje lo ruteé ahí. */

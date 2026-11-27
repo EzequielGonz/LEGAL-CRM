@@ -47,6 +47,23 @@ export const MAX_TEXTO_CANDIDATO = 6000;
 // El juez lee cada respuesta entera: si la ve cortada la puntúa como incompleta (prueba del 27/11).
 export const MAX_TEXTO_AL_JUEZ = MAX_TEXTO_CANDIDATO;
 export const MAX_RESULTADO = 8000;
+/**
+ * Tiempo (27/11, auditoría): la función de Vercel tiene 300 s y con muchas
+ * respuestas la arena no entraba. Por corrida compiten como máximo 20, y una
+ * tanda nueva arranca solo si todavía entran la tanda y el juez antes del plazo.
+ */
+export const MAX_CANDIDATOS_POR_CORRIDA = 20;
+/** Lo que espera cada respuesta y el juez antes de darlos por caídos (lo usa el generador real). */
+export const SEGUNDOS_LIMITE_CANDIDATO = 90;
+export const SEGUNDOS_LIMITE_JUEZ = 120;
+/** Segundos de la arena dentro de los 300 de la función (el resto: leer, tomar y cerrar la tarea). */
+export const SEGUNDOS_PLAZO_ARENA = 250;
+
+/** ¿Entra otra tanda de respuestas más el juez antes del plazo? Pura. */
+export function entraOtraTanda(transcurridoMs: number, plazoMs: number = SEGUNDOS_PLAZO_ARENA * 1000): boolean {
+  return transcurridoMs + (SEGUNDOS_LIMITE_CANDIDATO + SEGUNDOS_LIMITE_JUEZ) * 1000 <= plazoMs;
+}
+
 /** Minutos sin avance para considerar cortada una corrida de Gemini (se puede volver a intentar). */
 export const MINUTOS_CORRIDA_CORTADA = 10;
 
@@ -205,13 +222,17 @@ export function planArena(input: {
   const costoCandidatoUsd = costoEstimadoUsd({ entrada: tokensDe(input.promptEjemplo), salida: TOKENS_SALIDA_POR_CANDIDATO }, input.precios);
   const entradaJuez = tokensDe(input.promptEjemplo) + pedidos * Math.ceil(MAX_TEXTO_AL_JUEZ / 3.5);
   const costoJuezUsd = pedidos > 1 ? costoEstimadoUsd({ entrada: entradaJuez, salida: 80 * pedidos + 200 }, input.precios) : 0;
-  const n = topeDeCandidatos(disponibleUsd, costoCandidatoUsd, { maximo: pedidos, costoJuezUsd });
+  const porPresupuesto = topeDeCandidatos(disponibleUsd, costoCandidatoUsd, { maximo: pedidos, costoJuezUsd });
+  // 27/11: además del presupuesto, el tiempo de la función (hasta 20 por corrida).
+  const n = Math.min(porPresupuesto, MAX_CANDIDATOS_POR_CORRIDA);
   const aviso =
     n === 0
       ? "No queda presupuesto de Gemini para esta tarea (tope del mes o freno por tarea)."
-      : n < pedidos
+      : porPresupuesto < pedidos && porPresupuesto <= MAX_CANDIDATOS_POR_CORRIDA
         ? `Se pidieron ${pedidos} respuestas y entran ${n} sin pasar el presupuesto.`
-        : null;
+        : n < pedidos
+          ? `Se pidieron ${pedidos} respuestas; por el tiempo de la función compiten hasta ${MAX_CANDIDATOS_POR_CORRIDA} por corrida, así que corren ${n}.`
+          : null;
   return { n, pedidos, costoCandidatoUsd, costoJuezUsd, disponibleUsd, aviso };
 }
 
@@ -234,12 +255,19 @@ export interface ResultadoCorrida {
   costoUsd: number;
   /** Por qué no hubo ganador, si no lo hubo. */
   falla: string | null;
+  /** Respuestas que no se corrieron porque no entraban en el tiempo (0 si corrieron todas). */
+  recortadas: number;
 }
 
-async function enTandas<T, R>(items: T[], tam: number, fn: (x: T) => Promise<R>): Promise<R[]> {
-  const salida: R[] = [];
-  for (let i = 0; i < items.length; i += tam) salida.push(...(await Promise.all(items.slice(i, i + tam).map(fn))));
-  return salida;
+/** Gasto de una tanda (o del juez), para registrarlo apenas se gasta. */
+export interface GastoTanda {
+  tipo: "candidatos" | "juez";
+  llamadas: number;
+  tokensEntrada: number;
+  tokensSalida: number;
+  costoUsd: number;
+  /** ¿Salió algo usable? */
+  sirvio: boolean;
 }
 
 /**
@@ -258,32 +286,62 @@ export async function correrArena(
     pedidos: number;
     ahora?: () => Date;
     alAvanzar?: (texto: string) => Promise<void> | void;
+    /**
+     * Se llama después de cada tanda y del juez con lo gastado ahí (27/11): así el
+     * gasto cuenta para el tope de USD 30 aunque la función se corte después.
+     */
+    alGastar?: (g: GastoTanda) => Promise<void> | void;
+    /** Plazo de la arena en ms (por defecto SEGUNDOS_PLAZO_ARENA) y reloj monotónico (pruebas). */
+    plazoMs?: number;
+    reloj?: () => number;
   },
 ): Promise<ResultadoCorrida> {
   const ahora = opciones.ahora ?? (() => new Date());
+  const reloj = opciones.reloj ?? (() => performance.now());
+  const arranque = reloj();
+  const plazoMs = opciones.plazoMs ?? SEGUNDOS_PLAZO_ARENA * 1000;
   let tokensEntrada = 0;
   let tokensSalida = 0;
   let llamadas = 0;
   const costo = (r: RespuestaGenerador) => costoEstimadoUsd({ entrada: r.tokensEntrada, salida: r.tokensSalida }, opciones.precios);
 
   const indices = Array.from({ length: Math.max(0, n) }, (_, i) => i);
-  const candidatos: CandidatoGuardado[] = await enTandas(indices, LLAMADAS_EN_PARALELO, async (i) => {
+  const correrUno = async (i: number): Promise<{ c: CandidatoGuardado; r: RespuestaGenerador | null }> => {
     const id = `R${i + 1}`;
     const enfoque = enfoqueDeCandidato(i, tarea.ruta);
     try {
       const r = await generar(promptCandidato(tarea, enfoque), "candidato");
-      llamadas++;
-      tokensEntrada += r.tokensEntrada;
-      tokensSalida += r.tokensSalida;
       const limpio = limpiarSalida(r.texto);
-      return { id, enfoque, texto: limpio.ok ? limpio.texto : "", puntaje: null, porque: "", costoUsd: costo(r), error: limpio.ok ? null : limpio.motivo };
+      return { c: { id, enfoque, texto: limpio.ok ? limpio.texto : "", puntaje: null, porque: "", costoUsd: costo(r), error: limpio.ok ? null : limpio.motivo }, r };
     } catch (e) {
-      llamadas++;
-      return { id, enfoque, texto: "", puntaje: null, porque: "", costoUsd: 0, error: e instanceof Error ? e.message.slice(0, 200) : "Falló la llamada." };
+      return { c: { id, enfoque, texto: "", puntaje: null, porque: "", costoUsd: 0, error: e instanceof Error ? e.message.slice(0, 200) : "Falló la llamada." }, r: null };
     }
-  });
+  };
+  const candidatos: CandidatoGuardado[] = [];
+  for (let i = 0; i < indices.length; i += LLAMADAS_EN_PARALELO) {
+    // La primera tanda corre siempre; las siguientes, solo si entran con el juez antes del plazo.
+    if (i > 0 && !entraOtraTanda(reloj() - arranque, plazoMs)) break;
+    const tanda = await Promise.all(indices.slice(i, i + LLAMADAS_EN_PARALELO).map(correrUno));
+    const gasto: GastoTanda = { tipo: "candidatos", llamadas: tanda.length, tokensEntrada: 0, tokensSalida: 0, costoUsd: 0, sirvio: false };
+    for (const { c, r } of tanda) {
+      candidatos.push(c);
+      llamadas++;
+      if (r) {
+        tokensEntrada += r.tokensEntrada;
+        tokensSalida += r.tokensSalida;
+        gasto.tokensEntrada += r.tokensEntrada;
+        gasto.tokensSalida += r.tokensSalida;
+      }
+      gasto.costoUsd += c.costoUsd;
+      if (!c.error) gasto.sirvio = true;
+    }
+    await opciones.alGastar?.(gasto);
+  }
+  const recortadas = indices.length - candidatos.length;
   const sanos = candidatos.filter((c) => !c.error);
-  await opciones.alAvanzar?.(`Generó ${sanos.length} de ${candidatos.length} respuestas${sanos.length > 1 ? "; ahora las puntúa el juez" : ""}.`);
+  await opciones.alAvanzar?.(
+    `Generó ${sanos.length} de ${candidatos.length} respuestas${recortadas ? ` (${recortadas} no entraron en el tiempo de esta corrida)` : ""}${sanos.length > 1 ? "; ahora las puntúa el juez" : ""}.`,
+  );
 
   const base = (extra: Partial<ArenaGuardada>): ArenaGuardada => ({
     pedidos: opciones.pedidos,
@@ -306,6 +364,7 @@ export async function correrArena(
     llamadas,
     costoUsd: arena.costoUsd,
     falla,
+    recortadas,
   });
 
   if (sanos.length === 0) return fin(base({}), null, "Ninguna respuesta sirvió (fallaron o traían datos personales).");
@@ -316,6 +375,7 @@ export async function correrArena(
 
   let veredicto: Veredicto | null = null;
   let costoJuez = 0;
+  let gastoJuez: GastoTanda = { tipo: "juez", llamadas: 1, tokensEntrada: 0, tokensSalida: 0, costoUsd: 0, sirvio: false };
   try {
     const r = await generar(promptJuez(tarea, sanos.map((c) => ({ id: c.id, texto: c.texto }))), "juez");
     llamadas++;
@@ -323,10 +383,12 @@ export async function correrArena(
     tokensSalida += r.tokensSalida;
     costoJuez = costo(r);
     veredicto = leerVeredicto(r.texto, sanos.map((c) => c.id));
+    gastoJuez = { tipo: "juez", llamadas: 1, tokensEntrada: r.tokensEntrada, tokensSalida: r.tokensSalida, costoUsd: costoJuez, sirvio: Boolean(veredicto) };
   } catch {
     llamadas++;
     veredicto = null;
   }
+  await opciones.alGastar?.(gastoJuez);
   for (const c of candidatos) {
     const v = veredicto?.puntajes.get(c.id);
     if (v) {

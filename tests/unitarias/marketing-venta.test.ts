@@ -9,6 +9,7 @@ import {
   fusionarDatosVenta,
   guiaVenta,
   nombreBaseSugerido,
+  reservadosHoy,
   textoEnvioPresupuesto,
   validarExtraccion,
   ventanaAbierta,
@@ -30,7 +31,7 @@ test("cantidad por zona: reparte el tope y nunca se pasa", () => {
 });
 
 test("nombre de base sugerido y topes de gasto", () => {
-  const f = new Date(2026, 9, 16);
+  const f = new Date("2026-10-16T15:00:00Z"); // 16/10 12:00 en Argentina
   assert.equal(nombreBaseSugerido("pizzerías", ["Toda Argentina"], f), "Pizzerías · Toda Argentina · 16/10/2026");
   assert.equal(nombreBaseSugerido("gimnasios", ["Córdoba", "Rosario", "Salta"], f), "Gimnasios · Córdoba y 2 zonas más · 16/10/2026");
   const lim = { por_extraccion: 500, por_dia: 1000 };
@@ -77,4 +78,26 @@ test("guía de venta: la apertura no afirma investigación; el cierre siempre pr
   assert.ok(g.some((x) => x.includes("menos de 24 horas")));
   const e = guiaVenta({ etapa: "presupuesto_enviado", origen: "scraper", presentacion: "", marca: "", analisisListo: true, presupuesto: { estado: "enviado", monto: 100, moneda: "USD", plazo: "10 días" } });
   assert.ok(e.some((x) => x.includes("presupuesto_aprobado")));
+});
+
+test("nombre de base sugerido: usa el día de Argentina aunque en UTC ya sea mañana (27/11)", () => {
+  // 16/10 23:30 AR = 17/10 02:30 UTC.
+  assert.equal(nombreBaseSugerido("bares", ["Salta"], new Date("2026-10-17T02:30:00Z")), "Bares · Salta · 16/10/2026");
+  // 17/10 00:10 AR = 03:10 UTC.
+  assert.equal(nombreBaseSugerido("bares", ["Salta"], new Date("2026-10-17T03:10:00Z")), "Bares · Salta · 17/10/2026");
+});
+
+test("tope diario de extracciones: las canceladas cuentan lo que trajeron (27/11)", () => {
+  assert.equal(
+    reservadosHoy([
+      { estado: "listo", cantidad_max: 100, encontrados: 80 },
+      { estado: "error", cantidad_max: 50, encontrados: 5 },
+      { estado: "cancelado", cantidad_max: 300, encontrados: 120 },
+      { estado: "cancelado", cantidad_max: 300, encontrados: 0 },
+      { estado: "pendiente", cantidad_max: 200, encontrados: 40 },
+      { estado: "ejecutando", cantidad_max: 60, encontrados: 0 },
+    ]),
+    80 + 5 + 120 + 0 + 200 + 60,
+  );
+  assert.equal(reservadosHoy([]), 0);
 });

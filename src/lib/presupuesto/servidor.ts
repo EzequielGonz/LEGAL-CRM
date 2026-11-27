@@ -55,6 +55,15 @@ async function leerConCache(ahora: Date) {
   return _cache;
 }
 
+/**
+ * Lectura del gasto con la memoria de un minuto, para pantallas que consultan
+ * seguido (la Oficina refresca cada 8 s): 27/11, auditoría.
+ */
+export async function leerGastoGeminiConCache(ahora: Date = new Date()): Promise<{ config: ConfigPresupuesto; gasto: GastoCalculado }> {
+  const { config, gasto } = await leerConCache(ahora);
+  return { config, gasto };
+}
+
 const LIBRE: DecisionPresupuesto = { estado: "libre", bloquea: false, gastoMesUsd: 0, gastoDiaPerfilUsd: 0, porcentajeMes: 0, motivo: "" };
 
 /**

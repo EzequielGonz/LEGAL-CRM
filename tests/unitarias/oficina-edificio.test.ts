@@ -168,3 +168,12 @@ test("la tarea dejada desde una sala nombra el sector; desde el edificio o el Ce
   assert.equal(pedidoParaSector("direccion", "hola"), "hola");
   assert.match(pedidoParaSector("redes", "armá 3 reels"), /^Para el sector «Redes y contenido»: armá 3 reels$/);
 });
+
+test("para tu OK no lista lo que hizo Gemini y Claude todavía no repasó (27/11)", () => {
+  const sinRepasar = { ...t("g1", "lista", "seo"), ejecutor: "gemini", repaso: "sin_repasar" } as TareaOficina;
+  const repasada = { ...t("g2", "lista", "seo", null, 5), ejecutor: "gemini", repaso: "repasada" } as TareaOficina;
+  const deClaude = { ...t("c1", "lista", "redes", null, 10), ejecutor: "claude" } as TareaOficina;
+  const tareas = [sinRepasar, repasada, deClaude];
+  assert.equal(hojasParaOk(tareas), 2);
+  assert.deepEqual(entregasParaOk(tareas).map((x) => x.id), ["g2", "c1"]);
+});

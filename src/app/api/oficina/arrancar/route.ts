@@ -23,10 +23,10 @@ export async function POST(request: Request) {
   const [ultimo, pendientes, repasar] = await Promise.all([
     db.from("oficina_arranques" as any).select("id, pedido_at, estado").order("pedido_at", { ascending: false }).limit(1).maybeSingle(),
     db.from("bandeja_claude" as any).select("id", { count: "exact", head: true }).in("estado", ["pendiente", "en_espera"]),
-    db.from("bandeja_claude" as any).select("id", { count: "exact", head: true }).eq("ejecutor", "gemini").eq("repaso", "sin_repasar").neq("estado", "descartada"),
+    db.from("bandeja_claude" as any).select("id", { count: "exact", head: true }).eq("ejecutor", "gemini").eq("repaso", "sin_repasar").eq("estado", "lista"),
   ]);
   if (ultimo.error || pendientes.error) return NextResponse.json({ error: "No se pudo leer la oficina." }, { status: 500 });
-  // Antes de la migración 0652 no hay columna «repaso»: se cuenta 0.
+  // «Para repasar» = solo las «lista» (27/11, igual que colasDeTareas). Antes de la migración 0652 no hay columna «repaso»: se cuenta 0.
   const total = (pendientes.count ?? 0) + (repasar.error ? 0 : repasar.count ?? 0);
   if (!total) return NextResponse.json({ error: "No hay tareas en la mesa de entrada ni para repasar: dejá una primero." }, { status: 409 });
   const espera = puedeArrancar(ultimo.data as any);

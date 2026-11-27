@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+import { EsqueletoPagina } from "@/components/ui/esqueleto-pagina";
 import { leerFallas, type Falla } from "@/lib/salud/fallas";
 import { perfilActivo } from "@/lib/perfil-activo";
 import { MarcoPerfil } from "@/components/perfiles/marco-perfil";
@@ -27,7 +29,10 @@ export default async function SaludPage(props: { searchParams: Promise<{ perfil?
   datos.catch(() => {});
   return (
     <MarcoPerfil slug={slug} sinSalud>
-      <SaludContenido slug={slug} datos={datos} />
+      {/* 27/11: el marco se ve enseguida y el contenido llega con un esqueleto del mismo alto. */}
+      <Suspense fallback={<EsqueletoPagina tarjetas={4} filas={6} />}>
+        <SaludContenido slug={slug} datos={datos} />
+      </Suspense>
     </MarcoPerfil>
   );
 }

@@ -97,6 +97,32 @@ export function accionesDeCita(c: { status: string; kind?: string | null }): { a
   return { asistio: abierta, noAsistio: abierta, mover: abierta && c.kind !== "ia", cancelar: abierta, reabrir: c.status === "ausente" || c.status === "realizada" };
 }
 
+/**
+ * ¿Se puede pasar la cita a `nuevo`? Usa las mismas reglas que los botones
+ * (`accionesDeCita`), para que la API no acepte lo que la pantalla no ofrece
+ * (27/11, auditoría): una cita realizada no se cancela y una cancelada no se
+ * reabre. Devuelve el motivo del rechazo o `null` si se puede. Pura.
+ */
+export function motivoCambioDeCitaNoPermitido(c: { status: string; kind?: string | null }, nuevo: string): string | null {
+  if (c.status === nuevo) return null; // repetir la misma acción no cambia nada
+  const a = accionesDeCita(c);
+  const abierta = (ESTADOS_ABIERTOS as readonly string[]).includes(c.status);
+  const permitido =
+    nuevo === "realizada"
+      ? a.asistio
+      : nuevo === "ausente"
+        ? a.noAsistio
+        : nuevo === "cancelada"
+          ? a.cancelar
+          : nuevo === "pendiente" || nuevo === "confirmada"
+            ? abierta || a.reabrir
+            : false;
+  if (permitido) return null;
+  if (c.status === "cancelada") return "La cita está cancelada: no se puede cambiar. Si hace falta, agendá una nueva.";
+  if (nuevo === "cancelada") return "La cita ya pasó como realizada o ausente: no se puede cancelar. Si hace falta, reabrila primero.";
+  return "Ese cambio no está permitido para esta cita.";
+}
+
 /** Texto de recordatorio listo para pegar en el chat. No se envía solo. */
 export function textoRecordatorio(nombre: string | null, inicioIso: string, tipo?: string | null): string {
   const d = new Date(inicioIso);
