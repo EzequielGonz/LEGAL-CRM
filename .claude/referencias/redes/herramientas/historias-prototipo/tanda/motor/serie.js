@@ -2,7 +2,7 @@
 // Todo es función del tiempo: window.render(t). Recursos: karaoke palabra por palabra, contador que avanza, cartas que se abren,
 // cortes de cámara cada 1,5–3 s, luz de cine con desenfoque de miniatura (tilt-shift) y empalme del último cuadro con el primero (ffmpeg).
 import {clamp, lerp, win, easeOut, easeIn, ease, backOut, expoOut, hash} from '../../historia/base.js';
-import {ICONOS, elegirIcono} from './iconos.js';
+import {ICONOS, elegirIcono, sinAcento} from './iconos.js';
 const q = new URLSearchParams(location.search); const ID = q.get('id');
 const P = await (await fetch(`trabajo/${ID}/plan.json`)).json(); const R = P.receta, pal = R.pal, T = P.T;
 await document.fonts.ready; for (const f of ['800 40px Manrope', '700 40px "Playfair Display"', '800 40px Inter']) await document.fonts.load(f);
@@ -45,12 +45,14 @@ function escenaBeat(b, i) {
     <g transform="translate(40,10) scale(1.25)">${ic(IC)}</g>${b.icono2 ? `<g transform="translate(250,70) scale(.62)">${ICONOS[b.icono2](IC)}</g>` : ''}
     ${P.personaje ? `<g transform="translate(-300,110) scale(.5)" opacity=".9">${ICONOS.persona({...IC, d: pal.d})}</g>` : ''}`;
   } else s = `<circle r="${250}" fill="${pal.acc}" opacity=".2"/><circle r="190" fill="${pal.acc}" opacity=".16"/><g class="ico" transform="scale(1.4)">${ic(IC)}</g>`;
-  return `<svg width="1080" height="1920" viewBox="0 0 1080 1920"><g class="oc" transform="translate(540,${OY})"><g class="ob">${s}</g></g></svg>`;
+  const ins = (b.ins || []).map((x, k) => `<g class="ins" data-k="${k}" opacity="0"><circle r="260" fill="${pal.acc}" opacity=".25"/><g transform="scale(1.55)">${ICONOS[x.icono](IC)}</g></g>`).join('');
+  return `<svg width="1080" height="1920" viewBox="0 0 1080 1920"><g class="oc" transform="translate(540,${OY})"><g class="ob">${s}</g>${ins}</g></svg>`;
 }
+B.forEach(b => { b.ins = []; if (b.t1 - b.t0 > 3.6 && b.frases) b.frases.forEach((f, k) => { if (k === 0 && b.t0 > 0) return; const ic = elegirIcono(f.txt, [b.icono], true); if (ic && ICONOS[ic]) b.ins.push({t0: f.t0, t1: f.t1, icono: ic}); }); });
 const gO = $('#objs'), gT = $('#txt'); const obj = [], txt = [];
 B.forEach((b, i) => {
   const o = document.createElement('div'); o.className = 'bobj'; o.innerHTML = escenaBeat(b, i);
-  if (b.paso || b.num) { const n = document.createElement('div'); n.className = 'num'; n.style.fontSize = b.num ? '220px' : '260px'; n.style.top = `${OY - (b.num ? 200 : 460)}px`; n.dataset.chk = 1; o.appendChild(n); }
+  if (b.paso || b.num) { const n = document.createElement('div'); n.className = 'num'; n.style.fontSize = b.num ? '220px' : '260px'; n.style.top = `${OY - (b.num ? 330 : 130)}px`; n.dataset.chk = 1; o.appendChild(n); }
   if (b.num || (b.paso && !R.cartas)) { const g = o.querySelector('.ob'); g.setAttribute('transform', `translate(${b.num ? 0 : 170},${b.num ? 120 : 30}) scale(${b.num ? .62 : .78})`); }
   gO.appendChild(o); obj.push(o);
   const t = document.createElement('div'); t.className = `btxt st-${R.card}`; t.style.top = `${TY}px`; t.style.height = `${TH}px`; t.style.alignItems = 'center';
@@ -118,6 +120,8 @@ window.render = t => {
     const ob = o.querySelector('.ob'), ico = o.querySelector('.ico'); const fl = Math.sin(t * 2.2 + i) * 10; const pop = 1 + .1 * Math.exp(-(t - Math.max(b.t0, cortes.filter(u => u <= t).pop() || 0)) * 8);
     const oc = o.querySelector('.oc'); oc.setAttribute('transform', `translate(540,${OY + fl}) rotate(${Math.sin(t * 1.4 + i) * 2.5}) scale(${pop})`);
     const n = o.querySelector('.num'); if (n) { const kk = win(t, b.t0 + .1, b.t0 + 1.2); n.textContent = b.num ? Math.round(b.num * easeOut(kk)).toLocaleString('es-AR') : b.paso; const pp = b.num ? 1 : 1 + .25 * Math.exp(-(t - b.t0) * 6); n.style.transform = `scale(${pp})`; if (!b.num) n.style.left = '-250px'; }
+    (b.ins || []).forEach((x, k) => { const g = o.querySelector(`.ins[data-k="${k}"]`); const a = win(t, x.t0 - .05, x.t0 + .3), z = 1 - win(t, x.t1 - .12, x.t1 + .05); g.setAttribute('opacity', a * z); g.setAttribute('transform', `translate(0,${fl * .5}) scale(${.5 + .5 * backOut(a, 1.8)}) rotate(${(1 - a) * -12})`); });
+    { const ia = (b.ins || []).reduce((m, x) => Math.max(m, win(t, x.t0 - .05, x.t0 + .2) * (1 - win(t, x.t1 - .1, x.t1 + .1))), 0); ob.setAttribute('opacity', 1 - .78 * ia); }
     if (i === 0 && R.escala) { const e2 = easeOut(win(t, 0, .6)); ob.setAttribute('transform', `scale(${.25 + .75 * backOut(e2, 1.2)})`); }
   });
   if (cartas) { const a = B[cartas.idx[0]].t0, z = B[N - 1].t0; cartas.el.style.opacity = clamp(win(t, a - .05, a + .2)) * (1 - win(t, z - .15, z + .05));

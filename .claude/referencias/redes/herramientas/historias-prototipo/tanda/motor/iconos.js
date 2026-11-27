@@ -34,7 +34,8 @@ const REG = [
  [/salud|medic|clinica|obra social|hospital|monotribut|aporte/, 'cruz'], [/mito|error|ojo|cuidado|no |trampa|riesgo|ojo/, 'alerta'], [/auto|conduc|trayecto|vehiculo|moto/, 'auto'],
 ];
 export const sinAcento = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
-export function elegirIcono(txt, usados = []) {
+export function elegirIcono(txt, usados = [], opcional = false) {
   const s = sinAcento(txt); const hit = REG.filter(([r]) => r.test(s)).map(x => x[1]);
+  if (opcional) return hit.find(h => !usados.includes(h)) || null;
   return hit.find(h => !usados.includes(h)) || hit[0] || ['alerta','papel','lupa','check','reloj'][usados.length % 5];
 }

@@ -16,12 +16,41 @@
    "texto": "Choque: no firmes esto",
    "t0": 0.0,
    "voz": "Choque en Avenida Rivadavia. Te ofrecen arreglar ahí mismo y firmar un papel. Pará.",
+   "frases": [
+    {
+     "t0": 0.25,
+     "t1": 2.247,
+     "txt": "Choque en Avenida Rivadavia."
+    },
+    {
+     "t0": 2.7510000000000003,
+     "t1": 5.895,
+     "txt": "Te ofrecen arreglar ahí mismo y firmar un papel."
+    },
+    {
+     "t0": 6.4190000000000005,
+     "t1": 6.961,
+     "txt": "Pará."
+    }
+   ],
    "t1": 7.5440000000000005
   },
   {
    "texto": "Fotos de los dos autos",
    "t0": 7.5440000000000005,
    "voz": "Antes de firmar: sacá fotos de los dos autos y la patente.",
+   "frases": [
+    {
+     "t0": 7.554,
+     "t1": 8.705,
+     "txt": "Antes de firmar:"
+    },
+    {
+     "t0": 9.299,
+     "t1": 12.274,
+     "txt": "sacá fotos de los dos autos y la patente."
+    }
+   ],
    "t1": 12.965,
    "paso": 1
   },
@@ -29,6 +58,13 @@
    "texto": "Datos del seguro",
    "t0": 12.965,
    "voz": "Pedí los datos del seguro del otro.",
+   "frases": [
+    {
+     "t0": 12.975,
+     "t1": 15.041,
+     "txt": "Pedí los datos del seguro del otro."
+    }
+   ],
    "t1": 15.6,
    "paso": 2
   },
@@ -36,6 +72,13 @@
    "texto": "No firmes sin entender",
    "t0": 15.6,
    "voz": "Y no firmes nada que no entiendas.",
+   "frases": [
+    {
+     "t0": 15.61,
+     "t1": 17.681,
+     "txt": "Y no firmes nada que no entiendas."
+    }
+   ],
    "t1": 18.307000000000002,
    "paso": 3
   },
@@ -43,6 +86,13 @@
    "texto": "Guardalo",
    "t0": 18.307000000000002,
    "voz": "Guardalo para cuando lo necesites.",
+   "frases": [
+    {
+     "t0": 18.317,
+     "t1": 20.755,
+     "txt": "Guardalo para cuando lo necesites."
+    }
+   ],
    "t1": 22.14
   }
  ],
