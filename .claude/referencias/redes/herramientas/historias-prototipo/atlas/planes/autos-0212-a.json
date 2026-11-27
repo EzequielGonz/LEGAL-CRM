@@ -9,7 +9,7 @@
     "facebook"
   ],
   "gancho": "El seguro va antes que la llave.",
-  "voz": "El seguro va antes que la llave. «Lo veo después de retirar», dice Mati. No. Para circular, tenés que tener el seguro obligatorio. Uno: cotizá antes del retiro. Dos: mirá qué cubre de verdad. Tres: llevá la póliza ese día. Comentá CIRCULAR y te mando la guía. Mandáselo a quien retira esta semana. Acordate el orden:",
+  "voz": "El seguro va antes que la llave. «Lo veo después de retirar», dice Mati. No. Para circular, tenés que tener el seguro obligatorio. Uno: cotizá antes del retiro. Dos: mirá qué cubre de verdad. Tres: llevá la póliza ese día. Escribinos por WhatsApp. Mandáselo a quien retira esta semana. Acordate el orden:",
   "palabra": "CIRCULAR",
   "contador": 3,
   "beats": [
@@ -62,11 +62,11 @@
       "efecto": "sello"
     },
     {
-      "palabra": "Comentá",
+      "palabra": "Escribinos",
       "n": 0,
       "tipo": "cierre",
       "objeto": "celular",
-      "texto": "Comentá «CIRCULAR»",
+      "texto": "Escribinos por WhatsApp",
       "efecto": "rebote"
     },
     {
@@ -78,7 +78,7 @@
       "efecto": "golpe"
     }
   ],
-  "cierre": "Comentá «CIRCULAR»",
-  "copy": "El seguro va antes que la llave.\n\n✔ Para circular necesitás el seguro obligatorio (Ley 24.449, arts. 40 y 68).\n✔ Cotizá antes del retiro y mirá qué cubre de verdad.\n✔ Llevá la póliza el día que retirás.\n\nComentá «CIRCULAR» y te mando la guía «Seguro antes de retirar».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #SeguroDelAuto #RetiroDel0km",
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "El seguro va antes que la llave.\n\n✔ Para circular necesitás el seguro obligatorio (Ley 24.449, arts. 40 y 68).\n✔ Cotizá antes del retiro y mirá qué cubre de verdad.\n✔ Llevá la póliza el día que retirás.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #SeguroDelAuto #RetiroDel0km",
   "fuente": "Ley 24.449, arts. 40 y 68"
 }

@@ -1,84 +1,84 @@
 {
- "id": "marketing-0212-a",
- "marca": "marketing",
- "base": "marketing-0112-1",
- "fecha_pub": "2026-12-02",
- "hora": "08:10",
- "redes": [
-  "instagram",
-  "facebook"
- ],
- "gancho": "Tu cliente no sabe que cerraste.",
- "voz": "Tu cliente no sabe que cerraste. Lo avisaste en una historia que duró un día. Antes de las fiestas, armá un mensaje de ausencia. Uno: hasta cuándo cerrás. Dos: cuándo volvés a atender. Tres: cómo dejar un pedido para la vuelta. Comentá AUSENCIA y te mando la guía. Porque aunque bajes la persiana:",
- "palabra": "AUSENCIA",
- "contador": 3,
- "beats": [
-  {
-   "palabra": "Tu",
-   "n": 0,
-   "tipo": "gancho",
-   "objeto": "vidriera",
-   "texto": "Cerrado, y nadie sabe",
-   "efecto": "apagon"
-  },
-  {
-   "palabra": "Lo",
-   "n": 0,
-   "tipo": "problema",
-   "objeto": "reloj_arena",
-   "texto": "Historia: un día",
-   "efecto": "cuenta"
-  },
-  {
-   "palabra": "Antes",
-   "n": 0,
-   "tipo": "giro",
-   "objeto": "etiqueta",
-   "texto": "Mensaje de ausencia",
-   "efecto": "sello"
-  },
-  {
-   "palabra": "Uno",
-   "n": 0,
-   "tipo": "paso",
-   "objeto": "cartel",
-   "texto": "Hasta cuándo",
-   "efecto": "giro"
-  },
-  {
-   "palabra": "Dos",
-   "n": 0,
-   "tipo": "paso",
-   "objeto": "carta",
-   "texto": "Cuándo volvés",
-   "efecto": "rebote"
-  },
-  {
-   "palabra": "Tres",
-   "n": 0,
-   "tipo": "paso",
-   "objeto": "caja",
-   "texto": "Pedido para la vuelta",
-   "efecto": "caida"
-  },
-  {
-   "palabra": "Comentá",
-   "n": 0,
-   "tipo": "cierre",
-   "objeto": "chat",
-   "texto": "Comentá «AUSENCIA»",
-   "efecto": "flash"
-  },
-  {
-   "palabra": "Porque",
-   "n": 0,
-   "tipo": "cierre",
-   "objeto": "vidriera",
-   "texto": "Cerrado, y nadie sabe",
-   "efecto": "barrido"
-  }
- ],
- "cierre": "Comentá «AUSENCIA»",
- "copy": "Tu cliente no sabe que cerraste.\n\n✔ Hasta cuándo cerrás\n✔ Cuándo volvés a atender\n✔ Cómo dejar un pedido para la vuelta\n\nComentá «AUSENCIA» y te mando la guía «Mensaje de ausencia en las fiestas».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Fiestas #Comercios",
- "fuente": ""
+  "id": "marketing-0212-a",
+  "marca": "marketing",
+  "base": "marketing-0112-1",
+  "fecha_pub": "2026-12-02",
+  "hora": "08:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Tu cliente no sabe que cerraste.",
+  "voz": "Tu cliente no sabe que cerraste. Lo avisaste en una historia que duró un día. Antes de las fiestas, armá un mensaje de ausencia. Uno: hasta cuándo cerrás. Dos: cuándo volvés a atender. Tres: cómo dejar un pedido para la vuelta. Escribinos por WhatsApp. Porque aunque bajes la persiana:",
+  "palabra": "AUSENCIA",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "Tu",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "vidriera",
+      "texto": "Cerrado, y nadie sabe",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "Lo",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "reloj_arena",
+      "texto": "Historia: un día",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Antes",
+      "n": 0,
+      "tipo": "giro",
+      "objeto": "etiqueta",
+      "texto": "Mensaje de ausencia",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Uno",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "cartel",
+      "texto": "Hasta cuándo",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "Dos",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "carta",
+      "texto": "Cuándo volvés",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "Tres",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "caja",
+      "texto": "Pedido para la vuelta",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "chat",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Porque",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "vidriera",
+      "texto": "Cerrado, y nadie sabe",
+      "efecto": "barrido"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Tu cliente no sabe que cerraste.\n\n✔ Hasta cuándo cerrás\n✔ Cuándo volvés a atender\n✔ Cómo dejar un pedido para la vuelta\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Fiestas #Comercios",
+  "fuente": ""
 }

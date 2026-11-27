@@ -9,7 +9,7 @@
     "facebook"
   ],
   "gancho": "Te denunciaron: no lo aclares en redes.",
-  "voz": "Te denunciaron: no lo aclares en redes. Te enterás por un mensaje y querés defenderte ya. Respirá. Uno: no respondas ni borres nada; guardá capturas. Dos: no hables del tema en redes. Tres: antes de cualquier citación, consultá a un abogado. Comentá «DENUNCIA» y te mando la guía. Guardalo por las dudas, porque cuando te enterás de que…",
+  "voz": "Te denunciaron: no lo aclares en redes. Te enterás por un mensaje y querés defenderte ya. Respirá. Uno: no respondas ni borres nada; guardá capturas. Dos: no hables del tema en redes. Tres: antes de cualquier citación, consultá a un abogado. Escribinos por WhatsApp. Guardalo por las dudas, porque cuando te enterás de que…",
   "palabra": "DENUNCIA",
   "contador": 3,
   "beats": [
@@ -62,11 +62,11 @@
       "efecto": "giro"
     },
     {
-      "palabra": "Comentá",
+      "palabra": "Escribinos",
       "n": 0,
       "tipo": "cierre",
       "objeto": "sobre",
-      "texto": "Comentá DENUNCIA",
+      "texto": "Escribinos por WhatsApp",
       "efecto": "sello"
     },
     {
@@ -78,7 +78,7 @@
       "efecto": "caida"
     }
   ],
-  "cierre": "Comentá «DENUNCIA»",
-  "copy": "Te denunciaron: no lo aclares en redes.\n\n✔ 1/3 No respondas ni borres nada: guardá capturas\n✔ 2/3 No hables del tema en redes\n✔ 3/3 Antes de cualquier citación, consultá a un abogado\n\nComentá «DENUNCIA» y te mando la guía «Penal: te denunciaron».\n\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoPenal #Denuncia #BuenosAires",
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Te denunciaron: no lo aclares en redes.\n\n✔ 1/3 No respondas ni borres nada: guardá capturas\n✔ 2/3 No hables del tema en redes\n✔ 3/3 Antes de cualquier citación, consultá a un abogado\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoPenal #Denuncia #BuenosAires",
   "fuente": ""
 }

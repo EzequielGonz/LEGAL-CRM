@@ -9,7 +9,7 @@
     "facebook"
   ],
   "gancho": "Menor tasa no siempre es menor costo.",
-  "voz": "Menor tasa no siempre es menor costo. Te ofrecen un crédito con una tasa que parece baja. Mirá qué hay detrás de ese número. Pedí el costo total financiero: suma intereses, gastos y seguros. Dos créditos con la misma tasa pueden costar distinto. Comentá la palabra y te mando la guía. Si te venden solo la tasa, pensá:",
+  "voz": "Menor tasa no siempre es menor costo. Te ofrecen un crédito con una tasa que parece baja. Mirá qué hay detrás de ese número. Pedí el costo total financiero: suma intereses, gastos y seguros. Dos créditos con la misma tasa pueden costar distinto. Escribinos por WhatsApp. Si te venden solo la tasa, pensá:",
   "palabra": "CFT",
   "contador": 0,
   "beats": [
@@ -54,11 +54,11 @@
       "efecto": "flash"
     },
     {
-      "palabra": "Comentá",
+      "palabra": "Escribinos",
       "n": 0,
       "tipo": "cierre",
       "objeto": "check",
-      "texto": "Comentá «CFT»",
+      "texto": "Escribinos por WhatsApp",
       "efecto": "sello"
     },
     {
@@ -70,7 +70,7 @@
       "efecto": "giro"
     }
   ],
-  "cierre": "Comentá «CFT»",
-  "copy": "Menor tasa no siempre es menor costo.\n\n✔ La tasa sola no cuenta todo.\n✔ El costo total financiero suma intereses, gastos y seguros.\n✔ Compará créditos con ese número.\n\nComentá «CFT» y te mando la guía «Costo total financiero».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #CreditoPrendario #FinanciarAuto",
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Menor tasa no siempre es menor costo.\n\n✔ La tasa sola no cuenta todo.\n✔ El costo total financiero suma intereses, gastos y seguros.\n✔ Compará créditos con ese número.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #CreditoPrendario #FinanciarAuto",
   "fuente": ""
 }

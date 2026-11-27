@@ -9,8 +9,8 @@
     "facebook"
   ],
   "gancho": "La obra social del trabajo la elegís vos.",
-  "voz": "La obra social del trabajo la elegís vos. Gabriel arranca en un trabajo nuevo. Día uno: le dan una obra social. Día dos: mira su cartilla. Día tres: compara con otras. Si trabajás en relación de dependencia, podés elegir a cuál van tus aportes. Preguntá cómo hacer el cambio. Comentá NUEVO y te mando la guía. Porque en tu trabajo nuevo…",
-  "palabra": "NUEVO",
+  "voz": "La obra social del trabajo la elegís vos. Gabriel arranca en un trabajo nuevo. Día uno: le dan una obra social. Día dos: mira su cartilla. Día tres: compara con otras. Si trabajás en relación de dependencia, podés elegir a cuál van tus aportes. Preguntá cómo hacer el cambio. Escribinos por WhatsApp. Porque en tu trabajo nuevo…",
+  "palabra": "PODÉS ELEGIR",
   "contador": 3,
   "beats": [
     {
@@ -70,15 +70,15 @@
       "efecto": "lupa"
     },
     {
-      "palabra": "Comentá",
+      "palabra": "Escribinos",
       "n": 0,
       "tipo": "cierre",
       "objeto": "carpeta",
-      "texto": "Comentá «NUEVO»",
+      "texto": "Escribinos por WhatsApp",
       "efecto": "caida"
     }
   ],
-  "cierre": "Comentá «NUEVO»",
-  "copy": "La obra social del trabajo la elegís vos.\n\n✔ Si trabajás en relación de dependencia, podés elegir a cuál van tus aportes.\n✔ Antes de quedarte con la que te dan, mirá su cartilla.\n✔ Compará con otras y preguntá cómo hacer el cambio.\n\nComentá «NUEVO» y te mando la guía «Elegir obra social en un trabajo nuevo».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #TrabajoNuevo #Empleo #BuenosAires",
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "La obra social del trabajo la elegís vos.\n\n✔ Si trabajás en relación de dependencia, podés elegir a cuál van tus aportes.\n✔ Antes de quedarte con la que te dan, mirá su cartilla.\n✔ Compará con otras y preguntá cómo hacer el cambio.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #TrabajoNuevo #Empleo #BuenosAires",
   "fuente": ""
 }

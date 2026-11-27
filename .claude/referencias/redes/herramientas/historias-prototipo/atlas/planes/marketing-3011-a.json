@@ -1,84 +1,84 @@
 {
- "id": "marketing-3011-a",
- "marca": "marketing",
- "base": "marketing-2911-2",
- "fecha_pub": "2026-11-30",
- "hora": "12:20",
- "redes": [
-  "instagram",
-  "facebook"
- ],
- "gancho": "Tu bio no es para vos.",
- "voz": "Tu bio no es para vos. Es para el que llega por primera vez. Y decide en segundos si te escribe o no. Uno: qué hacés y qué vendés. Dos: para quién y en qué zona. Tres: cómo te contacta, con un link directo. Comentá BIO y te mando la guía. Mirá la tuya y repetí:",
- "palabra": "BIO",
- "contador": 3,
- "beats": [
-  {
-   "palabra": "Tu",
-   "n": 0,
-   "tipo": "gancho",
-   "objeto": "cartel",
-   "texto": "Bio: no es para vos",
-   "efecto": "caida"
-  },
-  {
-   "palabra": "Es",
-   "n": 1,
-   "tipo": "problema",
-   "objeto": "vidriera",
-   "texto": "Primera visita",
-   "efecto": "lupa"
-  },
-  {
-   "palabra": "Y",
-   "n": 0,
-   "tipo": "problema",
-   "objeto": "reloj_arena",
-   "texto": "Decide en segundos",
-   "efecto": "cuenta"
-  },
-  {
-   "palabra": "Uno",
-   "n": 0,
-   "tipo": "paso",
-   "objeto": "etiqueta",
-   "texto": "Qué hacés",
-   "efecto": "flash"
-  },
-  {
-   "palabra": "Dos",
-   "n": 0,
-   "tipo": "paso",
-   "objeto": "etiqueta",
-   "texto": "Para quién, dónde",
-   "efecto": "rebote"
-  },
-  {
-   "palabra": "Tres",
-   "n": 0,
-   "tipo": "paso",
-   "objeto": "celular",
-   "texto": "Link directo",
-   "efecto": "sello"
-  },
-  {
-   "palabra": "Comentá",
-   "n": 0,
-   "tipo": "cierre",
-   "objeto": "carta",
-   "texto": "Comentá «BIO»",
-   "efecto": "barrido"
-  },
-  {
-   "palabra": "Mirá",
-   "n": 0,
-   "tipo": "cierre",
-   "objeto": "cartel",
-   "texto": "Bio: no es para vos",
-   "efecto": "golpe"
-  }
- ],
- "cierre": "Comentá «BIO»",
- "copy": "Tu bio no es para vos.\n\n✔ Qué hacés y qué vendés\n✔ Para quién y en qué zona\n✔ Cómo te contactan, con un link directo\n\nComentá «BIO» y te mando la guía «Bio en 3 segundos».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #InstagramParaNegocios #Emprendedores #Pymes",
- "fuente": ""
+  "id": "marketing-3011-a",
+  "marca": "marketing",
+  "base": "marketing-2911-2",
+  "fecha_pub": "2026-11-30",
+  "hora": "12:20",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Tu bio no es para vos.",
+  "voz": "Tu bio no es para vos. Es para el que llega por primera vez. Y decide en segundos si te escribe o no. Uno: qué hacés y qué vendés. Dos: para quién y en qué zona. Tres: cómo te contacta, con un link directo. Escribinos por WhatsApp. Mirá la tuya y repetí:",
+  "palabra": "LINK DIRECTO",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "Tu",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "cartel",
+      "texto": "Bio: no es para vos",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Es",
+      "n": 1,
+      "tipo": "problema",
+      "objeto": "vidriera",
+      "texto": "Primera visita",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Y",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "reloj_arena",
+      "texto": "Decide en segundos",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Uno",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "etiqueta",
+      "texto": "Qué hacés",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Dos",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "etiqueta",
+      "texto": "Para quién, dónde",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "Tres",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "celular",
+      "texto": "Link directo",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "carta",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Mirá",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "cartel",
+      "texto": "Bio: no es para vos",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Tu bio no es para vos.\n\n✔ Qué hacés y qué vendés\n✔ Para quién y en qué zona\n✔ Cómo te contactan, con un link directo\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #InstagramParaNegocios #Emprendedores #Pymes",
+  "fuente": ""
 }

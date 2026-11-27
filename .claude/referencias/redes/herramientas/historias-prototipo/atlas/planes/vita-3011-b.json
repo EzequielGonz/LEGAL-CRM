@@ -9,7 +9,7 @@
     "facebook"
   ],
   "gancho": "Te detienen: tu silencio es un derecho.",
-  "voz": "Te detienen: tu silencio es un derecho. Nadie te obliga a declarar contra vos. Esa noche, en la comisaría, ¿qué decís? Uno: tu nombre y tus datos. Dos: que querés un abogado. Tres: nada más. Comentá «DETENIDO» y te mando la guía. Mandáselo a quien sale de noche, porque si un día…",
+  "voz": "Te detienen: tu silencio es un derecho. Nadie te obliga a declarar contra vos. Esa noche, en la comisaría, ¿qué decís? Uno: tu nombre y tus datos. Dos: que querés un abogado. Tres: nada más. Escribinos por WhatsApp. Mandáselo a quien sale de noche, porque si un día…",
   "palabra": "DETENIDO",
   "contador": 3,
   "beats": [
@@ -62,11 +62,11 @@
       "efecto": "tachar"
     },
     {
-      "palabra": "Comentá",
+      "palabra": "Escribinos",
       "n": 0,
       "tipo": "cierre",
       "objeto": "sobre",
-      "texto": "Comentá DETENIDO",
+      "texto": "Escribinos por WhatsApp",
       "efecto": "sello"
     },
     {
@@ -78,7 +78,7 @@
       "efecto": "caida"
     }
   ],
-  "cierre": "Comentá «DETENIDO»",
-  "copy": "Te detienen: tu silencio es un derecho.\n\n✔ 1/3 Tu nombre y tus datos\n✔ 2/3 Que querés un abogado\n✔ 3/3 Nada más\n\nComentá «DETENIDO» y te mando la guía «Penal: detención».\n\nFuente: Constitución Nacional, art. 18 (nadie puede ser obligado a declarar contra sí mismo).\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoPenal #Detencion #BuenosAires",
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Te detienen: tu silencio es un derecho.\n\n✔ 1/3 Tu nombre y tus datos\n✔ 2/3 Que querés un abogado\n✔ 3/3 Nada más\n\nEscribinos por WhatsApp.\n\nFuente: Constitución Nacional, art. 18 (nadie puede ser obligado a declarar contra sí mismo).\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoPenal #Detencion #BuenosAires",
   "fuente": "Constitución Nacional, art. 18"
 }

@@ -9,7 +9,7 @@
     "facebook"
   ],
   "gancho": "El aguinaldo no vence el 31 de diciembre.",
-  "voz": "El aguinaldo no vence el 31 de diciembre. ¿Qué día vence la segunda cuota? Pensá una fecha. Es el 18 de diciembre. Se calcula sobre la mitad del mejor sueldo del semestre. Si no llega, guardá tus recibos y consultá. Comentá «AGUINALDO» y te mando la guía. Mandáselo a quien cobra sueldo y revisá tu recibo, porque…",
+  "voz": "El aguinaldo no vence el 31 de diciembre. ¿Qué día vence la segunda cuota? Pensá una fecha. Es el 18 de diciembre. Se calcula sobre la mitad del mejor sueldo del semestre. Si no llega, guardá tus recibos y consultá. Escribinos por WhatsApp. Mandáselo a quien cobra sueldo y revisá tu recibo, porque…",
   "palabra": "AGUINALDO",
   "contador": 0,
   "beats": [
@@ -62,11 +62,11 @@
       "efecto": "lupa"
     },
     {
-      "palabra": "Comentá",
+      "palabra": "Escribinos",
       "n": 0,
       "tipo": "cierre",
       "objeto": "sello",
-      "texto": "Comentá AGUINALDO",
+      "texto": "Escribinos por WhatsApp",
       "efecto": "sello"
     },
     {
@@ -78,7 +78,7 @@
       "efecto": "flash"
     }
   ],
-  "cierre": "Comentá «AGUINALDO»",
-  "copy": "El aguinaldo no vence el 31 de diciembre.\n\nLa segunda cuota vence el 18 de diciembre.\nSe calcula sobre la mitad del mejor sueldo del semestre.\nSi no llega, guardá tus recibos y consultá.\n\nComentá «AGUINALDO» y te mando la guía «Aguinaldo: fecha de pago».\n\nFuente: Ley de Contrato de Trabajo, art. 122.\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #Aguinaldo #DerechoLaboral #Trabajadores",
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "El aguinaldo no vence el 31 de diciembre.\n\nLa segunda cuota vence el 18 de diciembre.\nSe calcula sobre la mitad del mejor sueldo del semestre.\nSi no llega, guardá tus recibos y consultá.\n\nEscribinos por WhatsApp.\n\nFuente: Ley de Contrato de Trabajo, art. 122.\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #Aguinaldo #DerechoLaboral #Trabajadores",
   "fuente": "Ley de Contrato de Trabajo, art. 122"
 }

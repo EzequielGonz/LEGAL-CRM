@@ -9,7 +9,7 @@
     "facebook"
   ],
   "gancho": "«Confiá» no es un presupuesto.",
-  "voz": "«Confiá» no es un presupuesto. «Te lo dejo a ese precio, confiá.» Y mañana, ¿quién se acuerda? Pedilo por escrito. Uno: la versión exacta del auto. Dos: todos los gastos incluidos. Tres: hasta qué fecha vale ese precio. Comentá PRESUPUESTO y te mando la guía. Mandáselo a quien compra de palabra. Cuando te digan «confiá», respondé:",
+  "voz": "«Confiá» no es un presupuesto. «Te lo dejo a ese precio, confiá.» Y mañana, ¿quién se acuerda? Pedilo por escrito. Uno: la versión exacta del auto. Dos: todos los gastos incluidos. Tres: hasta qué fecha vale ese precio. Escribinos por WhatsApp. Mandáselo a quien compra de palabra. Cuando te digan «confiá», respondé:",
   "palabra": "PRESUPUESTO",
   "contador": 3,
   "beats": [
@@ -62,11 +62,11 @@
       "efecto": "cuenta"
     },
     {
-      "palabra": "Comentá",
+      "palabra": "Escribinos",
       "n": 0,
       "tipo": "cierre",
       "objeto": "check",
-      "texto": "Comentá «PRESUPUESTO»",
+      "texto": "Escribinos por WhatsApp",
       "efecto": "sello"
     },
     {
@@ -78,7 +78,7 @@
       "efecto": "rebote"
     }
   ],
-  "cierre": "Comentá «PRESUPUESTO»",
-  "copy": "«Confiá» no es un presupuesto.\n\nPedilo por escrito, con:\n✔ La versión exacta.\n✔ Los gastos incluidos.\n✔ Hasta qué fecha vale.\n\nComentá «PRESUPUESTO» y te mando la guía «Presupuesto por escrito».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #Presupuesto #ComprarAuto",
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "«Confiá» no es un presupuesto.\n\nPedilo por escrito, con:\n✔ La versión exacta.\n✔ Los gastos incluidos.\n✔ Hasta qué fecha vale.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #Presupuesto #ComprarAuto",
   "fuente": ""
 }

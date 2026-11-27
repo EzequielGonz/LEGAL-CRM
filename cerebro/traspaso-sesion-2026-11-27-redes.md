@@ -6,6 +6,20 @@ Rama `claude/brave-hawking-nzsr60` · PR EzequielGonz/LEGAL-CRM#82 (seguido, en 
 - El dueño frenó el boceto de VITA. **No hay agentes trabajando ni nada programado.** Lo programado en Metricool del 25 al 29/11 (12 historias + 1 carrusel por día y marca) NO se toca.
 - **Esperando:** el dueño busca 1 o 2 reels de referencia con el 3D que imagina. Al recibirlos, analizarlos (gancho, cámara, luz, nivel de realismo, animación, efectos) y recién ahí hacer el boceto de VITA con el guion `vita-2711-1`.
 
+## 27/11 09:30 (Buenos Aires) — CARPETA DE TAREAS PROGRAMADAS: manda sobre todo lo de abajo
+- **Todo está en `docs/redes/tareas-programadas/`:**
+  - `README.md`: arranque y pasos;
+  - `01`: ritmo y grilla de horarios;
+  - `02`: análisis antes y a mitad de cada corrida;
+  - `03`: reels;
+  - `04`: posts, carruseles e historias;
+  - `05`: alojar y programar;
+  - `06`: calendario de las 21 corridas con sus ids.
+- **2 corridas por día hasta el 07/12** (21 en total). Cada una hace como mínimo 2 reels más por marca y completa el ritmo: 6 reels, 1 post, 1 carrusel y 2 historias por marca y día.
+- Cada tarea programada arranca leyendo el README.
+- **Cierre: solo «Escribinos por WhatsApp.»** (pedido del dueño, 27/11). Ya no hay palabra clave ni nada para cargar en los bots. Los 40 planes de la tanda 1 y la placa final de `escenas/vita.js` ya están corregidos; se avisó a los 3 constructores de escena.
+- Metricool todavía no tiene datos de mejor horario: devuelve 0 en las 4 marcas. La grilla sale de lo que ya rindió (`05-estrategia.md`).
+
 ## RITMO VIGENTE (pedido del dueño, 27/11 12:10): manda sobre todo lo anterior
 **Desde el 28/11, por marca y por día:**
 
@@ -79,8 +93,8 @@ Rama `claude/brave-hawking-nzsr60` · PR EzequielGonz/LEGAL-CRM#82 (seguido, en 
 - Al terminar, revisar sus informes y hojas antes de producir.
 
 **Guiones de la tanda 1: los 40 planes terminados y validados** (resúmenes en `docs/redes/tanda-2811-0712/tanda1/<marca>.md`). Antes de programar, revisar:
-- Marketing: que el bot acepte «reseñas» además de RESENAS, y confirmar en la ayuda oficial los datos de plataforma que se nombran (historias de un día, link de reseñas de Google, «Solicitudes» de Instagram, horarios especiales).
-- Autos: en 0KM, SENA y CFT la voz dice «comentá la palabra», porque la voz sintética lee mal las siglas; la palabra va en pantalla.
+- ~~Marketing: que el bot acepte «reseñas» además de RESENAS~~ (ya no aplica: el cierre es «Escribinos por WhatsApp»). Confirmar en la ayuda oficial los datos de plataforma que se nombran (historias de un día, link de reseñas de Google, «Solicitudes» de Instagram, horarios especiales).
+- Autos: ~~en 0KM, SENA y CFT la voz dice «comentá la palabra»~~ (ya no aplica: la voz cierra con «Escribinos por WhatsApp»).
 - Coberturas: los personajes pasaron a Lucía o Gabriel.
 - Las horas son las de los guiones base: chequear en Metricool que no se pisen con lo ya programado.
 

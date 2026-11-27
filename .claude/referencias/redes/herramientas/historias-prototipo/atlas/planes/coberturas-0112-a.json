@@ -9,7 +9,7 @@
     "facebook"
   ],
   "gancho": "Si falta el titular, la familia sigue cubierta.",
-  "voz": "Si falta el titular, la familia sigue cubierta. Gabriel se lo preguntó mirando la credencial de todos. ¿Cuánto tiempo? ¿Nada? ¿Un mes? Tres meses, sin aportar. Después, pueden elegir seguir, pagando los aportes. Hablalo hoy en casa y preguntá en tu obra social qué papeles piden. Comentá TITULAR y te mando la guía. Porque si falta el titular…",
+  "voz": "Si falta el titular, la familia sigue cubierta. Gabriel se lo preguntó mirando la credencial de todos. ¿Cuánto tiempo? ¿Nada? ¿Un mes? Tres meses, sin aportar. Después, pueden elegir seguir, pagando los aportes. Hablalo hoy en casa y preguntá en tu obra social qué papeles piden. Escribinos por WhatsApp. Porque si falta el titular…",
   "palabra": "TITULAR",
   "contador": 0,
   "beats": [
@@ -70,15 +70,15 @@
       "efecto": "lupa"
     },
     {
-      "palabra": "Comentá",
+      "palabra": "Escribinos",
       "n": 0,
       "tipo": "cierre",
       "objeto": "credencial",
-      "texto": "Comentá «TITULAR»",
+      "texto": "Escribinos por WhatsApp",
       "efecto": "flash"
     }
   ],
-  "cierre": "Comentá «TITULAR»",
-  "copy": "Si falta el titular, la familia sigue cubierta.\n\n✔ Si fallece el titular, la familia mantiene la obra social tres meses, sin aportar.\n✔ Después puede elegir seguir, pagando los aportes.\n✔ Preguntá hoy qué papeles piden, sin esperar a necesitarlo.\n\nComentá «TITULAR» y te mando la guía «Familia: si fallece el titular».\n\nFuente: Ley 23.660, art. 10, inc. h.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Familia #BuenosAires",
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Si falta el titular, la familia sigue cubierta.\n\n✔ Si fallece el titular, la familia mantiene la obra social tres meses, sin aportar.\n✔ Después puede elegir seguir, pagando los aportes.\n✔ Preguntá hoy qué papeles piden, sin esperar a necesitarlo.\n\nEscribinos por WhatsApp.\n\nFuente: Ley 23.660, art. 10, inc. h.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Familia #BuenosAires",
   "fuente": "Ley 23.660, art. 10, inc. h"
 }

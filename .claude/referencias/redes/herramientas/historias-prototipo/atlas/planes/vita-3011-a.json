@@ -9,7 +9,7 @@
     "facebook"
   ],
   "gancho": "Tu liquidación final no se paga cuando quieren.",
-  "voz": "Tu liquidación final no se paga cuando quieren. Te piden firmar ya. No firmes sin revisarla. Uno: los días trabajados del mes. Dos: aguinaldo y vacaciones proporcionales. Tres: el plazo. Si cobrabas por mes, tienen cuatro días hábiles para pagarte. Comentá «LIQUIDACION» y te mando la guía. Mandáselo a quien se va del trabajo, porque…",
+  "voz": "Tu liquidación final no se paga cuando quieren. Te piden firmar ya. No firmes sin revisarla. Uno: los días trabajados del mes. Dos: aguinaldo y vacaciones proporcionales. Tres: el plazo. Si cobrabas por mes, tienen cuatro días hábiles para pagarte. Escribinos por WhatsApp. Mandáselo a quien se va del trabajo, porque…",
   "palabra": "LIQUIDACION",
   "contador": 3,
   "beats": [
@@ -70,15 +70,15 @@
       "efecto": "apagon"
     },
     {
-      "palabra": "Comentá",
+      "palabra": "Escribinos",
       "n": 0,
       "tipo": "cierre",
       "objeto": "sobre",
-      "texto": "Comentá LIQUIDACION",
+      "texto": "Escribinos por WhatsApp",
       "efecto": "caida"
     }
   ],
-  "cierre": "Comentá «LIQUIDACION»",
-  "copy": "Tu liquidación final no se paga cuando quieren.\n\n✔ 1/3 Días trabajados del mes\n✔ 2/3 Aguinaldo y vacaciones proporcionales\n✔ 3/3 Si cobrabas por mes: dentro de los 4 días hábiles\n\nComentá «LIQUIDACION» y te mando la guía «Liquidación final».\n\nFuente: Ley de Contrato de Trabajo, arts. 128 y 255 bis.\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #LiquidacionFinal #Despido #DerechoLaboral",
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Tu liquidación final no se paga cuando quieren.\n\n✔ 1/3 Días trabajados del mes\n✔ 2/3 Aguinaldo y vacaciones proporcionales\n✔ 3/3 Si cobrabas por mes: dentro de los 4 días hábiles\n\nEscribinos por WhatsApp.\n\nFuente: Ley de Contrato de Trabajo, arts. 128 y 255 bis.\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #LiquidacionFinal #Despido #DerechoLaboral",
   "fuente": "Ley de Contrato de Trabajo, arts. 128 y 255 bis"
 }

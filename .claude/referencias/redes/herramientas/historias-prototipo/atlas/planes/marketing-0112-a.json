@@ -1,84 +1,84 @@
 {
- "id": "marketing-0112-a",
- "marca": "marketing",
- "base": "marketing-3011-1",
- "fecha_pub": "2026-12-01",
- "hora": "08:10",
- "redes": [
-  "instagram",
-  "facebook"
- ],
- "gancho": "Pedir reseñas no queda mal.",
- "voz": "Pedir reseñas no queda mal. Google mismo te da un link para pedirlas. Lo que queda mal es pedirlas mal. Uno: en el momento justo, cuando te agradecen. Dos: con el link directo, por mensaje. Tres: sin pedir estrellas ni dar nada a cambio. Comentá reseñas y te mando la guía. Si todavía te da vergüenza, decilo conmigo:",
- "palabra": "RESENAS",
- "contador": 3,
- "beats": [
-  {
-   "palabra": "Pedir",
-   "n": 0,
-   "tipo": "gancho",
-   "objeto": "cartel",
-   "texto": "Pedir reseñas no queda mal",
-   "efecto": "rebote"
-  },
-  {
-   "palabra": "Google",
-   "n": 0,
-   "tipo": "dato",
-   "objeto": "celular",
-   "texto": "Link para pedirlas",
-   "efecto": "giro"
-  },
-  {
-   "palabra": "Lo",
-   "n": 0,
-   "tipo": "giro",
-   "objeto": "etiqueta",
-   "texto": "Pedirlas mal",
-   "efecto": "lupa"
-  },
-  {
-   "palabra": "Uno",
-   "n": 0,
-   "tipo": "paso",
-   "objeto": "estrella",
-   "texto": "Cuando te agradecen",
-   "efecto": "flash"
-  },
-  {
-   "palabra": "Dos",
-   "n": 0,
-   "tipo": "paso",
-   "objeto": "chat",
-   "texto": "Link directo, por mensaje",
-   "efecto": "barrido"
-  },
-  {
-   "palabra": "Tres",
-   "n": 0,
-   "tipo": "paso",
-   "objeto": "cruz",
-   "texto": "Sin pedir estrellas",
-   "efecto": "tachar"
-  },
-  {
-   "palabra": "Comentá",
-   "n": 0,
-   "tipo": "cierre",
-   "objeto": "carta",
-   "texto": "Comentá «RESENAS»",
-   "efecto": "caida"
-  },
-  {
-   "palabra": "Si",
-   "n": 1,
-   "tipo": "cierre",
-   "objeto": "cartel",
-   "texto": "Pedir reseñas no queda mal",
-   "efecto": "golpe"
-  }
- ],
- "cierre": "Comentá «RESENAS»",
- "copy": "Pedir reseñas no queda mal.\n\n✔ En el momento justo: cuando te agradecen\n✔ Con el link directo de tu perfil de Google, por mensaje\n✔ Sin pedir estrellas y sin ofrecer nada a cambio\n\nComentá «RESENAS» y te mando la guía «Pedir reseñas».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #Reseñas #NegocioLocal #Pymes",
- "fuente": ""
+  "id": "marketing-0112-a",
+  "marca": "marketing",
+  "base": "marketing-3011-1",
+  "fecha_pub": "2026-12-01",
+  "hora": "08:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Pedir reseñas no queda mal.",
+  "voz": "Pedir reseñas no queda mal. Google mismo te da un link para pedirlas. Lo que queda mal es pedirlas mal. Uno: en el momento justo, cuando te agradecen. Dos: con el link directo, por mensaje. Tres: sin pedir estrellas ni dar nada a cambio. Escribinos por WhatsApp. Si todavía te da vergüenza, decilo conmigo:",
+  "palabra": "RESENAS",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "Pedir",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "cartel",
+      "texto": "Pedir reseñas no queda mal",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "Google",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "celular",
+      "texto": "Link para pedirlas",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "Lo",
+      "n": 0,
+      "tipo": "giro",
+      "objeto": "etiqueta",
+      "texto": "Pedirlas mal",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Uno",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "estrella",
+      "texto": "Cuando te agradecen",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Dos",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "chat",
+      "texto": "Link directo, por mensaje",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Tres",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "cruz",
+      "texto": "Sin pedir estrellas",
+      "efecto": "tachar"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "carta",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Si",
+      "n": 1,
+      "tipo": "cierre",
+      "objeto": "cartel",
+      "texto": "Pedir reseñas no queda mal",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Pedir reseñas no queda mal.\n\n✔ En el momento justo: cuando te agradecen\n✔ Con el link directo de tu perfil de Google, por mensaje\n✔ Sin pedir estrellas y sin ofrecer nada a cambio\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #Reseñas #NegocioLocal #Pymes",
+  "fuente": ""
 }

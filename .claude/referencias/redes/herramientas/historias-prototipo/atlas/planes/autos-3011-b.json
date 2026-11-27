@@ -9,7 +9,7 @@
     "facebook"
   ],
   "gancho": "Tu sobrino de 8 años no va adelante.",
-  "voz": "Tu sobrino de ocho años no va adelante. Aunque se ponga el cinturón. Aunque sea un viaje corto. Los menores de diez años viajan en el asiento de atrás: lo dice la ley de tránsito. Y con cinturón o la sillita que corresponda. Comentá «atrás» y te mando la guía. Mandáselo a quien lleva chicos y repetí conmigo:",
+  "voz": "Tu sobrino de ocho años no va adelante. Aunque se ponga el cinturón. Aunque sea un viaje corto. Los menores de diez años viajan en el asiento de atrás: lo dice la ley de tránsito. Y con cinturón o la sillita que corresponda. Escribinos por WhatsApp. Mandáselo a quien lleva chicos y repetí conmigo:",
   "palabra": "ATRAS",
   "contador": 0,
   "beats": [
@@ -62,11 +62,11 @@
       "efecto": "rebote"
     },
     {
-      "palabra": "Comentá",
+      "palabra": "Escribinos",
       "n": 0,
       "tipo": "cierre",
       "objeto": "celular",
-      "texto": "Comentá «ATRAS»",
+      "texto": "Escribinos por WhatsApp",
       "efecto": "caida"
     },
     {
@@ -78,7 +78,7 @@
       "efecto": "golpe"
     }
   ],
-  "cierre": "Comentá «ATRAS»",
-  "copy": "Tu sobrino de 8 años no va adelante.\n\n✔ Los menores de 10 años viajan en el asiento de atrás (Ley 24.449, art. 40, inc. g).\n✔ Aunque se ponga el cinturón y aunque el viaje sea corto.\n✔ Atrás, con cinturón o la sillita que corresponda.\n\nComentá «ATRAS» y te mando la guía «Chicos en el asiento de atrás».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #SeguridadVial #ViajarConChicos #LeyDeTransito",
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Tu sobrino de 8 años no va adelante.\n\n✔ Los menores de 10 años viajan en el asiento de atrás (Ley 24.449, art. 40, inc. g).\n✔ Aunque se ponga el cinturón y aunque el viaje sea corto.\n✔ Atrás, con cinturón o la sillita que corresponda.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #SeguridadVial #ViajarConChicos #LeyDeTransito",
   "fuente": "Ley 24.449, art. 40, inc. g"
 }

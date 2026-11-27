@@ -9,7 +9,7 @@
     "facebook"
   ],
   "gancho": "Ese descuento del recibo no es plata perdida.",
-  "voz": "Ese descuento del recibo no es plata perdida. Gabriel lo pasaba de largo todos los meses. Error. Esa línea es tu aporte a la obra social: tu cobertura. Uno: fijate a qué obra social va. Dos: revisá qué cartilla tenés cerca. Tres: preguntá si te conviene otra. Comentá APORTES y te mando cómo leer tu recibo. Y la próxima vez que veas ese descuento…",
+  "voz": "Ese descuento del recibo no es plata perdida. Gabriel lo pasaba de largo todos los meses. Error. Esa línea es tu aporte a la obra social: tu cobertura. Uno: fijate a qué obra social va. Dos: revisá qué cartilla tenés cerca. Tres: preguntá si te conviene otra. Escribinos por WhatsApp. Y la próxima vez que veas ese descuento…",
   "palabra": "APORTES",
   "contador": 3,
   "beats": [
@@ -62,11 +62,11 @@
       "efecto": "rebote"
     },
     {
-      "palabra": "Comentá",
+      "palabra": "Escribinos",
       "n": 0,
       "tipo": "cierre",
       "objeto": "carpeta",
-      "texto": "Comentá «APORTES»",
+      "texto": "Escribinos por WhatsApp",
       "efecto": "giro"
     },
     {
@@ -78,7 +78,7 @@
       "efecto": "caida"
     }
   ],
-  "cierre": "Comentá «APORTES»",
-  "copy": "Ese descuento del recibo no es plata perdida.\n\n✔ Fijate a qué obra social va tu aporte.\n✔ Revisá qué cartilla tenés cerca.\n✔ Preguntá si te conviene otra.\n\nComentá «APORTES» y te mando «Cómo leer tu recibo».\n\nFuente: Ley 23.660, art. 16.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #ReciboDeSueldo #Aportes #BuenosAires",
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Ese descuento del recibo no es plata perdida.\n\n✔ Fijate a qué obra social va tu aporte.\n✔ Revisá qué cartilla tenés cerca.\n✔ Preguntá si te conviene otra.\n\nEscribinos por WhatsApp.\n\nFuente: Ley 23.660, art. 16.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #ReciboDeSueldo #Aportes #BuenosAires",
   "fuente": "Ley 23.660, art. 16"
 }

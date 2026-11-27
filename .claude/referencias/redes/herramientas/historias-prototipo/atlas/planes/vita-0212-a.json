@@ -9,7 +9,7 @@
     "facebook"
   ],
   "gancho": "Tu baja por ART puede durar dos años.",
-  "voz": "Tu baja por ART puede durar dos años. Te accidentaste en el trabajo y estás de baja. ¿Cuánto puede durar como máximo? ¿Seis meses? ¿Un año? Hasta dos años desde la primera manifestación, salvo alta antes. Uno: seguí el tratamiento. Dos: guardá cada papel. Comentá «REPOSO» y te mando la guía. Mandáselo a un compañero de baja, porque…",
+  "voz": "Tu baja por ART puede durar dos años. Te accidentaste en el trabajo y estás de baja. ¿Cuánto puede durar como máximo? ¿Seis meses? ¿Un año? Hasta dos años desde la primera manifestación, salvo alta antes. Uno: seguí el tratamiento. Dos: guardá cada papel. Escribinos por WhatsApp. Mandáselo a un compañero de baja, porque…",
   "palabra": "REPOSO",
   "contador": 2,
   "beats": [
@@ -70,15 +70,15 @@
       "efecto": "lupa"
     },
     {
-      "palabra": "Comentá",
+      "palabra": "Escribinos",
       "n": 0,
       "tipo": "cierre",
       "objeto": "sello",
-      "texto": "Comentá REPOSO",
+      "texto": "Escribinos por WhatsApp",
       "efecto": "sello"
     }
   ],
-  "cierre": "Comentá «REPOSO»",
-  "copy": "Tu baja por ART puede durar dos años.\n\nHasta dos años desde la primera manifestación, salvo alta antes.\n✔ Seguí el tratamiento\n✔ Guardá cada papel\n\nComentá «REPOSO» y te mando la guía «ART: cuánto dura la baja».\n\nFuente: Ley 24.557, art. 7.\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #ART #AccidenteLaboral #DerechoLaboral",
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Tu baja por ART puede durar dos años.\n\nHasta dos años desde la primera manifestación, salvo alta antes.\n✔ Seguí el tratamiento\n✔ Guardá cada papel\n\nEscribinos por WhatsApp.\n\nFuente: Ley 24.557, art. 7.\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #ART #AccidenteLaboral #DerechoLaboral",
   "fuente": "Ley 24.557, art. 7"
 }

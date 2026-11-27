@@ -9,7 +9,7 @@
     "facebook"
   ],
   "gancho": "Nuevo no es sinónimo de revisado.",
-  "voz": "Nuevo no es sinónimo de revisado. El día del retiro, antes de firmar, contá conmigo. Uno: el chasis coincide con los papeles. Dos: sin rayones ni golpes. Tres: manual y llave de repuesto. Cuatro: rueda de auxilio y herramientas. Comentá LLAVE y te mando la revisión del retiro. Cuando te digan «firmá, que es nuevo», respondé:",
+  "voz": "Nuevo no es sinónimo de revisado. El día del retiro, antes de firmar, contá conmigo. Uno: el chasis coincide con los papeles. Dos: sin rayones ni golpes. Tres: manual y llave de repuesto. Cuatro: rueda de auxilio y herramientas. Escribinos por WhatsApp. Cuando te digan «firmá, que es nuevo», respondé:",
   "palabra": "LLAVE",
   "contador": 4,
   "beats": [
@@ -62,11 +62,11 @@
       "efecto": "giro"
     },
     {
-      "palabra": "Comentá",
+      "palabra": "Escribinos",
       "n": 0,
       "tipo": "cierre",
       "objeto": "check",
-      "texto": "Comentá «LLAVE»",
+      "texto": "Escribinos por WhatsApp",
       "efecto": "sello"
     },
     {
@@ -78,7 +78,7 @@
       "efecto": "barrido"
     }
   ],
-  "cierre": "Comentá «LLAVE»",
-  "copy": "Nuevo no es sinónimo de revisado.\n\nEl día del retiro, antes de firmar:\n✔ Que el chasis coincida con los papeles.\n✔ Sin rayones ni golpes.\n✔ Manual, llave de repuesto, rueda de auxilio y herramientas.\n\nComentá «LLAVE» y te mando «La revisión del retiro».\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #RetiroDel0km #AutoNuevo",
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Nuevo no es sinónimo de revisado.\n\nEl día del retiro, antes de firmar:\n✔ Que el chasis coincida con los papeles.\n✔ Sin rayones ni golpes.\n✔ Manual, llave de repuesto, rueda de auxilio y herramientas.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #RetiroDel0km #AutoNuevo",
   "fuente": ""
 }

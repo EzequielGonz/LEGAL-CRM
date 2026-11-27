@@ -9,8 +9,8 @@
     "facebook"
   ],
   "gancho": "Tu culpa no te deja sin ART.",
-  "voz": "Tu culpa no te deja sin ART. «Me lastimé por un error mío: no me cubre.» Falso. En general, la ART cubre aunque te hayas equivocado. Queda afuera el daño hecho a propósito o la fuerza mayor ajena al trabajo. Así que avisá, atendete y guardá todo. Comentá «CULPA» y te mando la guía. Mandáselo a un compañero, porque…",
-  "palabra": "CULPA",
+  "voz": "Tu culpa no te deja sin ART. «Me lastimé por un error mío: no me cubre.» Falso. En general, la ART cubre aunque te hayas equivocado. Queda afuera el daño hecho a propósito o la fuerza mayor ajena al trabajo. Así que avisá, atendete y guardá todo. Escribinos por WhatsApp. Mandáselo a un compañero, porque…",
+  "palabra": "FALSO",
   "contador": 0,
   "beats": [
     {
@@ -70,15 +70,15 @@
       "efecto": "flash"
     },
     {
-      "palabra": "Comentá",
+      "palabra": "Escribinos",
       "n": 0,
       "tipo": "cierre",
       "objeto": "sello",
-      "texto": "Comentá CULPA",
+      "texto": "Escribinos por WhatsApp",
       "efecto": "sello"
     }
   ],
-  "cierre": "Comentá «CULPA»",
-  "copy": "Tu culpa no te deja sin ART.\n\nEn general, la ART cubre aunque te hayas equivocado.\nQuedan afuera el daño hecho a propósito y la fuerza mayor ajena al trabajo.\nAvisá, atendete y guardá todo.\n\nComentá «CULPA» y te mando la guía «ART: el error propio».\n\nFuente: Ley 24.557, art. 6, inc. 3.\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #ART #AccidenteLaboral #DerechoLaboral",
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Tu culpa no te deja sin ART.\n\nEn general, la ART cubre aunque te hayas equivocado.\nQuedan afuera el daño hecho a propósito y la fuerza mayor ajena al trabajo.\nAvisá, atendete y guardá todo.\n\nEscribinos por WhatsApp.\n\nFuente: Ley 24.557, art. 6, inc. 3.\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #ART #AccidenteLaboral #DerechoLaboral",
   "fuente": "Ley 24.557, art. 6, inc. 3"
 }

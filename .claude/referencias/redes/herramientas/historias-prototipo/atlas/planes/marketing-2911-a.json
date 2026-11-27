@@ -1,84 +1,84 @@
 {
- "id": "marketing-2911-a",
- "marca": "marketing",
- "base": "marketing-2811-2",
- "fecha_pub": "2026-11-29",
- "hora": "12:20",
- "redes": [
-  "instagram",
-  "facebook"
- ],
- "gancho": "«Lo pienso» no es un no.",
- "voz": "«Lo pienso» no es un no. Es un todavía. ¿Cuántas veces volvés a escribir? Uno: a las veinticuatro horas. Dos: de nuevo, al tercer día. Tres: la última, a la semana. Cada vez, algo nuevo: foto, duda resuelta o fecha. Comentá SEGUIR y te mando la guía. Cuando lo vuelvas a escuchar, pensá:",
- "palabra": "SEGUIR",
- "contador": 3,
- "beats": [
-  {
-   "palabra": "Lo",
-   "n": 0,
-   "tipo": "gancho",
-   "objeto": "cartel",
-   "texto": "«Lo pienso» es NO",
-   "efecto": "rebote"
-  },
-  {
-   "palabra": "Es",
-   "n": 1,
-   "tipo": "giro",
-   "objeto": "cartel",
-   "texto": "TODAVÍA",
-   "efecto": "giro"
-  },
-  {
-   "palabra": "Uno",
-   "n": 0,
-   "tipo": "paso",
-   "objeto": "reloj_arena",
-   "texto": "24 horas",
-   "efecto": "cuenta"
-  },
-  {
-   "palabra": "Dos",
-   "n": 0,
-   "tipo": "paso",
-   "objeto": "chat",
-   "texto": "Tercer día",
-   "efecto": "flash"
-  },
-  {
-   "palabra": "Tres",
-   "n": 0,
-   "tipo": "paso",
-   "objeto": "carta",
-   "texto": "Una semana",
-   "efecto": "barrido"
-  },
-  {
-   "palabra": "Cada",
-   "n": 0,
-   "tipo": "dato",
-   "objeto": "caja",
-   "texto": "Foto, duda o fecha",
-   "efecto": "golpe"
-  },
-  {
-   "palabra": "Comentá",
-   "n": 0,
-   "tipo": "cierre",
-   "objeto": "etiqueta",
-   "texto": "Comentá «SEGUIR»",
-   "efecto": "sello"
-  },
-  {
-   "palabra": "Cuando",
-   "n": 0,
-   "tipo": "cierre",
-   "objeto": "cartel",
-   "texto": "«Lo pienso» es NO",
-   "efecto": "caida"
-  }
- ],
- "cierre": "Comentá «SEGUIR»",
- "copy": "«Lo pienso» no es un no.\n\n✔ A las 24 horas\n✔ Al tercer día\n✔ A la semana, y cada vez con algo nuevo: una foto, una duda resuelta o una fecha\n\nComentá «SEGUIR» y te mando la guía «Seguimiento después de “lo pienso”».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #Ventas #WhatsAppBusiness #Emprendedores",
- "fuente": ""
+  "id": "marketing-2911-a",
+  "marca": "marketing",
+  "base": "marketing-2811-2",
+  "fecha_pub": "2026-11-29",
+  "hora": "12:20",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "«Lo pienso» no es un no.",
+  "voz": "«Lo pienso» no es un no. Es un todavía. ¿Cuántas veces volvés a escribir? Uno: a las veinticuatro horas. Dos: de nuevo, al tercer día. Tres: la última, a la semana. Cada vez, algo nuevo: foto, duda resuelta o fecha. Escribinos por WhatsApp. Cuando lo vuelvas a escuchar, pensá:",
+  "palabra": "SEGUIR",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "Lo",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "cartel",
+      "texto": "«Lo pienso» es NO",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "Es",
+      "n": 1,
+      "tipo": "giro",
+      "objeto": "cartel",
+      "texto": "TODAVÍA",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "Uno",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "reloj_arena",
+      "texto": "24 horas",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Dos",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "chat",
+      "texto": "Tercer día",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Tres",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "carta",
+      "texto": "Una semana",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Cada",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "caja",
+      "texto": "Foto, duda o fecha",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "etiqueta",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Cuando",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "cartel",
+      "texto": "«Lo pienso» es NO",
+      "efecto": "caida"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "«Lo pienso» no es un no.\n\n✔ A las 24 horas\n✔ Al tercer día\n✔ A la semana, y cada vez con algo nuevo: una foto, una duda resuelta o una fecha\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #Ventas #WhatsAppBusiness #Emprendedores",
+  "fuente": ""
 }

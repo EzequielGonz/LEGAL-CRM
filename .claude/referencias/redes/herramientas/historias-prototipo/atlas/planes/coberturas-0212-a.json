@@ -9,7 +9,7 @@
     "facebook"
   ],
   "gancho": "Te asignan otro plan: no es el único.",
-  "voz": "Te asignan otro plan: no es el único. Lucía recibió el aviso: su plan se da de baja. No esperes al último día. Uno: pedí el aviso por escrito, con la fecha. Dos: averiguá a qué plan te pasan y qué cambia. Tres: compará antes de aceptar. Comentá BAJA y te mando la guía. Porque cuando te asignan otro plan…",
+  "voz": "Te asignan otro plan: no es el único. Lucía recibió el aviso: su plan se da de baja. No esperes al último día. Uno: pedí el aviso por escrito, con la fecha. Dos: averiguá a qué plan te pasan y qué cambia. Tres: compará antes de aceptar. Escribinos por WhatsApp. Porque cuando te asignan otro plan…",
   "palabra": "BAJA",
   "contador": 3,
   "beats": [
@@ -62,11 +62,11 @@
       "efecto": "barrido"
     },
     {
-      "palabra": "Comentá",
+      "palabra": "Escribinos",
       "n": 0,
       "tipo": "cierre",
       "objeto": "check",
-      "texto": "Comentá «BAJA»",
+      "texto": "Escribinos por WhatsApp",
       "efecto": "rebote"
     },
     {
@@ -78,7 +78,7 @@
       "efecto": "giro"
     }
   ],
-  "cierre": "Comentá «BAJA»",
-  "copy": "Te asignan otro plan: no es el único.\n\n✔ Pedí el aviso de baja por escrito, con la fecha.\n✔ Averiguá a qué plan te pasan y qué cambia.\n✔ Compará antes de aceptar.\n\nComentá «BAJA» y te mando la guía «Tu prepaga se da de baja».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Prepaga #ObraSocial #CambioDePlan #BuenosAires",
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Te asignan otro plan: no es el único.\n\n✔ Pedí el aviso de baja por escrito, con la fecha.\n✔ Averiguá a qué plan te pasan y qué cambia.\n✔ Compará antes de aceptar.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Prepaga #ObraSocial #CambioDePlan #BuenosAires",
   "fuente": ""
 }

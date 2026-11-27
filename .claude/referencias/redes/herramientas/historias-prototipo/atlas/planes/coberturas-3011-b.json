@@ -9,7 +9,7 @@
     "facebook"
   ],
   "gancho": "Cambiarte de prepaga no congela todo un año.",
-  "voz": "Cambiarte de prepaga no congela todo un año. Gabriel lo creía: «si me cambio, espero un año para todo». Tranqui, no es así. Para lo que está en el Programa Médico Obligatorio no puede haber carencias. Lo demás tiene que estar en el contrato. Antes de firmar, pedí el contrato y revisá cada espera. Comentá CARENCIAS y te mando la guía. Porque cambiarte de prepaga…",
+  "voz": "Cambiarte de prepaga no congela todo un año. Gabriel lo creía: «si me cambio, espero un año para todo». Tranqui, no es así. Para lo que está en el Programa Médico Obligatorio no puede haber carencias. Lo demás tiene que estar en el contrato. Antes de firmar, pedí el contrato y revisá cada espera. Escribinos por WhatsApp. Porque cambiarte de prepaga…",
   "palabra": "CARENCIAS",
   "contador": 0,
   "beats": [
@@ -70,15 +70,15 @@
       "efecto": "golpe"
     },
     {
-      "palabra": "Comentá",
+      "palabra": "Escribinos",
       "n": 0,
       "tipo": "cierre",
       "objeto": "carpeta",
-      "texto": "Comentá «CARENCIAS»",
+      "texto": "Escribinos por WhatsApp",
       "efecto": "giro"
     }
   ],
-  "cierre": "Comentá «CARENCIAS»",
-  "copy": "Cambiarte de prepaga no congela todo un año.\n\n✔ Para lo que está en el Programa Médico Obligatorio no puede haber carencias.\n✔ Lo demás tiene que estar escrito en el contrato.\n✔ Antes de firmar, pedí el contrato y revisá cada espera.\n\nComentá «CARENCIAS» y te mando la guía «Carencias del PMO».\n\nFuente: Ley 26.682, art. 10.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Prepaga #PMO #CambioDePrepaga #BuenosAires",
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Cambiarte de prepaga no congela todo un año.\n\n✔ Para lo que está en el Programa Médico Obligatorio no puede haber carencias.\n✔ Lo demás tiene que estar escrito en el contrato.\n✔ Antes de firmar, pedí el contrato y revisá cada espera.\n\nEscribinos por WhatsApp.\n\nFuente: Ley 26.682, art. 10.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Prepaga #PMO #CambioDePrepaga #BuenosAires",
   "fuente": "Ley 26.682, art. 10"
 }

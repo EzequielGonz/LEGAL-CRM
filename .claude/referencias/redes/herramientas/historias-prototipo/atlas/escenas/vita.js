@@ -181,7 +181,7 @@ export default async function (datos, plan) {
     cab.position.set(0, .47, .01); g.add(c, cab); return g; };
 
   // ════ MOTOR DE GOLPES: la escena la arma el plan (atlas/planes/<id>.json) ════
-  const PL = plan || {id: datos.id, gancho: datos.gancho || '', beats: [], contador: 0, cierre: 'Comentá «' + (datos.palabra || '') + '»'};
+  const PL = plan || {id: datos.id, gancho: datos.gancho || '', beats: [], contador: 0, cierre: 'Escribinos por WhatsApp'};
   const SEM = [...String(PL.id)].reduce((a, c) => a + c.charCodeAt(0), 0); const rnd = k => hash(SEM * 1.37 + k * 7.71);
   const twS = (w, n = 0) => { const lst = P.filter(p => nrm(p.w).startsWith(nrm(w || '~'))); return lst.length ? (lst[n] || lst[lst.length - 1]).t : null; };
   const fin = P[P.length - 1].t + P[P.length - 1].d;
@@ -247,7 +247,7 @@ export default async function (datos, plan) {
   const N = Math.max(0, PL.contador | 0); const placas = {};
   const placa = (k, dib) => { const p = carton(.62, .42, R, (x, w, h) => { x.fillStyle = '#efe6cf'; x.fillRect(0, 0, w, h); x.strokeStyle = NAVY; x.lineWidth = .014; x.strokeRect(.025, .025, w - .05, h - .05); dib(x, w, h); }); p.geometry.translate(0, -.21, 0); p.position.set(0, .76, .02); p.visible = false; atril.add(p); placas[k] = p; };
   for (let k = 1; k <= N; k++) placa('p' + k, (x, w) => { txt(x, `${k}/${N}`, w / 2, .24, .17, NAVY, {peso: 800}); x.fillStyle = ORO; x.fillRect(.12, .08, (w - .24) * k / N, .03); x.strokeStyle = NAVY; x.lineWidth = .006; x.strokeRect(.12, .08, w - .24, .03); });
-  const cierreTxt = (PL.cierre || '').replace(/^Coment[aá]\s*/i, ''); placa('cierre', (x, w) => { txt(x, 'comentá', w / 2, .3, .07, NAVY, {peso: 700}); txtFit(x, cierreTxt.replace(/[«»"]/g, ''), w / 2, .16, w - .12, .13, ORO, {peso: 800}); });
+  const cierreW = (PL.cierre || 'Escribinos por WhatsApp').replace(/[«»"]/g, '').trim().split(/\s+/); const cierreArriba = cierreW.slice(0, -1).join(' '), cierreAbajo = cierreW[cierreW.length - 1]; placa('cierre', (x, w) => { txtFit(x, cierreArriba.toLowerCase(), w / 2, .3, w - .14, .07, NAVY, {peso: 700}); txtFit(x, cierreAbajo, w / 2, .16, w - .12, .13, ORO, {peso: 800}); });
 
   // ── golpes en el tiempo ──
   const B = (PL.beats || []).map((b, i) => ({...b, i}));

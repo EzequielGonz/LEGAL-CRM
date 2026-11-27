@@ -9,7 +9,7 @@
     "facebook"
   ],
   "gancho": "El nombre de la prepaga no te atiende.",
-  "voz": "El nombre de la prepaga no te atiende. Hay tres formas de elegir. Por el precio más bajo. Por el nombre que suena. O por la cartilla de tu zona. Lucía eligió la tercera, por lo que usa de verdad. ¿Cuál sos vos? Revisá la cartilla antes de firmar. Comentá ELEGIR y te mando la guía. Porque el nombre…",
+  "voz": "El nombre de la prepaga no te atiende. Hay tres formas de elegir. Por el precio más bajo. Por el nombre que suena. O por la cartilla de tu zona. Lucía eligió la tercera, por lo que usa de verdad. ¿Cuál sos vos? Revisá la cartilla antes de firmar. Escribinos por WhatsApp. Porque el nombre…",
   "palabra": "ELEGIR",
   "contador": 3,
   "beats": [
@@ -70,15 +70,15 @@
       "efecto": "rebote"
     },
     {
-      "palabra": "Comentá",
+      "palabra": "Escribinos",
       "n": 0,
       "tipo": "cierre",
       "objeto": "carpeta",
-      "texto": "Comentá «ELEGIR»",
+      "texto": "Escribinos por WhatsApp",
       "efecto": "sello"
     }
   ],
-  "cierre": "Comentá «ELEGIR»",
-  "copy": "El nombre de la prepaga no te atiende.\n\n✔ Se puede elegir por precio, por nombre o por cartilla.\n✔ Lo que te sirve en la guardia es la cartilla de tu zona.\n✔ Revisá la cartilla antes de firmar.\n\nComentá «ELEGIR» y te mando la guía «Elegir plan por cartilla».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Prepaga #ObraSocial #Cartilla #BuenosAires",
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "El nombre de la prepaga no te atiende.\n\n✔ Se puede elegir por precio, por nombre o por cartilla.\n✔ Lo que te sirve en la guardia es la cartilla de tu zona.\n✔ Revisá la cartilla antes de firmar.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Prepaga #ObraSocial #Cartilla #BuenosAires",
   "fuente": ""
 }

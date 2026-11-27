@@ -1,84 +1,84 @@
 {
- "id": "marketing-2911-b",
- "marca": "marketing",
- "base": "marketing-2811-4",
- "fecha_pub": "2026-11-29",
- "hora": "21:20",
- "redes": [
-  "instagram",
-  "facebook"
- ],
- "gancho": "Más largo no es más atento.",
- "voz": "Más largo no es más atento. Hay tres tipos de vendedor de WhatsApp. El que manda un audio de tres minutos. El que manda el catálogo entero en PDF. Y el que responde con precio y paso siguiente. ¿Cuál sos? Comentá VENDEDOR y te mando la guía. Pensalo bien antes del próximo audio:",
- "palabra": "VENDEDOR",
- "contador": 0,
- "beats": [
-  {
-   "palabra": "Más",
-   "n": 0,
-   "tipo": "gancho",
-   "objeto": "cartel",
-   "texto": "Más largo, ¿más atento?",
-   "efecto": "barrido"
-  },
-  {
-   "palabra": "Hay",
-   "n": 0,
-   "tipo": "problema",
-   "objeto": "mostrador",
-   "texto": "Tres vendedores",
-   "efecto": "rebote"
-  },
-  {
-   "palabra": "El",
-   "n": 0,
-   "tipo": "problema",
-   "objeto": "megafono",
-   "texto": "Audio de 3:00",
-   "efecto": "golpe"
-  },
-  {
-   "palabra": "El",
-   "n": 1,
-   "tipo": "problema",
-   "objeto": "carta",
-   "texto": "Catálogo entero en PDF",
-   "efecto": "caida"
-  },
-  {
-   "palabra": "Y",
-   "n": 0,
-   "tipo": "giro",
-   "objeto": "chat",
-   "texto": "Precio y paso siguiente",
-   "efecto": "flash"
-  },
-  {
-   "palabra": "Cuál",
-   "n": 0,
-   "tipo": "giro",
-   "objeto": "cartel",
-   "texto": "¿Cuál sos?",
-   "efecto": "giro"
-  },
-  {
-   "palabra": "Comentá",
-   "n": 0,
-   "tipo": "cierre",
-   "objeto": "etiqueta",
-   "texto": "Comentá «VENDEDOR»",
-   "efecto": "sello"
-  },
-  {
-   "palabra": "Pensalo",
-   "n": 0,
-   "tipo": "cierre",
-   "objeto": "cartel",
-   "texto": "Más largo, ¿más atento?",
-   "efecto": "barrido"
-  }
- ],
- "cierre": "Comentá «VENDEDOR»",
- "copy": "Más largo no es más atento.\n\n✔ El que manda un audio de tres minutos\n✔ El que manda el catálogo entero en PDF\n✔ El que responde con precio y paso siguiente\n\n¿Cuál sos? Comentá «VENDEDOR» y te mando la guía «Cómo respondés en WhatsApp».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #VentasPorWhatsApp #AtencionAlCliente #Comercios",
- "fuente": ""
+  "id": "marketing-2911-b",
+  "marca": "marketing",
+  "base": "marketing-2811-4",
+  "fecha_pub": "2026-11-29",
+  "hora": "21:20",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Más largo no es más atento.",
+  "voz": "Más largo no es más atento. Hay tres tipos de vendedor de WhatsApp. El que manda un audio de tres minutos. El que manda el catálogo entero en PDF. Y el que responde con precio y paso siguiente. ¿Cuál sos? Escribinos por WhatsApp. Pensalo bien antes del próximo audio:",
+  "palabra": "VENDEDOR",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Más",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "cartel",
+      "texto": "Más largo, ¿más atento?",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Hay",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "mostrador",
+      "texto": "Tres vendedores",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "El",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "megafono",
+      "texto": "Audio de 3:00",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "El",
+      "n": 1,
+      "tipo": "problema",
+      "objeto": "carta",
+      "texto": "Catálogo entero en PDF",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Y",
+      "n": 0,
+      "tipo": "giro",
+      "objeto": "chat",
+      "texto": "Precio y paso siguiente",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Cuál",
+      "n": 0,
+      "tipo": "giro",
+      "objeto": "cartel",
+      "texto": "¿Cuál sos?",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "etiqueta",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Pensalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "cartel",
+      "texto": "Más largo, ¿más atento?",
+      "efecto": "barrido"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Más largo no es más atento.\n\n✔ El que manda un audio de tres minutos\n✔ El que manda el catálogo entero en PDF\n✔ El que responde con precio y paso siguiente\n\n¿Cuál sos? Escribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #VentasPorWhatsApp #AtencionAlCliente #Comercios",
+  "fuente": ""
 }

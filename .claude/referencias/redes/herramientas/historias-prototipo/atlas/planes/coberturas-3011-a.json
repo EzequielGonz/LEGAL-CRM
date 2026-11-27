@@ -9,7 +9,7 @@
     "facebook"
   ],
   "gancho": "Tu monotributo no es solo un impuesto.",
-  "voz": "Tu monotributo no es solo un impuesto. Lucía paga el monotributo y, además, una prepaga. Un día mira el detalle del pago: hay una línea que no entiende. Es su obra social. En general, una parte del monotributo ya va ahí. Revisá a cuál va y qué cartilla tenés cerca. Quizá pagás dos veces. Comentá MONO y te mando la guía. Porque tu monotributo…",
+  "voz": "Tu monotributo no es solo un impuesto. Lucía paga el monotributo y, además, una prepaga. Un día mira el detalle del pago: hay una línea que no entiende. Es su obra social. En general, una parte del monotributo ya va ahí. Revisá a cuál va y qué cartilla tenés cerca. Quizá pagás dos veces. Escribinos por WhatsApp. Porque tu monotributo…",
   "palabra": "MONO",
   "contador": 0,
   "beats": [
@@ -70,15 +70,15 @@
       "efecto": "caida"
     },
     {
-      "palabra": "Comentá",
+      "palabra": "Escribinos",
       "n": 0,
       "tipo": "cierre",
       "objeto": "carpeta",
-      "texto": "Comentá «MONO»",
+      "texto": "Escribinos por WhatsApp",
       "efecto": "giro"
     }
   ],
-  "cierre": "Comentá «MONO»",
-  "copy": "Tu monotributo no es solo un impuesto.\n\n✔ En general, una parte del monotributo ya va a una obra social.\n✔ Revisá a cuál va y qué cartilla tenés cerca.\n✔ Si además pagás una prepaga, preguntá si estás pagando dos veces.\n\nComentá «MONO» y te mando la guía «Monotributo y obra social».\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Monotributo #ObraSocial #Prepaga #BuenosAires",
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Tu monotributo no es solo un impuesto.\n\n✔ En general, una parte del monotributo ya va a una obra social.\n✔ Revisá a cuál va y qué cartilla tenés cerca.\n✔ Si además pagás una prepaga, preguntá si estás pagando dos veces.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Monotributo #ObraSocial #Prepaga #BuenosAires",
   "fuente": ""
 }

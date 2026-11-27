@@ -9,8 +9,8 @@
     "facebook"
   ],
   "gancho": "Una enfermedad previa no te deja afuera.",
-  "voz": "Una enfermedad previa no te deja afuera. Lucía creía que sí. Pensaba: «ninguna prepaga me va a aceptar». Falso. Por ley, una preexistencia no puede ser motivo de rechazo. Lo que sí puede cambiar es el valor de la cuota. Por eso, antes de firmar, preguntá cuánto y pedilo por escrito. Comentá PLAN y te mando la guía. Porque una enfermedad previa…",
-  "palabra": "PLAN",
+  "voz": "Una enfermedad previa no te deja afuera. Lucía creía que sí. Pensaba: «ninguna prepaga me va a aceptar». Falso. Por ley, una preexistencia no puede ser motivo de rechazo. Lo que sí puede cambiar es el valor de la cuota. Por eso, antes de firmar, preguntá cuánto y pedilo por escrito. Escribinos por WhatsApp. Porque una enfermedad previa…",
+  "palabra": "RECHAZADA",
   "contador": 0,
   "beats": [
     {
@@ -62,11 +62,11 @@
       "efecto": "sello"
     },
     {
-      "palabra": "Comentá",
+      "palabra": "Escribinos",
       "n": 0,
       "tipo": "cierre",
       "objeto": "carpeta",
-      "texto": "Comentá «PLAN»",
+      "texto": "Escribinos por WhatsApp",
       "efecto": "flash"
     },
     {
@@ -78,7 +78,7 @@
       "efecto": "caida"
     }
   ],
-  "cierre": "Comentá «PLAN»",
-  "copy": "Una enfermedad previa no te deja afuera.\n\n✔ Por ley, una preexistencia no puede ser motivo de rechazo.\n✔ Lo que sí puede cambiar es el valor de la cuota.\n✔ Antes de firmar, preguntá cuánto y pedilo por escrito.\n\nComentá «PLAN» y te mando la guía «Preexistencia».\n\nFuente: Ley 26.682, art. 10.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Prepaga #ObraSocial #Preexistencia #BuenosAires",
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Una enfermedad previa no te deja afuera.\n\n✔ Por ley, una preexistencia no puede ser motivo de rechazo.\n✔ Lo que sí puede cambiar es el valor de la cuota.\n✔ Antes de firmar, preguntá cuánto y pedilo por escrito.\n\nEscribinos por WhatsApp.\n\nFuente: Ley 26.682, art. 10.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Prepaga #ObraSocial #Preexistencia #BuenosAires",
   "fuente": "Ley 26.682, art. 10"
 }

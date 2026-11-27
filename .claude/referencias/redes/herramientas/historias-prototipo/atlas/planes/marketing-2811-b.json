@@ -1,84 +1,84 @@
 {
- "id": "marketing-2811-b",
- "marca": "marketing",
- "base": "marketing-2711-3",
- "fecha_pub": "2026-11-28",
- "hora": "18:40",
- "redes": [
-  "instagram",
-  "facebook"
- ],
- "gancho": "Tu competencia también puede preguntarte por privado.",
- "voz": "Tu competencia también puede preguntarte por privado. Esconder el precio no te cuida de nadie. Solo le suma un paso a quien quiere comprarte. Uno: el precio, o desde cuánto. Dos: qué incluye. Tres: «¿te lo reservo para el sábado?». Comentá RESPUESTAS y te mando la guía. Antes de esconderlo de nuevo, acordate:",
- "palabra": "RESPUESTAS",
- "contador": 3,
- "beats": [
-  {
-   "palabra": "Tu",
-   "n": 0,
-   "tipo": "gancho",
-   "objeto": "cartel",
-   "texto": "«Precio por privado»",
-   "efecto": "golpe"
-  },
-  {
-   "palabra": "Esconder",
-   "n": 0,
-   "tipo": "giro",
-   "objeto": "cruz",
-   "texto": "No te cuida",
-   "efecto": "tachar"
-  },
-  {
-   "palabra": "Solo",
-   "n": 0,
-   "tipo": "problema",
-   "objeto": "chat",
-   "texto": "Un paso de más",
-   "efecto": "rebote"
-  },
-  {
-   "palabra": "Uno",
-   "n": 0,
-   "tipo": "paso",
-   "objeto": "etiqueta",
-   "texto": "El precio",
-   "efecto": "flash"
-  },
-  {
-   "palabra": "Dos",
-   "n": 0,
-   "tipo": "paso",
-   "objeto": "caja",
-   "texto": "Qué incluye",
-   "efecto": "despiece"
-  },
-  {
-   "palabra": "Tres",
-   "n": 0,
-   "tipo": "paso",
-   "objeto": "check",
-   "texto": "¿Te lo reservo?",
-   "efecto": "sello"
-  },
-  {
-   "palabra": "Comentá",
-   "n": 0,
-   "tipo": "cierre",
-   "objeto": "carta",
-   "texto": "Comentá «RESPUESTAS»",
-   "efecto": "barrido"
-  },
-  {
-   "palabra": "Antes",
-   "n": 0,
-   "tipo": "cierre",
-   "objeto": "cartel",
-   "texto": "«Precio por privado»",
-   "efecto": "caida"
-  }
- ],
- "cierre": "Comentá «RESPUESTAS»",
- "copy": "Tu competencia también puede preguntarte por privado.\n\n✔ El precio, o desde cuánto\n✔ Qué incluye\n✔ Un paso concreto: «¿te lo reservo para el sábado?»\n\nEsconder el precio no te cuida de nadie: solo le suma un paso a quien quiere comprarte.\nComentá «RESPUESTAS» y te mando la guía «Precio por privado».\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #VentasPorWhatsApp #Emprendedores #Pymes",
- "fuente": ""
+  "id": "marketing-2811-b",
+  "marca": "marketing",
+  "base": "marketing-2711-3",
+  "fecha_pub": "2026-11-28",
+  "hora": "18:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Tu competencia también puede preguntarte por privado.",
+  "voz": "Tu competencia también puede preguntarte por privado. Esconder el precio no te cuida de nadie. Solo le suma un paso a quien quiere comprarte. Uno: el precio, o desde cuánto. Dos: qué incluye. Tres: «¿te lo reservo para el sábado?». Escribinos por WhatsApp. Antes de esconderlo de nuevo, acordate:",
+  "palabra": "RESPUESTAS",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "Tu",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "cartel",
+      "texto": "«Precio por privado»",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Esconder",
+      "n": 0,
+      "tipo": "giro",
+      "objeto": "cruz",
+      "texto": "No te cuida",
+      "efecto": "tachar"
+    },
+    {
+      "palabra": "Solo",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "chat",
+      "texto": "Un paso de más",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "Uno",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "etiqueta",
+      "texto": "El precio",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Dos",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "caja",
+      "texto": "Qué incluye",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Tres",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "check",
+      "texto": "¿Te lo reservo?",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "carta",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Antes",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "cartel",
+      "texto": "«Precio por privado»",
+      "efecto": "caida"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Tu competencia también puede preguntarte por privado.\n\n✔ El precio, o desde cuánto\n✔ Qué incluye\n✔ Un paso concreto: «¿te lo reservo para el sábado?»\n\nEsconder el precio no te cuida de nadie: solo le suma un paso a quien quiere comprarte.\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #VentasPorWhatsApp #Emprendedores #Pymes",
+  "fuente": ""
 }

@@ -9,7 +9,7 @@
     "facebook"
   ],
   "gancho": "Te despiden: firmar rápido no te conviene.",
-  "voz": "Te despiden: firmar rápido no te conviene. Hay tres reacciones. La que firma todo para irse rápido. La que se va sin pedir copia de nada. Y la que lee, pide copia y consulta antes. ¿Cuál sos? La tercera es la que se queda con papeles. Comentá «COPIA» y te mando la guía. Mandáselo a quien esté pasando por esto, porque si mañana…",
+  "voz": "Te despiden: firmar rápido no te conviene. Hay tres reacciones. La que firma todo para irse rápido. La que se va sin pedir copia de nada. Y la que lee, pide copia y consulta antes. ¿Cuál sos? La tercera es la que se queda con papeles. Escribinos por WhatsApp. Mandáselo a quien esté pasando por esto, porque si mañana…",
   "palabra": "COPIA",
   "contador": 3,
   "beats": [
@@ -70,15 +70,15 @@
       "efecto": "sello"
     },
     {
-      "palabra": "Comentá",
+      "palabra": "Escribinos",
       "n": 0,
       "tipo": "cierre",
       "objeto": "sobre",
-      "texto": "Comentá COPIA",
+      "texto": "Escribinos por WhatsApp",
       "efecto": "flash"
     }
   ],
-  "cierre": "Comentá «COPIA»",
-  "copy": "Te despiden: firmar rápido no te conviene.\n\n1/3 La que firma todo para irse rápido.\n2/3 La que se va sin pedir copia de nada.\n3/3 La que lee, pide copia y consulta antes. ¿Cuál sos?\n\nComentá «COPIA» y te mando la guía «Despido: cómo reaccionás».\n\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #Despido #DerechoLaboral #Trabajadores",
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Te despiden: firmar rápido no te conviene.\n\n1/3 La que firma todo para irse rápido.\n2/3 La que se va sin pedir copia de nada.\n3/3 La que lee, pide copia y consulta antes. ¿Cuál sos?\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #Despido #DerechoLaboral #Trabajadores",
   "fuente": ""
 }

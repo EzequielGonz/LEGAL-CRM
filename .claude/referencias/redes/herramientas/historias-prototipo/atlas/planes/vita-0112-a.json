@@ -9,8 +9,8 @@
     "facebook"
   ],
   "gancho": "La ART te rechazó: no es el final.",
-  "voz": "La ART te rechazó: no es el final. Te accidentaste trabajando y te dijeron que no. Tres cartas. Carta uno: pedí el rechazo por escrito. Carta dos: seguí atendiéndote y guardá cada estudio. Carta tres: no es la última palabra, está la Comisión Médica. Comentá «ART» y te mando la guía. Mandáselo a un compañero, porque si…",
-  "palabra": "ART",
+  "voz": "La ART te rechazó: no es el final. Te accidentaste trabajando y te dijeron que no. Tres cartas. Carta uno: pedí el rechazo por escrito. Carta dos: seguí atendiéndote y guardá cada estudio. Carta tres: no es la última palabra, está la Comisión Médica. Escribinos por WhatsApp. Mandáselo a un compañero, porque si…",
+  "palabra": "RECHAZADO",
   "contador": 3,
   "beats": [
     {
@@ -62,11 +62,11 @@
       "efecto": "tachar"
     },
     {
-      "palabra": "Comentá",
+      "palabra": "Escribinos",
       "n": 0,
       "tipo": "cierre",
       "objeto": "sobre",
-      "texto": "Comentá ART",
+      "texto": "Escribinos por WhatsApp",
       "efecto": "flash"
     },
     {
@@ -78,7 +78,7 @@
       "efecto": "golpe"
     }
   ],
-  "cierre": "Comentá «ART»",
-  "copy": "La ART te rechazó: no es el final.\n\n✔ 1/3 Pedí el rechazo por escrito\n✔ 2/3 Seguí atendiéndote y guardá cada estudio\n✔ 3/3 Está la Comisión Médica\n\nComentá «ART» y te mando la guía «ART: rechazo del accidente».\n\nFuente: Ley 27.348 (Comisiones Médicas).\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #ART #AccidenteLaboral #ComisionMedica",
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "La ART te rechazó: no es el final.\n\n✔ 1/3 Pedí el rechazo por escrito\n✔ 2/3 Seguí atendiéndote y guardá cada estudio\n✔ 3/3 Está la Comisión Médica\n\nEscribinos por WhatsApp.\n\nFuente: Ley 27.348 (Comisiones Médicas).\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #ART #AccidenteLaboral #ComisionMedica",
   "fuente": "Ley 27.348 (Comisiones Médicas)"
 }

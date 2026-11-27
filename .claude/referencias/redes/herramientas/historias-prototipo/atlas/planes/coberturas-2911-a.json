@@ -9,7 +9,7 @@
     "facebook"
   ],
   "gancho": "Te despiden y tu obra social sigue.",
-  "voz": "Te despiden y tu obra social sigue. Lunes, nueve de la mañana: Gabriel sale con la caja y piensa que se quedó sin cobertura. No. Si trabajaste más de tres meses seguidos, seguís cubierto tres meses más, sin aportar. Usá ese tiempo: revisá tu cartilla, compará y elegí sin apuro. Comentá TRABAJO y te mando la guía. Porque el lunes que te despiden…",
+  "voz": "Te despiden y tu obra social sigue. Lunes, nueve de la mañana: Gabriel sale con la caja y piensa que se quedó sin cobertura. No. Si trabajaste más de tres meses seguidos, seguís cubierto tres meses más, sin aportar. Usá ese tiempo: revisá tu cartilla, compará y elegí sin apuro. Escribinos por WhatsApp. Porque el lunes que te despiden…",
   "palabra": "TRABAJO",
   "contador": 0,
   "beats": [
@@ -70,15 +70,15 @@
       "efecto": "sello"
     },
     {
-      "palabra": "Comentá",
+      "palabra": "Escribinos",
       "n": 0,
       "tipo": "cierre",
       "objeto": "carpeta",
-      "texto": "Comentá «TRABAJO»",
+      "texto": "Escribinos por WhatsApp",
       "efecto": "rebote"
     }
   ],
-  "cierre": "Comentá «TRABAJO»",
-  "copy": "Te despiden y tu obra social sigue.\n\n✔ Si trabajaste más de tres meses seguidos, seguís cubierto tres meses más.\n✔ En ese tiempo no tenés que aportar.\n✔ Usalo para revisar tu cartilla y comparar sin apuro.\n\nComentá «TRABAJO» y te mando la guía «Te quedás sin trabajo: cobertura».\n\nFuente: Ley 23.660, art. 10, inc. a.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Despido #Trabajo #BuenosAires",
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Te despiden y tu obra social sigue.\n\n✔ Si trabajaste más de tres meses seguidos, seguís cubierto tres meses más.\n✔ En ese tiempo no tenés que aportar.\n✔ Usalo para revisar tu cartilla y comparar sin apuro.\n\nEscribinos por WhatsApp.\n\nFuente: Ley 23.660, art. 10, inc. a.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Despido #Trabajo #BuenosAires",
   "fuente": "Ley 23.660, art. 10, inc. a"
 }
