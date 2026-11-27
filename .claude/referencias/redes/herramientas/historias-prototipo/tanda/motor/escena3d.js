@@ -105,8 +105,8 @@ export function crear({P, pal, canvas, W = 1080, H = 1920}) {
   const fin = new ShaderPass({uniforms: {tDiffuse: {value: null}, tm: {value: 0}, grano: {value: R.grano ?? .035}}, vertexShader: vs,
     fragmentShader: 'uniform sampler2D tDiffuse;uniform float tm;uniform float grano;varying vec2 vUv;float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7))+tm)*43758.5453);}void main(){vec4 c=texture2D(tDiffuse,vUv);vec2 q=vUv-.5;float v=smoothstep(.98,.25,length(q*vec2(.9,.6)));c.rgb*=mix(.9,1.,v);c.rgb+=(h(vUv*vec2(1080.,1920.))-.5)*grano;gl_FragColor=c;}'}); comp.addPass(fin);
   // ---------- cámara: siempre en movimiento ----------
-  const CFG = [{az: [10, 22], el: 35, d: [62, 56], f: [0, 3.0, .6]}, {az: [26, 38], el: 31, d: [42, 35], f: [0, 2.6, 1.0]}, {az: [20, 6], el: 29, d: [38, 31], f: [2.2, 1.8, 3.0]}, {az: [-8, -24], el: 32, d: [50, 42], f: [-2.0, 2.4, -1.8]}, {az: [22, 10], el: 34, d: [58, 62], f: [0, 3.0, .6]}];
-  const cfgDe = i => B[i].loop ? {az: [10, 10], el: 35, d: [62, 62], f: [0, 3.0, .6]} : CFG[Math.min(i, CFG.length - 1)];
+  const CFG = [{az: [10, 22], el: 35, d: [56, 52], f: [0, 3.2, .6]}, {az: [26, 38], el: 31, d: [44, 38], f: [0, 3.8, 1.0]}, {az: [20, 6], el: 29, d: [40, 33], f: [2.2, 3.4, 3.0]}, {az: [-8, -24], el: 32, d: [50, 42], f: [-2.0, 3.6, -1.8]}, {az: [22, 10], el: 34, d: [54, 58], f: [0, 3.2, .6]}];
+  const cfgDe = i => B[i].loop ? {az: [10, 10], el: 35, d: [56, 56], f: [0, 3.2, .6]} : CFG[Math.min(i, CFG.length - 1)];
   const posa = (i, u) => { const c = cfgDe(i); const e = ease(u); return {az: lerp(c.az[0], c.az[1], e) * Math.PI / 180, el: c.el * Math.PI / 180, d: lerp(c.d[0], c.d[1], e), f: new THREE.Vector3(...c.f)}; };
   const idx = t => { let i = B.length - 1; while (i > 0 && B[i].t0 > t) i--; return i; };
   const pose0 = posa(0, 0);
