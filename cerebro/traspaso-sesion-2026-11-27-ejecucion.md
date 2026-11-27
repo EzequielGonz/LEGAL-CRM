@@ -117,3 +117,5 @@ El dueño, textual: «pausa todo y pone un checkpoint para retomar, programa ret
 **Ya hecho hoy que no hay que repetir:** auditoría del Laboratorio por código (`docs/oficina/2026-11-27-auditoria-laboratorio.md`, 20 hallazgos); carpeta `/home/user/LEGAL-CRM` puesta en la versión publicada.
 
 **Pendiente de respuesta al dueño:** lista verificada de IA con plan gratuito (DeepSeek y otras) para sumar a la arena de la Oficina; necesita que él cargue las claves en Vercel.
+
+**Sumado a las 14:40 (pedido del dueño, «dale, cuando retomes actualizalo»):** al retomar, actualizar el artefacto «Cerebro del negocio» (https://claude.ai/artifact/7EC3JRaX1oFAdraThQhWTv, versión del 21/11) con lo de esta semana. Leerlo primero con la herramienta de artefactos y publicar sobre la misma dirección; sin datos personales ni claves.
