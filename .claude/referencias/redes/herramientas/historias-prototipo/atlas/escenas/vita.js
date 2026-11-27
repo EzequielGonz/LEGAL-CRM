@@ -85,7 +85,7 @@ export default async function (datos) {
   for (let fila = 0; fila < 2; fila++) for (let i = -3; i <= 3; i++) { const b = new THREE.Mesh(new THREE.CapsuleGeometry(.2, .3, 6, 14), matButaca); b.rotation.z = Math.PI / 2; b.scale.set(1, 1.5, .5); b.position.set(i * .62 + fila * .31, -1.05 - fila * .35, 2.2 + fila * .9); sala.add(b); }
 
   // ── luces: seguidor con haz visible, laterales cálidos, luna de contraluz ──
-  scene.add(new THREE.HemisphereLight(0x2a2a4a, 0x140a06, .18));
+  const hemi = new THREE.HemisphereLight(0x2a2a4a, 0x140a06, .18); scene.add(hemi);
   const luna = new THREE.DirectionalLight(0x7f9cff, .9); luna.position.set(-1, 4, -6); scene.add(luna);
   const lat1 = new THREE.SpotLight(0xffc98a, 18, 14, .42, .6, 1.6); lat1.position.set(-3.2, 4.6, 2.8); lat1.target.position.set(-.2, .6, -.8); lat1.castShadow = true; lat1.shadow.mapSize.set(1024, 1024); lat1.shadow.bias = -.0006; scene.add(lat1, lat1.target);
   const lat2 = new THREE.SpotLight(0xffd8a8, 10, 14, .42, .65, 1.6); lat2.position.set(3.4, 4.4, 2.4); lat2.target.position.set(.3, .6, -.8); scene.add(lat2, lat2.target);
@@ -161,7 +161,7 @@ export default async function (datos) {
   estrella.position.set(.02, .2, -.25); scene.add(estrella);
 
   // ── Nico (cartulina articulada con broches dorados) ───────────────────────
-  const nico = new THREE.Group(); nico.position.set(.98, 0, .18); scene.add(nico);
+  const nico = new THREE.Group(); nico.position.set(.84, 0, .2); scene.add(nico);
   const cuerpo = carton(.42, .78, poli([[.1, 0], [.19, 0], [.21, .36], [.23, .36], [.25, 0], [.34, 0], [.33, .4], [.37, .62], [.34, .74], [.08, .74], [.05, .62], [.09, .4]]), (x) => {
     x.fillStyle = '#2a2f3a'; x.fillRect(0, 0, .42, .42); x.fillStyle = '#3a5a8c'; x.fillRect(0, .38, .42, .4); x.fillStyle = '#1d1d22'; x.fillRect(0, 0, .42, .05);
     x.fillStyle = 'rgba(255,255,255,.14)'; x.fillRect(.08, .6, .29, .02); });
@@ -204,7 +204,7 @@ export default async function (datos) {
   fronton.position.set(0, 3.08, .82); scene.add(fronton);
 
   // atril de cartón (contador y pedido)
-  const atril = new THREE.Group(); atril.position.set(-.8, 0, .5); atril.rotation.y = .18; atril.scale.setScalar(.78); scene.add(atril);
+  const atril = new THREE.Group(); atril.position.set(-.66, 0, .52); atril.rotation.y = .16; atril.scale.setScalar(.72); scene.add(atril);
   const pata = carton(.06, .55, rect, (x) => { x.fillStyle = '#6b4a2f'; x.fillRect(0, 0, .06, .55); }); atril.add(pata);
   const placas = {}; const placa = (clave, dib) => { const p = carton(.62, .42, rect, (x, w, h) => { x.fillStyle = '#efe6cf'; x.fillRect(0, 0, w, h); x.strokeStyle = NAVY; x.lineWidth = .014; x.strokeRect(.025, .025, w - .05, h - .05); dib(x, w, h); });
     p.geometry.translate(0, -.21, 0); p.position.set(0, .76, .02); p.visible = false; atril.add(p); placas[clave] = p; return p; };
@@ -301,7 +301,7 @@ export default async function (datos) {
     const dim = 1 - .55 * seg(t, tAnt - .3, tAnt + .3) * (1 - seg(t, tPor - .4, tPor + .2));
     const apagon = 1 - .85 * seg(t, tNun - .05, tNun + .12) * (1 - seg(t, tNun + 1.7, tNun + 2.3)); lat1.intensity = 18 * dim * apagon; lat2.intensity = 10 * dim * apagon; candil.forEach((l, i) => l.intensity = 1.6 * apagon * (.85 + .15 * Math.sin(t * 7 + i))); matBulbo.emissiveIntensity = 3 * (.3 + .7 * apagon); luna.intensity = .9 * apagon; tachon.material.emissiveIntensity = 1.6 + 2.5 * (1 - apagon);
     // farol y reloj
-    const enc = t < tDom ? 1 : 1; const parpadeo = t > .3 && t < .9 ? (Math.sin(t * 80) > 0 ? 1 : .2) : 1; lampara.material.emissiveIntensity = 3.2 * enc * parpadeo * (.2 + .8 * apg); luzFarol.intensity = 1.4 * enc * parpadeo * apg; lunaLuz.intensity = .6 * apg;
+    const enc = t < tDom ? 1 : 1; const parpadeo = t > .3 && t < .9 ? (Math.sin(t * 80) > 0 ? 1 : .2) : 1; lampara.material.emissiveIntensity = 3.2 * enc * parpadeo * (.2 + .8 * apg); luzFarol.intensity = 1.4 * enc * parpadeo * apg; lunaLuz.intensity = .6 * apg; hemi.intensity = .18 * apg; luna.intensity = .9 * apg; M.cine.uniforms.vineta.value = .42 + .5 * (1 - apg); M.cine.uniforms.tinte.value.set(.55 + .45 * apg, .55 + .45 * apg, .6 + .4 * apg); seg1.angle = Math.min(seg1.angle, apg < .5 ? .05 : 1);
     const m19 = 9 + E.outBack(seg(t, t19 + .1, t19 + .35)) * 1; const mm = (t > T - .5 ? 9 + (1 - seg(t, T - .4, T)) : m19); minu.rotation.z = -mm / 60 * Math.PI * 2; hora.rotation.z = -(19 % 12 + mm / 60) / 12 * Math.PI * 2;
     esfera.material[0].emissiveIntensity = .12 + .5 * Math.exp(-Math.max(0, t - t19) / .8) * (t > t19 ? 1 : 0);
     // choque congelado: leve vibración, estrella que late
@@ -338,7 +338,7 @@ export default async function (datos) {
     hojas.forEach((h, i) => { const n = 3 - i; if (n === 3) { h.rotation.x = 0; return; } const tt = tDias - (n === 1 ? 1.0 : .55); const k = E.io3(seg(t, tt, tt + .35)); h.visible = k < 1; h.rotation.x = -k * Math.PI * .97; });
     const sk = seg(t, tDias + .15, tDias + .45); sello.visible = t > tDias + .13; sello.scale.setScalar(Math.max(.001, lerp(1.6, .7, E.outExpo(sk)))); sello.rotation.z = -.2 * (1 - sk) - .15;
     // avión de papel: sale de Nico y cruza hacia la cámara
-    const av = seg(t, tMan + .1, tMan + 2.1); avion.visible = av > 0 && av < 1; const dest = cam.position.clone().add(new THREE.Vector3(-.35, .2, -.9)); const pa = new THREE.Vector3(.9, 1.0, .2).lerp(dest, E.io2(av)); pa.y += Math.sin(av * Math.PI * 2) * .25;
+    const av = seg(t, tMan + .1, tMan + 2.1); avion.visible = av > 0 && av < 1; const dest = cam.position.clone().add(new THREE.Vector3(-.35, .2, -.9)); const pa = new THREE.Vector3(.76, 1.0, .25).lerp(dest, E.io2(av)); pa.y += Math.sin(av * Math.PI * 2) * .25;
     avion.position.copy(pa); avion.lookAt(dest.clone().add(new THREE.Vector3(0, 0, 1))); avion.rotateZ(Math.sin(av * 9) * .3);
     kar(t); M.cine.uniforms.t.value = t * 11.7; M.comp.render();
   }

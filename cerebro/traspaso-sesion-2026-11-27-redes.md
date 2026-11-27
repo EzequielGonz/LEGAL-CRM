@@ -6,6 +6,11 @@ Rama `claude/brave-hawking-nzsr60` · PR EzequielGonz/LEGAL-CRM#82 (seguido, en 
 - El dueño frenó el boceto de VITA. **No hay agentes trabajando ni nada programado.** Lo programado en Metricool del 25 al 29/11 (12 historias + 1 carrusel por día y marca) NO se toca.
 - **Esperando:** el dueño busca 1 o 2 reels de referencia con el 3D que imagina. Al recibirlos, analizarlos (gancho, cámara, luz, nivel de realismo, animación, efectos) y recién ahí hacer el boceto de VITA con el guion `vita-2711-1`.
 
+## 27/11 11:45 — boceto de VITA terminado y enviado al dueño (espera su OK)
+- Video: `.claude/referencias/redes/herramientas/historias-prototipo/atlas/out/vita-2711-1-atlas-entrega.mp4` (34,6 s, 1080×1920, 30 fps, 53 MB, −15 LUFS; fuera de git por peso; el maestro CRF 17 pesa 174 MB). Hoja de revisión: `docs/redes/tanda-2811-0712/boceto-vita/atlas-teatrito-video-final.jpg`.
+- Estado: especificado, implementado, probado (revisado cuadro por cuadro en 12 momentos, el loop empalma) y **no publicado ni programado**. Ajustes finales: apagón real en «Nunca» (viñeta y luces bajan), atril y Nico dentro del cuadro.
+- Detalles a mejorar si da el OK: el resaltado del karaoke de VITA va por reparto proporcional dentro de cada frase (a veces se adelanta una palabra); en el empuje de cámara de los 4 s el frontón queda cortado arriba.
+
 ## CHECKPOINT 27/11 07:35 (el dueño dijo «frena, poné un checkpoint»)
 - **Pedido vigente:** UN solo reel de boceto, el de VITA (`vita-2711-1`), gratis, con el motor nuevo «Atlas» y el estilo Spotlight Stage (teatrito de juguete). Las otras 3 marcas quedan para después: el dueño lo corrigió en medio del trabajo.
 - **Motor Atlas** en `.claude/referencias/redes/herramientas/historias-prototipo/atlas/`:
