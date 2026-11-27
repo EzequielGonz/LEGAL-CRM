@@ -84,6 +84,7 @@ Límite de lo que leí: los mensajes de las sesiones de Code de la nube se leyer
 
 | Qué hizo Claude | Qué dijo / qué quería | Fuente |
 | --- | --- | --- |
+| Reels 27/11, cinco intentos seguidos: piloto con rayas y recuadros dorados; maqueta 3D low-poly («re contra malo»); motion editorial de tipografía; ilustración con IA («se ve muy IA»); fotos de stock reales con tipografía («le estás metiendo cosas IA… no estás leyendo mis gustos»); personajes 3D de videojuego (Mixamo) («tipo jueguito tampoco») | Lo que quiere: **los reels 2D de personajes que ya subimos (Nico en la esquina, el celular, los papeles volando, el calendario), pero en 3D, de mejor calidad, más reales, más animados, con voz y efectos «wow»**. Ni juguete, ni videojuego, ni IA, ni fotos de stock, ni solo tipografía. Antes de producir, pedirle **una referencia concreta** del 3D que imagina | Chat de redes, 27/11 |
 | Landings con fotos genéricas y header flojo | «el header de vita está horrible… las fotos que tiene son horribles… autoskocos también sigue siendo genérica» | C-ctx, 09/11 08:52 |
 | Piezas con números de página (01/05), etiquetas chicas sobre el título y línea decorativa | Sacarlos y subir a «estilo más premium, como un editor profesional» | C-ctx, 08/11 07:46 |
 | Cartel de CTA en historias que no lleva a nada | «No sirve, no te lleva a nada, ahí perderíamos clientes» | C-ctx, 08/11 07:56 |

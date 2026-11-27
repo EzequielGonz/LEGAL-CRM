@@ -15,3 +15,8 @@ cerebro/mapa-codigo/cache/
 docs/redes/tanda-2811-0712/salida/**/*.mp4
 .claude/referencias/redes/herramientas/historias-prototipo/tanda/trabajo/**/fr/
 .claude/referencias/redes/herramientas/historias-prototipo/tanda/trabajo/**/*.png
+
+# Recursos 3D pesados (se bajan de nuevo según assets3d/LICENCIAS.md)
+.claude/referencias/redes/herramientas/historias-prototipo/assets3d/*.hdr
+.claude/referencias/redes/herramientas/historias-prototipo/assets3d/*.glb
+.claude/referencias/redes/herramientas/historias-prototipo/assets3d/*.jpg

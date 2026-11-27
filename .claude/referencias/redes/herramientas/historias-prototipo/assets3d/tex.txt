@@ -1,0 +1,4 @@
+Diffuse https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/cobblestone_floor_04/cobblestone_floor_04_diff_2k.jpg
+nor_gl https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/cobblestone_floor_04/cobblestone_floor_04_nor_gl_2k.jpg
+Rough https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/cobblestone_floor_04/cobblestone_floor_04_rough_2k.jpg
+AO https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/cobblestone_floor_04/cobblestone_floor_04_ao_2k.jpg
