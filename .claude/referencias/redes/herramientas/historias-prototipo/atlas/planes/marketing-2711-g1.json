@@ -1,0 +1,23 @@
+{
+  "id": "marketing-2711-g1",
+  "marca": "marketing",
+  "base": "marketing-2711-g1",
+  "fecha_pub": "2026-11-27",
+  "hora": "10:10",
+  "redes": ["instagram", "facebook"],
+  "gancho": "Tiempo de entrega: tres cartas.",
+  "voz": "Tiempo de entrega, tres cartas. Primera: decilo antes de que te pregunten. Segunda: que sea un plazo que cumplís. Tercera: si se atrasa, avisá vos primero. Guardalo para tus pedidos.",
+  "palabra": "ENTREGA24",
+  "contador": 3,
+  "beats": [
+    {"palabra": "Tiempo", "n": 0, "tipo": "gancho", "objeto": "reloj_arena", "texto": "¿Cuándo llega?", "efecto": "golpe"},
+    {"palabra": "Primera", "n": 0, "tipo": "paso", "objeto": "carta", "texto": "Decilo antes", "efecto": "giro"},
+    {"palabra": "Segunda", "n": 0, "tipo": "paso", "objeto": "caja", "texto": "Un plazo que cumplís", "efecto": "sello"},
+    {"palabra": "Tercera", "n": 0, "tipo": "paso", "objeto": "chat", "texto": "Si se atrasa, avisá", "efecto": "rebote"},
+    {"palabra": "avisá", "n": 0, "tipo": "giro", "objeto": "celular", "texto": "Avisá vos primero", "efecto": "flash"},
+    {"palabra": "Guardalo", "n": 0, "tipo": "cierre", "objeto": "etiqueta", "texto": "Guardalo", "efecto": "caida"}
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Tiempo de entrega: tres cartas.\n\n✔ Decilo antes de que te pregunten\n✔ Un plazo que cumplís\n✔ Si se atrasa, avisá vos primero\n\nGuardalo para tus pedidos. ¿Querés ordenar tus entregas? Escribinos por WhatsApp.\n\n#KocosMarketing #Pymes #Emprendedores #BuenosAires",
+  "fuente": ""
+}
