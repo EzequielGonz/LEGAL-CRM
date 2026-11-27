@@ -193,7 +193,14 @@ def preparar(args):
     for j, tx in enumerate(textos):
         i0 = st[j]; i1 = st[j + 1] if j + 1 < len(st) else len(F)
         t0 = 0.0 if j == 0 else max(0.0, W[F[i0][0]]['t'] - .06); voz = ' '.join(W[i]['p'] for fr in F[i0:i1] for i in fr)
-        fr = [dict(t0=max(0.0, W[fi[0]]['t'] - .05), t1=W[fi[-1]]['e'] + .25, txt=' '.join(W[i]['p'] for i in fi)) for fi in F[i0:i1]]
+        fr = []
+        for fi in F[i0:i1]:   # cláusulas: se parte en comas y en «y» para sumar un cambio visual cada 1,5–3 s
+            cl = [[]]
+            for i in fi:
+                if cl[-1] and (W[i]['w'].lower() == 'y' or W[i - 1]['p'].endswith(',')) and len(cl[-1]) >= 2: cl.append([])
+                cl[-1].append(i)
+            if len(cl) > 1 and len(cl[-1]) < 2: cl[-2] += cl.pop()
+            fr += [dict(t0=max(0.0, W[c[0]]['t'] - .05), t1=W[c[-1]]['e'] + .25, txt=' '.join(W[i]['p'] for i in c)) for c in cl]
         beats.append(dict(texto=tx, t0=t0, voz=voz, frases=fr))
     for j, b in enumerate(beats): b['t1'] = beats[j + 1]['t0'] if j + 1 < len(beats) else T
     R = receta(g, len(beats))

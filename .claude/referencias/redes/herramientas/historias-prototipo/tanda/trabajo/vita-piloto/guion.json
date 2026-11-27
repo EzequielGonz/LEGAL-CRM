@@ -46,7 +46,11 @@
    "pill": "rgba(10,16,34,.6)",
    "pillInk": "#fff",
    "grade": "linear-gradient(180deg,rgba(0,70,110,.16),rgba(0,0,0,0) 45%,rgba(255,150,70,.10))"
-  }
+  },
+  "ft": "Playfair Display",
+  "fw": 700,
+  "ts": 104,
+  "hs": 118
  },
  "_marca": "vita",
  "_orden": 0

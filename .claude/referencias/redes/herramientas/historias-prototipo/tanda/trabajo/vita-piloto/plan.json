@@ -24,8 +24,13 @@
     },
     {
      "t0": 2.7510000000000003,
+     "t1": 4.887,
+     "txt": "Te ofrecen arreglar ahí mismo"
+    },
+    {
+     "t0": 4.627,
      "t1": 5.895,
-     "txt": "Te ofrecen arreglar ahí mismo y firmar un papel."
+     "txt": "y firmar un papel."
     },
     {
      "t0": 6.4190000000000005,
@@ -47,8 +52,13 @@
     },
     {
      "t0": 9.299,
+     "t1": 11.232,
+     "txt": "sacá fotos de los dos autos"
+    },
+    {
+     "t0": 10.972,
      "t1": 12.274,
-     "txt": "sacá fotos de los dos autos y la patente."
+     "txt": "y la patente."
     }
    ],
    "t1": 12.965
@@ -373,7 +383,7 @@
   "trans": "deslizar",
   "card": "sello",
   "sub": "color",
-  "ft": "Manrope",
+  "ft": "Playfair Display",
   "fs": "Manrope",
   "pal": {
    "bg1": "#112250",
@@ -398,6 +408,9 @@
   "tilt": true,
   "cartas": true,
   "contador": false,
-  "escala": true
+  "escala": true,
+  "fw": 700,
+  "ts": 104,
+  "hs": 118
  }
 }

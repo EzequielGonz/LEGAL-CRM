@@ -28,6 +28,10 @@
   "layout": "A",
   "sub": "color",
   "escala": true,
-  "pal": 0
+  "pal": 0,
+  "ft": "Playfair Display",
+  "fw": 700,
+  "ts": 104,
+  "hs": 118
  }
 }

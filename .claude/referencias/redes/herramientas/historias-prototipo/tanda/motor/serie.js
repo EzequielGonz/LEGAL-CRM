@@ -21,7 +21,7 @@ function fondoSVG() {
   switch (R.fondo) {
     case 'grid': m = [...Array(24)].map((_, i) => `<rect x="${i * 110 - 110}" y="-200" width="3" height="${H + 400}" fill="${c}" opacity=".22"/><rect x="-200" y="${i * 110 - 110}" width="${W + 400}" height="3" fill="${c}" opacity=".22"/>`).join(''); break;
     case 'rayas': m = [...Array(26)].map((_, i) => `<rect x="${i * 150 - 600}" y="-300" width="56" height="${H + 600}" fill="${c}" opacity=".16" transform="rotate(18 660 1080)"/>`).join(''); break;
-    case 'ciudad': m = [0, 1].map(L => [...Array(16)].map((_, i) => { const w = 90 + hash(i + L * 40) * 110, h = (L ? 420 : 640) + hash(i * 3 + L) * 520, x = i * 110 - 60; return `<rect x="${x}" y="${1500 - h + L * 160}" width="${w}" height="${h + 600}" fill="${c}" opacity="${L ? .14 : .08}"/>${[...Array(5)].map((_, k) => `<rect x="${x + 14}" y="${1500 - h + L * 160 + 26 + k * 70}" width="${w - 28}" height="20" fill="${pal.acc}" opacity="${hash(i * 9 + k) > .6 ? .22 : .05}"/>`).join('')}`; }).join('')).join(''); break;
+    case 'ciudad': m = [0, 1].map(L => [...Array(16)].map((_, i) => { const w = 90 + hash(i + L * 40) * 110, h = (L ? 420 : 640) + hash(i * 3 + L) * 520, x = i * 110 - 60; return `<rect x="${x}" y="${1500 - h + L * 160}" width="${w}" height="${h + 600}" fill="${c}" opacity="${L ? .09 : .05}"/>${[...Array(5)].map((_, k) => `<rect x="${x + 14}" y="${1500 - h + L * 160 + 26 + k * 70}" width="${w - 28}" height="20" fill="${pal.acc}" opacity="${hash(i * 9 + k) > .6 ? .14 : .03}"/>`).join('')}`; }).join('')).join(''); break;
     case 'blueprint': m = [...Array(46)].map((_, i) => `<rect x="${i * 56 - 56}" y="-100" width="2" height="${H + 200}" fill="${c}" opacity="${i % 5 ? .1 : .3}"/><rect x="-100" y="${i * 56 - 56}" width="${W + 200}" height="2" fill="${c}" opacity="${i % 5 ? .1 : .3}"/>`).join('') + `<circle cx="660" cy="1000" r="520" fill="none" stroke="${c}" stroke-width="3" stroke-dasharray="18 14" opacity=".4"/>`; break;
     case 'puntos': m = [...Array(18)].flatMap((_, r) => [...Array(14)].map((_, k) => `<circle cx="${k * 100 + (r % 2) * 50}" cy="${r * 124}" r="${6 + hash(r * 14 + k) * 18}" fill="${c}" opacity=".2"/>`)).join(''); break;
     case 'olas': m = [...Array(12)].map((_, i) => `<path d="M-100,${i * 200} q165,-90 330,0 t330,0 t330,0 t330,0 V${i * 200 + 260} H-100Z" fill="${c}" opacity="${.07 + (i % 3) * .04}"/>`).join(''); break;
@@ -32,7 +32,7 @@ function fondoSVG() {
 $('#bg').innerHTML = fondoSVG(); const bgm = $('#bgm');
 // luz de cine: halo, haces y bokeh
 $('#luz').innerHTML = `<svg width="${W}" height="${H}"><defs><radialGradient id="hl" cx=".3" cy=".12" r=".7"><stop offset="0" stop-color="${pal.luz}" stop-opacity=".5"/><stop offset="1" stop-color="${pal.luz}" stop-opacity="0"/></radialGradient><linearGradient id="hz" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${pal.luz}" stop-opacity=".35"/><stop offset="1" stop-color="${pal.luz}" stop-opacity="0"/></linearGradient></defs><rect width="${W}" height="${H}" fill="url(#hl)"/><g id="haces" style="mix-blend-mode:screen">${[0, 1, 2].map(i => `<polygon points="${220 + i * 360},-60 ${100 + i * 360},1700 ${420 + i * 360},1700" fill="url(#hz)" opacity=".5"/>`).join('')}</g></svg>`;
-$('#bok').innerHTML = `<svg width="${W}" height="${H}" style="mix-blend-mode:screen;filter:blur(7px)"><g id="bokm">${[...Array(16)].map((_, i) => `<circle cx="${hash(i) * W}" cy="${200 + hash(i * 3) * 1700}" r="${30 + hash(i + 7) * 70}" fill="${i % 2 ? pal.acc : pal.luz}" opacity="${.1 + hash(i + 5) * .16}"/>`).join('')}</g></svg><svg width="${W}" height="${H}" style="position:absolute;left:0;top:0"><g id="polvo">${[...Array(26)].map((_, i) => `<circle r="${1.6 + hash(i + 70) * 3}" fill="${pal.luz}"/>`).join('')}</g></svg>`;
+$('#bok').innerHTML = `<svg width="${W}" height="${H}" style="mix-blend-mode:screen;filter:blur(7px)"><g id="bokm">${[...Array(16)].map((_, i) => `<circle cx="${hash(i) * W}" cy="${200 + hash(i * 3) * 1700}" r="${30 + hash(i + 7) * 70}" fill="${i % 2 ? pal.acc : pal.luz}" opacity="${.06 + hash(i + 5) * .1}"/>`).join('')}</g></svg><svg width="${W}" height="${H}" style="position:absolute;left:0;top:0"><g id="polvo">${[...Array(26)].map((_, i) => `<circle r="${1.6 + hash(i + 70) * 3}" fill="${pal.luz}"/>`).join('')}</g></svg>`;
 const haces = $('#haces'), bokm = $('#bokm'), polvo = [...$('#polvo').children];
 // ---------- beats: objeto + título ----------
 const B = P.beats; const N = B.length; { const us = []; B.forEach((b, i) => { if (!b.icono) { b.icono = elegirIcono(b.texto + ' ' + (b.voz || '') + (i === 0 ? ' ' + (P.escena || '') : ''), us); } us.push(b.icono); if (i === 0 && P.escena) { const o2 = elegirIcono(P.escena, [b.icono]); if (o2 !== b.icono && /papel|auto|choque|celu|carta|llave|ticket|plata|local|camara/.test(o2)) b.icono2 = o2; } }); }
@@ -48,7 +48,7 @@ function escenaBeat(b, i) {
   const ins = (b.ins || []).map((x, k) => `<g class="ins" data-k="${k}" opacity="0"><circle r="260" fill="${pal.acc}" opacity=".25"/><g transform="scale(1.55)">${ICONOS[x.icono](IC)}</g></g>`).join('');
   return `<svg width="1080" height="1920" viewBox="0 0 1080 1920"><g class="oc" transform="translate(540,${OY})"><g class="ob">${s}</g>${ins}</g></svg>`;
 }
-B.forEach(b => { b.ins = []; if (b.t1 - b.t0 > 3.6 && b.frases) b.frases.forEach((f, k) => { if (k === 0 && b.t0 > 0) return; const ic = elegirIcono(f.txt, [b.icono], true); if (ic && ICONOS[ic]) b.ins.push({t0: f.t0, t1: f.t1, icono: ic}); }); });
+B.forEach(b => { b.ins = []; if (b.t1 - b.t0 > 3.6 && b.frases) b.frases.forEach((f, k) => { if (k === 0) return; const ic = elegirIcono(f.txt, [b.icono], true); if (ic && ICONOS[ic]) b.ins.push({t0: f.t0, t1: f.t1, icono: ic}); }); });
 const gO = $('#objs'), gT = $('#txt'); const obj = [], txt = [];
 B.forEach((b, i) => {
   const o = document.createElement('div'); o.className = 'bobj'; o.innerHTML = escenaBeat(b, i);
@@ -89,7 +89,7 @@ function aplicar(el, e, q) {
   el.style.opacity = (e.o ?? 1) * (q ? 1 - q : 1); el.style.transform = `translate(${x}px,${y}px) scale(${s * sx},${s})`; el.style.clipPath = e.clip ? `inset(0 0 ${e.clip}% 0)` : 'none';
 }
 // ---------- subtítulos karaoke ----------
-const grupos = []; { let cur = []; const W2 = P.words; W2.forEach((w, i) => { const len = cur.map(x => x.w).join(' ').length + w.w.length; const corte = R.sub === 'grande' ? 1 : 4; if (cur.length >= corte || (cur.length && len > 22)) { grupos.push(cur); cur = []; } cur.push(w); if (/[.?!:]$/.test(w.p || w.w)) { grupos.push(cur); cur = []; } }); if (cur.length) grupos.push(cur); }
+const grupos = []; { let cur = []; const W2 = P.words; W2.forEach((w, i) => { const len = cur.map(x => x.w).join(' ').length + w.w.length; const corte = R.sub === 'grande' ? 1 : 4; if (cur.length >= corte || (cur.length && len > 18)) { grupos.push(cur); cur = []; } cur.push(w); if (/[.?!:]$/.test(w.p || w.w)) { grupos.push(cur); cur = []; } }); if (cur.length) grupos.push(cur); }
 function subs(t) {
   let html = '';
   for (let gi = 0; gi < grupos.length; gi++) { const g = grupos[gi], a = g[0].t - .04, b = gi + 1 < grupos.length ? grupos[gi + 1][0].t - .04 : g[g.length - 1].e + .35;
@@ -116,18 +116,19 @@ window.render = t => {
     const o = obj[i], x = txt[i]; const ini = i === 0 ? 0 : win(t, b.t0, b.t0 + .38), fin = i === N - 1 ? 0 : win(t, b.t1 - .16, b.t1); const vis = t >= b.t0 - .02 && (t < b.t1 + .02 || i === N - 1);
     if (!vis) { o.style.opacity = 0; x.style.opacity = 0; return; }
     const dir = i % 2 ? 1 : -1; const p = i === 0 ? 1 : ini; const ent = entrar(p, R.trans, dir);
-    const oculto = cartas && cartas.idx.includes(i); aplicar(x, ent, fin); aplicar(o, ent, fin); if (oculto) o.style.opacity = 0; if (i === N - 1) o.style.opacity = (+o.style.opacity) * (1 - ctaK);
+    const oculto = cartas && cartas.idx.includes(i); aplicar(x, ent, fin); aplicar(o, ent, fin); if (oculto) o.querySelector('.ob').style.display = 'none'; if (i === N - 1) o.style.opacity = (+o.style.opacity) * (1 - ctaK);
     const ob = o.querySelector('.ob'), ico = o.querySelector('.ico'); const fl = Math.sin(t * 2.2 + i) * 10; const pop = 1 + .1 * Math.exp(-(t - Math.max(b.t0, cortes.filter(u => u <= t).pop() || 0)) * 8);
     const oc = o.querySelector('.oc'); oc.setAttribute('transform', `translate(540,${OY + fl}) rotate(${Math.sin(t * 1.4 + i) * 2.5}) scale(${pop})`);
     const n = o.querySelector('.num'); if (n) { const kk = win(t, b.t0 + .1, b.t0 + 1.2); n.textContent = b.num ? Math.round(b.num * easeOut(kk)).toLocaleString('es-AR') : b.paso; const pp = b.num ? 1 : 1 + .25 * Math.exp(-(t - b.t0) * 6); n.style.transform = `scale(${pp})`; if (!b.num) n.style.left = '-250px'; }
     (b.ins || []).forEach((x, k) => { const g = o.querySelector(`.ins[data-k="${k}"]`); const a = win(t, x.t0 - .05, x.t0 + .3), z = 1 - win(t, x.t1 - .12, x.t1 + .05); g.setAttribute('opacity', a * z); g.setAttribute('transform', `translate(0,${fl * .5}) scale(${.5 + .5 * backOut(a, 1.8)}) rotate(${(1 - a) * -12})`); });
-    { const ia = (b.ins || []).reduce((m, x) => Math.max(m, win(t, x.t0 - .05, x.t0 + .2) * (1 - win(t, x.t1 - .1, x.t1 + .1))), 0); ob.setAttribute('opacity', 1 - .78 * ia); }
+    { const ia = (b.ins || []).reduce((m, x) => Math.max(m, win(t, x.t0 - .05, x.t0 + .2) * (1 - win(t, x.t1 - .1, x.t1 + .1))), 0); ob.setAttribute('opacity', 1 - .78 * ia); o.dataset.ia = ia; }
     if (i === 0 && R.escala) { const e2 = easeOut(win(t, 0, .6)); ob.setAttribute('transform', `scale(${.7 + .3 * backOut(e2, 1.2)})`); }
   });
   if (cartas) { const a = B[cartas.idx[0]].t0, z = B[N - 1].t0; cartas.el.style.opacity = clamp(win(t, a - .05, a + .2)) * (1 - win(t, z - .15, z + .05));
+    const iaC = Math.max(0, ...obj.map(o => +(o.dataset.ia || 0)));
     cartas.cds.forEach((d, k) => { const bi = cartas.idx[k], b = B[bi], p = win(t, b.t0, b.t0 + .55), act = t >= b.t0 && t < b.t1; const f = d.firstChild; const ent = ease(win(t, a + k * .08 - .05, a + k * .08 + .3));
       const sx = p < .5 ? 1 - 2 * p : 2 * p - 1; const open = p >= .5; const sc = (act ? 1.1 : t > b.t1 ? .92 : 1) * (.7 + .3 * ent);
-      d.style.transform = `translateY(${(1 - ent) * -300}px) scale(${sc * Math.max(.02, sx)},${sc}) rotate(${(k - (cartas.M - 1) / 2) * 3}deg)`; d.style.opacity = ent * (t > b.t1 ? .8 : 1);
+      d.style.transform = `translateY(${(1 - ent) * -300}px) scale(${sc * Math.max(.02, sx)},${sc}) rotate(${(k - (cartas.M - 1) / 2) * 3}deg)`; d.style.opacity = ent * (t > b.t1 ? .8 : 1) * (1 - .75 * iaC);
       f.style.border = '3px solid rgba(255,255,255,.55)'; f.style.background = open ? pal.card : `linear-gradient(135deg,${pal.acc2},${pal.acc})`; f.style.boxShadow = act ? `0 0 70px ${pal.acc}` : '0 14px 40px rgba(0,0,0,.35)';
       const ico = open ? `<svg width="${cartas.cw * .78}" height="${cartas.cw * .78}" viewBox="-190 -190 380 380">${(ICONOS[b.icono] || ICONOS.alerta)({a: pal.accC || pal.acc, b: pal.acc2, k: pal.cardInk === '#fff' ? '#fff' : pal.card === '#ffffff' ? '#eef1f6' : pal.card, d: pal.cardInk})}</svg><div style="font:800 ${cartas.cw * .36}px Manrope;color:${pal.cardInk}">${Math.round((k + 1) * easeOut(win(t, b.t0 + .3, b.t0 + .9)) + (k + 1 > 1 ? 0 : 0)) || ''}</div>` : `<div style="font:800 ${cartas.cw * .55}px Manrope;color:${pal.onacc};opacity:.9">?</div>`;
       if (f.dataset.s !== (open ? 'o' + Math.round((k + 1) * easeOut(win(t, b.t0 + .3, b.t0 + .9))) : 'c')) { f.innerHTML = ico; f.dataset.s = open ? 'o' + Math.round((k + 1) * easeOut(win(t, b.t0 + .3, b.t0 + .9))) : 'c'; } }); }

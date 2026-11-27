@@ -10,9 +10,9 @@ Estado: **especificado** (guiones escritos y validados). No producido, no progra
 |---|---|---|---|
 | VITA | 44 | 10.236 | 232 |
 | Compara Tu Obra Social | 44 | 9.714 | 220 |
-| Automotores Kocos | 8 | 1.907 | 238 |
+| Automotores Kocos | 44 | 8.709 | 197 |
 | Kocos Marketing | 8 | 1.920 | 240 |
-| **Total** | **104** | **23.777** | 228 |
+| **Total** | **140** | **30.579** | 218 |
 
 Tope pedido: 38.000 caracteres (presupuesto ElevenLabs 40.000). Dentro del tope.
 
@@ -20,7 +20,7 @@ Tope pedido: 38.000 caracteres (presupuesto ElevenLabs 40.000). Dentro del tope.
 
 - **VITA:** escena con hora o número 5 · tres cartas cerradas 5 · segunda persona «vos» 5 · mito roto 5 · contador que avanza 4 · ¿cuál sos? (identidad) 4 · pregunta con respuesta numérica 4 · loop 4 · advertencia 3 · serie (parte 1) 2 · serie (parte 2) 2 · advertencia + escena con hora + contador + loop 1
 - **Compara Tu Obra Social:** mito roto 5 · segunda persona «vos» 5 · tres cartas cerradas 5 · advertencia 5 · pregunta con respuesta numérica 4 · escena con hora o número 4 · ¿cuál sos? (identidad) 4 · contador que avanza 4 · loop 4 · serie (parte 1) 2 · serie (parte 2) 2
-- **Automotores Kocos:** escena con hora o número 1 · tres cartas cerradas 1 · advertencia 1 · segunda persona «vos» 1 · pregunta con respuesta numérica 1 · ¿cuál sos? (identidad) 1 · contador que avanza 1 · mito roto 1
+- **Automotores Kocos:** escena con hora o número 5 · tres cartas cerradas 5 · advertencia 5 · segunda persona «vos» 5 · pregunta con respuesta numérica 4 · ¿cuál sos? (identidad) 4 · contador que avanza 4 · mito roto 4 · loop 4 · serie (parte 1) 2 · serie (parte 2) 2
 - **Kocos Marketing:** segunda persona «vos» 1 · escena con hora o número 1 · mito roto 1 · contador que avanza 1 · tres cartas cerradas 1 · pregunta con respuesta numérica 1 · advertencia 1 · ¿cuál sos? (identidad) 1
 
 ## VITA
@@ -133,6 +133,42 @@ Tope pedido: 38.000 caracteres (presupuesto ElevenLabs 40.000). Dentro del tope.
 | 28/11 | 13:10 | ¿cuál sos? (identidad) | ¿Qué comprador de 0 km sos? | GASTOS | 245 |
 | 28/11 | 17:10 | contador que avanza | Retiro del 0 km: 5 chequeos antes de firmar. | RETIRO | 232 |
 | 28/11 | 21:30 | mito roto | «La cuota del plan es fija.» No. | PLAN | 248 |
+| 29/11 | 09:10 | serie (parte 1) | Parte 1: Mati quiere entregar «el gris». | USADO | 195 |
+| 29/11 | 13:10 | loop | Diciembre o enero: ¿cuándo lo patentás? | ENERO | 236 |
+| 29/11 | 17:10 | escena con hora o número | Sábado 17:10: lo probaste dos minutos. | PRUEBA | 198 |
+| 29/11 | 21:30 | tres cartas cerradas | Plan de ahorro: tres cartas antes de firmar. | PREGUNTAS | 203 |
+| 30/11 | 09:10 | advertencia | Precio de palabra: desconfiá. | PRESUPUESTO | 191 |
+| 30/11 | 13:10 | segunda persona «vos» | Vas por tu primer 0 km: llevá esto. | PRIMERO | 197 |
+| 30/11 | 17:10 | pregunta con respuesta numérica | ¿Cuántas cosas te tienen que dar con el 0 km? | KIT | 197 |
+| 30/11 | 21:30 | ¿cuál sos? (identidad) | Contado, prendario o plan: ¿cuál sos? | FORMA | 202 |
+| 01/12 | 09:10 | contador que avanza | Kilómetro 0, 500, 1.000: el primer service. | SERVICE | 215 |
+| 01/12 | 13:10 | mito roto | «El seguro lo veo después.» No. | SEGURO | 209 |
+| 01/12 | 17:10 | serie (parte 2) | Parte 2: así vale más «el gris». | USADO | 204 |
+| 01/12 | 21:30 | loop | ¿Un híbrido? Primero, esto. | HIBRIDO | 194 |
+| 02/12 | 09:10 | escena con hora o número | Viernes 6:00: primer viaje con el 0 km. | VIAJE | 182 |
+| 02/12 | 13:10 | tres cartas cerradas | Crédito prendario: tres cartas. | PRENDARIO | 201 |
+| 02/12 | 17:10 | advertencia | No te vayas sin estos papeles. | PAPELES | 180 |
+| 02/12 | 21:30 | segunda persona «vos» | Cobrás el aguinaldo. ¿Va al anticipo? | AGUINALDO | 211 |
+| 03/12 | 09:10 | pregunta con respuesta numérica | Plan de ahorro: ¿de cuántas formas te lo dan? | LICITACION | 180 |
+| 03/12 | 13:10 | ¿cuál sos? (identidad) | En el showroom, ¿cuál de los tres sos? | SHOWROOM | 218 |
+| 03/12 | 17:10 | contador que avanza | Mes 1, mes 2, mes 3: lo que viene después. | FIJOS | 172 |
+| 03/12 | 21:30 | mito roto | «El precio de lista es lo que pagás.» No. | LISTA | 192 |
+| 04/12 | 09:10 | serie (parte 1) | Parte 1: Juli quiere el auto antes de las fiestas. | ENTREGA | 184 |
+| 04/12 | 13:10 | loop | ¿Qué trae el 0 km? Preguntá antes. | VERSION | 183 |
+| 04/12 | 17:10 | escena con hora o número | Viernes 17:00: retirás y no tenés póliza. | POLIZA | 185 |
+| 04/12 | 21:30 | tres cartas cerradas | Garantía del 0 km: tres cartas. | GARANTIA | 168 |
+| 05/12 | 09:10 | advertencia | No elijas la cuota sin sumar todo. | ANTICIPO | 199 |
+| 05/12 | 13:10 | segunda persona «vos» | Vos querés estrenarlo en Año Nuevo. | ANIO | 196 |
+| 05/12 | 17:10 | pregunta con respuesta numérica | Híbrido: ¿cuántas preguntas antes? Tres. | BATERIA | 180 |
+| 05/12 | 21:30 | ¿cuál sos? (identidad) | Primer 0 km: ¿cuál de los tres sos? | PRIMER | 205 |
+| 06/12 | 09:10 | contador que avanza | Antes de la ruta: cuatro chequeos. | RUTA | 164 |
+| 06/12 | 13:10 | mito roto | «El 0 km no necesita service.» No. | TALLER | 179 |
+| 06/12 | 17:10 | serie (parte 2) | Parte 2: la fecha de entrega, por escrito. | ENTREGA | 165 |
+| 06/12 | 21:30 | loop | La carpeta del 0 km: ¿está completa? | CARPETA | 160 |
+| reserva |  | segunda persona «vos» | Querés sumarle accesorios. Antes, esto. | ACCESORIOS | 179 |
+| reserva |  | advertencia | No firmes la orden sin leer el modelo. | ORDEN | 143 |
+| reserva |  | escena con hora o número | Lunes 9:10: señaste el sábado. ¿Tenés recibo? | SENA | 162 |
+| reserva |  | tres cartas cerradas | Licitar en un plan: tres cartas. | LICITAR | 173 |
 
 ## Kocos Marketing
 
