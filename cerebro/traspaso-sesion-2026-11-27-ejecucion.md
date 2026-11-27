@@ -119,3 +119,29 @@ El dueño, textual: «pausa todo y pone un checkpoint para retomar, programa ret
 **Pendiente de respuesta al dueño:** lista verificada de IA con plan gratuito (DeepSeek y otras) para sumar a la arena de la Oficina; necesita que él cargue las claves en Vercel.
 
 **Sumado a las 14:40 (pedido del dueño, «dale, cuando retomes actualizalo»):** al retomar, actualizar el artefacto «Cerebro del negocio» (https://claude.ai/artifact/7EC3JRaX1oFAdraThQhWTv, versión del 21/11) con lo de esta semana. Leerlo primero con la herramienta de artefactos y publicar sobre la misma dirección; sin datos personales ni claves.
+
+## Checkpoint 27/11 · 18:50 (para compactar; todo sigue corriendo)
+
+**Retomado a las 18:31 como pidió el dueño.** El scratchpad sobrevivió y la sesión del navegador seguía vigente.
+
+**Corriendo ahora (no dependen de la compactación; avisan al terminar):**
+
+| Flujo | Run | Tarea | Qué hace |
+|---|---|---|---|
+| Auditoría web, solo lectura | `wf_8e9edcef-4cc` | `wev3jq9mb` | 12 zonas en navegador + revisor por zona |
+| Pruebas con acciones | `wf_7a9b68b6-95d` | `wh2qg1vug` | 5 recorridos haciendo clic (sin campañas ni mensajes a personas) |
+| Código por capas (agentes nuevos) | `wf_536bd726-0f1` | `whrmp10mv` | Supabase/RLS, ingreso, fallas silenciosas, WhatsApp/webhooks, bots e IA, rendimiento; cada una con revisor |
+
+Scripts en la carpeta de flujos de la sesión y copia en `docs/oficina/auditoria-web/`. Informes parciales de cada agente en el scratchpad `aud-web/<zona>/informe.md` (con capturas que tienen datos personales: no copiar al repo). La máquina corre de a 2 agentes por flujo: son varias horas. Si un flujo se corta por límite de uso, relanzar con `scriptPath` + `resumeFromRunId`.
+
+**Al terminar los tres:** 1) juntar solo lo confirmado por los revisores, sin duplicar los 54 + 20 hallazgos previos; 2) verificar en la base qué crearon las pruebas («PRUEBA AUDITORÍA 27/11») y que quedó descartado o archivado; 3) escribir `docs/oficina/2026-11-27-auditoria-web.md` y dejar la tarea en la Oficina; 4) arreglar lo que corresponda; 5) recién entonces retomar el plan (`wf_6a348c3b-a19`, revisiones A3–A8; integrar de a una tanda; antes de publicar, mirar campañas en la base; migración de A4 solo sin campañas `en_curso`).
+
+**Hecho en esta vuelta:** artefacto «Cerebro del negocio» actualizado (versión 6, misma dirección) con datos de la base del 27/11: 15.197 contactos, 41 captados (26 Jurídico, 7 Marketing, 4 Coberturas, 4 Autos); Jurídico 864 envíos y 162 respuestas en 7 días; último entrante: Jurídico 27/11, Coberturas 26/11, Marketing 06/11, Autos 26/10. Captado se cuenta en `opportunities.capture_state = 'captado'`. A las 18:40 había 1 campaña `en_curso` y 9 tareas `lista` en la Oficina.
+
+**Pedidos del dueño de esta vuelta:** «revisa todas las skills plugins y conectores nuevos, podes ayudarte con muchas cosas» (hecho: tercera pata con agentes de `cartographer`, `pr-review-toolkit` y `vercel`; los de diseño —`naksha`, `ui-ux-behaves`, `audit-suite`, `uxkin`, `refero`— quedan para cuando se arreglen pantallas). También mandó un adjunto con «y esto fijate» que NO llegó: se le pidió que lo reenvíe.
+
+**Sin publicar en producción:** main sigue en `920569d`; la rama `integracion/rediseno-2211` tiene además los commits de cerebro y docs de hoy. Se publica junto con el informe de la auditoría.
+
+**Pendiente de respuesta al dueño:** lista verificada de IA con plan gratuito para la arena de la Oficina.
+
+**Aviso para quien retome:** hay ganchos nuevos de plugins que frenan la subida al remoto (piden un barrido previo de claves y datos personales) y los comandos que nombran archivos de claves; si frenan, hacer el barrido, separar el paso y reintentar.
