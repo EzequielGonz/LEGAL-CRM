@@ -42,7 +42,7 @@ export function crear({P, pal, canvas, W = 1080, H = 1920}) {
   const arbol = (x, z, s = 1) => { const g = grp(); g.add(mesh(new THREE.CylinderGeometry(.13, .17, .9, 8), std('#6a4a34'), 0, .45, 0)); g.add(mesh(new THREE.IcosahedronGeometry(.7 * s, 1), std(verde[Math.floor(hash(x * 7 + z) * 3)], {flatShading: true}), 0, 1.35, 0)); g.position.set(x, .08, z); mundo.add(g); };
   for (let gx = -42; gx <= 42; gx += 5.4) for (let gz = -42; gz <= 42; gz += 5.4) {
     if (Math.abs(gx) < 2.6 || Math.abs(gz) < 2.6 || Math.abs(Math.abs(gx) - 21) < 2.8 || Math.abs(Math.abs(gz) - 21) < 2.8) continue;
-    if (gz > -3.5 && Math.hypot(gx, gz) < 17) { if (hash(gx + gz * 3) > .35 && Math.abs(gx) > 3) arbol(gx, gz, 1.1); continue; }
+    if (gz > 6 || (gz > -3.5 && Math.hypot(gx, gz) < 17)) { if (hash(gx + gz * 3) > .35 && Math.abs(gx) > 3) arbol(gx, gz, 1.1); continue; }
     const i = Math.round(gx * 3 + gz * 7); const w = 3.6 + hash(i) * 1.3, d = 3.6 + hash(i + 9) * 1.2; const cerca = Math.hypot(gx, gz) < 12; const frente = gz > 0;
     const h = cerca ? (frente ? 1.3 + hash(i + 3) * 1.4 : 2.6 + hash(i + 3) * 2.6) : 2 + hash(i + 3) * 8; const m1 = BM[Math.floor(hash(i + 5) * 8)], m2 = BM[Math.floor(hash(i + 6) * 8)];
     const px = gx + (hash(i + 1) - .5) * .6, pz = gz + (hash(i + 2) - .5) * .6;
@@ -50,6 +50,9 @@ export function crear({P, pal, canvas, W = 1080, H = 1920}) {
     const b = new THREE.Mesh(new RoundedBoxGeometry(w, h, d, 2, .08), [m1, m1, roof, roof, m2, m2]); b.position.set(px, .16 + h / 2, pz); b.castShadow = b.receiveShadow = true; mundo.add(b);
     if (hash(i + 4) > .5) mundo.add(mesh(new THREE.BoxGeometry(w * .45, .5, d * .45), roof, px, .16 + h + .25, pz)); }
   for (const [x, z] of [[3.6, 3.6], [-3.4, 3.6], [-3.5, -3.5], [3.8, -3.4], [6.8, 3.4], [-7, 3.4], [-6.8, -3.4], [7.2, -3.4], [3.4, 7], [-3.5, 7.2]]) arbol(x, z, .9 + hash(x + z) * .3);
+  const pasto = mesh(new THREE.PlaneGeometry(90, 52), std('#79ad66', {roughness: 1}), 0, .0, 33, false); pasto.rotation.x = -Math.PI / 2; mundo.add(pasto);
+  mundo.add(mesh(new THREE.BoxGeometry(90, .16, 3.4), std('#d9d2c0'), 0, .09, 7.4, false));
+  for (const [x, z] of [[-9, 12], [-4, 16], [6, 14], [11, 11], [-12, 18], [14, 19], [2, 22], [-7, 24], [9, 26]]) arbol(x, z, 1.2 + hash(x) * .4);
   // semáforo y reloj de la esquina (19:10)
   const semaforo = (x, z, ry) => { const g = grp(); g.add(mesh(new THREE.CylinderGeometry(.08, .1, 3.4, 8), std('#34373f'), 0, 1.7, 0)); const arm = mesh(new THREE.BoxGeometry(1.8, .1, .1), std('#34373f'), -.9, 3.3, 0); g.add(arm); g.add(mesh(new RoundedBoxGeometry(.42, 1.1, .34, 2, .08), std('#1b1d22'), -1.7, 3.0, 0));
     [['#ff3b30', 3.3, 1.5], ['#ffd23a', 3.0, .2], ['#2ee06a', 2.7, .2]].forEach(([c, y, e]) => g.add(mesh(new THREE.SphereGeometry(.12, 10, 8), new THREE.MeshStandardMaterial({color: c, emissive: C(c), emissiveIntensity: e}), -1.7, y, .18, false))); g.position.set(x, .08, z); g.rotation.y = ry; mundo.add(g); };
@@ -72,6 +75,7 @@ export function crear({P, pal, canvas, W = 1080, H = 1920}) {
   const autoA = auto('#2f7fe0', {capot: true}); autoA.scale.setScalar(1.3); autoA.position.set(-1.6, .1, -.6); autoA.rotation.y = .1; mundo.add(autoA);
   const autoB = auto('#e0473d', {capot: true}); autoB.scale.setScalar(1.3); autoB.position.set(1.0, .1, 1.9); autoB.rotation.y = Math.PI / 2 + .2; mundo.add(autoB);
   const taxi = auto('#f1c232', {taxi: true}); mundo.add(taxi);
+  [['#e8e8ee', 7.5, 1.0, 0], ['#5aa469', -9.5, 1.0, 0], ['#8a63c9', 12, -1.0, Math.PI]].forEach(([c, x, z, r]) => { const a = auto(c); a.position.set(x, .1, z + (z > 0 ? .0 : 0)); a.rotation.y = r; a.scale.setScalar(1.15); mundo.add(a); });
   const patTex = cv(256, 96, (x, w, h) => { x.fillStyle = '#f4f4f0'; x.fillRect(0, 0, w, h); x.strokeStyle = '#223'; x.lineWidth = 6; x.strokeRect(3, 3, w - 6, h - 6); x.fillStyle = '#223'; x.font = '800 62px Inter, Manrope'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText('AB 123 CD', w / 2, h / 2 + 4); });
   const patente = mesh(new THREE.PlaneGeometry(.95, .36), new THREE.MeshStandardMaterial({map: patTex}), 0, .75, .98, false); autoB.add(patente); patente.rotation.y = 0; patente.position.set(-2.2, .8, 0); patente.rotation.y = -Math.PI / 2; 
   const estrella = mesh(new THREE.IcosahedronGeometry(.7, 0), new THREE.MeshStandardMaterial({color: '#ffd54a', emissive: C('#ffb300'), emissiveIntensity: 2.4, flatShading: true}), .55, 1.2, .5, false); mundo.add(estrella);
@@ -80,8 +84,9 @@ export function crear({P, pal, canvas, W = 1080, H = 1920}) {
   // ---------- siluetas ----------
   const persona = (color, esc = 1, rim = ACC) => { const g = grp(); const m = new THREE.MeshStandardMaterial({color, roughness: .55, emissive: C(rim), emissiveIntensity: .1});
     g.add(mesh(new THREE.CapsuleGeometry(.36, .95, 6, 14), m, 0, 1.0, 0)); g.add(mesh(new THREE.SphereGeometry(.33, 18, 14), m, 0, 2.0, 0)); for (const s of [-1, 1]) { const b = mesh(new THREE.CapsuleGeometry(.1, .65, 4, 8), m, s * .5, 1.15, 0); b.rotation.z = s * .22; g.add(b); }
+    for (const sx of [-1, 1]) g.add(mesh(new THREE.CapsuleGeometry(.14, .55, 4, 8), m, sx * .17, .32, 0));
     g.scale.setScalar(esc); g.userData.cabeza = new THREE.Vector3(0, 2.4 * esc, 0); return g; };
-  const nico = persona('#141a2e', 1.75, '#D4AF37'); nico.position.set(3.4, .16, 3.6); nico.rotation.y = -.7; mundo.add(nico);
+  const nico = persona('#0d1222', 1.75, '#7a6420'); nico.position.set(3.4, .16, 3.6); nico.rotation.y = -.7; mundo.add(nico);
   const otro = persona('#7a2a2a', 1.2, '#ffb0a0'); otro.position.set(-.2, .1, 3.3); otro.rotation.y = .5; otro.visible = false; mundo.add(otro);
   const tes = [persona('#2a5c8a', 1.0, '#9fd0ff'), persona('#3a7a4a', 1.05, '#b6ffc4')]; tes[0].position.set(-4.2, .16, 3.8); tes[1].position.set(5.2, .16, -3.7); tes.forEach(t => { t.visible = false; mundo.add(t); });
   // ---------- props de los 3 pasos (dentro de la escena) ----------
@@ -103,7 +108,7 @@ export function crear({P, pal, canvas, W = 1080, H = 1920}) {
     fragmentShader: 'uniform sampler2D tDiffuse;uniform vec2 dir;uniform vec2 res;uniform float foco;uniform float r;varying vec2 vUv;void main(){float d=smoothstep(.14,.5,abs(vUv.y-foco));float rad=r*d;vec4 s=vec4(0.);float ws=0.;for(int i=-6;i<=6;i++){float f=float(i)/6.;float w=exp(-f*f*2.2);s+=texture2D(tDiffuse,vUv+dir*rad*f*2./res)*w;ws+=w;}gl_FragColor=s/ws;}'});
   const tH = tilt([1, 0]), tV = tilt([0, 1]); comp.addPass(tH); comp.addPass(tV); comp.addPass(new OutputPass());
   const fin = new ShaderPass({uniforms: {tDiffuse: {value: null}, tm: {value: 0}, grano: {value: R.grano ?? .05}}, vertexShader: vs,
-    fragmentShader: 'uniform sampler2D tDiffuse;uniform float tm;uniform float grano;varying vec2 vUv;float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7))+tm)*43758.5453);}void main(){vec4 c=texture2D(tDiffuse,vUv);vec2 q=vUv-.5;float v=smoothstep(.98,.25,length(q*vec2(.9,.6)));c.rgb*=mix(.72,1.,v);c.rgb*=vec3(1.03,1.0,.96);c.rgb*=1.-.38*smoothstep(.6,1.,vUv.y);c.rgb*=1.-.3*smoothstep(.42,0.,vUv.y);c.rgb+=(h(vUv*vec2(1080.,1920.))-.5)*grano;gl_FragColor=c;}'}); comp.addPass(fin);
+    fragmentShader: 'uniform sampler2D tDiffuse;uniform float tm;uniform float grano;varying vec2 vUv;float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7))+tm)*43758.5453);}void main(){vec4 c=texture2D(tDiffuse,vUv);vec2 q=vUv-.5;float v=smoothstep(.98,.25,length(q*vec2(.9,.6)));c.rgb*=mix(.72,1.,v);c.rgb*=vec3(1.03,1.0,.96);c.rgb*=1.-.5*smoothstep(.58,1.,vUv.y);c.rgb*=1.-.3*smoothstep(.42,0.,vUv.y);c.rgb+=(h(vUv*vec2(1080.,1920.))-.5)*grano;gl_FragColor=c;}'}); comp.addPass(fin);
   // ---------- cámara: siempre en movimiento ----------
   const CFG = [{az: [14, 30], el: 27, d: [36, 32], f: [0, 1.7, .6]}, {az: [34, 52], el: 24, d: [26, 21], f: [0, 1.6, .8]}, {az: [28, 12], el: 20, d: [24, 18], f: [3.0, 2.2, 3.2]}, {az: [-6, -28], el: 24, d: [32, 25], f: [-3.4, 3.2, -1.0]}, {az: [30, 14], el: 27, d: [34, 36], f: [0, 1.7, .6]}];
   const cfgDe = i => B[i].loop ? {az: [14, 14], el: 27, d: [36, 36], f: [0, 1.7, .6]} : CFG[Math.min(i, CFG.length - 1)];
@@ -136,12 +141,12 @@ export function crear({P, pal, canvas, W = 1080, H = 1920}) {
     const kT = bi === 4 ? ease(win(t, b4.t0 + .3, b4.t1)) : 0; taxi.visible = bi === 4; taxi.position.set(lerp(-22, 22, kT), .1, 1.0);
     // paso 1: el celular flota, saca la foto con flash sobre autos, patente y esquina
     const v1 = bi === 1, p1 = v1 ? pop(t, b1.t0 + .1, b1.t1) : 0; celu.visible = p1 > .01;
-    const k1 = tF.filter(a => t >= a).length - 1, tgt = blancos[Math.max(0, k1)]; celu.position.set(tgt.x + 3.2, tgt.y + 3.3 + Math.sin(t * 2) * .15, tgt.z + 3.2); mira(celu); celu.scale.setScalar(Math.max(.01, p1) * 1.2);
+    const k1 = tF.filter(a => t >= a).length - 1, tgt = blancos[Math.max(0, k1)]; celu.position.set(tgt.x + 4.4, tgt.y + 2.6 + Math.sin(t * 2) * .15, tgt.z + 1.2); mira(celu); celu.rotateZ(-.18); celu.scale.setScalar(Math.max(.01, p1) * 1.0);
     aros.forEach((a, k) => { const pk = v1 ? pop(t, tF[k], b1.t1) : 0; a.visible = pk > .01; a.position.set(blancos[k].x, k === 2 ? 3.6 : .3, blancos[k].z); a.rotation.set(k === 2 ? 0 : -Math.PI / 2, 0, 0); if (k === 2) mira(a); a.scale.setScalar(Math.max(.01, pk) * (k === 0 ? 2.6 : 1.4) * (1 + .1 * Math.sin(t * 7))); a.material.opacity = pk * .9; });
     const tf = v1 ? Math.max(0, ...tF.map(a => t >= a ? Math.exp(-(t - a) * 8) : 0)) : 0; flash.visible = tf > .02; flash.position.copy(celu.position); flash.scale.setScalar(.8 + tf * 2.2); flash.material.opacity = tf * .9; window.__flash = tf;
     // paso 2: la silueta saca la libreta con los datos; aparecen el otro conductor y los testigos
     const v2 = bi === 2, p2 = v2 ? pop(t, tOtro - .1, b2.t1) : 0, p2b = v2 ? pop(t, tTes - .1, b2.t1) : 0; otro.visible = p2 > .01; otro.scale.setScalar(Math.max(.01, p2) * 1.2); tes.forEach((s, k) => { s.visible = p2b > .01; s.scale.setScalar(Math.max(.01, p2b) * (k ? 1.05 : 1)); });
-    const pl = v2 ? pop(t, b2.t0 + .1, b2.t1) : 0; libreta.visible = pl > .01; libreta.position.set(nico.position.x - .9, 2.9 + Math.sin(t * 1.8) * .1, nico.position.z + .6); mira(libreta); libreta.rotateZ(-.12); libreta.scale.setScalar(Math.max(.01, pl) * 1.9);
+    const pl = v2 ? pop(t, b2.t0 + .1, b2.t1) : 0; libreta.visible = pl > .01; libreta.position.set(nico.position.x - 1.3, 3.5 + Math.sin(t * 1.8) * .1, nico.position.z + .9); mira(libreta); libreta.rotateZ(-.12); libreta.scale.setScalar(Math.max(.01, pl) * 1.45);
     // paso 3: calendario de «3 días» que gira y vuela hacia el seguro
     const v3 = bi === 3, p3 = v3 ? pop(t, b3.t0 + .1, b3.t1) : 0, k3 = ease(win(t, tDias - .2, b3.t1)); calendario.visible = p3 > .01;
     calendario.position.set(lerp(-1.0, -6.4, k3), lerp(4.2, 5.0, k3) + Math.sin(t * 1.6) * .15, lerp(2.6, -3.0, k3)); calendario.rotation.set(0, (t - b3.t0) * 3.2 * (1 - k3) + k3 * 0, 0); if (k3 > 0) mira(calendario); calendario.scale.setScalar(Math.max(.01, p3) * (1.4 - .5 * k3));

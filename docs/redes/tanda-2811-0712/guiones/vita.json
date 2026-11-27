@@ -201,38 +201,6 @@
     "motor_voz": "elevenlabs",
     "variante_de": "",
     "redes": [
-      "facebook"
-    ],
-    "formula": "contador que avanza",
-    "tema": "choque: plazo para reclamar",
-    "basado_en": "nuevo",
-    "gancho_pantalla": "Te chocaron: el reloj de 3 años ya corre.",
-    "voz": "Te chocaron. Desde ese día corre un contador: día uno, día cien, día quinientos. Para reclamar los daños, el plazo general es de tres años. Guardá los papeles, seguí con tus estudios y no lo dejes para el final. Guardalo para cuando lo necesites.",
-    "caracteres_voz": 246,
-    "textos_pantalla": [
-      "Te chocaron: el reloj de 3 años ya corre.",
-      "Día 1 · día 100 · día 500",
-      "Plazo general: 3 años",
-      "Papeles y estudios, al día",
-      "Guardalo para cuando lo necesites.",
-      "Comentá «PLAZO»"
-    ],
-    "personaje": "Nico",
-    "lugar_ba": "Puente Alsina, Nueva Pompeya, de mañana",
-    "escena_visual": "Un contador dorado gigante gira sobre el puente mientras Nico cruza en moto; los números vuelan como hojas de calendario.",
-    "cierre": "Guardalo para cuando lo necesites. O comentá «PLAZO» y te mando la guía «Choque: plazo para reclamar».",
-    "palabra": "PLAZO",
-    "copy": "Te chocaron: el reloj de 3 años ya corre.\n\n✔ Día 1 · día 100 · día 500\n✔ Plazo general: 3 años\n✔ Papeles y estudios, al día\n\nGuardalo para cuando lo necesites. O comentá «PLAZO» y te mando la guía «Choque: plazo para reclamar».\n\nFuente: Código Civil y Comercial, art. 2561.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
-    "fuente": "Código Civil y Comercial, art. 2561"
-  },
-  {
-    "id": "vita-2811-2",
-    "fecha": "2026-11-28",
-    "hora": "11:10",
-    "marca": "VITA",
-    "motor_voz": "elevenlabs",
-    "variante_de": "",
-    "redes": [
       "instagram",
       "facebook"
     ],
@@ -257,6 +225,38 @@
     "palabra": "CULPA",
     "copy": "«Fue mi error, la ART no me cubre.» Falso.\n\n✔ Un error tuyo no te deja sin ART\n✔ Afuera: lo hecho a propósito\n✔ Avisá, atendete y guardá todo\n\nMandáselo a un compañero de trabajo. O comentá «CULPA» y te mando la guía «ART: el error propio».\n\nFuente: Ley 24.557, art. 6, inc. 3.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": "Ley 24.557, art. 6, inc. 3"
+  },
+  {
+    "id": "vita-2811-2",
+    "fecha": "2026-11-28",
+    "hora": "11:10",
+    "marca": "VITA",
+    "motor_voz": "elevenlabs",
+    "variante_de": "",
+    "redes": [
+      "facebook"
+    ],
+    "formula": "contador que avanza",
+    "tema": "choque: plazo para reclamar",
+    "basado_en": "nuevo",
+    "gancho_pantalla": "Te chocaron: el reloj de 3 años ya corre.",
+    "voz": "Te chocaron. Desde ese día corre un contador: día uno, día cien, día quinientos. Para reclamar los daños, el plazo general es de tres años. Guardá los papeles, seguí con tus estudios y no lo dejes para el final. Guardalo para cuando lo necesites.",
+    "caracteres_voz": 246,
+    "textos_pantalla": [
+      "Te chocaron: el reloj de 3 años ya corre.",
+      "Día 1 · día 100 · día 500",
+      "Plazo general: 3 años",
+      "Papeles y estudios, al día",
+      "Guardalo para cuando lo necesites.",
+      "Comentá «PLAZO»"
+    ],
+    "personaje": "Nico",
+    "lugar_ba": "Puente Alsina, Nueva Pompeya, de mañana",
+    "escena_visual": "Un contador dorado gigante gira sobre el puente mientras Nico cruza en moto; los números vuelan como hojas de calendario.",
+    "cierre": "Guardalo para cuando lo necesites. O comentá «PLAZO» y te mando la guía «Choque: plazo para reclamar».",
+    "palabra": "PLAZO",
+    "copy": "Te chocaron: el reloj de 3 años ya corre.\n\n✔ Día 1 · día 100 · día 500\n✔ Plazo general: 3 años\n✔ Papeles y estudios, al día\n\nGuardalo para cuando lo necesites. O comentá «PLAZO» y te mando la guía «Choque: plazo para reclamar».\n\nFuente: Código Civil y Comercial, art. 2561.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "fuente": "Código Civil y Comercial, art. 2561"
   },
   {
     "id": "vita-2811-3",
@@ -333,8 +333,8 @@
       "facebook"
     ],
     "formula": "escena con hora o número",
-    "tema": "ART: el error propio",
-    "basado_en": "variante de vita-2811-2 (Mito: «si fue culpa mía, la ART no me cubre»)",
+    "tema": "choque: plazo para reclamar",
+    "basado_en": "variante de vita-2811-2 (nuevo)",
     "gancho_pantalla": "Martes 7:15: te cortás en el depósito.",
     "voz": "Martes, 7:15. Te cortás con el cúter por un descuido. Igual tenés ART. Avisá, atendete y guardá el parte. Lo que queda afuera es lo hecho a propósito. Mandáselo a un compañero de turno.",
     "caracteres_voz": 185,
@@ -344,14 +344,14 @@
       "Atendete",
       "Guardá el parte",
       "Mandáselo a un compañero de turno.",
-      "Comentá «CULPA»"
+      "Comentá «PLAZO»"
     ],
-    "personaje": "Sole",
+    "personaje": "Nico",
     "lugar_ba": "Cámara frigorífica del supermercado de Flores, 7:15",
     "escena_visual": "Estilo rayos X sobre la mano de Sole; el reloj 7:15 en un display LED.",
-    "cierre": "Mandáselo a un compañero de turno. O comentá «CULPA» y te mando la guía «ART: el error propio».",
-    "palabra": "CULPA",
-    "copy": "Martes 7:15: te cortás en el depósito.\n\n✔ Avisá\n✔ Atendete\n✔ Guardá el parte\n\nMandáselo a un compañero de turno. O comentá «CULPA» y te mando la guía «ART: el error propio».\n\nFuente: Ley 24.557, art. 6, inc. 3.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "cierre": "Mandáselo a un compañero de turno. O comentá «PLAZO» y te mando la guía «Choque: plazo para reclamar».",
+    "palabra": "PLAZO",
+    "copy": "Martes 7:15: te cortás en el depósito.\n\n✔ Avisá\n✔ Atendete\n✔ Guardá el parte\n\nMandáselo a un compañero de turno. O comentá «PLAZO» y te mando la guía «Choque: plazo para reclamar».\n\nFuente: Ley 24.557, art. 6, inc. 3.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": "Ley 24.557, art. 6, inc. 3"
   },
   {
@@ -529,8 +529,8 @@
       "facebook"
     ],
     "formula": "tres cartas cerradas",
-    "tema": "choque: plazo para reclamar",
-    "basado_en": "variante de vita-2811-1 (nuevo)",
+    "tema": "ART: el error propio",
+    "basado_en": "variante de vita-2811-1 (Mito: «si fue culpa mía, la ART no me cubre»)",
     "gancho_pantalla": "Plazo para reclamar un choque: 3 cartas.",
     "voz": "Tres cartas sobre el plazo para reclamar un choque. Primera: el plazo general es de tres años. Segunda: corre desde el choque. Tercera: no lo dejes para el final. Mandáselo a quien chocó este año.",
     "caracteres_voz": 196,
@@ -540,14 +540,14 @@
       "Corre desde el choque",
       "No lo dejes para el final",
       "Mandáselo a quien chocó este año.",
-      "Comentá «PLAZO»"
+      "Comentá «CULPA»"
     ],
-    "personaje": "Nico",
+    "personaje": "Sole",
     "lugar_ba": "Mesa de un bar de Barracas",
     "escena_visual": "Tres cartas doradas sobre un mantel a cuadros; un reloj de arena en el centro.",
-    "cierre": "Mandáselo a quien chocó este año. O comentá «PLAZO» y te mando la guía «Choque: plazo para reclamar».",
-    "palabra": "PLAZO",
-    "copy": "Plazo para reclamar un choque: 3 cartas.\n\n✔ 3 años\n✔ Corre desde el choque\n✔ No lo dejes para el final\n\nMandáselo a quien chocó este año. O comentá «PLAZO» y te mando la guía «Choque: plazo para reclamar».\n\nFuente: Código Civil y Comercial, art. 2561.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "cierre": "Mandáselo a quien chocó este año. O comentá «CULPA» y te mando la guía «ART: el error propio».",
+    "palabra": "CULPA",
+    "copy": "Plazo para reclamar un choque: 3 cartas.\n\n✔ 3 años\n✔ Corre desde el choque\n✔ No lo dejes para el final\n\nMandáselo a quien chocó este año. O comentá «CULPA» y te mando la guía «ART: el error propio».\n\nFuente: Código Civil y Comercial, art. 2561.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": "Código Civil y Comercial, art. 2561"
   },
   {
@@ -1611,11 +1611,11 @@
     "tema": "enfermedad del trabajo",
     "basado_en": "nuevo",
     "gancho_pantalla": "Cargás cajas hace años. La espalda, no.",
-    "voz": "Vos cargás cajas hace años y ahora la espalda no da más. Puede ser una enfermedad del trabajo, no solo un accidente. Contale tu tarea al médico, avisá a tu empleador y a la ART, y guardá los estudios. Mandáselo a quien carga peso.",
-    "caracteres_voz": 230,
+    "voz": "Vos cargás cajas hace años y ahora la espalda no da más. La ART también cubre enfermedades causadas por el trabajo. Contale tu tarea al médico, avisá a tu empleador y a la ART, y guardá los estudios. Mandáselo a quien carga peso.",
+    "caracteres_voz": 229,
     "textos_pantalla": [
       "Cargás cajas hace años. La espalda, no.",
-      "No solo los accidentes",
+      "La ART cubre enfermedades",
       "Contá tu tarea al médico",
       "Avisá y guardá estudios",
       "Mandáselo a quien carga peso.",
@@ -1626,7 +1626,7 @@
     "escena_visual": "Rayos X de la espalda de Nico mientras levanta un cajón; las vértebras se iluminan en dorado una por una.",
     "cierre": "Mandáselo a quien carga peso. O comentá «ESPALDA» y te mando la guía «Enfermedad del trabajo».",
     "palabra": "ESPALDA",
-    "copy": "Cargás cajas hace años. La espalda, no.\n\n✔ No solo los accidentes\n✔ Contá tu tarea al médico\n✔ Avisá y guardá estudios\n\nMandáselo a quien carga peso. O comentá «ESPALDA» y te mando la guía «Enfermedad del trabajo».\n\nFuente: Ley 24.557, art. 6, inc. 2.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
+    "copy": "Cargás cajas hace años. La espalda, no.\n\n✔ La ART cubre enfermedades\n✔ Contá tu tarea al médico\n✔ Avisá y guardá estudios\n\nMandáselo a quien carga peso. O comentá «ESPALDA» y te mando la guía «Enfermedad del trabajo».\n\nFuente: Ley 24.557, art. 6, inc. 2.\nSituación ilustrativa. Voz generada con IA.\nInformación general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DerechoPenal #DerechoLaboral #BuenosAires",
     "fuente": "Ley 24.557, art. 6, inc. 2"
   },
   {

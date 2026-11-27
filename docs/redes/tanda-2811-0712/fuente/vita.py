@@ -41,14 +41,6 @@ R('VOS', 'sucesión: vender la casa heredada', 'nuevo',
   'Una llave gigante cuelga sobre la mesa del comedor; Sole y Dani la miran desde abajo. Tres carpetas se apilan solas a medida que habla la narradora.',
   'HERENCIA', 'Mandáselo a tus hermanos.'),
 # 28/11 ----------------------------------------------------------------
-R('CONT', 'choque: plazo para reclamar', 'nuevo',
-  'Te chocaron: el reloj de 3 años ya corre.',
-  'Te chocaron. Desde ese día corre un contador: día uno, día cien, día quinientos. '
-  'Para reclamar los daños, el plazo general es de tres años. Guardá los papeles, seguí con tus estudios y no lo dejes para el final.',
-  ['Día 1 · día 100 · día 500', 'Plazo general: 3 años', 'Papeles y estudios, al día'],
-  'Nico', 'Puente Alsina, Nueva Pompeya, de mañana',
-  'Un contador dorado gigante gira sobre el puente mientras Nico cruza en moto; los números vuelan como hojas de calendario.',
-  'PLAZO', 'Guardalo para cuando lo necesites.', 'Código Civil y Comercial, art. 2561'),
 R('MITO', 'ART: el error propio', 'Mito: «si fue culpa mía, la ART no me cubre»',
   '«Fue mi error, la ART no me cubre.» Falso.',
   '«Me lastimé por un error mío, así que la ART no me cubre.» Falso. El sistema cubre aunque te hayas equivocado. '
@@ -57,6 +49,14 @@ R('MITO', 'ART: el error propio', 'Mito: «si fue culpa mía, la ART no me cubre
   'Sole', 'Depósito del supermercado de Flores',
   'Sole se corta con el cúter; la frase «fue mi culpa» aparece en un cartel de neón que se rompe en pedazos con un golpe de sonido.',
   'CULPA', 'Mandáselo a un compañero de trabajo.', 'Ley 24.557, art. 6, inc. 3'),
+R('CONT', 'choque: plazo para reclamar', 'nuevo',
+  'Te chocaron: el reloj de 3 años ya corre.',
+  'Te chocaron. Desde ese día corre un contador: día uno, día cien, día quinientos. '
+  'Para reclamar los daños, el plazo general es de tres años. Guardá los papeles, seguí con tus estudios y no lo dejes para el final.',
+  ['Día 1 · día 100 · día 500', 'Plazo general: 3 años', 'Papeles y estudios, al día'],
+  'Nico', 'Puente Alsina, Nueva Pompeya, de mañana',
+  'Un contador dorado gigante gira sobre el puente mientras Nico cruza en moto; los números vuelan como hojas de calendario.',
+  'PLAZO', 'Guardalo para cuando lo necesites.', 'Código Civil y Comercial, art. 2561'),
 R('CUAL', 'choque: cómo reaccionás', 'Las primeras 24 horas después de un choque (como identidad)',
   'Después de un choque, ¿cuál de los tres sos?',
   'Después de un choque hay tres tipos. El que discute a los gritos. El que arregla de palabra y se va. '
@@ -282,9 +282,9 @@ R('CARTAS', 'herencia con deudas', 'nuevo',
   'HERENCIA', 'Mandáselo a tus hermanos.', 'Código Civil y Comercial, art. 2317'),
 R('VOS', 'enfermedad del trabajo', 'nuevo',
   'Cargás cajas hace años. La espalda, no.',
-  'Vos cargás cajas hace años y ahora la espalda no da más. Puede ser una enfermedad del trabajo, no solo un accidente. '
+  'Vos cargás cajas hace años y ahora la espalda no da más. La ART también cubre enfermedades causadas por el trabajo. '
   'Contale tu tarea al médico, avisá a tu empleador y a la ART, y guardá los estudios.',
-  ['No solo los accidentes', 'Contá tu tarea al médico', 'Avisá y guardá estudios'],
+  ['La ART cubre enfermedades', 'Contá tu tarea al médico', 'Avisá y guardá estudios'],
   'Nico', 'Depósito de bebidas de Barracas',
   'Rayos X de la espalda de Nico mientras levanta un cajón; las vértebras se iluminan en dorado una por una.',
   'ESPALDA', 'Mandáselo a quien carga peso.', 'Ley 24.557, art. 6, inc. 2'),
