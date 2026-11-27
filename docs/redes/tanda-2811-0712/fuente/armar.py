@@ -84,7 +84,7 @@ def main():
             d, h = divmod(j, 2)
             o = crudo.get(v['orig'])
             if not o: errores.append(f"{m} variante {j}: original {v['orig']} no existe"); continue
-            r = dict(o); r.update({k: v[k] for k in ('f', 'gancho', 'voz', 'puntos', 'lugar', 'escena', 'cierre')})
+            r = dict(o); r.update({k: v[k] for k in ('f', 'tema', 'palabra', 'gancho', 'voz', 'puntos', 'lugar', 'escena', 'cierre') if k in v})
             r['pj'] = v.get('pj') or o['pj']; r['fuente'] = v.get('fuente', o.get('fuente', ''))
             r['base'] = f"variante de {v['orig']} ({o['base']})"
             rid = f"{m}-{DIAS[d][8:]}{DIAS[d][5:7]}-g{h+1}"

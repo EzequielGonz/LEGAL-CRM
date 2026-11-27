@@ -110,12 +110,20 @@ export function crear({P, pal, canvas, W = 1080, H = 1920}) {
   const posa = (i, u) => { const c = cfgDe(i); const e = ease(u); return {az: lerp(c.az[0], c.az[1], e) * Math.PI / 180, el: c.el * Math.PI / 180, d: lerp(c.d[0], c.d[1], e), f: new THREE.Vector3(...c.f)}; };
   const idx = t => { let i = B.length - 1; while (i > 0 && B[i].t0 > t) i--; return i; };
   const pose0 = posa(0, 0);
+  // planos dentro de cada beat: la cámara viaja a un nuevo encuadre en cada cláusula (cada 1,5–3 s), siempre en movimiento suave
+  const PL = [null, {az: 44, el: 23, d: 21, f: [3.2, 2.6, 3.3]}, {az: -12, el: 30, d: 23, f: [0, 1.5, .5]}, {az: 34, el: 19, d: 19, f: [-2.55, 3.3, 2.6]}, {az: 4, el: 50, d: 52, f: [0, 1.0, .4]}, {az: -30, el: 26, d: 26, f: [-1.2, 1.6, .8]}];
+  const planoDe = (i, k) => { if (k <= 0) return null; const o = PL[1 + (k - 1 + i * 2) % 5]; return {az: o.az * Math.PI / 180, el: o.el * Math.PI / 180, d: o.d, f: new THREE.Vector3(...o.f)}; };
+  const mezcla = (p, q, k) => ({az: lerp(p.az, q.az, k), el: lerp(p.el, q.el, k), d: lerp(p.d, q.d, k), f: p.f.clone().lerp(q.f, k)});
+  function poseEn(i, t) {
+    const b = B[i], u = clamp((t - b.t0) / (b.t1 - b.t0)); let p = posa(i, u); if (b.loop || !b.frases || b.frases.length < 2) return p;
+    let k = 0; b.frases.forEach((f, j) => { if (t >= f.t0) k = j; }); const f = b.frases[k];
+    const prev = k > 0 ? (planoDe(i, k - 1) || p) : p; const cur = planoDe(i, k) || p; const e = ease(win(t - f.t0, 0, .75)); return mezcla(prev, cur, e); }
   function camara(t) {
-    const i = idx(t), b = B[i], u = clamp((t - b.t0) / (b.t1 - b.t0)); let p = posa(i, u);
-    if (i > 0) { const q = posa(i - 1, 1), k = ease(win(t - b.t0, 0, b.loop ? 1.6 : .6)); p = {az: lerp(q.az, p.az, k), el: lerp(q.el, p.el, k), d: lerp(q.d, p.d, k), f: q.f.clone().lerp(p.f, k)}; }
-    const paso = !!b.paso || (b.ins && 0); const gp = Math.exp(-(t - b.t0) * 5) * (i > 0 && !b.loop ? 1 : 0);
+    const i = idx(t), b = B[i]; let p = poseEn(i, t);
+    if (i > 0) { const q = poseEn(i - 1, b.t0 - .001), k = ease(win(t - b.t0, 0, b.loop ? 1.8 : .7)); p = mezcla(q, p, k); }
+    const gp = Math.exp(-(t - b.t0) * 5) * (i > 0 && !b.loop ? 1 : 0);
     const asent = win(t, 0, .5) * (1 - win(t, T - 1.4, T - .5)); const hx = (Math.sin(t * 1.7) * .22 + Math.sin(t * 4.3) * .07) * asent, hy = Math.sin(t * 1.3 + 1) * .14 * asent;
-    const d = p.d - gp * 6.5, az = p.az + Math.sin(t * .45) * .03 * asent;
+    const d = p.d - gp * 5.5, az = p.az + Math.sin(t * .45) * .03 * asent;
     cam.position.set(p.f.x + d * Math.cos(p.el) * Math.sin(az) + hx, p.f.y + d * Math.sin(p.el) + hy, p.f.z + d * Math.cos(p.el) * Math.cos(az)); cam.lookAt(p.f.x, p.f.y, p.f.z);
     cam.fov = (R.fov || 28) - gp * 3.5; cam.updateProjectionMatrix(); return gp; }
   // ---------- tiempos de palabras ----------

@@ -21,11 +21,11 @@ VITA en Instagram sube de a poco: 2 reels por día el 27 y 28/11, 3 el 29 y 30/1
 
 | Marca | Reels ElevenLabs | Caracteres | Promedio | Reels voz gratis |
 |---|---|---|---|---|
-| VITA | 44 | 10.235 | 232 | 20 |
+| VITA | 44 | 10.384 | 236 | 20 |
 | Compara Tu Obra Social | 44 | 9.714 | 220 | 20 |
 | Automotores Kocos | 44 | 8.709 | 197 | 20 |
 | Kocos Marketing | 44 | 8.649 | 196 | 20 |
-| **Total** | **176** | **37.307** | 211 | 80 |
+| **Total** | **176** | **37.456** | 212 | 80 |
 
 Tope pedido: 38.000 caracteres (presupuesto ElevenLabs 40.000). Dentro del tope. Las voces gratis no gastan ElevenLabs.
 
@@ -43,67 +43,67 @@ Tope pedido: 38.000 caracteres (presupuesto ElevenLabs 40.000). Dentro del tope.
 | 27/11 | 08:40 | ElevenLabs | advertencia + escena con hora + contador + loop | Recién chocaste. Esta frase, nunca. | NUNCA | IG + FB | 349 |
 | 27/11 | 11:10 | ElevenLabs | escena con hora o número | Viernes 18:05: te despiden y te dan un papel. | DESPIDO | FB | 242 |
 | 27/11 | 13:40 | ElevenLabs | tres cartas cerradas | Te llegó una citación penal. Tres cartas. | PENAL | FB | 252 |
-| 27/11 | 16:10 | gratis (de vita-2711-2) | contador que avanza | Minuto 1 en la oficina: te despiden. | DESPIDO | FB | 169 |
-| 27/11 | 19:40 | gratis (de vita-2711-3) | advertencia | Citación penal: no vayas solo. | PENAL | FB | 174 |
+| 27/11 | 16:10 | gratis (de vita-2711-2) | contador que avanza | Te despidieron por WhatsApp. | CHAT | FB | 206 |
+| 27/11 | 19:40 | gratis (de vita-2711-3) | advertencia | Te amenazan por mensaje: no lo borres. | AMENAZA | FB | 154 |
 | 27/11 | 21:10 | ElevenLabs | segunda persona «vos» | Heredaste la casa. ¿La podés vender mañana? | HERENCIA | IG + FB | 263 |
-| 28/11 | 08:40 | ElevenLabs | mito roto | «Fue mi error, la ART no me cubre.» Falso. | CULPA | IG + FB | 253 |
+| 28/11 | 08:40 | ElevenLabs | mito roto | «Fue mi error, la ART no me cubre.» Falso. | CULPA | IG + FB | 261 |
 | 28/11 | 11:10 | ElevenLabs | contador que avanza | Te chocaron: el reloj de 3 años ya corre. | PLAZO | FB | 246 |
-| 28/11 | 13:40 | ElevenLabs | ¿cuál sos? (identidad) | Después de un choque, ¿cuál de los tres sos? | CHOQUE | FB | 235 |
-| 28/11 | 16:10 | gratis (de vita-2711-4) | tres cartas cerradas | La casa de tus padres: tres cartas. | HERENCIA | FB | 198 |
-| 28/11 | 19:40 | gratis (de vita-2811-2) | escena con hora o número | Martes 7:15: te cortás en el depósito. | PLAZO | FB | 185 |
+| 28/11 | 13:40 | ElevenLabs | ¿cuál sos? (identidad) | Te vaciaron la cuenta por un link. ¿Cuál sos? | ESTAFA | FB | 246 |
+| 28/11 | 16:10 | gratis (de vita-2711-4) | tres cartas cerradas | Hermanos y herencia: tres cartas. | HERMANOS | FB | 221 |
+| 28/11 | 19:40 | gratis (de vita-2811-1) | escena con hora o número | Martes 19:15: otra vez dos horas de más. | HORAEXTRA | FB | 209 |
 | 28/11 | 21:10 | ElevenLabs | pregunta con respuesta numérica | Aguinaldo: ¿qué día vence la segunda cuota? | AGUINALDO | IG + FB | 229 |
 | 29/11 | 08:40 | ElevenLabs | serie (parte 1) | Parte 1: salió a trabajar y no llegó. | TRAYECTO | FB | 225 |
 | 29/11 | 11:10 | ElevenLabs | loop | Te llevan detenido. ¿Qué decís? | DETENIDO | IG + FB | 207 |
 | 29/11 | 13:40 | ElevenLabs | advertencia | Liquidación final: no firmes sin contar. | LIQUIDACION | IG + FB | 246 |
-| 29/11 | 16:10 | gratis (de vita-2811-4) | segunda persona «vos» | Vos esperás el aguinaldo el 18. | AGUINALDO | IG + FB | 201 |
-| 29/11 | 19:40 | gratis (de vita-2811-1) | tres cartas cerradas | Plazo para reclamar un choque: 3 cartas. | CULPA | FB | 196 |
+| 29/11 | 16:10 | gratis (de vita-2811-4) | segunda persona «vos» | Vos firmás el recibo. ¿Te quedás con copia? | RECIBO | IG + FB | 184 |
+| 29/11 | 19:40 | gratis (de vita-2811-2) | tres cartas cerradas | Te piden un pagaré en blanco: tres cartas. | PAGARE | FB | 212 |
 | 29/11 | 21:10 | ElevenLabs | escena con hora o número | 24/12, 23:40: te chocan llegando a la cena. | FIESTAS | FB | 229 |
 | 30/11 | 08:40 | ElevenLabs | tres cartas cerradas | La ART te rechazó. Tres cartas para hoy. | ART | IG + FB | 231 |
 | 30/11 | 11:10 | ElevenLabs | segunda persona «vos» | Te enterás por un mensaje: te denunciaron. | DENUNCIA | IG + FB | 224 |
 | 30/11 | 13:40 | ElevenLabs | contador que avanza | Te fuiste: corren 45 días hábiles. | CERTIFICADO | IG + FB | 238 |
-| 30/11 | 16:10 | gratis (de vita-2911-2) | ¿cuál sos? (identidad) | Te llevan detenido: ¿cuál sos? | DETENIDO | FB | 175 |
-| 30/11 | 19:40 | gratis (de vita-2911-3) | pregunta con respuesta numérica | Liquidación final: ¿en cuántos días? | LIQUIDACION | FB | 185 |
-| 30/11 | 21:10 | ElevenLabs | mito roto | «No tenía seguro, perdí.» No tan rápido. | SEGURO | FB | 200 |
-| 01/12 | 08:40 | ElevenLabs | ¿cuál sos? (identidad) | Te despiden: ¿cuál de las tres sos? | DESPIDO | IG + FB | 245 |
+| 30/11 | 16:10 | gratis (de vita-2911-2) | ¿cuál sos? (identidad) | Te piden que seas garante. ¿Cuál sos? | GARANTE | FB | 243 |
+| 30/11 | 19:40 | gratis (de vita-2911-3) | pregunta con respuesta numérica | Te vas en julio: ¿y las vacaciones? | VACACIONES | FB | 194 |
+| 30/11 | 21:10 | ElevenLabs | mito roto | «No tenía seguro, perdí.» No tan rápido. | SEGURO | FB | 219 |
+| 01/12 | 08:40 | ElevenLabs | ¿cuál sos? (identidad) | Te despiden: ¿cuál de las tres sos? | COPIA | IG + FB | 245 |
 | 01/12 | 11:10 | ElevenLabs | pregunta con respuesta numérica | ART: ¿cuánto puede durar la baja? | REPOSO | IG + FB | 243 |
 | 01/12 | 13:40 | ElevenLabs | serie (parte 2) | Parte 2: el choque de Nico también cuenta. | TRAYECTO | FB | 232 |
-| 01/12 | 16:10 | gratis (de vita-2911-4) | advertencia | Fiestas: no discutas en la calle. | FIESTAS | FB | 193 |
-| 01/12 | 19:40 | gratis (de vita-3011-1) | mito roto | «Si la ART dice que no, se terminó.» | ART | IG + FB | 159 |
-| 01/12 | 21:10 | ElevenLabs | loop | Te dieron el alta. Mañana volvés. Y duele. | ALTA | IG + FB | 244 |
+| 01/12 | 16:10 | gratis (de vita-2911-4) | advertencia | No firmes un alquiler sin leer esto. | ALQUILER | IG + FB | 164 |
+| 01/12 | 19:40 | gratis (de vita-3011-1) | mito roto | «Me caí en la vereda, mala suerte.» | VEREDA | FB | 191 |
+| 01/12 | 21:10 | ElevenLabs | loop | Te robaron el celular. «¿Para qué denunciar?» | ROBO | IG + FB | 240 |
 | 02/12 | 08:40 | ElevenLabs | advertencia | Carta documento del trabajo: no la guardes. | TELEGRAMA | IG + FB | 233 |
 | 02/12 | 11:10 | ElevenLabs | escena con hora o número | Tres años trabajando y cero recibos. | REGISTRO | IG + FB | 245 |
 | 02/12 | 13:40 | ElevenLabs | tres cartas cerradas | Choque con heridos: tres cartas que no ves. | HERIDOS | FB | 223 |
-| 02/12 | 16:10 | gratis (de vita-3011-2) | contador que avanza | Minuto 1 de enterarte de una denuncia. | DENUNCIA | IG + FB | 179 |
-| 02/12 | 19:40 | gratis (de vita-3011-3) | mito roto | «Me fui y no me deben ningún papel.» | CERTIFICADO | IG + FB | 205 |
-| 02/12 | 21:10 | ElevenLabs | segunda persona «vos» | Estuviste 20 días sin trabajar por un choque. | DANOS | FB | 213 |
+| 02/12 | 16:10 | gratis (de vita-3011-2) | contador que avanza | Se rompió en garantía. Día 1, 10, 30. | ROTO | IG + FB | 210 |
+| 02/12 | 19:40 | gratis (de vita-3011-3) | mito roto | «Facturo como monotributista, no soy empleado.» | ENCUBIERTO | IG + FB | 235 |
+| 02/12 | 21:10 | ElevenLabs | segunda persona «vos» | Estuviste 20 días sin trabajar por un choque. | DANOS | FB | 220 |
 | 03/12 | 08:40 | ElevenLabs | contador que avanza | Te fuiste en agosto: el aguinaldo suma. | PROPORCIONAL | IG + FB | 242 |
-| 03/12 | 11:10 | ElevenLabs | mito roto | «Sin testamento no hay herencia.» Falso. | HERENCIA | IG + FB | 220 |
-| 03/12 | 13:40 | ElevenLabs | ¿cuál sos? (identidad) | Te llega una citación. ¿Cuál de los tres sos? | CITACION | IG + FB | 222 |
-| 03/12 | 16:10 | gratis (de vita-0112-2) | segunda persona «vos» | Vos estás de baja hace meses. | REPOSO | IG + FB | 185 |
-| 03/12 | 19:40 | gratis (de vita-3011-4) | escena con hora o número | Sábado 14:00: te choca un auto sin seguro. | SEGURO | FB | 183 |
+| 03/12 | 11:10 | ElevenLabs | mito roto | «Sin testamento no hay herencia.» Falso. | HEREDEROS | IG + FB | 220 |
+| 03/12 | 13:40 | ElevenLabs | ¿cuál sos? (identidad) | Te citan como testigo. ¿Cuál de los tres sos? | TESTIGO | IG + FB | 226 |
+| 03/12 | 16:10 | gratis (de vita-0112-2) | segunda persona «vos» | Te mudaste y no te devuelven el depósito. | DEPOSITO | IG + FB | 207 |
+| 03/12 | 19:40 | gratis (de vita-3011-4) | escena con hora o número | Jueves 22:00: la humedad del vecino llegó. | HUMEDAD | FB | 201 |
 | 03/12 | 21:10 | ElevenLabs | pregunta con respuesta numérica | Cambiás el camino al trabajo: ¿72 horas? | RECORRIDO | IG + FB | 244 |
 | 04/12 | 08:40 | ElevenLabs | serie (parte 1) | Parte 1: le ofrecen plata rápida a Nico. | FIRMA | IG + FB | 219 |
 | 04/12 | 11:10 | ElevenLabs | loop | Seis de la mañana: golpean la puerta. | PUERTA | IG + FB | 225 |
 | 04/12 | 13:40 | ElevenLabs | advertencia | «Arreglemos acá»: desconfiá de esa frase. | ARREGLO | IG + FB | 213 |
-| 04/12 | 16:10 | gratis (de vita-0112-4) | tres cartas cerradas | Te dieron el alta: tres cartas. | ALTA | IG + FB | 197 |
-| 04/12 | 19:40 | gratis (de vita-0112-1) | segunda persona «vos» | Vos te quedaste sin trabajo hoy. | DESPIDO | FB | 181 |
-| 04/12 | 21:10 | ElevenLabs | escena con hora o número | Ruta 2, km 150: te chocan de vacaciones. | RUTA | IG + FB | 207 |
-| 05/12 | 08:40 | ElevenLabs | tres cartas cerradas | ¿Heredás las deudas? Tres cartas. | HERENCIA | IG + FB | 238 |
+| 04/12 | 16:10 | gratis (de vita-0112-4) | tres cartas cerradas | Testamento: tres cartas antes de hacerlo. | TESTAMENTO | IG + FB | 198 |
+| 04/12 | 19:40 | gratis (de vita-0112-1) | segunda persona «vos» | Trabajás en una casa y sin registrar. | CASAS | FB | 192 |
+| 04/12 | 21:10 | ElevenLabs | escena con hora o número | Lunes 9:00: te mandan a otra sucursal. | SUCURSAL | IG + FB | 273 |
+| 05/12 | 08:40 | ElevenLabs | tres cartas cerradas | ¿Heredás las deudas? Tres cartas. | DEUDAS | IG + FB | 238 |
 | 05/12 | 11:10 | ElevenLabs | segunda persona «vos» | Cargás cajas hace años. La espalda, no. | ESPALDA | IG + FB | 229 |
-| 05/12 | 13:40 | ElevenLabs | contador que avanza | Hora 0, hora 3, hora 24: después del choque. | HORAS | IG + FB | 221 |
-| 05/12 | 16:10 | gratis (de vita-0212-1) | ¿cuál sos? (identidad) | Te llega una carta documento: ¿cuál sos? | TELEGRAMA | IG + FB | 186 |
-| 05/12 | 19:40 | gratis (de vita-0212-2) | loop | Otra vez cobrás en mano. | REGISTRO | IG + FB | 198 |
-| 05/12 | 21:10 | ElevenLabs | mito roto | «Si renuncio, no cobro nada.» Falso. | RENUNCIA | IG + FB | 239 |
+| 05/12 | 13:40 | ElevenLabs | contador que avanza | Compraste online. Día 1, día 10, día 30: nada. | COMPRA | IG + FB | 209 |
+| 05/12 | 16:10 | gratis (de vita-0212-1) | ¿cuál sos? (identidad) | Te reclaman una deuda que no es tuya. | DEUDA | IG + FB | 225 |
+| 05/12 | 19:40 | gratis (de vita-0212-2) | loop | Renunciaste por WhatsApp. ¿Y ahora? | RENUNCIAR | IG + FB | 218 |
+| 05/12 | 21:10 | ElevenLabs | mito roto | «Si renuncio, no cobro nada.» Falso. | RENUNCIA | IG + FB | 252 |
 | 06/12 | 08:40 | ElevenLabs | ¿cuál sos? (identidad) | Te lastimás en el trabajo: ¿cuál sos? | AVISO | IG + FB | 219 |
-| 06/12 | 11:10 | ElevenLabs | pregunta con respuesta numérica | Te enfermás: ¿cuántos meses te pagan? | LICENCIA | IG + FB | 227 |
+| 06/12 | 11:10 | ElevenLabs | pregunta con respuesta numérica | Te enfermás: ¿cuántos meses te pagan? | LICENCIA | IG + FB | 257 |
 | 06/12 | 13:40 | ElevenLabs | serie (parte 2) | Parte 2: lo que firmás puede cerrarlo todo. | FIRMA | IG + FB | 208 |
-| 06/12 | 16:10 | gratis (de vita-0212-3) | advertencia | Choque con heridos: no te vayas. | HERIDOS | IG + FB | 193 |
-| 06/12 | 19:40 | gratis (de vita-0212-4) | contador que avanza | Día 1, día 10, día 20 sin trabajar. | DANOS | IG + FB | 196 |
-| 06/12 | 21:10 | ElevenLabs | loop | Te robaron el celular. «¿Para qué denunciar?» | ROBO | IG + FB | 240 |
-| reserva |  | ElevenLabs | segunda persona «vos» | Te chocaron en bici. También podés reclamar. | BICI | IG + FB | 216 |
+| 06/12 | 16:10 | gratis (de vita-0212-3) | advertencia | Te dicen que te vayas mañana: no así. | DESALOJO | IG + FB | 159 |
+| 06/12 | 19:40 | gratis (de vita-0212-4) | contador que avanza | Te enfermaste: hora 1, día 1, día 2. | MEDICO | IG + FB | 180 |
+| 06/12 | 21:10 | ElevenLabs | loop | Te dieron el alta. Mañana volvés. Y duele. | ALTA | IG + FB | 244 |
+| reserva |  | ElevenLabs | segunda persona «vos» | Te chocaron en bici. También se puede reclamar. | BICI | IG + FB | 219 |
 | reserva |  | ElevenLabs | escena con hora o número | Trabajás 48 horas y el recibo dice 20. | EXTRAS | IG + FB | 214 |
 | reserva |  | ElevenLabs | mito roto | «Sin contrato no tengo derechos.» Falso. | CONTRATO | IG + FB | 228 |
-| reserva |  | ElevenLabs | tres cartas cerradas | Casa heredada: 3 cartas antes de escriturar. | HERENCIA | IG + FB | 217 |
+| reserva |  | ElevenLabs | tres cartas cerradas | Casa heredada: 3 cartas antes de escriturar. | ESCRITURA | IG + FB | 217 |
 
 ## Compara Tu Obra Social
 
