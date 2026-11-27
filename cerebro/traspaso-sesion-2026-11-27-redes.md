@@ -6,8 +6,8 @@ Rama `claude/brave-hawking-nzsr60` · PR EzequielGonz/LEGAL-CRM#82 (seguido, en 
 - El dueño frenó el boceto de VITA. **No hay agentes trabajando ni nada programado.** Lo programado en Metricool del 25 al 29/11 (12 historias + 1 carrusel por día y marca) NO se toca.
 - **Esperando:** el dueño busca 1 o 2 reels de referencia con el 3D que imagina. Al recibirlos, analizarlos (gancho, cámara, luz, nivel de realismo, animación, efectos) y recién ahí hacer el boceto de VITA con el guion `vita-2711-1`.
 
-## CHECKPOINT 27/11 09:40 (Buenos Aires) — PAUSA pedida por el dueño, se retoma a las 14:30
-El dueño pidió «dejá un checkpoint y pausá» y después «pasala para las 14:30». La corrida 1 (antes 15:30) quedó a las 14:30 (`trig_01TFsMBNJWdP5NcYpjWz86FJ`).
+## CHECKPOINT 27/11 09:40 (Buenos Aires) — PAUSA pedida por el dueño, se retoma a las 18:32
+El dueño pidió «dejá un checkpoint y pausá» , después «pasala para las 14:30» y a las 14:30 «reprogramá para las 18:32». La corrida 1 (antes 15:30) quedó a las 18:32 (`trig_01TFsMBNJWdP5NcYpjWz86FJ`).
 
 | Pieza | Estado al pausar |
 |---|---|
@@ -20,7 +20,7 @@ El dueño pidió «dejá un checkpoint y pausá» y después «pasala para las 1
 | Escena Marketing (`escenas/marketing.js`, plan `marketing-2711-g1`) | **Frenada antes del primer render de prueba**. Falta la hoja y el informe. Ya sabe: cierre «Escribinos por WhatsApp» y megáfono → chat |
 | Reels de la tanda base 1 | Ninguno producido, alojado ni programado |
 
-**Para retomar a las 14:30:**
+**Para retomar a las 18:32:**
 1. SendMessage a los 3 agentes (ids en la tabla del calendario `06`; Coberturas `ae2799403b7f4cbb6`, Autos `a7a30568baff16336`, Marketing `a236a25ba8ca1a6e0`) para que sigan. Mientras, arrancar VITA (voces, alinear, render, mezcla).
 2. Revisar cada hoja y después seguir el README de la carpeta.
 
