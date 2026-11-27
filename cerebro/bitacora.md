@@ -219,3 +219,11 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 - Migraciones 0651 y 0652 aplicadas. Campañas comprobadas antes y después: 2 en curso y enviando.
 - Comprobado en producción en solo lectura: la Oficina carga, Claude figura sin conectar y Gemini lleva USD 1,87 de 30. No se probó una corrida real de Gemini (gasta del tope y lo pide el dueño).
 - Sigue en segundo plano el resto de las tandas (A2 a A8), de a dos por vez.
+
+## 27/11 · Vuelta de la Oficina por chat (el dueño pidió arrancar)
+
+- Claude tomó la tarea «analiza el panel completo»: 4 agentes (fallas de código, carga, accesibilidad, uso diario), 54 fallas nuevas. Con el OK del dueño se aplicaron y publicaron dos tandas (`e62efd8`, `cce6664`, `feb5d4f`). Informe en `docs/oficina/2026-11-27-auditoria-panel.md`.
+- Repaso de 9 tareas hechas por Gemini: 3 sirven tal cual y 6 se corrigieron. Aprendido: Gemini no ve el código ni las pantallas, así que inventa nombres de botones, estados y secciones; y en Autos 0 km escribió respuestas con cuotas, créditos y usados, contra la regla. Todo lo de Gemini sobre el panel o sobre el bot necesita repaso antes de usarse.
+- Fallas de la Oficina encontradas en la prueba real y corregidas: el juez leía respuestas cortadas, la ruta por Ingeniería marcaba «código», la escena no se refrescaba sola, «Para tu OK» listaba lo no aprobable.
+- Las dos campañas de la línea Civil se pausaron solas a las 11:19 por calidad baja en Meta. No se tocaron; la decisión de retomarlas es del dueño.
+- Pendiente de la auditoría: chats y ficha, resto de Hoy, Cerebro, perfiles, resultados (con las tandas del plan). Sin medir: la causa de los 12 segundos de Hoy y Salud.
