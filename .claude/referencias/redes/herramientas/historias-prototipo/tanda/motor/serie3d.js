@@ -10,18 +10,18 @@ $('#marca').innerHTML = `<img src="../${P.logo}"><span>${P.nombre}</span>`;
 const sa = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 const clave = (txt, i) => { const ws = txt.split(/\s+/); const pk = sa(P.palabra || ''); let k = ws.findIndex(w => pk && sa(w).replace(/[^a-z0-9]/g, '').startsWith(pk.slice(0, 4).toLowerCase())); if (k < 0) k = B[i].paso ? 0 : ws.reduce((m, w, j) => w.length > ws[m].length ? j : m, 0); return k; };
 const titulo = (txt, i) => { const ws = txt.split(/\s+/), k = clave(txt, i); return ws.map((w, j) => j === k ? `<em>${w.replace(/[.,]$/, '')}</em>${/[.,]$/.test(w) ? w.slice(-1) : ''}` : w).join(' '); };
-const TY = 420, TH = 300, txt = [];
+const TY = 360, TH = 300, txt = [];
 B.forEach((b, i) => { const d = document.createElement('div'); d.className = 'bt'; d.style.top = `${TY}px`; d.style.height = `${TH}px`; const t = document.createElement('div'); t.className = 't'; t.dataset.chk = 1; t.innerHTML = titulo(b.texto, i); d.appendChild(t); $('#txt').appendChild(d); txt.push(d);
   let fs = i === 0 || b.loop ? 116 : 108; t.style.fontSize = fs + 'px'; d.style.opacity = 1; while ((t.getBoundingClientRect().height > TH - 6 || t.scrollWidth > t.clientWidth + 1) && fs > 56) { fs -= 4; t.style.fontSize = fs + 'px'; } d.style.opacity = 0; });
 const pasos = B.filter(b => b.paso); const TOT = pasos.length ? (pasos[0].total || pasos.length) : 0;
 $('#prog').innerHTML = `<div class="lab"><b id="pn">1</b>/${TOT}</div><div class="bar">${[...Array(TOT)].map(() => '<div class="seg"><i></i></div>').join('')}</div>`; const segs = [...document.querySelectorAll('#prog .seg i')];
-const chico = $('#chico'); const ult = B.findLastIndex(b => b.chico); if (ult >= 0) { chico.innerHTML = B[ult].chico.replace(/«([^»]+)»/, '«<em>$1</em>»'); chico.dataset.chk = 1; chico.style.top = `${TY + TH + 4}px`; }
+const chico = $('#chico'); const ult = B.findLastIndex(b => b.chico); if (ult >= 0) { chico.innerHTML = B[ult].chico.replace(/«([^»]+)»/, '«<em>$1</em>»'); chico.dataset.chk = 1; chico.style.top = `${TY + TH - 10}px`; }
 const bu = P.burbuja; if (bu) { $('#burbuja').innerHTML = `<span>${bu.txt}</span><div class="tr"></div><i></i>`; $('#burbuja').dataset.chk = 1; }
 // subtítulos karaoke palabra por palabra (técnica de remotion-captions: páginas cortas y palabra activa resaltada con escala)
 const grupos = []; { let cur = []; P.words.forEach(w => { const len = cur.map(x => x.w).join(' ').length + w.w.length; if (cur.length >= 4 || (cur.length && len > 19)) { grupos.push(cur); cur = []; } cur.push(w); if (/[.?!:]$/.test(w.p || w.w)) { grupos.push(cur); cur = []; } }); if (cur.length) grupos.push(cur); }
 const ACC = R.acento || pal.acc;
 function subs(t) { let h = ''; for (let gi = 0; gi < grupos.length; gi++) { const g = grupos[gi], a = g[0].t - .04, b = gi + 1 < grupos.length ? grupos[gi + 1][0].t - .04 : g[g.length - 1].e + .35;
-  if (t >= a && t < b) h = g.map(w => { const on = t >= w.t && t < w.e + .06, said = t >= w.t, k = clamp((t - w.t) / .16); return `<span class="w" style="opacity:${said ? 1 : .5};transform:scale(${on ? 1 + .14 * backOut(k, 2) : 1});${on ? `color:${ACC};` : ''}">${w.w}</span>`; }).join(' '); }
+  if (t >= a && t < b) h = g.map(w => { const on = t >= w.t && t < w.e + .06, said = t >= w.t, k = clamp((t - w.t) / .16); return `<span class="w" style="opacity:${said ? 1 : .5};transform:scale(${on ? 1 + .14 * backOut(k, 2) : 1});${on ? `color:#D4AF37;font-family:'Playfair Display',serif;font-style:italic;font-size:80px;` : ''}">${w.w}</span>`; }).join(' '); }
   $('#sub').innerHTML = h; }
 // transición del título: sube y se enfoca (sin recuadros)
 function aplicar(el, p, q) { const e = easeOut(p); el.style.opacity = clamp(p * 3) * (1 - q); el.style.transform = `translateY(${(1 - e) * 60 + q * -30}px) scale(${.94 + .06 * e})`; el.style.filter = p < 1 ? `blur(${(1 - e) * 10}px)` : 'none'; }
