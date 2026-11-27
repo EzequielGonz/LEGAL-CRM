@@ -362,3 +362,11 @@ El dueño aprobó el paso a paso y pidió ejecutarlo y aplicarlo en el panel a p
 **Funciones nuevas que el dueño sumó el 27/11 («sumalo»):** búsqueda con Ctrl+K dentro de cada perfil (contacto, chat, campaña o pantalla, sin cruzar rubros; en el nivel general, solo pantallas) y recordatorios por contacto («volver a llamar el jueves») visibles en Hoy.
 
 | Campañas en curso (27/11, 9:10) | «Hay campañas corriendo en el panel, que no se pausen ni nada». Al integrar y publicar el plan no se pausa ni se toca ninguna campaña; las migraciones que tocan campañas, líneas o plantillas se aplican sin campañas enviando. |
+
+### 27/11 · Oficina: «Arrancar» usa Gemini cuando no hay disparador
+
+El dueño, textual: «que arranque cuando yo te lo pida tambien por mas que no haya disparador, usala».
+
+- Cuando él pide arrancar una tarea de la Oficina y el disparador de Claude no está configurado (o no responde), la tarea la resuelve Gemini (3 respuestas que compiten y un juez), en vez de quedar en `sin_disparador`.
+- Reemplaza, para ese caso, la decisión anterior de «Gemini solo por botón». El botón de Gemini sigue estando.
+- Gemini no arranca por su cuenta: solo cuando él lo pide. Se mantiene el tope de USD 30 por mes.
