@@ -51,8 +51,7 @@
      "txt": "sacá fotos de los dos autos y la patente."
     }
    ],
-   "t1": 12.965,
-   "paso": 1
+   "t1": 12.965
   },
   {
    "texto": "Datos del seguro",
@@ -65,8 +64,7 @@
      "txt": "Pedí los datos del seguro del otro."
     }
    ],
-   "t1": 15.6,
-   "paso": 2
+   "t1": 15.6
   },
   {
    "texto": "No firmes sin entender",
@@ -79,8 +77,7 @@
      "txt": "Y no firmes nada que no entiendas."
     }
    ],
-   "t1": 18.307000000000002,
-   "paso": 3
+   "t1": 18.307000000000002
   },
   {
    "texto": "Guardalo",
@@ -370,10 +367,10 @@
  ],
  "receta": {
   "seed": 427,
-  "fondo": "blueprint",
+  "fondo": "ciudad",
   "layout": "A",
-  "cam": "mano",
-  "trans": "giro",
+  "cam": "mix",
+  "trans": "deslizar",
   "card": "sello",
   "sub": "color",
   "ft": "Manrope",
@@ -399,8 +396,8 @@
   },
   "vin": 0.4,
   "tilt": true,
-  "cartas": false,
-  "contador": true,
-  "escala": false
+  "cartas": true,
+  "contador": false,
+  "escala": true
  }
 }

@@ -26,12 +26,12 @@ export const ICONOS = {
 const REG = [
  [/foto|camara|imagen|captur/, 'camara'], [/choque|colision|siniestro/, 'choque'], [/firm|contrato|document|propuesta|acuerdo|papel|escrit|clausula|poder/, 'papel'],
  [/celu|whatsapp|mensaje|dm\b|llamad/, 'celu'], [/chat|respond|consult|conversa/, 'chat'], [/carta|sobre|aviso|cuota|aument|prepaga/, 'carta'],
- [/llave|retiro|entrega|patent|0 ?km/, 'llave'], [/recibo|ticket|precio|factura|total|costo|gasto|boleta/, 'ticket'],
+ [/llave|retiro|entrega|0 ?km/, 'llave'], [/recibo|ticket|precio|factura|total|costo|gasto|boleta/, 'ticket'],
  [/plata|dinero|pago|pagar|moneda|cobro|anticipo|ahorro|cuotas|sueldo|indemniz/, 'plata'], [/lupa|compar|buscar|revis|mir[aá]/, 'lupa'],
  [/seguro|escudo|cobertura|proteg|art\b|riesgo|poliza/, 'escudo'], [/reloj|hora|plazo|vence|urgente|rapido|24/, 'reloj'], [/guard|listo/, 'guardar'],
  [/calendario|turno|fecha|dia\b|mes\b|semana/, 'calendario'], [/balanza|ley|juez|abogad|justicia|corte|derech|juicio|demanda/, 'balanza'],
  [/grafico|vistas|alcance|reel|resultado|ventas|crec|metric|numero/, 'grafico'], [/local|negocio|vidriera|tienda|comercio|agencia|concesion/, 'local'],
- [/salud|medic|clinica|obra social|hospital|monotribut|aporte/, 'cruz'], [/mito|error|ojo|cuidado|no |trampa|riesgo|ojo/, 'alerta'], [/auto|conduc|trayecto|vehiculo|moto/, 'auto'],
+ [/salud|medic|clinica|obra social|hospital|monotribut|aporte/, 'cruz'], [/mito|error|ojo|cuidado|no |trampa|riesgo|ojo/, 'alerta'], [/auto|patent|conduc|trayecto|vehiculo|moto/, 'auto'],
 ];
 export const sinAcento = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 export function elegirIcono(txt, usados = [], opcional = false) {

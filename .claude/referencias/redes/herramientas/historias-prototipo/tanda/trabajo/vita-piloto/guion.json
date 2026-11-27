@@ -18,6 +18,36 @@
  "escena_visual": "esquina porteña en miniatura, dos autos con un golpe leve, un papel que se acerca",
  "cierre": "Guardalo para cuando lo necesites",
  "palabra": "CHOQUE",
+ "estilo": {
+  "cartas": true,
+  "contador": false,
+  "fondo": "ciudad",
+  "cam": "mix",
+  "trans": "deslizar",
+  "card": "sello",
+  "layout": "A",
+  "sub": "color",
+  "escala": true,
+  "pal": {
+   "bg1": "#112250",
+   "bg2": "#0E1218",
+   "ink": "#fff",
+   "acc": "#D4AF37",
+   "acc2": "#C1AE7A",
+   "onacc": "#0E1218",
+   "card": "#F5F4F0",
+   "cardInk": "#112250",
+   "k": "#F5F4F0",
+   "d": "#0E1218",
+   "line": "#D4AF37",
+   "luz": "#ffe9b0",
+   "subFill": "#fff",
+   "subStroke": "rgba(8,12,28,.92)",
+   "pill": "rgba(10,16,34,.6)",
+   "pillInk": "#fff",
+   "grade": "linear-gradient(180deg,rgba(0,70,110,.16),rgba(0,0,0,0) 45%,rgba(255,150,70,.10))"
+  }
+ },
  "_marca": "vita",
  "_orden": 0
 }
