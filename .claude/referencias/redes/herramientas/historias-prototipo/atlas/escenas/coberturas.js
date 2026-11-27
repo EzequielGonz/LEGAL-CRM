@@ -495,13 +495,13 @@ export default async function (datos, plan) {
   // cada texto se centra en el cuadro con la cámara que va a tener cuando se lea
   const ubicar = (B, t) => { if (!B) return; ponerCam(camT, estado(t)); B.oy = paredY(camT, B.top); B.ox = paredX(camT, 540, B.oy - B.hB / 2); };
   ubicar(bGancho, 0); golpes.forEach(g => ubicar(g.bl, g.cambio + .45)); ubicar(bCierre, tCierre + .45);
-  if (cont) { const wMax = Math.max(.5, ...conObjeto.map(g => g.o.w)), zc = cont.g.position.z;
-    const ks = claves.filter(([t]) => conObjeto.some(g => t >= g.ini && t < g.sal)).map(c => c[1]); ks.push(C0);
-    const entra = (x0, k) => ks.every(st => { ponerCam(camT, st); const ob = pant(camT, HX + S * wMax / 2, .35, HZ)[0];
-      const d1 = pant(camT, x0 - S * .12 * k, .25 * k, zc)[0], dn = pant(camT, x0 + S * ((nCont - 1) * .205 + .13) * k, .3 * k, zc)[0];
-      return S > 0 ? d1 >= ob + 14 && dn <= 975 : d1 <= ob - 14 && dn >= 105; });
-    let el = null; busca: for (let k = .88; k >= .46; k -= .03) for (let x0 = .3; x0 <= 1.3; x0 += .02) if (entra(S * x0, k)) { el = [S * x0, k]; break busca; }
-    if (!el) el = [S * .62, .46]; cont.g.position.x = el[0]; cont.g.scale.setScalar(el[1]); console.log('LOG contador x', el[0].toFixed(2), 'escala', el[1].toFixed(2)); }
+  // contador: en primer plano a la derecha (delante de los objetos, así nada tapa el disco 1). Se ubica solo: el último disco
+  // antes del 90 % del ancho y la base arriba de 1245 px, en todos los planos donde se ve.
+  if (cont) { const zc = .15, ks = claves.filter(([t]) => t > primer + .3 && t < TF).map(c => c[1]); if (!ks.length) ks.push({...C0, y: .43});
+    const entra = (x0, k) => ks.every(st => { ponerCam(camT, st); const dn = pant(camT, x0 + S * ((nCont - 1) * .205 + .13) * k, .35 * k, zc)[0], pie = pant(camT, x0 - S * .1 * k, 0, zc + .17 * k)[1];
+      return (S > 0 ? dn <= 970 : dn >= 110) && pie <= 1245; });
+    let el = null; busca: for (let k = .72; k >= .45; k -= .03) for (let x0 = 1.5; x0 >= .45; x0 -= .02) if (entra(S * x0, k)) { el = [S * x0, k]; break busca; }
+    if (!el) el = [S * .6, .45]; cont.g.position.set(el[0], 0, zc); cont.k = el[1]; cont.g.scale.setScalar(el[1]); console.log('LOG contador x', el[0].toFixed(2), 'escala', el[1].toFixed(2)); }
   const impactos = golpes.filter(g => g.efecto === 'golpe' || g.efecto === 'caida').map(g => [g.t, g.efecto === 'golpe' ? 1 : .45, g.px, g.pz]);
   const lupas = golpes.filter(g => g.efecto === 'lupa' && g.o);
   const envBorde = t => seg(t, 0, .5) * (1 - seg(t, T - .6, T - .12));
@@ -650,6 +650,7 @@ export default async function (datos, plan) {
   // contador: discos que se dan vuelta y la bolita que sube escalón por escalón
   function animContador(ts) {
     if (!cont) return; const fin = T - .62;
+    const ee = resorte(seg(ts, act[0] - .5, act[0] - .12), 2.2, 5) * (1 - E.in3(seg(ts, T - .32, T - .15))); cont.g.visible = ee > .002; cont.g.scale.setScalar(Math.max(.001, cont.k * ee)); if (!cont.g.visible) return;
     cont.pasos.forEach((p, k) => { const ta = act[k], f = resorte(seg(ts, ta, ta + .55), 2, 5) * (1 - E.io2(seg(ts, fin + k * .05, fin + .3 + k * .05)));
       p.d.rotation.y = Math.PI * f * S; p.d.position.y = p.hh + .1 + Math.sin(Math.PI * seg(ts, ta, ta + .3)) * .07; });
     const P0 = new THREE.Vector3(-S * .2, .045, .14), pos = k => k < 0 ? P0 : new THREE.Vector3(cont.pasos[k].x, cont.pasos[k].hh + .045, .14);

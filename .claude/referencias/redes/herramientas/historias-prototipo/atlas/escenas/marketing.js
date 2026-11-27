@@ -37,7 +37,7 @@ export default async function (datos, plan) {
   // ── semilla del plan ──────────────────────────────────────────────────────
   const sid = String(PL.id || datos.id || 'marketing'); let s0 = 11; for (const ch of sid) s0 = (s0 * 131 + ch.charCodeAt(0)) % 1000003;
   const rnd = k => hash(s0 * .01371 + k * 7.317);
-  const lado = rnd(1) < .5 ? -1 : 1, yaw0 = (rnd(2) - .5) * .2, alto0 = (rnd(3) - .5) * .5, xP = .68 + (rnd(4) - .5) * .14;
+  const lado = rnd(1) < .5 ? -1 : 1, yaw0 = (rnd(2) - .5) * .2, alto0 = (rnd(3) - .5) * .5, xP = (rnd(4) - .5) * .5;
   const variante = Math.floor(rnd(5) * 3), estiloEnt = Math.floor(rnd(6) * 3);
   const ciclo = Math.max(1, Math.round(T / 7)), fase = t => t / T * Math.PI * 2 * ciclo; // todo lo «vivo» es periódico en T (loop)
 
@@ -61,21 +61,21 @@ export default async function (datos, plan) {
   tC = Math.min(tC, tR - 1.6);
 
   // ── cartel: medidas ───────────────────────────────────────────────────────
-  const IW = 3.51, HEAD = .3, DIV = .14, MARG = .1, LT = 20, LP = IW / 22, LH = .27, zB = .34, x0 = -IW / 2;
+  const IW = 3.51, HEAD = .3, DIV = .14, MARG = .1, LT = 14, LP = IW / 18, LH = .33, zB = .34, x0 = -IW / 2;
   let FC = 12, gL, cL; for (const fc of [12, 13, 14, 15, 16, 17, 18]) { FC = fc; gL = partir(gancho, fc, 6); cL = partir(cierre, fc, 6); if (gL.length <= 3 && cL.length <= 3) break; }
   if (gL.length > 3) for (const fc of [13, 14, 15, 16, 17, 18]) { FC = fc; gL = partir(gancho, fc, 6); cL = partir(cierre, fc, 6); if (gL.length <= 4 && cL.length <= 4) break; }
   const FP = IW / FC, FH = FP * 1.45, RF = clamp(Math.max(gL.length, cL.length, 2), 2, 4);
   const lineas = []; let np = 0;
-  beats.forEach((b, i) => { const ls = (b.tipo === 'cierre' && nrm(b.texto) === nrm(cierre)) ? [] : partir(b.texto || '', LT, 2); if (b.tipo === 'paso') np++;
+  beats.forEach((b, i) => { const ls = (b.tipo === 'cierre' && nrm(b.texto) === nrm(cierre)) ? [] : partir(b.texto || '', LT, 3); if (b.tipo === 'paso') np++;
     b.num = contador > 0 && b.tipo === 'paso' ? np : 0; b.l0 = lineas.length; b.nl = ls.length; b.len = ls.length ? Math.max(...ls.map(s => s.length)) : 0;
     ls.forEach((s, k) => lineas.push({s, num: k ? 0 : b.num, beat: i})); });
-  const NV = clamp(lineas.length, 4, 6); // filas visibles (si hay más, la lista corre hacia arriba)
-  // la lista va de la más nueva arriba a la más vieja abajo (cada golpe empuja las filas: el cartel re-gira entero)
+  const NV = clamp(Math.max(2, ...beats.map(b => b.nl)), 2, 3); // renglones visibles de la lista
+  // la lista va de la más nueva arriba a la más vieja abajo: al entrar un golpe, los renglones bajan deslizándose (sin re-voltear)
   beats.forEach(b => { b.fila = 0; });
-  const filaDe = (j, i) => { let r = 0; for (let q = i; q > j; q--) r += beats[q].nl; return r; }; // fila del golpe j cuando el último escrito es i
-  const yTop = 4.8, yF0 = yTop - HEAD, yL0 = yF0 - RF * FH - DIV, yBot = yL0 - NV * LH - MARG;
+  const filaLinea = (l, t) => { const j = lineas[l].beat; let r = l - beats[j].l0; for (let i = j + 1; i < NB; i++) if (beats[i].nl) r += beats[i].nl * E.io3(seg(t, beats[i].t - .5, beats[i].t - .18)); return r; };
+  const yBot = 2.75, yL0 = yBot + MARG + NV * LH, yF0 = yL0 + DIV + RF * FH, yTop = yF0 + HEAD; // el cartel queda arriba del objeto: nunca se tapan
   const filaY = r => yL0 - LH * (r + .5);
-  const zP = 3.7, hP = clamp(yBot - .3, 1.0, 1.45), hTop = hP + .06, OS = 1.24; // OS: escala de los objetos // pedestal: el objeto apoya en hTop
+  const zP = 2.75, hP = .85, hTop = hP + .06, OS = 1.0; // OS: escala de los objetos // pedestal: el objeto apoya en hTop
 
   // ── texturas dibujadas ────────────────────────────────────────────────────
   const travertino = lienzo(1024, 1024, (x, w, h) => {
@@ -161,7 +161,7 @@ export default async function (datos, plan) {
   // manchas de ventanal en la pared y el piso, haces de luz y polvo
   const manchas = [];
   { const g = new THREE.PlaneGeometry(4.4, 2.2); g.applyMatrix4(new THREE.Matrix4().makeShear(0, 0, -lado * .55, 0, 0, 0));
-    manchas.push([malla(g, plano(ventanaTx, .6, 0xFFB872), -lado * 1.1, 6.0, .012), .6]);
+    manchas.push([malla(g, plano(ventanaTx, .6, 0xFFB872), -lado * 1.1, yTop + 1.0, .012), .6]);
     const g3 = new THREE.PlaneGeometry(1.6, 3.4); g3.applyMatrix4(new THREE.Matrix4().makeShear(0, 0, -lado * .5, 0, 0, 0));
     manchas.push([malla(g3, plano(ventanaTx, .4, 0xFFB872), lado * 2.9, 3.4, .1), .4]);
     const g2 = new THREE.PlaneGeometry(3.2, 4.2); g2.applyMatrix4(new THREE.Matrix4().makeShear(0, 0, -lado * .6, 0, 0, 0));
@@ -177,11 +177,12 @@ export default async function (datos, plan) {
     const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
     const p = new THREE.Points(g, new THREE.PointsMaterial({size: .028, map: puntoTx, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: .75, color: 0xFFE2BC})); p.frustumCulled = false; scene.add(p); return {p, pos, sem}; })();
   // globos opalinos colgantes (cálidos)
-  const globos = [];
-  [[-.6 + rnd(11) * .2, 4.3, 5.6, .17], [.45, 4.75, 3.9, .2], [1.3, 5.1, 2.2, .22]].forEach(([x, y, z, r], i) => {
-    const m = new THREE.MeshStandardMaterial({color: 0xFFEBD2, emissive: 0xFFC890, emissiveIntensity: 1.6, roughness: .4}); const g = malla(new THREE.SphereGeometry(r, 32, 20), m, x, y, z);
-    const halo = malla(new THREE.PlaneGeometry(r * 7, r * 7), plano(puntoTx, .35, 0xFFB46A), x, y, z - .05); halo.renderOrder = 4;
-    malla(new THREE.CylinderGeometry(.005, .005, 4, 6), new THREE.MeshBasicMaterial({color: 0x2a2420}), x, y + r + 2, z); malla(new THREE.CylinderGeometry(.045, .06, .07, 20), mk.laton(), x, y + r + .02, z); globos.push(m); });
+  const globos = [], globosG = []; // se ubican después, mirando el plano general: arriba a la derecha, lejos del logo y del cartel
+  [[.64 + rnd(11) * .06, .07, 5.6, .17], [.8, .13, 4.0, .2], [.93, .05, 2.4, .22]].forEach(([sx, sy, z, r]) => {
+    const G = new THREE.Group(); scene.add(G); G.userData.pos = [sx, sy, z];
+    const m = new THREE.MeshStandardMaterial({color: 0xFFEBD2, emissive: 0xFFC890, emissiveIntensity: 1.6, roughness: .4}); malla(new THREE.SphereGeometry(r, 32, 20), m, 0, 0, 0, G);
+    malla(new THREE.PlaneGeometry(r * 7, r * 7), plano(puntoTx, .35, 0xFFB46A), 0, 0, -.05, G).renderOrder = 4;
+    malla(new THREE.CylinderGeometry(.005, .005, 4, 6), new THREE.MeshBasicMaterial({color: 0x2a2420}), 0, r + 2, 0, G); malla(new THREE.CylinderGeometry(.045, .06, .07, 20), mk.laton(), 0, r + .02, 0, G); globos.push(m); globosG.push(G); });
 
   // ── cartel de paletas: caja, panel, encabezado, divisor ───────────────────
   const IH = yTop - yBot, yC = (yTop + yBot) / 2;
@@ -213,66 +214,68 @@ export default async function (datos, plan) {
       x.restore(); }); }, {srgb: false});
   const celdas = [];
   for (let r = 0; r < RF; r++) for (let c = 0; c < FC; c++) celdas.push({zona: 'F', r, c, x: x0 + FP * (c + .5), y: yF0 - FH * (r + .5), w: FP * .93, h: FH * .92});
-  for (let r = 0; r < NV; r++) { celdas.push({zona: 'N', r, c: -1, x: x0 + LP * .5, y: filaY(r), w: LP * .9, h: LH * .9});
-    for (let c = 0; c < LT; c++) celdas.push({zona: 'L', r, c, x: x0 + LP * (c + 2.5), y: filaY(r), w: LP * .9, h: LH * .9}); }
+  const xCel = c => c < 0 ? x0 + LP * .5 : x0 + LP * (c + 2.5);
+  for (let r = 0; r < NV; r++) for (let c = -1; c < LT; c++) celdas.push({zona: 'S', r, c, x: xCel(c), y: filaY(r), w: LP * .9, h: LH * .9, fija: 0, z: zB + .003});
+  lineas.forEach((ln, l) => { for (let c = -1; c < LT; c++) celdas.push({zona: 'LN', l, c, x: xCel(c), y: -50, w: LP * .9, h: LH * .9, z: zB + .011,
+    meta: c < 0 ? (ln.num ? 100 + gid(String(ln.num % 10)) : 0) : (c < ln.s.length ? gid(ln.s[c]) : 0)}); });
   const hora = (String(PL.hora || '10:10') + '     ').slice(0, 5);
   for (let c = 0; c < 5; c++) celdas.push({zona: 'H', r: 0, c, x: x0 + IW - .6 + c * .112, y: yTop - HEAD / 2, w: .102, h: .19, fija: gid(hora[c])});
   // estados del contenido: gancho → cada golpe → cierre → reinicio (= cuadro 1)
   const filasF = ls => Array.from({length: RF}, (_, r) => { const a = Array(FC).fill(0), s = ls[r] || ''; for (let i = 0; i < Math.min(FC, s.length); i++) a[i] = gid(s[i]); return a; });
-  const listaVacia = () => ({L: Array.from({length: NV}, () => Array(LT).fill(0)), N: Array(NV).fill(0)});
-  function lista(i) { const o = listaVacia(); let r = 0;
-    for (let j = i; j >= 0 && r < NV; j--) for (let k = 0; k < beats[j].nl && r < NV; k++, r++) { const ln = lineas[beats[j].l0 + k]; for (let c = 0; c < Math.min(LT, ln.s.length); c++) o.L[r][c] = gid(ln.s[c]); if (ln.num) o.N[r] = 100 + gid(String(ln.num % 10)); }
-    return o; }
-  const est = [{t: -9, F: filasF(gL), ...listaVacia(), tipo: 'inicio'}];
+  const est = [{t: -9, F: filasF(gL), tipo: 'inicio'}];
   { const cr = []; beats.forEach((b, i) => cr.push({t: b.t - .12, tipo: 'golpe', i})); cr.push({t: tC, tipo: 'cierre'}); cr.push({t: tR, tipo: 'reinicio'}); cr.sort((a, b) => a.t - b.t);
-    let F = est[0].F, Ls = listaVacia();
-    for (const c of cr) { if (c.tipo === 'golpe') Ls = lista(c.i); if (c.tipo === 'cierre') F = filasF(cL); if (c.tipo === 'reinicio') { F = filasF(gL); Ls = listaVacia(); }
-      est.push({t: c.t, F, ...Ls, tipo: c.tipo, i: c.i}); } }
-  const valor = (s, ce) => ce.zona === 'F' ? s.F[ce.r][ce.c] : ce.zona === 'L' ? s.L[ce.r][ce.c] : ce.zona === 'N' ? s.N[ce.r] : ce.fija;
+    let F = est[0].F;
+    for (const c of cr) { if (c.tipo === 'cierre') F = filasF(cL); if (c.tipo === 'reinicio') F = filasF(gL);
+      est.push({t: c.t, F, tipo: c.tipo, i: c.i}); } }
+  const valor = (s, ce) => ce.zona === 'F' ? s.F[ce.r][ce.c] : ce.fija;
   function secuencia(a, b, n, ci, cuenta) {
     const col = b >= 100 ? 100 : 0, bb = b % 100, s = [a];
     if (cuenta && bb >= D0 && bb <= D9) { for (let k = D0; k <= bb; k++) if (col + k !== a) s.push(col + k); if (s.length === 1) s.push(b); return s; }
     if (bb === 0) { const ca = a >= 100 ? 100 : 0; for (let k = 0; k < n - 1; k++) s.push(ca + 1 + Math.floor(hash(ci * 7 + k * 3.3) * 26)); s.push(0); return s; }
     for (let k = n - 1; k >= 1; k--) s.push(col + ((bb - k + NG) % NG)); s.push(b); return s;
   }
-  celdas.forEach((ce, ci) => { let prev = valor(est[0], ce); ce.g0 = prev; ce.evs = [];
+  celdas.forEach((ce, ci) => { ce.evs = [];
+    if (ce.zona === 'LN') { ce.g0 = 0; if (!ce.meta) return; const b = beats[lineas[ce.l].beat], cuenta = b.efecto === 'cuenta';
+      ce.evs.push({t0: b.t - .12 + (ce.c < 0 ? -.02 : ce.c * .028) + hash(ci * 5.9) * .015, seq: secuencia(0, ce.meta, 3 + Math.floor(hash(ci * 4.3) * 4), ci, cuenta), dt: cuenta ? .1 : .06});
+      ce.evs.push({t0: tR + hash(ci * 1.7) * .3 + ce.c * .008, seq: secuencia(ce.meta, 0, 2 + Math.floor(hash(ci * 3.1) * 2), ci), dt: .06}); return; }
+    let prev = valor(est[0], ce); ce.g0 = prev;
     for (let k = 1; k < est.length; k++) { const s = est[k], v = valor(s, ce); if (v === prev) continue;
-      const b = s.tipo === 'golpe' ? beats[s.i] : null, nueva = b && ce.r < b.nl, cuenta = b && b.efecto === 'cuenta' && nueva;
       let ret, dt, n;
       if (s.tipo === 'reinicio') { ret = hash(ci * 1.7) * .3 + (ce.zona === 'F' ? ce.c * .02 + ce.r * .05 : ce.c * .008 + ce.r * .03); dt = .06; n = 2 + Math.floor(hash(ci * 3.1) * 2); }
       else if (ce.zona === 'F') { ret = ce.c * .032 + ce.r * .07 + hash(ci) * .02; dt = .07; n = 3 + Math.floor(hash(ci * 2.3) * 4); }
-      else { ret = (ce.zona === 'N' ? -.02 : ce.c * .026) + (nueva ? 0 : ce.r * .05) + hash(ci * 5.9) * .015; dt = cuenta ? .1 : .058; n = 3 + Math.floor(hash(ci * 4.3) * 4); }
-      ce.evs.push({t0: s.t + ret, seq: secuencia(prev, v, n, ci, cuenta), dt}); prev = v; } });
+      else continue;
+      ce.evs.push({t0: s.t + ret, seq: secuencia(prev, v, n, ci), dt}); prev = v; } });
   function estadoCelda(ce, t) { let e = null; for (const x of ce.evs) { if (t >= x.t0) e = x; else break; }
     if (!e) return [ce.g0, ce.g0, 0];
     const k = (t - e.t0) / e.dt, n = e.seq.length - 1;
     if (k >= n) { const g = e.seq[n], q = k - n; return q < 1.6 ? [g, g, Math.PI - .32 * Math.exp(-q * 3) * Math.abs(Math.sin(q * 5))] : [g, g, 0]; }
     const i = Math.floor(k), f = k - i; return [e.seq[i], e.seq[i + 1], Math.PI * f * f]; }
   // sonido de las paletas
-  for (let k = 1; k < est.length; k++) { const s = est[k]; let n = 0; celdas.forEach(ce => { if (valor(s, ce) !== valor(est[k - 1], ce)) n++; });
-    if (!n) continue; sfx(s.t + .02, n > 9 ? 'flap_largo' : 'flap', s.tipo === 'reinicio' ? .85 : .7); if (n > 26) sfx(s.t + .42, 'flap', .5); }
+  for (let k = 1; k < est.length; k++) { const s = est[k]; let n = 0; celdas.forEach(ce => { if (ce.zona === 'F' && valor(s, ce) !== valor(est[k - 1], ce)) n++; });
+    if (s.tipo === 'reinicio') { sfx(s.t + .02, 'flap_largo', .85); sfx(s.t + .4, 'flap', .5); } else if (n) sfx(s.t + .02, n > 9 ? 'flap_largo' : 'flap', .7); }
+  beats.forEach((b, i) => { if (!b.nl) return; if (i && beats.slice(0, i).some(q => q.nl)) sfx(b.t - .5, 'whoosh', .16); sfx(b.t - .1, b.len > 9 ? 'flap_largo' : 'flap', .7); });
   // instancias: 3 piezas por celda (mitad de arriba, mitad de abajo, paleta que cae)
   const NC = celdas.length, NI = NC * 3;
   const gF = new THREE.InstancedBufferGeometry(); { const b = new THREE.PlaneGeometry(1, 1); gF.index = b.index; gF.setAttribute('position', b.attributes.position); }
-  const aOff = new Float32Array(NI * 3), aSz = new Float32Array(NI * 2), aKind = new Float32Array(NI), aG = new Float32Array(NI * 2), aAng = new Float32Array(NI), aLit = new Float32Array(NI).fill(1);
-  celdas.forEach((ce, ci) => { for (let q = 0; q < 3; q++) { const j = ci * 3 + q; aOff.set([ce.x, ce.y, zB + .006], j * 3); aSz.set([ce.w, ce.h], j * 2); aKind[j] = q; aG[j * 2] = aG[j * 2 + 1] = ce.g0; } });
+  const aOff = new Float32Array(NI * 3), aSz = new Float32Array(NI * 2), aKind = new Float32Array(NI), aG = new Float32Array(NI * 2), aAng = new Float32Array(NI), aLit = new Float32Array(NI).fill(1), aClip = new Float32Array(NI);
+  celdas.forEach((ce, ci) => { for (let q = 0; q < 3; q++) { const j = ci * 3 + q; aOff.set([ce.x, ce.y, ce.z ?? zB + .006], j * 3); aClip[j] = ce.zona === 'LN' ? 1 : 0; aSz.set([ce.w, ce.h], j * 2); aKind[j] = q; aG[j * 2] = aG[j * 2 + 1] = ce.g0; } });
   const IA = (a, n) => new THREE.InstancedBufferAttribute(a, n);
-  gF.setAttribute('aOff', IA(aOff, 3)); gF.setAttribute('aSz', IA(aSz, 2)); gF.setAttribute('aKind', IA(aKind, 1)); gF.setAttribute('aG', IA(aG, 2)); gF.setAttribute('aAng', IA(aAng, 1)); gF.setAttribute('aLit', IA(aLit, 1));
+  gF.setAttribute('aOff', IA(aOff, 3)); gF.setAttribute('aSz', IA(aSz, 2)); gF.setAttribute('aKind', IA(aKind, 1)); gF.setAttribute('aG', IA(aG, 2)); gF.setAttribute('aAng', IA(aAng, 1)); gF.setAttribute('aLit', IA(aLit, 1)); gF.setAttribute('aClip', IA(aClip, 1));
   gF.instanceCount = NI;
   const Ld = new THREE.Vector3(lado * .35, .78, .62).normalize();
   const mFlap = new THREE.ShaderMaterial({side: THREE.DoubleSide,
     uniforms: {tA: {value: atlas}, uGrid: {value: new THREE.Vector2(AC, AR)}, uFlap: {value: new THREE.Color('#2A2826')}, uFlapN: {value: new THREE.Color(NARANJA)}, uInk: {value: new THREE.Color('#FFE9D4')}, uInkN: {value: new THREE.Color(TINTA)},
-      uL: {value: Ld}, uLc: {value: new THREE.Color(1.05, .93, .8)}, uAmb: {value: new THREE.Color(.42, .4, .37)}, uLuz: {value: 1}},
-    vertexShader: `attribute vec3 aOff;attribute vec2 aSz;attribute float aKind;attribute vec2 aG;attribute float aAng;attribute float aLit;
+      uL: {value: Ld}, uLc: {value: new THREE.Color(1.05, .93, .8)}, uAmb: {value: new THREE.Color(.42, .4, .37)}, uLuz: {value: 1}, uClip: {value: yL0 - NV * LH - .02}},
+    vertexShader: `attribute vec3 aOff;attribute vec2 aSz;attribute float aKind;attribute vec2 aG;attribute float aAng;attribute float aLit;attribute float aClip;varying float vClip;
       varying vec2 vUv;varying vec2 vG;varying float vKind;varying vec3 vN;varying vec3 vW;varying float vLit;varying float vAsp;varying float vSom;
       void main(){float hh=aSz.y*.5;float yl=(aKind>.5&&aKind<1.5)?(position.y-.5)*hh:(position.y+.5)*hh;
         vec3 p=vec3(position.x*aSz.x,yl,0.);vec3 n=vec3(0.,0.,1.);
         if(aKind>1.5){float c=cos(aAng),s=sin(aAng);p=vec3(p.x,yl*c,yl*s+.003);n=vec3(0.,-s,c);}
-        vUv=vec2(position.x+.5,yl/aSz.y+.5);vG=aG;vKind=aKind;vN=n;vLit=aLit;vAsp=aSz.x/aSz.y;vSom=(aKind>.5&&aKind<1.5)?1.-.5*sin(aAng):1.;
+        vUv=vec2(position.x+.5,yl/aSz.y+.5);vG=aG;vKind=aKind;vN=n;vLit=aLit;vAsp=aSz.x/aSz.y;vSom=(aKind>.5&&aKind<1.5)?1.-.5*sin(aAng):1.;vClip=aClip;
         vec4 w=modelMatrix*vec4(p+aOff,1.);vW=w.xyz;gl_Position=projectionMatrix*viewMatrix*w;}`,
-    fragmentShader: `uniform sampler2D tA;uniform vec2 uGrid;uniform vec3 uFlap,uFlapN,uInk,uInkN,uL,uLc,uAmb;uniform float uLuz;
+    fragmentShader: `uniform sampler2D tA;uniform vec2 uGrid;uniform vec3 uFlap,uFlapN,uInk,uInkN,uL,uLc,uAmb;uniform float uLuz,uClip;varying float vClip;
       varying vec2 vUv;varying vec2 vG;varying float vKind;varying vec3 vN;varying vec3 vW;varying float vLit;varying float vAsp;varying float vSom;
-      void main(){bool dorso=!gl_FrontFacing;float v=vUv.y,u=vUv.x,g;
+      void main(){if(vClip>.5&&vW.y<uClip)discard;bool dorso=!gl_FrontFacing;float v=vUv.y,u=vUv.x,g;
         if(vKind<.5)g=vG.y;else if(vKind<1.5)g=vG.x;else if(dorso){g=vG.y;v=1.-v;}else g=vG.x;
         float hg=abs(v-.5);if(hg<.012)discard;
         vec2 d=abs(vec2(u,v)-.5)*vec2(vAsp,1.);float r=.05;if(length(max(d-(vec2(.5*vAsp,.5)-r),0.))>r)discard;
@@ -356,7 +359,7 @@ export default async function (datos, plan) {
         const tel = new THREE.Group(); tel.position.set(0, .09, -.04); tel.rotation.x = -.16; g.add(tel);
         add(RB(.54, 1.08, .07, .07, 4), M_(mk.tinta), 0, .54, 0, tel);
         const sh = rr(.49, 1.02, .055); pant.repeat.set(1 / .49, 1 / 1.02); pant.offset.set(.5, .5);
-        add(new THREE.ShapeGeometry(sh, 8), M_(() => new THREE.MeshStandardMaterial({map: pant, emissive: 0xffffff, emissiveMap: pant, emissiveIntensity: .28, roughness: .3})), 0, .54, .0365, tel);
+        add(new THREE.ShapeGeometry(sh, 8), M_(() => new THREE.MeshStandardMaterial({map: pant, color: 0xc4c4c4, emissive: 0xffffff, emissiveMap: pant, emissiveIntensity: .19, roughness: .3})), 0, .54, .0365, tel);
         add(RB(.12, .028, .01, .012, 2), M_(() => new THREE.MeshBasicMaterial({color: 0x0a0a0a})), 0, 1.03, .038, tel);
         const insig = lienzo(128, 128, (x) => { x.fillStyle = NARANJA; x.beginPath(); x.arc(64, 64, 62, 0, 7); x.fill(); x.fillStyle = CREMA; x.font = '800 78px Outfit'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(String(contador || 3), 64, 68); });
         const badge = add(new THREE.CircleGeometry(.075, 32), M_(() => new THREE.MeshBasicMaterial({map: insig, transparent: true})), .25, 1.06, .05, tel);
@@ -508,48 +511,52 @@ export default async function (datos, plan) {
 
   // ── cámara: plano general y encuadres que se resuelven solos ──────────────
   const tmp = new THREE.PerspectiveCamera(36, 1080 / 1920, .05, 400), vv = new THREE.Vector3();
-  function proyY(cp, lk, pt, fov) { tmp.fov = fov; tmp.updateProjectionMatrix(); tmp.position.set(...cp); tmp.lookAt(...lk); tmp.updateMatrixWorld(); vv.set(...pt).project(tmp); return [(vv.x + 1) * 540, (1 - vv.y) * 960]; }
-  function encuadre({dist, xc, zc = 0, yaw = 0, pA, yA, pB = null, yB = 0, fov = 36, hmin = .8, hmax = 4.4}) {
+  function proy(cp, lk, pt) { tmp.position.set(...cp); tmp.lookAt(...lk); tmp.updateMatrixWorld(); vv.set(...pt).project(tmp); return [(vv.x + 1) * 540, (1 - vv.y) * 960]; }
+  const objC = [xP, hTop + .5 * OS, zP], objBase = [xP, hTop, zP + .45], objTope = [xP, hTop + 1.12 * OS, zP], bSup = [0, yTop + .18, zB], bInf = [0, yBot - .18, zB];
+  // apila: cartel desde yA (debajo del logo), objeto entero debajo del cartel y apoyado en yB (arriba de los subtítulos), cartel entero a lo ancho
+  function encuadre({yaw = 0, xc = 0, yA = 350, yB = 1235, hPref = 2.2}) {
     let mejor = null;
-    for (let h = hmin; h <= hmax + 1e-6; h += .05) {
-      const cp = [xc + Math.sin(yaw) * dist, h, zc + Math.cos(yaw) * dist]; let lo = -8, hi = 12, lk = null;
-      for (let it = 0; it < 26; it++) { const mid = (lo + hi) / 2; lk = [xc, mid, zc]; if (proyY(cp, lk, pA, fov)[1] > yA) hi = mid; else lo = mid; }
-      const e = pB ? Math.abs(proyY(cp, lk, pB, fov)[1] - yB) : 0; if (!mejor || e < mejor.e - 1e-9) mejor = {e, p: cp, m: lk, fov};
+    for (let d = 9; d <= 20.01; d += .5) for (let h = .7; h <= 4.6; h += .15) {
+      const cp = [xc + Math.sin(yaw) * d, h, Math.cos(yaw) * d]; let lo = -8, hi = 14, lk;
+      for (let it = 0; it < 22; it++) { const mid = (lo + hi) / 2; lk = [xc, mid, 0]; if (proy(cp, lk, bSup)[1] > yA) hi = mid; else lo = mid; }
+      const yb = proy(cp, lk, objBase)[1], yt = proy(cp, lk, objTope)[1], yi = proy(cp, lk, bInf)[1];
+      const xs = [[-IW / 2 - .2, yTop], [IW / 2 + .2, yTop], [-IW / 2 - .2, yBot], [IW / 2 + .2, yBot]].map(([x, y]) => proy(cp, lk, [x, y, zB])[0]);
+      const e = Math.abs(yb - yB) + 4 * Math.max(0, yi + 16 - yt) + 3 * Math.max(0, 36 - Math.min(...xs)) + 3 * Math.max(0, Math.max(...xs) - 1044) + 6 * Math.abs(h - hPref);
+      if (!mejor || e < mejor.e) mejor = {e, p: cp, m: lk, fov: 36};
     }
     return mejor;
   }
-  const objC = [xP, hTop + .5 * OS, zP];
-  const ANCHO = encuadre({dist: 12.8, xc: 0, yaw: yaw0, pA: [0, yTop + .16, zB], yA: 336 + alto0 * 30, pB: objC, yB: 1005, hmin: 1.2, hmax: 3.4});
-  const txc = b => x0 + LP * (2 + Math.min(LT, b.len) / 2);
-  const tomaFila = (b, i, sg) => { const dist = 12.3 + (rnd(20 + i) - .5) * .5, cx = .26 + sg * .05 + (rnd(25 + i) - .5) * .06, lx = .08 + (rnd(27 + i) - .5) * .1, yaw = Math.asin((cx - lx) / dist); return encuadre({dist, xc: lx, yaw, pA: [txc(b), filaY(b.fila + (b.nl - 1) / 2), zB], yA: 268 + (yTop - HEAD / 2 - filaY((b.nl - 1) / 2)) * 960 / ((dist - zB) * .3249), pB: objC, yB: 1000, hmax: 3.0}); }; // el logo cae sobre el encabezado del cartel // cámara en x≈.25: entra el comienzo de la fila y el objeto entero
-  const tomaObjeto = (b, i, sg) => encuadre({dist: 4.2, xc: xP - sg * .1, zc: zP, yaw: sg * (.28 + rnd(50 + i) * .14), pA: objC, yA: 900, hmin: hTop + .7, hmax: hTop + .7});
+  const ANCHO = encuadre({yaw: yaw0, yA: 350 + alto0 * 16, hPref: 2.1 + alto0});
+  const tomaFila = (b, i, sg) => encuadre({yaw: sg * (.05 + rnd(30 + i) * .08), xc: (rnd(25 + i) - .5) * .3, yA: 352 + rnd(26 + i) * 22, yB: 1238 - rnd(27 + i) * 30, hPref: 1.3 + rnd(28 + i) * 1.9});
+  // plano de producto: de arriba en tres cuartos, con el piso de fondo (el cartel queda fuera de cuadro)
+  const tomaObjeto = (b, i, sg) => { const yaw = sg * (.3 + rnd(50 + i) * .25), d = 2.5 + rnd(51 + i) * .3; return {p: [xP + Math.sin(yaw) * d, objC[1] + 1.55, zP + Math.cos(yaw) * d], m: [xP, objC[1] - .05, zP], fov: 36}; };
   const lupaX = (b, t) => { const k = seg(t, b.t + .35, b.t + 1.7); return lerp(x0 + LP * (2 + Math.min(LT, b.len)) + .3, x0 + LP * 2 + .2, E.io2(k)); };
-  const tomaDetalle = (b) => { const y = filaY(b.fila) + .04, x = lupaX(b, b.t); return {p: [x - .05, y + .1, zB + 2.45], m: [x - .05, y, 0], fov: 36, sigue: b}; };
-  const tomaCierre = encuadre({dist: 11.4, xc: .1, yaw: -lado * .07, pA: [0, yF0 - FH * RF / 2, zB], yA: 600, pB: objC, yB: 1000});
+  const tomaCierre = encuadre({yaw: -lado * .06, yA: 352, yB: 1235, hPref: 2.6});
+  { tmp.position.set(...ANCHO.p); tmp.lookAt(...ANCHO.m); tmp.updateMatrixWorld(); const c = tmp.position.clone();
+    globosG.forEach(G => { const [sx, sy, z] = G.userData.pos, d = new THREE.Vector3(sx * 2 - 1, 1 - sy * 2, .5).unproject(tmp).sub(c).normalize(); G.position.copy(c).addScaledVector(d, (z - c.z) / d.z); }); }
   const tomas = [{t: -20, dur: .01, ease: E.io3, der: 0, ...ANCHO}];
   beats.forEach((b, i) => {
     const D = (i < NB - 1 ? beats[i + 1].t : tC) - b.t, sg = ((i + (rnd(9) > .5 ? 1 : 0)) % 2) ? 1 : -1;
     if (!b.nl) { tomas.push({t: b.t - .2, dur: .5, ease: E.out5, der: .03, ...tomaCierre}); return; }
-    if (b.efecto === 'lupa') { tomas.push({t: b.t - .15, dur: .5, ease: E.out5, der: .04, ...tomaDetalle(b)}); if (D > 2.6) tomas.push({t: b.t + 1.75, dur: .5, ease: E.out5, der: .03, ...tomaFila(b, i, sg)}); return; }
     tomas.push({t: b.t - .2, dur: .45, ease: E.out5, der: .035, ...tomaFila(b, i, sg)});
-    const tAcc = ['tachar', 'sello', 'barrido', 'cuenta'].includes(b.efecto) ? 1.4 : 1.05;
+    const tAcc = ['tachar', 'sello', 'barrido', 'cuenta', 'lupa'].includes(b.efecto) ? 1.75 : 1.1;
     if (D > tAcc + 1.0) tomas.push({t: b.t + tAcc, dur: .5, ease: E.out5, der: .05, ...tomaObjeto(b, i, -sg)});
   });
   if (!beats.some(b => !b.nl && Math.abs(b.t - tC) < .6)) tomas.push({t: tC + (iC >= 0 && beats[iC].nl ? 1.0 : -.1), dur: .55, ease: E.out5, der: .03, ...tomaCierre});
   tomas.push({t: tR - .05, dur: 1.0, ease: E.io3, der: 0, ...ANCHO});
   tomas.sort((a, b) => a.t - b.t);
   tomas.forEach((s, i) => { s.P = new THREE.Vector3(...s.p); s.Mv = new THREE.Vector3(...s.m); s.fin = i < tomas.length - 1 ? tomas[i + 1].t : 1e9; });
+  console.log('LOG errores', tomas.map(s => (s.e ?? -1).toFixed(0) + '@' + s.t.toFixed(1)).join(' '));
   console.log('LOG tomas', tomas.length, 'ancho e', ANCHO.e.toFixed(0), 'h', ANCHO.p[1].toFixed(2), 'FC', FC, 'RF', RF, 'NV', NV, 'lineas', lineas.length, 'heroe', heroTipo);
   const pA_ = new THREE.Vector3(), mA_ = new THREE.Vector3(), pB_ = new THREE.Vector3(), mB_ = new THREE.Vector3();
   const pose = (s, t, oP, oM) => { const k = s.der * clamp((t - s.t) / Math.max(.6, s.fin - s.t)); oP.copy(s.P).lerp(s.Mv, k); oM.copy(s.Mv); };
   function camara(t) {
     let i = 0; while (i < tomas.length - 1 && t >= tomas[i + 1].t) i++;
     const B = tomas[i]; pose(B, t, pB_, mB_); let fov = B.fov;
-    if (B.sigue) { const dx = lupaX(B.sigue, t) - B.P.x - .05; pB_.x += dx; mB_.x += dx; } // el plano detalle acompaña a la lupa
-    if (i > 0) { const A = tomas[i - 1]; pose(A, B.t, pA_, mA_); if (A.sigue) { const dx = lupaX(A.sigue, B.t) - A.P.x - .05; pA_.x += dx; mA_.x += dx; } const k = B.ease(seg(t, B.t, B.t + B.dur)); pB_.lerpVectors(pA_, pB_, k); mB_.lerpVectors(mA_, mB_, k); fov = lerp(A.fov, B.fov, k); }
+    if (i > 0) { const A = tomas[i - 1]; pose(A, B.t, pA_, mA_); const k = B.ease(seg(t, B.t, B.t + B.dur)); pB_.lerpVectors(pA_, pB_, k); mB_.lerpVectors(mA_, mB_, k); fov = lerp(A.fov, B.fov, k); }
     const env = Math.sin(Math.PI * clamp(t / T)); let sh = 0; for (const [a, f] of golpes) sh += pulso(t, a, .22) * f;
     pB_.x += ruido(t * .9, 3) * .012 * env + sh * .018; pB_.y += ruido(t * .8, 5) * .01 * env + sh * .012;
-    for (const b of golpesF) fov -= 5 * E.out3(seg(t, b.t - .03, b.t + .05)) * (1 - E.io2(seg(t, b.t + .05, b.t + .55)));
+    for (const b of golpesF) fov -= 2 * E.out3(seg(t, b.t - .03, b.t + .05)) * (1 - E.io2(seg(t, b.t + .05, b.t + .55)));
     cam.position.copy(pB_); cam.lookAt(mB_); if (cam.fov !== fov) { cam.fov = fov; cam.updateProjectionMatrix(); }
   }
 
@@ -565,18 +572,21 @@ export default async function (datos, plan) {
   function subrayado(t) { let j = -1; for (let i = 0; i < P.length; i++) if (t >= P[i].t - .03) j = i; raizCss.setProperty('--u', (j < 0 ? 1 : E.out3(clamp((t - P[j].t + .03) / .18))).toFixed(3)); }
 
   // ── cuadro a cuadro ───────────────────────────────────────────────────────
-  const atG = gF.attributes.aG, atA = gF.attributes.aAng, atL = gF.attributes.aLit, gArr = atG.array, angArr = atA.array, litArr = atL.array;
+  const atO = gF.attributes.aOff, offArr = atO.array, atG = gF.attributes.aG, atA = gF.attributes.aAng, atL = gF.attributes.aLit, gArr = atG.array, angArr = atA.array, litArr = atL.array;
   const cBr = new THREE.Color(0xFFE6C8);
   function update(t) {
     const apg = apgEn(t);
     camara(t);
     // cartel: paletas, fila activa y luces de estado
     let jb = -1; for (let i = 0; i < NB; i++) if (t >= beats[i].t - .12) jb = i; if (t >= tR) jb = -1;
-    const a0 = jb >= 0 ? 0 : -9, a1 = jb >= 0 ? beats[jb].nl : -9;
-    const llenas = jb >= 0 ? Math.min(NV, beats[jb].l0 + beats[jb].nl) : 0;
-    for (let ci = 0; ci < NC; ci++) { const ce = celdas[ci], [A, B, an] = estadoCelda(ce, t);
-      const lit = (ce.zona === 'L' || ce.zona === 'N') ? (ce.r >= a0 && ce.r < a1 ? 1.07 : .8 * lerp(.25, 1, apg)) : ce.zona === 'F' ? lerp(.4, 1, apg) : lerp(.3, 1, apg);
-      for (let q = 0; q < 3; q++) { const j = ci * 3 + q; gArr[j * 2] = A; gArr[j * 2 + 1] = B; angArr[j] = an; litArr[j] = lit; } }
+    const a0 = jb >= 0 ? 0 : -9, a1 = jb >= 0 && t > beats[jb].t - .18 ? beats[jb].nl : -9;
+    let llenas = 0; for (let l = 0; l < lineas.length; l++) { const b = beats[lineas[l].beat]; if (t >= b.t - .12 && t < tR + .6) llenas = Math.max(llenas, Math.min(NV, Math.ceil(filaLinea(l, t) + .5))); }
+    for (let ci = 0; ci < NC; ci++) { const ce = celdas[ci], [A, B, an] = estadoCelda(ce, t); let lit, y = null;
+      if (ce.zona === 'LN') { const b = beats[lineas[ce.l].beat], r = filaLinea(ce.l, t), vis = t >= b.t - .2 && t < tR + .8 && r < NV + .02; y = vis ? filaY(r) : -50;
+        lit = lineas[ce.l].beat === jb ? 1.07 : .8 * lerp(.25, 1, apg); }
+      else if (ce.zona === 'S') lit = .8 * lerp(.25, 1, apg); else if (ce.zona === 'F') lit = lerp(.4, 1, apg); else lit = lerp(.3, 1, apg);
+      for (let q = 0; q < 3; q++) { const j = ci * 3 + q; gArr[j * 2] = A; gArr[j * 2 + 1] = B; angArr[j] = an; litArr[j] = lit; if (y !== null) offArr[j * 3 + 1] = y; } }
+    atO.needsUpdate = true;
     atG.needsUpdate = atA.needsUpdate = atL.needsUpdate = true;
     leds.forEach((l, r) => { const act = r >= a0 && r < a1; l.material.emissiveIntensity = act ? 3.2 + 1.3 * Math.sin(t * 9) : r < llenas ? .45 * lerp(.4, 1, apg) : 0; });
     // objetos
@@ -594,7 +604,7 @@ export default async function (datos, plan) {
       const alt = Math.min(1, o.dy / 1.6); it.sm.scale.setScalar(ud.ancho * 1.35 * s * (1 - .4 * alt)); it.sm.material.opacity = .5 * o.pres * (1 - .7 * alt) * Math.min(1, s / OS);
     }
     // marcas sobre la fila (tachado, sello)
-    for (const mc of marcas) { const b = beats[mc.i], r = jb >= mc.i ? filaDe(mc.i, jb) : -9, vis = t >= mc.t0 && t < tR + .08 && r >= 0 && r + b.nl <= NV; mc.m.visible = vis; if (!vis) continue;
+    for (const mc of marcas) { const b = beats[mc.i], r = filaLinea(b.l0, t), vis = t >= mc.t0 && t < tR + .08 && r + b.nl <= NV + .01; mc.m.visible = vis; if (!vis) continue;
       const y = filaY(r + (b.nl - 1) / 2);
       if (mc.tipo === 'tachar') { const L = LP * Math.min(LT, b.len) + .08, k = E.out3(seg(t, mc.t0, mc.t0 + .28)); mc.m.scale.x = Math.max(.001, L * k); mc.m.position.set(x0 + LP * 2 - .04 + L * k / 2, y, zB + .2); }
       else { const k = seg(t, mc.t0, mc.t0 + .18), x = Math.min(x0 + LP * (2 + Math.min(LT, b.len)) + .24, IW / 2 - .2); mc.m.position.set(x, y, zB + .22); mc.m.scale.setScalar(Math.max(.001, lerp(2.6, 1, E.outExpo(k)))); mc.m.rotation.set(0, 0, mc.rz * (1 - k) * 2 + mc.rz); } }

@@ -140,11 +140,9 @@ export default async function (datos, planIn) {
     const ps = new THREE.Mesh(new THREE.PlaneGeometry(80, 80), new THREE.MeshBasicMaterial({color: 0x01030c})); ps.rotation.x = -Math.PI / 2; ps.position.y = -.05; es.add(ps);
     const pm = new THREE.PMREMGenerator(R); scene.environment = pm.fromScene(es, .03).texture; pm.dispose(); }
 
-  // ── luces directas ───────────────────────────────────────────────────────
+  // ── luces directas (el contorno azul lo dan las tiras del entorno: una direccional sobre la laca deja destellos que el bloom vuelve cuadrados) ──
   const key = new THREE.DirectionalLight(0xffffff, 1.0); key.position.set(2, 9, 5); scene.add(key);
-  const rimA = new THREE.DirectionalLight(0x207CCF, .8); rimA.position.set(-7, .9, -6); scene.add(rimA);
-  const rimB = new THREE.DirectionalLight(0x8fc4ff, .6); rimB.position.set(7, .9, -5); scene.add(rimB);
-  const foco = new THREE.SpotLight(0xffffff, 0, 16, .32, .55, 1.2); scene.add(foco, foco.target);
+      const foco = new THREE.SpotLight(0xffffff, 0, 16, .32, .55, 1.2); scene.add(foco, foco.target);
 
   // ── materiales ───────────────────────────────────────────────────────────
   const UB = {uBarr: {value: 0}, uBOff: {value: 0}, uBAnch: {value: .4}, uBDL: {value: 6}, uBC: {value: V3()}, uBN: {value: V3(0, 0, 1)}, uBT: {value: V3(1, 0, 0)}, uBCol: {value: TIRA}};
@@ -155,7 +153,7 @@ export default async function (datos, planIn) {
   const fis = o => laca(new THREE.MeshPhysicalMaterial(o)), std = o => laca(new THREE.MeshStandardMaterial(o));
   const pintura = fis(PINT === 'perla' ? {color: 0xe6ecf4, metalness: .15, roughness: .3, clearcoat: 1, clearcoatRoughness: .035} : {color: NAVY, metalness: .6, roughness: .32, clearcoat: 1, clearcoatRoughness: .03});
   const plastico = new THREE.MeshStandardMaterial({color: 0x07090d, roughness: .5});
-  const vidrio = fis({color: 0x02060e, metalness: 0, roughness: .14, clearcoat: 1, clearcoatRoughness: .09});
+  const vidrio = fis({color: 0x02060e, metalness: 0, roughness: .16, clearcoat: 1, clearcoatRoughness: .16});
   const cromo = std({color: 0xdfe6ef, metalness: 1, roughness: .07});
   const llantaCara = std({color: 0xb4bdca, metalness: 1, roughness: .2});
   const llantaLado = new THREE.MeshStandardMaterial({color: 0x2a2f37, metalness: .9, roughness: .35});
@@ -608,8 +606,8 @@ export default async function (datos, planIn) {
     auto.updateMatrixWorld(true);
 
     // luces
-    scene.environmentIntensity = .1 + .9 * luz + 1.2 * flash;
-    key.intensity = 1.0 * luz + 8 * flash; rimA.intensity = .8 * luz; rimB.intensity = .6 * luz;
+    scene.environmentIntensity = (.1 + .9 * luz) * 1.25 + 1.2 * flash;
+    key.intensity = 1.0 * luz + 8 * flash;
     M.bloom.strength = .42 + .5 * flash; M.cine.uniforms.flash.value = Math.min(.6, flash * .55);
 
     // pedestal y objetos
