@@ -2,9 +2,9 @@
 // Todo es función del tiempo: window.render(t). Recursos: karaoke palabra por palabra, contador que avanza, cartas que se abren,
 // cortes de cámara cada 1,5–3 s, luz de cine con desenfoque de miniatura (tilt-shift) y empalme del último cuadro con el primero (ffmpeg).
 import {clamp, lerp, win, easeOut, easeIn, ease, backOut, expoOut, hash} from '../../historia/base.js';
-import {ICONOS} from './iconos.js';
+import {ICONOS, elegirIcono} from './iconos.js';
 const q = new URLSearchParams(location.search); const ID = q.get('id');
-const P = await (await fetch(`../trabajo/${ID}/plan.json`)).json(); const R = P.receta, pal = R.pal, T = P.T;
+const P = await (await fetch(`trabajo/${ID}/plan.json`)).json(); const R = P.receta, pal = R.pal, T = P.T;
 await document.fonts.ready; for (const f of ['800 40px Manrope', '700 40px "Playfair Display"', '800 40px Inter']) await document.fonts.load(f);
 const $ = s => document.querySelector(s); const rs = document.documentElement.style;
 Object.entries({'--ink': pal.ink, '--acc': pal.acc, '--onacc': pal.onacc, '--card': pal.card, '--cardInk': pal.cardInk, '--subStroke': pal.subStroke, '--pill': pal.pill, '--pillInk': pal.pillInk, '--ft': `'${R.ft}'`, '--fs': `'${R.fs}'`, '--vin': R.vin ?? .4, '--fw': R.fw ?? 800}).forEach(([k, v]) => rs.setProperty(k, v));
@@ -35,7 +35,7 @@ $('#luz').innerHTML = `<svg width="${W}" height="${H}"><defs><radialGradient id=
 $('#bok').innerHTML = `<svg width="${W}" height="${H}" style="mix-blend-mode:screen;filter:blur(7px)"><g id="bokm">${[...Array(16)].map((_, i) => `<circle cx="${hash(i) * W}" cy="${200 + hash(i * 3) * 1700}" r="${30 + hash(i + 7) * 70}" fill="${i % 2 ? pal.acc : pal.luz}" opacity="${.1 + hash(i + 5) * .16}"/>`).join('')}</g></svg><svg width="${W}" height="${H}" style="position:absolute;left:0;top:0"><g id="polvo">${[...Array(26)].map((_, i) => `<circle r="${1.6 + hash(i + 70) * 3}" fill="${pal.luz}"/>`).join('')}</g></svg>`;
 const haces = $('#haces'), bokm = $('#bokm'), polvo = [...$('#polvo').children];
 // ---------- beats: objeto + título ----------
-const B = P.beats; const N = B.length;
+const B = P.beats; const N = B.length; { const us = []; B.forEach((b, i) => { if (!b.icono) { b.icono = elegirIcono(b.texto + ' ' + (b.voz || '') + (i === 0 ? ' ' + (P.escena || '') : ''), us); } us.push(b.icono); if (i === 0 && P.escena) { const o2 = elegirIcono(P.escena, [b.icono]); if (o2 !== b.icono && /papel|auto|choque|celu|carta|llave|ticket|plata|local|camara/.test(o2)) b.icono2 = o2; } }); }
 function escenaBeat(b, i) {
   const ic = ICONOS[b.icono] || ICONOS.alerta; let s = '';
   if (i === 0) { // diorama: baldosa, edificios, cartel de calle con el lugar, objeto héroe y silueta
@@ -87,7 +87,7 @@ function aplicar(el, e, q) {
   el.style.opacity = (e.o ?? 1) * (q ? 1 - q : 1); el.style.transform = `translate(${x}px,${y}px) scale(${s * sx},${s})`; el.style.clipPath = e.clip ? `inset(0 0 ${e.clip}% 0)` : 'none';
 }
 // ---------- subtítulos karaoke ----------
-const grupos = []; { let cur = []; const W2 = P.words; W2.forEach((w, i) => { const len = cur.map(x => x.w).join(' ').length + w.w.length; const corte = R.sub === 'grande' ? 1 : 4; if (cur.length >= corte || (cur.length && len > 22)) { grupos.push(cur); cur = []; } cur.push(w); if (/[.?!:]$/.test(w.w)) { grupos.push(cur); cur = []; } }); if (cur.length) grupos.push(cur); }
+const grupos = []; { let cur = []; const W2 = P.words; W2.forEach((w, i) => { const len = cur.map(x => x.w).join(' ').length + w.w.length; const corte = R.sub === 'grande' ? 1 : 4; if (cur.length >= corte || (cur.length && len > 22)) { grupos.push(cur); cur = []; } cur.push(w); if (/[.?!:]$/.test(w.p || w.w)) { grupos.push(cur); cur = []; } }); if (cur.length) grupos.push(cur); }
 function subs(t) {
   let html = '';
   for (let gi = 0; gi < grupos.length; gi++) { const g = grupos[gi], a = g[0].t - .04, b = gi + 1 < grupos.length ? grupos[gi + 1][0].t - .04 : g[g.length - 1].e + .35;
