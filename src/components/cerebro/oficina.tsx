@@ -134,7 +134,7 @@ export function Oficina({
       if (!r.ok) throw new Error(d?.error || "No se pudo guardar la tarea.");
       const ruta: Area[] = d?.tarea?.ruta ?? [];
       const cuantas = Array.isArray(d?.tareas) ? d.tareas.length : 1;
-      const siguiente = disparo?.conectado ? "Tocá «Arrancar ahora» para Claude o «Que lo haga Gemini» en la tarea." : "Claude todavía no está conectado: usá «Que lo haga Gemini» en la tarea o escribí «oficina» en un chat de Claude del proyecto.";
+      const siguiente = disparo?.conectado ? "Tocá «Arrancar ahora» para Claude o «Que lo haga Gemini» en la tarea." : "Claude todavía no está conectado: tocá «Arrancar ahora» y la resuelve Gemini.";
       setAviso({
         tipo: "ok",
         texto: d?.rapida
@@ -285,7 +285,7 @@ export function Oficina({
           </small>
           {disparo && !disparo.conectado && (
             <small className="cz-err" role="status">
-              {TEXTO_SIN_CLAUDE} Mientras tanto podés usar «Que lo haga Gemini» en cada tarea, o escribir «oficina» en un chat de Claude del proyecto.
+              Claude todavía no está conectado: si tocás «Arrancar ahora», las tareas las resuelve Gemini (varias respuestas y un juez). Las de código, publicación o envío quedan para Claude.
             </small>
           )}
           {arranque && (

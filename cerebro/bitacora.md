@@ -212,3 +212,10 @@ description: Diario de sesiones y aprendizajes. Lo más nuevo arriba. Una entrad
 ## 27/11 · Arranca la ejecución del plan (9:00)
 - Flujo en segundo plano con fase 0 y fases A1 a A8, cada una en su copia (`/home/user/p27/`) y con revisor de otro modelo. Nada publicado todavía.
 - Regla del dueño: hay campañas corriendo, no se pausan ni se tocan. Traspaso en `traspaso-sesion-2026-11-27-ejecucion.md`.
+
+## 27/11 · Oficina publicada (tanda A1)
+
+- Publicado en producción (commit `c3c60b4` y el ajuste de textos siguiente): alcance sin límites al dejar una tarea, tablero de colas, «Que lo haga Gemini» con arena (3 respuestas y un juez por defecto) y «Arrancar ahora» que usa Gemini cuando Claude no tiene disparo (orden del dueño).
+- Migraciones 0651 y 0652 aplicadas. Campañas comprobadas antes y después: 2 en curso y enviando.
+- Comprobado en producción en solo lectura: la Oficina carga, Claude figura sin conectar y Gemini lleva USD 1,87 de 30. No se probó una corrida real de Gemini (gasta del tope y lo pide el dueño).
+- Sigue en segundo plano el resto de las tandas (A2 a A8), de a dos por vez.
