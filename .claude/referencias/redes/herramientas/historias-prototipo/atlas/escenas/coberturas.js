@@ -665,7 +665,7 @@ export default async function (datos, plan) {
     luces(t); bloques.forEach(B => animBloque(B, ts));
     conObjeto.forEach(g => animObjeto(g, ts, t)); animEfectosGlobales(ts, t);
     animPersonaje(ts, borde); animContador(ts); camara(t); sombrasUpd();
-    kar(t); M.cine.uniforms.t.value = (t > T - .12 ? 0 : t) * 11.7; M.comp.render();
+    kar(t > T - .12 ? 0 : t); M.cine.uniforms.t.value = (t > T - .12 ? 0 : t) * 11.7; M.comp.render();   // en los últimos 0,12 s todo vuelve al cuadro 1 (loop exacto)
   }
   console.log('LOG coberturas armada en', Math.round(performance.now() - t00), 'ms ·', glifos.size, 'glifos ·', golpes.length, 'golpes');
   return {update, total: T, eventos: ev};

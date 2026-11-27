@@ -142,7 +142,7 @@ export default async function (datos, planIn) {
     const pm = new THREE.PMREMGenerator(R); scene.environment = pm.fromScene(es, .03).texture; pm.dispose(); }
 
   // ── luces directas ───────────────────────────────────────────────────────
-  const key = new THREE.DirectionalLight(0xffffff, 1.3); key.position.set(2, 9, 5); scene.add(key);
+  const key = new THREE.DirectionalLight(0xffffff, 1.0); key.position.set(2, 9, 5); scene.add(key);
   const rimA = new THREE.DirectionalLight(0x207CCF, 2.2); rimA.position.set(-7, 3, -6); scene.add(rimA);
   const rimB = new THREE.DirectionalLight(0x8fc4ff, 1.5); rimB.position.set(7, 2.5, -5); scene.add(rimB);
   const foco = new THREE.SpotLight(0xffffff, 0, 16, .32, .55, 1.2); scene.add(foco, foco.target);
@@ -156,7 +156,7 @@ export default async function (datos, planIn) {
   const fis = o => laca(new THREE.MeshPhysicalMaterial(o)), std = o => laca(new THREE.MeshStandardMaterial(o));
   const pintura = fis(PINT === 'perla' ? {color: 0xe6ecf4, metalness: .15, roughness: .3, clearcoat: 1, clearcoatRoughness: .035} : {color: NAVY, metalness: .6, roughness: .32, clearcoat: 1, clearcoatRoughness: .03});
   const plastico = new THREE.MeshStandardMaterial({color: 0x07090d, roughness: .5});
-  const vidrio = fis({color: 0x02060e, metalness: 0, roughness: .04, clearcoat: 1, clearcoatRoughness: .01});
+  const vidrio = fis({color: 0x02060e, metalness: 0, roughness: .14, clearcoat: 1, clearcoatRoughness: .09});
   const cromo = std({color: 0xdfe6ef, metalness: 1, roughness: .07});
   const llantaCara = std({color: 0xb4bdca, metalness: 1, roughness: .2});
   const llantaLado = new THREE.MeshStandardMaterial({color: 0x2a2f37, metalness: .9, roughness: .35});
@@ -357,20 +357,21 @@ export default async function (datos, planIn) {
     } else if (tipo === 'poliza' || tipo === 'documento') {
       const tabla = new THREE.Mesh(new RoundedBoxGeometry(.64, .86, .035, 3, .03), lacaNavy); tabla.position.set(0, .45, 0); pieza(tabla, [0, 0, -.28], 'CARPETA');
       const hg = new THREE.PlaneGeometry(.56, .76, 8, 8); { const p = hg.attributes.position; for (let i = 0; i < p.count; i++) p.setZ(i, .012 * Math.pow(p.getX(i) / .28, 2)); hg.computeVertexNormals(); }
-      const tx = hojaTx(tipo); const hoja = new THREE.Mesh(hg, new THREE.MeshStandardMaterial({map: tx, roughness: .5, emissive: 0xffffff, emissiveMap: tx, emissiveIntensity: .22})); hoja.position.set(0, .43, .022);
+      const tx = hojaTx(tipo); const hoja = new THREE.Mesh(hg, new THREE.MeshStandardMaterial({map: tx, roughness: .5, emissive: 0xffffff, emissiveMap: tx, emissiveIntensity: .07})); hoja.position.set(0, .43, .022);
       pieza(hoja, [0, .08, .25], tipo === 'poliza' ? 'PÓLIZA' : 'HOJA');
-      const clip = new THREE.Mesh(new RoundedBoxGeometry(.26, .08, .05, 2, .02), cromo); clip.position.set(0, .86, .03); pieza(clip, [0, .35, .1], 'CLIP');
+      const clip = new THREE.Mesh(new RoundedBoxGeometry(.26, .08, .05, 2, .02), cromo); clip.position.set(0, .86, .03); pieza(clip, [0, .22, .1], 'CLIP');
       alto = .9; det.set(-.12, .375, .04);
     } else if (tipo === 'celular') {
       const cu = new THREE.Mesh(new RoundedBoxGeometry(.44, .88, .055, 4, .065), titanio); cu.position.set(0, .45, 0); pieza(cu, [0, 0, -.25], 'EQUIPO');
       const pa = new THREE.Mesh(new THREE.PlaneGeometry(.405, .845), new THREE.MeshBasicMaterial({map: pantallaTx(), transparent: true, color: new THREE.Color(1.3, 1.3, 1.3)})); pa.position.set(0, .45, .0285); pieza(pa, [0, 0, .28], 'PANTALLA');
       alto = .9; det.set(.07, .33, .03);
     } else if (tipo === 'llave') {
-      const fob = new THREE.Mesh(new RoundedBoxGeometry(.26, .46, .09, 4, .085), negroLaca); fob.position.set(0, .3, 0); pieza(fob, [0, 0, -.22], 'CUERPO');
+      const fob = new THREE.Mesh(new RoundedBoxGeometry(.26, .46, .09, 4, .085), lacaPerla); fob.position.set(0, .3, 0); pieza(fob, [0, 0, -.22], 'CUERPO');
+      const cara = new THREE.Mesh(new RoundedBoxGeometry(.2, .36, .02, 3, .05), negroLaca); cara.position.set(0, .3, .04); fob.attach(cara);
       const tapa = new THREE.Mesh(new RoundedBoxGeometry(.27, .1, .096, 3, .04), cromo); tapa.position.set(0, .56, 0); pieza(tapa, [0, .2, 0], 'TAPA');
       const aro = new THREE.Mesh(new THREE.TorusGeometry(.075, .016, 12, 40), cromo); aro.position.set(0, .68, 0); pieza(aro, [0, .42, 0], 'ARO');
       const bot = new THREE.Group(); [.4, .29, .18].forEach((y, i) => { const m = new THREE.Mesh(new THREE.CylinderGeometry(.042, .042, .014, 24), i === 0 ? botonAzul : titanio); m.rotation.x = Math.PI / 2; m.position.set(0, y, .047); bot.add(m); });
-      pieza(bot, [0, 0, .3], 'BOTONES'); alto = .76; det.set(0, .4, .06);
+      bot.position.z = .006; pieza(bot, [0, 0, .3], 'BOTONES'); g.userData.escala = 1.25; alto = .95; det.set(0, .4, .06);
     } else if (tipo === 'candado') {
       const cu = new THREE.Mesh(new RoundedBoxGeometry(.5, .42, .22, 4, .07), lacaNavy); cu.position.set(0, .21, 0); pieza(cu, [0, -.12, 0], 'CUERPO');
       const arco = new THREE.Group(); const t0 = new THREE.Mesh(new THREE.TorusGeometry(.15, .036, 16, 48, Math.PI), cromo); t0.position.y = .52; arco.add(t0);
@@ -379,7 +380,7 @@ export default async function (datos, planIn) {
     } else if (tipo === 'almanaque') {
       const num = (String(b.texto).match(/\d{1,2}/) || [String(1 + Math.floor(hash(b.i + 3) * 28))])[0];
       const atras = new THREE.Mesh(new RoundedBoxGeometry(.62, .72, .05, 3, .03), lacaNavy); atras.position.set(0, .38, -.02); pieza(atras, [0, 0, -.25], 'BASE');
-      const tx = almTx(num); const hj = new THREE.Mesh(new THREE.PlaneGeometry(.56, .62), new THREE.MeshStandardMaterial({map: tx, roughness: .5, emissive: 0xffffff, emissiveMap: tx, emissiveIntensity: .2})); hj.position.set(0, .35, .008); pieza(hj, [0, 0, .25], 'DÍA');
+      const tx = almTx(num); const hj = new THREE.Mesh(new THREE.PlaneGeometry(.56, .62), new THREE.MeshStandardMaterial({map: tx, roughness: .5, emissive: 0xffffff, emissiveMap: tx, emissiveIntensity: .07})); hj.position.set(0, .35, .008); pieza(hj, [0, 0, .25], 'DÍA');
       const an = new THREE.Group(); for (const s of [-1, 1]) { const a = new THREE.Mesh(new THREE.TorusGeometry(.04, .009, 8, 24), cromo); a.position.set(s * .17, .7, 0); a.rotation.y = Math.PI / 2; an.add(a); } pieza(an, [0, .25, 0], 'ANILLOS');
       alto = .76; det.set(0, .4, .02);
     } else if (tipo === 'velocimetro') {
@@ -472,7 +473,7 @@ export default async function (datos, planIn) {
     frente: {target: [.25, .64, 0], az: AZ0 + lado * 30, el: 3.5, dist: distPara(12.8)},
     perfil: {target: [-.1, .72, 0], az: AZ0 - lado * 46, el: 4.5, dist: distPara(17.5)},
     trasera: {target: [-.2, .76, 0], az: AZ0 - lado * 112, el: 7, dist: distPara(16)},
-    alta: {target: [0, 1.0, 0], az: AZ0 - lado * 8, el: 11, dist: distPara(20)},
+    alta: {target: [0, .95, 0], az: AZ0 - lado * 8, el: 7.5, dist: distPara(19.5)},
     rueda: {target: [XF, .45, Math.sign(Math.cos(AZ0 * D2R)) * ZR], az: AZ0 - lado * 18, el: 3, dist: distPara(6.4)}};
   let ultAuto = 'heroe', iObj = 0;
   B.forEach((b, i) => {
@@ -604,7 +605,7 @@ export default async function (datos, planIn) {
 
     // luces
     scene.environmentIntensity = .1 + .9 * luz + 1.2 * flash;
-    key.intensity = 1.3 * luz + 8 * flash; rimA.intensity = 2.2 * luz; rimB.intensity = 1.5 * luz;
+    key.intensity = 1.0 * luz + 8 * flash; rimA.intensity = 2.2 * luz; rimB.intensity = 1.5 * luz;
     M.bloom.strength = .42 + .5 * flash; M.cine.uniforms.flash.value = Math.min(.6, flash * .55);
 
     // pedestal y objetos
@@ -625,7 +626,7 @@ export default async function (datos, planIn) {
         default: s = E.outBack(seg(u, 0, .5)); ry += Math.PI * (1 - E.out3(seg(u, 0, .7))); }
       if (b.efecto === 'sello') { const q = t - (b.t + .42); if (q > 0) { const a = Math.exp(-q / .1) * Math.sin(q * 34) * .1; sy *= 1 - a; sx *= 1 + a * .5; } }
       const sal = E.in3(seg(u, D - .04, D + .22)); s *= 1 - sal; y -= sal * .5;
-      g.position.y = y; g.rotation.set(0, ry, 0); g.scale.set(Math.max(.001, s * sx), Math.max(.001, s * sy), Math.max(.001, s * sx));
+      g.position.y = y; g.rotation.set(0, ry, 0); s *= ud.escala || 1; g.scale.set(Math.max(.001, s * sx), Math.max(.001, s * sy), Math.max(.001, s * sx));
       // despiece del objeto
       const kd = b.efecto === 'despiece' ? E.out3(seg(u, .1, .65)) * (1 - E.io3(seg(u, Math.max(.8, D - .6), Math.max(.8, D - .6) + .45))) : 0;
       ud.partes.forEach((p, i) => p.m.position.copy(p.base).addScaledVector(p.dir, clamp(kd * 1.3 - i * .08)));

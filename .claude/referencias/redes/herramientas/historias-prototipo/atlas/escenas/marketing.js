@@ -356,7 +356,7 @@ export default async function (datos, plan) {
         const tel = new THREE.Group(); tel.position.set(0, .09, -.04); tel.rotation.x = -.16; g.add(tel);
         add(RB(.54, 1.08, .07, .07, 4), M_(mk.tinta), 0, .54, 0, tel);
         const sh = rr(.49, 1.02, .055); pant.repeat.set(1 / .49, 1 / 1.02); pant.offset.set(.5, .5);
-        add(new THREE.ShapeGeometry(sh, 8), M_(() => new THREE.MeshStandardMaterial({map: pant, emissive: 0xffffff, emissiveMap: pant, emissiveIntensity: .55, roughness: .15})), 0, .54, .0365, tel);
+        add(new THREE.ShapeGeometry(sh, 8), M_(() => new THREE.MeshStandardMaterial({map: pant, emissive: 0xffffff, emissiveMap: pant, emissiveIntensity: .28, roughness: .3})), 0, .54, .0365, tel);
         add(RB(.12, .028, .01, .012, 2), M_(() => new THREE.MeshBasicMaterial({color: 0x0a0a0a})), 0, 1.03, .038, tel);
         const insig = lienzo(128, 128, (x) => { x.fillStyle = NARANJA; x.beginPath(); x.arc(64, 64, 62, 0, 7); x.fill(); x.fillStyle = CREMA; x.font = '800 78px Outfit'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(String(contador || 3), 64, 68); });
         const badge = add(new THREE.CircleGeometry(.075, 32), M_(() => new THREE.MeshBasicMaterial({map: insig, transparent: true})), .25, 1.06, .05, tel);
