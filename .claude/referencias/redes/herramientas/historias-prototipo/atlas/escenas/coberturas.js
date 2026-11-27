@@ -403,11 +403,11 @@ export default async function (datos, plan) {
     if (!txt) return null; const pal = txt.split(/\s+/).filter(Boolean), N = pal.length;
     const mejor = n => { let m = 1e9, f = null; const rec = (i, k, acc) => { if (k === 1) { const fs = [...acc, pal.slice(i).join(' ')], mx = Math.max(...fs.map(ancho)); if (mx < m) { m = mx; f = fs; } return; }
       for (let j = i + 1; j <= N - k + 1; j++) rec(j, k - 1, [...acc, pal.slice(i, j).join(' ')]); }; rec(0, n, []); return [f, m]; };
-    const sDe = cap => cap / (capR * pxu), anchoU = anchoPx / pxu, altoU = altoPx / pxu, lhDe = n => n >= 4 ? .86 : n === 3 ? .9 : .96, altoEm = n => .92 + (n - 1) * lhDe(n) + .26; let f = null, s = 0;
-    if (clave && N >= 2 && !txt.includes('«')) { f = [pal.slice(0, -1).join(' '), pal[N - 1]]; s = Math.min(sDe(capMax), anchoU / Math.max(...f.map(ancho)), altoU / altoEm(2)); }   // placa del cierre: «Escribinos por / WhatsApp»
+    const sDe = cap => cap / (capR * pxu), anchoU = anchoPx / pxu, altoU = altoPx / pxu, lhDe = n => n >= 4 ? .86 : n === 3 ? .9 : .96, altoEm = n => .92 + (n - 1) * lhDe(n) + .26; let f = null, s = 0, lhF = null;
+    if (clave && N >= 2 && !txt.includes('«')) { f = [pal.slice(0, -1).join(' '), pal[N - 1]]; lhF = 1.26; s = Math.min(sDe(capMax), anchoU / Math.max(...f.map(ancho)), altoU / (.92 + lhF + .26)); }   // placa del cierre: «Escribinos por / WhatsApp»
     else if (gancho) { for (let n = 1; n <= Math.min(N, 5); n++) { const [fs, m] = mejor(n); const sn = Math.min(sDe(capMax), anchoU / m); if (!f || sn > s) { f = fs; s = sn; } if (sn >= sDe(capMin)) { f = fs; s = sn; break; } } }   // gancho: los renglones que hagan falta para mayúsculas de 110 px
     else for (let n = 1; n <= Math.min(N, 4); n++) { const [fs, m] = mejor(n); const sn = Math.min(sDe(capMax), anchoU / m, altoU / altoEm(n)); if (!f || sn > s * 1.02) { f = fs; s = sn; } }   // golpes: la letra más grande que entre en ancho y alto
-    const lh = lhDe(f.length), letras = [], g = new THREE.Group(); scene.add(g);
+    const lh = lhF ?? lhDe(f.length), letras = [], g = new THREE.Group(); scene.add(g);
     const enClave = [], conComillas = txt.includes('«'); let dentro = false, chapaRel = null;
     f.forEach((fila, r) => { const w = ancho(fila), by = -(.92 + r * lh) * s; let ini = -1;
       for (let i = 0; i < fila.length; i++) { const ch = fila[i]; if (ch === '«') dentro = true; const esC = clave && (conComillas ? dentro : r === f.length - 1 && i > fila.lastIndexOf(' ')); if (ch === '»') dentro = false;
@@ -415,8 +415,8 @@ export default async function (datos, plan) {
         const m = new THREE.Mesh(G.geo, arcilla(esC ? ACENTO : tonos[Math.floor(hash(letras.length + sem) * 3)])); m.visible = false;
         const sh = new THREE.Mesh(planoV, new THREE.MeshBasicMaterial({color: 0x0f362c, alphaMap: G.sombra.tx, transparent: true, depthWrite: false, opacity: 0})); sh.visible = false; sh.renderOrder = 1;
         g.add(m, sh); letras.push({m, sh, x: x0, y: by, dz: esC ? .075 : 0, rz: (hash(sem + letras.length * 1.7) - .5) * .08, ry: (hash(sem + letras.length * 2.3) - .5) * .14, G, s}); }
-      if (ini >= 0 && enClave.length) chapaRel = {x0: ini - s * .18, x1: enClave[enClave.length - 1] + s * .18, y: by + s * .33}; });
-    let chapa = null; if (chapaRel) { const w = chapaRel.x1 - chapaRel.x0, hh = s * 1.05; chapa = pz(losa(rrect(w, hh, hh * .3), .03, .025), HUESO); chapa.visible = false; g.add(chapa); }
+      if (ini >= 0 && enClave.length) chapaRel = {x0: ini - s * .18, x1: enClave[enClave.length - 1] + s * .18, y: by + s * .34}; });
+    let chapa = null; if (chapaRel) { const w = chapaRel.x1 - chapaRel.x0, hh = s * .96; chapa = pz(losa(rrect(w, hh, hh * .3), .03, .025), HUESO); chapa.visible = false; g.add(chapa); }
     return {g, letras, s, chapa, chapaRel, vent: [], hB: (.92 + (f.length - 1) * lh + .26) * s, top, ox: 0, oy: 0, filas: f};
   }
   function animBloque(B, ts) {
@@ -495,6 +495,13 @@ export default async function (datos, plan) {
   // cada texto se centra en el cuadro con la cámara que va a tener cuando se lea
   const ubicar = (B, t) => { if (!B) return; ponerCam(camT, estado(t)); B.oy = paredY(camT, B.top); B.ox = paredX(camT, 540, B.oy - B.hB / 2); };
   ubicar(bGancho, 0); golpes.forEach(g => ubicar(g.bl, g.cambio + .45)); ubicar(bCierre, tCierre + .45);
+  if (cont) { const wMax = Math.max(.5, ...conObjeto.map(g => g.o.w)), zc = cont.g.position.z;
+    const ks = claves.filter(([t]) => conObjeto.some(g => t >= g.ini && t < g.sal)).map(c => c[1]); ks.push(C0);
+    const entra = (x0, k) => ks.every(st => { ponerCam(camT, st); const ob = pant(camT, HX + S * wMax / 2, .35, HZ)[0];
+      const d1 = pant(camT, x0 - S * .12 * k, .25 * k, zc)[0], dn = pant(camT, x0 + S * ((nCont - 1) * .205 + .13) * k, .3 * k, zc)[0];
+      return S > 0 ? d1 >= ob + 14 && dn <= 975 : d1 <= ob - 14 && dn >= 105; });
+    let el = null; busca: for (let k = .88; k >= .46; k -= .03) for (let x0 = .3; x0 <= 1.3; x0 += .02) if (entra(S * x0, k)) { el = [S * x0, k]; break busca; }
+    if (!el) el = [S * .62, .46]; cont.g.position.x = el[0]; cont.g.scale.setScalar(el[1]); console.log('LOG contador x', el[0].toFixed(2), 'escala', el[1].toFixed(2)); }
   const impactos = golpes.filter(g => g.efecto === 'golpe' || g.efecto === 'caida').map(g => [g.t, g.efecto === 'golpe' ? 1 : .45, g.px, g.pz]);
   const lupas = golpes.filter(g => g.efecto === 'lupa' && g.o);
   const envBorde = t => seg(t, 0, .5) * (1 - seg(t, T - .6, T - .12));
