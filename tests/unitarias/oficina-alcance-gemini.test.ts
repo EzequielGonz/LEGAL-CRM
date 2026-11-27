@@ -7,8 +7,14 @@ import { claseDePalabras, claseFinal, puedeGemini } from "@/lib/oficina/clases";
 import {
   CANDIDATOS_POR_DEFECTO,
   MAX_CANDIDATOS_OFICINA,
+  MAX_CANDIDATOS_POR_CORRIDA,
+  SEGUNDOS_LIMITE_CANDIDATO,
+  SEGUNDOS_LIMITE_JUEZ,
+  SEGUNDOS_PLAZO_ARENA,
   TOPE_GASTO_POR_TAREA_USD,
   correrArena,
+  entraOtraTanda,
+  type GastoTanda,
   enfoqueDeCandidato,
   leerVeredicto,
   limpiarSalida,
@@ -32,9 +38,11 @@ import {
   leerTriaje,
   promptTriaje,
   puedeAprobar,
+  resultadoAlPedirCambios,
   textoDeAlcance,
   type TareaOficina,
 } from "@/lib/oficina/reglas";
+import { avisoFinal, avisoSinAptas, pideGemini, repartoParaGemini } from "@/lib/oficina/arranque-cliente";
 import { MAX_CANDIDATOS_ARENA } from "@/lib/arena";
 
 const PRECIOS = { precioEntradaMillon: 0.3, precioSalidaMillon: 2.5 };
@@ -139,7 +147,7 @@ test("planArena nunca pasa lo que queda del mes ni el freno por tarea", () => {
   assert.equal(holgado.n, 3);
   assert.equal(holgado.aviso, null);
   const cien = planArena({ pedidos: 101, restanteMesUsd: 20, promptEjemplo: prompt, precios: PRECIOS });
-  assert.ok(cien.n >= 1 && cien.n <= 101);
+  assert.ok(cien.n >= 1 && cien.n <= MAX_CANDIDATOS_POR_CORRIDA, "27/11: hasta 20 por corrida por el tiempo de la función");
   assert.ok(cien.n * cien.costoCandidatoUsd + cien.costoJuezUsd <= TOPE_GASTO_POR_TAREA_USD + 1e-9, "100 respuestas solo si entran en el freno por tarea");
   const justo = planArena({ pedidos: 50, restanteMesUsd: 0.02, promptEjemplo: prompt, precios: PRECIOS });
   assert.ok(justo.n < 50);
@@ -355,4 +363,78 @@ test("filaATareaOficina lee los campos nuevos y sigue tolerando filas viejas", (
 test("leerTriaje toma la clase de Gemini si es válida", () => {
   assert.equal(leerTriaje('{"titulo":"x","ruta":["redes"],"plan":"","clase":"analisis"}', "x").clase, "analisis");
   assert.equal(leerTriaje('{"titulo":"x","ruta":["redes"],"plan":"","clase":"hackear"}', "x").clase, null);
+});
+
+// --- 27/11 (auditoría): tiempo de la función, gasto por tanda y plan B del arranque ---
+
+test("arena: hasta 20 respuestas por corrida y aviso de que se recortó", () => {
+  assert.equal(MAX_CANDIDATOS_POR_CORRIDA, 20);
+  assert.ok(SEGUNDOS_PLAZO_ARENA + 30 <= 300, "deja margen dentro de los 300 s de la función");
+  const prompt = "x".repeat(350);
+  const barato = PRECIOS;
+  const cien = planArena({ pedidos: 101, restanteMesUsd: 20, promptEjemplo: prompt, precios: barato });
+  assert.equal(cien.n, 20);
+  assert.match(cien.aviso ?? "", /hasta 20 por corrida/);
+  assert.equal(planArena({ pedidos: 20, restanteMesUsd: 20, promptEjemplo: prompt, precios: barato }).aviso, null);
+});
+
+test("arena: una tanda nueva arranca solo si entran ella y el juez antes del plazo", () => {
+  const plazo = SEGUNDOS_PLAZO_ARENA * 1000;
+  const margen = (SEGUNDOS_LIMITE_CANDIDATO + SEGUNDOS_LIMITE_JUEZ) * 1000;
+  assert.equal(entraOtraTanda(0), true);
+  assert.equal(entraOtraTanda(plazo - margen), true);
+  assert.equal(entraOtraTanda(plazo - margen + 1), false);
+});
+
+test("arena: registra el gasto por tanda y corta las tandas que no entran en el tiempo", async () => {
+  const { gen, llamadas } = simulado({}, '{"puntajes":[{"id":"R1","puntaje":8},{"id":"R2","puntaje":6}]}');
+  const gastos: GastoTanda[] = [];
+  let t = 0;
+  // Cada consulta al reloj avanza 70 s: la segunda tanda ya no entra.
+  const reloj = () => (t += 70_000) - 70_000;
+  const avances: string[] = [];
+  const r = await correrArena(ENTRADA, 20, gen, { precios: PRECIOS, modelo: "s", pedidos: 20, reloj, alGastar: (g) => void gastos.push(g), alAvanzar: (x) => void avances.push(x) });
+  assert.equal(llamadas.filter((l) => l.tipo === "candidato").length, 10);
+  assert.equal(r.arena.corridos, 10);
+  assert.equal(r.recortadas, 10);
+  assert.match(avances[0], /10 no entraron en el tiempo/);
+  assert.deepEqual(gastos.map((g) => g.tipo), ["candidatos", "juez"]);
+  assert.equal(gastos[0].llamadas, 10);
+  assert.ok(Math.abs(gastos.reduce((a, g) => a + g.costoUsd, 0) - r.costoUsd) < 1e-9, "lo registrado por tanda suma el total");
+
+  const sinApuro = simulado({}, '{"puntajes":[{"id":"R1","puntaje":8}]}');
+  const g2: GastoTanda[] = [];
+  const r2 = await correrArena(ENTRADA, 12, sinApuro.gen, { precios: PRECIOS, modelo: "s", pedidos: 12, reloj: () => 0, alGastar: (g) => void g2.push(g) });
+  assert.equal(r2.recortadas, 0);
+  assert.deepEqual(g2.map((g) => [g.tipo, g.llamadas]), [["candidatos", 10], ["candidatos", 2], ["juez", 1]]);
+});
+
+test("pedir cambios: el resultado viejo no queda como vigente y nada se borra", () => {
+  const ahora = new Date("2026-11-27T15:00:00Z");
+  assert.equal(resultadoAlPedirCambios("Texto de Gemini", "Texto de Gemini", ahora), null, "lo de Gemini sigue en resultado_gemini");
+  const deClaude = resultadoAlPedirCambios("Informe de Claude", null, ahora)!;
+  assert.match(deClaude, /^Versión anterior \(pidieron cambios el 27\/11; no es la entrega vigente\)/);
+  assert.match(deClaude, /Informe de Claude$/);
+  assert.equal(resultadoAlPedirCambios(deClaude, null, ahora), deClaude, "no se marca dos veces");
+  assert.equal(resultadoAlPedirCambios(null, null, ahora), null);
+});
+
+test("arrancar sin Claude: Gemini toma solo lo que puede y avisa claro", () => {
+  assert.equal(pideGemini(503), true);
+  assert.equal(pideGemini(502), true);
+  assert.equal(pideGemini(429), false);
+  assert.equal(pideGemini(200), false);
+  const { aptas, soloClaude } = repartoParaGemini([
+    { id: "1", estado: "pendiente", clase: "texto" },
+    { id: "2", estado: "en_espera", clase: null },
+    { id: "3", estado: "pendiente", clase: "codigo" },
+    { id: "4", estado: "lista", clase: "texto" },
+    { id: "5", estado: "en_curso", clase: "analisis" },
+  ]);
+  assert.deepEqual(aptas.map((t) => t.id), ["1", "2"]);
+  assert.equal(soloClaude, 1);
+  assert.match(avisoSinAptas(1).texto, /la tarea que espera es de código/);
+  assert.equal(avisoFinal(2, 2, 1, "").tipo, "ok");
+  assert.match(avisoFinal(2, 2, 1, "").texto, /Gemini resolvió 2 de 2.*1 queda para Claude/);
+  assert.equal(avisoFinal(0, 2, 0, "falló").tipo, "err");
 });

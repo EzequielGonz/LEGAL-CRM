@@ -2,10 +2,12 @@ import { GoogleGenAI } from "@google/genai";
 import { identificadorModelo } from "@/lib/agentes/modelo";
 import { createAdminClient } from "@/lib/supabase/admin";
 import type { Alcance } from "@/lib/alcance";
-import { chequearTopeGemini, leerConfigPresupuesto, leerGastoGemini } from "@/lib/presupuesto/servidor";
+import { chequearTopeGemini, leerConfigPresupuesto, leerGastoGemini, leerGastoGeminiConCache } from "@/lib/presupuesto/servidor";
 import { costoEstimadoUsd, evaluarPresupuesto } from "@/lib/presupuesto/reglas";
 import { claseFinal, puedeGemini } from "@/lib/oficina/clases";
 import {
+  SEGUNDOS_LIMITE_CANDIDATO,
+  SEGUNDOS_LIMITE_JUEZ,
   correrArena,
   normalizarCandidatos,
   planArena,
@@ -165,7 +167,8 @@ export function disparoConectado(env: Record<string, string | undefined> = proce
 
 export async function estadoGemini(): Promise<EstadoGemini | null> {
   try {
-    const { config, gasto } = await leerGastoGemini();
+    // 27/11: con la memoria de un minuto; la Oficina consulta cada 8 s.
+    const { config, gasto } = await leerGastoGeminiConCache();
     const porcentaje = Math.round((gasto.mesUsd / config.mensualUsd) * 1000) / 10;
     const estado = gasto.mesUsd >= config.mensualUsd ? "tope_mes" : gasto.mesUsd >= config.mensualUsd * config.avisoFraccion ? "aviso" : "libre";
     return { mesUsd: Math.round(gasto.mesUsd * 100) / 100, mensualUsd: config.mensualUsd, porcentaje, estado };
@@ -187,24 +190,33 @@ export async function leerOficina(): Promise<LecturaOficina | null> {
     const db = createAdminClient();
     // Cerradas: las de la Oficina y cualquier otra que haya ejecutado alguien desde acá
     // (una tarea de la Bandeja que pasó por Gemini tiene que verse en «Para repasar»).
+    // 27/11 (auditoría): las «lista» sin decisión (esperan el OK o el repaso) van en
+    // una consulta aparte: antes compartían el límite de 40 con las cerradas y,
+    // con muchas cerradas recientes, una entrega pendiente podía no verse.
+    const cerradasDe = (cols: string, conEjecutor: boolean) =>
+      conEjecutor
+        ? db.from("bandeja_claude" as any).select(cols).or("origen.eq.oficina,ejecutor.not.is.null")
+        : db.from("bandeja_claude" as any).select(cols).eq("origen", "oficina");
     const consultar = (cols: string, conEjecutor: boolean) =>
       Promise.all([
         db.from("bandeja_claude" as any).select(cols).in("estado", ["pendiente", "en_curso", "en_espera"]).order("created_at", { ascending: true }).limit(80),
-        (conEjecutor
-          ? db.from("bandeja_claude" as any).select(cols).in("estado", ["lista", "descartada"]).or("origen.eq.oficina,ejecutor.not.is.null")
-          : db.from("bandeja_claude" as any).select(cols).in("estado", ["lista", "descartada"]).eq("origen", "oficina")
-        )
-          .order("updated_at", { ascending: false })
-          .limit(40),
+        cerradasDe(cols, conEjecutor).in("estado", ["lista", "descartada"]).order("updated_at", { ascending: false }).limit(40),
+        cerradasDe(cols, conEjecutor).eq("estado", "lista").is("decision", null).order("updated_at", { ascending: false }).limit(100),
       ]);
-    let [abiertas, cerradas] = await consultar(COLUMNAS_OFICINA, true);
-    if (sinColumna(abiertas.error) || sinColumna(cerradas.error)) [abiertas, cerradas] = await consultar(COLUMNAS_BASE, false);
-    if (abiertas.error || cerradas.error) throw abiertas.error ?? cerradas.error;
+    let [abiertas, cerradas, sinDecision] = await consultar(COLUMNAS_OFICINA, true);
+    if (sinColumna(abiertas.error) || sinColumna(cerradas.error) || sinColumna(sinDecision.error)) [abiertas, cerradas, sinDecision] = await consultar(COLUMNAS_BASE, false);
+    if (abiertas.error || cerradas.error || sinDecision.error) throw abiertas.error ?? cerradas.error ?? sinDecision.error;
     const [arr, gem] = await Promise.all([
       db.from("oficina_arranques" as any).select("pedido_at, estado, nota, tareas, terminado_at").order("pedido_at", { ascending: false }).limit(1).maybeSingle(),
       estadoGemini(),
     ]);
-    const tareas = [...(abiertas.data ?? []), ...(cerradas.data ?? [])].map(filaATareaOficina).filter((t): t is TareaOficina => Boolean(t));
+    const vistas = new Set<string>();
+    const filas = [...(abiertas.data ?? []), ...(sinDecision.data ?? []), ...(cerradas.data ?? [])].filter((f: any) => {
+      if (!f?.id || vistas.has(f.id)) return false;
+      vistas.add(f.id);
+      return true;
+    });
+    const tareas = filas.map(filaATareaOficina).filter((t): t is TareaOficina => Boolean(t));
     return { tareas, arranque: (arr.data as Arranque | null) ?? null, disparo: { conectado: disparoConectado() }, gemini: gem };
   } catch (e) {
     console.error("[oficina/leer]", e instanceof Error ? e.message : e);
@@ -252,7 +264,7 @@ export function generadorGemini(modelo = identificadorModelo()): GeneradorOficin
         contents: [{ role: "user", parts: [{ text: prompt }] }],
         config: tipo === "juez" ? { responseMimeType: "application/json" } : {},
       }),
-      new Promise<never>((_, no) => setTimeout(() => no(new Error("Gemini no respondió a tiempo.")), tipo === "juez" ? 120_000 : 90_000)),
+      new Promise<never>((_, no) => setTimeout(() => no(new Error("Gemini no respondió a tiempo.")), (tipo === "juez" ? SEGUNDOS_LIMITE_JUEZ : SEGUNDOS_LIMITE_CANDIDATO) * 1000)),
     ]);
     const u = usoDe(r);
     return { texto: textoDe(r), tokensEntrada: u.entrada, tokensSalida: u.salida };
@@ -328,7 +340,6 @@ export async function ejecutarConGemini(id: string, opciones: { candidatos?: unk
   if (reclamada.error) return { ok: false, status: 500, error: "No se pudo tomar la tarea." };
   if (!reclamada.data) return { ok: false, status: 409, error: "La tarea cambió mientras tanto. Recargá la Oficina." };
 
-  const inicio = Date.now();
   const cerrar = async (cambios: Record<string, unknown>) => {
     const { data, error } = await db.from("bandeja_claude" as any).update(cambios).eq("id", id).eq("estado", "en_curso").eq("ejecutor", "gemini").select(COLUMNAS_OFICINA).maybeSingle();
     if (error) console.error("[oficina/gemini/cerrar]", error.message);
@@ -336,6 +347,7 @@ export async function ejecutarConGemini(id: string, opciones: { candidatos?: unk
   };
 
   try {
+    let ultimoGasto = Date.now();
     const corrida = await correrArena(entrada, plan.n, generar ?? generadorGemini(modelo), {
       precios: config,
       modelo,
@@ -344,24 +356,35 @@ export async function ejecutarConGemini(id: string, opciones: { candidatos?: unk
         recorrido = [...recorrido, paso(texto, "Gemini", modelo, areaTrabajo)];
         await db.from("bandeja_claude" as any).update({ recorrido }).eq("id", id).eq("estado", "en_curso");
       },
+      // 27/11 (auditoría): el gasto se registra por tanda y no solo al final, para que
+      // cuente en el tope de USD 30 aunque la función se corte a mitad de camino.
+      alGastar: async (g) => {
+        const ahoraMs = Date.now();
+        await registrarGastoOficina({
+          rubroId: t.rubro_id,
+          bandejaId: id,
+          llamadas: g.llamadas,
+          tokensEntrada: g.tokensEntrada,
+          tokensSalida: g.tokensSalida,
+          costoUsd: g.costoUsd,
+          latenciaMs: ahoraMs - ultimoGasto,
+          resultado: g.sirvio ? "enviado" : "sin_texto",
+          herramientas: ["arena", g.tipo === "juez" ? "juez" : `candidatos:${g.llamadas}`],
+          error: null,
+        });
+        ultimoGasto = ahoraMs;
+      },
     });
-    await registrarGastoOficina({
-      rubroId: t.rubro_id,
-      bandejaId: id,
-      llamadas: corrida.llamadas,
-      tokensEntrada: corrida.tokensEntrada,
-      tokensSalida: corrida.tokensSalida,
-      costoUsd: corrida.costoUsd,
-      latenciaMs: Date.now() - inicio,
-      resultado: corrida.resultado ? "enviado" : "sin_texto",
-      herramientas: ["arena", `candidatos:${corrida.arena.corridos}`],
-      error: corrida.falla,
-    });
+    // Aviso para el dueño: presupuesto o tope por corrida, y si el plazo cortó tandas.
+    const recorte = corrida.recortadas
+      ? `Por el tiempo de la función corrieron ${corrida.arena.corridos} de ${plan.n} respuestas; podés volver a pedirle a Gemini otra vuelta.`
+      : null;
+    const aviso = [plan.aviso, recorte].filter(Boolean).join(" ") || null;
     const costo = Math.round((t.costo_usd + corrida.costoUsd) * 10_000) / 10_000;
     if (!corrida.resultado) {
       recorrido = [...recorrido, paso(corrida.falla ?? "Sin ganador.", "Juez de la arena (Gemini)", modelo)];
       const tarea = await cerrar({ estado: "en_espera", motivo_espera: corrida.falla, ultimo_error: corrida.falla, arena: corrida.arena, costo_usd: costo, recorrido });
-      return tarea ? { ok: true, tarea, aviso: corrida.falla } : { ok: false, status: 409, error: "La tarea cambió mientras Gemini trabajaba." };
+      return tarea ? { ok: true, tarea, aviso: [corrida.falla, recorte].filter(Boolean).join(" ") || null } : { ok: false, status: 409, error: "La tarea cambió mientras Gemini trabajaba." };
     }
     const nota =
       corrida.arena.corridos > 1
@@ -381,7 +404,7 @@ export async function ejecutarConGemini(id: string, opciones: { candidatos?: unk
       cerrada_at: new Date().toISOString(),
       recorrido,
     });
-    return tarea ? { ok: true, tarea, aviso: plan.aviso } : { ok: false, status: 409, error: "La tarea cambió mientras Gemini trabajaba." };
+    return tarea ? { ok: true, tarea, aviso } : { ok: false, status: 409, error: "La tarea cambió mientras Gemini trabajaba." };
   } catch (e) {
     const motivo = e instanceof Error ? e.message.slice(0, 200) : "Gemini falló.";
     console.error("[oficina/gemini]", motivo);

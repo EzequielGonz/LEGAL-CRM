@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { requireSession } from "@/lib/acceso/autorizacion";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { filaATareaOficina, leerRecorrido, puedeAprobar, validarDecision } from "@/lib/oficina/reglas";
+import { filaATareaOficina, leerRecorrido, puedeAprobar, resultadoAlPedirCambios, validarDecision } from "@/lib/oficina/reglas";
 import { COLUMNAS_OFICINA, ejecutarConGemini } from "@/lib/oficina/servidor";
 
 export const dynamic = "force-dynamic";
@@ -28,9 +28,9 @@ export async function PATCH(request: Request, props: { params: Promise<{ id: str
   if (!v.ok) return NextResponse.json({ error: v.error }, { status: 400 });
 
   const db = createAdminClient();
-  let actual: any = await db.from("bandeja_claude" as any).select("id, estado, decision, recorrido, ejecutor, repaso").eq("id", id).maybeSingle();
+  let actual: any = await db.from("bandeja_claude" as any).select("id, estado, decision, recorrido, ejecutor, repaso, resultado, resultado_gemini").eq("id", id).maybeSingle();
   // Antes de la migración 0652 no existen ejecutor ni repaso: ahí nada lo hizo Gemini.
-  if (actual.error?.code === "42703") actual = await db.from("bandeja_claude" as any).select("id, estado, decision, recorrido").eq("id", id).maybeSingle();
+  if (actual.error?.code === "42703") actual = await db.from("bandeja_claude" as any).select("id, estado, decision, recorrido, resultado").eq("id", id).maybeSingle();
   if (actual.error) return NextResponse.json({ error: "No se pudo leer la tarea." }, { status: 500 });
   const fila = actual.data as any;
   if (!fila || fila.estado !== "lista" || fila.decision === "aprobada") {
@@ -40,7 +40,12 @@ export async function PATCH(request: Request, props: { params: Promise<{ id: str
     const p = puedeAprobar({ estado: fila.estado, decision: fila.decision ?? null, ejecutor: fila.ejecutor ?? null, repaso: fila.repaso ?? null });
     if (!p.ok) return NextResponse.json({ error: p.motivo }, { status: 409 });
   }
-  const ahora = new Date().toISOString();
+  const ahoraFecha = new Date();
+  const ahora = ahoraFecha.toISOString();
+  // 27/11 (auditoría): al volver a la mesa de entrada se limpian el repaso y el
+  // ejecutor (la nueva vuelta la hace quien la tome) y el resultado viejo deja de
+  // verse como vigente; `resultado_gemini` se conserva. Sin columnas de la 0652, no se tocan.
+  const tieneEjecutor = "ejecutor" in fila;
   const cambios =
     v.decision === "aprobada"
       ? { decision: "aprobada", decision_nota: v.nota || null, decision_at: ahora }
@@ -51,6 +56,8 @@ export async function PATCH(request: Request, props: { params: Promise<{ id: str
             decision_nota: v.nota,
             decision_at: ahora,
             cerrada_at: null,
+            resultado: resultadoAlPedirCambios(fila.resultado, fila.resultado_gemini, ahoraFecha),
+            ...(tieneEjecutor ? { ejecutor: null, repaso: null } : {}),
             recorrido: [...leerRecorrido(fila.recorrido), { area: "duenos", agente: "Dueños", nota: `Pidieron cambios: ${v.nota}`, at: ahora }],
           }
         : { estado: "descartada", decision: "rechazada", decision_nota: v.nota, decision_at: ahora, motivo_descarte: v.nota, cerrada_at: ahora };

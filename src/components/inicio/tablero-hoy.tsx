@@ -1,7 +1,7 @@
 import { enlaceIndicador, indicadorPorClave, listarIndicador } from "@/lib/indicadores";
 import Link from "next/link";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { GRUPOS_PERSONAS, motivoLegible, resumenPersonas, type GrupoPersonas } from "@/lib/estadisticas-personas";
+import { GRUPOS_PERSONAS, motivoLegible, resumenPersonas, type GrupoPersonas, type ResumenPersonas } from "@/lib/estadisticas-personas";
 import { consultarEstadosLineas } from "@/lib/whatsapp/estado-linea";
 import { cuandoCorto, enlaceConversacion, iniciales } from "@/lib/cartera";
 import { conVolver } from "@/lib/navegacion";
@@ -126,7 +126,10 @@ export async function TableroHoy({
     listarIndicador(rubroId, indicadorPorClave("posible_captacion")!).catch(() => ({ filas: [] as any[] })),
     colasDeHoy(rubroId, areas).catch(() => ({ esperan: [], descartes: [], captadosSinDerivar: null })),
     (s.from("wasender_lineas" as any) as any).select("id, nombre, estado, habilitada").eq("rubro_id", rubroId).is("archivada_at", null),
-    resumenPersonas(rubroId, areas),
+    // 27/11: solo se usa con ?grupo= (el grupo elegido); sin eso no se consulta.
+    GRUPOS_PERSONAS.some((g) => g.clave === grupo && g.clave !== "por_cerrar" && g.clave !== "no_interesado")
+      ? resumenPersonas(rubroId, areas)
+      : Promise.resolve<ResumenPersonas>({ conteos: { por_cerrar: null, pide_persona: null, bot_trabado: null, se_enfrio: null, no_interesado: null }, listas: {} }),
     s.from("profile_lines").select("label, credential_key, active").eq("rubro_id", rubroId).eq("active", true),
     s
       .from("campaigns")

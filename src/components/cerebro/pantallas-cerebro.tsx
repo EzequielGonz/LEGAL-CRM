@@ -9,6 +9,7 @@ import { filtrarBarrios, pedidoDeRecomendacion, type ResumenGrafo } from "@/lib/
 import { CIERRE_CONFIRMAR } from "@/lib/resumen/pedidos";
 import { ETIQUETA_ETAPA, NOMBRE_AREA, escritorioActual, etapaDe, vistaEscritorios, type TareaOficina } from "@/lib/oficina/reglas";
 import { formatoNumero } from "@/lib/premium/anillo";
+import { arrancarConGemini, pideGemini } from "@/lib/oficina/arranque-cliente";
 
 /**
  * Funciones operables de las pantallas del anillo (vuelta 6). Todo lo que escribe pide confirmación:
@@ -19,7 +20,7 @@ import { formatoNumero } from "@/lib/premium/anillo";
 async function post<T = any>(url: string, cuerpo: unknown): Promise<T> {
   const r = await fetch(url, { method: "POST", cache: "no-store", headers: { "content-type": "application/json" }, body: JSON.stringify(cuerpo) });
   const j = await r.json().catch(() => ({}));
-  if (!r.ok) throw new Error(j?.error ?? "No se pudo completar. Probá de nuevo.");
+  if (!r.ok) throw Object.assign(new Error(j?.error ?? "No se pudo completar. Probá de nuevo."), { status: r.status });
   return j as T;
 }
 
@@ -44,7 +45,9 @@ export function OficinaAhora({ tareas }: { tareas: TareaOficina[] | null }) {
       const j = await post<{ arranque: { nota?: string } }>("/api/oficina/arrancar", {});
       setAviso({ ok: true, texto: j.arranque?.nota || "Listo: los agentes arrancaron." });
     } catch (e) {
-      setAviso({ ok: false, texto: (e as Error).message });
+      // 27/11: sin Claude conectado (503/502), arranca Gemini igual (orden del dueño).
+      if (pideGemini((e as { status?: number }).status ?? 0)) await arrancarConGemini({ tareas: tareas ?? [], alAvisar: (a) => setAviso({ ok: a.tipo === "ok", texto: a.texto }), recargar: () => {} });
+      else setAviso({ ok: false, texto: (e as Error).message });
     } finally {
       setOcupado(false);
       setConfirmar(false);

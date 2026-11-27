@@ -9,6 +9,7 @@ import { pedidoOrden } from "@/lib/cerebro/anillo";
 import { CIERRE_CONFIRMAR } from "@/lib/resumen/pedidos";
 import { NOMBRE_AREA, type Area } from "@/lib/oficina/reglas";
 import { pedidoParaSector } from "@/lib/oficina/panel";
+import { arrancarConGemini, leerTareasOficina, pideGemini } from "@/lib/oficina/arranque-cliente";
 import { ORDEN_SECTORES, SECTORES } from "@/lib/oficina/sectores";
 
 /**
@@ -49,7 +50,7 @@ type Resultado =
 async function api<T = any>(url: string, cuerpo?: unknown): Promise<T> {
   const r = await fetch(url, { method: "POST", cache: "no-store", headers: { "content-type": "application/json" }, body: JSON.stringify(cuerpo ?? {}) });
   const j = await r.json().catch(() => ({}));
-  if (!r.ok) throw new Error(j?.error ?? "No se pudo completar. Probá de nuevo.");
+  if (!r.ok) throw Object.assign(new Error(j?.error ?? "No se pudo completar. Probá de nuevo."), { status: r.status });
   return j as T;
 }
 
@@ -175,7 +176,14 @@ export function BarraMando({ alPensar }: { alPensar: (pensando: boolean) => void
       const j = await api<{ arranque: { nota?: string; estado?: string } }>("/api/oficina/arrancar", {});
       setRes({ tipo: "arrancado", nota: j.arranque?.nota || "Los agentes ya arrancaron. Mirá cómo avanzan en la Oficina." });
     } catch (er) {
-      setError((er as Error).message);
+      // 27/11: sin Claude conectado (503/502), arranca Gemini igual (orden del dueño).
+      if (pideGemini((er as { status?: number }).status ?? 0)) {
+        const aviso = await arrancarConGemini({ tareas: await leerTareasOficina(), alAvisar: (a) => setRes({ tipo: "arrancado", nota: a.texto }), recargar: () => {} });
+        if (aviso.tipo === "err") {
+          setRes(null);
+          setError(aviso.texto);
+        }
+      } else setError((er as Error).message);
     } finally {
       setCargando(false);
       alPensar(false);

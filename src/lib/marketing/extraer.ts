@@ -12,7 +12,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { searchGooglePlaces } from "./google-places";
 import { importScrapedPlaces } from "./import-scrape";
 import { inicioDelDiaAR } from "@/lib/hora-ar";
-import { cantidadParaZona, consultaZona, validarExtraccion, zonasDeExtraccion, type LimitesOutscraper } from "./venta";
+import { cantidadParaZona, consultaZona, reservadosHoy, validarExtraccion, zonasDeExtraccion, type LimitesOutscraper } from "./venta";
 
 export class ExtraccionError extends Error {
   constructor(message: string, public status = 400) {
@@ -33,16 +33,19 @@ export async function leerLimites(): Promise<LimitesOutscraper> {
   };
 }
 
-/** Negocios reservados hoy (topes pedidos en extracciones no canceladas). */
+/**
+ * Negocios reservados hoy: topes pedidos de las que siguen en curso y lo
+ * traído por las cerradas, canceladas incluidas (27/11: antes las canceladas
+ * no contaban aunque Outscraper ya hubiera cobrado lo que trajeron).
+ */
 export async function usadosHoy(): Promise<number> {
   // 24/10: el tope diario se reinicia a la medianoche de Argentina (antes, a la del servidor en UTC: 21 h AR).
   const inicio = inicioDelDiaAR();
   const { data } = await createAdminClient()
     .from("marketing_extracciones" as any)
     .select("cantidad_max, encontrados, estado")
-    .gte("created_at", inicio.toISOString())
-    .neq("estado", "cancelado");
-  return ((data ?? []) as any[]).reduce((a, r) => a + (r.estado === "listo" || r.estado === "error" ? r.encontrados : r.cantidad_max), 0);
+    .gte("created_at", inicio.toISOString());
+  return reservadosHoy((data ?? []) as any[]);
 }
 
 export async function crearExtraccion(input: { tipo: string; zonas: string[]; cantidad: number; nombre: string; actor?: string }) {
@@ -102,7 +105,8 @@ export async function avanzarExtraccion(id?: string): Promise<string> {
   const zona = progreso.pendientes[0];
   const cantidad = zona ? cantidadParaZona({ maxTotal: ext.cantidad_max, encontrados: ext.encontrados, zonasRestantes: progreso.pendientes.length }) : 0;
   if (!zona || cantidad === 0) {
-    await s.from("marketing_extracciones" as any).update({ estado: "listo", finished_at: ahora(), updated_at: ahora() }).eq("id", ext.id);
+    // 27/11: solo si sigue «ejecutando» (si la cancelaron mientras tanto, queda cancelada).
+    await s.from("marketing_extracciones" as any).update({ estado: "listo", finished_at: ahora(), updated_at: ahora() }).eq("id", ext.id).eq("estado", "ejecutando");
     return `${ext.nombre_base}: lista`;
   }
   try {
@@ -114,30 +118,40 @@ export async function avanzarExtraccion(id?: string): Promise<string> {
     const nuevoProgreso = { hechas: [...progreso.hechas, zona], pendientes: progreso.pendientes.slice(1), consultas: progreso.consultas + 1 };
     const encontrados = ext.encontrados + r.total;
     const terminada = nuevoProgreso.pendientes.length === 0 || encontrados >= ext.cantidad_max;
-    await s
+    const contadores = {
+      progreso: nuevoProgreso,
+      encontrados,
+      creados: ext.creados + r.creados,
+      duplicados: ext.duplicados + r.duplicados,
+      invalidos: ext.invalidos + r.invalidos,
+      updated_at: ahora(),
+    };
+    // 27/11 (auditoría): se guarda solo si sigue «ejecutando». Si la cancelaron
+    // durante la tanda, no se la vuelve a «pendiente»: se anotan los contadores
+    // (lo traído ya se pagó y cuenta para el tope diario) y se corta.
+    const { data: guardada } = await s
       .from("marketing_extracciones" as any)
-      .update({
-        estado: terminada ? "listo" : "pendiente",
-        progreso: nuevoProgreso,
-        encontrados,
-        creados: ext.creados + r.creados,
-        duplicados: ext.duplicados + r.duplicados,
-        invalidos: ext.invalidos + r.invalidos,
-        error: null,
-        finished_at: terminada ? ahora() : null,
-        updated_at: ahora(),
-      })
-      .eq("id", ext.id);
+      .update({ ...contadores, estado: terminada ? "listo" : "pendiente", error: null, finished_at: terminada ? ahora() : null })
+      .eq("id", ext.id)
+      .eq("estado", "ejecutando")
+      .select("id");
+    if (!(guardada ?? []).length) {
+      await s.from("marketing_extracciones" as any).update(contadores).eq("id", ext.id).eq("estado", "cancelado");
+      return `${ext.nombre_base}: cancelada durante la tanda (se guardaron ${r.creados} nuevos y se cortó)`;
+    }
     return `${ext.nombre_base} · ${zona}: ${r.creados} nuevos`;
   } catch (err: any) {
     const msg = String(err?.message ?? err).slice(0, 500);
     // Un fallo en una zona no frena el resto: se anota y se sigue con la próxima.
     const nuevoProgreso = { hechas: [...progreso.hechas, `${zona} (error)`], pendientes: progreso.pendientes.slice(1), consultas: progreso.consultas + 1 };
     const terminada = nuevoProgreso.pendientes.length === 0;
-    await s
+    const { data: guardada } = await s
       .from("marketing_extracciones" as any)
       .update({ estado: terminada ? (ext.encontrados > 0 ? "listo" : "error") : "pendiente", progreso: nuevoProgreso, error: msg, finished_at: terminada ? ahora() : null, updated_at: ahora() })
-      .eq("id", ext.id);
+      .eq("id", ext.id)
+      .eq("estado", "ejecutando")
+      .select("id");
+    if (!(guardada ?? []).length) return `${ext.nombre_base}: cancelada durante la tanda (error en ${zona}: ${msg})`;
     return `error en ${zona}: ${msg}`;
   }
 }

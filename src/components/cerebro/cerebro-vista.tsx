@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import Link from "next/link";
 import type { TareaOficina } from "@/lib/oficina/reglas";
-import { etapaDe, vistaEscritorios } from "@/lib/oficina/reglas";
+import { colasDeTareas, etapaDe, vistaEscritorios } from "@/lib/oficina/reglas";
 import { TableroPendientes } from "@/components/cerebro/tablero-pendientes";
 import { HablarConClaude } from "@/components/cerebro/hablar-con-claude";
 import { ChatAsistenteGeneral, type AccesoAsistente } from "@/components/asistente/chat-asistente-general";
@@ -138,7 +138,7 @@ export function CerebroVista({ fuentes, semana, contactos, salud, pedidos, rubro
   const escritorios = oficina ? vistaEscritorios(oficina) : null;
   const trabajando = escritorios ? escritorios.filter((e) => e.estado === "trabajando").length : null;
   const enCola = escritorios ? escritorios.filter((e) => e.estado === "en_cola").length : 0;
-  const esperanOk = oficina ? oficina.filter((t) => etapaDe(t) === "esperando_ok").length : 0;
+  const esperanOk = oficina ? colasDeTareas(oficina).ok.length : 0;
   const abiertasOficina = oficina ? oficina.filter((t) => etapaDe(t) !== "cerrada").length : null;
   const pedidosAbiertos = pedidos ? pedidos.filter((p) => p.estado === "pendiente" || p.estado === "en_curso" || p.estado === "en_espera").length : null;
   const enviados = total?.enviados.actual ?? null;

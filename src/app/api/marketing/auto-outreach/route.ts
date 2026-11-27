@@ -25,15 +25,21 @@ export async function POST(request: Request) {
 
   const supabase = createAdminClient();
 
-  const { data: existing } = await supabase
+  const { data: existingRaw, error: errLectura } = await supabase
     .from("campaigns")
-    .select("id, message_template_name")
+    .select("id, message_template_name, archived_at" as any)
     .eq("area", "marketing")
     .eq("name", AUTO_CAMPAIGN_NAME)
     .maybeSingle();
+  if (errLectura) return respuestaErrorInterno(errLectura, "marketing/auto-outreach");
+  const existing = existingRaw as unknown as { id: string; message_template_name: string | null; archived_at: string | null } | null;
 
   if (action === "pausar") {
-    if (existing) await supabase.from("campaigns").update({ status: "pausada" }).eq("id", existing.id);
+    if (existing) {
+      // 27/11 (auditoría): si la base no guardó la pausa, no se responde «ok».
+      const { error } = await supabase.from("campaigns").update({ status: "pausada" }).eq("id", existing.id);
+      if (error) return respuestaErrorInterno(error, "marketing/auto-outreach");
+    }
     return NextResponse.json({ ok: true, status: "pausada" });
   }
 
@@ -51,8 +57,15 @@ export async function POST(request: Request) {
   const limit =
     typeof daily_send_limit === "number" && daily_send_limit > 0 ? Math.floor(daily_send_limit) : 30;
 
+  if (existing?.archived_at) {
+    return NextResponse.json(
+      { error: "La prospección automática está archivada. Recuperala desde Campañas antes de activarla de nuevo." },
+      { status: 409 }
+    );
+  }
+
   if (existing) {
-    await supabase
+    const { error } = await supabase
       .from("campaigns")
       .update({
         status: "en_curso",
@@ -62,6 +75,7 @@ export async function POST(request: Request) {
         finished_at: null,
       })
       .eq("id", existing.id);
+    if (error) return respuestaErrorInterno(error, "marketing/auto-outreach");
     return NextResponse.json({ ok: true, status: "en_curso" });
   }
 

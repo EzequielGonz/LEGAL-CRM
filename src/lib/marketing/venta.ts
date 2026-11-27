@@ -62,7 +62,11 @@ export function cantidadParaZona(input: { maxTotal: number; encontrados: number;
   return Math.min(MAX_POR_CONSULTA, Math.max(1, Math.ceil(resta / input.zonasRestantes)));
 }
 
-/** Nombre de base sugerido (editable): «Pizzerías · Córdoba y Rosario · 16/10/2026». */
+/**
+ * Nombre de base sugerido (editable): «Pizzerías · Córdoba y Rosario · 16/10/2026».
+ * La fecha es el día de Argentina (UTC−3, sin horario de verano), no el del
+ * servidor ni el del navegador (27/11, auditoría).
+ */
 export function nombreBaseSugerido(tipo: string, zonas: string[], fecha = new Date()): string {
   const t = tipo.trim().replace(/\s+/g, " ");
   const tipoCap = t ? t.charAt(0).toUpperCase() + t.slice(1) : "Negocios";
@@ -73,13 +77,27 @@ export function nombreBaseSugerido(tipo: string, zonas: string[], fecha = new Da
       : zs.length <= 2
         ? zs.join(" y ")
         : `${zs[0]} y ${zs.length - 1} zonas más`;
-  const d = `${String(fecha.getDate()).padStart(2, "0")}/${String(fecha.getMonth() + 1).padStart(2, "0")}/${fecha.getFullYear()}`;
+  const ar = new Date(fecha.getTime() - 3 * 3_600_000);
+  const d = `${String(ar.getUTCDate()).padStart(2, "0")}/${String(ar.getUTCMonth() + 1).padStart(2, "0")}/${ar.getUTCFullYear()}`;
   return `${tipoCap} · ${zona} · ${d}`.slice(0, 120);
 }
 
 export interface LimitesOutscraper {
   por_extraccion: number;
   por_dia: number;
+}
+
+/**
+ * Negocios ya reservados hoy contra el tope diario (27/11, auditoría): las
+ * terminadas, con error o canceladas cuentan lo que de verdad trajeron
+ * (`encontrados`, que ya se pagó a Outscraper); las que siguen en curso
+ * reservan su tope pedido.
+ */
+export function reservadosHoy(filas: { estado: string; cantidad_max: number | null; encontrados: number | null }[]): number {
+  return filas.reduce((a, r) => {
+    const cerrada = r.estado === "listo" || r.estado === "error" || r.estado === "cancelado";
+    return a + (Number(cerrada ? r.encontrados : r.cantidad_max) || 0);
+  }, 0);
 }
 
 /** Valida un pedido de extracción contra los topes de gasto. */

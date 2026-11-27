@@ -9,9 +9,9 @@ import { TarjetaTarea } from "@/components/oficina/tarea-oficina";
 import { pedidoParaAgente } from "@/lib/oficina/recorrido";
 import { ORDEN_SECTORES, SECTORES } from "@/lib/oficina/sectores";
 import { alcanceDeSelector } from "@/lib/oficina/alcance-ui";
-import { CANDIDATOS_POR_DEFECTO, MAX_CANDIDATOS_OFICINA } from "@/lib/oficina/ejecucion";
+import { CANDIDATOS_POR_DEFECTO, MAX_CANDIDATOS_OFICINA, MAX_CANDIDATOS_POR_CORRIDA } from "@/lib/oficina/ejecucion";
 import { NOMBRE_AREA, TEXTO_SIN_CLAUDE, esParaRepasar, etapaDe, type Area, type TareaOficina } from "@/lib/oficina/reglas";
-import { puedeGemini } from "@/lib/oficina/clases";
+import { arrancarConGemini, pideGemini } from "@/lib/oficina/arranque-cliente";
 
 /**
  * La Oficina (22/11; 27/11 alcance, Gemini por botón y arena): escritorios de
@@ -154,38 +154,6 @@ export function Oficina({
     }
   }
 
-  /** Sin disparo de Claude: Gemini resuelve, de a una, las tareas de la mesa de entrada que puede hacer. */
-  async function arrancarConGemini() {
-    const entrada = tareas.filter((t) => t.estado === "pendiente" || t.estado === "en_espera");
-    const aptas = entrada.filter((t) => puedeGemini(t.clase).ok);
-    const soloClaude = entrada.length - aptas.length;
-    if (!aptas.length) {
-      setAviso({ tipo: "err", texto: soloClaude ? `Claude no está conectado y ${soloClaude === 1 ? "la tarea que espera es" : "las tareas que esperan son"} de código, publicación o envío: esas no las hace Gemini. Quedan en la mesa de entrada.` : TEXTO_SIN_CLAUDE });
-      return;
-    }
-    let hechas = 0;
-    let ultimoError = "";
-    for (const [i, t] of aptas.entries()) {
-      setAviso({ tipo: "ok", texto: `Claude no está conectado: Gemini está resolviendo la tarea ${i + 1} de ${aptas.length} (varias respuestas y un juez). Puede tardar unos minutos.` });
-      try {
-        const pedidoGemini = fetch(`/api/oficina/${t.id}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ accion: "gemini" }) });
-        // A los 3 s la tarea ya figura «en marcha»: se refresca para que se vea el escritorio trabajando.
-        const verla = setTimeout(() => void recargar(), 3000);
-        const g = await pedidoGemini;
-        clearTimeout(verla);
-        const gd = await g.json().catch(() => ({}));
-        if (g.ok) hechas++;
-        else ultimoError = gd?.error || "Gemini no pudo con una tarea.";
-      } catch {
-        ultimoError = "Se cortó la conexión con Gemini.";
-      }
-      await recargar();
-    }
-    const resto = soloClaude ? ` ${soloClaude} ${soloClaude === 1 ? "queda" : "quedan"} para Claude (código, publicación o envío).` : "";
-    if (hechas) setAviso({ tipo: "ok", texto: `Gemini resolvió ${hechas} de ${aptas.length}. ${hechas === 1 ? "Queda" : "Quedan"} «Hecho por Gemini · sin repasar».${ultimoError ? ` ${ultimoError}` : ""}${resto}` });
-    else setAviso({ tipo: "err", texto: `${ultimoError || "Gemini no pudo resolver las tareas."}${resto}` });
-  }
-
   async function arrancar() {
     setAviso(null);
     setArrancando(true);
@@ -194,9 +162,9 @@ export function Oficina({
       const d = await r.json().catch(() => ({}));
       if (d?.arranque) setArranque(d.arranque);
       if (d?.disparo) setDisparo(d.disparo);
-      if (r.status === 503 || r.status === 502) {
+      if (pideGemini(r.status)) {
         // Orden del dueño (27/11): si él pide arrancar y Claude no tiene disparo, lo resuelve Gemini.
-        await arrancarConGemini();
+        await arrancarConGemini({ tareas, alAvisar: setAviso, recargar });
       } else if (!r.ok) {
         throw new Error(d?.error || "No se pudo arrancar.");
       } else {
@@ -262,7 +230,7 @@ export function Oficina({
           <button className="cz-btn of3-neu" type="submit" disabled={enviando || !alcance}>
             {enviando ? "Ordenando…" : "Dejar en la oficina"}
           </button>
-          <small className="cz-muted">Gemini la ordena al instante. La trabaja Claude cuando arranques, o Gemini si tocás «Que lo haga Gemini» en la tarea (hasta {MAX_CANDIDATOS_OFICINA} respuestas compiten, si el presupuesto alcanza).</small>
+          <small className="cz-muted">Gemini la ordena al instante. La trabaja Claude cuando arranques, o Gemini si tocás «Que lo haga Gemini» en la tarea (compiten hasta {MAX_CANDIDATOS_POR_CORRIDA} respuestas por vuelta de Gemini, si el presupuesto alcanza).</small>
         </div>
         {aviso && (
           <p className={aviso.tipo === "ok" ? "cz-ok" : "cz-err"} role="status">
