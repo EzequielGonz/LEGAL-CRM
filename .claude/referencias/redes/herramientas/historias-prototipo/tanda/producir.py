@@ -224,8 +224,8 @@ def preparar(args):
     M = MARCAS[g['_marca']]
     q = re.search(r'«([^»]+)»', g.get('escena_visual', '')); bur = None
     if q:   # globo de diálogo del personaje: aparece con la 1.ª palabra de la cita y se tacha cuando llega «nunca»/«no»
-        w0 = sin_acento(q.group(1).split()[0]); t0 = next((w['t'] for w in W if sin_acento(w['w']).strip('«»') == w0), None)
-        if t0 is not None: tn = next((w['t'] for w in W if w['t'] > t0 + .5 and sin_acento(w['w']) in ('nunca', 'no')), t0 + 1.4); bur = dict(txt=q.group(1), t0=round(t0 - .1, 2), tachar=round(tn, 2), fin=round(beats[1]['t0'] - .05 if len(beats) > 1 else tn + 2, 2))
+        lim = lambda s: re.sub(r'[^a-z0-9]', '', sin_acento(s)); w0 = lim(q.group(1).split()[0]); t0 = next((w['t'] for w in W if lim(w['w']) == w0), None)
+        if t0 is not None: tn = next((w['t'] for w in W if w['t'] > t0 + .5 and lim(w['w']) in ('nunca', 'no')), t0 + 1.4); bur = dict(txt=q.group(1), t0=round(t0 - .1, 2), tachar=round(tn, 2), fin=round(beats[1]['t0'] - .05 if len(beats) > 1 else tn + 2, 2))
     hr = re.search(r'\b(\d{1,2}:\d{2})\b', g.get('lugar_ba', '') + ' ' + g.get('voz', ''))
     plan = dict(burbuja=bur, hora=hr.group(1) if hr else None, id=g['id'], marca=g['_marca'], T=T, lead=LEAD, voz_dur=round(D, 3), nombre=M['nombre'], logo=M['logo'], palabra=g['palabra'], cierre=g.get('cierre', ''), lugar=g.get('lugar_ba', ''), personaje=g.get('personaje', ''), escena=g.get('escena_visual', ''), beats=beats, words=W, receta=R)
     d = f'{TRAB}/{g["id"]}'; os.makedirs(d, exist_ok=True); json.dump(plan, open(f'{d}/plan.json', 'w'), ensure_ascii=False, indent=1); json.dump(g, open(f'{d}/guion.json', 'w'), ensure_ascii=False, indent=1)
