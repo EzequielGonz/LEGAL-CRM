@@ -1,0 +1,2 @@
+const {chromium} = require('playwright'); (async () => { const id = process.argv[2]; const b = await chromium.launch(); const p = await b.newPage({viewport: {width: 1080, height: 1920}});
+  await p.goto(`http://127.0.0.1:${process.env.PUERTO || 8801}/tanda/serie.html?id=${id}`); await p.waitForFunction('window.ready', null, {timeout: 120000}); console.log(JSON.stringify(await p.evaluate('window.CORTES'))); await b.close(); })();

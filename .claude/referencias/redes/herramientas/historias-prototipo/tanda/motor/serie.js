@@ -70,7 +70,7 @@ if (R.cartas && mid.length >= 2) {
 }
 // ---------- cámara: planos que cambian cada 1,5–3 s ----------
 const cortes = []; { let t = 0; B.forEach((b, i) => { cortes.push(b.t0); let u = b.t0 + 1.5 + hash(i + R.seed) * 1.0; while (u < b.t1 - .9) { cortes.push(u); u += 1.5 + hash(u * 7 + R.seed) * 1.2; } }); cortes.sort((a, b) => a - b); }
-const TIPOS = {empuje: ['push', 'pull', 'push', 'lat'], lateral: ['lat', 'latR', 'push', 'lat'], mano: ['push', 'lat', 'pull', 'latR'], orbita: ['orb', 'orbR', 'push', 'orb'], mix: ['push', 'lat', 'orb', 'pull', 'latR']}[R.cam] || ['push'];
+window.CORTES = cortes; const TIPOS = {empuje: ['push', 'pull', 'push', 'lat'], lateral: ['lat', 'latR', 'push', 'lat'], mano: ['push', 'lat', 'pull', 'latR'], orbita: ['orb', 'orbR', 'push', 'orb'], mix: ['push', 'lat', 'orb', 'pull', 'latR']}[R.cam] || ['push'];
 function camara(t) {
   let k = 0; while (k + 1 < cortes.length && cortes[k + 1] <= t) k++; const t0 = cortes[k], t1 = cortes[k + 1] ?? T, u = clamp((t - t0) / Math.max(.4, t1 - t0)); const ty = TIPOS[(k + R.seed) % TIPOS.length]; const e = ease(u); const s = hash(k * 5 + R.seed) > .5 ? 1 : -1;
   let z = 1, x = 0, y = 0, r = 0;
