@@ -27,8 +27,8 @@ function partir(txt, ancho, max = 9) {
 export default async function (datos, plan) {
   const PL = plan || {};
   const P = datos.palabras, T = datos.total;
-  const M = await motor({fondo: 0xE4D3BE, fov: 36, exposicion: 1.0, entorno: .42, bloom: {fuerza: .3, radio: .42, umbral: .97},
-    cine: {grano: .03, vineta: .24, ca: .0011, lift: [.014, .01, .006], tinte: [1, .985, .96]}});
+  const M = await motor({fondo: 0xE4D3BE, fov: 36, exposicion: 1.0, entorno: .42, bloom: {fuerza: .3, radio: .42, umbral: 1.05},
+    cine: {grano: .03, vineta: .3, ca: .0011, lift: [.014, .01, .006], tinte: [1, .985, .96]}});
   const {scene, cam} = M;
   const ev = []; const sfx = (t, n, v = 1) => { if (t >= 0 && t < T - .05) ev.push([+t.toFixed(3), n, +v.toFixed(2)]); };
   const golpes = []; // [t, fuerza] para el temblor de cámara
@@ -36,7 +36,7 @@ export default async function (datos, plan) {
   // ── semilla del plan ──────────────────────────────────────────────────────
   const sid = String(PL.id || datos.id || 'marketing'); let s0 = 11; for (const ch of sid) s0 = (s0 * 131 + ch.charCodeAt(0)) % 1000003;
   const rnd = k => hash(s0 * .01371 + k * 7.317);
-  const lado = rnd(1) < .5 ? -1 : 1, yaw0 = (rnd(2) - .5) * .2, alto0 = (rnd(3) - .5) * .5, xP = .9 + (rnd(4) - .5) * .2;
+  const lado = rnd(1) < .5 ? -1 : 1, yaw0 = (rnd(2) - .5) * .2, alto0 = (rnd(3) - .5) * .5, xP = .68 + (rnd(4) - .5) * .14;
   const variante = Math.floor(rnd(5) * 3), estiloEnt = Math.floor(rnd(6) * 3);
   const ciclo = Math.max(1, Math.round(T / 7)), fase = t => t / T * Math.PI * 2 * ciclo; // todo lo «vivo» es periódico en T (loop)
 
@@ -114,7 +114,7 @@ export default async function (datos, plan) {
 
   // ── materiales ────────────────────────────────────────────────────────────
   const mk = {
-    crema: () => new THREE.MeshPhysicalMaterial({color: CREMA, roughness: .34, clearcoat: .6, clearcoatRoughness: .25}),
+    crema: () => new THREE.MeshPhysicalMaterial({color: '#F2D8BE', roughness: .34, clearcoat: .6, clearcoatRoughness: .25}),
     naranja: () => new THREE.MeshPhysicalMaterial({color: NARANJA, roughness: .3, clearcoat: .9, clearcoatRoughness: .12}),
     tinta: () => new THREE.MeshPhysicalMaterial({color: TINTA, roughness: .38, clearcoat: .6, clearcoatRoughness: .18}),
     carbon: () => new THREE.MeshStandardMaterial({color: CARBON, roughness: .5, metalness: .25}),
@@ -147,14 +147,15 @@ export default async function (datos, plan) {
   { const xs = []; if (variante === 2) for (let x = -6; x <= 6; x += .13) xs.push(x); else for (let k = 0; k < 18; k++) { xs.push(2.28 + k * .13); xs.push(-2.28 - k * .13); }
     const li = new THREE.InstancedMesh(new THREE.BoxGeometry(.06, 7.4, .09), new THREE.MeshStandardMaterial({map: nogalTx, roughness: .5}), xs.length); const m4 = new THREE.Matrix4();
     xs.forEach((x, i) => { li.setMatrixAt(i, m4.makeTranslation(x, 3.7, .05)); }); scene.add(li); }
-  // sombra suave del piso contra la pared
+  // penumbra arriba de la pared (el sol de ventanal resalta) y sombra suave del piso contra la pared
+  malla(new THREE.PlaneGeometry(18, 4.5), plano(degradeV, .42, 0x3a2414, false), 0, 8.4, .008);
   { const s = malla(new THREE.PlaneGeometry(18, .9), plano(degradeV, .18, 0x2a1a0c, false), 0, .003, .45); s.rotation.x = -Math.PI / 2; }
 
   // ── luz: sol de ventanal, relleno, cenital sobre el pedestal, entorno ─────
   const hemi = new THREE.HemisphereLight(0xFFE3C4, 0xB89574, .55); scene.add(hemi);
   const sol = new THREE.DirectionalLight(0xFFC98E, 1.9); sol.position.set(lado * 7, 9, 6.5); scene.add(sol);
   const relleno = new THREE.DirectionalLight(0xFFEEDD, .35); relleno.position.set(-lado * 5, 3, 9); scene.add(relleno);
-  const cenital = new THREE.SpotLight(0xFFE2C0, 13, 13, .42, .8, 1.3); cenital.position.set(xP - .25 * lado, 6.4, zP + 1.4); cenital.target.position.set(xP, hTop + .4, zP); scene.add(cenital, cenital.target);
+  const cenital = new THREE.SpotLight(0xFFE2C0, 8, 13, .42, .8, 1.3); cenital.position.set(xP - .25 * lado, 6.4, zP + 1.4); cenital.target.position.set(xP, hTop + .4, zP); scene.add(cenital, cenital.target);
   const luzFlash = new THREE.PointLight(0xFFFFFF, 0, 9, 1.4); luzFlash.position.set(xP - .6, hTop + 1.4, zP + 2.2); scene.add(luzFlash);
   // manchas de ventanal en la pared y el piso, haces de luz y polvo
   const manchas = [];
@@ -163,11 +164,11 @@ export default async function (datos, plan) {
     const g3 = new THREE.PlaneGeometry(1.6, 3.4); g3.applyMatrix4(new THREE.Matrix4().makeShear(0, 0, -lado * .5, 0, 0, 0));
     manchas.push([malla(g3, plano(ventanaTx, .4, 0xFFB872), lado * 2.9, 3.4, .1), .4]);
     const g2 = new THREE.PlaneGeometry(3.2, 4.2); g2.applyMatrix4(new THREE.Matrix4().makeShear(0, 0, -lado * .6, 0, 0, 0));
-    const m2 = malla(g2, plano(ventanaTx, .5, 0xFFBE80), lado * .9, .004, 7.6); m2.rotation.x = -Math.PI / 2; manchas.push([m2, .5]); }
+    const m2 = malla(g2, plano(ventanaTx, .5, 0xFFBE80), lado * .7, .004, 6.3); m2.rotation.x = -Math.PI / 2; manchas.push([m2, .5]); }
   const camW = new THREE.Vector3(Math.sin(yaw0) * 12.8, 2, Math.cos(yaw0) * 12.8);
   const haces = [];
   [[0, 1.2, .16], [.6, .8, .12], [-.55, .6, .1]].forEach(([d, ancho, op]) => {
-    const A = new THREE.Vector3(lado * 6.5, 8.6, 9.6 + d), B = new THREE.Vector3(lado * .9 + d * .6, 0, 7.4 + d * .5);
+    const A = new THREE.Vector3(lado * 5.8, 8.6, 7.2 + d), B = new THREE.Vector3(lado * .6 + d * .6, 0, 6.0 + d * .5);
     const dir = B.clone().sub(A), L = dir.length(); dir.normalize(); const mid = A.clone().add(B).multiplyScalar(.5);
     const c = camW.clone().sub(mid).normalize(); const n = c.clone().sub(dir.clone().multiplyScalar(c.dot(dir))).normalize(); const r = new THREE.Vector3().crossVectors(dir, n);
     const m = malla(new THREE.PlaneGeometry(ancho, L), plano(hazTx, op, 0xFFD7A6), 0, 0, 0); m.matrixAutoUpdate = false; m.matrix.makeBasis(r, dir.clone().negate(), n).setPosition(mid); m.renderOrder = 5; haces.push([m, op]); });
@@ -320,7 +321,7 @@ export default async function (datos, plan) {
         ancho = .75; break; }
       case 'carta': {
         const w = .6, h = .88, sh = rr(w, h, .05);
-        const fr = lamina(w, h, (x, cw, ch) => { x.fillStyle = '#FFF4E6'; x.fillRect(0, 0, cw, ch); x.strokeStyle = TINTA; x.lineWidth = 5; x.beginPath(); x.roundRect(26, 26, cw - 52, ch - 52, 22); x.stroke();
+        const fr = lamina(w, h, (x, cw, ch) => { x.fillStyle = '#F4E4CF'; x.fillRect(0, 0, cw, ch); x.strokeStyle = TINTA; x.lineWidth = 5; x.beginPath(); x.roundRect(26, 26, cw - 52, ch - 52, 22); x.stroke();
           const s = SIMB(info); x.fillStyle = TINTA; x.textAlign = 'center'; x.textBaseline = 'middle'; x.font = '800 300px Outfit'; x.fillText(s, cw / 2, ch * .47); x.font = '800 64px Outfit'; x.fillText(s, 74, 86);
           x.save(); x.translate(cw - 74, ch - 86); x.rotate(Math.PI); x.fillText(s, 0, 0); x.restore(); x.fillStyle = NARANJA; x.beginPath(); x.roundRect(cw * .3, ch * .68, cw * .4, 18, 9); x.fill();
           x.beginPath(); x.moveTo(cw / 2, ch * .76); x.lineTo(cw / 2 + 16, ch * .79); x.lineTo(cw / 2, ch * .82); x.lineTo(cw / 2 - 16, ch * .79); x.fill(); });
@@ -515,7 +516,7 @@ export default async function (datos, plan) {
   const objC = [xP, hTop + .5 * OS, zP];
   const ANCHO = encuadre({dist: 12.8, xc: 0, yaw: yaw0, pA: [0, yTop + .16, zB], yA: 336 + alto0 * 30, pB: objC, yB: 1005, hmin: 1.2, hmax: 3.4});
   const txc = b => x0 + LP * (2 + Math.min(LT, b.len) / 2);
-  const tomaFila = (b, i, sg) => encuadre({dist: 10.2 + (rnd(20 + i) - .5) * .9, xc: clamp(lerp(txc(b), xP, .5), -.45, .55), yaw: sg * (.08 + rnd(30 + i) * .1), pA: [txc(b), filaY(b.fila + (b.nl - 1) / 2), zB], yA: 590, pB: objC, yB: 965});
+  const tomaFila = (b, i, sg) => encuadre({dist: 10.8 + (rnd(20 + i) - .5) * .6, xc: .2 + (rnd(25 + i) - .5) * .12, yaw: sg * (.03 + rnd(30 + i) * .05), pA: [txc(b), filaY(b.fila + (b.nl - 1) / 2), zB], yA: 590, pB: objC, yB: 965});
   const tomaObjeto = (b, i, sg) => encuadre({dist: 4.2, xc: xP - sg * .1, zc: zP, yaw: sg * (.28 + rnd(50 + i) * .14), pA: objC, yA: 900, hmin: hTop + .7, hmax: hTop + .7});
   const tomaDetalle = (b) => encuadre({dist: 5.6, xc: txc(b) + .2, yaw: 0, pA: [txc(b), filaY(b.fila), zB], yA: 760, hmin: filaY(b.fila) - .2, hmax: filaY(b.fila) - .2});
   const tomaCierre = encuadre({dist: 11.4, xc: .1, yaw: -lado * .07, pA: [0, yF0 - FH * RF / 2, zB], yA: 600, pB: objC, yB: 1000});
@@ -595,11 +596,11 @@ export default async function (datos, plan) {
       lupa.position.set(lerp(xa, xb, E.io2(k)), filaY(r) + .02 * Math.sin(k * 9), zB + .45 + .25 * Math.sin(k * Math.PI)); lupa.rotation.z = -.15 + .1 * Math.sin(k * 6); lupa.scale.setScalar(E.outBack(seg(k, 0, .15)) * (1 - E.in3(seg(k, .85, 1))) + .001); } } lupa.visible = lv;
     // luces del hall (apagón, flash) y atmósfera
     hemi.intensity = .55 * lerp(.12, 1, apg); sol.intensity = 1.9 * lerp(.04, 1, apg); relleno.intensity = .35 * lerp(.08, 1, apg); scene.environmentIntensity = .42 * lerp(.12, 1, apg);
-    cenital.intensity = 13 * (1 + 3.5 * (1 - apg)); conoA.material.uniforms.op.value = .5 * (1 - apg);
+    cenital.intensity = 8 * (1 + 5 * (1 - apg)); conoA.material.uniforms.op.value = .5 * (1 - apg);
     manchas.forEach(([m, op]) => m.material.opacity = op * apg); haces.forEach(([m, op]) => m.material.opacity = op * apg * (.85 + .15 * Math.sin(fase(t) * .5))); globos.forEach(m => m.emissiveIntensity = 1.6 * lerp(.35, 1, apg));
     let fl = 0; for (const b of flashes) if (t >= b.t + .02) fl += Math.exp(-(t - b.t - .02) / .09); for (const b of golpesF) if (t >= b.t) fl += .25 * Math.exp(-(t - b.t) / .07);
-    luzFlash.intensity = 90 * fl; M.cine.uniforms.flash.value = Math.min(.6, fl * .5); M.cine.uniforms.vineta.value = .24 + .3 * (1 - apg);
-    const fp = fase(t); for (let i = 0; i < polvo.sem.length; i++) { const [a, b, c, d] = polvo.sem[i]; const u = a, A = [lado * 6.5, 8.6, 9.6], Bp = [lado * .9, 0, 7.4];
+    luzFlash.intensity = 90 * fl; M.cine.uniforms.flash.value = Math.min(.6, fl * .5); M.cine.uniforms.vineta.value = .3 + .3 * (1 - apg);
+    const fp = fase(t); for (let i = 0; i < polvo.sem.length; i++) { const [a, b, c, d] = polvo.sem[i]; const u = a, A = [lado * 5.8, 8.6, 7.2], Bp = [lado * .6, 0, 6.0];
       polvo.pos[i * 3] = lerp(A[0], Bp[0], u) + (b - .5) * 1.6 + Math.sin(fp + d * 6.28) * .08; polvo.pos[i * 3 + 1] = lerp(A[1], Bp[1], u) + Math.sin(fp * .5 + c * 6.28) * .1; polvo.pos[i * 3 + 2] = lerp(A[2], Bp[2], u) + (c - .5) * 1.4 + Math.cos(fp + b * 6.28) * .08; }
     polvo.p.geometry.attributes.position.needsUpdate = true; polvo.p.material.opacity = .75 * apg;
     kar(t); subrayado(t);

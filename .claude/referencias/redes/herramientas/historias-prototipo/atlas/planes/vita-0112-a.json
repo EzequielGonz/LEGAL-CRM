@@ -57,7 +57,7 @@
       "palabra": "tres",
       "n": 1,
       "tipo": "paso",
-      "objeto": "balanza",
+      "objeto": "edificio",
       "texto": "3/3 Comisión Médica",
       "efecto": "tachar"
     },

@@ -41,7 +41,7 @@
       "palabra": "aunque",
       "n": 0,
       "tipo": "dato",
-      "objeto": "balanza",
+      "objeto": "firma",
       "texto": "Cubre aunque te equivoques",
       "efecto": "giro"
     },
@@ -57,7 +57,7 @@
       "palabra": "fuerza",
       "n": 0,
       "tipo": "dato",
-      "objeto": "martillo",
+      "objeto": "documento",
       "texto": "Fuerza mayor ajena",
       "efecto": "golpe"
     },

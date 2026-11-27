@@ -40,12 +40,13 @@ Pedido del dueño (27/11): 2 reels nuevos por día y marca, del 28/11 al 02/12, 
 
 | Marca | Estilo | Objetos |
 |---|---|---|
-| vita | Teatrito de cartulina de noche (telón, haz de luz, neblina) | auto, choque, documento, firma, celular, almanaque, reloj, balanza, casco, ambulancia, testigo, camara, billete, sobre, martillo, edificio, sello, nico, globo |
-| coberturas | Plastilina stop-motion sobre mesa menta | personaje, orden, receta, celular, credencial, sello, escalera, frasco, estetoscopio, almanaque, carpeta, check, pregunta, mostrador, reloj |
+| vita | Teatrito de cartulina de noche (telón, haz de luz, neblina) | auto, choque, documento, firma, celular, almanaque, reloj, casco, ambulancia, testigo, camara, billete, sobre, edificio, sello, nico, globo |
+| coberturas | Plastilina stop-motion sobre mesa menta | personaje, orden, receta, celular, credencial, sello, escalera, frasco, almanaque, carpeta, check, pregunta, mostrador, reloj |
 | autos | Producto de estudio oscuro (laca, luz que barre, piso espejo) | auto, llave, escudo, lupa, poliza, celular, almanaque, velocimetro, rueda, check, cruz, candado, grieta, documento |
-| marketing | Cartel de aeropuerto (paletas que giran) en hall cálido + objetos | cartel, reloj_arena, caja, celular, carta, mostrador, estrella, megafono, vidriera, check, cruz, chat, etiqueta |
+| marketing | Cartel de aeropuerto (paletas que giran) en hall cálido + objetos | cartel, reloj_arena, caja, celular, carta, mostrador, estrella, vidriera, check, cruz, chat, etiqueta |
 
 ## Reglas duras
+- Fuera los clichés de rubro (dirección de arte v2): balanza y martillo (VITA), estetoscopio (Coberturas), megáfono (Marketing). Se usan objetos de la situación: el papel, el recibo, el chat. Si un plan viejo los pide, la escena dibuja un objeto seguro.
 - Rioplatense con voseo. Sin caras reales. Sin «Black Friday». Nunca «Agencia Kocos» (es Automotores Kocos o Autos Kocos) ni «ORVIAN».
 - Polémico = desafía una creencia («Pedir perdón después de un choque te puede costar caro»). Nunca falso, nunca ataque a personas, empresas o colegas, nunca promesa de resultado («ganás seguro», «garantizado»).
 - Datos legales solo los que ya traen los guiones verificados (campo `fuente`). Coberturas sin cifras de aportes ni cuotas. Autos sin tasas ni precios inventados.
