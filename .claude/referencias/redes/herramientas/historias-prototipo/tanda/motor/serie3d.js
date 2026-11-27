@@ -10,7 +10,7 @@ $('#marca').innerHTML = `<img src="../${P.logo}"><span>${P.nombre}</span>`;
 const sa = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 const clave = (txt, i) => { const ws = txt.split(/\s+/); const pk = sa(P.palabra || ''); let k = ws.findIndex(w => pk && sa(w).replace(/[^a-z0-9]/g, '').startsWith(pk.slice(0, 4).toLowerCase())); if (k < 0) k = B[i].paso ? 0 : ws.reduce((m, w, j) => w.length > ws[m].length ? j : m, 0); return k; };
 const titulo = (txt, i) => { const ws = txt.split(/\s+/), k = clave(txt, i); return ws.map((w, j) => j === k ? `<em>${w.replace(/[.,]$/, '')}</em>${/[.,]$/.test(w) ? w.slice(-1) : ''}` : w).join(' '); };
-const TY = 360, TH = 300, txt = [];
+const TY = 385, TH = 290, txt = [];
 B.forEach((b, i) => { const d = document.createElement('div'); d.className = 'bt'; d.style.top = `${TY}px`; d.style.height = `${TH}px`; const t = document.createElement('div'); t.className = 't'; t.dataset.chk = 1; t.innerHTML = titulo(b.texto, i); d.appendChild(t); $('#txt').appendChild(d); txt.push(d);
   let fs = i === 0 || b.loop ? 116 : 108; t.style.fontSize = fs + 'px'; d.style.opacity = 1; while ((t.getBoundingClientRect().height > TH - 6 || t.scrollWidth > t.clientWidth + 1) && fs > 56) { fs -= 4; t.style.fontSize = fs + 'px'; } d.style.opacity = 0; });
 const pasos = B.filter(b => b.paso); const TOT = pasos.length ? (pasos[0].total || pasos.length) : 0;
