@@ -40,3 +40,27 @@ Mañana 28/11: cargar `OFICINA_DISPARO_URL` y `OFICINA_DISPARO_TOKEN` en Vercel 
 ## Cuidados de siempre
 
 El código de ingreso no se escribe en archivos. Sin datos de prospectos en documentos. No tocar `docs/redes/`, `.claude/referencias/redes/` ni `src/app/redes/**` (otra sesión). PRs 77, 80 y 40 quedan para después: desuscribirse si llegan avisos. Respuestas cortas, en rioplatense; el dueño es varón.
+
+## Checkpoint 27/11 · 13:45 (hora argentina)
+
+**Publicado en producción**
+- Tanda A1 (Oficina y Bandeja): commits `c3c60b4`, `2d2d0dd` y `1a96ec9`. Migraciones 0651 y 0652 aplicadas.
+- «Arrancar ahora» usa Gemini cuando Claude no tiene disparo (orden del dueño, en `02`). Lo hace la interfaz: llama a `/api/oficina/[id]` con `accion: gemini` tarea por tarea.
+- Prueba real hecha con permiso del dueño: una tarea de alcance «todo el panel» resuelta por Gemini (3 respuestas y juez, USD 0,02). Mostró dos fallas, ya corregidas y publicadas: el juez leía las respuestas cortadas a 2500 caracteres y la ruta por Ingeniería marcaba «código» por sí sola.
+
+**En curso al cerrar este checkpoint**
+- Workflow `wf_6a348c3b-a19` reanudado (tarea `wqm2fzzvj`): se había cortado por el límite de uso de 5 horas. Hechas: f0, a1, a2 (`p27/a2`, commit `ce83275`) y a4 (`p27/a4`, commit `e763104`). Faltan: a3, a5, a6, a7, a8 y las revisiones de a1, a2 y a4.
+- Prueba de todas las áreas de la Oficina (pedida por el dueño: «la idea es que pruebes todos los agentes»): 7 tareas, una por área, corriendo con Gemini desde el panel. Guion en el scratchpad (`ofi/todas.js`); el código de ingreso va solo por variable.
+
+**Qué sigue**
+1. Leer el resultado de la prueba de las 7 áreas y corregir lo que falle.
+2. Integrar a2 (Jarvis) cuando tenga su revisión; a4 (plantillas y línea única) solo con sus migraciones aplicadas sin campañas en curso.
+3. Integrar el resto a medida que termine; después B1, B2, B3, C y D.
+4. Pendientes menores: la prueba 209 falla desde antes; la 790 (Search Console) falla de a ratos.
+
+**Pendiente de decisión del dueño**
+- Lo que hace Gemini queda «sin repasar» y no se puede aprobar hasta que Claude lo repase. Sin disparo de Claude, eso deja las tareas trabadas en «Para repasar». Se le preguntó si quiere poder aprobar directo.
+
+**Regla viva**: hay 2 campañas en curso; no se pausan ni se tocan. Comprobar en la base antes y después de cada migración o publicación.
+
+**Retome programado**: 14:30 (tarea programada de esta sesión).
