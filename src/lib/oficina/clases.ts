@@ -51,8 +51,11 @@ export function claseDePalabras(pedido: string, ruta: readonly string[] = []): C
  * duda, gana Claude).
  */
 export function claseFinal(deGemini: Clase | null | undefined, pedido: string, ruta: readonly string[] = []): Clase {
+  // Solo las palabras del pedido mandan sobre Gemini. Que la ruta pase por Ingeniería no alcanza
+  // para decir «código»: un informe o una guía sobre el panel es texto (prueba del 27/11).
+  const soloPalabras = claseDePalabras(pedido);
+  if (SOLO_CLAUDE.includes(soloPalabras)) return soloPalabras;
   const porPalabras = claseDePalabras(pedido, ruta);
-  if (SOLO_CLAUDE.includes(porPalabras)) return porPalabras;
   if (deGemini && esClase(deGemini)) return deGemini;
   return porPalabras;
 }

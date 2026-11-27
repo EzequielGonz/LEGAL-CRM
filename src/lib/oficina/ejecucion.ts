@@ -44,7 +44,8 @@ export const TOKENS_SALIDA_POR_CANDIDATO = 2000;
 export const LLAMADAS_EN_PARALELO = 10;
 /** Largo máximo que se guarda de cada respuesta y el que lee el juez. */
 export const MAX_TEXTO_CANDIDATO = 6000;
-export const MAX_TEXTO_AL_JUEZ = 2500;
+// El juez lee cada respuesta entera: si la ve cortada la puntúa como incompleta (prueba del 27/11).
+export const MAX_TEXTO_AL_JUEZ = MAX_TEXTO_CANDIDATO;
 export const MAX_RESULTADO = 8000;
 /** Minutos sin avance para considerar cortada una corrida de Gemini (se puede volver a intentar). */
 export const MINUTOS_CORRIDA_CORTADA = 10;
