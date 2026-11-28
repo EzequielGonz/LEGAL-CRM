@@ -107,4 +107,95 @@ Regla común: ningún tema se repite en la misma marca antes de 7 días. Se mant
 
 ## Parte B (a mitad de corrida)
 
-_(vacía: se completa después del primer reel de cada marca y antes del segundo)_
+Medido el sábado 28/11 (Buenos Aires), solo lectura en Metricool. Ventana pedida: 24/11 al 28/11. Instagram y Facebook, reels, de las 4 marcas. Posts solo de VITA; en las otras tres marcas los posts quedan **sin dato** (no se pidieron).
+
+### 1. Qué se publicó desde el 24/11 (y qué no)
+
+| Dato | Resultado |
+|---|---|
+| Reels publicados el 25, 26 y 27/11 | **Ninguno** en las 4 marcas (Instagram y Facebook) |
+| Reels del 28/11 | Ninguno publicado al momento de leer. VITA tiene dos programados: 28/11 08:40 («Chocaste: pedir perdón te puede jugar en contra», formato A con voz y 1/3, 2/3, 3/3) y 28/11 21:10 («Heredar la casa no alcanza para venderla»). Las otras 3 marcas: sin dato (no se consultó la cola) |
+| Reels con datos nuevos | Solo los 5 por marca del **24/11** (11:30, 14:00, 16:30, 20:00 y 23:30), los 5 de **texto fijo «Escribinos «PALABRA» por WhatsApp»** (formato B). Los cinco reels de cada marca ya tienen más de 24 h: se pueden juzgar |
+
+**Conclusión de entrada:** ningún cambio decidido en la sección (e) de la Parte A salió todavía. Lo medido acá es solo el formato B, no los cambios de cada marca.
+
+### 2. Números del 24/11 contra la Parte A
+
+**Instagram, reels (5 por marca, todos formato B)**
+
+| Marca | Vistas (por reel, en orden de hora) | Total | Promedio | Promedio Parte A | Contra Parte A |
+|---|---|---|---|---|---|
+| VITA | 0, 0, 0, 0, 0 | 0 | 0 | 34 (10 sin el mejor) | menos de la mitad |
+| Coberturas | 1, 0, 3, 0, 1 | 5 | 1 | 15 | menos de la mitad |
+| Autos Kocos | 0, 2, 0, 1, 1 | 4 | 0,8 | 21 | menos de la mitad |
+| Kocos Marketing | 0, 0, 0, 1, 2 | 3 | 0,6 | 23 | menos de la mitad |
+
+- Todo cae, pero **no es una caída nueva**: la Parte A ya tenía el formato B con mediana 0 a 1 y promedio 1,5 a 4. Es la confirmación, no una novedad.
+- Alcance, guardados, compartidos y comentarios: 0 en todos. Solo hay 3 interacciones en Coberturas (el reel de 16:30 tuvo 3 vistas y 3 de alcance) y 1 en cada una de Autos y Marketing. Es ruido de cuentas de 0 a 2 seguidores.
+- Tiempo medio de visualización: valores de 0 a 4 s, con el mismo problema de la Parte A (no cierran con las vistas). Solo pista.
+- Retención, duración y «reel view rate»: **sin dato** (no se pidieron; la Parte A ya las daba vacías).
+
+**Facebook, reels (5 por marca, formato B)**
+
+| Marca | Vistas por reel | Total | Promedio | Promedio Parte A |
+|---|---|---|---|---|
+| VITA | 215, 125, 146, 17, 203 | 706 | 141 | 103 |
+| Coberturas | 189, 198, 23, 43, 0 | 453 | 91 | 72 |
+| Autos Kocos | 200, 198, 90, 0, 194 | 682 | 136 | 134 |
+| Kocos Marketing | 13, 35, 3, 7, 23 | 81 | 16 | 23 |
+
+- Ninguna marca pasó al doble de su promedio ni cayó a menos de la mitad: **sin despegue ni caída en Facebook**. El patrón de la Parte A se repite: o unas 200 vistas o casi nada.
+- Alcance de reels de Facebook: **sigue en 0** en todos. No sirve.
+- Franjas a vigilar de la Parte A (19:30, 22:20, 23:50): el reel de las 23:30 dio 215, 189, 200 y 13 vistas, y el de las 20:00 dio 125, 198, 198 y 35. **Ninguna cayó a 0 a 1 por la hora.** Los ceros de Facebook de este día salieron a las 11:30 (Coberturas, 0), 14:00 (Autos, 0) y 14:00 (Coberturas 43 y VITA 17). La hipótesis «las franjas tardías fallan en Facebook» no se sostiene con estos datos.
+
+**Seguidores (Instagram, evolución)**
+
+| Marca | Seguidores 24 a 27/11 | Ganados | Nota |
+|---|---|---|---|
+| VITA | 2 | sin dato | Sin cambios |
+| Coberturas, Autos, Marketing | 0 | sin dato | Metricool devuelve 0: Instagram no entrega el contador (igual que en la Parte A) |
+
+Historias: 11 a 13 por día en las 4 marcas, sin métricas pedidas. Facebook: seguidores **sin dato** esta vuelta.
+
+**Posts de VITA (24 al 27/11, 7 piezas)**
+
+| Red | Resultado |
+|---|---|
+| Instagram | Carruseles de 0 a 4 vistas y de 0 a 1 de alcance, 0 interacciones. Los carruseles «Comentá «PALABRA»» (ART, aguinaldo, choque, trayecto) dieron 4, 2, 3 y 3 vistas; las imágenes con «Escribinos…», 1, 1 y 0. Sin diferencia que se pueda leer |
+| Facebook | 0 a 8 impresiones. El máximo (8) fue el carrusel «Trayecto» del 24/11 |
+
+### 3. ¿Cada cambio ya tiene datos para juzgarse?
+
+| Marca | Cambio decidido en la Parte A | ¿Se puede juzgar? |
+|---|---|---|
+| VITA | Gancho nuevo: «3 cosas que nunca tenés que firmar después de un accidente» (desde el 28/11) | **No.** No está publicado. Lo programado para hoy es otro reel («Chocaste: pedir perdón…», 08:40) y uno de sucesión (21:10). Mismo bloqueo: sin revisión de abogada confirmada acá, sin dato |
+| Coberturas | Tema: «¿Sos monotributista? Tu obra social no se activa sola» | **No.** Sin reel publicado con ese tema |
+| Autos Kocos | Tema: «¿Lo patentás en diciembre o esperás a enero?» | **No.** Sin reel publicado con ese tema |
+| Kocos Marketing | Gancho: «Tu negocio no pierde clientes por precio» | **No.** Sin reel publicado con ese gancho |
+
+Regla de `02`: con menos de 24 h publicado, un reel no se juzga. Hoy no hay ni un reel con el cambio. Se juzga recién cuando haya al menos un reel por marca con más de 24 h.
+
+### 4. ¿VITA en Instagram sigue con reels en 0 vistas?
+
+**Sí.** Los 5 reels del 24/11 tienen 0 vistas, 0 de alcance, 0 interacciones. Con los 4 días que pasaron, no es demora de carga. Suma a la Parte A (el 59 % de los reels de VITA daba 0). Las otras 3 marcas, con el mismo formato B, sí registran 3 a 5 vistas por tanda: VITA queda un escalón por debajo. El mismo contenido en Facebook sí llegó (706 vistas en 5 reels). Eso apunta a la cuenta de Instagram y no al guion.
+
+Lo que **no** se puede afirmar desde acá: la causa. Sigue pendiente lo que ya figuraba en la Parte A: que la responsable revise «Estado de la cuenta» en la app de Instagram. Sin esa revisión, ningún cambio de guion de VITA se puede separar de un posible freno de la cuenta.
+
+### 5. Recomendación para la próxima corrida (un solo cambio por marca)
+
+Regla: **se mantiene todo lo decidido en la Parte A**, porque el cambio de cada marca no se probó todavía. No se agrega nada nuevo, para no mezclar dos cambios. La única novedad es un orden de prioridad: que el reel con el cambio salga primero y como formato A (voz y tres «✔»), no como texto fijo.
+
+| Marca | ¿Se mantiene lo decidido? | Cambio único para la próxima corrida | Lo que se vigila |
+|---|---|---|---|
+| VITA | Sí | **Mantener** el gancho «3 cosas que nunca tenés que firmar después de un accidente», en formato A, con revisión de abogada | Que el reel de Instagram deje de dar 0. Si repite 0 con formato A, escalar la revisión de «Estado de la cuenta» antes de tocar otro guion |
+| Coberturas | Sí | **Mantener** el tema «¿Sos monotributista? Tu obra social no se activa sola», con fuente de la Superintendencia y revisión profesional | Vistas del reel de Instagram contra las 100 a 130 de los mejores del formato A |
+| Autos Kocos | Sí | **Mantener** el tema «¿Lo patentás en diciembre o esperás a enero?», con datos de ACARA y su fuente | Que no baje de 113 vistas, el piso de los reels formato A |
+| Kocos Marketing | Sí | **Mantener** el gancho «Tu negocio no pierde clientes por precio», misma estructura de tres «✔» y misma voz | Vistas del reel de Instagram contra las 135 a 153 de los mejores. Facebook de la marca no es prioridad (16 por reel) |
+
+Observaciones comunes, sin aplicar todavía:
+1. Todos los reels medidos desde el 24/11 son formato B. Si en las próximas corridas se siguen publicando reels de texto fijo en Instagram, no aportan datos y la Parte A ya los marcó como «se corta». Se confirma el corte.
+2. «Comentá PALABRA» en carruseles de VITA: 0 comentarios en los 4 posts que lo llevan. El cierre que invite a guardar o mandar queda para la corrida siguiente, si el cambio de cada marca funciona.
+3. Horarios: Instagram sigue devolviendo **0 en todas las franjas** para VITA (semana 28/11 al 04/12). No hay base para mover la grilla de `01`. Los datos de Facebook de este día tampoco muestran una franja mala por hora.
+4. Pendiente de la Parte A que sigue abierto: Supermetrics sin autenticar, retención y duración vacías, alcance de reels de Facebook en 0.
+
+**Para la responsable:** (a) revisar «Estado de la cuenta» de Instagram de VITA; (b) confirmar que el reel de VITA de 08:40 de hoy sea el formato A con revisión de abogada. El reel de las 08:40 y el de las 21:10 de VITA son la primera lectura real: medirlos mañana domingo 29/11 a partir de las 09:00 y las 21:10.
