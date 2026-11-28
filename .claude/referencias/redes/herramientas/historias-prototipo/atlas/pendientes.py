@@ -1,4 +1,4 @@
-# Reels alojados (mp4 y jpg con 200) que todavía no están en docs/redes/programadas.jsonl.
+# Reels alojados (mp4 y jpg con 200, y el mp4 local ya subido según out/<id>.alojado) que todavía no están en docs/redes/programadas.jsonl.
 # Uso: python3 pendientes.py
 # Imprime la lista y, para cada uno, la línea de reel_metricool.py (blogId, fecha, redes) y su JSON «info».
 # Arma una hoja única prueba/chk/pendientes-hoja.jpg (una fila por reel: 3 cuadros + tapa) para revisar de una vez.
@@ -15,7 +15,11 @@ for l in open(os.path.join(RAIZ, 'docs/redes/programadas.jsonl')):
     try: d = json.loads(l)
     except ValueError: continue
     if d.get('ok') and d.get('tipo') == 'reel': prog.add(d.get('pieza'))
-pend = sorted((i for i, s in al.items() if s >= {'mp4', 'jpg'} and i not in prog),
+def al_dia(i):
+    # El mp4 local tiene que existir y estar alojado: la marca out/<id>.alojado no puede ser más vieja que el mp4.
+    mp4, marca = f'out/{i}.mp4', f'out/{i}.alojado'
+    return os.path.exists(mp4) and os.path.exists(marca) and os.path.getmtime(marca) >= os.path.getmtime(mp4)
+pend = sorted((i for i, s in al.items() if s >= {'mp4', 'jpg'} and i not in prog and al_dia(i)),
               key=lambda i: (json.load(open(f'planes/{i}.json'))['fecha_pub'], json.load(open(f'planes/{i}.json'))['hora']))
 print('pendientes:', ' '.join(pend) or 'ninguno')
 if not pend: sys.exit()
