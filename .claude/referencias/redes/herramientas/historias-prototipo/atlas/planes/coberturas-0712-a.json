@@ -1,0 +1,84 @@
+{
+  "id": "coberturas-0712-a",
+  "marca": "coberturas",
+  "base": "coberturas-0612-1",
+  "fecha_pub": "2026-12-07",
+  "hora": "12:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Tu cuota atrasada también es tu obra social.",
+  "voz": "Tu cuota atrasada también es tu obra social. Si sos monotributista, no dejes de pagar la cuota. En general, una parte es tu obra social: si te atrasás, podés tener problemas para atenderte. Revisá tu estado antes de pedir un turno. Escribinos por WhatsApp. Guardalo para tu próximo vencimiento, porque tu cuota atrasada…",
+  "palabra": "VENCIMIENTO",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "cuota",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "almanaque",
+      "texto": "¿Cuota atrasada?",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "monotributista",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "carpeta",
+      "texto": "Monotributista",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "parte",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "credencial",
+      "texto": "Una parte: obra social",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "atrasás",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "reloj",
+      "texto": "Si te atrasás…",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "problemas",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "mostrador",
+      "texto": "Problemas para atenderte",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Revisá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "celular",
+      "texto": "Revisá tu estado",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Guardalo para tu vencimiento",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Tu cuota atrasada también es tu obra social.\n\n✔ En general, una parte de la cuota es tu obra social.\n✔ Si te atrasás, podés tener problemas para atenderte.\n✔ Revisá tu estado antes de pedir un turno.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Monotributo #ObraSocial #BuenosAires",
+  "fuente": ""
+}

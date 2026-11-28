@@ -1,0 +1,84 @@
+{
+  "id": "vita-0712-b",
+  "marca": "vita",
+  "base": "vita-0312-3",
+  "fecha_pub": "2026-12-07",
+  "hora": "21:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Citado como testigo: faltar no es opción.",
+  "voz": "Citado como testigo: faltar no es opción. Te llegó una citación en una causa penal. Tres tipos. El que no va y se olvida. El que va sin la citación ni el documento. Y el que la lee, consulta si tiene dudas y va con su DNI. ¿Cuál sos? Escribinos por WhatsApp. Mandáselo a quien le llegó una, porque si te citan como testigo…",
+  "palabra": "TESTIGO",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "testigo",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "testigo",
+      "texto": "¿Testigo yo?",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "citación",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "sobre",
+      "texto": "Llegó una citación",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "tipos",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "globo",
+      "texto": "Tres tipos",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "olvida",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "reloj",
+      "texto": "No va",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "documento",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "Sin papeles",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "lee",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "nico",
+      "texto": "Lee, consulta, va",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sobre",
+      "texto": "Mandáselo a quien la recibió",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Citado como testigo: faltar no es opción.\n\n✔ Leé bien la citación.\n✔ Si tenés dudas, consultá antes.\n✔ Andá con la citación y tu DNI.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoPenal #Testigo #BuenosAires",
+  "fuente": ""
+}

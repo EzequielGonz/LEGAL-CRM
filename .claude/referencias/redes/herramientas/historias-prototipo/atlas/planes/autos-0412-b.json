@@ -1,0 +1,84 @@
+{
+  "id": "autos-0412-b",
+  "marca": "autos",
+  "base": "autos-0412-4",
+  "fecha_pub": "2026-12-04",
+  "hora": "17:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "La garantía del 0 km no cubre todo.",
+  "voz": "La garantía del 0 km no cubre todo. Y la letra chica importa. Tres cartas. Carta uno: leé qué cubre y qué no. Carta dos: hacé los services a tiempo, en las fechas que indica. Carta tres: guardá todos los comprobantes. Escribinos por WhatsApp. Guardalo con los papeles del auto, porque la garantía del 0 km…",
+  "palabra": "GARANTIA",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "garantía",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "escudo",
+      "texto": "¿Cubre todo?",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "letra",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "lupa",
+      "texto": "La letra chica",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "cartas",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "Tres cartas",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Carta",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "escudo",
+      "texto": "1. Qué cubre",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Carta",
+      "n": 1,
+      "tipo": "paso",
+      "objeto": "velocimetro",
+      "texto": "2. Services a tiempo",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Carta",
+      "n": 2,
+      "tipo": "paso",
+      "objeto": "documento",
+      "texto": "3. Comprobantes",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "llave",
+      "texto": "Guardalo con los papeles",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "La garantía del 0 km no cubre todo.\n\n✔ Leé qué cubre y qué no.\n✔ Hacé los services a tiempo.\n✔ Guardá todos los comprobantes.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #Garantía #BuenosAires",
+  "fuente": ""
+}

@@ -1,0 +1,84 @@
+{
+  "id": "marketing-0612-a",
+  "marca": "marketing",
+  "base": "marketing-0512-4",
+  "fecha_pub": "2026-12-06",
+  "hora": "12:20",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Si te preguntan cómo pagar, ya perdiste tiempo.",
+  "voz": "Si te preguntan cómo pagar, ya perdiste tiempo. ¿Cuántos medios de pago mostrás? Todos los que aceptás tienen que estar escritos. En tu perfil y en tu catálogo. Así nadie tiene que preguntarlo antes de comprar. Y la venta no se frena en una pregunta. Escribinos por WhatsApp. Guardalo y actualizá tu perfil, porque si te preguntan cómo pagar…",
+  "palabra": "PAGOS",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "pagar",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "chat",
+      "texto": "¿Cómo te pago?",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "medios",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "etiqueta",
+      "texto": "¿Cuántos mostrás?",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "aceptás",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "cartel",
+      "texto": "Todos, escritos",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "perfil",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "vidriera",
+      "texto": "Perfil y catálogo",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "nadie",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "check",
+      "texto": "Sin preguntar",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "frena",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "caja",
+      "texto": "La venta sigue",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "carta",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Actualizá tu perfil",
+      "efecto": "barrido"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Si te preguntan cómo pagar, ya perdiste tiempo.\n\n✔ Escribí todos los medios de pago que aceptás.\n✔ En tu perfil y en tu catálogo.\n✔ Que nadie tenga que preguntarlo antes de comprar.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #MediosDePago #Pymes",
+  "fuente": ""
+}

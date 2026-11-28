@@ -1,0 +1,84 @@
+{
+  "id": "coberturas-0412-b",
+  "marca": "coberturas",
+  "base": "coberturas-0112-4",
+  "fecha_pub": "2026-12-04",
+  "hora": "18:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "En tratamiento, no te cambies sin estas preguntas.",
+  "voz": "En tratamiento, no te cambies sin estas preguntas. Estás en tratamiento y querés pasarte a otra prepaga. Antes, preguntá tres cosas. Uno: si el plan nuevo lo cubre. Dos: si tus médicos están en cartilla. Tres: desde cuándo lo cubre. Escribinos por WhatsApp. Guardalo antes de cambiarte, porque si estás en tratamiento…",
+  "palabra": "TRATAMIENTO",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "tratamiento",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "frasco",
+      "texto": "¿Cambiarte ahora?",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Estás",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "receta",
+      "texto": "En pleno tratamiento",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "preguntá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "pregunta",
+      "texto": "Tres preguntas",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Uno",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "check",
+      "texto": "1. ¿Lo cubre?",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Dos",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "personaje",
+      "texto": "2. ¿Tus médicos?",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Tres",
+      "n": 1,
+      "tipo": "paso",
+      "objeto": "almanaque",
+      "texto": "3. ¿Desde cuándo?",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "carpeta",
+      "texto": "Guardalo antes del cambio",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "En tratamiento, no te cambies sin estas preguntas.\n\n✔ Si el plan nuevo cubre tu tratamiento.\n✔ Si tus médicos están en la cartilla.\n✔ Desde cuándo lo cubre.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Prepaga #Tratamiento #BuenosAires",
+  "fuente": ""
+}

@@ -1,0 +1,84 @@
+{
+  "id": "marketing-0512-a",
+  "marca": "marketing",
+  "base": "marketing-0212-1",
+  "fecha_pub": "2026-12-05",
+  "hora": "12:20",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Tener WhatsApp Business no alcanza.",
+  "voz": "Tener WhatsApp Business no alcanza. Vos lo instalaste, pero tu catálogo está vacío. Y cada cliente te pregunta lo mismo. Cargá tus diez productos más pedidos. Con foto real, precio y una línea de qué incluyen. Así el cliente elige antes de escribirte. Escribinos por WhatsApp. Guardalo y cargalo esta semana, porque tener WhatsApp Business…",
+  "palabra": "CATALOGO",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Tener",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "celular",
+      "texto": "¿Business y nada más?",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "catálogo",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "vidriera",
+      "texto": "Catálogo vacío",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "pregunta",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "chat",
+      "texto": "Siempre la misma pregunta",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Cargá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "caja",
+      "texto": "Tus 10 más pedidos",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "foto",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "etiqueta",
+      "texto": "Foto real y precio",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "elige",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "estrella",
+      "texto": "Elige antes de escribir",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "carta",
+      "texto": "Cargalo esta semana",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Tener WhatsApp Business no alcanza.\n\n✔ Cargá tus diez productos más pedidos.\n✔ Con foto real y precio.\n✔ Y una línea de qué incluyen.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Catálogo #Pymes",
+  "fuente": ""
+}

@@ -1,0 +1,85 @@
+{
+  "id": "marketing-0312-a",
+  "marca": "marketing",
+  "base": "marketing-0412-3",
+  "fecha_pub": "2026-12-03",
+  "hora": "12:20",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Tu negocio no pierde clientes por precio.",
+  "voz": "Tu negocio no pierde clientes por precio. Los pierde después del precio. Vos respondés cuánto sale y ahí termina la charla. Sumá siempre un paso siguiente. «¿Te lo reservo?» «¿Para qué día?» «¿Te mando opciones?» Una pregunta y la venta sigue. Escribinos por WhatsApp. Guardalo para tu próxima respuesta, porque tu negocio no pierde clientes…",
+  "palabra": "PASO",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "precio",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "etiqueta",
+      "texto": "¿Por precio?",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "Los",
+      "n": 0,
+      "tipo": "giro",
+      "objeto": "cruz",
+      "texto": "Después del precio",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "respondés",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "chat",
+      "texto": "«Sale tanto» y chau",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Sumá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "cartel",
+      "texto": "Paso siguiente",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "reservo",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "caja",
+      "texto": "«¿Te lo reservo?»",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "día",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "reloj_arena",
+      "texto": "«¿Para qué día?»",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Guardalo para responder",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Tu negocio no pierde clientes por precio.\n\n✔ No termines la charla en el precio.\n✔ Sumá siempre un paso siguiente.\n✔ «¿Te lo reservo?», «¿Para qué día?» o «¿Te mando opciones?»\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Ventas #Pymes",
+  "fuente": "",
+  "nota": "Prueba de la calibración del 27/11 (cambio de gancho)."
+}

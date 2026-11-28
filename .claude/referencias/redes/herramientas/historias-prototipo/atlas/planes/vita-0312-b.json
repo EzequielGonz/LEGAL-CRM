@@ -1,0 +1,84 @@
+{
+  "id": "vita-0312-b",
+  "marca": "vita",
+  "base": "vita-2811-3",
+  "fecha_pub": "2026-12-03",
+  "hora": "21:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Te vaciaron la cuenta: borrar todo te perjudica.",
+  "voz": "Te vaciaron la cuenta: borrar todo te perjudica. Un link falso y la plata ya no está. Hay tres tipos. El que borra todo de vergüenza. El que espera a ver si se arregla solo. Y el que guarda capturas, avisa al banco y hace la denuncia. ¿Cuál sos? Escribinos por WhatsApp. Mandáselo a quien usa el home banking, porque cuando te vacían la cuenta…",
+  "palabra": "ESTAFA",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "vaciaron",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "celular",
+      "texto": "¿Cuenta vacía?",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "link",
+      "n": 0,
+      "tipo": "giro",
+      "objeto": "sobre",
+      "texto": "Link falso",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "tipos",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "globo",
+      "texto": "Tres tipos",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "borra",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "Borra todo",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "espera",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "reloj",
+      "texto": "Espera solo",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "guarda",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "camara",
+      "texto": "Capturas, banco, denuncia",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sobre",
+      "texto": "Mandáselo y cuidá tu cuenta",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Te vaciaron la cuenta: borrar todo te perjudica.\n\n✔ Guardá capturas de todo.\n✔ Avisá al banco enseguida.\n✔ Hacé la denuncia.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #EstafaVirtual #DerechoPenal #BuenosAires",
+  "fuente": ""
+}

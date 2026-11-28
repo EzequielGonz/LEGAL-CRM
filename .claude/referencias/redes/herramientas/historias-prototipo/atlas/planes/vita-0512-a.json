@@ -1,0 +1,84 @@
+{
+  "id": "vita-0512-a",
+  "marca": "vita",
+  "base": "vita-0512-1",
+  "fecha_pub": "2026-12-05",
+  "hora": "08:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Heredar no te obliga a poner tu plata.",
+  "voz": "Heredar no te obliga a poner tu plata. ¿Heredás las deudas de tu papá? Tres cartas. Carta uno: el heredero responde solo hasta el valor de lo que recibe. Carta dos: no pongas plata tuya sin consultar. Carta tres: hacé un inventario de bienes y deudas. Escribinos por WhatsApp. Mandáselo a tus hermanos, porque heredar no te obliga…",
+  "palabra": "DEUDAS",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "Heredar",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "billete",
+      "texto": "¿Pagás sus deudas?",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "deudas",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "documento",
+      "texto": "Las deudas de papá",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "cartas",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "sobre",
+      "texto": "Tres cartas",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Carta",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "edificio",
+      "texto": "1. Hasta lo recibido",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Carta",
+      "n": 1,
+      "tipo": "paso",
+      "objeto": "billete",
+      "texto": "2. No pongas tu plata",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Carta",
+      "n": 2,
+      "tipo": "paso",
+      "objeto": "documento",
+      "texto": "3. Inventario",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sobre",
+      "texto": "Mandáselo a tus hermanos",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Heredar no te obliga a poner tu plata.\n\n✔ El heredero responde solo hasta el valor de lo que recibe.\n✔ No pongas plata tuya sin consultar.\n✔ Hacé un inventario de bienes y deudas.\n\nEscribinos por WhatsApp.\n\nFuente: Código Civil y Comercial, art. 2317.\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #Herencia #Sucesión #BuenosAires",
+  "fuente": "Código Civil y Comercial, art. 2317"
+}

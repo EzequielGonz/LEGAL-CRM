@@ -1,0 +1,84 @@
+{
+  "id": "marketing-0412-a",
+  "marca": "marketing",
+  "base": "marketing-2811-1",
+  "fecha_pub": "2026-12-04",
+  "hora": "12:20",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Tu día no rinde: te faltan tres respuestas.",
+  "voz": "Tu día no rinde: te faltan tres respuestas. Te preguntan lo mismo todo el día y escribís todo de nuevo. Tres cartas, tres respuestas rápidas. Carta uno: precio y formas de pago. Carta dos: horario y dirección. Carta tres: cómo se hace un pedido, paso a paso. Escribinos por WhatsApp. Guardalo y armalas hoy, porque si tu día no rinde…",
+  "palabra": "RAPIDAS",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "rinde",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "reloj_arena",
+      "texto": "¿Tu día no rinde?",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "preguntan",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "chat",
+      "texto": "Siempre lo mismo",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "cartas",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "carta",
+      "texto": "Tres respuestas",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Carta",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "etiqueta",
+      "texto": "1. Precio y pago",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Carta",
+      "n": 1,
+      "tipo": "paso",
+      "objeto": "mostrador",
+      "texto": "2. Horario y dirección",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Carta",
+      "n": 2,
+      "tipo": "paso",
+      "objeto": "caja",
+      "texto": "3. Cómo pedir",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Armalas hoy",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Tu día no rinde: te faltan tres respuestas.\n\n✔ Precio y formas de pago.\n✔ Horario y dirección.\n✔ Cómo se hace un pedido, paso a paso.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores",
+  "fuente": ""
+}

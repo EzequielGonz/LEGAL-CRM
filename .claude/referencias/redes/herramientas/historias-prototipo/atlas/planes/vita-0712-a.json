@@ -1,0 +1,84 @@
+{
+  "id": "vita-0712-a",
+  "marca": "vita",
+  "base": "vita-2811-2",
+  "fecha_pub": "2026-12-07",
+  "hora": "08:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Tenés tiempo para reclamar, pero no infinito.",
+  "voz": "Tenés tiempo para reclamar, pero no infinito. Te chocaron. Desde ese día corre un contador: día uno, día cien, día quinientos. Para reclamar los daños, el plazo general es de tres años. Guardá los papeles, seguí con tus estudios y no lo dejes para el final. Escribinos por WhatsApp. Mandáselo a quien tuvo un choque, porque el contador ya corre…",
+  "palabra": "PLAZO",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Tenés",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "reloj",
+      "texto": "¿Hay tiempo?",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "chocaron",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "choque",
+      "texto": "Te chocaron",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "contador",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "almanaque",
+      "texto": "Día 1, 100, 500",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "plazo",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "Plazo general: 3 años",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Guardá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "sobre",
+      "texto": "Guardá los papeles",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "seguí",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "ambulancia",
+      "texto": "Seguí tus estudios",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "auto",
+      "texto": "Mandáselo a quien chocó",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Tenés tiempo para reclamar, pero no infinito.\n\n✔ El plazo general para reclamar daños es de tres años.\n✔ Guardá todos los papeles.\n✔ Seguí con tus estudios y no lo dejes para el final.\n\nEscribinos por WhatsApp.\n\nFuente: Código Civil y Comercial, art. 2561.\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #AccidentesDeTránsito #Plazos #BuenosAires",
+  "fuente": "Código Civil y Comercial, art. 2561"
+}

@@ -1,0 +1,84 @@
+{
+  "id": "autos-0612-a",
+  "marca": "autos",
+  "base": "autos-0512-1",
+  "fecha_pub": "2026-12-06",
+  "hora": "09:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "La cuota más baja puede salirte más cara.",
+  "voz": "La cuota más baja puede salirte más cara. Te muestran una cuota chica y parece la mejor. Pero un anticipo chico puede subir la cuota o el plazo. Antes de decidir, hacé la cuenta completa: anticipo, cuota y plazo. Sumalo todo y recién ahí elegí. Escribinos por WhatsApp. Mandáselo a quien mira solo la cuota, porque la más baja…",
+  "palabra": "ANTICIPO",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "cuota",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "documento",
+      "texto": "¿La más baja?",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "muestran",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "celular",
+      "texto": "Cuota chica",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "anticipo",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "grieta",
+      "texto": "Anticipo chico…",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "subir",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "velocimetro",
+      "texto": "Sube cuota o plazo",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "cuenta",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "lupa",
+      "texto": "Cuenta completa",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Sumalo",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "almanaque",
+      "texto": "Sumá todo",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "llave",
+      "texto": "Mandáselo a quien duda",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "La cuota más baja puede salirte más cara.\n\n✔ Un anticipo chico puede subir la cuota o el plazo.\n✔ Hacé la cuenta completa: anticipo, cuota y plazo.\n✔ Sumalo todo antes de elegir.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #Cuotas #BuenosAires",
+  "fuente": ""
+}

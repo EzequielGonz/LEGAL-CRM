@@ -1,0 +1,84 @@
+{
+  "id": "coberturas-0312-b",
+  "marca": "coberturas",
+  "base": "coberturas-0512-3",
+  "fecha_pub": "2026-12-03",
+  "hora": "18:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "La guardia de vacaciones se busca antes.",
+  "voz": "La guardia de vacaciones se busca antes. Ruta 11, once de la noche, lejos de casa. Fiebre alta y no sabés adónde ir. Si lo preguntabas antes, tenías tres datos: la guardia del lugar, el teléfono de urgencias y cómo pedir reintegro. Escribinos por WhatsApp. Mandáselo a quien sale de viaje, porque la guardia de vacaciones…",
+  "palabra": "COSTA",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "guardia",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "pregunta",
+      "texto": "¿Y la guardia?",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "Ruta",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "reloj",
+      "texto": "Ruta 11, 23:00",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Fiebre",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "frasco",
+      "texto": "Fiebre lejos de casa",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "preguntabas",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "personaje",
+      "texto": "Preguntalo antes",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "guardia",
+      "n": 1,
+      "tipo": "dato",
+      "objeto": "mostrador",
+      "texto": "La guardia del lugar",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "teléfono",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "celular",
+      "texto": "Teléfono de urgencias",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "carpeta",
+      "texto": "Mandáselo a quien viaja",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "La guardia de vacaciones se busca antes.\n\n✔ La guardia del lugar al que vas.\n✔ El teléfono de urgencias de tu cobertura.\n✔ Cómo pedir reintegro.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Vacaciones #BuenosAires",
+  "fuente": ""
+}

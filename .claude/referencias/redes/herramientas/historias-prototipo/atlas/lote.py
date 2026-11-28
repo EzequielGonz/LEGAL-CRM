@@ -24,8 +24,8 @@ def uno(id_):
     run(['node', 'render.js', id_, '30', '3'], env=env); log(id_, 'render', round(time.time() - t0), 's')
     run(['python3', 'mezcla.py', id_])
     os.makedirs('out', exist_ok=True)
-    run(['ffmpeg', '-y', '-v', 'error', '-framerate', '30', '-i', f'fr/{id_}/%05d.jpg', '-i', f'audio/{id_}-mezcla.wav', '-c:v', 'libx264', '-crf', '21',
-         '-maxrate', '14M', '-bufsize', '28M', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '256k', '-shortest', '-movflags', '+faststart', f'out/{id_}.mp4'])
+    run(['ffmpeg', '-y', '-v', 'error', '-framerate', '30', '-i', f'fr/{id_}/%05d.jpg', '-i', f'audio/{id_}-mezcla.wav', '-c:v', 'libx264', '-crf', '22',
+         '-maxrate', '8M', '-bufsize', '16M', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '256k', '-shortest', '-movflags', '+faststart', f'out/{id_}.mp4'])
     D = dur(f'out/{id_}.mp4')
     run(['ffmpeg', '-y', '-v', 'error', '-ss', '1.2', '-i', f'out/{id_}.mp4', '-frames:v', '1', '-q:v', '2', f'out/{id_}.jpg'])
     os.makedirs('prueba/chk', exist_ok=True)

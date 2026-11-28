@@ -4,7 +4,7 @@ Todas se disparan en esta sesión (send_later). Cada una arranca leyendo `README
 
 | # | Cuándo (Buenos Aires) | Corrida | Id de la tarea | Estado | Qué se programó |
 |---|---|---|---|---|---|
-| 1 | Vie 27/11 18:32 (movida por pedido del dueño) | Retoma las escenas frenadas, termina la tanda base 1 (40 reels, 28/11–02/12) y hace la tanda 2 (03/12–07/12) | `trig_01TFsMBNJWdP5NcYpjWz86FJ` | en curso (escenas aprobadas, cola de render andando; un reel tarda unos 20 min) | |
+| 1 | Vie 27/11 18:32 (movida por pedido del dueño) | Retoma las escenas frenadas, termina la tanda base 1 (40 reels, 28/11–02/12) y hace la tanda 2 (03/12–07/12) | `trig_01TFsMBNJWdP5NcYpjWz86FJ` | en curso: tanda 1 en render (cola.sh, ~25 min por reel; la máquina se reinició el 28/11 02:50 UTC y la cola se relanzó); tanda 2: 40 planes (`tanda2/RESUMEN.md`) y 40 voces listas, cola2.sh espera a la tanda 1 | |
 | 2 | Sáb 28/11 13:00 | A | `trig_01YEtziqXSGoXu3bzb7Byf85` | pendiente | |
 | 3 | Sáb 28/11 18:00 | B | `trig_018UNPhSjF4r4jE77ZSSEHum` | pendiente | |
 | 4 | Dom 29/11 13:00 | A | `trig_01MwTFfvxAabHtoHGCYnjjuW` | pendiente | |

@@ -1,0 +1,85 @@
+{
+  "id": "coberturas-0612-b",
+  "marca": "coberturas",
+  "base": "coberturas-0612-3",
+  "fecha_pub": "2026-12-06",
+  "hora": "18:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Parte 2: Vero puede mantener su obra social.",
+  "voz": "Parte dos: Vero puede mantener su obra social. Durante una licencia sin goce de sueldo, podés elegir seguir con tu obra social. ¿Cómo? Pagando tu aporte y también la contribución del empleador. Preguntalo antes de que empiece la licencia, no después. Escribinos por WhatsApp. Mandáselo a quien vaya a pedir licencia, porque Vero puede…",
+  "palabra": "SINSUELDO",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Parte",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "personaje",
+      "texto": "Parte 2: Vero",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "Durante",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "almanaque",
+      "texto": "Licencia sin sueldo",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "elegir",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "check",
+      "texto": "Podés elegir",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Cómo",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "pregunta",
+      "texto": "¿Cómo?",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "aporte",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "carpeta",
+      "texto": "Tu aporte + empleador",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Preguntalo",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "reloj",
+      "texto": "Antes de la licencia",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien la pida",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Parte 2: Vero puede mantener su obra social.\n\n✔ En una licencia sin goce de sueldo, podés elegir mantener la obra social.\n✔ Pagás tu aporte y la contribución del empleador.\n✔ Preguntalo antes de que empiece la licencia.\n\nEscribinos por WhatsApp.\n\nFuente: Ley 23.660, art. 10, inc. d.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Licencia #BuenosAires",
+  "fuente": "Ley 23.660, art. 10, inc. d",
+  "nota": "Serie: parte 1 el 04/12 (coberturas-0412-a)."
+}

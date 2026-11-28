@@ -1,0 +1,84 @@
+{
+  "id": "marketing-0412-b",
+  "marca": "marketing",
+  "base": "marketing-0312-2",
+  "fecha_pub": "2026-12-04",
+  "hora": "18:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Tu cliente no debería buscar tu número.",
+  "voz": "Tu cliente no debería buscar tu número. ¿Cuántos pasos necesita alguien para escribirte por WhatsApp? Con un link directo, uno solo: lo toca y se abre el chat. Ponelo en tu perfil, en Google y en tus historias. Que escribirte sea lo más fácil del día. Escribinos por WhatsApp. Mandáselo a quien vende por WhatsApp, porque tu cliente…",
+  "palabra": "LINK",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "número",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "cartel",
+      "texto": "¿Dónde está tu número?",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "pasos",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "reloj_arena",
+      "texto": "¿Cuántos pasos?",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "link",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "chat",
+      "texto": "Link directo: 1 paso",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "toca",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "celular",
+      "texto": "Lo toca y escribe",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Ponelo",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "vidriera",
+      "texto": "Perfil, Google, historias",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "fácil",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "estrella",
+      "texto": "Lo más fácil",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "carta",
+      "texto": "Mandáselo a quien vende",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Tu cliente no debería buscar tu número.\n\n✔ Usá un link directo de WhatsApp: lo tocan y se abre el chat.\n✔ Ponelo en tu perfil, en Google y en tus historias.\n✔ Que escribirte sea lo más fácil.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Ventas #Pymes",
+  "fuente": ""
+}

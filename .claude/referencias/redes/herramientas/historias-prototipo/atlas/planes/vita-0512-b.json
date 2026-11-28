@@ -1,0 +1,84 @@
+{
+  "id": "vita-0512-b",
+  "marca": "vita",
+  "base": "vita-0212-4",
+  "fecha_pub": "2026-12-05",
+  "hora": "21:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Los días sin trabajar también se reclaman.",
+  "voz": "Los días sin trabajar también se reclaman. Un choque te dejó veinte días en casa, sin poder trabajar. Muchos creen que solo se reclama el auto. Guardá el certificado médico. Juntá los recibos de remedios y traslados. Y anotá cada día perdido. Escribinos por WhatsApp. Mandáselo a quien tuvo un choque este año, porque los días sin trabajar…",
+  "palabra": "DANOS",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "días",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "almanaque",
+      "texto": "Días sin trabajar",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "choque",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "choque",
+      "texto": "20 días en casa",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Muchos",
+      "n": 0,
+      "tipo": "giro",
+      "objeto": "auto",
+      "texto": "¿Solo el auto?",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "Guardá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "Certificado médico",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Juntá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "billete",
+      "texto": "Remedios y traslados",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "anotá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "almanaque",
+      "texto": "Cada día perdido",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sobre",
+      "texto": "Mandáselo a quien chocó",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Los días sin trabajar también se reclaman.\n\n✔ Guardá el certificado médico.\n✔ Juntá los recibos de remedios y traslados.\n✔ Anotá cada día que no pudiste trabajar.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #AccidentesDeTránsito #Choque #BuenosAires",
+  "fuente": ""
+}

@@ -1,0 +1,84 @@
+{
+  "id": "coberturas-0712-b",
+  "marca": "coberturas",
+  "base": "coberturas-0412-2",
+  "fecha_pub": "2026-12-07",
+  "hora": "18:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "¿Pagás por un plan que casi no usás?",
+  "voz": "¿Pagás por un plan que casi no usás? Este mes, ¿cuántas veces usaste tu prepaga? Hacé la lista del año: consultas, estudios y guardias. Si usás poco, quizás hay un plan que te sirve igual. Comparalo con la cartilla de tu zona. Escribinos por WhatsApp. Mandáselo a quien paga y no usa, porque este mes, ¿cuántas veces la usaste?",
+  "palabra": "USO",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Pagás",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "credencial",
+      "texto": "¿Lo usás?",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "mes",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "almanaque",
+      "texto": "¿Cuántas veces?",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "lista",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "carpeta",
+      "texto": "Lista del año",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "consultas",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "receta",
+      "texto": "Consultas, estudios, guardias",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "poco",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "frasco",
+      "texto": "Si usás poco…",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Comparalo",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "check",
+      "texto": "Cartilla de tu zona",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien no usa",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "¿Pagás por un plan que casi no usás?\n\n✔ Hacé la lista del año: consultas, estudios y guardias.\n✔ Si usás poco, quizás hay un plan que te sirve igual.\n✔ Comparalo con la cartilla de tu zona.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Prepaga #Cartilla #BuenosAires",
+  "fuente": ""
+}

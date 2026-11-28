@@ -1,0 +1,85 @@
+{
+  "id": "coberturas-0412-a",
+  "marca": "coberturas",
+  "base": "coberturas-0412-1",
+  "fecha_pub": "2026-12-04",
+  "hora": "12:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Sin sueldo no siempre es sin obra social.",
+  "voz": "Sin sueldo no siempre es sin obra social. Parte uno. Vero pide cuatro meses de licencia sin goce de sueldo para cuidar a su mamá. La aprueban. Pero aparece una duda: ¿pierde la obra social? La respuesta, en la parte dos. Escribinos por WhatsApp. Guardalo para ver la parte dos, porque sin sueldo…",
+  "palabra": "SINSUELDO",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Sin",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "credencial",
+      "texto": "¿Sin sueldo?",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "Parte",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "carpeta",
+      "texto": "Parte 1",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "Vero",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "personaje",
+      "texto": "Vero: 4 meses",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "aprueban",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "sello",
+      "texto": "Aprobada",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "duda",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "pregunta",
+      "texto": "¿Pierde la cobertura?",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "respuesta",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "almanaque",
+      "texto": "En la parte 2",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "carpeta",
+      "texto": "Guardalo para la parte 2",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Sin sueldo no siempre es sin obra social.\n\n✔ Vero pide cuatro meses de licencia sin goce de sueldo.\n✔ Se la aprueban.\n✔ ¿Pierde la obra social? Mirá la parte 2.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Licencia #BuenosAires",
+  "fuente": "",
+  "nota": "Serie: la parte 2 sale el 06/12 (coberturas-0612-b)."
+}

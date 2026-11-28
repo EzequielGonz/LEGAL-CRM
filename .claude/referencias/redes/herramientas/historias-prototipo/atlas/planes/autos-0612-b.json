@@ -1,0 +1,85 @@
+{
+  "id": "autos-0612-b",
+  "marca": "autos",
+  "base": "autos-0612-3",
+  "fecha_pub": "2026-12-06",
+  "hora": "17:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Parte 2: la fecha de entrega, por escrito.",
+  "voz": "Parte dos: la fecha de entrega, por escrito. Si querés el 0 km para una fecha, no alcanza con un «llega pronto». Pedí tres cosas por escrito. Uno: la fecha estimada de entrega. Dos: qué pasa si se atrasa. Tres: quién te avisa. Escribinos por WhatsApp. Mandáselo a quien espera su 0 km, porque en la parte dos…",
+  "palabra": "ENTREGA",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "Parte",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "documento",
+      "texto": "Parte 2",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "querés",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "almanaque",
+      "texto": "¿Para una fecha?",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "pronto",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "cruz",
+      "texto": "«Llega pronto»",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Uno",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "almanaque",
+      "texto": "1. Fecha estimada",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Dos",
+      "n": 1,
+      "tipo": "paso",
+      "objeto": "velocimetro",
+      "texto": "2. Si se atrasa",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Tres",
+      "n": 1,
+      "tipo": "paso",
+      "objeto": "celular",
+      "texto": "3. Quién avisa",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "llave",
+      "texto": "Mandáselo a quien espera",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Parte 2: la fecha de entrega, por escrito.\n\n✔ Fecha estimada de entrega.\n✔ Qué pasa si se atrasa.\n✔ Quién te avisa.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #Entrega #BuenosAires",
+  "fuente": "",
+  "nota": "Serie: parte 1 el 04/12 (autos-0412-a)."
+}

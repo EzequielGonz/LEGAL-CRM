@@ -1,0 +1,84 @@
+{
+  "id": "marketing-0312-b",
+  "marca": "marketing",
+  "base": "marketing-2911-3",
+  "fecha_pub": "2026-12-03",
+  "hora": "18:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Sin etiquetas, tus chats se pierden.",
+  "voz": "Sin etiquetas, tus chats se pierden. Abrís WhatsApp y no sabés en qué quedó cada cliente. Usá cuatro etiquetas. Nuevo. Presupuesto. Seguimiento. Y vendido. En un minuto ves dónde está cada venta y a quién escribirle hoy. Es WhatsApp Business y no cuesta nada. Escribinos por WhatsApp. Guardalo y etiquetá hoy, porque sin etiquetas…",
+  "palabra": "ETIQUETAS",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "etiquetas",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "chat",
+      "texto": "¿Chats perdidos?",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "Abrís",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "celular",
+      "texto": "¿En qué quedó?",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Usá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "etiqueta",
+      "texto": "Cuatro etiquetas",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Nuevo",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "carta",
+      "texto": "Nuevo · Presupuesto",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Seguimiento",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "check",
+      "texto": "Seguimiento · Vendido",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "minuto",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "reloj_arena",
+      "texto": "Todo en un minuto",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Business",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "cartel",
+      "texto": "WhatsApp Business, gratis",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "carta",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Sin etiquetas, tus chats se pierden.\n\n✔ Nuevo, presupuesto, seguimiento y vendido.\n✔ En un minuto ves en qué quedó cada chat.\n✔ Está en WhatsApp Business, gratis.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores",
+  "fuente": ""
+}

@@ -1,0 +1,84 @@
+{
+  "id": "autos-0512-b",
+  "marca": "autos",
+  "base": "autos-0212-3",
+  "fecha_pub": "2026-12-05",
+  "hora": "17:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "No retires tu 0 km sin estos papeles.",
+  "voz": "No retires tu 0 km sin estos papeles. Llegó el día y estás apurado por manejarlo. Antes, pedí cuatro cosas. La factura. El título. La cédula del auto. Y la póliza del seguro. Después, revisá que los datos coincidan con el auto. Escribinos por WhatsApp. Guardalo para el día del retiro, porque no retires tu 0 km…",
+  "palabra": "PAPELES",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "papeles",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "documento",
+      "texto": "¿Y los papeles?",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "apurado",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "llave",
+      "texto": "Apurado por manejar",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "factura",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "Factura",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "cédula",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "auto",
+      "texto": "Cédula del auto",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "póliza",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "poliza",
+      "texto": "Póliza del seguro",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "revisá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "lupa",
+      "texto": "Que coincidan",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "llave",
+      "texto": "Guardalo para el retiro",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "No retires tu 0 km sin estos papeles.\n\n✔ Factura, título y cédula del auto.\n✔ La póliza del seguro.\n✔ Que los datos coincidan con el auto.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #Papeles #BuenosAires",
+  "fuente": ""
+}

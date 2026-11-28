@@ -1,0 +1,84 @@
+{
+  "id": "vita-0612-b",
+  "marca": "vita",
+  "base": "vita-0512-3",
+  "fecha_pub": "2026-12-06",
+  "hora": "21:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Pagaste y no llegó: esperar no es reclamar.",
+  "voz": "Pagaste y no llegó: esperar no es reclamar. Compraste online. Día uno: pagaste. Día diez: no llegó. Día treinta: no te responden. Y vos seguís esperando. Guardá la factura y los mensajes. Reclamá por escrito y, si no contestan, consultá. Escribinos por WhatsApp. Guardalo para tu próxima compra online, porque si pagaste y no llegó…",
+  "palabra": "ONLINE",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "Pagaste",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "billete",
+      "texto": "¿Pagaste y nada?",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "Día",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "almanaque",
+      "texto": "Día 1: pagaste",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Día",
+      "n": 1,
+      "tipo": "paso",
+      "objeto": "reloj",
+      "texto": "Día 10: no llegó",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Día",
+      "n": 2,
+      "tipo": "paso",
+      "objeto": "celular",
+      "texto": "Día 30: silencio",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Guardá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "Factura y mensajes",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Reclamá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "firma",
+      "texto": "Reclamá por escrito",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sobre",
+      "texto": "Guardalo para tu compra",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Pagaste y no llegó: esperar no es reclamar.\n\n✔ Guardá la factura y los mensajes.\n✔ Reclamá por escrito.\n✔ Si no contestan, consultá.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #CompraOnline #DerechoDelConsumidor #BuenosAires",
+  "fuente": ""
+}

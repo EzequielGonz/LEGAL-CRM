@@ -1,0 +1,84 @@
+{
+  "id": "autos-0712-b",
+  "marca": "autos",
+  "base": "autos-reserva-2",
+  "fecha_pub": "2026-12-07",
+  "hora": "17:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "No firmes la orden sin leer estos renglones.",
+  "voz": "No firmes la orden sin leer estos renglones. Te dan la orden de compra y una birome. Antes de firmar, mirá tres renglones. Uno: el modelo y la versión. Dos: el color. Tres: el precio, con los gastos incluidos. Si algo no coincide, se corrige antes. Escribinos por WhatsApp. Guardalo para el día de la firma, porque no firmes…",
+  "palabra": "COMPRA",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "firmes",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "candado",
+      "texto": "¿Leíste la orden?",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "birome",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "documento",
+      "texto": "La orden de compra",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "Uno",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "lupa",
+      "texto": "1. Modelo y versión",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Dos",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "auto",
+      "texto": "2. Color",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Tres",
+      "n": 1,
+      "tipo": "paso",
+      "objeto": "documento",
+      "texto": "3. Precio con gastos",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "coincide",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "cruz",
+      "texto": "Si no coincide…",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "llave",
+      "texto": "Guardalo para la firma",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "No firmes la orden sin leer estos renglones.\n\n✔ Modelo y versión.\n✔ Color.\n✔ Precio con los gastos incluidos.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #OrdenDeCompra #BuenosAires",
+  "fuente": ""
+}

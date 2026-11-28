@@ -1,0 +1,84 @@
+{
+  "id": "vita-0412-a",
+  "marca": "vita",
+  "base": "vita-0412-2",
+  "fecha_pub": "2026-12-04",
+  "hora": "08:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Te allanan: resistirte te complica más.",
+  "voz": "Te allanan: resistirte te complica más. Seis de la mañana. Golpean la puerta: es un allanamiento. Uno: pedí ver la orden y quién la firmó. Dos: no te resistas. Tres: llamá a un abogado y no declares sin él. Escribinos por WhatsApp. Guardalo por las dudas, porque si a las seis golpean la puerta…",
+  "palabra": "PUERTA",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "allanan",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "edificio",
+      "texto": "¿Allanamiento?",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "Seis",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "reloj",
+      "texto": "6:00",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Golpean",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "edificio",
+      "texto": "Golpean la puerta",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Uno",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "documento",
+      "texto": "1. Ver la orden",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Dos",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "nico",
+      "texto": "2. No resistirte",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Tres",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "celular",
+      "texto": "3. Abogado primero",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sobre",
+      "texto": "Guardalo por las dudas",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Te allanan: resistirte te complica más.\n\n✔ Pedí ver la orden y quién la firmó.\n✔ No te resistas.\n✔ Llamá a un abogado y no declares sin él.\n\nEscribinos por WhatsApp.\n\nFuente: Constitución Nacional, art. 18.\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoPenal #Allanamiento #BuenosAires",
+  "fuente": "Constitución Nacional, art. 18"
+}

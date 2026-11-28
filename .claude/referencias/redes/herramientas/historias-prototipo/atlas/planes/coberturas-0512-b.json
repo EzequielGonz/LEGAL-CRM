@@ -1,0 +1,84 @@
+{
+  "id": "coberturas-0512-b",
+  "marca": "coberturas",
+  "base": "coberturas-0412-4",
+  "fecha_pub": "2026-12-05",
+  "hora": "18:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "En invierno no trabajás, pero podés seguir cubierto.",
+  "voz": "En invierno no trabajás, pero podés seguir cubierto. Vos trabajás en la temporada de verano. ¿Qué pasa con tu obra social el resto del año? Podés mantenerla en los meses sin trabajo, pagando los aportes. Preguntá cómo antes de que termine la temporada. Escribinos por WhatsApp. Mandáselo a quien trabaja en la temporada, porque en invierno…",
+  "palabra": "TEMPORADA",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "invierno",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "pregunta",
+      "texto": "¿Y en invierno?",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "verano",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "almanaque",
+      "texto": "Temporada de verano",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "resto",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "credencial",
+      "texto": "¿El resto del año?",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "mantenerla",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "check",
+      "texto": "Podés mantenerla",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "aportes",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "carpeta",
+      "texto": "Pagando los aportes",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Preguntá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "personaje",
+      "texto": "Preguntá antes",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien trabaja",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "En invierno no trabajás, pero podés seguir cubierto.\n\n✔ Podés mantener la obra social en los meses sin trabajo.\n✔ Pagando los aportes.\n✔ Preguntá cómo antes de que termine la temporada.\n\nEscribinos por WhatsApp.\n\nFuente: Ley 23.660, art. 10, inc. e.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Temporada #BuenosAires",
+  "fuente": "Ley 23.660, art. 10, inc. e"
+}

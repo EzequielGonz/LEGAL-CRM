@@ -1,0 +1,84 @@
+{
+  "id": "vita-0612-a",
+  "marca": "vita",
+  "base": "vita-reserva-1",
+  "fecha_pub": "2026-12-06",
+  "hora": "08:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Ir en bici no te deja sin reclamo.",
+  "voz": "Ir en bici no te deja sin reclamo. Vos ibas en bici y te chocó un auto. También se puede reclamar. Uno: fotos de la bici, el auto y la patente. Dos: datos de testigos. Tres: guardia médica y certificado, aunque parezca poco. Escribinos por WhatsApp. Mandáselo a quien va en bici, porque ir en bici…",
+  "palabra": "BICI",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "bici",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "casco",
+      "texto": "¿En bici?",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "chocó",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "choque",
+      "texto": "Te chocó un auto",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "También",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "También se reclama",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Uno",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "camara",
+      "texto": "1. Fotos y patente",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Dos",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "testigo",
+      "texto": "2. Testigos",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Tres",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "ambulancia",
+      "texto": "3. Guardia y certificado",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "casco",
+      "texto": "Mandáselo a quien pedalea",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Ir en bici no te deja sin reclamo.\n\n✔ Fotos de la bici, el auto y la patente.\n✔ Datos de los testigos.\n✔ Guardia médica y certificado, aunque parezca poco.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #AccidentesDeTránsito #Bicicleta #BuenosAires",
+  "fuente": ""
+}

@@ -1,0 +1,86 @@
+{
+  "id": "vita-0412-b",
+  "marca": "vita",
+  "base": "vita-0612-3",
+  "fecha_pub": "2026-12-04",
+  "hora": "21:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Tres cosas que nunca firmás después de chocar.",
+  "voz": "Tres cosas que nunca firmás después de chocar. Uno: un acuerdo el mismo día que te lo ofrecen. Dos: un papel que dice «firmá hoy y listo». Tres: una propuesta que no te dejan llevar para revisar. Lo que firmás puede cerrar tu reclamo. Pedila por escrito y hacela revisar por un abogado. Escribinos por WhatsApp. Mandáselo a quien acaba de chocar, porque hay tres cosas…",
+  "palabra": "FIRMA",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "cosas",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "firma",
+      "texto": "Nunca firmes esto",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Uno",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "almanaque",
+      "texto": "1. El mismo día",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Dos",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "documento",
+      "texto": "2. «Firmá hoy y listo»",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Tres",
+      "n": 1,
+      "tipo": "paso",
+      "objeto": "sobre",
+      "texto": "3. Sin poder revisarlo",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "cerrar",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "billete",
+      "texto": "Puede cerrar tu reclamo",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Pedila",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "Por escrito y revisado",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "auto",
+      "texto": "Mandáselo a quien chocó",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Tres cosas que nunca firmás después de chocar.\n\n✔ Nada el mismo día que te lo ofrecen.\n✔ Nada que diga «firmá hoy y listo».\n✔ Nada que no puedas llevar a revisar.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #AccidentesDeTránsito #Seguro #BuenosAires",
+  "fuente": "",
+  "nota": "Prueba de la calibración del 27/11 (bases vita-0412-1 y vita-0612-3). Revisión de abogada antes de publicar: se programa para revisión, no directo.",
+  "revision": "abogada antes de publicar"
+}

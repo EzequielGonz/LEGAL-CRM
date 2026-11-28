@@ -1,0 +1,85 @@
+{
+  "id": "marketing-0712-b",
+  "marca": "marketing",
+  "base": "marketing-0112-3",
+  "fecha_pub": "2026-12-07",
+  "hora": "18:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "A las 3:12 tu WhatsApp puede contestar solo.",
+  "voz": "A las tres y doce, tu WhatsApp puede contestar solo. Parte dos. Romina dejó listo un mensaje automático. Horario, precios y cómo pedir. Esa noche, el cliente lo lee y deja su pedido. A la mañana, Romina retoma con el pedido casi armado. Escribinos por WhatsApp. Mandáselo a quien le escriben de noche, porque a las tres y doce…",
+  "palabra": "MADRUGADA",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "doce",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "reloj_arena",
+      "texto": "3:12",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "Parte",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "cartel",
+      "texto": "Parte 2",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "automático",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "chat",
+      "texto": "Mensaje automático",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Horario",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "etiqueta",
+      "texto": "Horario, precios, pedido",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Esa",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "celular",
+      "texto": "El cliente lo lee",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "mañana",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "caja",
+      "texto": "Pedido casi armado",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "carta",
+      "texto": "Mandáselo a quien vende",
+      "efecto": "barrido"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "A las 3:12 tu WhatsApp puede contestar solo.\n\n✔ Dejá listo un mensaje automático para cuando no estás.\n✔ Con horario, precios y cómo pedir.\n✔ A la mañana retomás con el pedido casi armado.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores",
+  "fuente": "",
+  "nota": "Serie: parte 1 el 05/12 (marketing-0512-b)."
+}

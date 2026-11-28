@@ -1,0 +1,85 @@
+{
+  "id": "autos-0312-a",
+  "marca": "autos",
+  "base": "autos-2911-2",
+  "fecha_pub": "2026-12-03",
+  "hora": "09:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "¿Lo patentás en diciembre o esperás a enero?",
+  "voz": "¿Lo patentás en diciembre o esperás a enero? La fecha cambia más de lo que parece. Antes de decidir, preguntá tres cosas. Uno: qué año de modelo figura. Dos: la fecha de entrega. Tres: si cambia el precio. Con eso, la cuenta se hace sola. Escribinos por WhatsApp. Mandáselo a quien compra antes de fin de año. Y después sí: ¿diciembre o enero?",
+  "palabra": "ENERO",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "diciembre",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "almanaque",
+      "texto": "¿Diciembre o enero?",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "fecha",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "documento",
+      "texto": "La fecha importa",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "preguntá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "lupa",
+      "texto": "Tres preguntas",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Uno",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "auto",
+      "texto": "1. Año de modelo",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Dos",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "llave",
+      "texto": "2. Fecha de entrega",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Tres",
+      "n": 1,
+      "tipo": "paso",
+      "objeto": "documento",
+      "texto": "3. ¿Cambia el precio?",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien compra",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "¿Lo patentás en diciembre o esperás a enero?\n\n✔ Qué año de modelo figura.\n✔ La fecha de entrega.\n✔ Si cambia el precio.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #Patentamiento #BuenosAires",
+  "fuente": "",
+  "nota": "Prueba de la calibración del 27/11 (cambio de tema). Sin datos de ACARA: no hay fuente verificada todavía, no se inventan cifras."
+}

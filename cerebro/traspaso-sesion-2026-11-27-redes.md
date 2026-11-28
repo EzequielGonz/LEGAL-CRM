@@ -6,6 +6,13 @@ Rama `claude/brave-hawking-nzsr60` · PR EzequielGonz/LEGAL-CRM#82 (seguido, en 
 - El dueño frenó el boceto de VITA. **No hay agentes trabajando ni nada programado.** Lo programado en Metricool del 25 al 29/11 (12 historias + 1 carrusel por día y marca) NO se toca.
 - **Esperando:** el dueño busca 1 o 2 reels de referencia con el 3D que imagina. Al recibirlos, analizarlos (gancho, cámara, luz, nivel de realismo, animación, efectos) y recién ahí hacer el boceto de VITA con el guion `vita-2711-1`.
 
+## CHECKPOINT 28/11 00:10 BA (03:10 UTC) — TANDA 1 EN RENDER, TANDA 2 CON PLANES Y VOCES
+- **La máquina se reinició sola el 28/11 ~02:50 UTC** (después de un corte por límite de uso): mata los procesos de fondo. Al retomar: `pgrep -fa cola` en `atlas/`; si no están, `nohup setsid ./cola.sh > cola.out 2>&1 < /dev/null & disown` y lo mismo con `./cola2.sh` (cola2 espera a que termine cola.sh). `render.js` retoma los cuadros hechos y `lote.py` saltea los reels con `out/<id>.mp4`.
+- **Codificación:** `lote.py` ahora usa `-crf 22 -maxrate 8M` (antes 14M daba 62 MB por reel; ahora ~37 MB). vita-2811-a se recodificó desde los cuadros.
+- **vita-2811-a:** LISTO (35,0 s), revisado (gancho visible, cierre «Escribinos por WhatsApp» en cartel y karaoke). Detalle menor para mejorar en `escenas/vita.js`: la pastilla «VITA Abogados» tapa por momentos el borde izquierdo de los carteles. Alojado en la landing de VITA (`redes/2811/`).
+- **Tanda 2 (03 al 07/12):** 40 planes armados por código con `docs/redes/tanda-2811-0712/fuente/tanda2.py` (lo editorial escrito a mano sobre guiones verificados; valida largo de voz, gancho, golpes, objetos, cierre y efectos distintos). Resumen: `docs/redes/tanda-2811-0712/tanda2/RESUMEN.md`. 40 voces listas (ElevenLabs 25.505 de 40.000 en el mes). `vita-0412-b` («Tres cosas que nunca firmás después de chocar») lleva `"revision": "abogada antes de publicar"`: se programa como borrador, no directo.
+- **Metricool VITA 28/11:** 08:40 y 21:10 libres (hay carrusel 11:00 y 13 historias que no se tocan).
+
 ## CHECKPOINT 27/11 ~19:00 BA (21:56 UTC) — CORRIDA 1 EN PRODUCCIÓN, preparado para compactar
 **Destrabado:** el dueño eliminó en claude.ai los plugins `simple-workflow`, `sixth-sense`, `one-shot-prompting` y (a pedido suyo) `naksha`. Sus copias locales se archivaron (no borradas) en `/root/.claude/plugins/archivo-desactivados-2711/` y quedaron en `false` en `/root/.claude/settings.json`. Descargas y `git push` funcionan. El plugin `superstack` pide un recibo en `.superstack/outward-pass` antes de cada push (excluido de git): agregar una línea con la revisión de claves y datos personales y reintentar.
 

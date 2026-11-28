@@ -1,0 +1,84 @@
+{
+  "id": "autos-0712-a",
+  "marca": "autos",
+  "base": "autos-2811-1",
+  "fecha_pub": "2026-12-07",
+  "hora": "09:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Hay cuatro costos fuera del precio de lista.",
+  "voz": "Hay cuatro costos fuera del precio de lista. ¿Cuántos se suman, en general, a un 0 km? Pensá un número. Son cuatro: flete, formularios, patentamiento y sellos. Pero el que vale es el presupuesto detallado. Pedilo por escrito antes de señar. Escribinos por WhatsApp. Guardalo para pedir tu presupuesto, porque hay cuatro costos…",
+  "palabra": "COSTOS",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "costos",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "documento",
+      "texto": "¿Solo el de lista?",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "Cuántos",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "celular",
+      "texto": "¿Cuántos se suman?",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Pensá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "almanaque",
+      "texto": "Pensá un número",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "flete",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "auto",
+      "texto": "Flete y formularios",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "patentamiento",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "Patente y sellos",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "presupuesto",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "lupa",
+      "texto": "Presupuesto detallado",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "llave",
+      "texto": "Guardalo para pedirlo",
+      "efecto": "barrido"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Hay cuatro costos fuera del precio de lista.\n\n✔ En general se suman flete, formularios, patentamiento y sellos.\n✔ Lo que vale es el presupuesto detallado.\n✔ Pedilo por escrito antes de señar.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #PrecioDeLista #BuenosAires",
+  "fuente": ""
+}

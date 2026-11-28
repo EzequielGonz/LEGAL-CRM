@@ -1,0 +1,84 @@
+{
+  "id": "marketing-0712-a",
+  "marca": "marketing",
+  "base": "marketing-0312-3",
+  "fecha_pub": "2026-12-07",
+  "hora": "12:20",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Un audio de tres minutos no es atención.",
+  "voz": "Un audio de tres minutos no es atención. Tu cliente preguntó un precio y recibió un audio eterno. Escribilo en dos o tres líneas. Precio. Qué incluye. Y el paso siguiente. Si hace falta un audio, que sea corto. Escribinos por WhatsApp. Mandáselo a quien manda audios largos, porque un audio de tres minutos…",
+  "palabra": "AUDIOS",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "audio",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "reloj_arena",
+      "texto": "¿Audio de 3 minutos?",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "preguntó",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "chat",
+      "texto": "Preguntó un precio",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Escribilo",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "carta",
+      "texto": "Dos o tres líneas",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Precio",
+      "n": 1,
+      "tipo": "dato",
+      "objeto": "etiqueta",
+      "texto": "Precio",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "incluye",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "caja",
+      "texto": "Qué incluye",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "paso",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "cartel",
+      "texto": "Paso siguiente",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Si",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "celular",
+      "texto": "Audio corto, si hace falta",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Un audio de tres minutos no es atención.\n\n✔ Escribí en dos o tres líneas.\n✔ Precio, qué incluye y el paso siguiente.\n✔ Si hace falta audio, que sea corto.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Atención #Pymes",
+  "fuente": ""
+}

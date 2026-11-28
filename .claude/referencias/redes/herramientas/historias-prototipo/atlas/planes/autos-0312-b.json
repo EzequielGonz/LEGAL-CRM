@@ -1,0 +1,84 @@
+{
+  "id": "autos-0312-b",
+  "marca": "autos",
+  "base": "autos-0312-4",
+  "fecha_pub": "2026-12-03",
+  "hora": "17:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "El 0 km más barato no siempre conviene.",
+  "voz": "El 0 km más barato no siempre conviene. Mirás dos autos y elegís por precio. Antes de comparar, sumá cuatro cosas. El seguro. El consumo. El service. Y lo que trae de equipamiento. Ahí recién comparás de verdad. Escribinos por WhatsApp. Mandáselo a quien compara solo por precio, porque el más barato…",
+  "palabra": "BARATO",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "barato",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "auto",
+      "texto": "¿El más barato?",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "Mirás",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "documento",
+      "texto": "Elegís por precio",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "sumá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "lupa",
+      "texto": "Sumá 4 cosas",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "seguro",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "poliza",
+      "texto": "Seguro",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "consumo",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "velocimetro",
+      "texto": "Consumo y service",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "equipamiento",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "llave",
+      "texto": "Equipamiento",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien compara",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "El 0 km más barato no siempre conviene.\n\n✔ Sumá el seguro.\n✔ Sumá consumo y service.\n✔ Mirá qué trae de equipamiento.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #ComprarAuto #BuenosAires",
+  "fuente": ""
+}

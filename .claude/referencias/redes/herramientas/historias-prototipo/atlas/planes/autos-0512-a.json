@@ -1,0 +1,84 @@
+{
+  "id": "autos-0512-a",
+  "marca": "autos",
+  "base": "autos-2711-2",
+  "fecha_pub": "2026-12-05",
+  "hora": "09:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Nadie puede garantizarte la cuota 2.",
+  "voz": "Nadie puede garantizarte la cuota dos. «Te lo damos en la cuota dos.» Tres cartas antes de creerlo. Carta uno: en un plan de ahorro, el auto se adjudica por sorteo o por licitación. Carta dos: nadie puede garantizarte la cuota. Carta tres: pedí todo por escrito. Escribinos por WhatsApp. Mandáselo a quien esté por anotarse en un plan, porque nadie…",
+  "palabra": "SORTEO",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "Nadie",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "almanaque",
+      "texto": "¿Cuota 2?",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "damos",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "celular",
+      "texto": "«En la cuota 2»",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "cartas",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "Tres cartas",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Carta",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "rueda",
+      "texto": "1. Sorteo o licitación",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Carta",
+      "n": 1,
+      "tipo": "paso",
+      "objeto": "cruz",
+      "texto": "2. Nadie lo garantiza",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Carta",
+      "n": 2,
+      "tipo": "paso",
+      "objeto": "documento",
+      "texto": "3. Todo por escrito",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "llave",
+      "texto": "Mandáselo a quien se anota",
+      "efecto": "barrido"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Nadie puede garantizarte la cuota 2.\n\n✔ En un plan de ahorro, el auto se adjudica por sorteo o por licitación.\n✔ Nadie puede garantizarte la cuota.\n✔ Pedí todo por escrito.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #PlanDeAhorro #0km #BuenosAires",
+  "fuente": ""
+}

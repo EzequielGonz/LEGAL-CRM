@@ -1,0 +1,84 @@
+{
+  "id": "coberturas-0512-a",
+  "marca": "coberturas",
+  "base": "coberturas-0512-2",
+  "fecha_pub": "2026-12-05",
+  "hora": "12:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Enfermedad previa: no te rechazan, pero ojo.",
+  "voz": "Enfermedad previa: no te rechazan, pero ojo. Querés afiliarte a una prepaga y tenés una enfermedad previa. Tres cartas. Carta uno: no pueden rechazarte por eso. Carta dos: la declarás en la declaración jurada. Carta tres: pueden cobrarte un valor distinto, autorizado. Preguntalo antes. Escribinos por WhatsApp. Mandáselo a quien tenga una enfermedad previa, porque…",
+  "palabra": "PREVIA",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "Enfermedad",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "frasco",
+      "texto": "¿Te rechazan?",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "afiliarte",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "carpeta",
+      "texto": "Querés afiliarte",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "cartas",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "pregunta",
+      "texto": "Tres cartas",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Carta",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "check",
+      "texto": "1. No te rechazan",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Carta",
+      "n": 1,
+      "tipo": "paso",
+      "objeto": "orden",
+      "texto": "2. Declaración jurada",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Carta",
+      "n": 2,
+      "tipo": "paso",
+      "objeto": "credencial",
+      "texto": "3. Valor distinto",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien la tenga",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Enfermedad previa: no te rechazan, pero ojo.\n\n✔ No pueden rechazarte por una enfermedad previa.\n✔ La declarás en la declaración jurada.\n✔ Pueden cobrarte un valor distinto, autorizado.\n\nEscribinos por WhatsApp.\n\nFuente: Ley 26.682, art. 10.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Prepaga #EnfermedadPrevia #BuenosAires",
+  "fuente": "Ley 26.682, art. 10"
+}

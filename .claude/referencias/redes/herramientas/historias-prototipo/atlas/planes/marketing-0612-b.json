@@ -1,0 +1,84 @@
+{
+  "id": "marketing-0612-b",
+  "marca": "marketing",
+  "base": "marketing-0312-4",
+  "fecha_pub": "2026-12-06",
+  "hora": "18:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Tu mejor foto de producto es la tuya.",
+  "voz": "Tu mejor foto de producto es la tuya. Hay tres tipos de foto. La oscura y movida. La linda, pero sacada de internet. Y la propia, con luz natural y fondo liso. ¿Cuál subís vos? Probá hoy con la ventana y una mesa. Escribinos por WhatsApp. Mandáselo a quien sube fotos de sus productos, porque tu mejor foto…",
+  "palabra": "PRODUCTO",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "mejor",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "vidriera",
+      "texto": "¿Tu mejor foto?",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "tipos",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "cartel",
+      "texto": "Tres tipos",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "oscura",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "cruz",
+      "texto": "Oscura y movida",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "linda",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "etiqueta",
+      "texto": "Linda, de internet",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "propia",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "estrella",
+      "texto": "Propia, luz natural",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Probá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "caja",
+      "texto": "Ventana y una mesa",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien vende",
+      "efecto": "barrido"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Tu mejor foto de producto es la tuya.\n\n✔ Nada de fotos oscuras o movidas.\n✔ Nada de fotos sacadas de internet.\n✔ Foto propia, con luz natural y fondo liso.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #FotosDeProducto #Pymes #Emprendedores",
+  "fuente": ""
+}

@@ -1,0 +1,84 @@
+{
+  "id": "coberturas-0312-a",
+  "marca": "coberturas",
+  "base": "coberturas-reserva-2",
+  "fecha_pub": "2026-12-03",
+  "hora": "12:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Obra social y prepaga no son lo mismo.",
+  "voz": "Obra social y prepaga no son lo mismo. Y en tu recibo hay una línea que lo muestra. A la obra social van tus aportes, si trabajás en relación de dependencia. La prepaga la contratás aparte. A veces se combinan. Fijate cuál tenés y qué cubre cada una. Escribinos por WhatsApp. Mandáselo a quien las confunde, porque obra social y prepaga…",
+  "palabra": "DIFERENCIA",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Obra",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "credencial",
+      "texto": "¿Lo mismo?",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "recibo",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "carpeta",
+      "texto": "La línea del recibo",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "aportes",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "check",
+      "texto": "Aportes: obra social",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "prepaga",
+      "n": 1,
+      "tipo": "dato",
+      "objeto": "credencial",
+      "texto": "Prepaga: aparte",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "combinan",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "escalera",
+      "texto": "A veces se combinan",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Fijate",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "pregunta",
+      "texto": "¿Cuál tenés?",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien duda",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Obra social y prepaga no son lo mismo.\n\n✔ A la obra social van tus aportes si trabajás en relación de dependencia.\n✔ La prepaga la contratás aparte.\n✔ A veces se combinan: fijate cuál tenés.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #BuenosAires",
+  "fuente": ""
+}

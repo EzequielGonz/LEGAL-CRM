@@ -1,0 +1,84 @@
+{
+  "id": "vita-0312-a",
+  "marca": "vita",
+  "base": "vita-3011-4",
+  "fecha_pub": "2026-12-03",
+  "hora": "08:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "gancho": "Te chocó uno sin seguro: igual podés reclamar.",
+  "voz": "Te chocó uno sin seguro: igual podés reclamar. «Ya fue, no tiene seguro.» No tan rápido. Que no tenga seguro no te deja sin reclamo. En general, pueden responder el dueño del auto y quien manejaba. Vos juntá fotos, la patente, sus datos y los testigos. Escribinos por WhatsApp. Mandáselo a quien maneje todos los días, porque si te chocó uno sin seguro…",
+  "palabra": "SEGURO",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "chocó",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "choque",
+      "texto": "Sin seguro",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "Ya",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "globo",
+      "texto": "«Ya fue»",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "tan",
+      "n": 0,
+      "tipo": "giro",
+      "objeto": "sello",
+      "texto": "No tan rápido",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "Que",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "Igual hay reclamo",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "dueño",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "auto",
+      "texto": "Dueño y conductor",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "juntá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "camara",
+      "texto": "Fotos, patente, testigos",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien maneje",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Te chocó uno sin seguro: igual podés reclamar.\n\n✔ Que no tenga seguro no te deja sin reclamo.\n✔ En general, pueden responder el dueño del auto y quien manejaba.\n✔ Juntá fotos, patente, datos del otro y testigos.\n\nEscribinos por WhatsApp.\n\nFuente: Código Civil y Comercial, art. 1758.\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #AccidentesDeTránsito #Choque #BuenosAires",
+  "fuente": "Código Civil y Comercial, art. 1758"
+}
