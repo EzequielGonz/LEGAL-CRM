@@ -1,0 +1,802 @@
+[
+ {
+  "id": "marketing-3011-c1",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-11-30",
+  "hora": "17:40",
+  "base": "marketing-3011-3",
+  "gancho": "¿Vendés con el WhatsApp de tus amigos?",
+  "laminas": [
+   [
+    "¿Vendés con WhatsApp de amigos?",
+    "Hay tres opciones.",
+    "celular"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-3011-car",
+  "lamina": 1
+ },
+ {
+  "id": "marketing-3011-c2",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-11-30",
+  "hora": "17:40",
+  "base": "marketing-3011-3",
+  "gancho": "¿Vendés con el WhatsApp de tus amigos?",
+  "laminas": [
+   [
+    "Común: para tus amigos",
+    "Charlas con amigos.",
+    "chat"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-3011-car",
+  "lamina": 2
+ },
+ {
+  "id": "marketing-3011-c3",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-11-30",
+  "hora": "17:40",
+  "base": "marketing-3011-3",
+  "gancho": "¿Vendés con el WhatsApp de tus amigos?",
+  "laminas": [
+   [
+    "Business: catálogo y etiquetas",
+    "Ordená tus chats.",
+    "etiqueta"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-3011-car",
+  "lamina": 3
+ },
+ {
+  "id": "marketing-3011-c4",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-11-30",
+  "hora": "17:40",
+  "base": "marketing-3011-3",
+  "gancho": "¿Vendés con el WhatsApp de tus amigos?",
+  "laminas": [
+   [
+    "API: mucho volumen",
+    "Para muchos mensajes.",
+    "cartel"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-3011-car",
+  "lamina": 4
+ },
+ {
+  "id": "marketing-3011-c5",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-11-30",
+  "hora": "17:40",
+  "base": "marketing-3011-3",
+  "gancho": "¿Vendés con el WhatsApp de tus amigos?",
+  "laminas": [
+   [
+    "Escribinos por WhatsApp",
+    "Escribinos por WhatsApp.",
+    "check"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-3011-car",
+  "lamina": 5
+ },
+ {
+  "id": "marketing-0112-c1",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-01",
+  "hora": "17:40",
+  "base": "marketing-2711-1",
+  "gancho": "Atendés el local y el celular no para.",
+  "laminas": [
+   [
+    "Local y celular juntos",
+    "Esto te pasa.",
+    "mostrador"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0112-car",
+  "lamina": 1
+ },
+ {
+  "id": "marketing-0112-c2",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-01",
+  "hora": "17:40",
+  "base": "marketing-2711-1",
+  "gancho": "Atendés el local y el celular no para.",
+  "laminas": [
+   [
+    "«En un rato te respondo»",
+    "Una respuesta rápida.",
+    "chat"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0112-car",
+  "lamina": 2
+ },
+ {
+  "id": "marketing-0112-c3",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-01",
+  "hora": "17:40",
+  "base": "marketing-2711-1",
+  "gancho": "Atendés el local y el celular no para.",
+  "laminas": [
+   [
+    "Anotá quién escribió",
+    "Así no se pierde.",
+    "etiqueta"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0112-car",
+  "lamina": 3
+ },
+ {
+  "id": "marketing-0112-c4",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-01",
+  "hora": "17:40",
+  "base": "marketing-2711-1",
+  "gancho": "Atendés el local y el celular no para.",
+  "laminas": [
+   [
+    "Por orden de llegada",
+    "Uno por vez.",
+    "reloj_arena"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0112-car",
+  "lamina": 4
+ },
+ {
+  "id": "marketing-0112-c5",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-01",
+  "hora": "17:40",
+  "base": "marketing-2711-1",
+  "gancho": "Atendés el local y el celular no para.",
+  "laminas": [
+   [
+    "Escribinos por WhatsApp",
+    "Escribinos por WhatsApp.",
+    "check"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0112-car",
+  "lamina": 5
+ },
+ {
+  "id": "marketing-0212-c1",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-02",
+  "hora": "17:40",
+  "base": "marketing-0212-g1",
+  "gancho": "Combos: tres cartas antes de armarlos.",
+  "laminas": [
+   [
+    "Antes de armar combos",
+    "Tres cartas.",
+    "caja"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0212-car",
+  "lamina": 1
+ },
+ {
+  "id": "marketing-0212-c2",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-02",
+  "hora": "17:40",
+  "base": "marketing-0212-g1",
+  "gancho": "Combos: tres cartas antes de armarlos.",
+  "laminas": [
+   [
+    "Productos que van juntos",
+    "Pensá qué combina.",
+    "caja"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0212-car",
+  "lamina": 2
+ },
+ {
+  "id": "marketing-0212-c3",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-02",
+  "hora": "17:40",
+  "base": "marketing-0212-g1",
+  "gancho": "Combos: tres cartas antes de armarlos.",
+  "laminas": [
+   [
+    "Un nombre fácil",
+    "Que se recuerde.",
+    "etiqueta"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0212-car",
+  "lamina": 3
+ },
+ {
+  "id": "marketing-0212-c4",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-02",
+  "hora": "17:40",
+  "base": "marketing-0212-g1",
+  "gancho": "Combos: tres cartas antes de armarlos.",
+  "laminas": [
+   [
+    "Precio y qué incluye",
+    "Sin dudas.",
+    "check"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0212-car",
+  "lamina": 4
+ },
+ {
+  "id": "marketing-0212-c5",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-02",
+  "hora": "17:40",
+  "base": "marketing-0212-g1",
+  "gancho": "Combos: tres cartas antes de armarlos.",
+  "laminas": [
+   [
+    "Escribinos por WhatsApp",
+    "Escribinos por WhatsApp.",
+    "check"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0212-car",
+  "lamina": 5
+ },
+ {
+  "id": "marketing-0312-c1",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-03",
+  "hora": "17:40",
+  "base": "marketing-0312-1",
+  "gancho": "Tus estados de WhatsApp: ¿qué mostrás?",
+  "laminas": [
+   [
+    "Tus estados de WhatsApp",
+    "Tres ideas.",
+    "celular"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0312-car",
+  "lamina": 1
+ },
+ {
+  "id": "marketing-0312-c2",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-03",
+  "hora": "17:40",
+  "base": "marketing-0312-1",
+  "gancho": "Tus estados de WhatsApp: ¿qué mostrás?",
+  "laminas": [
+   [
+    "Lo nuevo",
+    "Mostrá lo que llegó.",
+    "estrella"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0312-car",
+  "lamina": 2
+ },
+ {
+  "id": "marketing-0312-c3",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-03",
+  "hora": "17:40",
+  "base": "marketing-0312-1",
+  "gancho": "Tus estados de WhatsApp: ¿qué mostrás?",
+  "laminas": [
+   [
+    "Detrás de escena",
+    "Mostrá cómo trabajás.",
+    "vidriera"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0312-car",
+  "lamina": 3
+ },
+ {
+  "id": "marketing-0312-c4",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-03",
+  "hora": "17:40",
+  "base": "marketing-0312-1",
+  "gancho": "Tus estados de WhatsApp: ¿qué mostrás?",
+  "laminas": [
+   [
+    "Cómo pedir",
+    "Explicá los pasos.",
+    "chat"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0312-car",
+  "lamina": 4
+ },
+ {
+  "id": "marketing-0312-c5",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-03",
+  "hora": "17:40",
+  "base": "marketing-0312-1",
+  "gancho": "Tus estados de WhatsApp: ¿qué mostrás?",
+  "laminas": [
+   [
+    "Escribinos por WhatsApp",
+    "Escribinos por WhatsApp.",
+    "check"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0312-car",
+  "lamina": 5
+ },
+ {
+  "id": "marketing-0412-c1",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-04",
+  "hora": "17:40",
+  "base": "marketing-0212-4",
+  "gancho": "La misma pregunta 10, 20, 30 veces.",
+  "laminas": [
+   [
+    "La misma pregunta, otra vez",
+    "Diez veces al día.",
+    "chat"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0412-car",
+  "lamina": 1
+ },
+ {
+  "id": "marketing-0412-c2",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-04",
+  "hora": "17:40",
+  "base": "marketing-0212-4",
+  "gancho": "La misma pregunta 10, 20, 30 veces.",
+  "laminas": [
+   [
+    "Las cinco más repetidas",
+    "Anotalas hoy.",
+    "carta"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0412-car",
+  "lamina": 2
+ },
+ {
+  "id": "marketing-0412-c3",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-04",
+  "hora": "17:40",
+  "base": "marketing-0212-4",
+  "gancho": "La misma pregunta 10, 20, 30 veces.",
+  "laminas": [
+   [
+    "Fijalas en el perfil",
+    "Que las vean primero.",
+    "vidriera"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0412-car",
+  "lamina": 3
+ },
+ {
+  "id": "marketing-0412-c4",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-04",
+  "hora": "17:40",
+  "base": "marketing-0212-4",
+  "gancho": "La misma pregunta 10, 20, 30 veces.",
+  "laminas": [
+   [
+    "Armalas hoy",
+    "Una sola vez.",
+    "check"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0412-car",
+  "lamina": 4
+ },
+ {
+  "id": "marketing-0412-c5",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-04",
+  "hora": "17:40",
+  "base": "marketing-0212-4",
+  "gancho": "La misma pregunta 10, 20, 30 veces.",
+  "laminas": [
+   [
+    "Escribinos por WhatsApp",
+    "Escribinos por WhatsApp.",
+    "check"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0412-car",
+  "lamina": 5
+ },
+ {
+  "id": "marketing-0512-c1",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-05",
+  "hora": "17:40",
+  "base": "marketing-reserva-2",
+  "gancho": "¿Tu bienvenida dice quién atiende?",
+  "laminas": [
+   [
+    "Tu mensaje de bienvenida",
+    "Tres cartas.",
+    "chat"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0512-car",
+  "lamina": 1
+ },
+ {
+  "id": "marketing-0512-c2",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-05",
+  "hora": "17:40",
+  "base": "marketing-reserva-2",
+  "gancho": "¿Tu bienvenida dice quién atiende?",
+  "laminas": [
+   [
+    "Quién atiende",
+    "Nombre y rol.",
+    "mostrador"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0512-car",
+  "lamina": 2
+ },
+ {
+  "id": "marketing-0512-c3",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-05",
+  "hora": "17:40",
+  "base": "marketing-reserva-2",
+  "gancho": "¿Tu bienvenida dice quién atiende?",
+  "laminas": [
+   [
+    "Horario",
+    "Cuándo respondés.",
+    "reloj_arena"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0512-car",
+  "lamina": 3
+ },
+ {
+  "id": "marketing-0512-c4",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-05",
+  "hora": "17:40",
+  "base": "marketing-reserva-2",
+  "gancho": "¿Tu bienvenida dice quién atiende?",
+  "laminas": [
+   [
+    "Tres opciones",
+    "Para elegir rápido.",
+    "check"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0512-car",
+  "lamina": 4
+ },
+ {
+  "id": "marketing-0512-c5",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-05",
+  "hora": "17:40",
+  "base": "marketing-reserva-2",
+  "gancho": "¿Tu bienvenida dice quién atiende?",
+  "laminas": [
+   [
+    "Escribinos por WhatsApp",
+    "Escribinos por WhatsApp.",
+    "check"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0512-car",
+  "lamina": 5
+ },
+ {
+  "id": "marketing-0612-c1",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-06",
+  "hora": "17:40",
+  "base": "marketing-0512-2",
+  "gancho": "Hora 24, día 3, día 7: seguimiento.",
+  "laminas": [
+   [
+    "Tres momentos de seguimiento",
+    "Un calendario simple.",
+    "reloj_arena"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0612-car",
+  "lamina": 1
+ },
+ {
+  "id": "marketing-0612-c2",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-06",
+  "hora": "17:40",
+  "base": "marketing-0512-2",
+  "gancho": "Hora 24, día 3, día 7: seguimiento.",
+  "laminas": [
+   [
+    "Hora 24: mensaje corto",
+    "Corto y claro.",
+    "chat"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0612-car",
+  "lamina": 2
+ },
+ {
+  "id": "marketing-0612-c3",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-06",
+  "hora": "17:40",
+  "base": "marketing-0512-2",
+  "gancho": "Hora 24, día 3, día 7: seguimiento.",
+  "laminas": [
+   [
+    "Día 3: algo nuevo",
+    "Contá algo nuevo.",
+    "estrella"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0612-car",
+  "lamina": 3
+ },
+ {
+  "id": "marketing-0612-c4",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-06",
+  "hora": "17:40",
+  "base": "marketing-0512-2",
+  "gancho": "Hora 24, día 3, día 7: seguimiento.",
+  "laminas": [
+   [
+    "Día 7: una fecha",
+    "Proponé una fecha.",
+    "check"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0612-car",
+  "lamina": 4
+ },
+ {
+  "id": "marketing-0612-c5",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-06",
+  "hora": "17:40",
+  "base": "marketing-0512-2",
+  "gancho": "Hora 24, día 3, día 7: seguimiento.",
+  "laminas": [
+   [
+    "Escribinos por WhatsApp",
+    "Escribinos por WhatsApp.",
+    "check"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0612-car",
+  "lamina": 5
+ },
+ {
+  "id": "marketing-0712-c1",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-07",
+  "hora": "17:40",
+  "base": "marketing-0512-1",
+  "gancho": "«La API es solo para empresas grandes.»",
+  "laminas": [
+   [
+    "«La API es para grandes»",
+    "No siempre.",
+    "cruz"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0712-car",
+  "lamina": 1
+ },
+ {
+  "id": "marketing-0712-c2",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-07",
+  "hora": "17:40",
+  "base": "marketing-0512-1",
+  "gancho": "«La API es solo para empresas grandes.»",
+  "laminas": [
+   [
+    "Depende del volumen",
+    "Cuántos mensajes recibís.",
+    "chat"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0712-car",
+  "lamina": 2
+ },
+ {
+  "id": "marketing-0712-c3",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-07",
+  "hora": "17:40",
+  "base": "marketing-0512-1",
+  "gancho": "«La API es solo para empresas grandes.»",
+  "laminas": [
+   [
+    "Y de cuántos atienden",
+    "Una persona o varias.",
+    "mostrador"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0712-car",
+  "lamina": 3
+ },
+ {
+  "id": "marketing-0712-c4",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-07",
+  "hora": "17:40",
+  "base": "marketing-0512-1",
+  "gancho": "«La API es solo para empresas grandes.»",
+  "laminas": [
+   [
+    "Medilo una semana",
+    "Contá y decidí.",
+    "reloj_arena"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0712-car",
+  "lamina": 4
+ },
+ {
+  "id": "marketing-0712-c5",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-07",
+  "hora": "17:40",
+  "base": "marketing-0512-1",
+  "gancho": "«La API es solo para empresas grandes.»",
+  "laminas": [
+   [
+    "Escribinos por WhatsApp",
+    "Escribinos por WhatsApp.",
+    "check"
+   ]
+  ],
+  "copy": "",
+  "fuente": "",
+  "carrusel": "marketing-0712-car",
+  "lamina": 5
+ }
+]
