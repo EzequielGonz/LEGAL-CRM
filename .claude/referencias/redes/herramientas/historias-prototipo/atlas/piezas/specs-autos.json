@@ -11,7 +11,7 @@
    [
     "Crédito prendario: tres cartas",
     "Leé antes de firmar",
-    "documento"
+    "escudo"
    ],
    [
     "El auto queda en garantía",
@@ -26,7 +26,7 @@
    [
     "¿Y si cancelás antes?",
     "Preguntá qué pasa",
-    "almanaque"
+    "cruz"
    ]
   ],
   "copy": "El auto queda como garantía del préstamo.\n\n✔ El auto queda como garantía del préstamo\n✔ Pedí el costo total, no solo la cuota\n✔ Mirá qué pasa si cancelás antes\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa.\n\n#AutomotoresKocos #0km #AutoNuevo #BuenosAires",
@@ -44,7 +44,7 @@
    [
     "¿Aguinaldo entero al anticipo?",
     "Dejá un resto",
-    "almanaque"
+    "llave"
    ]
   ],
   "copy": "¿El aguinaldo va todo al anticipo?\n\n✔ Dejá un resto para imprevistos\n✔ Sumá los gastos del retiro\n✔ Recién ahí mirá cuánto queda para el anticipo\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa.\n\n#AutomotoresKocos #0km #AutoNuevo #BuenosAires",
@@ -98,7 +98,7 @@
    [
     "Faltan tres días",
     "Preparate para entregar",
-    "almanaque"
+    "check"
    ],
    [
     "Día 3: seguro cotizado",
@@ -653,7 +653,7 @@
    [
     "¿La cuota es fija?",
     "En general se actualiza",
-    "almanaque"
+    "documento"
    ]
   ],
   "copy": "«La cuota del plan es fija.» No.\n\n✔ En general, se calcula sobre el precio actual del auto\n✔ Si el modelo sube, la cuota sube\n✔ Preguntá cómo se actualiza y pedilo por escrito\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa.\n\n#AutomotoresKocos #0km #AutoNuevo #BuenosAires",
