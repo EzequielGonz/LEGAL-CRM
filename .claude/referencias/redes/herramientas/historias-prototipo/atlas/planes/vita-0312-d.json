@@ -1,0 +1,86 @@
+{
+  "id": "vita-0312-d",
+  "marca": "vita",
+  "base": "vita-0312-g1",
+  "fecha_pub": "2026-12-03",
+  "hora": "13:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Mudarte no es regalar el depósito.",
+  "voz": "Mudarte no es regalar el depósito. El dueño no te lo devuelve y vos pensás: ya fue. Antes, juntá tres cosas. El contrato. El recibo del depósito. Y las fotos de cómo dejaste el departamento. Después, reclamá por escrito. Y consultá. Escribinos por WhatsApp. Mandáselo a quien se está mudando, porque mudarte no es regalar el depósito…",
+  "palabra": "DEPOSITO",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "Mudarte",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "billete",
+      "texto": "¿Depósito perdido?",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "dueño",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "sobre",
+      "texto": "El dueño no devuelve",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "tres",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "documento",
+      "texto": "3 cosas para juntar",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "contrato",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "El contrato",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "fotos",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "camara",
+      "texto": "Fotos del departamento",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "escrito",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "firma",
+      "texto": "Reclamo por escrito",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien se muda",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Mudarte no es regalar el depósito.\n\n✔ El contrato, el recibo del depósito y las fotos.\n✔ Reclamá por escrito.\n✔ Consultá.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #Alquiler #Depósito #BuenosAires",
+  "fuente": "",
+  "nota": "Extra d: reciclado de vita-0312-g1 (de segunda persona a frase de rechazo)."
+}

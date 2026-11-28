@@ -15,7 +15,7 @@ def nrm(s):
     s = unicodedata.normalize('NFD', s.lower()); s = ''.join(c for c in s if unicodedata.category(c) != 'Mn')
     return re.sub(r'[^a-z0-9ñ]', '', s)
 
-def armar(sp):
+def armar(sp, cola=3.8):
     lam = [list(x) for x in sp['laminas']]
     if sp['formato'] == 'car' and nrm(lam[-1][0]) != nrm(CIERRE): lam.append([CIERRE, CIERRE + '.', 'check' if sp['marca'] != 'vita' else 'sello'])
     palabras, beats, tiempos, vistos = [], [], [], {}
@@ -32,7 +32,7 @@ def armar(sp):
         beats.append({'palabra': ws[0], 'n': n, 'tipo': tipo, 'objeto': obj, 'texto': cartel,
                       'efecto': 'sello' if tipo == 'cierre' else EFECTOS[(i + len(sp['id'])) % len(EFECTOS)]})
         tiempos.append(round(ini + MIRA, 2))
-    total = round(.6 + len(lam) * PASO + .8, 2)
+    total = round(.6 + len(lam) * PASO + cola, 2)   # cola larga: algunas escenas pasan al cierre ~1,8 s antes del fin de la voz
     plan = {'id': sp['id'], 'marca': sp['marca'], 'gancho': sp['gancho'], 'voz': ' '.join(x[1] for x in lam), 'palabra': '',
             'contador': 0, 'beats': beats, 'cierre': CIERRE}
     json.dump(plan, open(f"planes/{sp['id']}.json", 'w'), ensure_ascii=False, indent=1)
@@ -40,7 +40,26 @@ def armar(sp):
                'palabra': '', 'gancho': sp['gancho']}, open(f"audio/{sp['id']}-palabras.json", 'w'), ensure_ascii=False, indent=1)
     return tiempos
 
+def sacar_por_lamina(sp):
+    # Marketing: el cartel grande de paletas solo se ve en plano abierto, en el estado «cierre».
+    # Cada lámina se rinde aparte con su texto como cierre, así queda en las paletas grandes y el subtítulo abajo.
+    lam = [list(x) for x in sp['laminas']]
+    if sp['formato'] == 'car' and nrm(lam[-1][0]) != nrm(CIERRE): lam.append([CIERRE, CIERRE + '.', 'check'])
+    salidas = []
+    for k, (cartel, linea, obj) in enumerate(lam):
+        sub = {'id': f"{sp['id']}-L{k + 1}", 'marca': sp['marca'], 'formato': 'his', 'gancho': cartel, 'laminas': [[cartel, linea, obj]]}
+        t = armar(sub, cola=.8)
+        p = json.load(open(f"planes/{sub['id']}.json")); p['cierre'] = cartel; p['beats'][0]['tipo'] = 'cierre'
+        json.dump(p, open(f"planes/{sub['id']}.json", 'w'), ensure_ascii=False, indent=1)
+        r = subprocess.run(['node', 'render.js', sub['id'], 'prueba', *map(str, t)], capture_output=True, text=True)
+        if r.returncode: raise SystemExit(r.stdout[-800:] + r.stderr[-800:])
+        im = Image.open(f"prueba/{sub['id']}-{t[0]:.2f}.jpg").convert('RGB')
+        if sp['formato'] in ('car', 'post'): im = im.crop((0, sp.get('recorte', 190), 1080, sp.get('recorte', 190) + 1350))
+        f = f"piezas/{sp['id']}-{k + 1}.jpg"; im.save(f, quality=90); salidas.append(f)
+    return salidas
+
 def sacar(sp):
+    if sp['marca'] == 'marketing': return sacar_por_lamina(sp)
     t = armar(sp); os.makedirs('piezas', exist_ok=True)
     r = subprocess.run(['node', 'render.js', sp['id'], 'prueba', *map(str, t)], capture_output=True, text=True)
     if r.returncode: raise SystemExit(r.stdout[-800:] + r.stderr[-800:])

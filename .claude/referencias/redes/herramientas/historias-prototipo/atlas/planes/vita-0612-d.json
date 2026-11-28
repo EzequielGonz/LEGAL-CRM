@@ -1,0 +1,86 @@
+{
+  "id": "vita-0612-d",
+  "marca": "vita",
+  "base": "vita-2711-g2",
+  "fecha_pub": "2026-12-06",
+  "hora": "13:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "«Borro el mensaje y listo.» Error.",
+  "voz": "«Borro el mensaje y listo.» Error. Es tentador, pero no. Te amenazan por mensaje y querés que desaparezca. No lo borres ni respondas. Guardá capturas con fecha y número. Anotá si hubo testigos. Y hacé la denuncia. Escribinos por WhatsApp. Guardalo por las dudas, porque si te amenazan y pensás «lo borro y listo»…",
+  "palabra": "AMENAZA",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Borro",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "globo",
+      "texto": "«Borro y listo»",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "amenazan",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "celular",
+      "texto": "Te amenazan por mensaje",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "borres",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "sello",
+      "texto": "No lo borres",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "capturas",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "camara",
+      "texto": "Capturas con fecha",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "testigos",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "testigo",
+      "texto": "Anotá testigos",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "denuncia",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "edificio",
+      "texto": "Hacé la denuncia",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sobre",
+      "texto": "Guardalo por las dudas",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "«Borro el mensaje y listo.» Error.\n\n✔ No lo borres ni respondas.\n✔ Guardá capturas con fecha y número.\n✔ Anotá si hubo testigos y hacé la denuncia.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoPenal #Amenazas #BuenosAires",
+  "fuente": "",
+  "nota": "Extra d: reciclado de vita-2711-g2 (de advertencia a frase del error)."
+}

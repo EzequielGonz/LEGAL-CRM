@@ -1,0 +1,78 @@
+{
+  "id": "vita-0312-e",
+  "marca": "vita",
+  "base": "vita-0512-g1",
+  "fecha_pub": "2026-12-03",
+  "hora": "19:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Deuda ajena: no pagues solo para que paren.",
+  "voz": "Deuda ajena: no pagues solo para que paren. Te llaman para cobrarte algo que no es tuyo y querés que dejen de molestar. Cortar y olvidarte no ayuda. Pedí el detalle por escrito. Y consultá. Escribinos por WhatsApp. Mandáselo a quien lo llaman todo el tiempo, porque si te cobran una deuda ajena…",
+  "palabra": "DEUDA",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Deuda",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "documento",
+      "texto": "Deuda ajena",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "pagues",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "billete",
+      "texto": "¿Pagar para que paren?",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "llaman",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "celular",
+      "texto": "Te llaman todo el tiempo",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Cortar",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "sello",
+      "texto": "Cortar tampoco ayuda",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "detalle",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "sobre",
+      "texto": "Pedí el detalle",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien lo llaman",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Deuda ajena: no pagues solo para que paren.\n\n✔ Pedí el detalle por escrito.\n✔ No pagues solo para que dejen de llamar.\n✔ Consultá.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #DeudaAjena #BuenosAires",
+  "fuente": "",
+  "nota": "Extra e: reciclado de vita-0512-g1 (de ¿cuál sos? a advertencia)."
+}

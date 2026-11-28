@@ -1,0 +1,87 @@
+{
+  "id": "vita-0512-e",
+  "marca": "vita",
+  "base": "vita-3011-b",
+  "fecha_pub": "2026-12-05",
+  "hora": "19:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Si te detienen, no hace falta explicar.",
+  "voz": "Si te detienen, no hace falta explicar. Nadie te obliga a declarar contra vos. Hay tres tipos. El que habla y habla para aclarar. El que se desespera. Y el que da su nombre y sus datos, pide un abogado y no dice nada más. ¿Cuál sos? Escribinos por WhatsApp. Mandáselo a quien sale de noche, porque si te detienen…",
+  "palabra": "DETENIDO",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "detienen",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "sello",
+      "texto": "Si te detienen",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "explicar",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "globo",
+      "texto": "No hace falta explicar",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "obliga",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "firma",
+      "texto": "Nadie te obliga",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "habla",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "celular",
+      "texto": "El que habla y habla",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "nombre",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "Tu nombre y datos",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "abogado",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "sobre",
+      "texto": "Pedí un abogado",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien sale",
+      "efecto": "barrido"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Si te detienen, no hace falta explicar.\n\n✔ Tu nombre y tus datos.\n✔ Pedí un abogado.\n✔ Nada más.\n\nEscribinos por WhatsApp.\n\nFuente: Constitución Nacional, art. 18.\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoPenal #Detención #BuenosAires",
+  "fuente": "Constitución Nacional, art. 18",
+  "reciclado_de": "vita-3011-b",
+  "nota": "Extra e: reciclado del plan vita-3011-b (de «tu silencio es un derecho» a ¿cuál sos?)."
+}

@@ -1,0 +1,78 @@
+{
+  "id": "vita-0712-c",
+  "marca": "vita",
+  "base": "vita-reserva-2",
+  "fecha_pub": "2026-12-07",
+  "hora": "11:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "El recibo dice 20 horas; vos hacés 48.",
+  "voz": "El recibo dice 20 horas; vos hacés 48. Por semana, ojo. El resto, en mano. Guardá hoy tus horarios, tus mensajes y tus comprobantes. Y antes de firmar cualquier papel, consultá. Escribinos por WhatsApp. Mandáselo a quien cobra parte en mano, porque si el recibo dice 20 horas y vos hacés 48…",
+  "palabra": "EXTRAS",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "recibo",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "documento",
+      "texto": "Recibo: 20 horas",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "hacés",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "reloj",
+      "texto": "Vos hacés 48",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "resto",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "billete",
+      "texto": "El resto, en mano",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Guardá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "sobre",
+      "texto": "Guardá horarios y mensajes",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "firmar",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "firma",
+      "texto": "Antes de firmar, consultá",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "billete",
+      "texto": "Mandáselo a quien cobra",
+      "efecto": "barrido"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "El recibo dice 20 horas; vos hacés 48.\n\n✔ Guardá tus horarios, mensajes y comprobantes.\n✔ Consultá antes de firmar cualquier papel.\n✔ Guardá tus comprobantes.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoLaboral #ReciboDeSueldo #BuenosAires",
+  "fuente": "",
+  "nota": "Extra c: tema nuevo (de reserva). Presupuesto de ElevenLabs agotado: va con voz gratis."
+}

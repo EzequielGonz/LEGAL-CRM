@@ -1,0 +1,78 @@
+{
+  "id": "vita-0412-d",
+  "marca": "vita",
+  "base": "vita-0312-g2",
+  "fecha_pub": "2026-12-04",
+  "hora": "13:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Humedad del vecino: aguantar no es la salida.",
+  "voz": "Humedad del vecino: aguantar no es la salida. Se te arruinó la pared y esperás que se arregle sola. Sacá fotos con fecha. Avisale por escrito. Si no responde, consultá qué se puede reclamar. Escribinos por WhatsApp. Mandáselo a quien vive en departamento, porque con la humedad del vecino, aguantar no es la salida…",
+  "palabra": "HUMEDAD",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Humedad",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "edificio",
+      "texto": "Humedad del vecino",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "pared",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "documento",
+      "texto": "Pared arruinada",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "fotos",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "camara",
+      "texto": "Fotos con fecha",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Avisale",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "sobre",
+      "texto": "Avisale por escrito",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "consultá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "celular",
+      "texto": "Consultá qué reclamar",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sobre",
+      "texto": "Mandáselo si vivís en departamento",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Humedad del vecino: aguantar no es la salida.\n\n✔ Sacá fotos con fecha.\n✔ Avisale por escrito.\n✔ Si no responde, consultá qué se puede reclamar.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #Departamento #Humedad #BuenosAires",
+  "fuente": "",
+  "nota": "Extra d: reciclado de vita-0312-g2 (de escena con hora a advertencia)."
+}

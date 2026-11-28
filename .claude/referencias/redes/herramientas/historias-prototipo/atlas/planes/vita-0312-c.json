@@ -1,0 +1,78 @@
+{
+  "id": "vita-0312-c",
+  "marca": "vita",
+  "base": "vita-0212-3",
+  "fecha_pub": "2026-12-03",
+  "hora": "11:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "elevenlabs",
+  "gancho": "Choque con herido: además puede haber causa penal.",
+  "voz": "Choque con herido: además puede haber causa penal. Pasa en un segundo. Uno: aparte del reclamo, puede abrirse una causa penal. Dos: llamá a emergencias y no te vayas. Tres: no declares sin abogado. Escribinos por WhatsApp. Mandáselo a quien maneje de noche, porque si en un choque hay un herido…",
+  "palabra": "HERIDOS",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "Choque",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "choque",
+      "texto": "Choque con herido",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "causa",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "documento",
+      "texto": "Puede haber causa penal",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "Uno",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "sello",
+      "texto": "1. Reclamo y causa penal",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Dos",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "ambulancia",
+      "texto": "2. Emergencias, no te vayas",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Tres",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "firma",
+      "texto": "3. Sin abogado, no declares",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "auto",
+      "texto": "Mandáselo a quien maneje",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Choque con herido: además puede haber causa penal.\n\n✔ Puede abrirse una causa penal, además del reclamo.\n✔ Llamá a emergencias y no te vayas.\n✔ No declares sin abogado.\n\nEscribinos por WhatsApp.\n\nFuente: Constitución Nacional, art. 18.\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #AccidentesDeTránsito #DerechoPenal #BuenosAires",
+  "fuente": "Constitución Nacional, art. 18",
+  "nota": "Extra c: tema nuevo (tránsito con herido, causa penal)."
+}

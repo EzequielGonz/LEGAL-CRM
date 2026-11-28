@@ -1,0 +1,86 @@
+{
+  "id": "vita-0712-d",
+  "marca": "vita",
+  "base": "vita-0412-g2",
+  "fecha_pub": "2026-12-07",
+  "hora": "13:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Sin registrar, no estás sin opciones.",
+  "voz": "Sin registrar, no estás sin opciones. Trabajás en una casa de familia y nadie te registró. Guardá tus mensajes, tus horarios y tus pagos. Anotá desde cuándo trabajás. Y consultá. Empezá hoy, con calma. Un paso a la vez. Escribinos por WhatsApp. Mandáselo a quien trabaja en casas, porque sin registrar, no estás sin opciones…",
+  "palabra": "CASAS",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "registrar",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "documento",
+      "texto": "Sin registrar",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "opciones",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "sello",
+      "texto": "Con opciones",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "casa",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "edificio",
+      "texto": "Una casa de familia",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "mensajes",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "celular",
+      "texto": "Guardá mensajes",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "horarios",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "reloj",
+      "texto": "Horarios",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "pagos",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "billete",
+      "texto": "Tus pagos",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sobre",
+      "texto": "Mandáselo a quien trabaja",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Sin registrar, no estás sin opciones.\n\n✔ Guardá mensajes, horarios y pagos.\n✔ Anotá desde cuándo trabajás.\n✔ Consultá.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #CasasParticulares #DerechoLaboral #BuenosAires",
+  "fuente": "",
+  "nota": "Extra d: reciclado de vita-0412-g2 (de segunda persona a frase de opciones)."
+}

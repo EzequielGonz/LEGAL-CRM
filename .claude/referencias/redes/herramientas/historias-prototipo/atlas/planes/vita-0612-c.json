@@ -1,0 +1,86 @@
+{
+  "id": "vita-0612-c",
+  "marca": "vita",
+  "base": "vita-0612-2",
+  "fecha_pub": "2026-12-06",
+  "hora": "11:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "elevenlabs",
+  "gancho": "Enfermarte no corta tu sueldo de golpe.",
+  "voz": "Enfermarte no corta tu sueldo de golpe. Sí, con límites. Si no es del trabajo, te siguen pagando meses. Sin familia a cargo: tres o seis, según la antigüedad. Con familia a cargo: seis o doce. Avisá y presentá el certificado. Escribinos por WhatsApp. Mandáselo a quien se enferma, porque enfermarte no corta tu sueldo…",
+  "palabra": "LICENCIA",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Enfermarte",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "ambulancia",
+      "texto": "Enfermarte",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "sueldo",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "billete",
+      "texto": "No se corta de golpe",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "trabajo",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "edificio",
+      "texto": "Si no es del trabajo",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "familia",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "almanaque",
+      "texto": "Sin familia: 3 o 6",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "familia",
+      "n": 1,
+      "tipo": "dato",
+      "objeto": "almanaque",
+      "texto": "Con familia: 6 o 12",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "certificado",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "Presentá el certificado",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sobre",
+      "texto": "Mandáselo a quien se enferma",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Enfermarte no corta tu sueldo de golpe.\n\n✔ Si no es del trabajo, te siguen pagando meses.\n✔ Sin familia a cargo, tres o seis; con familia, seis o doce.\n✔ Avisá y presentá el certificado.\n\nEscribinos por WhatsApp.\n\nFuente: Ley de Contrato de Trabajo, art. 208.\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoLaboral #Licencia #BuenosAires",
+  "fuente": "Ley de Contrato de Trabajo, art. 208",
+  "nota": "Extra c: tema nuevo (licencia por enfermedad, no por el trabajo; sin ART)."
+}

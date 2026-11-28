@@ -1,0 +1,87 @@
+{
+  "id": "vita-0712-e",
+  "marca": "vita",
+  "base": "vita-2811-a",
+  "fecha_pub": "2026-12-07",
+  "hora": "19:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Choque: primero las fotos, no el «perdón».",
+  "voz": "Choque: primero las fotos, no el «perdón». Recién chocaste y la frase te sale sola: «perdón, fue mi culpa». Mejor frená. Sacá fotos de los autos, la patente y la esquina. Pedí datos del otro conductor y de los testigos. Y avisá a tu seguro dentro de los tres días. Escribinos por WhatsApp. Mandáselo a quien maneje todos los días, porque en un choque, primero las fotos…",
+  "palabra": "NUNCA",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Choque",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "camara",
+      "texto": "Primero, las fotos",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "perdón",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "globo",
+      "texto": "No digas «perdón»",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "culpa",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "sello",
+      "texto": "«Fue mi culpa»",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "patente",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "auto",
+      "texto": "Autos, patente, esquina",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "testigos",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "testigo",
+      "texto": "Datos y testigos",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "avisá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "almanaque",
+      "texto": "Seguro, 3 días",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "auto",
+      "texto": "Mandáselo a quien maneje",
+      "efecto": "barrido"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Choque: primero las fotos, no el «perdón».\n\n✔ Fotos de los autos, la patente y la esquina.\n✔ Datos del otro conductor y de los testigos.\n✔ Aviso al seguro dentro de los tres días.\n\nEscribinos por WhatsApp.\n\nFuente: Ley 17.418, art. 46 (aviso del siniestro en 3 días).\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #AccidentesDeTránsito #Choque #BuenosAires",
+  "fuente": "Ley 17.418, art. 46 (aviso del siniestro en 3 días)",
+  "reciclado_de": "vita-2811-a",
+  "nota": "Extra e: reciclado fuerte del plan vita-2811-a (otra fórmula, otro gancho, otro orden)."
+}

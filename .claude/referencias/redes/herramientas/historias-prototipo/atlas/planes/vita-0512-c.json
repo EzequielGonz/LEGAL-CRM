@@ -1,0 +1,86 @@
+{
+  "id": "vita-0512-c",
+  "marca": "vita",
+  "base": "vita-reserva-3",
+  "fecha_pub": "2026-12-05",
+  "hora": "11:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "elevenlabs",
+  "gancho": "Sin contrato firmado no es sin derechos.",
+  "voz": "Sin contrato firmado no es sin derechos. «Nunca firmé nada, así que no tengo derechos.» Falso. El contrato de trabajo no necesita una forma especial para existir. Guardá pruebas de que trabajás: mensajes, horarios y pagos. Escribinos por WhatsApp. Mandáselo a quien trabaje sin contrato, porque sin contrato firmado no es sin derechos…",
+  "palabra": "CONTRATO",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Sin",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "firma",
+      "texto": "Sin firma, ¿sin derechos?",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Falso",
+      "n": 0,
+      "tipo": "giro",
+      "objeto": "sello",
+      "texto": "FALSO",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "contrato",
+      "n": 1,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "El contrato existe igual",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "forma",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "sobre",
+      "texto": "Sin forma especial",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "pruebas",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "camara",
+      "texto": "Guardá pruebas",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "mensajes",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "celular",
+      "texto": "Mensajes, horarios, pagos",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien trabaja",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Sin contrato firmado no es sin derechos.\n\n✔ El contrato de trabajo no necesita una forma especial.\n✔ Guardá pruebas de que trabajás.\n✔ Mensajes, horarios y pagos.\n\nEscribinos por WhatsApp.\n\nFuente: Ley de Contrato de Trabajo, art. 48.\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoLaboral #Contrato #BuenosAires",
+  "fuente": "Ley de Contrato de Trabajo, art. 48",
+  "nota": "Extra c: tema nuevo (contrato de palabra; de reserva)."
+}

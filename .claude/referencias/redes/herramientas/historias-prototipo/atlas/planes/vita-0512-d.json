@@ -1,0 +1,86 @@
+{
+  "id": "vita-0512-d",
+  "marca": "vita",
+  "base": "vita-0612-g1",
+  "fecha_pub": "2026-12-05",
+  "hora": "13:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "«Mañana te vas»: no te vayas sin consultar.",
+  "voz": "«Mañana te vas»: no te vayas sin consultar. El dueño te dice que mañana tenés que irte. Así, de golpe. No te vayas sin consultar antes. Guardá el contrato. Guardá los recibos de pago. Y guardá todos los mensajes. Escribinos por WhatsApp. Mandáselo a quien alquila, porque si te dicen «mañana te vas»…",
+  "palabra": "DESALOJO",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Mañana",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "globo",
+      "texto": "«Mañana te vas»",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "dueño",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "edificio",
+      "texto": "El dueño avisa",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "consultar",
+      "n": 1,
+      "tipo": "dato",
+      "objeto": "sello",
+      "texto": "No sin consultar",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "contrato",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "Guardá el contrato",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "recibos",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "billete",
+      "texto": "Recibos de pago",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "mensajes",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "celular",
+      "texto": "Los mensajes",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sobre",
+      "texto": "Mandáselo a quien alquila",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "«Mañana te vas»: no te vayas sin consultar.\n\n✔ Guardá el contrato.\n✔ Guardá los recibos de pago.\n✔ Guardá todos los mensajes.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #Alquiler #Desalojo #BuenosAires",
+  "fuente": "",
+  "nota": "Extra d: reciclado de vita-0612-g1 (de advertencia a frase del dueño)."
+}

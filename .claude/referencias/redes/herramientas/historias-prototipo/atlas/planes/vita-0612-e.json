@@ -1,0 +1,78 @@
+{
+  "id": "vita-0612-e",
+  "marca": "vita",
+  "base": "vita-0412-g1",
+  "fecha_pub": "2026-12-06",
+  "hora": "19:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Un testamento no se escribe de cualquier forma.",
+  "voz": "Un testamento no se escribe de cualquier forma. Querés dejar todo en orden, pero hay reglas que cumplir. Tiene formas que se cumplen. Hay herederos que la ley protege. Y conviene consultar siempre antes de escribirlo. Escribinos por WhatsApp. Mandáselo a tu familia, porque un testamento no se escribe de cualquier forma…",
+  "palabra": "TESTAMENTO",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "testamento",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "sello",
+      "texto": "¿Cualquier forma? No",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "orden",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "sobre",
+      "texto": "Dejar todo en orden",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "formas",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "firma",
+      "texto": "Formas que se cumplen",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "herederos",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "Herederos protegidos",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "consultar",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "celular",
+      "texto": "Consultá antes",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sobre",
+      "texto": "Mandáselo a tu familia",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Un testamento no se escribe de cualquier forma.\n\n✔ Tiene formas que se cumplen.\n✔ Hay herederos que la ley protege.\n✔ Consultá antes de escribirlo.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #Testamento #Herencia #BuenosAires",
+  "fuente": "",
+  "nota": "Extra e: reciclado de vita-0412-g1 (de tres cartas a frase de advertencia)."
+}

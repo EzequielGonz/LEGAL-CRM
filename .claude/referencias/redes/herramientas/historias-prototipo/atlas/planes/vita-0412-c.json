@@ -1,0 +1,86 @@
+{
+  "id": "vita-0412-c",
+  "marca": "vita",
+  "base": "vita-0312-2",
+  "fecha_pub": "2026-12-04",
+  "hora": "11:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "elevenlabs",
+  "gancho": "Papá no dejó testamento: igual se hereda.",
+  "voz": "Papá no dejó testamento: igual se hereda. «Sin testamento no hay herencia», pensás. Falso. En general, heredan los parientes que fija la ley, como hijos y cónyuge. Juntá las partidas. Listá todos los bienes. E iniciá la sucesión. Escribinos por WhatsApp. Mandáselo a tu familia, porque si papá no dejó testamento…",
+  "palabra": "HEREDEROS",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Papá",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "documento",
+      "texto": "Papá no dejó testamento",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "Falso",
+      "n": 0,
+      "tipo": "giro",
+      "objeto": "sello",
+      "texto": "FALSO",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "parientes",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "sobre",
+      "texto": "Parientes que fija la ley",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "hijos",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "Hijos y cónyuge",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "partidas",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "sobre",
+      "texto": "Juntá las partidas",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "sucesión",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "edificio",
+      "texto": "Iniciá la sucesión",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a tu familia",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Papá no dejó testamento: igual se hereda.\n\n✔ Sin testamento, igual se hereda.\n✔ Heredan los parientes que fija la ley.\n✔ Partidas, bienes e inicio de la sucesión.\n\nEscribinos por WhatsApp.\n\nFuente: Código Civil y Comercial, art. 2424.\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #Herencia #Sucesión #BuenosAires",
+  "fuente": "Código Civil y Comercial, art. 2424",
+  "nota": "Extra c: tema nuevo (sucesión sin testamento)."
+}
