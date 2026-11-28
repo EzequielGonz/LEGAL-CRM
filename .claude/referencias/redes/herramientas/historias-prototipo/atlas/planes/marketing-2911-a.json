@@ -18,7 +18,7 @@
       "n": 0,
       "tipo": "gancho",
       "objeto": "cartel",
-      "texto": "«Lo pienso» es NO",
+      "texto": "«Lo pienso» no es NO",
       "efecto": "rebote"
     },
     {
@@ -74,7 +74,7 @@
       "n": 0,
       "tipo": "cierre",
       "objeto": "cartel",
-      "texto": "«Lo pienso» es NO",
+      "texto": "«Lo pienso» no es NO",
       "efecto": "caida"
     }
   ],
