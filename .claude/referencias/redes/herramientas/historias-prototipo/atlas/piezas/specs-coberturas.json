@@ -694,5 +694,39 @@
   ],
   "copy": "",
   "fuente": ""
+ },
+ {
+  "id": "coberturas-2811-post",
+  "marca": "coberturas",
+  "formato": "post",
+  "fecha": "2026-11-28",
+  "hora": "14:10",
+  "gancho": "¿Dónde está tu credencial?",
+  "laminas": [
+   [
+    "¿Dónde está tu credencial?",
+    "Tenela en el celular.",
+    "credencial"
+   ]
+  ],
+  "copy": "¿Dónde está tu credencial? En la guardia te la van a pedir.\n✔ Descargá la credencial digital de tu cobertura\n✔ Guardá tu número de afiliado\n✔ Agendá el teléfono de emergencias\n\nEscribinos por WhatsApp.\nSituación ilustrativa.\n\n#ComparaTuObraSocial #Credencial #Prepaga #BuenosAires",
+  "fuente": ""
+ },
+ {
+  "id": "coberturas-2911-post",
+  "marca": "coberturas",
+  "formato": "post",
+  "fecha": "2026-11-29",
+  "hora": "14:10",
+  "gancho": "¿Te dieron turno para marzo?",
+  "laminas": [
+   [
+    "¿Turno para marzo?",
+    "Preguntá por otro prestador.",
+    "almanaque"
+   ]
+  ],
+  "copy": "¿Te dieron turno para marzo? No siempre es la única opción.\n✔ Pedí la cartilla de esa especialidad\n✔ Preguntá por otros prestadores cerca\n✔ Si es urgente, decilo y que quede anotado\n\nEscribinos por WhatsApp.\nSituación ilustrativa.\n\n#ComparaTuObraSocial #Turnos #Cartilla #BuenosAires",
+  "fuente": ""
  }
 ]

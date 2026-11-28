@@ -6,6 +6,13 @@ Rama `claude/brave-hawking-nzsr60` · PR EzequielGonz/LEGAL-CRM#82 (seguido, en 
 - El dueño frenó el boceto de VITA. **No hay agentes trabajando ni nada programado.** Lo programado en Metricool del 25 al 29/11 (12 historias + 1 carrusel por día y marca) NO se toca.
 - **Esperando:** el dueño busca 1 o 2 reels de referencia con el 3D que imagina. Al recibirlos, analizarlos (gancho, cámara, luz, nivel de realismo, animación, efectos) y recién ahí hacer el boceto de VITA con el guion `vita-2711-1`.
 
+## CHECKPOINT 28/11 13:25 BA (16:25 UTC) — CORRIDA A DEL 28/11 EN CURSO
+- **Calibración** A y B: `docs/redes/tanda-2811-0712/calibracion-2811-1300.md`. Métrica nueva de Metricool `IGRE30` (salida en los primeros 3 s): los reels con 100 vistas o más perdieron menos de la mitad de la gente; con 60 % o más, mueren en el piso. Sin cambio de formato esta corrida.
+- **Posts que faltaban** (28 y 29/11, ninguna marca tenía): 6 programados (Coberturas y Autos 28/11; las 4 marcas 29/11). VITA y Marketing del 28/11 no: hora pasada.
+- **Error corregido en `laminas.py`:** el post se quedaba sin el cierre en el plan y la escena saltaba al final (mostraba «Escribinos por WhatsApp» en vez del gancho). Ahora el plan lleva el cierre y se guarda solo la lámina 1. En Autos la línea de abajo tiene que ser de 3 palabras o menos (si no, se ve solo la última).
+- **Reels del 30/11 programados:** 10 de 20 (vita a, c y d; autos a, c y d; marketing a, c y d; coberturas a). La cola sigue; los controles cada ~45 min programan lo que sale.
+- **Lote viejo del 21/11** (historias y carruseles hasta el 29/11): cierra con palabra clave. La regla de `01` dice que no se toca; se le informó al dueño.
+
 ## CHECKPOINT 28/11 10:40 BA (13:40 UTC) — 28 Y 29/11 COMPLETOS (28 REELS) + 128 PIEZAS
 - **Reels programados:** 28/11: 8 (a y b por marca). 29/11: 20 (5 por marca). La cola sigue con 30/11 → 07/12; cada reel: `reel_metricool.py <id>` → revisar hoja y copy → `createScheduledPost` → `registrar.py`.
 - **Correcciones del día:** marketing-2911-a rehecho (el cartel decía «Lo pienso» es NO); coberturas-2911-e con tapa iluminada; `lote.py` ahora elige tapa iluminada en Coberturas y Marketing si el cuadro de 1,2 s sale oscuro; planes VITA ajustados a la rampa de Instagram (2911-d, 0112-e y 0312-e solo FB; 0212-c a las 08:40 por choque con 0212-a).

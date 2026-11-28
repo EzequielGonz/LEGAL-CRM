@@ -694,5 +694,22 @@
   ],
   "copy": "",
   "fuente": ""
+ },
+ {
+  "id": "vita-2911-post",
+  "marca": "vita",
+  "formato": "post",
+  "fecha": "2026-11-29",
+  "hora": "12:10",
+  "gancho": "Te llegó una carta documento. No la tires.",
+  "laminas": [
+   [
+    "Carta documento: no la tires",
+    "Leela y guardala.",
+    "sobre"
+   ]
+  ],
+  "copy": "Te llegó una carta documento. No la tires.\n✔ Leela completa y guardá el sobre\n✔ Anotá el día en que la recibiste\n✔ No contestes en caliente\n\nEscribinos por WhatsApp.\nSituación ilustrativa. Información general: no reemplaza una consulta.\n\n#VITAAbogados #CartaDocumento #DerechoCivil #BuenosAires",
+  "fuente": ""
  }
 ]

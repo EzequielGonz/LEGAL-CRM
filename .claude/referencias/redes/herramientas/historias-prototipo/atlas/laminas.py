@@ -17,7 +17,8 @@ def nrm(s):
 
 def armar(sp, cola=3.8):
     lam = [list(x) for x in sp['laminas']]
-    if sp['formato'] == 'car' and nrm(lam[-1][0]) != nrm(CIERRE): lam.append([CIERRE, CIERRE + '.', 'check' if sp['marca'] != 'vita' else 'sello'])
+    # El post también lleva el cierre en el plan (sin él la escena salta al estado final antes del cuadro), pero se guarda solo la lámina 1.
+    if sp['formato'] in ('car', 'post') and nrm(lam[-1][0]) != nrm(CIERRE): lam.append([CIERRE, CIERRE + '.', 'check' if sp['marca'] != 'vita' else 'sello'])
     palabras, beats, tiempos, vistos = [], [], [], {}
     for i, (cartel, linea, obj) in enumerate(lam):
         if len(cartel.split()) > 5: raise SystemExit(f"{sp['id']}: cartel de más de 5 palabras: {cartel}")
@@ -64,6 +65,7 @@ def sacar(sp):
     r = subprocess.run(['node', 'render.js', sp['id'], 'prueba', *map(str, t)], capture_output=True, text=True)
     if r.returncode: raise SystemExit(r.stdout[-800:] + r.stderr[-800:])
     salidas = []
+    if sp['formato'] == 'post': t = t[:1]
     for k, x in enumerate(t):
         im = Image.open(f"prueba/{sp['id']}-{x:.2f}.jpg").convert('RGB')
         if sp['formato'] in ('car', 'post'): im = im.crop((0, sp.get('recorte', 190), 1080, sp.get('recorte', 190) + 1350))

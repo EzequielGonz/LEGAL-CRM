@@ -694,5 +694,39 @@
   ],
   "copy": "",
   "fuente": ""
+ },
+ {
+  "id": "autos-2811-post",
+  "marca": "autos",
+  "formato": "post",
+  "fecha": "2026-11-28",
+  "hora": "15:40",
+  "gancho": "Una vuelta a la manzana no es una prueba.",
+  "laminas": [
+   [
+    "Probalo donde manejás vos",
+    "Probalo en avenida.",
+    "velocimetro"
+   ]
+  ],
+  "copy": "Una vuelta a la manzana no es una prueba.\n✔ Pedí manejarlo en avenida y con lomos de burro\n✔ Estacionalo como lo hacés en tu casa\n✔ Sentate atrás: ahí viaja tu familia\n\nEscribinos por WhatsApp.\nSituación ilustrativa.\n\n#AutomotoresKocos #0km #TestDrive #BuenosAires",
+  "fuente": ""
+ },
+ {
+  "id": "autos-2911-post",
+  "marca": "autos",
+  "formato": "post",
+  "fecha": "2026-11-29",
+  "hora": "15:40",
+  "gancho": "¿Entra el cochecito en el baúl?",
+  "laminas": [
+   [
+    "¿Entra el cochecito?",
+    "Probalo antes.",
+    "auto"
+   ]
+  ],
+  "copy": "¿Entra el cochecito en el baúl? Probalo antes de firmar.\n✔ Llevá el cochecito o la valija grande\n✔ Cargalo sin bajar los asientos\n✔ Fijate cómo se pliegan los de atrás\n\nEscribinos por WhatsApp.\nSituación ilustrativa.\n\n#AutomotoresKocos #0km #AutoFamiliar #BuenosAires",
+  "fuente": ""
  }
 ]
