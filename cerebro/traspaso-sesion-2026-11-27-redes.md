@@ -6,10 +6,11 @@ Rama `claude/brave-hawking-nzsr60` · PR EzequielGonz/LEGAL-CRM#82 (seguido, en 
 - El dueño frenó el boceto de VITA. **No hay agentes trabajando ni nada programado.** Lo programado en Metricool del 25 al 29/11 (12 historias + 1 carrusel por día y marca) NO se toca.
 - **Esperando:** el dueño busca 1 o 2 reels de referencia con el 3D que imagina. Al recibirlos, analizarlos (gancho, cámara, luz, nivel de realismo, animación, efectos) y recién ahí hacer el boceto de VITA con el guion `vita-2711-1`.
 
-## CHECKPOINT 28/11 05:30 BA (08:30 UTC) — PIEZAS VITA Y AUTOS PROGRAMADAS
+## CHECKPOINT 28/11 05:35 BA (08:35 UTC) — 128 PIEZAS FIJAS PROGRAMADAS (4 MARCAS)
 - **Reiniciar si la máquina se cayó:** en `atlas/`, `pgrep -fa 'cola.py|vigia.sh'`; si faltan, `nohup setsid python3 cola.py > cola.out 2>&1 < /dev/null & disown` y lo mismo con `./vigia.sh`.
-- **Reels programados (11):** 28/11 completo (a y b de las 4 marcas) y de 29/11 vita-a, autos-d y marketing-c. La cola sigue por 29/11 (faltan 16) y después 30/11. Sin competencia de CPU, un reel tarda de 4 a 8 min; con renders de láminas en paralelo, hasta 14.
-- **Piezas fijas 30/11–07/12:** VITA 32 y Autos 32 **programadas y comprobadas en Metricool** (historia 09:20/10:50, post, carrusel de 5 y historia de la noche; registro en `docs/redes/programadas.jsonl`). Marketing: re-render por lámina (texto en el cartel grande), muestra revisada OK; falta `alojar_piezas.py marketing` y programar. Coberturas: un agente las está renderizando.
+- **Reels programados (13):** 28/11 completo (a y b de las 4 marcas) y de 29/11 vita-a, vita-c, autos-c, autos-d y marketing-c. La cola sigue por 29/11 (faltan 15) y después 30/11. Sin competencia de CPU, un reel tarda de 4 a 8 min; con renders de láminas en paralelo, hasta 14.
+- **Piezas fijas 30/11–07/12: LAS 4 MARCAS PROGRAMADAS (128)** y comprobadas en Metricool (VITA las 32; Autos, Marketing y Coberturas un día cada una). Registro en `docs/redes/programadas.jsonl`. Marketing con láminas por cartel; Coberturas `0212-car` lámina 2 rehecha con reloj. `getScheduledPosts` no lista borradores: los duplicados viejos de Marketing no se pudieron ver ni se tocaron.
+- **Reels:** cargar cada uno con `python3 reel_metricool.py <id>` (arma el JSON de Metricool y la hoja `prueba/chk/<id>-hoja.jpg`), revisar la hoja, consultar el horario, `createScheduledPost`, `registrar.py <id> <id_metricool>`.
 - 28 y 29/11: historias y carruseles ya estaban programados de antes y no se tocan (`01-ritmo-y-horarios.md`).
 
 ## CHECKPOINT 28/11 00:40 BA (03:40 UTC) — 5 REELS POR DÍA Y MARCA, COLA ÚNICA
