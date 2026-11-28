@@ -163,3 +163,19 @@ Scripts en la carpeta de flujos de la sesión y copia en `docs/oficina/auditoria
 **Plugins archivados por pedido del dueño** (movidos, no borrados, a `/root/.claude/plugins/archivo-2026-11-27/`): `sixth-sense` (bloqueaba toda subida al remoto) y `naksha` (aviso de cierre que se repetía sin nada que hacer). Sigue activo el control de `superstack` antes de subir: pide un barrido de claves y datos personales; se hace el barrido y al reintentar el mismo comando pasa.
 
 **Repo:** rama `integracion/rediseno-2211` subida con todo lo de hoy; main sigue en `920569d` (sin publicar hasta el informe de la auditoría). `.gitignore` ahora ignora `.simple-workflow/`, `.superstack/` y `.naksha/`.
+
+## Checkpoint 27/11 · 19:10 (frenado por pedido del dueño; se reanuda 00:30)
+
+**Orden del dueño:** «no esta bien, no me da el uso. pone un checkpoint frena y reanuda 00 30». Motivo: el límite de uso de la cuenta no alcanza para correr los tres flujos juntos.
+
+**Estado:** los tres flujos quedaron **detenidos a propósito** a las 19:04 (no hay navegadores abiertos). Un relanzamiento hecho a las 19:03 por pedido suyo se frenó al minuto.
+
+| Flujo | Run | Qué hay guardado |
+|---|---|---|
+| Código por capas | `wf_536bd726-0f1` | base-rls y sesion-permisos hechos (sin revisor); el resto se repite. |
+| Web solo lectura | `wf_8e9edcef-4cc` | 1 zona de 12 terminada; 11 se repiten. |
+| Acciones | `wf_7a9b68b6-95d` | 1 ruta de 5 terminada; Oficina y Laboratorio quedaron a medias. |
+
+**Cómo reanudar (aviso programado `trig_01KjNdYAAh89rpNW6aPX3tnL`, 00:30 de Argentina = 03:30 UTC del 28/11):** cerrar navegadores colgados, comprobar la sesión (`node prueba.js` en `aud-web`), y relanzar con `scriptPath` + `resumeFromRunId` **de a un flujo por vez**: primero código, después web de solo lectura, al final acciones. Antes de dar por buenas las pruebas de acciones, verificar en la base qué quedó creado con el nombre «PRUEBA AUDITORÍA 27/11» por las rutas que se cortaron a medias.
+
+**Sesión del panel:** vigente a las 19:02 (comprobada). **Repo:** rama subida hasta `e42c9e1`; main sigue en `920569d`.
