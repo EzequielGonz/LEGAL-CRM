@@ -1,0 +1,698 @@
+[
+ {
+  "id": "vita-3011-his1",
+  "marca": "vita",
+  "formato": "his",
+  "fecha": "2026-11-30",
+  "hora": "09:20",
+  "base": "vita-3011-g1",
+  "gancho": "Te piden que seas garante. ¿Cuál sos?",
+  "laminas": [
+   [
+    "Te piden ser garante: ¿firmás?",
+    "Escribinos por WhatsApp.",
+    "firma"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "vita-3011-post",
+  "marca": "vita",
+  "formato": "post",
+  "fecha": "2026-11-30",
+  "hora": "12:10",
+  "base": "vita-0212-2",
+  "gancho": "Tres años trabajando y cero recibos.",
+  "laminas": [
+   [
+    "Tres años, cero recibos",
+    "No estás sin opciones",
+    "documento"
+   ]
+  ],
+  "copy": "Tres años trabajando y cero recibos.\n✔ Mensajes, audios y fotos\n✔ Nombres de compañeros\n✔ No firmes sin leer\n\nEscribinos por WhatsApp.\nSituación ilustrativa. Información general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoLaboral #BuenosAires",
+  "fuente": ""
+ },
+ {
+  "id": "vita-3011-car",
+  "marca": "vita",
+  "formato": "car",
+  "fecha": "2026-11-30",
+  "hora": "18:10",
+  "base": "vita-0112-g2",
+  "gancho": "«Me caí, mala suerte.» No siempre.",
+  "laminas": [
+   [
+    "¿Mala suerte? No siempre.",
+    "Caída en la vereda",
+    "globo"
+   ],
+   [
+    "Sacá fotos del lugar",
+    "Fotos del lugar",
+    "camara"
+   ],
+   [
+    "Pedí datos de testigos",
+    "Datos de testigos",
+    "testigo"
+   ],
+   [
+    "Andá a la guardia",
+    "Y consultá",
+    "ambulancia"
+   ]
+  ],
+  "copy": "«Me caí, mala suerte.» No siempre.\n✔ Fotos del lugar\n✔ Datos de testigos\n✔ Guardia y consulta\n\nEscribinos por WhatsApp.\nSituación ilustrativa. Información general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #BuenosAires",
+  "fuente": ""
+ },
+ {
+  "id": "vita-3011-his2",
+  "marca": "vita",
+  "formato": "his",
+  "fecha": "2026-11-30",
+  "hora": "20:20",
+  "base": "vita-0412-3",
+  "gancho": "«Arreglemos acá»: desconfiá de esa frase.",
+  "laminas": [
+   [
+    "«Arreglemos acá»: desconfiá",
+    "Escribinos por WhatsApp.",
+    "firma"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "vita-0112-his1",
+  "marca": "vita",
+  "formato": "his",
+  "fecha": "2026-12-01",
+  "hora": "09:20",
+  "base": "vita-0512-g1",
+  "gancho": "Te reclaman una deuda que no es tuya.",
+  "laminas": [
+   [
+    "¿Pagás para que no molesten?",
+    "Escribinos por WhatsApp.",
+    "celular"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "vita-0112-post",
+  "marca": "vita",
+  "formato": "post",
+  "fecha": "2026-12-01",
+  "hora": "12:10",
+  "base": "vita-0112-g1",
+  "gancho": "No firmes un alquiler sin leer esto.",
+  "laminas": [
+   [
+    "Alquiler: leé tres cosas",
+    "Antes de firmar",
+    "documento"
+   ]
+  ],
+  "copy": "No firmes un alquiler sin leer esto.\n✔ Cuánto y cómo aumenta\n✔ Qué pasa si te vas antes\n✔ Quién paga los arreglos\n\nEscribinos por WhatsApp.\nSituación ilustrativa. Información general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #BuenosAires",
+  "fuente": ""
+ },
+ {
+  "id": "vita-0112-car",
+  "marca": "vita",
+  "formato": "car",
+  "fecha": "2026-12-01",
+  "hora": "18:10",
+  "base": "vita-2911-4",
+  "gancho": "24/12, 23:40: te chocan llegando a la cena.",
+  "laminas": [
+   [
+    "24/12, 23:40: te chocan",
+    "Llegando a la cena",
+    "choque"
+   ],
+   [
+    "Fotos de todo",
+    "Nadie quiere trámites",
+    "camara"
+   ],
+   [
+    "Datos del otro y testigos",
+    "Hacelo igual",
+    "testigo"
+   ],
+   [
+    "Aviso al seguro: 3 días",
+    "Dentro de tres días",
+    "almanaque"
+   ]
+  ],
+  "copy": "24/12, 23:40: te chocan llegando a la cena.\n✔ Fotos de todo\n✔ Datos del otro y testigos\n✔ Aviso al seguro en 3 días\n\nEscribinos por WhatsApp.\nFuente: Ley 17.418, art. 46.\nSituación ilustrativa. Información general: no reemplaza una consulta.\n\n#VITAAbogados #AccidenteDeTransito #DerechoCivil #BuenosAires",
+  "fuente": "Ley 17.418, art. 46"
+ },
+ {
+  "id": "vita-0112-his2",
+  "marca": "vita",
+  "formato": "his",
+  "fecha": "2026-12-01",
+  "hora": "20:20",
+  "base": "vita-0312-g2",
+  "gancho": "Jueves 22:00: la humedad del vecino llegó.",
+  "laminas": [
+   [
+    "Humedad: avisá por escrito",
+    "Escribinos por WhatsApp.",
+    "camara"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "vita-0212-his1",
+  "marca": "vita",
+  "formato": "his",
+  "fecha": "2026-12-02",
+  "hora": "09:20",
+  "base": "vita-reserva-2",
+  "gancho": "Trabajás 48 horas y el recibo dice 20.",
+  "laminas": [
+   [
+    "¿Cobrás parte en mano?",
+    "Escribinos por WhatsApp.",
+    "billete"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "vita-0212-post",
+  "marca": "vita",
+  "formato": "post",
+  "fecha": "2026-12-02",
+  "hora": "12:10",
+  "base": "vita-0212-g1",
+  "gancho": "Se rompió en garantía. Día 1, 10, 30.",
+  "laminas": [
+   [
+    "Garantía: día 1, 10, 30",
+    "Reclamá por escrito",
+    "documento"
+   ]
+  ],
+  "copy": "Se rompió en garantía. Día 1, 10, 30.\n✔ Reclamo por escrito\n✔ Factura y número de reclamo\n✔ Consultá\n\nEscribinos por WhatsApp.\nSituación ilustrativa. Información general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #BuenosAires",
+  "fuente": ""
+ },
+ {
+  "id": "vita-0212-car",
+  "marca": "vita",
+  "formato": "car",
+  "fecha": "2026-12-02",
+  "hora": "18:10",
+  "base": "vita-0212-3",
+  "gancho": "Choque con heridos: tres cartas que no ves.",
+  "laminas": [
+   [
+    "Choque con heridos",
+    "Tres cartas ocultas",
+    "ambulancia"
+   ],
+   [
+    "Carta 1: causa penal",
+    "Además del reclamo",
+    "documento"
+   ],
+   [
+    "Carta 2: no te vayas",
+    "Llamá a emergencias",
+    "ambulancia"
+   ],
+   [
+    "Carta 3: abogado antes",
+    "No declares sin abogado",
+    "sobre"
+   ]
+  ],
+  "copy": "Choque con heridos: tres cartas que no ves.\n✔ Carta 1: puede haber causa penal\n✔ Carta 2: emergencias, no te vayas\n✔ Carta 3: no declares sin abogado\n\nEscribinos por WhatsApp.\nFuente: Constitución Nacional, art. 18.\nSituación ilustrativa. Información general: no reemplaza una consulta.\n\n#VITAAbogados #AccidenteDeTransito #DerechoCivil #BuenosAires",
+  "fuente": "Constitución Nacional, art. 18"
+ },
+ {
+  "id": "vita-0212-his2",
+  "marca": "vita",
+  "formato": "his",
+  "fecha": "2026-12-02",
+  "hora": "20:20",
+  "base": "vita-0412-4",
+  "gancho": "Lunes 9:00: te mandan a otra sucursal.",
+  "laminas": [
+   [
+    "Cambio de sucursal: por escrito",
+    "Escribinos por WhatsApp.",
+    "edificio"
+   ]
+  ],
+  "copy": "",
+  "fuente": "Ley de Contrato de Trabajo, art. 66 (texto de la Ley 27.802)"
+ },
+ {
+  "id": "vita-0312-his1",
+  "marca": "vita",
+  "formato": "his",
+  "fecha": "2026-12-03",
+  "hora": "09:20",
+  "base": "vita-2711-3",
+  "gancho": "Te llegó una citación penal. Tres cartas.",
+  "laminas": [
+   [
+    "¿Citación penal: ignorás o consultás?",
+    "Escribinos por WhatsApp.",
+    "sobre"
+   ]
+  ],
+  "copy": "",
+  "fuente": "Constitución Nacional, art. 18"
+ },
+ {
+  "id": "vita-0312-post",
+  "marca": "vita",
+  "formato": "post",
+  "fecha": "2026-12-03",
+  "hora": "12:10",
+  "base": "vita-0612-g2",
+  "gancho": "Te enfermaste: hora 1, día 1, día 2.",
+  "laminas": [
+   [
+    "Enfermo: avisá el día 1",
+    "Certificado el día 2",
+    "documento"
+   ]
+  ],
+  "copy": "Te enfermaste: hora 1, día 1, día 2.\n✔ Hora 1: te sentís mal\n✔ Día 1: avisá a tu empleador\n✔ Día 2: certificado con constancia\n\nEscribinos por WhatsApp.\nSituación ilustrativa. Información general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoLaboral #BuenosAires",
+  "fuente": ""
+ },
+ {
+  "id": "vita-0312-car",
+  "marca": "vita",
+  "formato": "car",
+  "fecha": "2026-12-03",
+  "hora": "18:10",
+  "base": "vita-0412-g2",
+  "gancho": "Trabajás en una casa y sin registrar.",
+  "laminas": [
+   [
+    "Trabajás en una casa",
+    "Sin registrar",
+    "edificio"
+   ],
+   [
+    "No estás sin opciones",
+    "Guardá mensajes",
+    "celular"
+   ],
+   [
+    "Horarios y pagos",
+    "Guardalos todos",
+    "billete"
+   ],
+   [
+    "Anotá desde cuándo",
+    "Y consultá",
+    "almanaque"
+   ]
+  ],
+  "copy": "Trabajás en una casa y sin registrar.\n✔ Mensajes y horarios\n✔ Pagos\n✔ Desde cuándo trabajás\n\nEscribinos por WhatsApp.\nSituación ilustrativa. Información general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoLaboral #BuenosAires",
+  "fuente": ""
+ },
+ {
+  "id": "vita-0312-his2",
+  "marca": "vita",
+  "formato": "his",
+  "fecha": "2026-12-03",
+  "hora": "20:20",
+  "base": "vita-0312-2",
+  "gancho": "«Sin testamento no hay herencia.» Falso.",
+  "laminas": [
+   [
+    "Sin testamento, igual se hereda",
+    "Escribinos por WhatsApp.",
+    "documento"
+   ]
+  ],
+  "copy": "",
+  "fuente": "Código Civil y Comercial, art. 2424"
+ },
+ {
+  "id": "vita-0412-his1",
+  "marca": "vita",
+  "formato": "his",
+  "fecha": "2026-12-04",
+  "hora": "09:20",
+  "base": "vita-0612-g1",
+  "gancho": "Te dicen que te vayas mañana: no así.",
+  "laminas": [
+   [
+    "¿Mañana tenés que irte?",
+    "Escribinos por WhatsApp.",
+    "edificio"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "vita-0412-post",
+  "marca": "vita",
+  "formato": "post",
+  "fecha": "2026-12-04",
+  "hora": "12:10",
+  "base": "vita-0612-2",
+  "gancho": "Te enfermás: ¿cuántos meses te pagan?",
+  "laminas": [
+   [
+    "¿Cuántos meses te pagan?",
+    "Si no es laboral",
+    "almanaque"
+   ]
+  ],
+  "copy": "Te enfermás: ¿cuántos meses te pagan?\n✔ Sin familia a cargo: 3 o 6 meses\n✔ Con familia a cargo: 6 o 12\n✔ Según tengas más o menos de 5 años\n\nEscribinos por WhatsApp.\nFuente: Ley de Contrato de Trabajo, art. 208.\nSituación ilustrativa. Información general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoLaboral #BuenosAires",
+  "fuente": "Ley de Contrato de Trabajo, art. 208"
+ },
+ {
+  "id": "vita-0412-car",
+  "marca": "vita",
+  "formato": "car",
+  "fecha": "2026-12-04",
+  "hora": "18:10",
+  "base": "vita-reserva-3",
+  "gancho": "«Sin contrato no tengo derechos.» Falso.",
+  "laminas": [
+   [
+    "«Sin contrato, sin derechos»",
+    "Eso es falso",
+    "globo"
+   ],
+   [
+    "No hace falta un papel",
+    "Sin forma especial",
+    "documento"
+   ],
+   [
+    "Mensajes y horarios",
+    "Son tu prueba",
+    "celular"
+   ],
+   [
+    "Comprobantes de pago",
+    "También son prueba",
+    "billete"
+   ]
+  ],
+  "copy": "«Sin contrato no tengo derechos.» Falso.\n✔ Sin papel también hay contrato\n✔ Mensajes y horarios\n✔ Comprobantes de pago\n\nEscribinos por WhatsApp.\nFuente: Ley de Contrato de Trabajo, art. 48.\nSituación ilustrativa. Información general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoLaboral #BuenosAires",
+  "fuente": "Ley de Contrato de Trabajo, art. 48"
+ },
+ {
+  "id": "vita-0412-his2",
+  "marca": "vita",
+  "formato": "his",
+  "fecha": "2026-12-04",
+  "hora": "20:20",
+  "base": "vita-3011-3",
+  "gancho": "Te fuiste: corren 45 días hábiles.",
+  "laminas": [
+   [
+    "Certificados: 45 días hábiles",
+    "Escribinos por WhatsApp.",
+    "almanaque"
+   ]
+  ],
+  "copy": "",
+  "fuente": "Ley de Contrato de Trabajo, art. 80 (texto de la Ley 27.802)"
+ },
+ {
+  "id": "vita-0512-his1",
+  "marca": "vita",
+  "formato": "his",
+  "fecha": "2026-12-05",
+  "hora": "09:20",
+  "base": "vita-2711-g2",
+  "gancho": "Te amenazan por mensaje: no lo borres.",
+  "laminas": [
+   [
+    "¿Te amenazaron por mensaje? ¿Borrás?",
+    "Escribinos por WhatsApp.",
+    "celular"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "vita-0512-post",
+  "marca": "vita",
+  "formato": "post",
+  "fecha": "2026-12-05",
+  "hora": "12:10",
+  "base": "vita-0112-4",
+  "gancho": "Te robaron el celular. «¿Para qué denunciar?»",
+  "laminas": [
+   [
+    "«¿Para qué denunciar?»",
+    "Comisaría o fiscalía",
+    "celular"
+   ]
+  ],
+  "copy": "Te robaron el celular. «¿Para qué denunciar?»\n✔ En comisaría o fiscalía\n✔ Datos del equipo y del lugar\n✔ Pedí copia\n\nEscribinos por WhatsApp.\nSituación ilustrativa. Información general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoPenal #BuenosAires",
+  "fuente": ""
+ },
+ {
+  "id": "vita-0512-car",
+  "marca": "vita",
+  "formato": "car",
+  "fecha": "2026-12-05",
+  "hora": "18:10",
+  "base": "vita-2811-g2",
+  "gancho": "Martes 19:15: otra vez dos horas de más.",
+  "laminas": [
+   [
+    "Martes 19:15: dos horas más",
+    "Y no figuran",
+    "reloj"
+   ],
+   [
+    "Anotá entrada y salida",
+    "Cada día",
+    "almanaque"
+   ],
+   [
+    "Guardá los mensajes",
+    "Donde te piden quedarte",
+    "celular"
+   ],
+   [
+    "Después, consultá",
+    "Con todo guardado",
+    "documento"
+   ]
+  ],
+  "copy": "Martes 19:15: otra vez dos horas de más.\n✔ Anotá entrada y salida\n✔ Guardá los mensajes\n✔ Consultá\n\nEscribinos por WhatsApp.\nSituación ilustrativa. Información general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoLaboral #BuenosAires",
+  "fuente": ""
+ },
+ {
+  "id": "vita-0512-his2",
+  "marca": "vita",
+  "formato": "his",
+  "fecha": "2026-12-05",
+  "hora": "20:20",
+  "base": "vita-0212-1",
+  "gancho": "Carta documento del trabajo: no la guardes.",
+  "laminas": [
+   [
+    "Carta documento: anotá cuándo llegó",
+    "Escribinos por WhatsApp.",
+    "sobre"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "vita-0612-his1",
+  "marca": "vita",
+  "formato": "his",
+  "fecha": "2026-12-06",
+  "hora": "09:20",
+  "base": "vita-2911-g1",
+  "gancho": "Vos firmás el recibo. ¿Te quedás con copia?",
+  "laminas": [
+   [
+    "¿Pedís copia del recibo?",
+    "Escribinos por WhatsApp.",
+    "documento"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "vita-0612-post",
+  "marca": "vita",
+  "formato": "post",
+  "fecha": "2026-12-06",
+  "hora": "12:10",
+  "base": "vita-3011-g2",
+  "gancho": "Te vas en julio: ¿y las vacaciones?",
+  "laminas": [
+   [
+    "¿Perdés las vacaciones?",
+    "Va la parte proporcional",
+    "almanaque"
+   ]
+  ],
+  "copy": "Te vas en julio: ¿y las vacaciones?\n✔ ¿Las perdés?\n✔ La parte proporcional\n✔ Que figure en la liquidación\n\nEscribinos por WhatsApp.\nFuente: Ley de Contrato de Trabajo, art. 156.\nSituación ilustrativa. Información general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoLaboral #BuenosAires",
+  "fuente": "Ley de Contrato de Trabajo, art. 156"
+ },
+ {
+  "id": "vita-0612-car",
+  "marca": "vita",
+  "formato": "car",
+  "fecha": "2026-12-06",
+  "hora": "18:10",
+  "base": "vita-2911-g2",
+  "gancho": "Te piden un pagaré en blanco: tres cartas.",
+  "laminas": [
+   [
+    "Pagaré en blanco",
+    "Tres cartas",
+    "documento"
+   ],
+   [
+    "Carta 1: nada en blanco",
+    "Sin monto ni fecha",
+    "firma"
+   ],
+   [
+    "Carta 2: pedí copia",
+    "De lo que firmás",
+    "documento"
+   ],
+   [
+    "Carta 3: si presionan, consultá",
+    "Antes de firmar",
+    "sello"
+   ]
+  ],
+  "copy": "Te piden un pagaré en blanco: tres cartas.\n✔ Sin monto ni fecha, no\n✔ Pedí copia\n✔ Si te presionan, consultá\n\nEscribinos por WhatsApp.\nSituación ilustrativa. Información general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #BuenosAires",
+  "fuente": ""
+ },
+ {
+  "id": "vita-0612-his2",
+  "marca": "vita",
+  "formato": "his",
+  "fecha": "2026-12-06",
+  "hora": "20:20",
+  "base": "vita-0312-1",
+  "gancho": "Te fuiste en agosto: el aguinaldo suma.",
+  "laminas": [
+   [
+    "Cada mes suma al aguinaldo",
+    "Escribinos por WhatsApp.",
+    "almanaque"
+   ]
+  ],
+  "copy": "",
+  "fuente": "Ley de Contrato de Trabajo, art. 123"
+ },
+ {
+  "id": "vita-0712-his1",
+  "marca": "vita",
+  "formato": "his",
+  "fecha": "2026-12-07",
+  "hora": "09:20",
+  "base": "vita-0512-4",
+  "gancho": "«Si renuncio, no cobro nada.» Falso.",
+  "laminas": [
+   [
+    "¿Renunciás y no cobrás nada?",
+    "Escribinos por WhatsApp.",
+    "sobre"
+   ]
+  ],
+  "copy": "",
+  "fuente": "Ley de Contrato de Trabajo, arts. 123 y 156"
+ },
+ {
+  "id": "vita-0712-post",
+  "marca": "vita",
+  "formato": "post",
+  "fecha": "2026-12-07",
+  "hora": "12:10",
+  "base": "vita-0212-g2",
+  "gancho": "«Facturo, así que no soy empleado.»",
+  "laminas": [
+   [
+    "Facturás: ¿sos empleado?",
+    "Horario y un jefe",
+    "documento"
+   ]
+  ],
+  "copy": "«Facturo, así que no soy empleado.»\n✔ Horario fijo\n✔ Un jefe\n✔ Un solo lugar de trabajo\n\nEscribinos por WhatsApp.\nSituación ilustrativa. Información general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoLaboral #BuenosAires",
+  "fuente": ""
+ },
+ {
+  "id": "vita-0712-car",
+  "marca": "vita",
+  "formato": "car",
+  "fecha": "2026-12-07",
+  "hora": "18:10",
+  "base": "vita-0312-g1",
+  "gancho": "Te mudaste y no te devuelven el depósito.",
+  "laminas": [
+   [
+    "¿No te devuelven el depósito?",
+    "Te mudaste",
+    "edificio"
+   ],
+   [
+    "Juntá el contrato",
+    "Y recibo del depósito",
+    "documento"
+   ],
+   [
+    "Fotos de cómo lo dejaste",
+    "Del departamento",
+    "camara"
+   ],
+   [
+    "Reclamá por escrito",
+    "Y consultá",
+    "sobre"
+   ]
+  ],
+  "copy": "Te mudaste y no te devuelven el depósito.\n✔ Contrato y recibo\n✔ Fotos del departamento\n✔ Reclamo por escrito\n\nEscribinos por WhatsApp.\nSituación ilustrativa. Información general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #BuenosAires",
+  "fuente": ""
+ },
+ {
+  "id": "vita-0712-his2",
+  "marca": "vita",
+  "formato": "his",
+  "fecha": "2026-12-07",
+  "hora": "20:20",
+  "base": "vita-0412-g1",
+  "gancho": "Testamento: tres cartas antes de hacerlo.",
+  "laminas": [
+   [
+    "Testamento: tiene formas que cumplir",
+    "Escribinos por WhatsApp.",
+    "documento"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ }
+]
