@@ -9,6 +9,7 @@ Rama `claude/brave-hawking-nzsr60` · PR EzequielGonz/LEGAL-CRM#82 (seguido, en 
 ## CHECKPOINT 28/11 10:40 BA (13:40 UTC) — 28 Y 29/11 COMPLETOS (28 REELS) + 128 PIEZAS
 - **Reels programados:** 28/11: 8 (a y b por marca). 29/11: 20 (5 por marca). La cola sigue con 30/11 → 07/12; cada reel: `reel_metricool.py <id>` → revisar hoja y copy → `createScheduledPost` → `registrar.py`.
 - **Correcciones del día:** marketing-2911-a rehecho (el cartel decía «Lo pienso» es NO); coberturas-2911-e con tapa iluminada; `lote.py` ahora elige tapa iluminada en Coberturas y Marketing si el cuadro de 1,2 s sale oscuro; planes VITA ajustados a la rampa de Instagram (2911-d, 0112-e y 0312-e solo FB; 0212-c a las 08:40 por choque con 0212-a).
+- **Clave para que la cola no se frene:** la máquina se recicla ~5 min después de quedar sin tareas de fondo activas. Mantener siempre una tarea de fondo larga (Bash en segundo plano: `while pgrep -f cola.py && pgrep -f vigia.sh; do sleep 60; done`, timeout 2 h) y re-armarla al vencer.
 - **Reinicios:** la máquina se reinicia en las pausas por límite de uso (≈02:50, ≈07:56 y ≈09:25 UTC del 28/11). Relanzar `cola.py` y `vigia.sh`; los controles cada ~45 min lo hacen.
 
 ## CHECKPOINT 28/11 05:35 BA (08:35 UTC) — 128 PIEZAS FIJAS PROGRAMADAS (4 MARCAS)
