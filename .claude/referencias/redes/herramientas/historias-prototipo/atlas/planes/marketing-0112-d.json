@@ -1,0 +1,85 @@
+{
+  "id": "marketing-0112-d",
+  "marca": "marketing",
+  "base": "marketing-0112-g1",
+  "fecha_pub": "2026-12-01",
+  "hora": "13:50",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Tu cliente se olvidó del pedido.",
+  "voz": "Tu cliente se olvidó del pedido. Le puede pasar a cualquiera. Pagó, lo anotaste y llegó el sábado sin acordarse. Mandale un mensaje el día anterior. Con la hora, el lugar de entrega y qué pidió. Una línea alcanza. Así se acuerda, vos te organizás y nadie queda esperando. Escribinos por WhatsApp. Guardalo para tus pedidos, porque tu cliente se olvidó…",
+  "palabra": "RECORDATORIO",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "olvidó",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "cruz",
+      "texto": "Se olvidó del pedido",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "sábado",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "reloj_arena",
+      "texto": "Llegó el sábado",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "anterior",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "cartel",
+      "texto": "El día anterior",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "hora",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "etiqueta",
+      "texto": "Hora y lugar",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "línea",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "chat",
+      "texto": "Una línea alcanza",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "organizás",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "estrella",
+      "texto": "Te organizás",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Guardalo para pedidos",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Tu cliente se olvidó del pedido.\n\n✔ Mandá un mensaje el día anterior.\n✔ Con hora, lugar y qué pidió.\n✔ Una línea alcanza.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pedidos #Pymes",
+  "fuente": ""
+}

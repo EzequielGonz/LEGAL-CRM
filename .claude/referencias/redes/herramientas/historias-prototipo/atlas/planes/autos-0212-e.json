@@ -1,0 +1,78 @@
+{
+  "id": "autos-0212-e",
+  "marca": "autos",
+  "base": "autos-0212-g2",
+  "fecha_pub": "2026-12-02",
+  "hora": "19:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Sin estos tres papeles, no circulás.",
+  "voz": "Sin estos tres papeles, no circulás. Carta uno: tu licencia. Carta dos: la cédula del auto. Carta tres: el comprobante del seguro vigente. Revisá hoy que estén los tres y dejalos juntos en la guantera. Los tres, siempre, no solo cuando salís de viaje. Escribinos por WhatsApp. Mandáselo a quien retira esta semana. Y por eso,",
+  "palabra": "CIRCULACION",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "Sin",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "candado",
+      "texto": "Sin tres papeles, no circulás",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Carta",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "documento",
+      "texto": "1. Tu licencia",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Carta",
+      "n": 1,
+      "tipo": "paso",
+      "objeto": "auto",
+      "texto": "2. Cédula del auto",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Carta",
+      "n": 2,
+      "tipo": "paso",
+      "objeto": "poliza",
+      "texto": "3. Seguro vigente",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "siempre",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "lupa",
+      "texto": "Los tres, siempre",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "eso",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "llave",
+      "texto": "Llevá los tres papeles",
+      "efecto": "barrido"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Sin estos tres papeles, no circulás.\n\n✔ Tu licencia.\n✔ La cédula del auto.\n✔ El comprobante del seguro vigente.\n\nEscribinos por WhatsApp.\n\nFuente: Ley 24.449, art. 40.\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #Documentación #BuenosAires",
+  "fuente": "Ley 24.449, art. 40",
+  "nota": "Reciclado de autos-0212-g2: pasa de pregunta numérica a tres cartas."
+}

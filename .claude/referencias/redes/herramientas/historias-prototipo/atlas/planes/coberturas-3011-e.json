@@ -1,0 +1,85 @@
+{
+  "id": "coberturas-3011-e",
+  "marca": "coberturas",
+  "base": "coberturas-3011-g2",
+  "fecha_pub": "2026-11-30",
+  "hora": "22:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Comprar anteojos sin preguntar te puede salir caro.",
+  "voz": "Comprar anteojos sin preguntar te puede salir caro. ¿Cuántas cosas conviene consultar antes? Pensá un número. Tres: si tu plan los cubre, qué óptica está adherida y qué receta piden. Anotalas en el celular y preguntá antes de pagar. Escribinos por WhatsApp. Mandáselo a quien usa anteojos todos los días, porque comprar anteojos…",
+  "palabra": "ANTEOJOS",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "anteojos",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "receta",
+      "texto": "Sin preguntar, caro",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "Cuántas",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "pregunta",
+      "texto": "¿Cuántas cosas?",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "Pensá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "reloj",
+      "texto": "Pensá un número",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Tres",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "credencial",
+      "texto": "¿Los cubre?",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "óptica",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "mostrador",
+      "texto": "¿Qué óptica?",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "receta",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "orden",
+      "texto": "¿Qué receta?",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien usa anteojos",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Comprar anteojos sin preguntar te puede salir caro.\n\n✔ Preguntá si tu plan los cubre.\n✔ Preguntá qué óptica está adherida.\n✔ Preguntá qué receta piden.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Anteojos #Cobertura #BuenosAires",
+  "fuente": ""
+}

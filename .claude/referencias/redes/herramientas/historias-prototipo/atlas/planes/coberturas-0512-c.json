@@ -1,0 +1,77 @@
+{
+  "id": "coberturas-0512-c",
+  "marca": "coberturas",
+  "base": "coberturas-0212-4",
+  "fecha_pub": "2026-12-05",
+  "hora": "21:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "elevenlabs",
+  "gancho": "Derivar tus aportes puede salir con costo aparte.",
+  "voz": "Derivar tus aportes puede salir con costo aparte. Derivar es elegir que tus aportes vayan a otra obra social o a un plan. Antes de hacerlo, preguntá qué cubre con eso y cuánto pagarías aparte. Después mirá la cartilla. Escribinos por WhatsApp. Guardalo para cuando lo pienses, porque derivar tus aportes…",
+  "palabra": "DERIVAR",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Derivar",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "carpeta",
+      "texto": "¿Derivar aportes?",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "elegir",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "credencial",
+      "texto": "Aportes a otro lado",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "cubre",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "pregunta",
+      "texto": "¿Qué cubre?",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "aparte",
+      "n": 1,
+      "tipo": "dato",
+      "objeto": "orden",
+      "texto": "¿Cuánto aparte?",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "cartilla",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "mostrador",
+      "texto": "Mirá la cartilla",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "carpeta",
+      "texto": "Guardalo para pensarlo",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Derivar tus aportes puede salir con costo aparte.\n\n✔ Derivar es elegir que tus aportes vayan a otra obra social o a un plan.\n✔ Preguntá qué cubre y cuánto pagarías aparte.\n✔ Mirá la cartilla.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #DerivarAportes #BuenosAires",
+  "fuente": ""
+}

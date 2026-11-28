@@ -1,0 +1,78 @@
+{
+  "id": "autos-2911-e",
+  "marca": "autos",
+  "base": "autos-2811-g2",
+  "fecha_pub": "2026-11-29",
+  "hora": "19:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Barato o caro: no elijas el seguro así.",
+  "voz": "Barato o caro: no elijas el seguro así. El más barato, sin leer, puede dejarte corto. El más caro, por las dudas, puede ser de más. Lo que sirve es comparar qué cubre cada uno y recién ahí elegir. Pedí las condiciones por escrito. Escribinos por WhatsApp. Mandáselo a quien está cotizando. Y por eso,",
+  "palabra": "POLIZAS",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Barato",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "poliza",
+      "texto": "¿Barato o caro?",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "sin",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "documento",
+      "texto": "Sin leer",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "caro",
+      "n": 1,
+      "tipo": "dato",
+      "objeto": "escudo",
+      "texto": "Caro, por las dudas",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "comparar",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "lupa",
+      "texto": "Compará qué cubre",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "escrito",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "candado",
+      "texto": "Condiciones por escrito",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Para quien cotiza",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Barato o caro: no elijas el seguro así.\n\n✔ Barato sin leer, no.\n✔ Caro por las dudas, tampoco.\n✔ Comparar qué cubre cada uno.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #Seguro #BuenosAires",
+  "fuente": "",
+  "nota": "Reciclado de autos-2811-g2: pasa de «¿cuál sos?» a advertencia sobre el seguro."
+}

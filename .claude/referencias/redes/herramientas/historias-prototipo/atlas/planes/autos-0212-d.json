@@ -1,0 +1,78 @@
+{
+  "id": "autos-0212-d",
+  "marca": "autos",
+  "base": "autos-0212-g1",
+  "fecha_pub": "2026-12-02",
+  "hora": "09:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "La llave extra no va en la guantera.",
+  "voz": "La llave extra no va en la guantera. Si la dejás ahí, queda con el mismo auto que querés cuidar. Guardala en tu casa, en un lugar que sepas. Y anotá dónde está, para encontrarla el día que la necesites. Hacelo hoy, cuando llegues. Escribinos por WhatsApp. Mandáselo a quien acaba de estrenar. Y acordate:",
+  "palabra": "REPUESTO",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "La",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "llave",
+      "texto": "Llave de repuesto",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "guantera",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "cruz",
+      "texto": "Guantera: no",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "casa",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "candado",
+      "texto": "En tu casa",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "anotá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "Anotá dónde está",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "hoy",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "almanaque",
+      "texto": "Hacelo hoy",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "acordate",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Guardala en casa",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "La llave extra no va en la guantera.\n\n✔ Guardala en tu casa, no en el auto.\n✔ Elegí un lugar que sepas.\n✔ Anotá dónde la dejaste.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #LlaveDeRepuesto #BuenosAires",
+  "fuente": "",
+  "nota": "Reciclado de autos-0212-g1: pasa de «vos» a mito roto sobre la guantera."
+}

@@ -1,0 +1,78 @@
+{
+  "id": "vita-0112-e",
+  "marca": "vita",
+  "base": "vita-2811-g2",
+  "fecha_pub": "2026-12-01",
+  "hora": "19:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "«Quedate un rato más.» Anotá cada hora.",
+  "voz": "«Quedate un rato más.» Anotá cada hora. Si te quedás dos horas de más y en el recibo no aparecen, algo no cierra. Anotá tu hora de entrada y de salida todos los días. Guardá los mensajes donde te piden quedarte. Y consultá. Escribinos por WhatsApp. Mandáselo a quien se queda de más, porque si te dicen «quedate un rato más»…",
+  "palabra": "HORAEXTRA",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Quedate",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "globo",
+      "texto": "«Quedate un rato más»",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "dos",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "reloj",
+      "texto": "2 horas de más",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "recibo",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "No aparecen en el recibo",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "entrada",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "almanaque",
+      "texto": "Entrada y salida",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "mensajes",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "celular",
+      "texto": "Guardá los mensajes",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sobre",
+      "texto": "Mandáselo a quien se queda",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "«Quedate un rato más.» Anotá cada hora.\n\n✔ Anotá tu hora de entrada y de salida.\n✔ Guardá los mensajes donde te piden quedarte.\n✔ Consultá.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoLaboral #HorasExtra #BuenosAires",
+  "fuente": "",
+  "nota": "Extra e: reciclado de vita-2811-g2 (de escena con hora a la frase del jefe)."
+}

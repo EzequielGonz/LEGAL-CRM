@@ -1,0 +1,78 @@
+{
+  "id": "autos-0312-e",
+  "marca": "autos",
+  "base": "autos-0512-g1",
+  "fecha_pub": "2026-12-03",
+  "hora": "19:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Una mochila a la vista es una invitación.",
+  "voz": "Una mochila a la vista es una invitación. Antes de bajarte, sacá lo de valor o guardalo donde no se vea. Después, dos cosas más. La llave de repuesto, lejos del auto. Y preguntale a tu aseguradora qué te piden. Revisalo antes de estacionar en la calle. Escribinos por WhatsApp. Mandáselo a quien estaciona en la calle. Y recordá:",
+  "palabra": "ANTIRROBO",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Una",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "lupa",
+      "texto": "Mochila a la vista",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "bajarte",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "auto",
+      "texto": "Antes de bajarte",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "valor",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "candado",
+      "texto": "Sacá lo de valor",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "llave",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "llave",
+      "texto": "Llave lejos del auto",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "aseguradora",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "poliza",
+      "texto": "Preguntá qué te piden",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "recordá",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "cruz",
+      "texto": "Nada a la vista",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Una mochila a la vista es una invitación.\n\n✔ Nada de valor a la vista.\n✔ La llave de repuesto, lejos del auto.\n✔ Preguntale a tu aseguradora qué te piden.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #Antirrobo #BuenosAires",
+  "fuente": "",
+  "nota": "Reciclado de autos-0512-g1: pasa de tres cartas a advertencia con una imagen."
+}

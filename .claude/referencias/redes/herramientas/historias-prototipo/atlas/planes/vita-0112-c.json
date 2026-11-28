@@ -1,0 +1,85 @@
+{
+  "id": "vita-0112-c",
+  "marca": "vita",
+  "base": "vita-0412-3",
+  "fecha_pub": "2026-12-01",
+  "hora": "11:10",
+  "redes": [
+    "facebook"
+  ],
+  "motor_voz": "elevenlabs",
+  "gancho": "Arreglar de palabra no deja nada escrito.",
+  "voz": "Arreglar de palabra no deja nada escrito. «Arreglemos acá, sin seguro», te dicen en la calle, apurados. Desconfiá. Pedí los datos del otro igual. Sacá fotos de todo. Y si arreglan, que quede todo por escrito y firmado por los dos. Escribinos por WhatsApp. Mandáselo a quien maneje, porque si arreglan de palabra…",
+  "palabra": "ARREGLO",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Arreglar",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "globo",
+      "texto": "Arreglar de palabra",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "Arreglemos",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "auto",
+      "texto": "«Arreglemos acá»",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Desconfiá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "sello",
+      "texto": "Desconfiá",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "datos",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "Pedí los datos",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "fotos",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "camara",
+      "texto": "Sacá fotos",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "escrito",
+      "n": 1,
+      "tipo": "dato",
+      "objeto": "firma",
+      "texto": "Por escrito y firmado",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "auto",
+      "texto": "Mandáselo a quien maneje",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Arreglar de palabra no deja nada escrito.\n\n✔ Pedí los datos del otro igual.\n✔ Sacá fotos de todo.\n✔ Si arreglan, que quede por escrito y firmado.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #AccidentesDeTránsito #Choque #BuenosAires",
+  "fuente": "",
+  "nota": "Extra c: tema nuevo (tránsito, solo Facebook hasta el 02/12)."
+}

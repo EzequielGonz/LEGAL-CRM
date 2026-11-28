@@ -1,0 +1,78 @@
+{
+  "id": "autos-2911-c",
+  "marca": "autos",
+  "base": "autos-2911-1",
+  "fecha_pub": "2026-11-29",
+  "hora": "11:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "elevenlabs",
+  "gancho": "El primer número del usado no es final.",
+  "voz": "El primer número del usado no es final. Mati quiere entregar su auto viejo, el gris, como parte de pago. Le dicen un número y le parece poco. Antes de aceptar, preguntá en qué se fijaron. En la parte dos: qué hace que un usado valga más. Escribinos por WhatsApp. Y acordate:",
+  "palabra": "USADO",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "El",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "documento",
+      "texto": "Primer número, no final",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "Mati",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "auto",
+      "texto": "Mati y «el gris»",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "dicen",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "velocimetro",
+      "texto": "Un número que parece poco",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "aceptar",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "lupa",
+      "texto": "Preguntá antes de aceptar",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "parte",
+      "n": 1,
+      "tipo": "dato",
+      "objeto": "almanaque",
+      "texto": "Parte 2: qué suma valor",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "acordate",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "cruz",
+      "texto": "El primero no es final",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "El primer número del usado no es final.\n\n✔ El primer número no es final.\n✔ Preguntá en qué se fijaron.\n✔ La parte dos cuenta qué suma valor.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #UsadoParteDePago #BuenosAires",
+  "fuente": "",
+  "nota": "Tema nuevo (c): parte 1 de la serie del usado; la parte 2 es autos-0112-3."
+}

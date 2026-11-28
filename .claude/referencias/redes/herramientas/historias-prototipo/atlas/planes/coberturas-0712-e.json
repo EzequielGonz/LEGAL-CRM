@@ -1,0 +1,87 @@
+{
+  "id": "coberturas-0712-e",
+  "marca": "coberturas",
+  "base": "coberturas-0212-b",
+  "fecha_pub": "2026-12-07",
+  "hora": "22:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "La obra social del trabajo no es fija.",
+  "voz": "La obra social del trabajo no es fija. Hay tres tipos. El que acepta la que le asignan. El que nunca mira la cartilla. Y el que, si trabaja en relación de dependencia, pregunta cómo elegir a cuál van sus aportes. ¿Cuál sos? Escribinos por WhatsApp. Mandáselo a quien empieza un trabajo nuevo, porque la obra social del trabajo…",
+  "palabra": "NUEVO",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "obra",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "credencial",
+      "texto": "¿Te la asignaron?",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "tipos",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "pregunta",
+      "texto": "Tres tipos",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "acepta",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "orden",
+      "texto": "Acepta lo asignado",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "mira",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "carpeta",
+      "texto": "Nunca mira la cartilla",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "elegir",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "check",
+      "texto": "Elige a dónde van aportes",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Cuál",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "personaje",
+      "texto": "¿Cuál sos?",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien empieza",
+      "efecto": "barrido"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "La obra social del trabajo no es fija.\n\n✔ Si trabajás en relación de dependencia, podés elegir a cuál van tus aportes.\n✔ Mirá la cartilla antes.\n✔ Preguntá cómo hacer el cambio.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #TrabajoNuevo #BuenosAires",
+  "fuente": "",
+  "reciclado_de": "coberturas-0212-b",
+  "nota": "Reciclado del plan coberturas-0212-b (edición fuerte: ¿cuál sos?, otro orden, otros objetos)."
+}

@@ -1,0 +1,85 @@
+{
+  "id": "marketing-3011-c",
+  "marca": "marketing",
+  "base": "marketing-3011-2",
+  "fecha_pub": "2026-11-30",
+  "hora": "10:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "elevenlabs",
+  "gancho": "Diciembre te encuentra con el WhatsApp desarmado.",
+  "voz": "Diciembre te encuentra con el WhatsApp desarmado. Esta semana revisá cinco cosas. El horario de fiestas. El mensaje de ausencia. Las respuestas rápidas. El catálogo al día. Y las etiquetas de los chats. Con eso, cuando entren las consultas, no improvisás. Escribinos por WhatsApp. Guardalo para esta semana, porque diciembre te encuentra…",
+  "palabra": "CHECKLIST",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Diciembre",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "cartel",
+      "texto": "Diciembre ya llega",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "horario",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "reloj_arena",
+      "texto": "Horario de fiestas",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "ausencia",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "carta",
+      "texto": "Mensaje de ausencia",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "respuestas",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "chat",
+      "texto": "Respuestas rápidas",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "catálogo",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "vidriera",
+      "texto": "Catálogo al día",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "etiquetas",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "etiqueta",
+      "texto": "Etiquetas",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Guardalo esta semana",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Diciembre te encuentra con el WhatsApp desarmado.\n\n✔ Horario de fiestas y mensaje de ausencia.\n✔ Respuestas rápidas y catálogo al día.\n✔ Etiquetas en los chats.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Diciembre #Pymes",
+  "fuente": ""
+}

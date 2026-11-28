@@ -1,0 +1,85 @@
+{
+  "id": "coberturas-0612-e",
+  "marca": "coberturas",
+  "base": "coberturas-0112-g1",
+  "fecha_pub": "2026-12-06",
+  "hora": "22:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Tomás un remedio por mes: ¿cuál sos?",
+  "voz": "Tomás un remedio por mes: ¿cuál sos? Hay tres tipos. El que paga sin preguntar. El que no sabe qué receta piden. Y el que pregunta si su plan tiene cobertura para uso crónico y qué farmacias están adheridas. Escribinos por WhatsApp. Mandáselo a quien toma remedios todos los meses, porque tomás un remedio por mes…",
+  "palabra": "CRONICO",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "remedio",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "frasco",
+      "texto": "Un remedio por mes",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "tipos",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "pregunta",
+      "texto": "Tres tipos",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "paga",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "celular",
+      "texto": "Paga sin preguntar",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "receta",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "receta",
+      "texto": "¿Qué receta piden?",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "crónico",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "credencial",
+      "texto": "¿Cobertura crónica?",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "farmacias",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "mostrador",
+      "texto": "¿Qué farmacias?",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien toma remedios",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Tomás un remedio por mes: ¿cuál sos?\n\n✔ Preguntá si tu plan cubre el uso crónico.\n✔ Preguntá qué receta piden.\n✔ Preguntá qué farmacias están adheridas.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Medicamentos #Cobertura #BuenosAires",
+  "fuente": ""
+}

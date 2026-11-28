@@ -1,0 +1,86 @@
+{
+  "id": "autos-0612-c",
+  "marca": "autos",
+  "base": "autos-0612-1",
+  "fecha_pub": "2026-12-06",
+  "hora": "13:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "elevenlabs",
+  "gancho": "Comprar un 0 km es más que firmar.",
+  "voz": "Comprar un 0 km es más que firmar. Son cuatro pasos. Uno: presupuesto por escrito. Dos: seña con recibo. Tres: firma de la orden, pero leída. Cuatro: retiro con revisión. Si te saltás uno, volvé a ese paso. Escribinos por WhatsApp. Mandáselo a quien está por comprar. Y por eso:",
+  "palabra": "PASOS",
+  "contador": 4,
+  "beats": [
+    {
+      "palabra": "Comprar",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "documento",
+      "texto": "Más que firmar",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "Uno",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "poliza",
+      "texto": "1. Presupuesto escrito",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Dos",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "almanaque",
+      "texto": "2. Seña con recibo",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Tres",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "lupa",
+      "texto": "3. Firma, pero leída",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Cuatro",
+      "n": 1,
+      "tipo": "paso",
+      "objeto": "llave",
+      "texto": "4. Retiro con revisión",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "saltás",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "cruz",
+      "texto": "Si te saltás uno, volvé",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "eso",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "documento",
+      "texto": "Más que firmar",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Comprar un 0 km es más que firmar.\n\n✔ Presupuesto por escrito.\n✔ Seña con recibo.\n✔ Retiro con revisión.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #ComprarAuto #BuenosAires",
+  "fuente": "",
+  "nota": "Tema nuevo (c): los cuatro pasos de la compra."
+}

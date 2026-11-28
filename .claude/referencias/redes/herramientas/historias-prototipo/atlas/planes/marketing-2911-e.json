@@ -1,0 +1,85 @@
+{
+  "id": "marketing-2911-e",
+  "marca": "marketing",
+  "base": "marketing-2911-g2",
+  "fecha_pub": "2026-11-29",
+  "hora": "18:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Tu cliente llegó y ya cerraste.",
+  "voz": "Tu cliente llegó y ya cerraste. Sábado, tres y cuarenta, viene a retirar su pedido y encuentra la persiana baja. Vos creías que lo sabía. No lo sabía. La solución es corta: el día antes, mandale por escrito el día, la hora y la dirección del retiro. Pedile que confirme. Escribinos por WhatsApp. Guardalo para tus entregas, porque tu cliente llegó…",
+  "palabra": "RETIRO",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "cliente",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "cartel",
+      "texto": "Llegó y cerraste",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "Sábado",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "reloj_arena",
+      "texto": "Sábado 15:40",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "persiana",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "cruz",
+      "texto": "Persiana baja",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "antes",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "mostrador",
+      "texto": "El día antes",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "escrito",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "carta",
+      "texto": "Por escrito",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "confirme",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "check",
+      "texto": "Que confirme",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "chat",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Guardalo para entregas",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Tu cliente llegó y ya cerraste.\n\n✔ Confirmá el retiro por escrito.\n✔ Día, hora y dirección.\n✔ Pedile que confirme.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Retiros #Pymes",
+  "fuente": ""
+}

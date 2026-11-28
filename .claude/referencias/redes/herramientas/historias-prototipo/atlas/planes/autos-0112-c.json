@@ -1,0 +1,86 @@
+{
+  "id": "autos-0112-c",
+  "marca": "autos",
+  "base": "autos-0612-2",
+  "fecha_pub": "2026-12-01",
+  "hora": "11:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "elevenlabs",
+  "gancho": "Las cubiertas nuevas también se revisan.",
+  "voz": "Las cubiertas nuevas también se revisan. Pensás: «es nuevo, para qué». Error. La presión se mide igual. Hacelo con las cubiertas frías, antes de salir. Y usá el valor que indica el manual, no uno cualquiera. Es de las revisiones más simples. Escribinos por WhatsApp. Mandáselo a quien estrenó auto. Y acordate:",
+  "palabra": "PRESION",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Las",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "rueda",
+      "texto": "Cubiertas nuevas",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "nuevo",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "auto",
+      "texto": "«Es nuevo, para qué»",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Error",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "cruz",
+      "texto": "Error",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "presión",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "velocimetro",
+      "texto": "Revisá la presión",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "frías",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "lupa",
+      "texto": "Con cubiertas frías",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "manual",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "Valor del manual",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "acordate",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "También se revisan",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Las cubiertas nuevas también se revisan.\n\n✔ Medí la presión con las cubiertas frías.\n✔ Usá el valor que indica el manual.\n✔ Hacelo aunque el auto sea nuevo.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #Neumáticos #BuenosAires",
+  "fuente": "",
+  "nota": "Tema nuevo (c): presión de las cubiertas del auto nuevo."
+}

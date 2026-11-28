@@ -1,0 +1,87 @@
+{
+  "id": "coberturas-0712-d",
+  "marca": "coberturas",
+  "base": "coberturas-0112-a",
+  "fecha_pub": "2026-12-07",
+  "hora": "15:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Perder al titular no corta la cobertura enseguida.",
+  "voz": "Perder al titular no corta la cobertura enseguida. «Si falta quien la tenía, la familia queda afuera.» No. Durante tres meses siguen cubiertos, sin aportar. Después pueden elegir seguir, pagando los aportes. Hablalo hoy en casa, antes de necesitarlo. Escribinos por WhatsApp. Guardalo por si algún día lo necesitás, porque perder al titular…",
+  "palabra": "TITULAR",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Perder",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "orden",
+      "texto": "Perder al titular",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "afuera",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "pregunta",
+      "texto": "¿Familia afuera?",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "Durante",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "almanaque",
+      "texto": "Durante 3 meses",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "sin",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "check",
+      "texto": "Sin aportar",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Después",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "carpeta",
+      "texto": "Después, pagando aportes",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Hablalo",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "personaje",
+      "texto": "Hablalo hoy en casa",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "credencial",
+      "texto": "Guardalo por si acaso",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Perder al titular no corta la cobertura enseguida.\n\n✔ Durante tres meses la familia sigue cubierta, sin aportar.\n✔ Después pueden elegir seguir, pagando los aportes.\n✔ Hablalo hoy en casa.\n\nEscribinos por WhatsApp.\n\nFuente: Ley 23.660, art. 10, inc. h.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Familia #BuenosAires",
+  "fuente": "Ley 23.660, art. 10, inc. h",
+  "reciclado_de": "coberturas-0112-a",
+  "nota": "Reciclado del plan coberturas-0112-a (edición fuerte: mito roto, otro orden, otros objetos)."
+}

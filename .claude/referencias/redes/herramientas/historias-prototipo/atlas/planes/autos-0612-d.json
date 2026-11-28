@@ -1,0 +1,86 @@
+{
+  "id": "autos-0612-d",
+  "marca": "autos",
+  "base": "autos-0612-g1",
+  "fecha_pub": "2026-12-06",
+  "hora": "11:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Primero se ajusta el auto, después se arranca.",
+  "voz": "Primero se ajusta el auto, después se arranca. Son tres ajustes antes de salir con el 0 km. El asiento. Los espejos. Y el apoyacabeza, a la altura de la cabeza. Hacelos con el auto parado, uno por uno. Es lo primero, antes de mover el volante. Escribinos por WhatsApp. Mandáselo a quien estrena auto. Y antes de arrancar:",
+  "palabra": "ESPEJOS",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "Primero",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "llave",
+      "texto": "Primero se ajusta",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "tres",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "velocimetro",
+      "texto": "Tres ajustes",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "asiento",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "auto",
+      "texto": "1. Asiento",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "espejos",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "lupa",
+      "texto": "2. Espejos",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "apoyacabeza",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "check",
+      "texto": "3. Apoyacabeza a tu altura",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "parado",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "candado",
+      "texto": "Con el auto parado",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "arrancar",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "velocimetro",
+      "texto": "Después, arrancás",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Primero se ajusta el auto, después se arranca.\n\n✔ El asiento.\n✔ Los espejos.\n✔ El apoyacabeza, a la altura de la cabeza.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #Manejo #BuenosAires",
+  "fuente": "",
+  "nota": "Reciclado de autos-0612-g1: pasa de tres cartas a regla de orden."
+}

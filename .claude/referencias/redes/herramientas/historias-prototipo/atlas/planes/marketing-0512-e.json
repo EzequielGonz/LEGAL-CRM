@@ -1,0 +1,87 @@
+{
+  "id": "marketing-0512-e",
+  "marca": "marketing",
+  "base": "marketing-2811-b",
+  "fecha_pub": "2026-12-05",
+  "hora": "21:20",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "«Te paso por privado» frena la venta.",
+  "voz": "«Te paso por privado» frena la venta. Alguien pregunta «¿cuánto sale?» y vos lo mandás al privado. Es un paso de más. Contestá directo. El precio, o desde cuánto. Qué incluye. Y una pregunta para seguir: «¿lo querés para el sábado?». Escribinos por WhatsApp. Guardalo para tu próxima consulta, porque «te paso por privado»…",
+  "palabra": "RESPUESTAS",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "privado",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "cartel",
+      "texto": "«Te paso por privado»",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "sale",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "chat",
+      "texto": "¿Cuánto sale?",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "directo",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "celular",
+      "texto": "Contestá directo",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "precio",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "etiqueta",
+      "texto": "El precio, o desde cuánto",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "incluye",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "caja",
+      "texto": "Qué incluye",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "pregunta",
+      "n": 1,
+      "tipo": "dato",
+      "objeto": "estrella",
+      "texto": "Una pregunta para seguir",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "carta",
+      "texto": "Guardalo para consultas",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "«Te paso por privado» frena la venta.\n\n✔ Contestá directo, sin mandarlo al privado.\n✔ Precio y qué incluye.\n✔ Cerrá con una pregunta para seguir.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Ventas #Pymes",
+  "fuente": "",
+  "reciclado_de": "marketing-2811-b",
+  "nota": "Reciclado del plan marketing-2811-b: otra fórmula, otro gancho y otro orden."
+}

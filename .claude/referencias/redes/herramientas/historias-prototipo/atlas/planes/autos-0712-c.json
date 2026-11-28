@@ -1,0 +1,86 @@
+{
+  "id": "autos-0712-c",
+  "marca": "autos",
+  "base": "autos-0112-1",
+  "fecha_pub": "2026-12-07",
+  "hora": "11:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "El primer service lo decide el manual.",
+  "voz": "El primer service lo decide el manual. Con cada kilómetro, el contador sube y el service se acerca. Hacelo cuando el manual lo indica, en un taller autorizado. Y guardá el comprobante: lo vas a necesitar para la garantía. Anotá la fecha en el celular el día que retirás el auto. Escribinos por WhatsApp. Guardalo para tu primer service. Y recordá:",
+  "palabra": "SERVICE",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "El",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "almanaque",
+      "texto": "¿Cuándo es el service?",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "kilómetro",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "velocimetro",
+      "texto": "El contador sube",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "manual",
+      "n": 1,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "Cuando lo indica el manual",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "taller",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "llave",
+      "texto": "Taller autorizado",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "comprobante",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "poliza",
+      "texto": "Guardá el comprobante",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "garantía",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "escudo",
+      "texto": "Para la garantía",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "recordá",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Primer service: el manual",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "El primer service lo decide el manual.\n\n✔ Hacelo cuando lo indica el manual.\n✔ En un taller autorizado.\n✔ Guardá el comprobante para la garantía.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #PrimerService #BuenosAires",
+  "fuente": "",
+  "nota": "Tema nuevo (c): el primer service."
+}

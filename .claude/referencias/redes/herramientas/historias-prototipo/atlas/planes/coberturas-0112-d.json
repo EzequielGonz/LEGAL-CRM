@@ -1,0 +1,77 @@
+{
+  "id": "coberturas-0112-d",
+  "marca": "coberturas",
+  "base": "coberturas-0112-g2",
+  "fecha_pub": "2026-12-01",
+  "hora": "15:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "No aceptes otro plan sin esto por escrito.",
+  "voz": "No aceptes otro plan sin esto por escrito. Te llaman de la prepaga para pasarte a un plan más caro. Carta uno: preguntá qué cambia de verdad. Carta dos: pedí que te manden la cartilla y las coberturas nuevas. Carta tres: decidí recién cuando lo tengas escrito. Escribinos por WhatsApp. Mandáselo a quien lo llaman seguido, porque no aceptes otro plan…",
+  "palabra": "OFERTA",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "aceptes",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "orden",
+      "texto": "¿Otro plan?",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "llaman",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "celular",
+      "texto": "Te llaman por teléfono",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Carta",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "pregunta",
+      "texto": "1. ¿Qué cambia?",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Carta",
+      "n": 1,
+      "tipo": "paso",
+      "objeto": "credencial",
+      "texto": "2. Cartilla nueva",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Carta",
+      "n": 2,
+      "tipo": "paso",
+      "objeto": "carpeta",
+      "texto": "3. Todo escrito",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien llaman",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "No aceptes otro plan sin esto por escrito.\n\n✔ Preguntá qué cambia de verdad.\n✔ Pedí la cartilla y las coberturas nuevas.\n✔ Decidí cuando lo tengas por escrito.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Prepaga #CambioDePlan #BuenosAires",
+  "fuente": ""
+}

@@ -1,0 +1,78 @@
+{
+  "id": "vita-0212-d",
+  "marca": "vita",
+  "base": "vita-0112-g1",
+  "fecha_pub": "2026-12-02",
+  "hora": "13:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Tu alquiler te cuesta lo que no leíste.",
+  "voz": "Tu alquiler te cuesta lo que no leíste. Antes de firmar, buscá tres cosas. Cuánto aumenta y cómo. Qué pasa si te vas antes. Y quién paga los arreglos. Si hay algo que no entendés, preguntá antes de firmar. Escribinos por WhatsApp. Guardalo para tu próximo alquiler, porque tu alquiler te cuesta lo que no leíste…",
+  "palabra": "ALQUILER",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "alquiler",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "edificio",
+      "texto": "Tu alquiler",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "tres",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "documento",
+      "texto": "3 cosas para leer",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "aumenta",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "billete",
+      "texto": "Cuánto y cómo aumenta",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "vas",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "almanaque",
+      "texto": "Si te vas antes",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "arreglos",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "sobre",
+      "texto": "Quién paga arreglos",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Guardalo para alquilar",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Tu alquiler te cuesta lo que no leíste.\n\n✔ Cuánto y cómo aumenta.\n✔ Qué pasa si te vas antes.\n✔ Quién paga los arreglos.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #Alquiler #DerechoCivil #BuenosAires",
+  "fuente": "",
+  "nota": "Extra d: reciclado de vita-0112-g1 (de advertencia a frase de costo)."
+}

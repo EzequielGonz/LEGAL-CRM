@@ -1,0 +1,77 @@
+{
+  "id": "coberturas-0112-e",
+  "marca": "coberturas",
+  "base": "coberturas-2811-g1",
+  "fecha_pub": "2026-12-01",
+  "hora": "21:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Ir al dentista sin preguntar puede salirte caro.",
+  "voz": "Ir al dentista sin preguntar puede salirte caro. Antes del turno, tres preguntas. ¿Qué te cubre tu plan? ¿El profesional está en cartilla? ¿Qué tratamientos necesitan autorización? Anotalas antes de sentarte en el sillón. Con eso sabés qué esperar. Escribinos por WhatsApp. Mandáselo a quien tiene turno, porque ir al dentista…",
+  "palabra": "DENTISTA",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "dentista",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "almanaque",
+      "texto": "¿Turno con el dentista?",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "preguntas",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "pregunta",
+      "texto": "Tres preguntas",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "cubre",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "credencial",
+      "texto": "¿Qué cubre?",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "cartilla",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "carpeta",
+      "texto": "¿En cartilla?",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "autorización",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "orden",
+      "texto": "¿Autorización?",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien tiene turno",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Ir al dentista sin preguntar puede salirte caro.\n\n✔ Preguntá qué te cubre tu plan.\n✔ Confirmá que el profesional está en cartilla.\n✔ Fijate qué tratamientos necesitan autorización.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Odontología #Cobertura #BuenosAires",
+  "fuente": ""
+}

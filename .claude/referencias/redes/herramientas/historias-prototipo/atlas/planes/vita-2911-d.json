@@ -1,0 +1,78 @@
+{
+  "id": "vita-2911-d",
+  "marca": "vita",
+  "base": "vita-2911-g2",
+  "fecha_pub": "2026-11-29",
+  "hora": "13:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "«Firmá, después lo llenamos.» Mala idea.",
+  "voz": "«Firmá, después lo llenamos.» Mala idea. Un pagaré en blanco no tiene monto ni fecha, y ahí está el problema. No firmes papeles sin monto ni fecha. Pedí copia de todo lo que firmás. Y si te presionan, consultá antes. Escribinos por WhatsApp. Mandáselo a quien compra en cuotas, porque si te dicen «firmá, después lo llenamos»…",
+  "palabra": "PAGARE",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Firmá",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "globo",
+      "texto": "«Firmá, después lo llenamos»",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "blanco",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "documento",
+      "texto": "Pagaré en blanco",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "monto",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "sello",
+      "texto": "Sin monto ni fecha",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "copia",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "sobre",
+      "texto": "Pedí copia",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "presionan",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "celular",
+      "texto": "Si presionan, consultá",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "billete",
+      "texto": "Mandáselo a quien compra",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "«Firmá, después lo llenamos.» Mala idea.\n\n✔ No firmes papeles sin monto ni fecha.\n✔ Pedí copia de lo que firmás.\n✔ Si te presionan, consultá antes.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoCivil #Pagaré #BuenosAires",
+  "fuente": "",
+  "nota": "Extra d: reciclado de vita-2911-g2 (de tres cartas a advertencia con frase del otro)."
+}

@@ -1,0 +1,78 @@
+{
+  "id": "autos-2911-d",
+  "marca": "autos",
+  "base": "autos-2811-g1",
+  "fecha_pub": "2026-11-29",
+  "hora": "09:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Sin cochera, no lo dejes en cualquier calle.",
+  "voz": "Sin cochera, no lo dejes en cualquier calle. Tres chequeos antes de irte. Uno: que sea un lugar iluminado. Dos: que no quede nada a la vista. Tres: revisá qué cubre tu seguro. Hacelo esta noche, no cuando ya lo dejaste. Escribinos por WhatsApp. Mandáselo a quien duerme sin cochera. Y esta noche,",
+  "palabra": "NOCHE",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "Sin",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "candado",
+      "texto": "¿Sin cochera?",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "Tres",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "lupa",
+      "texto": "Tres chequeos",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Uno",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "auto",
+      "texto": "1. Lugar iluminado",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Dos",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "cruz",
+      "texto": "2. Nada a la vista",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Tres",
+      "n": 1,
+      "tipo": "paso",
+      "objeto": "poliza",
+      "texto": "3. Revisá tu seguro",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "llave",
+      "texto": "Para quien no tiene cochera",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Sin cochera, no lo dejes en cualquier calle.\n\n✔ Elegí un lugar iluminado.\n✔ No dejes nada a la vista.\n✔ Revisá qué cubre tu seguro.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #Cochera #BuenosAires",
+  "fuente": "",
+  "nota": "Reciclado de autos-2811-g1: pasa de escena con hora a advertencia con tres chequeos."
+}

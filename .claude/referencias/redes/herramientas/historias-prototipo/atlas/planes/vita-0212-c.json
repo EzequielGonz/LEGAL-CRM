@@ -1,0 +1,78 @@
+{
+  "id": "vita-0212-c",
+  "marca": "vita",
+  "base": "vita-0112-4",
+  "fecha_pub": "2026-12-02",
+  "hora": "11:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "elevenlabs",
+  "gancho": "Te robaron el celular: denunciá igual.",
+  "voz": "Te robaron el celular: denunciá igual. Pensás: ¿para qué? Denunciá. Tres pasos, sin vueltas. Uno: en la comisaría o en la fiscalía. Dos: con los datos del equipo y del lugar. Tres: pedí copia. Escribinos por WhatsApp. Mandáselo a quien le robaron, porque si te robaron el celular y pensás «¿para qué?»…",
+  "palabra": "ROBO",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "robaron",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "celular",
+      "texto": "Te robaron el celular",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "para",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "globo",
+      "texto": "¿Para qué?",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "Uno",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "edificio",
+      "texto": "1. Comisaría o fiscalía",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Dos",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "documento",
+      "texto": "2. Datos del equipo",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Tres",
+      "n": 1,
+      "tipo": "paso",
+      "objeto": "sobre",
+      "texto": "3. Pedí copia",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien le robaron",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Te robaron el celular: denunciá igual.\n\n✔ Comisaría o fiscalía.\n✔ Datos del equipo y del lugar.\n✔ Pedí copia.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoPenal #Denuncia #BuenosAires",
+  "fuente": "",
+  "nota": "Extra c: tema nuevo (penal)."
+}

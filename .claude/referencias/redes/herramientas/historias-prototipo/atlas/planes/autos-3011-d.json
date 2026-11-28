@@ -1,0 +1,78 @@
+{
+  "id": "autos-3011-d",
+  "marca": "autos",
+  "base": "autos-3011-g1",
+  "fecha_pub": "2026-11-30",
+  "hora": "13:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "«Ya lo vendí» no alcanza.",
+  "voz": "«Ya lo vendí» no alcanza. Primero, la transferencia: se hace en el registro. Segundo, no firmes papeles en blanco. Tercero, guardá la constancia de que el auto ya no es tuyo. Sin esos tres pasos, no cerrás bien la venta. Parece un detalle, pero es lo que cierra todo. Escribinos por WhatsApp. Mandáselo a quien vende su usado. Porque",
+  "palabra": "TRANSFERENCIA",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "Ya",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "llave",
+      "texto": "«Ya lo vendí»",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Primero",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "documento",
+      "texto": "1. Transferencia en el registro",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Segundo",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "cruz",
+      "texto": "2. Nada en blanco",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Tercero",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "check",
+      "texto": "3. Guardá la constancia",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "cierra",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "candado",
+      "texto": "Así se cierra",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "auto",
+      "texto": "Para quien vende",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "«Ya lo vendí» no alcanza.\n\n✔ Primero, la transferencia en el registro.\n✔ Nada de papeles en blanco.\n✔ Guardá la constancia de que ya no es tuyo.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #AutoUsado #Transferencia #BuenosAires",
+  "fuente": "",
+  "nota": "Reciclado de autos-3011-g1: pasa de tres cartas a mito roto («ya lo vendí»)."
+}

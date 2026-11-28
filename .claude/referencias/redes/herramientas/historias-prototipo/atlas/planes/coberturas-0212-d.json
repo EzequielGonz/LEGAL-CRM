@@ -1,0 +1,85 @@
+{
+  "id": "coberturas-0212-d",
+  "marca": "coberturas",
+  "base": "coberturas-0212-g1",
+  "fecha_pub": "2026-12-02",
+  "hora": "15:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "La línea que nadie lee: tu débito automático.",
+  "voz": "La línea que nadie lee: tu débito automático. Hay tres tipos. El que ni mira el resumen. El que lo ve pero no compara. Y el que cada mes controla cuánto se debitó contra la factura. ¿Cuál sos? Escribinos por WhatsApp. Mandáselo a quien paga con débito, porque la línea que nadie lee…",
+  "palabra": "DEBITO",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "línea",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "carpeta",
+      "texto": "Línea que nadie lee",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "tipos",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "pregunta",
+      "texto": "Tres tipos",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "mira",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "celular",
+      "texto": "No mira el resumen",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "compara",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "almanaque",
+      "texto": "Ve y no compara",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "controla",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "check",
+      "texto": "Compara con la factura",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Cuál",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "personaje",
+      "texto": "¿Cuál sos?",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "credencial",
+      "texto": "Mandáselo a quien debita",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "La línea que nadie lee: tu débito automático.\n\n✔ Mirá el resumen todos los meses.\n✔ Compará lo debitado con la factura.\n✔ Revisalo cada mes.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Prepaga #Débito #BuenosAires",
+  "fuente": ""
+}

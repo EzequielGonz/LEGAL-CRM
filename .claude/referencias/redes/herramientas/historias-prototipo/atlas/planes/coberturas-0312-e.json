@@ -1,0 +1,85 @@
+{
+  "id": "coberturas-0312-e",
+  "marca": "coberturas",
+  "base": "coberturas-0312-g2",
+  "fecha_pub": "2026-12-03",
+  "hora": "22:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Pedir otra opinión no ofende a tu médico.",
+  "voz": "Pedir otra opinión no ofende a tu médico. Te recomiendan una operación y tenés dudas. Primero pedí tus estudios. Después buscá otro especialista que esté en cartilla. Y preguntá si necesitás autorización antes de pedir el turno. Ordenado así, decidís con más información. Escribinos por WhatsApp. Mandáselo a quien tiene una operación por delante, porque pedir otra opinión…",
+  "palabra": "OPINION",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "opinión",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "pregunta",
+      "texto": "Otra opinión",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "operación",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "orden",
+      "texto": "Te recomiendan operar",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "estudios",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "carpeta",
+      "texto": "Pedí tus estudios",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "especialista",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "personaje",
+      "texto": "Otro especialista",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "autorización",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "check",
+      "texto": "¿Autorización?",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "decidís",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "escalera",
+      "texto": "Decidís informado",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien se opera",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Pedir otra opinión no ofende a tu médico.\n\n✔ Pedí tus estudios.\n✔ Buscá otro especialista en cartilla.\n✔ Preguntá si necesitás autorización.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #SegundaOpinión #Cobertura #BuenosAires",
+  "fuente": ""
+}

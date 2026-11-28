@@ -1,0 +1,77 @@
+{
+  "id": "coberturas-0612-d",
+  "marca": "coberturas",
+  "base": "coberturas-0612-g1",
+  "fecha_pub": "2026-12-06",
+  "hora": "15:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Tu médico puede haber salido de la cartilla.",
+  "voz": "Tu médico puede haber salido de la cartilla. Martes, 10:15, llegás al turno y te dicen que ya no atiende por tu plan. La cartilla puede cambiar. Antes de cada turno, confirmá que el médico y el lugar siguen en tu plan. Un llamado te ahorra el viaje. Escribinos por WhatsApp. Guardalo para tu próximo turno, porque tu médico…",
+  "palabra": "ACTUALIZADA",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "médico",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "credencial",
+      "texto": "¿Sigue en cartilla?",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "Martes",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "reloj",
+      "texto": "Martes 10:15",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "cambiar",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "carpeta",
+      "texto": "La cartilla cambia",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Antes",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "pregunta",
+      "texto": "Confirmá antes del turno",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "llamado",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "celular",
+      "texto": "Un llamado alcanza",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "almanaque",
+      "texto": "Guardalo para tu turno",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Tu médico puede haber salido de la cartilla.\n\n✔ La cartilla puede cambiar.\n✔ Confirmá antes de cada turno que el médico y el lugar siguen en tu plan.\n✔ Un llamado te ahorra el viaje.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Cartilla #Turno #BuenosAires",
+  "fuente": ""
+}

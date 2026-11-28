@@ -1,0 +1,85 @@
+{
+  "id": "marketing-0512-d",
+  "marca": "marketing",
+  "base": "marketing-0512-g2",
+  "fecha_pub": "2026-12-05",
+  "hora": "13:50",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Explicar cómo llegar por chat es perder tiempo.",
+  "voz": "Explicar cómo llegar por chat es perder tiempo. «Doblás en la farmacia, seguís dos cuadras…» Y el cliente igual se pierde. Marcá bien tu local en Google. Mandá el link de la ubicación en un solo mensaje. Se abre el mapa y listo. Escribinos por WhatsApp. Guardalo para tu local, porque explicar cómo llegar…",
+  "palabra": "UBICACION",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "llegar",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "cartel",
+      "texto": "¿Cómo llegar?",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Doblás",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "chat",
+      "texto": "«Doblás en la farmacia»",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "pierde",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "cruz",
+      "texto": "Igual se pierde",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Google",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "vidriera",
+      "texto": "Local marcado en Google",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "link",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "celular",
+      "texto": "Un solo link",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "mapa",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "estrella",
+      "texto": "Se abre el mapa",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "caja",
+      "texto": "Guardalo para tu local",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Explicar cómo llegar por chat es perder tiempo.\n\n✔ Marcá bien tu local en Google.\n✔ Mandá la ubicación en un solo link.\n✔ Se abre el mapa y listo.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #GoogleMaps #WhatsAppBusiness #Pymes",
+  "fuente": ""
+}

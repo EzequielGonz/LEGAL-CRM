@@ -1,0 +1,87 @@
+{
+  "id": "marketing-0712-d",
+  "marca": "marketing",
+  "base": "marketing-0212-a",
+  "fecha_pub": "2026-12-07",
+  "hora": "13:50",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "¿Hasta cuándo cerrás en las fiestas?",
+  "voz": "¿Hasta cuándo cerrás en las fiestas? Si no lo sabés vos, menos lo sabe tu cliente. Armá un mensaje de ausencia con tres datos. El último día que atendés. El día que volvés. Y cómo dejar un pedido para la vuelta. Así, aunque bajes la persiana, la venta queda esperando. Escribinos por WhatsApp. Guardalo antes de cerrar, porque ¿hasta cuándo cerrás…",
+  "palabra": "AUSENCIA",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "cerrás",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "cartel",
+      "texto": "¿Hasta cuándo cerrás?",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "ausencia",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "carta",
+      "texto": "Mensaje de ausencia",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "último",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "reloj_arena",
+      "texto": "Último día que atendés",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "volvés",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "etiqueta",
+      "texto": "Cuándo volvés",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "pedido",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "caja",
+      "texto": "Pedido para la vuelta",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "persiana",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "vidriera",
+      "texto": "Persiana baja",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Guardalo antes de cerrar",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "¿Hasta cuándo cerrás en las fiestas?\n\n✔ El último día que atendés.\n✔ Cuándo volvés.\n✔ Cómo dejar un pedido para la vuelta.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Fiestas #Pymes",
+  "fuente": "",
+  "reciclado_de": "marketing-0212-a",
+  "nota": "Reciclado del plan marketing-0212-a: otra fórmula, otro gancho y otro orden."
+}

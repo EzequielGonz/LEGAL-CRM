@@ -1,0 +1,85 @@
+{
+  "id": "vita-0212-e",
+  "marca": "vita",
+  "base": "vita-2811-g1",
+  "fecha_pub": "2026-12-02",
+  "hora": "19:40",
+  "redes": [
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Entre hermanos, nadie decide solo la herencia.",
+  "voz": "Entre hermanos, nadie decide solo la herencia. Hay tres tipos. El que decide solo. El que evita hablar del tema. Y el que pone los números a la vista y, si no hay acuerdo, consulta. ¿Cuál sos? Escribinos por WhatsApp. Mandáselo a tus hermanos, porque entre hermanos, nadie decide solo la herencia…",
+  "palabra": "HERMANOS",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "hermanos",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "globo",
+      "texto": "Entre hermanos",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "tipos",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "sobre",
+      "texto": "Tres tipos",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "decide",
+      "n": 1,
+      "tipo": "dato",
+      "objeto": "sello",
+      "texto": "El que decide solo",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "evita",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "reloj",
+      "texto": "El que evita hablar",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "números",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "billete",
+      "texto": "Números a la vista",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "acuerdo",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "Sin acuerdo, consulta",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sobre",
+      "texto": "Mandáselo a tus hermanos",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Entre hermanos, nadie decide solo la herencia.\n\n✔ Nadie decide solo.\n✔ Números a la vista.\n✔ Sin acuerdo, consultá.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #Herencia #Hermanos #BuenosAires",
+  "fuente": "",
+  "nota": "Extra e: reciclado de vita-2811-g1 (de tres cartas a ¿cuál sos?)."
+}

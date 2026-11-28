@@ -1,0 +1,85 @@
+{
+  "id": "marketing-0312-e",
+  "marca": "marketing",
+  "base": "marketing-0512-g1",
+  "fecha_pub": "2026-12-03",
+  "hora": "21:20",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Tu presupuesto no dice hasta cuándo vale.",
+  "voz": "Tu presupuesto no dice hasta cuándo vale. Tres semanas después, el cliente vuelve y quiere el mismo precio. Escribilo completo. Qué incluye. El precio. La forma de pago. Y hasta cuándo vale. Mandalo por escrito, no por audio. Escribinos por WhatsApp. Guardalo para tu próximo presupuesto, porque tu presupuesto no dice…",
+  "palabra": "PRESUPUESTOS",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "presupuesto",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "etiqueta",
+      "texto": "Presupuesto sin fecha",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "semanas",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "reloj_arena",
+      "texto": "Tres semanas después",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "completo",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "carta",
+      "texto": "Escribilo completo",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "incluye",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "caja",
+      "texto": "Qué incluye",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "pago",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "mostrador",
+      "texto": "Forma de pago",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "vale",
+      "n": 1,
+      "tipo": "dato",
+      "objeto": "cartel",
+      "texto": "Hasta cuándo vale",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Guardalo para presupuestos",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Tu presupuesto no dice hasta cuándo vale.\n\n✔ Qué incluye y el precio.\n✔ La forma de pago.\n✔ Hasta cuándo vale.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #Presupuestos #WhatsAppBusiness #Pymes",
+  "fuente": ""
+}

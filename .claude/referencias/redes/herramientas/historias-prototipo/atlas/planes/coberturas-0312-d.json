@@ -1,0 +1,85 @@
+{
+  "id": "coberturas-0312-d",
+  "marca": "coberturas",
+  "base": "coberturas-2811-g2",
+  "fecha_pub": "2026-12-03",
+  "hora": "15:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Internarte sin preguntar honorarios puede salir caro.",
+  "voz": "Internarte sin preguntar honorarios puede salir caro. Te van a operar y ya tenés fecha. Antes de ir, hacé cuatro preguntas. Qué cubre el plan. Qué habitación te toca. Si hay honorarios aparte. Y qué autorización necesitás. Guardalo por si te toca. Escribinos por WhatsApp. Mandáselo a quien tiene una operación, porque internarte sin preguntar…",
+  "palabra": "INTERNACION",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Internarte",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "orden",
+      "texto": "¿Internación?",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "operar",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "almanaque",
+      "texto": "Operación programada",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "cuatro",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "pregunta",
+      "texto": "Cuatro preguntas",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "cubre",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "credencial",
+      "texto": "¿Qué cubre?",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "honorarios",
+      "n": 1,
+      "tipo": "dato",
+      "objeto": "carpeta",
+      "texto": "¿Honorarios aparte?",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "autorización",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "check",
+      "texto": "¿Autorización?",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien se opera",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Internarte sin preguntar honorarios puede salir caro.\n\n✔ Qué cubre el plan y qué habitación te toca.\n✔ Si hay honorarios aparte.\n✔ Qué autorización necesitás.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Internación #Cobertura #BuenosAires",
+  "fuente": ""
+}

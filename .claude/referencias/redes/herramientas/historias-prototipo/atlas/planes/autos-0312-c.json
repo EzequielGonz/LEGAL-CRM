@@ -1,0 +1,86 @@
+{
+  "id": "autos-0312-c",
+  "marca": "autos",
+  "base": "autos-2711-4",
+  "fecha_pub": "2026-12-03",
+  "hora": "11:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "elevenlabs",
+  "gancho": "Elegir el auto primero es empezar al revés.",
+  "voz": "Elegir el auto primero es empezar al revés. El orden es otro. Primero, la cuota que podés pagar sin ahogarte. Segundo, cuánto podés poner de anticipo. Y recién tercero, el auto, el modelo y el color. Hacé la cuenta esta noche, con lápiz y papel. Escribinos por WhatsApp. Y no te olvides:",
+  "palabra": "CUOTA",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "Elegir",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "auto",
+      "texto": "¿Auto primero?",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "orden",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "documento",
+      "texto": "El orden es otro",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "primero",
+      "n": 1,
+      "tipo": "paso",
+      "objeto": "velocimetro",
+      "texto": "1. La cuota que podés",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Segundo",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "almanaque",
+      "texto": "2. Cuánto de anticipo",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "tercero",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "llave",
+      "texto": "3. Recién el auto",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "cuenta",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "lupa",
+      "texto": "Hacé la cuenta",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "olvides",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Primero la cuota",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Elegir el auto primero es empezar al revés.\n\n✔ Primero, la cuota que podés pagar.\n✔ Segundo, cuánto ponés de anticipo.\n✔ Tercero, el auto y el color.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #Anticipo #BuenosAires",
+  "fuente": "",
+  "nota": "Tema nuevo (c): el orden para elegir: cuota, anticipo, auto."
+}

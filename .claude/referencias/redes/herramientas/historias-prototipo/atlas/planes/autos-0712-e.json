@@ -1,0 +1,87 @@
+{
+  "id": "autos-0712-e",
+  "marca": "autos",
+  "base": "autos-2911-b",
+  "fecha_pub": "2026-12-07",
+  "hora": "13:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "«Es nuevo, firmá» no es un argumento.",
+  "voz": "«Es nuevo, firmá» no es un argumento. Lunes, once de la mañana: el auto está en la puerta de la agencia. Mirá si tiene rayones o golpes. Pedí ver el manual, la llave de repuesto, la rueda de auxilio y las herramientas. Y que el chasis coincida con los papeles. Recién ahí, firmás. Escribinos por WhatsApp. Y la próxima vez que te apuren:",
+  "palabra": "LLAVE",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Es",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "cruz",
+      "texto": "«Es nuevo, firmá»",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Lunes",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "almanaque",
+      "texto": "Lunes, 11:00",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "rayones",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "grieta",
+      "texto": "Sin rayones ni golpes",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "manual",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "llave",
+      "texto": "Manual y llave extra",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "auxilio",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "rueda",
+      "texto": "Auxilio y herramientas",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "chasis",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "Chasis = papeles",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "apuren",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "lupa",
+      "texto": "Revisá antes de firmar",
+      "efecto": "barrido"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "«Es nuevo, firmá» no es un argumento.\n\n✔ Mirá que no tenga rayones ni golpes.\n✔ Pedí manual, llave de repuesto y auxilio.\n✔ Chequeá que el chasis coincida con los papeles.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #RetiroDelAuto #BuenosAires",
+  "fuente": "",
+  "reciclado_de": "autos-2911-b",
+  "nota": "Reciclado del plan autos-2911-b (edición fuerte): arranca por el argumento del vendedor, escena de lunes y orden invertido."
+}

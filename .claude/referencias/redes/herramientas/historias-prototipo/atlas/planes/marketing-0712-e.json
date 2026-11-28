@@ -1,0 +1,79 @@
+{
+  "id": "marketing-0712-e",
+  "marca": "marketing",
+  "base": "marketing-0112-a",
+  "fecha_pub": "2026-12-07",
+  "hora": "21:20",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Tus clientes contentos esperan que se lo pidas.",
+  "voz": "Tus clientes contentos esperan que se lo pidas. Si no se lo pedís, es difícil que lo hagan. Hacelo bien. Esperá el momento en que te agradecen. Mandá el link directo de Google por mensaje. Sin pedir estrellas ni regalar nada a cambio. Escribinos por WhatsApp. Guardalo para tu próximo «gracias», porque tus clientes contentos…",
+  "palabra": "RESENAS",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "contentos",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "estrella",
+      "texto": "Clientes contentos",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "pedís",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "chat",
+      "texto": "No se lo pedís",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "momento",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "reloj_arena",
+      "texto": "El momento justo",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "link",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "cartel",
+      "texto": "Link directo de Google",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "estrellas",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "etiqueta",
+      "texto": "Sin pedir estrellas",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Guardalo para el «gracias»",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Tus clientes contentos esperan que se lo pidas.\n\n✔ Pedilo cuando te agradecen.\n✔ Con el link directo de Google.\n✔ Sin pedir estrellas.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #Reseñas #WhatsAppBusiness #Pymes",
+  "fuente": "",
+  "reciclado_de": "marketing-0112-a",
+  "nota": "Reciclado del plan marketing-0112-a: otra fórmula, otro gancho y otro orden."
+}

@@ -1,0 +1,77 @@
+{
+  "id": "vita-3011-e",
+  "marca": "vita",
+  "base": "vita-0212-g1",
+  "fecha_pub": "2026-11-30",
+  "hora": "19:40",
+  "redes": [
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Un llamado por la garantía no alcanza.",
+  "voz": "Un llamado por la garantía no alcanza. Se rompió la heladera, llamás y nadie viene. Pasan los días y seguís sin heladera ni respuesta. Reclamá por escrito. Guardá la factura y el número de reclamo. Y consultá. Escribinos por WhatsApp. Guardalo con tus facturas, porque un llamado por la garantía no alcanza…",
+  "palabra": "ROTO",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "llamado",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "celular",
+      "texto": "Un llamado no alcanza",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "heladera",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "documento",
+      "texto": "Heladera rota",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "días",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "almanaque",
+      "texto": "Pasan los días",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "escrito",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "sobre",
+      "texto": "Reclamá por escrito",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "factura",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "billete",
+      "texto": "Factura y número",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "documento",
+      "texto": "Guardalo con tus facturas",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Un llamado por la garantía no alcanza.\n\n✔ Reclamá por escrito.\n✔ Guardá la factura y el número de reclamo.\n✔ Consultá.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #Garantía #DerechoDelConsumidor #BuenosAires",
+  "fuente": "",
+  "nota": "Extra e: reciclado de vita-0212-g1 (del contador a la frase del llamado)."
+}

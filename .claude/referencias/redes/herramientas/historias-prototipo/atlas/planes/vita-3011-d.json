@@ -1,0 +1,77 @@
+{
+  "id": "vita-3011-d",
+  "marca": "vita",
+  "base": "vita-3011-g1",
+  "fecha_pub": "2026-11-30",
+  "hora": "08:40",
+  "redes": [
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Garante: no lo firmes por compromiso.",
+  "voz": "Garante: no lo firmes por compromiso. Te piden que seas garante de un alquiler y decir que no incomoda. Pero antes de firmar, leé todo el contrato. Preguntá hasta dónde respondés. Recién después, decidí. Escribinos por WhatsApp. Mandáselo a quien le pidieron ser garante, porque si te piden firmar por compromiso…",
+  "palabra": "GARANTE",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Garante",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "globo",
+      "texto": "Garante, ¿por compromiso?",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "alquiler",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "edificio",
+      "texto": "De un alquiler",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "contrato",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "Leé el contrato",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "hasta",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "sello",
+      "texto": "¿Hasta dónde respondés?",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "decidí",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "firma",
+      "texto": "Recién después, decidí",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien le piden",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Garante: no lo firmes por compromiso.\n\n✔ Leé todo el contrato.\n✔ Preguntá hasta dónde respondés.\n✔ Decidí recién después.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #Alquiler #Garante #BuenosAires",
+  "fuente": "",
+  "nota": "Extra d: reciclado de vita-3011-g1 (de ¿cuál sos? a advertencia)."
+}

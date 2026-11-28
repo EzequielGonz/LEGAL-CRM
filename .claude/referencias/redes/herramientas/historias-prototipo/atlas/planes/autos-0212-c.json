@@ -1,0 +1,78 @@
+{
+  "id": "autos-0212-c",
+  "marca": "autos",
+  "base": "autos-0112-4",
+  "fecha_pub": "2026-12-02",
+  "hora": "11:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "elevenlabs",
+  "gancho": "No elijas un híbrido sin preguntar esto.",
+  "voz": "No elijas un híbrido sin preguntar esto. Son tres preguntas. Una: cuánto manejás en ciudad. Dos: dónde se hace el service. Tres: qué cubre la garantía de la batería. Con las respuestas, ahí sí hacés la cuenta. Si no te las dan claras, pedilas por escrito. Escribinos por WhatsApp. Mandáselo a quien piensa en un híbrido. Y antes de decidir:",
+  "palabra": "HIBRIDO",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "No",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "auto",
+      "texto": "¿Híbrido? Preguntá antes",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Una",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "velocimetro",
+      "texto": "1. ¿Cuánto en ciudad?",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Dos",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "llave",
+      "texto": "2. ¿Dónde el service?",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Tres",
+      "n": 1,
+      "tipo": "paso",
+      "objeto": "escudo",
+      "texto": "3. Garantía de la batería",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "cuenta",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "lupa",
+      "texto": "Recién ahí, la cuenta",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "decidir",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "documento",
+      "texto": "Preguntá antes de decidir",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "No elijas un híbrido sin preguntar esto.\n\n✔ Cuánto manejás en ciudad.\n✔ Dónde se hace el service.\n✔ Qué cubre la garantía de la batería.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #Híbrido #0km #BuenosAires",
+  "fuente": "",
+  "nota": "Tema nuevo (c): preguntas antes de un híbrido."
+}

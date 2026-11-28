@@ -1,0 +1,85 @@
+{
+  "id": "marketing-0412-c",
+  "marca": "marketing",
+  "base": "marketing-2711-1",
+  "fecha_pub": "2026-12-04",
+  "hora": "10:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "elevenlabs",
+  "gancho": "Tu cliente del chat también espera.",
+  "voz": "Tu cliente del chat también espera. Estás atendiendo en el mostrador y el celular no para. No lo ignores: mandale «en un rato te respondo». Anotá quién escribió, aunque sea en un papel. Y apenas te liberes, contestá por orden de llegada. Escribinos por WhatsApp. Mandáselo a quien atiende solo, porque tu cliente del chat…",
+  "palabra": "ORDEN",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "cliente",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "chat",
+      "texto": "El cliente del chat",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "mostrador",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "mostrador",
+      "texto": "En el mostrador",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "celular",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "celular",
+      "texto": "El celular no para",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "rato",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "carta",
+      "texto": "«En un rato te respondo»",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Anotá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "etiqueta",
+      "texto": "Anotá quién escribió",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "orden",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "reloj_arena",
+      "texto": "Por orden de llegada",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "cartel",
+      "texto": "Mandáselo a quien atiende solo",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Tu cliente del chat también espera.\n\n✔ Avisá «en un rato te respondo».\n✔ Anotá quién escribió.\n✔ Contestá por orden de llegada.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Atención #Pymes",
+  "fuente": ""
+}

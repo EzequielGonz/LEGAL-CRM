@@ -1,0 +1,77 @@
+{
+  "id": "coberturas-0312-c",
+  "marca": "coberturas",
+  "base": "coberturas-0312-4",
+  "fecha_pub": "2026-12-03",
+  "hora": "21:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "elevenlabs",
+  "gancho": "Darte de baja primero puede dejarte sin cobertura.",
+  "voz": "Darte de baja primero puede dejarte sin cobertura. Andá en orden. Paso uno: elegí con la cartilla en la mano. Paso dos: hacé el trámite de opción. Paso tres: no des de baja la anterior hasta confirmar la nueva. Escribinos por WhatsApp. Mandáselo a quien se cambia, porque darte de baja primero…",
+  "palabra": "TRAMITE",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "Darte",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "carpeta",
+      "texto": "¿Baja primero?",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "Andá",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "escalera",
+      "texto": "Andá en orden",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "Paso",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "credencial",
+      "texto": "1. Cartilla en mano",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Paso",
+      "n": 1,
+      "tipo": "paso",
+      "objeto": "orden",
+      "texto": "2. Trámite de opción",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Paso",
+      "n": 2,
+      "tipo": "paso",
+      "objeto": "check",
+      "texto": "3. Baja al final",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien se cambia",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Darte de baja primero puede dejarte sin cobertura.\n\n✔ Elegí con la cartilla en la mano.\n✔ Hacé el trámite de opción.\n✔ No des de baja la anterior hasta confirmar la nueva.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #CambioDeObraSocial #BuenosAires",
+  "fuente": ""
+}

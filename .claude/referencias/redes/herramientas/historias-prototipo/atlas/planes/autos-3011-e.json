@@ -1,0 +1,86 @@
+{
+  "id": "autos-3011-e",
+  "marca": "autos",
+  "base": "autos-3011-g2",
+  "fecha_pub": "2026-11-30",
+  "hora": "17:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "¿Cuánto entregás antes de cobrar? Nada.",
+  "voz": "¿Cuánto entregás antes de cobrar? Nada. Ni papeles ni llaves. Te escriben por el auto que publicaste y lo quieren llevar hoy. Que haya apuro no cambia nada: primero cobrá y confirmá que el pago entró. Recién después, entregás. Escribinos por WhatsApp. Mandáselo a quien vende su auto. Y la pregunta es:",
+  "palabra": "USADOPAGO",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Cuánto",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "llave",
+      "texto": "¿Cuánto entregás?",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "papeles",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "documento",
+      "texto": "Ni papeles ni llaves",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "escriben",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "celular",
+      "texto": "Lo quieren hoy",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "apuro",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "almanaque",
+      "texto": "Apuro no cambia nada",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "cobrá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "check",
+      "texto": "Primero cobrá",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "confirmá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "lupa",
+      "texto": "Confirmá el pago",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "pregunta",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "llave",
+      "texto": "¿Cuánto entregás?",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "¿Cuánto entregás antes de cobrar? Nada.\n\n✔ Primero cobrás.\n✔ Confirmá que el pago entró.\n✔ Recién después, papeles y llaves.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #AutoUsado #VenderAuto #BuenosAires",
+  "fuente": "",
+  "nota": "Reciclado de autos-3011-g2: pasa de escena con hora a pregunta con respuesta."
+}

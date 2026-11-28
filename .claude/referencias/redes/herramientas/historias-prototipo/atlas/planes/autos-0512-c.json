@@ -1,0 +1,86 @@
+{
+  "id": "autos-0512-c",
+  "marca": "autos",
+  "base": "autos-reserva-3",
+  "fecha_pub": "2026-12-05",
+  "hora": "11:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "elevenlabs",
+  "gancho": "¿Perdiste el recibo de tu seña? Pedilo hoy.",
+  "voz": "¿Perdiste el recibo de tu seña? Pedilo hoy. Señaste el sábado y el lunes, a las nueve y diez, no lo encontrás. No esperes. Pedí uno de nuevo, con modelo, color, monto y fecha. Y que diga qué pasa con la seña si la operación no sigue. Escribinos por WhatsApp. Mandáselo a quien señó. Y si te pasó, preguntate:",
+  "palabra": "COMPROBANTE",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Perdiste",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "documento",
+      "texto": "¿Sin recibo de la seña?",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Señaste",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "almanaque",
+      "texto": "Señaste el sábado",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "lunes",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "almanaque",
+      "texto": "Lunes, 9:10",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "pedí",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "celular",
+      "texto": "Pedí uno de nuevo",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "modelo",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "lupa",
+      "texto": "Modelo, color, monto, fecha",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "sigue",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "grieta",
+      "texto": "¿Y si no sigue?",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "preguntate",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "¿Tenés el recibo?",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "¿Perdiste el recibo de tu seña? Pedilo hoy.\n\n✔ Pedí otro recibo hoy.\n✔ Con modelo, color, monto y fecha.\n✔ Que diga qué pasa si no sigue.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #Seña #BuenosAires",
+  "fuente": "",
+  "nota": "Tema nuevo (c): la seña el día después, sin recibo."
+}

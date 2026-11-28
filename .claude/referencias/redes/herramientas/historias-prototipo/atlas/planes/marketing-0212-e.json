@@ -1,0 +1,85 @@
+{
+  "id": "marketing-0212-e",
+  "marca": "marketing",
+  "base": "marketing-0412-g1",
+  "fecha_pub": "2026-12-02",
+  "hora": "18:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "¿Qué ve primero quien entra a tu perfil?",
+  "voz": "¿Qué ve primero quien entra a tu perfil? Si no fijaste nada, ve lo último que subiste. Fijá tres publicaciones. Una con cómo pedir. Otra con precios o productos. Y otra con opiniones de clientes. Así, antes de escribirte, ya sabe cómo seguir. Escribinos por WhatsApp. Guardalo y fijá tres hoy, porque ¿qué ve primero…",
+  "palabra": "FIJADAS",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "primero",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "vidriera",
+      "texto": "¿Qué ve primero?",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "fijaste",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "cruz",
+      "texto": "¿Fijaste algo?",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Fijá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "cartel",
+      "texto": "Fijá 3 publicaciones",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "pedir",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "carta",
+      "texto": "Cómo pedir",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "precios",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "etiqueta",
+      "texto": "Precios o productos",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "opiniones",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "estrella",
+      "texto": "Opiniones de clientes",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Fijá tres hoy",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "¿Qué ve primero quien entra a tu perfil?\n\n✔ Fijá tres publicaciones.\n✔ Cómo pedir, precios y opiniones.\n✔ Que sepa cómo seguir.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #PerfilDeNegocio #WhatsAppBusiness #Pymes",
+  "fuente": ""
+}

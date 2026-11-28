@@ -1,0 +1,78 @@
+{
+  "id": "autos-0112-d",
+  "marca": "autos",
+  "base": "autos-0112-g1",
+  "fecha_pub": "2026-12-01",
+  "hora": "13:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "«Atrás no hace falta cinturón.» Falso.",
+  "voz": "«Atrás no hace falta cinturón.» Falso. Tienen que usarlo todos los ocupantes, en los autos que los tienen. No solo los de adelante. Antes de arrancar, mirá atrás y fijate que cada uno se lo haya puesto. Es el primer chequeo del viaje. Escribinos por WhatsApp. Mandáselo a quien lleva gente atrás. Y acordate:",
+  "palabra": "CINTURON",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Atrás",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "cruz",
+      "texto": "«Atrás no hace falta»",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "Falso",
+      "n": 0,
+      "tipo": "giro",
+      "objeto": "grieta",
+      "texto": "Falso",
+      "efecto": "tachar"
+    },
+    {
+      "palabra": "Tienen",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "candado",
+      "texto": "Cinturón para todos",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "solo",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "auto",
+      "texto": "No solo adelante",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "mirá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "lupa",
+      "texto": "Mirá atrás antes de salir",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "acordate",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Todos, con cinturón",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "«Atrás no hace falta cinturón.» Falso.\n\n✔ Cinturón para todos los ocupantes.\n✔ No solo para los de adelante.\n✔ Mirá atrás antes de arrancar.\n\nEscribinos por WhatsApp.\n\nFuente: Ley 24.449, art. 40, inc. k.\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #Cinturón #SeguridadVial #BuenosAires",
+  "fuente": "Ley 24.449, art. 40, inc. k",
+  "nota": "Reciclado de autos-0112-g1: pasa de pregunta numérica a mito roto."
+}

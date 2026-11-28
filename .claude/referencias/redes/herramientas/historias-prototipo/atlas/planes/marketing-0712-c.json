@@ -1,0 +1,85 @@
+{
+  "id": "marketing-0712-c",
+  "marca": "marketing",
+  "base": "marketing-0612-1",
+  "fecha_pub": "2026-12-07",
+  "hora": "10:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "«Consultar precio» no es un precio.",
+  "voz": "«Consultar precio» no es un precio. Quien mira tu catálogo quiere una cifra para decidir. Si el precio cambia, poné «desde» y qué lo hace cambiar. Así la consulta llega con más información. Y menos mensajes con la misma pregunta. Escribinos por WhatsApp. Mandáselo a quien esconde el precio, porque «consultar precio»…",
+  "palabra": "DESDE",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Consultar",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "etiqueta",
+      "texto": "¿Consultar precio?",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "catálogo",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "vidriera",
+      "texto": "Tu catálogo",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "cifra",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "cartel",
+      "texto": "Quiere una cifra",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "desde",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "caja",
+      "texto": "«Desde» y qué cambia",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "información",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "carta",
+      "texto": "Más información",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "pregunta",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "chat",
+      "texto": "Menos preguntas repetidas",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien esconde",
+      "efecto": "barrido"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "«Consultar precio» no es un precio.\n\n✔ Poné «desde» si el precio cambia.\n✔ Decí qué lo hace cambiar.\n✔ Menos mensajes con la misma pregunta.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #CatálogoWhatsApp #WhatsAppBusiness #Pymes",
+  "fuente": ""
+}

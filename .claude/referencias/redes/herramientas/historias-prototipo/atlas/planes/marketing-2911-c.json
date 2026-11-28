@@ -1,0 +1,85 @@
+{
+  "id": "marketing-2911-c",
+  "marca": "marketing",
+  "base": "marketing-2811-3",
+  "fecha_pub": "2026-11-29",
+  "hora": "10:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "elevenlabs",
+  "gancho": "Esas fotos de Google no son tuyas.",
+  "voz": "Esas fotos de Google no son tuyas. Un sábado, once de la mañana, alguien te busca. Ve una imagen de banco de fotos y duda: ¿será acá? Subí tres fotos reales. La fachada, para que te encuentren. El mostrador con tus productos. Y alguna nueva cada temporada. Escribinos por WhatsApp. Mandáselo a quien tenga local, porque esas fotos de Google…",
+  "palabra": "FOTOS",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Esas",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "vidriera",
+      "texto": "¿Fotos tuyas?",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "sábado",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "reloj_arena",
+      "texto": "Sábado 11:00",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "imagen",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "cruz",
+      "texto": "Foto de banco",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Subí",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "estrella",
+      "texto": "3 fotos reales",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "fachada",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "cartel",
+      "texto": "Fachada",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "mostrador",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "mostrador",
+      "texto": "Mostrador y productos",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien tenga local",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Esas fotos de Google no son tuyas.\n\n✔ Subí fotos reales de tu local.\n✔ La fachada y el mostrador.\n✔ Alguna nueva cada temporada.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #GoogleMaps #Pymes #Locales",
+  "fuente": ""
+}

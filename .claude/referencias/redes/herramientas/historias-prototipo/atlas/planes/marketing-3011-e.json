@@ -1,0 +1,77 @@
+{
+  "id": "marketing-3011-e",
+  "marca": "marketing",
+  "base": "marketing-0212-g2",
+  "fecha_pub": "2026-11-30",
+  "hora": "18:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Nadie compra lo que no entiende.",
+  "voz": "Nadie compra lo que no entiende. Tu «Pack Estrella» suena lindo, pero el cliente no sabe qué trae. Poné el nombre claro. Qué es. Para cuántas personas. Y el precio. Si lo entiende en dos segundos, pregunta menos y decide antes. Escribinos por WhatsApp. Guardalo y revisá tu catálogo, porque nadie compra lo que no entiende…",
+  "palabra": "NOMBRES",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Nadie",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "estrella",
+      "texto": "¿Pack Estrella? ¿Qué trae?",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "nombre",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "cartel",
+      "texto": "Nombre claro",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "cuántas",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "mostrador",
+      "texto": "Para cuántas personas",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "precio",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "etiqueta",
+      "texto": "Y el precio",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "segundos",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "reloj_arena",
+      "texto": "Se entiende en 2 segundos",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "vidriera",
+      "texto": "Revisá tu catálogo",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Nadie compra lo que no entiende.\n\n✔ Nombre claro: qué es.\n✔ Para cuántas personas es.\n✔ Precio a la vista.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #CatálogoWhatsApp #WhatsAppBusiness #Pymes",
+  "fuente": ""
+}

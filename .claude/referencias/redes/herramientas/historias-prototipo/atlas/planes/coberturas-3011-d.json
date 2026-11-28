@@ -1,0 +1,77 @@
+{
+  "id": "coberturas-3011-d",
+  "marca": "coberturas",
+  "base": "coberturas-3011-g1",
+  "fecha_pub": "2026-11-30",
+  "hora": "15:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Dejás la terapia sin preguntar si se cubre.",
+  "voz": "Dejás la terapia sin preguntar si se cubre. Lunes, 19:30, ya lo pensaste diez veces. Creés que tu plan no la cubre, pero nunca preguntaste. Antes de descartarla, consultá qué cubre tu plan y con qué profesionales. Escribinos por WhatsApp. Mandáselo a quien lo está pensando hace rato, porque dejás la terapia…",
+  "palabra": "TERAPIA",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Dejás",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "pregunta",
+      "texto": "¿Sin preguntar?",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Lunes",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "reloj",
+      "texto": "Lunes 19:30",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "Creés",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "credencial",
+      "texto": "¿No se cubre?",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "nunca",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "orden",
+      "texto": "Nunca preguntaste",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "consultá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "carpeta",
+      "texto": "¿Qué cubre? ¿Con quién?",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien lo piensa",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Dejás la terapia sin preguntar si se cubre.\n\n✔ Preguntá qué cubre tu plan.\n✔ Preguntá con qué profesionales.\n✔ No la descartes sin consultar.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Terapia #Prepaga #BuenosAires",
+  "fuente": ""
+}

@@ -1,0 +1,77 @@
+{
+  "id": "coberturas-2911-d",
+  "marca": "coberturas",
+  "base": "coberturas-2911-g1",
+  "fecha_pub": "2026-11-29",
+  "hora": "15:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Un «no» de la prepaga se puede reclamar.",
+  "voz": "Un «no» de la prepaga se puede reclamar. Te negaron algo y ya das todo por perdido. Paso uno: pedí la respuesta por escrito. Paso dos: hacé el reclamo. Paso tres: si no te contestan, existe la Superintendencia de Servicios de Salud. Escribinos por WhatsApp. Mandáselo a quien le negaron algo, porque un no de la prepaga…",
+  "palabra": "RECLAMO",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "Un",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "mostrador",
+      "texto": "«No» de la prepaga",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "negaron",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "orden",
+      "texto": "Te negaron algo",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "Paso",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "orden",
+      "texto": "1. Respuesta escrita",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Paso",
+      "n": 1,
+      "tipo": "paso",
+      "objeto": "carpeta",
+      "texto": "2. Hacé el reclamo",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Paso",
+      "n": 2,
+      "tipo": "paso",
+      "objeto": "sello",
+      "texto": "3. Superintendencia",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien le negaron",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Un «no» de la prepaga se puede reclamar.\n\n✔ Pedí la respuesta por escrito.\n✔ Hacé el reclamo.\n✔ Si no te contestan, existe la Superintendencia de Servicios de Salud.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Prepaga #Reclamo #BuenosAires",
+  "fuente": ""
+}

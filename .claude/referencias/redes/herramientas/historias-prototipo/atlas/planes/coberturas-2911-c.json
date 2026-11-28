@@ -1,0 +1,77 @@
+{
+  "id": "coberturas-2911-c",
+  "marca": "coberturas",
+  "base": "coberturas-2911-2",
+  "fecha_pub": "2026-11-29",
+  "hora": "18:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "elevenlabs",
+  "gancho": "Tu guardia más cercana quizás no te atiende.",
+  "voz": "Tu guardia más cercana quizás no te atiende. Dos de la mañana, tu hijo con fiebre y no sabés adónde ir. Mirá la cartilla hoy: guardia cerca, pediatra y farmacia de turno. Después ya no hay tiempo. Escribinos por WhatsApp. Mandáselo a quien tenga hijos chicos, porque tu guardia más cercana…",
+  "palabra": "CARTILLA",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "guardia",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "pregunta",
+      "texto": "¿Te atienden?",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "Dos",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "reloj",
+      "texto": "Madrugada y fiebre",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Mirá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "carpeta",
+      "texto": "Mirá tu cartilla hoy",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "pediatra",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "credencial",
+      "texto": "Pediatra y farmacia",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Después",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "almanaque",
+      "texto": "Después no hay tiempo",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien tenga hijos",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Tu guardia más cercana quizás no te atiende.\n\n✔ Mirá la cartilla hoy.\n✔ Buscá guardia cerca, pediatra y farmacia de turno.\n✔ No lo dejes para la madrugada.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Guardia #Cartilla #BuenosAires",
+  "fuente": ""
+}

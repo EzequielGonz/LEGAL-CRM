@@ -1,0 +1,85 @@
+{
+  "id": "marketing-0112-e",
+  "marca": "marketing",
+  "base": "marketing-3011-g1",
+  "fecha_pub": "2026-12-01",
+  "hora": "18:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Un pedido grande sin seña es una apuesta.",
+  "voz": "Un pedido grande sin seña es una apuesta. Hay tres tipos. El que confía y espera. El que pide la seña de palabra. Y el que la acuerda por escrito, con el monto y qué pasa si se cancela. ¿Cuál sos? Escribinos por WhatsApp. Guardalo para tu próximo pedido grande, porque sin seña es una apuesta…",
+  "palabra": "SENIA",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "apuesta",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "caja",
+      "texto": "¿Pedido grande sin seña?",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "tipos",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "cartel",
+      "texto": "Tres tipos",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "palabra",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "chat",
+      "texto": "Seña de palabra",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "escrito",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "carta",
+      "texto": "Por escrito",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "monto",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "etiqueta",
+      "texto": "Monto y cancelación",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "sos",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "estrella",
+      "texto": "¿Cuál sos?",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Guardalo para pedidos grandes",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Un pedido grande sin seña es una apuesta.\n\n✔ Acordala por escrito.\n✔ Con el monto.\n✔ Y qué pasa si se cancela.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Pedidos #Pymes",
+  "fuente": ""
+}

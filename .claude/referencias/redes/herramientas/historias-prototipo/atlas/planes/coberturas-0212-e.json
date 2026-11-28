@@ -1,0 +1,85 @@
+{
+  "id": "coberturas-0212-e",
+  "marca": "coberturas",
+  "base": "coberturas-0212-g2",
+  "fecha_pub": "2026-12-02",
+  "hora": "22:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Tu hijo grande puede quedar fuera del plan.",
+  "voz": "Tu hijo grande puede quedar fuera del plan. No siempre sigue para siempre: depende del plan y de su situación. Preguntá hasta cuándo puede seguir como familiar. Y preguntá qué pasa cuando empieza a trabajar. Hacelo hoy, no el día del turno. Escribinos por WhatsApp. Mandáselo a quien tenga hijos grandes, porque tu hijo grande…",
+  "palabra": "HIJOS",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "hijo",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "personaje",
+      "texto": "Hijo grande",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "siempre",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "pregunta",
+      "texto": "¿Para siempre?",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "depende",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "carpeta",
+      "texto": "Depende del plan",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "cuándo",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "almanaque",
+      "texto": "¿Hasta cuándo?",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "trabajar",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "credencial",
+      "texto": "Cuando trabaja",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Hacelo",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "reloj",
+      "texto": "Hacelo hoy",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien tenga hijos",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Tu hijo grande puede quedar fuera del plan.\n\n✔ Depende del plan y de su situación.\n✔ Preguntá hasta cuándo puede seguir como familiar.\n✔ Preguntá qué pasa cuando empieza a trabajar.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Familia #Prepaga #BuenosAires",
+  "fuente": ""
+}

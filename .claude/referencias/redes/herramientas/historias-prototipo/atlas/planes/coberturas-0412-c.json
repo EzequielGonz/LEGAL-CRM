@@ -1,0 +1,77 @@
+{
+  "id": "coberturas-0412-c",
+  "marca": "coberturas",
+  "base": "coberturas-2811-3",
+  "fecha_pub": "2026-12-04",
+  "hora": "21:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "elevenlabs",
+  "gancho": "Una declaración jurada apurada puede salirte cara.",
+  "voz": "Una declaración jurada apurada puede salirte cara. Para entrar a la prepaga te la piden. Ahí se establecen tus preexistencias, con lo que declarás. Leela despacio. Contestá todo con la verdad. Y guardate una copia firmada. Escribinos por WhatsApp. Mandáselo a quien se va a afiliar, porque una declaración jurada apurada…",
+  "palabra": "DECLARACION",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "declaración",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "carpeta",
+      "texto": "Declaración jurada",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "entrar",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "credencial",
+      "texto": "Para entrar a la prepaga",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "preexistencias",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "frasco",
+      "texto": "Ahí se fijan preexistencias",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Contestá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "check",
+      "texto": "Con la verdad",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "guardate",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "orden",
+      "texto": "Copia firmada",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien se afilia",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Una declaración jurada apurada puede salirte cara.\n\n✔ Ahí se establecen tus preexistencias.\n✔ Contestá todo con la verdad.\n✔ Guardate una copia firmada.\n\nEscribinos por WhatsApp.\n\nFuente: Ley 26.682, art. 10.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #DeclaraciónJurada #Prepaga #BuenosAires",
+  "fuente": "Ley 26.682, art. 10"
+}

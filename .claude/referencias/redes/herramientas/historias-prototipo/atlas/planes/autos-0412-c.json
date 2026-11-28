@@ -1,0 +1,78 @@
+{
+  "id": "autos-0412-c",
+  "marca": "autos",
+  "base": "autos-2911-4",
+  "fecha_pub": "2026-12-04",
+  "hora": "13:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "elevenlabs",
+  "gancho": "No firmes un plan sin estas tres respuestas.",
+  "voz": "No firmes un plan sin estas tres respuestas. Una: ¿cómo se actualiza la cuota? Dos: ¿cómo se adjudica el auto? Tres: ¿qué pasa si dejás de pagar? Pedí las tres por escrito, antes de anotarte. Y si no te las quieren dar, esa ya es una respuesta. Escribinos por WhatsApp. Mandáselo a quien está por anotarse. Y entonces:",
+  "palabra": "PREGUNTAS",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "No",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "cruz",
+      "texto": "¿Firmás sin respuestas?",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "Una",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "almanaque",
+      "texto": "1. Cómo se actualiza",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Dos",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "llave",
+      "texto": "2. Cómo se adjudica",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Tres",
+      "n": 1,
+      "tipo": "paso",
+      "objeto": "candado",
+      "texto": "3. Si dejás de pagar",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "escrito",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "poliza",
+      "texto": "Todo por escrito",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "entonces",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "lupa",
+      "texto": "Antes de firmar, preguntá",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "No firmes un plan sin estas tres respuestas.\n\n✔ Cómo se actualiza la cuota.\n✔ Cómo se adjudica el auto.\n✔ Qué pasa si dejás de pagar.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #PlanDeAhorro #0km #BuenosAires",
+  "fuente": "",
+  "nota": "Tema nuevo (c): tres preguntas antes de anotarse en un plan."
+}

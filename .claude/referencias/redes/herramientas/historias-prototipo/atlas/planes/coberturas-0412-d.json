@@ -1,0 +1,77 @@
+{
+  "id": "coberturas-0412-d",
+  "marca": "coberturas",
+  "base": "coberturas-0412-g2",
+  "fecha_pub": "2026-12-04",
+  "hora": "15:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Sin orden médica, no arranques kinesiología.",
+  "voz": "Sin orden médica, no arranques kinesiología. Tres cartas. Carta uno: pedí la orden antes de la primera sesión. Carta dos: preguntá cuántas sesiones cubre tu plan y con quién. Carta tres: consultá si necesitás autorización. Con eso, sabés bien qué esperar. Escribinos por WhatsApp. Guardalo antes de empezar, porque sin orden médica…",
+  "palabra": "KINESIO",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "orden",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "orden",
+      "texto": "Sin orden médica",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "Tres",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "carpeta",
+      "texto": "Tres cartas",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Carta",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "orden",
+      "texto": "1. La orden",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Carta",
+      "n": 1,
+      "tipo": "paso",
+      "objeto": "almanaque",
+      "texto": "2. Sesiones y quién",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Carta",
+      "n": 2,
+      "tipo": "paso",
+      "objeto": "pregunta",
+      "texto": "3. ¿Autorización?",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "carpeta",
+      "texto": "Guardalo antes de empezar",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Sin orden médica, no arranques kinesiología.\n\n✔ Pedí la orden médica antes de la primera sesión.\n✔ Preguntá cuántas sesiones cubre tu plan y con quién.\n✔ Consultá si necesitás autorización.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Kinesiología #Cobertura #BuenosAires",
+  "fuente": ""
+}

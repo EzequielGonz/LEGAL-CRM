@@ -1,0 +1,78 @@
+{
+  "id": "coberturas-0612-c",
+  "marca": "coberturas",
+  "base": "coberturas-0612-2",
+  "fecha_pub": "2026-12-06",
+  "hora": "21:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "elevenlabs",
+  "gancho": "Después de mudarte, buscá la guardia primero.",
+  "voz": "Después de mudarte, buscá la guardia primero. Día uno: la guardia más cercana. Día siete: confirmá que tus médicos atienden cerca. Día treinta: si no atienden, cambiá de plan o de cartilla. No esperes a una urgencia para enterarte. Escribinos por WhatsApp. Mandáselo a quien se mudó, porque después de mudarte…",
+  "palabra": "BARRIO",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "Después",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "carpeta",
+      "texto": "Después de mudarte",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "Día",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "mostrador",
+      "texto": "1. Guardia cerca",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Día",
+      "n": 1,
+      "tipo": "paso",
+      "objeto": "personaje",
+      "texto": "7. Tus médicos",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Día",
+      "n": 2,
+      "tipo": "paso",
+      "objeto": "credencial",
+      "texto": "30. ¿Mismo plan?",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "urgencia",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "reloj",
+      "texto": "No esperes la urgencia",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien se mudó",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Después de mudarte, buscá la guardia primero.\n\n✔ Día uno: buscá la guardia más cercana.\n✔ Día siete: confirmá que tus médicos atienden cerca.\n✔ Día treinta: si no, cambiá de plan o de cartilla.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Mudanza #Cartilla #BuenosAires",
+  "fuente": "",
+  "nota": "Tema de mudanza ya tocado el 30/11 (coberturas-3011-c); acá el ángulo es el contador de días."
+}

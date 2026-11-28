@@ -1,0 +1,70 @@
+{
+  "id": "autos-0412-e",
+  "marca": "autos",
+  "base": "autos-2711-g1",
+  "fecha_pub": "2026-12-04",
+  "hora": "19:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Sin comprobante del seguro, no salgas.",
+  "voz": "Sin comprobante del seguro, no salgas. Podés llevarlo impreso o en el celular. Lo que no podés es no encontrarlo. Guardalo donde lo tengas a mano, antes de salir. Y que esté vigente. Es un papel chico que te pide el viaje entero. Escribinos por WhatsApp. Mandáselo a quien nunca sabe dónde dejó el papel. Y ahora:",
+  "palabra": "DIGITAL",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Sin",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "candado",
+      "texto": "Sin comprobante, no salgas",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "impreso",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "celular",
+      "texto": "Impreso o en el celular",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "encontrarlo",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "lupa",
+      "texto": "Que lo encuentres rápido",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "vigente",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "check",
+      "texto": "Que esté vigente",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "nunca",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "poliza",
+      "texto": "Para quien no lo encuentra",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Sin comprobante del seguro, no salgas.\n\n✔ Impreso o en el celular.\n✔ Guardalo donde lo encuentres rápido.\n✔ Fijate que esté vigente.\n\nEscribinos por WhatsApp.\n\nFuente: Ley 24.449, art. 40, inc. c.\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #Seguro #BuenosAires",
+  "fuente": "Ley 24.449, art. 40, inc. c",
+  "nota": "Reciclado de autos-2711-g1: pasa de loop a advertencia."
+}

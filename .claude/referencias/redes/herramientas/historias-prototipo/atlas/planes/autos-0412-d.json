@@ -1,0 +1,78 @@
+{
+  "id": "autos-0412-d",
+  "marca": "autos",
+  "base": "autos-0412-g1",
+  "fecha_pub": "2026-12-04",
+  "hora": "11:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Tu seguro puede no cubrir trabajar con apps.",
+  "voz": "Tu seguro puede no cubrir trabajar con apps. Si querés usar el 0 km para manejar con aplicaciones, avisá a tu aseguradora antes de salir. Preguntale si tu póliza cubre ese uso. Y pedí la respuesta por escrito, así no queda en el aire. Escribinos por WhatsApp. Mandáselo a quien maneja para apps. Y ahora acordate:",
+  "palabra": "APPS",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Tu",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "poliza",
+      "texto": "¿Cubre trabajar con apps?",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "aplicaciones",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "auto",
+      "texto": "0 km para apps",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "avisá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "celular",
+      "texto": "Avisá a tu aseguradora",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "póliza",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "lupa",
+      "texto": "¿Cubre ese uso?",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "escrito",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "Por escrito",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "acordate",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Apps: preguntá primero",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Tu seguro puede no cubrir trabajar con apps.\n\n✔ Avisá a tu aseguradora antes de salir.\n✔ Preguntá si la póliza cubre ese uso.\n✔ Pedí la respuesta por escrito.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #Seguro #Aplicaciones",
+  "fuente": "",
+  "nota": "Reciclado de autos-0412-g1: pasa de «vos» a advertencia sobre el seguro."
+}

@@ -1,0 +1,77 @@
+{
+  "id": "vita-2911-e",
+  "marca": "vita",
+  "base": "vita-2911-g1",
+  "fecha_pub": "2026-11-29",
+  "hora": "19:40",
+  "redes": [
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Firmás el recibo y no te llevás nada.",
+  "voz": "Firmás el recibo y no te llevás nada. Fin de mes, otra firma, otro recibo, ¿y tu copia? Pedila siempre. Revisá que figuren tus horas. Y guardalas todas en una carpeta, mes por mes. Escribinos por WhatsApp. Guardalo para el próximo cobro, porque si firmás el recibo y no te llevás nada…",
+  "palabra": "RECIBO",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Firmás",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "firma",
+      "texto": "Firmás el recibo",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "copia",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "documento",
+      "texto": "¿Y tu copia?",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Pedila",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "sobre",
+      "texto": "Pedí siempre tu copia",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "horas",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "reloj",
+      "texto": "Revisá tus horas",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "guardalas",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "almanaque",
+      "texto": "Guardalas todas",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Guardalo para el cobro",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Firmás el recibo y no te llevás nada.\n\n✔ Pedí siempre tu copia.\n✔ Revisá que figuren tus horas.\n✔ Guardalas todas en una carpeta.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #DerechoLaboral #ReciboDeSueldo #BuenosAires",
+  "fuente": "",
+  "nota": "Extra e: reciclado de vita-2911-g1 (de segunda persona a escena de fin de mes)."
+}

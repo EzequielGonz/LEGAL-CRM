@@ -1,0 +1,77 @@
+{
+  "id": "coberturas-0712-c",
+  "marca": "coberturas",
+  "base": "coberturas-reserva-4",
+  "fecha_pub": "2026-12-07",
+  "hora": "21:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Excedencia no siempre es perder la obra social.",
+  "voz": "Excedencia no siempre es perder la obra social. Tuviste un hijo y elegís quedarte en casa. Tres cartas. Carta uno: podés mantener la obra social. Carta dos: pagando el aporte y la contribución. Carta tres: pedilo por escrito antes. Escribinos por WhatsApp. Mandáselo a quien acaba de ser mamá, porque excedencia…",
+  "palabra": "EXCEDENCIA",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "Excedencia",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "carpeta",
+      "texto": "¿Excedencia?",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "hijo",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "personaje",
+      "texto": "Tuviste un hijo",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "Carta",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "credencial",
+      "texto": "1. Podés mantenerla",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Carta",
+      "n": 1,
+      "tipo": "paso",
+      "objeto": "check",
+      "texto": "2. Aporte y contribución",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Carta",
+      "n": 2,
+      "tipo": "paso",
+      "objeto": "orden",
+      "texto": "3. Por escrito",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien es mamá",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Excedencia no siempre es perder la obra social.\n\n✔ Podés mantener la obra social.\n✔ Pagando el aporte y la contribución.\n✔ Pedilo por escrito antes.\n\nEscribinos por WhatsApp.\n\nFuente: Ley 23.660, art. 10, inc. g.\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #ObraSocial #Excedencia #BuenosAires",
+  "fuente": "Ley 23.660, art. 10, inc. g"
+}

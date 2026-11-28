@@ -1,0 +1,85 @@
+{
+  "id": "marketing-0412-e",
+  "marca": "marketing",
+  "base": "marketing-0412-g2",
+  "fecha_pub": "2026-12-04",
+  "hora": "21:20",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Tus historias desaparecen. Las destacadas, no.",
+  "voz": "Tus historias desaparecen. Las destacadas, no. Armá cuatro. Una con cómo pedir. Otra con precios. Otra con envíos. Y una con opiniones de clientes. Se arman una vez y quedan. Así quien llega a tu perfil encuentra todo sin escribirte tres veces. Escribinos por WhatsApp. Guardalo y armalas hoy, porque tus historias desaparecen…",
+  "palabra": "DESTACADAS",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "desaparecen",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "cruz",
+      "texto": "Las historias desaparecen",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "destacadas",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "estrella",
+      "texto": "Las destacadas, no",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "cuatro",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "cartel",
+      "texto": "4 destacadas",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "pedir",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "carta",
+      "texto": "Cómo pedir",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "precios",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "etiqueta",
+      "texto": "Precios",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "opiniones",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "vidriera",
+      "texto": "Opiniones",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Armalas hoy",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Tus historias desaparecen. Las destacadas, no.\n\n✔ Cómo pedir, precios y envíos.\n✔ Opiniones de clientes.\n✔ Se arman una vez y quedan.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #Historias #WhatsAppBusiness #Pymes",
+  "fuente": ""
+}

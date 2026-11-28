@@ -1,0 +1,77 @@
+{
+  "id": "coberturas-3011-c",
+  "marca": "coberturas",
+  "base": "coberturas-3011-2",
+  "fecha_pub": "2026-11-30",
+  "hora": "18:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "elevenlabs",
+  "gancho": "Tu cartilla no se muda con vos.",
+  "voz": "Tu cartilla no se muda con vos. Cambiás de barrio y tu guardia puede quedar lejos. Primero: ¿tu guardia sigue cerca? Segundo: ¿tus médicos atienden en la zona nueva? Tercero: si no, preguntá por un plan con cartilla en tu barrio. Escribinos por WhatsApp. Mandáselo a quien se mude, porque tu cartilla…",
+  "palabra": "MUDANZA",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "cartilla",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "credencial",
+      "texto": "Tu cartilla no se muda",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "barrio",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "mostrador",
+      "texto": "Otro barrio",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Primero",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "pregunta",
+      "texto": "1. ¿Guardia cerca?",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Segundo",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "personaje",
+      "texto": "2. ¿Tus médicos?",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Tercero",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "carpeta",
+      "texto": "3. Plan de tu zona",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien se mude",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Tu cartilla no se muda con vos.\n\n✔ Fijate si tu guardia sigue cerca.\n✔ Confirmá que tus médicos atienden en la zona nueva.\n✔ Si no, preguntá por un plan con cartilla en tu barrio.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Cartilla #Mudanza #BuenosAires",
+  "fuente": ""
+}

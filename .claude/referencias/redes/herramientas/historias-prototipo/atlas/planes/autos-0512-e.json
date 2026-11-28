@@ -1,0 +1,86 @@
+{
+  "id": "autos-0512-e",
+  "marca": "autos",
+  "base": "autos-0312-g2",
+  "fecha_pub": "2026-12-05",
+  "hora": "13:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Ese ruido nuevo no se ignora.",
+  "voz": "Ese ruido nuevo no se ignora. Estás manejando tu 0 km y escuchás algo que antes no estaba. Anotá cuándo pasa. Después llevalo al service: el auto está en garantía. Contale al taller lo que anotaste, así lo revisan mejor. Escribinos por WhatsApp. Guardalo para tu primer service. Y si algo suena distinto,",
+  "palabra": "RUIDO",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Ese",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "grieta",
+      "texto": "Ruido nuevo: no lo ignores",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "escuchás",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "auto",
+      "texto": "Algo que antes no estaba",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Anotá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "Anotá cuándo pasa",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "service",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "llave",
+      "texto": "Al service",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "garantía",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "escudo",
+      "texto": "Está en garantía",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "taller",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "celular",
+      "texto": "Contale al taller",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "suena",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "cruz",
+      "texto": "Si suena distinto",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Ese ruido nuevo no se ignora.\n\n✔ Anotá cuándo pasa el ruido.\n✔ Llevalo al service en garantía.\n✔ Contale al taller lo que anotaste.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #Garantía #BuenosAires",
+  "fuente": "",
+  "nota": "Reciclado de autos-0312-g2: pasa de loop a advertencia."
+}

@@ -1,0 +1,85 @@
+{
+  "id": "coberturas-2911-e",
+  "marca": "coberturas",
+  "base": "coberturas-2911-g2",
+  "fecha_pub": "2026-11-29",
+  "hora": "21:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Tu factura puede cobrar lo que no pediste.",
+  "voz": "Tu factura puede cobrar lo que no pediste. Hay tres tipos de afiliado. El que paga sin mirar. El que revisa qué cobran aparte. Y el que, si no lo pidió ni lo usa, pregunta cómo sacarlo. ¿Cuál sos? Escribinos por WhatsApp. Mandáselo a quien paga sin mirar, porque tu factura puede cobrar…",
+  "palabra": "ADICIONALES",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "factura",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "carpeta",
+      "texto": "Revisá la factura",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "tipos",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "pregunta",
+      "texto": "Tres tipos",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "paga",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "credencial",
+      "texto": "Paga sin mirar",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "revisa",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "check",
+      "texto": "Mira qué cobran",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "pidió",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "receta",
+      "texto": "¿Lo pediste? ¿Lo usás?",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Cuál",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "personaje",
+      "texto": "¿Cuál sos?",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien no mira",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Tu factura puede cobrar lo que no pediste.\n\n✔ Revisá qué cobran aparte.\n✔ Fijate si lo pediste y si lo usás.\n✔ Si no, preguntá cómo sacarlo.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Prepaga #Factura #BuenosAires",
+  "fuente": ""
+}

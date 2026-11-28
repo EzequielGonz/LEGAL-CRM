@@ -1,0 +1,85 @@
+{
+  "id": "marketing-0612-e",
+  "marca": "marketing",
+  "base": "marketing-0612-g2",
+  "fecha_pub": "2026-12-06",
+  "hora": "21:20",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Veinte opciones en el menú, ninguna decisión.",
+  "voz": "Veinte opciones en el menú, ninguna decisión. Quien tiene que elegir entre tantas, muchas veces no elige. Destacá las tres más pedidas arriba. Con foto y precio. El resto, abajo, ordenado por tipo. Así se decide más rápido. Escribinos por WhatsApp. Guardalo para tu menú o tu catálogo, porque veinte opciones…",
+  "palabra": "OPCIONES",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Veinte",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "cartel",
+      "texto": "20 opciones",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "elegir",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "chat",
+      "texto": "Tantas para elegir",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "muchas",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "cruz",
+      "texto": "Muchas veces no elige",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "Destacá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "estrella",
+      "texto": "Las 3 más pedidas",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "foto",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "etiqueta",
+      "texto": "Foto y precio",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "abajo",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "caja",
+      "texto": "El resto, abajo",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "vidriera",
+      "texto": "Guardalo para tu menú",
+      "efecto": "barrido"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Veinte opciones en el menú, ninguna decisión.\n\n✔ Destacá las tres más pedidas.\n✔ Con foto y precio.\n✔ El resto, abajo y ordenado.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #Menú #WhatsAppBusiness #Pymes",
+  "fuente": ""
+}

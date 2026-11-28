@@ -1,0 +1,79 @@
+{
+  "id": "autos-0712-d",
+  "marca": "autos",
+  "base": "autos-0112-b",
+  "fecha_pub": "2026-12-07",
+  "hora": "19:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "El plan es para quien no tiene apuro.",
+  "voz": "El plan es para quien no tiene apuro. Si tenés anticipo, mirá el crédito prendario. Y si tenés la plata, el contado. Son tres caminos, y cada uno tiene su cuenta. Preguntá cuál te calza y pedilo por escrito. Tu forma de pagar depende de tu situación. Escribinos por WhatsApp. Mandáselo a quien no sabe cómo pagar. Y si no tenés apuro,",
+  "palabra": "FORMA",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "El",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "velocimetro",
+      "texto": "Plan: sin apuro",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "anticipo",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "candado",
+      "texto": "Anticipo: prendario",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "plata",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "escudo",
+      "texto": "Plata: contado",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "caminos",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "rueda",
+      "texto": "Tres caminos",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "escrito",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "poliza",
+      "texto": "Pedilo por escrito",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "apuro",
+      "n": 1,
+      "tipo": "cierre",
+      "objeto": "almanaque",
+      "texto": "Sin apuro, plan",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "El plan es para quien no tiene apuro.\n\n✔ Plan: para quien no tiene apuro.\n✔ Prendario: si tenés anticipo.\n✔ Contado: si tenés la plata.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #PlanDeAhorro #CréditoPrendario #BuenosAires",
+  "fuente": "",
+  "reciclado_de": "autos-0112-b",
+  "nota": "Reciclado del plan autos-0112-b (edición fuerte): empieza por el plan, otro gancho y otros objetos."
+}

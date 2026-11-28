@@ -1,0 +1,86 @@
+{
+  "id": "autos-3011-c",
+  "marca": "autos",
+  "base": "autos-3011-3",
+  "fecha_pub": "2026-11-30",
+  "hora": "09:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "elevenlabs",
+  "gancho": "Si al retirar falta algo, no te vayas.",
+  "voz": "Si al retirar falta algo, no te vayas. Cuatro cosas tiene que traer: el manual, la garantía, la llave de repuesto y el auxilio. Contalas ahí mismo, con el auto adelante. Si falta una, pedila por escrito, no de palabra. Anotá cuáles son en el celular antes de entrar a la agencia. Escribinos por WhatsApp. Y acordate:",
+  "palabra": "KIT",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Si",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "cruz",
+      "texto": "¿Falta algo?",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "manual",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "documento",
+      "texto": "Manual",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "garantía",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "escudo",
+      "texto": "Garantía",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "llave",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "llave",
+      "texto": "Llave de repuesto",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "auxilio",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "rueda",
+      "texto": "Rueda de auxilio",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "escrito",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "poliza",
+      "texto": "Pedilo por escrito",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "acordate",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "candado",
+      "texto": "Si falta, no te vayas",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Si al retirar falta algo, no te vayas.\n\n✔ Contá las cuatro cosas ahí mismo.\n✔ Si falta una, pedila por escrito.\n✔ Anotalas antes de entrar.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#AutomotoresKocos #0km #RetiroDelAuto #BuenosAires",
+  "fuente": "",
+  "nota": "Tema nuevo (c): qué tiene que traer el 0 km al retirar."
+}

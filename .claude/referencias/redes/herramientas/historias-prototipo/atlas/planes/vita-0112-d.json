@@ -1,0 +1,78 @@
+{
+  "id": "vita-0112-d",
+  "marca": "vita",
+  "base": "vita-0112-g2",
+  "fecha_pub": "2026-12-01",
+  "hora": "13:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Baldosa rota: ¿mala suerte o reclamo?",
+  "voz": "Baldosa rota: ¿mala suerte o reclamo? Te caíste en la calle y alguien te dice que fue mala suerte. Primero, andá a la guardia. Después, sacá fotos del lugar. Pedí datos de testigos. Y consultá si se puede reclamar. Escribinos por WhatsApp. Mandáselo a quien se cayó en la calle, porque una baldosa rota no siempre es mala suerte…",
+  "palabra": "VEREDA",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Baldosa",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "globo",
+      "texto": "¿Mala suerte o reclamo?",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "guardia",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "ambulancia",
+      "texto": "Primero, la guardia",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "fotos",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "camara",
+      "texto": "Fotos del lugar",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "testigos",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "testigo",
+      "texto": "Datos de testigos",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "consultá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "celular",
+      "texto": "Consultá si se puede",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sobre",
+      "texto": "Mandáselo a quien se cayó",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Baldosa rota: ¿mala suerte o reclamo?\n\n✔ Andá a la guardia.\n✔ Sacá fotos del lugar y pedí datos de testigos.\n✔ Consultá si se puede reclamar.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #Vereda #DerechoCivil #BuenosAires",
+  "fuente": "",
+  "nota": "Extra d: reciclado de vita-0112-g2 (de mito roto a pregunta, con otro orden)."
+}

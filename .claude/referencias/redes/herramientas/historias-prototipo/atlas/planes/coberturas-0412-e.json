@@ -1,0 +1,85 @@
+{
+  "id": "coberturas-0412-e",
+  "marca": "coberturas",
+  "base": "coberturas-2711-g1",
+  "fecha_pub": "2026-12-04",
+  "hora": "22:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Tu receta puede no servir en la farmacia.",
+  "voz": "Tu receta puede no servir en la farmacia. Llegás con el papel y te dicen que así no. Antes de ir, preguntá a tu cobertura cómo es la receta que aceptan, si tiene que ser electrónica y qué farmacias están adheridas. Así no perdés el viaje. Escribinos por WhatsApp. Guardalo para tu próxima receta, porque tu receta puede no servir…",
+  "palabra": "RECETA",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "receta",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "receta",
+      "texto": "¿Sirve tu receta?",
+      "efecto": "apagon"
+    },
+    {
+      "palabra": "papel",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "sello",
+      "texto": "Así no",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "Antes",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "pregunta",
+      "texto": "Preguntá antes",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "aceptan",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "orden",
+      "texto": "¿Qué receta aceptan?",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "electrónica",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "celular",
+      "texto": "¿Electrónica?",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "farmacias",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "mostrador",
+      "texto": "Farmacias adheridas",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "carpeta",
+      "texto": "Guardalo para tu receta",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Tu receta puede no servir en la farmacia.\n\n✔ Preguntá cómo es la receta que aceptan.\n✔ Fijate si tiene que ser electrónica.\n✔ Preguntá qué farmacias están adheridas.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Receta #Farmacia #BuenosAires",
+  "fuente": ""
+}

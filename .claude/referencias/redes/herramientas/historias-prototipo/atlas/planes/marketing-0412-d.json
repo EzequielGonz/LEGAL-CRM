@@ -1,0 +1,85 @@
+{
+  "id": "marketing-0412-d",
+  "marca": "marketing",
+  "base": "marketing-0612-g1",
+  "fecha_pub": "2026-12-04",
+  "hora": "13:50",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Vender no termina cuando entregás.",
+  "voz": "Vender no termina cuando entregás. Al otro día, escribile al cliente. Un mensaje corto: gracias y si salió todo bien. Si hubo un problema, te enterás antes de que lo cuente por ahí. Y si salió bien, vuelve con confianza. Escribinos por WhatsApp. Mandáselo a quien vende por encargo, porque vender no termina…",
+  "palabra": "GRACIAS",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Vender",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "caja",
+      "texto": "Entregar no es cerrar",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "escribile",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "carta",
+      "texto": "Escribile al otro día",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "gracias",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "celular",
+      "texto": "Gracias y ¿salió bien?",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "problema",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "cruz",
+      "texto": "Si hubo un problema",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "enterás",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "chat",
+      "texto": "Te enterás primero",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "confianza",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "estrella",
+      "texto": "Vuelve con confianza",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "etiqueta",
+      "texto": "Mandáselo a quien vende",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Vender no termina cuando entregás.\n\n✔ Al otro día, escribile.\n✔ Gracias y si salió todo bien.\n✔ Si hubo un problema, te enterás primero.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Posventa #Pymes",
+  "fuente": ""
+}

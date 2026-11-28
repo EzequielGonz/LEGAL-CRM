@@ -1,0 +1,85 @@
+{
+  "id": "marketing-0212-d",
+  "marca": "marketing",
+  "base": "marketing-0312-g1",
+  "fecha_pub": "2026-12-02",
+  "hora": "13:50",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "«Un video es difícil.» No: dura cinco segundos.",
+  "voz": "«Un video es difícil.» No: dura cinco segundos. Agarrá el producto, girálo cerca de una ventana y filmá. Sin música ni edición. Subilo a tus estados o a tus historias. Muestra lo que una foto no muestra. Con el celular alcanza. Escribinos por WhatsApp. Guardalo para tu próximo producto, porque un video…",
+  "palabra": "VIDEO5",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "difícil",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "cruz",
+      "texto": "«Un video es difícil»",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "segundos",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "reloj_arena",
+      "texto": "Cinco segundos",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "producto",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "caja",
+      "texto": "Agarrá el producto",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "ventana",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "vidriera",
+      "texto": "Luz de ventana",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "música",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "etiqueta",
+      "texto": "Sin música ni edición",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "historias",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "celular",
+      "texto": "Estados e historias",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "carta",
+      "texto": "Guardalo para productos",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "«Un video es difícil.» No: dura cinco segundos.\n\n✔ Cinco segundos, cerca de una ventana.\n✔ Sin música ni edición.\n✔ Subilo a estados o historias.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Video #Pymes",
+  "fuente": ""
+}

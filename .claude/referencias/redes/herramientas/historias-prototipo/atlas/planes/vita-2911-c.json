@@ -1,0 +1,85 @@
+{
+  "id": "vita-2911-c",
+  "marca": "vita",
+  "base": "vita-2911-4",
+  "fecha_pub": "2026-11-29",
+  "hora": "11:10",
+  "redes": [
+    "facebook"
+  ],
+  "motor_voz": "elevenlabs",
+  "gancho": "Te chocan en Nochebuena: el trámite no espera.",
+  "voz": "Te chocan en Nochebuena: el trámite no espera. Llegás a la cena y te pegan de atrás. Nadie quiere papeles. Hacelo igual: fotos, datos del otro y testigos. Avisá a tu seguro dentro de los tres días. Escribinos por WhatsApp. Mandáselo a quien maneje en las fiestas, porque si te chocan en Nochebuena…",
+  "palabra": "FIESTAS",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "Nochebuena",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "reloj",
+      "texto": "Nochebuena, 23:40",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "pegan",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "choque",
+      "texto": "Te pegan de atrás",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "papeles",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "documento",
+      "texto": "¿Sin ganas de papeles?",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "fotos",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "camara",
+      "texto": "Fotos de todo",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "testigos",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "testigo",
+      "texto": "Datos y testigos",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Avisá",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "almanaque",
+      "texto": "Seguro, 3 días",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "auto",
+      "texto": "Mandáselo a quien maneje",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Te chocan en Nochebuena: el trámite no espera.\n\n✔ Sacá fotos de todo.\n✔ Pedí los datos del otro y de los testigos.\n✔ Avisá a tu seguro dentro de los tres días.\n\nEscribinos por WhatsApp.\n\nFuente: Ley 17.418, art. 46.\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #AccidentesDeTránsito #Choque #BuenosAires",
+  "fuente": "Ley 17.418, art. 46",
+  "nota": "Extra c: tema nuevo (tránsito, solo Facebook hasta el 02/12)."
+}

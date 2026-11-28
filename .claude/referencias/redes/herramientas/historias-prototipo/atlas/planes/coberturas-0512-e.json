@@ -1,0 +1,85 @@
+{
+  "id": "coberturas-0512-e",
+  "marca": "coberturas",
+  "base": "coberturas-0512-g2",
+  "fecha_pub": "2026-12-05",
+  "hora": "22:40",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Casi nadie pregunta si la videollamada está cubierta.",
+  "voz": "Casi nadie pregunta si la videollamada está cubierta. Consulta médica por videollamada: ¿la tenés o no? Preguntá si tu plan la incluye. Y preguntá para qué conviene usarla. Hacelo antes de necesitarla, porque a veces el apuro no deja pensar. Escribinos por WhatsApp. Mandáselo a quien no sabe si la tiene, porque casi nadie pregunta…",
+  "palabra": "VIDEO",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "videollamada",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "celular",
+      "texto": "¿Cubre videollamada?",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "Consulta",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "receta",
+      "texto": "Consulta médica",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "tenés",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "pregunta",
+      "texto": "¿La tenés o no?",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "incluye",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "check",
+      "texto": "¿La incluye?",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "conviene",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "carpeta",
+      "texto": "¿Para qué sirve?",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Hacelo",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "reloj",
+      "texto": "Antes de necesitarla",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien no sabe",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Casi nadie pregunta si la videollamada está cubierta.\n\n✔ Preguntá si tu plan incluye la consulta por videollamada.\n✔ Preguntá para qué conviene usarla.\n✔ Hacelo antes de necesitarla.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Telemedicina #Prepaga #BuenosAires",
+  "fuente": ""
+}

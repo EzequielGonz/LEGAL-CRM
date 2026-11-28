@@ -1,0 +1,85 @@
+{
+  "id": "coberturas-0512-d",
+  "marca": "coberturas",
+  "base": "coberturas-0512-g1",
+  "fecha_pub": "2026-12-05",
+  "hora": "15:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "Embarazada sin saber qué cubre tu plan.",
+  "voz": "Embarazada sin saber qué cubre tu plan. El test dio positivo y todo se mueve rápido. Carta uno: preguntá qué te cubre. Carta dos: qué médicos tenés en cartilla. Carta tres: qué sanatorios tenés en cartilla. Hacelo antes del primer control. Escribinos por WhatsApp. Mandáselo a quien está esperando, porque embarazada sin saber…",
+  "palabra": "EMBARAZO",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "Embarazada",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "pregunta",
+      "texto": "¿Qué te cubre?",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "test",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "celular",
+      "texto": "Test positivo",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Carta",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "credencial",
+      "texto": "1. Qué cubre",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Carta",
+      "n": 1,
+      "tipo": "paso",
+      "objeto": "personaje",
+      "texto": "2. Médicos",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Carta",
+      "n": 2,
+      "tipo": "paso",
+      "objeto": "mostrador",
+      "texto": "3. Sanatorios",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "control",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "reloj",
+      "texto": "Antes del control",
+      "efecto": "despiece"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Mandáselo a quien espera",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Embarazada sin saber qué cubre tu plan.\n\n✔ Preguntá qué te cubre.\n✔ Mirá qué médicos tenés en cartilla.\n✔ Mirá qué sanatorios tenés en cartilla.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#ComparaTuObraSocial #Embarazo #Cobertura #BuenosAires",
+  "fuente": ""
+}

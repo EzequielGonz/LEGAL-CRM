@@ -1,0 +1,78 @@
+{
+  "id": "vita-3011-c",
+  "marca": "vita",
+  "base": "vita-reserva-4",
+  "fecha_pub": "2026-11-30",
+  "hora": "11:10",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "elevenlabs",
+  "gancho": "Casa heredada: escriturar primero es empezar mal.",
+  "voz": "Casa heredada: escriturar primero es empezar mal. Heredaste una casa y querés escriturarla. Antes, tres cartas. Carta uno: la sucesión, terminada. Carta dos: todos los herederos de acuerdo. Carta tres: impuestos y deudas de la casa, al día. Escribinos por WhatsApp. Mandáselo a tus hermanos, porque escriturar primero es empezar mal…",
+  "palabra": "ESCRITURA",
+  "contador": 3,
+  "beats": [
+    {
+      "palabra": "Casa",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "edificio",
+      "texto": "Casa heredada",
+      "efecto": "caida"
+    },
+    {
+      "palabra": "Heredaste",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "documento",
+      "texto": "Heredaste una casa",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Carta",
+      "n": 0,
+      "tipo": "paso",
+      "objeto": "sello",
+      "texto": "1. Sucesión terminada",
+      "efecto": "flash"
+    },
+    {
+      "palabra": "Carta",
+      "n": 1,
+      "tipo": "paso",
+      "objeto": "firma",
+      "texto": "2. Herederos de acuerdo",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Carta",
+      "n": 2,
+      "tipo": "paso",
+      "objeto": "billete",
+      "texto": "3. Impuestos al día",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sello",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Mandáselo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "sobre",
+      "texto": "Mandáselo a tus hermanos",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "Casa heredada: escriturar primero es empezar mal.\n\n✔ Primero, la sucesión terminada.\n✔ Todos los herederos de acuerdo.\n✔ Impuestos y deudas de la casa, al día.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA. Información general: no reemplaza una consulta.\n\n#VITAAbogados #Herencia #Sucesión #BuenosAires",
+  "fuente": "",
+  "nota": "Extra c: tema nuevo (escriturar la casa heredada; de reserva)."
+}

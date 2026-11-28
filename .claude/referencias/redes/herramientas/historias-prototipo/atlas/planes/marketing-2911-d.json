@@ -1,0 +1,85 @@
+{
+  "id": "marketing-2911-d",
+  "marca": "marketing",
+  "base": "marketing-2911-g1",
+  "fecha_pub": "2026-11-29",
+  "hora": "13:50",
+  "redes": [
+    "instagram",
+    "facebook"
+  ],
+  "motor_voz": "gratis",
+  "gancho": "¿A cuántos barrios entregás de verdad?",
+  "voz": "¿A cuántos barrios entregás de verdad? Si contestás «a todos lados», el cliente pregunta igual. Escribí en tu perfil la lista. Qué barrios. Qué días. Y desde qué monto. Así el que no entra en tu zona ni pierde tiempo, y el que sí, pide directo. Escribinos por WhatsApp. Guardalo y completá tu perfil, porque ¿a cuántos barrios entregás…",
+  "palabra": "ZONA",
+  "contador": 0,
+  "beats": [
+    {
+      "palabra": "cuántos",
+      "n": 0,
+      "tipo": "gancho",
+      "objeto": "cartel",
+      "texto": "¿Cuántos barrios?",
+      "efecto": "giro"
+    },
+    {
+      "palabra": "todos",
+      "n": 0,
+      "tipo": "problema",
+      "objeto": "cruz",
+      "texto": "«A todos lados»",
+      "efecto": "rebote"
+    },
+    {
+      "palabra": "barrios",
+      "n": 1,
+      "tipo": "dato",
+      "objeto": "etiqueta",
+      "texto": "Qué barrios",
+      "efecto": "cuenta"
+    },
+    {
+      "palabra": "días",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "reloj_arena",
+      "texto": "Qué días",
+      "efecto": "barrido"
+    },
+    {
+      "palabra": "monto",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "caja",
+      "texto": "Desde qué monto",
+      "efecto": "golpe"
+    },
+    {
+      "palabra": "directo",
+      "n": 0,
+      "tipo": "dato",
+      "objeto": "estrella",
+      "texto": "Pide directo",
+      "efecto": "lupa"
+    },
+    {
+      "palabra": "Escribinos",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "check",
+      "texto": "Escribinos por WhatsApp",
+      "efecto": "sello"
+    },
+    {
+      "palabra": "Guardalo",
+      "n": 0,
+      "tipo": "cierre",
+      "objeto": "celular",
+      "texto": "Completá tu perfil",
+      "efecto": "golpe"
+    }
+  ],
+  "cierre": "Escribinos por WhatsApp",
+  "copy": "¿A cuántos barrios entregás de verdad?\n\n✔ Qué barrios, qué días y desde qué monto.\n✔ Escribilo en tu perfil.\n✔ Así pide directo quien sí entra.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa. Voz generada con IA.\n\n#KocosMarketing #WhatsAppBusiness #Envíos #Pymes",
+  "fuente": ""
+}
