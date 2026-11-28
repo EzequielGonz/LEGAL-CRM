@@ -5,6 +5,21 @@
 import json, os, subprocess, sys, time
 AQUI = os.path.dirname(os.path.abspath(__file__)); os.chdir(AQUI)
 LOG = open('lote.log', 'a', buffering=1)
+def tapa(id_):
+    # Tapa: cuadro de 1,2 s (gancho a la vista). Solo en marcas de escena clara (Coberturas y Marketing):
+    # si ese cuadro sale mucho más oscuro que la escena ya iluminada (apertura con foco o fundido),
+    # se busca más adelante, hasta 3,0 s. VITA y Autos son oscuras a propósito y quedan en 1,2 s.
+    from PIL import Image, ImageStat
+    def luz(t, destino):
+        run(['ffmpeg', '-y', '-v', 'error', '-ss', f'{t:.1f}', '-i', f'out/{id_}.mp4', '-frames:v', '1', '-q:v', '2', destino])
+        return ImageStat.Stat(Image.open(destino).convert('L')).mean[0]
+    primera = luz(1.2, f'out/{id_}.jpg')
+    if id_.split('-')[0] not in ('coberturas', 'marketing'): return
+    ref = luz(3.0, f'out/{id_}-ref.jpg'); os.remove(f'out/{id_}-ref.jpg')
+    if primera >= 0.6 * ref: return
+    for t in (1.6, 2.0, 2.4, 2.8, 3.0):
+        if luz(t, f'out/{id_}.jpg') >= 0.8 * ref: break
+
 def log(*a): LOG.write(time.strftime('%H:%M:%S ') + ' '.join(str(x) for x in a) + '\n')
 def run(cmd, env=None):
     r = subprocess.run(cmd, capture_output=True, text=True, env=env)
@@ -27,7 +42,7 @@ def uno(id_):
     run(['ffmpeg', '-y', '-v', 'error', '-framerate', '30', '-i', f'fr/{id_}/%05d.jpg', '-i', f'audio/{id_}-mezcla.wav', '-c:v', 'libx264', '-crf', '22',
          '-maxrate', '8M', '-bufsize', '16M', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '256k', '-shortest', '-movflags', '+faststart', f'out/{id_}.mp4'])
     D = dur(f'out/{id_}.mp4')
-    run(['ffmpeg', '-y', '-v', 'error', '-ss', '1.2', '-i', f'out/{id_}.mp4', '-frames:v', '1', '-q:v', '2', f'out/{id_}.jpg'])
+    tapa(id_)
     os.makedirs('prueba/chk', exist_ok=True)
     for k, t in enumerate([1.0, D / 2, D - 0.6]):
         run(['ffmpeg', '-y', '-v', 'error', '-ss', f'{t:.2f}', '-i', f'out/{id_}.mp4', '-frames:v', '1', '-vf', 'scale=360:-1', '-q:v', '4', f'prueba/chk/{id_}-{k}.jpg'])
