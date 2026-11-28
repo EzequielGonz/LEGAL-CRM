@@ -3,7 +3,7 @@
 # Se puede relanzar sin riesgo: saltea los que ya tienen «mp4 200» en alojados.log.
 cd "$(dirname "$0")"
 while true; do
-  for f in out/*-[0-9][0-9][0-9][0-9]-[ab].mp4; do
+  for f in out/*-[0-9][0-9][0-9][0-9]-[a-e].mp4; do
     [ -e "$f" ] || continue; id=$(basename "$f" .mp4); dd=$(echo "$id" | cut -d- -f2)
     grep -q " $id LISTO" lote.log || continue
     grep -q " $id mp4 200 " alojados.log 2>/dev/null && continue

@@ -76,15 +76,21 @@ def nrm(s):
 
 def palabras(t): return [w for w in t.split() if nrm(w)]
 
+def datos():
+    # Por defecto, los de la tanda 2 (abajo, en D). Con --datos <archivo> se leen otras líneas con el mismo formato.
+    if '--datos' in sys.argv: return open(sys.argv[sys.argv.index('--datos') + 1]).read()
+    return D
+
 def armar():
     bases = {}
     for m in OBJETOS:
         for g in json.load(open(os.path.join(TANDA, 'guiones', f'{m}.json'))): bases[g['id']] = g
     planes, errores = [], []
-    for k, linea in enumerate(l for l in D.strip().splitlines() if l.strip()):
+    for k, linea in enumerate(l for l in datos().strip().splitlines() if l.strip() and not l.startswith('#')):
         c = [x.strip() for x in linea.split('|')]
         id_, base, gancho, voz, checks, golpes, contador, tags = c[:8]; nota = c[8] if len(c) > 8 else ''
-        m, ddmm, letra = id_.split('-'); g = bases[base]; e = lambda s: errores.append(f'{id_}: {s}')
+        hora_x = c[9] if len(c) > 9 else ''; redes_x = c[10] if len(c) > 10 else ''; motor = c[11] if len(c) > 11 else 'elevenlabs'
+        m, ddmm, letra = id_.split('-'); g = bases[base] if base in bases else bases[json.load(open(os.path.join(PLANES, base + '.json')))['base']]; e = lambda s: errores.append(f'{id_}: {s}')
         toks = [nrm(w) for w in voz.split()]
         nv = len(palabras(voz)); ng = len(palabras(gancho))
         if not 50 <= nv <= 68: e(f'voz de {nv} palabras')
@@ -122,9 +128,10 @@ def armar():
         copy = f"{gancho}\n\n" + '\n'.join(f'✔ {x}' for x in cks) + f"\n\n{CIERRE}.\n\n" + (f'Fuente: {fuente}.\n' if fuente else '') + AVISO[m] + f"\n\n{MARCA_TAG[m]} {tags}"
         for mal in ('Agencia Kocos', 'ORVIAN', 'Black Friday', 'botón', 'garantizado', 'ganás seguro'):
             if mal.lower() in (voz + copy).lower() and not (mal == 'garantizado' and 'garantizarte' in voz): e(f'contiene «{mal}»')
-        plan = {'id': id_, 'marca': m, 'base': base, 'fecha_pub': f'2026-12-{ddmm[:2]}', 'hora': HORAS[m][0 if letra == 'a' else 1],
-                'redes': ['instagram', 'facebook'], 'gancho': gancho, 'voz': voz, 'palabra': g['palabra'], 'contador': int(contador),
+        plan = {'id': id_, 'marca': m, 'base': base, 'fecha_pub': f'2026-{ddmm[2:]}-{ddmm[:2]}', 'hora': hora_x or HORAS[m][0 if letra == 'a' else 1],
+                'redes': redes_x.split('+') if redes_x else ['instagram', 'facebook'], 'motor_voz': motor, 'gancho': gancho, 'voz': voz, 'palabra': g['palabra'], 'contador': int(contador),
                 'beats': beats, 'cierre': CIERRE, 'copy': copy, 'fuente': fuente}
+        if base not in bases: plan['reciclado_de'] = base
         if nota:
             plan['nota'] = nota
             if 'Revisión de abogada' in nota: plan['revision'] = 'abogada antes de publicar'

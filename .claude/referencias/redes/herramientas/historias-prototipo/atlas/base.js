@@ -72,16 +72,18 @@ const Cine = {
 
 // ── motor ────────────────────────────────────────────────────────────────────
 export const RAPIDO = new URLSearchParams(location.search).get('rapido') === '1';
+// escala del 3D (1 = 1080×1920). Con 0,67 el 3D se dibuja a 720×1280 y el navegador lo agranda; los textos del DOM quedan nítidos.
+export const ESCALA = Math.min(1, Math.max(.4, +(new URLSearchParams(location.search).get('escala') || 1)));
 export async function motor(cfg = {}) {
   await document.fonts.ready; if (RAPIDO) { cfg = {...cfg, dof: null}; }
   const r = new THREE.WebGLRenderer({antialias: true, preserveDrawingBuffer: true, powerPreference: 'high-performance'});
-  r.setPixelRatio(1); r.setSize(W, H); r.toneMapping = cfg.tono === 'agx' ? THREE.AgXToneMapping : THREE.ACESFilmicToneMapping; r.toneMappingExposure = cfg.exposicion ?? 1;
+  r.setPixelRatio(ESCALA); r.setSize(W, H); r.toneMapping = cfg.tono === 'agx' ? THREE.AgXToneMapping : THREE.ACESFilmicToneMapping; r.toneMappingExposure = cfg.exposicion ?? 1;
   r.outputColorSpace = THREE.SRGBColorSpace; r.shadowMap.enabled = !RAPIDO; r.shadowMap.type = cfg.sombraDura ? THREE.PCFShadowMap : THREE.PCFSoftShadowMap;
   document.getElementById('lienzo').appendChild(r.domElement);
   const scene = new THREE.Scene(); if (cfg.fondo) scene.background = new THREE.Color(cfg.fondo);
   const cam = new THREE.PerspectiveCamera(cfg.fov ?? 30, W / H, .05, 400);
   if (cfg.entorno) { const pm = new THREE.PMREMGenerator(r); scene.environment = pm.fromScene(new RoomEnvironment(), .04).texture; scene.environmentIntensity = cfg.entorno; }
-  const comp = new EffectComposer(r); comp.setPixelRatio(1); comp.setSize(W, H);
+  const comp = new EffectComposer(r); comp.setPixelRatio(ESCALA); comp.setSize(W, H);
   comp.addPass(new RenderPass(scene, cam));
   const b = cfg.bloom ?? {}; const bloom = new UnrealBloomPass(new THREE.Vector2(W / 2, H / 2), b.fuerza ?? .4, b.radio ?? .55, b.umbral ?? .85); comp.addPass(bloom);
   let dof = null; if (cfg.dof) { dof = new BokehPass(scene, cam, {focus: cfg.dof.foco ?? 5, aperture: cfg.dof.apertura ?? .002, maxblur: cfg.dof.max ?? .008}); comp.addPass(dof); }

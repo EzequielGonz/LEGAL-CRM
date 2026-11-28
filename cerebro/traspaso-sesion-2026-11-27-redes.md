@@ -6,6 +6,14 @@ Rama `claude/brave-hawking-nzsr60` · PR EzequielGonz/LEGAL-CRM#82 (seguido, en 
 - El dueño frenó el boceto de VITA. **No hay agentes trabajando ni nada programado.** Lo programado en Metricool del 25 al 29/11 (12 historias + 1 carrusel por día y marca) NO se toca.
 - **Esperando:** el dueño busca 1 o 2 reels de referencia con el 3D que imagina. Al recibirlos, analizarlos (gancho, cámara, luz, nivel de realismo, animación, efectos) y recién ahí hacer el boceto de VITA con el guion `vita-2711-1`.
 
+## CHECKPOINT 28/11 00:40 BA (03:40 UTC) — 5 REELS POR DÍA Y MARCA, COLA ÚNICA
+- **Pedido del dueño (28/11):** 3 reels más por marca y por día (total 5), «reciclando de buena manera». Ids `<marca>-<ddmm>-c` (tema nuevo, ElevenLabs con tope de 2.700 caracteres por marca), `-d` y `-e` (reciclados con edición fuerte y voz gratis edge-tts es-AR). Datos en `docs/redes/tanda-2811-0712/fuente/extra-<marca>.txt`, armados con `tanda2.py --datos …` (columnas extra: hora, redes, motor). 4 agentes los escriben del 29/11 al 07/12.
+- **Render 2,3 veces más rápido:** `base.js` acepta `escala` y `lote.py` usa `ESCALA=0.67` (el 3D a 720p; los textos del DOM siguen nítidos; comparado lado a lado, sin diferencia visible). ~11 min por reel.
+- **Cola única `atlas/cola.py`** (reemplaza `cola.sh` y `cola2.sh`): produce siempre el reel que sale antes entre los planes a..e con voz lista. `vigia.sh` aloja a..e.
+- **Programado en Metricool:** vita-2811-a (08:40, id 445099738) y vita-2811-b (21:10, id 445106681). Registrar con `atlas/registrar.py <id> <id_metricool>`.
+- **Piezas fijas** (post, carrusel y 2 historias por día y marca, 30/11 al 07/12): `atlas/laminas.py` con la escena 3D de cada marca; 4 agentes escriben `atlas/piezas/specs-<marca>.json` y renderizan.
+- **Calibración parte B:** hecha. VITA Instagram con 0 vistas en 5 de 5 reels (Facebook 706): pedirle al dueño que revise «Estado de la cuenta».
+
 ## CHECKPOINT 28/11 00:10 BA (03:10 UTC) — TANDA 1 EN RENDER, TANDA 2 CON PLANES Y VOCES
 - **La máquina se reinició sola el 28/11 ~02:50 UTC** (después de un corte por límite de uso): mata los procesos de fondo. Al retomar: `pgrep -fa cola` en `atlas/`; si no están, `nohup setsid ./cola.sh > cola.out 2>&1 < /dev/null & disown` y lo mismo con `./cola2.sh` (cola2 espera a que termine cola.sh). `render.js` retoma los cuadros hechos y `lote.py` saltea los reels con `out/<id>.mp4`.
 - **Codificación:** `lote.py` ahora usa `-crf 22 -maxrate 8M` (antes 14M daba 62 MB por reel; ahora ~37 MB). vita-2811-a se recodificó desde los cuadros.

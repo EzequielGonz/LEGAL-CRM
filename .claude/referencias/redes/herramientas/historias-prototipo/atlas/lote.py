@@ -20,7 +20,7 @@ def uno(id_):
     json.dump(dict(id=id_, voz_fin=round(T, 3), total=round(T + 1.2, 2), palabras=[], textos=[b['texto'] for b in pl['beats']],
                    palabra=pl.get('palabra', ''), gancho=pl['gancho']), open(f'audio/{id_}-palabras.json', 'w'), ensure_ascii=False, indent=1)
     log(id_, 'alinear', run(['python3', 'alinear.py', id_, pl['voz'], voz, '0']).strip())
-    env = dict(os.environ, RAPIDO='1'); t0 = time.time()
+    env = dict(os.environ, RAPIDO='1', ESCALA=os.environ.get('ESCALA', '0.67')); t0 = time.time()
     run(['node', 'render.js', id_, '30', '3'], env=env); log(id_, 'render', round(time.time() - t0), 's')
     run(['python3', 'mezcla.py', id_])
     os.makedirs('out', exist_ok=True)

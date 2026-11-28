@@ -11,7 +11,7 @@ async function pagina(id) {
   await p.route('http://motor.local/**', r => { const f = path.join(RAIZ, decodeURIComponent(new URL(r.request().url()).pathname));
     if (!fs.existsSync(f) || fs.statSync(f).isDirectory()) return r.fulfill({status: 404, body: ''});
     r.fulfill({status: 200, body: fs.readFileSync(f), contentType: MIME[path.extname(f)] || 'application/octet-stream'}); });
-  await p.goto(`http://motor.local/atlas/reel.html?m=${id}${process.env.RAPIDO ? '&rapido=1' : ''}`);
+  await p.goto(`http://motor.local/atlas/reel.html?m=${id}${process.env.RAPIDO ? '&rapido=1' : ''}${process.env.ESCALA ? '&escala=' + process.env.ESCALA : ''}`);
   await p.waitForFunction(() => window.listo || window.falla, null, {timeout: 300000});
   const falla = await p.evaluate(() => window.falla); if (falla) { console.log('FALLA', falla); process.exit(1); }
   return {b, p};
