@@ -190,7 +190,7 @@
    [
     "¿Tu guardia sigue cerca?",
     "Guardia cercana.",
-    "mostrador"
+    "celular"
    ],
    [
     "¿Tus médicos atienden ahí?",
@@ -538,7 +538,7 @@
    [
     "¿Necesita autorización previa?",
     "Preguntá primero.",
-    "pregunta"
+    "reloj"
    ],
    [
     "Pedila con la orden",
