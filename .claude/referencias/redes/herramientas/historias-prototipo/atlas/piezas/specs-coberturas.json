@@ -1,0 +1,698 @@
+[
+ {
+  "id": "coberturas-3011-car",
+  "marca": "coberturas",
+  "formato": "car",
+  "fecha": "2026-11-30",
+  "hora": "19:50",
+  "base": "coberturas-2811-g2",
+  "gancho": "No te internes sin preguntar esto.",
+  "laminas": [
+   [
+    "Internación programada: ¿qué preguntás?",
+    "Antes de internarte.",
+    "pregunta"
+   ],
+   [
+    "¿Qué cubre y qué habitación?",
+    "Cobertura y habitación.",
+    "carpeta"
+   ],
+   [
+    "¿Hay honorarios aparte?",
+    "Honorarios por separado.",
+    "orden"
+   ],
+   [
+    "¿Qué autorización necesitás?",
+    "Autorización previa.",
+    "sello"
+   ]
+  ],
+  "copy": "No te internes sin preguntar esto.\n\n✔ Preguntá qué cubre tu plan y qué habitación te toca.\n✔ Preguntá si hay honorarios aparte.\n✔ Consultá qué autorización necesitás.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Internacion",
+  "fuente": ""
+ },
+ {
+  "id": "coberturas-3011-post",
+  "marca": "coberturas",
+  "formato": "post",
+  "fecha": "2026-11-30",
+  "hora": "14:10",
+  "base": "coberturas-2911-4",
+  "gancho": "Antes de la valija, mirá tu cobertura.",
+  "laminas": [
+   [
+    "¿Tu cobertura también viaja?",
+    "Mirá guardias y urgencias.",
+    "mostrador"
+   ]
+  ],
+  "copy": "Antes de la valija, mirá tu cobertura.\n\n✔ Preguntá qué guardias te atienden en el lugar.\n✔ Averiguá cómo pedís una urgencia.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Vacaciones",
+  "fuente": ""
+ },
+ {
+  "id": "coberturas-3011-his1",
+  "marca": "coberturas",
+  "formato": "his",
+  "fecha": "2026-11-30",
+  "hora": "10:20",
+  "base": "coberturas-2711-g1",
+  "gancho": "¿Sabés qué receta aceptan?",
+  "laminas": [
+   [
+    "¿Sabés qué receta aceptan?",
+    "Escribinos por WhatsApp.",
+    "receta"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "coberturas-3011-his2",
+  "marca": "coberturas",
+  "formato": "his",
+  "fecha": "2026-11-30",
+  "hora": "20:40",
+  "base": "coberturas-2911-g2",
+  "gancho": "No pagues la factura sin mirar adicionales.",
+  "laminas": [
+   [
+    "Revisá qué cobran aparte.",
+    "Escribinos por WhatsApp.",
+    "carpeta"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "coberturas-0112-car",
+  "marca": "coberturas",
+  "formato": "car",
+  "fecha": "2026-12-01",
+  "hora": "19:50",
+  "base": "coberturas-0112-g1",
+  "gancho": "Remedios todos los meses: tres preguntas.",
+  "laminas": [
+   [
+    "Remedios todos los meses: ¿preguntaste?",
+    "Tres preguntas clave.",
+    "frasco"
+   ],
+   [
+    "¿Cobertura para uso crónico?",
+    "Cobertura para crónicos.",
+    "frasco"
+   ],
+   [
+    "¿Qué receta piden?",
+    "Tipo de receta.",
+    "receta"
+   ],
+   [
+    "¿Qué farmacias están adheridas?",
+    "Farmacias adheridas.",
+    "mostrador"
+   ]
+  ],
+  "copy": "Remedios todos los meses: tres preguntas.\n\n✔ Preguntá si tu plan cubre medicación de uso crónico.\n✔ Averiguá qué receta piden.\n✔ Pedí la lista de farmacias adheridas.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Medicamentos",
+  "fuente": ""
+ },
+ {
+  "id": "coberturas-0112-post",
+  "marca": "coberturas",
+  "formato": "post",
+  "fecha": "2026-12-01",
+  "hora": "14:10",
+  "base": "coberturas-2911-g1",
+  "gancho": "Si la prepaga dice no, no terminó.",
+  "laminas": [
+   [
+    "¿Te dijeron que no? Reclamá.",
+    "Pedí respuesta por escrito.",
+    "carpeta"
+   ]
+  ],
+  "copy": "Si la prepaga dice no, no terminó.\n\n✔ Pedí la respuesta por escrito y hacé el reclamo.\n✔ Si no te responden, existe la Superintendencia de Servicios de Salud.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Reclamo",
+  "fuente": ""
+ },
+ {
+  "id": "coberturas-0112-his1",
+  "marca": "coberturas",
+  "formato": "his",
+  "fecha": "2026-12-01",
+  "hora": "10:20",
+  "base": "coberturas-3011-g2",
+  "gancho": "¿Tu plan cubre tus anteojos?",
+  "laminas": [
+   [
+    "¿Tu plan cubre anteojos?",
+    "Escribinos por WhatsApp.",
+    "pregunta"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "coberturas-0112-his2",
+  "marca": "coberturas",
+  "formato": "his",
+  "fecha": "2026-12-01",
+  "hora": "20:40",
+  "base": "coberturas-0212-g1",
+  "gancho": "Se debitó la cuota: ¿cuánto fue?",
+  "laminas": [
+   [
+    "Compará débito y factura.",
+    "Escribinos por WhatsApp.",
+    "check"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "coberturas-0212-car",
+  "marca": "coberturas",
+  "formato": "car",
+  "fecha": "2026-12-02",
+  "hora": "19:50",
+  "base": "coberturas-3011-2",
+  "gancho": "Cambiás de barrio, no de cartilla.",
+  "laminas": [
+   [
+    "Te mudás: tres cartas",
+    "Antes de la mudanza.",
+    "carpeta"
+   ],
+   [
+    "¿Tu guardia sigue cerca?",
+    "Guardia cercana.",
+    "mostrador"
+   ],
+   [
+    "¿Tus médicos atienden ahí?",
+    "Tus médicos.",
+    "credencial"
+   ],
+   [
+    "¿Hay plan con tu zona?",
+    "Plan con tu zona.",
+    "pregunta"
+   ]
+  ],
+  "copy": "Cambiás de barrio, no de cartilla.\n\n✔ Fijate si tu guardia sigue cerca.\n✔ Confirmá que tus médicos atienden en la zona nueva.\n✔ Si no, preguntá por un plan con cartilla en tu barrio.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Mudanza",
+  "fuente": ""
+ },
+ {
+  "id": "coberturas-0212-post",
+  "marca": "coberturas",
+  "formato": "post",
+  "fecha": "2026-12-02",
+  "hora": "14:10",
+  "base": "coberturas-0312-g2",
+  "gancho": "Te dicen operación: ¿ya pediste tus estudios?",
+  "laminas": [
+   [
+    "¿Dudás? Pedí tus estudios.",
+    "Buscá otro especialista.",
+    "carpeta"
+   ]
+  ],
+  "copy": "Te dicen operación: ¿ya pediste tus estudios?\n\n✔ Pedí tus estudios.\n✔ Buscá otro especialista en cartilla.\n✔ Preguntá si necesitás autorización.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #SegundaOpinion",
+  "fuente": ""
+ },
+ {
+  "id": "coberturas-0212-his1",
+  "marca": "coberturas",
+  "formato": "his",
+  "fecha": "2026-12-02",
+  "hora": "10:20",
+  "base": "coberturas-2811-g1",
+  "gancho": "¿Tu dentista está en cartilla?",
+  "laminas": [
+   [
+    "¿Tu dentista está en cartilla?",
+    "Escribinos por WhatsApp.",
+    "pregunta"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "coberturas-0212-his2",
+  "marca": "coberturas",
+  "formato": "his",
+  "fecha": "2026-12-02",
+  "hora": "20:40",
+  "base": "coberturas-reserva-3",
+  "gancho": "Tu hijo trabaja: ya tiene aportes propios.",
+  "laminas": [
+   [
+    "Primer trabajo: aportes propios.",
+    "Escribinos por WhatsApp.",
+    "credencial"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "coberturas-0312-car",
+  "marca": "coberturas",
+  "formato": "car",
+  "fecha": "2026-12-03",
+  "hora": "19:50",
+  "base": "coberturas-2711-3",
+  "gancho": "Sumar a mamá no es automático.",
+  "laminas": [
+   [
+    "Sumar a mamá: preguntá antes",
+    "Hace falta autorización.",
+    "pregunta"
+   ],
+   [
+    "¿Qué requisitos piden?",
+    "Requisitos.",
+    "carpeta"
+   ],
+   [
+    "¿Qué papeles necesitás?",
+    "Papeles.",
+    "carpeta"
+   ],
+   [
+    "¿Cuánto cambia tu aporte?",
+    "Tu aporte.",
+    "credencial"
+   ]
+  ],
+  "copy": "Sumar a mamá no es automático.\n\n✔ Preguntá qué requisitos piden y qué papeles necesitás.\n✔ Averiguá cuánto cambia tu aporte.\n✔ Recordá que hace falta una autorización.\n\nEscribinos por WhatsApp.\n\nFuente: Ley 23.660, art. 9.\nSituación ilustrativa.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Familia",
+  "fuente": "Ley 23.660, art. 9"
+ },
+ {
+  "id": "coberturas-0312-post",
+  "marca": "coberturas",
+  "formato": "post",
+  "fecha": "2026-12-03",
+  "hora": "14:10",
+  "base": "coberturas-0512-g2",
+  "gancho": "¿Tenés consulta médica por videollamada?",
+  "laminas": [
+   [
+    "¿Tenés consulta por videollamada?",
+    "Preguntá qué cubre.",
+    "celular"
+   ]
+  ],
+  "copy": "¿Tenés consulta médica por videollamada?\n\n✔ Preguntá si tu plan la incluye.\n✔ Averiguá para qué conviene usarla.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Telemedicina",
+  "fuente": ""
+ },
+ {
+  "id": "coberturas-0312-his1",
+  "marca": "coberturas",
+  "formato": "his",
+  "fecha": "2026-12-03",
+  "hora": "10:20",
+  "base": "coberturas-3011-g1",
+  "gancho": "¿Sabés qué cubre tu terapia?",
+  "laminas": [
+   [
+    "¿Sabés qué cubre tu terapia?",
+    "Escribinos por WhatsApp.",
+    "pregunta"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "coberturas-0312-his2",
+  "marca": "coberturas",
+  "formato": "his",
+  "fecha": "2026-12-03",
+  "hora": "20:40",
+  "base": "coberturas-0112-g2",
+  "gancho": "Te ofrecen otro plan: pedilo por escrito.",
+  "laminas": [
+   [
+    "Pedí por escrito el cambio.",
+    "Escribinos por WhatsApp.",
+    "carpeta"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "coberturas-0412-car",
+  "marca": "coberturas",
+  "formato": "car",
+  "fecha": "2026-12-04",
+  "hora": "19:50",
+  "base": "coberturas-0412-g1",
+  "gancho": "¿Tu pareja entra en tu cobertura?",
+  "laminas": [
+   [
+    "¿Se fueron a vivir juntos?",
+    "¿Y la cobertura?",
+    "personaje"
+   ],
+   [
+    "¿Se puede sumar?",
+    "Preguntá primero.",
+    "pregunta"
+   ],
+   [
+    "¿Qué papeles piden?",
+    "Papeles de convivencia.",
+    "carpeta"
+   ],
+   [
+    "¿Cuánto cambia?",
+    "Costo del cambio.",
+    "credencial"
+   ]
+  ],
+  "copy": "¿Tu pareja entra en tu cobertura?\n\n✔ Preguntá qué requisitos piden para sumar a tu pareja.\n✔ Averiguá qué papeles prueban la convivencia.\n✔ Consultá cuánto cambia tu cuota.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Pareja",
+  "fuente": ""
+ },
+ {
+  "id": "coberturas-0412-post",
+  "marca": "coberturas",
+  "formato": "post",
+  "fecha": "2026-12-04",
+  "hora": "14:10",
+  "base": "coberturas-0212-2",
+  "gancho": "¿Encontrás tu cartilla en un minuto?",
+  "laminas": [
+   [
+    "¿Tu cartilla en un minuto?",
+    "Guardala en el celular.",
+    "celular"
+   ]
+  ],
+  "copy": "¿Encontrás tu cartilla en un minuto?\n\n✔ Guardá la guardia más cercana.\n✔ Anotá el teléfono de urgencias y tu número de afiliado.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Cartilla",
+  "fuente": ""
+ },
+ {
+  "id": "coberturas-0412-his1",
+  "marca": "coberturas",
+  "formato": "his",
+  "fecha": "2026-12-04",
+  "hora": "10:20",
+  "base": "coberturas-0512-g1",
+  "gancho": "Embarazo: ¿sabés qué te cubre?",
+  "laminas": [
+   [
+    "Embarazo: ¿sabés qué te cubre?",
+    "Escribinos por WhatsApp.",
+    "pregunta"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "coberturas-0412-his2",
+  "marca": "coberturas",
+  "formato": "his",
+  "fecha": "2026-12-04",
+  "hora": "20:40",
+  "base": "coberturas-0212-4",
+  "gancho": "Antes de derivar aportes, mirá esto.",
+  "laminas": [
+   [
+    "Derivar aportes: mirá la cartilla.",
+    "Escribinos por WhatsApp.",
+    "carpeta"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "coberturas-0512-car",
+  "marca": "coberturas",
+  "formato": "car",
+  "fecha": "2026-12-05",
+  "hora": "19:50",
+  "base": "coberturas-2711-2",
+  "gancho": "Esa línea del recibo es tu plata.",
+  "laminas": [
+   [
+    "Esa línea es tu plata",
+    "Mirá tu recibo.",
+    "orden"
+   ],
+   [
+    "¿A qué obra social va?",
+    "A quién va.",
+    "credencial"
+   ],
+   [
+    "¿Qué cartilla tenés cerca?",
+    "Tu cartilla cerca.",
+    "carpeta"
+   ],
+   [
+    "¿Te conviene otra?",
+    "Compará opciones.",
+    "pregunta"
+   ]
+  ],
+  "copy": "Esa línea del recibo es tu plata.\n\n✔ Es un aporte de tu sueldo, todos los meses.\n✔ Fijate a qué obra social va.\n✔ Mirá qué cartilla tenés cerca.\n\nEscribinos por WhatsApp.\n\nFuente: Ley 23.660, art. 16.\nSituación ilustrativa.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Recibo",
+  "fuente": "Ley 23.660, art. 16"
+ },
+ {
+  "id": "coberturas-0512-post",
+  "marca": "coberturas",
+  "formato": "post",
+  "fecha": "2026-12-05",
+  "hora": "14:10",
+  "base": "coberturas-0612-g1",
+  "gancho": "«La cartilla es siempre la misma.» Falso.",
+  "laminas": [
+   [
+    "La cartilla puede cambiar.",
+    "Confirmá antes del turno.",
+    "carpeta"
+   ]
+  ],
+  "copy": "«La cartilla es siempre la misma.» Falso.\n\n✔ Puede cambiar.\n✔ Antes de cada turno, confirmá que el médico y el lugar siguen en tu plan.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Cartilla",
+  "fuente": ""
+ },
+ {
+  "id": "coberturas-0512-his1",
+  "marca": "coberturas",
+  "formato": "his",
+  "fecha": "2026-12-05",
+  "hora": "10:20",
+  "base": "coberturas-0312-2",
+  "gancho": "¿Cada uno con otra cobertura?",
+  "laminas": [
+   [
+    "¿Cada uno con otra cobertura?",
+    "Escribinos por WhatsApp.",
+    "pregunta"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "coberturas-0512-his2",
+  "marca": "coberturas",
+  "formato": "his",
+  "fecha": "2026-12-05",
+  "hora": "20:40",
+  "base": "coberturas-0612-g2",
+  "gancho": "Turno: afiliado, orden y DNI.",
+  "laminas": [
+   [
+    "Turno: afiliado, orden y DNI",
+    "Escribinos por WhatsApp.",
+    "check"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "coberturas-0612-car",
+  "marca": "coberturas",
+  "formato": "car",
+  "fecha": "2026-12-06",
+  "hora": "19:50",
+  "base": "coberturas-2711-g2",
+  "gancho": "No saques turno antes de la autorización.",
+  "laminas": [
+   [
+    "Te piden un estudio",
+    "Paso 1 2 3.",
+    "orden"
+   ],
+   [
+    "¿Necesita autorización previa?",
+    "Preguntá primero.",
+    "pregunta"
+   ],
+   [
+    "Pedila con la orden",
+    "Pedila con la orden.",
+    "orden"
+   ],
+   [
+    "Turno solo con autorización",
+    "Turno después.",
+    "almanaque"
+   ]
+  ],
+  "copy": "No saques turno antes de la autorización.\n\n✔ Preguntá si el estudio necesita autorización previa.\n✔ Pedila con la orden.\n✔ Sacá el turno recién cuando esté autorizada.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Estudios",
+  "fuente": ""
+ },
+ {
+  "id": "coberturas-0612-post",
+  "marca": "coberturas",
+  "formato": "post",
+  "fecha": "2026-12-06",
+  "hora": "14:10",
+  "base": "coberturas-0612-4",
+  "gancho": "¿Cuántas coberturas paga tu casa?",
+  "laminas": [
+   [
+    "¿Cuántas coberturas paga tu casa?",
+    "Quién tiene qué.",
+    "carpeta"
+   ]
+  ],
+  "copy": "¿Cuántas coberturas paga tu casa?\n\n✔ Hacé la cuenta: quién tiene qué.\n✔ Mirá qué usa cada uno y cuánto cuesta junto.\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Familia",
+  "fuente": ""
+ },
+ {
+  "id": "coberturas-0612-his1",
+  "marca": "coberturas",
+  "formato": "his",
+  "fecha": "2026-12-06",
+  "hora": "10:20",
+  "base": "coberturas-0312-g1",
+  "gancho": "¿Preguntaste si te cubre afuera?",
+  "laminas": [
+   [
+    "¿Preguntaste si te cubre afuera?",
+    "Escribinos por WhatsApp.",
+    "pregunta"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "coberturas-0612-his2",
+  "marca": "coberturas",
+  "formato": "his",
+  "fecha": "2026-12-06",
+  "hora": "20:40",
+  "base": "coberturas-2911-2",
+  "gancho": "Mirá hoy tu guardia cercana.",
+  "laminas": [
+   [
+    "Mirá hoy tu guardia cercana.",
+    "Escribinos por WhatsApp.",
+    "mostrador"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "coberturas-0712-car",
+  "marca": "coberturas",
+  "formato": "car",
+  "fecha": "2026-12-07",
+  "hora": "19:50",
+  "base": "coberturas-0312-1",
+  "gancho": "El aguinaldo también paga tu obra social.",
+  "laminas": [
+   [
+    "Aguinaldo: revisá tu recibo",
+    "Mirá el descuento.",
+    "orden"
+   ],
+   [
+    "El aguinaldo también es sueldo",
+    "También es sueldo.",
+    "carpeta"
+   ],
+   [
+    "Lleva aporte a tu obra social",
+    "Lleva aporte.",
+    "credencial"
+   ],
+   [
+    "¿Va a la que elegiste?",
+    "¿Va a la tuya?",
+    "pregunta"
+   ]
+  ],
+  "copy": "El aguinaldo también paga tu obra social.\n\n✔ No es un error: el aguinaldo también es sueldo.\n✔ Lleva aporte a la obra social.\n✔ Revisá que vaya a la que elegiste.\n\nEscribinos por WhatsApp.\n\nFuente: Ley 23.660, art. 16; Ley de Contrato de Trabajo, art. 122.\nSituación ilustrativa.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Aguinaldo",
+  "fuente": "Ley 23.660, art. 16; Ley de Contrato de Trabajo, art. 122"
+ },
+ {
+  "id": "coberturas-0712-post",
+  "marca": "coberturas",
+  "formato": "post",
+  "fecha": "2026-12-07",
+  "hora": "14:10",
+  "base": "coberturas-0412-3",
+  "gancho": "Buscá desde cuándo estás en tu prepaga.",
+  "laminas": [
+   [
+    "¿Desde cuándo tenés tu prepaga?",
+    "Buscá tu antigüedad.",
+    "almanaque"
+   ]
+  ],
+  "copy": "Buscá desde cuándo estás en tu prepaga.\n\n✔ Con más de diez años en la misma prepaga, no te pueden aumentar por la edad.\n✔ Depende de tu antigüedad.\n\nEscribinos por WhatsApp.\n\nFuente: Ley 26.682, art. 12.\nSituación ilustrativa.\n\n#ComparaTuObraSocial #ObraSocial #Prepaga #Prepagas",
+  "fuente": "Ley 26.682, art. 12"
+ },
+ {
+  "id": "coberturas-0712-his1",
+  "marca": "coberturas",
+  "formato": "his",
+  "fecha": "2026-12-07",
+  "hora": "10:20",
+  "base": "coberturas-0212-g2",
+  "gancho": "¿Hasta cuándo sigue tu hijo en tu plan?",
+  "laminas": [
+   [
+    "¿Hasta cuándo sigue tu hijo?",
+    "Escribinos por WhatsApp.",
+    "pregunta"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "coberturas-0712-his2",
+  "marca": "coberturas",
+  "formato": "his",
+  "fecha": "2026-12-07",
+  "hora": "20:40",
+  "base": "coberturas-0412-g2",
+  "gancho": "Kinesio: pedí la orden antes.",
+  "laminas": [
+   [
+    "Kinesio: pedí la orden antes",
+    "Escribinos por WhatsApp.",
+    "orden"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ }
+]

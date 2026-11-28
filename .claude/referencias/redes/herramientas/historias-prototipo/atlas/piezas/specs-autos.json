@@ -1,0 +1,698 @@
+[
+ {
+  "id": "autos-3011-car",
+  "marca": "autos",
+  "formato": "car",
+  "fecha": "2026-11-30",
+  "hora": "20:10",
+  "base": "autos-0212-2",
+  "gancho": "El auto queda como garantía del préstamo.",
+  "laminas": [
+   [
+    "Crédito prendario: tres cartas",
+    "Leé antes de firmar",
+    "documento"
+   ],
+   [
+    "El auto queda en garantía",
+    "Es la garantía",
+    "candado"
+   ],
+   [
+    "Pedí el costo total",
+    "No solo la cuota",
+    "lupa"
+   ],
+   [
+    "¿Y si cancelás antes?",
+    "Preguntá qué pasa",
+    "almanaque"
+   ]
+  ],
+  "copy": "El auto queda como garantía del préstamo.\n\n✔ El auto queda como garantía del préstamo\n✔ Pedí el costo total, no solo la cuota\n✔ Mirá qué pasa si cancelás antes\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa.\n\n#AutomotoresKocos #0km #AutoNuevo #BuenosAires",
+  "fuente": ""
+ },
+ {
+  "id": "autos-3011-post",
+  "marca": "autos",
+  "formato": "post",
+  "fecha": "2026-11-30",
+  "hora": "15:40",
+  "base": "autos-0212-4",
+  "gancho": "¿El aguinaldo va todo al anticipo?",
+  "laminas": [
+   [
+    "¿Aguinaldo entero al anticipo?",
+    "Dejá un resto",
+    "almanaque"
+   ]
+  ],
+  "copy": "¿El aguinaldo va todo al anticipo?\n\n✔ Dejá un resto para imprevistos\n✔ Sumá los gastos del retiro\n✔ Recién ahí mirá cuánto queda para el anticipo\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa.\n\n#AutomotoresKocos #0km #AutoNuevo #BuenosAires",
+  "fuente": ""
+ },
+ {
+  "id": "autos-3011-his1",
+  "marca": "autos",
+  "formato": "his",
+  "fecha": "2026-11-30",
+  "hora": "10:50",
+  "base": "autos-0312-g2",
+  "gancho": "¿Ignorás el ruido nuevo del 0 km?",
+  "laminas": [
+   [
+    "¿Ruido nuevo? ¿Lo ignorás?",
+    "Escribinos por WhatsApp.",
+    "auto"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "autos-3011-his2",
+  "marca": "autos",
+  "formato": "his",
+  "fecha": "2026-11-30",
+  "hora": "19:50",
+  "base": "autos-0212-1",
+  "gancho": "Antes de la ruta, mirá esto.",
+  "laminas": [
+   [
+    "Ruta: ¿matafuego y balizas?",
+    "Escribinos por WhatsApp.",
+    "check"
+   ]
+  ],
+  "copy": "",
+  "fuente": "Ley 24.449, art. 40"
+ },
+ {
+  "id": "autos-0112-car",
+  "marca": "autos",
+  "formato": "car",
+  "fecha": "2026-12-01",
+  "hora": "20:10",
+  "base": "autos-0312-3",
+  "gancho": "Faltan tres días para la entrega.",
+  "laminas": [
+   [
+    "Faltan tres días",
+    "Preparate para entregar",
+    "almanaque"
+   ],
+   [
+    "Día 3: seguro cotizado",
+    "Cotizalo hoy",
+    "poliza"
+   ],
+   [
+    "Día 2: lugar en cochera",
+    "Lugar asegurado",
+    "auto"
+   ],
+   [
+    "Día 1: documentación lista",
+    "Papeles listos",
+    "documento"
+   ]
+  ],
+  "copy": "Faltan tres días para la entrega.\n\n✔ Día tres: el seguro, cotizado\n✔ Día dos: el lugar en la cochera\n✔ Día uno: la documentación lista\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa.\n\n#AutomotoresKocos #0km #AutoNuevo #BuenosAires",
+  "fuente": ""
+ },
+ {
+  "id": "autos-0112-post",
+  "marca": "autos",
+  "formato": "post",
+  "fecha": "2026-12-01",
+  "hora": "15:40",
+  "base": "autos-0312-g1",
+  "gancho": "¿Salís con la licencia vencida?",
+  "laminas": [
+   [
+    "¿Licencia vencida? No salgas",
+    "Fijate la fecha hoy",
+    "documento"
+   ]
+  ],
+  "copy": "¿Salís con la licencia vencida?\n\n✔ Para circular tenés que estar habilitado\n✔ La licencia se lleva encima\n✔ Fijate hoy cuándo vence\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa.\n\n#AutomotoresKocos #0km #AutoNuevo #BuenosAires",
+  "fuente": "Ley 24.449, art. 40, inc. a"
+ },
+ {
+  "id": "autos-0112-his1",
+  "marca": "autos",
+  "formato": "his",
+  "fecha": "2026-12-01",
+  "hora": "10:50",
+  "base": "autos-0312-2",
+  "gancho": "En el showroom, ¿te enamorás y firmás?",
+  "laminas": [
+   [
+    "¿Te enamorás y firmás?",
+    "Escribinos por WhatsApp.",
+    "llave"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "autos-0112-his2",
+  "marca": "autos",
+  "formato": "his",
+  "fecha": "2026-12-01",
+  "hora": "19:50",
+  "base": "autos-0312-1",
+  "gancho": "Tu cochera también se mide.",
+  "laminas": [
+   [
+    "Cochera: largo, ancho, alto",
+    "Escribinos por WhatsApp.",
+    "auto"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "autos-0212-car",
+  "marca": "autos",
+  "formato": "car",
+  "fecha": "2026-12-02",
+  "hora": "20:10",
+  "base": "autos-0412-2",
+  "gancho": "¿Qué trae realmente tu 0 km?",
+  "laminas": [
+   [
+    "¿Qué trae tu 0 km?",
+    "Preguntá antes de firmar",
+    "check"
+   ],
+   [
+    "¿Qué versión es?",
+    "Versión exacta",
+    "auto"
+   ],
+   [
+    "¿Qué equipamiento incluye?",
+    "Qué viene incluido",
+    "lupa"
+   ],
+   [
+    "¿Qué se paga aparte?",
+    "Accesorios aparte",
+    "cruz"
+   ]
+  ],
+  "copy": "¿Qué trae realmente tu 0 km?\n\n✔ Preguntá qué versión es\n✔ Preguntá qué equipamiento incluye\n✔ Preguntá qué accesorios se pagan aparte\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa.\n\n#AutomotoresKocos #0km #AutoNuevo #BuenosAires",
+  "fuente": ""
+ },
+ {
+  "id": "autos-0212-post",
+  "marca": "autos",
+  "formato": "post",
+  "fecha": "2026-12-02",
+  "hora": "15:40",
+  "base": "autos-0412-3",
+  "gancho": "Llegás a retirar y es de otro color.",
+  "laminas": [
+   [
+    "¿Otro color al retirar?",
+    "No aceptes apurado",
+    "auto"
+   ]
+  ],
+  "copy": "Llegás a retirar y es de otro color.\n\n✔ Revisá la orden de compra\n✔ Pedí una solución por escrito\n✔ No lo aceptes apurado\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa.\n\n#AutomotoresKocos #0km #AutoNuevo #BuenosAires",
+  "fuente": ""
+ },
+ {
+  "id": "autos-0212-his1",
+  "marca": "autos",
+  "formato": "his",
+  "fecha": "2026-12-02",
+  "hora": "10:50",
+  "base": "autos-0412-g1",
+  "gancho": "¿Usás el 0 km para trabajar?",
+  "laminas": [
+   [
+    "¿Lo usás para apps?",
+    "Escribinos por WhatsApp.",
+    "auto"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "autos-0212-his2",
+  "marca": "autos",
+  "formato": "his",
+  "fecha": "2026-12-02",
+  "hora": "19:50",
+  "base": "autos-0412-g2",
+  "gancho": "El auxilio no viene listo por defecto.",
+  "laminas": [
+   [
+    "Auxilio: revisá la presión",
+    "Escribinos por WhatsApp.",
+    "rueda"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "autos-0312-car",
+  "marca": "autos",
+  "formato": "car",
+  "fecha": "2026-12-03",
+  "hora": "20:10",
+  "base": "autos-0112-1",
+  "gancho": "El primer service tiene fecha: la del manual.",
+  "laminas": [
+   [
+    "El primer service tiene fecha",
+    "Mirá tu manual",
+    "velocimetro"
+   ],
+   [
+    "Hacelo según el manual",
+    "Manual en mano",
+    "documento"
+   ],
+   [
+    "En un taller autorizado",
+    "Taller autorizado",
+    "llave"
+   ],
+   [
+    "Guardá el comprobante",
+    "Sirve para la garantía",
+    "check"
+   ]
+  ],
+  "copy": "El primer service tiene fecha: la del manual.\n\n✔ Hacelo cuando lo indica el manual\n✔ Hacelo en un taller autorizado\n✔ Guardá el comprobante para la garantía\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa.\n\n#AutomotoresKocos #0km #AutoNuevo #BuenosAires",
+  "fuente": ""
+ },
+ {
+  "id": "autos-0312-post",
+  "marca": "autos",
+  "formato": "post",
+  "fecha": "2026-12-03",
+  "hora": "15:40",
+  "base": "autos-0512-2",
+  "gancho": "¿Le prestás el 0 km a tu hermano?",
+  "laminas": [
+   [
+    "¿Cubre a otros conductores?",
+    "Preguntale a tu aseguradora",
+    "poliza"
+   ]
+  ],
+  "copy": "¿Le prestás el 0 km a tu hermano?\n\n✔ Preguntá si el seguro cubre a otros conductores\n✔ Fijate qué tiene que llevar él para circular\n✔ Hacelo antes de prestarlo\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa.\n\n#AutomotoresKocos #0km #AutoNuevo #BuenosAires",
+  "fuente": ""
+ },
+ {
+  "id": "autos-0312-his1",
+  "marca": "autos",
+  "formato": "his",
+  "fecha": "2026-12-03",
+  "hora": "10:50",
+  "base": "autos-0512-4",
+  "gancho": "¿Leés el manual de tu 0 km?",
+  "laminas": [
+   [
+    "¿Leíste el manual?",
+    "Escribinos por WhatsApp.",
+    "documento"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "autos-0312-his2",
+  "marca": "autos",
+  "formato": "his",
+  "fecha": "2026-12-03",
+  "hora": "19:50",
+  "base": "autos-0612-g2",
+  "gancho": "No le cargues cualquier nafta.",
+  "laminas": [
+   [
+    "Nafta: mirá el manual",
+    "Escribinos por WhatsApp.",
+    "velocimetro"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "autos-0412-car",
+  "marca": "autos",
+  "formato": "car",
+  "fecha": "2026-12-04",
+  "hora": "20:10",
+  "base": "autos-0612-g1",
+  "gancho": "Antes de arrancar, ajustá estas tres cosas.",
+  "laminas": [
+   [
+    "Antes de arrancar",
+    "Tres ajustes rápidos",
+    "llave"
+   ],
+   [
+    "Primero, el asiento",
+    "Ajustalo bien",
+    "auto"
+   ],
+   [
+    "Después, los espejos",
+    "Espejos ajustados",
+    "lupa"
+   ],
+   [
+    "Apoyacabeza: altura de cabeza",
+    "A la altura justa",
+    "check"
+   ]
+  ],
+  "copy": "Antes de arrancar, ajustá estas tres cosas.\n\n✔ Ajustá el asiento\n✔ Ajustá los espejos\n✔ Poné el apoyacabeza a la altura de la cabeza\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa.\n\n#AutomotoresKocos #0km #AutoNuevo #BuenosAires",
+  "fuente": ""
+ },
+ {
+  "id": "autos-0412-post",
+  "marca": "autos",
+  "formato": "post",
+  "fecha": "2026-12-04",
+  "hora": "15:40",
+  "base": "autos-0612-4",
+  "gancho": "Se prende una luz en el tablero.",
+  "laminas": [
+   [
+    "¿Se prendió una luz?",
+    "No la ignores",
+    "velocimetro"
+   ]
+  ],
+  "copy": "Se prende una luz en el tablero.\n\n✔ Mirá en el manual qué significa\n✔ No la ignores\n✔ Consultá en el service\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa.\n\n#AutomotoresKocos #0km #AutoNuevo #BuenosAires",
+  "fuente": ""
+ },
+ {
+  "id": "autos-0412-his1",
+  "marca": "autos",
+  "formato": "his",
+  "fecha": "2026-12-04",
+  "hora": "10:50",
+  "base": "autos-0112-g2",
+  "gancho": "Tu perro en el auto: ¿suelto?",
+  "laminas": [
+   [
+    "¿Tu perro viaja suelto?",
+    "Escribinos por WhatsApp.",
+    "auto"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "autos-0412-his2",
+  "marca": "autos",
+  "formato": "his",
+  "fecha": "2026-12-04",
+  "hora": "19:50",
+  "base": "autos-0512-g1",
+  "gancho": "Nada de valor a la vista.",
+  "laminas": [
+   [
+    "Nada valioso a la vista",
+    "Escribinos por WhatsApp.",
+    "candado"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "autos-0512-car",
+  "marca": "autos",
+  "formato": "car",
+  "fecha": "2026-12-05",
+  "hora": "20:10",
+  "base": "autos-3011-2",
+  "gancho": "Vas por tu primer 0 km: llevá esto.",
+  "laminas": [
+   [
+    "Tu primer 0 km",
+    "Llevá estas tres cosas",
+    "llave"
+   ],
+   [
+    "La cuota máxima",
+    "Que podés pagar",
+    "check"
+   ],
+   [
+    "Cuánto tenés de anticipo",
+    "Anticipo definido",
+    "documento"
+   ],
+   [
+    "Preguntas anotadas",
+    "En el celular",
+    "celular"
+   ]
+  ],
+  "copy": "Vas por tu primer 0 km: llevá esto.\n\n✔ La cuota máxima que podés pagar\n✔ Cuánto tenés de anticipo\n✔ Las preguntas anotadas en el celular\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa.\n\n#AutomotoresKocos #0km #AutoNuevo #BuenosAires",
+  "fuente": ""
+ },
+ {
+  "id": "autos-0512-post",
+  "marca": "autos",
+  "formato": "post",
+  "fecha": "2026-12-05",
+  "hora": "15:40",
+  "base": "autos-2711-g2",
+  "gancho": "«Todo riesgo cubre todo.» No siempre.",
+  "laminas": [
+   [
+    "¿Todo riesgo cubre todo?",
+    "Preguntá la franquicia",
+    "poliza"
+   ]
+  ],
+  "copy": "«Todo riesgo cubre todo.» No siempre.\n\n✔ Muchas pólizas tienen franquicia\n✔ Una parte del arreglo la pagás vos\n✔ Preguntá cuánto es antes de contratar\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa.\n\n#AutomotoresKocos #0km #AutoNuevo #BuenosAires",
+  "fuente": ""
+ },
+ {
+  "id": "autos-0512-his1",
+  "marca": "autos",
+  "formato": "his",
+  "fecha": "2026-12-05",
+  "hora": "10:50",
+  "base": "autos-reserva-1",
+  "gancho": "¿Le sumás accesorios al 0 km?",
+  "laminas": [
+   [
+    "¿Le sumás accesorios?",
+    "Escribinos por WhatsApp.",
+    "auto"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "autos-0512-his2",
+  "marca": "autos",
+  "formato": "his",
+  "fecha": "2026-12-05",
+  "hora": "19:50",
+  "base": "autos-0212-g1",
+  "gancho": "Llave de repuesto: no en la guantera.",
+  "laminas": [
+   [
+    "Llave de repuesto: en casa",
+    "Escribinos por WhatsApp.",
+    "llave"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "autos-0612-car",
+  "marca": "autos",
+  "formato": "car",
+  "fecha": "2026-12-06",
+  "hora": "20:10",
+  "base": "autos-2811-g1",
+  "gancho": "El 0 km duerme en la calle.",
+  "laminas": [
+   [
+    "Once de la noche",
+    "Sin cochera",
+    "auto"
+   ],
+   [
+    "Elegí un lugar iluminado",
+    "Mejor con luz",
+    "lupa"
+   ],
+   [
+    "Nada a la vista",
+    "Que no se vea",
+    "cruz"
+   ],
+   [
+    "Revisá qué cubre tu seguro",
+    "Qué cubre exactamente",
+    "poliza"
+   ]
+  ],
+  "copy": "El 0 km duerme en la calle.\n\n✔ Elegí un lugar iluminado\n✔ No dejes nada a la vista\n✔ Revisá qué cubre tu seguro\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa.\n\n#AutomotoresKocos #0km #AutoNuevo #BuenosAires",
+  "fuente": ""
+ },
+ {
+  "id": "autos-0612-post",
+  "marca": "autos",
+  "formato": "post",
+  "fecha": "2026-12-06",
+  "hora": "15:40",
+  "base": "autos-3011-g2",
+  "gancho": "Te escriben y quieren llevárselo hoy.",
+  "laminas": [
+   [
+    "No entregues sin cobrar",
+    "Confirmá el pago",
+    "llave"
+   ]
+  ],
+  "copy": "Te escriben y quieren llevárselo hoy.\n\n✔ No entregues papeles ni llaves sin haber cobrado\n✔ Confirmá el pago antes de nada\n✔ Primero cobrás, después entregás\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa.\n\n#AutomotoresKocos #0km #AutoNuevo #BuenosAires",
+  "fuente": ""
+ },
+ {
+  "id": "autos-0612-his1",
+  "marca": "autos",
+  "formato": "his",
+  "fecha": "2026-12-06",
+  "hora": "10:50",
+  "base": "autos-0112-g1",
+  "gancho": "¿Todos usan cinturón en tu auto?",
+  "laminas": [
+   [
+    "¿Todos con cinturón atrás?",
+    "Escribinos por WhatsApp.",
+    "check"
+   ]
+  ],
+  "copy": "",
+  "fuente": "Ley 24.449, art. 40, inc. k"
+ },
+ {
+  "id": "autos-0612-his2",
+  "marca": "autos",
+  "formato": "his",
+  "fecha": "2026-12-06",
+  "hora": "19:50",
+  "base": "autos-2711-g1",
+  "gancho": "Tu seguro puede ir en el celular.",
+  "laminas": [
+   [
+    "Seguro: impreso o en celular",
+    "Escribinos por WhatsApp.",
+    "celular"
+   ]
+  ],
+  "copy": "",
+  "fuente": "Ley 24.449, art. 40, inc. c"
+ },
+ {
+  "id": "autos-0712-car",
+  "marca": "autos",
+  "formato": "car",
+  "fecha": "2026-12-07",
+  "hora": "20:10",
+  "base": "autos-2911-3",
+  "gancho": "Lo probaste dos minutos y ya querés firmar.",
+  "laminas": [
+   [
+    "Probalo más de dos minutos",
+    "Es para años",
+    "velocimetro"
+   ],
+   [
+    "Probalo en avenida",
+    "Salí a la avenida",
+    "auto"
+   ],
+   [
+    "Probá estacionar",
+    "Estacionalo también",
+    "rueda"
+   ],
+   [
+    "Revisá la posición de manejo",
+    "Sentate cómodo",
+    "check"
+   ]
+  ],
+  "copy": "Lo probaste dos minutos y ya querés firmar.\n\n✔ Pedí una prueba más larga\n✔ Probalo en avenida y estacionando\n✔ Fijate la posición de manejo\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa.\n\n#AutomotoresKocos #0km #AutoNuevo #BuenosAires",
+  "fuente": ""
+ },
+ {
+  "id": "autos-0712-post",
+  "marca": "autos",
+  "formato": "post",
+  "fecha": "2026-12-07",
+  "hora": "15:40",
+  "base": "autos-2811-4",
+  "gancho": "«La cuota del plan es fija.» No.",
+  "laminas": [
+   [
+    "¿La cuota es fija?",
+    "En general se actualiza",
+    "almanaque"
+   ]
+  ],
+  "copy": "«La cuota del plan es fija.» No.\n\n✔ En general, se calcula sobre el precio actual del auto\n✔ Si el modelo sube, la cuota sube\n✔ Preguntá cómo se actualiza y pedilo por escrito\n\nEscribinos por WhatsApp.\n\nSituación ilustrativa.\n\n#AutomotoresKocos #0km #AutoNuevo #BuenosAires",
+  "fuente": ""
+ },
+ {
+  "id": "autos-0712-his1",
+  "marca": "autos",
+  "formato": "his",
+  "fecha": "2026-12-07",
+  "hora": "10:50",
+  "base": "autos-2811-g2",
+  "gancho": "¿Contratás el seguro más barato sin leer?",
+  "laminas": [
+   [
+    "¿Seguro barato sin leer?",
+    "Escribinos por WhatsApp.",
+    "poliza"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "autos-0712-his2",
+  "marca": "autos",
+  "formato": "his",
+  "fecha": "2026-12-07",
+  "hora": "19:50",
+  "base": "autos-0112-4",
+  "gancho": "¿Un híbrido? Primero, esto.",
+  "laminas": [
+   [
+    "Híbrido: preguntá por la batería",
+    "Escribinos por WhatsApp.",
+    "lupa"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ }
+]

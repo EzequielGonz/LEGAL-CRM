@@ -1,0 +1,698 @@
+[
+ {
+  "id": "marketing-3011-car",
+  "marca": "marketing",
+  "formato": "car",
+  "fecha": "2026-11-30",
+  "hora": "17:40",
+  "base": "marketing-3011-3",
+  "gancho": "¿Vendés con el WhatsApp de tus amigos?",
+  "laminas": [
+   [
+    "¿Vendés con WhatsApp de amigos?",
+    "Hay tres opciones.",
+    "celular"
+   ],
+   [
+    "Común: para tus amigos",
+    "Charlas con amigos.",
+    "chat"
+   ],
+   [
+    "Business: catálogo y etiquetas",
+    "Ordená tus chats.",
+    "etiqueta"
+   ],
+   [
+    "API: mucho volumen",
+    "Para muchos mensajes.",
+    "cartel"
+   ]
+  ],
+  "copy": "¿Vendés con el WhatsApp de tus amigos?\n\n✔ Común: pensado para amigos\n✔ Business: catálogo y etiquetas\n✔ API: para mucho volumen\n\nEscribinos por WhatsApp.\nSituación ilustrativa.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores",
+  "fuente": ""
+ },
+ {
+  "id": "marketing-3011-post",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-11-30",
+  "hora": "11:40",
+  "base": "marketing-2911-g1",
+  "gancho": "No digas «llegamos a todos lados».",
+  "laminas": [
+   [
+    "«Llegamos a todos lados»: error",
+    "Decí qué barrios.",
+    "caja"
+   ]
+  ],
+  "copy": "No digas «llegamos a todos lados».\n\n✔ Qué barrios\n✔ Qué días\n✔ Desde qué monto\n\nEscribinos por WhatsApp.\nSituación ilustrativa.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores",
+  "fuente": ""
+ },
+ {
+  "id": "marketing-3011-his1",
+  "marca": "marketing",
+  "formato": "his",
+  "fecha": "2026-11-30",
+  "hora": "09:50",
+  "base": "marketing-3011-g1",
+  "gancho": "Pedido grande: ¿pediste seña?",
+  "laminas": [
+   [
+    "Pedido grande: ¿pedís seña?",
+    "Escribinos por WhatsApp.",
+    "caja"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "marketing-3011-his2",
+  "marca": "marketing",
+  "formato": "his",
+  "fecha": "2026-11-30",
+  "hora": "20:10",
+  "base": "marketing-2711-g1",
+  "gancho": "Prometé solo un plazo que cumplís.",
+  "laminas": [
+   [
+    "Prometé un plazo que cumplís",
+    "Escribinos por WhatsApp.",
+    "reloj_arena"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "marketing-0112-car",
+  "marca": "marketing",
+  "formato": "car",
+  "fecha": "2026-12-01",
+  "hora": "17:40",
+  "base": "marketing-2711-1",
+  "gancho": "Atendés el local y el celular no para.",
+  "laminas": [
+   [
+    "Local y celular juntos",
+    "Esto te pasa.",
+    "mostrador"
+   ],
+   [
+    "«En un rato te respondo»",
+    "Una respuesta rápida.",
+    "chat"
+   ],
+   [
+    "Anotá quién escribió",
+    "Así no se pierde.",
+    "etiqueta"
+   ],
+   [
+    "Por orden de llegada",
+    "Uno por vez.",
+    "reloj_arena"
+   ]
+  ],
+  "copy": "Atendés el local y el celular no para.\n\n✔ «En un rato te respondo»\n✔ Anotá quién escribió\n✔ Por orden de llegada\n\nEscribinos por WhatsApp.\nSituación ilustrativa.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores",
+  "fuente": ""
+ },
+ {
+  "id": "marketing-0112-post",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-01",
+  "hora": "11:40",
+  "base": "marketing-0112-g2",
+  "gancho": "Los clientes de siempre van primero.",
+  "laminas": [
+   [
+    "Avisales primero a los frecuentes",
+    "Anotá qué piden.",
+    "estrella"
+   ]
+  ],
+  "copy": "Los clientes de siempre van primero.\n\n✔ Anotalos\n✔ Qué piden\n✔ Avisales primero\n\nEscribinos por WhatsApp.\nSituación ilustrativa.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores",
+  "fuente": ""
+ },
+ {
+  "id": "marketing-0112-his1",
+  "marca": "marketing",
+  "formato": "his",
+  "fecha": "2026-12-01",
+  "hora": "09:50",
+  "base": "marketing-2811-g1",
+  "gancho": "Te piden lo que no tenés.",
+  "laminas": [
+   [
+    "¿Sin stock? ¿Qué respondés?",
+    "Escribinos por WhatsApp.",
+    "caja"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "marketing-0112-his2",
+  "marca": "marketing",
+  "formato": "his",
+  "fecha": "2026-12-01",
+  "hora": "20:10",
+  "base": "marketing-0512-g2",
+  "gancho": "Un link y no explicás más.",
+  "laminas": [
+   [
+    "Ubicación marcada y un link",
+    "Escribinos por WhatsApp.",
+    "vidriera"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "marketing-0212-car",
+  "marca": "marketing",
+  "formato": "car",
+  "fecha": "2026-12-02",
+  "hora": "17:40",
+  "base": "marketing-0212-g1",
+  "gancho": "Combos: tres cartas antes de armarlos.",
+  "laminas": [
+   [
+    "Antes de armar combos",
+    "Tres cartas.",
+    "caja"
+   ],
+   [
+    "Productos que van juntos",
+    "Pensá qué combina.",
+    "caja"
+   ],
+   [
+    "Un nombre fácil",
+    "Que se recuerde.",
+    "etiqueta"
+   ],
+   [
+    "Precio y qué incluye",
+    "Sin dudas.",
+    "check"
+   ]
+  ],
+  "copy": "Combos: tres cartas antes de armarlos.\n\n✔ Productos que van juntos\n✔ Un nombre fácil\n✔ Precio y qué incluye\n\nEscribinos por WhatsApp.\nSituación ilustrativa.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores",
+  "fuente": ""
+ },
+ {
+  "id": "marketing-0212-post",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-02",
+  "hora": "11:40",
+  "base": "marketing-0212-2",
+  "gancho": "18/12: cobran el aguinaldo y te escriben.",
+  "laminas": [
+   [
+    "18/12: cobran el aguinaldo",
+    "¿Quién responde?",
+    "chat"
+   ]
+  ],
+  "copy": "18/12: cobran el aguinaldo y te escriben.\n\n✔ Respuestas rápidas\n✔ Catálogo al día\n✔ Turnos para atender\n\nEscribinos por WhatsApp.\nFuente: Ley de Contrato de Trabajo, art. 122.\nSituación ilustrativa.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores",
+  "fuente": "Ley de Contrato de Trabajo, art. 122"
+ },
+ {
+  "id": "marketing-0212-his1",
+  "marca": "marketing",
+  "formato": "his",
+  "fecha": "2026-12-02",
+  "hora": "09:50",
+  "base": "marketing-0412-g2",
+  "gancho": "Historias destacadas: ¿tenés?",
+  "laminas": [
+   [
+    "¿Tenés historias destacadas?",
+    "Escribinos por WhatsApp.",
+    "vidriera"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "marketing-0212-his2",
+  "marca": "marketing",
+  "formato": "his",
+  "fecha": "2026-12-02",
+  "hora": "20:10",
+  "base": "marketing-0612-g1",
+  "gancho": "Después de entregar, escribí.",
+  "laminas": [
+   [
+    "Al otro día: gracias",
+    "Escribinos por WhatsApp.",
+    "carta"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "marketing-0312-car",
+  "marca": "marketing",
+  "formato": "car",
+  "fecha": "2026-12-03",
+  "hora": "17:40",
+  "base": "marketing-0312-1",
+  "gancho": "Tus estados de WhatsApp: ¿qué mostrás?",
+  "laminas": [
+   [
+    "Tus estados de WhatsApp",
+    "Tres ideas.",
+    "celular"
+   ],
+   [
+    "Lo nuevo",
+    "Mostrá lo que llegó.",
+    "estrella"
+   ],
+   [
+    "Detrás de escena",
+    "Mostrá cómo trabajás.",
+    "vidriera"
+   ],
+   [
+    "Cómo pedir",
+    "Explicá los pasos.",
+    "chat"
+   ]
+  ],
+  "copy": "Tus estados de WhatsApp: ¿qué mostrás?\n\n✔ Lo nuevo\n✔ Detrás de escena\n✔ Cómo pedir\n\nEscribinos por WhatsApp.\nSituación ilustrativa.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores",
+  "fuente": ""
+ },
+ {
+  "id": "marketing-0312-post",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-03",
+  "hora": "11:40",
+  "base": "marketing-0612-g2",
+  "gancho": "«Cuantas más opciones, más vendo.»",
+  "laminas": [
+   [
+    "«Más opciones, más ventas»",
+    "No siempre.",
+    "cruz"
+   ]
+  ],
+  "copy": "«Cuantas más opciones, más vendo.»\n\n✔ Más opciones pueden confundir\n✔ Destacá las más pedidas\n\nEscribinos por WhatsApp.\nSituación ilustrativa.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores",
+  "fuente": ""
+ },
+ {
+  "id": "marketing-0312-his1",
+  "marca": "marketing",
+  "formato": "his",
+  "fecha": "2026-12-03",
+  "hora": "09:50",
+  "base": "marketing-0312-g2",
+  "gancho": "Comentarios sin respuesta.",
+  "laminas": [
+   [
+    "¿Respondés todos los comentarios?",
+    "Escribinos por WhatsApp.",
+    "chat"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "marketing-0312-his2",
+  "marca": "marketing",
+  "formato": "his",
+  "fecha": "2026-12-03",
+  "hora": "20:10",
+  "base": "marketing-2911-g2",
+  "gancho": "Sábado 15:40 y cerraste.",
+  "laminas": [
+   [
+    "Avisá el horario de retiro",
+    "Escribinos por WhatsApp.",
+    "mostrador"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "marketing-0412-car",
+  "marca": "marketing",
+  "formato": "car",
+  "fecha": "2026-12-04",
+  "hora": "17:40",
+  "base": "marketing-0212-4",
+  "gancho": "La misma pregunta 10, 20, 30 veces.",
+  "laminas": [
+   [
+    "La misma pregunta, otra vez",
+    "Diez veces al día.",
+    "chat"
+   ],
+   [
+    "Las cinco más repetidas",
+    "Anotalas hoy.",
+    "carta"
+   ],
+   [
+    "Fijalas en el perfil",
+    "Que las vean primero.",
+    "vidriera"
+   ],
+   [
+    "Armalas hoy",
+    "Una sola vez.",
+    "check"
+   ]
+  ],
+  "copy": "La misma pregunta 10, 20, 30 veces.\n\n✔ 10, 20, 30 veces\n✔ Las 5 que más se repiten\n✔ Fijalas en el perfil\n\nEscribinos por WhatsApp.\nSituación ilustrativa.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores",
+  "fuente": ""
+ },
+ {
+  "id": "marketing-0412-post",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-04",
+  "hora": "11:40",
+  "base": "marketing-0112-g1",
+  "gancho": "¿Cuántos días antes recordás la entrega?",
+  "laminas": [
+   [
+    "¿Cuándo recordás la entrega?",
+    "Un día antes.",
+    "reloj_arena"
+   ]
+  ],
+  "copy": "¿Cuántos días antes recordás la entrega?\n\n✔ Un día antes\n✔ El día anterior\n✔ Con hora y lugar\n\nEscribinos por WhatsApp.\nSituación ilustrativa.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores",
+  "fuente": ""
+ },
+ {
+  "id": "marketing-0412-his1",
+  "marca": "marketing",
+  "formato": "his",
+  "fecha": "2026-12-04",
+  "hora": "09:50",
+  "base": "marketing-0312-g1",
+  "gancho": "Vos sacás fotos: ¿y un video?",
+  "laminas": [
+   [
+    "¿Probaste videos de 5 segundos?",
+    "Escribinos por WhatsApp.",
+    "celular"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "marketing-0412-his2",
+  "marca": "marketing",
+  "formato": "his",
+  "fecha": "2026-12-04",
+  "hora": "20:10",
+  "base": "marketing-2711-g2",
+  "gancho": "Te piden cambiar un producto.",
+  "laminas": [
+   [
+    "Política de cambios visible",
+    "Escribinos por WhatsApp.",
+    "etiqueta"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "marketing-0512-car",
+  "marca": "marketing",
+  "formato": "car",
+  "fecha": "2026-12-05",
+  "hora": "17:40",
+  "base": "marketing-reserva-2",
+  "gancho": "¿Tu bienvenida dice quién atiende?",
+  "laminas": [
+   [
+    "Tu mensaje de bienvenida",
+    "Tres cartas.",
+    "chat"
+   ],
+   [
+    "Quién atiende",
+    "Nombre y rol.",
+    "mostrador"
+   ],
+   [
+    "Horario",
+    "Cuándo respondés.",
+    "reloj_arena"
+   ],
+   [
+    "Tres opciones",
+    "Para elegir rápido.",
+    "check"
+   ]
+  ],
+  "copy": "¿Tu bienvenida dice quién atiende?\n\n✔ Quién atiende\n✔ Horario\n✔ Tres opciones\n\nEscribinos por WhatsApp.\nSituación ilustrativa.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores",
+  "fuente": ""
+ },
+ {
+  "id": "marketing-0512-post",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-05",
+  "hora": "11:40",
+  "base": "marketing-0412-g1",
+  "gancho": "Tu perfil arriba: ¿qué tenés fijado?",
+  "laminas": [
+   [
+    "Tu perfil arriba: ¿qué fijaste?",
+    "Cómo pedir primero.",
+    "vidriera"
+   ]
+  ],
+  "copy": "Tu perfil arriba: ¿qué tenés fijado?\n\n✔ Fijá cómo pedir\n✔ Fijá precios y opiniones\n✔ Cambiá la foto vieja\n\nEscribinos por WhatsApp.\nSituación ilustrativa.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores",
+  "fuente": ""
+ },
+ {
+  "id": "marketing-0512-his1",
+  "marca": "marketing",
+  "formato": "his",
+  "fecha": "2026-12-05",
+  "hora": "09:50",
+  "base": "marketing-reserva-3",
+  "gancho": "¿A cuántos les avisás de lo nuevo?",
+  "laminas": [
+   [
+    "¿Tenés lista de difusión?",
+    "Escribinos por WhatsApp.",
+    "carta"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "marketing-0512-his2",
+  "marca": "marketing",
+  "formato": "his",
+  "fecha": "2026-12-05",
+  "hora": "20:10",
+  "base": "marketing-0412-1",
+  "gancho": "El pedido de la torta se perdió.",
+  "laminas": [
+   [
+    "El papelito se pierde",
+    "Escribinos por WhatsApp.",
+    "etiqueta"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "marketing-0612-car",
+  "marca": "marketing",
+  "formato": "car",
+  "fecha": "2026-12-06",
+  "hora": "17:40",
+  "base": "marketing-0512-2",
+  "gancho": "Hora 24, día 3, día 7: seguimiento.",
+  "laminas": [
+   [
+    "Tres momentos de seguimiento",
+    "Un calendario simple.",
+    "reloj_arena"
+   ],
+   [
+    "Hora 24: mensaje corto",
+    "Corto y claro.",
+    "chat"
+   ],
+   [
+    "Día 3: algo nuevo",
+    "Contá algo nuevo.",
+    "estrella"
+   ],
+   [
+    "Día 7: una fecha",
+    "Proponé una fecha.",
+    "check"
+   ]
+  ],
+  "copy": "Hora 24, día 3, día 7: seguimiento.\n\n✔ Hora 24: mensaje corto\n✔ Día 3: algo nuevo\n✔ Día 7: una fecha\n\nEscribinos por WhatsApp.\nSituación ilustrativa.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores",
+  "fuente": ""
+ },
+ {
+  "id": "marketing-0612-post",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-06",
+  "hora": "11:40",
+  "base": "marketing-reserva-4",
+  "gancho": "Volvés de vacaciones y hay 80 chats.",
+  "laminas": [
+   [
+    "Volvés y hay 80 chats",
+    "¿Por dónde empezás?",
+    "chat"
+   ]
+  ],
+  "copy": "Volvés de vacaciones y hay 80 chats.\n\n✔ Primero los pedidos con fecha\n✔ Después las consultas de precio\n✔ Subí un estado: «volvimos»\n\nEscribinos por WhatsApp.\nSituación ilustrativa.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores",
+  "fuente": ""
+ },
+ {
+  "id": "marketing-0612-his1",
+  "marca": "marketing",
+  "formato": "his",
+  "fecha": "2026-12-06",
+  "hora": "09:50",
+  "base": "marketing-0512-3",
+  "gancho": "Te dejaron una reseña mala.",
+  "laminas": [
+   [
+    "¿Respondés las reseñas malas?",
+    "Escribinos por WhatsApp.",
+    "estrella"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "marketing-0612-his2",
+  "marca": "marketing",
+  "formato": "his",
+  "fecha": "2026-12-06",
+  "hora": "20:10",
+  "base": "marketing-3011-g2",
+  "gancho": "«Por audio ya está.» No.",
+  "laminas": [
+   [
+    "Confirmá el pedido por escrito",
+    "Escribinos por WhatsApp.",
+    "carta"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "marketing-0712-car",
+  "marca": "marketing",
+  "formato": "car",
+  "fecha": "2026-12-07",
+  "hora": "17:40",
+  "base": "marketing-0512-1",
+  "gancho": "«La API es solo para empresas grandes.»",
+  "laminas": [
+   [
+    "«La API es para grandes»",
+    "No siempre.",
+    "cruz"
+   ],
+   [
+    "Depende del volumen",
+    "Cuántos mensajes recibís.",
+    "chat"
+   ],
+   [
+    "Y de cuántos atienden",
+    "Una persona o varias.",
+    "mostrador"
+   ],
+   [
+    "Medilo una semana",
+    "Contá y decidí.",
+    "reloj_arena"
+   ]
+  ],
+  "copy": "«La API es solo para empresas grandes.»\n\n✔ Depende del volumen\n✔ Y de cuántos atienden\n✔ Medilo una semana\n\nEscribinos por WhatsApp.\nSituación ilustrativa.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores",
+  "fuente": ""
+ },
+ {
+  "id": "marketing-0712-post",
+  "marca": "marketing",
+  "formato": "post",
+  "fecha": "2026-12-07",
+  "hora": "11:40",
+  "base": "marketing-0112-2",
+  "gancho": "¿Qué local sos en Google?",
+  "laminas": [
+   [
+    "¿Qué local sos en Google?",
+    "¿Cómo aparecés hoy?",
+    "vidriera"
+   ]
+  ],
+  "copy": "¿Qué local sos en Google?\n\n✔ Sin horario\n✔ Fotos viejas\n✔ Todo al día\n\nEscribinos por WhatsApp.\nSituación ilustrativa.\n\n#KocosMarketing #WhatsAppBusiness #Pymes #Emprendedores #Google",
+  "fuente": ""
+ },
+ {
+  "id": "marketing-0712-his1",
+  "marca": "marketing",
+  "formato": "his",
+  "fecha": "2026-12-07",
+  "hora": "09:50",
+  "base": "marketing-0412-4",
+  "gancho": "Un mensaje de hace 9 días.",
+  "laminas": [
+   [
+    "¿Cada cuánto mirás Instagram?",
+    "Escribinos por WhatsApp.",
+    "chat"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ },
+ {
+  "id": "marketing-0712-his2",
+  "marca": "marketing",
+  "formato": "his",
+  "fecha": "2026-12-07",
+  "hora": "20:10",
+  "base": "marketing-reserva-1",
+  "gancho": "Tu foto de perfil chiquita.",
+  "laminas": [
+   [
+    "Logo simple y fondo liso",
+    "Escribinos por WhatsApp.",
+    "estrella"
+   ]
+  ],
+  "copy": "",
+  "fuente": ""
+ }
+]
