@@ -50,13 +50,13 @@
     "globo"
    ],
    [
+    "Fotos",
     "Sacá fotos del lugar",
-    "Fotos del lugar",
     "camara"
    ],
    [
-    "Pedí datos de testigos",
-    "Datos de testigos",
+    "Testigos",
+    "Pedí sus datos",
     "testigo"
    ],
    [
@@ -132,8 +132,8 @@
   "gancho": "24/12, 23:40: te chocan llegando a la cena.",
   "laminas": [
    [
-    "24/12, 23:40: te chocan",
-    "Llegando a la cena",
+    "24/12, 23:40",
+    "Te chocan de atrás",
     "choque"
    ],
    [
@@ -142,12 +142,12 @@
     "camara"
    ],
    [
-    "Datos del otro y testigos",
-    "Hacelo igual",
+    "Testigos",
+    "Y datos del otro",
     "testigo"
    ],
    [
-    "Aviso al seguro: 3 días",
+    "Aviso al seguro",
     "Dentro de tres días",
     "almanaque"
    ]
@@ -224,17 +224,17 @@
     "ambulancia"
    ],
    [
-    "Carta 1: causa penal",
-    "Además del reclamo",
+    "Penal",
+    "Puede haber causa penal",
     "documento"
    ],
    [
-    "Carta 2: no te vayas",
+    "Quedate",
     "Llamá a emergencias",
     "ambulancia"
    ],
    [
-    "Carta 3: abogado antes",
+    "Abogado",
     "No declares sin abogado",
     "sobre"
    ]
@@ -311,18 +311,18 @@
     "edificio"
    ],
    [
-    "No estás sin opciones",
-    "Guardá mensajes",
+    "Opciones",
+    "Guardá mensajes y horarios",
     "celular"
    ],
    [
-    "Horarios y pagos",
-    "Guardalos todos",
+    "Pagos",
+    "Guardalos también",
     "billete"
    ],
    [
-    "Anotá desde cuándo",
-    "Y consultá",
+    "Desde cuándo",
+    "Anotalo y consultá",
     "almanaque"
    ]
   ],
@@ -398,18 +398,18 @@
     "globo"
    ],
    [
-    "No hace falta un papel",
-    "Sin forma especial",
+    "Sin papel",
+    "También hay contrato",
     "documento"
    ],
    [
-    "Mensajes y horarios",
-    "Son tu prueba",
+    "Mensajes",
+    "Horarios y pagos",
     "celular"
    ],
    [
-    "Comprobantes de pago",
-    "También son prueba",
+    "Comprobantes",
+    "Son tu prueba",
     "billete"
    ]
   ],
@@ -480,17 +480,17 @@
   "gancho": "Martes 19:15: otra vez dos horas de más.",
   "laminas": [
    [
-    "Martes 19:15: dos horas más",
-    "Y no figuran",
+    "Martes 19:15",
+    "Dos horas de más",
     "reloj"
    ],
    [
-    "Anotá entrada y salida",
-    "Cada día",
+    "Anotá",
+    "Entrada y salida",
     "almanaque"
    ],
    [
-    "Guardá los mensajes",
+    "Mensajes",
     "Donde te piden quedarte",
     "celular"
    ],
@@ -572,18 +572,18 @@
     "documento"
    ],
    [
-    "Carta 1: nada en blanco",
+    "En blanco",
     "Sin monto ni fecha",
     "firma"
    ],
    [
-    "Carta 2: pedí copia",
+    "Copia",
     "De lo que firmás",
     "documento"
    ],
    [
-    "Carta 3: si presionan, consultá",
-    "Antes de firmar",
+    "Si te presionan",
+    "Consultá antes",
     "sello"
    ]
   ],
@@ -654,23 +654,23 @@
   "gancho": "Te mudaste y no te devuelven el depósito.",
   "laminas": [
    [
-    "¿No te devuelven el depósito?",
+    "¿Depósito sin devolver?",
     "Te mudaste",
     "edificio"
    ],
    [
-    "Juntá el contrato",
+    "Contrato",
     "Y recibo del depósito",
     "documento"
    ],
    [
-    "Fotos de cómo lo dejaste",
-    "Del departamento",
+    "Fotos",
+    "De cómo lo dejaste",
     "camara"
    ],
    [
-    "Reclamá por escrito",
-    "Y consultá",
+    "Por escrito",
+    "Reclamá y consultá",
     "sobre"
    ]
   ],

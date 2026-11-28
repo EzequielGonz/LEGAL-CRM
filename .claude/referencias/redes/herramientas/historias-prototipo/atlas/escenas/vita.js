@@ -283,11 +283,13 @@ export default async function (datos, plan) {
   css(`.vita{font-family:Manrope;font-weight:700;font-size:72px;color:#fff;-webkit-text-stroke:14px ${NAVY};paint-order:stroke fill;letter-spacing:-.5px}
     .vita span.on{font-family:'Playfair Display';font-style:italic;color:${ORO};font-size:82px}
     .logo.lv{background:${NAVY};height:62px;border-radius:31px;padding:0 26px 0 16px;box-shadow:0 6px 24px rgba(0,0,0,.35)} .logo.lv img{height:42px} .logo.lv span{font:600 30px Manrope;color:${CREMA}}`);
-  logo('../vita.png', 'VITA Abogados', 'lv');
+  const pastilla = logo('../vita.png', 'VITA Abogados', 'lv'); await pastilla.querySelector('img').decode().catch(() => {});
   const kar = karaoke(P, {max: 4, clase: 'vita'});
   const vInter = new THREE.Vector3();
+  function colgar(b, i, t) { const ci = E.outBack(seg(t, b.t0 - .05, b.t0 + .5), 1.1), co = E.in3(seg(t, b.t1 - .05, b.t1 + .4)); b.card.visible = ci > 0 && co < 1;
+    b.card.position.set(lerp(-.12, .02, rnd(i + 9)), lerp(3.3, 1.02 - (b.baja || 0), ci) + co * 2.2, -.05); b.card.rotation.z = Math.sin((t - b.t0) * 3) * .05 * Math.exp(-Math.max(0, t - b.t0) * 1.2) + (rnd(i) - .5) * .04; }
 
-  function update(t) {
+  function pose(t) {
     camara(t);
     // estado por golpe
     let foco = new THREE.Vector3(0, .4, -.1), radio = .7, apg = 1, flashI = 0, enEscena = 0;
@@ -311,7 +313,7 @@ export default async function (datos, plan) {
       o.rotation.z += Math.sin(t * 2.1 + i) * .015;
       if (b.objeto === 'globo') o.scale.multiplyScalar(1 + Math.exp(-Math.max(0, t - b.t0) / .3) * (t > b.t0 ? .06 : 0) * Math.sin((t - b.t0) * 15));
       // cartel colgante con el texto
-      if (b.card) { const ci = E.outBack(seg(t, b.t0 - .05, b.t0 + .5), 1.1), co = E.in3(seg(t, b.t1 - .05, b.t1 + .4)); b.card.visible = ci > 0 && co < 1; b.card.position.set(lerp(-.12, .02, rnd(i + 9)), lerp(3.3, 1.02, ci) + co * 2.2, -.05); b.card.rotation.z = Math.sin((t - b.t0) * 3) * .05 * Math.exp(-Math.max(0, t - b.t0) * 1.2) + (rnd(i) - .5) * .04; }
+      if (b.card) colgar(b, i, t);
       const activo = t >= b.t0 - .1 && t < b.t1; if (activo) { enEscena = i; foco.set(b.objeto === 'nico' ? .84 : sx, (b.objeto === 'globo' ? 1.1 : .45) + (b.efecto === 'caida' ? .1 : 0), sz); radio = b.efecto === 'apagon' || b.efecto === 'tachar' ? .42 : .6; }
       if ((b.efecto === 'apagon' || b.efecto === 'tachar') && t > b.t0 && t < b.t1) apg = Math.min(apg, 1 - .85 * seg(t, b.t0, b.t0 + .15) * (1 - seg(t, b.t1 - .3, b.t1)));
       if (b.efecto === 'flash') flashI += t >= b.t0 + .15 ? Math.exp(-(t - b.t0 - .15) / .08) : 0;
@@ -346,6 +348,40 @@ export default async function (datos, plan) {
     M.cine.uniforms.vineta.value = .42 + .5 * (1 - apg); M.cine.uniforms.tinte.value.set(.55 + .45 * apg, .55 + .45 * apg, .6 + .4 * apg);
     flash.intensity = 160 * flashI; M.cine.uniforms.flash.value = Math.min(.55, flashI * .5);
     esfera.material[0].emissiveIntensity = .15;
+  }
+
+  // ── la pastilla de marca no tapa carteles (28/11) ──
+  // Se mide en pantalla cada panel con texto (colgantes, globos, frontón, placas del atril, sello) contra la zona de la pastilla.
+  // 1) Margen: si un cartel colgante, ya quieto, pisaría la zona con el plano de su golpe, ese cartel cuelga más abajo lo justo.
+  // 2) Resto: si otro panel ocupa la zona un rato (no un paso fugaz), la pastilla se va con un fundido y vuelve después.
+  // Todo se precalcula cuadro a cuadro: es función pura de t (el render reparte cuadros entre procesos).
+  const zona = (() => { const r = pastilla.getBoundingClientRect(), m = 12; return {x0: r.left - m, y0: r.top - m, x1: Math.max(r.right, 380) + m, y1: r.bottom + m}; })();
+  const panel = (m, x0, x1, y0, y1) => ({m, x0, x1, y0, y1});
+  const paneles = [panel(fronton, -1.43, 1.43, .08, .7), panel(selloG, -.25, .25, 0, .5), ...Object.values(placas).map(p => panel(p, -.31, .31, -.21, .21))];
+  B.forEach(b => { if (b.card) paneles.push(b.panel = panel(b.card.children[0], -.68, .68, 0, .36)); if (b.objeto === 'globo') paneles.push(panel(b.obj.children[0], -.575, .575, 0, .62)); });
+  const vP = new THREE.Vector3(), rz = [[zona.x0, zona.y0], [zona.x1, zona.y0], [zona.x1, zona.y1], [zona.x0, zona.y1]];
+  const pisa = p => { for (let o = p.m; o; o = o.parent) if (!o.visible) return false; // cuadrilátero proyectado contra la zona (ejes separadores)
+    const q = []; for (const [u, v] of [[p.x0, p.y0], [p.x1, p.y0], [p.x1, p.y1], [p.x0, p.y1]]) { vP.set(u, v, 0).applyMatrix4(p.m.matrixWorld).project(cam); if (vP.z > 1) return false; q.push([(vP.x + 1) * 540, (1 - vP.y) * 960]); }
+    for (const [ax, ay] of [[1, 0], [0, 1], ...q.map((a, k) => [a[1] - q[(k + 1) % 4][1], q[(k + 1) % 4][0] - a[0]])]) {
+      const A = q.map(([x, y]) => x * ax + y * ay), Z = rz.map(([x, y]) => x * ax + y * ay); if (Math.max(...A) <= Math.min(...Z) || Math.max(...Z) <= Math.min(...A)) return false; }
+    return true; };
+  const FPS = 30, guarda = seg1.target.position.clone();
+  B.forEach((b, i) => { if (!b.card) return; const tA = b.t0 + .5, tB = b.t1 - .05; b.card.visible = true;
+    const pisaQuieto = () => { for (let t = tA; t <= tB; t += 1 / FPS) { camara(t); colgar(b, i, t); b.card.updateMatrixWorld(true); cam.updateMatrixWorld(); if (pisa(b.panel)) return true; } return false; };
+    for (b.baja = 0; b.baja < .3 && pisaQuieto(); b.baja += .01); });
+  const nS = Math.ceil(T * FPS) + 2, tapa = new Uint8Array(nS);
+  for (let i = 0; i < nS; i++) { pose(i / FPS); scene.updateMatrixWorld(); cam.updateMatrixWorld(); tapa[i] = paneles.some(pisa) ? 1 : 0; }
+  seg1.target.position.copy(guarda);
+  const tramos = v => { const r = []; for (let i = 0; i < nS; i++) if (tapa[i] === v && (i === 0 || tapa[i - 1] !== v)) { let j = i; while (j + 1 < nS && tapa[j + 1] === v) j++; r.push([i, j]); } return r; };
+  tramos(1).forEach(([a, b]) => { if (b - a + 1 < .3 * FPS) tapa.fill(0, a, b + 1); }); // un paso fugaz (cartel que baja o sube en menos de 0,3 s) no la esconde
+  tramos(0).forEach(([a, b]) => { if (a > 0 && b < nS - 1 && b - a + 1 < .8 * FPS) tapa.fill(1, a, b + 1); }); // sin parpadeos entre ocupaciones seguidas
+  const tras = new Float32Array(nS), falta = new Float32Array(nS); { let u = -1e9; for (let i = 0; i < nS; i++) { if (tapa[i]) u = i; tras[i] = (i - u) / FPS; } u = 1e9; for (let i = nS - 1; i >= 0; i--) { if (tapa[i]) u = i; falta[i] = (u - i) / FPS; } }
+
+  function update(t) {
+    pose(t);
+    const i = clamp(Math.round(t * FPS), 0, nS - 1), dt = t - i / FPS; // se va antes de que llegue el panel y vuelve rápido (entera al cerrar el loop)
+    const vis = Math.min(E.io2(seg(falta[i] - dt, .04, .34)), E.io2(seg(tras[i] + dt, .03, .18)));
+    pastilla.style.opacity = vis; pastilla.style.transform = vis < 1 ? `translateY(${(-8 * (1 - vis)).toFixed(2)}px)` : '';
     kar(t); M.cine.uniforms.t.value = t * 11.7; M.comp.render();
   }
   return {update, total: T, eventos: ev};

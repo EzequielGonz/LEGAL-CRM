@@ -190,7 +190,7 @@
    [
     "¿Qué versión es?",
     "Versión exacta",
-    "auto"
+    "llave"
    ],
    [
     "¿Qué equipamiento incluye?",
@@ -364,7 +364,7 @@
    [
     "Primero, el asiento",
     "Ajustalo bien",
-    "auto"
+    "llave"
    ],
    [
     "Después, los espejos",
@@ -542,7 +542,7 @@
    ],
    [
     "Nada a la vista",
-    "Que no se vea",
+    "Interior despejado",
     "cruz"
    ],
    [
@@ -625,7 +625,7 @@
    [
     "Probalo en avenida",
     "Salí a la avenida",
-    "auto"
+    "llave"
    ],
    [
     "Probá estacionar",
