@@ -6,6 +6,12 @@ Rama `claude/brave-hawking-nzsr60` · PR EzequielGonz/LEGAL-CRM#82 (seguido, en 
 - El dueño frenó el boceto de VITA. **No hay agentes trabajando ni nada programado.** Lo programado en Metricool del 25 al 29/11 (12 historias + 1 carrusel por día y marca) NO se toca.
 - **Esperando:** el dueño busca 1 o 2 reels de referencia con el 3D que imagina. Al recibirlos, analizarlos (gancho, cámara, luz, nivel de realismo, animación, efectos) y recién ahí hacer el boceto de VITA con el guion `vita-2711-1`.
 
+## CHECKPOINT 28/11 05:30 BA (08:30 UTC) — PIEZAS VITA Y AUTOS PROGRAMADAS
+- **Reiniciar si la máquina se cayó:** en `atlas/`, `pgrep -fa 'cola.py|vigia.sh'`; si faltan, `nohup setsid python3 cola.py > cola.out 2>&1 < /dev/null & disown` y lo mismo con `./vigia.sh`.
+- **Reels programados (11):** 28/11 completo (a y b de las 4 marcas) y de 29/11 vita-a, autos-d y marketing-c. La cola sigue por 29/11 (faltan 16) y después 30/11. Sin competencia de CPU, un reel tarda de 4 a 8 min; con renders de láminas en paralelo, hasta 14.
+- **Piezas fijas 30/11–07/12:** VITA 32 y Autos 32 **programadas y comprobadas en Metricool** (historia 09:20/10:50, post, carrusel de 5 y historia de la noche; registro en `docs/redes/programadas.jsonl`). Marketing: re-render por lámina (texto en el cartel grande), muestra revisada OK; falta `alojar_piezas.py marketing` y programar. Coberturas: un agente las está renderizando.
+- 28 y 29/11: historias y carruseles ya estaban programados de antes y no se tocan (`01-ritmo-y-horarios.md`).
+
 ## CHECKPOINT 28/11 00:40 BA (03:40 UTC) — 5 REELS POR DÍA Y MARCA, COLA ÚNICA
 - **Pedido del dueño (28/11):** 3 reels más por marca y por día (total 5), «reciclando de buena manera». Ids `<marca>-<ddmm>-c` (tema nuevo, ElevenLabs con tope de 2.700 caracteres por marca), `-d` y `-e` (reciclados con edición fuerte y voz gratis edge-tts es-AR). Datos en `docs/redes/tanda-2811-0712/fuente/extra-<marca>.txt`, armados con `tanda2.py --datos …` (columnas extra: hora, redes, motor). 4 agentes los escriben del 29/11 al 07/12.
 - **Render 2,3 veces más rápido:** `base.js` acepta `escala` y `lote.py` usa `ESCALA=0.67` (el 3D a 720p; los textos del DOM siguen nítidos; comparado lado a lado, sin diferencia visible). ~11 min por reel.
