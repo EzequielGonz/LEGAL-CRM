@@ -6,6 +6,11 @@ Rama `claude/brave-hawking-nzsr60` · PR EzequielGonz/LEGAL-CRM#82 (seguido, en 
 - El dueño frenó el boceto de VITA. **No hay agentes trabajando ni nada programado.** Lo programado en Metricool del 25 al 29/11 (12 historias + 1 carrusel por día y marca) NO se toca.
 - **Esperando:** el dueño busca 1 o 2 reels de referencia con el 3D que imagina. Al recibirlos, analizarlos (gancho, cámara, luz, nivel de realismo, animación, efectos) y recién ahí hacer el boceto de VITA con el guion `vita-2711-1`.
 
+## CHECKPOINT 28/11 10:40 BA (13:40 UTC) — 28 Y 29/11 COMPLETOS (28 REELS) + 128 PIEZAS
+- **Reels programados:** 28/11: 8 (a y b por marca). 29/11: 20 (5 por marca). La cola sigue con 30/11 → 07/12; cada reel: `reel_metricool.py <id>` → revisar hoja y copy → `createScheduledPost` → `registrar.py`.
+- **Correcciones del día:** marketing-2911-a rehecho (el cartel decía «Lo pienso» es NO); coberturas-2911-e con tapa iluminada; `lote.py` ahora elige tapa iluminada en Coberturas y Marketing si el cuadro de 1,2 s sale oscuro; planes VITA ajustados a la rampa de Instagram (2911-d, 0112-e y 0312-e solo FB; 0212-c a las 08:40 por choque con 0212-a).
+- **Reinicios:** la máquina se reinicia en las pausas por límite de uso (≈02:50, ≈07:56 y ≈09:25 UTC del 28/11). Relanzar `cola.py` y `vigia.sh`; los controles cada ~45 min lo hacen.
+
 ## CHECKPOINT 28/11 05:35 BA (08:35 UTC) — 128 PIEZAS FIJAS PROGRAMADAS (4 MARCAS)
 - **Reiniciar si la máquina se cayó:** en `atlas/`, `pgrep -fa 'cola.py|vigia.sh'`; si faltan, `nohup setsid python3 cola.py > cola.out 2>&1 < /dev/null & disown` y lo mismo con `./vigia.sh`.
 - **Reels programados (13):** 28/11 completo (a y b de las 4 marcas) y de 29/11 vita-a, vita-c, autos-c, autos-d y marketing-c. La cola sigue por 29/11 (faltan 15) y después 30/11. Sin competencia de CPU, un reel tarda de 4 a 8 min; con renders de láminas en paralelo, hasta 14.
